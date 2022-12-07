@@ -1,0 +1,200 @@
+{
+  "settings": {
+    "userName": "User",
+    "darkMode": "auto",
+    "preferredLanguage": "es",
+    "firstDayOfWeek": 1,
+    "preferredCurrency": "EUR"
+  },
+  "categories": [
+    {
+      "name": "Salud & belleza",
+      "color": "CC0605",
+      "icon": "pulse",
+      "type": "E",
+      "subcategories": [
+        { "name": "Cuidado personal", "icon": "body" },
+        { "name": "Médico", "icon": "medkit" },
+        { "name": "Fitness", "icon": "barbell" }
+      ]
+    },
+    {
+      "name": "Alimentación",
+      "color": "F4A900",
+      "icon": "cart",
+      "type": "E",
+      "subcategories": [
+        { "name": "Comer fuera", "icon": "restaurant" },
+        { "name": "Comestibles", "icon": "nutrition" }
+      ]
+    },
+    {
+      "name": "Compras",
+      "color": "3D642D",
+      "icon": "bag-handle",
+      "type": "E",
+      "subcategories": [
+        { "name": "Papelería", "icon": "library" },
+        { "name": "Electrónica", "icon": "desktop" },
+        { "name": "Ropa", "icon": "shirt" }
+      ]
+    },
+    {
+      "name": "Entretenimiento",
+      "color": "2A6478",
+      "icon": "golf",
+      "type": "E",
+      "subcategories": [
+        { "name": "Fiesta", "icon": "beer" },
+        { "name": "Eventos y sitios de interes", "icon": "ticket" },
+        { "name": "Música y conciertos", "icon": "musical-notes" },
+        { "name": "Cine y TV", "icon": "film" }
+      ]
+    },
+    {
+      "name": "Transporte",
+      "color": "84C3BE",
+      "icon": "bus",
+      "type": "E",
+      "subcategories": [
+        { "name": "Transporte público", "icon": "train" },
+        { "name": "Gasolina", "icon": "speedometer" },
+        { "name": "Multas y parkimétros", "icon": "trail-sign" },
+        { "name": "Seguro e impuestos", "icon": "receipt" },
+        { "name": "Mantenimiento", "icon": "hammer" }
+      ]
+    },
+    {
+      "name": "Hogar",
+      "color": "4E5452",
+      "icon": "home",
+      "type": "E",
+      "subcategories": [
+        { "name": "Alquiler", "icon": "key" },
+        { "name": "Agua", "icon": "water" },
+        { "name": "Luz", "icon": "flash" },
+        { "name": "Internet", "icon": "globe" },
+        { "name": "Teléfono", "icon": "call" },
+        { "name": "Productos para el hogar", "icon": "sparkles" },
+        { "name": "Muebles y accesorios", "icon": "bed" }
+      ]
+    },
+    { "name": "Impuestos", "color": "B32821", "icon": "receipt", "type": "E" },
+    {
+      "name": "Vacaciones",
+      "color": "FF7514",
+      "icon": "image",
+      "type": "E",
+      "subcategories": [
+        { "name": "Viaje", "icon": "airplane" },
+        { "name": "Alojamiento", "icon": "bed" }
+      ]
+    },
+    { "name": "Salario", "color": "4C9141", "icon": "briefcase", "type": "I" },
+    {
+      "name": "Regalos & Donaciones",
+      "color": "BB4B4B",
+      "icon": "gift",
+      "type": "B"
+    },
+    { "name": "Venta", "color": "CDA434", "icon": "exit", "type": "I" },
+    {
+      "name": "Inversión",
+      "color": "1E2460",
+      "icon": "analytics",
+      "type": "B"
+    },
+    {
+      "name": "Juegos & apuestas",
+      "color": "2A6478",
+      "icon": "dice",
+      "type": "B"
+    },
+    {
+      "name": "Premios & reconocimientos",
+      "color": "F39F18",
+      "icon": "trophy",
+      "type": "I"
+    },
+    {
+      "name": "Deudas & devoluciones",
+      "color": "781F19",
+      "icon": "arrow-redo",
+      "type": "E"
+    },
+    {
+      "name": "Préstamos",
+      "color": "781F19",
+      "icon": "arrow-undo",
+      "type": "I"
+    },
+    { "name": "Otros", "color": "403A3A", "icon": "cube", "type": "B" }
+  ],
+  "accounts": [
+    {
+      "iniValue": 1280.42,
+      "icon": "home",
+      "name": "Mi cuenta",
+      "date": "2022-05-30T17:05:42.975Z",
+      "type": "normal",
+      "transactions": [
+        {
+          "value": -123,
+          "category": "Inversión",
+          "date": "2022-05-30T22:13:31.719Z",
+          "id": "¿58NLS6481vy1139h1Y791654942085725"
+        },
+        {
+          "value": -16,
+          "category": "Transporte",
+          "date": "2022-06-11T11:51:06.884Z",
+          "id": "88459Y¡28As61Y4k664Q!1654948273040"
+        },
+        {
+          "value": 1000,
+          "category": "Salario",
+          "date": "2022-06-11T11:51:14.025Z",
+          "id": "e42j#6728r0&44551zM9&1654948280525"
+        },
+        {
+          "value": -56,
+          "category": "Comer fuera",
+          "date": "2022-06-02T09:51:00.000Z",
+          "id": "0np0405qR66Ñ1W146bD301654948336024",
+          "text": "Comida familiar"
+        }
+      ]
+    },
+    {
+      "iniValue": 1000,
+      "icon": "home",
+      "name": "Ey",
+      "date": "2022-05-30T22:11:40.652Z",
+      "type": "normal",
+      "transactions": []
+    }
+  ],
+  "budgets": [
+    {
+      "accounts": "all",
+      "categories": "all",
+      "limit": 166,
+      "name": "ydhjxdhj",
+      "repeat": "month"
+    }
+  ],
+  "cookies": {
+    "modelVersion": "1",
+    "introSeen": true,
+    "lastExportDate": "2022-06-06T13:18:20.249Z"
+  },
+  "transfers": [
+    {
+      "date": "2022-06-04T22:33:48.319Z",
+      "value": 20,
+      "from": "Test1",
+      "to": "Test2",
+      "id": "25q9G41cn0¿v1J83f38261654382028319"
+    }
+  ]
+}
