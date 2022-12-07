@@ -1,8 +1,9 @@
 {
   "name": "Monekin",
   "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "author": "Lozin Technologies",
+  "homepage": "https://github.com/enrique-lozano/Monekin",
+  "description": "A 100% Open Source app that tries to make personal finances easier. Fast, simple, without ads, without the need for an Internet connection and with a groundbreaking design, that's Monekin.",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -60,6 +61,5 @@
     "karma-jasmine-html-reporter": "~2.0.0",
     "ts-node": "~8.3.0",
     "typescript": "~4.8.4"
-  },
-  "description": "An Ionic project"
+  }
 }
