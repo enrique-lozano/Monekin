@@ -26,6 +26,13 @@
 // @import "~@ionic/angular/css/text-transformation.css";
 // @import "~@ionic/angular/css/flex-utils.css";
 
+/* Custom classes */
+@import "./classes/margin.scss";
+@import "./classes/padding.scss";
+@import "./classes/border.scss";
+@import "./classes/position.scss";
+@import "./classes/text.scss";
+
 /* Theme variables */
 @import "./theme/colors.scss";
 @import "./theme/breakpoints.scss";
