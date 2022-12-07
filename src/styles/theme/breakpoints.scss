@@ -1,0 +1,27 @@
+$breakpoints: (
+  "xs": 576px,
+  "sm": 768px,
+  "md": 992px,
+  "lg": 1200px,
+  "xl": 1800px,
+);
+
+@mixin min-width($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (min-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Unfortunately, `{$breakpoint}` can not be found. Avalaible breakpoints are: #{map-keys($breakpoints)}";
+  }
+}
+
+@mixin max-width($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (not (width: map-get($breakpoints, $breakpoint))) and (max-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Unfortunately, `{$breakpoint}` can not be found. Avalaible breakpoints are: #{map-keys($breakpoints)}";
+  }
+}

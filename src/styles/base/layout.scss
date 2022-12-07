@@ -1,0 +1,37 @@
+@import "theme/breakpoints.scss";
+
+:root {
+  // Variables for mobile:
+  --ion-tab-bar-height-md: 80px;
+  --ion-tab-bar-height-ios: 51px;
+
+  // Variables for desktop:
+  --ion-tab-bar-width-small: 78px;
+  --ion-tab-bar-width-big: 268px;
+}
+
+@include max-width("md") {
+  .show-on-mobile ion-tab-bar {
+    display: flex !important;
+  }
+
+  .md app-tabs.show-on-mobile + * {
+    height: calc(100vh - var(--ion-tab-bar-height-md));
+  }
+
+  .ios app-tabs.show-on-mobile + * {
+    height: calc(100vh - var(--ion-tab-bar-height-ios));
+  }
+}
+
+@include min-width("md") {
+  app-tabs + * {
+    left: var(--ion-tab-bar-width-small);
+  }
+}
+
+@include min-width("lg") {
+  app-tabs + * {
+    left: var(--ion-tab-bar-width-big);
+  }
+}
