@@ -1,5 +1,12 @@
 {
-    "recommendations": [
-      "ionic.ionic"
-    ]
+  "recommendations": [
+    "ionic.ionic",
+    "Angular.ng-template",
+    "johnpapa.Angular2",
+    "aaron-bond.better-comments",
+    "usernamehw.errorlens",
+    "seatonjiang.gitmoji-vscode",
+    "seatonjiang.gitmoji-vscode",
+    "esbenp.prettier-vscode"
+  ]
 }
