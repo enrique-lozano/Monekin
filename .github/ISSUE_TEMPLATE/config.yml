@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💡 Feature Request
+    url: https://github.com/enrique-lozano/Monekin/discussions/categories/ideas
+    about: Share your ideas about new features that you would like to see in the future
+  - name: 💬 Monekin community support
+    url: https://github.com/enrique-lozano/Monekin/discussions/categories/q-a
+    about: If you are looking for help or advice on how to use the app
