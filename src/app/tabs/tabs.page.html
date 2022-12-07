@@ -1,20 +1,34 @@
-<ion-tabs>
+<ion-tab-bar slot="bottom">
+  <ion-header>
+    <ion-toolbar>
+      <div slot="start" class="p-s" style="max-height: 56px">
+        <img src="assets/resources/appIcon.png" alt="App Icon" class="app-icon">
+        <ion-title slot="start" class="thin text-left">
+          Monekin
+        </ion-title>
+      </div>
+    </ion-toolbar>
+  </ion-header>
 
-  <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="tab1">
-      <ion-icon name="triangle"></ion-icon>
-      <ion-label>Tab 1</ion-label>
-    </ion-tab-button>
+  <div class="w-full my-xs add-transaction-button-container">
+    <ion-button size="large" expand="block" class="fab-button">
+      <ion-icon name="add"></ion-icon>
+      <ion-label>Nueva transacción</ion-label>
+    </ion-button>
+  </div>
 
-    <ion-tab-button tab="tab2">
-      <ion-icon name="ellipse"></ion-icon>
-      <ion-label>Tab 2</ion-label>
-    </ion-tab-button>
+  <ion-tab-button [ngClass]="{'tab-selected': currentURL.endsWith('tab1')}" (click)="goTo('/tabs/tab1')">
+    <ion-icon [name]="'home' + (currentURL.endsWith('tab1') ? '' : '-outline')"></ion-icon>
+    <ion-label>Tab 1</ion-label>
+  </ion-tab-button>
 
-    <ion-tab-button tab="tab3">
-      <ion-icon name="square"></ion-icon>
-      <ion-label>Tab 3</ion-label>
-    </ion-tab-button>
-  </ion-tab-bar>
+  <ion-tab-button [ngClass]="{'tab-selected': currentURL.endsWith('tab2')}" (click)="goTo('/tabs/tab2')">
+    <ion-icon [name]="'file-tray-full' + (currentURL.endsWith('tab2') ? '' : '-outline')"></ion-icon>
+    <ion-label>Tab 2</ion-label>
+  </ion-tab-button>
 
-</ion-tabs>
+  <ion-tab-button [ngClass]="{'tab-selected': currentURL.endsWith('tab3')}" (click)="goTo('/tabs/tab3')">
+    <ion-icon [name]="'bar-chart' + (currentURL.endsWith('tab3') ? '' : '-outline')"></ion-icon>
+    <ion-label>Tab 3</ion-label>
+  </ion-tab-button>
+</ion-tab-bar>

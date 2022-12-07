@@ -1,0 +1,46 @@
+/* Styles to apply to the buttons of the app (ion-button, ion-fab...) */
+
+// ----- FAB BUTTONS -----
+
+ion-fab-button.md,
+ion-button.md.fab-button {
+  --border-radius: 16px;
+}
+
+ion-fab-button.md {
+  --box-shadow: 0 1px 3px 0 rgb(60 64 67 / 30%),
+    0 4px 8px 3px rgb(60 64 67 / 15%);
+}
+
+ion-button.md.fab-button {
+  font-size: 0.825rem;
+  text-transform: none;
+  min-height: 56px;
+
+  &:hover {
+    --box-shadow: 0 1px 3px 0 rgb(60 64 67 / 30%),
+      0 4px 8px 3px rgb(60 64 67 / 15%);
+  }
+
+  ion-icon {
+    font-size: 2em;
+  }
+}
+
+// ----- NORMAL BUTTONS STYLING ----
+
+ion-button {
+  > * {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  ion-icon {
+    min-width: 1.4rem;
+  }
+
+  ion-icon + * {
+    margin-left: 5%;
+    margin-top: 1.25%;
+  }
+}

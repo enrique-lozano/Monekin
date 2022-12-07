@@ -10,9 +10,16 @@
   --ion-tab-bar-width-big: 268px;
 }
 
-@include max-width("md") {
+@include max-width("sm") {
+  // TODO: Transitioning the ion tab bar apparition and hiding
+
+  // On mobile, the tab bar is hidden by default
+  ion-tab-bar {
+    display: none;
+  }
+
   .show-on-mobile ion-tab-bar {
-    display: flex !important;
+    display: flex;
   }
 
   .md app-tabs.show-on-mobile + * {
@@ -24,7 +31,7 @@
   }
 }
 
-@include min-width("md") {
+@include min-width("sm") {
   app-tabs + * {
     left: var(--ion-tab-bar-width-small);
   }

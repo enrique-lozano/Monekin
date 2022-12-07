@@ -1,1 +1,194 @@
+@import "theme/breakpoints.scss";
 
+ion-header {
+  ion-toolbar {
+    div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 56px;
+
+      .app-icon {
+        height: 100%;
+        aspect-ratio: 1;
+        object-fit: contain;
+      }
+    }
+  }
+}
+
+ion-tab-bar {
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+}
+
+@include max-width("sm") {
+  ion-header {
+    display: none;
+  }
+
+  .add-transaction-button-container {
+    display: none;
+  }
+}
+
+@include max-width("lg") {
+  ion-title {
+    display: none;
+  }
+
+  .add-transaction-button-container {
+    padding: 8px;
+
+    ion-label {
+      display: none;
+    }
+  }
+}
+
+@include min-width("sm") {
+  ion-tabs {
+    flex-direction: column;
+  }
+
+  ion-tab-bar {
+    position: fixed;
+    justify-content: start;
+    width: var(--ion-tab-bar-width-small);
+    height: 100vh;
+    flex-direction: column;
+    border-right: 1px solid var(--ion-color-light);
+
+    ion-tab-button {
+      max-height: 56px;
+    }
+
+    .tabs-ios .tab-button {
+      width: 100%;
+      font-size: 10px;
+      padding: 0;
+    }
+
+    .has-icon .tab-badge {
+      right: calc(50% - 22px);
+    }
+
+    .tab-badge {
+      top: 33%;
+    }
+  }
+}
+
+@include min-width("lg") {
+  .add-transaction-button-container {
+    padding: 16px;
+  }
+
+  ion-tab-bar {
+    width: var(--ion-tab-bar-width-big);
+    align-items: flex-start;
+
+    ion-tab-button {
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      max-width: 100%;
+      width: calc(100% - 8px);
+      max-height: 48px;
+      border-top-right-radius: 1rem;
+      border-bottom-right-radius: 1rem;
+      transition: all 0.2s;
+
+      &.tab-selected {
+        background: var(--ion-color-secondary);
+      }
+
+      > * {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+
+      ion-label {
+        font-size: 0.85rem;
+      }
+
+      ion-icon {
+        font-size: 22px;
+      }
+    }
+  }
+}
+
+/* ----------- SPECIFIC MATERIAL DESIGN STYLES ---------- */
+
+ion-tab-bar.md {
+  @include max-width("sm") {
+    height: var(--ion-tab-bar-height-md);
+    --background: var(--ion-color-secondary);
+    --border: 0px;
+  }
+
+  ion-tab-button {
+    --ripple-color: transparent;
+
+    ion-icon {
+      padding: 4px 20px;
+      color: var(--ion-color-secondary-contrast);
+    }
+
+    ion-label {
+      color: var(--ion-color-secondary-contrast);
+      @include max-width("lg") {
+        font-size: 12px;
+      }
+    }
+  }
+
+  @include max-width("lg") {
+    ion-tab-button.tab-selected {
+      ion-icon {
+        position: relative;
+        color: var(--ion-color-tertiary-contrast);
+
+        &::after {
+          content: "";
+          position: absolute;
+          top: 0%;
+          left: 50%;
+          width: 100%;
+          height: 100%;
+          border-radius: 20px;
+          background: var(--ion-color-tertiary);
+          opacity: 1;
+          z-index: -1;
+
+          animation-name: backgroundChange;
+          animation-duration: 0.3s;
+          animation-timing-function: cubic-bezier(0.07, 0.88, 0.54, 0.78);
+          animation-fill-mode: forwards;
+        }
+      }
+
+      ion-label {
+        color: var(--ion-color-tertiary-contrast);
+        @media (prefers-color-scheme: dark) {
+          color: var(--ion-color-dark);
+        }
+      }
+    }
+  }
+
+  @keyframes backgroundChange {
+    0% {
+      width: 0%;
+      left: 50%;
+    }
+
+    100% {
+      width: 100%;
+      left: 0%;
+    }
+  }
+}
