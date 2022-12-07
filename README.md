@@ -1,56 +1,22 @@
-# Monekin - Official repository
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/othneildrew/Best-README-Template">
+    <img src="src/assets/resources/appIcon.png"  alt="App Icon" width="100" height="100">
+  </a>
 
-<style>
-    div.intro{
-        display: flex; 
-        align-items: center
-    }
+  <h1 align="center">Monekin - Official repository</h1>
 
-    div.intro img{
-        border-radius: 12px
-    }
-
-    div.intro p {
-        margin: 0; 
-        margin-left: 12px
-    }
-
-    @media screen and (max-width: 480px){
-        div.intro {
-            flex-direction: column;
-        }
-
-        div.intro p {
-            text-align: center;
-            margin-top: 10px
-        }
-    }
-</style>
-
-<div class="intro">
-
-<img src="src/assets/resources/appIcon.png" alt="Logo" width="100" height="100" >
-
-<p>
+  <p align="center">
     Monekin is a 100% Open Source app that tries to make personal finances easier. Fast, simple, without ads, without the need for an Internet connection and with a groundbreaking design, that's Monekin.
-</p>
-</div>
-
-<style>
-    .marketplaces-badgets{
-        margin-top: 16px; 
-        display: flex; 
-        flex-wrap: wrap;
-        align-items: stretch
-    }
-</style>
-
-<div class="marketplaces-badgets">
-
-[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
-     alt="Get it on Google Play"
-     height="80">](https://play.google.com/store/apps/details?id=com.monekin.app)
-
+    <br />
+    <a href="#about-the-project"><strong>Start exploring »</strong></a>
+    <br />
+    <br />
+    <a href="https://play.google.com/store/apps/details?id=com.monekin.app">
+      <img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"  alt="Google Play Badge" height="68">
+    </a>
+  </p>
 </div>
 
 <!-- TABLE OF CONTENTS -->
@@ -60,15 +26,20 @@
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
-        <li><a href="#built-with">Tech Stack</a></li>
+        <li><a href="#why-monekin">Why Monekin?</a></li>
+        <li><a href="#tech-stack">Tech Stack</a></li>
       </ul>
     </li>
     <li><a href="#contact">Contact</a></li>
-
   </ol>
 </details>
 
 ## About the project
+
+|          |             |                |       |
+| :---:    |    :----:   |          :---: | :---: |
+| ![1](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva1.PNG) | ![2](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva2.PNG) | ![3](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva3.PNG) | ![4](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva4.PNG)
+| ![5](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva5.PNG) | ![6](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva6.PNG)
 
 ### Why Monekin?
 
