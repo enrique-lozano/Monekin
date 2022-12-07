@@ -37,5 +37,10 @@
 @import "./theme/colors.scss";
 @import "./theme/breakpoints.scss";
 
+/* App fonts */
+@import "./fonts/nunito/font-faces.scss";
+@import "./fonts/work-sans/font-faces.scss";
+
 /* App styles */
 @import "./base/layout.scss";
+@import "./base/typography.scss";
