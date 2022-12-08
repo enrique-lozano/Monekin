@@ -4,10 +4,14 @@
   "author": "Lozin Technologies",
   "homepage": "https://github.com/enrique-lozano/Monekin",
   "description": "A 100% Open Source app that tries to make personal finances easier. Fast, simple, without ads, without the need for an Internet connection and with a groundbreaking design, that's Monekin.",
+  "main": "./electron/main.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:electron": "ng build --base-href ./ && npx electron .",
     "build": "ng build",
+    "build:win": "npx electron-packager . --platform=win32 --out=./build --overwrite",
+    "build:mobile": "ionic build && npx cap sync",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint"
@@ -47,6 +51,8 @@
     "@types/node": "^12.11.1",
     "@typescript-eslint/eslint-plugin": "5.3.0",
     "@typescript-eslint/parser": "5.3.0",
+    "electron": "^22.0.0",
+    "electron-packager": "^17.1.1",
     "eslint": "^7.6.0",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-jsdoc": "30.7.6",
