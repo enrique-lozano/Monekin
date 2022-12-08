@@ -1,0 +1,40 @@
+name: 🐛 Bug Report
+description: Create a report to help us improve Monekin
+labels:
+  - "bug"
+body:
+  - type: checkboxes
+    attributes:
+      label: Prerequisites
+      description: Please ensure you have completed all of the following.
+      options:
+        - label: I have read the [Contributing Guidelines](https://github.com/enrique-lozano/Monekin/blob/main/CONTRIBUTING.md#creating-an-issue).
+          required: true
+        - label: I agree to follow the [Code of Conduct](https://github.com/enrique-lozano/Monekin/blob/main/CODE_OF_CONDUCT.md).
+          required: true
+        - label: I have searched for [existing issues](https://github.com/enrique-lozano/Monekin/issues?q=is%3Aissue) that already report this problem, without success.
+          required: true
+        - label: I have updated the app to the last released version.
+          required: true
+  - type: textarea
+    attributes:
+      label: Current Behavior
+      description: A clear description of what the bug is and how it manifests. Add some screenshots or videos if you need to.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected Behavior
+      description: A clear description of what you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps to Reproduce
+      description: Please explain the steps required to duplicate this issue.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional Information
+      description: List any other information that is relevant to your issue. Stack traces, related issues, suggestions on how to fix, forum links, etc.
