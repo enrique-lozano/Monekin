@@ -30,10 +30,14 @@
     "@capacitor/keyboard": "4.1.0",
     "@capacitor/status-bar": "4.1.1",
     "@ionic/angular": "^6.1.9",
+    "@ionic/storage-angular": "^3.0.6",
     "@ngneat/transloco": "^4.1.1",
+    "cordova-sqlite-storage": "^6.0.0",
     "ionicons": "^6.0.3",
+    "localforage-cordovasqlitedriver": "^1.8.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
+    "uuid": "^9.0.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
@@ -50,6 +54,7 @@
     "@ionic/angular-toolkit": "^6.0.0",
     "@types/jasmine": "~4.0.0",
     "@types/node": "^12.11.1",
+    "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "5.3.0",
     "@typescript-eslint/parser": "5.3.0",
     "electron": "^22.0.0",

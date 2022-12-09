@@ -1,5 +1,5 @@
-import { AppLanguageCode } from '../constants/constants';
-import { ISOCorrencyCodes } from '../constants/currency-code.enum';
+import { ISOCorrencyCodes } from '../../../constants/currencies/currency-code.enum';
+import { AppLanguageCode } from '../../../modules/i18n/availableLangs';
 
 export enum UserAvatars {
   man = 'man',

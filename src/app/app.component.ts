@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { StorageService } from './services/db/storage.service';
+import { TranslateService } from './services/translate/translate.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,17 @@ import { Component } from '@angular/core';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor() {}
+  constructor(
+    private storage: StorageService,
+    private translateService: TranslateService
+  ) {
+    this.storage.init().then(() => {
+      this.getStartedConfig();
+    });
+  }
+
+  private async getStartedConfig() {
+    await this.translateService.setInitialAppLang();
+    //SplashScreen.hide();
+  }
 }

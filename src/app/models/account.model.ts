@@ -1,5 +1,5 @@
 import { v4 as generateUUID } from 'uuid';
-import { ISOCorrencyCodes } from '../constants/currency-code.enum';
+import { ISOCorrencyCodes } from '../constants/currencies/currency-code.enum';
 
 export class Account {
   readonly id: string;
