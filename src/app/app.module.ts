@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
 import { TabsPageModule } from './tabs/tabs.module';
 
 import { HttpClientModule } from '@angular/common/http';
-import { TranslocoRootModule } from './transloco-root.module';
+import { TranslocoRootModule } from './modules/i18n/transloco-root.module';
 
 @NgModule({
   declarations: [AppComponent],
