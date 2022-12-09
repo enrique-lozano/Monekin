@@ -8,6 +8,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TabsPageModule } from './tabs/tabs.module';
 
+import { HttpClientModule } from '@angular/common/http';
+import { TranslocoRootModule } from './transloco-root.module';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -15,6 +18,8 @@ import { TabsPageModule } from './tabs/tabs.module';
     IonicModule.forRoot(),
     AppRoutingModule,
     TabsPageModule,
+    HttpClientModule,
+    TranslocoRootModule,
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
