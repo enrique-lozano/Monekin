@@ -18,14 +18,23 @@ const routes: Routes = [
       import('./pages/tabs/tab3/tab3.module').then((m) => m.Tab3PageModule),
   },
   {
+    path: 'account-details',
+    loadChildren: () =>
+      import('./pages/accounts/account-details/account-details.module').then(
+        (m) => m.AccountDetailsPageModule
+      ),
+  },
+  {
+    path: 'account-form',
+    loadChildren: () =>
+      import('./pages/accounts/account-form/account-form.module').then(
+        (m) => m.AccountFormPageModule
+      ),
+  },
+  {
     path: '',
     redirectTo: '/tabs/tab1',
     pathMatch: 'full',
-  },
-  {
-    path: 'home',
-    loadChildren: () =>
-      import('./home/home.module').then((m) => m.HomePageModule),
   },
 ];
 @NgModule({

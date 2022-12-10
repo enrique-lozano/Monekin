@@ -14,6 +14,7 @@ import { DatePickerComponent } from '../components/dialogs/date-picker/date-pick
 import { CustomDateRangeComponent } from '../components/dialogs/date-range-selector/custom-date-range/custom-date-range.component';
 import { DateRangeSelectorComponent } from '../components/dialogs/date-range-selector/date-range-selector.component';
 import { IconSelectorComponent } from '../components/dialogs/icon-selector/icon-selector.component';
+import { PopoverMenuComponent } from '../components/dialogs/popover-menu/popover-menu.component';
 import { TransactionFilterComponent } from '../components/dialogs/transaction-filter/transaction-filter.component';
 import { TransactionOrderSelectorComponent } from '../components/dialogs/transaction-order-selector/transaction-order-selector.component';
 import { CurrencyValueComponent } from '../components/ui/currency-value/currency-value.component';
@@ -31,6 +32,7 @@ import { TrendingComponent } from '../components/ui/trending/trending.component'
     TransactionFilterComponent,
     CurrencySelectorComponent,
     CategoryStatsComponent,
+    PopoverMenuComponent,
     DatePickerComponent,
     DateRangeSelectorComponent,
     CustomDateRangeComponent,

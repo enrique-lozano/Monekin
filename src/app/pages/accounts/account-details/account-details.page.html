@@ -1,0 +1,167 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="openAccountActions($event)">
+        <ion-icon slot="icon-only" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <div class="p">
+    <div>
+      <ng-container *ngIf="account">{{account.name}}</ng-container>
+      <ion-skeleton-text *ngIf="!account" animated style="width: 25%;"></ion-skeleton-text>
+    </div>
+    <h1 class="mt-xs mb-xs">
+      <currency-value *ngIf="account" [value]="moneyInAccount" [currencyCode]="account?.currency"></currency-value>
+      <ion-skeleton-text *ngIf="!account" animated style="width: 35%;"></ion-skeleton-text>
+    </h1>
+  </div>
+
+  <div class="account-icon-container" *ngIf="account">
+    <ion-icon [name]="account?.icon"></ion-icon>
+  </div>
+
+</ion-header>
+
+<ion-content *transloco="let t" class="p">
+
+  <ion-chip [outline]="true" (click)="openDateModal()">
+    <ion-label>{{ t(("GENERAL.TIME.THIS." + dateRangeService.dateRangeSelected)) }}</ion-label>
+    <ion-icon name="caret-down"></ion-icon>
+  </ion-chip>
+
+  <ion-card class="mt">
+    <ion-card-header>
+      <ion-card-title>{{ t("GENERAL.expenses-and-incomes") }} </ion-card-title>
+
+      <ion-buttons>
+        <ion-button color="primary" (click)="goToAccountStats()">
+          <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+
+    </ion-card-header>
+
+    <ion-card-content>
+      <div class="flex justify-content-between">
+
+        <div class="flex items-center">
+          <ion-icon name="arrow-up" color="success" class="rounded-full shadow p-s mr-s" style="background-color: white;"></ion-icon>
+          <div>
+            <div class="thin" style="font-size: 0.9em;">{{ t("GENERAL.income") }}</div>
+            <div>
+              <currency-value *ngIf="income !== undefined" [value]="income" [currencyCode]="account.currency" [showDecimals]="false"></currency-value>
+              <ion-skeleton-text *ngIf="income === undefined" animated style="width: 100%;"></ion-skeleton-text>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center">
+          <ion-icon name="arrow-down" color="danger" class="rounded-full shadow p-s mr-s" style="background-color: white;"></ion-icon>
+          <div>
+            <div class="thin" style="font-size: 0.9em;">{{ t("GENERAL.expense") }}</div>
+            <div *ngIf="account">
+              <currency-value *ngIf="expense !== undefined" [value]="expense" [currencyCode]="account.currency" [showDecimals]="false">
+              </currency-value>
+              <ion-skeleton-text *ngIf="expense === undefined" animated style="width: 100%;"></ion-skeleton-text>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Info</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list>
+
+        <ion-item>
+          <ion-label>
+            <h3>{{ t("ACCOUNT.date") }}</h3>
+            <p>
+              <ng-container *ngIf="account">
+                {{ account.date | date : "longDate" : undefined : lang.getSelectedLang() }}
+              </ng-container>
+              <ion-skeleton-text *ngIf="!account" animated style="width: 70%;"></ion-skeleton-text>
+            </p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item *ngIf="account?.text">
+          <ion-label>
+            <h3>{{ t("ACCOUNT.FORM.description") }}</h3>
+            <p>{{ account?.text }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>
+            <h3>{{ t("ACCOUNT.n_transactions") }}</h3>
+            <p>
+              <ng-container *ngIf="allTransactions && transactions">
+                {{ allTransactions?.length }}
+                {{ t("(" + transactions?.length + " " + ("GENERAL.TIME.THIS." + dateRangeService.dateRangeSelected) | lowercase) + ")" }}
+              </ng-container>
+              <ion-skeleton-text *ngIf="!(allTransactions && transactions)" animated style="width: 70%;"></ion-skeleton-text>
+            </p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item *ngIf="account?.iban">
+          <ion-label>
+            <h3>{{ t("ACCOUNT.FORM.iban") }}</h3>
+            <p>{{ account?.iban }}</p>
+          </ion-label>
+
+          <ion-buttons slot="end">
+            <ion-button (click)="copyToClipboard(account.iban, 'ACCOUNT.FORM.iban')">
+              <ion-icon color="primary" name="copy-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+
+        <ion-item *ngIf="account?.swift">
+          <ion-label>
+            <h3>{{ t("ACCOUNT.FORM.swift") }}</h3>
+            <p>{{ account?.swift }}</p>
+          </ion-label>
+
+          <ion-buttons slot="end">
+            <ion-button (click)="copyToClipboard(account.swift, 'ACCOUNT.FORM.swift')">
+              <ion-icon color="primary" name="copy-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{ t("TABS.TAB1.important-expenses") }} </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p *ngIf="getImportantTransactions()?.length === 0" class="px text-center">
+        {{ t("TABS.TAB1.empty-expenses") }}
+      </p>
+
+      <app-transaction-list [transactions]="getImportantTransactions()" [displayTextSeparator]="false" [lineBetweenTransaction]="'medium'">
+      </app-transaction-list>
+
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
