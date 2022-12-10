@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ISOCorrencyCodes } from 'src/app/constants/currencies/currency-code.enum';
 import { currencyNames } from 'src/app/constants/currencies/i18n/currencies';
-import { Currency } from 'src/app/models/currency.model';
 import { AppLanguageCode } from 'src/app/modules/i18n/availableLangs';
+import { Currency } from 'src/app/services/currency/currency.model';
 import { SettingsService } from '../db/settings/settings.service';
 import { LangService } from '../translate/translate.service';
 
