@@ -5,6 +5,9 @@ import { IonicModule } from '@ionic/angular';
 import { ExploreContainerComponentModule } from '../../../explore-container/explore-container.module';
 import { Tab1Page } from './tab1.page';
 
+import { TranslocoModule } from '@ngneat/transloco';
+import { ComponentsModule } from 'src/app/modules/components.module';
+import { SwiperModule } from 'swiper/angular';
 import { Tab1PageRoutingModule } from './tab1-routing.module';
 
 @NgModule({
@@ -14,6 +17,9 @@ import { Tab1PageRoutingModule } from './tab1-routing.module';
     FormsModule,
     ExploreContainerComponentModule,
     Tab1PageRoutingModule,
+    TranslocoModule,
+    ComponentsModule,
+    SwiperModule,
   ],
   declarations: [Tab1Page],
 })

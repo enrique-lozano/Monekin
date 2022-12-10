@@ -1,0 +1,24 @@
+ion-list > * {
+  transform-origin: 0% 0%;
+}
+
+.green {
+  color: var(--ion-color-success-contrast);
+  background-color: var(--ion-color-success);
+}
+
+.sublist-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 0.5vh;
+  padding-left: 16px;
+  margin-top: 1vh;
+}
+
+.sublist-title:not(:first-of-type) {
+  margin-top: 2vh;
+}
+
+/*--------- dark mode variables go here----------- */
+@media (prefers-color-scheme: dark) {
+}

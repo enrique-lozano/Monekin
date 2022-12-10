@@ -41,8 +41,19 @@
 @import "./fonts/nunito/font-faces.scss";
 @import "./fonts/work-sans/font-faces.scss";
 
+/* Material Icons */
+@import "./material-icons/style.scss";
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 500, "GRAD" 0, "opsz" 48;
+}
+
 /* App styles */
 @import "./base/layout.scss";
 @import "./base/typography.scss";
 
 @import "./components/button.scss";
+@import "./components/swiper.scss";
+@import "./components/card.scss";
+@import "./components/dialog.scss";
+@import "./components/avatar.scss";

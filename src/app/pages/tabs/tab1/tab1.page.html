@@ -1,125 +1,230 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
-  </ion-toolbar>
+<ion-header *transloco="let t" class="p pb-l">
+
+  <div class="flex justify-content-between items-center">
+    <div class="flex items-center" routerLink="/settings">
+
+      <ion-avatar class="user-avatar mr-xs">
+        <img *ngIf="userAvatar" [src]="'./../../../../assets/icons/avatars/' + userAvatar + '.svg'" alt="User Avatar">
+        <ion-skeleton-text *ngIf="!userAvatar" animated></ion-skeleton-text>
+      </ion-avatar>
+
+      <div class="ml-s">
+        <span class="thin text-smaller">
+          {{ t("TABS.TAB1.hello-" + currentTime) }}
+        </span>
+        <h5>
+          <ion-skeleton-text *ngIf="!userName" style="width: 80%;" animated></ion-skeleton-text>
+          <ng-container *ngIf="userName">{{userName}}</ng-container>
+        </h5>
+      </div>
+
+    </div>
+
+    <ion-chip [outline]="true" (click)="openDateModal()">
+      <ion-label>{{ t("GENERAL.TIME.THIS." + dateRangeService.dateRangeSelected) }}</ion-label>
+      <ion-icon name="caret-down"></ion-icon>
+    </ion-chip>
+
+  </div>
+
+  <div class="mt pt all-accounts-info">
+    <div class="thin text-smaller"> {{ t("TABS.TAB1.total-balance") }} </div>
+    <h1>
+      <currency-value *ngIf="userTotalMoney !== undefined" [value]="userTotalMoney"></currency-value>
+      <ion-skeleton-text *ngIf="userTotalMoney === undefined" animated style="width: 30%;"></ion-skeleton-text>
+    </h1>
+
+    <div class="bold mt-xs">
+      <app-trending [form]="'outline-box'" [value]="userMoneyVariation" [textAfter]="('GENERAL.TIME.THIS.' +
+        dateRangeService.dateRangeSelected) | lowercase">
+      </app-trending>
+    </div>
+  </div>
+
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content *transloco="let t" color="" [scrollEvents]="true" (ionScroll)="toggleFab($event)">
+
+  <div class="flex justify-content-between items-end pl pr-xs pt">
+    <ion-card-title class="my-s">{{ t("TABS.TAB1.my-accounts") }}</ion-card-title>
+    <ion-button size="small" fill="clear" color="primary" routerLink="/all-accounts">
+      {{ t("TABS.TAB1.ACCOUNT-RESUME.link")}}
+    </ion-button>
+  </div>
+
+  <div class="px" *ngIf="!accounts">
+    <ion-progress-bar type="indeterminate"></ion-progress-bar>
+  </div>
+
+  <swiper @inOut *ngIf="accounts" [config]="accountsSwiperConfig" class="swiper-height-auto slides-width-auto" #accountsSwiper>
+    <ng-template swiperSlide *ngFor="let account of accounts; let i = index">
+      <ion-card color="light" class="account-card p" style="margin-left: 16px;" [routerLink]="'/account-details/' + account.id">
+        <div class="flex items-center w-full">
+          <ion-icon [name]="account.icon" color="" class="rounded-full"
+            style="background-color: var(--ion-color-tertiary); color: var(--ion-color-tertiary-contrast); font-size: 22px; padding: 12px;">
+          </ion-icon>
+          <div style="margin-left: 14px;">
+            <h5 class="mb-xs flex items-center">
+              {{ account.name }}
+            </h5>
+            <div class="flex items-end">
+              <span style="margin-right: 12px;">
+                <currency-value [value]="account.money" [currencyCode]="account.currency">
+                </currency-value>
+              </span>
+              <app-trending class="bold" style="display: inline-block;" [value]="account.variation">
+              </app-trending>
+            </div>
+          </div>
+        </div>
+      </ion-card>
+    </ng-template>
+
+    <ng-template swiperSlide>
+      <ion-card color="light" (click)="goToAddAccount()" style="margin-right: 16px; margin-left: 16px;"
+        class="account-card p add-account-slide-container">
+        <div class="text-center flex items-center justify-content-around w-full">
+          <ion-icon name="add-circle"></ion-icon>
+          <h5>{{ t("ACCOUNT.FORM.create") }}</h5>
+        </div>
+      </ion-card>
+    </ng-template>
+  </swiper>
+
+  <div class="p">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title> {{ t("FINANCIAL-HEALTH.display") }} </ion-card-title>
+
+        <ion-buttons>
+          <ion-button color="primary" routerLink="/finance-health">
+            <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+
+      </ion-card-header>
+
+      <ion-card-content>
+
+        <div class="flex items-center wrap">
+          <p class="health-text">
+            <ng-container *ngIf="healthyReview">
+              {{ t("FINANCIAL-HEALTH.review.descr." + healthyReview) }}
+            </ng-container>
+
+            <ng-container *ngIf="!healthyReview">
+              <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+            </ng-container>
+          </p>
+
+          <div class="healthy-chart-container">
+            <canvas #healthyChart></canvas>
+            <p id="health-value">{{healthy | number : "1.0-0"}}</p>
+          </div>
+
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ t("TABS.TAB1.important-expenses") }} </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <p *ngIf="importantTransactions?.length === 0" class="px text-center">
+          {{ t("TABS.TAB1.empty-expenses") }}
+        </p>
+
+        <app-transaction-list [transactions]="importantTransactions" [displayTextSeparator]="false" [lineBetweenTransaction]="'medium'">
+        </app-transaction-list>
+
+      </ion-card-content>
+    </ion-card>
 
 
-  <ion-button routerLink="/home">Ir a home</ion-button>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ t("GENERAL.expenses-and-incomes") }} </ion-card-title>
 
-  <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quas ea molestias suscipit corporis nobis inventore modi voluptate ullam, quos ratione
-    sed alias eos fuga provident corrupti labore quo tenetur placeat possimus aliquid maxime? Exercitationem ex minima placeat, aperiam a adipisci
-    numquam vitae eos sunt! Ullam recusandae aperiam, quas necessitatibus doloremque deserunt minima qui quisquam suscipit est quidem laborum velit,
-    cumque sed praesentium soluta? Exercitationem vitae cum dignissimos sunt, assumenda beatae voluptatum dolor velit corrupti repudiandae? Nobis quo
-    beatae nesciunt sequi exercitationem. Quos neque itaque quae quidem, voluptatum cumque incidunt vitae qui iste ipsum, modi optio nihil autem iure
-    molestias earum rem? Iste quas eos nemo dicta a tempore odio cumque quae optio aut facilis praesentium ipsam reiciendis quisquam inventore quod
-    possimus corporis quasi illo voluptatem maiores, minima aspernatur. Dolorem eaque nulla eveniet, earum nam error. Consequatur debitis laudantium
-    quia natus incidunt eligendi dolorem, quisquam similique exercitationem maxime qui suscipit veritatis quis laborum, mollitia ea, est cumque
-    cupiditate fuga culpa assumenda commodi labore. Ipsam quaerat voluptatibus ut veritatis aliquam dolor amet facilis sed ex, repudiandae iusto neque
-    fugiat repellendus voluptatem veniam, quis ea est nisi at distinctio tenetur quibusdam dolores temporibus? Reiciendis ipsum, reprehenderit ex
-    fugit quia quidem placeat consectetur quam dicta commodi accusantium, illo nisi dolorem amet assumenda libero deleniti neque excepturi voluptatem
-    sapiente accusamus sunt? Voluptate quibusdam, voluptas velit impedit sapiente quae vitae provident magnam dolores iste minus, vero ipsa ut
-    eligendi corrupti nesciunt rem corporis. Nulla atque ipsa odio suscipit. Inventore dolorem iusto ratione, voluptatum nostrum cumque! Ipsam et
-    nostrum vel? Tempore reprehenderit amet molestias nostrum, odit pariatur adipisci maiores, itaque explicabo, animi distinctio suscipit est
-    veritatis porro! Dolorum excepturi ratione deleniti qui dicta fugit alias porro, id quos quibusdam, consequatur accusamus cum maiores enim
-    recusandae, repudiandae expedita quod eius? Perferendis suscipit veniam vel eaque fugiat totam possimus et culpa ullam? Esse dignissimos odio ab
-    quaerat omnis quibusdam maxime incidunt, tenetur natus nobis deleniti explicabo voluptatibus dolores eius odit distinctio libero suscipit
-    consectetur tempore, error voluptates. Maxime, atque. Iusto labore maiores aut vero rerum libero dolorum pariatur neque cumque possimus doloremque
-    doloribus provident quam, totam repudiandae commodi illo, hic corrupti vitae recusandae placeat alias? Dignissimos maxime animi iure eaque quis
-    officiis ipsum quo vel impedit ex dolorem suscipit saepe earum facilis, odio sint, consequatur velit consectetur nemo eius. Voluptates magnam
-    maiores autem natus error pariatur obcaecati necessitatibus perferendis. Possimus eligendi, atque, a adipisci error aperiam nulla dignissimos
-    veritatis, magnam nemo quisquam. Recusandae voluptates ullam, excepturi deserunt, nostrum dolores pariatur sunt expedita porro neque numquam.
-    Dicta eaque fuga ut maxime suscipit delectus autem eum magnam ipsa aperiam, est totam necessitatibus corrupti quis repellat quas laborum quod,
-    illum recusandae! Sunt necessitatibus dolore veniam dicta voluptates quibusdam odit, voluptatum, at corrupti nam perferendis ab debitis architecto
-    distinctio explicabo reiciendis amet! Voluptas quasi ut deserunt delectus. Velit quasi inventore ipsam explicabo? Sapiente nemo aperiam qui, nobis
-    asperiores veritatis sit, aut est laborum tempora natus itaque consequuntur exercitationem optio tenetur consequatur, vero voluptates rerum atque
-    totam. Architecto enim voluptates atque excepturi ex consectetur iure repudiandae quaerat porro, quisquam dolor cumque odit deleniti saepe a. Et
-    totam esse dolore. Cum, dolores mollitia placeat architecto quisquam, quia impedit itaque earum deleniti officiis minus ipsum! Magnam quae
-    dignissimos, doloremque suscipit autem sequi reiciendis? Esse aperiam rerum, quas eum maiores hic. Magni vero adipisci iste consequatur inventore
-    alias magnam quod officia ab aperiam esse neque nostrum error molestiae non iusto, in cum quaerat obcaecati perspiciatis iure asperiores facere
-    saepe. Libero officiis mollitia, rerum, eum minus omnis illum sunt illo ipsa perspiciatis amet aut laudantium? Saepe error iste hic maxime
-    corrupti et a itaque consectetur non recusandae, soluta laudantium eligendi vitae incidunt tempore provident totam porro minima mollitia, voluptas
-    quisquam autem. Nam aspernatur natus reprehenderit dolores in, saepe tempore ut sit illum cum provident ipsum. Dignissimos, labore, id ex autem
-    ipsa ducimus perferendis quam explicabo ullam, ipsum quisquam facilis incidunt dolore! Quo ullam molestias quos aperiam, mollitia ipsam doloribus,
-    suscipit corrupti natus quis repellendus veniam debitis esse ipsa incidunt impedit fugit in quam rem necessitatibus voluptatem. Necessitatibus
-    rerum quisquam nulla repellendus aliquid ipsum natus reprehenderit soluta iste repudiandae facilis porro voluptatibus maiores, molestiae quod
-    itaque officia totam eum illo eius deleniti quis consequatur officiis? Optio consectetur magni dolore odio voluptate iure laboriosam reiciendis
-    recusandae veniam atque, sed, aut eligendi, vel facilis at unde voluptatibus. Accusantium fuga dolorum suscipit minus facilis itaque incidunt
-    quis, excepturi molestiae maiores deserunt repudiandae reiciendis. Natus earum in quas nesciunt ex autem delectus ducimus. Doloremque corrupti
-    suscipit voluptates aperiam commodi obcaecati, harum tenetur error alias nesciunt architecto, sequi soluta, ad est. Aut quis repudiandae ab
-    consequatur esse tenetur illo velit numquam reprehenderit eligendi id tempore odit, hic excepturi deserunt doloremque sit. Adipisci cum suscipit
-    odit soluta repellendus laudantium voluptatum enim eum nulla molestiae, vero atque mollitia voluptatem nisi fuga libero aliquid incidunt
-    exercitationem dolore rerum qui iusto ullam fugit ipsam. Recusandae unde saepe architecto neque corrupti sapiente ratione culpa obcaecati!
-    Voluptatibus vitae distinctio dolorum minima illo, veniam sint praesentium, nam at tempora repellendus, laboriosam ut impedit quis vero excepturi.
-    Inventore eaque est obcaecati, quae sint neque minima libero omnis accusamus nobis. Ex labore excepturi sequi odit. Ratione molestiae excepturi,
-    non, officia voluptas sint in laborum quo sed error expedita odio porro nisi odit deleniti esse fugit, unde libero explicabo ad. Aliquam, impedit!
-    Iusto vero tempore laboriosam, esse, porro enim voluptas quod placeat aliquid fugit sapiente dignissimos! Modi ex esse quia, a rerum molestiae
-    ducimus perspiciatis excepturi, voluptates, dignissimos facere. Quos, illo nobis amet placeat sapiente delectus exercitationem voluptates laborum!
-    Iusto maiores temporibus ratione error eum tenetur illum ducimus commodi vel dolor sed incidunt iste in neque officia, obcaecati esse adipisci
-    voluptatem ab sapiente? Dolore earum ab provident voluptate, impedit voluptatem voluptatum mollitia architecto ducimus esse iure nihil obcaecati
-    quos at nam reprehenderit corporis harum incidunt. Reiciendis ullam consequuntur, aspernatur nobis in ipsa dolore quisquam ratione repellat quia
-    dolorum? Dolor quas fugit distinctio inventore ullam tenetur sed assumenda enim ea facere debitis quos ad dolore suscipit a libero incidunt,
-    laborum repudiandae nostrum omnis. Cum eaque laboriosam ex culpa dicta officia blanditiis dolores eum sint quis neque labore, natus ipsam
-    necessitatibus alias consequatur mollitia vel accusamus voluptatum assumenda aspernatur placeat. In accusantium a nulla at adipisci. In, sit eum.
-    Eveniet eligendi quidem assumenda mollitia perferendis repellat exercitationem recusandae odio delectus numquam, minima libero quasi tempora neque
-    vero. Assumenda, reiciendis dignissimos. Alias tempore labore debitis cupiditate, temporibus dolorum repudiandae doloremque nisi quasi? Aliquam
-    natus saepe, ullam eveniet quidem nulla optio doloribus tenetur dolor repudiandae commodi quam consequatur illum doloremque voluptatum enim
-    laudantium eligendi omnis maxime nesciunt molestias nostrum! Facere impedit ipsam, cumque corrupti earum, blanditiis iusto dolorum atque ab
-    dolorem ut sit nisi similique qui labore magnam incidunt molestias quas praesentium reiciendis a magni dicta obcaecati aperiam. Rerum, nemo
-    explicabo. Molestias facilis assumenda, maiores doloremque reprehenderit excepturi magni accusantium in! Architecto mollitia consequuntur
-    accusantium sunt! Commodi voluptatum nulla iure voluptatibus, cumque aliquid ipsam ducimus totam similique dicta quod magnam, temporibus
-    doloremque, assumenda ea fugit saepe consequuntur quia officia. Quisquam dolor voluptate quasi, sed unde excepturi iusto architecto a itaque
-    consequuntur sint sequi reiciendis dolorem iste accusamus accusantium nostrum fugiat magnam ut enim. Numquam inventore voluptatum repellat
-    architecto nostrum adipisci nemo laborum. Culpa sequi, aliquam reprehenderit rerum soluta unde labore ut! Eius dolorem eos repellendus vitae neque
-    non! Illum facere ab error deleniti nobis eum, porro neque natus quod. Fuga dolor magnam sit! Aspernatur placeat neque molestias est minus alias,
-    sequi quam eaque similique natus id ullam dolore dolor velit ad a consequuntur unde iste fugit, exercitationem culpa, pariatur optio inventore
-    facilis. Excepturi odio delectus inventore, tempora quasi nihil facere hic eveniet voluptas saepe pariatur fuga minima, molestiae laudantium
-    beatae earum corrupti consequatur atque. Ut quae, assumenda deserunt adipisci ad accusamus pariatur consectetur blanditiis, rerum provident
-    obcaecati autem nisi molestias nobis nesciunt eos officia saepe soluta dicta nemo error iure! Laudantium ipsam facilis velit facere ea expedita
-    incidunt fuga nulla blanditiis et, magni dicta, voluptatum ipsa odio, assumenda repellendus libero error vel eaque. Fugit ea, nesciunt reiciendis
-    omnis perferendis asperiores quis incidunt ullam quae unde officiis dolorum sed eos aut adipisci repudiandae ducimus soluta veritatis sapiente
-    expedita laudantium cupiditate eum iure? Tempore officiis neque voluptatibus, aliquid nam odio explicabo, saepe hic iure soluta illo sed veniam
-    sunt, exercitationem recusandae et incidunt rem. Dignissimos odio, distinctio pariatur amet consequatur possimus magnam nulla corrupti veniam
-    facere adipisci beatae minus aspernatur sunt, aut architecto non modi deserunt atque voluptas. Tenetur provident animi dolor impedit odit facilis
-    doloribus incidunt saepe quo nemo, dolorum totam quas. Illo aut similique, a natus iusto accusantium nesciunt numquam debitis exercitationem quo
-    maiores asperiores id modi consequuntur veniam rerum labore libero nam velit voluptate? Soluta ab maxime esse libero vero perferendis. Error
-    facere magnam quas possimus ullam dolorum ut porro molestias repellendus id illum voluptatum perferendis laboriosam, mollitia esse quis, saepe
-    nemo dolor. Error, repudiandae. Corporis, ipsa facere. Excepturi perspiciatis facilis inventore cumque. Reiciendis, hic ipsam totam molestiae
-    eveniet a voluptatum praesentium neque, sapiente illo inventore quia, perferendis placeat dicta adipisci ipsum quidem fugiat at asperiores
-    veritatis! Ut ratione minima nihil sunt expedita perferendis? Animi molestiae nisi hic commodi amet fugit accusantium. Blanditiis aliquam possimus
-    perferendis consequatur sequi quos ab alias eaque repellat beatae adipisci voluptates soluta facere cupiditate obcaecati rerum, omnis illum natus
-    quas et animi numquam sit dicta cum? Quia eaque dolor sequi aspernatur! Ipsum perspiciatis quisquam quis ad sint optio suscipit eligendi
-    voluptatum tempore vero doloribus iusto atque itaque debitis repellat magnam, nisi, voluptatibus alias, fuga voluptate. Magni, nesciunt!
-    Praesentium cum consectetur, tempora reiciendis minus quidem repudiandae ab distinctio minima ratione deserunt. Rem soluta aperiam excepturi vero
-    incidunt aliquam itaque tempora optio. Magnam dicta voluptatibus at laudantium, expedita ipsa hic? Rem, necessitatibus exercitationem ea quia
-    excepturi at officiis eos fugiat ullam nobis vero doloremque inventore reprehenderit aliquam consequatur nihil earum placeat, optio, nostrum nulla
-    culpa ducimus cupiditate debitis maxime. Molestias quod voluptatibus magnam eos nam voluptatem, eveniet velit itaque molestiae doloribus
-    perferendis quis, aperiam repellendus corrupti veritatis quia esse, reiciendis in omnis corporis! Sunt vero ut enim quasi aspernatur assumenda
-    tenetur odio in. Quas officia velit nulla sed adipisci minima quod mollitia esse unde voluptatem blanditiis accusantium facere id asperiores
-    officiis voluptate a in eos optio voluptatibus inventore architecto, voluptates, delectus eligendi. Ipsam eaque amet ullam fugiat sapiente
-    corporis, tenetur iusto pariatur reiciendis possimus commodi, dignissimos maiores. Suscipit numquam voluptates, hic, alias harum reiciendis
-    impedit dolores vel reprehenderit dicta tenetur voluptatibus eligendi architecto placeat officia libero quia iure maxime. Soluta corrupti optio
-    repellat dolorum repudiandae consequatur officiis commodi, nulla molestiae itaque id est rem cumque totam! Alias blanditiis commodi dolores
-    ducimus, expedita voluptatibus fugit repellat? Tempora consequatur fugit tempore vitae aut eaque? Ipsa sit fuga tenetur est minus illum deleniti
-    laudantium? Quaerat nam, magni non molestiae nesciunt nisi qui accusamus beatae vitae esse, dicta officia a odio iusto repudiandae quam omnis quo
-    veniam at mollitia reiciendis quod. Molestias sequi impedit illum nam fugit qui amet voluptate. Nihil nesciunt, consequatur magnam cum saepe eaque
-    earum distinctio, autem iusto hic sequi, animi voluptate architecto sit ipsa explicabo quod ea. Optio laboriosam voluptates architecto dicta
-    repudiandae, veniam nemo laudantium sit dolore illo nam temporibus, laborum dolor voluptatibus deserunt ex error fuga ipsa rerum, quasi suscipit
-    itaque fugit exercitationem. Soluta exercitationem ex laboriosam reprehenderit voluptatibus totam magni explicabo in, qui beatae fugiat nisi iste
-    sunt eveniet aliquam perspiciatis unde temporibus, aliquid quis? Voluptatibus delectus voluptas iste mollitia praesentium dolores dolorum, optio
-    culpa soluta? Pariatur quisquam laboriosam maiores? Reprehenderit, asperiores. Culpa odio neque voluptates ab debitis molestias quia quidem illum
-    suscipit tenetur impedit accusamus dolorum provident temporibus sed atque deleniti, voluptatem nostrum reiciendis aspernatur fugit at? Enim nam
-    illum, exercitationem blanditiis, fugiat dolor consequatur autem nesciunt eveniet et aut laboriosam, sapiente nisi explicabo ea eius repudiandae
-    quisquam delectus quis ipsam quidem ratione. Reprehenderit voluptatem quod necessitatibus repudiandae tenetur architecto omnis accusamus
-    voluptatum dolore quas, eos repellat. Harum, quia fugit enim molestias illum minima corrupti ipsam, quis fugiat, repellat cum eligendi doloremque.
-    Minus, excepturi eaque perferendis suscipit consectetur possimus accusamus dignissimos soluta provident?</p>
+        <ion-buttons>
+          <ion-button color="primary" routerLink="/tabs/tab3">
+            <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="flex justify-content-between">
+
+          <div class="flex items-center">
+            <ion-icon name="arrow-up" color="success" class="rounded-full shadow p-s mr-s" style="background-color: white;"></ion-icon>
+            <div>
+              <div class="thin" style="font-size: 0.9em;">{{ t("GENERAL.income") }}</div>
+              <div>
+                <currency-value *ngIf="userTotalIncome !== undefined" [value]="userTotalIncome" [showDecimals]="false"></currency-value>
+                <ion-skeleton-text *ngIf="userTotalIncome === undefined" animated style="width: 30%;"></ion-skeleton-text>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center">
+            <ion-icon name="arrow-down" color="danger" class="rounded-full shadow p-s mr-s" style="background-color: white;"></ion-icon>
+            <div>
+              <div class="thin" style="font-size: 0.9em;">{{ t("GENERAL.expense") }}</div>
+              <div>
+                <currency-value *ngIf="userTotalExpense !== undefined" [value]="userTotalExpense" [showDecimals]="false"></currency-value>
+                <ion-skeleton-text *ngIf="userTotalExpense === undefined" animated style="width: 30%;"></ion-skeleton-text>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title> {{ t("TABS.TAB1.tools") }} </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-list class="tool-list">
+          <ion-item detail routerLink="/recurring-transaction-list">
+            <span slot="start" class="material-symbols-outlined">
+              restart_alt
+            </span>
+            <ion-label>{{ t("RECURRENT-TRANSACTIONS.title") }}</ion-label>
+          </ion-item>
+
+          <ion-item detail routerLink="/budgets">
+            <span slot="start" class="material-symbols-outlined">
+              calculate
+            </span>
+            <ion-label>{{ t("BUDGETS.title") }}</ion-label>
+          </ion-item>
+
+          <ion-item detail routerLink="/currency-converter">
+            <span slot="start" class="material-symbols-outlined">
+              currency_exchange
+            </span>
+            <ion-label>{{ t("CURRENCIES.currency-converter") }}</ion-label>
+          </ion-item>
+
+          <ion-item detail routerLink="/settings">
+            <span slot="start" class="material-symbols-outlined">
+              settings
+            </span>
+            <ion-label>{{ t("SETTINGS.title") }}</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+
+    </ion-card>
+  </div>
 </ion-content>

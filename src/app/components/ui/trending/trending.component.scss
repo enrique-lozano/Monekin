@@ -1,0 +1,46 @@
+.trend {
+  display: flex;
+
+  > * {
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    font-size: smaller;
+  }
+
+  &.box > * {
+    padding: 2px 6px;
+
+    &.green {
+      background-color: var(--ion-color-success-light);
+    }
+
+    &.red {
+      background-color: var(--ion-color-danger-light);
+    }
+
+    &.equal {
+      background-color: var(--ion-color-light);
+    }
+  }
+
+  ion-icon {
+    margin-right: 4px;
+  }
+
+  .green * {
+    color: var(--ion-color-success);
+  }
+
+  .red * {
+    color: var(--ion-color-danger);
+  }
+
+  .equal * {
+    color: var(--ion-color-primary);
+
+    @media (prefers-color-scheme: dark) {
+      color: var(--ion-color-tertiary);
+    }
+  }
+}

@@ -1,0 +1,48 @@
+ion-card {
+  margin: 0;
+  margin-bottom: 16px;
+  border-radius: 8px;
+
+  ion-card-header {
+    &.md {
+      padding-top: 4px;
+      padding-bottom: 6px;
+      padding-right: 6px;
+    }
+
+    &.ios {
+      padding-top: 12px;
+      padding-bottom: 8px;
+      padding-right: 10px;
+    }
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    ion-card-title.md:only-child {
+      padding-top: 10px;
+      padding-bottom: 8px;
+    }
+  }
+
+  ion-card-content :not(p) {
+    color: var(--ion-text-color);
+  }
+
+  ion-card-content p {
+    color: var(
+      --ion-card-color,
+      var(--ion-item-color, var(--ion-color-step-550, #737373))
+    );
+  }
+
+  ion-list {
+    padding: 0px !important;
+
+    ion-item {
+      --padding-start: 0px;
+      --inner-padding-end: 4px;
+    }
+  }
+}

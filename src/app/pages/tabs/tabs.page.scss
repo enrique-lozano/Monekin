@@ -1,5 +1,27 @@
 @import "theme/breakpoints.scss";
 
+/* ION MAIN FAB STYLES */
+
+ion-fab {
+  transition: all 0.3s;
+  transform: scale(1);
+}
+
+ion-fab.hide {
+  transform: scale(0);
+}
+
+ion-fab.md {
+  bottom: 94px;
+  right: 16px;
+}
+
+ion-fab.ios {
+  bottom: 60px;
+}
+
+/* HEADER FOR TABLETS AND DESKTOPS */
+
 ion-header {
   ion-toolbar {
     div {
@@ -49,6 +71,10 @@ ion-tab-bar {
 }
 
 @include min-width("sm") {
+  ion-fab {
+    display: none;
+  }
+
   ion-tabs {
     flex-direction: column;
   }
