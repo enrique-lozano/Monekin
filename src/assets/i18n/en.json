@@ -90,6 +90,7 @@
       }
     },
     "TAB2": {
+      "title": "Transacciones",
       "balance": "Balance",
       "empty": "No transactions found to display here. Add a transaction by clicking the '+' button at the bottom",
       "searcher.placeholder": "Search by category, description...",

@@ -1,4 +1,4 @@
-<ion-tab-bar slot="bottom">
+<ion-tab-bar *transloco="let t" slot="bottom">
   <ion-header>
     <ion-toolbar>
       <div slot="start" class="p-s" style="max-height: 56px">
@@ -19,17 +19,17 @@
 
   <ion-tab-button [ngClass]="{'tab-selected': currentURL.endsWith('tab1')}" (click)="goTo('/tabs/tab1')">
     <ion-icon [name]="'home' + (currentURL.endsWith('tab1') ? '' : '-outline')"></ion-icon>
-    <ion-label>Tab 1</ion-label>
+    <ion-label>{{ t("TABS.TAB1.title") }}</ion-label>
   </ion-tab-button>
 
   <ion-tab-button [ngClass]="{'tab-selected': currentURL.endsWith('tab2')}" (click)="goTo('/tabs/tab2')">
     <ion-icon [name]="'file-tray-full' + (currentURL.endsWith('tab2') ? '' : '-outline')"></ion-icon>
-    <ion-label>Tab 2</ion-label>
+    <ion-label>{{ t("TABS.TAB2.title") }}</ion-label>
   </ion-tab-button>
 
   <ion-tab-button [ngClass]="{'tab-selected': currentURL.endsWith('tab3')}" (click)="goTo('/tabs/tab3')">
     <ion-icon [name]="'bar-chart' + (currentURL.endsWith('tab3') ? '' : '-outline')"></ion-icon>
-    <ion-label>Tab 3</ion-label>
+    <ion-label>{{ t("TABS.TAB3.title") }}</ion-label>
   </ion-tab-button>
 </ion-tab-bar>
 
