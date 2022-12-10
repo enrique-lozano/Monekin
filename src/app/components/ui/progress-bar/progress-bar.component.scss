@@ -1,0 +1,59 @@
+$animation-duration: 1s;
+
+.progress-container {
+  border-radius: 0.15rem;
+  position: relative;
+
+  &.horizontal {
+    width: 100%;
+    height: 10px;
+
+    .progress-fill {
+      height: 100%;
+      transition: width $animation-duration;
+      animation-duration: $animation-duration;
+      animation-name: animateProgressBarX;
+      transform-origin: 0% 0%;
+    }
+  }
+
+  &.vertical {
+    width: 10px;
+    height: 100%;
+
+    .progress-fill {
+      width: 100%;
+      transition: height $animation-duration;
+      animation-duration: $animation-duration;
+      animation-name: animateProgressBarY;
+      transform-origin: 0% 100%;
+    }
+  }
+
+  .progress-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    border-radius: 0.15rem;
+    animation-duration: 1.5s;
+  }
+}
+
+@keyframes animateProgressBarX {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes animateProgressBarY {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}

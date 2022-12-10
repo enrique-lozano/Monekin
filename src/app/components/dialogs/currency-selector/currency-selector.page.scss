@@ -1,0 +1,13 @@
+ion-searchbar {
+  --border-radius: 0.5rem;
+  padding: 0;
+
+  > .searchbar-input-container.sc-ion-searchbar-md {
+    border-radius: 0.5rem;
+    border: 1px solid var(--ion-color-light);
+  }
+
+  &.searchbar-has-focus > .searchbar-input-container.sc-ion-searchbar-md {
+    border: 1px solid var(--ion-color-medium);
+  }
+}

@@ -1,0 +1,12 @@
+.selected {
+  background-color: var(--ion-color-light);
+
+  ion-icon {
+    color: inherit;
+  }
+}
+
+ion-icon {
+  margin-right: 12px;
+  color: transparent;
+}

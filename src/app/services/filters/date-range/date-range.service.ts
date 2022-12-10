@@ -147,7 +147,7 @@ export class DateRangeService {
         );
       }
     } else if (this.dateRangeSelected == DateRange.Annualy) {
-      return startDateRange.getFullYear();
+      return String(startDateRange.getFullYear());
     } else if (this.dateRangeSelected == DateRange.Quaterly) {
       return (
         'Q' +

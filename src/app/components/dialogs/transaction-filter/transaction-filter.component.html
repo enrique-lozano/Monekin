@@ -1,0 +1,40 @@
+<ion-toolbar>
+  <ion-title>{{ "TABS.filter-transactions" | transloco }}</ion-title>
+</ion-toolbar>
+
+<div class="p">
+  <ion-item button="true" lines="none" class="mb-s" fill="outline" (click)="selectAccounts()">
+    <ion-label>{{ "GENERAL.accounts" | transloco }}:</ion-label>
+    <ion-label class="text-end">
+      <ng-container *ngIf="selectedAccounts !== 'all'">
+        <ng-container *ngFor="let account of selectedAccounts; let i = index">{{account.name}}{{ i !== (selectedAccounts.length-1) ? ", " : "" }}
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="selectedAccounts === 'all'">
+        {{ "ACCOUNT.SELECT.all" | transloco }}
+      </ng-container>
+    </ion-label>
+  </ion-item>
+
+  <ion-item button="true" lines="none" class="mt-s mb" fill="outline" (click)="selectCategories()">
+    <ion-label>{{ "GENERAL.categories" | transloco }}:</ion-label>
+    <ion-label class="text-end" *ngIf="selectedCategories !== 'all'">
+      <ng-container *ngFor="let category of selectedCategories; let i = index">
+        {{category.name}}{{ i !== (selectedCategories.length-1) ? ", " : "" }}
+      </ng-container>
+    </ion-label>
+    <ion-label *ngIf="selectedCategories === 'all'" class="text-end">{{ "CATEGORIES.SELECT.all" | transloco }}</ion-label>
+  </ion-item>
+
+  <!-- Buttons -->
+  <div class="flex justify-content-between">
+    <ion-button expand="block" style="width: 49%;" class="stroked" (click)="dismiss()">
+      {{ "GENERAL.cancel" | transloco }}
+    </ion-button>
+
+    <ion-button expand="block" style="width: 49%;" (click)="submit()">
+      {{ "GENERAL.confirm" | transloco }}
+    </ion-button>
+  </div>
+
+</div>

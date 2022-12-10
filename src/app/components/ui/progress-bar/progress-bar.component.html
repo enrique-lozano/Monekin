@@ -1,0 +1,5 @@
+<div class="progress-container" [ngClass]="mode === 'Horizontal' ? 'horizontal' : 'vertical'" [ngStyle]="{'background': '#' + color + '19'}">
+  <div class="progress-fill" [style.width]="mode === 'Horizontal' ? infillPercentage + '%' : ''"
+    [style.height]="mode === 'Vertical' ? infillPercentage + '%' : ''" [ngStyle]="{'background': '#' + color}">
+  </div>
+</div>

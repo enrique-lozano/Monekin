@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons class="pt" slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{"CURRENCIES.select-a-currency" | transloco }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="pt px">
+    <ion-searchbar [(ngModel)]="searcher" (ionChange)="getItems()" debounce="0" style="margin-bottom: 2vh" type="text"
+      [placeholder]="'CURRENCIES.search-placeholder' | transloco"></ion-searchbar>
+  </div>
+
+  <ion-list>
+    <ion-item (click)="selectCoin(currency)" *ngFor="let currency of currencies">
+
+      <ion-avatar slot="start">
+        <img [src]="'./../../../../assets/icons/currency_flags/' + (currency.code | lowercase) + '.svg'" alt="Currency Flag" loading="lazy">
+      </ion-avatar>
+
+      <ion-label>
+        {{currency.name}}
+      </ion-label>
+
+      <ion-note slot="end">
+        {{currency.code}}
+      </ion-note>
+
+    </ion-item>
+  </ion-list>
+
+</ion-content>

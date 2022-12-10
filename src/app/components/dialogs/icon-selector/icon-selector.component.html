@@ -1,0 +1,52 @@
+<div *transloco="let t">
+  <ion-toolbar color="light">
+    <ion-icon [ngStyle]="{color: color, backgroundColor: background}" [name]="selectedIcon" slot="start"></ion-icon>
+    <ion-title slot="start">{{ popoverTitle }}</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar color="light" *ngIf="showInput">
+    <ion-item color="light">
+      <ion-label>{{ t("ICON-SELECTOR.name") }}</ion-label>
+      <ion-input [(ngModel)]="inputValue"></ion-input>
+    </ion-item>
+  </ion-toolbar>
+
+  <ion-toolbar [ngStyle]="{'margin-top': showInput ? '0px' : ''}" color="light" *ngIf="canSelectColor">
+    <ion-segment [(ngModel)]="segmentValue">
+      <ion-segment-button value="icon" (click)="slidePrev()">
+        {{ t("ICON-SELECTOR.icon") }}
+      </ion-segment-button>
+      <ion-segment-button value="color" (click)="slideNext()">
+        {{ t("ICON-SELECTOR.color") }}
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+  <swiper #swiper [config]="swiperConfig">
+    <ng-template swiperSlide>
+      <div class="flex wrap container icons-container" [ngStyle]="{marginTop: (!canSelectColor && !showInput) ? '72px' : ''}">
+        <ion-icon [lazy]="i > 40" *ngFor="let icon of icons; let i = index" [name]="icon" (click)="selectIcon(icon)"
+          [ngClass]="{'selected': selectedIcon === icon}">
+        </ion-icon>
+      </div>
+    </ng-template>
+    <ng-template swiperSlide>
+      <div class="flex wrap container color-container">
+        <ion-icon *ngFor="let c of colorOptions" [ngStyle]="{color: c, backgroundColor: c + '19'}" [name]="selectedIcon"
+          (click)="color = c; background = color + '19'" [ngClass]="{'selected': color === c}"></ion-icon>
+      </div>
+
+    </ng-template>
+
+  </swiper>
+
+  <div class="bottom-options">
+    <ion-button color="primary" fill="clear" (click)="dismiss()">
+      {{ t("GENERAL.cancel") }}
+    </ion-button>
+
+    <ion-button color="primary" fill="clear" (click)="submit()">
+      {{ t("GENERAL.confirm") }}
+    </ion-button>
+  </div>
+</div>

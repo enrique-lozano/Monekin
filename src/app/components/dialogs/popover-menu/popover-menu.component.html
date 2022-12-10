@@ -1,0 +1,8 @@
+<ion-list>
+  <ng-container *ngFor="let item of menuItems">
+    <ion-item [disabled]="item.disabled" button *ngIf="!item.hidden" (click)="clickElement(item)">
+      <ion-icon *ngIf="item.icon" slot="start" [name]="item.icon"></ion-icon>
+      <ion-label>{{ item.labelKey | translate }}</ion-label>
+    </ion-item>
+  </ng-container>
+</ion-list>

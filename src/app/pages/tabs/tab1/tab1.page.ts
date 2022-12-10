@@ -11,6 +11,7 @@ import Chart from 'chart.js/auto';
 
 //import { animate, style, transition, trigger } from '@angular/animations';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { OverlayEventDetail } from '@ionic/core';
 import { AccountUtilsService } from 'src/app/services/account-utils/account-utils.service';
 import { Account } from 'src/app/services/db/account/account.model';
 import { AccountService } from 'src/app/services/db/account/account.service';
@@ -18,8 +19,10 @@ import { UserAvatars } from 'src/app/services/db/settings/settings.model';
 import { SettingsService } from 'src/app/services/db/settings/settings.service';
 import { Transaction } from 'src/app/services/db/transaction/transaction.model';
 import { TransactionService } from 'src/app/services/db/transaction/transaction.service';
+import { DateRange } from 'src/app/services/filters/date-range/date-range.enum';
 import { DateRangeService } from 'src/app/services/filters/date-range/date-range.service';
 import { FilterService } from 'src/app/services/filters/filter.service';
+import { IonModalService } from 'src/app/services/ionic/ion-modal.service';
 import { StatusBarService } from 'src/app/services/ionic/status-bar.service';
 import { LangService } from 'src/app/services/translate/translate.service';
 
@@ -81,7 +84,7 @@ export class Tab1Page implements OnInit {
     public dateRangeService: DateRangeService,
     private router: Router,
     private filter: FilterService,
-    //  private modalService: IonModalService,
+    private modalService: IonModalService,
     private statusBar: StatusBarService,
     private financeHealth: FinanceHealthService
   ) {}
@@ -264,7 +267,7 @@ export class Tab1Page implements OnInit {
   }
 
   async openDateModal() {
-    /*  const newDateRange = await this.modalService.openDateRangeModal();
+    const newDateRange = await this.modalService.openDateRangeModal();
 
     if (newDateRange.data) {
       if (newDateRange.data != DateRange.Custom) {
@@ -286,7 +289,7 @@ export class Tab1Page implements OnInit {
 
         return customDateModal.present();
       }
-    } */
+    }
   }
 
   goToAddAccount() {

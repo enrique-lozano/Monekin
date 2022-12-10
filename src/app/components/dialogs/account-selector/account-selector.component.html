@@ -1,0 +1,45 @@
+<ion-toolbar *transloco="let t">
+  <ion-title>
+    <ng-container *ngIf="allowMultiSelection">{{ t("ACCOUNT.SELECT.multiple") }}</ng-container>
+    <ng-container *ngIf="!allowMultiSelection">{{ t("ACCOUNT.SELECT.one") }}</ng-container>
+  </ion-title>
+</ion-toolbar>
+
+<div>
+  <ion-list [ngClass]="{'add-bottom-padding': !allowMultiSelection}">
+
+    <ng-container *ngIf="!allowMultiSelection && selectedAccounts !== 'all'">
+      <ion-radio-group [value]="selectedAccounts[0].name">
+        <ion-item *ngFor="let account of allAccounts; let i = index">
+          <ion-icon [name]="account.icon" slot="start"></ion-icon>
+          <ion-label>
+            {{account.name}}
+          </ion-label>
+          <ion-radio slot="end" [value]="account.name" (ionFocus)="select(account)"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ng-container>
+
+    <ng-container *ngIf="allowMultiSelection">
+      <ion-item *ngFor="let account of allAccounts; let i = index">
+        <ion-icon [name]="account.icon" slot="start"></ion-icon>
+        <ion-label>
+          {{account.name}}
+        </ion-label>
+        <ion-checkbox slot="end" [checked]="isChecked(account)" (ionChange)="onCheckboxChange($event, account)"></ion-checkbox>
+      </ion-item>
+    </ng-container>
+  </ion-list>
+</div>
+
+<ion-footer *ngIf="allowMultiSelection" class="flex justify-content-between ion-no-border p-s">
+  <ng-container *transloco="let t">
+    <ion-button expand="block" style="width: 49%;" class="stroked" (click)="dismiss()">
+      {{ t("GENERAL.cancel") }}
+    </ion-button>
+
+    <ion-button [disabled]="selectedAccounts.length === 0" expand="block" style="width: 49%;" (click)="submit()">
+      {{ t("GENERAL.confirm") }}
+    </ion-button>
+  </ng-container>
+</ion-footer>

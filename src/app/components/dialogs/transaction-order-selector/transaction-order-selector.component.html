@@ -1,0 +1,15 @@
+<ion-toolbar>
+  <ion-title>
+    {{ "Ordenar transacciones" | transloco }}
+  </ion-title>
+</ion-toolbar>
+
+<div class="mt" *ngIf="order">
+  <div *ngFor="let item of keys" [ngClass]="{'selected': order.orderBy === transactionListOrderKeyType[item]}"
+    class="pl py mr-s my-xs rounded-r-xl flex items-center" (click)="selectOrder(item)">
+    <ion-icon [name]="order.dir === 'asc' ? 'arrow-up' : 'arrow-down'"></ion-icon>
+    <span>
+      {{ ("GENERAL.TRANSACTION-ORDER." + transactionListOrderKeyType[item]) | transloco }}
+    </span>
+  </div>
+</div>

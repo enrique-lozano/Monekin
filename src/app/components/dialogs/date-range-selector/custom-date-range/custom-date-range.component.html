@@ -1,0 +1,26 @@
+<div class="container" *transloco="let t">
+  <h5 class="header"> {{ t("GENERAL.TIME.THIS.Custom") }} </h5>
+
+  <div class="flex w-full items-center wrap">
+    <div class="option" (click)="selectDate('Start')">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <div>
+        {{ t("GENERAL.TIME.start-date") }}
+      </div>
+      <div class="thin" style="font-size: smaller;">{{ startDate | date : "longDate" : undefined : lang.getSelectedLang() }}</div>
+    </div>
+    <div class="option" (click)="selectDate('End')">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <div>
+        {{ t("GENERAL.TIME.end-date") }}
+      </div>
+      <div class="thin" style="font-size: smaller;">{{ endDate | date : "longDate" : undefined : lang.getSelectedLang() }}</div>
+    </div>
+  </div>
+
+  <div class="footer-buttons">
+    <span (click)="dismiss()">{{ t("GENERAL.cancel") }}</span>
+    <span (click)="submit()">OK</span>
+
+  </div>
+</div>
