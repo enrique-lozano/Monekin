@@ -1,0 +1,130 @@
+<ng-container *transloco="let t">
+  <ion-card class="mt">
+    <ion-card-content class="flex items-center justify-content-between">
+      <div>
+        <span class="thin">{{ t("TABS.TAB1.total-balance") }}</span>
+        <h1>
+          <span>
+            <currency-value [value]="balance"></currency-value>
+          </span>
+        </h1>
+
+        <h2 style="margin-top: 6px; font-weight: 700">
+          <app-trending *ngIf="startDate && endDate && filterService.selectedCategories === 'all'" [value]="variation"></app-trending>
+        </h2>
+      </div>
+
+      <div>
+        <div class="flex items-center mb">
+          <ion-icon name="arrow-up" color="success" class="shadow rounded-full p-s mr-s" style="background-color: white;"></ion-icon>
+          <div>
+            <div class="thin" style="font-size: 0.9rem;">{{ t("GENERAL.income") }}</div>
+            <div>
+              <currency-value [value]="totalIncomes" [showDecimals]="false"></currency-value>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <ion-icon name="arrow-down" color="danger" class="shadow rounded-full p-s mr-s" style="background-color: white;"></ion-icon>
+          <div>
+            <div class="thin" style="font-size: 0.9rem;">{{ t("GENERAL.expense") }}</div>
+            <div>
+              <currency-value [value]="totalExpenses" [showDecimals]="false"></currency-value>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </ion-card-content>
+  </ion-card>
+
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{ t("TABS.TAB3.cash-flow") }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content style="position: relative; height:40vh; width:100%">
+      <ion-spinner duration="1200" *ngIf="!balanceChartRef || loading" class="chart-loading"></ion-spinner>
+      <canvas #balanceChart [ngClass]="{'loading-chart': loading}" style="height: 100%;"></canvas>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{ t("GENERAL.TRANSACTION-ORDER.Category") }}</ion-card-title>
+      <ion-chip [outline]="true" class="my-s" (click)="selectTypeOfCategoryToShow($event)">
+        <ion-label>{{ t(("GENERAL." + categoriesToShow)) }}</ion-label>
+        <ion-icon name="caret-down"></ion-icon>
+      </ion-chip>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ng-container *ngIf="categoriesToShow === 'expense'">
+        <div class="grid" *ngIf="categoriesExpense.length > 0">
+          <ng-container *ngFor="let item of categoriesExpense">
+            <div class="icon-container" (click)="openCategoryStats(item)">
+              <ion-icon [name]="item.category?.icon"
+                [ngStyle]="{'color': '#' + item.category?.color, 'background-color': '#' + item.category?.color + '19'}">
+              </ion-icon>
+            </div>
+            <div (click)="openCategoryStats(item)">
+              {{ item.category?.name }}
+              <app-progress-bar [infillPercentage]="100 * (item.value / totalExpenses)" [color]="item.category?.color"></app-progress-bar>
+            </div>
+            <div class="text-end" (click)="openCategoryStats(item)">
+              <div>
+                <currency-value [value]="item.value" [showDecimals]="false"></currency-value>
+              </div>
+              <div class="thin" style="line-height: 0.85rem; font-size: 0.85rem;">{{ (item.value / totalExpenses) | percent : "1.0-0" :
+                lang.getSelectedLang() }}</div>
+            </div>
+          </ng-container>
+        </div>
+
+        <p *ngIf="categoriesExpense.length === 0" style="font-size: 0.9rem;">
+          {{ t("TABS.TAB2.empty") }}
+        </p>
+      </ng-container>
+
+      <ng-container *ngIf="categoriesToShow === 'income'">
+        <div class="grid" *ngIf="categoriesIncome.length > 0">
+          <ng-container *ngFor="let item of categoriesIncome">
+            <div class="icon-container" (click)="openCategoryStats(item)">
+              <ion-icon [name]="item.category?.icon"
+                [ngStyle]="{'color': '#' + item.category?.color, 'background-color': '#' + item.category?.color + '19'}">
+              </ion-icon>
+            </div>
+            <div (click)="openCategoryStats(item)">
+              {{ item.category?.name }}
+              <app-progress-bar [infillPercentage]="100 * (item.value / totalIncomes)" [color]="item.category?.color"></app-progress-bar>
+            </div>
+            <div class="text-end" (click)="openCategoryStats(item)">
+              <currency-value [value]="item.value" [showDecimals]="false"></currency-value>
+              <div class="thin" style="line-height: 0.85rem; font-size: 0.85rem;">{{ (item.value / totalIncomes) | percent : "1.0-0" :
+                lang.getSelectedLang() }}</div>
+            </div>
+          </ng-container>
+        </div>
+
+        <p *ngIf="categoriesIncome.length === 0" style="font-size: 0.9rem;">
+          {{ t("TABS.TAB2.empty") }}
+        </p>
+      </ng-container>
+
+    </ion-card-content>
+  </ion-card>
+
+
+  <ion-card *ngIf="filterService.selectedCategories === 'all'">
+    <ion-card-header>
+      <ion-card-title>{{ t("TABS.TAB3.balance-evolution") }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content style="position: relative; height:40vh; width:100%">
+      <ion-spinner duration="1200" *ngIf="!balanceChartRef || loading" class="chart-loading"></ion-spinner>
+      <canvas #evolutionChart [ngClass]="{'loading-chart': loading}" style="height: 100%;"></canvas>
+    </ion-card-content>
+
+  </ion-card>
+</ng-container>

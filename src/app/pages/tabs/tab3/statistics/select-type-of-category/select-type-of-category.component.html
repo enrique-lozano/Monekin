@@ -1,0 +1,11 @@
+<ion-list *transloco="let t">
+  <ion-item [ngClass]="{'selected': currentSelection === 'income'}" class="pl-s" (click)="selectItem('income')">
+    <ion-label>{{ t("GENERAL.income") }}</ion-label>
+    <ion-icon slot="end" *ngIf="currentSelection === 'income'" name="checkmark-circle-outline"></ion-icon>
+  </ion-item>
+
+  <ion-item [ngClass]="{'selected': currentSelection === 'expense'}" class="pl-s" (click)="selectItem('expense')">
+    <ion-label>{{ t("GENERAL.expense") }}</ion-label>
+    <ion-icon slot="end" *ngIf="currentSelection === 'expense'" name="checkmark-circle-outline"></ion-icon>
+  </ion-item>
+</ion-list>

@@ -1,17 +1,55 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<ion-header>
+
+  <ion-toolbar color="primary">
     <ion-title>
-      Tab 3
+      {{ 'TABS.TAB3.title' | transloco }}
     </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="openDateModal()">
+        <ion-icon name="calendar-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+
+      <ion-button (click)="openFilterModal()">
+        <ion-icon name="funnel-outline" slot="icon-only"></ion-icon>
+        <div *ngIf="isFilterActive" class="badge"></div>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="slidePrev()" [disabled]="!dateRangeService.startDate || !dateRangeService.endDate">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="text-center">
+      <span>{{ getDateSliderText() }}</span>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="slideNext()" [disabled]="!dateRangeService.startDate || !dateRangeService.endDate">
+        <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content color="" [scrollEvents]="true" (ionScroll)="toggleFab($event)">
 
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+  <app-tab-filters [componentVisible]="isFilterActive" (filtersChanged)="refreshData(); isFilterActive = filterService.isFilterActive()">
+  </app-tab-filters>
+
+  <swiper #swiperGraphs [config]="swiperGraphsConfig" (slideNextTransitionEnd)="slideChanged('Right')"
+    (slidePrevTransitionEnd)="slideChanged('Left')">
+    <ng-template class="px" swiperSlide>
+      <app-statistics [startDate]="slide0Dates?.start" [endDate]="slide0Dates?.end"></app-statistics>
+    </ng-template>
+    <ng-template class="px" swiperSlide>
+      <app-statistics [startDate]="slide1Dates?.start" [endDate]="slide1Dates?.end"></app-statistics>
+    </ng-template>
+    <ng-template class="px" swiperSlide>
+      <app-statistics [startDate]="slide2Dates?.start" [endDate]="slide2Dates?.end"></app-statistics>
+    </ng-template>
+
+  </swiper>
 </ion-content>
