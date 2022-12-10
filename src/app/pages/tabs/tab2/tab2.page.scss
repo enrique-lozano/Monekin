@@ -1,0 +1,58 @@
+ion-toolbar {
+  ion-input {
+    margin-left: 20px;
+    margin-right: 20px;
+    border-bottom: 1px solid;
+    transition: all 0.4s;
+  }
+
+  ion-title {
+    transition: all 1.5s;
+  }
+
+  .search-button {
+    transition: all 0.4s;
+  }
+
+  &.search-visible {
+    ion-title {
+      width: 0;
+      height: 0;
+      opacity: 0;
+    }
+
+    .search-button {
+      transform: scale(0);
+    }
+  }
+
+  &.search-hidden {
+    ion-input {
+      width: 0%;
+      height: 0%;
+      margin: 0%;
+    }
+
+    ion-title {
+      opacity: 1;
+    }
+  }
+}
+
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background-color: var(--ion-color-light);
+  border-bottom: 1px solid var(--ion-color-light-shade);
+
+  .order-selector {
+    --padding-end: 0;
+    --padding-start: 0;
+
+    ion-icon {
+      margin-left: 4px;
+    }
+  }
+}

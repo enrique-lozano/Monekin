@@ -18,6 +18,7 @@ import { TransactionFilterComponent } from '../components/dialogs/transaction-fi
 import { TransactionOrderSelectorComponent } from '../components/dialogs/transaction-order-selector/transaction-order-selector.component';
 import { CurrencyValueComponent } from '../components/ui/currency-value/currency-value.component';
 import { ProgressBarComponent } from '../components/ui/progress-bar/progress-bar.component';
+import { TabFiltersComponent } from '../components/ui/tab-filters/tab-filters.component';
 import { TransactionListComponent } from '../components/ui/transaction-list/transaction-list.component';
 import { TrendingComponent } from '../components/ui/trending/trending.component';
 
@@ -36,6 +37,7 @@ import { TrendingComponent } from '../components/ui/trending/trending.component'
     AccountSelectorComponent,
     IconSelectorComponent,
     ProgressBarComponent,
+    TabFiltersComponent,
   ],
   imports: [
     CommonModule,
@@ -50,6 +52,7 @@ import { TrendingComponent } from '../components/ui/trending/trending.component'
     TrendingComponent,
     TransactionListComponent,
     ProgressBarComponent,
+    TabFiltersComponent,
   ],
 })
 export class ComponentsModule {}

@@ -1,17 +1,58 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
+<ion-header *transloco="let t">
+
+  <ion-toolbar color="primary" [ngClass]="{'search-hidden': !searchHasFocus && !searchValue, 'search-visible': searchHasFocus || searchValue}">
+
+    <div>
+      <ion-title>
+        {{ t('GENERAL.transactions') }}
+      </ion-title>
+
+      <ion-input #searcher animated [placeholder]="t('TABS.TAB2.searcher.placeholder')" [(ngModel)]="searchValue" (ionChange)="refreshData()"
+        (ionBlur)="onSearchLossFocus()">
+      </ion-input>
+    </div>
+
+    <ion-buttons slot="end">
+      <ion-button class="search-button" (click)="activateSearch()">
+        <ion-icon name="search-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+
+      <ion-button (click)="openFilterModal()">
+        <ion-icon name="funnel-outline" slot="icon-only"></ion-icon>
+        <div *ngIf="isFilterActive" class="badge"></div>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
+
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content *transloco="let t" color="" [scrollEvents]="true" (ionScroll)="toggleFab($event)">
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <app-tab-filters [componentVisible]="isFilterActive" (filtersChanged)="refreshData(); isFilterActive = filterService.isFilterActive()">
+  </app-tab-filters>
+
+  <div class="px py-s list-header">
+
+    <ion-button class="order-selector" fill="clear" (click)="openOrderTransactionsModal()">
+      {{ t(("GENERAL.TRANSACTION-ORDER." + order.orderBy)) }}
+      <ion-icon [name]="order.dir === 'asc' ? 'arrow-up' : 'arrow-down'"></ion-icon>
+    </ion-button>
+
+    <span @inOut *ngIf="allTransactions" class="thin text-smaller">
+      {{ allTransactions.length }} {{ t("GENERAL.transactions") | lowercase }}
+    </span>
+  </div>
+
+  <div class="empty-list" *ngIf="allTransactions?.length === 0">
+    <img src="./../../../../assets/icons/empty-transactions.svg" alt="No transactions icon">
+    <p>{{ t("TABS.TAB2.empty") }}</p>
+  </div>
+
+  <app-transaction-list [transactions]="allTransactions?.slice(0,itemsToDisplay)" [order]="order.orderBy" style="width: 100%">
+  </app-transaction-list>
+
+  <ion-infinite-scroll class="mt" #infiniteScroll (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content loadingSpinner="lines" [loadingText]="t('TABS.TAB2.loading')">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
