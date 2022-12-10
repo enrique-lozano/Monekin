@@ -3,20 +3,23 @@ import { Storage } from '@ionic/storage-angular';
 import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 import { IonicStorageKey } from 'src/app/constants/capacitor-storage';
 import { ISOCorrencyCodes } from 'src/app/constants/currencies/currency-code.enum';
-import { Account } from 'src/app/models/account.model';
-import { Budget } from 'src/app/models/budget.model';
-import { CategoryInStorage } from 'src/app/models/category.model';
-import { Cookies, defaultCookies } from 'src/app/models/cookies.model';
+import { Account } from 'src/app/services/db/account/account.model';
+import { Budget } from 'src/app/services/db/budget/budget.model';
+import { CategoryInStorage } from 'src/app/services/db/category/category.model';
 import {
-  Transaction,
-  TransactionInStorage,
-} from 'src/app/models/transaction.model';
-import { UserData } from 'src/app/models/user-data.model';
+  Cookies,
+  defaultCookies,
+} from 'src/app/services/db/cookie/cookies.model';
 import {
   defaultSettings,
   UserAvatars,
   UserSettings,
 } from 'src/app/services/db/settings/settings.model';
+import {
+  Transaction,
+  TransactionInStorage,
+} from 'src/app/services/db/transaction/transaction.model';
+import { UserData } from 'src/app/services/db/user-data.model';
 import { v4 as generateUUID } from 'uuid';
 
 @Injectable({

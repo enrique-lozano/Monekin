@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IonicStorageKey } from 'src/app/constants/capacitor-storage';
-import { UserData } from 'src/app/models/user-data.model';
+import { UserData } from 'src/app/services/db/user-data.model';
 import { StorageService } from './storage.service';
 
 @Injectable({

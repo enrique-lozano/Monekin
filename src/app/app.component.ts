@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { StorageService } from './services/db/storage.service';
-import { TranslateService } from './services/translate/translate.service';
+import { LangService } from './services/translate/translate.service';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +10,7 @@ import { TranslateService } from './services/translate/translate.service';
 export class AppComponent {
   constructor(
     private storage: StorageService,
-    private translateService: TranslateService
+    private translateService: LangService
   ) {
     this.storage.init().then(() => {
       this.getStartedConfig();

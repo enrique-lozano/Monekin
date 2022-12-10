@@ -1,14 +1,11 @@
-import { ISOCorrencyCodes } from '../constants/currencies/currency-code.enum';
-import { defaultLang } from '../modules/i18n/availableLangs';
-import {
-  defaultSettings,
-  UserSettings,
-} from '../services/db/settings/settings.model';
-import { Account } from './account.model';
-import { Budget } from './budget.model';
-import { CategoryInStorage } from './category.model';
-import { Cookies, defaultCookies } from './cookies.model';
-import { TransactionInStorage } from './transaction.model';
+import { ISOCorrencyCodes } from '../../constants/currencies/currency-code.enum';
+import { defaultLang } from '../../modules/i18n/availableLangs';
+import { Account } from './account/account.model';
+import { Budget } from './budget/budget.model';
+import { CategoryInStorage } from './category/category.model';
+import { Cookies, defaultCookies } from './cookie/cookies.model';
+import { defaultSettings, UserSettings } from './settings/settings.model';
+import { TransactionInStorage } from './transaction/transaction.model';
 
 export class UserData {
   accounts: Account[];

@@ -11,7 +11,7 @@ import { SettingsService } from '../db/settings/settings.service';
 @Injectable({
   providedIn: 'root',
 })
-export class TranslateService {
+export class LangService {
   constructor(
     private translate: TranslocoService,
     private settingsService: SettingsService

@@ -1,6 +1,6 @@
 import { v4 as generateUUID } from 'uuid';
-import { Account } from './account.model';
-import { Category } from './category.model';
+import { Account } from '../account/account.model';
+import { Category } from '../category/category.model';
 
 export enum RecurrentOption {
   week = 'week',
