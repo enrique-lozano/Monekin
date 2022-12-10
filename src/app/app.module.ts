@@ -6,7 +6,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TabsPageModule } from './tabs/tabs.module';
+import { TabsPageModule } from './pages/tabs/tabs.module';
 
 // Ionic Storage:
 import { Drivers } from '@ionic/storage';

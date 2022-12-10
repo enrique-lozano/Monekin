@@ -1,4 +1,4 @@
-import { ISOCorrencyCodes } from '../constants/currency-code.enum';
+import { ISOCorrencyCodes } from '../constants/currencies/currency-code.enum';
 
 export interface Currency {
   code: ISOCorrencyCodes;
