@@ -1,0 +1,41 @@
+ion-toolbar {
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-primary-contrast);
+}
+
+.search-hidden {
+  ion-input {
+    .native-input {
+      height: 0;
+      padding: 0;
+    }
+  }
+}
+
+// Remove toolbar bottom shadow
+.header-md::after {
+  display: none;
+}
+
+.ios ion-toolbar ion-back-button,
+.ios ion-toolbar ion-button {
+  --color: var(--ion-color-primary-contrast);
+}
+
+ion-toolbar ion-segment-button {
+  //--background-checked: var(--ion-color-primary-contrast);
+  --color: var(--ion-color-primary-contrast);
+}
+
+.ios ion-toolbar ion-segment-button {
+  --color-checked: var(--ion-color-primary);
+}
+
+.md ion-toolbar ion-segment-button {
+  --indicator-height: 3px;
+  --color-checked: var(--ion-color-tertiary);
+}
+
+.md ion-picker-column .picker-opt.picker-opt-selected {
+  font-weight: bold;
+}
