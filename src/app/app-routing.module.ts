@@ -68,6 +68,13 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'currency-converter',
+    loadChildren: () =>
+      import('./pages/currency-converter/currency-converter.module').then(
+        (m) => m.CurrencyConverterPageModule
+      ),
+  },
+  {
     path: 'settings',
     loadChildren: () =>
       import('./pages/settings/settings.module').then(
