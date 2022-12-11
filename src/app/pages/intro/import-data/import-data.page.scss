@@ -1,0 +1,12 @@
+@import "./../intro.page.scss";
+
+.swiper-slide {
+  height: calc(100vh - 136px); // Full - FooterSize
+}
+
+ion-footer {
+  flex-wrap: wrap;
+  > * {
+    width: 100%;
+  }
+}

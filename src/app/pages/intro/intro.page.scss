@@ -1,0 +1,102 @@
+@import "theme/breakpoints.scss";
+$max-intro-width: 950px;
+
+ion-content,
+ion-footer {
+  --background: var(--ion-color-light);
+  background-color: var(--ion-color-light);
+}
+
+.swiper-slide {
+  height: calc(100vh - 76px); // Full - FooterSize
+  width: 100vw;
+  max-width: $max-intro-width;
+  margin: auto;
+  overflow: auto;
+  padding-top: 5vh;
+  padding-bottom: 2vh;
+  display: flex;
+  flex-direction: column;
+
+  @include min-width("lg") {
+    align-content: center;
+    flex-direction: row;
+  }
+
+  justify-content: center;
+  align-items: center;
+
+  .text-container {
+    width: 100%;
+    padding: 0px 24px;
+    margin-top: 6vh;
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    align-content: center;
+
+    > * {
+      width: 100%;
+    }
+
+    .currency-selector-item {
+      --inner-border-width: 0px;
+    }
+  }
+}
+
+.img-container {
+  padding: 12px 18px;
+  width: 85%;
+  background-color: var(--ion-color-tertiary);
+  border-radius: 1rem;
+  flex-grow: 2;
+  display: inline-flex;
+  align-items: center;
+
+  @include min-width("lg") {
+    min-height: 70vh;
+  }
+
+  img {
+    max-height: 350px;
+    width: 100%;
+  }
+}
+
+ion-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px max(16px, calc((100vw - $max-intro-width) / 2));
+
+  ion-button[fill="clear"] {
+    color: var(--ion-color-primary);
+
+    @media (prefers-color-scheme: dark) {
+      color: var(--ion-color-tertiary);
+    }
+  }
+
+  > * {
+    width: 33.33%;
+  }
+
+  .page-indicator {
+    ion-icon {
+      font-size: 10px;
+      transition: all 0.5s;
+      margin: 0px 4px;
+      color: var(--ion-color-secondary);
+    }
+
+    ion-icon.active {
+      transform: scale(1.2);
+      color: var(--ion-color-primary);
+
+      @media (prefers-color-scheme: dark) {
+        color: var(--ion-color-tertiary);
+      }
+    }
+  }
+}

@@ -23,6 +23,13 @@ export class TabsPage {
       if (res instanceof NavigationEnd) {
         this.currentURL = this.router.url;
 
+        if (this.currentURL.indexOf('/intro') != -1) {
+          // Hide tabs on intro pages
+          document.querySelector('app-tabs')?.classList.add('hidden');
+        } else {
+          document.querySelector('app-tabs')?.classList.remove('hidden');
+        }
+
         if (this.currentURL.indexOf('/tabs/') != -1) {
           // If we are on one of the tabs:
           document.querySelector('app-tabs')?.classList.add('show-on-mobile');

@@ -62,12 +62,14 @@
     "skip": "Skip",
     "next": "Next",
     "select-your-currency": "Select your currency",
-    "sl1Title": "Welcome to Monekin",
+    "sl1Title": "Welcome to Monekin!",
     "sl1Descr": "To begin, select your currency. You will be able to change the currency and language later at any time in the application settings",
     "sl2Title": "Safe, private and reliable",
-    "sl2Descr": "Your data is only yours. We store the information directly on your phone, without going through external servers. This makes it possible to use the app even without internet",
+    "sl2Descr": "Your data is only yours. We store the information directly on your device, without going through external servers. This makes it possible to use the app even without internet",
+    "sl2Descr2": "Also, the source code of the application is public, anyone can collaborate on it and see how it works",
     "sl3Title": "Take control",
-    "sl3Descr": "With Monekin, you can finally achieve the financial independence you want so much. You will have graphs, budgets, tips, statistics and much more about your money."
+    "sl3Descr": "With Monekin, you can finally achieve the financial independence you want so much. You will have graphs, budgets, tips, statistics and much more about your money.",
+    "sl3Descr2": "We hope you enjoy your experience! Do not hesitate to contact us in case of doubts, suggestions..."
   },
   "TABS": {
     "filter-transactions": "Filter transactions",
@@ -367,7 +369,7 @@
       "file": "Import file",
       "start-from-zero": "Start from scratch",
       "description": "Replace all data currently in the app with data you have previously saved",
-      "longDescription": "If you have already used our application before, you may have a backup saved on your device with the name Monekin_backup_YEAR_MONTH_DAY.json. If you prefer, you can perform this data import later. Before uninstalling this application or changing mobile always remember to make this backup",
+      "longDescription": "If you have already used our application before, you may have a backup saved on your device with the name Monekin_backup_YYYY_MM_DD. If you prefer, you can perform this data import later. Before uninstalling this application or changing mobile always remember to make this backup",
       "success": "Import performed successfully",
       "error": "Error importing file. Please contact developer via lozin.technologies@gmail.com"
     },

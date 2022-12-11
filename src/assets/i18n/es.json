@@ -62,12 +62,14 @@
     "skip": "Saltar",
     "next": "Siguiente",
     "select-your-currency": "Selecciona tu divisa",
-    "sl1Title": "Bienvenido a Monekin",
+    "sl1Title": "Bienvenido a Monekin!",
     "sl1Descr": "Para empezar, selecciona tu moneda. Podrás cambiar de divisa y de idioma mas adelante en todo momento en los ajustes de la aplicación",
     "sl2Title": "Seguro, privado y confiable",
-    "sl2Descr": "Tus datos son solo tuyos. Almacenamos la información directamente en tu telefono, sin pasar por servidores externos. Esto hace que puedas usar la aplicación incluso sin Internet",
+    "sl2Descr": "Tus datos son solo tuyos. Almacenamos la información directamente en tu dispositivo, sin pasar por servidores externos. Esto hace que puedas usar la aplicación incluso sin Internet",
+    "sl2Descr2": "Además, el código fuente de la aplicación es público, cualquiera puede colaborar en el y ver como funciona",
     "sl3Title": "Lleva el control",
-    "sl3Descr": "Con Monekin, podrás al fin lograr la independencia financiaria que tanto deseas. Podrás ver gráficas, presupuestos, consejos, estadisticas y mucho más sobre tu dinero."
+    "sl3Descr": "Con Monekin, podrás al fin lograr la independencia financiaria que tanto deseas. Podrás ver gráficas, presupuestos, consejos, estadisticas y mucho más sobre tu dinero.",
+    "sl3Descr2": "Esperemos que disfrutes de tu experiencia! No dudes en contactar con nosotros en caso de dudas, sugerencias..."
   },
   "TABS": {
     "filter-transactions": "Filtrar transacciones",
@@ -367,7 +369,7 @@
       "file": "Importar archivo",
       "start-from-zero": "Empezar desde cero",
       "description": "Reemplaza todos los datos que hay actualmente en la app por otros que hayas guardado previamente",
-      "longDescription": "Si ya has usado nuestra aplicación antes puede que tengas una copia de seguridad guardada en tu disposivo con el nombre Monekin_backup_AÑO_MES_DIA.json. Si prefieres puedes realizar esta importación de datos mas adelante. Antes de desinstalar esta aplicación o cambiar de movil recuerda siempre realizar esta copia de seguridad",
+      "longDescription": "Si ya has usado nuestra aplicación antes puede que tengas una copia de seguridad guardada en tu disposivo con el nombre Monekin_backup_YYYY_MM_DD. Si prefieres puedes realizar esta importación de datos mas adelante. Antes de desinstalar esta aplicación o cambiar de movil recuerda siempre realizar esta copia de seguridad",
       "success": "Importación realizada con exito",
       "error": "Error al importar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com"
     },

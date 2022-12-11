@@ -40,4 +40,8 @@ import { TranslocoRootModule } from './modules/i18n/transloco-root.module';
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    // defineElement(lottie.loadAnimation);
+  }
+}

@@ -1,0 +1,91 @@
+<ion-content *transloco="let t">
+  <swiper #swiper [config]="config" (activeIndexChange)="onSwipe()">
+    <!--------- SLIDE 1 -------->
+    <ng-template swiperSlide>
+      <div class="swiper-slide">
+
+        <div class="img-container">
+          <img src="../../../assets/icons/undraw/first.svg" alt="" />
+        </div>
+
+        <div class="text-container">
+
+          <h1>{{ t('INTRO.sl1Title') }}</h1>
+          <p class="text-justify">{{ t('INTRO.sl1Descr') }}</p>
+
+          <ion-item class="rounded-xxl currency-selector-item" (click)="goToSelectCoin()">
+            <ion-avatar slot="start">
+              <img [src]="'./../../../../assets/icons/currency_flags/' + (userCurrency?.code | lowercase) + '.svg'" alt="Selected Currency Flag" />
+            </ion-avatar>
+            <ion-label>
+              <span style="font-size: 0.9em; font-weight: 300">
+                {{ t("INTRO.select-your-currency") }}
+              </span>
+              <h2>{{ userCurrency?.name }}</h2>
+            </ion-label>
+            <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+          </ion-item>
+        </div>
+
+      </div>
+
+    </ng-template>
+
+    <!--------- SLIDE 2 -------->
+    <ng-template swiperSlide>
+      <div class="swiper-slide">
+        <div class="img-container">
+          <img src="../../../assets/icons/undraw/security.svg" alt="" />
+        </div>
+        <div class="text-container">
+          <h1>{{ t('INTRO.sl2Title') }}</h1>
+          <p class="text-justify">{{ t('INTRO.sl2Descr') }}</p>
+          <p class="text-justify m-0">{{ t('INTRO.sl2Descr2') }}</p>
+        </div>
+
+      </div>
+    </ng-template>
+
+    <!--------- SLIDE 3 -------->
+    <ng-template swiperSlide>
+      <div class="swiper-slide">
+        <div class="img-container">
+          <img src="../../../assets/icons/undraw/wallet.svg" alt="" />
+        </div>
+        <div class="text-container">
+          <h1>{{ t('INTRO.sl3Title') }}</h1>
+          <p class="text-justify">{{ t('INTRO.sl3Descr') }}</p>
+          <p class="text-justify m-0">{{ t('INTRO.sl3Descr2') }}</p>
+        </div>
+
+      </div>
+    </ng-template>
+  </swiper>
+
+  <div class="buttons-container">
+
+  </div>
+</ion-content>
+
+<ion-footer *transloco="let t" class="ion-no-border">
+  <div class="thin">
+    <ng-container *ngIf="currentSlide !== 2">
+      <ion-button fill="clear" (click)="introFinished()">
+        {{ t("INTRO.skip") }}
+      </ion-button>
+    </ng-container>
+  </div>
+  <div class="page-indicator text-center">
+    <ng-container *ngFor="let i of [0,1,2]">
+      <ion-icon name="ellipse" [ngClass]="{'active': i === currentSlide}"></ion-icon>
+    </ng-container>
+  </div>
+  <div class="text-end">
+    <ion-button fill="clear" (click)="slideNext()">
+      <div class="flex items-center justify-content-end bold">
+        {{ t("INTRO.next") }}
+        <ion-icon class="ml-s" name="arrow-forward"></ion-icon>
+      </div>
+    </ion-button>
+  </div>
+</ion-footer>
