@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
 import { Account } from 'src/app/services/db/account/account.model';
 import { AccountService } from 'src/app/services/db/account/account.service';
 import { Budget } from 'src/app/services/db/budget/budget.model';
@@ -40,7 +39,6 @@ export class BudgetFormPage implements OnInit {
     private budgetService: BudgetService,
     private router: Router,
     private utils: UtilsService,
-    private alertController: AlertController,
     private activeRoute: ActivatedRoute,
     private modalService: IonModalService
   ) {
