@@ -6,7 +6,7 @@ const path = require("path");
 // TODO: Improve the design of the title bar. Maybe following this great repo https://github.com/binaryfunt/electron-seamless-titlebar-tutorial
 
 function onReady() {
-  win = new BrowserWindow({
+  var win = new BrowserWindow({
     width: 1024,
     height: 728,
     minWidth: 300,
@@ -22,6 +22,10 @@ function onReady() {
   );
 
   win.maximize(); // Full screen window
+
+  if (app.isPackaged) {
+    win.webContents.openDevTools();
+  }
 
   win.setMenu(null);
 }

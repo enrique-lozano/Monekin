@@ -16,7 +16,7 @@
     <div class="images-container">
       <ion-avatar class="user-avatar" (click)="selectedAvatar = allAvatarsEnum[image]" [class.selected]="allAvatarsEnum[image] === selectedAvatar"
         *ngFor="let image of allAvatars">
-        <img [src]="'./../../../../assets/icons/avatars/' + allAvatarsEnum[image] + '.svg'" alt="">
+        <img [src]="'assets/icons/avatars/' + allAvatarsEnum[image] + '.svg'" alt="">
       </ion-avatar>
     </div>
 

@@ -10,8 +10,8 @@
     "start": "ng serve",
     "start:electron": "ng build --base-href ./ && npx electron .",
     "build": "ng build",
-    "build:win": "npx electron-packager . --platform=win32 --out=./build --overwrite",
     "build:mobile": "ionic build && npx cap sync",
+    "deploy:win": "npx electron-packager . --platform=win32 --out=./build --overwrite",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint"

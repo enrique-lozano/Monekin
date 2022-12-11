@@ -4,7 +4,7 @@
     <div class="flex items-center" routerLink="/settings">
 
       <ion-avatar class="user-avatar mr-xs">
-        <img *ngIf="userAvatar" [src]="'./../../../../assets/icons/avatars/' + userAvatar + '.svg'" alt="User Avatar">
+        <img *ngIf="userAvatar" [src]="'assets/icons/avatars/' + userAvatar + '.svg'" alt="User Avatar">
         <ion-skeleton-text *ngIf="!userAvatar" animated></ion-skeleton-text>
       </ion-avatar>
 

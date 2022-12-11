@@ -11,7 +11,7 @@
   <ion-list>
     <ion-item button (click)="editUserProfile()">
       <ion-avatar slot="start" class="user-avatar">
-        <img *ngIf="userAvatar" [src]="'./../../../../assets/icons/avatars/' + userAvatar + '.svg'" alt="User Avatar">
+        <img *ngIf="userAvatar" [src]="'assets/icons/avatars/' + userAvatar + '.svg'" alt="User Avatar">
         <ion-skeleton-text *ngIf="!userAvatar" animated></ion-skeleton-text>
       </ion-avatar>
       <ion-label>
