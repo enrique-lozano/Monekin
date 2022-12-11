@@ -27,7 +27,7 @@ ion-button.md.fab-button {
   }
 }
 
-// ----- NORMAL BUTTONS STYLING ----
+// ----- STYLES FOR ALL BUTTONS ----
 
 ion-button {
   > * {
@@ -43,4 +43,54 @@ ion-button {
     margin-left: 5%;
     margin-top: 1.25%;
   }
+}
+
+// ----- STROKED BUTTONS STYLING ----
+
+ion-button[expand="block"].stroked {
+  --color: var(--ion-color-primary);
+  --background: white;
+  --border-color: var(--ion-color-primary);
+  --border-width: 1px;
+  --border-style: solid;
+}
+
+ion-content ion-button[expand="block"].stroked {
+  @media (prefers-color-scheme: dark) {
+    --color: var(--ion-color-primary-contrast);
+    --border-color: var(--ion-color-primary-contrast);
+  }
+}
+
+// ----- MD SPECIFIC STYLING ----
+
+ion-button[expand="block"].md {
+  --border-radius: 100px;
+  --box-shadow: none;
+  margin-left: 0;
+  margin-right: 0;
+  height: 40px;
+}
+
+ion-button[fill="clear"].md {
+  text-transform: none;
+  color: var(--ion-text-color);
+}
+
+ion-fab-button.md {
+  --border-radius: 16px;
+  --box-shadow: 8px 5px 8px -1px rgba(0, 0, 0, 0.15);
+  filter: drop-shadow(0px 1px 3px rgba(0, 0, 0, 0.2));
+}
+
+// ----- BADGE IN ICONS BUTTONS ----
+
+ion-buttons ion-button ion-icon + .badge {
+  background-color: var(--ion-color-tertiary);
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: -3px;
+  right: -3px;
+  border-radius: 100%;
 }

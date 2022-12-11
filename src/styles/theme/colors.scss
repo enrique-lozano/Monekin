@@ -255,4 +255,14 @@
 
     --ion-card-background: #1e1e1e;
   }
+
+  ion-content,
+  app-tabs ion-fab {
+    --ion-color-primary: var(--ion-color-tertiary);
+    --ion-color-primary-rgb: var(--ion-color-tertiary-rgb);
+    --ion-color-primary-contrast: var(--ion-color-tertiary-contrast);
+    --ion-color-primary-contrast-rgb: var(--ion-color-tertiary-contrast-rgb);
+    --ion-color-primary-shade: var(--ion-color-tertiary-shade);
+    --ion-color-primary-tint: var(--ion-color-tertiary-tint);
+  }
 }
