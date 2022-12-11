@@ -1,0 +1,28 @@
+<ion-toolbar>
+  <ion-title>{{ "CATEGORIES.SELECT.select-subcategory" | transloco }}</ion-title>
+</ion-toolbar>
+
+<div class="p">
+
+  <ion-chip [outline]="true" (click)="selectCategory(category)" [ngClass]="{'selected': category?.id === selectedCategory?.id}"
+    [style.backgroundColor]="category?.id === selectedCategory?.id ? ('#' + category?.color) : ''">
+    <ion-icon name="close-outline"></ion-icon>
+    <ion-label>{{ "CATEGORIES.SELECT.without-subcategory" | transloco }}</ion-label>
+  </ion-chip>
+
+  <ion-chip *ngFor="let subcat of subcategories" [outline]="true" (click)="selectCategory(subcat)"
+    [ngClass]="{'selected': subcat.id === selectedCategory?.id}"
+    [style.backgroundColor]="subcat.id === selectedCategory?.id ? ('#' + category.color) : ''">
+
+    <ion-icon [name]="subcat.icon"></ion-icon>
+    <ion-label>{{subcat.name}}</ion-label>
+  </ion-chip>
+</div>
+
+<ion-footer class="p pt-xs ion-no-border">
+  <ion-button expand="block" (click)="submit()">
+    {{ "GENERAL.confirm" | transloco }}
+
+    <ion-icon class="ml-xs" name="arrow-forward"></ion-icon>
+  </ion-button>
+</ion-footer>

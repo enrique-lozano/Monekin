@@ -97,14 +97,14 @@ export class BudgetFormPage implements OnInit {
   }
 
   async selectCategories() {
-    /*     const modalRes = await this.modalService.openCategorySelectorModal(
+    const modalRes = await this.modalService.openCategorySelectorModal(
       'multiselection',
       this.categories
     );
 
     if (modalRes.data) {
       this.categories = modalRes.data as MainCategory[];
-    } */
+    }
   }
 
   async postBudget() {

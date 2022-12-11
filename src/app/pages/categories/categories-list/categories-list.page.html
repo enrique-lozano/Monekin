@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{"GENERAL.categories" | transloco }}</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="segmentValue">
+      <ion-segment-button value="Income" (click)="prev()">
+        <ion-label>{{"GENERAL.income" | transloco }}</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Expense" (click)="next()">
+        <ion-label>{{ "GENERAL.expense" | transloco }}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <swiper class="swiper-min-height-small" #swiper [config]="config" (slideChange)="slideChanged()">
+    <ng-template swiperSlide>
+      <ion-list>
+        <ion-item button *ngFor="let category of categoriesIncome" (click)="selectCategory(category)">
+          <ion-icon slot="start" [style.color]="'#' + category.color" [name]="category.icon"></ion-icon>
+          <ion-label>{{category.name}}</ion-label>
+          <ion-checkbox disabled class="fake-disabled" [checked]="isCheckboxSelected(category)" *ngIf="mode === 'multiselection'" slot="end">
+          </ion-checkbox>
+        </ion-item>
+      </ion-list>
+    </ng-template>
+
+    <ng-template swiperSlide>
+      <ion-list>
+        <ion-item button *ngFor="let category of categoriesExpense" (click)="selectCategory(category)">
+          <ion-icon slot="start" [style.color]="'#' + category.color" [name]="category.icon"></ion-icon>
+          <ion-label>{{category.name}}</ion-label>
+          <ion-checkbox disabled class="fake-disabled" [checked]="isCheckboxSelected(category)" *ngIf="mode === 'multiselection'" slot="end">
+          </ion-checkbox>
+        </ion-item>
+      </ion-list>
+    </ng-template>
+  </swiper>
+</ion-content>
+
+<ion-footer *ngIf="mode === 'category' || mode === 'multiselection'" class="p">
+  <ion-button *ngIf="mode === 'category'" expand="block" (click)="goToCreateCategory()">
+    {{"CATEGORIES.create" | transloco }}
+  </ion-button>
+
+  <div *ngIf="mode === 'multiselection'" class="flex justify-content-between">
+    <ion-button expand="block" style="width: 49%;" class="stroked" (click)="dismiss()">
+      {{ "GENERAL.cancel" | transloco }}
+    </ion-button>
+
+    <ion-button [disabled]="selectedCategories?.length === 0" expand="block" style="width: 49%;" (click)="submit()">
+      {{ "GENERAL.confirm" | transloco }}
+    </ion-button>
+  </div>
+</ion-footer>

@@ -54,6 +54,20 @@ const routes: Routes = [
       import('./pages/budgets/budgets.module').then((m) => m.BudgetsPageModule),
   },
   {
+    path: 'categories-list',
+    loadChildren: () =>
+      import('./pages/categories/categories-list/categories-list.module').then(
+        (m) => m.CategoriesListPageModule
+      ),
+  },
+  {
+    path: 'category-form',
+    loadChildren: () =>
+      import('./pages/categories/category-form/category-form.module').then(
+        (m) => m.CategoryFormPageModule
+      ),
+  },
+  {
     path: 'settings',
     loadChildren: () =>
       import('./pages/settings/settings.module').then(

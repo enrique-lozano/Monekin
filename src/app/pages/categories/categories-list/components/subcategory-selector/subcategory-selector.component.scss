@@ -1,0 +1,11 @@
+ion-chip {
+  transition: all 0.5s;
+}
+
+ion-chip.selected {
+  color: white;
+
+  ion-icon {
+    color: white;
+  }
+}

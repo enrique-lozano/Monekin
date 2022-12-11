@@ -17,6 +17,8 @@ import { IconSelectorComponent } from 'src/app/components/dialogs/icon-selector/
 import { TransactionFilterComponent } from 'src/app/components/dialogs/transaction-filter/transaction-filter.component';
 import { TransactionOrderSelectorComponent } from 'src/app/components/dialogs/transaction-order-selector/transaction-order-selector.component';
 import { TransactionListOrder } from 'src/app/constants/transaction-list-order';
+import { CategoriesListPage } from 'src/app/pages/categories/categories-list/categories-list.page';
+import { SubcategorySelectorComponent } from 'src/app/pages/categories/categories-list/components/subcategory-selector/subcategory-selector.component';
 import { UserProfileEditionComponent } from 'src/app/pages/settings/user-profile-edition/user-profile-edition.component';
 import { Currency } from '../currency/currency.model';
 import { Account } from '../db/account/account.model';
@@ -180,7 +182,7 @@ export class IonModalService {
 
     return result;
   }
-  /* 
+
   async openCategorySelectorModal(
     mode: 'modal-with-subcats' | 'modal-without-subcats' | 'multiselection',
     selectedCategories?: 'all' | Category[]
@@ -200,7 +202,7 @@ export class IonModalService {
 
     return modal.onDidDismiss<Category[] | 'all'>();
   }
- */
+
   async openCategoryStatsModal(item: {
     category: Category;
     transactions: Transaction[];
@@ -219,7 +221,7 @@ export class IonModalService {
   }
 
   /** Returns the selected subcategory, or the parent category if the user prefers not to select any subcategory. Will return undefined if the modal is dismissed */
-  /*   async openSubcategorySelectorModal(category: Category) {
+  async openSubcategorySelectorModal(category: Category) {
     const result = await this.modalCtrl.create({
       component: SubcategorySelectorComponent,
       breakpoints: [0, 1],
@@ -232,7 +234,7 @@ export class IonModalService {
     result.present();
 
     return result.onDidDismiss<Category>();
-  } */
+  }
 
   async openCurrencySelectorModal() {
     const result = await this.modalCtrl.create({
