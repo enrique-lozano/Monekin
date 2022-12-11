@@ -83,7 +83,7 @@
       <div *ngFor="let group of buttons" class="inline-block w-full h-1/4">
         <div *ngFor="let but of group" class="p-xs w-1/3 h-full inline-block">
           <ion-button color="light" (click)="butPress(but)" class="h-full w-full">
-            <ng-container *ngIf="but !== '<-'"> {{but} } </ng-container>
+            <ng-container *ngIf="but !== '<-'"> {{but}} </ng-container>
             <ng-container *ngIf="but === '<-'">
               <ion-icon name="backspace-outline"></ion-icon>
             </ng-container>
