@@ -55,6 +55,7 @@ import { TrendingComponent } from '../components/ui/trending/trending.component'
     TransactionListComponent,
     ProgressBarComponent,
     TabFiltersComponent,
+    DatePickerComponent,
   ],
 })
 export class ComponentsModule {}

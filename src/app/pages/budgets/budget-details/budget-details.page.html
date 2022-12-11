@@ -1,0 +1,111 @@
+<ion-header *transloco="let t">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{ t("BUDGETS.DETAILS.title") }}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="openBudgetActions($event)">
+        <ion-icon slot="icon-only" ios="ellipsis-horizontal" md="ellipsis-vertical"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="segmentValue">
+      <ion-segment-button value="Statistics" (click)="prev()">
+        <ion-label>{{ t("BUDGETS.DETAILS.statistics") }}</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Transactions" (click)="next()">
+        <ion-label>{{ t("GENERAL.transactions") }}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content *transloco="let t">
+
+  <swiper class="swiper-min-height" #swiper [config]="config" (slideChange)="slideChanged()">
+    <ng-template swiperSlide class="p">
+
+      <ion-card>
+        <ion-card-header class="px-xs justify-content-center">
+          <ion-card-title>
+            <ng-container *ngIf="budget">{{budget.name}}</ng-container>
+            <ion-skeleton-text *ngIf="!budget" animated style="width: 25%;"></ion-skeleton-text>
+          </ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <div class="resume-container text-center">
+            <div class="w-1/2">
+              <span class="capitalize">{{ t("BUDGETS.to-expend") }}</span>
+              <h2 class="flex justify-content-center">
+                <ng-container *ngIf="budget && currentValue !== undefined">
+                  {{(((budget.limit - currentValue) > 0) ? (budget.limit - currentValue) : 0) | number : "1.0-2" : lang.getSelectedLang() }}
+                </ng-container>
+                <ion-skeleton-text *ngIf="!budget || currentValue === undefined" animated style="width: 25%;"></ion-skeleton-text>
+              </h2>
+            </div>
+            <div class="w-1/2">
+              <span>{{ t("BUDGETS.DETAILS.budget-value") }}</span>
+              <h2 class="flex justify-content-center">
+                <ng-container *ngIf="budget">
+                  {{budget.limit | number : "1.0-0" : lang.getSelectedLang() }}
+                </ng-container>
+                <ion-skeleton-text *ngIf="!budget" animated style="width: 25%;"></ion-skeleton-text>
+              </h2>
+            </div>
+            <div class="w-full my">
+              <app-progress-bar [infillPercentage]="(1 - (currentValue / budget?.limit)) * 100"
+                [color]="getBarColor((1 - (currentValue / budget?.limit)) * 100)">
+              </app-progress-bar>
+            </div>
+
+            <span *ngIf="currentValue === undefined || !budget" class="w-full">
+              <ion-skeleton-text animated style="width: 66%;"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 55%;"></ion-skeleton-text>
+            </span>
+
+            <ng-container *ngIf="currentValue !== undefined && budget">
+              <span class="text-left" *ngIf="(budget.limit - currentValue) >= 0">
+                {{ t("BUDGETS.DETAILS.expend-diary-left") }}:
+                <currency-value [value]="getDiarySpendLeft()" [showDecimals]="false"></currency-value>
+              </span>
+              <span class="text-left" *ngIf="(budget.limit - currentValue) < 0">
+                {{ t("BUDGETS.DETAILS.budget-exceeded-for") }}:
+                <currency-value [value]="currentValue - budget.limit" [showDecimals]="false"></currency-value>
+              </span>
+              <span class="text-left">{{ t("BUDGETS.DETAILS.you-already-expend") }} {{percentaje | percent : "1.0-0" : lang.getSelectedLang() }}
+                {{ t("BUDGETS.DETAILS.of-the-budget") }}</span>
+            </ng-container>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>{{ t("BUDGETS.DETAILS.expend-evolution") }}</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content style="position: relative; height:40vh; width:100%">
+          <canvas id="chart" #chart style="height: 100%;"></canvas>
+        </ion-card-content>
+      </ion-card>
+
+    </ng-template>
+    <ng-template swiperSlide>
+      <div class="empty-list" *ngIf="transactions?.length === 0">
+        <img src="./../../../../assets/icons/empty-transactions.svg" alt="No transactions icon">
+        <p>
+          {{ t("BUDGETS.DETAILS.no-transactions") }}
+        </p>
+      </div>
+
+      <app-transaction-list [transactions]="transactions" style="width: 100%"></app-transaction-list>
+    </ng-template>
+  </swiper>
+</ion-content>

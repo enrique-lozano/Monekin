@@ -42,6 +42,18 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'finance-health',
+    loadChildren: () =>
+      import('./pages/finance-health/finance-health.module').then(
+        (m) => m.FinanceHealthPageModule
+      ),
+  },
+  {
+    path: 'budgets',
+    loadChildren: () =>
+      import('./pages/budgets/budgets.module').then((m) => m.BudgetsPageModule),
+  },
+  {
     path: 'settings',
     loadChildren: () =>
       import('./pages/settings/settings.module').then(

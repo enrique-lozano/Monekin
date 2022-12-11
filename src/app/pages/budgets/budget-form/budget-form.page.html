@@ -1,0 +1,92 @@
+<ion-header *transloco="let t">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>
+      <ng-container *ngIf="budgetToEdit">{{ t("BUDGETS.FORM.edit") }}</ng-container>
+      <ng-container *ngIf="!budgetToEdit">{{ t("BUDGETS.FORM.title") }}</ng-container>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="p" *transloco="let t">
+  <form [formGroup]="form">
+    <ion-item fill="outline" [counter]="true">
+      <ion-label position="floating">{{ t("BUDGETS.FORM.name") }} *</ion-label>
+      <ion-input maxlength="20" type="text" formControlName="name" placeholder="My account"></ion-input>
+
+      <ion-icon slot="end" name="alert-circle" color="danger"></ion-icon>
+    </ion-item>
+
+    <ion-item class="my-s" fill="outline">
+      <ion-label position="floating">{{ t("BUDGETS.FORM.value") }} *</ion-label>
+      <ion-input type="number" formControlName="balance" placeholder="Ex.: 1250"></ion-input>
+
+      <ion-icon slot="end" name="alert-circle" color="danger"></ion-icon>
+    </ion-item>
+  </form>
+
+  <ion-item button="true" lines="none" class="my" fill="outline" (click)="selectAccounts()">
+    <ion-label>{{ t("GENERAL.accounts") }}:</ion-label>
+    <ion-label class="text-end" *ngIf="accounts !== 'all'">
+      <ng-container *ngFor="let account of accounts; let i = index">
+        {{account.name}}{{ i !== (accounts.length-1) ? ", " : "" }}
+      </ng-container>
+    </ion-label>
+    <ion-label class="text-end" *ngIf="accounts === 'all'">
+      {{ t("ACCOUNT.SELECT.all") }}
+    </ion-label>
+  </ion-item>
+
+  <ion-item button="true" lines="none" class="my" fill="outline" (click)="selectCategories()">
+    <ion-label>{{ t("GENERAL.categories") }}:</ion-label>
+    <ion-label class="text-end" *ngIf="categories !== 'all'">
+      <ng-container *ngFor="let category of categories; let i = index">{{category.name}}{{ i !== (categories.length-1) ? ", " : "" }}
+      </ng-container>
+    </ion-label>
+    <ion-label *ngIf="categories === 'all'" class="text-end">{{ t("CATEGORIES.SELECT.all") }}</ion-label>
+  </ion-item>
+
+  <ion-item fill="outline" class="my">
+    <ion-label>{{ t("BUDGETS.FORM.repetition") }}:</ion-label>
+    <ion-select interface="popover" [(ngModel)]="repeat">
+      <ion-select-option value="no">{{ t("GENERAL.TIME.no-repeat") }}</ion-select-option>
+      <ion-select-option value="week">{{ t("GENERAL.TIME.weekly") }}</ion-select-option>
+      <ion-select-option value="month">{{ t("GENERAL.TIME.monthly") }}</ion-select-option>
+      <ion-select-option value="year">{{ t("GENERAL.TIME.annualy") }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <!-- Start Date -->
+  <ion-item [ngStyle]="{'display': repeat !== 'no' ? 'none' : ''}" button="true" class="my" fill="outline" id="open-start-date-input">
+    <ion-label position="floating">{{ t("GENERAL.TIME.start-date") }}</ion-label>
+    <ion-input [value]="formatDate(dateStart)"></ion-input>
+  </ion-item>
+
+  <ion-modal trigger="open-start-date-input">
+    <ng-template>
+      <app-date-picker (dateChange)="setStartDate($event)" [max]="dateEnd"></app-date-picker>
+    </ng-template>
+  </ion-modal>
+
+  <!-- End Date -->
+  <ion-item [ngStyle]="{'display': repeat !== 'no' ? 'none' : ''}" button="true" class="my" fill="outline" id="open-end-date-input">
+    <ion-label position="floating">{{ t("GENERAL.TIME.end-date") }}</ion-label>
+    <ion-input [value]="formatDate(dateEnd)"></ion-input>
+  </ion-item>
+
+  <ion-modal trigger="open-end-date-input">
+    <ng-template>
+      <app-date-picker (dateChange)="setEndDate($event)" [min]="dateStart"></app-date-picker>
+    </ng-template>
+  </ion-modal>
+</ion-content>
+
+<ion-footer class="p" *transloco="let t">
+  <ion-button [disabled]="form.invalid" expand="block" (click)="postBudget()">
+    <ng-container *ngIf="!budgetToEdit">{{ t("BUDGETS.FORM.create") }}</ng-container>
+    <ng-container *ngIf="budgetToEdit">{{ t("BUDGETS.FORM.edit") }}</ng-container>
+  </ion-button>
+</ion-footer>
