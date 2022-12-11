@@ -1,0 +1,26 @@
+<ion-toolbar *transloco="let t">
+  <ion-title>{{ t("Xuexueouixd cdfjkkfjc") }}</ion-title>
+</ion-toolbar>
+
+<div class="p" *transloco="let t">
+  <ion-item class="w-full my" fill="outline">
+    <ion-label position="floating">{{ t("Tipo de cambio") }}</ion-label>
+    <ion-input (ionChange)="recalculateDestiny()" [(ngModel)]="exchangeRate" type="number"></ion-input>
+  </ion-item>
+
+  <ion-item class="w-full my" fill="outline">
+    <ion-label position="floating">{{ t("Cantidad a transapasar en destino") }}</ion-label>
+    <ion-input (ionChange)="recalculateExchangeRate()" [(ngModel)]="valueInDestiny" type="number"></ion-input>
+  </ion-item>
+
+  <!-- Buttons -->
+  <div class="flex justify-content-between">
+    <ion-button expand="block" class="stroked" style="width: 49%" (click)="dismiss()">
+      {{ t("GENERAL.cancel") }}
+    </ion-button>
+
+    <ion-button expand="block" style="width: 49%" (click)="submit()">
+      {{ t("GENERAL.confirm") }}
+    </ion-button>
+  </div>
+</div>

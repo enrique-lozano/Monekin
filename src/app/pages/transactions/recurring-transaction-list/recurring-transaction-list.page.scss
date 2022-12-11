@@ -1,0 +1,33 @@
+.border-item:not(:last-child) {
+  border-bottom: 1px solid var(--ion-color-light);
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  ion-icon {
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 28px;
+  }
+}
+
+p.inactive {
+  margin: 2px 0px;
+  font-size: smaller;
+  font-weight: 300;
+
+  white-space: nowrap;
+  max-width: 45vw;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  span {
+    padding: 0px 6px;
+    border-radius: 0.25rem;
+    background-color: var(--ion-color-danger-light);
+    color: var(--ion-color-danger);
+  }
+}

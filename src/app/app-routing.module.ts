@@ -28,6 +28,27 @@ const routes: Routes = [
       import('./pages/tabs/tab3/tab3.module').then((m) => m.Tab3PageModule),
   },
   {
+    path: 'transaction-form',
+    loadChildren: () =>
+      import(
+        './pages/transactions/transaction-form/transaction-form.module'
+      ).then((m) => m.TransactionFormPageModule),
+  },
+  {
+    path: 'transaction-details',
+    loadChildren: () =>
+      import(
+        './pages/transactions/transaction-details/transaction-details.module'
+      ).then((m) => m.TransactionDetailsPageModule),
+  },
+  {
+    path: 'recurring-transaction-list',
+    loadChildren: () =>
+      import(
+        './pages/transactions/recurring-transaction-list/recurring-transaction-list.module'
+      ).then((m) => m.RecurringTransactionListPageModule),
+  },
+  {
     path: 'account-details',
     loadChildren: () =>
       import('./pages/accounts/account-details/account-details.module').then(

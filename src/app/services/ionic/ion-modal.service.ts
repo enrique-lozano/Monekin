@@ -20,10 +20,15 @@ import { TransactionListOrder } from 'src/app/constants/transaction-list-order';
 import { CategoriesListPage } from 'src/app/pages/categories/categories-list/categories-list.page';
 import { SubcategorySelectorComponent } from 'src/app/pages/categories/categories-list/components/subcategory-selector/subcategory-selector.component';
 import { UserProfileEditionComponent } from 'src/app/pages/settings/user-profile-edition/user-profile-edition.component';
+import { CurrencyExchangeSelectorComponent } from 'src/app/pages/transactions/transaction-form/components/currency-exchange-selector/currency-exchange-selector.component';
+import { RecurrentSelectorComponent } from 'src/app/pages/transactions/transaction-form/components/recurrent-selector/recurrent-selector.component';
 import { Currency } from '../currency/currency.model';
 import { Account } from '../db/account/account.model';
 import { Category } from '../db/category/category.model';
-import { Transaction } from '../db/transaction/transaction.model';
+import {
+  RecurrentOption,
+  Transaction,
+} from '../db/transaction/transaction.model';
 
 @Injectable({
   providedIn: 'root',
@@ -104,7 +109,7 @@ export class IonModalService {
     }>();
   }
 
-  /*   async openRecurrentModal(
+  async openRecurrentModal(
     repetition: 'no' | 'week' | 'month' | 'year',
     dateStart: Date,
     dateEnd: Date
@@ -149,7 +154,7 @@ export class IonModalService {
 
     return result.onDidDismiss<number>();
   }
- */
+
   async openAccountSelectorModal(
     selectedAccounts: 'all' | Account[],
     allowMultiSelection: boolean,
