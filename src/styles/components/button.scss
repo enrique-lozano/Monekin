@@ -1,32 +1,5 @@
 /* Styles to apply to the buttons of the app (ion-button, ion-fab...) */
 
-// ----- FAB BUTTONS -----
-
-ion-fab-button.md,
-ion-button.md.fab-button {
-  --border-radius: 16px;
-}
-
-ion-fab-button.md {
-  --box-shadow: 0 1px 3px 0 rgb(60 64 67 / 30%),
-    0 4px 8px 3px rgb(60 64 67 / 15%);
-}
-
-ion-button.md.fab-button {
-  font-size: 0.825rem;
-  text-transform: none;
-  min-height: 56px;
-
-  &:hover {
-    --box-shadow: 0 1px 3px 0 rgb(60 64 67 / 30%),
-      0 4px 8px 3px rgb(60 64 67 / 15%);
-  }
-
-  ion-icon {
-    font-size: 2em;
-  }
-}
-
 // ----- STYLES FOR ALL BUTTONS ----
 
 ion-button {
@@ -93,4 +66,31 @@ ion-buttons ion-button ion-icon + .badge {
   top: -3px;
   right: -3px;
   border-radius: 100%;
+}
+
+// ----- FAB BUTTONS -----
+
+ion-fab-button.md,
+ion-button.md.fab-button {
+  --border-radius: 16px;
+}
+
+ion-fab-button.md {
+  --box-shadow: 0 1px 3px 0 rgb(60 64 67 / 30%),
+    0 4px 8px 3px rgb(60 64 67 / 15%);
+}
+
+ion-button.md.fab-button {
+  font-size: 0.825rem;
+  text-transform: none;
+  min-height: 56px;
+
+  &:hover {
+    --box-shadow: 0 1px 3px 0 rgb(60 64 67 / 30%),
+      0 4px 8px 3px rgb(60 64 67 / 15%);
+  }
+
+  ion-icon {
+    font-size: 2em;
+  }
 }
