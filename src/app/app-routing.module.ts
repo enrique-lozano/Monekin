@@ -49,6 +49,13 @@ const routes: Routes = [
       ).then((m) => m.RecurringTransactionListPageModule),
   },
   {
+    path: 'accounts/list',
+    loadChildren: () =>
+      import('./pages/accounts/all-accounts/all-accounts.module').then(
+        (m) => m.AllAccountsPageModule
+      ),
+  },
+  {
     path: 'account-details',
     loadChildren: () =>
       import('./pages/accounts/account-details/account-details.module').then(

@@ -1,0 +1,69 @@
+<ion-header *transloco="let t">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>
+      {{ t("TABS.TAB1.ACCOUNT-RESUME.display") }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *transloco="let t">
+  <ion-progress-bar *ngIf="!accounts" type="indeterminate"></ion-progress-bar>
+
+  <ng-container *ngIf="accounts">
+    <ion-list style="padding-bottom: 12px !important;">
+      <ion-list-header>
+        {{ t("TABS.TAB1.ACCOUNT-RESUME.balance-by-account") }}
+      </ion-list-header>
+
+      <ion-item *ngFor="let account of accounts" class="account-container">
+        <ion-avatar slot="start">
+          <ion-icon [name]="account.icon"></ion-icon>
+        </ion-avatar>
+
+        <ion-label>
+          <div class="flex justify-content-between items-center">
+            <h2>{{ account.name }}</h2>
+            <span>
+              {{ account.money | currency : userCurrency : "symbol-narrow" : "1.0-2" : lang.getSelectedLang() }}
+            </span>
+          </div>
+          <div class="my-xs">
+            <app-progress-bar [color]="color" [mode]="'Horizontal'" [infillPercentage]="100 * account.money / totalMoney"></app-progress-bar>
+          </div>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+    <div class="border-bottom"></div>
+
+    <ion-list>
+      <ion-list-header>
+        {{ t("TABS.TAB1.ACCOUNT-RESUME.balance-by-currency") }}
+      </ion-list-header>
+
+      <ion-item *ngFor="let currency of currencies" class="currency-container">
+
+        <ion-avatar slot="start">
+          <img [src]="'./../../../assets/icons/currency_flags/' + currency.currency.code.toLowerCase() + '.svg'" alt="">
+        </ion-avatar>
+
+        <ion-label>
+          <div class="flex justify-content-between items-center">
+            <h2>{{ currency.currency.name }}</h2>
+            <span>
+              {{ currency.money | currency : userCurrency : "symbol-narrow" : "1.0-2" : lang.getSelectedLang() }}
+            </span>
+          </div>
+          <div class="my-xs">
+            <app-progress-bar [color]="color" [mode]="'Horizontal'" [infillPercentage]="100 * currency.money / totalMoney"></app-progress-bar>
+          </div>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+
+</ion-content>
