@@ -299,9 +299,13 @@ export class Tab1Page implements OnInit {
   previousScroll = 0;
   toggleFab(event: any) {
     if (event.detail.scrollTop > this.previousScroll) {
-      document.getElementsByTagName('ion-fab')[0].classList.add('hide');
+      document
+        .getElementById('add-transaction-mobile-fab')
+        .classList.add('hide');
     } else if (event.detail.scrollTop < this.previousScroll) {
-      document.getElementsByTagName('ion-fab')[0].classList.remove('hide');
+      document
+        .getElementById('add-transaction-mobile-fab')
+        .classList.remove('hide');
     }
     this.previousScroll = event.detail.scrollTop;
   }

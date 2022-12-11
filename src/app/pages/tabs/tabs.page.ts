@@ -22,12 +22,18 @@ export class TabsPage {
     this.router.events.subscribe((res) => {
       if (res instanceof NavigationEnd) {
         this.currentURL = this.router.url;
+
         if (this.currentURL.indexOf('/tabs/') != -1) {
+          // If we are on one of the tabs:
           document.querySelector('app-tabs')?.classList.add('show-on-mobile');
         } else {
           document
             .querySelector('app-tabs')
             ?.classList.remove('show-on-mobile');
+
+          document
+            .getElementById('add-transaction-mobile-fab')
+            .classList.add('hide');
         }
       }
     });
