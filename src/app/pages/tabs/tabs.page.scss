@@ -30,11 +30,14 @@ ion-header {
       justify-content: center;
       width: 100%;
       height: 56px;
+      padding-bottom: 0px;
 
       .app-icon {
         height: 100%;
         aspect-ratio: 1;
         object-fit: contain;
+        background-color: rgba(255, 255, 255, 0.24);
+        border-radius: 4px;
       }
     }
   }
