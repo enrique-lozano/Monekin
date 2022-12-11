@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title *transloco="let t">{{ t("SETTINGS.LICENSES.title") }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="p" *transloco="let t">
+  <p>{{ t("SETTINGS.LICENSES.start") }}</p>
+  <h3>{{ t("SETTINGS.LICENSES.icons") }}</h3>
+  <p>
+    {{ t("SETTINGS.LICENSES.text1") }}
+    <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>.
+    {{ t("SETTINGS.LICENSES.text2") }}
+  </p>
+  <ul>
+    <li><a href="https://www.freepik.com" title="Freepik">Freepik</a></li>
+    <li>
+      <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a>
+    </li>
+    <li>
+      <a href="https://www.flaticon.com/authors/good-ware" title="Goodware">Goodware</a>
+    </li>
+    <li>
+      <a href="https://www.flaticon.com/authors/moonkik" title="Moonkik">Moonkik</a>
+    </li>
+    <li>
+      <a href="https://www.flaticon.com/authors/prettycons" title="Prettycons">Prettycons</a>
+    </li>
+    <li>
+      <a href="https://www.flaticon.com/authors/good-ware" title="Goodware">Goodware</a>
+    </li>
+  </ul>
+
+  <p [innerHTML]="t('SETTINGS.LICENSES.text3')"></p>
+
+  <h3>{{ t("SETTINGS.LICENSES.fonts") }}</h3>
+
+  <ul class="thin" style="font-size: 14px;">
+    <li>SIL Open Font License, 1.1
+      Nunito[wght].ttf: Copyright 2014 The Nunito Project Authors (https://github.com/googlefonts/nunito)
+    </li>
+    <li>WorkSans[wght].ttf: Copyright 2019 The Work Sans Project Authors (https://github.com/weiweihuanghuang/Work-Sans)</li>
+  </ul>
+</ion-content>

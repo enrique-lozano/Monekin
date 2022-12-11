@@ -3,6 +3,16 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
+    path: '',
+    redirectTo: '/tabs/tab1',
+    pathMatch: 'full',
+  },
+  {
+    path: 'tabs',
+    redirectTo: '/tabs/tab1',
+    pathMatch: 'full',
+  },
+  {
     path: 'tabs/tab1',
     loadChildren: () =>
       import('./pages/tabs/tab1/tab1.module').then((m) => m.Tab1PageModule),
@@ -32,9 +42,11 @@ const routes: Routes = [
       ),
   },
   {
-    path: '',
-    redirectTo: '/tabs/tab1',
-    pathMatch: 'full',
+    path: 'settings',
+    loadChildren: () =>
+      import('./pages/settings/settings.module').then(
+        (m) => m.SettingsPageModule
+      ),
   },
 ];
 @NgModule({

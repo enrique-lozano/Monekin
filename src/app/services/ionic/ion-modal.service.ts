@@ -17,6 +17,7 @@ import { IconSelectorComponent } from 'src/app/components/dialogs/icon-selector/
 import { TransactionFilterComponent } from 'src/app/components/dialogs/transaction-filter/transaction-filter.component';
 import { TransactionOrderSelectorComponent } from 'src/app/components/dialogs/transaction-order-selector/transaction-order-selector.component';
 import { TransactionListOrder } from 'src/app/constants/transaction-list-order';
+import { UserProfileEditionComponent } from 'src/app/pages/settings/user-profile-edition/user-profile-edition.component';
 import { Currency } from '../currency/currency.model';
 import { Account } from '../db/account/account.model';
 import { Category } from '../db/category/category.model';
@@ -261,7 +262,7 @@ export class IonModalService {
     return result.onDidDismiss<TransactionListOrder>();
   }
 
-  /*   async openUserProfileEdition() {
+  async openUserProfileEdition() {
     const result = await this.modalCtrl.create({
       component: UserProfileEditionComponent,
       breakpoints: [0, 1],
@@ -271,7 +272,7 @@ export class IonModalService {
     result.present();
 
     return result.onDidDismiss<void>();
-  } */
+  }
 
   /** Function used to solve an ionic issue that fails on calculate the ion-content height, setting it equal to the height of the modal. At the moment, its use is valid for modals with a specific height, with an ion-header and an ion-content */
   recalculateContentHeight() {

@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ "SETTINGS.data" | transloco }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="p" *transloco="let t">
+
+  <ion-card color="tertiary" (click)="exportData()" class="card p">
+    <div class="flex items-center mb-s">
+      <ion-icon name="cloud-download-outline"></ion-icon>
+      <h3>{{ t("BACKUP.EXPORT.title") }}</h3>
+    </div>
+    <p style="margin: 0;">{{ t("BACKUP.EXPORT.description") }}</p>
+    <p style="margin: 0;margin-top: 8px; font-size: smaller">{{ t("BACKUP.EXPORT.last") }}{{ lastExport ? (lastExport | date : "mediumDate" :
+      undefined
+      : lang.getSelectedLang() ) : "--/--/----"}}, {{ lastExport ? (lastExport | date : "shortTime" : undefined
+      : lang.getSelectedLang() ) : "--:--"}}</p>
+  </ion-card>
+
+  <ion-card color="tertiary" (click)="importData()" class="card p mb-s">
+    <div class="flex items-center mb-s">
+      <ion-icon name="cloud-upload-outline"></ion-icon>
+      <h3>{{ t("BACKUP.IMPORT.title") }}</h3>
+    </div>
+    <p style="margin: 0;">{{ t("BACKUP.IMPORT.description") }}</p>
+  </ion-card>
+
+  <p class="help" (click)="openHelp()">{{ t("BACKUP.GUIDE.title") }}
+    <ion-icon name="help-outline"></ion-icon>
+  </p>
+
+  <input type="file" hidden (change)="onFileSelected()" accept="application/json" id="file-input">
+
+  <ion-card color="light" (click)="saveCSV()" class="card p">
+    <div class="flex items-center mb-s">
+      <ion-icon name="grid"></ion-icon>
+      <h3>{{ t("BACKUP.EXPORT.csv") }}</h3>
+    </div>
+    <p style="margin: 0;">{{ t("BACKUP.EXPORT.csv.description") }}</p>
+    <p style="margin-bottom: 0; font-size: smaller;" [innerHtml]="t('BACKUP.EXPORT.csv.note')"></p>
+  </ion-card>
+
+</ion-content>
+
+<ion-footer class="p" *transloco="let t">
+  <ion-button color="danger" expand="block" (click)="deleteAllData()">
+    {{ t("SETTINGS.delete-all") }}
+  </ion-button>
+</ion-footer>

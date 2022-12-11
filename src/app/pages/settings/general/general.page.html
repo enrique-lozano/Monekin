@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title *transloco="let t">{{ t("SETTINGS.other") }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *transloco="let t">
+  <ion-list>
+    <ion-item>
+      <ion-label>
+        {{ t("SETTINGS.lang") }}
+      </ion-label>
+      <ion-select [(ngModel)]="selectedLang" (ionChange)="setLanguage()" interface="popover">
+        <ion-select-option *ngFor="let lang of languages" [value]="lang">{{lang}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        {{ t("SETTINGS.first_day_of_week") }}
+      </ion-label>
+      <ion-select [(ngModel)]="selectedWeekDay" (ionChange)="setLanguage()" interface="popover">
+        <ion-select-option *ngFor="let day of weekDays; let i = index " [value]="i">{{day}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+</ion-content>
