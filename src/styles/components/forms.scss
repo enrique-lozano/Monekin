@@ -1,0 +1,58 @@
+ion-item.item-has-focus {
+  --highlight-background: var(--highlight-color-focused);
+}
+
+ion-item.item-has-focus.ion-touched.ion-invalid {
+  --highlight-background: var(--highlight-color-invalid);
+}
+
+form
+  ion-item.ion-invalid.ion-touched
+  ion-icon[name="alert-circle"][color="danger"][slot="end"] {
+  display: block;
+
+  animation-name: shakeX;
+  animation-delay: 0s;
+  animation-duration: 1s;
+}
+
+@keyframes shakeX {
+  from,
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translate3d(-2px, 0, 0);
+  }
+
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+}
+
+form
+  :not(ion-item.ion-invalid.ion-touched)
+  ion-icon[name="alert-circle"][color="danger"][slot="end"] {
+  display: none;
+}
+
+ion-searchbar {
+  --border-radius: 8px !important;
+  --box-shadow: none !important;
+
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+
+  .searchbar-input-container {
+    border-radius: 8px;
+    border: 1px solid rgba(161, 161, 161, 0.842);
+  }
+}
