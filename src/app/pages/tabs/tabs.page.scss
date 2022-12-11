@@ -85,10 +85,12 @@ ion-tab-bar {
     width: var(--ion-tab-bar-width-small);
     height: 100vh;
     flex-direction: column;
-    border-right: 1px solid var(--ion-color-light);
+    background-color: var(--ion-color-primary);
+    box-shadow: 1px 1px 3px 1px rgba(173, 173, 173, 0.2);
 
     ion-tab-button {
       max-height: 56px;
+      background-color: var(--ion-color-primary);
     }
 
     .tabs-ios .tab-button {
@@ -109,7 +111,7 @@ ion-tab-bar {
 
 @include min-width("lg") {
   .add-transaction-button-container {
-    padding: 16px;
+    padding: 16px 8px;
   }
 
   ion-tab-bar {
@@ -122,7 +124,7 @@ ion-tab-bar {
       justify-content: flex-start;
       max-width: 100%;
       width: calc(100% - 8px);
-      max-height: 48px;
+      max-height: 42px;
       border-top-right-radius: 1rem;
       border-bottom-right-radius: 1rem;
       transition: all 0.2s;
@@ -137,11 +139,11 @@ ion-tab-bar {
       }
 
       ion-label {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
       }
 
       ion-icon {
-        font-size: 22px;
+        font-size: 20px;
       }
     }
   }
@@ -159,15 +161,31 @@ ion-tab-bar.md {
   ion-tab-button {
     --ripple-color: transparent;
 
+    ion-label,
+    ion-icon {
+      color: var(--ion-color-secondary-contrast);
+
+      @include min-width("sm") {
+        color: var(--ion-color-primary-contrast);
+      }
+    }
+
     ion-icon {
       padding: 4px 20px;
-      color: var(--ion-color-secondary-contrast);
     }
 
     ion-label {
-      color: var(--ion-color-secondary-contrast);
       @include max-width("lg") {
         font-size: 12px;
+      }
+    }
+
+    @include min-width("lg") {
+      &.tab-selected {
+        ion-icon,
+        ion-label {
+          color: var(--ion-color-secondary-contrast);
+        }
       }
     }
   }
@@ -178,6 +196,10 @@ ion-tab-bar.md {
         position: relative;
         color: var(--ion-color-tertiary-contrast);
 
+        @include min-width("sm") {
+          color: var(--ion-color-secondary-contrast);
+        }
+
         &::after {
           content: "";
           position: absolute;
@@ -187,6 +209,11 @@ ion-tab-bar.md {
           height: 100%;
           border-radius: 20px;
           background: var(--ion-color-tertiary);
+
+          @include min-width("sm") {
+            background: var(--ion-color-secondary);
+          }
+
           opacity: 1;
           z-index: -1;
 
@@ -199,6 +226,11 @@ ion-tab-bar.md {
 
       ion-label {
         color: var(--ion-color-tertiary-contrast);
+
+        @include min-width("sm") {
+          color: var(--ion-color-primary-contrast);
+        }
+
         @media (prefers-color-scheme: dark) {
           color: var(--ion-color-dark);
         }
