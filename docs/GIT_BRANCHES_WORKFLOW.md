@@ -1,4 +1,4 @@
-# Git/GitHub workflow
+# Git/GitHub branches workflow
 
 As a rule, you as a project collaborator should create working branches (fix/XXXX, feature/XXX....) starting from <code>develop</code>. When you have your collaboration ready, you must make a Pull Request to this branch. Below you have more information about the purpose of each branch.
 
