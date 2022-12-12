@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SplashScreen } from '@capacitor/splash-screen';
 import { CurrencyService } from './services/currency/currency.service';
 import { StorageService } from './services/db/storage.service';
 import { LangService } from './services/translate/translate.service';
@@ -24,6 +25,7 @@ export class AppComponent {
     await this.currencyService.initializeUserCurrency(
       this.translateService.getSelectedLang()
     );
-    //SplashScreen.hide();
+
+    SplashScreen.hide();
   }
 }

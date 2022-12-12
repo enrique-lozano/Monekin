@@ -6,7 +6,7 @@
     "aaron-bond.better-comments",
     "usernamehw.errorlens",
     "seatonjiang.gitmoji-vscode",
-    "seatonjiang.gitmoji-vscode",
+    "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode"
   ]
 }

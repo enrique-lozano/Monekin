@@ -69,3 +69,5 @@ Thumbs.db
 
 # Monekin specific
 build/*
+android/keys/*
+!android/keys/.gitkeep
