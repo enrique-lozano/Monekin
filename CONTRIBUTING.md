@@ -4,43 +4,33 @@ First off, thank you for considering contributing to Monekin. It's people like y
 
 In this article you will find information about the steps you should take to help us with the development of code for the application. Note that it also helps to [report bugs](https://github.com/enrique-lozano/Monekin/issues), participate in the [forum](https://github.com/enrique-lozano/Monekin/discussions) and in short, be active in our community!
 
-## 1. Fork the repo
+There are many ways in which you can contribute, beyond writing code. The goal of this document is to provide a high-level overview of how you can get involved.
 
-To start, fork the project. If you are new to this, don't worry! We leave you a guide below, and if you still have problems, you can contact us whenever you wish.
+## Reporting issues
 
-[How To Fork Guide by GitHub](https://docs.github.com/en/get-started/quickstart/fork-a-repo)
+Have you identified a reproducible problem in Monekin? If so, we will be very grateful to hear from you to solve it as soon as possible.
 
-## 2. Choose what to do
+Before reporting an issue, please do a search in [open issues](https://github.com/enrique-lozano/Monekin/issues) to see if the issue or feature request has already been filed. If you find your issue already exists, make relevant comments and add your [reaction](https://github.com/blog/2119-add-reactions-to-pull-requests-issues-and-comments). Use a reaction in place of a "+1" comment:
 
-You can see a list of tasks to do [here](https://github.com/enrique-lozano/Monekin/issues). Once you see one that suits you and is not assigned to anyone else, you can leave a comment on the task, so that other users and administrators know who is working on it.
+* 👍 - upvote
+* 👎 - downvote
 
-If the list of tasks is too small for you, or you can't find one that suits you, here are some tips on how to help:
+To report an issue, go to the [open issues page](https://github.com/enrique-lozano/Monekin/issues) and create a new issue clicking the green bottom at the right-top of the section. We provide a template to fill the required data that we need to solve the issue. Try to be as detailed as possible in your explanations and descriptions. Attach screenshots or videos if necessary.
 
-- Ask questions or suggest ideas in the comments section of any issue.
-- Some recurring tasks such as adding new languages to the application, improving marketplace screenshots, or improving documentation do not usually have a related issue. These tasks are easy to perform, maybe you can start there.
-- You can always make code improvements and pull requests without having an opened issue.
-- You can create an issue about the thing that you consider to work on
+## Asking questions
 
-## 3. Create a new working branch in your fork
+Have a question? Rather than opening an issue, please go to the [Monekin Forum](https://github.com/enrique-lozano/Monekin/discussions/categories/q-a). The active community will be eager to assist you. Your well-worded question will serve as a resource to others searching for help.
 
-Once you've decided on what you want to contribute it's time to create a new branch in your forked Monekin
-repository.
+## Feature request
 
-    git checkout -b your-branch-name develop
+As with questions, for feature requests and suggestions we encourage you to use the [forum](https://github.com/enrique-lozano/Monekin/discussions/categories/ideas). If your request/suggestion is well-accepted, we will create an issue with it to take it into account for future releases.
 
-> **NOTE**: You should replace `your-branch-name` with a good name to give to your branch. For example `fix/XXXX` where XXXX is the Issue number, or `feature/some-new-feature`.
+If your suggestion has already been made by someone else, please instead of creating a new thread, react or reply to this one. Suggestions with more interactions/upvotes will have a better chance of being selected.
 
-This will be the branch in which you will code, make commits, etc. Before start coding it is recommended to read the [git workflow](https://github.com/enrique-lozano/Monekin/blob/main/docs/GIT_WORKFLOW.md) that we use in this project.
+## Create something new / Fix a bug
 
-`main` and `develop` branches are protected and only administrators can upload changes to them directly. All other users will have to make a Pull Request (step 4).
+If you are interested in writing code to fix issues or to create new features please refer to this [guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/CODE_CONTRIBUTING.md).
 
-## 4. Submit a PR to `develop` branch
+# Thank you!
 
-So far you should have pushed your work to your working branch and have tested that it works on all the compatible devices. Then final step is to open a pull request to the `develop` branch of the official [Monekin repo](https://github.com/enrique-lozano/Monekin).
-
-[How To Submit a PR Guide by GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
-
-### IMPORTANT:
-
-- Make sure that on the base repository's base the `develop` branch is chosen as "base".
-- Pull requests to `main` will be changed to the `develop` branch, or int wordt case, rejected.
+Your contributions to Monekin and other open source projects, large or small, make great projects like this possible. Thank you for taking the time to contribute.
