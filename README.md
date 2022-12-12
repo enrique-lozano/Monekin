@@ -48,3 +48,27 @@ After a lot of research on the marketplaces I could not find any application tha
 ### Tech Stack
 
 Developed in Ionic and Angular, which allows it to be a modern and scalable application to a large number of operating systems and platforms.
+
+## Run the code locally 🚀🧑‍💻
+
+The following explains how to run the project code locally. This way you will be able to investigate on your own how it is done, create new features, fix bugs, etc.
+
+### Prerequisites
+
+As with any Angular project, you will need to have Node.js installed. To install it go to [here](https://nodejs.org/en/download/). Note the [Angular compatibility matrix](https://gist.github.com/LayZeeDK/c822cc812f75bb07b7c55d07ba2719b3) to download a compatible version. You should also have git installed in your machine.
+
+### Installation
+
+Open a terminal on your computer and go to the folder where you want to place the project. Then clone the project and install the dependencies by typing the following commands:
+
+```
+git clone https://github.com/enrique-lozano/Monekin.git
+```
+```
+cd Monekin
+```
+```
+npm install
+```
+
+If everything went correctly these commands will finish executing without errors. Now you can run <code>npm run start:browser</code> on your terminal. When this command finish, you can open <code>http://localhost:4200</code> in your favourite browser to see the app running. The app will be refreshed when changes in the code appear.
