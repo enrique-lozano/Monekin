@@ -10,21 +10,9 @@ To start, fork the project. If you are new to this, don't worry! We leave you a 
 
 ## 2. Configure your developer workspace
 
-Once you have the project up and running, you should prepare to develop in Monekin. To do this, we leave you two simple steps, which, although they are not mandatory, are **highly recommended**:
-
-### Install Husky
-
-We used Husky in the project to prevent invalid code from being pushed to the git repository. To install it you will only have to enter the following command:
-
-```
-husky install
-```
-
-Now you already have Husky configured and ready, if you now try to make an invalid commit/push the terminal will show you what to change to continue. Simple, right?
+Once you have the project up and running, you should prepare to develop in Monekin. To make changes to the project and develop on it, the use of Visual Studio Code as a text editor is strongly recommended. You can use any other code editor, you can even program using Word, but Visual Studio Code is the most widespread editor for Front-End development, and using it guarantees you follow the same work methods as the administrators of this project.
 
 ### Visual Studio and Recommended extensions
-
-To make changes to the project and develop on it, the use of Visual Studio Code as a text editor is strongly recommended. You can use any other code editor, you can even program using Word, but Visual Studio Code is the most widespread editor for Front-End development, and using it guarantees you follow the same work methods as the administrators of this project.
 
 To increase your productivity on this project, it is strongly recommended to install the recommended extensions. To do this, when you have the project open with Visual Studio Code, you can type `@recommended` in the extensions section, and install all the ones that appear in the list.
 
