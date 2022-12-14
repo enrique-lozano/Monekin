@@ -1,6 +1,6 @@
 # Commit message convention for Monekin
 
-To ensure a correct reading of commits and to facilitate their subsequent search or enable automation processes for the app, we use well-defined criteria when formulating commit messages. This criterion is based on the Conventional Commits, and is explained below:
+To ensure a correct reading of commits and to facilitate their subsequent search or enable automation processes for the app, we use well-defined criteria when formulating commit messages. This criterion is based on the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/), and is explained below:
 
 In general, the same pattern is followed as explained in the documentation of this convention, which is:
 
@@ -49,4 +49,4 @@ We know that following all this convention can be somewhat difficult, therefore,
 
 ### Husky
 
-As you may have already read in the Monekin Contribution Guide, we use Husky to prevent anything wrong from being pushed to the repository. Well, this extension is also used to validate the messages of your commits before they are carried out. It will also indicate the errors of the same, so that you can correct them easily.
+As you may have already read in the [Monekin Contribution Guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/CODE_CONTRIBUTING.md), we use Husky to prevent anything wrong from being pushed to the repository. Well, this extension is also used to validate the messages of your commits before they are carried out. It will also indicate the errors of the same, so that you can correct them easily.
