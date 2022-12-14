@@ -37,6 +37,12 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
+        <li>
+      <a href="#contributing-">Contributing</a>
+      <ul>
+        <li><a href="#why-to-contribute">Why to contribute?</a></li>
+      </ul>
+    </li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
@@ -79,3 +85,16 @@ npm install
 ```
 
 If everything went correctly these commands will finish executing without errors. Now you can run <code>npm run start:browser</code> on your terminal. When this command finish, you can open <code>http://localhost:4200</code> in your favourite browser to see the app running. The app will be refreshed when changes in the code appear.
+
+## Contributing 🙋🏻
+
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make here are **greatly appreciated**. Read through our [contributing guidelines](https://github.com/enrique-lozano/Monekin/blob/main/CONTRIBUTING.md) to learn about how you can collaborate making Monekin better.
+
+### Why to contribute?
+- We can learn for you and you can learn from us.
+- You'll appear in our contributors wall.
+- You can **include it in your CV/LinkedIn** and show recruiters that you contribute to open-source projects.
+- You'll make Monekin better.
+- You can develop the features that you miss in the app yourself, the way you want them.
+- You'll play around and learn cutting-edge technologies.
+- It's the easiest way to learn Angular/Typescript/SCSS... in a production environment.
