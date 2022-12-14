@@ -66,4 +66,4 @@ So far you should have pushed your work to your working branch and have tested t
 ### IMPORTANT:
 
 - Make sure that on the base repository's base the `develop` branch is chosen as "base".
-- Pull requests to `main` will be changed to the `develop` branch, or int wordt case, rejected.
+- Pull requests to `main` will be changed to the `develop` branch, or in the worst case, rejected.
