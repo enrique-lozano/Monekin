@@ -65,3 +65,9 @@ It can be seen that in the case of entering a valid commit, the instruction will
 - **commitlint [[link](https://marketplace.visualstudio.com/items?itemName=joshbolduc.commitlint)]**: With this extension installed, you will have a linter for your commits in VSCode according with the requirements of Monekin.
 
 ![image](https://user-images.githubusercontent.com/61509169/207728724-7b67a415-b5cc-47f8-b2d0-32de97963e34.png)
+
+## A final note 📝
+
+Despite the fact that this convention is mandatory for this project and that it is very easy to carry out thanks to the aforementioned tools, we are not going to kill anyone who does not follow it to the letter.
+
+What we want is that you feel comfortable collaborating, that you try, that you mess around and yes, also that you make mistakes. In the event that this convention is not followed in some of your pull requests, the worst thing that can happen to you is that we make a `squash commit`, that is, that we unify all your commits into one with a different message.
