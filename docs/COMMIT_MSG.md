@@ -27,7 +27,7 @@ In addition, in order to simplify the process we have reduced the number of poss
 
 Usually you are going to use only the `fix` and the `feat` type.
 
-For our project, the valid scopes are defined [here]().
+For our project, the valid scopes are defined [here](https://github.com/enrique-lozano/Monekin/blob/main/docs/VALID_COMMIT_SCOPES.ts) along with a brief description of when to use them.
 
 So, the final commit header (the first line of the commit, before the body and the footers) should look something like this:
 
@@ -36,7 +36,7 @@ So, the final commit header (the first line of the commit, before the body and t
   │       │             │
   │       │             └─⫸ Summary in present tense. First letter capitalized. No period at the end.
   │       │
-  │       └─⫸ Commit Scope: One of the defined [here]()
+  │       └─⫸ Commit Scope: One of the defined in the VALID_COMMIT_SCOPES.ts
   │
   └─⫸ Commit Type: build|ci|docs|feat|fix|perf|refactor|test
 ```
@@ -49,4 +49,19 @@ We know that following all this convention can be somewhat difficult, therefore,
 
 ### Husky
 
-As you may have already read in the [Monekin Contribution Guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/CODE_CONTRIBUTING.md), we use Husky to prevent anything wrong from being pushed to the repository. Well, this extension is also used to validate the messages of your commits before they are carried out. It will also indicate the errors of the same, so that you can correct them easily.
+As you may have already read in the [Monekin Contribution Guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/CODE_CONTRIBUTING.md), we use Husky to prevent anything wrong from being pushed to the repository. Well, this extension is also used to validate the messages of your commits before they are carried out. It will also indicate the errors about them, so that you can correct them easily. Examples:
+
+![image](https://user-images.githubusercontent.com/61509169/207724827-e3d939e6-a98e-4782-bee6-39ee65e6587f.png)
+
+![image](https://user-images.githubusercontent.com/61509169/207725733-443bf900-06b1-411e-b711-b6b62a1a4fec.png)
+
+It can be seen that in the case of entering a valid commit, the instruction will be executed as normal:
+
+![image](https://user-images.githubusercontent.com/61509169/207725987-ea037f49-9391-4ca5-849f-c40b99b29574.png)
+
+### VSCode Extensions
+
+- **Conventional Commits [[link](https://marketplace.visualstudio.com/items?itemName=vivaxy.vscode-conventional-commits)]**: With this great extension you can write your commit messages in the required format for this project easier. When you clone this repo, we provide the configuration for this extension that match with our requirements, so you don't have to do anything. You will see that our scopes appear automatically in the form when you run this extension. Check the link for more info on how to use it.
+- **commitlint [[link](https://marketplace.visualstudio.com/items?itemName=joshbolduc.commitlint)]**: With this extension installed, you will have a linter for your commits in VSCode according with the requirements of Monekin.
+
+![image](https://user-images.githubusercontent.com/61509169/207728724-7b67a415-b5cc-47f8-b2d0-32de97963e34.png)
