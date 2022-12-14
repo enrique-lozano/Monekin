@@ -5,8 +5,9 @@
     "johnpapa.Angular2",
     "aaron-bond.better-comments",
     "usernamehw.errorlens",
-    "seatonjiang.gitmoji-vscode",
     "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode"
+    "esbenp.prettier-vscode",
+    "joshbolduc.commitlint",
+    "vivaxy.vscode-conventional-commits"
   ]
 }
