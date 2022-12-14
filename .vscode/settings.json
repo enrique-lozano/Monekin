@@ -1,0 +1,12 @@
+{
+  "conventionalCommits.gitmoji": false,
+
+  // Should be equal to the ones in the VALID_COMMIT_SCOPES.ts
+  "conventionalCommits.scopes": [
+    "ux/ui",
+    "security",
+    "literals",
+    "assets",
+    "accessibility"
+  ]
+}
