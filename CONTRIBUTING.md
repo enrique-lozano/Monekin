@@ -2,8 +2,6 @@
 
 First off, thank you for considering contributing to Monekin. It's people like you that make this application such a great tool.
 
-In this article you will find information about the steps you should take to help us with the development of code for the application. Note that it also helps to [report bugs](https://github.com/enrique-lozano/Monekin/issues), participate in the [forum](https://github.com/enrique-lozano/Monekin/discussions) and in short, be active in our community!
-
 There are many ways in which you can contribute, beyond writing code. The goal of this document is to provide a high-level overview of how you can get involved.
 
 ## Reporting issues
