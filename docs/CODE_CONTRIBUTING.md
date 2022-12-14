@@ -41,7 +41,7 @@ repository.
 
 > **NOTE**: You should replace `your-branch-name` with a good name to give to your branch. For example `fix/XXXX` where XXXX is the Issue number, or `feature/some-new-feature`.
 
-This will be the branch in which you will code, make commits, etc. Before start coding it is recommended to read the [git branch workflow](https://github.com/enrique-lozano/Monekin/blob/main/docs/GIT_WORKFLOW.md) and the [commit message convention](https://github.com/enrique-lozano/Monekin/blob/main/docs/COMMIT_MSG.md) that we use in this project.
+This will be the branch in which you will code, make commits, etc. Before start coding it is recommended to read the [git branch workflow](https://github.com/enrique-lozano/Monekin/blob/main/docs/GIT_BRANCHES_WORKFLOW.md) and the [commit message convention](https://github.com/enrique-lozano/Monekin/blob/main/docs/COMMIT_MSG.md) that we use in this project.
 
 `main` and `develop` branches are protected and only administrators can upload changes to them directly. All other users will have to make a Pull Request (step 4).
 
