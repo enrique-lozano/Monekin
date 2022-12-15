@@ -1,0 +1,34 @@
+$max-width: 720px;
+
+ion-content,
+ion-footer {
+  --background: var(--ion-color-light);
+  background-color: var(--ion-color-light);
+}
+
+.main-container {
+  padding-top: 6vh;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  max-width: $max-width;
+  margin: auto;
+
+  .account-description {
+    font-size: 0.8em;
+    font-weight: 300;
+    text-align: justify;
+  }
+
+  .app-icon {
+    aspect-ratio: 1;
+    width: 80px;
+  }
+}
+
+ion-footer {
+  padding: 16px max(16px, calc((100vw - $max-width) / 2));
+}
