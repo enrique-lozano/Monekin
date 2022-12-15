@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 import { AppModule } from 'src/app/app.module';
 import { StorageService } from 'src/app/services/db/storage.service';
 
@@ -15,7 +15,7 @@ describe('GeneralPage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [GeneralPage],
-      imports: [IonicModule.forRoot(), FormsModule, AppModule, TranslateModule],
+      imports: [IonicModule.forRoot(), FormsModule, AppModule, TranslocoModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(GeneralPage);

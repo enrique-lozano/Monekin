@@ -9,10 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TabsPageModule } from './pages/tabs/tabs.module';
 
-// Ionic Storage:
-import { Drivers } from '@ionic/storage';
-import { IonicStorageModule } from '@ionic/storage-angular';
-import * as cordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
+import { StorageModule } from './modules/storage.module';
 
 // Translate imports
 import { HttpClientModule } from '@angular/common/http';
@@ -28,14 +25,7 @@ import { TranslocoRootModule } from './modules/i18n/transloco-root.module';
     TabsPageModule,
     HttpClientModule,
     TranslocoRootModule,
-    IonicStorageModule.forRoot({
-      name: 'myStorage',
-      driverOrder: [
-        cordovaSQLiteDriver._driver,
-        Drivers.IndexedDB,
-        Drivers.LocalStorage,
-      ],
-    }),
+    StorageModule,
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

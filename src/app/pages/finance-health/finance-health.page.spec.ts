@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslocoModule } from '@ngneat/transloco';
 import { AppModule } from 'src/app/app.module';
 import { ComponentsModule } from 'src/app/modules/components.module';
 
@@ -17,7 +17,7 @@ describe('FinanceHealthPage', () => {
         IonicModule.forRoot(),
         ComponentsModule,
         AppModule,
-        TranslateModule,
+        TranslocoModule,
       ],
     }).compileComponents();
 
