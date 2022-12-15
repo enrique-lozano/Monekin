@@ -9,7 +9,6 @@ import { IntroPage } from './intro.page';
 
 import { TranslocoModule } from '@ngneat/transloco';
 import { SwiperModule } from 'swiper/angular';
-import { ImportDataPage } from './import-data/import-data.page';
 
 @NgModule({
   imports: [
@@ -20,6 +19,6 @@ import { ImportDataPage } from './import-data/import-data.page';
     SwiperModule,
     TranslocoModule,
   ],
-  declarations: [IntroPage, ImportDataPage],
+  declarations: [IntroPage],
 })
 export class IntroPageModule {}
