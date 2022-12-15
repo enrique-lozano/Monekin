@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { StatusBarService } from 'src/app/services/ionic/status-bar.service';
 
 @Component({
   selector: 'app-login',
@@ -6,10 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
+  constructor(private statusBar: StatusBarService) {}
 
-  constructor() { }
+  ngOnInit() {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
+    this.statusBar.setLightStatusBar();
   }
-
 }
