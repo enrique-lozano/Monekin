@@ -70,6 +70,6 @@
   <ion-button [disabled]="isSubmitted" expand="block" (click)="submit()">
     {{ (!categoryToEdit ? "CATEGORIES.create" : "CATEGORIES.edit") | transloco}}
 
-    <ion-icon *ngIf="isSubmitted" class="animate-flip ml-s" name="ellipse"></ion-icon>
+    <ion-icon *ngIf="isSubmitted" class="ml-s" name="ellipse"></ion-icon>
   </ion-button>
 </ion-footer>

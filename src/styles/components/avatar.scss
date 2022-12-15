@@ -7,6 +7,8 @@ ion-avatar {
   height: fit-content;
   aspect-ratio: 1;
 
+  overflow: hidden;
+
   > ion-icon:only-child.md {
     padding: 10px;
   }

@@ -48,6 +48,9 @@
   font-variation-settings: "FILL" 0, "wght" 500, "GRAD" 0, "opsz" 48;
 }
 
+/* Animations */
+@import "./../app/animations/animations.scss";
+
 /* App styles */
 @import "./base/layout.scss";
 @import "./base/typography.scss";

@@ -7,14 +7,17 @@ ion-footer {
   background-color: var(--ion-color-light);
 }
 
+.upload-icon {
+  animation-iteration-count: infinite;
+  animation-duration: 2s;
+}
+
 .swiper-slide {
-  height: calc(100vh - 76px); // Full - FooterSize
+  height: calc(100vh - 88px); // Full - FooterSize
   width: 100vw;
   max-width: $max-intro-width;
   margin: auto;
   overflow: auto;
-  padding-top: 5vh;
-  padding-bottom: 2vh;
   display: flex;
   flex-direction: column;
 
@@ -28,12 +31,16 @@ ion-footer {
 
   .text-container {
     width: 100%;
-    padding: 0px 24px;
-    margin-top: 6vh;
+    padding: 0 24px;
+    padding-top: 4vh;
+    padding-bottom: 1vh;
+    max-height: 50%;
+    height: 50%;
     display: inline-flex;
-    align-items: center;
-    flex-wrap: wrap;
-    align-content: center;
+    align-items: flex-start;
+    overflow: scroll;
+    flex-direction: column;
+    justify-content: flex-start;
 
     > * {
       width: 100%;
@@ -47,19 +54,19 @@ ion-footer {
 
 .img-container {
   padding: 12px 18px;
-  width: 85%;
+  width: 100%;
+  height: 50%;
   background-color: var(--ion-color-tertiary);
-  border-radius: 1rem;
-  flex-grow: 2;
   display: inline-flex;
   align-items: center;
 
   @include min-width("lg") {
     min-height: 70vh;
+    border-radius: 0.25rem;
   }
 
   img {
-    max-height: 350px;
+    max-height: 100%;
     width: 100%;
   }
 }

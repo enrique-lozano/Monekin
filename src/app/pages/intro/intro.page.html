@@ -5,7 +5,7 @@
       <div class="swiper-slide">
 
         <div class="img-container">
-          <img src=".assets/icons/undraw/first.svg" alt="" />
+          <img src="assets/icons/undraw/first.svg" alt="" />
         </div>
 
         <div class="text-container">
@@ -13,7 +13,7 @@
           <h1>{{ t('INTRO.sl1Title') }}</h1>
           <p class="text-justify">{{ t('INTRO.sl1Descr') }}</p>
 
-          <ion-item class="rounded-xxl currency-selector-item" (click)="goToSelectCoin()">
+          <ion-item button detail class="rounded-xxl currency-selector-item" (click)="goToSelectCoin()">
             <ion-avatar slot="start">
               <img [src]="'assets/icons/currency_flags/' + (userCurrency?.code | lowercase) + '.svg'" alt="Selected Currency Flag" />
             </ion-avatar>
@@ -23,7 +23,6 @@
               </span>
               <h2>{{ userCurrency?.name }}</h2>
             </ion-label>
-            <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
           </ion-item>
         </div>
 
@@ -35,7 +34,7 @@
     <ng-template swiperSlide>
       <div class="swiper-slide">
         <div class="img-container">
-          <img src=".assets/icons/undraw/security.svg" alt="" />
+          <img src="assets/icons/undraw/security.svg" alt="" />
         </div>
         <div class="text-container">
           <h1>{{ t('INTRO.sl2Title') }}</h1>
@@ -50,12 +49,38 @@
     <ng-template swiperSlide>
       <div class="swiper-slide">
         <div class="img-container">
-          <img src=".assets/icons/undraw/wallet.svg" alt="" />
+          <img src="assets/icons/undraw/upload.svg" alt="" />
         </div>
         <div class="text-container">
-          <h1>{{ t('INTRO.sl3Title') }}</h1>
-          <p class="text-justify">{{ t('INTRO.sl3Descr') }}</p>
-          <p class="text-justify m-0">{{ t('INTRO.sl3Descr2') }}</p>
+          <h1>{{ t("BACKUP.IMPORT.title") }}</h1>
+          <p class="text-justify">{{ t("BACKUP.IMPORT.longDescription") }}</p>
+          <ion-item button detail class="rounded-xxl currency-selector-item" (click)="importFile()">
+            <ion-avatar slot="start" style="background-color: var(--ion-color-secondary);">
+              <ion-icon name="arrow-up" class="upload-icon fadeInUp"></ion-icon>
+            </ion-avatar>
+            <input type="file" hidden (change)="onFileSelected()" id="file-input">
+            <ion-label>
+              <span style="font-size: 0.9em; font-weight: 300">
+                {{ t("BACKUP.IMPORT.upload_file") }}
+              </span>
+              <h2>{{ t("BACKUP.IMPORT.touch_to_import") }}</h2>
+            </ion-label>
+          </ion-item>
+        </div>
+
+      </div>
+    </ng-template>
+
+    <!--------- SLIDE 4 -------->
+    <ng-template swiperSlide>
+      <div class="swiper-slide">
+        <div class="img-container">
+          <img src="assets/icons/undraw/wallet.svg" alt="" />
+        </div>
+        <div class="text-container">
+          <h1>{{ t('INTRO.lastSlideTitle') }}</h1>
+          <p class="text-justify">{{ t('INTRO.lastSlideDescr') }}</p>
+          <p class="text-justify m-0">{{ t('INTRO.lastSlideDescr2') }}</p>
         </div>
 
       </div>
@@ -69,14 +94,14 @@
 
 <ion-footer *transloco="let t" class="ion-no-border">
   <div class="thin">
-    <ng-container *ngIf="currentSlide !== 2">
+    <ng-container *ngIf="!swiper?.swiperRef?.isEnd">
       <ion-button fill="clear" (click)="introFinished()">
         {{ t("INTRO.skip") }}
       </ion-button>
     </ng-container>
   </div>
   <div class="page-indicator text-center">
-    <ng-container *ngFor="let i of [0,1,2]">
+    <ng-container *ngFor="let i of [0,1,2,3]">
       <ion-icon name="ellipse" [ngClass]="{'active': i === currentSlide}"></ion-icon>
     </ng-container>
   </div>
