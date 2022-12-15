@@ -19,7 +19,7 @@ export class IntroGuard implements CanActivate {
       return true;
     } else {
       // If the user have not seen the intro we should go to intro
-      this.router.navigateByUrl('/intro', { replaceUrl: true });
+      this.router.navigateByUrl('/onboarding/login', { replaceUrl: true });
       return true;
     }
   }

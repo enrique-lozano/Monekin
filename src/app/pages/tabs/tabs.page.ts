@@ -23,8 +23,8 @@ export class TabsPage {
       if (res instanceof NavigationEnd) {
         this.currentURL = this.router.url;
 
-        if (this.currentURL.indexOf('/intro') != -1) {
-          // Hide tabs on intro pages
+        if (this.currentURL.indexOf('/onboarding') != -1) {
+          // Hide tabs on onboarding pages
           document.querySelector('app-tabs')?.classList.add('hidden');
         } else {
           document.querySelector('app-tabs')?.classList.remove('hidden');

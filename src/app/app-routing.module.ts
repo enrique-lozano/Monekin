@@ -9,7 +9,7 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'intro',
+    path: 'onboarding',
     loadChildren: () =>
       import('./pages/onboarding/onboarding.module').then(
         (m) => m.OnboardingPageModule
