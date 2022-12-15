@@ -1,8 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
-import { TranslocoModule } from '@ngneat/transloco';
-import { AppModule } from 'src/app/app.module';
-import { ComponentsModule } from 'src/app/modules/components.module';
+import { PageTestModule } from 'src/app/modules/testing/page-test.module';
 
 import { FinanceHealthPage } from './finance-health.page';
 
@@ -13,12 +10,7 @@ describe('FinanceHealthPage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [FinanceHealthPage],
-      imports: [
-        IonicModule.forRoot(),
-        ComponentsModule,
-        AppModule,
-        TranslocoModule,
-      ],
+      imports: [PageTestModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(FinanceHealthPage);
