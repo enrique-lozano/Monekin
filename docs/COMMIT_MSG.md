@@ -62,9 +62,6 @@ It can be seen that in the case of entering a valid commit, the instruction will
 ### VSCode Extensions
 
 - **Conventional Commits [[link](https://marketplace.visualstudio.com/items?itemName=vivaxy.vscode-conventional-commits)]**: With this great extension you can write your commit messages in the required format for this project easier. When you clone this repo, we provide the configuration for this extension that match with our requirements, so you don't have to do anything. You will see that our scopes appear automatically in the form when you run this extension. Check the link for more info on how to use it.
-- **commitlint [[link](https://marketplace.visualstudio.com/items?itemName=joshbolduc.commitlint)]**: With this extension installed, you will have a linter for your commits in VSCode according with the requirements of Monekin.
-
-![image](https://user-images.githubusercontent.com/61509169/207728724-7b67a415-b5cc-47f8-b2d0-32de97963e34.png)
 
 ## A final note 📝
 

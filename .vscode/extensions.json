@@ -7,7 +7,6 @@
     "usernamehw.errorlens",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
-    "joshbolduc.commitlint",
     "vivaxy.vscode-conventional-commits"
   ]
 }
