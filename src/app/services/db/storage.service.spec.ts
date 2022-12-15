@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { AppModule } from 'src/app/app.module';
 import { IonicStorageKey } from 'src/app/constants/capacitor-storage';
+import { ServiceTestModule } from 'src/app/modules/testing/service-test.module';
 
 import { StorageService } from './storage.service';
 
@@ -9,7 +9,7 @@ describe('BackupService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [AppModule],
+      imports: [ServiceTestModule],
     });
     service = TestBed.inject(StorageService);
   });

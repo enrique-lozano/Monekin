@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { AppModule } from '../app.module';
+import { ServiceTestModule } from 'src/app/modules/testing/service-test.module';
 
 import { BackupService } from './backup.service';
 
@@ -8,7 +8,7 @@ describe('BackupService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [AppModule],
+      imports: [ServiceTestModule],
     });
     service = TestBed.inject(BackupService);
   });
