@@ -41,7 +41,12 @@ export class OnboardingPage implements OnInit, AfterContentChecked {
   ngOnInit() {}
 
   async ionViewWillEnter() {
-    this.statusBar.setLightStatusBar();
+    this.statusBar.setStatusBarColor(
+      getComputedStyle(document.documentElement).getPropertyValue(
+        '--ion-color-light'
+      ),
+      'Dark'
+    );
 
     this.userCurrency = await this.currencyService.getUserCurrency();
   }
