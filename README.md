@@ -88,7 +88,9 @@ If everything went correctly these commands will finish executing without errors
 
 ## Contributing 🙋🏻
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make here are **greatly appreciated**. Read through our [contributing guidelines](https://github.com/enrique-lozano/Monekin/blob/main/CONTRIBUTING.md) to learn about how you can collaborate making Monekin better. **All Pull Requests are welcome** and will be studied without exception!
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make here are **greatly appreciated**. 
+
+Read through our [contributing guidelines](https://github.com/enrique-lozano/Monekin/blob/main/CONTRIBUTING.md) to learn about how you can collaborate making Monekin better. **All Pull Requests are welcome** and will be studied without exception!
 
 ### Why to contribute?
 - We can learn for you and you can learn from us.
