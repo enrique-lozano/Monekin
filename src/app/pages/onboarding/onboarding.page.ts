@@ -18,11 +18,11 @@ import { SwiperComponent } from 'swiper/angular';
 import { SwiperOptions } from 'swiper/types';
 
 @Component({
-  selector: 'app-intro',
-  templateUrl: './intro.page.html',
-  styleUrls: ['./intro.page.scss'],
+  selector: 'app-onboarding',
+  templateUrl: './onboarding.page.html',
+  styleUrls: ['./onboarding.page.scss'],
 })
-export class IntroPage implements OnInit, AfterContentChecked {
+export class OnboardingPage implements OnInit, AfterContentChecked {
   currentSlide = 0;
   userCurrency: Currency;
 

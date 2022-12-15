@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { IntroPageRoutingModule } from './intro-routing.module';
-import { IntroPage } from './intro.page';
+import { OnboardingPageRoutingModule } from './onboarding-routing.module';
+import { OnboardingPage } from './onboarding.page';
 
 import { TranslocoModule } from '@ngneat/transloco';
 import { SwiperModule } from 'swiper/angular';
@@ -15,10 +15,10 @@ import { SwiperModule } from 'swiper/angular';
     CommonModule,
     FormsModule,
     IonicModule,
-    IntroPageRoutingModule,
+    OnboardingPageRoutingModule,
     SwiperModule,
     TranslocoModule,
   ],
-  declarations: [IntroPage],
+  declarations: [OnboardingPage],
 })
-export class IntroPageModule {}
+export class OnboardingPageModule {}

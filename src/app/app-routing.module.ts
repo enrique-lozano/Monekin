@@ -11,7 +11,9 @@ const routes: Routes = [
   {
     path: 'intro',
     loadChildren: () =>
-      import('./pages/intro/intro.module').then((m) => m.IntroPageModule),
+      import('./pages/onboarding/onboarding.module').then(
+        (m) => m.OnboardingPageModule
+      ),
   },
   {
     path: 'tabs',
