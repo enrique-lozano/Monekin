@@ -1,7 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslocoModule } from '@ngneat/transloco';
-import { AppModule } from 'src/app/app.module';
+import { PageTestModule } from 'src/app/modules/testing/page-test.module';
 
 import { TabsPage } from './tabs.page';
 
@@ -12,7 +11,7 @@ describe('TabsPage', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [TabsPage],
-      imports: [AppModule, TranslocoModule],
+      imports: [PageTestModule],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   });
