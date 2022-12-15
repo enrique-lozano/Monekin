@@ -43,7 +43,7 @@ export class OnboardingPage implements OnInit, AfterContentChecked {
   async ionViewWillEnter() {
     this.statusBar.setStatusBarColor(
       getComputedStyle(document.documentElement).getPropertyValue(
-        '--ion-color-light'
+        '--ion-color-tertiary'
       ),
       'Dark'
     );
