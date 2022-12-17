@@ -20,7 +20,7 @@ export interface UserSettings {
   avatar: UserAvatars;
   darkMode: 'auto' | 'enabled' | 'disabled';
   preferredLanguage: AppLanguageCode;
-  locale: string;
+  /** @since Monekin 3.0.0 */ locale: string;
   preferredCurrency: ISOCorrencyCodes;
   firstDayOfWeek: 0 | 1 | 2 | 3 | 4 | 5 | 6;
 }
