@@ -1,20 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IonicStorageKey } from 'src/app/constants/capacitor-storage';
 import { ISOCorrencyCodes } from 'src/app/constants/currencies/currency-code.enum';
 import { defaultExhangeRates } from 'src/app/constants/default-exchange-rates';
 import { StorageService } from '../db/storage.service';
 import { UtilsService } from '../utils/utils.service';
+import { exchangeRate } from './currency.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ExchangeRatesService {
-  private exchangeRates: {
-    lastUpdate: Date;
-    baseCurrency: string;
-    rates: { [key: string]: string };
-  };
+  private exchangeRates: exchangeRate;
 
   constructor(
     private http: HttpClient,
@@ -35,7 +31,7 @@ export class ExchangeRatesService {
   async getExchangeRates() {
     if (this.exchangeRates) return this.exchangeRates;
 
-    this.exchangeRates = await this.storage.get(IonicStorageKey.exchangeRates);
+    this.exchangeRates = await this.storage.getItem('exchangeRates');
 
     if (!this.exchangeRates || (await this.getDaysWithoutUpdate()) > 7) {
       let dataFromAPI: {
@@ -56,7 +52,7 @@ export class ExchangeRatesService {
           }
         : defaultExhangeRates;
 
-      await this.storage.set(IonicStorageKey.exchangeRates, this.exchangeRates);
+      await this.storage.setItem('exchangeRates', this.exchangeRates);
     }
 
     return this.exchangeRates;

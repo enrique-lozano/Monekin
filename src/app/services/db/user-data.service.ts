@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { IonicStorageKey } from 'src/app/constants/capacitor-storage';
 import { UserData } from 'src/app/services/db/user-data.model';
 import { StorageService } from './storage.service';
 
@@ -14,11 +13,11 @@ export class UserDataService {
   async getUserData() {
     if (this.userData) return this.userData;
 
-    this.userData = await this.storageService.get(IonicStorageKey.userData);
+    this.userData = await this.storageService.getItem('userData');
 
     if (!this.userData) {
       await this.storageService.init();
-      this.userData = await this.storageService.get(IonicStorageKey.userData);
+      this.userData = await this.storageService.getItem('userData');
     }
 
     return this.userData;
@@ -29,6 +28,6 @@ export class UserDataService {
 
     this.userData = { ...this.userData, ...newData };
 
-    await this.storageService.set(IonicStorageKey.userData, this.userData);
+    await this.storageService.setItem('userData', this.userData);
   }
 }

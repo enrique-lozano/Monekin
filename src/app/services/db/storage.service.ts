@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
-import { IonicStorageKey } from 'src/app/constants/capacitor-storage';
 import { ISOCorrencyCodes } from 'src/app/constants/currencies/currency-code.enum';
 import { Account } from 'src/app/services/db/account/account.model';
 import { Budget } from 'src/app/services/db/budget/budget.model';
@@ -21,6 +20,7 @@ import {
 } from 'src/app/services/db/transaction/transaction.model';
 import { UserData } from 'src/app/services/db/user-data.model';
 import { v4 as generateUUID } from 'uuid';
+import { IonicStorageKeyV1, StorageSchema } from './storage.model';
 
 @Injectable({
   providedIn: 'root',
@@ -31,23 +31,32 @@ export class StorageService {
 
   constructor(private storage: Storage) {}
 
-  async set(key: IonicStorageKey, value: any) {
+  async setItem<T extends keyof StorageSchema>(
+    key: T,
+    value: StorageSchema[T]
+  ) {
     if (!this.appStorage) {
       await this.init();
     }
 
-    return this.appStorage.set(key, value);
+    await this.appStorage.set(key, value);
   }
 
-  async get(key: IonicStorageKey) {
+  async getItem<T extends keyof StorageSchema>(key: T) {
     if (!this.appStorage) {
       await this.init();
     }
 
-    return this.appStorage.get(key);
+    return (await this.appStorage.get(key)) as StorageSchema[T];
   }
 
-  async remove(key: IonicStorageKey) {
+  async patchItems(items: Partial<StorageSchema>) {
+    for (const key of Object.keys(items)) {
+      await this.setItem(key as keyof StorageSchema, items[key]);
+    }
+  }
+
+  async removeItem<T extends keyof StorageSchema>(key: T) {
     if (!this.appStorage) {
       await this.init();
     }
@@ -55,8 +64,8 @@ export class StorageService {
   }
 
   async removeAll() {
-    for (const key of Object.keys(IonicStorageKey)) {
-      await this.remove(IonicStorageKey[key]);
+    for (const key of Object.keys(IonicStorageKeyV1)) {
+      await this.removeItem(IonicStorageKeyV1[key]);
     }
   }
 
@@ -69,21 +78,21 @@ export class StorageService {
   }
 
   private async initializeDB() {
-    if (await this.get(IonicStorageKey.userData)) return;
+    if (await this.getItem('userData')) return;
 
     let userData: UserData;
 
     if (
-      ((await this.get(IonicStorageKey.cookies)) as Cookies)?.modelVersion ==
-      '1'
+      ((await this.appStorage.get(IonicStorageKeyV1.cookies)) as Cookies)
+        ?.modelVersion == '1'
     ) {
       userData = this.transformDataToV2({
-        accounts: await this.get(IonicStorageKey.accounts),
-        budgets: await this.get(IonicStorageKey.budgets),
-        transfers: await this.get(IonicStorageKey.transfers),
-        categories: await this.get(IonicStorageKey.categories),
-        cookies: await this.get(IonicStorageKey.cookies),
-        settings: await this.get(IonicStorageKey.settings),
+        accounts: await this.appStorage.get(IonicStorageKeyV1.accounts),
+        budgets: await this.appStorage.get(IonicStorageKeyV1.budgets),
+        transfers: await this.appStorage.get(IonicStorageKeyV1.transfers),
+        categories: await this.appStorage.get(IonicStorageKeyV1.categories),
+        cookies: await this.appStorage.get(IonicStorageKeyV1.cookies),
+        settings: await this.appStorage.get(IonicStorageKeyV1.settings),
       });
     } else {
       userData = {
@@ -96,7 +105,7 @@ export class StorageService {
       };
     }
 
-    await this.set(IonicStorageKey.userData, userData);
+    await this.setItem('userData', userData);
   }
 
   transformDataToV2(data: {

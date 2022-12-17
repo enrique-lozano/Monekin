@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { IonicStorageKey } from 'src/app/constants/capacitor-storage';
 import { BackupService } from 'src/app/services/backup/backup.service';
 import { Account } from 'src/app/services/db/account/account.model';
 import { CategoryService } from 'src/app/services/db/category/category.service';
@@ -184,7 +183,7 @@ export class DataPage implements OnInit {
 
                     await this.categoryService.getInitialCategories();
 
-                    await this.storage.set(IonicStorageKey.userData, userData);
+                    await this.storage.setItem('userData', userData);
 
                     this.router.navigate(['tabs']);
                   },
