@@ -20,6 +20,7 @@ export interface UserSettings {
   avatar: UserAvatars;
   darkMode: 'auto' | 'enabled' | 'disabled';
   preferredLanguage: AppLanguageCode;
+  locale: string;
   preferredCurrency: ISOCorrencyCodes;
   firstDayOfWeek: 0 | 1 | 2 | 3 | 4 | 5 | 6;
 }
@@ -31,4 +32,5 @@ export const defaultSettings: UserSettings = {
   preferredLanguage: undefined,
   preferredCurrency: undefined,
   firstDayOfWeek: undefined,
+  locale: undefined,
 };
