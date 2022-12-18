@@ -46,7 +46,7 @@ export class BackupService {
     let data = JSON.parse(fileReaderResult as string);
 
     if ((data.cookies as Cookies).modelVersion === '1') {
-      data = this.storage.transformDataToV2(data);
+      data = this.storage.migrateFromV1();
     }
 
     await this.userDataService.setUserData(data);

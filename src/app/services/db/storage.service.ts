@@ -12,7 +12,6 @@ import {
 import {
   defaultSettings,
   UserAvatars,
-  UserSettings,
 } from 'src/app/services/db/settings/settings.model';
 import {
   Transaction,
@@ -86,14 +85,7 @@ export class StorageService {
       ((await this.appStorage.get(IonicStorageKeyV1.cookies)) as Cookies)
         ?.modelVersion == '1'
     ) {
-      userData = this.transformDataToV2({
-        accounts: await this.appStorage.get(IonicStorageKeyV1.accounts),
-        budgets: await this.appStorage.get(IonicStorageKeyV1.budgets),
-        transfers: await this.appStorage.get(IonicStorageKeyV1.transfers),
-        categories: await this.appStorage.get(IonicStorageKeyV1.categories),
-        cookies: await this.appStorage.get(IonicStorageKeyV1.cookies),
-        settings: await this.appStorage.get(IonicStorageKeyV1.settings),
-      });
+      userData = await this.migrateFromV1();
     } else {
       userData = {
         accounts: [],
@@ -108,14 +100,17 @@ export class StorageService {
     await this.setItem('userData', userData);
   }
 
-  transformDataToV2(data: {
-    accounts: any[];
-    transfers: any[];
-    categories: any[];
-    budgets: Budget[];
-    settings: UserSettings;
-    cookies: Cookies;
-  }) {
+  /** Migrate the data contained in the storage if the last time the user used the app was in Monekin v1.X.X */
+  async migrateFromV1() {
+    const data = {
+      accounts: await this.appStorage.get(IonicStorageKeyV1.accounts),
+      budgets: await this.appStorage.get(IonicStorageKeyV1.budgets),
+      transfers: await this.appStorage.get(IonicStorageKeyV1.transfers),
+      categories: await this.appStorage.get(IonicStorageKeyV1.categories),
+      cookies: await this.appStorage.get(IonicStorageKeyV1.cookies),
+      settings: await this.appStorage.get(IonicStorageKeyV1.settings),
+    };
+
     const result: Partial<UserData> = {
       cookies: { ...data.cookies, ...{ modelVersion: '2' } },
       settings: { ...data.settings, avatar: UserAvatars.man },

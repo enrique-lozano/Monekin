@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UserDataService } from '../user-data.service';
+import { default as packageInfo } from './../../../../../package.json';
 import { Cookies } from './cookies.model';
 
 @Injectable({
@@ -23,5 +24,9 @@ export class CookieService {
   async setCookies(cookies: Partial<Cookies>) {
     this.cookies = { ...this.cookies, ...cookies };
     await this.userDataService.setUserData({ cookies: this.cookies });
+  }
+
+  async setCurrentAppVersion() {
+    await this.setCookies({ modelVersion: packageInfo.version });
   }
 }
