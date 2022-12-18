@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { CurrencyService } from './services/currency/currency.service';
+import { CookieService } from './services/db/cookie/cookie.service';
 import { StorageService } from './services/db/storage.service';
 import { LangService } from './services/translate/translate.service';
 
@@ -13,7 +14,8 @@ export class AppComponent {
   constructor(
     private storage: StorageService,
     private currencyService: CurrencyService,
-    private translateService: LangService
+    private translateService: LangService,
+    private cookieService: CookieService
   ) {
     this.storage.init().then(() => {
       this.getStartedConfig();
@@ -25,6 +27,8 @@ export class AppComponent {
     await this.currencyService.initializeUserCurrency(
       this.translateService.getSelectedLang()
     );
+
+    await this.cookieService.setCurrentAppVersion();
 
     SplashScreen.hide();
   }

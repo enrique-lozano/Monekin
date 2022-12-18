@@ -6,7 +6,7 @@ export interface Cookies {
 }
 
 export const defaultCookies: Cookies = {
-  modelVersion: '2',
+  modelVersion: undefined,
   introSeen: false,
   lastExportDate: undefined,
 };
