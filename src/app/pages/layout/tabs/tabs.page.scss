@@ -2,15 +2,6 @@
 
 /* ION MAIN FAB STYLES */
 
-ion-fab {
-  transition: all 0.3s;
-  transform: scale(1);
-}
-
-ion-fab.hide {
-  transform: scale(0);
-}
-
 ion-fab.md {
   bottom: 94px;
   right: 16px;
