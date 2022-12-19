@@ -8,8 +8,8 @@ import { Tab3Page } from './tab3.page';
 import { TranslocoModule } from '@ngneat/transloco';
 import { ComponentsModule } from 'src/app/modules/components.module';
 import { SwiperModule } from 'swiper/angular';
-import { SelectTypeOfCategoryComponent } from './statistics/select-type-of-category/select-type-of-category.component';
-import { StatisticsComponent } from './statistics/statistics.component';
+import { SelectTypeOfCategoryComponent } from './components/select-type-of-category/select-type-of-category.component';
+import { StatisticsComponent } from './components/statistics/statistics.component';
 import { Tab3PageRoutingModule } from './tab3-routing.module';
 
 @NgModule({

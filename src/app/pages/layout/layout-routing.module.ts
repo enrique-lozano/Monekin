@@ -21,17 +21,17 @@ const routes: Routes = [
       {
         path: 'tabs/tab1',
         loadChildren: () =>
-          import('./../tabs/tab1/tab1.module').then((m) => m.Tab1PageModule),
+          import('./tabs/tab1/tab1.module').then((m) => m.Tab1PageModule),
       },
       {
         path: 'tabs/tab2',
         loadChildren: () =>
-          import('./../tabs/tab2/tab2.module').then((m) => m.Tab2PageModule),
+          import('./tabs/tab2/tab2.module').then((m) => m.Tab2PageModule),
       },
       {
         path: 'tabs/tab3',
         loadChildren: () =>
-          import('./../tabs/tab3/tab3.module').then((m) => m.Tab3PageModule),
+          import('./tabs/tab3/tab3.module').then((m) => m.Tab3PageModule),
       },
       {
         path: 'transaction-form',

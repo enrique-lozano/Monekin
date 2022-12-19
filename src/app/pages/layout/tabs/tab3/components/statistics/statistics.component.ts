@@ -26,7 +26,7 @@ import { FilterService } from 'src/app/services/filters/filter.service';
 import { IonModalService } from 'src/app/services/ionic/ion-modal.service';
 import { LangService } from 'src/app/services/translate/translate.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { SelectTypeOfCategoryComponent } from './select-type-of-category/select-type-of-category.component';
+import { SelectTypeOfCategoryComponent } from '../select-type-of-category/select-type-of-category.component';
 
 @Component({
   selector: 'app-statistics',
