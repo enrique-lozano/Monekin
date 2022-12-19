@@ -11,6 +11,23 @@ import { LangService } from 'src/app/services/translate/translate.service';
 })
 export class TabsPage {
   currentURL: string = 'tab1';
+  readonly tabs = [
+    {
+      label: 'TABS.TAB1.title',
+      icon: 'home',
+      url: '/tabs/tab1',
+    },
+    {
+      label: 'TABS.TAB2.title',
+      icon: 'file-tray-full',
+      url: '/tabs/tab2',
+    },
+    {
+      label: 'TABS.TAB3.title',
+      icon: 'bar-chart',
+      url: '/tabs/tab3',
+    },
+  ];
 
   constructor(
     private router: Router,
@@ -22,13 +39,6 @@ export class TabsPage {
     this.router.events.subscribe((res) => {
       if (res instanceof NavigationEnd) {
         this.currentURL = this.router.url;
-
-        if (this.currentURL.indexOf('/onboarding') != -1) {
-          // Hide tabs on onboarding pages
-          document.querySelector('app-tabs')?.classList.add('hidden');
-        } else {
-          document.querySelector('app-tabs')?.classList.remove('hidden');
-        }
 
         if (this.currentURL.indexOf('/tabs/') != -1) {
           // If we are on one of the tabs:

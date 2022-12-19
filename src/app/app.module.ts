@@ -7,7 +7,6 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TabsPageModule } from './pages/tabs/tabs.module';
 
 import { StorageModule } from './modules/storage.module';
 
@@ -25,7 +24,6 @@ import { TranslocoRootModule } from './modules/i18n/transloco-root.module';
     BrowserAnimationsModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    TabsPageModule,
     HttpClientModule,
     TranslocoRootModule,
     StorageModule,
