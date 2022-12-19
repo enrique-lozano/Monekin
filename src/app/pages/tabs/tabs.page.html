@@ -17,21 +17,15 @@
     </ion-button>
   </div>
 
-  <ion-tab-button [ngClass]="{'tab-selected': currentURL.endsWith('tab1')}" (click)="goTo('/tabs/tab1')">
-    <ion-icon [name]="'home' + (currentURL.endsWith('tab1') ? '' : '-outline')"></ion-icon>
-    <ion-label>{{ t("TABS.TAB1.title") }}</ion-label>
-  </ion-tab-button>
+  <ng-container *ngFor="let tab of tabs">
+    <ion-tab-button routerLinkActive="tab-selected" routerDirection="root" [routerLink]="[tab.url]">
+      <ion-icon [name]="tab.icon + (currentURL === tab.url ? '' : '-outline')"></ion-icon>
+      <ion-label>{{ t(tab.label) }}</ion-label>
+    </ion-tab-button>
+  </ng-container>
 
-  <ion-tab-button [ngClass]="{'tab-selected': currentURL.endsWith('tab2')}" (click)="goTo('/tabs/tab2')">
-    <ion-icon [name]="'file-tray-full' + (currentURL.endsWith('tab2') ? '' : '-outline')"></ion-icon>
-    <ion-label>{{ t("TABS.TAB2.title") }}</ion-label>
-  </ion-tab-button>
-
-  <ion-tab-button [ngClass]="{'tab-selected': currentURL.endsWith('tab3')}" (click)="goTo('/tabs/tab3')">
-    <ion-icon [name]="'bar-chart' + (currentURL.endsWith('tab3') ? '' : '-outline')"></ion-icon>
-    <ion-label>{{ t("TABS.TAB3.title") }}</ion-label>
-  </ion-tab-button>
 </ion-tab-bar>
+
 
 <ion-fab id="add-transaction-mobile-fab" vertical="bottom" horizontal="end">
   <ion-fab-button (click)="goToAddTransaction()" color="primary">

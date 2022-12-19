@@ -1,20 +1,24 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+
 import { IonicModule } from '@ionic/angular';
+
+import { LayoutPageRoutingModule } from './layout-routing.module';
+
 import { TranslocoModule } from '@ngneat/transloco';
-import { TabsPage } from './tabs.page';
+import { TabsPageModule } from '../tabs/tabs.module';
+import { LayoutPage } from './layout.page';
 
 @NgModule({
   imports: [
-    IonicModule,
     CommonModule,
     FormsModule,
-    RouterModule,
+    IonicModule,
+    LayoutPageRoutingModule,
     TranslocoModule,
+    TabsPageModule,
   ],
-  declarations: [TabsPage],
-  exports: [TabsPage],
+  declarations: [LayoutPage],
 })
-export class TabsPageModule {}
+export class LayoutPageModule {}

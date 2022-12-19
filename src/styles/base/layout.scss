@@ -42,9 +42,3 @@
     left: var(--ion-tab-bar-width-big);
   }
 }
-
-app-tabs.hidden + * {
-  left: 0;
-  width: 100% !important;
-  z-index: 15000;
-}
