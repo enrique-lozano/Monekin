@@ -24,12 +24,5 @@ export interface Budget {
 export class Budget implements Budget {
   constructor(obj: Budget) {
     Object.assign(this, obj);
-
-    if (obj.startDate) {
-      this.startDate = new Date(obj.startDate);
-    }
-    if (obj.endDate) {
-      this.endDate = new Date(obj.endDate);
-    }
   }
 }

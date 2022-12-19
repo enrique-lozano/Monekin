@@ -21,14 +21,17 @@ export class AccountFormPage implements OnInit {
   currency: Currency;
   type: 'normal' | 'saving' = 'normal';
 
-  form: FormGroup<{
-    name: FormControl<string>;
-    currency: FormControl<string>;
-    text: FormControl<string>;
-    iban: FormControl<string>;
-    swift: FormControl<string>;
-    balance: FormControl<number>;
-  }>;
+  form = new FormGroup({
+    name: new FormControl('', Validators.required),
+    currency: new FormControl('', Validators.required),
+    text: new FormControl(''),
+    iban: new FormControl(''),
+    swift: new FormControl(''),
+    balance: new FormControl<number>(undefined, [
+      Validators.required,
+      Validators.max(10000000000),
+    ]),
+  });
 
   accountToEdit: Account;
 
@@ -42,19 +45,7 @@ export class AccountFormPage implements OnInit {
     private settingSerive: SettingsService,
     private transactionService: TransactionService,
     private readonly accountUtils: AccountUtilsService
-  ) {
-    this.form = new FormGroup({
-      name: new FormControl('', Validators.required),
-      currency: new FormControl('', Validators.required),
-      text: new FormControl('', []),
-      iban: new FormControl('', []),
-      swift: new FormControl('', []),
-      balance: new FormControl(undefined, [
-        Validators.required,
-        Validators.max(10000000000),
-      ]),
-    });
-  }
+  ) {}
 
   async ngOnInit() {
     this.currency = this.currencyService.getCurrencyByCode(
@@ -148,11 +139,13 @@ export class AccountFormPage implements OnInit {
       type: this.accountToEdit?.type ?? this.type,
     });
 
+    // Optional data:
     for (const key of ['text', 'iban', 'swift']) {
-      objToPost[key] = this.form.value[key];
+      if (objToPost[key]) objToPost[key] = this.form.value[key];
     }
 
     if (this.accountToEdit) {
+      // ----- EDIT -----
       this.accountService
         .editAccount(this.accountToEdit.id, new Account(objToPost))
         .then(async () => {
@@ -162,8 +155,11 @@ export class AccountFormPage implements OnInit {
             replaceUrl: true,
           });
         });
+
       return;
     }
+
+    // ----- CREATE -----
 
     this.accountService.addAccount(objToPost).then(() => {
       this.router.navigate(['/tabs/tab1'], { replaceUrl: true });

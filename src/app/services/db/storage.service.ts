@@ -5,14 +5,8 @@ import { ISOCorrencyCodes } from 'src/app/constants/currencies/currency-code.enu
 import { Account } from 'src/app/services/db/account/account.model';
 import { Budget } from 'src/app/services/db/budget/budget.model';
 import { CategoryInStorage } from 'src/app/services/db/category/category.model';
-import {
-  Cookies,
-  defaultCookies,
-} from 'src/app/services/db/cookie/cookies.model';
-import {
-  defaultSettings,
-  UserAvatars,
-} from 'src/app/services/db/settings/settings.model';
+import { Cookies } from 'src/app/services/db/cookie/cookies.model';
+import { UserAvatars } from 'src/app/services/db/settings/settings.model';
 import {
   Transaction,
   TransactionInStorage,
@@ -73,10 +67,11 @@ export class StorageService {
 
     await this.storage.defineDriver(CordovaSQLiteDriver);
     this.appStorage = await this.storage.create();
-    await this.initializeDB();
+    await this.checkMigrations();
   }
 
-  private async initializeDB() {
+  /** Migrate the DB model to the last version */
+  private async checkMigrations() {
     if (await this.getItem('userData')) return;
 
     let userData: UserData;
@@ -87,14 +82,7 @@ export class StorageService {
     ) {
       userData = await this.migrateFromV1();
     } else {
-      userData = {
-        accounts: [],
-        budgets: [],
-        transactions: [],
-        settings: defaultSettings,
-        cookies: defaultCookies,
-        categories: undefined, //Initialized later on the app.component
-      };
+      userData = {} as UserData;
     }
 
     await this.setItem('userData', userData);

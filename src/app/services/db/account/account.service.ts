@@ -29,7 +29,7 @@ export class AccountService {
   }
 
   async refreshAccounts() {
-    this.accounts = (await this.userDataService.getUserData()).accounts;
+    this.accounts = (await this.userDataService.getUserData()).accounts || [];
     this.accounts = this.accounts.map((x) => new Account(x));
   }
 

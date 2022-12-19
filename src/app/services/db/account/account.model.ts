@@ -30,7 +30,5 @@ export class Account {
     Object.assign(this, obj);
 
     if (!this.id) this.id = generateUUID();
-
-    this.date = new Date(obj.date);
   }
 }

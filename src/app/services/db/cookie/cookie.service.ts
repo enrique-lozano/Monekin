@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UserDataService } from '../user-data.service';
 import { default as packageInfo } from './../../../../../package.json';
-import { Cookies } from './cookies.model';
+import { Cookies, defaultCookies } from './cookies.model';
 
 @Injectable({
   providedIn: 'root',
@@ -18,11 +18,12 @@ export class CookieService {
   }
 
   async refreshCookies() {
-    this.cookies = (await this.userDataService.getUserData()).cookies;
+    this.cookies =
+      (await this.userDataService.getUserData()).cookies || defaultCookies;
   }
 
   async setCookies(cookies: Partial<Cookies>) {
-    this.cookies = { ...this.cookies, ...cookies };
+    this.cookies = { ...(await this.getCookies()), ...cookies };
     await this.userDataService.setUserData({ cookies: this.cookies });
   }
 
