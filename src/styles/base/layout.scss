@@ -18,8 +18,23 @@
     display: none;
   }
 
-  .show-on-mobile ion-tab-bar {
-    display: flex;
+  #add-transaction-mobile-fab {
+    transition: all 0.3s;
+    transform: scale(0);
+  }
+
+  .show-on-mobile {
+    ion-tab-bar {
+      display: flex;
+    }
+
+    #add-transaction-mobile-fab {
+      transform: scale(1);
+    }
+
+    #add-transaction-mobile-fab.hide {
+      transform: scale(0);
+    }
   }
 
   .md app-tabs.show-on-mobile + * {
