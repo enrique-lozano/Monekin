@@ -34,7 +34,7 @@ export class CategoryService {
 
   async refreshCategories() {
     this.categories = this.categoriesToMemory(
-      (await this.userDataService.getUserData()).categories ??
+      (await this.userDataService.getUserData()).categories ||
         (await this.getInitialCategories())
     );
   }

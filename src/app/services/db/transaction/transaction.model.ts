@@ -24,13 +24,7 @@ abstract class TransactionBase {
   constructor(obj: any) {
     Object.assign(this, obj);
 
-    this.date = new Date(obj.date);
-
     if (!this.id) this.id = generateUUID();
-
-    if (obj.repeat && obj.repeat.endDate) {
-      this.repeat.endDate = new Date(obj.repeat.endDate);
-    }
   }
 }
 

@@ -85,9 +85,7 @@ export class TransactionService {
 
   async refreshTransactions() {
     this.transactions = await this.transactionsToMemory(
-      (
-        await this.userDataService.getUserData()
-      ).transactions
+      (await this.userDataService.getUserData()).transactions || []
     );
   }
 

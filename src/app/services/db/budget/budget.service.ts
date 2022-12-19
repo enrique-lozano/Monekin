@@ -33,7 +33,7 @@ export class BudgetService {
   }
 
   async refreshBudgets() {
-    this.budgets = (await this.userDataService.getUserData()).budgets;
+    this.budgets = (await this.userDataService.getUserData()).budgets || [];
     this.budgets = this.budgets.map((x) => new Budget(x));
   }
 

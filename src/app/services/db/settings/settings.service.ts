@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UserDataService } from '../user-data.service';
-import { UserSettings } from './settings.model';
+import { defaultSettings, UserSettings } from './settings.model';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +19,8 @@ export class SettingsService {
   }
 
   async refreshSettings() {
-    this.userSettings = (await this.userDataService.getUserData()).settings;
+    this.userSettings =
+      (await this.userDataService.getUserData()).settings || defaultSettings;
   }
 
   async setSettings(settings: Partial<UserSettings>) {
