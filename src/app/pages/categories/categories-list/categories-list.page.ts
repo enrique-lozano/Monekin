@@ -45,7 +45,18 @@ export class CategoriesListPage implements AfterContentChecked {
     private modalCtrl: ModalController
   ) {}
 
-  async ionViewWillEnter() {
+  @ViewChild('swiper') swiper: SwiperComponent;
+  config: SwiperOptions = {
+    initialSlide: 1,
+  };
+
+  ngAfterContentChecked() {
+    if (this.swiper) {
+      this.swiper.updateSwiper({});
+    }
+  }
+
+  async ionViewDidEnter() {
     this.allMainCategories = (
       await this.categoryService.getCategories()
     ).filter((x) => x instanceof MainCategory) as MainCategory[];
@@ -61,20 +72,7 @@ export class CategoriesListPage implements AfterContentChecked {
     if (this.activeRoute.snapshot.queryParamMap.get('returnTo') == 'category') {
       this.mode = 'category';
     }
-  }
 
-  @ViewChild('swiper') swiper: SwiperComponent;
-  config: SwiperOptions = {
-    initialSlide: 1,
-  };
-
-  ngAfterContentChecked() {
-    if (this.swiper) {
-      this.swiper.updateSwiper({});
-    }
-  }
-
-  ionViewDidEnter() {
     const _this = this;
     _this.modalService.recalculateContentHeight();
   }
