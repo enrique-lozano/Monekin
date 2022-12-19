@@ -1,4 +1,35 @@
+import groovy.json.JsonSlurper
+
 apply plugin: 'com.android.application'
+
+// Read package.json and return `version` field
+def getVersionFromNpm() {
+    //  Read and parse package.json file from project root
+    def inputFile = new File("$rootDir/../package.json")
+    def packageJson = new JsonSlurper().parseText(inputFile.text)
+
+
+    println ("Version Name: " +  packageJson["version"]);
+    // Return the version, you can get any value this way
+    return packageJson["version"]
+}
+
+// Convert version name to a version number
+def getNumericVersionFromNpm() {
+
+    def versionName =  getVersionFromNpm()
+    def parts = versionName.split("\\.")
+
+
+    int hotfix = parts[2] as int
+    int minor = parts[1] as int
+    int major = parts[0] as int
+
+    def numericVersion =  major*100000 + minor*1000 + hotfix
+    println('Version Code: ' + numericVersion)
+
+    return numericVersion
+}
 
 // Create a variable called keystorePropertiesFile, and initialize it to your
 // keystore.properties file, in the rootProject folder.
@@ -16,8 +47,8 @@ android {
         applicationId "com.monekin.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 204
-        versionName "2.0.4"
+        versionCode getNumericVersionFromNpm()
+        versionName getVersionFromNpm()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
