@@ -20,7 +20,9 @@
 <ion-content>
   <swiper class="swiper-min-height-small" #swiper [config]="config" (slideChange)="slideChanged()">
     <ng-template swiperSlide>
-      <ion-list>
+      <ion-progress-bar *ngIf="!categoriesIncome" type="indeterminate"></ion-progress-bar>
+
+      <ion-list *ngIf="categoriesIncome">
         <ion-item button *ngFor="let category of categoriesIncome" (click)="selectCategory(category)">
           <ion-icon slot="start" [style.color]="'#' + category.color" [name]="category.icon"></ion-icon>
           <ion-label>{{category.name}}</ion-label>
@@ -31,7 +33,9 @@
     </ng-template>
 
     <ng-template swiperSlide>
-      <ion-list>
+      <ion-progress-bar *ngIf="!categoriesExpense" type="indeterminate"></ion-progress-bar>
+
+      <ion-list *ngIf="categoriesExpense">
         <ion-item button *ngFor="let category of categoriesExpense" (click)="selectCategory(category)">
           <ion-icon slot="start" [style.color]="'#' + category.color" [name]="category.icon"></ion-icon>
           <ion-label>{{category.name}}</ion-label>
