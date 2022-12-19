@@ -7,8 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { LayoutPageRoutingModule } from './layout-routing.module';
 
 import { TranslocoModule } from '@ngneat/transloco';
-import { TabsPageModule } from '../tabs/tabs.module';
 import { LayoutPage } from './layout.page';
+import { TabsPageModule } from './tabs/tabs.module';
 
 @NgModule({
   imports: [
