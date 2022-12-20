@@ -1,7 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { TranslocoModule } from '@ngneat/transloco';
-import { AppModule } from 'src/app/app.module';
-
+import { ServiceTestModule } from 'src/app/modules/testing/service-test.module';
 import { LangService } from './translate.service';
 
 describe('TranslateService', () => {
@@ -9,7 +7,7 @@ describe('TranslateService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TranslocoModule, AppModule],
+      imports: [ServiceTestModule],
     });
     service = TestBed.inject(LangService);
   });

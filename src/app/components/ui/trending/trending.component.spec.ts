@@ -1,7 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
-import { TranslocoModule } from '@ngneat/transloco';
-import { AppModule } from 'src/app/app.module';
+import { PageTestModule } from 'src/app/modules/testing/page-test.module';
 
 import { TrendingComponent } from './trending.component';
 
@@ -12,7 +10,7 @@ describe('TrendingComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [TrendingComponent],
-      imports: [IonicModule.forRoot(), AppModule, TranslocoModule],
+      imports: [PageTestModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TrendingComponent);

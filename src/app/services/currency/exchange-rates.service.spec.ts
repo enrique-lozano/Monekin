@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { AppModule } from 'src/app/app.module';
+import { ServiceTestModule } from 'src/app/modules/testing/service-test.module';
 
 import { ExchangeRatesService } from './exchange-rates.service';
 
@@ -8,7 +8,7 @@ describe('ExchangeRatesService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [AppModule],
+      imports: [ServiceTestModule],
     });
     service = TestBed.inject(ExchangeRatesService);
   });

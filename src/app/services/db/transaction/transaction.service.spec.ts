@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { AppModule } from 'src/app/app.module';
+import { ServiceTestModule } from 'src/app/modules/testing/service-test.module';
 import { IncomeOrExpense } from 'src/app/services/db/transaction/transaction.model';
 import { userDataMock } from 'src/app/services/db/user-data.model';
 import { UserDataService } from '../user-data.service';
@@ -11,7 +11,7 @@ describe('TransactionService', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      imports: [AppModule],
+      imports: [ServiceTestModule],
     });
     service = TestBed.inject(TransactionService);
     storage = TestBed.inject(UserDataService);

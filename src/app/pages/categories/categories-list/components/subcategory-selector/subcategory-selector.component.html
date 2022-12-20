@@ -1,28 +1,32 @@
-<ion-toolbar>
-  <ion-title>{{ "CATEGORIES.SELECT.select-subcategory" | transloco }}</ion-title>
-</ion-toolbar>
+<ng-container *transloco="let t">
 
-<div class="p">
+  <ion-toolbar>
+    <ion-title>{{ t("CATEGORIES.SELECT.select-subcategory") }}</ion-title>
+  </ion-toolbar>
 
-  <ion-chip [outline]="true" (click)="selectCategory(category)" [ngClass]="{'selected': category?.id === selectedCategory?.id}"
-    [style.backgroundColor]="category?.id === selectedCategory?.id ? ('#' + category?.color) : ''">
-    <ion-icon name="close-outline"></ion-icon>
-    <ion-label>{{ "CATEGORIES.SELECT.without-subcategory" | transloco }}</ion-label>
-  </ion-chip>
+  <div class="p">
 
-  <ion-chip *ngFor="let subcat of subcategories" [outline]="true" (click)="selectCategory(subcat)"
-    [ngClass]="{'selected': subcat.id === selectedCategory?.id}"
-    [style.backgroundColor]="subcat.id === selectedCategory?.id ? ('#' + category.color) : ''">
+    <ion-chip [outline]="true" (click)="selectCategory(category)" [ngClass]="{'selected': category?.id === selectedCategory?.id}"
+      [style.backgroundColor]="category?.id === selectedCategory?.id ? ('#' + category?.color) : ''">
+      <ion-icon name="close-outline"></ion-icon>
+      <ion-label>{{ t("CATEGORIES.SELECT.without-subcategory") }}</ion-label>
+    </ion-chip>
 
-    <ion-icon [name]="subcat.icon"></ion-icon>
-    <ion-label>{{subcat.name}}</ion-label>
-  </ion-chip>
-</div>
+    <ion-chip *ngFor="let subcat of subcategories" [outline]="true" (click)="selectCategory(subcat)"
+      [ngClass]="{'selected': subcat.id === selectedCategory?.id}"
+      [style.backgroundColor]="subcat.id === selectedCategory?.id ? ('#' + category.color) : ''">
 
-<ion-footer class="p pt-xs ion-no-border">
-  <ion-button expand="block" (click)="submit()">
-    {{ "GENERAL.confirm" | transloco }}
+      <ion-icon [name]="subcat.icon"></ion-icon>
+      <ion-label>{{subcat.name}}</ion-label>
+    </ion-chip>
+  </div>
 
-    <ion-icon class="ml-xs" name="arrow-forward"></ion-icon>
-  </ion-button>
-</ion-footer>
+  <ion-footer class="p pt-xs ion-no-border">
+    <ion-button expand="block" (click)="submit()">
+      {{ t("GENERAL.confirm") }}
+
+      <ion-icon class="ml-xs" name="arrow-forward"></ion-icon>
+    </ion-button>
+  </ion-footer>
+
+</ng-container>

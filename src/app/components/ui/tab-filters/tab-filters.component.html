@@ -1,5 +1,5 @@
 <div *ngIf="componentVisible" class="py-s px chips-container">
-  <span>{{ "GENERAL.filters" | transloco }}:</span>
+  <span *transloco="let t">{{ t("GENERAL.filters") }}:</span>
 
   <ng-container *ngIf="filterService.selectedAccounts !== 'all'">
     <ion-chip (click)="removeAccount(account)" color="secondary" *ngFor="let account of filterService.selectedAccounts">

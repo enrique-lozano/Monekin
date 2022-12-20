@@ -49,6 +49,7 @@
       }
     },
     "TRANSACTION-ORDER": {
+      "display": "Ordenar transacciones",
       "Category": "Por categoría",
       "Quantity": "Por cantidad",
       "Date": "Por fecha"
