@@ -9,7 +9,7 @@ def getVersionFromNpm() {
     def packageJson = new JsonSlurper().parseText(inputFile.text)
 
 
-    println ("Version Name: " +  packageJson["version"]);
+    println ("Version Name: " +  packageJson["version"])
     // Return the version, you can get any value this way
     return packageJson["version"]
 }
