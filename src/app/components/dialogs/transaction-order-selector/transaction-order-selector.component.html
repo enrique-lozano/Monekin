@@ -1,15 +1,19 @@
-<ion-toolbar>
-  <ion-title>
-    {{ "Ordenar transacciones" | transloco }}
-  </ion-title>
-</ion-toolbar>
+<ng-container *transloco="let t">
 
-<div class="mt" *ngIf="order">
-  <div *ngFor="let item of keys" [ngClass]="{'selected': order.orderBy === transactionListOrderKeyType[item]}"
-    class="pl py mr-s my-xs rounded-r-xl flex items-center" (click)="selectOrder(item)">
-    <ion-icon [name]="order.dir === 'asc' ? 'arrow-up' : 'arrow-down'"></ion-icon>
-    <span>
-      {{ ("GENERAL.TRANSACTION-ORDER." + transactionListOrderKeyType[item]) | transloco }}
-    </span>
+  <ion-toolbar>
+    <ion-title>
+      {{ t("GENERAL.TRANSACTION-ORDER.display") }}
+    </ion-title>
+  </ion-toolbar>
+
+  <div class="mt" *ngIf="order">
+    <div *ngFor="let item of keys" [ngClass]="{'selected': order.orderBy === transactionListOrderKeyType[item]}"
+      class="pl py mr-s my-xs rounded-r-xl flex items-center" (click)="selectOrder(item)">
+      <ion-icon [name]="order.dir === 'asc' ? 'arrow-up' : 'arrow-down'"></ion-icon>
+      <span>
+        {{ t(("GENERAL.TRANSACTION-ORDER." + transactionListOrderKeyType[item])) }}
+      </span>
+    </div>
   </div>
-</div>
+
+</ng-container>

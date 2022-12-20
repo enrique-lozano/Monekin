@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { TranslocoModule } from '@ngneat/transloco';
 import { AppModule } from 'src/app/app.module';
+import { PageTestModule } from 'src/app/modules/testing/page-test.module';
 import { StorageService } from 'src/app/services/db/storage.service';
 
 import { GeneralPage } from './general.page';
@@ -15,7 +16,7 @@ describe('GeneralPage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [GeneralPage],
-      imports: [IonicModule.forRoot(), FormsModule, AppModule, TranslocoModule],
+      imports: [PageTestModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(GeneralPage);

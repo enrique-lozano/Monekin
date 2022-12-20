@@ -3,7 +3,7 @@
   <div class="green" *ngIf="value > 0">
     <ion-icon name="trending-up"></ion-icon>
     <span>
-      {{ value | percent : "1.0-1" : lang.getSelectedLang() }}
+      {{ value | percent : "1.0-1" }}
     </span>
     <span *ngIf="textAfter">&nbsp;{{textAfter}}</span>
   </div>
@@ -11,14 +11,14 @@
   <div class="red" *ngIf="value < 0">
     <ion-icon name="trending-down"></ion-icon>
     <span>
-      {{ -value | percent : "1.0-1" : lang.getSelectedLang() }}
+      {{ -value | percent : "1.0-1" }}
     </span>
     <span *ngIf="textAfter">&nbsp;{{textAfter}}</span>
   </div>
 
   <div class="equal" *ngIf="value === 0">
     <span>
-      {{ "= "}}{{ 0 | percent : "1.0-0" : lang.getSelectedLang() }}
+      {{ "= "}}{{ 0 | percent : "1.0-0" }}
     </span>
     <span *ngIf="textAfter">&nbsp;{{textAfter}}</span>
   </div>

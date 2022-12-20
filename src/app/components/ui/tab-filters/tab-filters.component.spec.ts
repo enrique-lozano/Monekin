@@ -1,7 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
-import { TranslocoModule } from '@ngneat/transloco';
-import { AppModule } from 'src/app/app.module';
+import { PageTestModule } from 'src/app/modules/testing/page-test.module';
 
 import { TabFiltersComponent } from './tab-filters.component';
 
@@ -12,7 +10,7 @@ describe('TabFiltersComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [TabFiltersComponent],
-      imports: [IonicModule.forRoot(), TranslocoModule, AppModule],
+      imports: [PageTestModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TabFiltersComponent);

@@ -1,7 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
-import { TranslocoModule } from '@ngneat/transloco';
-import { AppModule } from 'src/app/app.module';
+import { PageTestModule } from 'src/app/modules/testing/page-test.module';
 
 import { DataPage } from './data.page';
 
@@ -12,7 +10,7 @@ describe('DataPage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [DataPage],
-      imports: [IonicModule.forRoot(), AppModule, TranslocoModule],
+      imports: [PageTestModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DataPage);

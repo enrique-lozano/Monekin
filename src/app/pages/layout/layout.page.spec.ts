@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { PageTestModule } from 'src/app/modules/testing/page-test.module';
 
 import { LayoutPage } from './layout.page';
 
@@ -9,8 +9,8 @@ describe('LayoutPage', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ LayoutPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [LayoutPage],
+      imports: [PageTestModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LayoutPage);
