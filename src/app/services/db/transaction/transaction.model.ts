@@ -24,6 +24,9 @@ abstract class TransactionBase {
   constructor(obj: any) {
     Object.assign(this, obj);
 
+    // Dates have to be instantiated again in each model, not necessary for web
+    this.date = new Date(this.date);
+
     if (!this.id) this.id = generateUUID();
   }
 }
