@@ -1,3 +1,12 @@
+:root {
+  --breakpoint-xs: 576px;
+  --breakpoint-sm: 768px;
+  --breakpoint-md: 992px;
+  --breakpoint-lg: 1200px;
+  --breakpoint-xl: 1800px;
+}
+
+// Same breakpoints as below
 $breakpoints: (
   "xs": 576px,
   "sm": 768px,
