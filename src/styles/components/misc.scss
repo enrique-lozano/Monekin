@@ -5,3 +5,17 @@ ion-skeleton-text {
 ion-chip.md {
   border-radius: 8px;
 }
+
+ion-list {
+  --ion-item-background: transparent;
+
+  ion-item {
+    > *[slot="start"] {
+      margin-right: 18px;
+    }
+  }
+
+  ion-item:last-child {
+    --inner-border-width: 0px;
+  }
+}
