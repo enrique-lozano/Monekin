@@ -127,8 +127,6 @@ export class StatisticsComponent implements OnInit, OnChanges {
       this.getNumericalStats();
       this.getCategoriesInfo();
 
-      this.changeDet.detectChanges();
-
       await new Promise((r) => setTimeout(r, 800));
 
       this.createBalanceChart();
