@@ -42,7 +42,7 @@
     "@ionic/angular": "^6.1.9",
     "@ionic/storage-angular": "^3.0.6",
     "@ngneat/transloco": "^4.1.1",
-    "chart.js": "^4.0.1",
+    "chart.js": "^4.1.1",
     "cordova-sqlite-storage": "^6.0.0",
     "ionicons": "^6.0.3",
     "localforage-cordovasqlitedriver": "^1.8.0",

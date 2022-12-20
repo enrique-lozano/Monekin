@@ -237,7 +237,6 @@ export class Tab1Page implements OnInit {
       return;
     }
 
-    //! Type hinting seems to be broken. See: https://github.com/chartjs/Chart.js/issues/10896
     this.healthyChartRef = new Chart(ctx, {
       type: 'doughnut',
       data: {
