@@ -38,6 +38,10 @@ ion-tab-bar {
   position: fixed;
   bottom: 0;
   width: 100vw;
+
+  ion-tab-button {
+    max-width: 100%;
+  }
 }
 
 @include max-width("sm") {

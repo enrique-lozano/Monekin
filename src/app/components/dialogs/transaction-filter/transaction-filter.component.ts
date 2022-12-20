@@ -42,14 +42,14 @@ export class TransactionFilterComponent implements OnInit {
   }
 
   async selectCategories() {
-    /*     const modalRes = await this.modalService.openCategorySelectorModal(
+    const modalRes = await this.modalService.openCategorySelectorModal(
       'multiselection',
       this.selectedCategories
     );
 
     if (modalRes.data) {
       this.selectedCategories = modalRes.data as MainCategory[];
-    } */
+    }
   }
 
   dismiss() {

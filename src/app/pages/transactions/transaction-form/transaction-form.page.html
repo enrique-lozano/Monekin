@@ -26,7 +26,7 @@
   <div [class.default-form-color]="mode === 'Transfer' || !movementDestiny"
     [class.success-form-color]="mode === 'Transaction' && ($any(movementDestiny)?.type === 'I' || $any(movementDestiny)?.parentCategory?.type === 'I')"
     [class.danger-form-color]="mode === 'Transaction' && ($any(movementDestiny)?.type === 'E' || $any(movementDestiny)?.parentCategory?.type === 'E')"
-    class="h-full flex" style="flex-direction: column; position: absolute;">
+    class="h-full flex w-full" style="flex-direction: column; position: absolute;">
     <div class="value-container">
       <div id="value">
         {{ mode === "Transaction" && movementDestiny ? (movementDestiny.type === 'I' ? '+' : '-') : '' }} {{value | currency :
@@ -42,7 +42,7 @@
         : '1.0-2' : lang.getSelectedLang() }) }}
       </span>
     </div>
-    <div style="position: relative;">
+    <div class="w-full" style="position: relative;">
 
       <div class="px py-s selector thin" (click)="setDescription()">
         {{ description ? description : (t("TRANSACTION.FORM.description.add")) }}
