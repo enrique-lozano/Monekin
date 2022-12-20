@@ -19,33 +19,33 @@
 }
 
 .border-bottom {
-  border-bottom: 1px solid gainsboro;
+  border-bottom: 1px solid var(--ion-color-medium, gainsboro);
 }
 
 .border-top {
-  border-top: 1px solid gainsboro;
+  border-top: 1px solid var(--ion-color-medium, gainsboro);
 }
 
 .border-left {
-  border-left: 1px solid gainsboro;
+  border-left: 1px solid var(--ion-color-medium, gainsboro);
 }
 
 .border-right {
-  border-right: 1px solid gainsboro;
+  border-right: 1px solid var(--ion-color-medium, gainsboro);
 }
 
 .border {
-  border: 1px solid gainsboro;
+  border: 1px solid var(--ion-color-medium, gainsboro);
 }
 
 .border-x {
-  border-right: 1px solid gainsboro;
-  border-left: 1px solid gainsboro;
+  border-right: 1px solid var(--ion-color-medium, gainsboro);
+  border-left: 1px solid var(--ion-color-medium, gainsboro);
 }
 
 .border-y {
-  border-top: 1px solid gainsboro;
-  border-bottom: 1px solid gainsboro;
+  border-top: 1px solid var(--ion-color-medium, gainsboro);
+  border-bottom: 1px solid var(--ion-color-medium, gainsboro);
 }
 
 .rounded-none {
