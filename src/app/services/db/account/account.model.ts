@@ -29,6 +29,8 @@ export class Account {
   constructor(obj: Account | Omit<Account, 'id'>) {
     Object.assign(this, obj);
 
+    if (this.date) this.date = new Date(this.date);
+
     if (!this.id) this.id = generateUUID();
   }
 }
