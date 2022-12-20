@@ -1,5 +1,4 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { SwiperComponent } from 'swiper/angular';
 
 // import Swiper core and required modules
@@ -82,7 +81,6 @@ export class Tab1Page implements OnInit {
     private settingService: SettingsService,
     private accountUtils: AccountUtilsService,
     public dateRangeService: DateRangeService,
-    private router: Router,
     private filter: FilterService,
     private modalService: IonModalService,
     private statusBar: StatusBarService,
@@ -289,10 +287,6 @@ export class Tab1Page implements OnInit {
         return customDateModal.present();
       }
     }
-  }
-
-  goToAddAccount() {
-    this.router.navigate(['account-form']);
   }
 
   previousScroll = 0;

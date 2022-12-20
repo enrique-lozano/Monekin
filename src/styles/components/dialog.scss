@@ -74,6 +74,7 @@ ion-modal {
     .ion-page > * {
       max-height: 80vh;
       overflow: auto;
+      max-width: 100%;
     }
   }
 }

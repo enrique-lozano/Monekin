@@ -11,9 +11,9 @@
   </ion-header>
 
   <div class="w-full my-xs add-transaction-button-container">
-    <ion-button color="secondary" size="large" expand="block" class="fab-button">
+    <ion-button (click)="goToAddTransaction()" color="secondary" size="large" expand="block" class="fab-button">
       <ion-icon name="add"></ion-icon>
-      <ion-label>Nueva transacción</ion-label>
+      <ion-label> {{ t("TRANSACTION.new") }}</ion-label>
     </ion-button>
   </div>
 

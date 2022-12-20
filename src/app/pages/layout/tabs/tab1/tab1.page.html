@@ -81,7 +81,7 @@
     </ng-template>
 
     <ng-template swiperSlide>
-      <ion-card color="light" (click)="goToAddAccount()" style="margin-right: 16px; margin-left: 16px;"
+      <ion-card color="light" [routerLink]="['/account-form']" style="margin-right: 16px; margin-left: 16px;"
         class="account-card p add-account-slide-container">
         <div class="text-center flex items-center justify-content-around w-full">
           <ion-icon name="add-circle"></ion-icon>
