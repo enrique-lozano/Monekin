@@ -1,7 +1,7 @@
 <div *transloco="let t">
   <ion-toolbar color="light">
     <ion-icon [ngStyle]="{color: color, backgroundColor: background}" [name]="selectedIcon" slot="start"></ion-icon>
-    <ion-title slot="start">{{ popoverTitle }}</ion-title>
+    <ion-title slot="start">{{ t(popoverTitle) }}</ion-title>
   </ion-toolbar>
 
   <ion-toolbar color="light" *ngIf="showInput">
