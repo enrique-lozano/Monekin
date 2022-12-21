@@ -31,7 +31,7 @@
 <ion-content *transloco="let t" class="p">
 
   <ion-chip [outline]="true" (click)="openDateModal()">
-    <ion-label>{{ t(("GENERAL.TIME.THIS." + dateRangeService.dateRangeSelected)) }}</ion-label>
+    <ion-label>{{ t("GENERAL.TIME.THIS." + dateRangeService.dateRangeSelected) }}</ion-label>
     <ion-icon name="caret-down"></ion-icon>
   </ion-chip>
 
@@ -91,7 +91,7 @@
             <h3>{{ t("ACCOUNT.date") }}</h3>
             <p>
               <ng-container *ngIf="account">
-                {{ account.date | date : "longDate" : undefined : lang.getSelectedLang() }}
+                {{ account.date | date : "longDate" }}
               </ng-container>
               <ion-skeleton-text *ngIf="!account" animated style="width: 70%;"></ion-skeleton-text>
             </p>
@@ -111,7 +111,7 @@
             <p>
               <ng-container *ngIf="allTransactions && transactions">
                 {{ allTransactions?.length }}
-                {{ t("(" + transactions?.length + " " + ("GENERAL.TIME.THIS." + dateRangeService.dateRangeSelected) | lowercase) + ")" }}
+                {{ "(" + transactions?.length + " " + (t("GENERAL.TIME.THIS." + dateRangeService.dateRangeSelected) | lowercase) + ")" }}
               </ng-container>
               <ion-skeleton-text *ngIf="!(allTransactions && transactions)" animated style="width: 70%;"></ion-skeleton-text>
             </p>
