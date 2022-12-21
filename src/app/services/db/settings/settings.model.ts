@@ -16,12 +16,26 @@ export enum UserAvatars {
 
 /** Settings and variables that the user can modify in the settings page */
 export interface UserSettings {
+  /** The user display name */
   userName: string;
+
   avatar: UserAvatars;
+
   darkMode: 'auto' | 'enabled' | 'disabled';
+
+  /** The app language.
+   *
+   * Unlike localization, which comes directly from Angular, this parameter is limited by the amount of translation files you have. */
   preferredLanguage: AppLanguageCode;
-  /** @since Monekin 3.0.0 */ locale: string;
+
+  /** The user locale/region. Used to change the format of dates, numbers... throw the Angular pipes
+   *
+   *  @since `v3.0.0` */
+  locale: string;
+
   preferredCurrency: ISOCorrencyCodes;
+
+  /** First day of the week to show in calendars and other components, with 0 being Sunday, 1 being Monday, 2 being Tuesday... */
   firstDayOfWeek: 0 | 1 | 2 | 3 | 4 | 5 | 6;
 }
 

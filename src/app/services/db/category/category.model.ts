@@ -16,6 +16,7 @@ abstract class CategoryBase {
   }
 }
 
+/** A category that does not have any subcategories */
 export class MainCategory extends CategoryBase {
   /** Color in an HEX format, without the first character '#'. Only applicable if this category is a parent category (does not have parentCategory attribute defined). Child categories will have the same color as its parents  */
   color: string;
@@ -31,6 +32,7 @@ export class MainCategory extends CategoryBase {
   }
 }
 
+/** A category that have one parent category */
 export class ChildCategory extends CategoryBase {
   parentCategory: MainCategory;
 
@@ -45,7 +47,7 @@ export class ChildCategory extends CategoryBase {
   }
 }
 
-/** Credits to the solution for: https://stackoverflow.com/a/61281828 */
+// Credits to the solution for: https://stackoverflow.com/a/61281828
 export type Category = MainCategory | ChildCategory;
 
 export type CategoryInStorage =
