@@ -27,7 +27,7 @@
             </div>
           </div>
 
-          <h1 class="input-value">{{value | number : "1.0-2" : lang.getSelectedLang() }}</h1>
+          <h1 class="input-value">{{value | number : "1.0-2" }}</h1>
         </ion-card-content>
       </ion-card>
     </div>
@@ -39,7 +39,7 @@
         </ion-avatar>
         <ion-label>
           1 {{ currency1?.code }} =
-          {{ exchangeRate | number : "1.0-4" : lang.getSelectedLang() }}
+          {{ exchangeRate | number : "1.0-4" }}
           {{ currency2?.code}}
         </ion-label>
       </ion-item>
@@ -65,7 +65,7 @@
           </div>
         </div>
 
-        <h1 class="input-value">{{ calculatedValue | number : "1.0-2" : lang.getSelectedLang() }}</h1>
+        <h1 class="input-value">{{ calculatedValue | number : "1.0-2" }}</h1>
       </ion-card-content>
     </ion-card>
   </div>
@@ -75,7 +75,7 @@
     </ion-skeleton-text>
 
     <span class="last-change-info" *ngIf="daysSinceLastUpdate !== undefined">
-      {{ t("CURRENCIES.days-without-update", {x : (daysSinceLastUpdate | number : "1.0-0" : lang.getSelectedLang()) } ) }}
+      {{ t("CURRENCIES.days-without-update", {x : (daysSinceLastUpdate | number : "1.0-0") } ) }}
     </span>
 
 

@@ -48,7 +48,7 @@
                   </div>
                 </div>
                 <div class="w-1/3 text-end" style="font-size: 1.08em; align-self: end; padding-bottom: 5px;">
-                  {{(1 - ((budget.limit - currentValues[i]) > 0 ? currentValues[i] / budget.limit : 1)) | percent : "1.0-0" : lang.getSelectedLang()
+                  {{(1 - ((budget.limit - currentValues[i]) > 0 ? currentValues[i] / budget.limit : 1)) | percent : "1.0-0"
                   }}
                 </div>
               </div>
@@ -103,7 +103,7 @@
                   </div>
                 </div>
                 <div class="w-1/3 text-end" style="font-size: 1.08em; align-self: end; padding-bottom: 5px;">
-                  {{(1 - (currentValues[i] / budget.limit)) | percent : "1.0-0" : lang.getSelectedLang() }}
+                  {{(1 - (currentValues[i] / budget.limit)) | percent : "1.0-0" }}
                 </div>
               </div>
 

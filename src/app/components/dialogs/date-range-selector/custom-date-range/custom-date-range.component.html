@@ -7,14 +7,14 @@
       <div>
         {{ t("GENERAL.TIME.start-date") }}
       </div>
-      <div class="thin" style="font-size: smaller;">{{ startDate | date : "longDate" : undefined : lang.getSelectedLang() }}</div>
+      <div class="thin" style="font-size: smaller;">{{ startDate | date : "longDate" : undefined }}</div>
     </div>
     <div class="option" (click)="selectDate('End')">
       <ion-icon name="calendar-outline"></ion-icon>
       <div>
         {{ t("GENERAL.TIME.end-date") }}
       </div>
-      <div class="thin" style="font-size: smaller;">{{ endDate | date : "longDate" : undefined : lang.getSelectedLang() }}</div>
+      <div class="thin" style="font-size: smaller;">{{ endDate | date : "longDate" : undefined }}</div>
     </div>
   </div>
 

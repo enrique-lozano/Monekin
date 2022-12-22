@@ -28,7 +28,7 @@
           <div class="flex justify-content-between items-center">
             <h2>{{ account.name }}</h2>
             <span>
-              {{ account.money | currency : userCurrency : "symbol-narrow" : "1.0-2" : lang.getSelectedLang() }}
+              {{ account.money | currency : userCurrency : "symbol-narrow" : "1.0-2" }}
             </span>
           </div>
           <div class="my-xs">
@@ -55,7 +55,7 @@
           <div class="flex justify-content-between items-center">
             <h2>{{ currency.currency.name }}</h2>
             <span>
-              {{ currency.money | currency : userCurrency : "symbol-narrow" : "1.0-2" : lang.getSelectedLang() }}
+              {{ currency.money | currency : userCurrency : "symbol-narrow" : "1.0-2" }}
             </span>
           </div>
           <div class="my-xs">

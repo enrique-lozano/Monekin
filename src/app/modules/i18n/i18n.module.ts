@@ -3,6 +3,7 @@ import { APP_INITIALIZER, Injectable, LOCALE_ID } from '@angular/core';
 import { getBrowserCultureLang } from '@ngneat/transloco';
 import { AppInjector } from 'src/app/app.module';
 import { SettingsService } from 'src/app/services/db/settings/settings.service';
+import { LOCALE_LIST } from './locales';
 // import { loadTranslations } from '@angular/localize';
 
 @Injectable({
@@ -18,7 +19,7 @@ class I18n {
       (await userSettings.getSettings()).locale || getBrowserCultureLang();
 
     await userSettings.setSettings({
-      locale: this.userLocale,
+      locale: this.userLocale as LOCALE_LIST,
     });
 
     // Use web pack magic string to only include required locale data

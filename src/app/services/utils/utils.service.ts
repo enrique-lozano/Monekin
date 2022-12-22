@@ -5,13 +5,12 @@ import {
   getLocaleMonthNames,
   TranslationWidth,
 } from '@angular/common';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import {
   currentDay,
   currentMonth,
   currentYear,
 } from 'src/app/constants/constants';
-import { defaultLang } from 'src/app/modules/i18n/availableLangs';
 import { SettingsService } from '../db/settings/settings.service';
 import { LangService } from '../translate/translate.service';
 
@@ -19,12 +18,16 @@ import { LangService } from '../translate/translate.service';
   providedIn: 'root',
 })
 export class UtilsService {
-  constructor(private lang: LangService, private settings: SettingsService) {}
+  constructor(
+    @Inject(LOCALE_ID) private userLocale: string,
+    private lang: LangService,
+    private settings: SettingsService
+  ) {}
 
   getMonthArray(transWidth: TranslationWidth, capitalize = true) {
     return (
       getLocaleMonthNames(
-        this.lang.getSelectedLang(),
+        this.userLocale,
         FormStyle.Standalone,
         transWidth
       ) as string[]
@@ -50,7 +53,7 @@ export class UtilsService {
   ) {
     // Retrieve [Sunday, Monday...] in the language of the user
     let array = getLocaleDayNames(
-      this.lang.getSelectedLang() ?? defaultLang,
+      this.userLocale,
       FormStyle.Standalone,
       transWidth
     ) as string[];
@@ -142,7 +145,7 @@ export class UtilsService {
       if (showTodayAndYesterdayText == 'i18nKeys') return 'GENERAL.today';
       else if (showTodayAndYesterdayText == 'translated')
         return this.lang.getTranslation('GENERAL.today');
-      else return formatDate(date, formatWidth, this.lang.getSelectedLang());
+      else return formatDate(date, formatWidth, this.userLocale);
     } else if (
       date.getDate() + 1 == currentDay &&
       date.getMonth() == currentMonth &&
@@ -151,9 +154,9 @@ export class UtilsService {
       if (showTodayAndYesterdayText == 'i18nKeys') return 'GENERAL.yesterday';
       else if (showTodayAndYesterdayText == 'translated')
         return this.lang.getTranslation('GENERAL.yesterday');
-      else return formatDate(date, formatWidth, this.lang.getSelectedLang());
+      else return formatDate(date, formatWidth, this.userLocale);
     } else {
-      return formatDate(date, formatWidth, this.lang.getSelectedLang());
+      return formatDate(date, formatWidth, this.userLocale);
     }
   }
 

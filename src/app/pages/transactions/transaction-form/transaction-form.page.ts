@@ -1,6 +1,6 @@
 import { formatDate } from '@angular/common';
-import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, Inject, LOCALE_ID } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AlertController, NavController } from '@ionic/angular';
 import { ISOCorrencyCodes } from 'src/app/constants/currencies/currency-code.enum';
 import { ExchangeRatesService } from 'src/app/services/currency/exchange-rates.service';
@@ -68,14 +68,14 @@ export class TransactionFormPage {
   exchangeToPreferredCurrency = 0;
 
   constructor(
-    public lang: LangService,
+    @Inject(LOCALE_ID) private userLocale: string,
+    private lang: LangService,
     private toast: ToastService,
     private ionModal: IonModalService,
     private alertCtrl: AlertController,
     private utils: UtilsService,
     private categoryService: CategoryService,
     private exchangeRateService: ExchangeRatesService,
-    private router: Router,
     private navController: NavController,
     private activeRoute: ActivatedRoute,
     private readonly accountService: AccountService,
@@ -192,21 +192,13 @@ export class TransactionFormPage {
     if (this.repetition != 'no') {
       if (this.selectedDate && this.dateEnd) {
         return (
-          formatDate(
-            this.selectedDate,
-            'mediumDate',
-            this.lang.getSelectedLang()
-          ) +
+          formatDate(this.selectedDate, 'mediumDate', this.userLocale) +
           ' - ' +
-          formatDate(this.dateEnd, 'mediumDate', this.lang.getSelectedLang())
+          formatDate(this.dateEnd, 'mediumDate', this.userLocale)
         );
       } else if (this.selectedDate) {
         return (
-          formatDate(
-            this.selectedDate,
-            'mediumDate',
-            this.lang.getSelectedLang()
-          ) +
+          formatDate(this.selectedDate, 'mediumDate', this.userLocale) +
           ' - ' +
           this.lang.getTranslation('GENERAL.TIME.infinite')
         );
@@ -219,7 +211,7 @@ export class TransactionFormPage {
       return (
         this.lang.getTranslation(date) +
         ', ' +
-        formatDate(this.selectedDate, 'mediumDate', this.lang.getSelectedLang())
+        formatDate(this.selectedDate, 'mediumDate', this.userLocale)
       );
     } else {
       return date;

@@ -391,6 +391,10 @@
     "edit-profile": "Editar perfil",
     "display-name": "Nombre de usuario",
     "lang": "Idioma",
+    "lang.descr": "Idioma en el que se mostrarán los textos en la app",
+    "locale": "Región",
+    "locale.descr": "Establece el formato a usar para fechas, números...",
+    "locale.warn": "Al cambiar de región la app se refrescará",
     "first_day_of_week": "Primer día de la semana",
     "edit-categories": "Editar categorias",
     "edit-categories.description": "Crea y edita categorías a tu gusto",
@@ -428,5 +432,9 @@
     "TERMS-OF-USE": {
       "title": "Términos de uso"
     }
+  },
+  "LANG": {
+    "es": "Español",
+    "en": "Inglés"
   }
 }

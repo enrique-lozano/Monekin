@@ -68,7 +68,7 @@
             {{ t("ACCOUNT.date") }}
           </ng-container>
         </p>
-        <h4>{{ transaction?.date | date : "longDate" : undefined : lang.getSelectedLang() }}, {{ transaction?.date | date : "shortTime" : undefined :
+        <h4>{{ transaction?.date | date : "longDate" : undefined }}, {{ transaction?.date | date : "shortTime" : undefined :
           lang.getSelectedLang() }}</h4>
       </ion-label>
     </ion-item>
@@ -94,7 +94,7 @@
       <ion-item *ngIf="transaction?.repeat.endDate">
         <ion-label>
           <p>{{ t("RECURRENT-TRANSACTIONS.DETAILS.end-date") }}</p>
-          <h4>{{ transaction?.repeat.endDate | date : "longDate" : undefined : lang.getSelectedLang() }}</h4>
+          <h4>{{ transaction?.repeat.endDate | date : "longDate" : undefined }}</h4>
         </ion-label>
       </ion-item>
     </ng-container>

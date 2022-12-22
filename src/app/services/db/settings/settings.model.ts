@@ -1,3 +1,4 @@
+import { LOCALE_LIST } from 'src/app/modules/i18n/locales';
 import { ISOCorrencyCodes } from '../../../constants/currencies/currency-code.enum';
 import { AppLanguageCode } from '../../../modules/i18n/availableLangs';
 
@@ -31,7 +32,7 @@ export interface UserSettings {
   /** The user locale/region. Used to change the format of dates, numbers... throw the Angular pipes
    *
    *  @since `v3.0.0` */
-  locale: string;
+  locale: LOCALE_LIST;
 
   preferredCurrency: ISOCorrencyCodes;
 
