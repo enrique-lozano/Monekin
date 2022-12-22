@@ -17,7 +17,7 @@
             {{ t("GENERAL.yesterday") }}
           </ng-container>
           <ng-container *ngIf="!getIfToday(trans) && !getIfYesterday(trans)">
-            {{ trans.date | date : "dd MMMM" : "" : lang.getSelectedLang() }}
+            {{ trans.date | date : "dd MMMM" : "" }}
           </ng-container>
         </div>
 
@@ -52,7 +52,7 @@
               [currencyCode]="trans.account.currency"></currency-value>
           </span>
           <p *ngIf="recurrentListTemporality && recurrentListTemporality !== trans.repeat.temp">
-            {{ trans.value | currency : trans.account.currency : "symbol-narrow" : "1.2-2" : lang.getSelectedLang() }} -
+            {{ trans.value | currency : trans.account.currency : "symbol-narrow" : "1.2-2" }} -
             <ng-container *ngIf="trans.repeat.temp === 'week'">{{ t("GENERAL.TIME.weekly") }}</ng-container>
             <ng-container *ngIf="trans.repeat.temp === 'month'">{{ t("GENERAL.TIME.monthly") }}</ng-container>
             <ng-container *ngIf="trans.repeat.temp === 'year'">{{ t("GENERAL.TIME.annualy") }}</ng-container>

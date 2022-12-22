@@ -30,16 +30,16 @@
     <div class="value-container">
       <div id="value">
         {{ mode === "Transaction" && movementDestiny ? (movementDestiny.type === 'I' ? '+' : '-') : '' }} {{value | currency :
-        movementFrom?.currency : "symbol-narrow" : "1.0-2" : lang.getSelectedLang() }}
+        movementFrom?.currency : "symbol-narrow" : "1.0-2" }}
       </div>
 
       <span (click)="openTransferObjetiveModal()" *ngIf="mode === 'Transfer' && movementFrom.currency !== $any(movementDestiny).currency"
         class="value-note"
-        [innerHTML]="t(('TRANSFER.FORM.currency-info-' + (movementToEdit ? 'edit' : 'add')), {x: (valueToDestiny ?? value) | currency : $any(movementDestiny).currency : 'symbol-narrow' : '1.0-2' : lang.getSelectedLang()})"></span>
+        [innerHTML]="t(('TRANSFER.FORM.currency-info-' + (movementToEdit ? 'edit' : 'add')), {x: (valueToDestiny ?? value) | currency : $any(movementDestiny).currency : 'symbol-narrow' : '1.0-2'})"></span>
 
       <span *ngIf="mode === 'Transaction' && userPreferredCurrency && userPreferredCurrency !== movementFrom?.currency" class="value-note">
         {{ t("TRANSACTION.FORM.exchange-to-preferred", {x: exchangeToPreferredCurrency | currency : userPreferredCurrency : 'symbol-narrow'
-        : '1.0-2' : lang.getSelectedLang() }) }}
+        : '1.0-2' }) }}
       </span>
     </div>
     <div class="w-full" style="position: relative;">

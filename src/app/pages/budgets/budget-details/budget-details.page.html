@@ -45,7 +45,7 @@
               <span class="capitalize">{{ t("BUDGETS.to-expend") }}</span>
               <h2 class="flex justify-content-center">
                 <ng-container *ngIf="budget && currentValue !== undefined">
-                  {{(((budget.limit - currentValue) > 0) ? (budget.limit - currentValue) : 0) | number : "1.0-2" : lang.getSelectedLang() }}
+                  {{(((budget.limit - currentValue) > 0) ? (budget.limit - currentValue) : 0) | number : "1.0-2" }}
                 </ng-container>
                 <ion-skeleton-text *ngIf="!budget || currentValue === undefined" animated style="width: 25%;"></ion-skeleton-text>
               </h2>
@@ -54,7 +54,7 @@
               <span>{{ t("BUDGETS.DETAILS.budget-value") }}</span>
               <h2 class="flex justify-content-center">
                 <ng-container *ngIf="budget">
-                  {{budget.limit | number : "1.0-0" : lang.getSelectedLang() }}
+                  {{budget.limit | number : "1.0-0" }}
                 </ng-container>
                 <ion-skeleton-text *ngIf="!budget" animated style="width: 25%;"></ion-skeleton-text>
               </h2>
@@ -79,7 +79,7 @@
                 {{ t("BUDGETS.DETAILS.budget-exceeded-for") }}:
                 <currency-value [value]="currentValue - budget.limit" [showDecimals]="false"></currency-value>
               </span>
-              <span class="text-left">{{ t("BUDGETS.DETAILS.you-already-expend") }} {{percentaje | percent : "1.0-0" : lang.getSelectedLang() }}
+              <span class="text-left">{{ t("BUDGETS.DETAILS.you-already-expend") }} {{percentaje | percent : "1.0-0" }}
                 {{ t("BUDGETS.DETAILS.of-the-budget") }}</span>
             </ng-container>
           </div>

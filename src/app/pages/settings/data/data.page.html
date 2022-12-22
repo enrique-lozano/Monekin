@@ -17,8 +17,8 @@
     <p style="margin: 0;">{{ t("BACKUP.EXPORT.description") }}</p>
     <p style="margin: 0;margin-top: 8px; font-size: smaller">{{ t("BACKUP.EXPORT.last") }}{{ lastExport ? (lastExport | date : "mediumDate" :
       undefined
-      : lang.getSelectedLang() ) : "--/--/----"}}, {{ lastExport ? (lastExport | date : "shortTime" : undefined
-      : lang.getSelectedLang() ) : "--:--"}}</p>
+      ) : "--/--/----"}}, {{ lastExport ? (lastExport | date : "shortTime" : undefined
+      ) : "--:--"}}</p>
   </ion-card>
 
   <ion-card color="tertiary" (click)="importData()" class="card p mb-s">

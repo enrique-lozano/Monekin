@@ -7,7 +7,9 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  Inject,
   Input,
+  LOCALE_ID,
   OnChanges,
   OnInit,
   SimpleChanges,
@@ -16,7 +18,6 @@ import {
 import { ISOCorrencyCodes } from 'src/app/constants/currencies/currency-code.enum';
 import { Currency } from 'src/app/services/currency/currency.model';
 import { CurrencyService } from 'src/app/services/currency/currency.service';
-import { LangService } from 'src/app/services/translate/translate.service';
 
 @Component({
   selector: 'currency-value',
@@ -38,23 +39,17 @@ export class CurrencyValueComponent
 
   userCurrency: Currency;
 
-  constructor(private lang: LangService, private currency: CurrencyService) {}
+  constructor(
+    @Inject(LOCALE_ID) private userLocale: string,
+    private currency: CurrencyService
+  ) {}
 
   ngOnInit() {}
 
   ngAfterViewInit() {
-    if (!this.lang.getSelectedLang()) {
-      console.warn(
-        'Lang is not initialized yet -> Currency-value component: ngAfterViewInit()'
-      );
-      return;
-    }
-
-    this.decimalSeparator = formatNumber(
-      1.1,
-      this.lang.getSelectedLang(),
-      '1.1-1'
-    ).charAt(1);
+    this.decimalSeparator = formatNumber(1.1, this.userLocale, '1.1-1').charAt(
+      1
+    );
 
     this.currency.onChangeCurrency.subscribe((currency) => {
       this.userCurrency = currency;
@@ -77,11 +72,11 @@ export class CurrencyValueComponent
 
     const formatedNumber = formatCurrency(
       this.value,
-      this.lang.getSelectedLang(),
+      this.userLocale,
       getCurrencySymbol(
         this.currencyCode ?? this.userCurrency.code,
         'narrow',
-        this.lang.getSelectedLang()
+        this.userLocale
       ),
       undefined,
       this.showDecimals ? '1.2-2' : '1.0-0'

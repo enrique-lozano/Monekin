@@ -4,6 +4,7 @@ import {
   AppLanguageCode,
   appLanguages,
 } from 'src/app/modules/i18n/availableLangs';
+import { LOCALE_LIST } from 'src/app/modules/i18n/locales';
 import { SettingsService } from 'src/app/services/db/settings/settings.service';
 import { LangService } from 'src/app/services/translate/translate.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
@@ -15,8 +16,10 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 })
 export class GeneralPage implements OnInit {
   languages: string[];
+  locales = Object.entries(LOCALE_LIST);
 
   selectedLang: AppLanguageCode;
+  selectedLocale: LOCALE_LIST;
 
   weekDays: string[];
   selectedWeekDay: 0 | 1 | 2 | 3 | 4 | 5 | 6;
@@ -32,8 +35,13 @@ export class GeneralPage implements OnInit {
 
   async ngOnInit() {
     await this.getWeekDays();
-    this.selectedWeekDay = (await this.settings.getSettings()).firstDayOfWeek;
+
+    const userSettings = await this.settings.getSettings();
+    this.selectedWeekDay = userSettings.firstDayOfWeek;
+    this.selectedLocale = userSettings.locale;
   }
+
+  ionViewDidEnter() {}
 
   async getWeekDays() {
     this.weekDays = await this.utils.getDayWeeksArray(
@@ -44,7 +52,12 @@ export class GeneralPage implements OnInit {
 
   async setLanguage() {
     await this.langService.setLanguage(this.selectedLang);
-    await this.getWeekDays();
+  }
+
+  async setLocale() {
+    await this.settings.setSettings({ locale: this.selectedLocale });
+
+    location.reload();
   }
 
   async setWeekDay() {
