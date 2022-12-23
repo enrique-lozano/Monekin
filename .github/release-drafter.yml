@@ -1,5 +1,8 @@
-name-template: "v$RESOLVED_VERSION"
+name-template: "Monekin v$RESOLVED_VERSION"
 tag-template: "v$RESOLVED_VERSION"
+
+commitish: "refs/head/main"
+
 categories:
   - title: "✨ New features"
     labels: ["type: enhancement"]
