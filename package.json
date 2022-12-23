@@ -16,7 +16,8 @@
     "deploy:android:apk": "cd android && gradlew assembleDebug",
     "deploy:android:aab": "cd android && gradlew bundleRelease",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
+    "test": "ng test --karma-config=tests/karma.conf.js",
+    "test:ci": "ng test --karma-config=tests/karma-ci.conf.js",
     "lint": "ng lint",
     "prepare": "husky install"
   },
