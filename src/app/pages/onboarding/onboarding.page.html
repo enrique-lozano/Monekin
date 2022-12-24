@@ -2,7 +2,7 @@
   <swiper #swiper [config]="config" (activeIndexChange)="onSwipe()">
     <!--------- SLIDE 1 -------->
     <ng-template swiperSlide>
-      <div class="swiper-slide">
+      <div class="swiper-slide" data-cy="swiper-slide">
 
         <div class="img-container">
           <img src="assets/icons/undraw/first.svg" alt="" />
@@ -13,9 +13,10 @@
           <h1>{{ t('INTRO.sl1Title') }}</h1>
           <p class="text-justify">{{ t('INTRO.sl1Descr') }}</p>
 
-          <ion-item button detail class="rounded-xxl currency-selector-item" (click)="goToSelectCoin()">
+          <ion-item button detail class="rounded-xxl currency-selector-item" (click)="goToSelectCoin()" data-cy="select-currency-button">
             <ion-avatar slot="start">
-              <img [src]="'assets/icons/currency_flags/' + (userCurrency?.code | lowercase) + '.svg'" alt="Selected Currency Flag" />
+              <img [src]="'assets/icons/currency_flags/' + (userCurrency?.code | lowercase) + '.svg'" alt="Selected Currency Flag"
+                data-cy="selected-currency-flag" />
             </ion-avatar>
             <ion-label>
               <span style="font-size: 0.9em; font-weight: 300">
@@ -32,7 +33,7 @@
 
     <!--------- SLIDE 2 -------->
     <ng-template swiperSlide>
-      <div class="swiper-slide">
+      <div class="swiper-slide" data-cy="swiper-slide">
         <div class="img-container">
           <img src="assets/icons/undraw/security.svg" alt="" />
         </div>
@@ -47,7 +48,7 @@
 
     <!--------- SLIDE 3 -------->
     <ng-template swiperSlide>
-      <div class="swiper-slide">
+      <div class="swiper-slide" data-cy="swiper-slide">
         <div class="img-container">
           <img src="assets/icons/undraw/upload.svg" alt="" />
         </div>
@@ -73,7 +74,7 @@
 
     <!--------- SLIDE 4 -------->
     <ng-template swiperSlide>
-      <div class="swiper-slide">
+      <div class="swiper-slide" data-cy="swiper-slide">
         <div class="img-container">
           <img src="assets/icons/undraw/wallet.svg" alt="" />
         </div>
@@ -95,7 +96,7 @@
 <ion-footer *transloco="let t" class="ion-no-border">
   <div class="thin">
     <ng-container *ngIf="!swiper?.swiperRef?.isEnd">
-      <ion-button fill="clear" (click)="introFinished()">
+      <ion-button fill="clear" (click)="introFinished()" data-cy="skip-slides">
         {{ t("INTRO.skip") }}
       </ion-button>
     </ng-container>
@@ -106,7 +107,7 @@
     </ng-container>
   </div>
   <div class="text-end">
-    <ion-button fill="clear" (click)="slideNext()">
+    <ion-button fill="clear" (click)="slideNext()" data-cy="next-slide">
       <div class="flex items-center justify-content-end bold">
         {{ t("INTRO.next") }}
         <ion-icon class="ml-s" name="arrow-forward"></ion-icon>

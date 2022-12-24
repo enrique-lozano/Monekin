@@ -6,6 +6,15 @@ export default defineConfig({
       // implement node event listeners here
     },
 
+    baseUrl: 'http://localhost:4200',
+
+    testIsolation: true,
+
+    videoUploadOnPasses: false,
+
+    viewportWidth: 480,
+    viewportHeight: 823,
+
     fixturesFolder: 'tests/cypress/fixtures',
     screenshotsFolder: 'tests/cypress/screenshots',
     videosFolder: 'tests/cypress/videos',
