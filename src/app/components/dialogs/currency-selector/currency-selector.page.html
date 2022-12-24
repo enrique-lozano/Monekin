@@ -14,8 +14,8 @@
       [placeholder]="'CURRENCIES.search-placeholder' | transloco"></ion-searchbar>
   </div>
 
-  <ion-list>
-    <ion-item (click)="selectCoin(currency)" *ngFor="let currency of currencies">
+  <ion-list data-cy="currency-list">
+    <ion-item (click)="selectCoin(currency)" *ngFor="let currency of currencies" data-cy="currency-item">
 
       <ion-avatar slot="start">
         <img [src]="'assets/icons/currency_flags/' + (currency.code | lowercase) + '.svg'" alt="Currency Flag" loading="lazy">
