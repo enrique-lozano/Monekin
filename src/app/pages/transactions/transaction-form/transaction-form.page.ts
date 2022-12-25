@@ -68,7 +68,7 @@ export class TransactionFormPage {
   exchangeToPreferredCurrency = 0;
 
   constructor(
-    @Inject(LOCALE_ID) private userLocale: string,
+    @Inject(LOCALE_ID) private readonly userLocale: string,
     private lang: LangService,
     private toast: ToastService,
     private ionModal: IonModalService,
