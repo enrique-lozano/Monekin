@@ -1,11 +1,6 @@
-<ion-toolbar *transloco="let t">
-  <ion-title>
-    <ng-container *ngIf="allowMultiSelection">{{ t("ACCOUNT.SELECT.multiple") }}</ng-container>
-    <ng-container *ngIf="!allowMultiSelection">{{ t("ACCOUNT.SELECT.one") }}</ng-container>
-  </ion-title>
-</ion-toolbar>
+<app-dynamic-sheet-modal [title]="allowMultiSelection ? 'ACCOUNT.SELECT.multiple' : 'ACCOUNT.SELECT.one'" (dismissed)="dismiss()"
+  (confirmed)="submit()" [displayFooterButtons]="allowMultiSelection" [confirmButtonDisabled]="selectedAccounts.length === 0">
 
-<div>
   <ion-list [ngClass]="{'add-bottom-padding': !allowMultiSelection}">
 
     <ng-container *ngIf="!allowMultiSelection && selectedAccounts !== 'all'">
@@ -30,16 +25,5 @@
       </ion-item>
     </ng-container>
   </ion-list>
-</div>
 
-<ion-footer *ngIf="allowMultiSelection" class="flex justify-content-between ion-no-border p-s">
-  <ng-container *transloco="let t">
-    <ion-button expand="block" style="width: 49%;" class="stroked" (click)="dismiss()">
-      {{ t("GENERAL.cancel") }}
-    </ion-button>
-
-    <ion-button [disabled]="selectedAccounts.length === 0" expand="block" style="width: 49%;" (click)="submit()">
-      {{ t("GENERAL.confirm") }}
-    </ion-button>
-  </ng-container>
-</ion-footer>
+</app-dynamic-sheet-modal>

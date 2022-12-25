@@ -1,19 +1,17 @@
-<ng-container *transloco="let t">
+<app-dynamic-sheet-modal [title]="'GENERAL.TRANSACTION-ORDER.display'" [displayFooterButtons]="false">
+  <ng-container *transloco="let t">
 
-  <ion-toolbar>
-    <ion-title>
-      {{ t("GENERAL.TRANSACTION-ORDER.display") }}
-    </ion-title>
-  </ion-toolbar>
+    <ion-list class="" *ngIf="order">
+      <ion-item *ngFor="let item of keys" lines="none" [ngClass]="{'selected': order.orderBy === transactionListOrderKeyType[item]}"
+        class="mr-s rounded-r-xl flex items-center" (click)="selectOrder(item)">
+        <ion-icon slot="start" [name]="order.dir === 'asc' ? 'arrow-up' : 'arrow-down'"></ion-icon>
+        <ion-label>
+          <h2>
+            {{ t(("GENERAL.TRANSACTION-ORDER." + transactionListOrderKeyType[item])) }}
+          </h2>
+        </ion-label>
+      </ion-item>
+    </ion-list>
 
-  <div class="mt" *ngIf="order">
-    <div *ngFor="let item of keys" [ngClass]="{'selected': order.orderBy === transactionListOrderKeyType[item]}"
-      class="pl py mr-s my-xs rounded-r-xl flex items-center" (click)="selectOrder(item)">
-      <ion-icon [name]="order.dir === 'asc' ? 'arrow-up' : 'arrow-down'"></ion-icon>
-      <span>
-        {{ t(("GENERAL.TRANSACTION-ORDER." + transactionListOrderKeyType[item])) }}
-      </span>
-    </div>
-  </div>
-
-</ng-container>
+  </ng-container>
+</app-dynamic-sheet-modal>

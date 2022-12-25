@@ -1,67 +1,53 @@
-<ion-toolbar *transloco="let t">
-  <ion-title>
-    {{ t("RECURRENT-TRANSACTIONS.SELECTOR.title") }}
-  </ion-title>
-</ion-toolbar>
+<app-dynamic-sheet-modal [title]="'RECURRENT-TRANSACTIONS.SELECTOR.title'" (dismissed)="dismiss()" (confirmed)="submit()">
 
-<div class="p" *transloco="let t">
-  <ion-item fill="outline">
-    <ion-label position="floating">{{ t("GENERAL.TIME.periodicity") }}</ion-label>
-    <ion-select placeholder="Select One" interface="popover" [value]="repetition" [(ngModel)]="repetition">
-      <ion-select-option value="no">{{ t("GENERAL.TIME.no-repeat") }}</ion-select-option>
-      <ion-select-option value="week">{{ t("GENERAL.TIME.weekly") }}</ion-select-option>
-      <ion-select-option value="month">{{ t("GENERAL.TIME.monthly") }}</ion-select-option>
-      <ion-select-option value="year">{{ t("GENERAL.TIME.annualy") }}</ion-select-option>
-    </ion-select>
-  </ion-item>
-
-  <!-- Start Date -->
-  <ion-item [disabled]="repetition === 'no'" button="true" class="my" fill="outline" id="open-start-date-input">
-    <ion-label position="floating">{{ t("GENERAL.TIME.start-date")}} *</ion-label>
-    <ion-input [value]="formatDate(dateStart)"></ion-input>
-  </ion-item>
-
-  <ion-modal trigger="open-start-date-input">
-    <ng-template>
-      <app-date-picker (dateChange)="setStartDate($event)" [max]="dateEnd"></app-date-picker>
-    </ng-template>
-  </ion-modal>
-
-  <!-- End Date -->
-  <div class="flex items-center w-full my">
-    <ion-item fill="outline" [disabled]="repetition === 'no'">
-      <ion-label position="floating">{{ t("RECURRENT-TRANSACTIONS.SELECTOR.until") }}</ion-label>
-      <ion-select interface="popover" [(ngModel)]="until" (ionChange)="onUntilChange()">
-        <ion-select-option value="forever">
-          {{ t("RECURRENT-TRANSACTIONS.SELECTOR.infinite") }}
-        </ion-select-option>
-        <ion-select-option value="endDate">
-          {{ t("RECURRENT-TRANSACTIONS.SELECTOR.date") }}
-        </ion-select-option>
+  <div class="px" *transloco="let t">
+    <ion-item fill="outline" class="mt">
+      <ion-label position="floating">{{ t("GENERAL.TIME.periodicity") }}</ion-label>
+      <ion-select placeholder="Select One" interface="popover" [value]="repetition" [(ngModel)]="repetition">
+        <ion-select-option value="no">{{ t("GENERAL.TIME.no-repeat") }}</ion-select-option>
+        <ion-select-option value="week">{{ t("GENERAL.TIME.weekly") }}</ion-select-option>
+        <ion-select-option value="month">{{ t("GENERAL.TIME.monthly") }}</ion-select-option>
+        <ion-select-option value="year">{{ t("GENERAL.TIME.annualy") }}</ion-select-option>
       </ion-select>
     </ion-item>
 
-    <ion-item [disabled]="repetition === 'no' || until === 'forever'" button="true" class="pl w-full" fill="outline" id="open-end-date-input">
-      <ion-label position="floating">{{ t("GENERAL.TIME.end-date")}}</ion-label>
-      <ion-input [value]="formatDate(dateEnd)"></ion-input>
+    <!-- Start Date -->
+    <ion-item [disabled]="repetition === 'no'" button="true" class="my" fill="outline" id="open-start-date-input">
+      <ion-label position="floating">{{ t("GENERAL.TIME.start-date")}} *</ion-label>
+      <ion-input [value]="formatDate(dateStart)"></ion-input>
     </ion-item>
+
+    <ion-modal trigger="open-start-date-input">
+      <ng-template>
+        <app-date-picker (dateChange)="setStartDate($event)" [max]="dateEnd"></app-date-picker>
+      </ng-template>
+    </ion-modal>
+
+    <!-- End Date -->
+    <div class="flex items-center w-full my">
+      <ion-item fill="outline" [disabled]="repetition === 'no'">
+        <ion-label position="floating">{{ t("RECURRENT-TRANSACTIONS.SELECTOR.until") }}</ion-label>
+        <ion-select interface="popover" [(ngModel)]="until" (ionChange)="onUntilChange()">
+          <ion-select-option value="forever">
+            {{ t("RECURRENT-TRANSACTIONS.SELECTOR.infinite") }}
+          </ion-select-option>
+          <ion-select-option value="endDate">
+            {{ t("RECURRENT-TRANSACTIONS.SELECTOR.date") }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item [disabled]="repetition === 'no' || until === 'forever'" button="true" class="pl w-full" fill="outline" id="open-end-date-input">
+        <ion-label position="floating">{{ t("GENERAL.TIME.end-date")}}</ion-label>
+        <ion-input [value]="formatDate(dateEnd)"></ion-input>
+      </ion-item>
+    </div>
+
+    <ion-modal trigger="open-end-date-input">
+      <ng-template>
+        <app-date-picker (dateChange)="setEndDate($event)" [min]="dateStart"></app-date-picker>
+      </ng-template>
+    </ion-modal>
+
   </div>
-
-  <ion-modal trigger="open-end-date-input">
-    <ng-template>
-      <app-date-picker (dateChange)="setEndDate($event)" [min]="dateStart"></app-date-picker>
-    </ng-template>
-  </ion-modal>
-
-  <!-- Buttons -->
-  <div class="flex justify-content-between">
-    <ion-button expand="block" class="stroked" style="width: 49%" (click)="dismiss()">
-      {{ t("GENERAL.cancel") }}
-    </ion-button>
-
-    <ion-button expand="block" style="width: 49%" (click)="submit()">
-      {{ t("GENERAL.confirm") }}
-    </ion-button>
-  </div>
-
-</div>
+</app-dynamic-sheet-modal>

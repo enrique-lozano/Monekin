@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { CategoriesListPageRoutingModule } from './categories-list-routing.module';
 
 import { TranslocoModule } from '@ngneat/transloco';
+import { ComponentsModule } from 'src/app/modules/components.module';
 import { SwiperModule } from 'swiper/angular';
 import { CategoriesListPage } from './categories-list.page';
 import { SubcategorySelectorComponent } from './components/subcategory-selector/subcategory-selector.component';
@@ -18,6 +19,7 @@ import { SubcategorySelectorComponent } from './components/subcategory-selector/
     IonicModule,
     TranslocoModule,
     SwiperModule,
+    ComponentsModule,
     CategoriesListPageRoutingModule,
   ],
   declarations: [CategoriesListPage, SubcategorySelectorComponent],
