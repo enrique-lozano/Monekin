@@ -18,6 +18,11 @@ ion-button {
   }
 }
 
+ion-button[expand="block"],
+ion-button[expand="full"] {
+  width: 100%;
+}
+
 // ----- STROKED BUTTONS STYLING ----
 
 ion-button[expand="block"].stroked {

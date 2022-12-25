@@ -13,6 +13,7 @@ import { CurrencySelectorComponent } from '../components/dialogs/currency-select
 import { DatePickerComponent } from '../components/dialogs/date-picker/date-picker.component';
 import { CustomDateRangeComponent } from '../components/dialogs/date-range-selector/custom-date-range/custom-date-range.component';
 import { DateRangeSelectorComponent } from '../components/dialogs/date-range-selector/date-range-selector.component';
+import { DynamicSheetModalComponent } from '../components/dialogs/dynamic-sheet-modal/dynamic-sheet-modal.component';
 import { IconSelectorComponent } from '../components/dialogs/icon-selector/icon-selector.component';
 import { PopoverMenuComponent } from '../components/dialogs/popover-menu/popover-menu.component';
 import { TransactionFilterComponent } from '../components/dialogs/transaction-filter/transaction-filter.component';
@@ -40,6 +41,7 @@ import { TrendingComponent } from '../components/ui/trending/trending.component'
     IconSelectorComponent,
     ProgressBarComponent,
     TabFiltersComponent,
+    DynamicSheetModalComponent,
   ],
   imports: [
     CommonModule,
@@ -56,6 +58,7 @@ import { TrendingComponent } from '../components/ui/trending/trending.component'
     ProgressBarComponent,
     TabFiltersComponent,
     DatePickerComponent,
+    DynamicSheetModalComponent,
   ],
 })
 export class ComponentsModule {}
