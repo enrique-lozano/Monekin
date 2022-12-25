@@ -3,7 +3,9 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  Inject,
   Input,
+  LOCALE_ID,
   OnChanges,
   OnInit,
   ViewChild,
@@ -71,7 +73,8 @@ export class StatisticsComponent implements OnInit, OnChanges {
 
   constructor(
     private popoverController: PopoverController,
-    public lang: LangService,
+    private lang: LangService,
+    @Inject(LOCALE_ID) private readonly userLocale: string,
     public filterService: FilterService,
     private dateRangeService: DateRangeService,
     private utils: UtilsService,
@@ -656,9 +659,7 @@ export class StatisticsComponent implements OnInit, OnChanges {
       });
 
       data.push(balance);
-      labels.push(
-        formatDate(loopDay, 'mediumDate', this.lang.getSelectedLang())
-      );
+      labels.push(formatDate(loopDay, 'mediumDate', this.userLocale));
     }
 
     return { data, labels };
