@@ -4,19 +4,19 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { LoginPageRoutingModule } from './login-routing.module';
+import { ExportPageRoutingModule } from './export-routing.module';
 
 import { TranslocoModule } from '@ngneat/transloco';
-import { LoginPage } from './login.page';
+import { ExportPage } from './export.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    LoginPageRoutingModule,
+    ExportPageRoutingModule,
     TranslocoModule,
   ],
-  declarations: [LoginPage],
+  declarations: [ExportPage],
 })
-export class LoginPageModule {}
+export class ExportPageModule {}

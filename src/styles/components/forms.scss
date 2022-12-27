@@ -56,3 +56,7 @@ ion-searchbar {
     border: 1px solid rgba(161, 161, 161, 0.842);
   }
 }
+
+ion-label[slot="end"] {
+  max-width: 50%;
+}

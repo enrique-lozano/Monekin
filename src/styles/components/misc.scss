@@ -15,7 +15,8 @@ ion-list {
     }
   }
 
-  ion-item:last-child {
+  ion-item:last-child,
+  ion-item-group ion-item:last-child {
     --inner-border-width: 0px;
   }
 }
