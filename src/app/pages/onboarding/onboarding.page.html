@@ -56,15 +56,34 @@
           <h1>{{ t("BACKUP.IMPORT.title") }}</h1>
           <p class="text-justify">{{ t("BACKUP.IMPORT.longDescription") }}</p>
           <ion-item button detail class="rounded-xxl currency-selector-item" (click)="importFile()">
-            <ion-avatar slot="start" style="background-color: var(--ion-color-secondary);">
-              <ion-icon name="arrow-up" class="upload-icon fadeInUp"></ion-icon>
+
+            <ion-avatar *ngIf="!dataImported" slot="start" style="background-color: var(--ion-color-secondary);">
+              <ion-icon name="arrow-up" class="upload-icon fadeInUp" style="color: var(--ion-color-secondary-contrast);"></ion-icon>
             </ion-avatar>
-            <input type="file" hidden (change)="onFileSelected()" id="file-input">
+
+            <ion-avatar *ngIf="dataImported" slot="start" style="background-color: var(--ion-color-success);">
+              <ion-icon name="checkmark" style="color: var(--ion-color-success-contrast);"></ion-icon>
+            </ion-avatar>
+
+            <input type="file" accept="application/json" hidden (change)="onFileSelected()" id="file-input">
+
             <ion-label>
               <span style="font-size: 0.9em; font-weight: 300">
-                {{ t("BACKUP.IMPORT.upload_file") }}
+                <ng-container *ngIf="dataImported">
+                  {{ t("BACKUP.IMPORT.onboarding_done") }}
+                </ng-container>
+                <ng-container *ngIf="!dataImported">
+                  {{ t("BACKUP.IMPORT.upload_file") }}
+                </ng-container>
               </span>
-              <h2>{{ t("BACKUP.IMPORT.touch_to_import") }}</h2>
+              <h2>
+                <ng-container *ngIf="dataImported">
+                  {{ t("BACKUP.IMPORT.touch_to_change") }}
+                </ng-container>
+                <ng-container *ngIf="!dataImported">
+                  {{ t("BACKUP.IMPORT.touch_to_import") }}
+                </ng-container>
+              </h2>
             </ion-label>
           </ion-item>
         </div>

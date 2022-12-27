@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 import { TranslocoModule } from '@ngneat/transloco';
-import { DataPage } from './data/data.page';
 import { GeneralPage } from './general/general.page';
 import { LegalPage } from './legal/legal.page';
 import { LicensePage } from './license/license.page';
@@ -28,7 +27,6 @@ import { UserProfileEditionComponent } from './user-profile-edition/user-profile
     LicensePage,
     LegalPage,
     GeneralPage,
-    DataPage,
   ],
 })
 export class SettingsPageModule {}

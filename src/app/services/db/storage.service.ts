@@ -88,16 +88,25 @@ export class StorageService {
     await this.setItem('userData', userData);
   }
 
-  /** Migrate the data contained in the storage if the last time the user used the app was in Monekin v1.X.X */
-  async migrateFromV1() {
-    const data = {
-      accounts: await this.appStorage.get(IonicStorageKeyV1.accounts),
-      budgets: await this.appStorage.get(IonicStorageKeyV1.budgets),
-      transfers: await this.appStorage.get(IonicStorageKeyV1.transfers),
-      categories: await this.appStorage.get(IonicStorageKeyV1.categories),
-      cookies: await this.appStorage.get(IonicStorageKeyV1.cookies),
-      settings: await this.appStorage.get(IonicStorageKeyV1.settings),
-    };
+  /** Migrate the data from `v1.X.X` to the latest released version */
+  async migrateFromV1(data?: {
+    accounts: any[];
+    budgets: any[];
+    transfers: any[];
+    categories: any[];
+    cookies: any;
+    settings: any;
+  }) {
+    if (!data) {
+      data = {
+        accounts: await this.appStorage.get(IonicStorageKeyV1.accounts),
+        budgets: await this.appStorage.get(IonicStorageKeyV1.budgets),
+        transfers: await this.appStorage.get(IonicStorageKeyV1.transfers),
+        categories: await this.appStorage.get(IonicStorageKeyV1.categories),
+        cookies: await this.appStorage.get(IonicStorageKeyV1.cookies),
+        settings: await this.appStorage.get(IonicStorageKeyV1.settings),
+      };
+    }
 
     const result: Partial<UserData> = {
       cookies: { ...data.cookies, ...{ modelVersion: '2' } },
