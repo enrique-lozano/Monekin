@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { PageTestModule } from 'src/app/modules/testing/page-test.module';
 
 import { ExportPage } from './export.page';
 
@@ -9,8 +9,8 @@ describe('ExportPage', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExportPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [ExportPage],
+      imports: [PageTestModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ExportPage);

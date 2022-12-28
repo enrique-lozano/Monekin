@@ -64,8 +64,6 @@ export class BackupService {
   async importDataFromFile(fileReaderResult: string | ArrayBuffer) {
     let data = JSON.parse(fileReaderResult as string);
 
-    console.log(data);
-
     if ((data.cookies as Cookies).modelVersion === '1') {
       data = await this.storage.migrateFromV1(data);
     }
