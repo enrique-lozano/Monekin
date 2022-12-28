@@ -19,7 +19,7 @@ import { LangService } from '../translate/translate.service';
 })
 export class UtilsService {
   constructor(
-    @Inject(LOCALE_ID) private userLocale: string,
+    @Inject(LOCALE_ID) private readonly userLocale: string,
     private lang: LangService,
     private settings: SettingsService
   ) {}

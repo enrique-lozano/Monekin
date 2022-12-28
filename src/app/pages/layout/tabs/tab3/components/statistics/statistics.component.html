@@ -76,8 +76,7 @@
               <div>
                 <currency-value [value]="item.value" [showDecimals]="false"></currency-value>
               </div>
-              <div class="thin" style="line-height: 0.85rem; font-size: 0.85rem;">{{ (item.value / totalExpenses) | percent : "1.0-0" :
-                lang.getSelectedLang() }}</div>
+              <div class="thin" style="line-height: 0.85rem; font-size: 0.85rem;">{{ (item.value / totalExpenses) | percent : "1.0-0" }}</div>
             </div>
           </ng-container>
         </div>
@@ -101,8 +100,7 @@
             </div>
             <div class="text-end" (click)="openCategoryStats(item)">
               <currency-value [value]="item.value" [showDecimals]="false"></currency-value>
-              <div class="thin" style="line-height: 0.85rem; font-size: 0.85rem;">{{ (item.value / totalIncomes) | percent : "1.0-0" :
-                lang.getSelectedLang() }}</div>
+              <div class="thin" style="line-height: 0.85rem; font-size: 0.85rem;">{{ (item.value / totalIncomes) | percent : "1.0-0" }}</div>
             </div>
           </ng-container>
         </div>

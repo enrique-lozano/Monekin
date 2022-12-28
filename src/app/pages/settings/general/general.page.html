@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title *transloco="let t">{{ t("SETTINGS.other") }}</ion-title>
+    <ion-title *transloco="let t">{{ t("SETTINGS.GENERAL.other") }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -15,11 +15,13 @@
         <h2>{{ t("SETTINGS.lang") }}</h2>
         <p>{{ t("SETTINGS.lang.descr") }}</p>
       </ion-label>
+
       <ion-select [(ngModel)]="selectedLang" (ionChange)="setLanguage()" interface="popover">
         <ion-select-option *ngFor="let lang of languages" [value]="lang">
           {{t("LANG." + lang)}}
         </ion-select-option>
       </ion-select>
+
     </ion-item>
 
     <ion-item>

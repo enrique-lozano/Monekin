@@ -1,6 +1,6 @@
 {
   "name": "Monekin",
-  "version": "0.0.1",
+  "version": "3.0.0",
   "author": "Lozin Technologies",
   "homepage": "https://github.com/enrique-lozano/Monekin",
   "description": "A 100% Open Source app that tries to make personal finances easier. Fast, simple, without ads, without the need for an Internet connection and with a groundbreaking design, that's Monekin.",
@@ -12,11 +12,16 @@
     "build": "ng build",
     "build:electron": "ng build --base-href ./",
     "build:mobile": "ionic build && npx cap sync",
-    "deploy:win": "npx electron-packager . --platform=win32 --out=./build --overwrite",
+    "deploy:win": "npx electron-packager . --platform=win32 --out=./build --icon=src/assets/resources/appIcon --ignore=\"(.git|.github|.angular|.husky|android|app-marketplaces|node_modules|docs|.vscode|tests|src|.gitignore|()*.md|LICENSE)\" --overwrite",
     "deploy:android:apk": "cd android && gradlew assembleDebug",
     "deploy:android:aab": "cd android && gradlew bundleRelease",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
+    "release:android:apk": "npm run build:mobile && npm run deploy:android:apk",
+    "release:android:aab": "npm run build:mobile && npm run deploy:android:aab",
+    "release:win": "npm run build:electron && npm run deploy:win",
+    "test": "ng test --karma-config=tests/karma.conf.js",
+    "test:ci": "ng test --karma-config=tests/karma-ci.conf.js",
+    "e2e": "cypress run",
+    "e2e:open": "cypress open --e2e",
     "lint": "ng lint",
     "prepare": "husky install"
   },
@@ -50,6 +55,7 @@
     "swiper": "^8.4.5",
     "tslib": "^2.3.0",
     "uuid": "^9.0.0",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.1/xlsx-0.19.1.tgz",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
@@ -71,6 +77,7 @@
     "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "5.3.0",
     "@typescript-eslint/parser": "5.3.0",
+    "cypress": "^12.2.0",
     "electron": "^22.0.0",
     "electron-packager": "^17.1.1",
     "eslint": "^7.6.0",

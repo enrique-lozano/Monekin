@@ -53,17 +53,27 @@ ion-modal {
     display: block;
     contain: content;
 
-    > ion-toolbar:first-of-type {
+    ion-toolbar:first-child {
       padding-top: 6px;
-      margin-bottom: 4px;
+    }
 
+    ion-toolbar {
       --background: var(--ion-color-light);
       --color: var(--ion-color-light-contrast);
+    }
+
+    ion-toolbar:last-child {
       box-shadow: 1px 1px 2px var(--ion-color-medium-tint);
     }
 
-    > ion-header > ion-toolbar:first-of-type {
-      padding-top: 10px !important;
+    > ion-header {
+      > ion-toolbar:first-of-type {
+        padding-top: 10px !important;
+      }
+
+      > ion-toolbar:last-child {
+        box-shadow: none;
+      }
     }
   }
 
