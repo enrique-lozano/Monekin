@@ -23,7 +23,7 @@ function onReady() {
 
   win.maximize(); // Full screen window
 
-  if (app.isPackaged) {
+  if (!app.isPackaged) {
     win.webContents.openDevTools();
   }
 
