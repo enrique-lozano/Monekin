@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { PageTestModule } from 'src/app/modules/testing/page-test.module';
+import { IonicModule } from '@ionic/angular';
 
-import { DataPage } from './data.page';
+import { ExportPage } from './export.page';
 
-describe('DataPage', () => {
-  let component: DataPage;
-  let fixture: ComponentFixture<DataPage>;
+describe('ExportPage', () => {
+  let component: ExportPage;
+  let fixture: ComponentFixture<ExportPage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [DataPage],
-      imports: [PageTestModule],
+      declarations: [ ExportPage ],
+      imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DataPage);
+    fixture = TestBed.createComponent(ExportPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

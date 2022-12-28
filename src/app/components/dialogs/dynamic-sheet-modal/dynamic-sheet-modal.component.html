@@ -1,0 +1,24 @@
+<ng-container *transloco="let t">
+
+  <ion-toolbar>
+    <ion-title>{{ t(title) }}</ion-title>
+  </ion-toolbar>
+
+  <div class="sheet-content">
+    <ng-content></ng-content>
+  </div>
+
+  <!-- Buttons -->
+  <ion-footer *ngIf="displayFooterButtons" class="ion-no-border px py-s">
+    <ng-container *transloco="let t">
+      <ion-button expand="block" class="stroked" (click)="dismiss()">
+        {{ t("GENERAL.cancel") }}
+      </ion-button>
+
+      <ion-button expand="block" [disabled]="confirmButtonDisabled" (click)="submit()">
+        {{ t("GENERAL.confirm") }}
+      </ion-button>
+    </ng-container>
+  </ion-footer>
+
+</ng-container>

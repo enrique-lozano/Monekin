@@ -22,17 +22,20 @@ ion-toolbar {
   --color: var(--ion-color-primary-contrast);
 }
 
-ion-toolbar ion-segment-button {
+ion-toolbar ion-segment-button:not(.modal-sheet ion-segment-button) {
   //--background-checked: var(--ion-color-primary-contrast);
   --color: var(--ion-color-primary-contrast);
 }
 
-.ios ion-toolbar ion-segment-button {
+.ios ion-toolbar ion-segment-button:not(.modal-sheet ion-segment-button) {
   --color-checked: var(--ion-color-primary);
 }
 
 .md ion-toolbar ion-segment-button {
   --indicator-height: 3px;
+}
+
+.md ion-toolbar ion-segment-button:not(.modal-sheet ion-segment-button) {
   --color-checked: var(--ion-color-tertiary);
 }
 

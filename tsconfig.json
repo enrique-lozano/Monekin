@@ -27,5 +27,6 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  "exclude": ["src/**/*.spec.ts", "src/**/*.d.ts", "build"]
 }
