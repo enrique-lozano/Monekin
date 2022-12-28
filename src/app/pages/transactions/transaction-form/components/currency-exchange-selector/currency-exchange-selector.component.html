@@ -3,12 +3,12 @@
   <div class="px" *transloco="let t">
     <ion-item class="w-full my" fill="outline">
       <ion-label position="floating">{{ t("Tipo de cambio") }}</ion-label>
-      <ion-input (ionChange)="recalculateDestiny()" [(ngModel)]="exchangeRate" type="number"></ion-input>
+      <ion-input (input)="recalculateDestiny($event)" [(ngModel)]="exchangeRate" type="number"></ion-input>
     </ion-item>
 
     <ion-item class="w-full my" fill="outline">
       <ion-label position="floating">{{ t("Cantidad a transapasar en destino") }}</ion-label>
-      <ion-input (ionChange)="recalculateExchangeRate()" [(ngModel)]="valueInDestiny" type="number"></ion-input>
+      <ion-input (input)="recalculateExchangeRate($event)" [(ngModel)]="valueInDestiny" type="number"></ion-input>
     </ion-item>
   </div>
 
