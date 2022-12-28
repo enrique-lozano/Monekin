@@ -15,12 +15,12 @@ export class CurrencyExchangeSelectorComponent implements OnInit {
 
   ngOnInit() {}
 
-  recalculateDestiny() {
-    this.valueInDestiny = this.valueInSource * this.exchangeRate;
+  recalculateDestiny(event: any) {
+    this.valueInDestiny = this.valueInSource * event.target.value;
   }
 
-  recalculateExchangeRate() {
-    this.exchangeRate = this.valueInDestiny / this.valueInSource;
+  recalculateExchangeRate(event: any) {
+    this.exchangeRate = event.target.value / this.valueInSource;
   }
 
   dismiss() {
@@ -28,6 +28,6 @@ export class CurrencyExchangeSelectorComponent implements OnInit {
   }
 
   submit() {
-    this.modalCtrl.dismiss(this.valueInDestiny);
+    this.modalCtrl.dismiss(this.exchangeRate);
   }
 }

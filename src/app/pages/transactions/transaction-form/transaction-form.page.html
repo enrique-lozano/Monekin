@@ -35,7 +35,7 @@
 
       <span (click)="openTransferObjetiveModal()" *ngIf="mode === 'Transfer' && movementFrom.currency !== $any(movementDestiny).currency"
         class="value-note"
-        [innerHTML]="t(('TRANSFER.FORM.currency-info-' + (movementToEdit ? 'edit' : 'add')), {x: (valueToDestiny ?? value) | currency : $any(movementDestiny).currency : 'symbol-narrow' : '1.0-2'})"></span>
+        [innerHTML]="t(('TRANSFER.FORM.currency-info-' + (movementToEdit ? 'edit' : 'add')), {x: (exchangeRateForTransfer !== undefined ? (exchangeRateForTransfer * toNumber(value)) : value) | currency : $any(movementDestiny).currency : 'symbol-narrow' : '1.0-2'})"></span>
 
       <span *ngIf="mode === 'Transaction' && userPreferredCurrency && userPreferredCurrency !== movementFrom?.currency" class="value-note">
         {{ t("TRANSACTION.FORM.exchange-to-preferred", {x: exchangeToPreferredCurrency | currency : userPreferredCurrency : 'symbol-narrow'
