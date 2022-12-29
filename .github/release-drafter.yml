@@ -1,7 +1,7 @@
 name-template: "Monekin v$RESOLVED_VERSION"
 tag-template: "v$RESOLVED_VERSION"
 
-commitish: "refs/head/main"
+commitish: "refs/heads/main"
 
 categories:
   - title: "✨ New features"
