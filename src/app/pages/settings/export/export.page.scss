@@ -1,0 +1,7 @@
+ion-card {
+  border: 2px solid transparent;
+}
+
+ion-card.selected {
+  border-color: var(--ion-color-primary);
+}

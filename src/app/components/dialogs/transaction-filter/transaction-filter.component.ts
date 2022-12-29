@@ -52,7 +52,7 @@ export class TransactionFilterComponent implements OnInit {
     }
   }
 
-  dismiss() {
+  dismiss() { 
     this.modalCtrl.dismiss(false);
   }
 

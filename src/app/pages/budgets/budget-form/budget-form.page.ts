@@ -10,7 +10,7 @@ import { CategoryService } from 'src/app/services/db/category/category.service';
 import { IonModalService } from 'src/app/services/ionic/ion-modal.service';
 import { LangService } from 'src/app/services/translate/translate.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-
+ 
 @Component({
   selector: 'app-budget-form',
   templateUrl: './budget-form.page.html',

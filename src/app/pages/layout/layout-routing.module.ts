@@ -117,6 +117,13 @@ const routes: Routes = [
             (m) => m.SettingsPageModule
           ),
       },
+      {
+        path: 'backup/export',
+        loadChildren: () =>
+          import('./../settings/export/export.module').then(
+            (m) => m.ExportPageModule
+          ),
+      },
     ],
   },
 ];
