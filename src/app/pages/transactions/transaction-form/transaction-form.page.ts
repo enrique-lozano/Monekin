@@ -134,7 +134,7 @@ export class TransactionFormPage {
             (this.movementDestiny as Account).currency
           );
 
-        await this.setDestinyValue();
+        await this.setExchangeRateForTransfers();
 
         return;
       }
@@ -267,8 +267,6 @@ export class TransactionFormPage {
     this.getExchangeToPreferredCurrency().then((res) => {
       this.exchangeToPreferredCurrency = res;
     });
-
-    this.setDestinyValue().then(() => {});
   }
 
   async getExchangeToPreferredCurrency() {
@@ -356,10 +354,12 @@ export class TransactionFormPage {
   }
 
   async openTransferObjetiveModal() {
+    const valueInDestiny = Number(this.value) * this.exchangeRateForTransfer;
+
     const modalResult = await this.ionModal.openCurrencyExchangeSelector(
       Number(this.value),
-      this.exchangeRateForTransfer,
-      Number(this.value) * this.exchangeRateForTransfer
+      Math.round((this.exchangeRateForTransfer + Number.EPSILON) * 100) / 100,
+      Math.round((valueInDestiny + Number.EPSILON) * 100) / 100
     );
 
     if (modalResult.data) {
@@ -367,7 +367,8 @@ export class TransactionFormPage {
     }
   }
 
-  async setDestinyValue() {
+  /** Calculate and set the exchange rate for a transfer between two accounts of different currencies */
+  async setExchangeRateForTransfers() {
     if (
       this.mode != 'Transfer' ||
       this.movementFrom.currency === (this.movementDestiny as Account).currency
@@ -404,7 +405,7 @@ export class TransactionFormPage {
         });
       }
 
-      this.setDestinyValue().then(() => {});
+      this.setExchangeRateForTransfers().then(() => {});
     }
   }
 
