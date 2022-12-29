@@ -48,7 +48,8 @@ export class TransactionFormPage {
   /** Movement to edit (only defined when editing) */
   movementToEdit: Transaction;
 
-  valueToDestiny: number;
+  /** Selected exchange rate in a transfer between accounts with different currencies. Should be undefined or 1 in any other cases  */
+  exchangeRateForTransfer: number;
 
   // --------- OTHER USEFULL PARAMS ------------ //
 
@@ -127,7 +128,13 @@ export class TransactionFormPage {
           this.activeRoute.snapshot.queryParamMap.get('to')
         );
 
-        await this.setDestinyValue();
+        this.exchangeRateForTransfer =
+          await this.exchangeRateService.getExchangeRate(
+            this.movementFrom.currency,
+            (this.movementDestiny as Account).currency
+          );
+
+        await this.setExchangeRateForTransfers();
 
         return;
       }
@@ -179,12 +186,17 @@ export class TransactionFormPage {
       }
     } else if (this.mode == 'Transfer') {
       this.movementDestiny = this.movementToEdit.receivingAccount;
-      this.valueToDestiny = this.movementToEdit.valueInDestiny;
+      this.exchangeRateForTransfer =
+        this.movementToEdit.valueInDestiny / this.movementToEdit.value;
     }
 
     this.getExchangeToPreferredCurrency().then((res) => {
       this.exchangeToPreferredCurrency = res;
     });
+  }
+
+  toNumber(x: string) {
+    return Number(x);
   }
 
   getDateInDom() {
@@ -255,8 +267,6 @@ export class TransactionFormPage {
     this.getExchangeToPreferredCurrency().then((res) => {
       this.exchangeToPreferredCurrency = res;
     });
-
-    this.setDestinyValue().then(() => {});
   }
 
   async getExchangeToPreferredCurrency() {
@@ -344,35 +354,34 @@ export class TransactionFormPage {
   }
 
   async openTransferObjetiveModal() {
+    const valueInDestiny = Number(this.value) * this.exchangeRateForTransfer;
+
     const modalResult = await this.ionModal.openCurrencyExchangeSelector(
       Number(this.value),
-      await this.exchangeRateService.getExchangeRate(
-        this.movementFrom.currency,
-        (this.movementDestiny as Account).currency
-      ),
-      this.valueToDestiny
+      Math.round((this.exchangeRateForTransfer + Number.EPSILON) * 100) / 100,
+      Math.round((valueInDestiny + Number.EPSILON) * 100) / 100
     );
 
     if (modalResult.data) {
-      this.valueToDestiny = modalResult.data;
+      this.exchangeRateForTransfer = modalResult.data;
     }
   }
 
-  async setDestinyValue() {
+  /** Calculate and set the exchange rate for a transfer between two accounts of different currencies */
+  async setExchangeRateForTransfers() {
     if (
       this.mode != 'Transfer' ||
       this.movementFrom.currency === (this.movementDestiny as Account).currency
     ) {
-      this.valueToDestiny = undefined;
+      this.exchangeRateForTransfer = undefined;
       return;
     }
 
-    const exchangeRate = await this.exchangeRateService.getExchangeRate(
-      this.movementFrom.currency,
-      (this.movementDestiny as Account).currency
-    );
-
-    this.valueToDestiny = exchangeRate * Number(this.value);
+    this.exchangeRateForTransfer =
+      await this.exchangeRateService.getExchangeRate(
+        this.movementFrom.currency,
+        (this.movementDestiny as Account).currency
+      );
   }
 
   async openAccountSelector(toSelect: 1 | 2 = 1) {
@@ -390,9 +399,13 @@ export class TransactionFormPage {
       } else {
         if (toSelect == 1) this.movementFrom = modalResult.data[0];
         if (toSelect == 2) this.movementDestiny = modalResult.data[0];
+
+        this.getExchangeToPreferredCurrency().then((res) => {
+          this.exchangeToPreferredCurrency = res;
+        });
       }
 
-      this.setDestinyValue().then(() => {});
+      this.setExchangeRateForTransfers().then(() => {});
     }
   }
 
@@ -457,8 +470,8 @@ export class TransactionFormPage {
         ...(this.movementToEdit && {
           id: this.movementToEdit.id,
         }),
-        ...(this.valueToDestiny && {
-          valueInDestiny: this.valueToDestiny,
+        ...(this.exchangeRateForTransfer && {
+          valueInDestiny: Number(this.value) * this.exchangeRateForTransfer,
         }),
         receivingAccount: this.movementDestiny as Account,
       });
