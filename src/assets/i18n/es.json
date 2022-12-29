@@ -188,7 +188,12 @@
       "from": "Cuenta origen",
       "to": "Cuenta destino",
       "currency-info-add": "Se transpasarán {{x}} a la cuenta de destino &#183; Pulsa para editar",
-      "currency-info-edit": "Se han transpasado {{x}} a la cuenta de destino &#183; Pulsa para editar"
+      "currency-info-edit": "Se han transpasado {{x}} a la cuenta de destino &#183; Pulsa para editar",
+      "currency-exchange-selector": {
+        "title": "Editar cambio entre divisas",
+        "exchange-rate": "Tipo de cambio",
+        "value-in-destiny": "Cantidad transferida en destino"
+      }
     }
   },
   "RECURRENT-TRANSACTIONS": {

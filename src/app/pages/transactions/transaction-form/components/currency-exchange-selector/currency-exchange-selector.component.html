@@ -1,13 +1,13 @@
-<app-dynamic-sheet-modal [title]="'hcdhjchjcvhj'" (dismissed)="dismiss()" (confirmed)="submit()">
+<app-dynamic-sheet-modal [title]="'TRANSFER.FORM.currency-exchange-selector.title'" (dismissed)="dismiss()" (confirmed)="submit()">
 
-  <div class="px" *transloco="let t">
+  <div class="px" *transloco="let t; read: 'TRANSFER.FORM.currency-exchange-selector'">
     <ion-item class="w-full my" fill="outline">
-      <ion-label position="floating">{{ t("Tipo de cambio") }}</ion-label>
+      <ion-label position="floating">{{ t("exchange-rate") }}</ion-label>
       <ion-input (input)="recalculateDestiny($event)" [(ngModel)]="exchangeRate" type="number"></ion-input>
     </ion-item>
 
     <ion-item class="w-full my" fill="outline">
-      <ion-label position="floating">{{ t("Cantidad a transapasar en destino") }}</ion-label>
+      <ion-label position="floating">{{ t("value-in-destiny") }}</ion-label>
       <ion-input (input)="recalculateExchangeRate($event)" [(ngModel)]="valueInDestiny" type="number"></ion-input>
     </ion-item>
   </div>
