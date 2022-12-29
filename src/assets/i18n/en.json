@@ -188,7 +188,12 @@
       "from": "Origin account",
       "to": "Destination account",
       "currency-info-add": "{{x}} will be transferred to the destination account &#183; Click to edit",
-      "currency-info-edit": "{{x}} have been transferred to the destination account &#183; Click to edit"
+      "currency-info-edit": "{{x}} have been transferred to the destination account &#183; Click to edit",
+      "currency-exchange-selector": {
+        "title": "Edit exchange between currencies",
+        "exchange-rate": "Exchange rate",
+        "value-in-destiny": "Amount transferred in destination"
+      }
     }
   },
   "RECURRENT-TRANSACTIONS": {
