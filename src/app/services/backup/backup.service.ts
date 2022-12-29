@@ -7,15 +7,18 @@ import {
   currentMonth,
   currentYear,
 } from 'src/app/constants/constants';
+import * as XLSX from 'xlsx';
 import { AccountService } from '../db/account/account.service';
 import { BudgetService } from '../db/budget/budget.service';
 import { CategoryService } from '../db/category/category.service';
 import { CookieService } from '../db/cookie/cookie.service';
-import { Cookies } from '../db/cookie/cookies.model';
+import { Cookies, defaultCookies } from '../db/cookie/cookies.model';
+import { defaultSettings } from '../db/settings/settings.model';
 import { SettingsService } from '../db/settings/settings.service';
 import { StorageService } from '../db/storage.service';
 import { Transaction } from '../db/transaction/transaction.model';
 import { TransactionService } from '../db/transaction/transaction.service';
+import { UserData } from '../db/user-data.model';
 import { UserDataService } from '../db/user-data.service';
 import { FilterService } from '../filters/filter.service';
 import { ToastService } from '../ionic/toast.service';
@@ -39,14 +42,32 @@ export class BackupService {
     private filterService: FilterService
   ) {}
 
+  /** Resets all the user data to its default values */
+  async resetAllData() {
+    const userData: UserData = {
+      accounts: [],
+      budgets: [],
+      transactions: [],
+      settings: defaultSettings,
+      cookies: defaultCookies,
+      categories: undefined,
+    };
+
+    await this.categoryService.getInitialCategories();
+
+    await this.storage.setItem('userData', userData);
+  }
+
   /**
    * @param fileReaderResult The result of the fileReader.onload() function
    */
   async importDataFromFile(fileReaderResult: string | ArrayBuffer) {
     let data = JSON.parse(fileReaderResult as string);
 
+    console.log(data);
+
     if ((data.cookies as Cookies).modelVersion === '1') {
-      data = this.storage.migrateFromV1();
+      data = await this.storage.migrateFromV1(data);
     }
 
     await this.userDataService.setUserData(data);
@@ -74,33 +95,79 @@ export class BackupService {
     });
   }
 
-  /** Convert a transaction array (json object) to csv, and export the converted result
+  /** Convert a transaction array (json object) to a spreadsheet format, and export the converted result
    *
-   * @param data The array of transactions. Each transaction should have one additional key to indicate the account of the transactions. The order of the keys of each transaction should be the same
+   * @param data The array of transactions
+   * @param format The spreadsheet format (CSV or Excel)
+   * @param separator The separator to use for the CSV columns
    */
-  async exportCSV(data: Transaction[]) {
+  async exportSpreadsheet(
+    data: Transaction[],
+    format: 'csv' | 'xlsx' = 'csv',
+    separator: ';' | ',' = ','
+  ) {
     let csvData = '';
 
+    let keys = [
+      'ID',
+      'Amount',
+      'Date',
+      'Note',
+      'Account',
+      'Category',
+      'Subcategory',
+    ];
+
     if (data[0]) {
-      Object.keys(data[0]).forEach((key) => {
-        csvData += key + ';';
+      keys.forEach((key) => {
+        csvData += key + separator;
       });
     }
 
     csvData += '\n';
 
     data.forEach((transaction) => {
-      Object.keys(transaction).forEach((key) => {
-        csvData += String(transaction[key]) + ';';
-      });
+      csvData +=
+        transaction.id +
+        separator +
+        transaction.value +
+        separator +
+        transaction.date +
+        separator +
+        (transaction.text ?? '') +
+        separator +
+        transaction.account.name +
+        separator +
+        (transaction.category.parentCategory
+          ? transaction.category.parentCategory.name
+          : transaction.category.name) +
+        separator +
+        (transaction.category.parentCategory ? transaction.category.name : '');
 
       csvData += '\n';
     });
 
-    await this.downloadFile(csvData, 'transactions', 'csv');
+    if (format == 'csv') {
+      await this.downloadFile(csvData, 'transactions', 'csv');
+    } else if (format == 'xlsx') {
+      const arrayOfArrayCsv = csvData.split('\n').map((row: string) => {
+        return row.split(separator);
+      });
+
+      const wb = XLSX.utils.book_new();
+      const newWs = XLSX.utils.aoa_to_sheet(arrayOfArrayCsv);
+      XLSX.utils.book_append_sheet(wb, newWs);
+      const rawExcel = XLSX.write(wb, { type: 'buffer' });
+
+      await this.downloadFile(rawExcel, 'transactions', 'xlsx' as any);
+    }
   }
 
-  async downloadFile(data: string, filename: string, filetype: 'json' | 'csv') {
+  async downloadFile(
+    data: string,
+    filename: string,
+    filetype: 'json' | 'csv' | 'xlsx'
+  ) {
     if (this.platform.is('hybrid')) {
       if (await Share.canShare()) {
         Filesystem.writeFile({
@@ -162,6 +229,9 @@ export class BackupService {
 
       if (filetype == 'json') mimetype = 'application/json';
       else if (filetype == 'csv') mimetype = 'text/csv';
+      else if (filetype == 'xlsx')
+        mimetype =
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
       const a = document.createElement('a');
       a.style.display = 'none';

@@ -67,5 +67,9 @@ testem.log
 .DS_Store
 Thumbs.db
 
+# Cypress E2E
+tests/cypress/videos
+tests/cypress/screenshots
+
 # Monekin specific
 build/*

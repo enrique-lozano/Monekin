@@ -26,6 +26,8 @@ export class OnboardingPage implements OnInit, AfterContentChecked {
   currentSlide = 0;
   userCurrency: Currency;
 
+  dataImported = false;
+
   constructor(
     private router: Router,
     private currencyService: CurrencyService,
@@ -94,7 +96,7 @@ export class OnboardingPage implements OnInit, AfterContentChecked {
   }
 
   onFileSelected() {
-    const filesUpload: any = document.querySelector('#file-input');
+    const filesUpload: HTMLInputElement = document.querySelector('#file-input');
 
     if (filesUpload.files && filesUpload.files.length > 0) {
       const fileReader: FileReader = new FileReader();
@@ -103,7 +105,9 @@ export class OnboardingPage implements OnInit, AfterContentChecked {
         if (fileReader.result) {
           this.backupService
             .importDataFromFile(fileReader.result)
-            .then(() => {})
+            .then(() => {
+              this.dataImported = true;
+            })
             .catch((err) => {
               this.toast.present('BACKUP.IMPORT.error', 'danger');
               console.error(err);

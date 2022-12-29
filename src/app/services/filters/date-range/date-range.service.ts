@@ -1,5 +1,5 @@
 import { formatDate } from '@angular/common';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { currentMonth, currentYear } from 'src/app/constants/constants';
 import { LangService } from '../../translate/translate.service';
 import { UtilsService } from '../../utils/utils.service';
@@ -14,7 +14,11 @@ export class DateRangeService {
   startDate: Date;
   endDate: Date;
 
-  constructor(private utils: UtilsService, private lang: LangService) {}
+  constructor(
+    private utils: UtilsService,
+    private lang: LangService,
+    @Inject(LOCALE_ID) private userLocale: string
+  ) {}
 
   /** Get the start and the end of the current selected period */
   async getCurrentDateRange() {
@@ -138,13 +142,9 @@ export class DateRangeService {
 
     if (this.dateRangeSelected == DateRange.Monthly) {
       if (currentYear == startDateRange.getFullYear()) {
-        return formatDate(startDateRange, 'MMMM', this.lang.getSelectedLang());
+        return formatDate(startDateRange, 'MMMM', this.userLocale);
       } else {
-        return formatDate(
-          startDateRange,
-          'MMMM - yyyy',
-          this.lang.getSelectedLang()
-        );
+        return formatDate(startDateRange, 'MMMM - yyyy', this.userLocale);
       }
     } else if (this.dateRangeSelected == DateRange.Annualy) {
       return String(startDateRange.getFullYear());

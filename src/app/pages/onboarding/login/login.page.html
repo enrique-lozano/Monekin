@@ -1,24 +1,19 @@
-<ion-content class="p">
+<ion-content class="p" *transloco="let t">
 
   <div class="main-container">
     <header>
       <img src="assets/resources/appIcon-removebg.png" alt="App Icon" class="app-icon">
-      <h1 class="mt-l">Bienvenido a Monekin</h1>
-      <h5 class="my">Tu gestor de finanzas personales</h5>
+      <h1 class="mt-l">{{ t("INTRO.welcome") }}</h1>
+      <h5 class="my">{{ t("INTRO.welcome.subtitle") }}</h5>
     </header>
 
     <div>
-      <p class="account-description"> <strong>CUENTA SIN CONEXIÓN:</strong> <br /> Tus datos serán guardados unicamente en tu dispositivo, y estarán
-        seguros mientras no desinstales la app o cambies de telefono. Para prevenir la perdida de datos se recomienda realizar una copia de
-        seguridad regularmente desde los ajustes de la app </p>
-      <ion-button expand="block" [routerLink]="'/onboarding'">Iniciar sesión offline</ion-button>
+      <p class="account-description" [innerHTML]="t('INTRO.offline.descr')"></p>
+      <ion-button expand="block" [routerLink]="'/onboarding'" data-cy="start-offline">{{ t("INTRO.offline.start") }}</ion-button>
     </div>
   </div>
 
 </ion-content>
 
-<ion-footer class="">
-  <p class="m-0 thin" style="font-size: 0.8em;">
-    Al iniciar sesión aceptas la política de privacidad y los terminos de uso de la aplicación
-  </p>
+<ion-footer class="px thin" style="font-size: 0.8em;" *transloco="let t" [innerHTML]="t('INTRO.welcome.footer')">
 </ion-footer>

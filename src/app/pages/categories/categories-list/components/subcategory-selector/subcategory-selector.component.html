@@ -1,10 +1,6 @@
-<ng-container *transloco="let t">
+<app-dynamic-sheet-modal [title]="'CATEGORIES.SELECT.select-subcategory'" [displayFooterButtons]="false">
 
-  <ion-toolbar>
-    <ion-title>{{ t("CATEGORIES.SELECT.select-subcategory") }}</ion-title>
-  </ion-toolbar>
-
-  <div class="p">
+  <div class="p" *transloco="let t">
 
     <ion-chip [outline]="true" (click)="selectCategory(category)" [ngClass]="{'selected': category?.id === selectedCategory?.id}"
       [style.backgroundColor]="category?.id === selectedCategory?.id ? ('#' + category?.color) : ''">
@@ -20,6 +16,9 @@
       <ion-label>{{subcat.name}}</ion-label>
     </ion-chip>
   </div>
+</app-dynamic-sheet-modal>
+
+<ng-container *transloco="let t">
 
   <ion-footer class="p pt-xs ion-no-border">
     <ion-button expand="block" (click)="submit()">

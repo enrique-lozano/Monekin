@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title *transloco="let t">{{ t("SETTINGS.legal")}}</ion-title>
+    <ion-title *transloco="let t">{{ t("SETTINGS.PROJECT.legal")}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -23,5 +23,7 @@
 
   </ion-list>
 
-
 </ion-content>
+
+<ion-footer class="px text-justify thin" style="font-size: 0.8em;" *transloco="let t" [innerHTML]="t('SETTINGS.LICENSES.footer')">
+</ion-footer>
