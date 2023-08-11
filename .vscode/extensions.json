@@ -1,8 +1,7 @@
 {
   "recommendations": [
-    "ionic.ionic",
-    "Angular.ng-template",
-    "johnpapa.Angular2",
+    "Dart-Code.flutter",
+    "Dart-Code.dart-code",
     "aaron-bond.better-comments",
     "usernamehw.errorlens",
     "dbaeumer.vscode-eslint",

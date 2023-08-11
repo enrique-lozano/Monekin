@@ -1,7 +1,0 @@
-{
-  "name": "Monekin",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular"
-}
