@@ -1,13 +1,17 @@
+# See https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file for more info on this file
+
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: 'pub'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
 
     target-branch: develop
 
     open-pull-requests-limit: 3
+    labels:
+      - 'type: build'
 
     commit-message:
-      prefix: "build"
+      prefix: 'build'
