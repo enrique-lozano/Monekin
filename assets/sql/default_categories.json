@@ -1,0 +1,361 @@
+[
+  {
+    "names": {
+      "en": "Aesthetics & Health",
+      "es": "Salud & belleza"
+    },
+    "icon": "ecg_heart",
+    "color": "CC0605",
+    "type": "E",
+    "subcategories": [
+      {
+        "icon": "self_care",
+        "names": {
+          "es": "Cuidado personal",
+          "en": "Personal care"
+        }
+      },
+      {
+        "icon": "medication",
+        "names": {
+          "es": "Médico",
+          "en": "Medical"
+        }
+      },
+      {
+        "icon": "fitness_center",
+        "names": {
+          "es": "Fitness",
+          "en": "Fitness"
+        }
+      }
+    ]
+  },
+  {
+    "names": {
+      "en": "Food & Dining",
+      "es": "Alimentación"
+    },
+    "icon": "shopping_cart",
+    "color": "F4A900",
+    "type": "E",
+    "subcategories": [
+      {
+        "icon": "dinner_dining",
+        "names": {
+          "es": "Comer fuera",
+          "en": "Eating out"
+        }
+      },
+      {
+        "icon": "nutrition",
+        "names": {
+          "es": "Comestibles",
+          "en": "Groceries"
+        }
+      }
+    ]
+  },
+  {
+    "names": {
+      "en": "Purchases",
+      "es": "Compras"
+    },
+    "icon": "shopping_bag",
+    "color": "3D642D",
+    "type": "E",
+    "subcategories": [
+      {
+        "icon": "library_books",
+        "names": {
+          "es": "Papelería",
+          "en": "Stationery"
+        }
+      },
+      {
+        "icon": "computer",
+        "names": {
+          "es": "Electrónica",
+          "en": "Electronics"
+        }
+      },
+      {
+        "icon": "checkroom",
+        "names": {
+          "es": "Ropa",
+          "en": "Clothes"
+        }
+      }
+    ]
+  },
+  {
+    "names": {
+      "en": "Leisure",
+      "es": "Entretenimiento"
+    },
+    "icon": "golf_course",
+    "color": "2A6478",
+    "type": "E",
+    "subcategories": [
+      {
+        "icon": "celebration",
+        "names": {
+          "es": "Fiesta",
+          "en": "Party"
+        }
+      },
+      {
+        "icon": "museum",
+        "names": {
+          "es": "Eventos y sitios de interes",
+          "en": "Sites of interest and events"
+        }
+      },
+      {
+        "icon": "music_note",
+        "names": {
+          "es": "Música y conciertos",
+          "en": "Music"
+        }
+      },
+      {
+        "icon": "movie",
+        "names": {
+          "es": "Cine y TV",
+          "en": "TV-shows and movies"
+        }
+      }
+    ]
+  },
+  {
+    "names": {
+      "en": "Transportation",
+      "es": "Transporte"
+    },
+    "icon": "tram",
+    "color": "84C3BE",
+    "type": "E",
+    "subcategories": [
+      {
+        "icon": "train",
+        "names": {
+          "es": "Transporte público",
+          "en": "Public Transport"
+        }
+      },
+      {
+        "icon": "speed",
+        "names": {
+          "es": "Gasolina",
+          "en": "Fuel"
+        }
+      },
+      {
+        "icon": "receipt_long",
+        "names": {
+          "es": "Multas y parkimétros",
+          "en": "Tolls and parking"
+        }
+      },
+      {
+        "icon": "receipt",
+        "names": {
+          "es": "Seguro e impuestos",
+          "en": "Taxes and car insurance"
+        }
+      },
+      {
+        "icon": "car_repair",
+        "names": {
+          "es": "Mantenimiento",
+          "en": "Maintenance"
+        }
+      }
+    ]
+  },
+  {
+    "names": {
+      "en": "Housing",
+      "es": "Hogar"
+    },
+    "icon": "home",
+    "color": "4E5452",
+    "type": "E",
+    "subcategories": [
+      {
+        "icon": "key",
+        "names": {
+          "es": "Alquiler",
+          "en": "Rental"
+        }
+      },
+      {
+        "icon": "water",
+        "names": {
+          "es": "Agua",
+          "en": "Water"
+        }
+      },
+      {
+        "icon": "bolt",
+        "names": {
+          "es": "Luz",
+          "en": "Electricity"
+        }
+      },
+      {
+        "icon": "language",
+        "names": {
+          "es": "Internet",
+          "en": "Internet"
+        }
+      },
+      {
+        "icon": "call",
+        "names": {
+          "es": "Teléfono",
+          "en": "Phone"
+        }
+      },
+      {
+        "icon": "sprinkler",
+        "names": {
+          "es": "Productos para el hogar",
+          "en": "Home supplies"
+        }
+      },
+      {
+        "icon": "bed",
+        "names": {
+          "es": "Muebles y accesorios",
+          "en": "Furniture and appliances"
+        }
+      }
+    ]
+  },
+  {
+    "names": {
+      "en": "Taxes",
+      "es": "Impuestos"
+    },
+    "icon": "receipt",
+    "color": "B32821",
+    "type": "E"
+  },
+  {
+    "names": {
+      "en": "Plants & Pets",
+      "es": "Plantas & mascotas"
+    },
+    "icon": "pets",
+    "color": "587246",
+    "type": "E",
+    "subcategories": []
+  },
+  {
+    "names": {
+      "en": "Holidays",
+      "es": "Vacaciones"
+    },
+    "icon": "landscape",
+    "color": "FF7514",
+    "type": "E",
+    "subcategories": [
+      {
+        "icon": "flight",
+        "names": {
+          "es": "Viaje",
+          "en": "Travel"
+        }
+      },
+      {
+        "icon": "bed",
+        "names": {
+          "es": "Alojamiento",
+          "en": "Accommodation"
+        }
+      }
+    ]
+  },
+  {
+    "names": {
+      "en": "Salary",
+      "es": "Salario"
+    },
+    "icon": "work",
+    "color": "4C9141",
+    "type": "I"
+  },
+  {
+    "names": {
+      "en": "Gifts & Donations",
+      "es": "Regalos & Donaciones"
+    },
+    "icon": "redeem",
+    "color": "BB4B4B",
+    "type": "B"
+  },
+  {
+    "names": {
+      "en": "Sale",
+      "es": "Venta"
+    },
+    "icon": "logout",
+    "color": "CDA434",
+    "type": "I"
+  },
+  {
+    "names": {
+      "en": "Investments",
+      "es": "Inversión"
+    },
+    "icon": "auto_graph",
+    "color": "1E2460",
+    "type": "B"
+  },
+  {
+    "names": {
+      "en": "Gambling",
+      "es": "Juegos & apuestas"
+    },
+    "icon": "casino",
+    "color": "2A6478",
+    "type": "B"
+  },
+  {
+    "names": {
+      "en": "Awards & Honours",
+      "es": "Premios & reconocimientos"
+    },
+    "icon": "military_tech",
+    "color": "F39F18",
+    "type": "I"
+  },
+  {
+    "names": {
+      "en": "Debts",
+      "es": "Deudas & devoluciones"
+    },
+    "icon": "redo",
+    "color": "781F19",
+    "type": "E"
+  },
+  {
+    "names": {
+      "en": "Loans",
+      "es": "Préstamos"
+    },
+    "icon": "undo",
+    "color": "781F19",
+    "type": "I"
+  },
+  {
+    "names": {
+      "en": "Others",
+      "es": "Otros"
+    },
+    "icon": "inventory_2",
+    "color": "403A3A",
+    "type": "B"
+  }
+]
