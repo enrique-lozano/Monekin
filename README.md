@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="src/assets/resources/appIcon.png"  alt="App Icon" width="100" height="100">
+    <img src="assets/resources/appIcon.png"  alt="App Icon" width="100" height="100">
   </a>
 
   <h1 align="center">Monekin - Official repository</h1>
@@ -49,10 +49,10 @@
 
 ## About the project
 
-|          |             |                |       |
-| :---:    |    :----:   |          :---: | :---: |
-| ![1](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva1.PNG) | ![2](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva2.PNG) | ![3](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva3.PNG) | ![4](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva4.PNG)
-| ![5](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva5.PNG) | ![6](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva6.PNG)
+|                                                                                                                    |                                                                                                                    |                                                                                                                    |                                                                                                                    |
+| :----------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: |
+| ![1](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva1.PNG) | ![2](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva2.PNG) | ![3](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva3.PNG) | ![4](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva4.PNG) |
+| ![5](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva5.PNG) | ![6](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva6.PNG) |
 
 ### Why Monekin?
 
@@ -60,7 +60,9 @@ After a lot of research on the marketplaces I could not find any application tha
 
 ### Tech Stack
 
-Developed in Ionic and Angular, which allows it to be a modern and scalable application to a large number of operating systems and platforms.
+At the beggining the app was developed in Ionic and Angular. In 2023, in order to make our app better, we migrate the app to Flutter, which allow us to have a modern and scalable application for a large number of operating systems and platforms.
+
+To store and persist your data in the app we store a SQLite database directly in your device, thanks to an opensource package called [drift](https://github.com/simolus3/drift)
 
 ## Run the code locally 🚀🧑‍💻
 
@@ -68,7 +70,7 @@ The following explains how to run the project code locally. This way you will be
 
 ### Prerequisites
 
-As with any Angular project, you will need to have Node.js installed. To install it go to [here](https://nodejs.org/en/download/). Note the [Angular compatibility matrix](https://gist.github.com/LayZeeDK/c822cc812f75bb07b7c55d07ba2719b3) to download a compatible version. You should also have git installed in your machine.
+As with any Flutter project, you need to install the framework in your machine. Visit the [official docs](https://docs.flutter.dev/get-started/install) for more info. You should also have git installed in your machine.
 
 ### Installation
 
@@ -77,26 +79,29 @@ Open a terminal on your computer and go to the folder where you want to place th
 ```
 git clone https://github.com/enrique-lozano/Monekin.git
 ```
+
 ```
 cd Monekin
 ```
+
 ```
-npm install
+flutter pub get
 ```
 
-If everything went correctly these commands will finish executing without errors. Now you can run <code>npm run start:browser</code> on your terminal. When this command finish, you can open <code>http://localhost:4200</code> in your favourite browser to see the app running. The app will be refreshed when changes in the code appear.
+If everything went correctly these commands will finish executing without errors. Now you can run <code>flutter run</code> on your terminal to open the app locally in your device. The app will be refreshed when changes in the code appear. Before making any changes into the code is recommended to read the [code contribution guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/CODE_CONTRIBUTING.md)
 
 ## Contributing 🙋🏻
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make here are **greatly appreciated**. 
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make here are **greatly appreciated**.
 
 Read through our [contributing guidelines](https://github.com/enrique-lozano/Monekin/blob/main/CONTRIBUTING.md) to learn about how you can collaborate making Monekin better. **All Pull Requests are welcome** and will be studied without exception!
 
 ### Why to contribute?
+
 - We can learn for you and you can learn from us.
 - You'll appear in our contributors wall.
 - You can **include it in your CV/LinkedIn** and show recruiters that you contribute to open-source projects.
 - You'll make Monekin better.
 - You can develop the features that you miss in the app yourself, the way you want them.
 - You'll play around and learn cutting-edge technologies.
-- It's the easiest way to learn Angular/Typescript/SCSS... in a production environment.
+- It's the easiest way to learn Flutter/Dart... in a production environment.
