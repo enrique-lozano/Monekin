@@ -1,8 +1,0 @@
-<ion-list *transloco="let t">
-  <ng-container *ngFor="let item of menuItems">
-    <ion-item [disabled]="item.disabled" button *ngIf="!item.hidden" (click)="clickElement(item)">
-      <ion-icon *ngIf="item.icon" slot="start" [name]="item.icon"></ion-icon>
-      <ion-label>{{ t(item.labelKey) }}</ion-label>
-    </ion-item>
-  </ng-container>
-</ion-list>

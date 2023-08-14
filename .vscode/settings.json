@@ -1,4 +1,13 @@
 {
+  "material-icon-theme.folders.associations": {
+    "presentation": "views"
+  },
+  "files.exclude": {
+    "**/*.freezed.dart": true,
+    "**/*.g.dart": false
+  },
+  "cmake.configureOnOpen": false,
+
   "conventionalCommits.gitmoji": false,
 
   // Should be equal to the ones in the VALID_COMMIT_SCOPES.ts
@@ -8,5 +17,9 @@
     "literals",
     "assets",
     "accessibility"
-  ]
+  ],
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "python.formatting.provider": "none"
 }

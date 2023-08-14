@@ -1,0 +1,27 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - '**/*.freezed.dart'
+    - '**/*.mocks.dart'
+  errors:
+    missing_required_param: warning
+    missing_return: warning
+  enable-experiment:
+    - records
+    - patterns
+
+linter:
+  rules:
+    unnecessary_overrides: false
+    use_key_in_widget_constructors: false
+    avoid_void_async: true
+    cancel_subscriptions: true
+    package_api_docs: true
+    prefer_final_in_for_each: true
+    prefer_single_quotes: true
+    test_types_in_equals: true
+    throw_in_finally: true
+    unawaited_futures: true
+    use_colored_box: true
+    use_decorated_box: true

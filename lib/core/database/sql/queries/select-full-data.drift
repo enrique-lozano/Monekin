@@ -1,0 +1,93 @@
+--- Some inserts functions to trigger at the start
+
+---- * WHEN CONVERTING TO .sql:
+---- * --- Remove the imports 
+---- * --- Remove the function and result names (xxx:) 
+
+import './../initial/tables.drift';
+import './../../../models/account/account.dart';
+import './../../../models/category/category.dart';
+import './../../../models/budget/budget.dart';
+import './../../../models/exchange-rate/exchange_rate.dart';
+import './../../../models/transaction/transaction.dart';
+
+getAccountsWithFullData($predicate = TRUE) WITH Account: 
+    SELECT a.*, currency.** 
+    FROM accounts a 
+        INNER JOIN currencies currency 
+        ON a.currencyId = currency.code 
+    WHERE $predicate 
+    ORDER BY $orderBy
+    LIMIT $limit;
+
+getTransactionsWithFullData($predicate = TRUE) WITH MoneyTransaction: 
+    SELECT 
+        t.*, a.** as account, 
+        accountCurrency.**, 
+        receivingAccountCurrency.**, 
+        ra.** as receivingAccount, 
+        c.** as category, 
+        pc.** as parentCategory
+    FROM transactions t 
+        INNER JOIN accounts a 
+        ON t.accountID = a.id
+        INNER JOIN currencies accountCurrency 
+        ON a.currencyId = accountCurrency.code
+        LEFT JOIN accounts ra 
+        ON t.receivingAccountID = ra.id 
+        INNER JOIN currencies receivingAccountCurrency 
+        ON a.currencyId = receivingAccountCurrency.code
+        LEFT JOIN categories c 
+        ON t.categoryID = c.id
+        LEFT JOIN categories pc
+        ON c.parentCategoryID = pc.id 
+    WHERE $predicate 
+    ORDER BY $orderBy
+    LIMIT $limit;
+
+getCategoriesWithFullData($predicate = TRUE, :limit AS NUMBER) WITH Category: 
+    SELECT a.*, parentCategory.** 
+    FROM categories a 
+        LEFT JOIN categories parentCategory 
+        ON a.parentCategoryID = parentCategory.id 
+    WHERE $predicate 
+    LIMIT :limit;
+
+getExchangeRates($predicate = TRUE, :limit AS NUMBER) WITH ExchangeRate:
+    SELECT e.*, currency.**
+    FROM exchangeRates e
+        INNER JOIN currencies currency
+        ON e.currencyCode = currency.code
+    WHERE $predicate 
+    ORDER BY date
+    LIMIT :limit;
+
+getLastExchangeRates(:limit AS NUMBER) WITH ExchangeRate:
+    SELECT er.*, currency.**
+    FROM exchangeRates er
+        INNER JOIN currencies currency
+        ON er.currencyCode = currency.code
+    WHERE date = (
+                    SELECT MAX(date) 
+                        FROM exchangeRates
+                    WHERE currencyCode = er.currencyCode
+                )
+    ORDER BY currency.code
+    LIMIT :limit;
+
+getBudgetsWithFullData($predicate = TRUE) WITH Budget:
+    SELECT id, name, limitAmount, intervalPeriod, startDate, endDate,
+        LIST(
+            SELECT categoryID
+            FROM budgetCategory
+            WHERE budgetID = budgets.id
+        ) AS categories,
+        LIST(
+            SELECT accountID
+            FROM budgetAccount
+            WHERE budgetID = budgets.id
+        ) AS accounts
+    FROM budgets
+    WHERE $predicate 
+    ORDER BY $orderBy
+    LIMIT $limit;

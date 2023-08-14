@@ -1,0 +1,172 @@
+---- * WHEN CONVERTING TO .sql:
+---- * --- Remove the 'AS ....' after a table creation  
+---- * --- Convert DATETIME to TEXT, BOOL to INT and ENUMS to TEXT
+---- * --- Remove the imports 
+
+import './../../../models/transaction/transaction.dart';
+import './../../../models/category/category.dart';
+import './../../../models/account/account.dart';
+import './../../services/user-setting/user_setting_service.dart';
+import './../../services/app-data/app_data_service.dart';
+
+CREATE TABLE IF NOT EXISTS currencies (
+    -- ISO 4217 currency code. Identifies a currency uniquely ([see more](https://en.wikipedia.org/wiki/ISO_4217#List_of_ISO_4217_currency_codes))
+    code TEXT NOT NULL PRIMARY KEY,
+
+    -- Symbol to represent the currency
+    symbol TEXT NOT NULL
+) AS CurrencyInDB;
+
+CREATE TABLE IF NOT EXISTS exchangeRates (
+    id TEXT NOT NULL PRIMARY KEY,
+    date DATETIME NOT NULL,
+    currencyCode TEXT NOT NULL REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
+    exchangeRate REAL NOT NULL
+) AS ExchangeRateInDB;
+
+CREATE TABLE IF NOT EXISTS currencyNames (
+    currencyCode TEXT NOT NULL PRIMARY KEY REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
+    en TEXT NOT NULL,
+    es TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS accounts (
+    id TEXT NOT NULL PRIMARY KEY,
+    
+    -- Account name (unique among user accounts)
+    name TEXT UNIQUE NOT NULL,
+    
+    iniValue REAL NOT NULL,
+
+    -- Date of creation of this account
+    date DATETIME NOT NULL,
+
+    description TEXT,
+    type ENUMNAME(AccountType) NOT NULL CHECK(type IN ('normal', 'saving')),
+    
+    iconId TEXT NOT NULL,
+
+    -- If true, the account will be no-selectable for new transactions and will not appear in some stats
+    isArchived BOOLEAN NOT NULL DEFAULT 0,
+
+    -- ID of the currency used by this account and therefore all transactions contained in it
+    currencyId TEXT NOT NULL REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
+    
+    iban TEXT,
+    swift TEXT
+) AS AccountInDB;
+
+CREATE TABLE IF NOT EXISTS categories (
+    id TEXT NOT NULL PRIMARY KEY,
+
+    -- The name of the category
+    name TEXT UNIQUE NOT NULL,
+
+    -- Id of the icon that represents this category
+    iconId TEXT NOT NULL,
+
+    -- Color that will be used to represent this category in some screens. If null, the color of the parent's category will be used
+    color TEXT,
+
+    -- Type of the category. If null, the type of the parent's category will be used
+    type ENUMNAME(CategoryType) CHECK(type IN ('E', 'I', 'B')),
+
+    -- Parent category of this category (if any)
+    parentCategoryID TEXT REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    --- Color and type are not needed in child categories. They are inherited from the parent 
+    CHECK ((parentCategoryID IS NULL) != (color IS NULL AND type IS NULL)),
+    CHECK ((color IS NULL) == (type IS NULL))
+) AS CategoryInDB;
+
+CREATE TABLE IF NOT EXISTS transactions (
+  id TEXT NOT NULL PRIMARY KEY,
+  
+  -- Date on which the payment of this transaction was made
+  date DATETIME NOT NULL,
+
+  accountID TEXT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  
+  -- Monetary amount related to this transaction, in the currency of its account
+  value REAL NOT NULL,
+
+  -- Title or main label of this transaction. If not defined, the category name is used normally as fallback
+  title TEXT,
+
+  -- Some description, notes or extra info about the transaction.
+  notes TEXT,
+
+  status ENUMNAME(TransactionStatus) CHECK(status IN ('voided', 'pending', 'reconciled', 'unreconciled')),
+  categoryID TEXT REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  valueInDestiny REAL,
+  receivingAccountID TEXT REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  isHidden BOOLEAN NOT NULL DEFAULT 0,
+
+  /* --- Recurrency data --- */
+
+  -- The time range with which new transactions to be paid will appear (weekly, monthly...)
+  intervalPeriod ENUMNAME(TransactionPeriodicity) CHECK(intervalPeriod IN ('day','week','month','year')),
+
+  -- Within the time range chosen in the `intervalPeriod` attribute, every few times new transactions will appear to be paid. For example, putting a 2 here and having monthly as `intervalPeriod`, new payments will appear every two months
+  intervalEach INTEGER,
+
+  -- Date until which payments will continue to appear. If this field or the `remainingTransactions` field is not specified, the recurring transaction will never end.
+  endDate DATETIME,
+
+  -- Number of payments remaining. This value must dicrease by one in the case a new payment is done within this rule. If this field or the `endDate` field is not specified, the recurring transaction will never end.
+  remainingTransactions INTEGER,
+
+  -- Should be Transfer or income/expense (not both). Leaving both to null is also not valid
+  CHECK ((receivingAccountID IS NULL) != (categoryID IS NULL)),
+
+  -- Recurrency data mandatory fields (if the transaction is required)
+  CHECK ((intervalPeriod IS NULL) == (intervalEach IS NULL)),
+
+  CHECK ((intervalPeriod IS NOT NULL) OR (endDate IS NULL)),
+  CHECK ((intervalPeriod IS NOT NULL) OR (remainingTransactions IS NULL)),
+
+  -- valueInDestiny can not be defined for non-transfer transactions:
+  CHECK (categoryID IS NULL OR valueInDestiny IS NULL)
+) AS TransactionInDB;
+
+
+CREATE TABLE IF NOT EXISTS budgets (
+  id TEXT NOT NULL PRIMARY KEY,
+
+  -- Title of the budget and its identificator. For instance, this name is unique (the user can not have another budget with the same name) 
+  name TEXT NOT NULL UNIQUE,
+
+  --  Maximum value that the budget takes. It will always be in the user's preferred currency
+  limitAmount REAL NOT NULL,
+
+  -- Periodicity of the budget. If null, the budget is a single-time budget
+  intervalPeriod ENUMNAME(TransactionPeriodicity) CHECK(intervalPeriod IN ('day','week','month','year')),
+
+  -- Custom start date. Only if the budget has no periodicity
+  startDate DATETIME,
+
+  -- Custom end date. Only if the budget has no periodicity
+  endDate DATETIME,
+
+  CHECK ((startDate IS NULL AND endDate IS NULL) != (intervalPeriod IS NULL))
+) AS BudgetInDB;
+
+CREATE TABLE IF NOT EXISTS budgetCategory (
+  budgetID TEXT NOT NULL REFERENCES budgets(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  categoryID TEXT NOT NULL REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS budgetAccount (
+  budgetID TEXT NOT NULL REFERENCES budgets(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  accountID TEXT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS userSettings (
+  settingKey ENUMNAME(SettingKey) NOT NULL PRIMARY KEY,
+  settingValue TEXT
+);
+
+CREATE TABLE IF NOT EXISTS appData (
+  appDataKey ENUMNAME(AppDataKey) NOT NULL PRIMARY KEY,
+  appDataValue TEXT
+);
