@@ -15,8 +15,17 @@ import 'package:rxdart/rxdart.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(
-    ProviderScope(
+  runApp(const MonekinAppEntryPoint());
+}
+
+class MonekinAppEntryPoint extends StatelessWidget {
+  const MonekinAppEntryPoint({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ProviderScope(
       child: StreamBuilder(
           stream: Rx.combineLatest2(
               UserSettingService.instance.getSettings((p0) =>
@@ -61,7 +70,7 @@ void main() {
                   .appDataValue;
 
               return TranslationProvider(
-                child: MyApp(
+                child: MaterialAppContainer(
                   goToIntro: userHasSeenIntro != '1',
                   themeMode: ThemeMode.values.byName(userSettings
                       .firstWhere((element) =>
@@ -73,12 +82,13 @@ void main() {
 
             return Container();
           }),
-    ),
-  );
+    );
+  }
 }
 
-class MyApp extends ConsumerWidget {
-  const MyApp({super.key, required this.themeMode, required this.goToIntro});
+class MaterialAppContainer extends ConsumerWidget {
+  const MaterialAppContainer(
+      {super.key, required this.themeMode, required this.goToIntro});
 
   final ThemeMode themeMode;
   final bool goToIntro;
