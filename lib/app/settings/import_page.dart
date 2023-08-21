@@ -37,6 +37,16 @@ class ImportPage extends StatelessWidget {
                           BackupDatabaseService()
                               .importDatabase()
                               .then((value) {
+                            if (!value) {
+                              Navigator.pop(context);
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text(t.backup.import.cancelled)),
+                              );
+                              return;
+                            }
+
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
