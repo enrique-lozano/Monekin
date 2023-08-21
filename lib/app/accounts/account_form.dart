@@ -240,9 +240,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                                         .colorScheme
                                         .onBackground)),
                           ),
-                          const SizedBox(
-                            width: 20,
-                          ),
+                          const SizedBox(width: 20),
                           Expanded(
                             child: TextFormField(
                               controller: _nameController,
@@ -259,9 +257,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                           )
                         ],
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      const SizedBox(height: 20),
                       TextFormField(
                         controller: _balanceController,
                         decoration: InputDecoration(
