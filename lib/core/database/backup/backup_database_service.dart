@@ -115,7 +115,7 @@ class BackupDatabaseService {
     return downloadPath;
   }
 
-  Future<void> importDatabase() async {
+  Future<bool> importDatabase() async {
     FilePickerResult? result;
 
     try {
@@ -135,7 +135,11 @@ class BackupDatabaseService {
           .writeAsBytes(await file.readAsBytes(), mode: FileMode.write);
 
       db.markTablesUpdated(db.allTables);
+
+      return true;
     }
+
+    return false;
   }
 
   Future<File?> readFile() async {
