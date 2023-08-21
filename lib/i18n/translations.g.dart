@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 849 (424 per locale)
+/// Strings: 851 (425 per locale)
 ///
-/// Built on 2023-08-11 at 16:05 UTC
+/// Built on 2023-08-21 at 12:17 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -894,6 +894,7 @@ class _TranslationsBackupImportEn {
 	String get tap_to_select_file => 'Tap to select a file';
 	late final _TranslationsBackupImportManualImportEn manual_import = _TranslationsBackupImportManualImportEn._(_root);
 	String get success => 'Import performed successfully';
+	String get cancelled => 'Import was cancelled by the user';
 	String get error => 'Error importing file. Please contact developer via lozin.technologies@gmail.com';
 }
 
@@ -1927,6 +1928,7 @@ class _TranslationsBackupImportEs implements _TranslationsBackupImportEn {
 	@override String get select_other_file => 'Selecciona otro fichero';
 	@override late final _TranslationsBackupImportManualImportEs manual_import = _TranslationsBackupImportManualImportEs._(_root);
 	@override String get success => 'Importación realizada con exito';
+	@override String get cancelled => 'La importación fue cancelada por el usuario';
 	@override String get error => 'Error al importar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com';
 }
 
@@ -2597,6 +2599,7 @@ extension on _TranslationsEn {
 			case 'backup.import.manual_import.steps_descr.5': return 'Specifies the columns for other optional transaction attributes';
 			case 'backup.import.manual_import.success': return ({required Object x}) => 'Successfully imported ${x} transactions';
 			case 'backup.import.success': return 'Import performed successfully';
+			case 'backup.import.cancelled': return 'Import was cancelled by the user';
 			case 'backup.import.error': return 'Error importing file. Please contact developer via lozin.technologies@gmail.com';
 			case 'settings.title': return 'Settings';
 			case 'settings.edit_profile': return 'Edit profile';
@@ -3048,6 +3051,7 @@ extension on _TranslationsEs {
 			case 'backup.import.manual_import.steps_descr.4': return 'Selecciona la columna donde se especifica la fecha de cada transacción. En caso de no especificarse, se crearan transacciones con la fecha actual';
 			case 'backup.import.manual_import.steps_descr.5': return 'Especifica las columnas para otros atributos optativos de las transacciones';
 			case 'backup.import.success': return 'Importación realizada con exito';
+			case 'backup.import.cancelled': return 'La importación fue cancelada por el usuario';
 			case 'backup.import.error': return 'Error al importar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com';
 			case 'settings.title': return 'Ajustes';
 			case 'settings.edit_profile': return 'Editar perfil';
