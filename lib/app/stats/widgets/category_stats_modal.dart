@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/stats/widgets/chart_by_categories.dart';
+import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -16,7 +17,8 @@ class CategoryStatsModal extends StatelessWidget {
   final ChartByCategoriesDataItem categoryData;
   final String dateRangeDisplayName;
 
-  List<Map<String, dynamic>> getSubcategoriesData(BuildContext context) {
+  Future<List<Map<String, dynamic>>> getSubcategoriesData(
+      BuildContext context) async {
     final t = Translations.of(context);
 
     List<Map<String, dynamic>> subcategories = [];
@@ -28,14 +30,20 @@ class CategoryStatsModal extends StatelessWidget {
           x['name'] == transaction.category!.name ||
           x['name'] == notBelongToAnySubcatName);
 
+      final trValue = await ExchangeRateService.instance
+          .calculateExchangeRateToPreferredCurrency(
+              fromCurrency: transaction.account.currencyId,
+              amount: transaction.value.abs())
+          .first;
+
       if (categoryToEdit != null) {
-        categoryToEdit['value'] += transaction.value.abs();
+        categoryToEdit['value'] += trValue;
       } else {
         subcategories.add({
           'name': transaction.category!.name == categoryData.category.name
               ? notBelongToAnySubcatName
               : transaction.category!.name,
-          'value': transaction.value.abs(),
+          'value': trValue,
           'icon': transaction.category!.icon,
         });
       }
@@ -47,9 +55,6 @@ class CategoryStatsModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-
-    final List<Map<String, dynamic>> subcategories =
-        getSubcategoriesData(context);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -97,28 +102,40 @@ class CategoryStatsModal extends StatelessWidget {
           ),
         ),
         const Divider(),
-        Column(
-          children: List.generate(subcategories.length, (index) {
-            final subcategoryData = subcategories[index];
+        FutureBuilder(
+            future: getSubcategoriesData(context),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const LinearProgressIndicator();
+              }
 
-            return ListTile(
-              leading: (subcategoryData['icon'] as SupportedIcon).displayFilled(
-                color: ColorHex.get(categoryData.category.color),
-              ),
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(subcategoryData['name']),
-                  CurrencyDisplayer(amountToConvert: subcategoryData['value'])
-                ],
-              ),
-              subtitle: AnimatedProgressBar(
-                value: subcategoryData['value'] / categoryData.value,
-                color: ColorHex.get(categoryData.category.color),
-              ),
-            );
-          }),
-        )
+              final subcategories = snapshot.data!;
+
+              return Column(
+                children: List.generate(subcategories.length, (index) {
+                  final subcategoryData = subcategories[index];
+
+                  return ListTile(
+                    leading: (subcategoryData['icon'] as SupportedIcon)
+                        .displayFilled(
+                      color: ColorHex.get(categoryData.category.color),
+                    ),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(subcategoryData['name']),
+                        CurrencyDisplayer(
+                            amountToConvert: subcategoryData['value'])
+                      ],
+                    ),
+                    subtitle: AnimatedProgressBar(
+                      value: subcategoryData['value'] / categoryData.value,
+                      color: ColorHex.get(categoryData.category.color),
+                    ),
+                  );
+                }),
+              );
+            })
       ],
     );
   }
