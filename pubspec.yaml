@@ -5,7 +5,7 @@ description: The best personal finance controller on the market. Learn to save a
 # following page: https://dart.dev/tools/pub/pubspec
 
 publish_to: 'none'
-version: 4.0.0+400000
+version: 4.0.1+400001
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
