@@ -495,6 +495,7 @@
         "success": "Successfully imported {{x}} transactions"
       },
       "success": "Import performed successfully",
+      "cancelled": "Import was cancelled by the user",
       "error": "Error importing file. Please contact developer via lozin.technologies@gmail.com"
     }
   },

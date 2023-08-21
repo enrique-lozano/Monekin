@@ -497,6 +497,7 @@
         ]
       },
       "success": "Importación realizada con exito",
+      "cancelled": "La importación fue cancelada por el usuario",
       "error": "Error al importar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com"
     }
   },
