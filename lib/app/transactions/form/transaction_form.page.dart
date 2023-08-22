@@ -467,7 +467,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     final trColor = isBlue
         ? Theme.of(context).brightness == Brightness.light
             ? Theme.of(context).primaryColorLight
-            : Theme.of(context).primaryColor
+            : Theme.of(context).primaryColor.darken()
         : (selectedCategory!.type.isIncome ? Colors.green : Colors.red);
 
     final trColorLighten = trColor.lighten(isBlue ? 0.275 : 0.375);
