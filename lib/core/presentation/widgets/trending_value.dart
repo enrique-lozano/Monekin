@@ -20,7 +20,7 @@ class TrendingValue extends StatelessWidget {
 
   final bool filled, outlined;
 
-  Widget paintTrendValue() {
+  Widget paintTrendValue(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -30,14 +30,13 @@ class TrendingValue extends StatelessWidget {
           color: _getColorBasedOnPercentage(),
         ),
         const SizedBox(width: 6),
-        UINumberFormatter(
-          UINumberFormatterMode.percentage,
+        UINumberFormatter.percentage(
           amountToConvert: percentage,
           textStyle: TextStyle(
               fontSize: fontSize,
               fontWeight: fontWeight,
               color: _getColorBasedOnPercentage()),
-        ).getTextWidget()
+        ).getTextWidget(context)
       ],
     );
   }
@@ -62,10 +61,10 @@ class TrendingValue extends StatelessWidget {
               ? Border.all(color: _getColorBasedOnPercentage(), width: 1)
               : null,
         ),
-        child: paintTrendValue(),
+        child: paintTrendValue(context),
       );
     } else {
-      return paintTrendValue();
+      return paintTrendValue(context);
     }
   }
 }
