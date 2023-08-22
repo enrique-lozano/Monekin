@@ -467,7 +467,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     final trColor = isBlue
         ? Theme.of(context).brightness == Brightness.light
             ? Theme.of(context).primaryColorLight
-            : Theme.of(context).primaryColor
+            : Theme.of(context).primaryColor.darken()
         : (selectedCategory!.type.isIncome ? Colors.green : Colors.red);
 
     final trColorLighten = trColor.lighten(isBlue ? 0.275 : 0.375);
@@ -519,13 +519,19 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                           children: [
                             Expanded(
                               child: Center(
-                                child: CurrencyDisplayer(
-                                  amountToConvert: valueToNumber ?? 0,
-                                  currency: fromAccount?.currency,
-                                  textStyle: Theme.of(context)
+                                child: AnimatedDefaultTextStyle(
+                                  duration: const Duration(milliseconds: 400),
+                                  style: Theme.of(context)
                                       .textTheme
                                       .headlineLarge!
-                                      .copyWith(fontSize: 32),
+                                      .copyWith(
+                                          fontSize: (valueToNumber ?? 0) >= 1000
+                                              ? 36
+                                              : 42),
+                                  child: CurrencyDisplayer(
+                                    amountToConvert: valueToNumber ?? 0,
+                                    currency: fromAccount?.currency,
+                                  ),
                                 ),
                               ),
                             ),

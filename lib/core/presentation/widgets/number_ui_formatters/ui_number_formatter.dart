@@ -8,11 +8,29 @@ import 'package:monekin/core/database/app_db.dart';
 enum UINumberFormatterMode { currency, percentage, decimal }
 
 class UINumberFormatter {
-  const UINumberFormatter(this.mode,
+  const UINumberFormatter.decimal(
       {required this.amountToConvert,
-      this.currency,
       this.showDecimals = true,
-      this.textStyle = const TextStyle(inherit: true)});
+      this.textStyle = const TextStyle(inherit: true),
+      this.decimalsStyle})
+      : mode = UINumberFormatterMode.decimal,
+        currency = null;
+
+  const UINumberFormatter.percentage(
+      {required this.amountToConvert,
+      this.showDecimals = true,
+      this.textStyle = const TextStyle(inherit: true),
+      this.decimalsStyle})
+      : mode = UINumberFormatterMode.percentage,
+        currency = null;
+
+  const UINumberFormatter.currency(
+      {required this.amountToConvert,
+      required this.currency,
+      this.showDecimals = true,
+      this.textStyle = const TextStyle(inherit: true),
+      this.decimalsStyle})
+      : mode = UINumberFormatterMode.currency;
 
   final double amountToConvert;
 
@@ -20,23 +38,23 @@ class UINumberFormatter {
   final CurrencyInDB? currency;
 
   final TextStyle textStyle;
+  final TextStyle? decimalsStyle;
 
   final bool showDecimals;
 
   final UINumberFormatterMode mode;
 
-  List<TextSpan> getTextSpanList() {
+  List<TextSpan> getTextSpanList(BuildContext context) {
     final String decimalSep =
         numberFormatSymbols[Intl.defaultLocale]?.DECIMAL_SEP;
-    final valueFontSize = textStyle.fontSize ?? 16;
+
+    final valueFontSize =
+        (textStyle.fontSize ?? DefaultTextStyle.of(context).style.fontSize) ??
+            16;
 
     List<String> parts = [];
 
     if (mode == UINumberFormatterMode.currency) {
-      if (currency == null) {
-        throw Exception('A currency should be specified');
-      }
-
       // Remove the decimal separator from the symbol, otherwise the parts won't be splitted correctly
       final String symbolWithoutDecSep =
           currency!.symbol.replaceAll(decimalSep, '');
@@ -71,18 +89,19 @@ class UINumberFormatter {
       if (showDecimals && parts.length > 1)
         TextSpan(
             text: parts[1],
-            style: textStyle.copyWith(
-              fontWeight: FontWeight.w300,
-              fontSize: max(valueFontSize * 0.75, 14),
-            ))
+            style: decimalsStyle ??
+                textStyle.copyWith(
+                  fontWeight: FontWeight.w300,
+                  fontSize: max(valueFontSize * 0.75, 14),
+                ))
     ];
   }
 
-  Text getTextWidget() {
+  Text getTextWidget(BuildContext context) {
     return Text.rich(
       TextSpan(
         style: textStyle,
-        children: getTextSpanList(),
+        children: getTextSpanList(context),
       ),
     );
   }
