@@ -31,11 +31,12 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
           label: t.general.edit,
           icon: Icons.edit,
           onClick: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AccountFormPage(
-                        account: account,
-                      )))),
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AccountFormPage(
+                          account: account,
+                        )),
+              )),
       ListTileActionItem(
           label: t.transfer.create,
           icon: Icons.swap_vert_rounded,
