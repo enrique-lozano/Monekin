@@ -14,6 +14,7 @@ import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -372,7 +373,8 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   SizedBox(
-                    width: constraints.maxWidth > 600
+                    width: constraints.maxWidth >
+                            BreakPoint.getById(BreakpointID.md).width
                         ? constraints.maxWidth / 2 - 16
                         : double.infinity,
                     child: CardWithHeader(
@@ -495,7 +497,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   SizedBox(
-                    width: constraints.maxWidth > 600
+                    width: constraints.maxWidth >
+                            BreakPoint.getById(BreakpointID.md).width
                         ? constraints.maxWidth / 2 - 16
                         : double.infinity,
                     child: CardWithHeader(
@@ -525,7 +528,8 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   SizedBox(
-                    width: constraints.maxWidth > 600
+                    width: constraints.maxWidth >
+                            BreakPoint.getById(BreakpointID.md).width
                         ? constraints.maxWidth / 2 - 16
                         : double.infinity,
                     child: CardWithHeader(
@@ -544,7 +548,8 @@ class _HomePageState extends State<HomePage> {
                         }),
                   ),
                   SizedBox(
-                    width: constraints.maxWidth > 600
+                    width: constraints.maxWidth >
+                            BreakPoint.getById(BreakpointID.md).width
                         ? constraints.maxWidth / 2 - 16
                         : double.infinity,
                     child: CardWithHeader(
