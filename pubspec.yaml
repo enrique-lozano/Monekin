@@ -5,7 +5,15 @@ description: The best personal finance controller on the market. Learn to save a
 # following page: https://dart.dev/tools/pub/pubspec
 
 publish_to: 'none'
-version: 4.0.1+400001
+
+# [VersionName]+[VersionNumber] -> The version number follow the below convetion:
+#
+# XXXXX.YY.ZZZ
+#
+# The X represents the major releases, and can be up to infinity. Never start by a zero
+# The Y represents the minor releases, and can be up to 99. Always start by a zero
+# The Z represents the patch releases, and can be up to 999. Always start by a zero
+version: 4.1.0+410000
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -50,7 +58,7 @@ dependencies:
   url_launcher: ^6.1.11
   uuid: ^3.0.7
   rxdart: ^0.27.7
-  flex_color_scheme: ^7.1.2
+  flex_color_scheme: ^7.3.1
   csv: ^5.0.2
   dotted_border: ^2.0.0+3
   package_info_plus: ^4.0.2
@@ -83,6 +91,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/resources/
     - assets/icons/app_onboarding/
     - assets/icons/avatars/
     - assets/icons/currency_flags/
