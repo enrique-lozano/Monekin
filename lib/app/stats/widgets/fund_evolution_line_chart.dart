@@ -226,13 +226,12 @@ class FundEvolutionLineChart extends StatelessWidget {
                                 return LineTooltipItem(
                                     '${snapshot.data!.labels[flSpot.x.toInt()]} \n',
                                     const TextStyle(),
-                                    children: UINumberFormatter(
-                                            UINumberFormatterMode.decimal,
+                                    children: UINumberFormatter.decimal(
                                             amountToConvert: snapshot.data!
                                                 .balance[flSpot.x.toInt()],
                                             textStyle: const TextStyle(
                                                 fontWeight: FontWeight.bold))
-                                        .getTextSpanList());
+                                        .getTextSpanList(context));
                               }).toList();
                             },
                           )),

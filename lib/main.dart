@@ -4,7 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/home/home.page.dart';
-import 'package:monekin/app/onboarding/onboarding.dart';
+import 'package:monekin/app/onboarding/intro.page.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
@@ -25,6 +25,8 @@ class MonekinAppEntryPoint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("------------------ APP ENTRY POINT ------------------");
+
     return ProviderScope(
       child: StreamBuilder(
           stream: Rx.combineLatest2(
@@ -36,8 +38,6 @@ class MonekinAppEntryPoint extends StatelessWidget {
               (a, b) => (a, b)),
           builder: (context, snapshot) {
             print('Finding initial user settings...');
-
-            print(snapshot);
 
             if (snapshot.hasData) {
               final userSettings = snapshot.data!.$1;
@@ -111,7 +111,7 @@ class MaterialAppContainer extends ConsumerWidget {
           if (!goToIntro) {
             return const HomePage();
           } else {
-            return const OnboardingPage();
+            return const IntroPage();
           }
         }));
   }

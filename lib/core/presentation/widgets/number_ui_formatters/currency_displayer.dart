@@ -12,7 +12,8 @@ class CurrencyDisplayer extends StatelessWidget {
       required this.amountToConvert,
       this.currency,
       this.showDecimals = true,
-      this.textStyle = const TextStyle(inherit: true)});
+      this.textStyle = const TextStyle(inherit: true),
+      this.decimalsStyle});
 
   final double amountToConvert;
 
@@ -20,21 +21,24 @@ class CurrencyDisplayer extends StatelessWidget {
   final CurrencyInDB? currency;
 
   final TextStyle textStyle;
+  final TextStyle? decimalsStyle;
 
   final bool showDecimals;
 
   @override
   Widget build(BuildContext context) {
-    final valueFontSize = textStyle.fontSize ?? 16;
+    final valueFontSize =
+        (textStyle.fontSize ?? DefaultTextStyle.of(context).style.fontSize) ??
+            16;
 
     if (currency != null) {
-      return UINumberFormatter(
-        UINumberFormatterMode.currency,
+      return UINumberFormatter.currency(
         amountToConvert: amountToConvert,
         currency: currency,
         showDecimals: showDecimals,
         textStyle: textStyle,
-      ).getTextWidget();
+        decimalsStyle: decimalsStyle,
+      ).getTextWidget(context);
     }
 
     return StreamBuilder(
@@ -44,14 +48,14 @@ class CurrencyDisplayer extends StatelessWidget {
             return Skeleton(width: 50, height: valueFontSize);
           }
 
-          return UINumberFormatter(
-            UINumberFormatterMode.currency,
+          return UINumberFormatter.currency(
             amountToConvert: amountToConvert,
             currency: CurrencyInDB(
                 code: snapshot.data!.code, symbol: snapshot.data!.symbol),
             showDecimals: showDecimals,
             textStyle: textStyle,
-          ).getTextWidget();
+            decimalsStyle: decimalsStyle,
+          ).getTextWidget(context);
         });
   }
 }

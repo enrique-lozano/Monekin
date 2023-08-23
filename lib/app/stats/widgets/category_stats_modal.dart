@@ -8,6 +8,20 @@ import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
+class SubcategoryModalItem {
+  String id;
+  String name;
+  SupportedIcon icon;
+  double value;
+
+  SubcategoryModalItem({
+    required this.id,
+    required this.name,
+    required this.icon,
+    required this.value,
+  });
+}
+
 class CategoryStatsModal extends StatelessWidget {
   const CategoryStatsModal(
       {super.key,
@@ -17,18 +31,17 @@ class CategoryStatsModal extends StatelessWidget {
   final ChartByCategoriesDataItem categoryData;
   final String dateRangeDisplayName;
 
-  Future<List<Map<String, dynamic>>> getSubcategoriesData(
+  Future<List<SubcategoryModalItem>> getSubcategoriesData(
       BuildContext context) async {
     final t = Translations.of(context);
 
-    List<Map<String, dynamic>> subcategories = [];
+    List<SubcategoryModalItem> subcategories = [];
 
     for (final transaction in categoryData.transactions) {
       final notBelongToAnySubcatName = t.categories.select.without_subcategory;
 
-      final categoryToEdit = subcategories.firstWhereOrNull((x) =>
-          x['name'] == transaction.category!.name ||
-          x['name'] == notBelongToAnySubcatName);
+      final categoryToEdit = subcategories
+          .firstWhereOrNull((x) => x.id == transaction.category!.id);
 
       final trValue = await ExchangeRateService.instance
           .calculateExchangeRateToPreferredCurrency(
@@ -36,20 +49,23 @@ class CategoryStatsModal extends StatelessWidget {
               amount: transaction.value.abs())
           .first;
 
+      print(transaction);
+      print("-----------");
+
       if (categoryToEdit != null) {
-        categoryToEdit['value'] += trValue;
+        categoryToEdit.value += trValue;
       } else {
-        subcategories.add({
-          'name': transaction.category!.name == categoryData.category.name
-              ? notBelongToAnySubcatName
-              : transaction.category!.name,
-          'value': trValue,
-          'icon': transaction.category!.icon,
-        });
+        subcategories.add(SubcategoryModalItem(
+            id: transaction.category!.id,
+            name: transaction.category!.isMainCategory
+                ? notBelongToAnySubcatName
+                : transaction.category!.name,
+            icon: transaction.category!.icon,
+            value: trValue));
       }
     }
 
-    return subcategories.sorted((a, b) => b['value'].compareTo(a['value']));
+    return subcategories.sorted((a, b) => b.value.compareTo(a.value));
   }
 
   @override
@@ -116,20 +132,19 @@ class CategoryStatsModal extends StatelessWidget {
                   final subcategoryData = subcategories[index];
 
                   return ListTile(
-                    leading: (subcategoryData['icon'] as SupportedIcon)
-                        .displayFilled(
+                    leading: subcategoryData.icon.displayFilled(
                       color: ColorHex.get(categoryData.category.color),
                     ),
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(subcategoryData['name']),
+                        Text(subcategoryData.name),
                         CurrencyDisplayer(
-                            amountToConvert: subcategoryData['value'])
+                            amountToConvert: subcategoryData.value)
                       ],
                     ),
                     subtitle: AnimatedProgressBar(
-                      value: subcategoryData['value'] / categoryData.value,
+                      value: subcategoryData.value / categoryData.value,
                       color: ColorHex.get(categoryData.category.color),
                     ),
                   );

@@ -298,10 +298,10 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
                       ),
-                      children: UINumberFormatter(UINumberFormatterMode.decimal,
+                      children: UINumberFormatter.decimal(
                               amountToConvert: rod.toY,
                               textStyle: const TextStyle(fontSize: 16))
-                          .getTextSpanList(),
+                          .getTextSpanList(context),
                     );
                   },
                 ),
