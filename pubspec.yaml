@@ -83,6 +83,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/resources/
     - assets/icons/app_onboarding/
     - assets/icons/avatars/
     - assets/icons/currency_flags/

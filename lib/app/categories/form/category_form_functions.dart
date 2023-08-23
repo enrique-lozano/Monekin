@@ -39,7 +39,7 @@ class CategoryFormFunctions {
                 initialData: 0,
                 builder: (context, snapshot) {
                   return HTMLText(
-                      text: t.categories
+                      htmlString: t.categories
                           .delete_warning_message(x: snapshot.data!),
                       tags: const {
                         'b': TextStyle(fontWeight: FontWeight.bold)
@@ -110,7 +110,7 @@ class CategoryFormFunctions {
                     initialData: 0,
                     builder: (context, snapshot) {
                       return HTMLText(
-                          text: t.categories.merge_warning1(
+                          htmlString: t.categories.merge_warning1(
                               destiny: selCategory.name,
                               from: category.name,
                               x: snapshot.data!),
@@ -120,7 +120,8 @@ class CategoryFormFunctions {
                     }),
                 const SizedBox(height: 6),
                 HTMLText(
-                    text: t.categories.merge_warning2(from: category.name),
+                    htmlString:
+                        t.categories.merge_warning2(from: category.name),
                     tags: const {'b': TextStyle(fontWeight: FontWeight.bold)})
               ],
             ),
@@ -205,7 +206,7 @@ class CategoryFormFunctions {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 HTMLText(
-                    text: t.categories
+                    htmlString: t.categories
                         .make_child_warning1(destiny: selCategory.name),
                     tags: const {'b': TextStyle(fontWeight: FontWeight.bold)}),
                 const SizedBox(height: 6),
@@ -226,7 +227,7 @@ class CategoryFormFunctions {
                     initialData: 0,
                     builder: (context, snapshot) {
                       return HTMLText(
-                          text: t.categories.make_child_warning2(
+                          htmlString: t.categories.make_child_warning2(
                               destiny: selCategory.name, x: snapshot.data!),
                           tags: const {
                             'b': TextStyle(fontWeight: FontWeight.bold)
