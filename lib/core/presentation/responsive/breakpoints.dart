@@ -26,7 +26,7 @@ class BreakPoint extends Equatable {
     return breakpoints.first;
   }
 
-  static getById(BreakpointID id) {
+  static BreakPoint getById(BreakpointID id) {
     return appBreakPoints.firstWhere((element) => element.id == id);
   }
 
