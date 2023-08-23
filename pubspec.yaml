@@ -5,7 +5,15 @@ description: The best personal finance controller on the market. Learn to save a
 # following page: https://dart.dev/tools/pub/pubspec
 
 publish_to: 'none'
-version: 4.0.1+400001
+
+# [VersionName]+[VersionNumber] -> The version number follow the below convetion:
+#
+# XXXXX.YY.ZZZ
+#
+# The X represents the major releases, and can be up to infinity. Never start by a zero
+# The Y represents the minor releases, and can be up to 99. Always start by a zero
+# The Z represents the patch releases, and can be up to 999. Always start by a zero
+version: 4.1.0+410000
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
