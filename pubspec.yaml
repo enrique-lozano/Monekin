@@ -53,7 +53,7 @@ dependencies:
   permission_handler: ^10.2.0
   json_annotation: ^4.8.1
   fl_chart: ^0.63.0
-  file_picker: ^5.3.0
+  file_picker: ^5.5.0
   share_plus: ^7.1.0
   url_launcher: ^6.1.11
   uuid: ^3.0.7
