@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 853 (426 per locale)
+/// Strings: 855 (427 per locale)
 ///
-/// Built on 2023-08-23 at 12:38 UTC
+/// Built on 2023-09-30 at 12:01 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -330,6 +330,7 @@ class _TranslationsTransactionEn {
 	String get delete => 'Delete transaction';
 	String get delete_warning_message => 'This action is irreversible. The current balance of your accounts and all your statistics will be recalculated';
 	String get delete_success => 'Transaction deleted correctly';
+	String get details => 'Movement details';
 	late final _TranslationsTransactionNextPaymentsEn next_payments = _TranslationsTransactionNextPaymentsEn._(_root);
 	late final _TranslationsTransactionListEn list = _TranslationsTransactionListEn._(_root);
 	late final _TranslationsTransactionFormEn form = _TranslationsTransactionFormEn._(_root);
@@ -1365,6 +1366,7 @@ class _TranslationsTransactionEs implements _TranslationsTransactionEn {
 	@override String get delete => 'Eliminar transacción';
 	@override String get delete_warning_message => 'Esta acción es irreversible. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas';
 	@override String get delete_success => 'Transacción eliminada correctamente';
+	@override String get details => 'Detalles del movimiento';
 	@override late final _TranslationsTransactionNextPaymentsEs next_payments = _TranslationsTransactionNextPaymentsEs._(_root);
 	@override late final _TranslationsTransactionListEs list = _TranslationsTransactionListEs._(_root);
 	@override late final _TranslationsTransactionFormEs form = _TranslationsTransactionFormEs._(_root);
@@ -2395,6 +2397,7 @@ extension on _TranslationsEn {
 			case 'transaction.delete': return 'Delete transaction';
 			case 'transaction.delete_warning_message': return 'This action is irreversible. The current balance of your accounts and all your statistics will be recalculated';
 			case 'transaction.delete_success': return 'Transaction deleted correctly';
+			case 'transaction.details': return 'Movement details';
 			case 'transaction.next_payments.accept': return 'Accept';
 			case 'transaction.next_payments.skip': return 'Skip';
 			case 'transaction.next_payments.skip_success': return 'Successfully skipped transaction';
@@ -2848,6 +2851,7 @@ extension on _TranslationsEs {
 			case 'transaction.delete': return 'Eliminar transacción';
 			case 'transaction.delete_warning_message': return 'Esta acción es irreversible. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas';
 			case 'transaction.delete_success': return 'Transacción eliminada correctamente';
+			case 'transaction.details': return 'Detalles del movimiento';
 			case 'transaction.next_payments.skip': return 'Saltar';
 			case 'transaction.next_payments.skip_success': return 'Transacción saltada con exito';
 			case 'transaction.next_payments.skip_dialog_title': return 'Saltar transacción';
