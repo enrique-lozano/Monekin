@@ -8,20 +8,20 @@ ThemeData getThemeData(bool dark) {
     name: 'App color scheme',
     description: 'The app color scheme',
     light: FlexSchemeColor(
-      primary: Color(0xFF005DB7),
-      primaryContainer: Color(0xFFD6E3FF),
+      primary: Color.fromARGB(255, 15, 51, 117),
+      primaryContainer: Color(0xFFDAE2FF),
       secondary: Color(0xFF555F71),
       secondaryContainer: Color(0xFFDAE2F9),
-      tertiary: Color(0xFF6F5575),
-      tertiaryContainer: Color(0xFFF9D8FD),
+      tertiary: Color(0xFF735572),
+      tertiaryContainer: Color(0xFFFED7F9),
     ),
     dark: FlexSchemeColor(
-      primary: Color(0xFFA9C7FF),
-      primaryContainer: Color(0xFF00468C),
-      secondary: Color(0xFFBDC7DC),
-      secondaryContainer: Color(0xFF3E4758),
-      tertiary: Color(0xFFDCBCE1),
-      tertiaryContainer: Color(0xFF563E5C),
+      primary: Color(0xFF8FCDFF),
+      primaryContainer: Color(0xFF004B71),
+      secondary: Color(0xFFB8C8D9),
+      secondaryContainer: Color(0xFF394956),
+      tertiary: Color(0xFF735572),
+      tertiaryContainer: Color(0xFFFED7F9),
     ),
   );
 
@@ -49,9 +49,19 @@ ThemeData getThemeData(bool dark) {
       fontFamily: 'Nunito');
 
   return theme.copyWith(
+    appBarTheme: AppBarTheme(
+      color: theme.colorScheme.primary,
+      foregroundColor: theme.colorScheme.onPrimary,
+      shadowColor: theme.primaryColorDark,
+    ),
     dividerTheme: const DividerThemeData(space: 0),
+    cardColor: theme.colorScheme.surface,
     inputDecorationTheme: const InputDecorationTheme(
       border: OutlineInputBorder(),
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: theme.colorScheme.primary,
+      foregroundColor: theme.colorScheme.onPrimary,
     ),
     bottomSheetTheme: theme.bottomSheetTheme.copyWith(
       elevation: 0,
@@ -66,6 +76,10 @@ ThemeData getThemeData(bool dark) {
           listTileSmallText.copyWith(fontWeight: FontWeight.w300),
       leadingAndTrailingTextStyle: listTileSmallText,
     ),
+    tabBarTheme: TabBarTheme(
+        unselectedLabelColor: theme.colorScheme.onPrimary,
+        labelColor: theme.colorScheme.primaryContainer,
+        indicatorColor: theme.colorScheme.primaryContainer),
     useMaterial3: true,
     materialTapTargetSize: MaterialTapTargetSize.padded,
     visualDensity: VisualDensity.standard,
