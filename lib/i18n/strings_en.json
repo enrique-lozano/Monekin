@@ -232,6 +232,7 @@
     "delete": "Delete transaction",
     "delete.warning-message": "This action is irreversible. The current balance of your accounts and all your statistics will be recalculated",
     "delete.success": "Transaction deleted correctly",
+    "details": "Movement details",
     "NEXT-PAYMENTS": {
       "accept": "Accept",
       "skip": "Skip",
@@ -309,6 +310,7 @@
     }
   },
   "ACCOUNT": {
+    "details": "Account details",
     "date": "Opening date",
     "balance": "Account balance",
     "n_transactions": "Number of transactions",

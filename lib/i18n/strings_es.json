@@ -233,6 +233,7 @@
     "delete": "Eliminar transacción",
     "delete.warning-message": "Esta acción es irreversible. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas",
     "delete.success": "Transacción eliminada correctamente",
+    "details": "Detalles del movimiento",
     "NEXT-PAYMENTS": {
       "skip": "Saltar",
       "skip.success": "Transacción saltada con exito",
@@ -301,7 +302,6 @@
   "RECURRENT-TRANSACTIONS": {
     "title": "Movimientos recurrentes",
     "empty": "Parece que no posees ninguna transacción recurrente. Crea una transacción que se repita mensual, anual o semanalmente y aparecerá aquí",
-
     "DETAILS": {
       "title": "Transaccion recurrente",
       "next-payment-info": "El próximo movimiento de esta transacción tendrá lugar el día {{date}}. Puedes elegir si deseas saltar este movimiento o aceptarlo en la fecha que elijas",
@@ -311,6 +311,7 @@
     }
   },
   "ACCOUNT": {
+    "details": "Detalles de la cuenta",
     "date": "Fecha de apertura",
     "balance": "Saldo de la cuenta",
     "n_transactions": "Número de transacciones",

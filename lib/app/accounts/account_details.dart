@@ -228,7 +228,10 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
         initialData: widget.account,
         builder: (context, snapshot) {
           return Scaffold(
-            appBar: AppBar(elevation: 0),
+            appBar: AppBar(
+              elevation: 0,
+              title: Text(t.account.details),
+            ),
             body: Builder(builder: (context) {
               if (!snapshot.hasData) {
                 return const LinearProgressIndicator();
@@ -244,36 +247,45 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
 
               return Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(account.name),
-                            StreamBuilder(
-                                initialData: 0.0,
-                                stream: AccountService.instance
-                                    .getAccountMoney(account: account),
-                                builder: (context, snapshot) {
-                                  return CurrencyDisplayer(
-                                    amountToConvert: snapshot.data!,
-                                    currency: account.currency,
-                                    textStyle: const TextStyle(
-                                        fontSize: 32,
-                                        fontWeight: FontWeight.w600),
-                                  );
-                                }),
-                          ],
-                        ),
-                        Hero(
-                            tag: 'account-icon-${widget.account.id}',
-                            child: account.displayIcon(context, size: 48))
-                      ],
+                  DefaultTextStyle.merge(
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary),
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text(account.name),
+                              StreamBuilder(
+                                  initialData: 0.0,
+                                  stream: AccountService.instance
+                                      .getAccountMoney(account: account),
+                                  builder: (context, snapshot) {
+                                    return CurrencyDisplayer(
+                                      amountToConvert: snapshot.data!,
+                                      currency: account.currency,
+                                      textStyle: const TextStyle(
+                                          fontSize: 32,
+                                          fontWeight: FontWeight.w600),
+                                    );
+                                  }),
+                            ],
+                          ),
+                          Positioned(
+                            bottom: -42,
+                            right: 0,
+                            child: Hero(
+                                tag: 'account-icon-${widget.account.id}',
+                                child: account.displayIcon(context, size: 48)),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 24),
