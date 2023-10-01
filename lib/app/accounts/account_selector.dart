@@ -12,6 +12,7 @@ Future<List<Account>?> showAccountSelectorBottomSheet(
   return showModalBottomSheet<List<Account>>(
     context: context,
     showDragHandle: true,
+    isScrollControlled: true,
     builder: (context) {
       return accountSelector;
     },
