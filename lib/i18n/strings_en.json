@@ -310,6 +310,7 @@
     }
   },
   "ACCOUNT": {
+    "details": "Account details",
     "date": "Opening date",
     "balance": "Account balance",
     "n_transactions": "Number of transactions",
