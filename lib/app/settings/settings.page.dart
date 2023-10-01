@@ -136,7 +136,7 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(height: 22),
               createListSeparator(t.settings.data.display),
               createSettingItem(
-                  title: 'Export',
+                  title: t.backup.export.title_sort,
                   subtitle: t.settings.data.export_descr,
                   icon: Icons.cloud_download_outlined,
                   onTap: () {
