@@ -91,34 +91,36 @@ class IntroPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: BreakpointContainer(
-          mdChild: Row(
-            children: [
-              Flexible(
-                  flex: 1,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 12, horizontal: 24),
-                    child: buildFirstSection(context),
-                  )),
-              const VerticalDivider(),
-              Flexible(
-                  flex: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 12, horizontal: 24),
-                    child: buildSecondSection(context),
-                  )),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              buildFirstSection(context),
-              buildSecondSection(context),
-            ],
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: BreakpointContainer(
+            mdChild: Row(
+              children: [
+                Flexible(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 24),
+                      child: buildFirstSection(context),
+                    )),
+                const VerticalDivider(),
+                Flexible(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 24),
+                      child: buildSecondSection(context),
+                    )),
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                buildFirstSection(context),
+                buildSecondSection(context),
+              ],
+            ),
           ),
         ),
       ),
