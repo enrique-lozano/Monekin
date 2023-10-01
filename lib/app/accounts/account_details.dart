@@ -228,7 +228,10 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
         initialData: widget.account,
         builder: (context, snapshot) {
           return Scaffold(
-            appBar: AppBar(elevation: 0),
+            appBar: AppBar(
+              elevation: 0,
+              title: Text(t.account.details),
+            ),
             body: Builder(builder: (context) {
               if (!snapshot.hasData) {
                 return const LinearProgressIndicator();
