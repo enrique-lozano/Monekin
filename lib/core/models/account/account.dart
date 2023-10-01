@@ -69,8 +69,9 @@ class Account extends AccountInDB {
 
   Widget displayIcon(BuildContext context, {double size = 22}) {
     return Container(
-      padding: const EdgeInsets.all(4),
+      padding: EdgeInsets.all(size * 0.185),
       decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.onPrimary,
           border: Border.all(width: 2, color: Theme.of(context).primaryColor),
           borderRadius: BorderRadius.circular(1000)),
       child: icon.display(size: size, color: Theme.of(context).primaryColor),

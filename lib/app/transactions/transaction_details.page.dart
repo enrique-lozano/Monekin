@@ -416,7 +416,10 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
         initialData: widget.transaction,
         builder: (context, snapshot) {
           return Scaffold(
-            appBar: AppBar(elevation: 0),
+            appBar: AppBar(
+              elevation: 0,
+              title: Text(t.transaction.details),
+            ),
             body: Builder(builder: (context) {
               if (!snapshot.hasData) {
                 return const LinearProgressIndicator();
@@ -428,16 +431,21 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                   .transactionDetailsActions(context,
                       transaction: transaction, navigateBackOnDelete: true);
 
-              return SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+              return Column(
+                children: [
+                  DefaultTextStyle.merge(
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary),
+                      child: Stack(
+                        clipBehavior: Clip.none,
                         children: [
                           Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               CurrencyDisplayer(
                                 amountToConvert: transaction.value,
@@ -481,218 +489,246 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                 ),
                             ],
                           ),
-                          Hero(
-                            tag: 'transaction-icon-${transaction.id}',
-                            child: Container(
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color:
-                                    transaction.color(context).withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(12),
+                          Positioned(
+                            bottom: -32,
+                            right: 0,
+                            child: Hero(
+                              tag: 'transaction-icon-${transaction.id}',
+                              child: Container(
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color:
+                                      transaction.color(context).lighten(0.5),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: Theme.of(context).primaryColor,
+                                    width: 0,
+                                  ),
+                                ),
+                                child: transaction.isIncomeOrExpense
+                                    ? transaction.category!.icon.display(
+                                        color: transaction.color(context),
+                                        size: 42,
+                                      )
+                                    : const Icon(Icons.swap_vert, size: 42),
                               ),
-                              child: transaction.isIncomeOrExpense
-                                  ? transaction.category!.icon.display(
-                                      color: transaction.color(context),
-                                      size: 42,
-                                    )
-                                  : const Icon(Icons.swap_vert, size: 42),
                             ),
                           )
                         ],
                       ),
-                      const SizedBox(height: 24),
-                      if (transaction.status != null ||
-                          transaction.recurrentInfo.isRecurrent)
-                        statusDisplayer(transaction),
-                      CardWithHeader(
-                        title: 'Info',
-                        body: SizedBox(
-                          width: double.infinity,
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ListTile(
-                                  //contentPadding: const EdgeInsets.all(2),
-                                  title: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(t.general.account),
-                                      Chip(
-                                          label: Text(transaction.account.name),
-                                          padding: const EdgeInsets.all(2),
-                                          labelStyle: TextStyle(
-                                              color: Theme.of(context)
-                                                  .primaryColor),
-                                          side: BorderSide(
-                                              color: Theme.of(context)
-                                                  .primaryColor),
-                                          backgroundColor: Theme.of(context)
-                                              .primaryColor
-                                              .withOpacity(0.12),
-                                          avatar: CircleAvatar(
-                                            backgroundColor: Colors.transparent,
-                                            child: transaction.account.icon
-                                                .display(
-                                                    color: Theme.of(context)
-                                                        .primaryColor),
-                                          )),
-                                    ],
+                    ),
+                  ),
+                  SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 34),
+                    child: Column(
+                      children: [
+                        if (transaction.status != null ||
+                            transaction.recurrentInfo.isRecurrent)
+                          statusDisplayer(transaction),
+                        CardWithHeader(
+                          title: 'Info',
+                          body: SizedBox(
+                            width: double.infinity,
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ListTile(
+                                    //contentPadding: const EdgeInsets.all(2),
+                                    title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(t.general.account),
+                                        Chip(
+                                            label:
+                                                Text(transaction.account.name),
+                                            padding: const EdgeInsets.all(2),
+                                            labelStyle: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor),
+                                            side: BorderSide(
+                                                color: Theme.of(context)
+                                                    .primaryColor),
+                                            backgroundColor: Theme.of(context)
+                                                .primaryColor
+                                                .withOpacity(0.12),
+                                            avatar: CircleAvatar(
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              child: transaction.account.icon
+                                                  .display(
+                                                      color: Theme.of(context)
+                                                          .primaryColor),
+                                            )),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                const Divider(indent: 12),
-                                ListTile(
-                                  //contentPadding: const EdgeInsets.all(2),
-                                  title: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(transaction.isIncomeOrExpense
-                                          ? t.general.category
-                                          : t.transfer.form.to),
-                                      Chip(
-                                          label: Text(
-                                              transaction.isIncomeOrExpense
-                                                  ? transaction.category!.name
-                                                  : transaction
-                                                      .receivingAccount!.name),
-                                          padding: const EdgeInsets.all(2),
-                                          labelStyle: TextStyle(
-                                              color: transaction
-                                                  .color(context)
-                                                  .darken()),
-                                          side: BorderSide(
-                                              color: transaction
-                                                  .color(context)
-                                                  .darken()),
-                                          backgroundColor: transaction
-                                              .color(context)
-                                              .withOpacity(0.12),
-                                          avatar: CircleAvatar(
-                                            backgroundColor: Colors.transparent,
-                                            child: transaction.isIncomeOrExpense
-                                                ? transaction.category!.icon
-                                                    .display(
-                                                        color: transaction
-                                                            .color(context))
-                                                : widget.transaction
-                                                    .receivingAccount!.icon
-                                                    .display(
-                                                        color: transaction
-                                                            .color(context)),
-                                          )),
-                                    ],
-                                  ),
-                                ),
-                                StreamBuilder(
-                                    stream: CurrencyService.instance
-                                        .getUserPreferredCurrency(),
-                                    builder: (context, snapshot) {
-                                      if (!snapshot.hasData ||
-                                          snapshot.data!.code ==
-                                              transaction.account.currencyId) {
-                                        return Container();
-                                      }
-
-                                      final userCurrency = snapshot.data!;
-
-                                      return Column(
-                                        children: [
-                                          const Divider(indent: 12),
-                                          ListTile(
-                                            title: Text(
-                                              t.transaction.form
-                                                  .exchange_to_preferred_today(
-                                                      currency:
-                                                          userCurrency.code),
-                                            ),
-                                            trailing: StreamBuilder(
-                                                stream: ExchangeRateService
-                                                    .instance
-                                                    .calculateExchangeRateToPreferredCurrency(
-                                                  fromCurrency: transaction
-                                                      .account.currencyId,
-                                                  amount: transaction.value,
-                                                ),
-                                                builder: (context,
-                                                    exchangeRateSnapshot) {
-                                                  if (!exchangeRateSnapshot
-                                                      .hasData) {
-                                                    return const Skeleton(
-                                                        width: 16, height: 14);
-                                                  }
-
-                                                  return CurrencyDisplayer(
-                                                    currency: userCurrency,
-                                                    textStyle: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                    ),
-                                                    amountToConvert:
-                                                        exchangeRateSnapshot
-                                                            .data!,
-                                                  );
-                                                }),
-                                          ),
-                                          const Divider(indent: 12),
-                                          ListTile(
-                                            title: Text(
-                                              t.transaction.form
-                                                  .exchange_to_preferred_in_date(
-                                                currency: userCurrency.code,
-                                                date: DateFormat.yMd()
-                                                    .format(transaction.date),
-                                              ),
-                                            ),
-                                            trailing: StreamBuilder(
-                                                stream: ExchangeRateService
-                                                    .instance
-                                                    .calculateExchangeRateToPreferredCurrency(
-                                                  fromCurrency: transaction
-                                                      .account.currencyId,
-                                                  amount: transaction.value,
-                                                  date: transaction.date,
-                                                ),
-                                                builder: (context,
-                                                    exchangeRateSnapshot) {
-                                                  if (!exchangeRateSnapshot
-                                                      .hasData) {
-                                                    return const Skeleton(
-                                                        width: 16, height: 14);
-                                                  }
-
-                                                  return CurrencyDisplayer(
-                                                    currency: userCurrency,
-                                                    textStyle: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                    ),
-                                                    amountToConvert:
-                                                        exchangeRateSnapshot
-                                                            .data!,
-                                                  );
-                                                }),
-                                          )
-                                        ],
-                                      );
-                                    }),
-                                if (transaction.notes != null) ...[
                                   const Divider(indent: 12),
                                   ListTile(
-                                    title: Text(t.transaction.form.description),
-                                    subtitle: Text(transaction.notes!),
-                                  )
-                                ]
-                              ]),
+                                    //contentPadding: const EdgeInsets.all(2),
+                                    title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(transaction.isIncomeOrExpense
+                                            ? t.general.category
+                                            : t.transfer.form.to),
+                                        Chip(
+                                            label: Text(
+                                                transaction.isIncomeOrExpense
+                                                    ? transaction.category!.name
+                                                    : transaction
+                                                        .receivingAccount!
+                                                        .name),
+                                            padding: const EdgeInsets.all(2),
+                                            labelStyle: TextStyle(
+                                                color: transaction
+                                                    .color(context)
+                                                    .darken()),
+                                            side: BorderSide(
+                                                color: transaction
+                                                    .color(context)
+                                                    .darken()),
+                                            backgroundColor: transaction
+                                                .color(context)
+                                                .withOpacity(0.12),
+                                            avatar: CircleAvatar(
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              child: transaction
+                                                      .isIncomeOrExpense
+                                                  ? transaction.category!.icon
+                                                      .display(
+                                                          color: transaction
+                                                              .color(context))
+                                                  : widget.transaction
+                                                      .receivingAccount!.icon
+                                                      .display(
+                                                          color: transaction
+                                                              .color(context)),
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                  StreamBuilder(
+                                      stream: CurrencyService.instance
+                                          .getUserPreferredCurrency(),
+                                      builder: (context, snapshot) {
+                                        if (!snapshot.hasData ||
+                                            snapshot.data!.code ==
+                                                transaction
+                                                    .account.currencyId) {
+                                          return Container();
+                                        }
+
+                                        final userCurrency = snapshot.data!;
+
+                                        return Column(
+                                          children: [
+                                            const Divider(indent: 12),
+                                            ListTile(
+                                              title: Text(
+                                                t.transaction.form
+                                                    .exchange_to_preferred_today(
+                                                        currency:
+                                                            userCurrency.code),
+                                              ),
+                                              trailing: StreamBuilder(
+                                                  stream: ExchangeRateService
+                                                      .instance
+                                                      .calculateExchangeRateToPreferredCurrency(
+                                                    fromCurrency: transaction
+                                                        .account.currencyId,
+                                                    amount: transaction.value,
+                                                  ),
+                                                  builder: (context,
+                                                      exchangeRateSnapshot) {
+                                                    if (!exchangeRateSnapshot
+                                                        .hasData) {
+                                                      return const Skeleton(
+                                                          width: 16,
+                                                          height: 14);
+                                                    }
+
+                                                    return CurrencyDisplayer(
+                                                      currency: userCurrency,
+                                                      textStyle:
+                                                          const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                      amountToConvert:
+                                                          exchangeRateSnapshot
+                                                              .data!,
+                                                    );
+                                                  }),
+                                            ),
+                                            const Divider(indent: 12),
+                                            ListTile(
+                                              title: Text(
+                                                t.transaction.form
+                                                    .exchange_to_preferred_in_date(
+                                                  currency: userCurrency.code,
+                                                  date: DateFormat.yMd()
+                                                      .format(transaction.date),
+                                                ),
+                                              ),
+                                              trailing: StreamBuilder(
+                                                  stream: ExchangeRateService
+                                                      .instance
+                                                      .calculateExchangeRateToPreferredCurrency(
+                                                    fromCurrency: transaction
+                                                        .account.currencyId,
+                                                    amount: transaction.value,
+                                                    date: transaction.date,
+                                                  ),
+                                                  builder: (context,
+                                                      exchangeRateSnapshot) {
+                                                    if (!exchangeRateSnapshot
+                                                        .hasData) {
+                                                      return const Skeleton(
+                                                          width: 16,
+                                                          height: 14);
+                                                    }
+
+                                                    return CurrencyDisplayer(
+                                                      currency: userCurrency,
+                                                      textStyle:
+                                                          const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                      amountToConvert:
+                                                          exchangeRateSnapshot
+                                                              .data!,
+                                                    );
+                                                  }),
+                                            )
+                                          ],
+                                        );
+                                      }),
+                                  if (transaction.notes != null) ...[
+                                    const Divider(indent: 12),
+                                    ListTile(
+                                      title:
+                                          Text(t.transaction.form.description),
+                                      subtitle: Text(transaction.notes!),
+                                    )
+                                  ]
+                                ]),
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      CardWithHeader(
-                          title: t.general.quick_actions,
-                          body: MonekinQuickActionsButton(
-                              actions: transactionDetailsActions)),
-                    ],
-                  ));
+                        const SizedBox(height: 16),
+                        CardWithHeader(
+                            title: t.general.quick_actions,
+                            body: MonekinQuickActionsButton(
+                                actions: transactionDetailsActions)),
+                      ],
+                    ),
+                  ),
+                ],
+              );
             }),
           );
         });
