@@ -21,7 +21,9 @@ Future<List<Category>?> showCategoryListModal(
   return showModalBottomSheet<List<Category>>(
     context: context,
     isScrollControlled: true,
-    showDragHandle: true,
+    showDragHandle: false,
+    backgroundColor:
+        Theme.of(context).appBarTheme.backgroundColor!.darken(0.02),
     builder: (context) {
       return DraggableScrollableSheet(
           expand: false,
@@ -29,7 +31,10 @@ Future<List<Category>?> showCategoryListModal(
           minChildSize: 0.85,
           initialChildSize: 0.85,
           builder: (context, scrollController) {
-            return page;
+            return Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: page,
+            );
           });
     },
   );

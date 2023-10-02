@@ -26,12 +26,14 @@ class CardWithHeader extends StatelessWidget {
       margin: const EdgeInsets.all(0),
       child: Column(
         children: [
-          Padding(
+          Container(
             padding: EdgeInsets.fromLTRB(
                 16,
                 onHeaderButtonClick != null ? 2 : iconSize,
                 2,
                 onHeaderButtonClick != null ? 2 : iconSize),
+            decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primaryContainer),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
