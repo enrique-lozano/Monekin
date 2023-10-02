@@ -13,7 +13,7 @@ publish_to: 'none'
 # The X represents the major releases, and can be up to infinity. Never start by a zero
 # The Y represents the minor releases, and can be up to 99. Always start by a zero
 # The Z represents the patch releases, and can be up to 999. Always start by a zero
-version: 4.1.0+410000
+version: 4.2.0+420000
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -53,7 +53,7 @@ dependencies:
   permission_handler: ^10.2.0
   json_annotation: ^4.8.1
   fl_chart: ^0.63.0
-  file_picker: ^5.3.0
+  file_picker: ^5.5.0
   share_plus: ^7.1.0
   url_launcher: ^6.1.11
   uuid: ^3.0.7

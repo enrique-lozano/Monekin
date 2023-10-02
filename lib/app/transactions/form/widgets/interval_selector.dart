@@ -69,7 +69,10 @@ class _IntervalSelectorState extends State<IntervalSelector> {
     final t = Translations.of(context);
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(t.general.time.periodicity.display),
+        elevation: 0,
+      ),
       persistentFooterButtons: [
         PersistentFooterButton(
             child: FilledButton.icon(

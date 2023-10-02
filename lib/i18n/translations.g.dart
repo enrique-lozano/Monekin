@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 853 (426 per locale)
+/// Strings: 857 (428 per locale)
 ///
-/// Built on 2023-08-23 at 12:38 UTC
+/// Built on 2023-10-01 at 17:24 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -330,6 +330,7 @@ class _TranslationsTransactionEn {
 	String get delete => 'Delete transaction';
 	String get delete_warning_message => 'This action is irreversible. The current balance of your accounts and all your statistics will be recalculated';
 	String get delete_success => 'Transaction deleted correctly';
+	String get details => 'Movement details';
 	late final _TranslationsTransactionNextPaymentsEn next_payments = _TranslationsTransactionNextPaymentsEn._(_root);
 	late final _TranslationsTransactionListEn list = _TranslationsTransactionListEn._(_root);
 	late final _TranslationsTransactionFormEn form = _TranslationsTransactionFormEn._(_root);
@@ -370,6 +371,7 @@ class _TranslationsAccountEn {
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
+	String get details => 'Account details';
 	String get date => 'Opening date';
 	String get balance => 'Account balance';
 	String get n_transactions => 'Number of transactions';
@@ -1365,6 +1367,7 @@ class _TranslationsTransactionEs implements _TranslationsTransactionEn {
 	@override String get delete => 'Eliminar transacción';
 	@override String get delete_warning_message => 'Esta acción es irreversible. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas';
 	@override String get delete_success => 'Transacción eliminada correctamente';
+	@override String get details => 'Detalles del movimiento';
 	@override late final _TranslationsTransactionNextPaymentsEs next_payments = _TranslationsTransactionNextPaymentsEs._(_root);
 	@override late final _TranslationsTransactionListEs list = _TranslationsTransactionListEs._(_root);
 	@override late final _TranslationsTransactionFormEs form = _TranslationsTransactionFormEs._(_root);
@@ -1405,6 +1408,7 @@ class _TranslationsAccountEs implements _TranslationsAccountEn {
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
+	@override String get details => 'Detalles de la cuenta';
 	@override String get date => 'Fecha de apertura';
 	@override String get balance => 'Saldo de la cuenta';
 	@override String get n_transactions => 'Número de transacciones';
@@ -2395,6 +2399,7 @@ extension on _TranslationsEn {
 			case 'transaction.delete': return 'Delete transaction';
 			case 'transaction.delete_warning_message': return 'This action is irreversible. The current balance of your accounts and all your statistics will be recalculated';
 			case 'transaction.delete_success': return 'Transaction deleted correctly';
+			case 'transaction.details': return 'Movement details';
 			case 'transaction.next_payments.accept': return 'Accept';
 			case 'transaction.next_payments.skip': return 'Skip';
 			case 'transaction.next_payments.skip_success': return 'Successfully skipped transaction';
@@ -2450,6 +2455,7 @@ extension on _TranslationsEn {
 			case 'recurrent_transactions.details.last_payment_info': return ({required Object date}) => 'The next move for this transaction will take place on ${date}. This payment will be the last for the recurring rule, so this rule will be automatically removed when this payment is made';
 			case 'recurrent_transactions.details.delete_header': return 'Delete recurring transaction';
 			case 'recurrent_transactions.details.delete_message': return 'This action is irreversible and will not affect transactions you have already confirmed/paid for';
+			case 'account.details': return 'Account details';
 			case 'account.date': return 'Opening date';
 			case 'account.balance': return 'Account balance';
 			case 'account.n_transactions': return 'Number of transactions';
@@ -2848,6 +2854,7 @@ extension on _TranslationsEs {
 			case 'transaction.delete': return 'Eliminar transacción';
 			case 'transaction.delete_warning_message': return 'Esta acción es irreversible. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas';
 			case 'transaction.delete_success': return 'Transacción eliminada correctamente';
+			case 'transaction.details': return 'Detalles del movimiento';
 			case 'transaction.next_payments.skip': return 'Saltar';
 			case 'transaction.next_payments.skip_success': return 'Transacción saltada con exito';
 			case 'transaction.next_payments.skip_dialog_title': return 'Saltar transacción';
@@ -2903,6 +2910,7 @@ extension on _TranslationsEs {
 			case 'recurrent_transactions.details.last_payment_info': return ({required Object date}) => 'El próximo movimiento de esta transacción tendrá lugar el día ${date}. Este pago será el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al realizar este pago';
 			case 'recurrent_transactions.details.delete_header': return 'Eliminar transacción recurrente';
 			case 'recurrent_transactions.details.delete_message': return 'Esta acción es irreversible y no afectará a transacciones que ya hayas confirmado/pagado';
+			case 'account.details': return 'Detalles de la cuenta';
 			case 'account.date': return 'Fecha de apertura';
 			case 'account.balance': return 'Saldo de la cuenta';
 			case 'account.n_transactions': return 'Número de transacciones';
