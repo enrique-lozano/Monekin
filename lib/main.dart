@@ -86,7 +86,7 @@ class MonekinAppEntryPoint extends StatelessWidget {
   }
 }
 
-class MaterialAppContainer extends ConsumerWidget {
+class MaterialAppContainer extends StatelessWidget {
   const MaterialAppContainer(
       {super.key, required this.themeMode, required this.goToIntro});
 
@@ -94,7 +94,7 @@ class MaterialAppContainer extends ConsumerWidget {
   final bool goToIntro;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     // Get the language of the Intl in each rebuild of the TranslationProvider:
     Intl.defaultLocale = LocaleSettings.currentLocale.languageTag;
 
