@@ -5,12 +5,25 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:monekin/main.dart';
 
 void main() {
-  testWidgets('App opens', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MonekinAppEntryPoint());
+  testWidgets('MonekinAppEntryPoint builds correctly',
+      (WidgetTester tester) async {
+    await tester.runAsync(() async {
+      await tester.pumpWidget(const MonekinAppEntryPoint());
+
+      expect(find.byType(MonekinAppEntryPoint), findsOneWidget);
+    });
+  });
+
+  testWidgets('MaterialAppContainer builds correctly',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(const MaterialAppContainer(
+        themeMode: ThemeMode.light, goToIntro: false));
+
+    expect(find.byType(MaterialAppContainer), findsOneWidget);
   });
 }
