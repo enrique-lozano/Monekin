@@ -2,7 +2,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/accounts/account_details.dart';
 import 'package:monekin/app/accounts/account_form.dart';
-import 'package:monekin/app/home/widgets/drawer.dart';
+import 'package:monekin/app/home/widgets/home_drawer.dart';
 import 'package:monekin/app/home/widgets/income_or_expense_card.dart';
 import 'package:monekin/app/stats/widgets/balance_bar_chart_small.dart';
 import 'package:monekin/app/stats/widgets/chart_by_categories.dart';
@@ -15,6 +15,7 @@ import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -171,7 +172,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('Monekin'),
         elevation: 1,
-        centerTitle: true,
+        centerTitle: BreakPoint.of(context).isSmallerOrEqualTo(BreakpointID.md),
         actions: [
           IconButton(
               onPressed: () {
@@ -199,7 +200,7 @@ class _HomePageState extends State<HomePage> {
               }
             });
           }),
-      drawer: const HomeDrawer(),
+      drawer: const Drawer(child: HomeDrawer()),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -212,85 +213,112 @@ class _HomePageState extends State<HomePage> {
                       bottomLeft: Radius.circular(16),
                       bottomRight: Radius.circular(16),
                     )),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                child: Column(
+                padding: EdgeInsets.fromLTRB(
+                    16,
+                    BreakPoint.of(context).isLargerThan(BreakpointID.md)
+                        ? 8
+                        : 24,
+                    16,
+                    8),
+                child: ResponsiveRowColumn(
+                  direction:
+                      BreakPoint.of(context).isLargerThan(BreakpointID.md)
+                          ? Axis.horizontal
+                          : Axis.vertical,
+                  rowSpacing: 40,
+                  columnSpacing: 18,
                   children: [
-                    const SizedBox(height: 12),
-                    StreamBuilder(
-                        stream: _accountsStream,
-                        builder: (context, accounts) {
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                  '${t.home.total_balance} - ${dateRangeService.selectedDateRange.currentText(context)}',
-                                  style: const TextStyle(fontSize: 12)),
-                              if (!accounts.hasData) ...[
-                                const Skeleton(width: 70, height: 40),
-                                const Skeleton(width: 30, height: 14),
-                              ],
-                              if (accounts.hasData) ...[
-                                StreamBuilder(
-                                    stream: accountService.getAccountsMoney(
-                                        accountIds:
-                                            accounts.data!.map((e) => e.id)),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasData) {
-                                        return CurrencyDisplayer(
-                                          amountToConvert: snapshot.data!,
-                                          textStyle: const TextStyle(
-                                              fontSize: 40,
-                                              fontWeight: FontWeight.w600),
-                                        );
-                                      }
-
-                                      return const Skeleton(
-                                          width: 90, height: 40);
-                                    }),
-                                if (dateRangeService.startDate != null &&
-                                    dateRangeService.endDate != null)
+                    ResponsiveRowColumnItem(
+                      child: StreamBuilder(
+                          stream: _accountsStream,
+                          builder: (context, accounts) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: BreakPoint.of(context)
+                                      .isLargerThan(BreakpointID.md)
+                                  ? CrossAxisAlignment.start
+                                  : CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                    '${t.home.total_balance} - ${dateRangeService.selectedDateRange.currentText(context)}',
+                                    style: const TextStyle(fontSize: 12)),
+                                if (!accounts.hasData) ...[
+                                  const Skeleton(width: 70, height: 40),
+                                  const Skeleton(width: 30, height: 14),
+                                ],
+                                if (accounts.hasData) ...[
                                   StreamBuilder(
-                                      stream: accountService
-                                          .getAccountsMoneyVariation(
-                                              accounts: accounts.data!,
-                                              startDate:
-                                                  dateRangeService.startDate,
-                                              endDate: dateRangeService.endDate,
-                                              convertToPreferredCurrency: true),
+                                      stream: accountService.getAccountsMoney(
+                                          accountIds:
+                                              accounts.data!.map((e) => e.id)),
                                       builder: (context, snapshot) {
-                                        if (!snapshot.hasData) {
-                                          return const Skeleton(
-                                              width: 52, height: 22);
+                                        if (snapshot.hasData) {
+                                          return CurrencyDisplayer(
+                                            amountToConvert: snapshot.data!,
+                                            textStyle: const TextStyle(
+                                                fontSize: 40,
+                                                fontWeight: FontWeight.w600),
+                                          );
                                         }
 
-                                        return TrendingValue(
-                                          percentage: snapshot.data!,
-                                          filled: true,
-                                          fontWeight: FontWeight.bold,
-                                          outlined: true,
-                                        );
+                                        return const Skeleton(
+                                            width: 90, height: 40);
                                       }),
-                              ]
-                            ],
-                          );
-                        }),
-                    const SizedBox(height: 24),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IncomeOrExpenseCard(
-                          type: AccountDataFilter.income,
-                          startDate: dateRangeService.startDate,
-                          endDate: dateRangeService.endDate,
-                        ),
-                        IncomeOrExpenseCard(
-                          type: AccountDataFilter.expense,
-                          startDate: dateRangeService.startDate,
-                          endDate: dateRangeService.endDate,
-                        ),
-                      ],
+                                  if (dateRangeService.startDate != null &&
+                                      dateRangeService.endDate != null)
+                                    StreamBuilder(
+                                        stream: accountService
+                                            .getAccountsMoneyVariation(
+                                                accounts: accounts.data!,
+                                                startDate:
+                                                    dateRangeService.startDate,
+                                                endDate:
+                                                    dateRangeService.endDate,
+                                                convertToPreferredCurrency:
+                                                    true),
+                                        builder: (context, snapshot) {
+                                          if (!snapshot.hasData) {
+                                            return const Skeleton(
+                                                width: 52, height: 22);
+                                          }
+
+                                          return TrendingValue(
+                                            percentage: snapshot.data!,
+                                            filled: true,
+                                            fontWeight: FontWeight.bold,
+                                            outlined: true,
+                                          );
+                                        }),
+                                ]
+                              ],
+                            );
+                          }),
+                    ),
+                    ResponsiveRowColumnItem(
+                      child: ResponsiveRowColumn(
+                        direction:
+                            BreakPoint.of(context).isLargerThan(BreakpointID.md)
+                                ? Axis.vertical
+                                : Axis.horizontal,
+                        rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        columnCrossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ResponsiveRowColumnItem(
+                            child: IncomeOrExpenseCard(
+                              type: AccountDataFilter.income,
+                              startDate: dateRangeService.startDate,
+                              endDate: dateRangeService.endDate,
+                            ),
+                          ),
+                          ResponsiveRowColumnItem(
+                            child: IncomeOrExpenseCard(
+                              type: AccountDataFilter.expense,
+                              startDate: dateRangeService.startDate,
+                              endDate: dateRangeService.endDate,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -397,216 +425,206 @@ class _HomePageState extends State<HomePage> {
                         );
                       }),
                   const SizedBox(height: 16),
-                  LayoutBuilder(builder: (context, constraints) {
-                    return Wrap(
-                      runSpacing: 16,
-                      spacing: 16,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: constraints.maxWidth >
-                                  BreakPoint.getById(BreakpointID.md).width
-                              ? constraints.maxWidth / 2 - 16
-                              : double.infinity,
-                          child: CardWithHeader(
-                            title: t.financial_health.display,
-                            body: StreamBuilder(
-                                stream: _accountsStream,
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return const LinearProgressIndicator();
-                                  }
+                  ResponsiveRowColumn.withSymetricSpacing(
+                    spacing: 16,
+                    direction:
+                        BreakPoint.of(context).isLargerThan(BreakpointID.md)
+                            ? Axis.horizontal
+                            : Axis.vertical,
+                    children: [
+                      ResponsiveRowColumnItem(
+                        rowFit: FlexFit.tight,
+                        child: CardWithHeader(
+                          title: t.financial_health.display,
+                          body: StreamBuilder(
+                              stream: _accountsStream,
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return const LinearProgressIndicator();
+                                }
 
-                                  final accounts = snapshot.data!;
+                                final accounts = snapshot.data!;
 
-                                  return Padding(
-                                      padding: const EdgeInsets.all(16),
-                                      child: StreamBuilder(
-                                          initialData: 0.0,
-                                          stream: FinanceHealthService()
-                                              .getHealthyValue(
-                                            accounts: accounts,
-                                            startDate:
-                                                dateRangeService.startDate,
-                                            endDate: dateRangeService.endDate,
-                                          ),
-                                          builder: (context, snapshot) {
-                                            Color getHealthyValueColor(
-                                                    double healthyValue) =>
-                                                HSLColor.fromAHSL(1,
-                                                        healthyValue, 1, 0.35)
-                                                    .toColor();
+                                return Padding(
+                                    padding: const EdgeInsets.all(16),
+                                    child: StreamBuilder(
+                                        initialData: 0.0,
+                                        stream: FinanceHealthService()
+                                            .getHealthyValue(
+                                          accounts: accounts,
+                                          startDate: dateRangeService.startDate,
+                                          endDate: dateRangeService.endDate,
+                                        ),
+                                        builder: (context, snapshot) {
+                                          Color getHealthyValueColor(
+                                                  double healthyValue) =>
+                                              HSLColor.fromAHSL(
+                                                      1, healthyValue, 1, 0.35)
+                                                  .toColor();
 
-                                            return ConstrainedBox(
-                                              constraints: const BoxConstraints(
-                                                  maxHeight: 180),
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  AnimatedProgressBar(
-                                                    value: snapshot.data! / 100,
-                                                    direction: Axis.vertical,
-                                                    width: 16,
-                                                    color: getHealthyValueColor(
-                                                        snapshot.data!),
-                                                  ),
-                                                  const SizedBox(width: 16),
-                                                  Expanded(
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceEvenly,
-                                                      children: [
-                                                        Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Row(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .baseline,
-                                                                textBaseline:
-                                                                    TextBaseline
-                                                                        .alphabetic,
-                                                                children: [
-                                                                  Text(
+                                          return ConstrainedBox(
+                                            constraints: BoxConstraints(
+                                                maxHeight:
+                                                    BreakPoint.of(context)
+                                                            .isLargerThan(
+                                                                BreakpointID.md)
+                                                        ? 265
+                                                        : 180),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                AnimatedProgressBar(
+                                                  value: snapshot.data! / 100,
+                                                  direction: Axis.vertical,
+                                                  width: 16,
+                                                  color: getHealthyValueColor(
+                                                      snapshot.data!),
+                                                ),
+                                                const SizedBox(width: 16),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: [
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Row(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .baseline,
+                                                              textBaseline:
+                                                                  TextBaseline
+                                                                      .alphabetic,
+                                                              children: [
+                                                                Text(
+                                                                  snapshot.data!
+                                                                      .toStringAsFixed(
+                                                                          0),
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .headlineMedium!
+                                                                      .copyWith(
+                                                                        color: getHealthyValueColor(
+                                                                            snapshot.data!),
+                                                                        fontWeight:
+                                                                            FontWeight.w700,
+                                                                      ),
+                                                                ),
+                                                                const Text(
+                                                                    ' / 100')
+                                                              ]),
+                                                          Text(
+                                                            FinanceHealthService()
+                                                                .getHealthyValueReviewTitle(
+                                                                    context,
                                                                     snapshot
-                                                                        .data!
-                                                                        .toStringAsFixed(
-                                                                            0),
-                                                                    style: Theme.of(
-                                                                            context)
-                                                                        .textTheme
-                                                                        .headlineMedium!
-                                                                        .copyWith(
-                                                                          color:
-                                                                              getHealthyValueColor(snapshot.data!),
-                                                                          fontWeight:
-                                                                              FontWeight.w700,
-                                                                        ),
-                                                                  ),
-                                                                  const Text(
-                                                                      ' / 100')
-                                                                ]),
-                                                            Text(
-                                                              FinanceHealthService()
-                                                                  .getHealthyValueReviewTitle(
-                                                                      context,
+                                                                        .data!),
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .titleMedium!
+                                                                .copyWith(
+                                                                  color: getHealthyValueColor(
                                                                       snapshot
                                                                           .data!),
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .titleMedium!
-                                                                  .copyWith(
-                                                                    color: getHealthyValueColor(
-                                                                        snapshot
-                                                                            .data!),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w700,
-                                                                  ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        Text(
-                                                          FinanceHealthService()
-                                                              .getHealthyValueReviewDescr(
-                                                                  context,
-                                                                  snapshot
-                                                                      .data!),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            );
-                                          }));
-                                }),
-                          ),
-                        ),
-                        SizedBox(
-                          width: constraints.maxWidth >
-                                  BreakPoint.getById(BreakpointID.md).width
-                              ? constraints.maxWidth / 2 - 16
-                              : double.infinity,
-                          child: CardWithHeader(
-                              title: t.stats.balance_evolution,
-                              body: FundEvolutionLineChart(
-                                startDate: dateRangeService.startDate,
-                                endDate: dateRangeService.endDate,
-                                dateRange: dateRangeService.selectedDateRange,
-                              ),
-                              onHeaderButtonClick: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const StatsPage(
-                                              initialIndex: 1,
-                                            )));
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Text(
+                                                        FinanceHealthService()
+                                                            .getHealthyValueReviewDescr(
+                                                                context,
+                                                                snapshot.data!),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          );
+                                        }));
                               }),
-                        )
-                      ],
-                    );
-                  }),
+                        ),
+                      ),
+                      ResponsiveRowColumnItem(
+                        rowFit: FlexFit.tight,
+                        child: CardWithHeader(
+                            title: t.stats.balance_evolution,
+                            body: FundEvolutionLineChart(
+                              startDate: dateRangeService.startDate,
+                              endDate: dateRangeService.endDate,
+                              dateRange: dateRangeService.selectedDateRange,
+                            ),
+                            onHeaderButtonClick: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const StatsPage(
+                                            initialIndex: 1,
+                                          )));
+                            }),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 16),
-                  LayoutBuilder(builder: (context, constraints) {
-                    return Wrap(
-                      runSpacing: 16,
-                      spacing: 16,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: constraints.maxWidth >
-                                  BreakPoint.getById(BreakpointID.md).width
-                              ? constraints.maxWidth / 2 - 16
-                              : double.infinity,
-                          child: CardWithHeader(
-                              title: t.stats.by_categories,
-                              body: ChartByCategories(
-                                startDate: dateRangeService.startDate,
-                                endDate: dateRangeService.endDate,
-                              ),
-                              onHeaderButtonClick: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const StatsPage(
-                                              initialIndex: 0,
-                                            )));
-                              }),
-                        ),
-                        SizedBox(
-                          width: constraints.maxWidth >
-                                  BreakPoint.getById(BreakpointID.md).width
-                              ? constraints.maxWidth / 2 - 16
-                              : double.infinity,
-                          child: CardWithHeader(
-                              title: t.stats.cash_flow,
-                              body: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 16, left: 16, right: 16),
-                                child: BalanceChartSmall(
-                                    dateRangeService: dateRangeService),
-                              ),
-                              onHeaderButtonClick: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const StatsPage(
-                                              initialIndex: 2,
-                                            )));
-                              }),
-                        )
-                      ],
-                    );
-                  }),
+                  ResponsiveRowColumn.withSymetricSpacing(
+                    spacing: 16,
+                    direction:
+                        BreakPoint.of(context).isLargerThan(BreakpointID.md)
+                            ? Axis.horizontal
+                            : Axis.vertical,
+                    children: [
+                      ResponsiveRowColumnItem(
+                        rowFit: FlexFit.tight,
+                        child: CardWithHeader(
+                            title: t.stats.by_categories,
+                            body: ChartByCategories(
+                              startDate: dateRangeService.startDate,
+                              endDate: dateRangeService.endDate,
+                            ),
+                            onHeaderButtonClick: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const StatsPage(
+                                            initialIndex: 0,
+                                          )));
+                            }),
+                      ),
+                      ResponsiveRowColumnItem(
+                        rowFit: FlexFit.tight,
+                        child: CardWithHeader(
+                            title: t.stats.cash_flow,
+                            body: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 16, left: 16, right: 16),
+                              child: BalanceChartSmall(
+                                  dateRangeService: dateRangeService),
+                            ),
+                            onHeaderButtonClick: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const StatsPage(
+                                            initialIndex: 2,
+                                          )));
+                            }),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 64),
                 ],
               ),

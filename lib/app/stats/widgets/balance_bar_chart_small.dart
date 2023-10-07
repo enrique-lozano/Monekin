@@ -2,6 +2,7 @@ import 'package:async/async.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/services/filters/date_range_service.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -104,7 +105,7 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
     final t = Translations.of(context);
 
     return SizedBox(
-      height: 250,
+      height: BreakPoint.of(context).isLargerThan(BreakpointID.md) ? 325 : 250,
       child: StreamBuilder(
           stream: AccountService.instance.getAccounts(),
           builder: (context, accountsSnapshot) {
