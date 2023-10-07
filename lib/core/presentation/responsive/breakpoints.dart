@@ -30,6 +30,26 @@ class BreakPoint extends Equatable {
     return appBreakPoints.firstWhere((element) => element.id == id);
   }
 
+  bool isSmallerThan(BreakpointID id) {
+    return this < BreakPoint.getById(id);
+  }
+
+  bool isSmallerOrEqualTo(BreakpointID id) {
+    return this <= BreakPoint.getById(id);
+  }
+
+  bool isLargerThan(BreakpointID id) {
+    return this > BreakPoint.getById(id);
+  }
+
+  bool isLargerOrEqualTo(BreakpointID id) {
+    return this >= BreakPoint.getById(id);
+  }
+
+  bool isBetween(BreakpointID id1, BreakpointID id2) {
+    return this >= BreakPoint.getById(id1) && this <= BreakPoint.getById(id2);
+  }
+
   @override
   List<Object?> get props => [id.index];
 

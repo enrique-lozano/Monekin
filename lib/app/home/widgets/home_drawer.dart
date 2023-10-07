@@ -64,50 +64,57 @@ class HomeDrawer extends StatelessWidget {
       ),
     ];
 
-    return Drawer(
-      child: ListView(padding: EdgeInsets.zero, children: [
-        StreamBuilder(
-            stream: UserSettingService.instance.getSettings(
-              (p0) =>
-                  p0.settingKey.equalsValue(SettingKey.userName) |
-                  p0.settingKey.equalsValue(SettingKey.avatar),
-            ),
-            builder: (context, snapshot) {
-              final userName = snapshot.data
-                  ?.firstWhere(
-                    (element) => element.settingKey == SettingKey.userName,
-                  )
-                  .settingValue;
-              final userAvatar = snapshot.data
-                  ?.firstWhere(
-                    (element) => element.settingKey == SettingKey.avatar,
-                  )
-                  .settingValue;
+    return ListView(padding: EdgeInsets.zero, children: [
+      StreamBuilder(
+          stream: UserSettingService.instance.getSettings(
+            (p0) =>
+                p0.settingKey.equalsValue(SettingKey.userName) |
+                p0.settingKey.equalsValue(SettingKey.avatar),
+          ),
+          builder: (context, snapshot) {
+            final userName = snapshot.data
+                ?.firstWhere(
+                  (element) => element.settingKey == SettingKey.userName,
+                )
+                .settingValue;
+            final userAvatar = snapshot.data
+                ?.firstWhere(
+                  (element) => element.settingKey == SettingKey.avatar,
+                )
+                .settingValue;
 
-              return UserAccountsDrawerHeader(
-                accountName: userName != null
-                    ? Text(userName)
-                    : const Skeleton(width: 25, height: 12),
-                currentAccountPicture: UserAvatar(avatar: userAvatar),
-                currentAccountPictureSize: const Size.fromRadius(24),
-                accountEmail: Text(
-                  t.home.hello_day,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w300,
-                    fontSize: 12,
-                  ),
+            return UserAccountsDrawerHeader(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.background,
+              ),
+              accountName: userName != null
+                  ? Text(
+                      userName,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
+                    )
+                  : const Skeleton(width: 25, height: 12),
+              currentAccountPicture: UserAvatar(avatar: userAvatar),
+              currentAccountPictureSize: const Size.fromRadius(24),
+              accountEmail: Text(
+                t.home.hello_day,
+                style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                  fontSize: 12,
+                  color: Theme.of(context).colorScheme.onBackground,
                 ),
-              );
-            }),
-        ...List.generate(drawerActions.length, (index) {
-          final item = drawerActions[index];
-          return ListTile(
-            title: Text(item.label),
-            leading: Icon(item.icon),
-            onTap: item.onClick,
-          );
-        }),
-      ]),
-    );
+              ),
+            );
+          }),
+      ...List.generate(drawerActions.length, (index) {
+        final item = drawerActions[index];
+        return ListTile(
+          title: Text(item.label),
+          leading: Icon(item.icon),
+          onTap: item.onClick,
+        );
+      }),
+    ]);
   }
 }
