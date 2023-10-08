@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -89,7 +90,7 @@ class IncomeExpenseComparason extends StatelessWidget {
                         value: income + expense > 0
                             ? (income / (income + expense))
                             : 0,
-                        color: Colors.green),
+                        color: CustomColors.of(context).success),
                   ])),
               ListTile(
                   title: Column(
@@ -106,7 +107,7 @@ class IncomeExpenseComparason extends StatelessWidget {
                         value: income + expense > 0
                             ? (expense / (income + expense))
                             : 0,
-                        color: Colors.red),
+                        color: CustomColors.of(context).danger),
                   ]))
             ]);
           },

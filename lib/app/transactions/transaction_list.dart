@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/transactions/transaction_details.page.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/services/view-actions/transaction_view_actions_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
@@ -87,7 +88,7 @@ class TransactionListComponent extends StatelessWidget {
                   Icon(
                     transaction.status?.icon ?? Icons.repeat,
                     color: transaction.status?.color.darken(0.1) ??
-                        Theme.of(context).primaryColor,
+                        Theme.of(context).colorScheme.primary,
                     size: 12,
                   )
               ],
@@ -119,8 +120,8 @@ class TransactionListComponent extends StatelessWidget {
                           Icons.repeat_rounded,
                           size: 14,
                           color: isPending
-                              ? Theme.of(context).primaryColor
-                              : Colors.red,
+                              ? Theme.of(context).colorScheme.primary
+                              : CustomColors.of(context).danger,
                         ),
                         const SizedBox(width: 4),
                         Text(
@@ -131,8 +132,8 @@ class TransactionListComponent extends StatelessWidget {
                               fontSize: 12,
                               fontWeight: FontWeight.w400,
                               color: isPending
-                                  ? Theme.of(context).primaryColor
-                                  : Colors.red,
+                                  ? Theme.of(context).colorScheme.primary
+                                  : CustomColors.of(context).danger,
                             ))
                       ],
                     );
@@ -148,9 +149,9 @@ class TransactionListComponent extends StatelessWidget {
                   color: transaction.status == TransactionStatus.voided
                       ? Colors.grey.shade400
                       : transaction.type == TransactionType.income
-                          ? Colors.green
+                          ? CustomColors.of(context).success
                           : transaction.type == TransactionType.expense
-                              ? Colors.red
+                              ? CustomColors.of(context).danger
                               : null,
                   decoration: transaction.status == TransactionStatus.voided
                       ? TextDecoration.lineThrough

@@ -29,9 +29,9 @@ class CardWithHeader extends StatelessWidget {
           Container(
             padding: EdgeInsets.fromLTRB(
                 16,
-                onHeaderButtonClick != null ? 2 : iconSize,
+                onHeaderButtonClick != null ? 2 : iconSize - 6,
                 2,
-                onHeaderButtonClick != null ? 2 : iconSize),
+                onHeaderButtonClick != null ? 2 : iconSize - 6),
             decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primaryContainer),
             child: Row(
@@ -44,7 +44,7 @@ class CardWithHeader extends StatelessWidget {
                   IconButton(
                     onPressed: onHeaderButtonClick,
                     iconSize: iconSize,
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).colorScheme.primary,
                     icon: Icon(headerButtonIcon),
                   )
               ],

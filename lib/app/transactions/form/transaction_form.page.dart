@@ -14,6 +14,7 @@ import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/animations/shake/shake_widget.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/expansion_panel/single_expansion_panel.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
@@ -386,12 +387,16 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     );
   }
 
-  Widget buildCalculatorButton({
+  Widget buildCalculatorButton(
+    BuildContext context, {
     required String text,
     int flex = 1,
-    required Color bgColor,
-    Color? textColor = Colors.black,
+    Color? bgColor,
+    Color? textColor,
   }) {
+    textColor ??= Theme.of(context).colorScheme.onBackground;
+    bgColor ??= Theme.of(context).colorScheme.background;
+
     onButtonPress() {
       HapticFeedback.lightImpact();
 
@@ -433,8 +438,8 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
             shadowColor: bgColor.darken(0.15),
             surfaceTintColor: bgColor.darken(0.15),
             foregroundColor: textColor,
-            disabledForegroundColor: textColor,
-            disabledBackgroundColor: bgColor.lighten(0.175),
+            disabledForegroundColor: textColor.withOpacity(0.3),
+            disabledBackgroundColor: bgColor.withOpacity(0.3),
             elevation: 0,
           ),
           onPressed:
@@ -465,12 +470,13 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         selectedCategory == null);
 
     final trColor = isBlue
-        ? Theme.of(context).brightness == Brightness.light
-            ? Theme.of(context).primaryColorLight
-            : Theme.of(context).primaryColor.darken()
-        : (selectedCategory!.type.isIncome ? Colors.green : Colors.red);
+        ? CustomColors.of(context).brand.lighten()
+        : (selectedCategory!.type.isIncome
+            ? CustomColors.of(context).success
+            : CustomColors.of(context).danger);
 
-    final trColorLighten = trColor.lighten(isBlue ? 0.275 : 0.375);
+    final trColorLighten = trColor.withOpacity(
+        Theme.of(context).brightness == Brightness.light ? 0.1 : 0.2);
 
     return StreamBuilder(
         stream: UserSettingService.instance
@@ -753,20 +759,20 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                       Container(
                         height: constrains.maxHeight * 0.4,
                         padding: const EdgeInsets.all(6),
-                        color: trColorLighten,
+                        // color: trColorLighten,
                         child: Row(
                           children: [
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '1'),
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '4'),
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '7'),
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '.'),
                                 ],
                               ),
@@ -775,13 +781,13 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '2'),
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '5'),
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '8'),
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '0'),
                                 ],
                               ),
@@ -790,13 +796,13 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '3'),
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '6'),
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '9'),
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '⌫'),
                                 ],
                               ),
@@ -805,10 +811,13 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: 'AC'),
-                                  buildCalculatorButton(
-                                      bgColor: trColor, text: 'DONE', flex: 3),
+                                  buildCalculatorButton(context,
+                                      bgColor: trColor,
+                                      text: 'DONE',
+                                      textColor: Colors.white,
+                                      flex: 3),
                                 ],
                               ),
                             ),

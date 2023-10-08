@@ -32,7 +32,8 @@ class _FilterRowIndicatorState extends State<FilterRowIndicator> {
         padding: const EdgeInsets.all(0),
         onDeleted: onDeleted,
         deleteIcon: const Icon(Icons.close, size: 12),
-        backgroundColor: Theme.of(context).primaryColor.withOpacity(0.05),
+        backgroundColor:
+            Theme.of(context).colorScheme.primary.withOpacity(0.05),
         label: Text(
           label,
           style: Theme.of(context).textTheme.labelSmall,

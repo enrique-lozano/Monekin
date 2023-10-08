@@ -67,7 +67,7 @@ class _CurrencySelectorModalState extends State<CurrencySelectorModal> {
                     ),
                     Chip(
                       side: BorderSide(color: colors.primary, width: 2),
-                      // backgroundColor: Theme.of(context).primaryColorLight,
+                      // backgroundColor: Theme.of(context).colorScheme.primaryLight,
                       label: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
