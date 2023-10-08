@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -98,21 +99,30 @@ class MaterialAppContainer extends StatelessWidget {
     // Get the language of the Intl in each rebuild of the TranslationProvider:
     Intl.defaultLocale = LocaleSettings.currentLocale.languageTag;
 
-    return MaterialApp(
-        title: 'Monekin',
-        debugShowCheckedModeBanner: false,
-        locale: TranslationProvider.of(context).flutterLocale,
-        supportedLocales: AppLocaleUtils.supportedLocales,
-        localizationsDelegates: GlobalMaterialLocalizations.delegates,
-        theme: getThemeData(false),
-        darkTheme: getThemeData(true),
-        themeMode: themeMode,
-        home: Builder(builder: (context) {
-          if (!goToIntro) {
-            return const HomePage();
-          } else {
-            return const IntroPage();
-          }
-        }));
+    return DynamicColorBuilder(
+        builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+      return MaterialApp(
+          title: 'Monekin',
+          debugShowCheckedModeBanner: false,
+          locale: TranslationProvider.of(context).flutterLocale,
+          supportedLocales: AppLocaleUtils.supportedLocales,
+          localizationsDelegates: GlobalMaterialLocalizations.delegates,
+          theme: getThemeData(context,
+              isDark: false,
+              lightDynamic: lightDynamic,
+              darkDynamic: darkDynamic),
+          darkTheme: getThemeData(context,
+              isDark: true,
+              lightDynamic: lightDynamic,
+              darkDynamic: darkDynamic),
+          themeMode: themeMode,
+          home: Builder(builder: (context) {
+            if (!goToIntro) {
+              return const HomePage();
+            } else {
+              return const IntroPage();
+            }
+          }));
+    });
   }
 }

@@ -38,7 +38,7 @@ class IntroPage extends StatelessWidget {
           style: Theme.of(context)
               .textTheme
               .labelSmall!
-              .copyWith(color: Theme.of(context).primaryColor),
+              .copyWith(color: Theme.of(context).colorScheme.primary),
         ),
       ],
     );

@@ -123,12 +123,15 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                                 padding: const EdgeInsets.all(4),
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                        width: 2,
-                                        color: Theme.of(context).primaryColor),
+                                      width: 2,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
                                     borderRadius: BorderRadius.circular(1000)),
                                 child: accountWithMoney.account.icon.display(
-                                    size: 22,
-                                    color: Theme.of(context).primaryColor)),
+                                  size: 22,
+                                  color: Theme.of(context).colorScheme.primary,
+                                )),
                             onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => AccountFormPage(

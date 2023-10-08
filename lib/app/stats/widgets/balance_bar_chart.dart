@@ -5,6 +5,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/services/filters/date_range_service.dart';
@@ -227,8 +228,8 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
         BarChartRodData(
           toY: income,
           color: isTouched && touchedRodDataIndex == 0
-              ? Colors.green.darken(0.1)
-              : Colors.green,
+              ? CustomColors.of(context).success.darken(0.1)
+              : CustomColors.of(context).success,
           width: width,
           borderRadius: BorderRadius.only(
             topLeft: radius,
@@ -238,8 +239,8 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
         BarChartRodData(
           toY: expense,
           color: isTouched && touchedRodDataIndex == 1
-              ? Colors.red.darken(0.1)
-              : Colors.red,
+              ? CustomColors.of(context).danger.darken(0.1)
+              : CustomColors.of(context).danger,
           width: width,
           borderRadius: BorderRadius.only(
             bottomLeft: radius,

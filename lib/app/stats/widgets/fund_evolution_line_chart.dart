@@ -65,8 +65,8 @@ class FundEvolutionLineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Color> gradientColors = [
-      Theme.of(context).primaryColor,
-      Theme.of(context).primaryColor.lighten(0.3),
+      Theme.of(context).colorScheme.primary,
+      Theme.of(context).colorScheme.primary.lighten(0.3),
     ];
 
     final accountService = AccountService.instance;
