@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 857 (428 per locale)
+/// Strings: 874 (437 per locale)
 ///
-/// Built on 2023-10-01 at 17:24 UTC
+/// Built on 2023-10-09 at 13:40 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -491,7 +491,7 @@ class _TranslationsSettingsEn {
 	String get title => 'Settings';
 	String get edit_profile => 'Edit profile';
 	String get display_name => 'User name';
-	String get lang => 'Language';
+	String get lang => 'App language';
 	String get lang_descr => 'Language in which the texts will be displayed in the app';
 	String get locale => 'Region';
 	String get locale_descr => 'Set the format to use for dates, numbers...';
@@ -499,11 +499,8 @@ class _TranslationsSettingsEn {
 	String get first_day_of_week => 'First day of week';
 	late final _TranslationsSettingsGeneralEn general = _TranslationsSettingsGeneralEn._(_root);
 	late final _TranslationsSettingsDataEn data = _TranslationsSettingsDataEn._(_root);
-	late final _TranslationsSettingsProjectEn project = _TranslationsSettingsProjectEn._(_root);
+	late final _TranslationsSettingsAboutUsEn about_us = _TranslationsSettingsAboutUsEn._(_root);
 	late final _TranslationsSettingsHelpUsEn help_us = _TranslationsSettingsHelpUsEn._(_root);
-	late final _TranslationsSettingsPrivacyEn privacy = _TranslationsSettingsPrivacyEn._(_root);
-	late final _TranslationsSettingsLicensesEn licenses = _TranslationsSettingsLicensesEn._(_root);
-	late final _TranslationsSettingsTermsOfUseEn terms_of_use = _TranslationsSettingsTermsOfUseEn._(_root);
 }
 
 // Path: lang
@@ -874,7 +871,7 @@ class _TranslationsBackupExportEn {
 	String get all_descr => 'Export all your data (accounts, transactions, budgets, settings...). Import them again at any time so you don\'t lose anything.';
 	String get transactions => 'Transactions backup';
 	String get transactions_descr => 'Export your transactions in various formats so you can more easily analyze them in other programs or applications.';
-	String get description => 'Keep a backup of all your accounts, budgets, transactions, settings...';
+	String get description => 'Download your data in different formats';
 	String get dialog_title => 'Save/Send file';
 	String get success_in_documents => 'File successfully saved to Internal Storage/Documents';
 	String get success_in_data => 'File saved/downloaded successfully';
@@ -908,10 +905,11 @@ class _TranslationsSettingsGeneralEn {
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
-	String get display => 'General settings';
 	String get categories_descr => 'Create and edit categories to your liking';
 	String get other => 'Advanced settings';
 	String get other_descr => 'Other general app customization settings';
+	String get appearance => 'Appearance';
+	String get appearance_descr => 'App theme, texts...';
 	String get theme => 'Theme';
 	String get theme_light => 'Light';
 	String get theme_dark => 'Dark';
@@ -927,7 +925,7 @@ class _TranslationsSettingsDataEn {
 
 	// Translations
 	String get display => 'Data';
-	String get export_descr => 'Download your data in different formats';
+	String get display_descr => 'Export and import your data so you don\'t lose anything';
 	String get delete_all => 'Delete my data';
 	String get delete_all_header1 => 'Stop right there padawan ⚠️⚠️';
 	String get delete_all_message1 => 'Are you sure you want to continue? All your data will be permanently deleted and cannot be recovered';
@@ -935,19 +933,17 @@ class _TranslationsSettingsDataEn {
 	String get delete_all_message2 => 'By deleting an account you will delete all your stored personal data. Your accounts, transactions, budgets and categories will be deleted and cannot be recovered. Do you agree?';
 }
 
-// Path: settings.project
-class _TranslationsSettingsProjectEn {
-	_TranslationsSettingsProjectEn._(this._root);
+// Path: settings.about_us
+class _TranslationsSettingsAboutUsEn {
+	_TranslationsSettingsAboutUsEn._(this._root);
 
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
-	String get display => 'Project';
-	String get legal => 'Terms and privacy';
-	String get legal_descr => 'Check licenses and other legal terms of our app';
-	String get contributors => 'Collaborators';
-	String get contributors_descr => 'All the developers who have made Monekin grow';
-	String get contact => 'Contact us';
+	String get display => 'App information';
+	String get description => 'Check out the terms and other relevant information about Monekin. Get in touch with the community by reporting bugs, leaving suggestions...';
+	late final _TranslationsSettingsAboutUsLegalEn legal = _TranslationsSettingsAboutUsLegalEn._(_root);
+	late final _TranslationsSettingsAboutUsProjectEn project = _TranslationsSettingsAboutUsProjectEn._(_root);
 }
 
 // Path: settings.help_us
@@ -958,41 +954,17 @@ class _TranslationsSettingsHelpUsEn {
 
 	// Translations
 	String get display => 'Help us';
+	String get description => 'Find out how you can help Monekin become better and better';
 	String get rate_us => 'Rate us';
 	String get rate_us_descr => 'Any rate is welcome!';
 	String get share => 'Share Monekin';
-	String get share_text => 'Monekin! The best personal finance app';
+	String get share_descr => 'Share our app to friends and family';
+	String get share_text => 'Monekin! The best personal finance app. Download it here';
+	String get thanks => 'Thank you!';
+	String get thanks_long => 'Your contributions to Monekin and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.';
+	String get donate => 'Make a donation';
+	String get donate_descr => 'With your donation you will help the app continue receiving improvements. What better way than to thank the work done by inviting me to a coffee?';
 	String get report => 'Report bugs, leave suggestions...';
-}
-
-// Path: settings.privacy
-class _TranslationsSettingsPrivacyEn {
-	_TranslationsSettingsPrivacyEn._(this._root);
-
-	final _TranslationsEn _root; // ignore: unused_field
-
-	// Translations
-	String get title => 'Privacy policy';
-}
-
-// Path: settings.licenses
-class _TranslationsSettingsLicensesEn {
-	_TranslationsSettingsLicensesEn._(this._root);
-
-	final _TranslationsEn _root; // ignore: unused_field
-
-	// Translations
-	String get title => 'Licences';
-}
-
-// Path: settings.terms_of_use
-class _TranslationsSettingsTermsOfUseEn {
-	_TranslationsSettingsTermsOfUseEn._(this._root);
-
-	final _TranslationsEn _root; // ignore: unused_field
-
-	// Translations
-	String get title => 'Terms of use';
 }
 
 // Path: general.time.ranges
@@ -1160,6 +1132,32 @@ class _TranslationsBackupImportManualImportEn {
 		'Specifies the columns for other optional transaction attributes',
 	];
 	String success({required Object x}) => 'Successfully imported ${x} transactions';
+}
+
+// Path: settings.about_us.legal
+class _TranslationsSettingsAboutUsLegalEn {
+	_TranslationsSettingsAboutUsLegalEn._(this._root);
+
+	final _TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	String get display => 'Legal information';
+	String get privacy => 'Privacy policy';
+	String get terms => 'Terms of use';
+	String get licenses => 'Licenses';
+}
+
+// Path: settings.about_us.project
+class _TranslationsSettingsAboutUsProjectEn {
+	_TranslationsSettingsAboutUsProjectEn._(this._root);
+
+	final _TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	String get display => 'Project';
+	String get contributors => 'Collaborators';
+	String get contributors_descr => 'All the developers who have made Monekin grow';
+	String get contact => 'Contact us';
 }
 
 // Path: <root>
@@ -1528,7 +1526,7 @@ class _TranslationsSettingsEs implements _TranslationsSettingsEn {
 	@override String get title => 'Ajustes';
 	@override String get edit_profile => 'Editar perfil';
 	@override String get display_name => 'Nombre de usuario';
-	@override String get lang => 'Idioma';
+	@override String get lang => 'Idioma de la aplicación';
 	@override String get lang_descr => 'Idioma en el que se mostrarán los textos en la app';
 	@override String get locale => 'Región';
 	@override String get locale_descr => 'Establece el formato a usar para fechas, números...';
@@ -1536,11 +1534,8 @@ class _TranslationsSettingsEs implements _TranslationsSettingsEn {
 	@override String get first_day_of_week => 'Primer día de la semana';
 	@override late final _TranslationsSettingsGeneralEs general = _TranslationsSettingsGeneralEs._(_root);
 	@override late final _TranslationsSettingsDataEs data = _TranslationsSettingsDataEs._(_root);
-	@override late final _TranslationsSettingsProjectEs project = _TranslationsSettingsProjectEs._(_root);
+	@override late final _TranslationsSettingsAboutUsEs about_us = _TranslationsSettingsAboutUsEs._(_root);
 	@override late final _TranslationsSettingsHelpUsEs help_us = _TranslationsSettingsHelpUsEs._(_root);
-	@override late final _TranslationsSettingsPrivacyEs privacy = _TranslationsSettingsPrivacyEs._(_root);
-	@override late final _TranslationsSettingsLicensesEs licenses = _TranslationsSettingsLicensesEs._(_root);
-	@override late final _TranslationsSettingsTermsOfUseEs terms_of_use = _TranslationsSettingsTermsOfUseEs._(_root);
 }
 
 // Path: lang
@@ -1911,7 +1906,7 @@ class _TranslationsBackupExportEs implements _TranslationsBackupExportEn {
 	@override String get all_descr => 'Exporta todos tus datos (cuentas, transacciones, presupuestos, ajustes...). Importalos de nuevo en cualquier momento para no perder nada.';
 	@override String get transactions => 'Respaldo de transacciones';
 	@override String get transactions_descr => 'Exporta tus transacciones en diversos formatos para que puedas analizarlas mas facilmente en otros programas o aplicaciones.';
-	@override String get description => 'Guarda una copia de seguridad de todas tus cuentas, presupuestos, transacciones, ajustes...';
+	@override String get description => 'Exporta tus datos en diferentes formatos';
 	@override String get dialog_title => 'Guardar/Enviar archivo';
 	@override String get success_in_documents => 'Archivo guardado correctamente en Almacenamiento interno/Documents';
 	@override String get success_in_data => 'Archivo guardado/enviado correctamente';
@@ -1949,6 +1944,8 @@ class _TranslationsSettingsGeneralEs implements _TranslationsSettingsGeneralEn {
 	@override String get categories_descr => 'Crea y edita categorías a tu gusto';
 	@override String get other => 'Ajustes avanzados';
 	@override String get other_descr => 'Otros ajustes generales de personalización de la app';
+	@override String get appearance => 'Apariencia';
+	@override String get appearance_descr => 'Tema de la aplicación, textos...';
 	@override String get theme => 'Tema';
 	@override String get theme_light => 'Claro';
 	@override String get theme_dark => 'Oscuro';
@@ -1964,7 +1961,7 @@ class _TranslationsSettingsDataEs implements _TranslationsSettingsDataEn {
 
 	// Translations
 	@override String get display => 'Datos';
-	@override String get export_descr => 'Descarga tus datos en diferentes formatos';
+	@override String get display_descr => 'Exporta y importa tus datos para no perder nada';
 	@override String get delete_all => 'Eliminar mis datos';
 	@override String get delete_all_header1 => 'Alto ahí padawan ⚠️⚠️';
 	@override String get delete_all_message1 => '¿Estas seguro de que quieres continuar? Todos tus datos serán borrados permanentemente y no podrán ser recuperados';
@@ -1972,19 +1969,17 @@ class _TranslationsSettingsDataEs implements _TranslationsSettingsDataEn {
 	@override String get delete_all_message2 => 'Al eliminar una cuenta eliminarás todos tus datos personales almacenados. Tus cuentas, transacciones, presupuestos y categorías serán borrados y no podrán ser recuperados. ¿Estas de acuerdo?';
 }
 
-// Path: settings.project
-class _TranslationsSettingsProjectEs implements _TranslationsSettingsProjectEn {
-	_TranslationsSettingsProjectEs._(this._root);
+// Path: settings.about_us
+class _TranslationsSettingsAboutUsEs implements _TranslationsSettingsAboutUsEn {
+	_TranslationsSettingsAboutUsEs._(this._root);
 
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get display => 'Proyecto';
-	@override String get legal => 'Términos y privacidad';
-	@override String get legal_descr => 'Revisa licencias y otros terminos legales de nuestra app';
-	@override String get contributors => 'Colaboradores';
-	@override String get contributors_descr => 'Todos los desarrolladores que han hecho que Monekin crezca';
-	@override String get contact => 'Contacta con nosotros';
+	@override String get display => 'Información de la app';
+	@override String get description => 'Consulta los terminos y otra información relevante sobre Monekin. Ponte en contacto con la comunidad reportando errores, dejando sugerencias...';
+	@override late final _TranslationsSettingsAboutUsLegalEs legal = _TranslationsSettingsAboutUsLegalEs._(_root);
+	@override late final _TranslationsSettingsAboutUsProjectEs project = _TranslationsSettingsAboutUsProjectEs._(_root);
 }
 
 // Path: settings.help_us
@@ -1995,41 +1990,17 @@ class _TranslationsSettingsHelpUsEs implements _TranslationsSettingsHelpUsEn {
 
 	// Translations
 	@override String get display => 'Ayúdanos';
+	@override String get description => 'Descubre de que formas puedes ayudar a que Monekin sea cada vez mejor';
 	@override String get rate_us => 'Califícanos';
 	@override String get rate_us_descr => '¡Cualquier valoración es bienvenida!';
 	@override String get share => 'Comparte Monekin';
-	@override String get share_text => 'Monekin! La mejor app de finanzas personales';
+	@override String get share_descr => 'Comparte nuestra app a amigos y familiares';
+	@override String get share_text => 'Monekin! La mejor app de finanzas personales. Descargala aquí';
+	@override String get thanks => 'Gracias!';
+	@override String get thanks_long => 'Tus contribuciones a Monekin y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir.';
+	@override String get donate => 'Haz una donación';
+	@override String get donate_descr => 'Con tu donación ayudaras a que la app siga recibiendo mejoras. ¿Que mejor forma que agradecer el trabajo realizado invitandome a un cafe?';
 	@override String get report => 'Reporta errores, deja sugerencias...';
-}
-
-// Path: settings.privacy
-class _TranslationsSettingsPrivacyEs implements _TranslationsSettingsPrivacyEn {
-	_TranslationsSettingsPrivacyEs._(this._root);
-
-	@override final _TranslationsEs _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Política de privacidad';
-}
-
-// Path: settings.licenses
-class _TranslationsSettingsLicensesEs implements _TranslationsSettingsLicensesEn {
-	_TranslationsSettingsLicensesEs._(this._root);
-
-	@override final _TranslationsEs _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Licencias';
-}
-
-// Path: settings.terms_of_use
-class _TranslationsSettingsTermsOfUseEs implements _TranslationsSettingsTermsOfUseEn {
-	_TranslationsSettingsTermsOfUseEs._(this._root);
-
-	@override final _TranslationsEs _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Términos de uso';
 }
 
 // Path: general.time.ranges
@@ -2198,6 +2169,32 @@ class _TranslationsBackupImportManualImportEs implements _TranslationsBackupImpo
 		'Selecciona la columna donde se especifica la fecha de cada transacción. En caso de no especificarse, se crearan transacciones con la fecha actual',
 		'Especifica las columnas para otros atributos optativos de las transacciones',
 	];
+}
+
+// Path: settings.about_us.legal
+class _TranslationsSettingsAboutUsLegalEs implements _TranslationsSettingsAboutUsLegalEn {
+	_TranslationsSettingsAboutUsLegalEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Información legal';
+	@override String get privacy => 'Política de privacidad';
+	@override String get terms => 'Términos de uso';
+	@override String get licenses => 'Licencias';
+}
+
+// Path: settings.about_us.project
+class _TranslationsSettingsAboutUsProjectEs implements _TranslationsSettingsAboutUsProjectEn {
+	_TranslationsSettingsAboutUsProjectEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Proyecto';
+	@override String get contributors => 'Colaboradores';
+	@override String get contributors_descr => 'Todos los desarrolladores que han hecho que Monekin crezca';
+	@override String get contact => 'Contacta con nosotros';
 }
 
 /// Flat map(s) containing all translations.
@@ -2576,7 +2573,7 @@ extension on _TranslationsEn {
 			case 'backup.export.all_descr': return 'Export all your data (accounts, transactions, budgets, settings...). Import them again at any time so you don\'t lose anything.';
 			case 'backup.export.transactions': return 'Transactions backup';
 			case 'backup.export.transactions_descr': return 'Export your transactions in various formats so you can more easily analyze them in other programs or applications.';
-			case 'backup.export.description': return 'Keep a backup of all your accounts, budgets, transactions, settings...';
+			case 'backup.export.description': return 'Download your data in different formats';
 			case 'backup.export.dialog_title': return 'Save/Send file';
 			case 'backup.export.success_in_documents': return 'File successfully saved to Internal Storage/Documents';
 			case 'backup.export.success_in_data': return 'File saved/downloaded successfully';
@@ -2613,43 +2610,51 @@ extension on _TranslationsEn {
 			case 'settings.title': return 'Settings';
 			case 'settings.edit_profile': return 'Edit profile';
 			case 'settings.display_name': return 'User name';
-			case 'settings.lang': return 'Language';
+			case 'settings.lang': return 'App language';
 			case 'settings.lang_descr': return 'Language in which the texts will be displayed in the app';
 			case 'settings.locale': return 'Region';
 			case 'settings.locale_descr': return 'Set the format to use for dates, numbers...';
 			case 'settings.locale_warn': return 'When changing region the app will update';
 			case 'settings.first_day_of_week': return 'First day of week';
-			case 'settings.general.display': return 'General settings';
 			case 'settings.general.categories_descr': return 'Create and edit categories to your liking';
 			case 'settings.general.other': return 'Advanced settings';
 			case 'settings.general.other_descr': return 'Other general app customization settings';
+			case 'settings.general.appearance': return 'Appearance';
+			case 'settings.general.appearance_descr': return 'App theme, texts...';
 			case 'settings.general.theme': return 'Theme';
 			case 'settings.general.theme_light': return 'Light';
 			case 'settings.general.theme_dark': return 'Dark';
 			case 'settings.general.prefer_calc': return 'Prefer calculator';
 			case 'settings.general.prefer_calc_descr': return 'Displays a calculator on the add/edit transaction page that will simplify actions on devices without a keyboard';
 			case 'settings.data.display': return 'Data';
-			case 'settings.data.export_descr': return 'Download your data in different formats';
+			case 'settings.data.display_descr': return 'Export and import your data so you don\'t lose anything';
 			case 'settings.data.delete_all': return 'Delete my data';
 			case 'settings.data.delete_all_header1': return 'Stop right there padawan ⚠️⚠️';
 			case 'settings.data.delete_all_message1': return 'Are you sure you want to continue? All your data will be permanently deleted and cannot be recovered';
 			case 'settings.data.delete_all_header2': return 'One last step ⚠️⚠️';
 			case 'settings.data.delete_all_message2': return 'By deleting an account you will delete all your stored personal data. Your accounts, transactions, budgets and categories will be deleted and cannot be recovered. Do you agree?';
-			case 'settings.project.display': return 'Project';
-			case 'settings.project.legal': return 'Terms and privacy';
-			case 'settings.project.legal_descr': return 'Check licenses and other legal terms of our app';
-			case 'settings.project.contributors': return 'Collaborators';
-			case 'settings.project.contributors_descr': return 'All the developers who have made Monekin grow';
-			case 'settings.project.contact': return 'Contact us';
+			case 'settings.about_us.display': return 'App information';
+			case 'settings.about_us.description': return 'Check out the terms and other relevant information about Monekin. Get in touch with the community by reporting bugs, leaving suggestions...';
+			case 'settings.about_us.legal.display': return 'Legal information';
+			case 'settings.about_us.legal.privacy': return 'Privacy policy';
+			case 'settings.about_us.legal.terms': return 'Terms of use';
+			case 'settings.about_us.legal.licenses': return 'Licenses';
+			case 'settings.about_us.project.display': return 'Project';
+			case 'settings.about_us.project.contributors': return 'Collaborators';
+			case 'settings.about_us.project.contributors_descr': return 'All the developers who have made Monekin grow';
+			case 'settings.about_us.project.contact': return 'Contact us';
 			case 'settings.help_us.display': return 'Help us';
+			case 'settings.help_us.description': return 'Find out how you can help Monekin become better and better';
 			case 'settings.help_us.rate_us': return 'Rate us';
 			case 'settings.help_us.rate_us_descr': return 'Any rate is welcome!';
 			case 'settings.help_us.share': return 'Share Monekin';
-			case 'settings.help_us.share_text': return 'Monekin! The best personal finance app';
+			case 'settings.help_us.share_descr': return 'Share our app to friends and family';
+			case 'settings.help_us.share_text': return 'Monekin! The best personal finance app. Download it here';
+			case 'settings.help_us.thanks': return 'Thank you!';
+			case 'settings.help_us.thanks_long': return 'Your contributions to Monekin and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.';
+			case 'settings.help_us.donate': return 'Make a donation';
+			case 'settings.help_us.donate_descr': return 'With your donation you will help the app continue receiving improvements. What better way than to thank the work done by inviting me to a coffee?';
 			case 'settings.help_us.report': return 'Report bugs, leave suggestions...';
-			case 'settings.privacy.title': return 'Privacy policy';
-			case 'settings.licenses.title': return 'Licences';
-			case 'settings.terms_of_use.title': return 'Terms of use';
 			case 'lang.es': return 'Spanish';
 			case 'lang.en': return 'English';
 			default: return null;
@@ -3031,7 +3036,7 @@ extension on _TranslationsEs {
 			case 'backup.export.all_descr': return 'Exporta todos tus datos (cuentas, transacciones, presupuestos, ajustes...). Importalos de nuevo en cualquier momento para no perder nada.';
 			case 'backup.export.transactions': return 'Respaldo de transacciones';
 			case 'backup.export.transactions_descr': return 'Exporta tus transacciones en diversos formatos para que puedas analizarlas mas facilmente en otros programas o aplicaciones.';
-			case 'backup.export.description': return 'Guarda una copia de seguridad de todas tus cuentas, presupuestos, transacciones, ajustes...';
+			case 'backup.export.description': return 'Exporta tus datos en diferentes formatos';
 			case 'backup.export.dialog_title': return 'Guardar/Enviar archivo';
 			case 'backup.export.success_in_documents': return 'Archivo guardado correctamente en Almacenamiento interno/Documents';
 			case 'backup.export.success_in_data': return 'Archivo guardado/enviado correctamente';
@@ -3068,7 +3073,7 @@ extension on _TranslationsEs {
 			case 'settings.title': return 'Ajustes';
 			case 'settings.edit_profile': return 'Editar perfil';
 			case 'settings.display_name': return 'Nombre de usuario';
-			case 'settings.lang': return 'Idioma';
+			case 'settings.lang': return 'Idioma de la aplicación';
 			case 'settings.lang_descr': return 'Idioma en el que se mostrarán los textos en la app';
 			case 'settings.locale': return 'Región';
 			case 'settings.locale_descr': return 'Establece el formato a usar para fechas, números...';
@@ -3078,33 +3083,42 @@ extension on _TranslationsEs {
 			case 'settings.general.categories_descr': return 'Crea y edita categorías a tu gusto';
 			case 'settings.general.other': return 'Ajustes avanzados';
 			case 'settings.general.other_descr': return 'Otros ajustes generales de personalización de la app';
+			case 'settings.general.appearance': return 'Apariencia';
+			case 'settings.general.appearance_descr': return 'Tema de la aplicación, textos...';
 			case 'settings.general.theme': return 'Tema';
 			case 'settings.general.theme_light': return 'Claro';
 			case 'settings.general.theme_dark': return 'Oscuro';
 			case 'settings.general.prefer_calc': return 'Preferir calculadora';
 			case 'settings.general.prefer_calc_descr': return 'Muestra en la página de adición/edición de transacciones una calculadora que simplificará las acciones en dispositivos sin teclado';
 			case 'settings.data.display': return 'Datos';
-			case 'settings.data.export_descr': return 'Descarga tus datos en diferentes formatos';
+			case 'settings.data.display_descr': return 'Exporta y importa tus datos para no perder nada';
 			case 'settings.data.delete_all': return 'Eliminar mis datos';
 			case 'settings.data.delete_all_header1': return 'Alto ahí padawan ⚠️⚠️';
 			case 'settings.data.delete_all_message1': return '¿Estas seguro de que quieres continuar? Todos tus datos serán borrados permanentemente y no podrán ser recuperados';
 			case 'settings.data.delete_all_header2': return 'Un último paso ⚠️⚠️';
 			case 'settings.data.delete_all_message2': return 'Al eliminar una cuenta eliminarás todos tus datos personales almacenados. Tus cuentas, transacciones, presupuestos y categorías serán borrados y no podrán ser recuperados. ¿Estas de acuerdo?';
-			case 'settings.project.display': return 'Proyecto';
-			case 'settings.project.legal': return 'Términos y privacidad';
-			case 'settings.project.legal_descr': return 'Revisa licencias y otros terminos legales de nuestra app';
-			case 'settings.project.contributors': return 'Colaboradores';
-			case 'settings.project.contributors_descr': return 'Todos los desarrolladores que han hecho que Monekin crezca';
-			case 'settings.project.contact': return 'Contacta con nosotros';
+			case 'settings.about_us.display': return 'Información de la app';
+			case 'settings.about_us.description': return 'Consulta los terminos y otra información relevante sobre Monekin. Ponte en contacto con la comunidad reportando errores, dejando sugerencias...';
+			case 'settings.about_us.legal.display': return 'Información legal';
+			case 'settings.about_us.legal.privacy': return 'Política de privacidad';
+			case 'settings.about_us.legal.terms': return 'Términos de uso';
+			case 'settings.about_us.legal.licenses': return 'Licencias';
+			case 'settings.about_us.project.display': return 'Proyecto';
+			case 'settings.about_us.project.contributors': return 'Colaboradores';
+			case 'settings.about_us.project.contributors_descr': return 'Todos los desarrolladores que han hecho que Monekin crezca';
+			case 'settings.about_us.project.contact': return 'Contacta con nosotros';
 			case 'settings.help_us.display': return 'Ayúdanos';
+			case 'settings.help_us.description': return 'Descubre de que formas puedes ayudar a que Monekin sea cada vez mejor';
 			case 'settings.help_us.rate_us': return 'Califícanos';
 			case 'settings.help_us.rate_us_descr': return '¡Cualquier valoración es bienvenida!';
 			case 'settings.help_us.share': return 'Comparte Monekin';
-			case 'settings.help_us.share_text': return 'Monekin! La mejor app de finanzas personales';
+			case 'settings.help_us.share_descr': return 'Comparte nuestra app a amigos y familiares';
+			case 'settings.help_us.share_text': return 'Monekin! La mejor app de finanzas personales. Descargala aquí';
+			case 'settings.help_us.thanks': return 'Gracias!';
+			case 'settings.help_us.thanks_long': return 'Tus contribuciones a Monekin y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir.';
+			case 'settings.help_us.donate': return 'Haz una donación';
+			case 'settings.help_us.donate_descr': return 'Con tu donación ayudaras a que la app siga recibiendo mejoras. ¿Que mejor forma que agradecer el trabajo realizado invitandome a un cafe?';
 			case 'settings.help_us.report': return 'Reporta errores, deja sugerencias...';
-			case 'settings.privacy.title': return 'Política de privacidad';
-			case 'settings.licenses.title': return 'Licencias';
-			case 'settings.terms_of_use.title': return 'Términos de uso';
 			case 'lang.es': return 'Español';
 			case 'lang.en': return 'Inglés';
 			default: return null;
