@@ -119,7 +119,11 @@ class BackupDatabaseService {
     FilePickerResult? result;
 
     try {
-      result = await FilePicker.platform.pickFiles();
+      result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['db'],
+        allowMultiple: false,
+      );
     } catch (e) {
       throw Exception(e.toString());
     }
