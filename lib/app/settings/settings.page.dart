@@ -7,6 +7,7 @@ import 'package:monekin/app/settings/backup_settings_page.dart';
 import 'package:monekin/app/settings/edit_profile_modal.dart';
 import 'package:monekin/app/settings/help_us_page.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/user_avatar.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -43,7 +44,7 @@ ListTile createSettingItem(BuildContext context,
         children: [
           Icon(
             icon,
-            color: Theme.of(context).primaryColor,
+            color: appColorScheme(context).primary,
           ),
         ],
       ),
@@ -103,7 +104,6 @@ class _SettingsPageState extends State<SettingsPage> {
                         builder: (context) => const CategoriesList(
                             mode: CategoriesListMode.page)));
               }),
-              //const Divider(indent: 54),
               createSettingItem(context,
                   title: t.currencies.currency_manager,
                   subtitle:
@@ -114,7 +114,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     MaterialPageRoute(
                         builder: (context) => const CurrencyManagerPage()));
               }),
-              //const Divider(indent: 54),
               createSettingItem(context,
                   title: t.settings.general.appearance,
                   subtitle: t.settings.general.appearance_descr,
@@ -124,8 +123,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     MaterialPageRoute(
                         builder: (context) => const AdvancedSettingsPage()));
               }),
-              //const SizedBox(height: 22),
-              //createListSeparator(t.settings.data.display),
               createSettingItem(context,
                   title: t.settings.data.display,
                   subtitle: t.settings.data.display_descr,
@@ -135,19 +132,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     MaterialPageRoute(
                         builder: (context) => const BackupSettings()));
               }),
-              //const Divider(indent: 54),
-              /* createSettingItem( context,
-                  title: t.backup.import.title,
-                  icon: Icons.cloud_upload_outlined,
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ImportPage()));
-                  }), */
-              //const SizedBox(height: 22),
-              //createListSeparator(t.settings.help_us.display),
-
               createSettingItem(context,
                   title: t.settings.about_us.display,
                   subtitle: t.settings.about_us.description,
@@ -155,7 +139,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const AboutPage()));
               }),
-
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: InkWell(
@@ -206,61 +189,6 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
               )
-
-              /* createSettingItem( context,
-                  title: t.settings.help_us.rate_us,
-                  subtitle: t.settings.help_us.rate_us_descr,
-                  icon: Icons.star_rate_outlined,
-                  onTap: () {
-                    openExternalURL(context,
-                        'https://play.google.com/store/apps/details?id=com.monekin.app');
-                  }),
-              //const Divider(indent: 54),
-              createSettingItem( context,
-                  title: t.settings.help_us.share,
-                  icon: Icons.share,
-                  onTap: () {
-                    Share.share(
-                        'Monekin! The best personal finance app. Download here: https://play.google.com/store/apps/details?id=com.monekin.app');
-                  }),
-              //const Divider(indent: 54),
-              createSettingItem( context,
-                  title: t.settings.help_us.report,
-                  icon: Icons.rate_review_outlined,
-                  onTap: () {
-                    openExternalURL(context,
-                        'https://github.com/enrique-lozano/Monekin/issues/new/choose');
-                  }),
-              //const SizedBox(height: 22),
-              //createListSeparator('Project'),
-              createSettingItem( context,
-                  title: t.settings.project.legal,
-                  subtitle: t.settings.project.legal_descr,
-                  icon: Icons.inventory_outlined,
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LegalPage()));
-                  }),
-              //const Divider(indent: 54),
-              createSettingItem( context,
-                  title: t.settings.project.contributors,
-                  subtitle: t.settings.project.contributors_descr,
-                  icon: Icons.group_outlined,
-                  onTap: () {
-                    openExternalURL(context,
-                        'https://github.com/enrique-lozano/Monekin/graphs/contributors');
-                  }),
-              //const Divider(indent: 54),
-              createSettingItem( context,
-                  title: t.settings.project.contact,
-                  icon: Icons.email_outlined,
-                  onTap: () {
-                    openExternalURL(
-                        context, 'mailto:lozin.technologies@gmail.com');
-                  }),
-              const SizedBox(height: 16), */
             ],
           ),
         ));

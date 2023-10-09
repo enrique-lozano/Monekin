@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 
 class TrendingValue extends StatelessWidget {
@@ -27,7 +28,7 @@ class TrendingValue extends StatelessWidget {
         Icon(
           percentage >= 0 ? Icons.trending_up : Icons.trending_down,
           size: fontSize * (9 / 7),
-          color: _getColorBasedOnPercentage(),
+          color: _getColorBasedOnPercentage(context),
         ),
         const SizedBox(width: 6),
         UINumberFormatter.percentage(
@@ -35,14 +36,16 @@ class TrendingValue extends StatelessWidget {
           textStyle: TextStyle(
               fontSize: fontSize,
               fontWeight: fontWeight,
-              color: _getColorBasedOnPercentage()),
+              color: _getColorBasedOnPercentage(context)),
         ).getTextWidget(context)
       ],
     );
   }
 
-  Color _getColorBasedOnPercentage() {
-    return percentage >= 0 ? Colors.green : Colors.red;
+  Color _getColorBasedOnPercentage(BuildContext context) {
+    return percentage >= 0
+        ? CustomColors.of(context).success
+        : CustomColors.of(context).danger;
   }
 
   @override
@@ -58,7 +61,7 @@ class TrendingValue extends StatelessWidget {
                   : const Color.fromARGB(255, 255, 220, 220)),
           borderRadius: BorderRadius.circular(fontSize / 3.5),
           border: outlined
-              ? Border.all(color: _getColorBasedOnPercentage(), width: 1)
+              ? Border.all(color: _getColorBasedOnPercentage(context), width: 1)
               : null,
         ),
         child: paintTrendValue(context),

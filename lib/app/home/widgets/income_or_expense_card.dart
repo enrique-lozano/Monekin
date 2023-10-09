@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
@@ -25,7 +26,9 @@ class IncomeOrExpenseCard extends StatelessWidget {
 
     final isIncome = type == AccountDataFilter.income;
 
-    final Color color = isIncome ? Colors.green : Colors.red;
+    final Color color = isIncome
+        ? CustomColors.of(context).success
+        : CustomColors.of(context).danger;
     final String text = isIncome ? t.general.income : t.general.expense;
 
     return Padding(

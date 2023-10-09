@@ -10,6 +10,7 @@ import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
@@ -167,7 +168,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                                     ? 1
                                     : budgetValue ?? 0,
                                 color: budgetValue != null && budgetValue >= 1
-                                    ? Colors.red
+                                    ? CustomColors.of(context).danger
                                     : null,
                               );
                             })

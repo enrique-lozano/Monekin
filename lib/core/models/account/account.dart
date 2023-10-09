@@ -72,9 +72,11 @@ class Account extends AccountInDB {
       padding: EdgeInsets.all(size * 0.185),
       decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.onPrimary,
-          border: Border.all(width: 2, color: Theme.of(context).primaryColor),
+          border: Border.all(
+              width: 2, color: Theme.of(context).colorScheme.primary),
           borderRadius: BorderRadius.circular(1000)),
-      child: icon.display(size: size, color: Theme.of(context).primaryColor),
+      child: icon.display(
+          size: size, color: Theme.of(context).colorScheme.primary),
     );
   }
 
