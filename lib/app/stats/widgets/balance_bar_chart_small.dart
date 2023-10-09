@@ -3,6 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/services/filters/date_range_service.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -19,7 +20,7 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
   int touchedGroupIndex = -1;
 
   BarChartGroupData makeGroupData(int x, double expense, double income,
-      {bool disabled = false}) {
+      {bool disabled = false, required CustomColors colors}) {
     const double width = 56;
 
     const radius = BorderRadius.vertical(
@@ -34,8 +35,8 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
           color: disabled
               ? Colors.grey.withOpacity(0.175)
               : x == 0
-                  ? Colors.red.withOpacity(0.4)
-                  : Colors.red,
+                  ? colors.danger.withOpacity(0.4)
+                  : colors.danger,
           borderRadius: radius,
           width: width,
         ),
@@ -44,8 +45,8 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
           color: disabled
               ? Colors.grey.withOpacity(0.175)
               : x == 0
-                  ? Colors.green.withOpacity(0.4)
-                  : Colors.green,
+                  ? colors.success.withOpacity(0.4)
+                  : colors.success,
           borderRadius: radius,
           width: width,
         ),
@@ -139,8 +140,10 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
                         ),
                       ),
                       barGroups: [
-                        makeGroupData(0, 4, 2, disabled: true),
-                        makeGroupData(1, 5, 7, disabled: true),
+                        makeGroupData(0, 4, 2,
+                            disabled: true, colors: CustomColors.of(context)),
+                        makeGroupData(1, 5, 7,
+                            disabled: true, colors: CustomColors.of(context)),
                       ],
                       gridData: const FlGridData(show: false),
                     ),
@@ -210,9 +213,11 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
                       ),
                       barGroups: [
                         makeGroupData(
-                            0, -snapshpot.data![0], snapshpot.data![1]),
+                            0, -snapshpot.data![0], snapshpot.data![1],
+                            colors: CustomColors.of(context)),
                         makeGroupData(
-                            1, -snapshpot.data![2], snapshpot.data![3]),
+                            1, -snapshpot.data![2], snapshpot.data![3],
+                            colors: CustomColors.of(context)),
                       ],
                       gridData: const FlGridData(show: false),
                     ),

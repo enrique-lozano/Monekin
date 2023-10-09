@@ -6,7 +6,7 @@
 /// Locales: 2
 /// Strings: 874 (437 per locale)
 ///
-/// Built on 2023-10-09 at 13:40 UTC
+/// Built on 2023-10-09 at 13:59 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -1996,7 +1996,7 @@ class _TranslationsSettingsHelpUsEs implements _TranslationsSettingsHelpUsEn {
 	@override String get share => 'Comparte Monekin';
 	@override String get share_descr => 'Comparte nuestra app a amigos y familiares';
 	@override String get share_text => 'Monekin! La mejor app de finanzas personales. Descargala aquí';
-	@override String get thanks => 'Gracias!';
+	@override String get thanks => '¡Gracias!';
 	@override String get thanks_long => 'Tus contribuciones a Monekin y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir.';
 	@override String get donate => 'Haz una donación';
 	@override String get donate_descr => 'Con tu donación ayudaras a que la app siga recibiendo mejoras. ¿Que mejor forma que agradecer el trabajo realizado invitandome a un cafe?';
@@ -3114,7 +3114,7 @@ extension on _TranslationsEs {
 			case 'settings.help_us.share': return 'Comparte Monekin';
 			case 'settings.help_us.share_descr': return 'Comparte nuestra app a amigos y familiares';
 			case 'settings.help_us.share_text': return 'Monekin! La mejor app de finanzas personales. Descargala aquí';
-			case 'settings.help_us.thanks': return 'Gracias!';
+			case 'settings.help_us.thanks': return '¡Gracias!';
 			case 'settings.help_us.thanks_long': return 'Tus contribuciones a Monekin y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir.';
 			case 'settings.help_us.donate': return 'Haz una donación';
 			case 'settings.help_us.donate_descr': return 'Con tu donación ayudaras a que la app siga recibiendo mejoras. ¿Que mejor forma que agradecer el trabajo realizado invitandome a un cafe?';

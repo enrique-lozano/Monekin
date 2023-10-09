@@ -205,10 +205,11 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             DefaultTextStyle.merge(
-              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+              style: TextStyle(
+                  color: Theme.of(context).appBarTheme.foregroundColor),
               child: Container(
                 decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).appBarTheme.backgroundColor,
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(16),
                       bottomRight: Radius.circular(16),

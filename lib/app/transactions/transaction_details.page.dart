@@ -292,7 +292,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
     final color = showRecurrencyStatus
         ? isDarkTheme
             ? Theme.of(context).colorScheme.secondary.darken(0.15)
-            : Theme.of(context).primaryColor.lighten(0.2)
+            : Theme.of(context).colorScheme.primary.lighten(0.2)
         : transaction.status!.color;
 
     return Card(
@@ -474,7 +474,8 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                     Icon(
                                       Icons.repeat_rounded,
                                       size: 14,
-                                      color: Theme.of(context).primaryColor,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
                                     const SizedBox(width: 4),
                                     Text(
@@ -482,8 +483,9 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                           .formText(context),
                                       style: TextStyle(
                                           fontWeight: FontWeight.w300,
-                                          color:
-                                              Theme.of(context).primaryColor),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
                                     ),
                                   ],
                                 ),
@@ -501,7 +503,8 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                       transaction.color(context).lighten(0.5),
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
-                                    color: Theme.of(context).primaryColor,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                     width: 0,
                                   ),
                                 ),
@@ -546,12 +549,15 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                             padding: const EdgeInsets.all(2),
                                             labelStyle: TextStyle(
                                                 color: Theme.of(context)
-                                                    .primaryColor),
+                                                    .colorScheme
+                                                    .primary),
                                             side: BorderSide(
                                                 color: Theme.of(context)
-                                                    .primaryColor),
+                                                    .colorScheme
+                                                    .primary),
                                             backgroundColor: Theme.of(context)
-                                                .primaryColor
+                                                .colorScheme
+                                                .primary
                                                 .withOpacity(0.12),
                                             avatar: CircleAvatar(
                                               backgroundColor:
@@ -559,7 +565,8 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                               child: transaction.account.icon
                                                   .display(
                                                       color: Theme.of(context)
-                                                          .primaryColor),
+                                                          .colorScheme
+                                                          .primary),
                                             )),
                                       ],
                                     ),

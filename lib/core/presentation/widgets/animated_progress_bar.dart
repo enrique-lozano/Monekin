@@ -43,7 +43,7 @@ class _AnimatedProgressBarState extends State<AnimatedProgressBar> {
       topRight: Radius.circular(widget.radius),
     );
 
-    final barColor = widget.color ?? Theme.of(context).primaryColor;
+    final barColor = widget.color ?? Theme.of(context).colorScheme.primary;
 
     return TweenAnimationBuilder<double>(
       duration: Duration(milliseconds: widget.animationDuration),

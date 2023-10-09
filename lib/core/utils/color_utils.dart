@@ -4,6 +4,14 @@ extension ColorHex on Color {
   /// Return a color instance from an hex string
   static Color get(String hex) =>
       Color(int.parse("0xff${hex.replaceAll('#', '')}"));
+
+  String toHex({bool leadingHashSign = true}) {
+    return '${leadingHashSign ? '#' : ''}'
+        '${alpha.toRadixString(16).padLeft(2, '0')}'
+        '${red.toRadixString(16).padLeft(2, '0')}'
+        '${green.toRadixString(16).padLeft(2, '0')}'
+        '${blue.toRadixString(16).padLeft(2, '0')}';
+  }
 }
 
 extension ColorBrightness on Color {

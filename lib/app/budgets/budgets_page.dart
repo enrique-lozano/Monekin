@@ -4,6 +4,7 @@ import 'package:monekin/app/budgets/budget_details_page.dart';
 import 'package:monekin/app/budgets/budget_form_page.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/models/budget/budget.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/empty_indicator.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -80,7 +81,7 @@ class BudgetsPage extends StatelessWidget {
                           ? 1
                           : budgetValue ?? 0,
                       color: budgetValue != null && budgetValue >= 1
-                          ? Colors.red
+                          ? CustomColors.of(context).danger
                           : null,
                     );
                   })
