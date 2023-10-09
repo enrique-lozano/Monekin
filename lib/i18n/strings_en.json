@@ -458,7 +458,7 @@
       "all.descr": "Export all your data (accounts, transactions, budgets, settings...). Import them again at any time so you don't lose anything.",
       "transactions": "Transactions backup",
       "transactions.descr": "Export your transactions in various formats so you can more easily analyze them in other programs or applications.",
-      "description": "Keep a backup of all your accounts, budgets, transactions, settings...",
+      "description": "Download your data in different formats",
       "dialog_title": "Save/Send file",
       "success_in_documents": "File successfully saved to Internal Storage/Documents",
       "success_in_data": "File saved/downloaded successfully",
@@ -506,17 +506,18 @@
     "title": "Settings",
     "edit-profile": "Edit profile",
     "display-name": "User name",
-    "lang": "Language",
+    "lang": "App language",
     "lang.descr": "Language in which the texts will be displayed in the app",
     "locale": "Region",
     "locale.descr": "Set the format to use for dates, numbers...",
     "locale.warn": "When changing region the app will update",
     "first_day_of_week": "First day of week",
     "GENERAL": {
-      "display": "General settings",
       "categories.descr": "Create and edit categories to your liking",
       "other": "Advanced settings",
       "other.descr": "Other general app customization settings",
+      "appearance": "Appearance",
+      "appearance.descr": "App theme, texts...",
       "theme": "Theme",
       "theme.light": "Light",
       "theme.dark": "Dark",
@@ -525,37 +526,42 @@
     },
     "DATA": {
       "display": "Data",
-      "export.descr": "Download your data in different formats",
+      "display.descr": "Export and import your data so you don't lose anything",
       "delete-all": "Delete my data",
       "delete-all-header1": "Stop right there padawan ⚠️⚠️",
       "delete-all-message1": "Are you sure you want to continue? All your data will be permanently deleted and cannot be recovered",
       "delete-all-header2": "One last step ⚠️⚠️",
       "delete-all-message2": "By deleting an account you will delete all your stored personal data. Your accounts, transactions, budgets and categories will be deleted and cannot be recovered. Do you agree?"
     },
-    "PROJECT": {
-      "display": "Project",
-      "legal": "Terms and privacy",
-      "legal.descr": "Check licenses and other legal terms of our app",
-      "contributors": "Collaborators",
-      "contributors.descr": "All the developers who have made Monekin grow",
-      "contact": "Contact us"
+    "ABOUT_US": {
+      "display": "App information",
+      "description": "Check out the terms and other relevant information about Monekin. Get in touch with the community by reporting bugs, leaving suggestions...",
+      "LEGAL": {
+        "display": "Legal information",
+        "privacy": "Privacy policy",
+        "terms": "Terms of use",
+        "licenses": "Licenses"
+      },
+      "PROJECT": {
+        "display": "Project",
+        "contributors": "Collaborators",
+        "contributors.descr": "All the developers who have made Monekin grow",
+        "contact": "Contact us"
+      }
     },
     "HELP_US": {
       "display": "Help us",
+      "description": "Find out how you can help Monekin become better and better",
       "rate-us": "Rate us",
       "rate-us.descr": "Any rate is welcome!",
       "share": "Share Monekin",
-      "share.text": "Monekin! The best personal finance app",
+      "share.descr": "Share our app to friends and family",
+      "share.text": "Monekin! The best personal finance app. Download it here",
+      "thanks": "Thank you!",
+      "thanks_long": "Your contributions to Monekin and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.",
+      "donate": "Make a donation",
+      "donate.descr": "With your donation you will help the app continue receiving improvements. What better way than to thank the work done by inviting me to a coffee?",
       "report": "Report bugs, leave suggestions..."
-    },
-    "PRIVACY": {
-      "title": "Privacy policy"
-    },
-    "LICENSES": {
-      "title": "Licences"
-    },
-    "TERMS-OF-USE": {
-      "title": "Terms of use"
     }
   },
   "LANG": {
