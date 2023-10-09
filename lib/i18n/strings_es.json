@@ -459,7 +459,7 @@
       "all.descr": "Exporta todos tus datos (cuentas, transacciones, presupuestos, ajustes...). Importalos de nuevo en cualquier momento para no perder nada.",
       "transactions": "Respaldo de transacciones",
       "transactions.descr": "Exporta tus transacciones en diversos formatos para que puedas analizarlas mas facilmente en otros programas o aplicaciones.",
-      "description": "Guarda una copia de seguridad de todas tus cuentas, presupuestos, transacciones, ajustes...",
+      "description": "Exporta tus datos en diferentes formatos",
       "dialog_title": "Guardar/Enviar archivo",
       "success_in_documents": "Archivo guardado correctamente en Almacenamiento interno/Documents",
       "success_in_data": "Archivo guardado/enviado correctamente",
@@ -507,7 +507,7 @@
     "title": "Ajustes",
     "edit-profile": "Editar perfil",
     "display-name": "Nombre de usuario",
-    "lang": "Idioma",
+    "lang": "Idioma de la aplicación",
     "lang.descr": "Idioma en el que se mostrarán los textos en la app",
     "locale": "Región",
     "locale.descr": "Establece el formato a usar para fechas, números...",
@@ -518,6 +518,8 @@
       "categories.descr": "Crea y edita categorías a tu gusto",
       "other": "Ajustes avanzados",
       "other.descr": "Otros ajustes generales de personalización de la app",
+      "appearance": "Apariencia",
+      "appearance.descr": "Tema de la aplicación, textos...",
       "theme": "Tema",
       "theme.light": "Claro",
       "theme.dark": "Oscuro",
@@ -526,37 +528,42 @@
     },
     "DATA": {
       "display": "Datos",
-      "export.descr": "Descarga tus datos en diferentes formatos",
+      "display.descr": "Exporta y importa tus datos para no perder nada",
       "delete-all": "Eliminar mis datos",
       "delete-all-header1": "Alto ahí padawan ⚠️⚠️",
       "delete-all-message1": "¿Estas seguro de que quieres continuar? Todos tus datos serán borrados permanentemente y no podrán ser recuperados",
       "delete-all-header2": "Un último paso ⚠️⚠️",
       "delete-all-message2": "Al eliminar una cuenta eliminarás todos tus datos personales almacenados. Tus cuentas, transacciones, presupuestos y categorías serán borrados y no podrán ser recuperados. ¿Estas de acuerdo?"
     },
-    "PROJECT": {
-      "display": "Proyecto",
-      "legal": "Términos y privacidad",
-      "legal.descr": "Revisa licencias y otros terminos legales de nuestra app",
-      "contributors": "Colaboradores",
-      "contributors.descr": "Todos los desarrolladores que han hecho que Monekin crezca",
-      "contact": "Contacta con nosotros"
+    "ABOUT_US": {
+      "display": "Información de la app",
+      "description": "Consulta los terminos y otra información relevante sobre Monekin. Ponte en contacto con la comunidad reportando errores, dejando sugerencias...",
+      "LEGAL": {
+        "display": "Información legal",
+        "privacy": "Política de privacidad",
+        "terms": "Términos de uso",
+        "licenses": "Licencias"
+      },
+      "PROJECT": {
+        "display": "Proyecto",
+        "contributors": "Colaboradores",
+        "contributors.descr": "Todos los desarrolladores que han hecho que Monekin crezca",
+        "contact": "Contacta con nosotros"
+      }
     },
     "HELP_US": {
       "display": "Ayúdanos",
+      "description": "Descubre de que formas puedes ayudar a que Monekin sea cada vez mejor",
       "rate-us": "Califícanos",
       "rate-us.descr": "¡Cualquier valoración es bienvenida!",
       "share": "Comparte Monekin",
-      "share.text": "Monekin! La mejor app de finanzas personales",
+      "share.descr": "Comparte nuestra app a amigos y familiares",
+      "share.text": "Monekin! La mejor app de finanzas personales. Descargala aquí",
+      "thanks": "¡Gracias!",
+      "thanks.long": "Tus contribuciones a Monekin y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir.",
+      "donate": "Haz una donación",
+      "donate.descr": "Con tu donación ayudaras a que la app siga recibiendo mejoras. ¿Que mejor forma que agradecer el trabajo realizado invitandome a un cafe?",
       "report": "Reporta errores, deja sugerencias..."
-    },
-    "PRIVACY": {
-      "title": "Política de privacidad"
-    },
-    "LICENSES": {
-      "title": "Licencias"
-    },
-    "TERMS-OF-USE": {
-      "title": "Términos de uso"
     }
   },
   "LANG": {
