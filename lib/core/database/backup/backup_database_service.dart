@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/utils/get_download_path.dart';
 import 'package:path/path.dart' as path;
@@ -129,16 +130,34 @@ class BackupDatabaseService {
     }
 
     if (result != null) {
-      File file = File(result.files.single.path!);
+      File selectedFile = File(result.files.single.path!);
 
       // Delete the previous database
-      String path = await db.databasePath;
+      String dbPath = await db.databasePath;
+
+      final currentDBContent = await File(dbPath).readAsBytes();
 
       // Load the new database
-      await File(path)
-          .writeAsBytes(await file.readAsBytes(), mode: FileMode.write);
+      await File(dbPath)
+          .writeAsBytes(await selectedFile.readAsBytes(), mode: FileMode.write);
 
-      db.markTablesUpdated(db.allTables);
+      try {
+        final dbVersion = int.parse((await AppDataService.instance
+            .getAppDataItem(AppDataKey.dbVersion)
+            .first)!);
+
+        if (dbVersion < db.schemaVersion) {
+          // TODO: Migrate
+        }
+
+        db.markTablesUpdated(db.allTables);
+      } catch (e) {
+        // Reset the DB as it was
+        await File(dbPath).writeAsBytes(currentDBContent, mode: FileMode.write);
+        db.markTablesUpdated(db.allTables);
+
+        throw Exception('The database is invalid or could not be readed');
+      }
 
       return true;
     }
