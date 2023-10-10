@@ -44,6 +44,7 @@ class BackupSettings extends StatelessWidget {
                                   SnackBar(
                                       content: Text(t.backup.import.cancelled)),
                                 );
+
                                 return;
                               }
 
@@ -59,6 +60,8 @@ class BackupSettings extends StatelessWidget {
                                     content: Text(t.backup.import.success)),
                               );
                             }).catchError((err) {
+                              Navigator.pop(context);
+
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(content: Text(err.toString())));
                             });
