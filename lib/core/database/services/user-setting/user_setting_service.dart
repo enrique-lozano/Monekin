@@ -7,8 +7,15 @@ enum SettingKey {
   userName,
   avatar,
   appLanguage,
+
+  /// Key to storage the app theme. Could be 'system', 'light' or 'dark'
   themeMode,
-  transactionMobileMode
+
+  /// Key to storage the app accentColor. It's a string representing the color in HEX format (without the `#`) or the string 'auto' to apply dynamic colors if possible (if not possible will default to the Monekin blue brand color)
+  accentColor,
+
+  /// Key to storage if we should display a calculator in the transaction-form page. Could be '1' (true) or '0' (false)
+  transactionMobileMode,
 }
 
 class UserSettingService {

@@ -60,7 +60,7 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
       rightTitles: AxisTitles(
           sideTitles: SideTitles(
         showTitles: true,
-        reservedSize: 28,
+        reservedSize: 32,
         getTitlesWidget: (value, meta) {
           return Row(
             children: [
