@@ -147,6 +147,26 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                 }),
             StreamBuilder(
                 stream: UserSettingService.instance
+                    .getSetting(SettingKey.amoledMode)
+                    .map((event) => event == '1'),
+                initialData: true,
+                builder: (context, snapshot) {
+                  return SwitchListTile(
+                    title: Text(t.settings.general.amoled_mode),
+                    subtitle: Text(t.settings.general.amoled_mode_descr),
+                    value: snapshot.data!,
+                    onChanged: Theme.of(context).brightness == Brightness.light
+                        ? null
+                        : (bool value) {
+                            setState(() {
+                              UserSettingService.instance.setSetting(
+                                  SettingKey.amoledMode, value ? '1' : '0');
+                            });
+                          },
+                  );
+                }),
+            StreamBuilder(
+                stream: UserSettingService.instance
                     .getSetting(SettingKey.accentColor)
                     .map((event) => event == 'auto'),
                 initialData: true,
