@@ -9,7 +9,7 @@ import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 class TransactionFilters {
-  /// Accounts that this filter contains. Will be null if this filter is not in use, or if all categories are selected
+  /// Accounts that this filter contains. Will be null if this filter is not in use, or if all accounts are selected
   List<Account>? accounts;
 
   /// Categories that this filter contains. Will be null if this filter is not in use, or if all categories are selected

@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 874 (437 per locale)
+/// Strings: 884 (442 per locale)
 ///
-/// Built on 2023-10-09 at 13:59 UTC
+/// Built on 2023-10-10 at 22:44 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -911,8 +911,13 @@ class _TranslationsSettingsGeneralEn {
 	String get appearance => 'Appearance';
 	String get appearance_descr => 'App theme, texts...';
 	String get theme => 'Theme';
+	String get theme_auto => 'Defined by the system';
 	String get theme_light => 'Light';
 	String get theme_dark => 'Dark';
+	String get dynamic_colors => 'Dynamic colors';
+	String get dynamic_colors_descr => 'Use your system accent color whenever possible';
+	String get accent_color => 'Accent color';
+	String get accent_color_descr => 'Choose the color the app will use to emphasize certain parts of the interface';
 	String get prefer_calc => 'Prefer calculator';
 	String get prefer_calc_descr => 'Displays a calculator on the add/edit transaction page that will simplify actions on devices without a keyboard';
 }
@@ -1947,8 +1952,13 @@ class _TranslationsSettingsGeneralEs implements _TranslationsSettingsGeneralEn {
 	@override String get appearance => 'Apariencia';
 	@override String get appearance_descr => 'Tema de la aplicación, textos...';
 	@override String get theme => 'Tema';
+	@override String get theme_auto => 'Definido por el sistema';
 	@override String get theme_light => 'Claro';
 	@override String get theme_dark => 'Oscuro';
+	@override String get dynamic_colors => 'Colores dinámicos';
+	@override String get dynamic_colors_descr => 'Usa el color de acentuación de su sistema siempre que sea posible';
+	@override String get accent_color => 'Color de acentuación';
+	@override String get accent_color_descr => 'Elige el color que usará la app para enfatizar ciertas partes de la interfaz';
 	@override String get prefer_calc => 'Preferir calculadora';
 	@override String get prefer_calc_descr => 'Muestra en la página de adición/edición de transacciones una calculadora que simplificará las acciones en dispositivos sin teclado';
 }
@@ -2622,8 +2632,13 @@ extension on _TranslationsEn {
 			case 'settings.general.appearance': return 'Appearance';
 			case 'settings.general.appearance_descr': return 'App theme, texts...';
 			case 'settings.general.theme': return 'Theme';
+			case 'settings.general.theme_auto': return 'Defined by the system';
 			case 'settings.general.theme_light': return 'Light';
 			case 'settings.general.theme_dark': return 'Dark';
+			case 'settings.general.dynamic_colors': return 'Dynamic colors';
+			case 'settings.general.dynamic_colors_descr': return 'Use your system accent color whenever possible';
+			case 'settings.general.accent_color': return 'Accent color';
+			case 'settings.general.accent_color_descr': return 'Choose the color the app will use to emphasize certain parts of the interface';
 			case 'settings.general.prefer_calc': return 'Prefer calculator';
 			case 'settings.general.prefer_calc_descr': return 'Displays a calculator on the add/edit transaction page that will simplify actions on devices without a keyboard';
 			case 'settings.data.display': return 'Data';
@@ -3086,8 +3101,13 @@ extension on _TranslationsEs {
 			case 'settings.general.appearance': return 'Apariencia';
 			case 'settings.general.appearance_descr': return 'Tema de la aplicación, textos...';
 			case 'settings.general.theme': return 'Tema';
+			case 'settings.general.theme_auto': return 'Definido por el sistema';
 			case 'settings.general.theme_light': return 'Claro';
 			case 'settings.general.theme_dark': return 'Oscuro';
+			case 'settings.general.dynamic_colors': return 'Colores dinámicos';
+			case 'settings.general.dynamic_colors_descr': return 'Usa el color de acentuación de su sistema siempre que sea posible';
+			case 'settings.general.accent_color': return 'Color de acentuación';
+			case 'settings.general.accent_color_descr': return 'Elige el color que usará la app para enfatizar ciertas partes de la interfaz';
 			case 'settings.general.prefer_calc': return 'Preferir calculadora';
 			case 'settings.general.prefer_calc_descr': return 'Muestra en la página de adición/edición de transacciones una calculadora que simplificará las acciones en dispositivos sin teclado';
 			case 'settings.data.display': return 'Datos';
