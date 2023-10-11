@@ -34,6 +34,7 @@ class MonekinAppEntryPoint extends StatelessWidget {
               UserSettingService.instance.getSettings((p0) =>
                   p0.settingKey.equalsValue(SettingKey.appLanguage) |
                   p0.settingKey.equalsValue(SettingKey.themeMode) |
+                  p0.settingKey.equalsValue(SettingKey.amoledMode) |
                   p0.settingKey.equalsValue(SettingKey.accentColor)),
               AppDataService.instance
                   .getAppDataItems((p0) => AppDB.instance.buildExpr([])),
@@ -76,6 +77,11 @@ class MonekinAppEntryPoint extends StatelessWidget {
             return TranslationProvider(
               child: MaterialAppContainer(
                 goToIntro: userHasSeenIntro != '1',
+                amoledMode: userSettings
+                        .firstWhere((element) =>
+                            element.settingKey == SettingKey.amoledMode)
+                        .settingValue! ==
+                    '1',
                 accentColor: userSettings
                     .firstWhere((element) =>
                         element.settingKey == SettingKey.accentColor)
@@ -96,11 +102,13 @@ class MaterialAppContainer extends StatelessWidget {
       {super.key,
       required this.themeMode,
       required this.goToIntro,
-      required this.accentColor});
+      required this.accentColor,
+      required this.amoledMode});
 
   final ThemeMode themeMode;
   final bool goToIntro;
   final String accentColor;
+  final bool amoledMode;
 
   @override
   Widget build(BuildContext context) {
@@ -117,11 +125,13 @@ class MaterialAppContainer extends StatelessWidget {
           localizationsDelegates: GlobalMaterialLocalizations.delegates,
           theme: getThemeData(context,
               isDark: false,
+              amoledMode: amoledMode,
               lightDynamic: lightDynamic,
               darkDynamic: darkDynamic,
               accentColor: accentColor),
           darkTheme: getThemeData(context,
               isDark: true,
+              amoledMode: amoledMode,
               lightDynamic: lightDynamic,
               darkDynamic: darkDynamic,
               accentColor: accentColor),

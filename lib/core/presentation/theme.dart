@@ -67,6 +67,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
 ThemeData getThemeData(
   BuildContext context, {
   required bool isDark,
+  required bool amoledMode,
   required ColorScheme? lightDynamic,
   required ColorScheme? darkDynamic,
   required String accentColor,
@@ -90,6 +91,11 @@ ThemeData getThemeData(
 
     // Repeat for the dark color scheme.
     darkColorScheme = darkDynamic.harmonized();
+
+    if (amoledMode) {
+      darkColorScheme = darkColorScheme.copyWith(background: Colors.black);
+    }
+
     darkCustomColors = darkCustomColors.harmonized(darkColorScheme);
 
     isAppUsingDynamicColors = true; // ignore, only for demo purposes
@@ -99,9 +105,10 @@ ThemeData getThemeData(
       seedColor: accentColor == 'auto' ? _brandBlue : ColorHex.get(accentColor),
     );
     darkColorScheme = ColorScheme.fromSeed(
-      seedColor: accentColor == 'auto' ? _brandBlue : ColorHex.get(accentColor),
-      brightness: Brightness.dark,
-    );
+        seedColor:
+            accentColor == 'auto' ? _brandBlue : ColorHex.get(accentColor),
+        brightness: Brightness.dark,
+        background: amoledMode ? Colors.black : null);
   }
 
   theme = ThemeData(
