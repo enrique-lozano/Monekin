@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 884 (442 per locale)
+/// Strings: 888 (444 per locale)
 ///
-/// Built on 2023-10-10 at 22:44 UTC
+/// Built on 2023-10-11 at 10:27 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -914,6 +914,8 @@ class _TranslationsSettingsGeneralEn {
 	String get theme_auto => 'Defined by the system';
 	String get theme_light => 'Light';
 	String get theme_dark => 'Dark';
+	String get amoled_mode => 'AMOLED mode';
+	String get amoled_mode_descr => 'Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens';
 	String get dynamic_colors => 'Dynamic colors';
 	String get dynamic_colors_descr => 'Use your system accent color whenever possible';
 	String get accent_color => 'Accent color';
@@ -1955,6 +1957,8 @@ class _TranslationsSettingsGeneralEs implements _TranslationsSettingsGeneralEn {
 	@override String get theme_auto => 'Definido por el sistema';
 	@override String get theme_light => 'Claro';
 	@override String get theme_dark => 'Oscuro';
+	@override String get amoled_mode => 'Modo AMOLED';
+	@override String get amoled_mode_descr => 'Usa un fondo de pantalla negro puro cuando sea posible. Esto ayudará ligeramente a la bateria de dispositivos con pantallas AMOLED';
 	@override String get dynamic_colors => 'Colores dinámicos';
 	@override String get dynamic_colors_descr => 'Usa el color de acentuación de su sistema siempre que sea posible';
 	@override String get accent_color => 'Color de acentuación';
@@ -2635,6 +2639,8 @@ extension on _TranslationsEn {
 			case 'settings.general.theme_auto': return 'Defined by the system';
 			case 'settings.general.theme_light': return 'Light';
 			case 'settings.general.theme_dark': return 'Dark';
+			case 'settings.general.amoled_mode': return 'AMOLED mode';
+			case 'settings.general.amoled_mode_descr': return 'Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens';
 			case 'settings.general.dynamic_colors': return 'Dynamic colors';
 			case 'settings.general.dynamic_colors_descr': return 'Use your system accent color whenever possible';
 			case 'settings.general.accent_color': return 'Accent color';
@@ -3104,6 +3110,8 @@ extension on _TranslationsEs {
 			case 'settings.general.theme_auto': return 'Definido por el sistema';
 			case 'settings.general.theme_light': return 'Claro';
 			case 'settings.general.theme_dark': return 'Oscuro';
+			case 'settings.general.amoled_mode': return 'Modo AMOLED';
+			case 'settings.general.amoled_mode_descr': return 'Usa un fondo de pantalla negro puro cuando sea posible. Esto ayudará ligeramente a la bateria de dispositivos con pantallas AMOLED';
 			case 'settings.general.dynamic_colors': return 'Colores dinámicos';
 			case 'settings.general.dynamic_colors_descr': return 'Usa el color de acentuación de su sistema siempre que sea posible';
 			case 'settings.general.accent_color': return 'Color de acentuación';

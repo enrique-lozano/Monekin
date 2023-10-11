@@ -524,6 +524,8 @@
       "theme.auto": "Definido por el sistema",
       "theme.light": "Claro",
       "theme.dark": "Oscuro",
+      "amoled-mode": "Modo AMOLED",
+      "amoled-mode.descr": "Usa un fondo de pantalla negro puro cuando sea posible. Esto ayudará ligeramente a la bateria de dispositivos con pantallas AMOLED",
       "dynamic-colors": "Colores dinámicos",
       "dynamic-colors.descr": "Usa el color de acentuación de su sistema siempre que sea posible",
       "accent-color": "Color de acentuación",
