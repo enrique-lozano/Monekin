@@ -121,8 +121,8 @@ class BackupDatabaseService {
 
     try {
       result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['db'],
+        type: Platform.isWindows ? FileType.custom : FileType.any,
+        allowedExtensions: Platform.isWindows ? ['db'] : null,
         allowMultiple: false,
       );
     } catch (e) {
