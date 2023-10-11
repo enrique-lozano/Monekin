@@ -33,55 +33,59 @@ class MonekinAppEntryPoint extends StatelessWidget {
           stream: Rx.combineLatest2(
               UserSettingService.instance.getSettings((p0) =>
                   p0.settingKey.equalsValue(SettingKey.appLanguage) |
-                  p0.settingKey.equalsValue(SettingKey.themeMode)),
+                  p0.settingKey.equalsValue(SettingKey.themeMode) |
+                  p0.settingKey.equalsValue(SettingKey.accentColor)),
               AppDataService.instance
                   .getAppDataItems((p0) => AppDB.instance.buildExpr([])),
               (a, b) => (a, b)),
           builder: (context, snapshot) {
             print('Finding initial user settings...');
 
-            if (snapshot.hasData) {
-              final userSettings = snapshot.data!.$1;
-              final appDataItems = snapshot.data!.$2;
-
-              final lang = userSettings
-                  .firstWhere(
-                      (element) => element.settingKey == SettingKey.appLanguage)
-                  .settingValue;
-
-              if (lang != null) {
-                print('App language found. Setting the locale to `$lang`...');
-                LocaleSettings.setLocaleRaw(lang);
-              } else {
-                print(
-                    'App language found. Setting the user device language...');
-                LocaleSettings.useDeviceLocale();
-                UserSettingService.instance
-                    .setSetting(
-                      SettingKey.appLanguage,
-                      LocaleSettings.currentLocale.languageTag,
-                    )
-                    .then((value) => null);
-              }
-
-              final userHasSeenIntro = appDataItems
-                  .firstWhere(
-                    (element) => element.appDataKey == AppDataKey.introSeen,
-                  )
-                  .appDataValue;
-
-              return TranslationProvider(
-                child: MaterialAppContainer(
-                  goToIntro: userHasSeenIntro != '1',
-                  themeMode: ThemeMode.values.byName(userSettings
-                      .firstWhere((element) =>
-                          element.settingKey == SettingKey.themeMode)
-                      .settingValue!),
-                ),
-              );
+            if (!snapshot.hasData) {
+              return Container();
             }
 
-            return Container();
+            final userSettings = snapshot.data!.$1;
+            final appDataItems = snapshot.data!.$2;
+
+            final lang = userSettings
+                .firstWhere(
+                    (element) => element.settingKey == SettingKey.appLanguage)
+                .settingValue;
+
+            if (lang != null) {
+              print('App language found. Setting the locale to `$lang`...');
+              LocaleSettings.setLocaleRaw(lang);
+            } else {
+              print('App language found. Setting the user device language...');
+              LocaleSettings.useDeviceLocale();
+              UserSettingService.instance
+                  .setSetting(
+                    SettingKey.appLanguage,
+                    LocaleSettings.currentLocale.languageTag,
+                  )
+                  .then((value) => null);
+            }
+
+            final userHasSeenIntro = appDataItems
+                .firstWhere(
+                  (element) => element.appDataKey == AppDataKey.introSeen,
+                )
+                .appDataValue;
+
+            return TranslationProvider(
+              child: MaterialAppContainer(
+                goToIntro: userHasSeenIntro != '1',
+                accentColor: userSettings
+                    .firstWhere((element) =>
+                        element.settingKey == SettingKey.accentColor)
+                    .settingValue!,
+                themeMode: ThemeMode.values.byName(userSettings
+                    .firstWhere(
+                        (element) => element.settingKey == SettingKey.themeMode)
+                    .settingValue!),
+              ),
+            );
           }),
     );
   }
@@ -89,10 +93,14 @@ class MonekinAppEntryPoint extends StatelessWidget {
 
 class MaterialAppContainer extends StatelessWidget {
   const MaterialAppContainer(
-      {super.key, required this.themeMode, required this.goToIntro});
+      {super.key,
+      required this.themeMode,
+      required this.goToIntro,
+      required this.accentColor});
 
   final ThemeMode themeMode;
   final bool goToIntro;
+  final String accentColor;
 
   @override
   Widget build(BuildContext context) {
@@ -110,11 +118,13 @@ class MaterialAppContainer extends StatelessWidget {
           theme: getThemeData(context,
               isDark: false,
               lightDynamic: lightDynamic,
-              darkDynamic: darkDynamic),
+              darkDynamic: darkDynamic,
+              accentColor: accentColor),
           darkTheme: getThemeData(context,
               isDark: true,
               lightDynamic: lightDynamic,
-              darkDynamic: darkDynamic),
+              darkDynamic: darkDynamic,
+              accentColor: accentColor),
           themeMode: themeMode,
           home: Builder(builder: (context) {
             if (!goToIntro) {

@@ -519,8 +519,13 @@
       "appearance": "Appearance",
       "appearance.descr": "App theme, texts...",
       "theme": "Theme",
+      "theme.auto": "Defined by the system",
       "theme.light": "Light",
       "theme.dark": "Dark",
+      "dynamic-colors": "Dynamic colors",
+      "dynamic-colors.descr": "Use your system accent color whenever possible",
+      "accent-color": "Accent color",
+      "accent-color.descr": "Choose the color the app will use to emphasize certain parts of the interface",
       "prefer-calc": "Prefer calculator",
       "prefer-calc-descr": "Displays a calculator on the add/edit transaction page that will simplify actions on devices without a keyboard"
     },
