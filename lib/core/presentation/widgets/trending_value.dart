@@ -56,7 +56,7 @@ class TrendingValue extends StatelessWidget {
 
   Color _getColorBasedOnPercentage(BuildContext context) {
     return percentage == 0
-        ? CustomColors.of(context).brand.lighten(0.25)
+        ? CustomColors.of(context).brand.lighten(0.35).withBlue(225)
         : percentage > 0
             ? CustomColors.of(context).success
             : CustomColors.of(context).danger;
