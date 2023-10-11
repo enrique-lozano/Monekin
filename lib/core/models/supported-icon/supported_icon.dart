@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:monekin/core/utils/color_utils.dart';
 
 part 'supported_icon.g.dart';
 
@@ -43,7 +44,7 @@ class SupportedIcon {
     return Container(
         padding: EdgeInsets.all(size / (22 / 6)),
         decoration: BoxDecoration(
-            color: color.withOpacity(0.12),
+            color: color.lighten(0.82),
             borderRadius: BorderRadius.circular(size / (22 / 6))),
         child: display(size: size, color: color));
   }

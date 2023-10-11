@@ -500,7 +500,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
                                   color:
-                                      transaction.color(context).lighten(0.5),
+                                      transaction.color(context).lighten(0.82),
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
                                     color:

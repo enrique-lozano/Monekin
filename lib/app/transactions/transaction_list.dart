@@ -163,7 +163,7 @@ class TransactionListComponent extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                    color: transaction.color(context).withOpacity(0.2),
+                    color: transaction.color(context).lighten(0.82),
                     borderRadius: BorderRadius.circular(6)),
                 child: transaction.isIncomeOrExpense
                     ? transaction.category!.icon.display(
