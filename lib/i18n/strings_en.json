@@ -522,6 +522,8 @@
       "theme.auto": "Defined by the system",
       "theme.light": "Light",
       "theme.dark": "Dark",
+      "amoled-mode": "AMOLED mode",
+      "amoled-mode.descr": "Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens",
       "dynamic-colors": "Dynamic colors",
       "dynamic-colors.descr": "Use your system accent color whenever possible",
       "accent-color": "Accent color",

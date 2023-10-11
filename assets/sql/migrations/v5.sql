@@ -1,1 +1,2 @@
-INSERT INTO userSettings VALUES ('accentColor', 'auto');
+INSERT INTO userSettings VALUES ('accentColor', 'auto'),
+('amoledMode', '0');
