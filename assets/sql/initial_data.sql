@@ -313,4 +313,5 @@ INSERT INTO userSettings VALUES
 ('avatar', 'man'), 
 ('userName', 'User'), 
 ('appLanguage', null), 
+('accentColor', 'auto'), 
 ('themeMode', 'system');

@@ -105,6 +105,7 @@ flutter:
     - assets/icons/supported_selectable_icons/technology/
     - assets/icons/supported_selectable_icons/logos/financial_institutions/
     - assets/sql/
+    - assets/sql/migrations/
     - assets/icons/backup/
 
   fonts:
