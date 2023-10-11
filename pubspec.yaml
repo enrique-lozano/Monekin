@@ -81,11 +81,11 @@ dev_dependencies:
 flutter_launcher_icons:
   image_path: 'assets/resources/appIcon-removebg.png'
   android: true
-  ios: true
+  ios: false
   windows:
     generate: true
   macos:
-    generate: true
+    generate: false
 
 flutter:
   uses-material-design: true
