@@ -1,5 +1,6 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/core/utils/color_utils.dart';
 
 bool isAppUsingDynamicColors = false;
 
@@ -68,13 +69,14 @@ ThemeData getThemeData(
   required bool isDark,
   required ColorScheme? lightDynamic,
   required ColorScheme? darkDynamic,
+  required String accentColor,
 }) {
   ThemeData theme;
 
   ColorScheme lightColorScheme;
   ColorScheme darkColorScheme;
 
-  if (lightDynamic != null && darkDynamic != null) {
+  if (lightDynamic != null && darkDynamic != null && accentColor == 'auto') {
     // On Android S+ devices, use the provided dynamic color scheme.
     // (Recommended) Harmonize the dynamic color scheme' built-in semantic colors.
     lightColorScheme = lightDynamic.harmonized();
@@ -94,10 +96,10 @@ ThemeData getThemeData(
   } else {
     // Otherwise, use fallback schemes.
     lightColorScheme = ColorScheme.fromSeed(
-      seedColor: _brandBlue,
+      seedColor: accentColor == 'auto' ? _brandBlue : ColorHex.get(accentColor),
     );
     darkColorScheme = ColorScheme.fromSeed(
-      seedColor: _brandBlue,
+      seedColor: accentColor == 'auto' ? _brandBlue : ColorHex.get(accentColor),
       brightness: Brightness.dark,
     );
   }

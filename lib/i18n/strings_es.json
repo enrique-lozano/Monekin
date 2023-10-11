@@ -521,8 +521,13 @@
       "appearance": "Apariencia",
       "appearance.descr": "Tema de la aplicación, textos...",
       "theme": "Tema",
+      "theme.auto": "Definido por el sistema",
       "theme.light": "Claro",
       "theme.dark": "Oscuro",
+      "dynamic-colors": "Colores dinámicos",
+      "dynamic-colors.descr": "Usa el color de acentuación de su sistema siempre que sea posible",
+      "accent-color": "Color de acentuación",
+      "accent-color.descr": "Elige el color que usará la app para enfatizar ciertas partes de la interfaz",
       "prefer-calc": "Preferir calculadora",
       "prefer-calc-descr": "Muestra en la página de adición/edición de transacciones una calculadora que simplificará las acciones en dispositivos sin teclado"
     },
