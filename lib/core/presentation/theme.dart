@@ -4,13 +4,13 @@ import 'package:monekin/core/utils/color_utils.dart';
 
 bool isAppUsingDynamicColors = false;
 
-// Fictitious brand color.
-const _brandBlue = Color(0xFF0F3375);
+/// Monekin brand color.
+const brandBlue = Color(0xFF0F3375);
 
 CustomColors lightCustomColors = const CustomColors(
-    danger: Colors.red, success: Colors.green, brand: _brandBlue);
+    danger: Colors.red, success: Colors.green, brand: brandBlue);
 CustomColors darkCustomColors = const CustomColors(
-    danger: Colors.redAccent, success: Colors.lightGreen, brand: _brandBlue);
+    danger: Colors.redAccent, success: Colors.lightGreen, brand: brandBlue);
 
 ColorScheme appColorScheme(BuildContext context) {
   return Theme.of(context).colorScheme;
@@ -102,11 +102,11 @@ ThemeData getThemeData(
   } else {
     // Otherwise, use fallback schemes.
     lightColorScheme = ColorScheme.fromSeed(
-      seedColor: accentColor == 'auto' ? _brandBlue : ColorHex.get(accentColor),
+      seedColor: accentColor == 'auto' ? brandBlue : ColorHex.get(accentColor),
     );
     darkColorScheme = ColorScheme.fromSeed(
         seedColor:
-            accentColor == 'auto' ? _brandBlue : ColorHex.get(accentColor),
+            accentColor == 'auto' ? brandBlue : ColorHex.get(accentColor),
         brightness: Brightness.dark,
         background: amoledMode ? Colors.black : null);
   }
