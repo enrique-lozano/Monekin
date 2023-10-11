@@ -87,7 +87,9 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     required Function onClick,
   }) {
     icon ??= SupportedIconService.instance.defaultSupportedIcon;
-    iconColor ??= Theme.of(context).colorScheme.primary;
+    iconColor ??= Theme.of(context).brightness == Brightness.light
+        ? Theme.of(context).colorScheme.primary
+        : Theme.of(context).colorScheme.primaryContainer;
 
     final t = Translations.of(context);
 
@@ -96,22 +98,26 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         onTap: () => onClick(),
         borderRadius: BorderRadius.circular(8),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           child: Row(
             children: [
-              icon.displayFilled(color: iconColor, size: 24),
+              icon.displayFilled(color: iconColor, size: 28),
               const SizedBox(width: 8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelSmall!
-                        .copyWith(fontWeight: FontWeight.w300),
+                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                        fontWeight: FontWeight.w300,
+                        color: Theme.of(context).colorScheme.onPrimary),
                   ),
-                  Text(inputValue ?? t.general.unspecified)
+                  Text(
+                    inputValue ?? t.general.unspecified,
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: Theme.of(context).colorScheme.onPrimary),
+                  )
                 ],
               )
             ],
@@ -475,8 +481,9 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
             ? CustomColors.of(context).success
             : CustomColors.of(context).danger);
 
-    final trColorLighten = trColor.withOpacity(
-        Theme.of(context).brightness == Brightness.light ? 0.1 : 0.2);
+    final trColorLighten = Theme.of(context).brightness == Brightness.light
+        ? trColor.lighten(0.65)
+        : trColor.darken(0.65);
 
     return StreamBuilder(
         stream: UserSettingService.instance
@@ -516,250 +523,288 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                 ---------- FORM IN A CALCULATOR STYLE ------------
                 ------------------------------------------------- */
 
-                return LayoutBuilder(builder: (context, constrains) {
-                  return Column(
-                    children: [
-                      SizedBox(
-                        height: constrains.maxHeight * 0.6,
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Center(
-                                child: AnimatedDefaultTextStyle(
+                return Column(
+                  children: [
+                    Flexible(
+                      flex: 8,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                AnimatedDefaultTextStyle(
                                   duration: const Duration(milliseconds: 400),
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineLarge!
                                       .copyWith(
                                           fontSize: (valueToNumber ?? 0) >= 1000
-                                              ? 36
-                                              : 42),
+                                              ? (valueToNumber ?? 0) >= 1000000
+                                                  ? 36
+                                                  : 42
+                                              : 56),
                                   child: CurrencyDisplayer(
                                     amountToConvert: valueToNumber ?? 0,
                                     currency: fromAccount?.currency,
                                   ),
                                 ),
-                              ),
-                            ),
-                            if (date.compareTo(DateTime.now()) > 0)
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: InlineInfoCard(
-                                  text: t.transaction.form.validators.date_max,
-                                  mode: InlineInfoCardMode.info,
-                                ),
-                              ),
-                            if (fromAccount != null &&
-                                fromAccount!.date.compareTo(date) > 0 &&
-                                !(date.compareTo(DateTime.now()) > 0))
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: InlineInfoCard(
-                                  text: t.transaction.form.validators
-                                      .date_after_account_creation,
-                                  mode: InlineInfoCardMode.warn,
-                                ),
-                              ),
-                            const Divider(),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          16, 12, 8, 12),
-                                      child: recurrentRule.isNoRecurrent
-                                          ? Text(
-                                              DateFormat.yMMMMd()
-                                                  .add_Hm()
-                                                  .format(date),
-                                              softWrap: false,
-                                              overflow: TextOverflow.fade,
-                                            )
-                                          : Text(
-                                              '${DateFormat.yMMMMd().format(date)} - ${recurrentRule.formText(context)}',
-                                              softWrap: false,
-                                              overflow: TextOverflow.fade,
-                                            ),
+                                if (date.compareTo(DateTime.now()) > 0)
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 32),
+                                    child: InlineInfoCard(
+                                      text: t
+                                          .transaction.form.validators.date_max,
+                                      direction: Axis.horizontal,
+                                      mode: InlineInfoCardMode.info,
                                     ),
-                                    onTap: () async {
-                                      DateTime? pickedDate =
-                                          await openDateTimePicker(
-                                        context,
-                                        initialDate: date,
-                                        firstDate: fromAccount?.date,
-                                        showTimePickerAfterDate: true,
-                                      );
-                                      if (pickedDate == null) return;
-
-                                      setState(() {
-                                        date = pickedDate;
-                                      });
-                                    },
                                   ),
-                                ),
-                                IconButton(
-                                  onPressed: () async {
-                                    final res =
-                                        await showIntervalSelectoHelpDialog(
-                                            context,
-                                            selectedRecurrentRule:
-                                                recurrentRule);
-
-                                    if (res == null) return;
-
-                                    setState(() {
-                                      recurrentRule = res;
-                                    });
-                                  },
-                                  icon: recurrentRule.isRecurrent
-                                      ? const Icon(Icons.event_repeat_rounded)
-                                      : const Icon(Icons.repeat_one_rounded),
-                                ),
-                                const SizedBox(width: 4)
+                                if (fromAccount != null &&
+                                    fromAccount!.date.compareTo(date) > 0 &&
+                                    !(date.compareTo(DateTime.now()) > 0))
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: InlineInfoCard(
+                                      text: t.transaction.form.validators
+                                          .date_after_account_creation,
+                                      direction: Axis.vertical,
+                                      mode: InlineInfoCardMode.warn,
+                                    ),
+                                  ),
                               ],
                             ),
-                            const Divider(),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  selector(
-                                      isMobile: true,
-                                      title: t.general.account,
-                                      inputValue: fromAccount?.name,
-                                      icon: fromAccount?.icon,
-                                      iconColor: null,
-                                      onClick: () async {
-                                        final modalRes =
-                                            await showAccountSelector(
-                                                fromAccount!);
+                          ),
+                          //const Divider(),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: OutlinedButton(
+                                        child: recurrentRule.isNoRecurrent
+                                            ? Text(
+                                                DateFormat.yMMMMd()
+                                                    .add_Hm()
+                                                    .format(date),
+                                                softWrap: false,
+                                                overflow: TextOverflow.fade,
+                                              )
+                                            : Text(
+                                                '${DateFormat.yMMMMd().format(date)} - ${recurrentRule.formText(context)}',
+                                                softWrap: false,
+                                                overflow: TextOverflow.fade,
+                                              ),
+                                        onPressed: () async {
+                                          DateTime? pickedDate =
+                                              await openDateTimePicker(
+                                            context,
+                                            initialDate: date,
+                                            firstDate: fromAccount?.date,
+                                            showTimePickerAfterDate: true,
+                                          );
+                                          if (pickedDate == null) return;
 
-                                        if (modalRes != null &&
-                                            modalRes.isNotEmpty) {
                                           setState(() {
-                                            fromAccount = modalRes.first;
+                                            date = pickedDate;
                                           });
-                                        }
-                                      }),
-                                  const Icon(Icons.arrow_forward),
-                                  if (widget.mode ==
-                                      TransactionFormMode.transfer)
-                                    selector(
-                                        isMobile: true,
-                                        title: t.transfer.form.to,
-                                        inputValue: toAccount?.name,
-                                        icon: toAccount?.icon,
-                                        iconColor: null,
-                                        onClick: () async {
-                                          final modalRes =
-                                              await showAccountSelector(
-                                                  toAccount!);
-
-                                          if (modalRes != null &&
-                                              modalRes.isNotEmpty) {
-                                            setState(() {
-                                              toAccount = modalRes.first;
-                                            });
-                                          }
-                                        }),
-                                  if (widget.mode ==
-                                      TransactionFormMode.incomeOrExpense)
-                                    ShakeWidget(
-                                      duration:
-                                          const Duration(milliseconds: 200),
-                                      shakeCount: 1,
-                                      shakeOffset: 10,
-                                      key: _shakeKey,
-                                      child: selector(
-                                        isMobile: true,
-                                        title: t.general.category,
-                                        inputValue: selectedCategory?.name,
-                                        icon: selectedCategory?.icon,
-                                        iconColor: selectedCategory != null
-                                            ? ColorHex.get(
-                                                selectedCategory!.color)
-                                            : null,
-                                        onClick: () => selectCategory(),
+                                        },
                                       ),
                                     ),
-                                ],
-                              ),
-                            ),
-                            const Divider(),
-                            InkWell(
-                              child: Container(
-                                padding: const EdgeInsets.all(8),
-                                //color: trColorLighten,
-                                child: Center(
-                                  child: Text(
-                                    t.transaction.form.tap_to_see_more,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w300),
-                                  ),
+                                    IconButton.filled(
+                                      onPressed: () async {
+                                        final res =
+                                            await showIntervalSelectoHelpDialog(
+                                                context,
+                                                selectedRecurrentRule:
+                                                    recurrentRule);
+
+                                        if (res == null) return;
+
+                                        setState(() {
+                                          recurrentRule = res;
+                                        });
+                                      },
+                                      icon: recurrentRule.isRecurrent
+                                          ? const Icon(
+                                              Icons.event_repeat_rounded)
+                                          : const Icon(
+                                              Icons.repeat_one_rounded),
+                                    ),
+                                    IconButton.filled(
+                                      icon:
+                                          const Icon(Icons.text_fields_rounded),
+                                      onPressed: () => showModalBottomSheet(
+                                        context: context,
+                                        showDragHandle: true,
+                                        isScrollControlled: true,
+                                        builder: (context) =>
+                                            DraggableScrollableSheet(
+                                                expand: false,
+                                                maxChildSize: 0.85,
+                                                minChildSize: 0.5,
+                                                initialChildSize: 0.55,
+                                                builder: (context,
+                                                    scrollController) {
+                                                  return Padding(
+                                                    padding: EdgeInsets.only(
+                                                        bottom: MediaQuery.of(
+                                                                context)
+                                                            .viewInsets
+                                                            .bottom),
+                                                    child: Column(
+                                                      children: [
+                                                        Expanded(
+                                                          child:
+                                                              ScrollableWithBottomGradient(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                              vertical: 8,
+                                                              horizontal: 16,
+                                                            ),
+                                                            controller:
+                                                                scrollController,
+                                                            child: Column(
+                                                              children: [
+                                                                buildTitleField(),
+                                                                const SizedBox(
+                                                                    height: 16),
+                                                                ...buildExtraFields()
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        BottomSheetFooter(
+                                                            submitText: t
+                                                                .general
+                                                                .close_and_save,
+                                                            showCloseIcon:
+                                                                false,
+                                                            submitIcon: Icons
+                                                                .keyboard_arrow_down_rounded,
+                                                            onSaved: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                            })
+                                                      ],
+                                                    ),
+                                                  );
+                                                }),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              onTap: () => showModalBottomSheet(
-                                context: context,
-                                showDragHandle: true,
-                                isScrollControlled: true,
-                                builder: (context) => DraggableScrollableSheet(
-                                    expand: false,
-                                    maxChildSize: 0.85,
-                                    minChildSize: 0.5,
-                                    initialChildSize: 0.55,
-                                    builder: (context, scrollController) {
-                                      return Padding(
-                                        padding: EdgeInsets.only(
-                                            bottom: MediaQuery.of(context)
-                                                .viewInsets
-                                                .bottom),
-                                        child: Column(
-                                          children: [
-                                            Expanded(
-                                              child:
-                                                  ScrollableWithBottomGradient(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                  vertical: 8,
-                                                  horizontal: 16,
-                                                ),
-                                                controller: scrollController,
-                                                child: Column(
-                                                  children: [
-                                                    buildTitleField(),
-                                                    const SizedBox(height: 16),
-                                                    ...buildExtraFields()
-                                                  ],
-                                                ),
+                                Card(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  child: DefaultTextStyle.merge(
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          selector(
+                                              isMobile: true,
+                                              title: t.general.account,
+                                              inputValue: fromAccount?.name,
+                                              icon: fromAccount?.icon,
+                                              iconColor: null,
+                                              onClick: () async {
+                                                final modalRes =
+                                                    await showAccountSelector(
+                                                        fromAccount!);
+
+                                                if (modalRes != null &&
+                                                    modalRes.isNotEmpty) {
+                                                  setState(() {
+                                                    fromAccount =
+                                                        modalRes.first;
+                                                  });
+                                                }
+                                              }),
+                                          Icon(
+                                            Icons.arrow_forward,
+                                            color: appColorScheme(context)
+                                                .onPrimary,
+                                          ),
+                                          if (widget.mode ==
+                                              TransactionFormMode.transfer)
+                                            selector(
+                                                isMobile: true,
+                                                title: t.transfer.form.to,
+                                                inputValue: toAccount?.name,
+                                                icon: toAccount?.icon,
+                                                iconColor: null,
+                                                onClick: () async {
+                                                  final modalRes =
+                                                      await showAccountSelector(
+                                                          toAccount!);
+
+                                                  if (modalRes != null &&
+                                                      modalRes.isNotEmpty) {
+                                                    setState(() {
+                                                      toAccount =
+                                                          modalRes.first;
+                                                    });
+                                                  }
+                                                }),
+                                          if (widget.mode ==
+                                              TransactionFormMode
+                                                  .incomeOrExpense)
+                                            ShakeWidget(
+                                              duration: const Duration(
+                                                  milliseconds: 200),
+                                              shakeCount: 1,
+                                              shakeOffset: 10,
+                                              key: _shakeKey,
+                                              child: selector(
+                                                isMobile: true,
+                                                title: t.general.category,
+                                                inputValue:
+                                                    selectedCategory?.name,
+                                                icon: selectedCategory?.icon,
+                                                iconColor: selectedCategory !=
+                                                        null
+                                                    ? ColorHex.get(
+                                                        selectedCategory!.color)
+                                                    : null,
+                                                onClick: () => selectCategory(),
                                               ),
                                             ),
-                                            BottomSheetFooter(
-                                                submitText:
-                                                    t.general.close_and_save,
-                                                showCloseIcon: false,
-                                                submitIcon: Icons
-                                                    .keyboard_arrow_down_rounded,
-                                                onSaved: () {
-                                                  Navigator.pop(context);
-                                                })
-                                          ],
-                                        ),
-                                      );
-                                    }),
-                              ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            const Divider(),
-                          ],
-                        ),
+                          ),
+                          // const Divider(),
+                        ],
                       ),
-                      Container(
-                        height: constrains.maxHeight * 0.4,
+                    ),
+
+                    /*  ---------- NUMMBER CALCULATOR BUTTONS ------------ */
+                    Flexible(
+                      flex: 7,
+                      child: Container(
                         padding: const EdgeInsets.all(6),
-                        // color: trColorLighten,
+                        decoration: BoxDecoration(
+                            color: trColorLighten,
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(16),
+                              topRight: Radius.circular(16),
+                            )),
                         child: Row(
                           children: [
                             Expanded(
@@ -823,10 +868,10 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                             ),
                           ],
                         ),
-                      )
-                    ],
-                  );
-                });
+                      ),
+                    )
+                  ],
+                );
               }
 
               /* -----------------------------------------------
