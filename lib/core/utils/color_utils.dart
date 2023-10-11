@@ -18,19 +18,19 @@ extension ColorBrightness on Color {
   Color darken([double amount = .1]) {
     assert(amount >= 0 && amount <= 1);
 
-    final hsl = HSLColor.fromColor(this);
-    final hslDark = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
+    var f = 1 - amount;
 
-    return hslDark.toColor();
+    return Color.fromARGB(
+        alpha, (red * f).round(), (green * f).round(), (blue * f).round());
   }
 
   Color lighten([double amount = .1]) {
     assert(amount >= 0 && amount <= 1);
 
-    final hsl = HSLColor.fromColor(this);
-    final hslLight =
-        hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
-
-    return hslLight.toColor();
+    return Color.fromARGB(
+        alpha,
+        red + ((255 - red) * amount).round(),
+        green + ((255 - green) * amount).round(),
+        blue + ((255 - blue) * amount).round());
   }
 }

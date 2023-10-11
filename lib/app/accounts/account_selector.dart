@@ -102,8 +102,11 @@ class _AccountSelectorState extends State<AccountSelector> {
                     return RadioListTile(
                       value: account.id,
                       title: Text(account.name),
-                      secondary:
-                          account.icon.displayFilled(color: colors.primary),
+                      secondary: account.icon.displayFilled(
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? colors.primary
+                                  : colors.onPrimary),
                       groupValue: selectedAccounts.firstOrNull?.id,
                       onChanged: (value) {
                         setState(() {
