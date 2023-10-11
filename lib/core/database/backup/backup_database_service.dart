@@ -147,7 +147,7 @@ class BackupDatabaseService {
             .first)!);
 
         if (dbVersion < db.schemaVersion) {
-          // TODO: Migrate
+          await db.migrateDB(dbVersion, db.schemaVersion);
         }
 
         db.markTablesUpdated(db.allTables);
