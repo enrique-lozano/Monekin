@@ -122,8 +122,11 @@ class _AccountSelectorState extends State<AccountSelector> {
                           .map((e) => e.id)
                           .contains(account.id),
                       title: Text(account.name),
-                      secondary:
-                          account.icon.displayFilled(color: colors.primary),
+                      secondary: account.icon.displayFilled(
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? colors.primary
+                                  : colors.onPrimary),
                       onChanged: (value) {
                         if (value == true) {
                           selectedAccounts.add(account);

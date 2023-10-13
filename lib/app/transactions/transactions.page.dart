@@ -11,14 +11,16 @@ import 'package:monekin/core/presentation/widgets/filter_sheet_modal.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 class TransactionsPage extends StatefulWidget {
-  const TransactionsPage({Key? key}) : super(key: key);
+  const TransactionsPage({Key? key, this.filters}) : super(key: key);
+
+  final TransactionFilters? filters;
 
   @override
   State<TransactionsPage> createState() => _TransactionsPageState();
 }
 
 class _TransactionsPageState extends State<TransactionsPage> {
-  TransactionFilters filters = TransactionFilters();
+  late TransactionFilters filters;
 
   bool searchActive = false;
 
@@ -33,6 +35,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
   @override
   void initState() {
     super.initState();
+
+    filters = widget.filters ?? TransactionFilters();
 
     searchFocusNode.addListener(() {
       if (!searchFocusNode.hasFocus) {

@@ -15,6 +15,7 @@ class TransactionFilters {
   /// Categories that this filter contains. Will be null if this filter is not in use, or if all categories are selected
   List<Category>? categories;
 
+  // TODO: Make const/final class (create copyWith)
   TransactionFilters({this.accounts, this.categories});
 
   clearAll() {
