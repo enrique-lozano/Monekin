@@ -1,9 +1,9 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/transactions/form/widgets/interval_selector_help.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -49,58 +49,14 @@ enum TransactionPeriodicity {
 /// All the possible types of a transaction
 enum TransactionType { income, expense, transfer }
 
-enum TransactionStatus {
-  voided,
-  pending,
-  reconciled,
-  unreconciled;
-
-  IconData get icon {
-    if (this == voided) return Icons.block_rounded;
-    if (this == pending) return Icons.hourglass_full_rounded;
-    if (this == unreconciled) return Icons.cloud_off_rounded;
-    if (this == reconciled) return Icons.check_circle_rounded;
-
-    return Icons.question_mark;
-  }
-
-  Color get color {
-    if (this == voided) return Colors.red;
-    if (this == pending) return Colors.amber;
-    if (this == unreconciled) return Colors.orange;
-    if (this == reconciled) return Colors.green;
-
-    return Colors.grey;
-  }
-
-  String displayName(BuildContext context) {
-    final t = Translations.of(context);
-
-    if (this == voided) return t.transaction.status.voided;
-    if (this == pending) return t.transaction.status.pending;
-    if (this == unreconciled) return t.transaction.status.unreconciled;
-    if (this == reconciled) return t.transaction.status.reconciled;
-
-    return '';
-  }
-
-  String description(BuildContext context) {
-    final t = Translations.of(context);
-
-    if (this == voided) return t.transaction.status.voided_descr;
-    if (this == pending) return t.transaction.status.pending_descr;
-    if (this == unreconciled) return t.transaction.status.unreconciled_descr;
-    if (this == reconciled) return t.transaction.status.reconciled_descr;
-
-    return '';
-  }
-}
-
 class MoneyTransaction extends TransactionInDB {
   Category? category;
   Account account;
   Account? receivingAccount;
   RecurrencyData recurrentInfo;
+
+  double currentValueInPreferredCurrency;
+  double? currentValueInDestinyInPreferredCurrency;
 
   MoneyTransaction(
       {required super.id,
@@ -117,6 +73,8 @@ class MoneyTransaction extends TransactionInDB {
       CurrencyInDB? receivingAccountCurrency,
       CategoryInDB? category,
       CategoryInDB? parentCategory,
+      this.currentValueInDestinyInPreferredCurrency,
+      required this.currentValueInPreferredCurrency,
       super.endDate,
       super.intervalEach,
       super.intervalPeriod,
@@ -139,51 +97,9 @@ class MoneyTransaction extends TransactionInDB {
               : null,
         ),
         super(
-            accountID: account.id,
-            categoryID: category?.id,
-            receivingAccountID: receivingAccount?.id);
-
-  MoneyTransaction.incomeOrExpense({
-    required super.id,
-    required this.account,
-    required super.date,
-    required super.value,
-    super.notes,
-    super.title,
-    super.isHidden = false,
-    super.status,
-    required this.category,
-    this.recurrentInfo = const RecurrencyData.noRepeat(),
-  }) : super(
           accountID: account.id,
           categoryID: category?.id,
-          intervalEach: recurrentInfo.intervalEach,
-          intervalPeriod: recurrentInfo.intervalPeriod,
-          endDate: recurrentInfo.ruleRecurrentLimit?.endDate,
-          remainingTransactions:
-              recurrentInfo.ruleRecurrentLimit?.remainingIterations,
-        );
-
-  MoneyTransaction.transfer(
-      {required super.id,
-      required this.account,
-      required super.date,
-      required super.value,
-      super.notes,
-      super.title,
-      super.isHidden = false,
-      super.status,
-      this.recurrentInfo = const RecurrencyData.noRepeat(),
-      required this.receivingAccount,
-      super.valueInDestiny})
-      : super(
-          accountID: account.id,
           receivingAccountID: receivingAccount?.id,
-          intervalEach: recurrentInfo.intervalEach,
-          intervalPeriod: recurrentInfo.intervalPeriod,
-          endDate: recurrentInfo.ruleRecurrentLimit?.endDate,
-          remainingTransactions:
-              recurrentInfo.ruleRecurrentLimit?.remainingIterations,
         );
 
   bool get isTransfer => receivingAccountID != null;
@@ -270,30 +186,4 @@ class MoneyTransaction extends TransactionInDB {
 
     return toReturn;
   }
-}
-
-enum RuleUntilMode { infinity, date, nTimes }
-
-class RecurrentRuleLimit extends Equatable {
-  final DateTime? endDate;
-  final int? remainingIterations;
-
-  const RecurrentRuleLimit({this.endDate, this.remainingIterations})
-      : assert(!(endDate != null && remainingIterations != null));
-
-  const RecurrentRuleLimit.infinite()
-      : endDate = null,
-        remainingIterations = null;
-
-  RuleUntilMode get untilMode {
-    if (endDate != null) {
-      return RuleUntilMode.date;
-    } else if (remainingIterations != null) {
-      return RuleUntilMode.nTimes;
-    }
-    return RuleUntilMode.infinity;
-  }
-
-  @override
-  List<dynamic> get props => [endDate, remainingIterations];
 }

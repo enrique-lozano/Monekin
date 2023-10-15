@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
-import 'package:monekin/core/presentation/widgets/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -32,9 +32,9 @@ class IncomeExpenseComparason extends StatelessWidget {
                 Text(t.general.balance),
                 StreamBuilder(
                   stream: AccountService.instance.getAccountsData(
-                      accountIds: filters?.accounts?.map((e) => e.id),
+                      accountIds: filters?.accountsIDs,
                       accountDataFilter: AccountDataFilter.balance,
-                      categoriesIds: filters?.categories?.map((e) => e.id),
+                      categoriesIds: filters?.categories,
                       startDate: startDate,
                       endDate: endDate),
                   builder: (context, snapshot) {
@@ -54,15 +54,15 @@ class IncomeExpenseComparason extends StatelessWidget {
         StreamBuilder(
           stream: Rx.combineLatest2(
               AccountService.instance.getAccountsData(
-                  accountIds: filters?.accounts?.map((e) => e.id),
+                  accountIds: filters?.accountsIDs,
                   accountDataFilter: AccountDataFilter.income,
-                  categoriesIds: filters?.categories?.map((e) => e.id),
+                  categoriesIds: filters?.categories,
                   startDate: startDate,
                   endDate: endDate),
               AccountService.instance.getAccountsData(
-                  accountIds: filters?.accounts?.map((e) => e.id),
+                  accountIds: filters?.accountsIDs,
                   accountDataFilter: AccountDataFilter.expense,
-                  categoriesIds: filters?.categories?.map((e) => e.id),
+                  categoriesIds: filters?.categories,
                   startDate: startDate,
                   endDate: endDate),
               (a, b) => [a, b]),

@@ -4,6 +4,7 @@
 ---- * --- Remove the imports 
 
 import './../../../models/transaction/transaction.dart';
+import './../../../models/transaction/transaction_status.dart';
 import './../../../models/category/category.dart';
 import './../../../models/account/account.dart';
 import './../../services/user-setting/user_setting_service.dart';

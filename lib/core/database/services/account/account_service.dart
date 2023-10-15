@@ -1,7 +1,11 @@
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/models/transaction/transaction_status.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:rxdart/rxdart.dart';
 
 enum AccountDataFilter { income, expense, balance }
@@ -152,13 +156,56 @@ class AccountService {
     ], (res) => res[0] + res[1]);
   }
 
-  Stream<double> getAccountsData(
-      {required AccountDataFilter accountDataFilter,
-      Iterable<String>? accountIds,
-      Iterable<String>? categoriesIds,
-      DateTime? endDate,
-      DateTime? startDate,
-      bool convertToPreferredCurrency = true}) {
+  Stream<double> getAccountsData2({
+    TransactionFilters filters = const TransactionFilters(),
+    bool convertToPreferredCurrency = true,
+  }) {
+    if (filters.status != null) {
+      filters = filters.copyWith(
+          status: filters.status!
+            ..whereNot((element) => [
+                  TransactionStatus.pending.index,
+                  TransactionStatus.voided.index
+                ].contains(element.index)));
+    } else if (filters.notStatus != null) {
+      filters = filters.copyWith(
+          notStatus: filters.notStatus!
+            ..addAll([TransactionStatus.pending, TransactionStatus.voided]));
+    } else {
+      filters = filters.copyWith(
+          notStatus: [TransactionStatus.pending, TransactionStatus.voided]);
+    }
+
+    return TransactionService.instance
+        .countTransactions(
+            predicate: filters,
+            exchDate: filters.maxDate ?? DateTime.now(),
+            convertToPreferredCurrency: convertToPreferredCurrency)
+        .map((event) => event.valueSum);
+  }
+
+  Stream<double> getAccountsData({
+    required AccountDataFilter accountDataFilter,
+    Iterable<String>? accountIds,
+    Iterable<String>? categoriesIds,
+    DateTime? endDate,
+    DateTime? startDate,
+    bool convertToPreferredCurrency = true,
+  }) {
+    return getAccountsData2(
+      filters: TransactionFilters(
+          accountsIDs: accountIds,
+          categories: categoriesIds,
+          maxDate: endDate,
+          minDate: startDate,
+          transactionTypes: accountDataFilter == AccountDataFilter.expense
+              ? [TransactionType.expense]
+              : accountDataFilter == AccountDataFilter.income
+                  ? [TransactionType.income]
+                  : null),
+      convertToPreferredCurrency: convertToPreferredCurrency,
+    );
+
     String transactionWhereStatement = """
         isHidden = 0
         AND status IS NOT 'voided'      

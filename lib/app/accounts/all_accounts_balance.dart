@@ -8,7 +8,7 @@ import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
-import 'package:monekin/core/presentation/widgets/filter_sheet_modal.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/database/services/currency/currency_service.dart';
@@ -45,13 +45,13 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
   Future<List<AccountWithMoney>> getAccountsWithMoney(
       DateTime date, TransactionFilters? filters) async {
     final accounts =
-        filters?.accounts ?? await AccountService.instance.getAccounts().first;
+        await (filters ?? const TransactionFilters()).accounts().first;
 
     final balances = accounts.map((account) async => AccountWithMoney(
         money: await AccountService.instance
             .getAccountMoney(
               account: account,
-              categoriesIds: filters?.categories?.map((e) => e.id),
+              categoriesIds: filters?.categories,
               convertToPreferredCurrency: true,
               date: date,
             )

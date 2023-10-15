@@ -1,17 +1,16 @@
 import 'package:collection/collection.dart';
-import 'package:drift/drift.dart' as drift;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/stats/widgets/category_stats_modal.dart';
-import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/presentation/widgets/filter_sheet_modal.dart';
+import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -64,26 +63,17 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
 
     final transactions = await transactionService
         .getTransactions(
-          predicate: (t, acc, p2, p3, p4, transCategory, p6) =>
-              AppDB.instance.buildExpr([
-            t.receivingAccountID.isNull(),
-            t.isHidden.isNotValue(true),
-            t.status.isNotInValues(
-                [TransactionStatus.pending, TransactionStatus.voided]),
-            if (widget.startDate != null)
-              t.date.isBiggerThanValue(widget.startDate!),
-            if (widget.endDate != null)
-              t.date.isSmallerThanValue(widget.endDate!),
-            if (widget.filters?.accounts != null)
-              t.accountID.isIn(widget.filters!.accounts!.map((e) => e.id)),
-            if (widget.filters?.categories != null)
-              transCategory.id
-                  .isIn(widget.filters!.categories!.map((e) => e.id)),
-            if (transactionsType == TransactionType.income)
-              t.value.isBiggerOrEqualValue(0),
-            if (transactionsType == TransactionType.expense)
-              t.value.isSmallerOrEqualValue(0)
-          ]),
+          filters: (widget.filters ?? const TransactionFilters()).copyWith(
+            notStatus: [TransactionStatus.pending, TransactionStatus.voided],
+            transactionTypes: [
+              if (transactionsType == TransactionType.expense)
+                TransactionType.expense,
+              if (transactionsType == TransactionType.income)
+                TransactionType.income
+            ],
+            minDate: widget.startDate,
+            maxDate: widget.endDate,
+          ),
         )
         .first;
 

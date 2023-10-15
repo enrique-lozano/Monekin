@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/core/presentation/widgets/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 class IncomeOrExpenseCard extends StatelessWidget {
@@ -54,8 +54,8 @@ class IncomeOrExpenseCard extends StatelessWidget {
               Text(text),
               StreamBuilder(
                   stream: AccountService.instance.getAccountsData(
-                    accountIds: filters?.accounts!.map((e) => e.id),
-                    categoriesIds: filters?.categories?.map((e) => e.id),
+                    accountIds: filters?.accountsIDs,
+                    categoriesIds: filters?.categories,
                     startDate: startDate,
                     endDate: endDate,
                     accountDataFilter: type,

@@ -3,10 +3,10 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -36,7 +36,7 @@ class FundEvolutionLineChart extends StatelessWidget {
 
   final bool showBalanceHeader;
 
-  final List<Account>? accountsFilter;
+  final List<String>? accountsFilter;
 
   Stream<LineChartDataItem?> getEvolutionData() {
     if (startDate == null || endDate == null) return Stream.value(null);
@@ -52,8 +52,8 @@ class FundEvolutionLineChart extends StatelessWidget {
     while (currentDay.compareTo(endDate!) < 0) {
       labels.add(DateFormat.yMMMMd().format(currentDay));
 
-      balance.add(AccountService.instance.getAccountsMoney(
-          accountIds: accountsFilter?.map((e) => e.id), date: currentDay));
+      balance.add(AccountService.instance
+          .getAccountsMoney(accountIds: accountsFilter, date: currentDay));
 
       currentDay = currentDay.add(Duration(days: dayRange));
     }
@@ -78,7 +78,7 @@ class FundEvolutionLineChart extends StatelessWidget {
         if (showBalanceHeader) ...[
           StreamBuilder(
               stream: accountsFilter != null
-                  ? Stream.value(accountsFilter)
+                  ? TransactionFilters(accountsIDs: accountsFilter).accounts()
                   : accountService.getAccounts(),
               builder: (context, accountsSnapshot) {
                 if (!accountsSnapshot.hasData) {

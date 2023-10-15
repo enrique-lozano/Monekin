@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/widgets/filter_sheet_modal.dart';
+import 'package:monekin/core/database/services/category/category_service.dart';
+import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 class FilterRowIndicator extends StatefulWidget {
@@ -14,7 +16,7 @@ class FilterRowIndicator extends StatefulWidget {
 }
 
 class _FilterRowIndicatorState extends State<FilterRowIndicator> {
-  late final TransactionFilters filters;
+  late TransactionFilters filters;
 
   @override
   void initState() {
@@ -55,28 +57,36 @@ class _FilterRowIndicatorState extends State<FilterRowIndicator> {
                 .bodyMedium!
                 .copyWith(fontWeight: FontWeight.w700),
           ),
-          if (filters.accounts != null) ...[
+          if (filters.accountsIDs != null) ...[
             const SizedBox(width: 8),
             buildChip(
               context,
-              label: '${filters.accounts!.length} ${t.general.accounts}',
+              label: '${filters.accountsIDs!.length} ${t.general.accounts}',
               onDeleted: () {
-                filters.accounts = null;
+                filters = filters.copyWithNull(accountsIDs: true);
                 widget.onChange(filters);
               },
             ),
           ],
           if (filters.categories != null) ...[
             const SizedBox(width: 8),
-            buildChip(
-              context,
-              label:
-                  '${filters.categories!.where((cat) => cat.isMainCategory).length} ${t.general.categories}',
-              onDeleted: () {
-                filters.categories = null;
-                widget.onChange(filters);
-              },
-            )
+            StreamBuilder(
+                stream: CategoryService.instance.getCategories(
+                  predicate: (catTable, parentCatTable) =>
+                      catTable.id.isIn(filters.categories!),
+                ),
+                initialData: const <Category>[],
+                builder: (context, snapshot) {
+                  return buildChip(
+                    context,
+                    label:
+                        '${snapshot.data!.where((cat) => cat.isMainCategory).length} ${t.general.categories}',
+                    onDeleted: () {
+                      filters = filters.copyWithNull(categories: true);
+                      widget.onChange(filters);
+                    },
+                  );
+                })
           ]
         ],
       ),

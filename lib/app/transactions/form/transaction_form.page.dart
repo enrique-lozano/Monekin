@@ -13,6 +13,7 @@ import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/animations/shake/shake_widget.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
@@ -174,39 +175,38 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
               : t.transaction.new_success)));
     }
 
-    late MoneyTransaction toPush;
-
-    if (widget.mode == TransactionFormMode.incomeOrExpense) {
-      toPush = MoneyTransaction.incomeOrExpense(
-          id: widget.transactionToEdit?.id ?? const Uuid().v4(),
-          account: fromAccount!,
-          date: date,
-          value: selectedCategory!.type.isExpense
-              ? valueToNumber! * -1
-              : valueToNumber!,
-          category: selectedCategory!,
-          status: date.compareTo(DateTime.now()) > 0
-              ? TransactionStatus.pending
-              : status,
-          notes: notesController.text.isEmpty ? null : notesController.text,
-          title: titleController.text.isEmpty ? null : titleController.text,
-          recurrentInfo: recurrentRule);
-    } else {
-      toPush = MoneyTransaction.transfer(
-          id: widget.transactionToEdit?.id ?? const Uuid().v4(),
-          account: fromAccount!,
-          receivingAccount: toAccount!,
-          date: date,
-          value: valueToNumber!,
-          status: date.compareTo(DateTime.now()) > 0
-              ? TransactionStatus.pending
-              : status,
-          notes: notesController.text.isEmpty ? null : notesController.text,
-          title: titleController.text.isEmpty ? null : titleController.text,
-          recurrentInfo: recurrentRule);
-    }
-
-    TransactionService.instance.insertOrUpdateTransaction(toPush).then((value) {
+    TransactionService.instance
+        .insertOrUpdateTransaction(
+      TransactionInDB(
+        id: widget.transactionToEdit?.id ?? const Uuid().v4(),
+        date: date,
+        accountID: fromAccount!.id,
+        value: widget.mode == TransactionFormMode.incomeOrExpense &&
+                selectedCategory!.type.isExpense
+            ? valueToNumber! * -1
+            : valueToNumber!,
+        isHidden: false,
+        status: date.compareTo(DateTime.now()) > 0
+            ? TransactionStatus.pending
+            : status,
+        notes: notesController.text.isEmpty ? null : notesController.text,
+        title: titleController.text.isEmpty ? null : titleController.text,
+        intervalEach: recurrentRule.intervalEach,
+        intervalPeriod: recurrentRule.intervalPeriod,
+        endDate: recurrentRule.ruleRecurrentLimit?.endDate,
+        remainingTransactions:
+            recurrentRule.ruleRecurrentLimit?.remainingIterations,
+        valueInDestiny: widget.mode == TransactionFormMode.transfer
+            ? valueInDestinyToNumber
+            : null,
+        categoryID: widget.mode == TransactionFormMode.incomeOrExpense
+            ? selectedCategory?.id
+            : null,
+        receivingAccountID:
+            widget.mode == TransactionFormMode.transfer ? toAccount?.id : null,
+      ),
+    )
+        .then((value) {
       onSuccess();
     }).catchError((error) {
       ScaffoldMessenger.of(context)
