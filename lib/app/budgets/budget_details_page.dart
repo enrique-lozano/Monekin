@@ -5,17 +5,17 @@ import 'package:monekin/app/budgets/budget_form_page.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/budgets/components/budget_evolution_chart.dart';
 import 'package:monekin/app/transactions/transaction_list.dart';
-import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/budget/budget.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -225,21 +225,23 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
             ),
           ),
           StreamBuilder(
-              stream: TransactionService.instance.getTransactions(
-                predicate: (transaction, account, accountCurrency,
-                        receivingAccount, receivingAccountCurrency, c, p6) =>
-                    AppDB.instance.buildExpr([
-                  c.id.isIn(widget.budget.categories) |
-                      c.parentCategoryID.isIn(widget.budget.categories),
-                  transaction.accountID.isIn(widget.budget.accounts),
-                  transaction.isHidden.isNotValue(true),
-                  transaction.date
-                      .isBiggerThanValue(widget.budget.currentDateRange[0]),
-                  transaction.date
-                      .isSmallerThanValue(widget.budget.currentDateRange[1]),
-                  transaction.status.isNotInValues(
-                      [TransactionStatus.pending, TransactionStatus.voided])
-                ]),
+              stream: TransactionService.instance.getTransactionsFromPredicate(
+                predicate: TransactionFilters(
+                  notStatus: [
+                    TransactionStatus.pending,
+                    TransactionStatus.voided
+                  ],
+                  minDate: widget.budget.currentDateRange[0],
+                  maxDate: widget.budget.currentDateRange[1],
+                ).toTransactionExpression(
+                  extraFilters: (transaction, account, accountCurrency,
+                          receivingAccount, receivingAccountCurrency, c, p6) =>
+                      [
+                    c.id.isIn(widget.budget.categories) |
+                        c.parentCategoryID.isIn(widget.budget.categories),
+                    transaction.accountID.isIn(widget.budget.accounts),
+                  ],
+                ),
               ),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {

@@ -5,6 +5,7 @@ import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -641,35 +642,14 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                                         currency:
                                                             userCurrency.code),
                                               ),
-                                              trailing: StreamBuilder(
-                                                  stream: ExchangeRateService
-                                                      .instance
-                                                      .calculateExchangeRateToPreferredCurrency(
-                                                    fromCurrency: transaction
-                                                        .account.currencyId,
-                                                    amount: transaction.value,
-                                                  ),
-                                                  builder: (context,
-                                                      exchangeRateSnapshot) {
-                                                    if (!exchangeRateSnapshot
-                                                        .hasData) {
-                                                      return const Skeleton(
-                                                          width: 16,
-                                                          height: 14);
-                                                    }
-
-                                                    return CurrencyDisplayer(
-                                                      currency: userCurrency,
-                                                      textStyle:
-                                                          const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                      ),
-                                                      amountToConvert:
-                                                          exchangeRateSnapshot
-                                                              .data!,
-                                                    );
-                                                  }),
+                                              trailing: CurrencyDisplayer(
+                                                currency: userCurrency,
+                                                textStyle: const TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                ),
+                                                amountToConvert: transaction
+                                                    .currentValueInPreferredCurrency,
+                                              ),
                                             ),
                                             const Divider(indent: 12),
                                             ListTile(

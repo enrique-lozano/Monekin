@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/core/presentation/widgets/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/services/filters/date_range_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 
@@ -63,14 +63,14 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
     final accountService = AccountService.instance;
 
     final accounts =
-        widget.filters?.accounts ?? await accountService.getAccounts().first;
+        await (widget.filters ?? const TransactionFilters()).accounts().first;
     final accountsIds = accounts.map((event) => event.id);
 
     getIncomeData(DateTime? startDate, DateTime? endDate) async =>
         await accountService
             .getAccountsData(
                 accountIds: accountsIds,
-                categoriesIds: widget.filters?.categories?.map((e) => e.id),
+                categoriesIds: widget.filters?.categories,
                 accountDataFilter: AccountDataFilter.income,
                 startDate: startDate,
                 endDate: endDate)
@@ -80,7 +80,7 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
         await accountService
             .getAccountsData(
                 accountIds: accountsIds,
-                categoriesIds: widget.filters?.categories?.map((e) => e.id),
+                categoriesIds: widget.filters?.categories,
                 accountDataFilter: AccountDataFilter.expense,
                 startDate: startDate,
                 endDate: endDate)

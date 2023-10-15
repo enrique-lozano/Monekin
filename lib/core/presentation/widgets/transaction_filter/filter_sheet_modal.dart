@@ -3,27 +3,9 @@ import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/categories_list.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
-import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
-
-class TransactionFilters {
-  /// Accounts that this filter contains. Will be null if this filter is not in use, or if all accounts are selected
-  List<Account>? accounts;
-
-  /// Categories that this filter contains. Will be null if this filter is not in use, or if all categories are selected
-  List<Category>? categories;
-
-  TransactionFilters({this.accounts, this.categories});
-
-  clearAll() {
-    accounts = null;
-    categories = null;
-  }
-
-  get hasFilter => accounts != null || categories != null;
-}
 
 class FilterSheetModal extends StatefulWidget {
   const FilterSheetModal(
@@ -95,15 +77,21 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                   StreamBuilder(
                       stream: AccountService.instance.getAccounts(),
                       builder: (context, snapshot) {
+                        final selectedAccounts = (snapshot.data ?? []).where(
+                            (element) =>
+                                filtersToReturn.accountsIDs
+                                    ?.contains(element.id) ??
+                                false);
+
                         return selector(
                             title: t.general.accounts,
-                            inputValue: filtersToReturn.accounts == null ||
+                            inputValue: filtersToReturn.accountsIDs == null ||
                                     (snapshot.hasData &&
-                                        filtersToReturn.accounts!.length ==
+                                        filtersToReturn.accountsIDs!.length ==
                                             snapshot.data!.length)
                                 ? t.account.select.all
-                                : filtersToReturn.accounts
-                                    ?.map((e) => e.name)
+                                : selectedAccounts
+                                    .map((e) => e.name)
                                     .join(', '),
                             onClick: () async {
                               final modalRes =
@@ -113,19 +101,17 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                                         allowMultiSelection: true,
                                         filterSavingAccounts: false,
                                         selectedAccounts:
-                                            filtersToReturn.accounts ??
-                                                (snapshot.hasData
-                                                    ? [...snapshot.data!]
-                                                    : []),
+                                            selectedAccounts.toList(),
                                       ));
 
                               if (modalRes != null && modalRes.isNotEmpty) {
                                 setState(() {
-                                  filtersToReturn.accounts = snapshot.hasData &&
-                                          modalRes.length ==
-                                              snapshot.data!.length
-                                      ? null
-                                      : modalRes;
+                                  filtersToReturn = filtersToReturn.copyWith(
+                                      accountsIDs: snapshot.hasData &&
+                                              modalRes.length ==
+                                                  snapshot.data!.length
+                                          ? null
+                                          : modalRes.map((e) => e.id));
                                 });
                               }
                             });
@@ -140,6 +126,12 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                     StreamBuilder(
                         stream: CategoryService.instance.getCategories(),
                         builder: (context, snapshot) {
+                          final selectedCategories = (snapshot.data ?? [])
+                              .where((element) =>
+                                  filtersToReturn.categories
+                                      ?.contains(element.id) ??
+                                  false);
+
                           return selector(
                               title: t.general.categories,
                               inputValue: filtersToReturn.categories == null ||
@@ -147,8 +139,8 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                                           filtersToReturn.categories!.length ==
                                               snapshot.data!.length)
                                   ? t.categories.select.all
-                                  : filtersToReturn.categories
-                                      ?.where(
+                                  : selectedCategories
+                                      .where(
                                           (element) => element.isMainCategory)
                                       .map((e) => e.name)
                                       .join(', '),
@@ -159,19 +151,18 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                                     mode: CategoriesListMode
                                         .modalSelectMultiCategory,
                                     selectedCategories:
-                                        filtersToReturn.categories ??
-                                            (snapshot.data ?? []),
+                                        selectedCategories.toList(),
                                   ),
                                 );
 
                                 if (modalRes != null && modalRes.isNotEmpty) {
                                   setState(() {
-                                    filtersToReturn.categories =
-                                        snapshot.hasData &&
+                                    filtersToReturn = filtersToReturn.copyWith(
+                                        categories: snapshot.hasData &&
                                                 modalRes.length ==
                                                     snapshot.data!.length
                                             ? null
-                                            : modalRes;
+                                            : modalRes.map((e) => e.id));
                                   });
                                 }
                               });
