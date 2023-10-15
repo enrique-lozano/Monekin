@@ -40,12 +40,24 @@ class SupportedIcon {
   }
 
   /// Display the icon surrounded by a filled container in any widget
-  Widget displayFilled({required Color color, double size = 22}) {
+  ///
+  /// The [color] attribute is the only attribute required here
+  ///
+  /// By default, a padding and a border radius of the 27% aprox. of the icon size will be applied.
+  /// The bgColor will be by default a lighter version of the icon color
+  Widget displayFilled(
+      {required Color color,
+      double size = 22,
+      double? padding,
+      double? borderRadius,
+      Color? bgColor}) {
+    final padAndRadius = size / (22 / 6);
+
     return Container(
-        padding: EdgeInsets.all(size / (22 / 6)),
+        padding: EdgeInsets.all(padding ?? padAndRadius),
         decoration: BoxDecoration(
-            color: color.lighten(0.82),
-            borderRadius: BorderRadius.circular(size / (22 / 6))),
+            color: bgColor ?? color.lighten(0.82),
+            borderRadius: BorderRadius.circular(borderRadius ?? padAndRadius)),
         child: display(size: size, color: color));
   }
 }
