@@ -174,8 +174,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
                     ),
                   ),
                 );
-
-                return Text('${res.numberOfRes}  --- ${res.valueSum}  ');
               },
             ),
             Expanded(
