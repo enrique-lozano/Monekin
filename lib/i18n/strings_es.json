@@ -256,7 +256,11 @@
     },
     "FILTERS": {
       "from_value": "Desde monto",
-      "to_value": "Hasta monto"
+      "to_value": "Hasta monto",
+      "from_value_def": "Desde {{ x }}",
+      "to_value_def": "Hasta {{ x }}",
+      "from_date_def": "Desde el {{ date }}",
+      "to_date_def": "Hasta el {{ date }}"
     },
     "FORM": {
       "status": "Estado",

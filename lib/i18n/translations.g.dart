@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 906 (453 per locale)
+/// Strings: 914 (457 per locale)
 ///
-/// Built on 2023-10-16 at 15:03 UTC
+/// Built on 2023-10-16 at 22:06 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -672,6 +672,10 @@ class _TranslationsTransactionFiltersEn {
 	// Translations
 	String get from_value => 'From amount';
 	String get to_value => 'Up to amount';
+	String from_value_def({required Object x}) => 'From ${x}';
+	String to_value_def({required Object x}) => 'Up to ${x}';
+	String from_date_def({required Object date}) => 'From the ${date}';
+	String to_date_def({required Object date}) => 'Up to the ${date}';
 }
 
 // Path: transaction.form
@@ -1751,6 +1755,10 @@ class _TranslationsTransactionFiltersEs implements _TranslationsTransactionFilte
 	// Translations
 	@override String get from_value => 'Desde monto';
 	@override String get to_value => 'Hasta monto';
+	@override String from_value_def({required Object x}) => 'Desde ${x}';
+	@override String to_value_def({required Object x}) => 'Hasta ${x}';
+	@override String from_date_def({required Object date}) => 'Desde el ${date}';
+	@override String to_date_def({required Object date}) => 'Hasta el ${date}';
 }
 
 // Path: transaction.form
@@ -2503,6 +2511,10 @@ extension on _TranslationsEn {
 			case 'transaction.list.loading': return 'Loading more transactions...';
 			case 'transaction.filters.from_value': return 'From amount';
 			case 'transaction.filters.to_value': return 'Up to amount';
+			case 'transaction.filters.from_value_def': return ({required Object x}) => 'From ${x}';
+			case 'transaction.filters.to_value_def': return ({required Object x}) => 'Up to ${x}';
+			case 'transaction.filters.from_date_def': return ({required Object date}) => 'From the ${date}';
+			case 'transaction.filters.to_date_def': return ({required Object date}) => 'Up to the ${date}';
 			case 'transaction.form.status': return 'Status';
 			case 'transaction.form.validators.zero': return 'The value of a transaction cannot be equal to zero';
 			case 'transaction.form.validators.date_max': return 'The selected date is after the current one. The transaction will be added as pending';
@@ -2990,6 +3002,10 @@ extension on _TranslationsEs {
 			case 'transaction.list.loading': return 'Cargando más transacciones...';
 			case 'transaction.filters.from_value': return 'Desde monto';
 			case 'transaction.filters.to_value': return 'Hasta monto';
+			case 'transaction.filters.from_value_def': return ({required Object x}) => 'Desde ${x}';
+			case 'transaction.filters.to_value_def': return ({required Object x}) => 'Hasta ${x}';
+			case 'transaction.filters.from_date_def': return ({required Object date}) => 'Desde el ${date}';
+			case 'transaction.filters.to_date_def': return ({required Object date}) => 'Hasta el ${date}';
 			case 'transaction.form.status': return 'Estado';
 			case 'transaction.form.validators.zero': return 'El valor de una transacción no puede ser igual a cero';
 			case 'transaction.form.validators.date_max': return 'La fecha seleccionada es posterior a la actual. Se añadirá la transacción como pendiente';
