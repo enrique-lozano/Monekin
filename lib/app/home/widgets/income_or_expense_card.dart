@@ -29,7 +29,9 @@ class IncomeOrExpenseCard extends StatelessWidget {
     final Color color = isIncome
         ? CustomColors.of(context).success
         : CustomColors.of(context).danger;
-    final String text = isIncome ? t.general.income : t.general.expense;
+    final String text = isIncome
+        ? t.transaction.types.income(n: 1)
+        : t.transaction.types.expense(n: 1);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),

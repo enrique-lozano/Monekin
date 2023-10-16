@@ -124,22 +124,17 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           onTap: () {
                             if (userCurrency == null) return;
 
-                            showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                showDragHandle: true,
-                                builder: (context) {
-                                  return CurrencySelectorModal(
-                                      preselectedCurrency: userCurrency,
-                                      onCurrencySelected: (newCurrency) {
-                                        UserSettingService.instance
-                                            .setSetting(
-                                                SettingKey.preferredCurrency,
-                                                newCurrency.code)
-                                            .then(
-                                                (value) => setState(() => {}));
-                                      });
-                                });
+                            showCurrencySelectorModal(
+                                context,
+                                CurrencySelectorModal(
+                                    preselectedCurrency: userCurrency,
+                                    onCurrencySelected: (newCurrency) {
+                                      UserSettingService.instance
+                                          .setSetting(
+                                              SettingKey.preferredCurrency,
+                                              newCurrency.code)
+                                          .then((value) => setState(() => {}));
+                                    }));
                           },
                         );
                       }),

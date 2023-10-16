@@ -64,7 +64,8 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
     final transactions = await transactionService
         .getTransactions(
           filters: (widget.filters ?? const TransactionFilters()).copyWith(
-            notStatus: [TransactionStatus.pending, TransactionStatus.voided],
+            status: TransactionStatus.notIn(
+                {TransactionStatus.pending, TransactionStatus.voided}),
             transactionTypes: [
               if (transactionsType == TransactionType.expense)
                 TransactionType.expense,
@@ -244,11 +245,11 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
                 segments: [
                   ButtonSegment(
                     value: TransactionType.expense,
-                    label: Text(t.general.expense),
+                    label: Text(t.transaction.types.expense(n: 1)),
                   ),
                   ButtonSegment(
                     value: TransactionType.income,
-                    label: Text(t.general.income),
+                    label: Text(t.transaction.types.income(n: 1)),
                   ),
                 ],
                 showSelectedIcon: false,
@@ -346,7 +347,7 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${dataCategory.transactions.length} ${dataCategory.transactions.length == 1 ? t.general.transaction : t.general.transactions}'
+                          '${dataCategory.transactions.length} ${t.transaction.display(n: dataCategory.transactions.length)}'
                               .toLowerCase(),
                         ),
                         Text(

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -6,6 +7,18 @@ enum TransactionStatus {
   pending,
   reconciled,
   unreconciled;
+
+  /// Get a list of statuses that are not in a set of statuses.
+  ///
+  /// Include the null status with the [includeNullStatus] param, that defaults to true.
+  static List<TransactionStatus?> notIn(Set<TransactionStatus> statuses,
+      {bool includeNullStatus = true}) {
+    return [
+      if (includeNullStatus) null,
+      ...TransactionStatus.values
+          .whereNot((element) => statuses.contains(element))
+    ];
+  }
 
   IconData get icon {
     if (this == voided) return Icons.block_rounded;

@@ -21,6 +21,8 @@ abstract class _$TransactionFiltersCWProxy {
 
   TransactionFilters minValue(double? minValue);
 
+  TransactionFilters maxValue(double? maxValue);
+
   TransactionFilters transactionTypes(List<TransactionType>? transactionTypes);
 
   TransactionFilters isRecurrent(bool? isRecurrent);
@@ -29,9 +31,7 @@ abstract class _$TransactionFiltersCWProxy {
 
   TransactionFilters categories(Iterable<String>? categories);
 
-  TransactionFilters status(List<TransactionStatus>? status);
-
-  TransactionFilters notStatus(List<TransactionStatus>? notStatus);
+  TransactionFilters status(List<TransactionStatus?>? status);
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `TransactionFilters(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -46,12 +46,12 @@ abstract class _$TransactionFiltersCWProxy {
     bool? includeParentCategoriesInSearch,
     bool? includeReceivingAccountsInAccountFilters,
     double? minValue,
+    double? maxValue,
     List<TransactionType>? transactionTypes,
     bool? isRecurrent,
     Iterable<String>? accountsIDs,
     Iterable<String>? categories,
-    List<TransactionStatus>? status,
-    List<TransactionStatus>? notStatus,
+    List<TransactionStatus?>? status,
   });
 }
 
@@ -87,6 +87,9 @@ class _$TransactionFiltersCWProxyImpl implements _$TransactionFiltersCWProxy {
   TransactionFilters minValue(double? minValue) => this(minValue: minValue);
 
   @override
+  TransactionFilters maxValue(double? maxValue) => this(maxValue: maxValue);
+
+  @override
   TransactionFilters transactionTypes(
           List<TransactionType>? transactionTypes) =>
       this(transactionTypes: transactionTypes);
@@ -104,12 +107,8 @@ class _$TransactionFiltersCWProxyImpl implements _$TransactionFiltersCWProxy {
       this(categories: categories);
 
   @override
-  TransactionFilters status(List<TransactionStatus>? status) =>
+  TransactionFilters status(List<TransactionStatus?>? status) =>
       this(status: status);
-
-  @override
-  TransactionFilters notStatus(List<TransactionStatus>? notStatus) =>
-      this(notStatus: notStatus);
 
   @override
 
@@ -127,12 +126,12 @@ class _$TransactionFiltersCWProxyImpl implements _$TransactionFiltersCWProxy {
     Object? includeReceivingAccountsInAccountFilters =
         const $CopyWithPlaceholder(),
     Object? minValue = const $CopyWithPlaceholder(),
+    Object? maxValue = const $CopyWithPlaceholder(),
     Object? transactionTypes = const $CopyWithPlaceholder(),
     Object? isRecurrent = const $CopyWithPlaceholder(),
     Object? accountsIDs = const $CopyWithPlaceholder(),
     Object? categories = const $CopyWithPlaceholder(),
     Object? status = const $CopyWithPlaceholder(),
-    Object? notStatus = const $CopyWithPlaceholder(),
   }) {
     return TransactionFilters(
       minDate: minDate == const $CopyWithPlaceholder()
@@ -164,6 +163,10 @@ class _$TransactionFiltersCWProxyImpl implements _$TransactionFiltersCWProxy {
           ? _value.minValue
           // ignore: cast_nullable_to_non_nullable
           : minValue as double?,
+      maxValue: maxValue == const $CopyWithPlaceholder()
+          ? _value.maxValue
+          // ignore: cast_nullable_to_non_nullable
+          : maxValue as double?,
       transactionTypes: transactionTypes == const $CopyWithPlaceholder()
           ? _value.transactionTypes
           // ignore: cast_nullable_to_non_nullable
@@ -183,11 +186,7 @@ class _$TransactionFiltersCWProxyImpl implements _$TransactionFiltersCWProxy {
       status: status == const $CopyWithPlaceholder()
           ? _value.status
           // ignore: cast_nullable_to_non_nullable
-          : status as List<TransactionStatus>?,
-      notStatus: notStatus == const $CopyWithPlaceholder()
-          ? _value.notStatus
-          // ignore: cast_nullable_to_non_nullable
-          : notStatus as List<TransactionStatus>?,
+          : status as List<TransactionStatus?>?,
     );
   }
 }
@@ -209,12 +208,12 @@ extension $TransactionFiltersCopyWith on TransactionFilters {
     bool maxDate = false,
     bool searchValue = false,
     bool minValue = false,
+    bool maxValue = false,
     bool transactionTypes = false,
     bool isRecurrent = false,
     bool accountsIDs = false,
     bool categories = false,
     bool status = false,
-    bool notStatus = false,
   }) {
     return TransactionFilters(
       minDate: minDate == true ? null : this.minDate,
@@ -224,12 +223,12 @@ extension $TransactionFiltersCopyWith on TransactionFilters {
       includeReceivingAccountsInAccountFilters:
           includeReceivingAccountsInAccountFilters,
       minValue: minValue == true ? null : this.minValue,
+      maxValue: maxValue == true ? null : this.maxValue,
       transactionTypes: transactionTypes == true ? null : this.transactionTypes,
       isRecurrent: isRecurrent == true ? null : this.isRecurrent,
       accountsIDs: accountsIDs == true ? null : this.accountsIDs,
       categories: categories == true ? null : this.categories,
       status: status == true ? null : this.status,
-      notStatus: notStatus == true ? null : this.notStatus,
     );
   }
 }

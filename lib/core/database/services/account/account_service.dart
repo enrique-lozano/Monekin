@@ -162,18 +162,17 @@ class AccountService {
   }) {
     if (filters.status != null) {
       filters = filters.copyWith(
-          status: filters.status!
-            ..whereNot((element) => [
+        status: filters.status!
+            .whereNot((element) => [
                   TransactionStatus.pending.index,
                   TransactionStatus.voided.index
-                ].contains(element.index)));
-    } else if (filters.notStatus != null) {
-      filters = filters.copyWith(
-          notStatus: filters.notStatus!
-            ..addAll([TransactionStatus.pending, TransactionStatus.voided]));
+                ].contains(element?.index))
+            .toList(),
+      );
     } else {
       filters = filters.copyWith(
-          notStatus: [TransactionStatus.pending, TransactionStatus.voided]);
+          status: TransactionStatus.notIn(
+              {TransactionStatus.pending, TransactionStatus.voided}));
     }
 
     return TransactionService.instance

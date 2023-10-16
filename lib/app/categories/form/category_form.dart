@@ -249,10 +249,12 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                               items: [
                                 DropdownMenuItem(
                                     value: CategoryType.I,
-                                    child: Text(t.general.income)),
+                                    child:
+                                        Text(t.transaction.types.income(n: 1))),
                                 DropdownMenuItem(
                                     value: CategoryType.E,
-                                    child: Text(t.general.expense)),
+                                    child: Text(
+                                        t.transaction.types.expense(n: 1))),
                                 DropdownMenuItem(
                                     value: CategoryType.B,
                                     child: Text(t.categories.both_types))

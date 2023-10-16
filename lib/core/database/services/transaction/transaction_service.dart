@@ -153,7 +153,7 @@ class TransactionService {
             .watchSingle()
       ], (res) {
         return TransactionQueryStatResult(
-            numberOfRes: res.map((e) => e.transactionsNumber).sum,
+            numberOfRes: res[0].transactionsNumber + res[1].transactionsNumber,
             valueSum: convertToPreferredCurrency
                 ? res[0].sumInPrefCurrency -
                     res[1].sumInPrefCurrency +

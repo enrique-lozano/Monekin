@@ -22,6 +22,7 @@ import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/status_filter/transaction_status_filter.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/core/utils/constants.dart';
@@ -296,38 +297,25 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         transaction.valueInDestiny?.abs().toString() ?? '';
   }
 
+  FilterChip statusFilter(BuildContext context, TransactionStatus status) {
+    bool isSelected = true;
+
+    return FilterChip(
+        label: Text(status.displayName(context)),
+        selected: isSelected,
+        showCheckmark: false,
+        avatar: Icon(
+          status.icon,
+          color: status.color,
+        ),
+        onSelected: (value) {
+          setState(() {});
+        });
+  }
+
   List<Widget> buildExtraFields() {
     return [
-      if (recurrentRule.isNoRecurrent)
-        DropdownButtonFormField<TransactionStatus?>(
-          value: date.compareTo(DateTime.now()) > 0
-              ? TransactionStatus.pending
-              : status,
-          decoration: InputDecoration(
-            labelText: t.transaction.form.status,
-          ),
-          items: [
-            DropdownMenuItem(
-              value: null,
-              child: Text(t.transaction.status.none),
-            ),
-            ...List.generate(
-                TransactionStatus.values.length,
-                (index) => DropdownMenuItem(
-                    value: TransactionStatus.values[index],
-                    child: Text(
-                        TransactionStatus.values[index].displayName(context))))
-          ],
-          onChanged: date.compareTo(DateTime.now()) > 0
-              ? null
-              : (value) {
-                  setState(() {
-                    status = value;
-                  });
-                },
-        ),
       if (widget.mode == TransactionFormMode.transfer) ...[
-        const SizedBox(height: 16),
         TextFormField(
           controller: valueInDestinyController,
           decoration: InputDecoration(
@@ -359,19 +347,19 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
             setState(() {});
           },
         ),
+        const SizedBox(height: 16),
       ],
       if (widget.mode == TransactionFormMode.transfer &&
           valueToNumber != null &&
           valueInDestinyToNumber == null) ...[
-        const SizedBox(height: 16),
         InlineInfoCard(
             text: '${t.transfer.form.currency_info_add(
               x: NumberFormat.currency(symbol: toAccount!.currency.symbol)
                   .format(valueToNumber),
             )} ',
-            mode: InlineInfoCardMode.info)
+            mode: InlineInfoCardMode.info),
+        const SizedBox(height: 16),
       ],
-      const SizedBox(height: 16),
       TextFormField(
         minLines: 2,
         maxLines: 10,
@@ -382,6 +370,17 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
           hintText: t.transaction.form.description_info,
         ),
       ),
+      if (recurrentRule.isNoRecurrent) ...[
+        const SizedBox(height: 16),
+        TransactionStatusFilter(
+          selectedStatuses: [status],
+          onSelected: (statusSelected, value) {
+            setState(() {
+              status = statusSelected;
+            });
+          },
+        ),
+      ],
     ];
   }
 
@@ -1027,13 +1026,11 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                     ),
                     SingleExpansionPanel(
                       sidePadding: 16,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Column(children: buildExtraFields())),
-                        ],
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: buildExtraFields()),
                       ),
                     ),
                   ],

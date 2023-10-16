@@ -17,17 +17,10 @@
     "unarchive": "Unarchive",
     "balance": "Balance",
     "delete": "Delete",
-    "income": "Income",
-    "expense": "Expense",
-    "incomes": "Incomes",
-    "expenses": "Expenses",
-    "expenses-and-incomes": "Expenses and incomes",
     "account": "Account",
     "accounts": "Accounts",
     "categories": "Categories",
     "category": "Category",
-    "transaction": "Transaction",
-    "transactions": "Transactions",
     "today": "Today",
     "yesterday": "Yesterday",
     "filters": "Filters",
@@ -42,6 +35,8 @@
     "TIME": {
       "start-date": "Start date",
       "end-date": "End date",
+      "from-date": "From date",
+      "until-date": "Until date",
       "date": "Date",
       "datetime": "Datetime",
       "each": "Each",
@@ -219,6 +214,10 @@
     }
   },
   "TRANSACTION": {
+    "display": {
+      "one": "Transaction",
+      "other": "Transactions"
+    },
     "create": "New transaction",
     "new.income": "New income",
     "new.expense": "New expense",
@@ -253,6 +252,8 @@
     },
     "FORM": {
       "status": "Status",
+      "from_value": "From amount",
+      "to_value": "Up to amount",
       "VALIDATORS": {
         "zero": "The value of a transaction cannot be equal to zero",
         "date-max": "The selected date is after the current one. The transaction will be added as pending",
@@ -279,10 +280,25 @@
       "pending.descr": "This transaction is pending and therefore it will not be taken into account when calculating balances and statistics",
       "voided": "Voided",
       "voided.descr": "Void/cancelled transaction due to payment error or any other reason. It will not be taken into account when calculating balances and statistics"
+    },
+    "TYPES": {
+      "income": {
+        "one": "Income",
+        "other": "Incomes"
+      },
+      "expense": {
+        "one": "Expense",
+        "other": "Expenses"
+      },
+      "transfer": {
+        "one": "Transfer",
+        "other": "Transfers"
+      }
     }
   },
   "TRANSFER": {
     "display": "Transfer",
+    "transfers": "Transfers",
     "transfer-to": "Transfer to {{ account }}",
     "create": "New Transfer",
     "need-two-accounts.warning.header": "Ops!",
