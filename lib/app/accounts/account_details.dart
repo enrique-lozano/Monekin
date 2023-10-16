@@ -7,6 +7,7 @@ import 'package:monekin/app/transactions/transaction_list.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
@@ -272,12 +273,57 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                                     stream: AccountService.instance
                                         .getAccountMoney(account: account),
                                     builder: (context, snapshot) {
-                                      return CurrencyDisplayer(
-                                        amountToConvert: snapshot.data!,
-                                        currency: account.currency,
-                                        textStyle: const TextStyle(
-                                            fontSize: 32,
-                                            fontWeight: FontWeight.w600),
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          CurrencyDisplayer(
+                                            amountToConvert: snapshot.data!,
+                                            currency: account.currency,
+                                            textStyle: const TextStyle(
+                                                fontSize: 32,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          StreamBuilder(
+                                            stream: ExchangeRateService.instance
+                                                .calculateExchangeRateToPreferredCurrency(
+                                              amount: snapshot.data!,
+                                              fromCurrency:
+                                                  account.currency.code,
+                                            ),
+                                            builder:
+                                                (context, currencySnapshot) {
+                                              if (currencySnapshot
+                                                          .connectionState ==
+                                                      ConnectionState.waiting ||
+                                                  currencySnapshot.data != 0 &&
+                                                      currencySnapshot.data! ==
+                                                          snapshot.data) {
+                                                return Container();
+                                              }
+
+                                              return Row(
+                                                children: [
+                                                  Text(
+                                                    String.fromCharCode(Icons
+                                                        .currency_exchange_rounded
+                                                        .codePoint),
+                                                    style: TextStyle(
+                                                      fontFamily: Icons
+                                                          .currency_exchange_rounded
+                                                          .fontFamily,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 4),
+                                                  CurrencyDisplayer(
+                                                      amountToConvert:
+                                                          currencySnapshot
+                                                              .data!),
+                                                ],
+                                              );
+                                            },
+                                          )
+                                        ],
                                       );
                                     }),
                               ],
