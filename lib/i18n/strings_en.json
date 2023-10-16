@@ -117,7 +117,10 @@
       "Date": "By date"
     },
     "VALIDATIONS": {
-      "required": "Required field"
+      "required": "Required field",
+      "positive": "Should be positive",
+      "min_number": "Should be greater than {{x}}",
+      "max_number": "Should be less than {{x}}"
     }
   },
   "INTRO": {
@@ -250,10 +253,12 @@
       "searcher.placeholder": "Search by category, description...",
       "loading": "Loading more transactions..."
     },
+    "FILTERS": {
+      "from_value": "From amount",
+      "to_value": "Up to amount"
+    },
     "FORM": {
       "status": "Status",
-      "from_value": "From amount",
-      "to_value": "Up to amount",
       "VALIDATORS": {
         "zero": "The value of a transaction cannot be equal to zero",
         "date-max": "The selected date is after the current one. The transaction will be added as pending",

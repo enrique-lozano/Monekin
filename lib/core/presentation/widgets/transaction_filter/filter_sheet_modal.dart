@@ -42,6 +42,8 @@ class FilterSheetModal extends StatefulWidget {
 class _FilterSheetModalState extends State<FilterSheetModal> {
   late TransactionFilters filtersToReturn;
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -105,6 +107,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
     return DraggableScrollableSheet(
         expand: false,
         initialChildSize: 0.6,
+        snapSizes: const [0.33, 0.6, 1],
         builder: (context, scrollController) {
           return Column(
             mainAxisSize: MainAxisSize.min,
@@ -123,112 +126,54 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                     SingleChildScrollView(
                       controller: scrollController,
                       padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          /* ---------------------------------- */
-                          /* -------- ACCOUNT SELECTOR -------- */
-                          /* ---------------------------------- */
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            /* ---------------------------------- */
+                            /* -------- ACCOUNT SELECTOR -------- */
+                            /* ---------------------------------- */
 
-                          StreamBuilder(
-                              stream: AccountService.instance.getAccounts(),
-                              builder: (context, snapshot) {
-                                final selectedAccounts = (snapshot.data ?? [])
-                                    .where((element) =>
-                                        filtersToReturn.accountsIDs
-                                            ?.contains(element.id) ??
-                                        false);
-
-                                return selector(
-                                    title: t.general.accounts,
-                                    inputValue:
-                                        filtersToReturn.accountsIDs == null ||
-                                                (snapshot.hasData &&
-                                                    filtersToReturn.accountsIDs!
-                                                            .length ==
-                                                        snapshot.data!.length)
-                                            ? t.account.select.all
-                                            : selectedAccounts
-                                                .map((e) => e.name)
-                                                .join(', '),
-                                    onClick: () async {
-                                      final modalRes =
-                                          await showAccountSelectorBottomSheet(
-                                              context,
-                                              AccountSelector(
-                                                allowMultiSelection: true,
-                                                filterSavingAccounts: false,
-                                                selectedAccounts:
-                                                    selectedAccounts.toList(),
-                                              ));
-
-                                      if (modalRes != null &&
-                                          modalRes.isNotEmpty) {
-                                        setState(() {
-                                          filtersToReturn =
-                                              filtersToReturn.copyWith(
-                                                  accountsIDs: snapshot
-                                                              .hasData &&
-                                                          modalRes.length ==
-                                                              snapshot
-                                                                  .data!.length
-                                                      ? null
-                                                      : modalRes
-                                                          .map((e) => e.id));
-                                        });
-                                      }
-                                    });
-                              }),
-
-                          /* ---------------------------------- */
-                          /* -------- CATEGORY SELECTOR ------- */
-                          /* ---------------------------------- */
-
-                          if (widget.showCategoryFilter) ...[
-                            const SizedBox(height: 16),
                             StreamBuilder(
-                                stream:
-                                    CategoryService.instance.getCategories(),
+                                stream: AccountService.instance.getAccounts(),
                                 builder: (context, snapshot) {
-                                  final selectedCategories =
-                                      (snapshot.data ?? []).where((element) =>
-                                          filtersToReturn.categories
+                                  final selectedAccounts = (snapshot.data ?? [])
+                                      .where((element) =>
+                                          filtersToReturn.accountsIDs
                                               ?.contains(element.id) ??
                                           false);
 
                                   return selector(
-                                      title: t.general.categories,
+                                      title: t.general.accounts,
                                       inputValue:
-                                          filtersToReturn.categories == null ||
+                                          filtersToReturn.accountsIDs == null ||
                                                   (snapshot.hasData &&
                                                       filtersToReturn
-                                                              .categories!
+                                                              .accountsIDs!
                                                               .length ==
                                                           snapshot.data!.length)
-                                              ? t.categories.select.all
-                                              : selectedCategories
-                                                  .where((element) =>
-                                                      element.isMainCategory)
+                                              ? t.account.select.all
+                                              : selectedAccounts
                                                   .map((e) => e.name)
                                                   .join(', '),
                                       onClick: () async {
                                         final modalRes =
-                                            await showCategoryListModal(
-                                          context,
-                                          CategoriesList(
-                                            mode: CategoriesListMode
-                                                .modalSelectMultiCategory,
-                                            selectedCategories:
-                                                selectedCategories.toList(),
-                                          ),
-                                        );
+                                            await showAccountSelectorBottomSheet(
+                                                context,
+                                                AccountSelector(
+                                                  allowMultiSelection: true,
+                                                  filterSavingAccounts: false,
+                                                  selectedAccounts:
+                                                      selectedAccounts.toList(),
+                                                ));
 
                                         if (modalRes != null &&
                                             modalRes.isNotEmpty) {
                                           setState(() {
                                             filtersToReturn =
                                                 filtersToReturn.copyWith(
-                                                    categories: snapshot
+                                                    accountsIDs: snapshot
                                                                 .hasData &&
                                                             modalRes.length ==
                                                                 snapshot.data!
@@ -240,214 +185,330 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                                         }
                                       });
                                 }),
-                          ],
-                          const SizedBox(height: 16),
 
-                          /* ---------------------------------- */
-                          /* -------- TRANSACTION DATE -------- */
-                          /* ---------------------------------- */
+                            /* ---------------------------------- */
+                            /* -------- CATEGORY SELECTOR ------- */
+                            /* ---------------------------------- */
 
-                          Row(
-                            children: [
-                              Flexible(
-                                child: TextFormField(
-                                  controller: TextEditingController(
-                                    text: filtersToReturn.minDate != null
-                                        ? DateFormat.yMMMMd()
-                                            .format(filtersToReturn.minDate!)
-                                        : '',
-                                  ),
-                                  decoration: InputDecoration(
-                                    labelText: t.general.time.from_date,
-                                    hintText: t.general.time.from_date,
-                                    floatingLabelBehavior:
-                                        FloatingLabelBehavior.never,
-                                  ),
-                                  readOnly: true,
-                                  onTap: () async {
-                                    DateTime? pickedDate =
-                                        await openDateTimePicker(
-                                      context,
-                                      initialDate: filtersToReturn.minDate,
-                                      lastDate: filtersToReturn.maxDate,
-                                      showTimePickerAfterDate: false,
-                                    );
-                                    if (pickedDate == null) return;
+                            if (widget.showCategoryFilter) ...[
+                              const SizedBox(height: 16),
+                              StreamBuilder(
+                                  stream:
+                                      CategoryService.instance.getCategories(),
+                                  builder: (context, snapshot) {
+                                    final selectedCategories =
+                                        (snapshot.data ?? []).where((element) =>
+                                            filtersToReturn.categories
+                                                ?.contains(element.id) ??
+                                            false);
 
-                                    setState(() {
-                                      filtersToReturn = filtersToReturn
-                                          .copyWith(minDate: pickedDate);
-                                    });
-                                  },
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Flexible(
-                                child: TextFormField(
-                                  controller: TextEditingController(
-                                    text: filtersToReturn.maxDate != null
-                                        ? DateFormat.yMMMMd()
-                                            .format(filtersToReturn.maxDate!)
-                                        : '',
-                                  ),
-                                  decoration: InputDecoration(
-                                    labelText: t.general.time.until_date,
-                                    hintText: t.general.time.until_date,
-                                    floatingLabelBehavior:
-                                        FloatingLabelBehavior.never,
-                                  ),
-                                  readOnly: true,
-                                  onTap: () async {
-                                    DateTime? pickedDate =
-                                        await openDateTimePicker(
-                                      context,
-                                      initialDate: filtersToReturn.maxDate,
-                                      firstDate: filtersToReturn.minDate,
-                                      showTimePickerAfterDate: false,
-                                    );
-                                    if (pickedDate == null) return;
+                                    return selector(
+                                        title: t.general.categories,
+                                        inputValue: filtersToReturn
+                                                        .categories ==
+                                                    null ||
+                                                (snapshot.hasData &&
+                                                    filtersToReturn.categories!
+                                                            .length ==
+                                                        snapshot.data!.length)
+                                            ? t.categories.select.all
+                                            : selectedCategories
+                                                .where((element) =>
+                                                    element.isMainCategory)
+                                                .map((e) => e.name)
+                                                .join(', '),
+                                        onClick: () async {
+                                          final modalRes =
+                                              await showCategoryListModal(
+                                            context,
+                                            CategoriesList(
+                                              mode: CategoriesListMode
+                                                  .modalSelectMultiCategory,
+                                              selectedCategories:
+                                                  selectedCategories.toList(),
+                                            ),
+                                          );
 
-                                    setState(() {
-                                      filtersToReturn = filtersToReturn
-                                          .copyWith(maxDate: pickedDate);
-                                    });
-                                  },
-                                ),
-                              ),
+                                          if (modalRes != null &&
+                                              modalRes.isNotEmpty) {
+                                            setState(() {
+                                              filtersToReturn =
+                                                  filtersToReturn.copyWith(
+                                                      categories: snapshot
+                                                                  .hasData &&
+                                                              modalRes.length ==
+                                                                  snapshot.data!
+                                                                      .length
+                                                          ? null
+                                                          : modalRes.map(
+                                                              (e) => e.id));
+                                            });
+                                          }
+                                        });
+                                  }),
                             ],
-                          ),
-                          const SizedBox(height: 16),
+                            const SizedBox(height: 16),
 
-                          /* ---------------------------------- */
-                          /* ------- TRANSACTION AMOUNT ------- */
-                          /* ---------------------------------- */
+                            /* ---------------------------------- */
+                            /* -------- TRANSACTION DATE -------- */
+                            /* ---------------------------------- */
 
-                          StreamBuilder(
-                              stream: CurrencyService.instance
-                                  .getUserPreferredCurrency(),
-                              builder: (context, prefCurrencySnapshot) {
-                                return Row(
-                                  children: [
-                                    Flexible(
-                                        child: TextFormField(
-                                      decoration: InputDecoration(
-                                        labelText:
-                                            t.transaction.form.from_value,
-                                        hintText: 'Ex.: 200',
-                                        suffixText:
-                                            prefCurrencySnapshot.data?.symbol,
-                                      ),
-                                      keyboardType: TextInputType.number,
-                                      validator: (value) => fieldValidator(
-                                        value,
-                                        isRequired: false,
-                                        validator: ValidatorType.double,
-                                      ),
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
-                                      textInputAction: TextInputAction.next,
-                                      inputFormatters: decimalDigitFormatter,
-                                      initialValue: filtersToReturn.minValue
-                                          ?.toStringAsFixed(2),
-                                      onChanged: (value) {
-                                        filtersToReturn =
-                                            filtersToReturn.copyWith(
-                                          minValue: double.tryParse(value),
-                                        );
-
-                                        setState(() {});
-                                      },
-                                    )),
-                                    const SizedBox(width: 16),
-                                    Flexible(
-                                        child: TextFormField(
-                                      decoration: InputDecoration(
-                                        labelText: t.transaction.form.to_value,
-                                        hintText: 'Ex.: 200',
-                                        suffixText:
-                                            prefCurrencySnapshot.data?.symbol,
-                                      ),
-                                      keyboardType: TextInputType.number,
-                                      validator: (value) => fieldValidator(
-                                        value,
-                                        isRequired: false,
-                                        validator: ValidatorType.double,
-                                      ),
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
-                                      textInputAction: TextInputAction.next,
-                                      inputFormatters: decimalDigitFormatter,
-                                      initialValue: filtersToReturn.maxValue
-                                          ?.toStringAsFixed(2),
-                                      onChanged: (value) {
-                                        filtersToReturn =
-                                            filtersToReturn.copyWith(
-                                          maxValue: double.tryParse(value),
-                                        );
-
-                                        setState(() {});
-                                      },
-                                    )),
-                                  ],
-                                );
-                              }),
-                          const SizedBox(height: 16),
-
-                          /* ---------------------------------- */
-                          /* -------- TRANSACTION TYPE -------- */
-                          /* ---------------------------------- */
-
-                          Text("Tipo de transacción:"),
-                          const SizedBox(height: 4),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
+                            Row(
                               children: [
-                                transactionTypeFilter(
-                                    context, TransactionType.income),
-                                const SizedBox(width: 6),
-                                transactionTypeFilter(
-                                    context, TransactionType.expense),
-                                const SizedBox(width: 6),
-                                transactionTypeFilter(
-                                    context, TransactionType.transfer),
+                                Flexible(
+                                  child: TextFormField(
+                                    controller: TextEditingController(
+                                      text: filtersToReturn.minDate != null
+                                          ? DateFormat.yMMMMd()
+                                              .format(filtersToReturn.minDate!)
+                                          : '',
+                                    ),
+                                    decoration: InputDecoration(
+                                      labelText: t.general.time.from_date,
+                                      hintText: t.general.time.from_date,
+                                      floatingLabelBehavior:
+                                          FloatingLabelBehavior.never,
+                                    ),
+                                    readOnly: true,
+                                    onTap: () async {
+                                      DateTime? pickedDate =
+                                          await openDateTimePicker(
+                                        context,
+                                        initialDate: filtersToReturn.minDate,
+                                        lastDate: filtersToReturn.maxDate,
+                                        showTimePickerAfterDate: false,
+                                      );
+                                      if (pickedDate == null) return;
+
+                                      setState(() {
+                                        filtersToReturn = filtersToReturn
+                                            .copyWith(minDate: pickedDate);
+                                      });
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                Flexible(
+                                  child: TextFormField(
+                                    controller: TextEditingController(
+                                      text: filtersToReturn.maxDate != null
+                                          ? DateFormat.yMMMMd()
+                                              .format(filtersToReturn.maxDate!)
+                                          : '',
+                                    ),
+                                    decoration: InputDecoration(
+                                      labelText: t.general.time.until_date,
+                                      hintText: t.general.time.until_date,
+                                      floatingLabelBehavior:
+                                          FloatingLabelBehavior.never,
+                                    ),
+                                    readOnly: true,
+                                    onTap: () async {
+                                      DateTime? pickedDate =
+                                          await openDateTimePicker(
+                                        context,
+                                        initialDate: filtersToReturn.maxDate,
+                                        firstDate: filtersToReturn.minDate,
+                                        showTimePickerAfterDate: false,
+                                      );
+                                      if (pickedDate == null) return;
+
+                                      setState(() {
+                                        filtersToReturn = filtersToReturn
+                                            .copyWith(maxDate: pickedDate);
+                                      });
+                                    },
+                                  ),
+                                ),
                               ],
                             ),
-                          ),
-                          const SizedBox(height: 16),
-                          TransactionStatusFilter(
-                            selectedStatuses: filtersToReturn.status ??
-                                [null, ...TransactionStatus.values],
-                            onSelected: (statusSelected, value) {
-                              var newListToAssign = filtersToReturn.status;
+                            const SizedBox(height: 16),
 
-                              if (newListToAssign == null) {
-                                if (statusSelected != null) {
-                                  newListToAssign =
-                                      TransactionStatus.notIn({statusSelected});
+                            /* ---------------------------------- */
+                            /* ------- TRANSACTION AMOUNT ------- */
+                            /* ---------------------------------- */
+
+                            StreamBuilder(
+                                stream: CurrencyService.instance
+                                    .getUserPreferredCurrency(),
+                                builder: (context, prefCurrencySnapshot) {
+                                  return Row(
+                                    children: [
+                                      Flexible(
+                                          child: TextFormField(
+                                        decoration: InputDecoration(
+                                          labelText:
+                                              t.transaction.filters.from_value,
+                                          hintText: 'Ex.: 200',
+                                          suffixText:
+                                              prefCurrencySnapshot.data?.symbol,
+                                        ),
+                                        keyboardType: TextInputType.number,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return null;
+                                          }
+
+                                          final defaultNumberValidatorResult =
+                                              fieldValidator(value,
+                                                  isRequired: false,
+                                                  validator:
+                                                      ValidatorType.double);
+
+                                          if (defaultNumberValidatorResult !=
+                                              null) {
+                                            return defaultNumberValidatorResult;
+                                          }
+
+                                          final valToNum = double.parse(value);
+
+                                          if (valToNum < 0) {
+                                            return t
+                                                .general.validations.positive;
+                                          } else if (filtersToReturn.maxValue !=
+                                                  null &&
+                                              valToNum >
+                                                  filtersToReturn.maxValue!) {
+                                            return t.general.validations
+                                                .max_number(
+                                                    x: filtersToReturn
+                                                        .maxValue!);
+                                          }
+
+                                          return null;
+                                        },
+                                        autovalidateMode:
+                                            AutovalidateMode.onUserInteraction,
+                                        textInputAction: TextInputAction.next,
+                                        inputFormatters: decimalDigitFormatter,
+                                        initialValue:
+                                            (filtersToReturn.minValue ?? 0)
+                                                .toStringAsFixed(2),
+                                        onChanged: (value) {
+                                          filtersToReturn =
+                                              filtersToReturn.copyWith(
+                                            minValue: double.tryParse(value),
+                                          );
+
+                                          setState(() {});
+                                        },
+                                      )),
+                                      const SizedBox(width: 16),
+                                      Flexible(
+                                          child: TextFormField(
+                                        decoration: InputDecoration(
+                                          labelText:
+                                              t.transaction.filters.to_value,
+                                          hintText: 'Ex.: 200',
+                                          suffixText:
+                                              prefCurrencySnapshot.data?.symbol,
+                                        ),
+                                        keyboardType: TextInputType.number,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return null;
+                                          }
+
+                                          final defaultNumberValidatorResult =
+                                              fieldValidator(value,
+                                                  isRequired: false,
+                                                  validator:
+                                                      ValidatorType.double);
+
+                                          if (defaultNumberValidatorResult !=
+                                              null) {
+                                            return defaultNumberValidatorResult;
+                                          }
+
+                                          final valToNum = double.parse(value);
+
+                                          if (valToNum <
+                                              (filtersToReturn.minValue ?? 0)) {
+                                            return t.general.validations
+                                                .min_number(
+                                                    x: filtersToReturn
+                                                        .minValue!);
+                                          }
+
+                                          return null;
+                                        },
+                                        autovalidateMode:
+                                            AutovalidateMode.onUserInteraction,
+                                        textInputAction: TextInputAction.next,
+                                        inputFormatters: decimalDigitFormatter,
+                                        initialValue: filtersToReturn.maxValue
+                                            ?.toStringAsFixed(2),
+                                        onChanged: (value) {
+                                          filtersToReturn =
+                                              filtersToReturn.copyWith(
+                                            maxValue: double.tryParse(value),
+                                          );
+
+                                          setState(() {});
+                                        },
+                                      )),
+                                    ],
+                                  );
+                                }),
+                            const SizedBox(height: 16),
+
+                            /* ---------------------------------- */
+                            /* -------- TRANSACTION TYPE -------- */
+                            /* ---------------------------------- */
+
+                            Text("Tipo de transacción:"),
+                            const SizedBox(height: 4),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  transactionTypeFilter(
+                                      context, TransactionType.income),
+                                  const SizedBox(width: 6),
+                                  transactionTypeFilter(
+                                      context, TransactionType.expense),
+                                  const SizedBox(width: 6),
+                                  transactionTypeFilter(
+                                      context, TransactionType.transfer),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TransactionStatusFilter(
+                              selectedStatuses: filtersToReturn.status ??
+                                  [null, ...TransactionStatus.values],
+                              onSelected: (statusSelected, value) {
+                                var newListToAssign = filtersToReturn.status;
+
+                                if (newListToAssign == null) {
+                                  if (statusSelected != null) {
+                                    newListToAssign = TransactionStatus.notIn(
+                                        {statusSelected});
+                                  } else {
+                                    newListToAssign = TransactionStatus.notIn(
+                                        {},
+                                        includeNullStatus: value);
+                                  }
+                                } else if (value) {
+                                  newListToAssign.add(statusSelected);
                                 } else {
-                                  newListToAssign = TransactionStatus.notIn({},
-                                      includeNullStatus: value);
+                                  newListToAssign.removeWhere((element) =>
+                                      element?.index == statusSelected?.index);
                                 }
-                              } else if (value) {
-                                newListToAssign.add(statusSelected);
-                              } else {
-                                newListToAssign.removeWhere((element) =>
-                                    element?.index == statusSelected?.index);
-                              }
 
-                              if (newListToAssign.length ==
-                                  TransactionStatus.values.length + 1) {
-                                newListToAssign = null;
-                              }
+                                if (newListToAssign.length ==
+                                    TransactionStatus.values.length + 1) {
+                                  newListToAssign = null;
+                                }
 
-                              setState(() {
-                                filtersToReturn = filtersToReturn.copyWith(
-                                    status: newListToAssign);
-                              });
-                            },
-                          ),
-                        ],
+                                setState(() {
+                                  filtersToReturn = filtersToReturn.copyWith(
+                                      status: newListToAssign);
+                                });
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     ScrollableWithBottomGradient.buildPositionedGradient(
@@ -456,7 +517,9 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                 ),
               ),
               BottomSheetFooter(
-                  onSaved: () => Navigator.of(context).pop(filtersToReturn)),
+                  onSaved: !(_formKey.currentState?.validate() ?? true)
+                      ? null
+                      : () => Navigator.of(context).pop(filtersToReturn)),
             ],
           );
         });

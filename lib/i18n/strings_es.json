@@ -118,7 +118,10 @@
       "Date": "Por fecha"
     },
     "VALIDATIONS": {
-      "required": "Campo obligatorio"
+      "required": "Campo obligatorio",
+      "positive": "Debe ser positivo",
+      "min_number": "Debe ser mayor que {{x}}",
+      "max_number": "Debe ser menor que {{x}}"
     }
   },
   "INTRO": {
@@ -251,10 +254,12 @@
       "searcher.placeholder": "Busca por categoría, descripción...",
       "loading": "Cargando más transacciones..."
     },
+    "FILTERS": {
+      "from_value": "Desde monto",
+      "to_value": "Hasta monto"
+    },
     "FORM": {
       "status": "Estado",
-      "from_value": "Desde monto",
-      "to_value": "Hasta monto",
       "VALIDATORS": {
         "zero": "El valor de una transacción no puede ser igual a cero",
         "date-max": "La fecha seleccionada es posterior a la actual. Se añadirá la transacción como pendiente",
