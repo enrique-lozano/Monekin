@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 900 (450 per locale)
+/// Strings: 906 (453 per locale)
 ///
-/// Built on 2023-10-16 at 14:07 UTC
+/// Built on 2023-10-16 at 15:03 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -330,6 +330,7 @@ class _TranslationsTransactionEn {
 	String get details => 'Movement details';
 	late final _TranslationsTransactionNextPaymentsEn next_payments = _TranslationsTransactionNextPaymentsEn._(_root);
 	late final _TranslationsTransactionListEn list = _TranslationsTransactionListEn._(_root);
+	late final _TranslationsTransactionFiltersEn filters = _TranslationsTransactionFiltersEn._(_root);
 	late final _TranslationsTransactionFormEn form = _TranslationsTransactionFormEn._(_root);
 	late final _TranslationsTransactionStatusEn status = _TranslationsTransactionStatusEn._(_root);
 	late final _TranslationsTransactionTypesEn types = _TranslationsTransactionTypesEn._(_root);
@@ -566,6 +567,9 @@ class _TranslationsGeneralValidationsEn {
 
 	// Translations
 	String get required => 'Required field';
+	String get positive => 'Should be positive';
+	String min_number({required Object x}) => 'Should be greater than ${x}';
+	String max_number({required Object x}) => 'Should be less than ${x}';
 }
 
 // Path: financial_health.review
@@ -659,6 +663,17 @@ class _TranslationsTransactionListEn {
 	String get loading => 'Loading more transactions...';
 }
 
+// Path: transaction.filters
+class _TranslationsTransactionFiltersEn {
+	_TranslationsTransactionFiltersEn._(this._root);
+
+	final _TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	String get from_value => 'From amount';
+	String get to_value => 'Up to amount';
+}
+
 // Path: transaction.form
 class _TranslationsTransactionFormEn {
 	_TranslationsTransactionFormEn._(this._root);
@@ -667,8 +682,6 @@ class _TranslationsTransactionFormEn {
 
 	// Translations
 	String get status => 'Status';
-	String get from_value => 'From amount';
-	String get to_value => 'Up to amount';
 	late final _TranslationsTransactionFormValidatorsEn validators = _TranslationsTransactionFormValidatorsEn._(_root);
 	String get title => 'Transaction title';
 	String get value => 'Value of the transaction';
@@ -1396,6 +1409,7 @@ class _TranslationsTransactionEs implements _TranslationsTransactionEn {
 	@override String get details => 'Detalles del movimiento';
 	@override late final _TranslationsTransactionNextPaymentsEs next_payments = _TranslationsTransactionNextPaymentsEs._(_root);
 	@override late final _TranslationsTransactionListEs list = _TranslationsTransactionListEs._(_root);
+	@override late final _TranslationsTransactionFiltersEs filters = _TranslationsTransactionFiltersEs._(_root);
 	@override late final _TranslationsTransactionFormEs form = _TranslationsTransactionFormEs._(_root);
 	@override late final _TranslationsTransactionStatusEs status = _TranslationsTransactionStatusEs._(_root);
 	@override late final _TranslationsTransactionTypesEs types = _TranslationsTransactionTypesEs._(_root);
@@ -1632,6 +1646,9 @@ class _TranslationsGeneralValidationsEs implements _TranslationsGeneralValidatio
 
 	// Translations
 	@override String get required => 'Campo obligatorio';
+	@override String get positive => 'Debe ser positivo';
+	@override String min_number({required Object x}) => 'Debe ser mayor que ${x}';
+	@override String max_number({required Object x}) => 'Debe ser menor que ${x}';
 }
 
 // Path: financial_health.review
@@ -1725,6 +1742,17 @@ class _TranslationsTransactionListEs implements _TranslationsTransactionListEn {
 	@override String get loading => 'Cargando más transacciones...';
 }
 
+// Path: transaction.filters
+class _TranslationsTransactionFiltersEs implements _TranslationsTransactionFiltersEn {
+	_TranslationsTransactionFiltersEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get from_value => 'Desde monto';
+	@override String get to_value => 'Hasta monto';
+}
+
 // Path: transaction.form
 class _TranslationsTransactionFormEs implements _TranslationsTransactionFormEn {
 	_TranslationsTransactionFormEs._(this._root);
@@ -1733,8 +1761,6 @@ class _TranslationsTransactionFormEs implements _TranslationsTransactionFormEn {
 
 	// Translations
 	@override String get status => 'Estado';
-	@override String get from_value => 'Desde monto';
-	@override String get to_value => 'Hasta monto';
 	@override late final _TranslationsTransactionFormValidatorsEs validators = _TranslationsTransactionFormValidatorsEs._(_root);
 	@override String get title => 'Título de la transacción';
 	@override String get value => 'Valor de la transacción';
@@ -2368,6 +2394,9 @@ extension on _TranslationsEn {
 			case 'general.transaction_order.quantity': return 'By quantity';
 			case 'general.transaction_order.date': return 'By date';
 			case 'general.validations.required': return 'Required field';
+			case 'general.validations.positive': return 'Should be positive';
+			case 'general.validations.min_number': return ({required Object x}) => 'Should be greater than ${x}';
+			case 'general.validations.max_number': return ({required Object x}) => 'Should be less than ${x}';
 			case 'intro.start': return 'Start';
 			case 'intro.skip': return 'Skip';
 			case 'intro.next': return 'Next';
@@ -2472,9 +2501,9 @@ extension on _TranslationsEn {
 			case 'transaction.list.empty': return 'No transactions found to display here. Add a transaction by clicking the \'+\' button at the bottom';
 			case 'transaction.list.searcher_placeholder': return 'Search by category, description...';
 			case 'transaction.list.loading': return 'Loading more transactions...';
+			case 'transaction.filters.from_value': return 'From amount';
+			case 'transaction.filters.to_value': return 'Up to amount';
 			case 'transaction.form.status': return 'Status';
-			case 'transaction.form.from_value': return 'From amount';
-			case 'transaction.form.to_value': return 'Up to amount';
 			case 'transaction.form.validators.zero': return 'The value of a transaction cannot be equal to zero';
 			case 'transaction.form.validators.date_max': return 'The selected date is after the current one. The transaction will be added as pending';
 			case 'transaction.form.validators.date_after_account_creation': return 'You cannot create a transaction whose date is before the creation date of the account it belongs to';
@@ -2852,6 +2881,9 @@ extension on _TranslationsEs {
 			case 'general.transaction_order.quantity': return 'Por cantidad';
 			case 'general.transaction_order.date': return 'Por fecha';
 			case 'general.validations.required': return 'Campo obligatorio';
+			case 'general.validations.positive': return 'Debe ser positivo';
+			case 'general.validations.min_number': return ({required Object x}) => 'Debe ser mayor que ${x}';
+			case 'general.validations.max_number': return ({required Object x}) => 'Debe ser menor que ${x}';
 			case 'intro.start': return 'Empecemos';
 			case 'intro.skip': return 'Saltar';
 			case 'intro.next': return 'Siguiente';
@@ -2956,9 +2988,9 @@ extension on _TranslationsEs {
 			case 'transaction.list.empty': return 'No se han encontrado transacciones que mostrar aquí. Añade una transacción pulsando el botón \'+\' de la parte inferior';
 			case 'transaction.list.searcher_placeholder': return 'Busca por categoría, descripción...';
 			case 'transaction.list.loading': return 'Cargando más transacciones...';
+			case 'transaction.filters.from_value': return 'Desde monto';
+			case 'transaction.filters.to_value': return 'Hasta monto';
 			case 'transaction.form.status': return 'Estado';
-			case 'transaction.form.from_value': return 'Desde monto';
-			case 'transaction.form.to_value': return 'Hasta monto';
 			case 'transaction.form.validators.zero': return 'El valor de una transacción no puede ser igual a cero';
 			case 'transaction.form.validators.date_max': return 'La fecha seleccionada es posterior a la actual. Se añadirá la transacción como pendiente';
 			case 'transaction.form.validators.date_after_account_creation': return 'No puedes crear una transacción cuya fecha es anterior a la fecha de creación de la cuenta a la que pertenece';
