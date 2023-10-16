@@ -59,7 +59,7 @@ getExchangeRates($predicate = TRUE, :limit AS NUMBER) WITH ExchangeRate:
         INNER JOIN currencies currency
         ON e.currencyCode = currency.code
     WHERE $predicate 
-    ORDER BY date
+    ORDER BY date DESC
     LIMIT :limit;
 
 getLastExchangeRates(:limit AS NUMBER) WITH ExchangeRate:
