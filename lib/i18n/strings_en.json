@@ -255,7 +255,11 @@
     },
     "FILTERS": {
       "from_value": "From amount",
-      "to_value": "Up to amount"
+      "to_value": "Up to amount",
+      "from_value_def": "From {{ x }}",
+      "to_value_def": "Up to {{ x }}",
+      "from_date_def": "From the {{ date }}",
+      "to_date_def": "Up to the {{ date }}"
     },
     "FORM": {
       "status": "Status",
