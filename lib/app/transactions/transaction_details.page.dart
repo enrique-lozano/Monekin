@@ -298,7 +298,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
 
     return Card(
       elevation: 1,
-      color: color.lighten(0.385),
+      color: color.lighten(0.625),
       clipBehavior: Clip.hardEdge,
       margin: const EdgeInsets.only(bottom: 16),
       child: Column(
