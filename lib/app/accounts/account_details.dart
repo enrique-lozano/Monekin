@@ -382,12 +382,14 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                             title: t.home.last_transactions,
                             onHeaderButtonClick: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => TransactionsPage(
-                                            filters: TransactionFilters(
-                                                accounts: [widget.account]),
-                                          )));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TransactionsPage(
+                                    filters: TransactionFilters(
+                                        accounts: [widget.account]),
+                                  ),
+                                ),
+                              );
                             },
                             body: StreamBuilder(
                                 stream: TransactionService.instance
