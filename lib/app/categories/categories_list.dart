@@ -171,8 +171,8 @@ class _CategoriesListState extends State<CategoriesList> {
               appBar: AppBar(
                 elevation: 0,
                 bottom: TabBar(tabs: [
-                  Tab(text: t.general.incomes),
-                  Tab(text: t.general.expenses),
+                  Tab(text: t.transaction.types.income(n: 10)),
+                  Tab(text: t.transaction.types.expense(n: 10)),
                 ]),
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

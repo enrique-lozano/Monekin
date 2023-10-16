@@ -43,7 +43,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
           title: Text(t.budgets.details.title),
           bottom: TabBar(tabs: [
             Tab(text: t.budgets.details.statistics),
-            Tab(text: t.general.transactions),
+            Tab(text: t.transaction.display(n: 1)),
           ]),
           actions: [
             MonekinPopuMenuButton(actionItems: [
@@ -227,10 +227,8 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
           StreamBuilder(
               stream: TransactionService.instance.getTransactionsFromPredicate(
                 predicate: TransactionFilters(
-                  notStatus: [
-                    TransactionStatus.pending,
-                    TransactionStatus.voided
-                  ],
+                  status: TransactionStatus.notIn(
+                      {TransactionStatus.pending, TransactionStatus.voided}),
                   minDate: widget.budget.currentDateRange[0],
                   maxDate: widget.budget.currentDateRange[1],
                 ).toTransactionExpression(

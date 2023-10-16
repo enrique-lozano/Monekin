@@ -4,6 +4,7 @@ import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -47,7 +48,43 @@ enum TransactionPeriodicity {
 }
 
 /// All the possible types of a transaction
-enum TransactionType { income, expense, transfer }
+enum TransactionType {
+  income,
+  expense,
+  transfer;
+
+  String displayName(BuildContext context, {bool plural = false}) {
+    if (this == income) {
+      return t.transaction.types.income(n: plural ? 10 : 1);
+    } else if (this == expense) {
+      return t.transaction.types.expense(n: plural ? 10 : 1);
+    } else if (this == transfer) {
+      return t.transaction.types.transfer(n: plural ? 10 : 1);
+    }
+
+    return '';
+  }
+
+  IconData icon() {
+    if (this == income) {
+      return Icons.south_east_rounded;
+    } else if (this == expense) {
+      return Icons.north_east_rounded;
+    }
+
+    return Icons.swap_vert_rounded;
+  }
+
+  Color color(BuildContext context) {
+    if (this == income) {
+      return CustomColors.of(context).success;
+    } else if (this == expense) {
+      return CustomColors.of(context).danger;
+    }
+
+    return appColorScheme(context).primary;
+  }
+}
 
 class MoneyTransaction extends TransactionInDB {
   Category? category;

@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 888 (444 per locale)
+/// Strings: 900 (450 per locale)
 ///
-/// Built on 2023-10-15 at 07:54 UTC
+/// Built on 2023-10-16 at 14:07 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -192,17 +192,10 @@ class _TranslationsGeneralEn {
 	String get unarchive => 'Unarchive';
 	String get balance => 'Balance';
 	String get delete => 'Delete';
-	String get income => 'Income';
-	String get expense => 'Expense';
-	String get incomes => 'Incomes';
-	String get expenses => 'Expenses';
-	String get expenses_and_incomes => 'Expenses and incomes';
 	String get account => 'Account';
 	String get accounts => 'Accounts';
 	String get categories => 'Categories';
 	String get category => 'Category';
-	String get transaction => 'Transaction';
-	String get transactions => 'Transactions';
 	String get today => 'Today';
 	String get yesterday => 'Yesterday';
 	String get filters => 'Filters';
@@ -317,6 +310,10 @@ class _TranslationsTransactionEn {
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
+	String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		one: 'Transaction',
+		other: 'Transactions',
+	);
 	String get create => 'New transaction';
 	String get new_income => 'New income';
 	String get new_expense => 'New expense';
@@ -335,6 +332,7 @@ class _TranslationsTransactionEn {
 	late final _TranslationsTransactionListEn list = _TranslationsTransactionListEn._(_root);
 	late final _TranslationsTransactionFormEn form = _TranslationsTransactionFormEn._(_root);
 	late final _TranslationsTransactionStatusEn status = _TranslationsTransactionStatusEn._(_root);
+	late final _TranslationsTransactionTypesEn types = _TranslationsTransactionTypesEn._(_root);
 }
 
 // Path: transfer
@@ -345,6 +343,7 @@ class _TranslationsTransferEn {
 
 	// Translations
 	String get display => 'Transfer';
+	String get transfers => 'Transfers';
 	String transfer_to({required Object account}) => 'Transfer to ${account}';
 	String get create => 'New Transfer';
 	String get need_two_accounts_warning_header => 'Ops!';
@@ -534,6 +533,8 @@ class _TranslationsGeneralTimeEn {
 	// Translations
 	String get start_date => 'Start date';
 	String get end_date => 'End date';
+	String get from_date => 'From date';
+	String get until_date => 'Until date';
 	String get date => 'Date';
 	String get datetime => 'Datetime';
 	String get each => 'Each';
@@ -666,6 +667,8 @@ class _TranslationsTransactionFormEn {
 
 	// Translations
 	String get status => 'Status';
+	String get from_value => 'From amount';
+	String get to_value => 'Up to amount';
 	late final _TranslationsTransactionFormValidatorsEn validators = _TranslationsTransactionFormValidatorsEn._(_root);
 	String get title => 'Transaction title';
 	String get value => 'Value of the transaction';
@@ -693,6 +696,27 @@ class _TranslationsTransactionStatusEn {
 	String get pending_descr => 'This transaction is pending and therefore it will not be taken into account when calculating balances and statistics';
 	String get voided => 'Voided';
 	String get voided_descr => 'Void/cancelled transaction due to payment error or any other reason. It will not be taken into account when calculating balances and statistics';
+}
+
+// Path: transaction.types
+class _TranslationsTransactionTypesEn {
+	_TranslationsTransactionTypesEn._(this._root);
+
+	final _TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	String income({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		one: 'Income',
+		other: 'Incomes',
+	);
+	String expense({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		one: 'Expense',
+		other: 'Expenses',
+	);
+	String transfer({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		one: 'Transfer',
+		other: 'Transfers',
+	);
 }
 
 // Path: transfer.form
@@ -1234,17 +1258,10 @@ class _TranslationsGeneralEs implements _TranslationsGeneralEn {
 	@override String get unarchive => 'Desarchivar';
 	@override String get delete => 'Eliminar';
 	@override String get balance => 'Balance';
-	@override String get income => 'Ingreso';
-	@override String get expense => 'Gasto';
-	@override String get incomes => 'Ingresos';
-	@override String get expenses => 'Gastos';
-	@override String get expenses_and_incomes => 'Gastos e ingresos';
 	@override String get account => 'Cuenta';
 	@override String get accounts => 'Cuentas';
 	@override String get categories => 'Categorías';
 	@override String get category => 'Categoría';
-	@override String get transaction => 'Transacción';
-	@override String get transactions => 'Transacciones';
 	@override String get today => 'Hoy';
 	@override String get yesterday => 'Ayer';
 	@override String get filters => 'Filtros';
@@ -1359,6 +1376,10 @@ class _TranslationsTransactionEs implements _TranslationsTransactionEn {
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		one: 'Transacción',
+		other: 'Transacciones',
+	);
 	@override String get create => 'Nueva transacción';
 	@override String get new_income => 'Nuevo ingreso';
 	@override String get new_expense => 'Nuevo gasto';
@@ -1377,6 +1398,7 @@ class _TranslationsTransactionEs implements _TranslationsTransactionEn {
 	@override late final _TranslationsTransactionListEs list = _TranslationsTransactionListEs._(_root);
 	@override late final _TranslationsTransactionFormEs form = _TranslationsTransactionFormEs._(_root);
 	@override late final _TranslationsTransactionStatusEs status = _TranslationsTransactionStatusEs._(_root);
+	@override late final _TranslationsTransactionTypesEs types = _TranslationsTransactionTypesEs._(_root);
 }
 
 // Path: transfer
@@ -1387,6 +1409,7 @@ class _TranslationsTransferEs implements _TranslationsTransferEn {
 
 	// Translations
 	@override String get display => 'Transferencia';
+	@override String get transfers => 'Transferencias';
 	@override String transfer_to({required Object account}) => 'Transferencia hacia ${account}';
 	@override String get create => 'Nueva transferencia';
 	@override String get need_two_accounts_warning_header => 'Ops!';
@@ -1576,6 +1599,8 @@ class _TranslationsGeneralTimeEs implements _TranslationsGeneralTimeEn {
 	// Translations
 	@override String get start_date => 'Fecha de inicio';
 	@override String get end_date => 'Fecha de fin';
+	@override String get from_date => 'Desde fecha';
+	@override String get until_date => 'Hasta fecha';
 	@override String get date => 'Fecha';
 	@override String get datetime => 'Fecha y hora';
 	@override String get each => 'Cada';
@@ -1708,6 +1733,8 @@ class _TranslationsTransactionFormEs implements _TranslationsTransactionFormEn {
 
 	// Translations
 	@override String get status => 'Estado';
+	@override String get from_value => 'Desde monto';
+	@override String get to_value => 'Hasta monto';
 	@override late final _TranslationsTransactionFormValidatorsEs validators = _TranslationsTransactionFormValidatorsEs._(_root);
 	@override String get title => 'Título de la transacción';
 	@override String get value => 'Valor de la transacción';
@@ -1735,6 +1762,27 @@ class _TranslationsTransactionStatusEs implements _TranslationsTransactionStatus
 	@override String get pending_descr => 'Esta transacción esta pendiente y por tanto no será tenida en cuenta a la hora de calcular balances y estadísticas';
 	@override String get voided => 'Nula';
 	@override String get voided_descr => 'Transacción nula/cancelada debido a un error en el pago o cualquier otro motivo. No será tenida en cuenta a la hora de calcular balances y estadísticas';
+}
+
+// Path: transaction.types
+class _TranslationsTransactionTypesEs implements _TranslationsTransactionTypesEn {
+	_TranslationsTransactionTypesEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String income({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		one: 'Ingreso',
+		other: 'Ingresos',
+	);
+	@override String expense({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		one: 'Gasto',
+		other: 'Gastos',
+	);
+	@override String transfer({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		one: 'Transferencia',
+		other: 'Transferencias',
+	);
 }
 
 // Path: transfer.form
@@ -2234,17 +2282,10 @@ extension on _TranslationsEn {
 			case 'general.unarchive': return 'Unarchive';
 			case 'general.balance': return 'Balance';
 			case 'general.delete': return 'Delete';
-			case 'general.income': return 'Income';
-			case 'general.expense': return 'Expense';
-			case 'general.incomes': return 'Incomes';
-			case 'general.expenses': return 'Expenses';
-			case 'general.expenses_and_incomes': return 'Expenses and incomes';
 			case 'general.account': return 'Account';
 			case 'general.accounts': return 'Accounts';
 			case 'general.categories': return 'Categories';
 			case 'general.category': return 'Category';
-			case 'general.transaction': return 'Transaction';
-			case 'general.transactions': return 'Transactions';
 			case 'general.today': return 'Today';
 			case 'general.yesterday': return 'Yesterday';
 			case 'general.filters': return 'Filters';
@@ -2256,6 +2297,8 @@ extension on _TranslationsEn {
 			case 'general.clipboard.error': return 'Error al copiar';
 			case 'general.time.start_date': return 'Start date';
 			case 'general.time.end_date': return 'End date';
+			case 'general.time.from_date': return 'From date';
+			case 'general.time.until_date': return 'Until date';
 			case 'general.time.date': return 'Date';
 			case 'general.time.datetime': return 'Datetime';
 			case 'general.time.each': return 'Each';
@@ -2397,6 +2440,10 @@ extension on _TranslationsEn {
 			case 'icon_selector.scopes.technology': return 'Technology';
 			case 'icon_selector.scopes.other': return 'Others';
 			case 'icon_selector.scopes.logos_financial_institutions': return 'Financial institutions';
+			case 'transaction.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+				one: 'Transaction',
+				other: 'Transactions',
+			);
 			case 'transaction.create': return 'New transaction';
 			case 'transaction.new_income': return 'New income';
 			case 'transaction.new_expense': return 'New expense';
@@ -2426,6 +2473,8 @@ extension on _TranslationsEn {
 			case 'transaction.list.searcher_placeholder': return 'Search by category, description...';
 			case 'transaction.list.loading': return 'Loading more transactions...';
 			case 'transaction.form.status': return 'Status';
+			case 'transaction.form.from_value': return 'From amount';
+			case 'transaction.form.to_value': return 'Up to amount';
 			case 'transaction.form.validators.zero': return 'The value of a transaction cannot be equal to zero';
 			case 'transaction.form.validators.date_max': return 'The selected date is after the current one. The transaction will be added as pending';
 			case 'transaction.form.validators.date_after_account_creation': return 'You cannot create a transaction whose date is before the creation date of the account it belongs to';
@@ -2448,7 +2497,20 @@ extension on _TranslationsEn {
 			case 'transaction.status.pending_descr': return 'This transaction is pending and therefore it will not be taken into account when calculating balances and statistics';
 			case 'transaction.status.voided': return 'Voided';
 			case 'transaction.status.voided_descr': return 'Void/cancelled transaction due to payment error or any other reason. It will not be taken into account when calculating balances and statistics';
+			case 'transaction.types.income': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+				one: 'Income',
+				other: 'Incomes',
+			);
+			case 'transaction.types.expense': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+				one: 'Expense',
+				other: 'Expenses',
+			);
+			case 'transaction.types.transfer': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+				one: 'Transfer',
+				other: 'Transfers',
+			);
 			case 'transfer.display': return 'Transfer';
+			case 'transfer.transfers': return 'Transfers';
 			case 'transfer.transfer_to': return ({required Object account}) => 'Transfer to ${account}';
 			case 'transfer.create': return 'New Transfer';
 			case 'transfer.need_two_accounts_warning_header': return 'Ops!';
@@ -2703,17 +2765,10 @@ extension on _TranslationsEs {
 			case 'general.unarchive': return 'Desarchivar';
 			case 'general.delete': return 'Eliminar';
 			case 'general.balance': return 'Balance';
-			case 'general.income': return 'Ingreso';
-			case 'general.expense': return 'Gasto';
-			case 'general.incomes': return 'Ingresos';
-			case 'general.expenses': return 'Gastos';
-			case 'general.expenses_and_incomes': return 'Gastos e ingresos';
 			case 'general.account': return 'Cuenta';
 			case 'general.accounts': return 'Cuentas';
 			case 'general.categories': return 'Categorías';
 			case 'general.category': return 'Categoría';
-			case 'general.transaction': return 'Transacción';
-			case 'general.transactions': return 'Transacciones';
 			case 'general.today': return 'Hoy';
 			case 'general.yesterday': return 'Ayer';
 			case 'general.filters': return 'Filtros';
@@ -2725,6 +2780,8 @@ extension on _TranslationsEs {
 			case 'general.clipboard.error': return 'Error al copiar';
 			case 'general.time.start_date': return 'Fecha de inicio';
 			case 'general.time.end_date': return 'Fecha de fin';
+			case 'general.time.from_date': return 'Desde fecha';
+			case 'general.time.until_date': return 'Hasta fecha';
 			case 'general.time.date': return 'Fecha';
 			case 'general.time.datetime': return 'Fecha y hora';
 			case 'general.time.each': return 'Cada';
@@ -2867,6 +2924,10 @@ extension on _TranslationsEs {
 			case 'icon_selector.scopes.technology': return 'Technología';
 			case 'icon_selector.scopes.other': return 'Otros';
 			case 'icon_selector.scopes.logos_financial_institutions': return 'Financial institutions';
+			case 'transaction.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+				one: 'Transacción',
+				other: 'Transacciones',
+			);
 			case 'transaction.create': return 'Nueva transacción';
 			case 'transaction.new_income': return 'Nuevo ingreso';
 			case 'transaction.new_expense': return 'Nuevo gasto';
@@ -2896,6 +2957,8 @@ extension on _TranslationsEs {
 			case 'transaction.list.searcher_placeholder': return 'Busca por categoría, descripción...';
 			case 'transaction.list.loading': return 'Cargando más transacciones...';
 			case 'transaction.form.status': return 'Estado';
+			case 'transaction.form.from_value': return 'Desde monto';
+			case 'transaction.form.to_value': return 'Hasta monto';
 			case 'transaction.form.validators.zero': return 'El valor de una transacción no puede ser igual a cero';
 			case 'transaction.form.validators.date_max': return 'La fecha seleccionada es posterior a la actual. Se añadirá la transacción como pendiente';
 			case 'transaction.form.validators.date_after_account_creation': return 'No puedes crear una transacción cuya fecha es anterior a la fecha de creación de la cuenta a la que pertenece';
@@ -2918,7 +2981,20 @@ extension on _TranslationsEs {
 			case 'transaction.status.pending_descr': return 'Esta transacción esta pendiente y por tanto no será tenida en cuenta a la hora de calcular balances y estadísticas';
 			case 'transaction.status.voided': return 'Nula';
 			case 'transaction.status.voided_descr': return 'Transacción nula/cancelada debido a un error en el pago o cualquier otro motivo. No será tenida en cuenta a la hora de calcular balances y estadísticas';
+			case 'transaction.types.income': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+				one: 'Ingreso',
+				other: 'Ingresos',
+			);
+			case 'transaction.types.expense': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+				one: 'Gasto',
+				other: 'Gastos',
+			);
+			case 'transaction.types.transfer': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+				one: 'Transferencia',
+				other: 'Transferencias',
+			);
 			case 'transfer.display': return 'Transferencia';
+			case 'transfer.transfers': return 'Transferencias';
 			case 'transfer.transfer_to': return ({required Object account}) => 'Transferencia hacia ${account}';
 			case 'transfer.create': return 'Nueva transferencia';
 			case 'transfer.need_two_accounts_warning_header': return 'Ops!';

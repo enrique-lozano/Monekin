@@ -1,11 +1,22 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/i18n/translations.g.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
+showCurrencySelectorModal(
+  BuildContext context,
+  CurrencySelectorModal modalData,
+) {
+  showModalBottomSheet(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (context) => modalData);
+}
 
 class CurrencySelectorModal extends StatefulWidget {
   const CurrencySelectorModal(
@@ -118,9 +129,7 @@ class _CurrencySelectorModalState extends State<CurrencySelectorModal> {
                         ScrollViewKeyboardDismissBehavior.onDrag,
                     itemCount: _filteredCurrencies?.length ?? 0,
                     separatorBuilder: (context, i) {
-                      return const Divider(
-                        height: 0,
-                      );
+                      return const Divider(height: 0);
                     },
                     itemBuilder: (context, index) {
                       final currencyItem = _filteredCurrencies![index];

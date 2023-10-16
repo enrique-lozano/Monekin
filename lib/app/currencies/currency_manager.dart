@@ -94,19 +94,15 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
             onTap: () {
               if (_userCurrency == null) return;
 
-              showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  showDragHandle: true,
-                  builder: (context) {
-                    return CurrencySelectorModal(
-                        preselectedCurrency: _userCurrency!,
-                        onCurrencySelected: (newCurrency) async {
-                          await Future.delayed(
-                              const Duration(milliseconds: 250));
-                          changePreferredCurrency(newCurrency);
-                        });
-                  });
+              showCurrencySelectorModal(
+                context,
+                CurrencySelectorModal(
+                    preselectedCurrency: _userCurrency!,
+                    onCurrencySelected: (newCurrency) async {
+                      await Future.delayed(const Duration(milliseconds: 250));
+                      changePreferredCurrency(newCurrency);
+                    }),
+              );
             },
           ),
           const SizedBox(height: 10),

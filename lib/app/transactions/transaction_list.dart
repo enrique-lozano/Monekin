@@ -171,7 +171,7 @@ class TransactionListComponent extends StatelessWidget {
                         color: transaction.color(context),
                         size: 28,
                       )
-                    : const Icon(Icons.swap_vert, size: 28),
+                    : Icon(TransactionType.transfer.icon(), size: 28),
               ),
             ),
             onTap: () {

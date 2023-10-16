@@ -530,7 +530,8 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                           color: transaction.color(context),
                                           size: 42,
                                         )
-                                      : const Icon(Icons.swap_vert, size: 42),
+                                      : Icon(TransactionType.transfer.icon(),
+                                          size: 42),
                                 ),
                               ),
                             ],

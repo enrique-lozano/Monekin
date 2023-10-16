@@ -285,19 +285,16 @@ class _AccountFormPageState extends State<AccountFormPage> {
                           onTap: () {
                             if (_currency == null) return;
 
-                            showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                showDragHandle: true,
-                                builder: (context) {
-                                  return CurrencySelectorModal(
-                                      preselectedCurrency: _currency!,
-                                      onCurrencySelected: (newCurrency) {
-                                        setState(() {
-                                          _currency = newCurrency;
-                                        });
-                                      });
-                                });
+                            showCurrencySelectorModal(
+                              context,
+                              CurrencySelectorModal(
+                                  preselectedCurrency: _currency!,
+                                  onCurrencySelected: (newCurrency) {
+                                    setState(() {
+                                      _currency = newCurrency;
+                                    });
+                                  }),
+                            );
                           },
                           decoration: InputDecoration(
                               labelText: t.currencies.currency,

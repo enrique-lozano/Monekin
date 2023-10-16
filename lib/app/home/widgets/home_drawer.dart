@@ -43,7 +43,7 @@ class HomeDrawer extends StatelessWidget {
         onClick: () => navigateToRoute(context, const AllAccountsPage()),
       ),
       ListTileActionItem(
-        label: t.general.transactions,
+        label: t.transaction.display(n: 1),
         icon: Icons.app_registration_rounded,
         onClick: () => navigateToRoute(context, const TransactionsPage()),
       ),

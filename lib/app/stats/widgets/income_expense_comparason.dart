@@ -82,7 +82,7 @@ class IncomeExpenseComparason extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(t.general.income),
+                        Text(t.transaction.types.income(n: 1)),
                         CurrencyDisplayer(amountToConvert: income)
                       ],
                     ),
@@ -99,7 +99,7 @@ class IncomeExpenseComparason extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(t.general.expense),
+                        Text(t.transaction.types.expense(n: 1)),
                         CurrencyDisplayer(amountToConvert: expense)
                       ],
                     ),

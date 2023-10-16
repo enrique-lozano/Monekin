@@ -23,8 +23,7 @@ class TransactionFilters {
   /// Defaults to `false`
   final bool includeParentCategoriesInSearch;
 
-  final List<TransactionStatus>? status;
-  final List<TransactionStatus>? notStatus;
+  final List<TransactionStatus?>? status;
 
   final DateTime? minDate;
   final DateTime? maxDate;
@@ -35,6 +34,7 @@ class TransactionFilters {
   final bool? isRecurrent;
 
   final double? minValue;
+  final double? maxValue;
 
   const TransactionFilters({
     this.minDate,
@@ -43,25 +43,25 @@ class TransactionFilters {
     this.includeParentCategoriesInSearch = false,
     this.includeReceivingAccountsInAccountFilters = true,
     this.minValue,
+    this.maxValue,
     this.transactionTypes,
     this.isRecurrent,
     this.accountsIDs,
     this.categories,
     this.status,
-    this.notStatus,
-  }) : assert(status == null || notStatus == null);
+  });
 
   get hasFilter => [
         minDate,
         maxDate,
         searchValue,
         minValue,
+        maxValue,
         transactionTypes,
         isRecurrent,
         accountsIDs,
         categories,
         status,
-        notStatus,
       ].any((element) => element != null);
 
   Stream<List<Account>> accounts() => accountsIDs != null
@@ -88,15 +88,16 @@ class TransactionFilters {
                   Categories c,
                   Categories)?
               extraFilters}) {
-    print(
-        "IS INCOME ->  ${transactionTypes != null && transactionTypes!.length == 1 && transactionTypes![0].index == TransactionType.income.index}");
-
-    print(
-        "IS NOT TRANSFER ->  ${transactionTypes != null && !transactionTypes!.map((e) => e.index).contains(TransactionType.transfer.index)}");
     return (transaction, account, accountCurrency, receivingAccount,
             receivingAccountCurrency, c, p6) =>
         AppDB.instance.buildExpr([
-          // const CustomExpression("(currentValueInPreferredCurrency < -10)"),
+          if (maxValue != null)
+            CustomExpression(
+                '(t.value * COALESCE(excRateToday.exchangeRate,1) <= $maxValue)'),
+
+          if (minValue != null)
+            CustomExpression(
+                '(t.value * COALESCE(excRateToday.exchangeRate,1) >= $minValue)'),
 
           // Transaction types:
           if (transactionTypes != null &&
@@ -140,7 +141,6 @@ class TransactionFilters {
                 c.parentCategoryID.isIn(categories!),
           if (categories != null && !includeParentCategoriesInSearch)
             transaction.categoryID.isIn(categories!),
-          if (notStatus != null) transaction.status.isNotInValues(notStatus!),
           if (status != null) transaction.status.isInValues(status!),
           if (extraFilters != null)
             AppDB.instance.buildExpr(extraFilters(
