@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/transactions/transaction_details.page.dart';
+import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/services/view-actions/transaction_view_actions_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 
@@ -49,10 +51,45 @@ class TransactionListComponent extends StatelessWidget {
         });
   }
 
-  Widget dateSeparator(DateTime date) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
-      child: Text(DateFormat.yMMMMd().format(date)),
+  Widget dateSeparator(BuildContext context, DateTime date) {
+    return Container(
+      padding: const EdgeInsets.only(right: 12),
+      margin: const EdgeInsets.only(top: 8),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(16, 4, 12, 4),
+        decoration: BoxDecoration(
+          color: appColorScheme(context).surfaceVariant,
+          borderRadius: const BorderRadius.only(
+            bottomRight: Radius.circular(120),
+            topRight: Radius.circular(120),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(DateFormat.yMMMMd().format(date)),
+            StreamBuilder(
+                initialData: 0.0,
+                stream: AccountService.instance.getAccountsBalance(
+                  filters: TransactionFilters().copyWith(
+                    minDate: DateTime(date.year, date.month, date.day),
+                    maxDate: DateTime(date.year, date.month, date.day + 1),
+                  ),
+                ),
+                builder: (context, snapshot) {
+                  final partialBalance = snapshot.data!;
+
+                  return CurrencyDisplayer(
+                    amountToConvert: partialBalance,
+                    textStyle:
+                        Theme.of(context).textTheme.labelMedium!.copyWith(
+                              fontWeight: FontWeight.w400,
+                            ),
+                  );
+                })
+          ],
+        ),
+      ),
     );
   }
 
@@ -67,7 +104,7 @@ class TransactionListComponent extends StatelessWidget {
 
           if (index == 0) {
             if (!showGroupDivider) return Container();
-            return dateSeparator(transactions[0].date);
+            return dateSeparator(context, transactions[0].date);
           }
 
           final transaction = transactions[index - 1];
@@ -149,11 +186,9 @@ class TransactionListComponent extends StatelessWidget {
               textStyle: TextStyle(
                   color: transaction.status == TransactionStatus.voided
                       ? Colors.grey.shade400
-                      : transaction.type == TransactionType.income
-                          ? CustomColors.of(context).success
-                          : transaction.type == TransactionType.expense
-                              ? CustomColors.of(context).danger
-                              : null,
+                      : transaction.isIncomeOrExpense
+                          ? transaction.type.color(context)
+                          : null,
                   decoration: transaction.status == TransactionStatus.voided
                       ? TextDecoration.lineThrough
                       : null,
@@ -197,10 +232,12 @@ class TransactionListComponent extends StatelessWidget {
               index >= 1 &&
                   DateUtils.isSameDay(
                       transactions[index - 1].date, transactions[index].date)) {
-            return const Divider(indent: 68);
+            // Separator between transactions in the same group
+            return Container();
           }
 
-          return dateSeparator(transactions[index].date);
+          // Group separator
+          return dateSeparator(context, transactions[index].date);
         });
   }
 }

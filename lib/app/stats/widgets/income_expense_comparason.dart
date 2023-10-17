@@ -35,7 +35,7 @@ class IncomeExpenseComparason extends StatelessWidget {
               children: [
                 Text(t.general.balance),
                 StreamBuilder(
-                  stream: AccountService.instance.getAccountsData(
+                  stream: AccountService.instance.getAccountsBalance(
                     filters: filters.copyWith(
                       minDate: startDate,
                       maxDate: endDate,
@@ -57,14 +57,14 @@ class IncomeExpenseComparason extends StatelessWidget {
         ),
         StreamBuilder(
           stream: Rx.combineLatest2(
-              AccountService.instance.getAccountsData(
+              AccountService.instance.getAccountsBalance(
                 filters: filters.copyWith(
                   transactionTypes: [TransactionType.income],
                   minDate: startDate,
                   maxDate: endDate,
                 ),
               ),
-              AccountService.instance.getAccountsData(
+              AccountService.instance.getAccountsBalance(
                 filters: filters.copyWith(
                   transactionTypes: [TransactionType.expense],
                   minDate: startDate,

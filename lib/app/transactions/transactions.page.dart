@@ -7,6 +7,7 @@ import 'package:monekin/core/database/services/transaction/transaction_service.d
 import 'package:monekin/core/presentation/widgets/empty_indicator.dart';
 import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -148,33 +149,37 @@ class _TransactionsPageState extends State<TransactionsPage> {
                   });
                 },
               ),
-              const Divider()
+              const Divider(indent: 12, endIndent: 12)
             ],
             StreamBuilder(
               stream: TransactionService.instance
                   .countTransactions(predicate: filters),
               builder: (context, snapshot) {
-                if (!snapshot.hasData || snapshot.data!.numberOfRes == 0) {
-                  return Container();
-                }
+                final res = snapshot.data;
 
-                final res = snapshot.data!;
-
-                return Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 12, 8, 0),
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: DefaultTextStyle(
-                        style: Theme.of(context).textTheme.titleMedium!,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
+                return Card(
+                  elevation: 3,
+                  //color: appColorScheme(context).primary,
+                  margin: const EdgeInsets.all(0),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0)),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 12, 24, 12),
+                    child: DefaultTextStyle(
+                      style: Theme.of(context).textTheme.titleMedium!,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          if (res != null) ...[
                             Text(
                                 '${res.numberOfRes} ${t.transaction.display(n: res.numberOfRes).toLowerCase()}'),
                             CurrencyDisplayer(amountToConvert: res.valueSum)
                           ],
-                        ),
+                          if (res == null) ...[
+                            const Skeleton(width: 38, height: 18),
+                            const Skeleton(width: 28, height: 18),
+                          ]
+                        ],
                       ),
                     ),
                   ),
@@ -213,7 +218,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
 
                   return SingleChildScrollView(
                     controller: listController,
-                    padding: const EdgeInsets.only(bottom: 80),
+                    padding: const EdgeInsets.only(bottom: 80, top: 8),
                     child: Column(
                       children: [
                         TransactionListComponent(
@@ -225,7 +230,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                           const SizedBox(height: 10),
                           const CircularProgressIndicator(),
                           const SizedBox(height: 10),
-                          Text("Loading data")
+                          const Text('Loading data')
                         ]
                       ],
                     ),

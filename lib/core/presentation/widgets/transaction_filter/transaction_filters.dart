@@ -93,11 +93,11 @@ class TransactionFilters {
         AppDB.instance.buildExpr([
           if (maxValue != null)
             CustomExpression(
-                '(t.value * COALESCE(excRateToday.exchangeRate,1) <= $maxValue)'),
+                '(t.value * COALESCE(excRate.exchangeRate,1) <= $maxValue)'),
 
           if (minValue != null)
             CustomExpression(
-                '(t.value * COALESCE(excRateToday.exchangeRate,1) >= $minValue)'),
+                '(t.value * COALESCE(excRate.exchangeRate,1) >= $minValue)'),
 
           // Transaction types:
           if (transactionTypes != null &&

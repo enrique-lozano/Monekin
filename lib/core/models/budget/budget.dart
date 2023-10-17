@@ -53,7 +53,7 @@ class Budget extends BudgetInDB {
     date ??= DateTime.now();
 
     return AccountService.instance
-        .getAccountsData(
+        .getAccountsBalance(
       filters: TransactionFilters(
         accountsIDs: accounts,
         categories: categories,

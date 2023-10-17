@@ -1,4 +1,3 @@
-import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/budgets/budget_form_page.dart';
@@ -231,15 +230,10 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                       {TransactionStatus.pending, TransactionStatus.voided}),
                   minDate: widget.budget.currentDateRange[0],
                   maxDate: widget.budget.currentDateRange[1],
-                ).toTransactionExpression(
-                  extraFilters: (transaction, account, accountCurrency,
-                          receivingAccount, receivingAccountCurrency, c, p6) =>
-                      [
-                    c.id.isIn(widget.budget.categories) |
-                        c.parentCategoryID.isIn(widget.budget.categories),
-                    transaction.accountID.isIn(widget.budget.accounts),
-                  ],
-                ),
+                  includeParentCategoriesInSearch: true,
+                  categories: widget.budget.categories,
+                  accountsIDs: widget.budget.accounts,
+                ).toTransactionExpression(),
               ),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
