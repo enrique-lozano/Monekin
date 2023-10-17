@@ -154,7 +154,9 @@ class _TransactionsPageState extends State<TransactionsPage> {
               stream: TransactionService.instance
                   .countTransactions(predicate: filters),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) return Container();
+                if (!snapshot.hasData || snapshot.data!.numberOfRes == 0) {
+                  return Container();
+                }
 
                 final res = snapshot.data!;
 
@@ -163,13 +165,16 @@ class _TransactionsPageState extends State<TransactionsPage> {
                   child: Card(
                     child: Padding(
                       padding: const EdgeInsets.all(12),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                              '${res.numberOfRes} ${t.transaction.display(n: res.numberOfRes).toLowerCase()}'),
-                          CurrencyDisplayer(amountToConvert: res.valueSum)
-                        ],
+                      child: DefaultTextStyle(
+                        style: Theme.of(context).textTheme.titleMedium!,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                                '${res.numberOfRes} ${t.transaction.display(n: res.numberOfRes).toLowerCase()}'),
+                            CurrencyDisplayer(amountToConvert: res.valueSum)
+                          ],
+                        ),
                       ),
                     ),
                   ),
