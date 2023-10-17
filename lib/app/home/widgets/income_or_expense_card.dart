@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
@@ -14,7 +15,7 @@ class IncomeOrExpenseCard extends StatelessWidget {
       required this.endDate,
       this.filters});
 
-  final AccountDataFilter type;
+  final TransactionType type;
   final DateTime? startDate;
   final DateTime? endDate;
 
@@ -56,11 +57,13 @@ class IncomeOrExpenseCard extends StatelessWidget {
               Text(text),
               StreamBuilder(
                   stream: AccountService.instance.getAccountsData(
-                    accountIds: filters?.accountsIDs,
-                    categoriesIds: filters?.categories,
-                    startDate: startDate,
-                    endDate: endDate,
-                    accountDataFilter: type,
+                    filters: TransactionFilters(
+                      accountsIDs: filters?.accountsIDs,
+                      categories: filters?.categories,
+                      minDate: startDate,
+                      maxDate: endDate,
+                      transactionTypes: [type],
+                    ),
                   ),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {

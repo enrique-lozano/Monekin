@@ -26,14 +26,15 @@ Future<TransactionFilters?> openFilterSheetModal(
 }
 
 class FilterSheetModal extends StatefulWidget {
-  const FilterSheetModal(
-      {super.key,
-      required this.preselectedFilter,
-      this.showCategoryFilter = true});
+  const FilterSheetModal({
+    super.key,
+    required this.preselectedFilter,
+    this.showDateFilter = true,
+  });
 
   final TransactionFilters preselectedFilter;
 
-  final bool showCategoryFilter;
+  final bool showDateFilter;
 
   @override
   State<FilterSheetModal> createState() => _FilterSheetModalState();
@@ -190,140 +191,139 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                             /* -------- CATEGORY SELECTOR ------- */
                             /* ---------------------------------- */
 
-                            if (widget.showCategoryFilter) ...[
-                              const SizedBox(height: 16),
-                              StreamBuilder(
-                                  stream:
-                                      CategoryService.instance.getCategories(),
-                                  builder: (context, snapshot) {
-                                    final selectedCategories =
-                                        (snapshot.data ?? []).where((element) =>
-                                            filtersToReturn.categories
-                                                ?.contains(element.id) ??
-                                            false);
+                            const SizedBox(height: 16),
+                            StreamBuilder(
+                                stream:
+                                    CategoryService.instance.getCategories(),
+                                builder: (context, snapshot) {
+                                  final selectedCategories =
+                                      (snapshot.data ?? []).where((element) =>
+                                          filtersToReturn.categories
+                                              ?.contains(element.id) ??
+                                          false);
 
-                                    return selector(
-                                        title: t.general.categories,
-                                        inputValue: filtersToReturn
-                                                        .categories ==
-                                                    null ||
-                                                (snapshot.hasData &&
-                                                    filtersToReturn.categories!
-                                                            .length ==
-                                                        snapshot.data!.length)
-                                            ? t.categories.select.all
-                                            : selectedCategories
-                                                .where((element) =>
-                                                    element.isMainCategory)
-                                                .map((e) => e.name)
-                                                .join(', '),
-                                        onClick: () async {
-                                          final modalRes =
-                                              await showCategoryListModal(
-                                            context,
-                                            CategoriesList(
-                                              mode: CategoriesListMode
-                                                  .modalSelectMultiCategory,
-                                              selectedCategories:
-                                                  selectedCategories.toList(),
-                                            ),
-                                          );
+                                  return selector(
+                                      title: t.general.categories,
+                                      inputValue:
+                                          filtersToReturn.categories == null ||
+                                                  (snapshot.hasData &&
+                                                      filtersToReturn
+                                                              .categories!
+                                                              .length ==
+                                                          snapshot.data!.length)
+                                              ? t.categories.select.all
+                                              : selectedCategories
+                                                  .where((element) =>
+                                                      element.isMainCategory)
+                                                  .map((e) => e.name)
+                                                  .join(', '),
+                                      onClick: () async {
+                                        final modalRes =
+                                            await showCategoryListModal(
+                                          context,
+                                          CategoriesList(
+                                            mode: CategoriesListMode
+                                                .modalSelectMultiCategory,
+                                            selectedCategories:
+                                                selectedCategories.toList(),
+                                          ),
+                                        );
 
-                                          if (modalRes != null &&
-                                              modalRes.isNotEmpty) {
-                                            setState(() {
-                                              filtersToReturn =
-                                                  filtersToReturn.copyWith(
-                                                      categories: snapshot
-                                                                  .hasData &&
-                                                              modalRes.length ==
-                                                                  snapshot.data!
-                                                                      .length
-                                                          ? null
-                                                          : modalRes.map(
-                                                              (e) => e.id));
-                                            });
-                                          }
-                                        });
-                                  }),
-                            ],
+                                        if (modalRes != null &&
+                                            modalRes.isNotEmpty) {
+                                          setState(() {
+                                            filtersToReturn =
+                                                filtersToReturn.copyWith(
+                                                    categories: snapshot
+                                                                .hasData &&
+                                                            modalRes.length ==
+                                                                snapshot.data!
+                                                                    .length
+                                                        ? null
+                                                        : modalRes
+                                                            .map((e) => e.id));
+                                          });
+                                        }
+                                      });
+                                }),
                             const SizedBox(height: 16),
 
                             /* ---------------------------------- */
                             /* -------- TRANSACTION DATE -------- */
                             /* ---------------------------------- */
 
-                            Row(
-                              children: [
-                                Flexible(
-                                  child: TextFormField(
-                                    controller: TextEditingController(
-                                      text: filtersToReturn.minDate != null
-                                          ? DateFormat.yMMMMd()
-                                              .format(filtersToReturn.minDate!)
-                                          : '',
-                                    ),
-                                    decoration: InputDecoration(
-                                      labelText: t.general.time.from_date,
-                                      hintText: t.general.time.from_date,
-                                      floatingLabelBehavior:
-                                          FloatingLabelBehavior.never,
-                                    ),
-                                    readOnly: true,
-                                    onTap: () async {
-                                      DateTime? pickedDate =
-                                          await openDateTimePicker(
-                                        context,
-                                        initialDate: filtersToReturn.minDate,
-                                        lastDate: filtersToReturn.maxDate,
-                                        showTimePickerAfterDate: false,
-                                      );
-                                      if (pickedDate == null) return;
+                            if (widget.showDateFilter) ...[
+                              Row(
+                                children: [
+                                  Flexible(
+                                    child: TextFormField(
+                                      controller: TextEditingController(
+                                        text: filtersToReturn.minDate != null
+                                            ? DateFormat.yMMMMd().format(
+                                                filtersToReturn.minDate!)
+                                            : '',
+                                      ),
+                                      decoration: InputDecoration(
+                                        labelText: t.general.time.from_date,
+                                        hintText: t.general.time.from_date,
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.never,
+                                      ),
+                                      readOnly: true,
+                                      onTap: () async {
+                                        DateTime? pickedDate =
+                                            await openDateTimePicker(
+                                          context,
+                                          initialDate: filtersToReturn.minDate,
+                                          lastDate: filtersToReturn.maxDate,
+                                          showTimePickerAfterDate: false,
+                                        );
+                                        if (pickedDate == null) return;
 
-                                      setState(() {
-                                        filtersToReturn = filtersToReturn
-                                            .copyWith(minDate: pickedDate);
-                                      });
-                                    },
+                                        setState(() {
+                                          filtersToReturn = filtersToReturn
+                                              .copyWith(minDate: pickedDate);
+                                        });
+                                      },
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(width: 16),
-                                Flexible(
-                                  child: TextFormField(
-                                    controller: TextEditingController(
-                                      text: filtersToReturn.maxDate != null
-                                          ? DateFormat.yMMMMd()
-                                              .format(filtersToReturn.maxDate!)
-                                          : '',
-                                    ),
-                                    decoration: InputDecoration(
-                                      labelText: t.general.time.until_date,
-                                      hintText: t.general.time.until_date,
-                                      floatingLabelBehavior:
-                                          FloatingLabelBehavior.never,
-                                    ),
-                                    readOnly: true,
-                                    onTap: () async {
-                                      DateTime? pickedDate =
-                                          await openDateTimePicker(
-                                        context,
-                                        initialDate: filtersToReturn.maxDate,
-                                        firstDate: filtersToReturn.minDate,
-                                        showTimePickerAfterDate: false,
-                                      );
-                                      if (pickedDate == null) return;
+                                  const SizedBox(width: 16),
+                                  Flexible(
+                                    child: TextFormField(
+                                      controller: TextEditingController(
+                                        text: filtersToReturn.maxDate != null
+                                            ? DateFormat.yMMMMd().format(
+                                                filtersToReturn.maxDate!)
+                                            : '',
+                                      ),
+                                      decoration: InputDecoration(
+                                        labelText: t.general.time.until_date,
+                                        hintText: t.general.time.until_date,
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.never,
+                                      ),
+                                      readOnly: true,
+                                      onTap: () async {
+                                        DateTime? pickedDate =
+                                            await openDateTimePicker(
+                                          context,
+                                          initialDate: filtersToReturn.maxDate,
+                                          firstDate: filtersToReturn.minDate,
+                                          showTimePickerAfterDate: false,
+                                        );
+                                        if (pickedDate == null) return;
 
-                                      setState(() {
-                                        filtersToReturn = filtersToReturn
-                                            .copyWith(maxDate: pickedDate);
-                                      });
-                                    },
+                                        setState(() {
+                                          filtersToReturn = filtersToReturn
+                                              .copyWith(maxDate: pickedDate);
+                                        });
+                                      },
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 16),
-
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+                            ],
                             /* ---------------------------------- */
                             /* ------- TRANSACTION AMOUNT ------- */
                             /* ---------------------------------- */

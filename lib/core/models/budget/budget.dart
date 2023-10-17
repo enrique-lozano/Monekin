@@ -1,6 +1,7 @@
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/services/filters/date_range_service.dart';
 import 'package:monekin/core/utils/constants.dart';
 
@@ -53,11 +54,12 @@ class Budget extends BudgetInDB {
 
     return AccountService.instance
         .getAccountsData(
-      accountIds: accounts,
-      accountDataFilter: AccountDataFilter.balance,
-      categoriesIds: categories,
-      startDate: currentDateRange[0],
-      endDate: date,
+      filters: TransactionFilters(
+        accountsIDs: accounts,
+        categories: categories,
+        minDate: currentDateRange[0],
+        maxDate: date,
+      ),
     )
         .map((res) {
       res = res * -1;

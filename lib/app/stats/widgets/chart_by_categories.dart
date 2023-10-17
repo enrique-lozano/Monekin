@@ -35,7 +35,7 @@ class ChartByCategories extends StatefulWidget {
       required this.endDate,
       this.showList = false,
       this.initialSelectedType = TransactionType.expense,
-      this.filters});
+      this.filters = const TransactionFilters()});
 
   final DateTime? startDate;
   final DateTime? endDate;
@@ -44,7 +44,7 @@ class ChartByCategories extends StatefulWidget {
 
   final TransactionType initialSelectedType;
 
-  final TransactionFilters? filters;
+  final TransactionFilters filters;
 
   @override
   State<ChartByCategories> createState() => _ChartByCategoriesState();
@@ -63,9 +63,9 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
 
     final transactions = await transactionService
         .getTransactions(
-          filters: (widget.filters ?? const TransactionFilters()).copyWith(
-            status: TransactionStatus.notIn(
-                {TransactionStatus.pending, TransactionStatus.voided}),
+          filters: widget.filters.copyWith(
+            status: TransactionStatus.getStatusThatCountsForStats(
+                widget.filters.status),
             transactionTypes: [
               if (transactionsType == TransactionType.expense)
                 TransactionType.expense,
