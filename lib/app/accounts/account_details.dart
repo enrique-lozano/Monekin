@@ -1,15 +1,23 @@
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_form.dart';
+import 'package:monekin/app/transactions/transaction_list.dart';
+import 'package:monekin/app/transactions/transactions.page.dart';
+import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
+import 'package:monekin/core/presentation/widgets/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
+import '../../core/database/services/transaction/transaction_service.dart';
 import '../transactions/form/transaction_form.page.dart';
 
 class AccountDetailsPage extends StatefulWidget {
@@ -247,51 +255,90 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
 
               return Column(
                 children: [
-                  DefaultTextStyle.merge(
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary),
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(account.name),
-                              StreamBuilder(
-                                  initialData: 0.0,
-                                  stream: AccountService.instance
-                                      .getAccountMoney(account: account),
-                                  builder: (context, snapshot) {
-                                    return CurrencyDisplayer(
-                                      amountToConvert: snapshot.data!,
-                                      currency: account.currency,
-                                      textStyle: const TextStyle(
-                                          fontSize: 32,
-                                          fontWeight: FontWeight.w600),
-                                    );
-                                  }),
-                            ],
-                          ),
-                          Positioned(
-                            bottom: -42,
-                            right: 0,
-                            child: Hero(
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Card(
+                      margin: const EdgeInsets.all(0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(account.name),
+                                StreamBuilder(
+                                    initialData: 0.0,
+                                    stream: AccountService.instance
+                                        .getAccountMoney(account: account),
+                                    builder: (context, snapshot) {
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          CurrencyDisplayer(
+                                            amountToConvert: snapshot.data!,
+                                            currency: account.currency,
+                                            textStyle: const TextStyle(
+                                                fontSize: 32,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          StreamBuilder(
+                                            stream: ExchangeRateService.instance
+                                                .calculateExchangeRateToPreferredCurrency(
+                                              amount: snapshot.data!,
+                                              fromCurrency:
+                                                  account.currency.code,
+                                            ),
+                                            builder:
+                                                (context, currencySnapshot) {
+                                              if (currencySnapshot
+                                                          .connectionState ==
+                                                      ConnectionState.waiting ||
+                                                  currencySnapshot.data != 0 &&
+                                                      currencySnapshot.data! ==
+                                                          snapshot.data) {
+                                                return Container();
+                                              }
+
+                                              return Row(
+                                                children: [
+                                                  Text(
+                                                    String.fromCharCode(Icons
+                                                        .currency_exchange_rounded
+                                                        .codePoint),
+                                                    style: TextStyle(
+                                                      fontFamily: Icons
+                                                          .currency_exchange_rounded
+                                                          .fontFamily,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 4),
+                                                  CurrencyDisplayer(
+                                                      amountToConvert:
+                                                          currencySnapshot
+                                                              .data!),
+                                                ],
+                                              );
+                                            },
+                                          )
+                                        ],
+                                      );
+                                    }),
+                              ],
+                            ),
+                            Hero(
                                 tag: 'account-icon-${widget.account.id}',
                                 child: account.displayIcon(context, size: 48)),
-                          )
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                       child: Column(
                         children: [
                           CardWithHeader(
@@ -330,6 +377,65 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                                   ]
                                 ],
                               )),
+                          const SizedBox(height: 16),
+                          CardWithHeader(
+                            title: t.home.last_transactions,
+                            onHeaderButtonClick: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TransactionsPage(
+                                    filters: TransactionFilters(
+                                        accounts: [widget.account]),
+                                  ),
+                                ),
+                              );
+                            },
+                            body: StreamBuilder(
+                                stream: TransactionService.instance
+                                    .getTransactions(
+                                        predicate: (transaction,
+                                                account,
+                                                accountCurrency,
+                                                receivingAccount,
+                                                receivingAccountCurrency,
+                                                c,
+                                                p6) =>
+                                            AppDB.instance.buildExpr([
+                                              transaction.status.isNotInValues([
+                                                TransactionStatus.pending,
+                                                TransactionStatus.voided
+                                              ])
+                                            ]),
+                                        limit: 5,
+                                        orderBy: (p0, p1, p2, p3, p4, p5, p6) =>
+                                            drift.OrderBy([
+                                              drift.OrderingTerm(
+                                                  expression: p0.date,
+                                                  mode: drift.OrderingMode.desc)
+                                            ])),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return const LinearProgressIndicator();
+                                  }
+
+                                  if (snapshot.data!.isEmpty) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(24),
+                                      child: Text(
+                                        t.transaction.list.empty,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    );
+                                  }
+                                  return TransactionListComponent(
+                                      transactions: snapshot.data!,
+                                      showGroupDivider: false,
+                                      prevPage: AccountDetailsPage(
+                                        account: widget.account,
+                                      ));
+                                }),
+                          ),
                           const SizedBox(height: 16),
                           CardWithHeader(
                               title: t.general.quick_actions,
