@@ -299,7 +299,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
 
     return Card(
       elevation: 1,
-      color: color.lighten(0.385),
+      color: color.lighten(0.625),
       clipBehavior: Clip.hardEdge,
       margin: const EdgeInsets.only(bottom: 16),
       child: Column(
@@ -563,11 +563,16 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                         children: [
                                           transaction.account.icon
                                               .displayFilled(
-                                                  padding: 2,
-                                                  borderRadius: 100,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary),
+                                            padding: 2,
+                                            borderRadius: 100,
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? appColorScheme(context)
+                                                        .primary
+                                                    : appColorScheme(context)
+                                                        .primaryContainer,
+                                          ),
                                           const SizedBox(width: 6),
                                           Text(transaction.account.name)
                                         ],
