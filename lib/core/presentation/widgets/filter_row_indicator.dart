@@ -27,6 +27,13 @@ class _FilterRowIndicatorState extends State<FilterRowIndicator> {
     filters = widget.filters;
   }
 
+  @override
+  void didUpdateWidget(covariant FilterRowIndicator oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    filters = widget.filters;
+  }
+
   ResponsiveRowColumnItem buildChip(
     BuildContext context, {
     required String label,
