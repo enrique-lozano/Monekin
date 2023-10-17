@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
-import 'package:monekin/core/presentation/widgets/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 
 class IncomeExpenseComparason extends StatelessWidget {
   const IncomeExpenseComparason(
-      {super.key, this.startDate, this.endDate, this.filters});
+      {super.key,
+      this.startDate,
+      this.endDate,
+      this.filters = const TransactionFilters()});
 
   final DateTime? startDate;
   final DateTime? endDate;
 
-  final TransactionFilters? filters;
+  final TransactionFilters filters;
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +36,11 @@ class IncomeExpenseComparason extends StatelessWidget {
                 Text(t.general.balance),
                 StreamBuilder(
                   stream: AccountService.instance.getAccountsData(
-                      accountIds: filters?.accounts?.map((e) => e.id),
-                      accountDataFilter: AccountDataFilter.balance,
-                      categoriesIds: filters?.categories?.map((e) => e.id),
-                      startDate: startDate,
-                      endDate: endDate),
+                    filters: filters.copyWith(
+                      minDate: startDate,
+                      maxDate: endDate,
+                    ),
+                  ),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return const Skeleton(width: 35, height: 32);
@@ -54,17 +58,19 @@ class IncomeExpenseComparason extends StatelessWidget {
         StreamBuilder(
           stream: Rx.combineLatest2(
               AccountService.instance.getAccountsData(
-                  accountIds: filters?.accounts?.map((e) => e.id),
-                  accountDataFilter: AccountDataFilter.income,
-                  categoriesIds: filters?.categories?.map((e) => e.id),
-                  startDate: startDate,
-                  endDate: endDate),
+                filters: filters.copyWith(
+                  transactionTypes: [TransactionType.income],
+                  minDate: startDate,
+                  maxDate: endDate,
+                ),
+              ),
               AccountService.instance.getAccountsData(
-                  accountIds: filters?.accounts?.map((e) => e.id),
-                  accountDataFilter: AccountDataFilter.expense,
-                  categoriesIds: filters?.categories?.map((e) => e.id),
-                  startDate: startDate,
-                  endDate: endDate),
+                filters: filters.copyWith(
+                  transactionTypes: [TransactionType.expense],
+                  minDate: startDate,
+                  maxDate: endDate,
+                ),
+              ),
               (a, b) => [a, b]),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
@@ -82,7 +88,7 @@ class IncomeExpenseComparason extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(t.general.income),
+                        Text(t.transaction.types.income(n: 1)),
                         CurrencyDisplayer(amountToConvert: income)
                       ],
                     ),
@@ -99,7 +105,7 @@ class IncomeExpenseComparason extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(t.general.expense),
+                        Text(t.transaction.types.expense(n: 1)),
                         CurrencyDisplayer(amountToConvert: expense)
                       ],
                     ),

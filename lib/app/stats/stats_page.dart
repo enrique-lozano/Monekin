@@ -8,7 +8,8 @@ import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
-import 'package:monekin/core/presentation/widgets/filter_sheet_modal.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/filter_sheet_modal.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/services/filters/date_range_service.dart';
@@ -33,7 +34,7 @@ class _StatsPageState extends State<StatsPage> {
 
   late DateRange currentDateRange;
 
-  TransactionFilters filters = TransactionFilters();
+  TransactionFilters filters = const TransactionFilters();
 
   @override
   void initState() {
@@ -46,9 +47,11 @@ class _StatsPageState extends State<StatsPage> {
     currentDateRange = dateRangeService.selectedDateRange;
   }
 
-  Widget buildContainerWithPadding(List<Widget> children,
-      {EdgeInsetsGeometry padding =
-          const EdgeInsets.symmetric(vertical: 24, horizontal: 16)}) {
+  Widget buildContainerWithPadding(
+    List<Widget> children, {
+    EdgeInsetsGeometry padding =
+        const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+  }) {
     return SingleChildScrollView(
       padding: padding,
       child: Column(
@@ -71,13 +74,13 @@ class _StatsPageState extends State<StatsPage> {
           actions: [
             IconButton(
                 onPressed: () async {
-                  final modalRes =
-                      await showModalBottomSheet<TransactionFilters>(
-                          context: context,
-                          isScrollControlled: true,
-                          showDragHandle: true,
-                          builder: (context) =>
-                              FilterSheetModal(preselectedFilter: filters));
+                  final modalRes = await openFilterSheetModal(
+                    context,
+                    FilterSheetModal(
+                      preselectedFilter: filters,
+                      showDateFilter: false,
+                    ),
+                  );
 
                   if (modalRes != null) {
                     setState(() {
@@ -137,7 +140,7 @@ class _StatsPageState extends State<StatsPage> {
                         startDate: currentStartDate,
                         endDate: currentEndDate,
                         dateRange: currentDateRange,
-                        accountsFilter: filters.accounts,
+                        filters: filters,
                       ),
                     ),
                     const SizedBox(height: 16),

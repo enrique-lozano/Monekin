@@ -27,7 +27,9 @@ getTransactionsWithFullData($predicate = TRUE) WITH MoneyTransaction:
         receivingAccountCurrency.**, 
         ra.** as receivingAccount, 
         c.** as category, 
-        pc.** as parentCategory
+        pc.** as parentCategory,
+        t.value * COALESCE(excRateToday.exchangeRate,1) as currentValueInPreferredCurrency,
+        t.valueInDestiny * COALESCE(excRateTodayOfDestiny.exchangeRate,1) as currentValueInDestinyInPreferredCurrency
     FROM transactions t 
         INNER JOIN accounts a 
         ON t.accountID = a.id
@@ -41,9 +43,86 @@ getTransactionsWithFullData($predicate = TRUE) WITH MoneyTransaction:
         ON t.categoryID = c.id
         LEFT JOIN categories pc
         ON c.parentCategoryID = pc.id 
+        LEFT JOIN
+        (
+            SELECT currencyCode,
+                    exchangeRate
+                FROM exchangeRates er
+                WHERE date = (
+                                SELECT MAX(date) 
+                                FROM exchangeRates
+                                WHERE currencyCode = er.currencyCode 
+                                AND DATE <= DATE('now')
+                            )
+                ORDER BY currencyCode
+        )
+        excRateToday ON a.currencyId = excRateToday.currencyCode
+        LEFT JOIN
+        (
+            SELECT currencyCode,
+                    exchangeRate
+                FROM exchangeRates er
+                WHERE date = (
+                                SELECT MAX(date) 
+                                FROM exchangeRates
+                                WHERE currencyCode = er.currencyCode 
+                                AND DATE <= DATE('now')
+                            )
+                ORDER BY currencyCode
+        )
+        excRateTodayOfDestiny ON ra.currencyId = excRateTodayOfDestiny.currencyCode
     WHERE $predicate 
     ORDER BY $orderBy
     LIMIT $limit;
+
+countTransactions($predicate = TRUE, :date AS DATETIME): 
+    SELECT COUNT(*) AS transactionsNumber, 
+    COALESCE(SUM(t.value), 0) AS sum, 
+    COALESCE(SUM(COALESCE(t.valueInDestiny,t.value)), 0) AS sumInDestiny,
+    COALESCE(SUM(t.value * COALESCE(excRate.exchangeRate,1)), 0) AS sumInPrefCurrency, 
+    COALESCE(SUM(COALESCE(t.valueInDestiny,t.value) * COALESCE(excRateOfDestiny.exchangeRate,1)), 0) AS sumInDestinyInPrefCurrency
+    FROM transactions t 
+        INNER JOIN accounts a 
+        ON t.accountID = a.id
+        INNER JOIN currencies accountCurrency 
+        ON a.currencyId = accountCurrency.code
+        LEFT JOIN accounts ra 
+        ON t.receivingAccountID = ra.id 
+        INNER JOIN currencies receivingAccountCurrency 
+        ON a.currencyId = receivingAccountCurrency.code
+        LEFT JOIN categories c 
+        ON t.categoryID = c.id
+        LEFT JOIN categories pc
+        ON c.parentCategoryID = pc.id
+        LEFT JOIN
+        (
+            SELECT currencyCode,
+                    exchangeRate
+                FROM exchangeRates er
+                WHERE date = (
+                                SELECT MAX(date) 
+                                FROM exchangeRates
+                                WHERE currencyCode = er.currencyCode 
+                                AND DATE <= :date
+                            )
+                ORDER BY currencyCode
+        )
+        excRate ON a.currencyId = excRate.currencyCode 
+        LEFT JOIN
+        (
+            SELECT currencyCode,
+                    exchangeRate
+                FROM exchangeRates er
+                WHERE date = (
+                                SELECT MAX(date) 
+                                FROM exchangeRates
+                                WHERE currencyCode = er.currencyCode 
+                                AND DATE <= :date
+                            )
+                ORDER BY currencyCode
+        )
+        excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode 
+    WHERE $predicate;
 
 getCategoriesWithFullData($predicate = TRUE, :limit AS NUMBER) WITH Category: 
     SELECT a.*, parentCategory.** 

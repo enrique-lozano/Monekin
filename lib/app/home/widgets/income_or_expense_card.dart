@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/core/presentation/widgets/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 class IncomeOrExpenseCard extends StatelessWidget {
@@ -14,7 +15,7 @@ class IncomeOrExpenseCard extends StatelessWidget {
       required this.endDate,
       this.filters});
 
-  final AccountDataFilter type;
+  final TransactionType type;
   final DateTime? startDate;
   final DateTime? endDate;
 
@@ -29,7 +30,9 @@ class IncomeOrExpenseCard extends StatelessWidget {
     final Color color = isIncome
         ? CustomColors.of(context).success
         : CustomColors.of(context).danger;
-    final String text = isIncome ? t.general.income : t.general.expense;
+    final String text = isIncome
+        ? t.transaction.types.income(n: 1)
+        : t.transaction.types.expense(n: 1);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
@@ -54,11 +57,13 @@ class IncomeOrExpenseCard extends StatelessWidget {
               Text(text),
               StreamBuilder(
                   stream: AccountService.instance.getAccountsData(
-                    accountIds: filters?.accounts!.map((e) => e.id),
-                    categoriesIds: filters?.categories?.map((e) => e.id),
-                    startDate: startDate,
-                    endDate: endDate,
-                    accountDataFilter: type,
+                    filters: TransactionFilters(
+                      accountsIDs: filters?.accountsIDs,
+                      categories: filters?.categories,
+                      minDate: startDate,
+                      maxDate: endDate,
+                      transactionTypes: [type],
+                    ),
                   ),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {

@@ -8,8 +8,8 @@ class AnimatedProgressBar extends StatefulWidget {
       this.color,
       this.animationDuration = 750,
       this.width = 8,
-      this.direction = Axis.horizontal})
-      : assert(value <= 1 && value >= 0);
+      this.direction =
+          Axis.horizontal}) /* :  assert(value <= 1 && value >= 0) */;
 
   /// Percentage of the bar to occupy. Must be a value between 0 and 1
   final double value;

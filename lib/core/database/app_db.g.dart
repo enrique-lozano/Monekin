@@ -3660,7 +3660,7 @@ abstract class _$AppDB extends GeneratedDatabase {
         startIndex: $arrayStartIndex);
     $arrayStartIndex += generatedlimit.amountOfVariables;
     return customSelect(
-        'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."iconId" AS "nested_0.iconId", "a"."isArchived" AS "nested_0.isArchived", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."iconId" AS "nested_3.iconId", "ra"."isArchived" AS "nested_3.isArchived", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id INNER JOIN currencies AS receivingAccountCurrency ON a.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
+        'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."iconId" AS "nested_0.iconId", "a"."isArchived" AS "nested_0.isArchived", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."iconId" AS "nested_3.iconId", "ra"."isArchived" AS "nested_3.isArchived", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRateToday.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateTodayOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id INNER JOIN currencies AS receivingAccountCurrency ON a.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateToday ON a.currencyId = excRateToday.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateTodayOfDestiny ON ra.currencyId = excRateTodayOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
         variables: [
           ...generatedpredicate.introducedVariables,
           ...generatedorderBy.introducedVariables,
@@ -3671,6 +3671,7 @@ abstract class _$AppDB extends GeneratedDatabase {
           accounts,
           currencies,
           categories,
+          exchangeRates,
           ...generatedpredicate.watchedTables,
           ...generatedorderBy.watchedTables,
           ...generatedlimit.watchedTables,
@@ -3696,12 +3697,55 @@ abstract class _$AppDB extends GeneratedDatabase {
               await categories.mapFromRowOrNull(row, tablePrefix: 'nested_4'),
           parentCategory:
               await categories.mapFromRowOrNull(row, tablePrefix: 'nested_5'),
+          currentValueInDestinyInPreferredCurrency: row
+              .readNullable<double>('currentValueInDestinyInPreferredCurrency'),
+          currentValueInPreferredCurrency:
+              row.read<double>('currentValueInPreferredCurrency'),
           endDate: row.readNullable<DateTime>('endDate'),
           intervalEach: row.readNullable<int>('intervalEach'),
           intervalPeriod: NullAwareTypeConverter.wrapFromSql(
               Transactions.$converterintervalPeriod,
               row.readNullable<String>('intervalPeriod')),
           remainingTransactions: row.readNullable<int>('remainingTransactions'),
+        ));
+  }
+
+  Selectable<CountTransactionsResult> countTransactions(
+      {required DateTime date, CountTransactions$predicate? predicate}) {
+    var $arrayStartIndex = 2;
+    final generatedpredicate = $write(
+        predicate?.call(
+                alias(this.transactions, 't'),
+                alias(this.accounts, 'a'),
+                alias(this.currencies, 'accountCurrency'),
+                alias(this.accounts, 'ra'),
+                alias(this.currencies, 'receivingAccountCurrency'),
+                alias(this.categories, 'c'),
+                alias(this.categories, 'pc')) ??
+            const CustomExpression('(TRUE)'),
+        hasMultipleTables: true,
+        startIndex: $arrayStartIndex);
+    $arrayStartIndex += generatedpredicate.amountOfVariables;
+    return customSelect(
+        'SELECT COUNT(*) AS transactionsNumber, COALESCE(SUM(t.value), 0) AS sum, COALESCE(SUM(COALESCE(t.valueInDestiny, t.value)), 0) AS sumInDestiny, COALESCE(SUM(t.value * COALESCE(excRate.exchangeRate, 1)), 0) AS sumInPrefCurrency, COALESCE(SUM(COALESCE(t.valueInDestiny, t.value) * COALESCE(excRateOfDestiny.exchangeRate, 1)), 0) AS sumInDestinyInPrefCurrency FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id INNER JOIN currencies AS receivingAccountCurrency ON a.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= ?1) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= ?1) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql}',
+        variables: [
+          Variable<DateTime>(date),
+          ...generatedpredicate.introducedVariables
+        ],
+        readsFrom: {
+          transactions,
+          accounts,
+          currencies,
+          categories,
+          exchangeRates,
+          ...generatedpredicate.watchedTables,
+        }).map((QueryRow row) => CountTransactionsResult(
+          transactionsNumber: row.read<int>('transactionsNumber'),
+          sum: row.read<double>('sum'),
+          sumInDestiny: row.read<double>('sumInDestiny'),
+          sumInPrefCurrency: row.read<double>('sumInPrefCurrency'),
+          sumInDestinyInPrefCurrency:
+              row.read<double>('sumInDestinyInPrefCurrency'),
         ));
   }
 
@@ -4031,6 +4075,30 @@ typedef GetTransactionsWithFullData$orderBy = OrderBy Function(
     Categories c,
     Categories pc);
 typedef GetTransactionsWithFullData$limit = Limit Function(
+    Transactions t,
+    Accounts a,
+    Currencies accountCurrency,
+    Accounts ra,
+    Currencies receivingAccountCurrency,
+    Categories c,
+    Categories pc);
+
+class CountTransactionsResult {
+  final int transactionsNumber;
+  final double sum;
+  final double sumInDestiny;
+  final double sumInPrefCurrency;
+  final double sumInDestinyInPrefCurrency;
+  CountTransactionsResult({
+    required this.transactionsNumber,
+    required this.sum,
+    required this.sumInDestiny,
+    required this.sumInPrefCurrency,
+    required this.sumInDestinyInPrefCurrency,
+  });
+}
+
+typedef CountTransactions$predicate = Expression<bool> Function(
     Transactions t,
     Accounts a,
     Currencies accountCurrency,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/transactions/transaction_list.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/presentation/widgets/empty_indicator.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 class RecurrentTransactionPage extends StatefulWidget {
@@ -21,9 +22,7 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
       appBar: AppBar(title: Text(t.recurrent_transactions.title)),
       body: StreamBuilder(
           stream: TransactionService.instance.getTransactions(
-            predicate: (transaction, account, accountCurrency, receivingAccount,
-                    receivingAccountCurrency, c, p6) =>
-                transaction.intervalPeriod.isNotNull(),
+            filters: const TransactionFilters(isRecurrent: true),
           ),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {

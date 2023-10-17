@@ -93,7 +93,7 @@ class CategoryStatsModal extends StatelessWidget {
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       Text(
-                        '${categoryData.transactions.length} ${categoryData.transactions.length == 1 ? t.general.transaction : t.general.transactions}'
+                        '${categoryData.transactions.length} ${t.transaction.display(n: categoryData.transactions.length)}'
                             .toLowerCase(),
                       )
                     ],

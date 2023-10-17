@@ -17,17 +17,10 @@
     "unarchive": "Unarchive",
     "balance": "Balance",
     "delete": "Delete",
-    "income": "Income",
-    "expense": "Expense",
-    "incomes": "Incomes",
-    "expenses": "Expenses",
-    "expenses-and-incomes": "Expenses and incomes",
     "account": "Account",
     "accounts": "Accounts",
     "categories": "Categories",
     "category": "Category",
-    "transaction": "Transaction",
-    "transactions": "Transactions",
     "today": "Today",
     "yesterday": "Yesterday",
     "filters": "Filters",
@@ -42,6 +35,8 @@
     "TIME": {
       "start-date": "Start date",
       "end-date": "End date",
+      "from-date": "From date",
+      "until-date": "Until date",
       "date": "Date",
       "datetime": "Datetime",
       "each": "Each",
@@ -122,7 +117,10 @@
       "Date": "By date"
     },
     "VALIDATIONS": {
-      "required": "Required field"
+      "required": "Required field",
+      "positive": "Should be positive",
+      "min_number": "Should be greater than {{x}}",
+      "max_number": "Should be less than {{x}}"
     }
   },
   "INTRO": {
@@ -219,6 +217,10 @@
     }
   },
   "TRANSACTION": {
+    "display": {
+      "one": "Transaction",
+      "other": "Transactions"
+    },
     "create": "New transaction",
     "new.income": "New income",
     "new.expense": "New expense",
@@ -251,6 +253,14 @@
       "searcher.placeholder": "Search by category, description...",
       "loading": "Loading more transactions..."
     },
+    "FILTERS": {
+      "from_value": "From amount",
+      "to_value": "Up to amount",
+      "from_value_def": "From {{ x }}",
+      "to_value_def": "Up to {{ x }}",
+      "from_date_def": "From the {{ date }}",
+      "to_date_def": "Up to the {{ date }}"
+    },
     "FORM": {
       "status": "Status",
       "VALIDATORS": {
@@ -279,10 +289,25 @@
       "pending.descr": "This transaction is pending and therefore it will not be taken into account when calculating balances and statistics",
       "voided": "Voided",
       "voided.descr": "Void/cancelled transaction due to payment error or any other reason. It will not be taken into account when calculating balances and statistics"
+    },
+    "TYPES": {
+      "income": {
+        "one": "Income",
+        "other": "Incomes"
+      },
+      "expense": {
+        "one": "Expense",
+        "other": "Expenses"
+      },
+      "transfer": {
+        "one": "Transfer",
+        "other": "Transfers"
+      }
     }
   },
   "TRANSFER": {
     "display": "Transfer",
+    "transfers": "Transfers",
     "transfer-to": "Transfer to {{ account }}",
     "create": "New Transfer",
     "need-two-accounts.warning.header": "Ops!",
