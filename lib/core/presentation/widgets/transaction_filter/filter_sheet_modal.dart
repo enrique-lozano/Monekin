@@ -477,6 +477,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                             TransactionStatusFilter(
                               selectedStatuses: filtersToReturn.status ??
                                   [null, ...TransactionStatus.values],
+                              allowMultipleSelection: true,
                               onSelected: (statusSelected, value) {
                                 var newListToAssign = filtersToReturn.status;
 

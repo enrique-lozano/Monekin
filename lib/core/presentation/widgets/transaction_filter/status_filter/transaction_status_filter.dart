@@ -5,12 +5,16 @@ import 'package:monekin/i18n/translations.g.dart';
 
 class TransactionStatusFilter extends StatelessWidget {
   const TransactionStatusFilter(
-      {super.key, this.onSelected, required this.selectedStatuses});
+      {super.key,
+      this.onSelected,
+      required this.selectedStatuses,
+      required this.allowMultipleSelection});
 
   final void Function(TransactionStatus? statusSelected, bool value)?
       onSelected;
 
   final List<TransactionStatus?> selectedStatuses;
+  final bool allowMultipleSelection;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +23,8 @@ class TransactionStatusFilter extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${t.transaction.form.status}:'),
+        Text(
+            '${t.transaction.status.display(n: allowMultipleSelection ? 10 : 1)}:'),
         const SizedBox(height: 4),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,

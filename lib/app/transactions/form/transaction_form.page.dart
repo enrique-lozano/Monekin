@@ -374,6 +374,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         const SizedBox(height: 16),
         TransactionStatusFilter(
           selectedStatuses: [status],
+          allowMultipleSelection: false,
           onSelected: (statusSelected, value) {
             setState(() {
               status = statusSelected;
