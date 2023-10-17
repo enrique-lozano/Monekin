@@ -5,15 +5,15 @@ import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/transactions/transaction_list.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
-import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
-import 'package:monekin/core/presentation/widgets/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -47,7 +47,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
               )),
       ListTileActionItem(
           label: t.transfer.create,
-          icon: Icons.swap_vert_rounded,
+          icon: TransactionType.transfer.icon(),
           onClick: account.isArchived
               ? null
               : () async {
@@ -386,7 +386,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                                 MaterialPageRoute(
                                   builder: (context) => TransactionsPage(
                                     filters: TransactionFilters(
-                                        accounts: [widget.account]),
+                                        accountsIDs: [widget.account.id]),
                                   ),
                                 ),
                               );
@@ -394,19 +394,12 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                             body: StreamBuilder(
                                 stream: TransactionService.instance
                                     .getTransactions(
-                                        predicate: (transaction,
-                                                account,
-                                                accountCurrency,
-                                                receivingAccount,
-                                                receivingAccountCurrency,
-                                                c,
-                                                p6) =>
-                                            AppDB.instance.buildExpr([
-                                              transaction.status.isNotInValues([
-                                                TransactionStatus.pending,
-                                                TransactionStatus.voided
-                                              ])
-                                            ]),
+                                        filters: TransactionFilters(
+                                          status: TransactionStatus.notIn({
+                                            TransactionStatus.pending,
+                                            TransactionStatus.voided
+                                          }),
+                                        ),
                                         limit: 5,
                                         orderBy: (p0, p1, p2, p3, p4, p5, p6) =>
                                             drift.OrderBy([

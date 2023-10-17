@@ -5,6 +5,7 @@ import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
@@ -529,7 +530,8 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                           color: transaction.color(context),
                                           size: 42,
                                         )
-                                      : const Icon(Icons.swap_vert, size: 42),
+                                      : Icon(TransactionType.transfer.icon(),
+                                          size: 42),
                                 ),
                               ),
                             ],

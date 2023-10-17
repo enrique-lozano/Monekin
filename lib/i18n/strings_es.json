@@ -17,17 +17,10 @@
     "unarchive": "Desarchivar",
     "delete": "Eliminar",
     "balance": "Balance",
-    "income": "Ingreso",
-    "expense": "Gasto",
-    "incomes": "Ingresos",
-    "expenses": "Gastos",
-    "expenses-and-incomes": "Gastos e ingresos",
     "account": "Cuenta",
     "accounts": "Cuentas",
     "categories": "Categorías",
     "category": "Categoría",
-    "transaction": "Transacción",
-    "transactions": "Transacciones",
     "today": "Hoy",
     "yesterday": "Ayer",
     "filters": "Filtros",
@@ -42,6 +35,8 @@
     "TIME": {
       "start-date": "Fecha de inicio",
       "end-date": "Fecha de fin",
+      "from-date": "Desde fecha",
+      "until-date": "Hasta fecha",
       "date": "Fecha",
       "datetime": "Fecha y hora",
       "each": "Cada",
@@ -123,7 +118,10 @@
       "Date": "Por fecha"
     },
     "VALIDATIONS": {
-      "required": "Campo obligatorio"
+      "required": "Campo obligatorio",
+      "positive": "Debe ser positivo",
+      "min_number": "Debe ser mayor que {{x}}",
+      "max_number": "Debe ser menor que {{x}}"
     }
   },
   "INTRO": {
@@ -220,6 +218,10 @@
     }
   },
   "TRANSACTION": {
+    "display": {
+      "one": "Transacción",
+      "other": "Transacciones"
+    },
     "create": "Nueva transacción",
     "new.income": "Nuevo ingreso",
     "new.expense": "Nuevo gasto",
@@ -252,6 +254,14 @@
       "searcher.placeholder": "Busca por categoría, descripción...",
       "loading": "Cargando más transacciones..."
     },
+    "FILTERS": {
+      "from_value": "Desde monto",
+      "to_value": "Hasta monto",
+      "from_value_def": "Desde {{ x }}",
+      "to_value_def": "Hasta {{ x }}",
+      "from_date_def": "Desde el {{ date }}",
+      "to_date_def": "Hasta el {{ date }}"
+    },
     "FORM": {
       "status": "Estado",
       "VALIDATORS": {
@@ -280,10 +290,25 @@
       "pending.descr": "Esta transacción esta pendiente y por tanto no será tenida en cuenta a la hora de calcular balances y estadísticas",
       "voided": "Nula",
       "voided.descr": "Transacción nula/cancelada debido a un error en el pago o cualquier otro motivo. No será tenida en cuenta a la hora de calcular balances y estadísticas"
+    },
+    "TYPES": {
+      "income": {
+        "one": "Ingreso",
+        "other": "Ingresos"
+      },
+      "expense": {
+        "one": "Gasto",
+        "other": "Gastos"
+      },
+      "transfer": {
+        "one": "Transferencia",
+        "other": "Transferencias"
+      }
     }
   },
   "TRANSFER": {
     "display": "Transferencia",
+    "transfers": "Transferencias",
     "transfer-to": "Transferencia hacia {{ account }}",
     "create": "Nueva transferencia",
     "need-two-accounts.warning.header": "Ops!",

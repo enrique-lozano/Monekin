@@ -144,19 +144,15 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                               return null;
                             },
                             onTap: () {
-                              showModalBottomSheet(
-                                  context: context,
-                                  showDragHandle: true,
-                                  isScrollControlled: true,
-                                  builder: (context) {
-                                    return CurrencySelectorModal(
-                                        preselectedCurrency: _currency,
-                                        onCurrencySelected: (newCurrency) => {
-                                              setState(() {
-                                                _currency = newCurrency;
-                                              })
-                                            });
-                                  });
+                              showCurrencySelectorModal(
+                                  context,
+                                  CurrencySelectorModal(
+                                      preselectedCurrency: _currency,
+                                      onCurrencySelected: (newCurrency) => {
+                                            setState(() {
+                                              _currency = newCurrency;
+                                            })
+                                          }));
                             },
                             decoration: InputDecoration(
                                 labelText: t.currencies.currency,

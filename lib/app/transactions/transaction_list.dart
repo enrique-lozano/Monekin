@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/transactions/transaction_details.page.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/services/view-actions/transaction_view_actions_service.dart';
@@ -170,7 +171,7 @@ class TransactionListComponent extends StatelessWidget {
                         color: transaction.color(context),
                         size: 28,
                       )
-                    : const Icon(Icons.swap_vert, size: 28),
+                    : Icon(TransactionType.transfer.icon(), size: 28),
               ),
             ),
             onTap: () {

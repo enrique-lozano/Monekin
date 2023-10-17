@@ -1,9 +1,11 @@
 import 'package:async/async.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
-import 'package:flutter/material.dart';
 
 class FinanceHealthService {
   /// Returns the number of months that the user can live without income, taking into account their spending rate in the last 12 months.
@@ -14,9 +16,11 @@ class FinanceHealthService {
     ].min;
 
     final totalExpensesStream = AccountService.instance.getAccountsData(
-        accountIds: accounts.map((e) => e.id),
-        startDate: startDate,
-        accountDataFilter: AccountDataFilter.expense);
+      filters: TransactionFilters(
+          accountsIDs: accounts.map((e) => e.id),
+          minDate: startDate,
+          transactionTypes: [TransactionType.expense]),
+    );
 
     final currenctBalanceStream = AccountService.instance
         .getAccountsMoney(accountIds: accounts.map((e) => e.id));
@@ -46,15 +50,19 @@ class FinanceHealthService {
       required DateTime? endDate}) {
     return StreamZip([
       AccountService.instance.getAccountsData(
-          accountIds: accountIds,
-          accountDataFilter: AccountDataFilter.income,
-          startDate: startDate,
-          endDate: endDate),
+        filters: TransactionFilters(
+            accountsIDs: accountIds,
+            transactionTypes: [TransactionType.income],
+            minDate: startDate,
+            maxDate: endDate),
+      ),
       AccountService.instance.getAccountsData(
-          accountIds: accountIds,
-          accountDataFilter: AccountDataFilter.expense,
-          startDate: startDate,
-          endDate: endDate),
+        filters: TransactionFilters(
+            accountsIDs: accountIds,
+            transactionTypes: [TransactionType.expense],
+            minDate: startDate,
+            maxDate: endDate),
+      ),
     ]).map((res) {
       final income = res[0];
       final expense = res[1];

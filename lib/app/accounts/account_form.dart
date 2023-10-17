@@ -1,4 +1,3 @@
-import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -10,11 +9,13 @@ import 'package:monekin/core/database/services/transaction/transaction_service.d
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
+import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/expansion_panel/single_expansion_panel.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -61,10 +62,8 @@ class _AccountFormPageState extends State<AccountFormPage> {
     if (_accountToEdit != null) {
       if ((await TransactionService.instance
               .getTransactions(
-                predicate: (transaction, account, accountCurrency,
-                        receivingAccount, receivingAccountCurrency, c, p6) =>
-                    account.id.isValue(_accountToEdit!.id) &
-                    transaction.date.isSmallerThanValue(_openingDate),
+                filters: TransactionFilters(
+                    accountsIDs: [_accountToEdit!.id], maxDate: _openingDate),
                 limit: 2,
               )
               .first)
@@ -286,19 +285,16 @@ class _AccountFormPageState extends State<AccountFormPage> {
                           onTap: () {
                             if (_currency == null) return;
 
-                            showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                showDragHandle: true,
-                                builder: (context) {
-                                  return CurrencySelectorModal(
-                                      preselectedCurrency: _currency!,
-                                      onCurrencySelected: (newCurrency) {
-                                        setState(() {
-                                          _currency = newCurrency;
-                                        });
-                                      });
-                                });
+                            showCurrencySelectorModal(
+                              context,
+                              CurrencySelectorModal(
+                                  preselectedCurrency: _currency!,
+                                  onCurrencySelected: (newCurrency) {
+                                    setState(() {
+                                      _currency = newCurrency;
+                                    });
+                                  }),
+                            );
                           },
                           decoration: InputDecoration(
                               labelText: t.currencies.currency,
@@ -338,20 +334,16 @@ class _AccountFormPageState extends State<AccountFormPage> {
                         stream: _accountToEdit == null
                             ? Stream.value(true)
                             : TransactionService.instance
-                                .getTransactions(
-                                    predicate: (transaction,
-                                            account,
-                                            accountCurrency,
-                                            receivingAccount,
-                                            receivingAccountCurrency,
-                                            c,
-                                            p6) =>
-                                        transaction.receivingAccountID
-                                            .isNull() &
-                                        transaction.accountID
-                                            .isValue(_accountToEdit!.id),
-                                    limit: 1)
-                                .map((event) => event.isEmpty),
+                                .countTransactions(
+                                  predicate: TransactionFilters(
+                                    transactionTypes: [
+                                      TransactionType.expense,
+                                      TransactionType.income
+                                    ],
+                                    accountsIDs: [_accountToEdit!.id],
+                                  ),
+                                )
+                                .map((event) => event.numberOfRes == 0),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData || snapshot.data! == false) {
                             return Container();
