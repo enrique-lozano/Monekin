@@ -31,27 +31,29 @@ class CurrencyWithMoney {
 }
 
 class AllAccountBalancePage extends StatefulWidget {
-  const AllAccountBalancePage({super.key, required this.date, this.filters});
+  const AllAccountBalancePage(
+      {super.key,
+      required this.date,
+      this.filters = const TransactionFilters()});
 
   final DateTime date;
 
-  final TransactionFilters? filters;
+  final TransactionFilters filters;
 
   @override
   State<AllAccountBalancePage> createState() => _AllAccountBalancePageState();
 }
 
 class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
-  Future<List<AccountWithMoney>> getAccountsWithMoney(
-      DateTime date, TransactionFilters? filters) async {
-    final accounts =
-        await (filters ?? const TransactionFilters()).accounts().first;
+  Future<List<AccountWithMoney>> getAccountsWithMoney(DateTime date,
+      {TransactionFilters filters = const TransactionFilters()}) async {
+    final accounts = await filters.accounts().first;
 
     final balances = accounts.map((account) async => AccountWithMoney(
         money: await AccountService.instance
             .getAccountMoney(
               account: account,
-              categoriesIds: filters?.categories,
+              trFilters: filters,
               convertToPreferredCurrency: true,
               date: date,
             )
@@ -97,7 +99,7 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
     final t = Translations.of(context);
 
     return FutureBuilder(
-        future: getAccountsWithMoney(widget.date, widget.filters),
+        future: getAccountsWithMoney(widget.date, filters: widget.filters),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const LinearProgressIndicator();

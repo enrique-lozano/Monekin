@@ -13,6 +13,7 @@ import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
@@ -306,14 +307,14 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           ResponsiveRowColumnItem(
                             child: IncomeOrExpenseCard(
-                              type: AccountDataFilter.income,
+                              type: TransactionType.income,
                               startDate: dateRangeService.startDate,
                               endDate: dateRangeService.endDate,
                             ),
                           ),
                           ResponsiveRowColumnItem(
                             child: IncomeOrExpenseCard(
-                              type: AccountDataFilter.expense,
+                              type: TransactionType.expense,
                               startDate: dateRangeService.startDate,
                               endDate: dateRangeService.endDate,
                             ),

@@ -26,7 +26,7 @@ class FundEvolutionLineChart extends StatelessWidget {
       {super.key,
       required this.startDate,
       required this.endDate,
-      this.accountsFilter,
+      this.filters = const TransactionFilters(),
       required this.dateRange,
       this.showBalanceHeader = false});
 
@@ -36,7 +36,7 @@ class FundEvolutionLineChart extends StatelessWidget {
 
   final bool showBalanceHeader;
 
-  final List<String>? accountsFilter;
+  final TransactionFilters filters;
 
   Stream<LineChartDataItem?> getEvolutionData() {
     if (startDate == null || endDate == null) return Stream.value(null);
@@ -53,7 +53,7 @@ class FundEvolutionLineChart extends StatelessWidget {
       labels.add(DateFormat.yMMMMd().format(currentDay));
 
       balance.add(AccountService.instance
-          .getAccountsMoney(accountIds: accountsFilter, date: currentDay));
+          .getAccountsMoney(trFilters: filters, date: currentDay));
 
       currentDay = currentDay.add(Duration(days: dayRange));
     }
@@ -77,9 +77,7 @@ class FundEvolutionLineChart extends StatelessWidget {
       children: [
         if (showBalanceHeader) ...[
           StreamBuilder(
-              stream: accountsFilter != null
-                  ? TransactionFilters(accountsIDs: accountsFilter).accounts()
-                  : accountService.getAccounts(),
+              stream: filters.accounts(),
               builder: (context, accountsSnapshot) {
                 if (!accountsSnapshot.hasData) {
                   return Column(
@@ -115,8 +113,10 @@ class FundEvolutionLineChart extends StatelessWidget {
                                 style: const TextStyle(fontSize: 12)),
                             StreamBuilder(
                                 stream: accountService.getAccountsMoney(
-                                    accountIds: accounts.map((e) => e.id),
-                                    date: endDate),
+                                  accountIds: accounts.map((e) => e.id),
+                                  trFilters: filters,
+                                  date: endDate,
+                                ),
                                 builder: (context, snapshot) {
                                   if (!snapshot.hasData) {
                                     return const Skeleton(

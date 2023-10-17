@@ -76,7 +76,10 @@ class _StatsPageState extends State<StatsPage> {
                 onPressed: () async {
                   final modalRes = await openFilterSheetModal(
                     context,
-                    FilterSheetModal(preselectedFilter: filters),
+                    FilterSheetModal(
+                      preselectedFilter: filters,
+                      showDateFilter: false,
+                    ),
                   );
 
                   if (modalRes != null) {
@@ -137,7 +140,7 @@ class _StatsPageState extends State<StatsPage> {
                         startDate: currentStartDate,
                         endDate: currentEndDate,
                         dateRange: currentDateRange,
-                        accountsFilter: filters.accountsIDs?.toList(),
+                        filters: filters,
                       ),
                     ),
                     const SizedBox(height: 16),

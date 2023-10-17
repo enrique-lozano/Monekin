@@ -20,6 +20,24 @@ enum TransactionStatus {
     ];
   }
 
+  /// Filter the status that does count for stats, parting of a array of statuses (if defined).
+  ///
+  /// The transaction statuses that do not count for balances and other stats are the pending and the voided transactions
+  static List<TransactionStatus?> getStatusThatCountsForStats(
+      List<TransactionStatus?>? status) {
+    if (status != null) {
+      return status
+          .whereNot((element) => [
+                TransactionStatus.pending.index,
+                TransactionStatus.voided.index
+              ].contains(element?.index))
+          .toList();
+    } else {
+      return TransactionStatus.notIn(
+          {TransactionStatus.pending, TransactionStatus.voided});
+    }
+  }
+
   IconData get icon {
     if (this == voided) return Icons.block_rounded;
     if (this == pending) return Icons.hourglass_full_rounded;
