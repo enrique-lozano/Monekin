@@ -1,4 +1,3 @@
-import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/home/home.page.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
@@ -187,55 +186,17 @@ class _TransactionsPageState extends State<TransactionsPage> {
               },
             ),
             Expanded(
-              child: StreamBuilder(
-                stream: TransactionService.instance.getTransactions(
+              child: SingleChildScrollView(
+                controller: listController,
+                padding: const EdgeInsets.only(bottom: 80, top: 8),
+                child: TransactionListComponent(
                   filters: filters,
                   limit: currentPage * pageSize,
-                  orderBy: (p0, p1, p2, p3, p4, p5, p6) => drift.OrderBy([
-                    drift.OrderingTerm(
-                        expression: p0.date, mode: drift.OrderingMode.desc)
-                  ]),
+                  prevPage: const HomePage(),
+                  onEmptyList: EmptyIndicator(
+                      title: t.general.empty_warn,
+                      description: t.transaction.list.empty),
                 ),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Column(
-                      children: [LinearProgressIndicator()],
-                    );
-                  }
-
-                  final transactions = snapshot.data!;
-
-                  if (transactions.isEmpty) {
-                    return Column(
-                      children: [
-                        Expanded(
-                            child: EmptyIndicator(
-                                title: t.general.empty_warn,
-                                description: t.transaction.list.empty)),
-                      ],
-                    );
-                  }
-
-                  return SingleChildScrollView(
-                    controller: listController,
-                    padding: const EdgeInsets.only(bottom: 80, top: 8),
-                    child: Column(
-                      children: [
-                        TransactionListComponent(
-                          transactions: transactions,
-                          prevPage: const HomePage(),
-                        ),
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) ...[
-                          const SizedBox(height: 10),
-                          const CircularProgressIndicator(),
-                          const SizedBox(height: 10),
-                          const Text('Loading data')
-                        ]
-                      ],
-                    ),
-                  );
-                },
               ),
             ),
           ],
