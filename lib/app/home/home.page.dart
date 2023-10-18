@@ -1,4 +1,3 @@
-import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/accounts/account_details.dart';
 import 'package:monekin/app/accounts/account_form.dart';
@@ -364,51 +363,33 @@ class _HomePageState extends State<HomePage> {
                           .checkIfCreateTransactionIsPossible(),
                       builder: (context, accountSnapshot) {
                         return CardWithHeader(
-                          title: t.home.last_transactions,
-                          onHeaderButtonClick:
-                              accountSnapshot.hasData && accountSnapshot.data!
-                                  ? () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const TransactionsPage()));
-                                    }
-                                  : null,
-                          body: StreamBuilder(
-                              stream: TransactionService.instance
-                                  .getTransactions(
-                                      filters: TransactionFilters(
-                                        minDate: dateRangeService.startDate,
-                                        maxDate: dateRangeService.endDate,
-                                      ),
-                                      limit: 5,
-                                      orderBy: (p0, p1, p2, p3, p4, p5, p6) =>
-                                          drift.OrderBy([
-                                            drift.OrderingTerm(
-                                                expression: p0.date,
-                                                mode: drift.OrderingMode.desc)
-                                          ])),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return const LinearProgressIndicator();
-                                }
-
-                                if (snapshot.data!.isEmpty) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(24),
-                                    child: Text(
-                                      t.transaction.list.empty,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  );
-                                }
-                                return TransactionListComponent(
-                                    transactions: snapshot.data!,
-                                    showGroupDivider: false,
-                                    prevPage: const HomePage());
-                              }),
-                        );
+                            title: t.home.last_transactions,
+                            onHeaderButtonClick:
+                                accountSnapshot.hasData && accountSnapshot.data!
+                                    ? () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const TransactionsPage()));
+                                      }
+                                    : null,
+                            body: TransactionListComponent(
+                              filters: TransactionFilters(
+                                minDate: dateRangeService.startDate,
+                                maxDate: dateRangeService.endDate,
+                              ),
+                              limit: 5,
+                              showGroupDivider: false,
+                              prevPage: const HomePage(),
+                              onEmptyList: Padding(
+                                padding: const EdgeInsets.all(24),
+                                child: Text(
+                                  t.transaction.list.empty,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ));
                       }),
                   const SizedBox(height: 16),
                   ResponsiveRowColumn.withSymetricSpacing(
