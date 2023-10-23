@@ -153,14 +153,14 @@ class AccountService {
     // Sum the acount initial balance and the balance of the transactions
     return Rx.combineLatest([
       initialBalanceQuery,
-      getAccountsData(
+      getAccountsBalance(
         filters: trFilters.copyWith(maxDate: date, accountsIDs: accountIds),
         convertToPreferredCurrency: convertToPreferredCurrency,
       )
     ], (res) => res[0] + res[1]);
   }
 
-  Stream<double> getAccountsData({
+  Stream<double> getAccountsBalance({
     TransactionFilters filters = const TransactionFilters(),
     bool convertToPreferredCurrency = true,
   }) {

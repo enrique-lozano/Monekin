@@ -56,7 +56,7 @@ class IncomeOrExpenseCard extends StatelessWidget {
             children: [
               Text(text),
               StreamBuilder(
-                  stream: AccountService.instance.getAccountsData(
+                  stream: AccountService.instance.getAccountsBalance(
                     filters: TransactionFilters(
                       accountsIDs: filters?.accountsIDs,
                       categories: filters?.categories,

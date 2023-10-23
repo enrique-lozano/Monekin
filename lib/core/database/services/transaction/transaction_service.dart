@@ -15,6 +15,15 @@ class TransactionQueryStatResult {
       {required this.numberOfRes, required this.valueSum});
 }
 
+typedef TransactionQueryOrderBy = OrderBy Function(
+    Transactions transaction,
+    Accounts account,
+    Currencies accountCurrency,
+    Accounts receivingAccount,
+    Currencies receivingAccountCurrency,
+    Categories c,
+    Categories);
+
 class TransactionService {
   final AppDB db;
 
@@ -75,23 +84,20 @@ class TransactionService {
         .watch();
   }
 
+  /// Get transactions from the DB based on some filters.
+  ///
+  /// By default, the transactions will be returned ordered by date
   Stream<List<MoneyTransaction>> getTransactions({
     TransactionFilters? filters,
-    OrderBy Function(
-            Transactions transaction,
-            Accounts account,
-            Currencies accountCurrency,
-            Accounts receivingAccount,
-            Currencies receivingAccountCurrency,
-            Categories c,
-            Categories)?
-        orderBy,
+    TransactionQueryOrderBy? orderBy,
     int? limit,
     int? offset,
   }) {
     return getTransactionsFromPredicate(
         predicate: filters?.toTransactionExpression(),
-        orderBy: orderBy,
+        orderBy: orderBy ??
+            (p0, p1, p2, p3, p4, p5, p6) => OrderBy(
+                [OrderingTerm(expression: p0.date, mode: OrderingMode.desc)]),
         limit: limit,
         offset: offset);
   }

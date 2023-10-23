@@ -15,7 +15,7 @@ class FinanceHealthService {
       ...accounts.map((e) => e.date)
     ].min;
 
-    final totalExpensesStream = AccountService.instance.getAccountsData(
+    final totalExpensesStream = AccountService.instance.getAccountsBalance(
       filters: TransactionFilters(
           accountsIDs: accounts.map((e) => e.id),
           minDate: startDate,
@@ -49,14 +49,14 @@ class FinanceHealthService {
       required DateTime? startDate,
       required DateTime? endDate}) {
     return StreamZip([
-      AccountService.instance.getAccountsData(
+      AccountService.instance.getAccountsBalance(
         filters: TransactionFilters(
             accountsIDs: accountIds,
             transactionTypes: [TransactionType.income],
             minDate: startDate,
             maxDate: endDate),
       ),
-      AccountService.instance.getAccountsData(
+      AccountService.instance.getAccountsBalance(
         filters: TransactionFilters(
             accountsIDs: accountIds,
             transactionTypes: [TransactionType.expense],

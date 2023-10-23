@@ -263,7 +263,6 @@
       "to_date_def": "Hasta el {{ date }}"
     },
     "FORM": {
-      "status": "Estado",
       "VALIDATORS": {
         "zero": "El valor de una transacción no puede ser igual a cero",
         "date-max": "La fecha seleccionada es posterior a la actual. Se añadirá la transacción como pendiente",
@@ -280,6 +279,10 @@
       "exchange-to-preferred-in-date": "Equivalencia a {{ currency }} el {{date}}:"
     },
     "STATUS": {
+      "display": {
+        "one": "Estado",
+        "other": "Estados"
+      },
       "tr_status": "Transacción {{ status }}",
       "none": "Sin estado",
       "reconciled": "Reconciliada",
