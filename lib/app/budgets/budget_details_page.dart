@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:monekin/app/budgets/budget_form_page.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/budgets/components/budget_evolution_chart.dart';
-import 'package:monekin/app/transactions/transaction_list.dart';
+import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
