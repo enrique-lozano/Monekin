@@ -4,6 +4,7 @@ import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
+import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -86,6 +87,51 @@ enum TransactionType {
   }
 }
 
+enum NextPayStatus {
+  /// The payment date has not yet arrived, but it is very close
+  comingSoon,
+
+  /// The payment should have already been made, that is, it was scheduled before the current date
+  delayed,
+
+  /// The payment date has not yet arrived nor is it close
+  planified;
+
+  Color color(BuildContext context) {
+    if (this == planified) {
+      return appColorScheme(context).primary;
+    } else if (this == delayed) {
+      return CustomColors.of(context).danger;
+    }
+
+    return Colors.amber;
+  }
+
+  IconData get icon {
+    if (this == planified) {
+      return Icons.event_rounded;
+    } else if (this == delayed) {
+      return Icons.warning_rounded;
+    }
+
+    return Icons.upcoming;
+  }
+
+  String displayDaysToPay(BuildContext context, int days) {
+    final t = Translations.of(context);
+
+    if (days == 0) {
+      return t.general.today;
+    }
+
+    if (this == delayed) {
+      return 'Atrasado por ${days.abs()}d';
+    }
+
+    return 'In ${days.abs()} days';
+  }
+}
+
 class MoneyTransaction extends TransactionInDB {
   Category? category;
   Account account;
@@ -163,6 +209,89 @@ class MoneyTransaction extends TransactionInDB {
       : value < 0
           ? TransactionType.expense
           : TransactionType.income;
+
+  NextPayStatus? get nextPayStatus {
+    if (recurrentInfo.isNoRecurrent && status != TransactionStatus.pending) {
+      return null;
+    }
+
+    return daysToPay() < 0
+        ? NextPayStatus.delayed
+        : daysToPay() <= 10
+            ? NextPayStatus.comingSoon
+            : NextPayStatus.planified;
+  }
+
+  /// Get the days to the next payment. Will return an error in case of a non-recurrent transactions that is not pending
+  ///
+  /// If the day has already passed, it will return a negative number
+  int daysToPay() {
+    if (recurrentInfo.isNoRecurrent && status != TransactionStatus.pending) {
+      throw Exception(
+          'The transaction should be recurrent to get the following dates');
+    }
+
+    return date.difference(DateTime.now()).inDays;
+  }
+
+  /// Get the money that this transaction would generate for a given periodicity, without taken into account the start and end dates of a recurrency
+  double getUnifiedMoneyForAPeriod({
+    required TransactionPeriodicity periodicity,
+    bool convertToPreferredCurrency = true,
+  }) {
+    final baseValue =
+        convertToPreferredCurrency ? currentValueInPreferredCurrency : value;
+
+    if (recurrentInfo.isNoRecurrent) {
+      return baseValue;
+    }
+
+    if (periodicity == recurrentInfo.intervalPeriod) {
+      return baseValue / recurrentInfo.intervalEach!;
+    } else if (recurrentInfo.intervalPeriod == TransactionPeriodicity.day) {
+      if (periodicity == TransactionPeriodicity.week) {
+        return baseValue / 7;
+      }
+      if (periodicity == TransactionPeriodicity.month) {
+        return baseValue / 30;
+      }
+      if (periodicity == TransactionPeriodicity.year) {
+        return baseValue / 365;
+      }
+    } else if (recurrentInfo.intervalPeriod == TransactionPeriodicity.week) {
+      if (periodicity == TransactionPeriodicity.day) {
+        return baseValue * 7;
+      }
+      if (periodicity == TransactionPeriodicity.month) {
+        return baseValue / 4;
+      }
+      if (periodicity == TransactionPeriodicity.year) {
+        return baseValue / 52;
+      }
+    } else if (recurrentInfo.intervalPeriod == TransactionPeriodicity.month) {
+      if (periodicity == TransactionPeriodicity.day) {
+        return baseValue * 30;
+      }
+      if (periodicity == TransactionPeriodicity.week) {
+        return baseValue * 4;
+      }
+      if (periodicity == TransactionPeriodicity.year) {
+        return baseValue / 12;
+      }
+    } else if (recurrentInfo.intervalPeriod == TransactionPeriodicity.year) {
+      if (periodicity == TransactionPeriodicity.day) {
+        return baseValue * 365;
+      }
+      if (periodicity == TransactionPeriodicity.week) {
+        return baseValue * 52;
+      }
+      if (periodicity == TransactionPeriodicity.month) {
+        return baseValue * 12;
+      }
+    }
+
+    throw Exception('We could not calculate this value');
+  }
 
   /// Get the following dates of a recurring transaction, disregarding the most immediate upcoming transaction, referenced in the `date` attribute of this class.
   ///

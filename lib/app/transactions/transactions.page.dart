@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/home/home.page.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
-import 'package:monekin/app/transactions/transaction_list.dart';
+import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/presentation/widgets/empty_indicator.dart';
 import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
@@ -28,11 +28,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
   FocusNode searchFocusNode = FocusNode();
   String? searchValue;
 
-  ScrollController listController = ScrollController();
-
-  final int pageSize = 40;
-  late int currentPage = 1;
-
   @override
   void initState() {
     super.initState();
@@ -43,15 +38,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
       if (!searchFocusNode.hasFocus) {
         setState(() {
           searchActive = false;
-        });
-      }
-    });
-
-    listController.addListener(() {
-      if (listController.offset >= listController.position.maxScrollExtent &&
-          !listController.position.outOfRange) {
-        setState(() {
-          currentPage += 1;
         });
       }
     });
@@ -186,17 +172,12 @@ class _TransactionsPageState extends State<TransactionsPage> {
               },
             ),
             Expanded(
-              child: SingleChildScrollView(
-                controller: listController,
-                padding: const EdgeInsets.only(bottom: 80, top: 8),
-                child: TransactionListComponent(
-                  filters: filters,
-                  limit: currentPage * pageSize,
-                  prevPage: const HomePage(),
-                  onEmptyList: EmptyIndicator(
-                      title: t.general.empty_warn,
-                      description: t.transaction.list.empty),
-                ),
+              child: TransactionListComponent(
+                filters: filters,
+                prevPage: const HomePage(),
+                onEmptyList: EmptyIndicator(
+                    title: t.general.empty_warn,
+                    description: t.transaction.list.empty),
               ),
             ),
           ],
