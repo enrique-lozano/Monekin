@@ -262,7 +262,6 @@
       "to_date_def": "Up to the {{ date }}"
     },
     "FORM": {
-      "status": "Status",
       "VALIDATORS": {
         "zero": "The value of a transaction cannot be equal to zero",
         "date-max": "The selected date is after the current one. The transaction will be added as pending",
@@ -279,6 +278,10 @@
       "exchange-to-preferred-in-date": "Equivalent to {{ currency }} on {{date}}:"
     },
     "STATUS": {
+      "display": {
+        "one": "Estado",
+        "other": "Estados"
+      },
       "tr_status": "{{ status }} transaction",
       "none": "Sin estado",
       "reconciled": "Reconciled",

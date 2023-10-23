@@ -164,25 +164,25 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
 
             return StreamBuilder(
                 stream: StreamZip([
-                  AccountService.instance.getAccountsData(
+                  AccountService.instance.getAccountsBalance(
                       filters: TransactionFilters(
                     transactionTypes: [TransactionType.expense],
                     minDate: widget.dateRangeService.getDateRange(-1)[0],
                     maxDate: widget.dateRangeService.getDateRange(-1)[1],
                   )),
-                  AccountService.instance.getAccountsData(
+                  AccountService.instance.getAccountsBalance(
                       filters: TransactionFilters(
                     transactionTypes: [TransactionType.income],
                     minDate: widget.dateRangeService.getDateRange(-1)[0],
                     maxDate: widget.dateRangeService.getDateRange(-1)[1],
                   )),
-                  AccountService.instance.getAccountsData(
+                  AccountService.instance.getAccountsBalance(
                       filters: TransactionFilters(
                     transactionTypes: [TransactionType.expense],
                     minDate: widget.dateRangeService.startDate,
                     maxDate: widget.dateRangeService.endDate,
                   )),
-                  AccountService.instance.getAccountsData(
+                  AccountService.instance.getAccountsBalance(
                       filters: TransactionFilters(
                     transactionTypes: [TransactionType.income],
                     minDate: widget.dateRangeService.startDate,

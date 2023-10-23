@@ -1,10 +1,9 @@
-import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_form.dart';
-import 'package:monekin/app/transactions/transaction_list.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
+import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/models/account/account.dart';
@@ -17,7 +16,6 @@ import 'package:monekin/core/presentation/widgets/transaction_filter/transaction
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-import '../../core/database/services/transaction/transaction_service.dart';
 import '../transactions/form/transaction_form.page.dart';
 
 class AccountDetailsPage extends StatefulWidget {
@@ -391,43 +389,26 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                                 ),
                               );
                             },
-                            body: StreamBuilder(
-                                stream: TransactionService.instance
-                                    .getTransactions(
-                                        filters: TransactionFilters(
-                                          status: TransactionStatus.notIn({
-                                            TransactionStatus.pending,
-                                            TransactionStatus.voided
-                                          }),
-                                        ),
-                                        limit: 5,
-                                        orderBy: (p0, p1, p2, p3, p4, p5, p6) =>
-                                            drift.OrderBy([
-                                              drift.OrderingTerm(
-                                                  expression: p0.date,
-                                                  mode: drift.OrderingMode.desc)
-                                            ])),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return const LinearProgressIndicator();
-                                  }
-
-                                  if (snapshot.data!.isEmpty) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(24),
-                                      child: Text(
-                                        t.transaction.list.empty,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    );
-                                  }
-                                  return TransactionListComponent(
-                                      transactions: snapshot.data!,
-                                      showGroupDivider: false,
-                                      prevPage: AccountDetailsPage(
-                                        account: widget.account,
-                                      ));
+                            body: TransactionListComponent(
+                              filters: TransactionFilters(
+                                status: TransactionStatus.notIn({
+                                  TransactionStatus.pending,
+                                  TransactionStatus.voided
                                 }),
+                                accountsIDs: [widget.account.id],
+                              ),
+                              limit: 5,
+                              showGroupDivider: false,
+                              prevPage:
+                                  AccountDetailsPage(account: widget.account),
+                              onEmptyList: Padding(
+                                padding: const EdgeInsets.all(24),
+                                child: Text(
+                                  t.transaction.list.empty,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
                           ),
                           const SizedBox(height: 16),
                           CardWithHeader(
