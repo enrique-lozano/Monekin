@@ -546,6 +546,7 @@
       "other.descr": "Other general app customization settings",
       "appearance": "Appearance",
       "appearance.descr": "App theme, texts...",
+      "app_colors": "App colors",
       "theme": "Theme",
       "theme.auto": "Defined by the system",
       "theme.light": "Light",

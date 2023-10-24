@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 916 (458 per locale)
+/// Strings: 918 (459 per locale)
 ///
-/// Built on 2023-10-23 at 21:16 UTC
+/// Built on 2023-10-24 at 14:18 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -762,7 +762,7 @@ class _TranslationsRecurrentTransactionsDetailsEn {
 	// Translations
 	String get title => 'Recurrent transaction';
 	String get descr => 'The next moves for this transaction are shown below. You can accept the first move or skip this move';
-	String get last_payment_info => 'This movement is the last of the recurring rule, so this rule will be automatically deleted upon confirmation';
+	String get last_payment_info => 'This movement is the last of the recurring rule, so this rule will be automatically deleted when confirming this action';
 	String get delete_header => 'Delete recurring transaction';
 	String get delete_message => 'This action is irreversible and will not affect transactions you have already confirmed/paid for';
 }
@@ -954,6 +954,7 @@ class _TranslationsSettingsGeneralEn {
 	String get other_descr => 'Other general app customization settings';
 	String get appearance => 'Appearance';
 	String get appearance_descr => 'App theme, texts...';
+	String get app_colors => 'App colors';
 	String get theme => 'Theme';
 	String get theme_auto => 'Defined by the system';
 	String get theme_light => 'Light';
@@ -1848,7 +1849,7 @@ class _TranslationsRecurrentTransactionsDetailsEs implements _TranslationsRecurr
 	// Translations
 	@override String get title => 'Transaccion recurrente';
 	@override String get descr => 'A continuación se muestran próximos movimientos de esta transacción. Podrás aceptar el primero de ellos o saltar este movimiento';
-	@override String get last_payment_info => 'Este movimiento es el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al confirmarlo';
+	@override String get last_payment_info => 'Este movimiento es el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al confirmar esta acción';
 	@override String get delete_header => 'Eliminar transacción recurrente';
 	@override String get delete_message => 'Esta acción es irreversible y no afectará a transacciones que ya hayas confirmado/pagado';
 }
@@ -2041,6 +2042,7 @@ class _TranslationsSettingsGeneralEs implements _TranslationsSettingsGeneralEn {
 	@override String get other_descr => 'Otros ajustes generales de personalización de la app';
 	@override String get appearance => 'Apariencia';
 	@override String get appearance_descr => 'Tema de la aplicación, textos...';
+	@override String get app_colors => 'Colores de la aplicación';
 	@override String get theme => 'Tema';
 	@override String get theme_auto => 'Definido por el sistema';
 	@override String get theme_light => 'Claro';
@@ -2575,7 +2577,7 @@ extension on _TranslationsEn {
 			case 'recurrent_transactions.empty': return 'It looks like you don\'t have any recurring transactions. Create a monthly, yearly, or weekly recurring transaction and it will appear here';
 			case 'recurrent_transactions.details.title': return 'Recurrent transaction';
 			case 'recurrent_transactions.details.descr': return 'The next moves for this transaction are shown below. You can accept the first move or skip this move';
-			case 'recurrent_transactions.details.last_payment_info': return 'This movement is the last of the recurring rule, so this rule will be automatically deleted upon confirmation';
+			case 'recurrent_transactions.details.last_payment_info': return 'This movement is the last of the recurring rule, so this rule will be automatically deleted when confirming this action';
 			case 'recurrent_transactions.details.delete_header': return 'Delete recurring transaction';
 			case 'recurrent_transactions.details.delete_message': return 'This action is irreversible and will not affect transactions you have already confirmed/paid for';
 			case 'account.details': return 'Account details';
@@ -2747,6 +2749,7 @@ extension on _TranslationsEn {
 			case 'settings.general.other_descr': return 'Other general app customization settings';
 			case 'settings.general.appearance': return 'Appearance';
 			case 'settings.general.appearance_descr': return 'App theme, texts...';
+			case 'settings.general.app_colors': return 'App colors';
 			case 'settings.general.theme': return 'Theme';
 			case 'settings.general.theme_auto': return 'Defined by the system';
 			case 'settings.general.theme_light': return 'Light';
@@ -3069,7 +3072,7 @@ extension on _TranslationsEs {
 			case 'recurrent_transactions.empty': return 'Parece que no posees ninguna transacción recurrente. Crea una transacción que se repita mensual, anual o semanalmente y aparecerá aquí';
 			case 'recurrent_transactions.details.title': return 'Transaccion recurrente';
 			case 'recurrent_transactions.details.descr': return 'A continuación se muestran próximos movimientos de esta transacción. Podrás aceptar el primero de ellos o saltar este movimiento';
-			case 'recurrent_transactions.details.last_payment_info': return 'Este movimiento es el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al confirmarlo';
+			case 'recurrent_transactions.details.last_payment_info': return 'Este movimiento es el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al confirmar esta acción';
 			case 'recurrent_transactions.details.delete_header': return 'Eliminar transacción recurrente';
 			case 'recurrent_transactions.details.delete_message': return 'Esta acción es irreversible y no afectará a transacciones que ya hayas confirmado/pagado';
 			case 'account.details': return 'Detalles de la cuenta';
@@ -3242,6 +3245,7 @@ extension on _TranslationsEs {
 			case 'settings.general.other_descr': return 'Otros ajustes generales de personalización de la app';
 			case 'settings.general.appearance': return 'Apariencia';
 			case 'settings.general.appearance_descr': return 'Tema de la aplicación, textos...';
+			case 'settings.general.app_colors': return 'Colores de la aplicación';
 			case 'settings.general.theme': return 'Tema';
 			case 'settings.general.theme_auto': return 'Definido por el sistema';
 			case 'settings.general.theme_light': return 'Claro';
