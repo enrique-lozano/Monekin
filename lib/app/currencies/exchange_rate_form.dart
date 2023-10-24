@@ -71,7 +71,9 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
     });
 
     CurrencyService.instance.getUserPreferredCurrency().first.then((value) {
-      userPreferredCurrency = value;
+      setState(() {
+        userPreferredCurrency = value;
+      });
     });
   }
 
@@ -200,19 +202,24 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                             ),
                             const SizedBox(width: 16),
                             Expanded(
-                              child: TextFormField(
-                                controller: rateController,
-                                validator: (value) => fieldValidator(value,
-                                    validator: ValidatorType.double,
-                                    isRequired: true),
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                decoration: InputDecoration(
-                                  labelText: '${t.currencies.exchange_rate} *',
-                                  hintText: 'Ex.: 2.14',
-                                ),
+                                child: TextFormField(
+                              controller: rateController,
+                              validator: (value) => fieldValidator(value,
+                                  validator: ValidatorType.double,
+                                  isRequired: true),
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              decoration: InputDecoration(
+                                labelText: '${t.currencies.exchange_rate} *',
+                                hintText: 'Ex.: 2.14',
+                                helperText: (userPreferredCurrency != null &&
+                                        _currency != null &&
+                                        double.tryParse(rateController.text) !=
+                                            null)
+                                    ? '1 ${_currency?.code} = ${double.parse(rateController.text)} ${userPreferredCurrency?.code ?? ''}'
+                                    : null,
                               ),
-                            )
+                            ))
                           ],
                         ),
                       ],
