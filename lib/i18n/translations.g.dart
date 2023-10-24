@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 918 (459 per locale)
+/// Strings: 920 (460 per locale)
 ///
-/// Built on 2023-10-24 at 14:18 UTC
+/// Built on 2023-10-24 at 17:18 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -395,6 +395,7 @@ class _TranslationsCurrenciesEn {
 	String get currency_converter => 'Currency converter';
 	String get currency => 'Currency';
 	String get currency_manager => 'Currency manager';
+	String get currency_manager_descr => 'Configura tu divisa y sus tipos de cambio con otras';
 	String get preferred_currency => 'Preferred/base currency';
 	String get change_preferred_currency_title => 'Change preferred currency';
 	String get change_preferred_currency_msg => 'All stats and budgets will be displayed in this currency from now on. Accounts and transactions will keep the currency they had. All saved exchange rates will be deleted if you execute this action. Do you wish to continue?';
@@ -1481,6 +1482,7 @@ class _TranslationsCurrenciesEs implements _TranslationsCurrenciesEn {
 	// Translations
 	@override String get currency_converter => 'Conversor de divisas';
 	@override String get currency_manager => 'Administrador de divisas';
+	@override String get currency_manager_descr => 'Configura tu divisa y sus tipos de cambio con otras';
 	@override String get currency => 'Divisa';
 	@override String get preferred_currency => 'Divisa predeterminada/base';
 	@override String get change_preferred_currency_title => 'Cambiar divisa predeterminada';
@@ -2620,6 +2622,7 @@ extension on _TranslationsEn {
 			case 'currencies.currency_converter': return 'Currency converter';
 			case 'currencies.currency': return 'Currency';
 			case 'currencies.currency_manager': return 'Currency manager';
+			case 'currencies.currency_manager_descr': return 'Configura tu divisa y sus tipos de cambio con otras';
 			case 'currencies.preferred_currency': return 'Preferred/base currency';
 			case 'currencies.change_preferred_currency_title': return 'Change preferred currency';
 			case 'currencies.change_preferred_currency_msg': return 'All stats and budgets will be displayed in this currency from now on. Accounts and transactions will keep the currency they had. All saved exchange rates will be deleted if you execute this action. Do you wish to continue?';
@@ -3114,6 +3117,7 @@ extension on _TranslationsEs {
 			case 'account.select.all': return 'Todas las cuentas';
 			case 'currencies.currency_converter': return 'Conversor de divisas';
 			case 'currencies.currency_manager': return 'Administrador de divisas';
+			case 'currencies.currency_manager_descr': return 'Configura tu divisa y sus tipos de cambio con otras';
 			case 'currencies.currency': return 'Divisa';
 			case 'currencies.preferred_currency': return 'Divisa predeterminada/base';
 			case 'currencies.change_preferred_currency_title': return 'Cambiar divisa predeterminada';

@@ -97,7 +97,7 @@ class _SettingsPageState extends State<SettingsPage> {
               createSettingItem(context,
                   title: t.general.categories,
                   subtitle: t.settings.general.categories_descr,
-                  icon: Icons.sell_outlined, onTap: () {
+                  icon: Icons.category_rounded, onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -106,8 +106,7 @@ class _SettingsPageState extends State<SettingsPage> {
               }),
               createSettingItem(context,
                   title: t.currencies.currency_manager,
-                  subtitle:
-                      'Configura tu divisa y sus tipos de cambio con otras',
+                  subtitle: t.currencies.currency_manager_descr,
                   icon: Icons.currency_exchange, onTap: () {
                 Navigator.push(
                     context,

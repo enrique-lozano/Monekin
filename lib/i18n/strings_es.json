@@ -390,6 +390,7 @@
   "CURRENCIES": {
     "currency-converter": "Conversor de divisas",
     "currency-manager": "Administrador de divisas",
+    "currency-manager.descr": "Configura tu divisa y sus tipos de cambio con otras",
     "currency": "Divisa",
     "preferred-currency": "Divisa predeterminada/base",
     "change-preferred-currency-title": "Cambiar divisa predeterminada",
