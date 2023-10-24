@@ -127,7 +127,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
           children: [
             if (filters.hasFilter) ...[
               FilterRowIndicator(
-                filters: filters,
+                filters: filters.copyWith(searchValue: searchValue),
                 onChange: (newFilters) {
                   setState(() {
                     filters = newFilters;
@@ -137,8 +137,9 @@ class _TransactionsPageState extends State<TransactionsPage> {
               const Divider(indent: 12, endIndent: 12)
             ],
             StreamBuilder(
-              stream: TransactionService.instance
-                  .countTransactions(predicate: filters),
+              stream: TransactionService.instance.countTransactions(
+                predicate: filters.copyWith(searchValue: searchValue),
+              ),
               builder: (context, snapshot) {
                 final res = snapshot.data;
 
@@ -173,7 +174,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
             ),
             Expanded(
               child: TransactionListComponent(
-                filters: filters,
+                filters: filters.copyWith(searchValue: searchValue),
                 prevPage: const HomePage(),
                 onEmptyList: EmptyIndicator(
                     title: t.general.empty_warn,
