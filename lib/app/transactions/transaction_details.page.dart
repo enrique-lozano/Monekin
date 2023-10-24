@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -49,14 +50,16 @@ class TransactionDetailsPage extends StatefulWidget {
 
 class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
   List<ListTileActionItem> _getPayActions(
-      BuildContext context, MoneyTransaction transaction) {
+    BuildContext context,
+    MoneyTransaction transaction,
+  ) {
     final t = Translations.of(context);
 
     payTransaction(DateTime datetime) {
       showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
+          return AlertDialog.adaptive(
             title: Text(t.transaction.next_payments.accept_dialog_title),
             content: SingleChildScrollView(
               child: Text(
@@ -95,13 +98,11 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                     // Transaction created/updated successfully with a new empty status
 
                     if (transaction.recurrentInfo.isRecurrent) {
-                      if (transaction
-                          .getNextDatesOfRecurrency(limit: 2)
-                          .isEmpty) {
+                      if (transaction.isOnLastPayment) {
                         // NO MORE PAYMENTS NEEDED
 
                         TransactionService.instance
-                            .deleteTransaction(newId)
+                            .deleteTransaction(transaction.id)
                             .then((value) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -117,63 +118,33 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                         return;
                       }
 
-                      final db = TransactionService.instance.db;
+                      // Change the next payment date and the remaining iterations (if required)
+                      int? remainingIterations = transaction.recurrentInfo
+                          .ruleRecurrentLimit!.remainingIterations;
 
-                      (db.select(db.transactions)
-                            ..where((tbl) => tbl.id.isValue(transaction.id)))
-                          .getSingle()
-                          .then((value) {
-                        // Change the next payment date and the remaining iterations (if required)
-                        int? remainingIterations = transaction.recurrentInfo
-                            .ruleRecurrentLimit!.remainingIterations;
-
-                        TransactionService.instance
-                            .insertOrUpdateTransaction(
-                          value.copyWith(
-                              date: transaction.getNextDatesOfRecurrency(
-                                  limit: 2)[0],
-                              remainingTransactions: remainingIterations != null
-                                  ? drift.Value(remainingIterations - 1)
-                                  : const drift.Value(null)),
-                        )
-                            .then((inserted) {
-                          if (inserted <= 0) return;
-
-                          TransactionService.instance
-                              .getTransactionById(transaction.id)
-                              .first
-                              .then((value) {
-                            if (value == null) return;
-
-                            setState(() {
-                              transaction = value;
-                            });
-
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(t.transaction.new_success),
-                            ));
-
-                            Navigator.pop(context);
-                          });
-                        });
-                      });
-                    } else {
                       TransactionService.instance
-                          .getTransactionById(newId)
-                          .first
-                          .then((value) {
-                        if (value == null) return;
-
-                        setState(() {
-                          transaction = value;
-                        });
+                          .insertOrUpdateTransaction(
+                        transaction.copyWith(
+                            date: transaction.followingDateToNext,
+                            remainingTransactions: remainingIterations != null
+                                ? drift.Value(remainingIterations - 1)
+                                : const drift.Value(null)),
+                      )
+                          .then((inserted) {
+                        if (inserted <= 0) return;
 
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(t.transaction.edit_success),
+                          content: Text(t.transaction.new_success),
                         ));
 
                         Navigator.pop(context);
                       });
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(t.transaction.edit_success),
+                      ));
+
+                      Navigator.pop(context);
                     }
                   });
                 },
@@ -203,51 +174,59 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
   }
 
   showSkipTransactionModal(BuildContext context, MoneyTransaction transaction) {
+    final nextPaymentDate = transaction.followingDateToNext;
+
     showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
             title: Text(t.transaction.next_payments.skip_dialog_title),
             content: SingleChildScrollView(
-              child: Text(
-                t.transaction.next_payments.skip_dialog_msg(
-                  date: DateFormat.yMMMd().format(
-                      transaction.getNextDatesOfRecurrency(limit: 2)[0]),
-                ),
-              ),
+              child: Text(nextPaymentDate != null
+                  ? t.transaction.next_payments.skip_dialog_msg(
+                      date: DateFormat.yMMMd().format(nextPaymentDate),
+                    )
+                  : t.recurrent_transactions.details.last_payment_info),
             ),
             actions: [
               TextButton(
                 onPressed: () {
-                  final db = TransactionService.instance.db;
-
-                  (db.select(db.transactions)
-                        ..where((tbl) => tbl.id.isValue(transaction.id)))
-                      .getSingle()
-                      .then((value) {
+                  if (nextPaymentDate == null) {
                     TransactionService.instance
-                        .insertOrUpdateTransaction(value.copyWith(
-                      date: transaction.getNextDatesOfRecurrency(limit: 2)[0],
-                    ))
-                        .then((inserted) {
-                      TransactionService.instance
-                          .getTransactionById(transaction.id)
-                          .first
-                          .then((value) {
-                        if (value == null) return;
+                        .deleteTransaction(transaction.id)
+                        .then((value) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              '${t.transaction.next_payments.skip_success}. ${t.transaction.next_payments.recurrent_rule_finished}'),
+                        ),
+                      );
 
-                        setState(() {
-                          transaction = value;
-                        });
-
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content:
-                              Text(t.transaction.next_payments.skip_success),
-                        ));
-
-                        Navigator.pop(context);
-                      });
+                      Navigator.pop(context);
+                      Navigator.pop(context);
                     });
+
+                    return;
+                  }
+
+                  // Change the next payment date and the remaining iterations (if required)
+                  int? remainingIterations = transaction
+                      .recurrentInfo.ruleRecurrentLimit!.remainingIterations;
+
+                  TransactionService.instance
+                      .insertOrUpdateTransaction(transaction.copyWith(
+                          date: transaction.followingDateToNext,
+                          remainingTransactions: remainingIterations != null
+                              ? drift.Value(remainingIterations - 1)
+                              : const drift.Value(null)))
+                      .then((inserted) {
+                    if (inserted == 0) return;
+
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(t.transaction.next_payments.skip_success),
+                    ));
+
+                    Navigator.pop(context);
                   });
                 },
                 child: Text(t.general.continue_text),
@@ -255,6 +234,54 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
             ],
           );
         });
+  }
+
+  Widget cardPay({
+    required MoneyTransaction transaction,
+    required DateTime date,
+    bool isNext = false,
+  }) {
+    return ListTile(
+      subtitleTextStyle: Theme.of(context).textTheme.labelSmall!.copyWith(
+            color: isNext
+                ? transaction.nextPayStatus!.color(context)
+                : appColorScheme(context).onSecondary,
+          ),
+      leading: Icon(
+        isNext ? transaction.nextPayStatus!.icon : Icons.access_time,
+        color: isNext ? transaction.nextPayStatus!.color(context) : null,
+      ),
+      title: Text(
+        DateFormat.yMMMd().format(date),
+        style: TextStyle(color: appColorScheme(context).onSecondary),
+      ),
+      subtitle: !isNext
+          ? null
+          : Text(
+              transaction.nextPayStatus!
+                  .displayDaysToPay(context, transaction.daysToPay()),
+            ),
+      trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+        IconButton(
+          color: CustomColors.of(context).danger,
+          disabledColor: CustomColors.of(context).danger.withOpacity(0.3),
+          icon: const Icon(Icons.cancel_rounded),
+          tooltip: t.transaction.next_payments.skip,
+          onPressed: !isNext
+              ? null
+              : () => showSkipTransactionModal(context, transaction),
+        ),
+        const SizedBox(width: 4),
+        IconButton(
+          onPressed: !isNext ? null : () => showPayModal(context, transaction),
+          color: appColorScheme(context).primaryContainer,
+          tooltip: t.transaction.next_payments.accept,
+          disabledColor:
+              appColorScheme(context).primaryContainer.withOpacity(0.3),
+          icon: const Icon(Icons.price_check_rounded),
+        ),
+      ]),
+    );
   }
 
   showPayModal(BuildContext context, MoneyTransaction transaction) {
@@ -278,6 +305,15 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                         },
                 ),
               )).toList(),
+              if (transaction.isOnLastPayment)
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Text(
+                    '* ${t.recurrent_transactions.details.last_payment_info}',
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                )
             ],
           );
         });
@@ -336,69 +372,44 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
           ),
           Divider(color: color.lighten(0.25)),
           Padding(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(showRecurrencyStatus ? 0 : 12),
             child: Column(
               children: [
-                Builder(builder: (context) {
-                  return Text(
-                      showRecurrencyStatus
-                          ? transaction
-                                  .getNextDatesOfRecurrency(limit: 2)
-                                  .isNotEmpty
-                              ? t.recurrent_transactions.details
-                                  .next_payment_info(
-                                      date: DateFormat.yMMMMd()
-                                          .format(transaction.date))
-                              : t.recurrent_transactions.details
-                                  .last_payment_info(
-                                      date: DateFormat.yMMMMd()
-                                          .format(transaction.date))
-                          : transaction.status!.description(context),
-                      style: TextStyle(
-                        color: isDarkTheme
-                            ? Theme.of(context).colorScheme.background
-                            : null,
-                      ));
-                }),
+                Padding(
+                  padding: EdgeInsets.all(showRecurrencyStatus ? 12 : 0),
+                  child: Text(
+                    showRecurrencyStatus
+                        ? t.recurrent_transactions.details.descr
+                        : transaction.status!.description(context),
+                    style: TextStyle(
+                      color: isDarkTheme
+                          ? Theme.of(context).colorScheme.background
+                          : null,
+                    ),
+                  ),
+                ),
                 if (transaction.status == TransactionStatus.pending ||
                     transaction.recurrentInfo.isRecurrent) ...[
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      if (transaction.recurrentInfo.isRecurrent &&
-                          transaction
-                              .getNextDatesOfRecurrency(limit: 2)
-                              .isNotEmpty) ...[
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: () =>
-                                showSkipTransactionModal(context, transaction),
-                            style: OutlinedButton.styleFrom(
-                                side: BorderSide(color: color.darken(0.2)),
-                                backgroundColor: Colors.white.withOpacity(0.6),
-                                foregroundColor: color.darken(0.2)),
-                            child: Text(t.transaction.next_payments.skip),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                      ],
-                      Expanded(
-                        child: FilledButton(
-                          onPressed: () => showPayModal(context, transaction),
-                          style: FilledButton.styleFrom(
-                              backgroundColor: color.darken(0.2)),
-                          child: Text(
-                            t.transaction.next_payments.accept,
-                            style: TextStyle(
-                              color: isDarkTheme
-                                  ? Theme.of(context).colorScheme.onBackground
-                                  : null,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  //const SizedBox(height: 12),
+                  Builder(builder: (context) {
+                    return Column(
+                      children: transaction
+                          .getNextDatesOfRecurrency(limit: 3)
+                          .mapIndexed((index, e) => Column(
+                                children: [
+                                  if (index != 0)
+                                    Divider(
+                                        indent: 48, color: color.darken(0.2)),
+                                  cardPay(
+                                    date: e,
+                                    transaction: transaction,
+                                    isNext: index == 0,
+                                  ),
+                                ],
+                              ))
+                          .toList(),
+                    );
+                  })
                 ]
               ],
             ),
