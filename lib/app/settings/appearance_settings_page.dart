@@ -121,7 +121,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     .then((value) => null);
               },
             ),
-            createListSeparator(context, t.settings.lang),
+            createListSeparator(context, t.settings.general.app_colors),
             StreamBuilder(
                 stream: UserSettingService.instance
                     .getSetting(SettingKey.themeMode),
@@ -250,7 +250,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     ),
                   );
                 }),
-            createListSeparator(context, t.settings.lang),
+            createListSeparator(context, t.transaction.display(n: 2)),
             StreamBuilder(
                 stream: UserSettingService.instance
                     .getSetting(SettingKey.transactionMobileMode),

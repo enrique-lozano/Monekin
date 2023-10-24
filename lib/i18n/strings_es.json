@@ -548,6 +548,7 @@
       "other.descr": "Otros ajustes generales de personalización de la app",
       "appearance": "Apariencia",
       "appearance.descr": "Tema de la aplicación, textos...",
+      "app_colors": "Colores de la aplicación",
       "theme": "Tema",
       "theme.auto": "Definido por el sistema",
       "theme.light": "Claro",
