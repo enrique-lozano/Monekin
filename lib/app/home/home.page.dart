@@ -142,7 +142,7 @@ class _HomePageState extends State<HomePage> {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
+        return AlertDialog.adaptive(
           title: Text(t.home.should_create_account_header),
           content: SingleChildScrollView(
               child: Text(t.home.should_create_account_message)),
@@ -150,6 +150,7 @@ class _HomePageState extends State<HomePage> {
             TextButton(
               child: Text(t.general.continue_text),
               onPressed: () {
+                Navigator.pop(context);
                 Navigator.push(
                     context,
                     MaterialPageRoute(
