@@ -1,7 +1,9 @@
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_type_selector.dart';
+import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
@@ -97,6 +99,20 @@ class _AccountFormPageState extends State<AccountFormPage> {
           .updateAccount(accountToSubmit)
           .then((value) => {navigateBack()});
     } else {
+      final db = AppDB.instance;
+
+      final query = db.select(db.accounts)
+        ..addColumns([db.accounts.id.count()])
+        ..where((tbl) => tbl.name.isValue(_nameController.text));
+
+      if (await query.watchSingleOrNull().first != null) {
+        snackbarDisplayer(SnackBar(
+          content: Text(t.account.form.already_exists),
+        ));
+
+        return;
+      }
+
       await accountService
           .insertAccount(accountToSubmit)
           .then((value) => {navigateBack()});

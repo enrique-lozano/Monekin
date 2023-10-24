@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/form/category_form_functions.dart';
 import 'package:monekin/core/database/app_db.dart';
@@ -69,7 +70,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
     super.dispose();
   }
 
-  submitForm() {
+  submitForm() async {
     final messager = ScaffoldMessenger.of(context);
 
     if (categoryToEdit != null) {
@@ -81,14 +82,30 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
           parentCategory: categoryToEdit!.parentCategory,
           type: categoryToEdit!.type);
 
-      CategoryService.instance.updateCategory(categoryToEdit!).then((value) {
+      await CategoryService.instance
+          .updateCategory(categoryToEdit!)
+          .then((value) {
         messager
             .showSnackBar(SnackBar(content: Text(t.categories.edit_success)));
       }).catchError((error) {
         messager.showSnackBar(SnackBar(content: Text(error.toString())));
       });
     } else {
-      CategoryService.instance
+      final db = AppDB.instance;
+
+      final query = db.select(db.categories)
+        ..addColumns([db.categories.id.count()])
+        ..where((tbl) => tbl.name.isValue(_nameController.text));
+
+      if (await query.watchSingleOrNull().first != null) {
+        messager.showSnackBar(SnackBar(
+          content: Text(t.categories.already_exists),
+        ));
+
+        return;
+      }
+
+      await CategoryService.instance
           .insertCategory(CategoryInDB(
               id: const Uuid().v4(),
               name: _nameController.text,
