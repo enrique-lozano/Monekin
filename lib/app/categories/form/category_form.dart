@@ -96,6 +96,8 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
               type: _type,
               color: _color))
           .then((value) {
+        Navigator.pop(context);
+
         messager
             .showSnackBar(SnackBar(content: Text(t.categories.create_success)));
       }).catchError((error) {
