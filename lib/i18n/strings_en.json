@@ -390,6 +390,7 @@
     "currency-converter": "Currency converter",
     "currency": "Currency",
     "currency-manager": "Currency manager",
+    "currency-manager.descr": "Configura tu divisa y sus tipos de cambio con otras",
     "preferred-currency": "Preferred/base currency",
     "change-preferred-currency-title": "Change preferred currency",
     "change-preferred-currency-msg": "All stats and budgets will be displayed in this currency from now on. Accounts and transactions will keep the currency they had. All saved exchange rates will be deleted if you execute this action. Do you wish to continue?",
