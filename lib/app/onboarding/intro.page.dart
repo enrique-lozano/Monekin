@@ -51,13 +51,19 @@ class IntroPage extends StatelessWidget {
       children: [
         Text(
           t.intro.offline_descr_title,
-          style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600),
+          style: Theme.of(context)
+              .textTheme
+              .labelSmall!
+              .copyWith(fontWeight: FontWeight.w600),
         ),
         Text(
           t.intro.offline_descr,
-          style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w200),
+          style: Theme.of(context)
+              .textTheme
+              .labelSmall!
+              .copyWith(fontWeight: FontWeight.w200),
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 12),
         SizedBox(
           // width: double.infinity,
           child: FilledButton.icon(
@@ -72,7 +78,7 @@ class IntroPage extends StatelessWidget {
                 child: Text(t.intro.offline_start),
               )),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 18),
         HTMLText(
           htmlString: t.intro.welcome_footer,
           defaultTextStyle:
