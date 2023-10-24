@@ -50,9 +50,11 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
               prevPage: const RecurrentTransactionPage(),
               periodicityInfo: periodicity,
               showGroupDivider: false,
-              onEmptyList: EmptyIndicator(
-                  title: t.general.empty_warn,
-                  description: t.recurrent_transactions.empty),
+              onEmptyList: Center(
+                child: EmptyIndicator(
+                    title: t.general.empty_warn,
+                    description: t.recurrent_transactions.empty),
+              ),
             ),
           ),
           const Divider(endIndent: 16, indent: 16),

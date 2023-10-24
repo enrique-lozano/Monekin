@@ -331,8 +331,8 @@
     "empty": "It looks like you don't have any recurring transactions. Create a monthly, yearly, or weekly recurring transaction and it will appear here",
     "DETAILS": {
       "title": "Recurrent transaction",
-      "next-payment-info": "The next movement of this transaction will take place on {{date}}. You can choose whether you want to skip this movement or accept it on the date of your choice",
-      "last-payment-info": "The next move for this transaction will take place on {{date}}. This payment will be the last for the recurring rule, so this rule will be automatically removed when this payment is made",
+      "descr": "The next moves for this transaction are shown below. You can accept the first move or skip this move",
+      "last-payment-info": "This movement is the last of the recurring rule, so this rule will be automatically deleted when confirming this action",
       "delete-header": "Delete recurring transaction",
       "delete-message": "This action is irreversible and will not affect transactions you have already confirmed/paid for"
     }

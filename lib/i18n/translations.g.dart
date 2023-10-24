@@ -6,7 +6,7 @@
 /// Locales: 2
 /// Strings: 916 (458 per locale)
 ///
-/// Built on 2023-10-17 at 14:31 UTC
+/// Built on 2023-10-23 at 21:16 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -761,8 +761,8 @@ class _TranslationsRecurrentTransactionsDetailsEn {
 
 	// Translations
 	String get title => 'Recurrent transaction';
-	String next_payment_info({required Object date}) => 'The next movement of this transaction will take place on ${date}. You can choose whether you want to skip this movement or accept it on the date of your choice';
-	String last_payment_info({required Object date}) => 'The next move for this transaction will take place on ${date}. This payment will be the last for the recurring rule, so this rule will be automatically removed when this payment is made';
+	String get descr => 'The next moves for this transaction are shown below. You can accept the first move or skip this move';
+	String get last_payment_info => 'This movement is the last of the recurring rule, so this rule will be automatically deleted upon confirmation';
 	String get delete_header => 'Delete recurring transaction';
 	String get delete_message => 'This action is irreversible and will not affect transactions you have already confirmed/paid for';
 }
@@ -1847,8 +1847,8 @@ class _TranslationsRecurrentTransactionsDetailsEs implements _TranslationsRecurr
 
 	// Translations
 	@override String get title => 'Transaccion recurrente';
-	@override String next_payment_info({required Object date}) => 'El próximo movimiento de esta transacción tendrá lugar el día ${date}. Puedes elegir si deseas saltar este movimiento o aceptarlo en la fecha que elijas';
-	@override String last_payment_info({required Object date}) => 'El próximo movimiento de esta transacción tendrá lugar el día ${date}. Este pago será el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al realizar este pago';
+	@override String get descr => 'A continuación se muestran próximos movimientos de esta transacción. Podrás aceptar el primero de ellos o saltar este movimiento';
+	@override String get last_payment_info => 'Este movimiento es el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al confirmarlo';
 	@override String get delete_header => 'Eliminar transacción recurrente';
 	@override String get delete_message => 'Esta acción es irreversible y no afectará a transacciones que ya hayas confirmado/pagado';
 }
@@ -2574,8 +2574,8 @@ extension on _TranslationsEn {
 			case 'recurrent_transactions.title': return 'Recurrent transactions';
 			case 'recurrent_transactions.empty': return 'It looks like you don\'t have any recurring transactions. Create a monthly, yearly, or weekly recurring transaction and it will appear here';
 			case 'recurrent_transactions.details.title': return 'Recurrent transaction';
-			case 'recurrent_transactions.details.next_payment_info': return ({required Object date}) => 'The next movement of this transaction will take place on ${date}. You can choose whether you want to skip this movement or accept it on the date of your choice';
-			case 'recurrent_transactions.details.last_payment_info': return ({required Object date}) => 'The next move for this transaction will take place on ${date}. This payment will be the last for the recurring rule, so this rule will be automatically removed when this payment is made';
+			case 'recurrent_transactions.details.descr': return 'The next moves for this transaction are shown below. You can accept the first move or skip this move';
+			case 'recurrent_transactions.details.last_payment_info': return 'This movement is the last of the recurring rule, so this rule will be automatically deleted upon confirmation';
 			case 'recurrent_transactions.details.delete_header': return 'Delete recurring transaction';
 			case 'recurrent_transactions.details.delete_message': return 'This action is irreversible and will not affect transactions you have already confirmed/paid for';
 			case 'account.details': return 'Account details';
@@ -3068,8 +3068,8 @@ extension on _TranslationsEs {
 			case 'recurrent_transactions.title': return 'Movimientos recurrentes';
 			case 'recurrent_transactions.empty': return 'Parece que no posees ninguna transacción recurrente. Crea una transacción que se repita mensual, anual o semanalmente y aparecerá aquí';
 			case 'recurrent_transactions.details.title': return 'Transaccion recurrente';
-			case 'recurrent_transactions.details.next_payment_info': return ({required Object date}) => 'El próximo movimiento de esta transacción tendrá lugar el día ${date}. Puedes elegir si deseas saltar este movimiento o aceptarlo en la fecha que elijas';
-			case 'recurrent_transactions.details.last_payment_info': return ({required Object date}) => 'El próximo movimiento de esta transacción tendrá lugar el día ${date}. Este pago será el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al realizar este pago';
+			case 'recurrent_transactions.details.descr': return 'A continuación se muestran próximos movimientos de esta transacción. Podrás aceptar el primero de ellos o saltar este movimiento';
+			case 'recurrent_transactions.details.last_payment_info': return 'Este movimiento es el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al confirmarlo';
 			case 'recurrent_transactions.details.delete_header': return 'Eliminar transacción recurrente';
 			case 'recurrent_transactions.details.delete_message': return 'Esta acción es irreversible y no afectará a transacciones que ya hayas confirmado/pagado';
 			case 'account.details': return 'Detalles de la cuenta';
