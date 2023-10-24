@@ -332,8 +332,8 @@
     "empty": "Parece que no posees ninguna transacción recurrente. Crea una transacción que se repita mensual, anual o semanalmente y aparecerá aquí",
     "DETAILS": {
       "title": "Transaccion recurrente",
-      "next-payment-info": "El próximo movimiento de esta transacción tendrá lugar el día {{date}}. Puedes elegir si deseas saltar este movimiento o aceptarlo en la fecha que elijas",
-      "last-payment-info": "El próximo movimiento de esta transacción tendrá lugar el día {{date}}. Este pago será el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al realizar este pago",
+      "descr": "A continuación se muestran próximos movimientos de esta transacción. Podrás aceptar el primero de ellos o saltar este movimiento",
+      "last-payment-info": "Este movimiento es el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al confirmar esta acción",
       "delete-header": "Eliminar transacción recurrente",
       "delete-message": "Esta acción es irreversible y no afectará a transacciones que ya hayas confirmado/pagado"
     }
