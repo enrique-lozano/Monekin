@@ -228,7 +228,7 @@ class MoneyTransaction extends TransactionInDB {
   int daysToPay() {
     if (recurrentInfo.isNoRecurrent && status != TransactionStatus.pending) {
       throw Exception(
-          'The transaction should be recurrent to get the following dates');
+          'The transaction should be recurrent or pending to get this data');
     }
 
     return date.difference(DateTime.now()).inDays;
@@ -293,7 +293,12 @@ class MoneyTransaction extends TransactionInDB {
     throw Exception('We could not calculate this value');
   }
 
-  /// Get the following dates of a recurring transaction, disregarding the most immediate upcoming transaction, referenced in the `date` attribute of this class.
+  bool get isOnLastPayment => getNextDatesOfRecurrency(limit: 2).length == 1;
+
+  DateTime? get followingDateToNext =>
+      getNextDatesOfRecurrency(limit: 2).elementAtOrNull(1);
+
+  /// Get the following dates of a recurring transaction
   ///
   /// You can pass certain limits (date or number of iter.) as parameters so that the function does not return an array of infinite dates. These limits will not be taken into account if there is already a stricter limit in the transaction.
   List<DateTime> getNextDatesOfRecurrency({DateTime? untilDate, int? limit}) {
@@ -325,22 +330,31 @@ class MoneyTransaction extends TransactionInDB {
       return toReturn;
     }
 
+    toReturn.add(date);
+
     while (limit == null || toReturn.length < limit) {
       late DateTime toPush;
 
-      if (recurrentInfo.intervalPeriod == TransactionPeriodicity.day) {
-        toPush = date.add(Duration(days: recurrentInfo.intervalEach!));
-      } else if (recurrentInfo.intervalPeriod == TransactionPeriodicity.week) {
-        toPush = date.add(Duration(days: recurrentInfo.intervalEach! * 7));
-      } else if (recurrentInfo.intervalPeriod == TransactionPeriodicity.month) {
-        toPush = date.copyWith(month: date.month + recurrentInfo.intervalEach!);
+      int multiplier = toReturn.length;
 
-        if (toPush.month > date.month + recurrentInfo.intervalEach!) {
+      if (recurrentInfo.intervalPeriod == TransactionPeriodicity.day) {
+        toPush =
+            date.add(Duration(days: recurrentInfo.intervalEach! * multiplier));
+      } else if (recurrentInfo.intervalPeriod == TransactionPeriodicity.week) {
+        toPush = date
+            .add(Duration(days: recurrentInfo.intervalEach! * 7 * multiplier));
+      } else if (recurrentInfo.intervalPeriod == TransactionPeriodicity.month) {
+        toPush = date.copyWith(
+            month: date.month + recurrentInfo.intervalEach! * multiplier);
+
+        if (toPush.month >
+            date.month + recurrentInfo.intervalEach! * multiplier) {
           toPush = date.copyWith(
-              month: date.month + recurrentInfo.intervalEach! + 1);
+              month: date.month + recurrentInfo.intervalEach! * multiplier + 1);
         }
       } else if (recurrentInfo.intervalPeriod == TransactionPeriodicity.year) {
-        toPush = date.copyWith(year: date.year + recurrentInfo.intervalEach!);
+        toPush = date.copyWith(
+            year: date.year + recurrentInfo.intervalEach! * multiplier);
       }
 
       if (untilDate != null && toPush.compareTo(untilDate) > 0) {
