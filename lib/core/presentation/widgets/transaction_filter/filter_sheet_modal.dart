@@ -81,7 +81,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
         selected: isSelected,
         showCheckmark: false,
         avatar: Icon(
-          type.icon(),
+          type.icon,
           color: type.color(context),
         ),
         onSelected: (value) {
