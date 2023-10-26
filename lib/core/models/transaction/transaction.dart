@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/transactions/form/widgets/interval_selector_help.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/theme.dart';
