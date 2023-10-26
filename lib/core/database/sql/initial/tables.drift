@@ -5,6 +5,7 @@
 
 import './../../../models/transaction/transaction.dart';
 import './../../../models/transaction/transaction_status.dart';
+import './../../../models/transaction/transaction_periodicity.dart';
 import './../../../models/category/category.dart';
 import './../../../models/account/account.dart';
 import './../../services/user-setting/user_setting_service.dart';
