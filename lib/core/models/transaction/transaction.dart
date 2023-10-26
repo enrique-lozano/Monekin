@@ -66,7 +66,7 @@ enum TransactionType {
     return '';
   }
 
-  IconData icon() {
+  IconData get icon {
     if (this == income) {
       return Icons.south_east_rounded;
     } else if (this == expense) {
