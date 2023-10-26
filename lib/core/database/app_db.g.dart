@@ -2157,17 +2157,17 @@ class ExchangeRatesCompanion extends UpdateCompanion<ExchangeRateInDB> {
   }
 }
 
-class Tags extends Table with TableInfo<Tags, Tag> {
+class Tags extends Table with TableInfo<Tags, TagInDB> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   Tags(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, true,
+      'id', aliasedName, false,
       type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      $customConstraints: 'PRIMARY KEY');
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL PRIMARY KEY');
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
@@ -2194,12 +2194,14 @@ class Tags extends Table with TableInfo<Tags, Tag> {
   @override
   String get actualTableName => 'tags';
   @override
-  VerificationContext validateIntegrity(Insertable<Tag> instance,
+  VerificationContext validateIntegrity(Insertable<TagInDB> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
@@ -2225,11 +2227,11 @@ class Tags extends Table with TableInfo<Tags, Tag> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Tag map(Map<String, dynamic> data, {String? tablePrefix}) {
+  TagInDB map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Tag(
+    return TagInDB(
       id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id']),
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       color: attachedDatabase.typeMapping
@@ -2248,8 +2250,8 @@ class Tags extends Table with TableInfo<Tags, Tag> {
   bool get dontWriteConstraints => true;
 }
 
-class Tag extends DataClass implements Insertable<Tag> {
-  final String? id;
+class TagInDB extends DataClass implements Insertable<TagInDB> {
+  final String id;
 
   /// The name of the tag
   final String name;
@@ -2259,14 +2261,15 @@ class Tag extends DataClass implements Insertable<Tag> {
 
   /// The description of the tag
   final String? description;
-  const Tag(
-      {this.id, required this.name, required this.color, this.description});
+  const TagInDB(
+      {required this.id,
+      required this.name,
+      required this.color,
+      this.description});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (!nullToAbsent || id != null) {
-      map['id'] = Variable<String>(id);
-    }
+    map['id'] = Variable<String>(id);
     map['name'] = Variable<String>(name);
     map['color'] = Variable<String>(color);
     if (!nullToAbsent || description != null) {
@@ -2277,7 +2280,7 @@ class Tag extends DataClass implements Insertable<Tag> {
 
   TagsCompanion toCompanion(bool nullToAbsent) {
     return TagsCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      id: Value(id),
       name: Value(name),
       color: Value(color),
       description: description == null && nullToAbsent
@@ -2286,11 +2289,11 @@ class Tag extends DataClass implements Insertable<Tag> {
     );
   }
 
-  factory Tag.fromJson(Map<String, dynamic> json,
+  factory TagInDB.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Tag(
-      id: serializer.fromJson<String?>(json['id']),
+    return TagInDB(
+      id: serializer.fromJson<String>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       color: serializer.fromJson<String>(json['color']),
       description: serializer.fromJson<String?>(json['description']),
@@ -2300,27 +2303,27 @@ class Tag extends DataClass implements Insertable<Tag> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<String?>(id),
+      'id': serializer.toJson<String>(id),
       'name': serializer.toJson<String>(name),
       'color': serializer.toJson<String>(color),
       'description': serializer.toJson<String?>(description),
     };
   }
 
-  Tag copyWith(
-          {Value<String?> id = const Value.absent(),
+  TagInDB copyWith(
+          {String? id,
           String? name,
           String? color,
           Value<String?> description = const Value.absent()}) =>
-      Tag(
-        id: id.present ? id.value : this.id,
+      TagInDB(
+        id: id ?? this.id,
         name: name ?? this.name,
         color: color ?? this.color,
         description: description.present ? description.value : this.description,
       );
   @override
   String toString() {
-    return (StringBuffer('Tag(')
+    return (StringBuffer('TagInDB(')
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('color: $color, ')
@@ -2334,15 +2337,15 @@ class Tag extends DataClass implements Insertable<Tag> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Tag &&
+      (other is TagInDB &&
           other.id == this.id &&
           other.name == this.name &&
           other.color == this.color &&
           other.description == this.description);
 }
 
-class TagsCompanion extends UpdateCompanion<Tag> {
-  final Value<String?> id;
+class TagsCompanion extends UpdateCompanion<TagInDB> {
+  final Value<String> id;
   final Value<String> name;
   final Value<String> color;
   final Value<String?> description;
@@ -2355,14 +2358,15 @@ class TagsCompanion extends UpdateCompanion<Tag> {
     this.rowid = const Value.absent(),
   });
   TagsCompanion.insert({
-    this.id = const Value.absent(),
+    required String id,
     required String name,
     required String color,
     this.description = const Value.absent(),
     this.rowid = const Value.absent(),
-  })  : name = Value(name),
+  })  : id = Value(id),
+        name = Value(name),
         color = Value(color);
-  static Insertable<Tag> custom({
+  static Insertable<TagInDB> custom({
     Expression<String>? id,
     Expression<String>? name,
     Expression<String>? color,
@@ -2379,7 +2383,7 @@ class TagsCompanion extends UpdateCompanion<Tag> {
   }
 
   TagsCompanion copyWith(
-      {Value<String?>? id,
+      {Value<String>? id,
       Value<String>? name,
       Value<String>? color,
       Value<String?>? description,

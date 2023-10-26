@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/models/tags/tag.dart';
 
 class TagService {
   final AppDB db;
@@ -7,11 +8,11 @@ class TagService {
   TagService._(this.db);
   static final TagService instance = TagService._(AppDB.instance);
 
-  Future<int> insertTag(Tag tag) {
+  Future<int> insertTag(TagInDB tag) {
     return db.into(db.tags).insert(tag);
   }
 
-  Future<bool> updateTag(Tag tag) {
+  Future<bool> updateTag(TagInDB tag) {
     return db.update(db.tags).replace(tag);
   }
 
@@ -29,6 +30,9 @@ class TagService {
     return (db.select(db.tags)
           ..where(filter ?? (tbl) => const CustomExpression('(TRUE)'))
           ..limit(limit, offset: offset))
-        .watch();
+        .watch()
+        .map(
+          (event) => event.map((e) => Tag.fromTagInDB(e)).toList(),
+        );
   }
 }
