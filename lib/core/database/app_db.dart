@@ -13,6 +13,7 @@ import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
