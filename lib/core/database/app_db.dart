@@ -50,7 +50,7 @@ class AppDB extends _$AppDB {
     print('Executing migrations from previous version...');
 
     for (var i = from + 1; i <= to; i++) {
-      print("Migrating database from v$from to v$i:");
+      print("Migrating database from v$from to v$i...");
 
       String initialSQL =
           await rootBundle.loadString('assets/sql/migrations/v$i.sql');
@@ -68,6 +68,8 @@ class AppDB extends _$AppDB {
       await AppDataService.instance
           .setAppDataItem(AppDataKey.dbVersion, i.toStringAsFixed(0));
     }
+
+    print('Migration completed!');
   }
 
   @override
