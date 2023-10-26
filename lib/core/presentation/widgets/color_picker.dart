@@ -42,12 +42,13 @@ final colorOptions = [
 ];
 
 class ColorPicker extends StatefulWidget {
-  const ColorPicker(
-      {super.key,
-      required this.colorOptions,
-      this.selectedColor,
-      this.onColorSelected,
-      this.padding = const EdgeInsets.only(top: 8, bottom: 16)});
+  const ColorPicker({
+    super.key,
+    required this.colorOptions,
+    this.selectedColor,
+    this.onColorSelected,
+    this.padding = const EdgeInsets.only(top: 8, bottom: 16),
+  });
 
   final List<String> colorOptions;
 
