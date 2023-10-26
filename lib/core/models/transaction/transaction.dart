@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
 import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
@@ -122,7 +123,7 @@ class MoneyTransaction extends TransactionInDB {
       CategoryInDB? parentCategory,
       this.currentValueInDestinyInPreferredCurrency,
       required this.currentValueInPreferredCurrency,
-      required this.tags,
+      required List<TagInDB> tags,
       super.endDate,
       super.intervalEach,
       super.intervalPeriod,
@@ -134,6 +135,7 @@ class MoneyTransaction extends TransactionInDB {
             receivingAccount != null && receivingAccountCurrency != null
                 ? Account.fromDB(receivingAccount, receivingAccountCurrency)
                 : null,
+        tags = tags.map((e) => Tag.fromTagInDB(e)).toList(),
         recurrentInfo = RecurrencyData(
           intervalEach: intervalEach,
           intervalPeriod: intervalPeriod,

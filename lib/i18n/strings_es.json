@@ -412,6 +412,26 @@
     "search-title": "Toca para buscar",
     "search-placeholder": "Busca por nombre o por código de la divisa"
   },
+  "TAGS": {
+    "display": {
+      "one": "Etiqueta",
+      "other": "Etiquetas"
+    },
+    "FORM": {
+      "name": "Nombre de la etiqueta",
+      "description": "Descripción"
+    },
+    "select": "Selecionar etiquetas",
+    "create": "Crear etiqueta",
+    "add": "Añadir etiqueta",
+    "create.success": "Etiqueta creada correctamente",
+    "already-exists": "El nombre de esta etiqueta ya existe. Puede que quieras editarla",
+    "edit": "Editar etiqueta",
+    "edit.success": "Etiqueta editada correctamente",
+    "delete.success": "Categoría eliminada correctamente",
+    "delete-warning-header": "¿Eliminar etiqueta?",
+    "delete-warning-message": "Esta acción no borrará las transacciones que poseen esta etiqueta."
+  },
   "CATEGORIES": {
     "unknown": "Categoría desconocida",
     "create": "Crear categoría",

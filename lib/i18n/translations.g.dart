@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 920 (460 per locale)
+/// Strings: 948 (474 per locale)
 ///
-/// Built on 2023-10-24 at 17:18 UTC
+/// Built on 2023-10-26 at 21:34 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -161,6 +161,7 @@ class _TranslationsEn implements BaseTranslations<AppLocale, _TranslationsEn> {
 	late final _TranslationsRecurrentTransactionsEn recurrent_transactions = _TranslationsRecurrentTransactionsEn._(_root);
 	late final _TranslationsAccountEn account = _TranslationsAccountEn._(_root);
 	late final _TranslationsCurrenciesEn currencies = _TranslationsCurrenciesEn._(_root);
+	late final _TranslationsTagsEn tags = _TranslationsTagsEn._(_root);
 	late final _TranslationsCategoriesEn categories = _TranslationsCategoriesEn._(_root);
 	late final _TranslationsBudgetsEn budgets = _TranslationsBudgetsEn._(_root);
 	late final _TranslationsBackupEn backup = _TranslationsBackupEn._(_root);
@@ -408,6 +409,30 @@ class _TranslationsCurrenciesEn {
 	String get select_a_currency => 'Select a currency';
 	String get search_title => 'Tap to search';
 	String get search_placeholder => 'Search by name or by currency code';
+}
+
+// Path: tags
+class _TranslationsTagsEn {
+	_TranslationsTagsEn._(this._root);
+
+	final _TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		one: 'Label',
+		other: 'Tags',
+	);
+	late final _TranslationsTagsFormEn form = _TranslationsTagsFormEn._(_root);
+	String get select => 'Select tags';
+	String get add => 'Add tag';
+	String get create => 'Create label';
+	String get create_success => 'Label created successfully';
+	String get already_exists => 'This tag name already exists. You may want to edit it';
+	String get edit => 'Edit tag';
+	String get edit_success => 'Tag edited successfully';
+	String get delete_success => 'Category deleted successfully';
+	String get delete_warning_header => 'Delete tag?';
+	String get delete_warning_message => 'This action will not delete transactions that have this tag.';
 }
 
 // Path: categories
@@ -858,6 +883,17 @@ class _TranslationsCurrenciesFormEn {
 	String get edit_success => 'Exchange rate edited successfully';
 }
 
+// Path: tags.form
+class _TranslationsTagsFormEn {
+	_TranslationsTagsFormEn._(this._root);
+
+	final _TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	String get name => 'Tag name';
+	String get description => 'Description';
+}
+
 // Path: categories.select
 class _TranslationsCategoriesSelectEn {
 	_TranslationsCategoriesSelectEn._(this._root);
@@ -1249,6 +1285,7 @@ class _TranslationsEs implements _TranslationsEn {
 	@override late final _TranslationsRecurrentTransactionsEs recurrent_transactions = _TranslationsRecurrentTransactionsEs._(_root);
 	@override late final _TranslationsAccountEs account = _TranslationsAccountEs._(_root);
 	@override late final _TranslationsCurrenciesEs currencies = _TranslationsCurrenciesEs._(_root);
+	@override late final _TranslationsTagsEs tags = _TranslationsTagsEs._(_root);
 	@override late final _TranslationsCategoriesEs categories = _TranslationsCategoriesEs._(_root);
 	@override late final _TranslationsBudgetsEs budgets = _TranslationsBudgetsEs._(_root);
 	@override late final _TranslationsBackupEs backup = _TranslationsBackupEs._(_root);
@@ -1496,6 +1533,30 @@ class _TranslationsCurrenciesEs implements _TranslationsCurrenciesEn {
 	@override String get select_a_currency => 'Selecciona una divisa';
 	@override String get search_title => 'Toca para buscar';
 	@override String get search_placeholder => 'Busca por nombre o por código de la divisa';
+}
+
+// Path: tags
+class _TranslationsTagsEs implements _TranslationsTagsEn {
+	_TranslationsTagsEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		one: 'Etiqueta',
+		other: 'Etiquetas',
+	);
+	@override late final _TranslationsTagsFormEs form = _TranslationsTagsFormEs._(_root);
+	@override String get select => 'Selecionar etiquetas';
+	@override String get create => 'Crear etiqueta';
+	@override String get add => 'Añadir etiqueta';
+	@override String get create_success => 'Etiqueta creada correctamente';
+	@override String get already_exists => 'El nombre de esta etiqueta ya existe. Puede que quieras editarla';
+	@override String get edit => 'Editar etiqueta';
+	@override String get edit_success => 'Etiqueta editada correctamente';
+	@override String get delete_success => 'Categoría eliminada correctamente';
+	@override String get delete_warning_header => '¿Eliminar etiqueta?';
+	@override String get delete_warning_message => 'Esta acción no borrará las transacciones que poseen esta etiqueta.';
 }
 
 // Path: categories
@@ -1944,6 +2005,17 @@ class _TranslationsCurrenciesFormEs implements _TranslationsCurrenciesFormEn {
 	@override String get add_success => 'Tipo de cambio añadido correctamente';
 	@override String get edit => 'Editar tipo de cambio';
 	@override String get edit_success => 'Tipo de cambio editado correctamente';
+}
+
+// Path: tags.form
+class _TranslationsTagsFormEs implements _TranslationsTagsFormEn {
+	_TranslationsTagsFormEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Nombre de la etiqueta';
+	@override String get description => 'Descripción';
 }
 
 // Path: categories.select
@@ -2640,6 +2712,22 @@ extension on _TranslationsEn {
 			case 'currencies.select_a_currency': return 'Select a currency';
 			case 'currencies.search_title': return 'Tap to search';
 			case 'currencies.search_placeholder': return 'Search by name or by currency code';
+			case 'tags.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+				one: 'Label',
+				other: 'Tags',
+			);
+			case 'tags.form.name': return 'Tag name';
+			case 'tags.form.description': return 'Description';
+			case 'tags.select': return 'Select tags';
+			case 'tags.add': return 'Add tag';
+			case 'tags.create': return 'Create label';
+			case 'tags.create_success': return 'Label created successfully';
+			case 'tags.already_exists': return 'This tag name already exists. You may want to edit it';
+			case 'tags.edit': return 'Edit tag';
+			case 'tags.edit_success': return 'Tag edited successfully';
+			case 'tags.delete_success': return 'Category deleted successfully';
+			case 'tags.delete_warning_header': return 'Delete tag?';
+			case 'tags.delete_warning_message': return 'This action will not delete transactions that have this tag.';
 			case 'categories.unknown': return 'Unknown category';
 			case 'categories.create': return 'Create category';
 			case 'categories.create_success': return 'Category created correctly';
@@ -3136,6 +3224,22 @@ extension on _TranslationsEs {
 			case 'currencies.select_a_currency': return 'Selecciona una divisa';
 			case 'currencies.search_title': return 'Toca para buscar';
 			case 'currencies.search_placeholder': return 'Busca por nombre o por código de la divisa';
+			case 'tags.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+				one: 'Etiqueta',
+				other: 'Etiquetas',
+			);
+			case 'tags.form.name': return 'Nombre de la etiqueta';
+			case 'tags.form.description': return 'Descripción';
+			case 'tags.select': return 'Selecionar etiquetas';
+			case 'tags.create': return 'Crear etiqueta';
+			case 'tags.add': return 'Añadir etiqueta';
+			case 'tags.create_success': return 'Etiqueta creada correctamente';
+			case 'tags.already_exists': return 'El nombre de esta etiqueta ya existe. Puede que quieras editarla';
+			case 'tags.edit': return 'Editar etiqueta';
+			case 'tags.edit_success': return 'Etiqueta editada correctamente';
+			case 'tags.delete_success': return 'Categoría eliminada correctamente';
+			case 'tags.delete_warning_header': return '¿Eliminar etiqueta?';
+			case 'tags.delete_warning_message': return 'Esta acción no borrará las transacciones que poseen esta etiqueta.';
 			case 'categories.unknown': return 'Categoría desconocida';
 			case 'categories.create': return 'Crear categoría';
 			case 'categories.create_success': return 'Categoría creada correctamente';

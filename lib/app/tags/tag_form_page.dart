@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
+import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/presentation/widgets/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/utils/color_utils.dart';
@@ -46,7 +47,7 @@ class _TagFormPageState extends State<TagFormPage> {
     final tagToEdit = Tag(
       id: widget.tag?.id ?? const Uuid().v4(),
       name: _nameController.text,
-      description: _descrController.text,
+      description: _descrController.text.isEmpty ? null : _descrController.text,
       color: _color,
     );
 
@@ -66,7 +67,7 @@ class _TagFormPageState extends State<TagFormPage> {
 
       if (await query.watchSingleOrNull().first != null) {
         messager.showSnackBar(SnackBar(
-          content: Text("ALREADY"),
+          content: Text(t.tags.already_exists),
         ));
 
         return;
@@ -88,7 +89,8 @@ class _TagFormPageState extends State<TagFormPage> {
     final t = Translations.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text("Tag")),
+      appBar:
+          AppBar(title: Text(widget.tag != null ? t.tags.edit : t.tags.add)),
       persistentFooterButtons: [
         PersistentFooterButton(
           child: FilledButton.icon(
@@ -124,7 +126,7 @@ class _TagFormPageState extends State<TagFormPage> {
                             controller: _nameController,
                             maxLength: maxLabelLenghtForDisplayNames,
                             decoration: InputDecoration(
-                              labelText: '${t.categories.name} *',
+                              labelText: '${t.tags.form.name} *',
                               hintText: 'Ex.: Food',
                             ),
                             validator: (value) =>
@@ -141,7 +143,7 @@ class _TagFormPageState extends State<TagFormPage> {
                       controller: _descrController,
                       maxLines: 2,
                       decoration: InputDecoration(
-                        labelText: t.categories.name,
+                        labelText: t.tags.form.description,
                         hintText: 'Ex.: Food',
                         alignLabelWithHint: true,
                       ),

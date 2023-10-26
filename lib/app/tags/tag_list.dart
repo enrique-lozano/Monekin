@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/tags/tag_form_page.dart';
-import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
+import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
-import 'package:monekin/core/utils/color_utils.dart';
+import 'package:monekin/i18n/translations.g.dart';
 
 Future<List<Tag>?> showTagListModal(BuildContext context, TagList page) {
   return showModalBottomSheet<List<Tag>>(
@@ -65,7 +65,7 @@ class _TagListState extends State<TagList> {
                   value: selectedTags.any((element) => element.id == tag.id),
                   secondary: Icon(
                     Icons.sell_rounded,
-                    color: ColorHex.get(tag.color),
+                    color: tag.colorData,
                   ),
                   title: Text(tag.name),
                   subtitle:
@@ -90,7 +90,7 @@ class _TagListState extends State<TagList> {
               return ListTile(
                 leading: Icon(
                   Icons.sell_rounded,
-                  color: ColorHex.get(tag.color),
+                  color: tag.colorData,
                 ),
                 title: Text(tag.name),
                 subtitle: tag.description != null && tag.description!.isNotEmpty
@@ -111,6 +111,8 @@ class _TagListState extends State<TagList> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
+
     if (widget.isModal) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,7 +120,7 @@ class _TagListState extends State<TagList> {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
             child: Text(
-              "Seleccionar tags",
+              t.tags.select,
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
@@ -139,7 +141,7 @@ class _TagListState extends State<TagList> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text("Tags")),
+      appBar: AppBar(title: Text(t.tags.display(n: 10))),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add_rounded),
         onPressed: () => Navigator.push(

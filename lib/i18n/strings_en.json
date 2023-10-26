@@ -411,6 +411,26 @@
     "search-title": "Tap to search",
     "search-placeholder": "Search by name or by currency code"
   },
+  "TAGS": {
+    "display": {
+      "one": "Label",
+      "other": "Tags"
+    },
+    "FORM": {
+      "name": "Tag name",
+      "description": "Description"
+    },
+    "select": "Select tags",
+    "add": "Add tag",
+    "create": "Create label",
+    "create.success": "Label created successfully",
+    "already-exists": "This tag name already exists. You may want to edit it",
+    "edit": "Edit tag",
+    "edit.success": "Tag edited successfully",
+    "delete.success": "Category deleted successfully",
+    "delete-warning-header": "Delete tag?",
+    "delete-warning-message": "This action will not delete transactions that have this tag."
+  },
   "CATEGORIES": {
     "unknown": "Unknown category",
     "create": "Create category",

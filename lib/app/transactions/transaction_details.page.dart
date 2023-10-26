@@ -625,6 +625,38 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                           ? t.general.category
                                           : t.transfer.form.to),
                                     ),
+                                    if (transaction.tags.isNotEmpty) ...[
+                                      const Divider(indent: 12),
+                                      ListTile(
+                                        title: Text("Tags"),
+                                        subtitle: Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 4),
+                                          child: Wrap(
+                                            spacing: 6,
+                                            runSpacing: 0,
+                                            children: List.generate(
+                                                transaction.tags.length,
+                                                (index) {
+                                              final tag =
+                                                  transaction.tags[index];
+
+                                              return Chip(
+                                                label: Text(
+                                                  tag.name,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .labelSmall,
+                                                ),
+                                                avatar: Icon(Icons.sell,
+                                                    color:
+                                                        tag.colorData.darken()),
+                                              );
+                                            }),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                     StreamBuilder(
                                         stream: CurrencyService.instance
                                             .getUserPreferredCurrency(),
