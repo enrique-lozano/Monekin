@@ -2157,6 +2157,469 @@ class ExchangeRatesCompanion extends UpdateCompanion<ExchangeRateInDB> {
   }
 }
 
+class Tags extends Table with TableInfo<Tags, Tag> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  Tags(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: 'PRIMARY KEY');
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'UNIQUE NOT NULL');
+  static const VerificationMeta _colorMeta = const VerificationMeta('color');
+  late final GeneratedColumn<String> color = GeneratedColumn<String>(
+      'color', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
+  static const VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+      'description', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  @override
+  List<GeneratedColumn> get $columns => [id, name, color, description];
+  @override
+  String get aliasedName => _alias ?? 'tags';
+  @override
+  String get actualTableName => 'tags';
+  @override
+  VerificationContext validateIntegrity(Insertable<Tag> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('color')) {
+      context.handle(
+          _colorMeta, color.isAcceptableOrUnknown(data['color']!, _colorMeta));
+    } else if (isInserting) {
+      context.missing(_colorMeta);
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+          _descriptionMeta,
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Tag map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Tag(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id']),
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      color: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}color'])!,
+      description: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}description']),
+    );
+  }
+
+  @override
+  Tags createAlias(String alias) {
+    return Tags(attachedDatabase, alias);
+  }
+
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class Tag extends DataClass implements Insertable<Tag> {
+  final String? id;
+
+  /// The name of the tag
+  final String name;
+
+  /// The display color of the tag
+  final String color;
+
+  /// The description of the tag
+  final String? description;
+  const Tag(
+      {this.id, required this.name, required this.color, this.description});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<String>(id);
+    }
+    map['name'] = Variable<String>(name);
+    map['color'] = Variable<String>(color);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
+    return map;
+  }
+
+  TagsCompanion toCompanion(bool nullToAbsent) {
+    return TagsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      name: Value(name),
+      color: Value(color),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
+    );
+  }
+
+  factory Tag.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Tag(
+      id: serializer.fromJson<String?>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      color: serializer.fromJson<String>(json['color']),
+      description: serializer.fromJson<String?>(json['description']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String?>(id),
+      'name': serializer.toJson<String>(name),
+      'color': serializer.toJson<String>(color),
+      'description': serializer.toJson<String?>(description),
+    };
+  }
+
+  Tag copyWith(
+          {Value<String?> id = const Value.absent(),
+          String? name,
+          String? color,
+          Value<String?> description = const Value.absent()}) =>
+      Tag(
+        id: id.present ? id.value : this.id,
+        name: name ?? this.name,
+        color: color ?? this.color,
+        description: description.present ? description.value : this.description,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Tag(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('color: $color, ')
+          ..write('description: $description')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name, color, description);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Tag &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.color == this.color &&
+          other.description == this.description);
+}
+
+class TagsCompanion extends UpdateCompanion<Tag> {
+  final Value<String?> id;
+  final Value<String> name;
+  final Value<String> color;
+  final Value<String?> description;
+  final Value<int> rowid;
+  const TagsCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.color = const Value.absent(),
+    this.description = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  TagsCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    required String color,
+    this.description = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : name = Value(name),
+        color = Value(color);
+  static Insertable<Tag> custom({
+    Expression<String>? id,
+    Expression<String>? name,
+    Expression<String>? color,
+    Expression<String>? description,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (color != null) 'color': color,
+      if (description != null) 'description': description,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  TagsCompanion copyWith(
+      {Value<String?>? id,
+      Value<String>? name,
+      Value<String>? color,
+      Value<String?>? description,
+      Value<int>? rowid}) {
+    return TagsCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      color: color ?? this.color,
+      description: description ?? this.description,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (color.present) {
+      map['color'] = Variable<String>(color.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TagsCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('color: $color, ')
+          ..write('description: $description, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class TransactionTags extends Table
+    with TableInfo<TransactionTags, TransactionTag> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  TransactionTags(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _transactionIDMeta =
+      const VerificationMeta('transactionID');
+  late final GeneratedColumn<String> transactionID = GeneratedColumn<String>(
+      'transactionID', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints:
+          'NOT NULL REFERENCES transactions(id)ON UPDATE CASCADE ON DELETE CASCADE');
+  static const VerificationMeta _tagIDMeta = const VerificationMeta('tagID');
+  late final GeneratedColumn<String> tagID = GeneratedColumn<String>(
+      'tagID', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints:
+          'NOT NULL REFERENCES tags(id)ON UPDATE CASCADE ON DELETE CASCADE');
+  @override
+  List<GeneratedColumn> get $columns => [transactionID, tagID];
+  @override
+  String get aliasedName => _alias ?? 'transactionTags';
+  @override
+  String get actualTableName => 'transactionTags';
+  @override
+  VerificationContext validateIntegrity(Insertable<TransactionTag> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('transactionID')) {
+      context.handle(
+          _transactionIDMeta,
+          transactionID.isAcceptableOrUnknown(
+              data['transactionID']!, _transactionIDMeta));
+    } else if (isInserting) {
+      context.missing(_transactionIDMeta);
+    }
+    if (data.containsKey('tagID')) {
+      context.handle(
+          _tagIDMeta, tagID.isAcceptableOrUnknown(data['tagID']!, _tagIDMeta));
+    } else if (isInserting) {
+      context.missing(_tagIDMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => const {};
+  @override
+  TransactionTag map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TransactionTag(
+      transactionID: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}transactionID'])!,
+      tagID: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}tagID'])!,
+    );
+  }
+
+  @override
+  TransactionTags createAlias(String alias) {
+    return TransactionTags(attachedDatabase, alias);
+  }
+
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class TransactionTag extends DataClass implements Insertable<TransactionTag> {
+  final String transactionID;
+  final String tagID;
+  const TransactionTag({required this.transactionID, required this.tagID});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['transactionID'] = Variable<String>(transactionID);
+    map['tagID'] = Variable<String>(tagID);
+    return map;
+  }
+
+  TransactionTagsCompanion toCompanion(bool nullToAbsent) {
+    return TransactionTagsCompanion(
+      transactionID: Value(transactionID),
+      tagID: Value(tagID),
+    );
+  }
+
+  factory TransactionTag.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TransactionTag(
+      transactionID: serializer.fromJson<String>(json['transactionID']),
+      tagID: serializer.fromJson<String>(json['tagID']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'transactionID': serializer.toJson<String>(transactionID),
+      'tagID': serializer.toJson<String>(tagID),
+    };
+  }
+
+  TransactionTag copyWith({String? transactionID, String? tagID}) =>
+      TransactionTag(
+        transactionID: transactionID ?? this.transactionID,
+        tagID: tagID ?? this.tagID,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('TransactionTag(')
+          ..write('transactionID: $transactionID, ')
+          ..write('tagID: $tagID')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(transactionID, tagID);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TransactionTag &&
+          other.transactionID == this.transactionID &&
+          other.tagID == this.tagID);
+}
+
+class TransactionTagsCompanion extends UpdateCompanion<TransactionTag> {
+  final Value<String> transactionID;
+  final Value<String> tagID;
+  final Value<int> rowid;
+  const TransactionTagsCompanion({
+    this.transactionID = const Value.absent(),
+    this.tagID = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  TransactionTagsCompanion.insert({
+    required String transactionID,
+    required String tagID,
+    this.rowid = const Value.absent(),
+  })  : transactionID = Value(transactionID),
+        tagID = Value(tagID);
+  static Insertable<TransactionTag> custom({
+    Expression<String>? transactionID,
+    Expression<String>? tagID,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (transactionID != null) 'transactionID': transactionID,
+      if (tagID != null) 'tagID': tagID,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  TransactionTagsCompanion copyWith(
+      {Value<String>? transactionID, Value<String>? tagID, Value<int>? rowid}) {
+    return TransactionTagsCompanion(
+      transactionID: transactionID ?? this.transactionID,
+      tagID: tagID ?? this.tagID,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (transactionID.present) {
+      map['transactionID'] = Variable<String>(transactionID.value);
+    }
+    if (tagID.present) {
+      map['tagID'] = Variable<String>(tagID.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TransactionTagsCompanion(')
+          ..write('transactionID: $transactionID, ')
+          ..write('tagID: $tagID, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class Budgets extends Table with TableInfo<Budgets, BudgetInDB> {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -3558,6 +4021,8 @@ abstract class _$AppDB extends GeneratedDatabase {
   late final Categories categories = Categories(this);
   late final Transactions transactions = Transactions(this);
   late final ExchangeRates exchangeRates = ExchangeRates(this);
+  late final Tags tags = Tags(this);
+  late final TransactionTags transactionTags = TransactionTags(this);
   late final Budgets budgets = Budgets(this);
   late final BudgetCategory budgetCategory = BudgetCategory(this);
   late final BudgetAccount budgetAccount = BudgetAccount(this);
@@ -3660,13 +4125,15 @@ abstract class _$AppDB extends GeneratedDatabase {
         startIndex: $arrayStartIndex);
     $arrayStartIndex += generatedlimit.amountOfVariables;
     return customSelect(
-        'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."iconId" AS "nested_0.iconId", "a"."isArchived" AS "nested_0.isArchived", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."iconId" AS "nested_3.iconId", "ra"."isArchived" AS "nested_3.isArchived", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRate.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id INNER JOIN currencies AS receivingAccountCurrency ON a.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
+        'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."iconId" AS "nested_0.iconId", "a"."isArchived" AS "nested_0.isArchived", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."iconId" AS "nested_3.iconId", "ra"."isArchived" AS "nested_3.isArchived", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRate.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id INNER JOIN currencies AS receivingAccountCurrency ON a.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
         variables: [
           ...generatedpredicate.introducedVariables,
           ...generatedorderBy.introducedVariables,
           ...generatedlimit.introducedVariables
         ],
         readsFrom: {
+          transactionTags,
+          tags,
           transactions,
           accounts,
           currencies,
@@ -3701,6 +4168,16 @@ abstract class _$AppDB extends GeneratedDatabase {
               .readNullable<double>('currentValueInDestinyInPreferredCurrency'),
           currentValueInPreferredCurrency:
               row.read<double>('currentValueInPreferredCurrency'),
+          tags: await customSelect(
+              'SELECT tags.* FROM transactionTags INNER JOIN tags ON transactionTags.tagID = tags.id WHERE transactionTags.transactionID = ?1',
+              variables: [
+                Variable<String>(row.read('\$n_0'))
+              ],
+              readsFrom: {
+                transactionTags,
+                tags,
+                transactions,
+              }).asyncMap(tags.mapFromRow).get(),
           endDate: row.readNullable<DateTime>('endDate'),
           intervalEach: row.readNullable<int>('intervalEach'),
           intervalPeriod: NullAwareTypeConverter.wrapFromSql(
@@ -3895,6 +4372,8 @@ abstract class _$AppDB extends GeneratedDatabase {
         categories,
         transactions,
         exchangeRates,
+        tags,
+        transactionTags,
         budgets,
         budgetCategory,
         budgetAccount,
@@ -3973,6 +4452,34 @@ abstract class _$AppDB extends GeneratedDatabase {
                 limitUpdateKind: UpdateKind.update),
             result: [
               TableUpdate('exchangeRates', kind: UpdateKind.update),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('transactions',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('transactionTags', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('transactions',
+                limitUpdateKind: UpdateKind.update),
+            result: [
+              TableUpdate('transactionTags', kind: UpdateKind.update),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('tags',
+                limitUpdateKind: UpdateKind.delete),
+            result: [
+              TableUpdate('transactionTags', kind: UpdateKind.delete),
+            ],
+          ),
+          WritePropagation(
+            on: TableUpdateQuery.onTableName('tags',
+                limitUpdateKind: UpdateKind.update),
+            result: [
+              TableUpdate('transactionTags', kind: UpdateKind.update),
             ],
           ),
           WritePropagation(

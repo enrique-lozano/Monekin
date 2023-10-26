@@ -141,6 +141,8 @@ class MoneyTransaction extends TransactionInDB {
   double currentValueInPreferredCurrency;
   double? currentValueInDestinyInPreferredCurrency;
 
+  List<Tag> tags;
+
   MoneyTransaction(
       {required super.id,
       required super.date,
@@ -158,6 +160,7 @@ class MoneyTransaction extends TransactionInDB {
       CategoryInDB? parentCategory,
       this.currentValueInDestinyInPreferredCurrency,
       required this.currentValueInPreferredCurrency,
+      required this.tags,
       super.endDate,
       super.intervalEach,
       super.intervalPeriod,
