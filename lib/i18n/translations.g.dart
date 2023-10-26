@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 920 (460 per locale)
+/// Strings: 934 (467 per locale)
 ///
-/// Built on 2023-10-24 at 17:18 UTC
+/// Built on 2023-10-26 at 09:41 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -585,6 +585,7 @@ class _TranslationsFinancialHealthReviewEn {
 	String get normal => 'Average';
 	String get bad => 'Fair';
 	String get very_bad => 'Very Bad';
+	String get insufficient_data => 'Insufficient data';
 	late final _TranslationsFinancialHealthReviewDescrEn descr = _TranslationsFinancialHealthReviewDescrEn._(_root);
 }
 
@@ -595,10 +596,14 @@ class _TranslationsFinancialHealthMonthsWithoutIncomeEn {
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
-	String good({required Object x}) => 'Well done! At your current spending rate right now you could survive up to ${x} months without any income';
-	String normal({required Object x}) => 'At your current spending rate right now you could survive up to ${x} months without any income. While this value is acceptable, you can still improve a little more!';
-	String bad({required Object x}) => 'Wow! You would barely survive ${x} months without income at your current spending rate. Remember that it is recommended to be able to live at least 6 months without any income';
-	String get very_bad => 'Wow! You could hardly survive a month without income at your current spending rate. Remember that it is recommended to be able to live at least 6 months without any income';
+	String get title => 'Survival rate';
+	String get subtitle => 'Given your balance, amount of time you could go without income';
+	String text({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		zero: 'You couldn\'t survive a month without income at this rate of expenses!',
+		one: 'You could barely survive approximately a month without income at this rate of expenses!',
+		other: 'You could survive approximately <b>${n} months</b> without income at this rate of spending.',
+	);
+	String get suggestion => 'Remember that it is advisable to always keep this ratio above 5 months at least. If you see that you do not have a sufficient savings cushion, reduce unnecessary expenses.';
 	String get insufficient_data => 'It looks like we don\'t have enough expenses to calculate how many months you could survive without income. Enter a few transactions and come back here to check your financial health';
 }
 
@@ -609,10 +614,10 @@ class _TranslationsFinancialHealthSavingsPercentageEn {
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
-	String good({required Object value}) => 'Congratulations! You have managed to save ${value}% of your income during this period. It seems that you are already quite an expert. Keep it up!';
-	String normal({required Object value}) => 'Congratulations, you managed to save ${value}% of your income during this period. Visit the analysis tab to see where you can save even more!';
-	String bad({required Object value}) => 'You have managed to save ${value}% of your income during this period. However, we believe that you can still do much more! Remember that it is recommended to save at least 30% of what you earn';
-	String get very_bad => 'Wow, you haven\'t managed to save anything during this period :( Visit the analysis tab to see where your financial weaknesses are. Remember that it is recommended to save at least 30% of what you earn';
+	String get title => 'Savings percentage';
+	String get subtitle => 'What part of your income is not spent in this period';
+	late final _TranslationsFinancialHealthSavingsPercentageTextEn text = _TranslationsFinancialHealthSavingsPercentageTextEn._(_root);
+	String get suggestion => 'Remember that it is advisable to save at least 15-20% of what you earn.';
 }
 
 // Path: icon_selector.scopes
@@ -1123,11 +1128,25 @@ class _TranslationsFinancialHealthReviewDescrEn {
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
+	String get insufficient_data => 'It looks like we don\'t have enough expenses to calculate your financial health. Visit the analysis tab to see how to save even more!';
 	String get very_good => 'Congratulations! Your financial health is tremendous. We hope you continue your good streak and continue learning with Monekin';
 	String get good => 'Great! Your financial health is good. Visit the analysis tab to see how to save even more!';
 	String get normal => 'Your financial health is more or less in the average of the rest of the population for this period';
 	String get bad => 'It seems that your financial situation is not the best yet. Explore the analysis tab to learn more about your finances';
 	String get very_bad => 'Hmm, your financial health is far below what it should be. Try to see where the problem is in the analysis section';
+}
+
+// Path: financial_health.savings_percentage.text
+class _TranslationsFinancialHealthSavingsPercentageTextEn {
+	_TranslationsFinancialHealthSavingsPercentageTextEn._(this._root);
+
+	final _TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	String good({required Object value}) => 'Congratulations! You have managed to save <b>${value}%</b> of your income during this period. It seems that you are already an expert, keep up the good work!';
+	String normal({required Object value}) => 'Congratulations, you have managed to save <b>${value}%</b> of your income during this period.';
+	String bad({required Object value}) => 'You have managed to save <b>${value}%</b> of your income during this period. However, we think you can still do much more!';
+	String get very_bad => 'Wow, you haven\'t managed to save anything during this period.';
 }
 
 // Path: transaction.form.validators
@@ -1673,6 +1692,7 @@ class _TranslationsFinancialHealthReviewEs implements _TranslationsFinancialHeal
 	@override String get normal => 'En la media';
 	@override String get bad => 'Regular';
 	@override String get very_bad => 'Muy mala';
+	@override String get insufficient_data => 'Datos insuficientes';
 	@override late final _TranslationsFinancialHealthReviewDescrEs descr = _TranslationsFinancialHealthReviewDescrEs._(_root);
 }
 
@@ -1683,10 +1703,14 @@ class _TranslationsFinancialHealthMonthsWithoutIncomeEs implements _Translations
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String good({required Object x}) => 'Bien hecho! Con tu ritmo de gastos actual ahora mismo podrías sobrevivir hasta ${x} meses sin ningún ingreso';
-	@override String normal({required Object x}) => 'Con tu ritmo de gastos actual ahora mismo podrías sobrevivir hasta ${x} meses sin ningún ingreso. Si bien este valor es aceptable, aun puedes mejorar un poco más!';
-	@override String bad({required Object x}) => 'Vaya! Apenás sobrevivirías ${x} meses sin ingresos con tu ritmo de gastos actual. Recuerda que lo recomendable es poder vivir al menos 6 meses sin ningun ingreso';
-	@override String get very_bad => 'Vaya! Apenas sobrevivirías un mes sin ingresos con tu ritmo de gastos actual. Recuerda que lo recomendable es poder vivir al menos 6 meses sin ningun ingreso';
+	@override String get title => 'Ratio de supervivencia';
+	@override String get subtitle => 'Dado tu saldo, cantidad de tiempo que podrías pasar sin ingresos';
+	@override String text({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		zero: 'No podrías sobrevivir ni un mes sin ingresos con este ritmo de gastos!',
+		one: 'Apenas podrías sobrevivir aproximadatemente un mes sin ingresos con este ritmo de gastos!',
+		other: 'Podrías sobrevivir aproximadamente <b>${n} meses</b> sin ingresos manteniendo este ritmo de gastos.',
+	);
+	@override String get suggestion => 'Recuerda que es recomendable mantener este ratio siempre por encima de 5 meses como mínimo. Si ves que no tienes un colchon de ahorro suficiente, reduce los gastos no necesarios.';
 	@override String get insufficient_data => 'Parece que no tenemos gastos suficientes para calcular cuantos meses podrías sobrevivir sin ingresos. Introduce unas pocas transacciones y regresa aquí para consultar tu salud financiera';
 }
 
@@ -1697,10 +1721,10 @@ class _TranslationsFinancialHealthSavingsPercentageEs implements _TranslationsFi
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String good({required Object value}) => 'Enhorabuena! Has conseguido ahorrar un ${value}% de tus ingresos durante este periodo. Parece que ya eres todo un expert@. Sigue asi!';
-	@override String normal({required Object value}) => 'Enhorabuena, has conseguido ahorrar un ${value}% de tus ingresos durante este periodo. Visita la pestaña de análisis para ver donde puedes ahorrar aun más!';
-	@override String bad({required Object value}) => 'Has conseguido ahorrar un ${value}% de tus ingresos durante este periodo. Sin embargo, creemos que aun puedes hacer mucho mas! Recuerda que es recomendable ahorrar al menos un 30% de lo que ingresas';
-	@override String get very_bad => 'Vaya, no has conseguido ahorrar nada durante este periodo :( Visita la pestaña de análisis para ver donde estan tus debilidades financieras. Recuerda que es recomendable ahorrar al menos un 30% de lo que ingresas';
+	@override String get title => 'Porcentaje de ahorro';
+	@override String get subtitle => 'Que parte de tus ingresos no son gastados en este periodo';
+	@override late final _TranslationsFinancialHealthSavingsPercentageTextEs text = _TranslationsFinancialHealthSavingsPercentageTextEs._(_root);
+	@override String get suggestion => 'Recuerda que es recomendable ahorrar al menos un 15-20% de lo que ingresas.';
 }
 
 // Path: icon_selector.scopes
@@ -2213,11 +2237,25 @@ class _TranslationsFinancialHealthReviewDescrEs implements _TranslationsFinancia
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
+	@override String get insufficient_data => 'Parece que no tenemos gastos suficientes para calcular tu salud financiera. Visita la pestaña de análisis para ver como ahorrar aun mas!';
 	@override String get very_good => 'Enhorabuena! Tu salud financiera es formidable. Esperamos que sigas con tu buena racha y que continues aprendiendo con Monekin';
 	@override String get good => 'Genial! Tu salud financiera es buena. Visita la pestaña de análisis para ver como ahorrar aun mas!';
 	@override String get normal => 'Tu salud financiera se encuentra mas o menos en la media del resto de la población para este periodo';
 	@override String get bad => 'Parece que tu situación financiera no es la mejor aun. Explora la pestaña de análisis para conocer mas sobre tus finanzas';
 	@override String get very_bad => 'Mmm, tu salud financera esta muy por debajo de lo que debería. Trata de ver donde esta el problema en la sección de análisis';
+}
+
+// Path: financial_health.savings_percentage.text
+class _TranslationsFinancialHealthSavingsPercentageTextEs implements _TranslationsFinancialHealthSavingsPercentageTextEn {
+	_TranslationsFinancialHealthSavingsPercentageTextEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String good({required Object value}) => 'Enhorabuena! Has conseguido ahorrar un <b>${value}%</b> de tus ingresos durante este periodo. Parece que ya eres todo un expert@, sigue asi!';
+	@override String normal({required Object value}) => 'Enhorabuena, has conseguido ahorrar un <b>${value}%</b> de tus ingresos durante este periodo.';
+	@override String bad({required Object value}) => 'Has conseguido ahorrar un <b>${value}%</b> de tus ingresos durante este periodo. Sin embargo, creemos que aun puedes hacer mucho mas!';
+	@override String get very_bad => 'Vaya, no has conseguido ahorrar nada durante este periodo.';
 }
 
 // Path: transaction.form.validators
@@ -2450,20 +2488,29 @@ extension on _TranslationsEn {
 			case 'financial_health.review.normal': return 'Average';
 			case 'financial_health.review.bad': return 'Fair';
 			case 'financial_health.review.very_bad': return 'Very Bad';
+			case 'financial_health.review.insufficient_data': return 'Insufficient data';
+			case 'financial_health.review.descr.insufficient_data': return 'It looks like we don\'t have enough expenses to calculate your financial health. Visit the analysis tab to see how to save even more!';
 			case 'financial_health.review.descr.very_good': return 'Congratulations! Your financial health is tremendous. We hope you continue your good streak and continue learning with Monekin';
 			case 'financial_health.review.descr.good': return 'Great! Your financial health is good. Visit the analysis tab to see how to save even more!';
 			case 'financial_health.review.descr.normal': return 'Your financial health is more or less in the average of the rest of the population for this period';
 			case 'financial_health.review.descr.bad': return 'It seems that your financial situation is not the best yet. Explore the analysis tab to learn more about your finances';
 			case 'financial_health.review.descr.very_bad': return 'Hmm, your financial health is far below what it should be. Try to see where the problem is in the analysis section';
-			case 'financial_health.months_without_income.good': return ({required Object x}) => 'Well done! At your current spending rate right now you could survive up to ${x} months without any income';
-			case 'financial_health.months_without_income.normal': return ({required Object x}) => 'At your current spending rate right now you could survive up to ${x} months without any income. While this value is acceptable, you can still improve a little more!';
-			case 'financial_health.months_without_income.bad': return ({required Object x}) => 'Wow! You would barely survive ${x} months without income at your current spending rate. Remember that it is recommended to be able to live at least 6 months without any income';
-			case 'financial_health.months_without_income.very_bad': return 'Wow! You could hardly survive a month without income at your current spending rate. Remember that it is recommended to be able to live at least 6 months without any income';
+			case 'financial_health.months_without_income.title': return 'Survival rate';
+			case 'financial_health.months_without_income.subtitle': return 'Given your balance, amount of time you could go without income';
+			case 'financial_health.months_without_income.text': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+				zero: 'You couldn\'t survive a month without income at this rate of expenses!',
+				one: 'You could barely survive approximately a month without income at this rate of expenses!',
+				other: 'You could survive approximately <b>${n} months</b> without income at this rate of spending.',
+			);
+			case 'financial_health.months_without_income.suggestion': return 'Remember that it is advisable to always keep this ratio above 5 months at least. If you see that you do not have a sufficient savings cushion, reduce unnecessary expenses.';
 			case 'financial_health.months_without_income.insufficient_data': return 'It looks like we don\'t have enough expenses to calculate how many months you could survive without income. Enter a few transactions and come back here to check your financial health';
-			case 'financial_health.savings_percentage.good': return ({required Object value}) => 'Congratulations! You have managed to save ${value}% of your income during this period. It seems that you are already quite an expert. Keep it up!';
-			case 'financial_health.savings_percentage.normal': return ({required Object value}) => 'Congratulations, you managed to save ${value}% of your income during this period. Visit the analysis tab to see where you can save even more!';
-			case 'financial_health.savings_percentage.bad': return ({required Object value}) => 'You have managed to save ${value}% of your income during this period. However, we believe that you can still do much more! Remember that it is recommended to save at least 30% of what you earn';
-			case 'financial_health.savings_percentage.very_bad': return 'Wow, you haven\'t managed to save anything during this period :( Visit the analysis tab to see where your financial weaknesses are. Remember that it is recommended to save at least 30% of what you earn';
+			case 'financial_health.savings_percentage.title': return 'Savings percentage';
+			case 'financial_health.savings_percentage.subtitle': return 'What part of your income is not spent in this period';
+			case 'financial_health.savings_percentage.text.good': return ({required Object value}) => 'Congratulations! You have managed to save <b>${value}%</b> of your income during this period. It seems that you are already an expert, keep up the good work!';
+			case 'financial_health.savings_percentage.text.normal': return ({required Object value}) => 'Congratulations, you have managed to save <b>${value}%</b> of your income during this period.';
+			case 'financial_health.savings_percentage.text.bad': return ({required Object value}) => 'You have managed to save <b>${value}%</b> of your income during this period. However, we think you can still do much more!';
+			case 'financial_health.savings_percentage.text.very_bad': return 'Wow, you haven\'t managed to save anything during this period.';
+			case 'financial_health.savings_percentage.suggestion': return 'Remember that it is advisable to save at least 15-20% of what you earn.';
 			case 'stats.title': return 'Statistics';
 			case 'stats.balance': return 'Balance';
 			case 'stats.balance_by_account': return 'Balance by accounts';
@@ -2946,20 +2993,29 @@ extension on _TranslationsEs {
 			case 'financial_health.review.normal': return 'En la media';
 			case 'financial_health.review.bad': return 'Regular';
 			case 'financial_health.review.very_bad': return 'Muy mala';
+			case 'financial_health.review.insufficient_data': return 'Datos insuficientes';
+			case 'financial_health.review.descr.insufficient_data': return 'Parece que no tenemos gastos suficientes para calcular tu salud financiera. Visita la pestaña de análisis para ver como ahorrar aun mas!';
 			case 'financial_health.review.descr.very_good': return 'Enhorabuena! Tu salud financiera es formidable. Esperamos que sigas con tu buena racha y que continues aprendiendo con Monekin';
 			case 'financial_health.review.descr.good': return 'Genial! Tu salud financiera es buena. Visita la pestaña de análisis para ver como ahorrar aun mas!';
 			case 'financial_health.review.descr.normal': return 'Tu salud financiera se encuentra mas o menos en la media del resto de la población para este periodo';
 			case 'financial_health.review.descr.bad': return 'Parece que tu situación financiera no es la mejor aun. Explora la pestaña de análisis para conocer mas sobre tus finanzas';
 			case 'financial_health.review.descr.very_bad': return 'Mmm, tu salud financera esta muy por debajo de lo que debería. Trata de ver donde esta el problema en la sección de análisis';
-			case 'financial_health.months_without_income.good': return ({required Object x}) => 'Bien hecho! Con tu ritmo de gastos actual ahora mismo podrías sobrevivir hasta ${x} meses sin ningún ingreso';
-			case 'financial_health.months_without_income.normal': return ({required Object x}) => 'Con tu ritmo de gastos actual ahora mismo podrías sobrevivir hasta ${x} meses sin ningún ingreso. Si bien este valor es aceptable, aun puedes mejorar un poco más!';
-			case 'financial_health.months_without_income.bad': return ({required Object x}) => 'Vaya! Apenás sobrevivirías ${x} meses sin ingresos con tu ritmo de gastos actual. Recuerda que lo recomendable es poder vivir al menos 6 meses sin ningun ingreso';
-			case 'financial_health.months_without_income.very_bad': return 'Vaya! Apenas sobrevivirías un mes sin ingresos con tu ritmo de gastos actual. Recuerda que lo recomendable es poder vivir al menos 6 meses sin ningun ingreso';
+			case 'financial_health.months_without_income.title': return 'Ratio de supervivencia';
+			case 'financial_health.months_without_income.subtitle': return 'Dado tu saldo, cantidad de tiempo que podrías pasar sin ingresos';
+			case 'financial_health.months_without_income.text': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+				zero: 'No podrías sobrevivir ni un mes sin ingresos con este ritmo de gastos!',
+				one: 'Apenas podrías sobrevivir aproximadatemente un mes sin ingresos con este ritmo de gastos!',
+				other: 'Podrías sobrevivir aproximadamente <b>${n} meses</b> sin ingresos manteniendo este ritmo de gastos.',
+			);
+			case 'financial_health.months_without_income.suggestion': return 'Recuerda que es recomendable mantener este ratio siempre por encima de 5 meses como mínimo. Si ves que no tienes un colchon de ahorro suficiente, reduce los gastos no necesarios.';
 			case 'financial_health.months_without_income.insufficient_data': return 'Parece que no tenemos gastos suficientes para calcular cuantos meses podrías sobrevivir sin ingresos. Introduce unas pocas transacciones y regresa aquí para consultar tu salud financiera';
-			case 'financial_health.savings_percentage.good': return ({required Object value}) => 'Enhorabuena! Has conseguido ahorrar un ${value}% de tus ingresos durante este periodo. Parece que ya eres todo un expert@. Sigue asi!';
-			case 'financial_health.savings_percentage.normal': return ({required Object value}) => 'Enhorabuena, has conseguido ahorrar un ${value}% de tus ingresos durante este periodo. Visita la pestaña de análisis para ver donde puedes ahorrar aun más!';
-			case 'financial_health.savings_percentage.bad': return ({required Object value}) => 'Has conseguido ahorrar un ${value}% de tus ingresos durante este periodo. Sin embargo, creemos que aun puedes hacer mucho mas! Recuerda que es recomendable ahorrar al menos un 30% de lo que ingresas';
-			case 'financial_health.savings_percentage.very_bad': return 'Vaya, no has conseguido ahorrar nada durante este periodo :( Visita la pestaña de análisis para ver donde estan tus debilidades financieras. Recuerda que es recomendable ahorrar al menos un 30% de lo que ingresas';
+			case 'financial_health.savings_percentage.title': return 'Porcentaje de ahorro';
+			case 'financial_health.savings_percentage.subtitle': return 'Que parte de tus ingresos no son gastados en este periodo';
+			case 'financial_health.savings_percentage.text.good': return ({required Object value}) => 'Enhorabuena! Has conseguido ahorrar un <b>${value}%</b> de tus ingresos durante este periodo. Parece que ya eres todo un expert@, sigue asi!';
+			case 'financial_health.savings_percentage.text.normal': return ({required Object value}) => 'Enhorabuena, has conseguido ahorrar un <b>${value}%</b> de tus ingresos durante este periodo.';
+			case 'financial_health.savings_percentage.text.bad': return ({required Object value}) => 'Has conseguido ahorrar un <b>${value}%</b> de tus ingresos durante este periodo. Sin embargo, creemos que aun puedes hacer mucho mas!';
+			case 'financial_health.savings_percentage.text.very_bad': return 'Vaya, no has conseguido ahorrar nada durante este periodo.';
+			case 'financial_health.savings_percentage.suggestion': return 'Recuerda que es recomendable ahorrar al menos un 15-20% de lo que ingresas.';
 			case 'stats.title': return 'Estadísticas';
 			case 'stats.balance': return 'Saldo';
 			case 'stats.balance_by_account': return 'Saldo por cuentas';

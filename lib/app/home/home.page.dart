@@ -404,127 +404,120 @@ class _HomePageState extends State<HomePage> {
                         rowFit: FlexFit.tight,
                         child: CardWithHeader(
                           title: t.financial_health.display,
-                          body: StreamBuilder(
-                              stream: _accountsStream,
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return const LinearProgressIndicator();
-                                }
+                          onHeaderButtonClick: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const StatsPage(initialIndex: 0),
+                            ),
+                          ),
+                          body: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: StreamBuilder(
+                                  stream:
+                                      FinanceHealthService().getHealthyValue(
+                                    filters: TransactionFilters(
+                                      minDate: dateRangeService.startDate,
+                                      maxDate: dateRangeService.endDate,
+                                    ),
+                                  ),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return const LinearProgressIndicator();
+                                    }
 
-                                final accounts = snapshot.data!;
+                                    final financeHealthData = snapshot.data!;
 
-                                return Padding(
-                                    padding: const EdgeInsets.all(16),
-                                    child: StreamBuilder(
-                                        initialData: 0.0,
-                                        stream: FinanceHealthService()
-                                            .getHealthyValue(
-                                          accounts: accounts,
-                                          startDate: dateRangeService.startDate,
-                                          endDate: dateRangeService.endDate,
-                                        ),
-                                        builder: (context, snapshot) {
-                                          Color getHealthyValueColor(
-                                                  double healthyValue) =>
-                                              HSLColor.fromAHSL(
-                                                      1, healthyValue, 1, 0.35)
-                                                  .toColor();
-
-                                          return ConstrainedBox(
-                                            constraints: BoxConstraints(
-                                                maxHeight:
-                                                    BreakPoint.of(context)
-                                                            .isLargerThan(
-                                                                BreakpointID.md)
-                                                        ? 265
-                                                        : 180),
-                                            child: Row(
+                                    return ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                          maxHeight: BreakPoint.of(context)
+                                                  .isLargerThan(BreakpointID.md)
+                                              ? 265
+                                              : 180),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          AnimatedProgressBar(
+                                            value: financeHealthData
+                                                    .healthyScore ??
+                                                20 / 100,
+                                            direction: Axis.vertical,
+                                            width: 16,
+                                            color: FinanceHealthData
+                                                .getHealthyValueColor(
+                                                    financeHealthData
+                                                        .healthyScore),
+                                          ),
+                                          const SizedBox(width: 16),
+                                          Expanded(
+                                            child: Column(
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
                                               children: [
-                                                AnimatedProgressBar(
-                                                  value: snapshot.data! / 100,
-                                                  direction: Axis.vertical,
-                                                  width: 16,
-                                                  color: getHealthyValueColor(
-                                                      snapshot.data!),
-                                                ),
-                                                const SizedBox(width: 16),
-                                                Expanded(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
-                                                    children: [
-                                                      Column(
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment
-                                                                .start,
+                                                                .baseline,
+                                                        textBaseline:
+                                                            TextBaseline
+                                                                .alphabetic,
                                                         children: [
-                                                          Row(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .baseline,
-                                                              textBaseline:
-                                                                  TextBaseline
-                                                                      .alphabetic,
-                                                              children: [
-                                                                Text(
-                                                                  snapshot.data!
-                                                                      .toStringAsFixed(
-                                                                          0),
-                                                                  style: Theme.of(
-                                                                          context)
-                                                                      .textTheme
-                                                                      .headlineMedium!
-                                                                      .copyWith(
-                                                                        color: getHealthyValueColor(
-                                                                            snapshot.data!),
-                                                                        fontWeight:
-                                                                            FontWeight.w700,
-                                                                      ),
-                                                                ),
-                                                                const Text(
-                                                                    ' / 100')
-                                                              ]),
                                                           Text(
-                                                            FinanceHealthService()
-                                                                .getHealthyValueReviewTitle(
-                                                                    context,
-                                                                    snapshot
-                                                                        .data!),
+                                                            financeHealthData
+                                                                .healthyScoreString(),
                                                             style: Theme.of(
                                                                     context)
                                                                 .textTheme
-                                                                .titleMedium!
+                                                                .headlineMedium!
                                                                 .copyWith(
-                                                                  color: getHealthyValueColor(
-                                                                      snapshot
-                                                                          .data!),
+                                                                  color: FinanceHealthData
+                                                                      .getHealthyValueColor(
+                                                                          financeHealthData
+                                                                              .healthyScore),
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w700,
                                                                 ),
                                                           ),
-                                                        ],
-                                                      ),
-                                                      Text(
-                                                        FinanceHealthService()
-                                                            .getHealthyValueReviewDescr(
-                                                                context,
-                                                                snapshot.data!),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                )
+                                                          const Text(' / 100')
+                                                        ]),
+                                                    Text(
+                                                      financeHealthData
+                                                          .getHealthyValueReviewTitle(
+                                                              context),
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .titleMedium!
+                                                          .copyWith(
+                                                            color: FinanceHealthData
+                                                                .getHealthyValueColor(
+                                                                    financeHealthData
+                                                                        .healthyScore),
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                          ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Text(
+                                                  financeHealthData
+                                                      .getHealthyValueReviewDescr(
+                                                          context),
+                                                ),
                                               ],
                                             ),
-                                          );
-                                        }));
-                              }),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  })),
                         ),
                       ),
                       ResponsiveRowColumnItem(
