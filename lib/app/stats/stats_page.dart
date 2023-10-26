@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/stats/footer_segmented_calendar_button.dart';
 import 'package:monekin/app/stats/widgets/balance_bar_chart.dart';
 import 'package:monekin/app/stats/widgets/chart_by_categories.dart';
+import 'package:monekin/app/stats/widgets/finance_health_details.dart';
 import 'package:monekin/app/stats/widgets/fund_evolution_line_chart.dart';
 import 'package:monekin/app/stats/widgets/income_expense_comparason.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
@@ -67,7 +68,7 @@ class _StatsPageState extends State<StatsPage> {
 
     return DefaultTabController(
       initialIndex: widget.initialIndex,
-      length: 3,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           title: Text(t.stats.title),
@@ -91,6 +92,7 @@ class _StatsPageState extends State<StatsPage> {
                 icon: const Icon(Icons.filter_alt_outlined)),
           ],
           bottom: TabBar(tabs: [
+            Tab(text: t.financial_health.display),
             Tab(text: t.stats.by_categories),
             Tab(text: t.stats.balance),
             Tab(text: t.stats.cash_flow),
@@ -122,15 +124,27 @@ class _StatsPageState extends State<StatsPage> {
             ],
             Expanded(
               child: TabBarView(children: [
-                buildContainerWithPadding([
-                  ChartByCategories(
-                    startDate: currentStartDate,
-                    endDate: currentEndDate,
-                    showList: true,
-                    initialSelectedType: TransactionType.expense,
-                    filters: filters,
-                  ),
-                ], padding: const EdgeInsets.all(0)),
+                buildContainerWithPadding(
+                  [
+                    FinanceHealthDetails(
+                      filters: filters.copyWith(
+                          minDate: currentStartDate, maxDate: currentEndDate),
+                    )
+                  ],
+                  padding: const EdgeInsets.all(0),
+                ),
+                buildContainerWithPadding(
+                  [
+                    ChartByCategories(
+                      startDate: currentStartDate,
+                      endDate: currentEndDate,
+                      showList: true,
+                      initialSelectedType: TransactionType.expense,
+                      filters: filters,
+                    ),
+                  ],
+                  padding: const EdgeInsets.all(0),
+                ),
                 buildContainerWithPadding(
                   [
                     CardWithHeader(
