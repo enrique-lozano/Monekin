@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 920 (460 per locale)
+/// Strings: 924 (462 per locale)
 ///
-/// Built on 2023-10-24 at 17:18 UTC
+/// Built on 2023-10-27 at 14:28 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -178,7 +178,7 @@ class _TranslationsGeneralEn {
 	String get cancel => 'Cancel';
 	String get or => 'or';
 	String get understood => 'Understood';
-	String get unspecified => 'Sin especificar';
+	String get unspecified => 'Unspecified';
 	String get attention => 'Attention ⚠️';
 	String get confirm => 'Confirm';
 	String get continue_text => 'Continue';
@@ -704,11 +704,11 @@ class _TranslationsTransactionStatusEn {
 
 	// Translations
 	String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
-		one: 'Estado',
-		other: 'Estados',
+		one: 'Status',
+		other: 'Statuses',
 	);
 	String tr_status({required Object status}) => '${status} transaction';
-	String get none => 'Sin estado';
+	String get none => 'Stateless';
 	String get reconciled => 'Reconciled';
 	String get reconciled_descr => 'This transaction has already been validated and corresponds to a real transaction from your bank';
 	String get unreconciled => 'Unreconciled';
@@ -726,6 +726,10 @@ class _TranslationsTransactionTypesEn {
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
+	String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		one: 'Transaction type',
+		other: 'Transaction types',
+	);
 	String income({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 		one: 'Income',
 		other: 'Incomes',
@@ -1814,6 +1818,10 @@ class _TranslationsTransactionTypesEs implements _TranslationsTransactionTypesEn
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		one: 'Tipo de transacción',
+		other: 'Tipos de transacción',
+	);
 	@override String income({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
 		one: 'Ingreso',
 		other: 'Ingresos',
@@ -2312,7 +2320,7 @@ extension on _TranslationsEn {
 			case 'general.cancel': return 'Cancel';
 			case 'general.or': return 'or';
 			case 'general.understood': return 'Understood';
-			case 'general.unspecified': return 'Sin especificar';
+			case 'general.unspecified': return 'Unspecified';
 			case 'general.attention': return 'Attention ⚠️';
 			case 'general.confirm': return 'Confirm';
 			case 'general.continue_text': return 'Continue';
@@ -2538,11 +2546,11 @@ extension on _TranslationsEn {
 			case 'transaction.form.exchange_to_preferred_today': return ({required Object currency}) => 'Equivalent to ${currency} today:';
 			case 'transaction.form.exchange_to_preferred_in_date': return ({required Object currency, required Object date}) => 'Equivalent to ${currency} on ${date}:';
 			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
-				one: 'Estado',
-				other: 'Estados',
+				one: 'Status',
+				other: 'Statuses',
 			);
 			case 'transaction.status.tr_status': return ({required Object status}) => '${status} transaction';
-			case 'transaction.status.none': return 'Sin estado';
+			case 'transaction.status.none': return 'Stateless';
 			case 'transaction.status.reconciled': return 'Reconciled';
 			case 'transaction.status.reconciled_descr': return 'This transaction has already been validated and corresponds to a real transaction from your bank';
 			case 'transaction.status.unreconciled': return 'Unreconciled';
@@ -2551,6 +2559,10 @@ extension on _TranslationsEn {
 			case 'transaction.status.pending_descr': return 'This transaction is pending and therefore it will not be taken into account when calculating balances and statistics';
 			case 'transaction.status.voided': return 'Voided';
 			case 'transaction.status.voided_descr': return 'Void/cancelled transaction due to payment error or any other reason. It will not be taken into account when calculating balances and statistics';
+			case 'transaction.types.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+				one: 'Transaction type',
+				other: 'Transaction types',
+			);
 			case 'transaction.types.income': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 				one: 'Income',
 				other: 'Incomes',
@@ -3047,6 +3059,10 @@ extension on _TranslationsEs {
 			case 'transaction.status.pending_descr': return 'Esta transacción esta pendiente y por tanto no será tenida en cuenta a la hora de calcular balances y estadísticas';
 			case 'transaction.status.voided': return 'Nula';
 			case 'transaction.status.voided_descr': return 'Transacción nula/cancelada debido a un error en el pago o cualquier otro motivo. No será tenida en cuenta a la hora de calcular balances y estadísticas';
+			case 'transaction.types.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+				one: 'Tipo de transacción',
+				other: 'Tipos de transacción',
+			);
 			case 'transaction.types.income': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
 				one: 'Ingreso',
 				other: 'Ingresos',
