@@ -3,7 +3,7 @@
     "cancel": "Cancel",
     "or": "or",
     "understood": "Understood",
-    "unspecified": "Sin especificar",
+    "unspecified": "Unspecified",
     "attention": "Attention ⚠️",
     "confirm": "Confirm",
     "continue_text": "Continue",
@@ -279,11 +279,11 @@
     },
     "STATUS": {
       "display": {
-        "one": "Estado",
-        "other": "Estados"
+        "one": "Status",
+        "other": "Statuses"
       },
       "tr_status": "{{ status }} transaction",
-      "none": "Sin estado",
+      "none": "Stateless",
       "reconciled": "Reconciled",
       "reconciled.descr": "This transaction has already been validated and corresponds to a real transaction from your bank",
       "unreconciled": "Unreconciled",
@@ -294,6 +294,10 @@
       "voided.descr": "Void/cancelled transaction due to payment error or any other reason. It will not be taken into account when calculating balances and statistics"
     },
     "TYPES": {
+      "display": {
+        "one": "Transaction type",
+        "other": "Transaction types"
+      },
       "income": {
         "one": "Income",
         "other": "Incomes"
