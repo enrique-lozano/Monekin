@@ -425,6 +425,7 @@
       "name": "Nombre de la etiqueta",
       "description": "Descripción"
     },
+    "without-tags": "Sin etiquetas",
     "select": "Selecionar etiquetas",
     "create": "Crear etiqueta",
     "add": "Añadir etiqueta",

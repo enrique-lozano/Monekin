@@ -536,7 +536,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                                     runSpacing: 0,
                                     children: [
                                       FilterChip(
-                                        label: Text("Sin etiqueta"),
+                                        label: Text(t.tags.without_tags),
                                         selected: isTagSelected(null),
                                         onSelected: (value) => setState(() {
                                           var newListToAssign =
@@ -569,7 +569,9 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                                           });
                                         }),
                                         showCheckmark: false,
-                                        avatar: const Icon(Icons.sell),
+                                        avatar: Icon(Icons.label_off_rounded,
+                                            color: appColorScheme(context)
+                                                .primary),
                                       ),
                                       if (snapshot.data != null)
                                         ...List.generate(snapshot.data!.length,

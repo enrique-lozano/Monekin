@@ -424,6 +424,7 @@
       "name": "Tag name",
       "description": "Description"
     },
+    "without-tags": "Without tags",
     "select": "Select tags",
     "add": "Add tag",
     "create": "Create label",
