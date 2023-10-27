@@ -85,10 +85,7 @@ class _TagListState extends State<TagList> {
               }
 
               return ListTile(
-                leading: Icon(
-                  Icons.sell_rounded,
-                  color: tag.colorData,
-                ),
+                leading: tag.displayIcon(),
                 title: Text(tag.name),
                 subtitle: tag.description != null && tag.description!.isNotEmpty
                     ? Text(tag.description!)
