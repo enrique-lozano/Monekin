@@ -33,6 +33,8 @@ abstract class _$TransactionFiltersCWProxy {
 
   TransactionFilters status(List<TransactionStatus?>? status);
 
+  TransactionFilters tagsIDs(Iterable<String?>? tagsIDs);
+
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `TransactionFilters(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
@@ -52,6 +54,7 @@ abstract class _$TransactionFiltersCWProxy {
     Iterable<String>? accountsIDs,
     Iterable<String>? categories,
     List<TransactionStatus?>? status,
+    Iterable<String?>? tagsIDs,
   });
 }
 
@@ -111,6 +114,10 @@ class _$TransactionFiltersCWProxyImpl implements _$TransactionFiltersCWProxy {
       this(status: status);
 
   @override
+  TransactionFilters tagsIDs(Iterable<String?>? tagsIDs) =>
+      this(tagsIDs: tagsIDs);
+
+  @override
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `TransactionFilters(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -132,6 +139,7 @@ class _$TransactionFiltersCWProxyImpl implements _$TransactionFiltersCWProxy {
     Object? accountsIDs = const $CopyWithPlaceholder(),
     Object? categories = const $CopyWithPlaceholder(),
     Object? status = const $CopyWithPlaceholder(),
+    Object? tagsIDs = const $CopyWithPlaceholder(),
   }) {
     return TransactionFilters(
       minDate: minDate == const $CopyWithPlaceholder()
@@ -187,6 +195,10 @@ class _$TransactionFiltersCWProxyImpl implements _$TransactionFiltersCWProxy {
           ? _value.status
           // ignore: cast_nullable_to_non_nullable
           : status as List<TransactionStatus?>?,
+      tagsIDs: tagsIDs == const $CopyWithPlaceholder()
+          ? _value.tagsIDs
+          // ignore: cast_nullable_to_non_nullable
+          : tagsIDs as Iterable<String?>?,
     );
   }
 }
@@ -214,6 +226,7 @@ extension $TransactionFiltersCopyWith on TransactionFilters {
     bool accountsIDs = false,
     bool categories = false,
     bool status = false,
+    bool tagsIDs = false,
   }) {
     return TransactionFilters(
       minDate: minDate == true ? null : this.minDate,
@@ -229,6 +242,7 @@ extension $TransactionFiltersCopyWith on TransactionFilters {
       accountsIDs: accountsIDs == true ? null : this.accountsIDs,
       categories: categories == true ? null : this.categories,
       status: status == true ? null : this.status,
+      tagsIDs: tagsIDs == true ? null : this.tagsIDs,
     );
   }
 }
