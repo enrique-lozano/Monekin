@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
@@ -5,12 +6,14 @@ import 'package:monekin/app/categories/categories_list.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
+import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/status_filter/transaction_status_filter.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/tags_filter/tags_filter_container.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
@@ -50,6 +53,11 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
     super.initState();
 
     filtersToReturn = widget.preselectedFilter;
+  }
+
+  bool isTagSelected(String? tagId) {
+    return filtersToReturn.tagsIDs == null ||
+        filtersToReturn.tagsIDs!.any((element) => element == tagId);
   }
 
   Widget selector({
@@ -473,6 +481,11 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                                 ],
                               ),
                             ),
+
+                            /* ---------------------------------- */
+                            /* ------------- STATUS ------------- */
+                            /* ---------------------------------- */
+
                             const SizedBox(height: 16),
                             TransactionStatusFilter(
                               selectedStatuses: filtersToReturn.status ??
@@ -508,6 +521,108 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                                 });
                               },
                             ),
+
+                            /* ---------------------------------- */
+                            /* -------------- TAGS -------------- */
+                            /* ---------------------------------- */
+
+                            const SizedBox(height: 16),
+                            TagsFilterContainer(
+                              child: StreamBuilder(
+                                stream: TagService.instance.getTags(),
+                                builder: (context, snapshot) {
+                                  return Wrap(
+                                    spacing: 6,
+                                    runSpacing: 0,
+                                    children: [
+                                      FilterChip(
+                                        label: Text("Sin etiqueta"),
+                                        selected: isTagSelected(null),
+                                        onSelected: (value) => setState(() {
+                                          var newListToAssign =
+                                              filtersToReturn.tagsIDs?.toList();
+
+                                          if (newListToAssign == null) {
+                                            newListToAssign = snapshot.data!
+                                                .map((e) => e.id)
+                                                .toList();
+                                          } else if (value) {
+                                            newListToAssign = [
+                                              ...newListToAssign,
+                                              null
+                                            ];
+                                          } else {
+                                            newListToAssign.removeWhere(
+                                                (element) => element == null);
+                                          }
+
+                                          if (newListToAssign.length ==
+                                              snapshot.data!.length + 1) {
+                                            newListToAssign = null;
+                                          }
+
+                                          setState(() {
+                                            filtersToReturn =
+                                                filtersToReturn.copyWith(
+                                              tagsIDs: newListToAssign,
+                                            );
+                                          });
+                                        }),
+                                        showCheckmark: false,
+                                        avatar: const Icon(Icons.sell),
+                                      ),
+                                      if (snapshot.data != null)
+                                        ...List.generate(snapshot.data!.length,
+                                            (index) {
+                                          final tag = snapshot.data![index];
+
+                                          return FilterChip(
+                                            label: Text(tag.name),
+                                            selected: isTagSelected(tag.id),
+                                            onSelected: (value) {
+                                              var newListToAssign =
+                                                  filtersToReturn.tagsIDs
+                                                      ?.toList();
+
+                                              if (newListToAssign == null) {
+                                                newListToAssign = [
+                                                  null,
+                                                  ...snapshot.data!
+                                                      .whereNot((element) =>
+                                                          element.id == tag.id)
+                                                      .map((e) => e.id)
+                                                      .toList()
+                                                ];
+                                              } else if (value) {
+                                                newListToAssign.add(tag.id);
+                                              } else {
+                                                newListToAssign.removeWhere(
+                                                    (element) =>
+                                                        element == tag.id);
+                                              }
+
+                                              if (newListToAssign.length ==
+                                                  snapshot.data!.length + 1) {
+                                                newListToAssign = null;
+                                              }
+
+                                              setState(() {
+                                                filtersToReturn =
+                                                    filtersToReturn.copyWith(
+                                                  tagsIDs: newListToAssign,
+                                                );
+                                              });
+                                            },
+                                            showCheckmark: false,
+                                            avatar: Icon(Icons.sell,
+                                                color: tag.colorData),
+                                          );
+                                        }),
+                                    ],
+                                  );
+                                },
+                              ),
+                            )
                           ],
                         ),
                       ),
@@ -518,7 +633,9 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                 ),
               ),
               BottomSheetFooter(
-                  onSaved: !(_formKey.currentState?.validate() ?? true)
+                  onSaved: !(_formKey.currentState?.validate() ?? true) ||
+                          filtersToReturn.tagsIDs != null &&
+                              filtersToReturn.tagsIDs!.isEmpty
                       ? null
                       : () => Navigator.of(context).pop(filtersToReturn)),
             ],

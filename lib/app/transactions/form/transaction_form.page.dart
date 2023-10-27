@@ -25,6 +25,7 @@ import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/status_filter/transaction_status_filter.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/tags_filter/tags_filter_container.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/core/utils/constants.dart';
@@ -395,40 +396,40 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         ),
       ],
       const SizedBox(height: 16),
-      Text('${t.tags.display(n: 19)}:'),
-      const SizedBox(height: 4),
-      Wrap(
-        spacing: 6,
-        runSpacing: 0,
-        children: [
-          ...List.generate(tags.length, (index) {
-            final tag = tags[index];
+      TagsFilterContainer(
+        child: Wrap(
+          spacing: 6,
+          runSpacing: 0,
+          children: [
+            ...List.generate(tags.length, (index) {
+              final tag = tags[index];
 
-            return FilterChip(
-              label: Text(tag.name),
-              selected: true,
-              onSelected: (value) => setState(() {
-                tags.removeWhere((element) => element.id == tag.id);
-              }),
-              showCheckmark: false,
-              selectedColor: tag.colorData.lighten(0.3),
-              avatar: Icon(Icons.sell, color: tag.colorData.darken()),
-            );
-          }),
-          ActionChip(
-            label: Text(t.tags.add),
-            avatar: const Icon(Icons.add),
-            onPressed: () => showTagListModal(
-                    context, TagList(isModal: true, selected: tags))
-                .then((value) {
-              if (value != null) {
-                setState(() {
-                  tags = value;
-                });
-              }
+              return FilterChip(
+                label: Text(tag.name),
+                selected: true,
+                onSelected: (value) => setState(() {
+                  tags.removeWhere((element) => element.id == tag.id);
+                }),
+                showCheckmark: false,
+                selectedColor: tag.colorData.lighten(0.3),
+                avatar: Icon(Icons.sell, color: tag.colorData.darken()),
+              );
             }),
-          ),
-        ],
+            ActionChip(
+              label: Text(t.tags.add),
+              avatar: const Icon(Icons.add),
+              onPressed: () => showTagListModal(
+                      context, TagList(isModal: true, selected: tags))
+                  .then((value) {
+                if (value != null) {
+                  setState(() {
+                    tags = value;
+                  });
+                }
+              }),
+            ),
+          ],
+        ),
       )
     ];
   }
