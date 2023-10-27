@@ -148,6 +148,16 @@ class _FilterRowIndicatorState extends State<FilterRowIndicator> {
                             widget.onChange(filters);
                           },
                         ),
+                      if (filters.tagsIDs != null)
+                        buildChip(
+                          context,
+                          label:
+                              '${filters.tagsIDs!.length} ${t.tags.display(n: filters.tagsIDs!.length)}',
+                          onDeleted: () {
+                            filters = filters.copyWithNull(tagsIDs: true);
+                            widget.onChange(filters);
+                          },
+                        ),
                       if (filters.transactionTypes != null)
                         for (final trType in filters.transactionTypes!) ...[
                           buildChip(
