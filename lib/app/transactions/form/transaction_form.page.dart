@@ -405,13 +405,16 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
               final tag = tags[index];
 
               return FilterChip(
-                label: Text(tag.name),
+                label: Text(
+                  tag.name,
+                  style: TextStyle(color: tag.colorData),
+                ),
                 selected: true,
                 onSelected: (value) => setState(() {
                   tags.removeWhere((element) => element.id == tag.id);
                 }),
                 showCheckmark: false,
-                selectedColor: tag.colorData.lighten(0.3),
+                selectedColor: tag.colorData.lighten(0.75),
                 avatar: Icon(Icons.sell, color: tag.colorData.darken()),
               );
             }),

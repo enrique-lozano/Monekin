@@ -642,15 +642,19 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                                   transaction.tags[index];
 
                                               return Chip(
+                                                backgroundColor:
+                                                    tag.colorData.lighten(0.75),
+                                                elevation: 0,
                                                 label: Text(
                                                   tag.name,
                                                   style: Theme.of(context)
                                                       .textTheme
-                                                      .labelSmall,
+                                                      .labelSmall!
+                                                      .copyWith(
+                                                          color: tag.colorData),
                                                 ),
                                                 avatar: Icon(Icons.sell,
-                                                    color:
-                                                        tag.colorData.darken()),
+                                                    color: tag.colorData),
                                               );
                                             }),
                                           ),
