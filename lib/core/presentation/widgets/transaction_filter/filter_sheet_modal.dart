@@ -616,8 +616,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                                               });
                                             },
                                             showCheckmark: false,
-                                            avatar: Icon(Icons.sell,
-                                                color: tag.colorData),
+                                            avatar: tag.displayIcon(),
                                           );
                                         }),
                                     ],

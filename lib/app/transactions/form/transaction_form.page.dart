@@ -415,7 +415,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                 }),
                 showCheckmark: false,
                 selectedColor: tag.colorData.lighten(0.75),
-                avatar: Icon(Icons.sell, color: tag.colorData.darken()),
+                avatar: tag.displayIcon(),
               );
             }),
             ActionChip(
