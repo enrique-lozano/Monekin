@@ -295,6 +295,10 @@
       "voided.descr": "Transacción nula/cancelada debido a un error en el pago o cualquier otro motivo. No será tenida en cuenta a la hora de calcular balances y estadísticas"
     },
     "TYPES": {
+      "display": {
+        "one": "Tipo de transacción",
+        "other": "Tipos de transacción"
+      },
       "income": {
         "one": "Ingreso",
         "other": "Ingresos"
