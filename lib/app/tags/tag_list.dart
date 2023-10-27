@@ -63,10 +63,7 @@ class _TagListState extends State<TagList> {
               if (widget.isModal) {
                 return CheckboxListTile.adaptive(
                   value: selectedTags.any((element) => element.id == tag.id),
-                  secondary: Icon(
-                    Icons.sell_rounded,
-                    color: tag.colorData,
-                  ),
+                  secondary: tag.displayIcon(),
                   title: Text(tag.name),
                   subtitle:
                       tag.description != null && tag.description!.isNotEmpty

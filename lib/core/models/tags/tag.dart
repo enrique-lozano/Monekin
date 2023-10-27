@@ -10,12 +10,18 @@ class Tag extends TagInDB {
     super.description,
   });
 
+  /// Display an icon in the current tag color by default
+  Icon displayIcon({double? size, Color? color}) {
+    return Icon(Tag.icon, size: size, color: color ?? colorData);
+  }
+
   static Tag fromTagInDB(TagInDB e) {
     return Tag(
-        id: e.id, name: e.color, color: e.color, description: e.description);
+        id: e.id, name: e.name, color: e.color, description: e.description);
   }
 
   Color get colorData => ColorHex.get(color);
 
-  static IconData get icon => Icons.sell_rounded;
+  /// The icon that represent the tag entity
+  static IconData get icon => Icons.label_rounded;
 }

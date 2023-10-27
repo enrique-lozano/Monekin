@@ -119,7 +119,7 @@ class _TagFormPageState extends State<TagFormPage> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Icons.label_outline_rounded, color: _colorObj),
+                        Icon(Tag.icon, color: _colorObj, size: 48),
                         const SizedBox(width: 20),
                         Expanded(
                           child: TextFormField(
