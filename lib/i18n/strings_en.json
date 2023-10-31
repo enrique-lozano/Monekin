@@ -424,6 +424,7 @@
       "name": "Tag name",
       "description": "Description"
     },
+    "empty-list": "You haven't created any tags yet. Tags and categories are a great way to categorize your movements",
     "without-tags": "Without tags",
     "select": "Select tags",
     "add": "Add tag",
