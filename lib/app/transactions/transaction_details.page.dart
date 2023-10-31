@@ -625,6 +625,42 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                           ? t.general.category
                                           : t.transfer.form.to),
                                     ),
+                                    if (transaction.tags.isNotEmpty) ...[
+                                      const Divider(indent: 12),
+                                      ListTile(
+                                        title: Text("Tags"),
+                                        subtitle: Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 4),
+                                          child: Wrap(
+                                            spacing: 6,
+                                            runSpacing: 0,
+                                            children: List.generate(
+                                                transaction.tags.length,
+                                                (index) {
+                                              final tag =
+                                                  transaction.tags[index];
+
+                                              return Chip(
+                                                backgroundColor:
+                                                    tag.colorData.lighten(0.75),
+                                                elevation: 0,
+                                                label: Text(
+                                                  tag.name,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .labelSmall!
+                                                      .copyWith(
+                                                          color: tag.colorData),
+                                                ),
+                                                avatar: Icon(Icons.sell,
+                                                    color: tag.colorData),
+                                              );
+                                            }),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                     StreamBuilder(
                                         stream: CurrencyService.instance
                                             .getUserPreferredCurrency(),

@@ -36,20 +36,22 @@ class TransactionFilters {
   final double? minValue;
   final double? maxValue;
 
-  const TransactionFilters({
-    this.minDate,
-    this.maxDate,
-    this.searchValue,
-    this.includeParentCategoriesInSearch = false,
-    this.includeReceivingAccountsInAccountFilters = true,
-    this.minValue,
-    this.maxValue,
-    this.transactionTypes,
-    this.isRecurrent,
-    this.accountsIDs,
-    this.categories,
-    this.status,
-  });
+  final Iterable<String?>? tagsIDs;
+
+  const TransactionFilters(
+      {this.minDate,
+      this.maxDate,
+      this.searchValue,
+      this.includeParentCategoriesInSearch = false,
+      this.includeReceivingAccountsInAccountFilters = true,
+      this.minValue,
+      this.maxValue,
+      this.transactionTypes,
+      this.isRecurrent,
+      this.accountsIDs,
+      this.categories,
+      this.status,
+      this.tagsIDs});
 
   get hasFilter => [
         minDate,
@@ -62,6 +64,7 @@ class TransactionFilters {
         accountsIDs,
         categories,
         status,
+        tagsIDs,
       ].any((element) => element != null);
 
   Stream<List<Account>> accounts() => accountsIDs != null
@@ -91,6 +94,10 @@ class TransactionFilters {
     return (transaction, account, accountCurrency, receivingAccount,
             receivingAccountCurrency, c, p6) =>
         AppDB.instance.buildExpr([
+          if (tagsIDs != null)
+            CustomExpression(
+                "t.id IN (SELECT transactionID FROM transactionTags WHERE tagID IN (${tagsIDs!.where((element) => element != null).map((s) => "'$s'").join(', ')})) ${tagsIDs!.any((element) => element == null) ? 'OR t.id NOT IN (SELECT transactionID FROM transactionTags)' : ''}"),
+
           if (maxValue != null)
             CustomExpression(
                 '(t.value * COALESCE(excRate.exchangeRate,1) <= $maxValue)'),

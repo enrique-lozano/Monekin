@@ -28,6 +28,12 @@ getTransactionsWithFullData($predicate = TRUE) WITH MoneyTransaction:
         ra.** as receivingAccount, 
         c.** as category, 
         pc.** as parentCategory,
+        LIST(
+            SELECT tags.*
+            FROM transactionTags INNER JOIN tags
+            ON transactionTags.tagID = tags.id
+            WHERE transactionTags.transactionID = t.id
+        ) AS tags,
         t.value * COALESCE(excRate.exchangeRate,1) as currentValueInPreferredCurrency,
         t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate,1) as currentValueInDestinyInPreferredCurrency
     FROM transactions t 

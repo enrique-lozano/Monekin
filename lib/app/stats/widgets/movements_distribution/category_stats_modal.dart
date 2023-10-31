@@ -1,7 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/stats/widgets/chart_by_categories.dart';
+import 'package:monekin/app/stats/widgets/movements_distribution/chart_by_categories.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -28,7 +29,7 @@ class CategoryStatsModal extends StatelessWidget {
       required this.categoryData,
       required this.dateRangeDisplayName});
 
-  final ChartByCategoriesDataItem categoryData;
+  final TrDistributionChartItem<Category> categoryData;
   final String dateRangeDisplayName;
 
   Future<List<SubcategoryModalItem>> getSubcategoriesData(
@@ -48,9 +49,6 @@ class CategoryStatsModal extends StatelessWidget {
               fromCurrency: transaction.account.currencyId,
               amount: transaction.value.abs())
           .first;
-
-      print(transaction);
-      print("-----------");
 
       if (categoryToEdit != null) {
         categoryToEdit.value += trValue;
