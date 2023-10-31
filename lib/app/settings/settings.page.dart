@@ -6,6 +6,7 @@ import 'package:monekin/app/settings/appearance_settings_page.dart';
 import 'package:monekin/app/settings/backup_settings_page.dart';
 import 'package:monekin/app/settings/edit_profile_modal.dart';
 import 'package:monekin/app/settings/help_us_page.dart';
+import 'package:monekin/app/tags/tag_list.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
@@ -101,8 +102,19 @@ class _SettingsPageState extends State<SettingsPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const CategoriesList(
-                            mode: CategoriesListMode.page)));
+                      builder: (context) =>
+                          const CategoriesList(mode: CategoriesListMode.page),
+                    ));
+              }),
+              createSettingItem(context,
+                  title: t.tags.display(n: 10),
+                  subtitle: t.settings.general.categories_descr,
+                  icon: Icons.label_outline_rounded, onTap: () {
+                return Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const TagList(),
+                    ));
               }),
               createSettingItem(context,
                   title: t.currencies.currency_manager,

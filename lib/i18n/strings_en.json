@@ -196,7 +196,9 @@
     "balance-evolution": "Balance evolution",
     "compared-to-previous-period": "Compared to the previous period",
     "by-periods": "By periods",
-    "by-categories": "By categories"
+    "by-categories": "By categorías",
+    "by-tags": "By tags",
+    "distribution": "Distribution"
   },
   "ICON-SELECTOR": {
     "name": "Name:",
@@ -414,6 +416,28 @@
     "select-a-currency": "Select a currency",
     "search-title": "Tap to search",
     "search-placeholder": "Search by name or by currency code"
+  },
+  "TAGS": {
+    "display": {
+      "one": "Label",
+      "other": "Tags"
+    },
+    "FORM": {
+      "name": "Tag name",
+      "description": "Description"
+    },
+    "empty-list": "You haven't created any tags yet. Tags and categories are a great way to categorize your movements",
+    "without-tags": "Without tags",
+    "select": "Select tags",
+    "add": "Add tag",
+    "create": "Create label",
+    "create.success": "Label created successfully",
+    "already-exists": "This tag name already exists. You may want to edit it",
+    "edit": "Edit tag",
+    "edit.success": "Tag edited successfully",
+    "delete.success": "Category deleted successfully",
+    "delete-warning-header": "Delete tag?",
+    "delete-warning-message": "This action will not delete transactions that have this tag."
   },
   "CATEGORIES": {
     "unknown": "Unknown category",
