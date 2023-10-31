@@ -3,7 +3,7 @@
     "cancel": "Cancel",
     "or": "or",
     "understood": "Understood",
-    "unspecified": "Sin especificar",
+    "unspecified": "Unspecified",
     "attention": "Attention ⚠️",
     "confirm": "Confirm",
     "continue_text": "Continue",
@@ -207,7 +207,9 @@
     "balance-evolution": "Balance evolution",
     "compared-to-previous-period": "Compared to the previous period",
     "by-periods": "By periods",
-    "by-categories": "By categories"
+    "by-categories": "By categorías",
+    "by-tags": "By tags",
+    "distribution": "Distribution"
   },
   "ICON-SELECTOR": {
     "name": "Name:",
@@ -290,11 +292,11 @@
     },
     "STATUS": {
       "display": {
-        "one": "Estado",
-        "other": "Estados"
+        "one": "Status",
+        "other": "Statuses"
       },
       "tr_status": "{{ status }} transaction",
-      "none": "Sin estado",
+      "none": "Stateless",
       "reconciled": "Reconciled",
       "reconciled.descr": "This transaction has already been validated and corresponds to a real transaction from your bank",
       "unreconciled": "Unreconciled",
@@ -305,6 +307,10 @@
       "voided.descr": "Void/cancelled transaction due to payment error or any other reason. It will not be taken into account when calculating balances and statistics"
     },
     "TYPES": {
+      "display": {
+        "one": "Transaction type",
+        "other": "Transaction types"
+      },
       "income": {
         "one": "Income",
         "other": "Incomes"
@@ -421,6 +427,28 @@
     "select-a-currency": "Select a currency",
     "search-title": "Tap to search",
     "search-placeholder": "Search by name or by currency code"
+  },
+  "TAGS": {
+    "display": {
+      "one": "Label",
+      "other": "Tags"
+    },
+    "FORM": {
+      "name": "Tag name",
+      "description": "Description"
+    },
+    "empty-list": "You haven't created any tags yet. Tags and categories are a great way to categorize your movements",
+    "without-tags": "Without tags",
+    "select": "Select tags",
+    "add": "Add tag",
+    "create": "Create label",
+    "create.success": "Label created successfully",
+    "already-exists": "This tag name already exists. You may want to edit it",
+    "edit": "Edit tag",
+    "edit.success": "Tag edited successfully",
+    "delete.success": "Category deleted successfully",
+    "delete-warning-header": "Delete tag?",
+    "delete-warning-message": "This action will not delete transactions that have this tag."
   },
   "CATEGORIES": {
     "unknown": "Unknown category",

@@ -45,7 +45,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
               )),
       ListTileActionItem(
           label: t.transfer.create,
-          icon: TransactionType.transfer.icon(),
+          icon: TransactionType.transfer.icon,
           onClick: account.isArchived
               ? null
               : () async {

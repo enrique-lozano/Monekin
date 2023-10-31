@@ -5,6 +5,7 @@
 
 import './../../../models/transaction/transaction.dart';
 import './../../../models/transaction/transaction_status.dart';
+import './../../../models/transaction/transaction_periodicity.dart';
 import './../../../models/category/category.dart';
 import './../../../models/account/account.dart';
 import './../../services/user-setting/user_setting_service.dart';
@@ -129,6 +130,24 @@ CREATE TABLE IF NOT EXISTS transactions (
   -- valueInDestiny can not be defined for non-transfer transactions:
   CHECK (categoryID IS NULL OR valueInDestiny IS NULL)
 ) AS TransactionInDB;
+
+CREATE TABLE IF NOT EXISTS tags (
+    id TEXT NOT NULL PRIMARY KEY,
+
+    -- The name of the tag
+    name TEXT UNIQUE NOT NULL,
+
+    -- The display color of the tag
+    color TEXT NOT NULL,
+
+    -- The description of the tag
+    description TEXT
+) AS TagInDB;
+
+CREATE TABLE IF NOT EXISTS transactionTags (
+  transactionID TEXT NOT NULL REFERENCES transactions(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  tagID TEXT NOT NULL REFERENCES tags(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 
 CREATE TABLE IF NOT EXISTS budgets (

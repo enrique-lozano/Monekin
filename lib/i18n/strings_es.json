@@ -208,7 +208,9 @@
     "compared-to-previous-period": "Frente al periodo anterior",
     "cash-flow": "Flujo de caja",
     "by-periods": "Por periodos",
-    "by-categories": "Por categorías"
+    "by-categories": "Por categorías",
+    "by-tags": "Por etiquetas",
+    "distribution": "Distribución"
   },
   "ICON-SELECTOR": {
     "name": "Nombre:",
@@ -306,6 +308,10 @@
       "voided.descr": "Transacción nula/cancelada debido a un error en el pago o cualquier otro motivo. No será tenida en cuenta a la hora de calcular balances y estadísticas"
     },
     "TYPES": {
+      "display": {
+        "one": "Tipo de transacción",
+        "other": "Tipos de transacción"
+      },
       "income": {
         "one": "Ingreso",
         "other": "Ingresos"
@@ -422,6 +428,28 @@
     "select-a-currency": "Selecciona una divisa",
     "search-title": "Toca para buscar",
     "search-placeholder": "Busca por nombre o por código de la divisa"
+  },
+  "TAGS": {
+    "display": {
+      "one": "Etiqueta",
+      "other": "Etiquetas"
+    },
+    "FORM": {
+      "name": "Nombre de la etiqueta",
+      "description": "Descripción"
+    },
+    "empty-list": "No has creado ninguna etiqueta aun. Las etiquetas y las categorías son una gran forma de categorizar tus movimientos",
+    "without-tags": "Sin etiquetas",
+    "select": "Selecionar etiquetas",
+    "create": "Crear etiqueta",
+    "add": "Añadir etiqueta",
+    "create.success": "Etiqueta creada correctamente",
+    "already-exists": "El nombre de esta etiqueta ya existe. Puede que quieras editarla",
+    "edit": "Editar etiqueta",
+    "edit.success": "Etiqueta editada correctamente",
+    "delete.success": "Categoría eliminada correctamente",
+    "delete-warning-header": "¿Eliminar etiqueta?",
+    "delete-warning-message": "Esta acción no borrará las transacciones que poseen esta etiqueta."
   },
   "CATEGORIES": {
     "unknown": "Categoría desconocida",

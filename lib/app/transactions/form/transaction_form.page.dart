@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/categories_list.dart';
-import 'package:monekin/app/transactions/form/widgets/interval_selector_help.dart';
+import 'package:monekin/app/tags/tag_list.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
@@ -12,6 +12,8 @@ import 'package:monekin/core/database/services/user-setting/user_setting_service
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
+import 'package:monekin/core/models/tags/tag.dart';
+import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/animations/shake/shake_widget.dart';
@@ -23,6 +25,7 @@ import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/status_filter/transaction_status_filter.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/tags_filter/tags_filter_container.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/core/utils/constants.dart';
@@ -77,6 +80,8 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   bool get isEditMode => widget.transactionToEdit != null;
 
   RecurrencyData recurrentRule = const RecurrencyData.noRepeat();
+
+  List<Tag> tags = [];
 
   final _shakeKey = GlobalKey<ShakeWidgetState>();
 
@@ -147,9 +152,10 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
 
   submitForm() {
     final t = Translations.of(context);
+    final scMessenger = ScaffoldMessenger.of(context);
 
     if (valueToNumber! < 0) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      scMessenger.showSnackBar(SnackBar(
           content: Text(widget.mode == TransactionFormMode.incomeOrExpense
               ? t.transaction.form.validators.negative_transaction
               : t.transaction.form.validators.negative_transfer)));
@@ -158,7 +164,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     }
 
     if (fromAccount != null && fromAccount!.date.compareTo(date) > 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      scMessenger.showSnackBar(
         SnackBar(
             content: Text(
                 t.transaction.form.validators.date_after_account_creation)),
@@ -170,16 +176,18 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     onSuccess() {
       Navigator.pop(context);
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      scMessenger.showSnackBar(SnackBar(
           content: Text(isEditMode
               ? t.transaction.edit_success
               : t.transaction.new_success)));
     }
 
+    final newTrID = widget.transactionToEdit?.id ?? const Uuid().v4();
+
     TransactionService.instance
         .insertOrUpdateTransaction(
       TransactionInDB(
-        id: widget.transactionToEdit?.id ?? const Uuid().v4(),
+        id: newTrID,
         date: date,
         accountID: fromAccount!.id,
         value: widget.mode == TransactionFormMode.incomeOrExpense &&
@@ -208,10 +216,29 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
       ),
     )
         .then((value) {
-      onSuccess();
+      final db = AppDB.instance;
+
+      Future.wait(
+        [
+          for (final tag in tags)
+            if (widget.transactionToEdit != null &&
+                widget.transactionToEdit!.tags
+                    .any((element) => element.id == tag.id))
+              (db.delete(db.transactionTags)
+                    ..where((tbl) => tbl.tagID.isValue(tag.id)))
+                  .go()
+            else
+              db
+                  .into(db.transactionTags)
+                  .insert(TransactionTag(transactionID: newTrID, tagID: tag.id))
+        ],
+      ).then((value) {
+        onSuccess();
+      }).catchError((error) {
+        scMessenger.showSnackBar(SnackBar(content: Text(error.toString())));
+      });
     }).catchError((error) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(error.toString())));
+      scMessenger.showSnackBar(SnackBar(content: Text(error.toString())));
     });
   }
 
@@ -287,6 +314,8 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
           selectedCategory!.type = CategoryType.I;
         }
       }
+
+      tags = [...transaction.tags];
     });
 
     notesController.text = transaction.notes ?? '';
@@ -295,22 +324,6 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
 
     valueInDestinyController.text =
         transaction.valueInDestiny?.abs().toString() ?? '';
-  }
-
-  FilterChip statusFilter(BuildContext context, TransactionStatus status) {
-    bool isSelected = true;
-
-    return FilterChip(
-        label: Text(status.displayName(context)),
-        selected: isSelected,
-        showCheckmark: false,
-        avatar: Icon(
-          status.icon,
-          color: status.color,
-        ),
-        onSelected: (value) {
-          setState(() {});
-        });
   }
 
   List<Widget> buildExtraFields() {
@@ -382,6 +395,45 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
           },
         ),
       ],
+      const SizedBox(height: 16),
+      TagsFilterContainer(
+        child: Wrap(
+          spacing: 6,
+          runSpacing: 0,
+          children: [
+            ...List.generate(tags.length, (index) {
+              final tag = tags[index];
+
+              return FilterChip(
+                label: Text(
+                  tag.name,
+                  style: TextStyle(color: tag.colorData),
+                ),
+                selected: true,
+                onSelected: (value) => setState(() {
+                  tags.removeWhere((element) => element.id == tag.id);
+                }),
+                showCheckmark: false,
+                selectedColor: tag.colorData.lighten(0.75),
+                avatar: tag.displayIcon(),
+              );
+            }),
+            ActionChip(
+              label: Text(t.tags.add),
+              avatar: const Icon(Icons.add),
+              onPressed: () => showTagListModal(
+                      context, TagList(isModal: true, selected: tags))
+                  .then((value) {
+                if (value != null) {
+                  setState(() {
+                    tags = value;
+                  });
+                }
+              }),
+            ),
+          ],
+        ),
+      )
     ];
   }
 

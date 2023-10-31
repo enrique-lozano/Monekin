@@ -2,26 +2,24 @@ import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/stats/widgets/category_stats_modal.dart';
+import 'package:monekin/app/stats/widgets/movements_distribution/category_stats_modal.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
-import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/services/filters/date_range_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-import '../../../core/services/filters/date_range_service.dart';
-
-class ChartByCategoriesDataItem {
-  Category category;
+class TrDistributionChartItem<T> {
+  T category;
   List<MoneyTransaction> transactions;
   double value;
 
-  ChartByCategoriesDataItem({
+  TrDistributionChartItem({
     required this.category,
     required this.transactions,
     required this.value,
@@ -54,10 +52,10 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
   int touchedIndex = -1;
   late TransactionType transactionsType;
 
-  Future<List<ChartByCategoriesDataItem>> getEvolutionData(
+  Future<List<TrDistributionChartItem<Category>>> getEvolutionData(
     BuildContext context,
   ) async {
-    final data = <ChartByCategoriesDataItem>[];
+    final data = <TrDistributionChartItem<Category>>[];
 
     final transactionService = TransactionService.instance;
 
@@ -79,11 +77,7 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
         .first;
 
     for (final transaction in transactions) {
-      final trValue = await ExchangeRateService.instance
-          .calculateExchangeRateToPreferredCurrency(
-              fromCurrency: transaction.account.currencyId,
-              amount: transaction.value.abs())
-          .first;
+      final trValue = transaction.currentValueInPreferredCurrency.abs();
 
       final categoryToEdit = data.firstWhereOrNull((cat) =>
           cat.category.id == transaction.category?.id ||
@@ -94,7 +88,7 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
         categoryToEdit.transactions.add(transaction);
       } else {
         data.add(
-          ChartByCategoriesDataItem(
+          TrDistributionChartItem(
               category: transaction.category!.parentCategoryID == null
                   ? Category.fromDB(transaction.category!, null)
                   : (await CategoryService.instance
@@ -112,13 +106,12 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
 
   /// Returns a value between 0 and 100
   double getElementPercentageInTotal(
-      double elementValue, List<ChartByCategoriesDataItem> items) {
-    return (elementValue /
-        items.map((e) => e.value).reduce((value, element) => value + element));
+      double elementValue, List<TrDistributionChartItem> items) {
+    return (elementValue / items.map((e) => e.value).sum);
   }
 
-  List<ChartByCategoriesDataItem> deleteUnimportantItems(
-      List<ChartByCategoriesDataItem> data) {
+  List<TrDistributionChartItem> deleteUnimportantItems(
+      List<TrDistributionChartItem> data) {
     const limit = 0.05;
 
     final unimportantItems = data.where(
@@ -131,7 +124,7 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
             getElementPercentageInTotal(element.value, data) >= limit)
         .toList();
 
-    final toAdd = ChartByCategoriesDataItem(
+    final toAdd = TrDistributionChartItem(
         value: 0,
         transactions: [],
         category: Category(
@@ -152,7 +145,7 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
   }
 
   List<PieChartSectionData> showingSections(
-      List<ChartByCategoriesDataItem> data) {
+      List<TrDistributionChartItem> data) {
     if (data.isEmpty) {
       return [
         PieChartSectionData(
