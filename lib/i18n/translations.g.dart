@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 956 (478 per locale)
+/// Strings: 960 (480 per locale)
 ///
-/// Built on 2023-10-31 at 14:26 UTC
+/// Built on 2023-10-31 at 15:48 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -285,7 +285,9 @@ class _TranslationsStatsEn {
 	String get balance_evolution => 'Balance evolution';
 	String get compared_to_previous_period => 'Compared to the previous period';
 	String get by_periods => 'By periods';
-	String get by_categories => 'By categories';
+	String get by_categories => 'By categorías';
+	String get by_tags => 'By tags';
+	String get distribution => 'Distribution';
 }
 
 // Path: icon_selector
@@ -1416,6 +1418,8 @@ class _TranslationsStatsEs implements _TranslationsStatsEn {
 	@override String get cash_flow => 'Flujo de caja';
 	@override String get by_periods => 'Por periodos';
 	@override String get by_categories => 'Por categorías';
+	@override String get by_tags => 'Por etiquetas';
+	@override String get distribution => 'Distribución';
 }
 
 // Path: icon_selector
@@ -2556,7 +2560,9 @@ extension on _TranslationsEn {
 			case 'stats.balance_evolution': return 'Balance evolution';
 			case 'stats.compared_to_previous_period': return 'Compared to the previous period';
 			case 'stats.by_periods': return 'By periods';
-			case 'stats.by_categories': return 'By categories';
+			case 'stats.by_categories': return 'By categorías';
+			case 'stats.by_tags': return 'By tags';
+			case 'stats.distribution': return 'Distribution';
 			case 'icon_selector.name': return 'Name:';
 			case 'icon_selector.icon': return 'Icon';
 			case 'icon_selector.color': return 'Colour';
@@ -3075,6 +3081,8 @@ extension on _TranslationsEs {
 			case 'stats.cash_flow': return 'Flujo de caja';
 			case 'stats.by_periods': return 'Por periodos';
 			case 'stats.by_categories': return 'Por categorías';
+			case 'stats.by_tags': return 'Por etiquetas';
+			case 'stats.distribution': return 'Distribución';
 			case 'icon_selector.name': return 'Nombre:';
 			case 'icon_selector.icon': return 'Icono';
 			case 'icon_selector.color': return 'Color';
