@@ -100,11 +100,11 @@ class TransactionFilters {
 
           if (maxValue != null)
             CustomExpression(
-                '(t.value * COALESCE(excRate.exchangeRate,1) <= $maxValue)'),
+                '(ABS(t.value * COALESCE(excRate.exchangeRate,1)) <= $maxValue)'),
 
           if (minValue != null)
             CustomExpression(
-                '(t.value * COALESCE(excRate.exchangeRate,1) >= $minValue)'),
+                '(ABS(t.value * COALESCE(excRate.exchangeRate,1)) >= $minValue)'),
 
           // Transaction types:
           if (transactionTypes != null &&
