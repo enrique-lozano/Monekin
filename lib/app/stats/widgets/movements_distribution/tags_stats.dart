@@ -59,6 +59,8 @@ class TagStats extends StatelessWidget {
                     .where((element) => element.transactions.isNotEmpty)
                     .toList();
 
+                tagsInfo.sort((a, b) => a.value.compareTo(b.value));
+
                 if (tags.isEmpty || tagsInfo.isEmpty) {
                   return Padding(
                     padding: const EdgeInsets.all(24),
