@@ -134,50 +134,45 @@ class _StatsPageState extends State<StatsPage> {
                   ],
                   padding: const EdgeInsets.all(0),
                 ),
-                buildContainerWithPadding(
-                  [
-                    CardWithHeader(
-                      title: t.stats.by_categories,
-                      body: ChartByCategories(
-                        startDate: currentStartDate,
-                        endDate: currentEndDate,
-                        showList: true,
-                        initialSelectedType: TransactionType.expense,
-                        filters: filters,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    CardWithHeader(
-                      title: t.stats.by_tags,
-                      body: TagStats(
-                        filters: filters.copyWith(
-                          minDate: currentStartDate,
-                          maxDate: currentEndDate,
-                        ),
-                      ),
-                    ),
-                  ],
-                  padding: const EdgeInsets.all(0),
-                ),
-                buildContainerWithPadding(
-                  [
-                    CardWithHeader(
-                      title: t.stats.balance_evolution,
-                      body: FundEvolutionLineChart(
-                        showBalanceHeader: true,
-                        startDate: currentStartDate,
-                        endDate: currentEndDate,
-                        dateRange: currentDateRange,
-                        filters: filters,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    AllAccountBalancePage(
-                      date: currentEndDate ?? DateTime.now(),
+                buildContainerWithPadding([
+                  CardWithHeader(
+                    title: t.stats.by_categories,
+                    body: ChartByCategories(
+                      startDate: currentStartDate,
+                      endDate: currentEndDate,
+                      showList: true,
+                      initialSelectedType: TransactionType.expense,
                       filters: filters,
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 16),
+                  CardWithHeader(
+                    title: t.stats.by_tags,
+                    body: TagStats(
+                      filters: filters.copyWith(
+                        minDate: currentStartDate,
+                        maxDate: currentEndDate,
+                      ),
+                    ),
+                  ),
+                ]),
+                buildContainerWithPadding([
+                  CardWithHeader(
+                    title: t.stats.balance_evolution,
+                    body: FundEvolutionLineChart(
+                      showBalanceHeader: true,
+                      startDate: currentStartDate,
+                      endDate: currentEndDate,
+                      dateRange: currentDateRange,
+                      filters: filters,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  AllAccountBalancePage(
+                    date: currentEndDate ?? DateTime.now(),
+                    filters: filters,
+                  ),
+                ]),
                 buildContainerWithPadding([
                   CardWithHeader(
                     title: t.stats.cash_flow,
