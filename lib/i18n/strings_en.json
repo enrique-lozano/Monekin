@@ -196,7 +196,9 @@
     "balance-evolution": "Balance evolution",
     "compared-to-previous-period": "Compared to the previous period",
     "by-periods": "By periods",
-    "by-categories": "By categories"
+    "by-categories": "By categorías",
+    "by-tags": "By tags",
+    "distribution": "Distribution"
   },
   "ICON-SELECTOR": {
     "name": "Name:",

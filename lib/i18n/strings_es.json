@@ -197,7 +197,9 @@
     "compared-to-previous-period": "Frente al periodo anterior",
     "cash-flow": "Flujo de caja",
     "by-periods": "Por periodos",
-    "by-categories": "Por categorías"
+    "by-categories": "Por categorías",
+    "by-tags": "Por etiquetas",
+    "distribution": "Distribución"
   },
   "ICON-SELECTOR": {
     "name": "Nombre:",

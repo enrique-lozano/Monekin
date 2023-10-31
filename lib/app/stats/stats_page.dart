@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/stats/footer_segmented_calendar_button.dart';
 import 'package:monekin/app/stats/widgets/balance_bar_chart.dart';
-import 'package:monekin/app/stats/widgets/chart_by_categories.dart';
 import 'package:monekin/app/stats/widgets/fund_evolution_line_chart.dart';
 import 'package:monekin/app/stats/widgets/income_expense_comparason.dart';
+import 'package:monekin/app/stats/widgets/movements_distribution/chart_by_categories.dart';
+import 'package:monekin/app/stats/widgets/movements_distribution/tags_stats.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
@@ -50,7 +51,7 @@ class _StatsPageState extends State<StatsPage> {
   Widget buildContainerWithPadding(
     List<Widget> children, {
     EdgeInsetsGeometry padding =
-        const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+        const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
   }) {
     return SingleChildScrollView(
       padding: padding,
@@ -91,7 +92,7 @@ class _StatsPageState extends State<StatsPage> {
                 icon: const Icon(Icons.filter_alt_outlined)),
           ],
           bottom: TabBar(tabs: [
-            Tab(text: t.stats.by_categories),
+            Tab(text: t.stats.distribution),
             Tab(text: t.stats.balance),
             Tab(text: t.stats.cash_flow),
           ], isScrollable: true),
@@ -123,14 +124,27 @@ class _StatsPageState extends State<StatsPage> {
             Expanded(
               child: TabBarView(children: [
                 buildContainerWithPadding([
-                  ChartByCategories(
-                    startDate: currentStartDate,
-                    endDate: currentEndDate,
-                    showList: true,
-                    initialSelectedType: TransactionType.expense,
-                    filters: filters,
+                  CardWithHeader(
+                    title: t.stats.by_categories,
+                    body: ChartByCategories(
+                      startDate: currentStartDate,
+                      endDate: currentEndDate,
+                      showList: true,
+                      initialSelectedType: TransactionType.expense,
+                      filters: filters,
+                    ),
                   ),
-                ], padding: const EdgeInsets.all(0)),
+                  const SizedBox(height: 16),
+                  CardWithHeader(
+                    title: t.stats.by_tags,
+                    body: TagStats(
+                      filters: filters.copyWith(
+                        minDate: currentStartDate,
+                        maxDate: currentEndDate,
+                      ),
+                    ),
+                  ),
+                ]),
                 buildContainerWithPadding(
                   [
                     CardWithHeader(
