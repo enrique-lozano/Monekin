@@ -464,7 +464,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                             /* -------- TRANSACTION TYPE -------- */
                             /* ---------------------------------- */
 
-                            Text(t.transaction.display(n: 10)),
+                            Text('${t.transaction.types.display(n: 10)}:'),
                             const SizedBox(height: 4),
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,

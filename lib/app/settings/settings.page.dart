@@ -107,7 +107,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ));
               }),
               createSettingItem(context,
-                  title: "Tags",
+                  title: t.tags.display(n: 10),
                   subtitle: t.settings.general.categories_descr,
                   icon: Icons.label_outline_rounded, onTap: () {
                 return Navigator.push(
