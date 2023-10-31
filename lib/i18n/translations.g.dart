@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 954 (477 per locale)
+/// Strings: 956 (478 per locale)
 ///
-/// Built on 2023-10-27 at 14:53 UTC
+/// Built on 2023-10-31 at 14:26 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -423,6 +423,7 @@ class _TranslationsTagsEn {
 		other: 'Tags',
 	);
 	late final _TranslationsTagsFormEn form = _TranslationsTagsFormEn._(_root);
+	String get empty_list => 'You haven\'t created any tags yet. Tags and categories are a great way to categorize your movements';
 	String get without_tags => 'Without tags';
 	String get select => 'Select tags';
 	String get add => 'Add tag';
@@ -1552,6 +1553,7 @@ class _TranslationsTagsEs implements _TranslationsTagsEn {
 		other: 'Etiquetas',
 	);
 	@override late final _TranslationsTagsFormEs form = _TranslationsTagsFormEs._(_root);
+	@override String get empty_list => 'No has creado ninguna etiqueta aun. Las etiquetas y las categorías son una gran forma de categorizar tus movimientos';
 	@override String get without_tags => 'Sin etiquetas';
 	@override String get select => 'Selecionar etiquetas';
 	@override String get create => 'Crear etiqueta';
@@ -2732,6 +2734,7 @@ extension on _TranslationsEn {
 			);
 			case 'tags.form.name': return 'Tag name';
 			case 'tags.form.description': return 'Description';
+			case 'tags.empty_list': return 'You haven\'t created any tags yet. Tags and categories are a great way to categorize your movements';
 			case 'tags.without_tags': return 'Without tags';
 			case 'tags.select': return 'Select tags';
 			case 'tags.add': return 'Add tag';
@@ -3249,6 +3252,7 @@ extension on _TranslationsEs {
 			);
 			case 'tags.form.name': return 'Nombre de la etiqueta';
 			case 'tags.form.description': return 'Descripción';
+			case 'tags.empty_list': return 'No has creado ninguna etiqueta aun. Las etiquetas y las categorías son una gran forma de categorizar tus movimientos';
 			case 'tags.without_tags': return 'Sin etiquetas';
 			case 'tags.select': return 'Selecionar etiquetas';
 			case 'tags.create': return 'Crear etiqueta';

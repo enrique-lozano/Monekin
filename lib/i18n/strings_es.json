@@ -425,6 +425,7 @@
       "name": "Nombre de la etiqueta",
       "description": "Descripción"
     },
+    "empty-list": "No has creado ninguna etiqueta aun. Las etiquetas y las categorías son una gran forma de categorizar tus movimientos",
     "without-tags": "Sin etiquetas",
     "select": "Selecionar etiquetas",
     "create": "Crear etiqueta",

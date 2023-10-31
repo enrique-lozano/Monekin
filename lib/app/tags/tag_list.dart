@@ -3,6 +3,7 @@ import 'package:monekin/app/tags/tag_form_page.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:monekin/core/presentation/widgets/empty_indicator.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -54,6 +55,13 @@ class _TagListState extends State<TagList> {
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const LinearProgressIndicator();
+          }
+
+          if (snapshot.data!.isEmpty) {
+            return EmptyIndicator(
+              title: t.general.empty_warn,
+              description: t.tags.empty_list,
+            );
           }
 
           return ListView.separated(
