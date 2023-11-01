@@ -184,14 +184,12 @@ class _StatsPageState extends State<StatsPage> {
                   const SizedBox(height: 16),
                   CardWithHeader(
                     title: t.stats.by_periods,
-                    body: Padding(
-                      padding: const EdgeInsets.only(bottom: 10, top: 16),
-                      child: BalanceBarChart(
-                        startDate: currentStartDate,
-                        endDate: currentEndDate,
-                        dateRange: currentDateRange,
-                        filters: filters,
-                      ),
+                    bodyPadding: const EdgeInsets.only(bottom: 12, top: 16),
+                    body: BalanceBarChart(
+                      startDate: currentStartDate,
+                      endDate: currentEndDate,
+                      dateRange: currentDateRange,
+                      filters: filters,
                     ),
                   )
                 ]),
