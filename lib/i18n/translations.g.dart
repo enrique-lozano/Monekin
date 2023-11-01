@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 974 (487 per locale)
+/// Strings: 990 (495 per locale)
 ///
-/// Built on 2023-10-31 at 16:01 UTC
+/// Built on 2023-11-01 at 11:09 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -121,6 +121,13 @@ class AppLocaleUtils extends BaseAppLocaleUtils<AppLocale, _TranslationsEn> {
 	static AppLocale findDeviceLocale() => instance.findDeviceLocale();
 	static List<Locale> get supportedLocales => instance.supportedLocales;
 	static List<String> get supportedLocalesRaw => instance.supportedLocalesRaw;
+}
+
+// context enums
+
+enum GenderContext {
+	male,
+	female,
 }
 
 // translations
@@ -288,6 +295,8 @@ class _TranslationsStatsEn {
 	String get by_categories => 'By categorías';
 	String get by_tags => 'By tags';
 	String get distribution => 'Distribution';
+	String get finance_health_resume => 'Resume';
+	String get finance_health_breakdown => 'Breakdown';
 }
 
 // Path: icon_selector
@@ -609,12 +618,54 @@ class _TranslationsFinancialHealthReviewEn {
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
-	String get very_good => 'Very good!';
-	String get good => 'Good';
-	String get normal => 'Average';
-	String get bad => 'Fair';
-	String get very_bad => 'Very Bad';
-	String get insufficient_data => 'Insufficient data';
+	String very_good({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Very good!';
+			case GenderContext.female:
+				return 'Very good!';
+		}
+	}
+	String good({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Good';
+			case GenderContext.female:
+				return 'Good';
+		}
+	}
+	String normal({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Average';
+			case GenderContext.female:
+				return 'Average';
+		}
+	}
+	String bad({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Fair';
+			case GenderContext.female:
+				return 'Fair';
+		}
+	}
+	String very_bad({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Very Bad';
+			case GenderContext.female:
+				return 'Very Bad';
+		}
+	}
+	String insufficient_data({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Insufficient data';
+			case GenderContext.female:
+				return 'Insufficient data';
+		}
+	}
 	late final _TranslationsFinancialHealthReviewDescrEn descr = _TranslationsFinancialHealthReviewDescrEn._(_root);
 }
 
@@ -1172,12 +1223,12 @@ class _TranslationsFinancialHealthReviewDescrEn {
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
-	String get insufficient_data => 'It looks like we don\'t have enough expenses to calculate your financial health. Visit the analysis tab to see how to save even more!';
+	String get insufficient_data => 'It looks like we don\'t have enough expenses to calculate your financial health. Add some expenses/incomes in this period to allow us to help you!';
 	String get very_good => 'Congratulations! Your financial health is tremendous. We hope you continue your good streak and continue learning with Monekin';
 	String get good => 'Great! Your financial health is good. Visit the analysis tab to see how to save even more!';
 	String get normal => 'Your financial health is more or less in the average of the rest of the population for this period';
-	String get bad => 'It seems that your financial situation is not the best yet. Explore the analysis tab to learn more about your finances';
-	String get very_bad => 'Hmm, your financial health is far below what it should be. Try to see where the problem is in the analysis section';
+	String get bad => 'It seems that your financial situation is not the best yet. Explore the rest of the charts to learn more about your finances';
+	String get very_bad => 'Hmm, your financial health is far below what it should be. Explore the rest of the charts to learn more about your finances';
 }
 
 // Path: financial_health.savings_percentage.text
@@ -1439,6 +1490,8 @@ class _TranslationsStatsEs implements _TranslationsStatsEn {
 	@override String get by_categories => 'Por categorías';
 	@override String get by_tags => 'Por etiquetas';
 	@override String get distribution => 'Distribución';
+	@override String get finance_health_resume => 'Resumen';
+	@override String get finance_health_breakdown => 'Desglose';
 }
 
 // Path: icon_selector
@@ -1760,12 +1813,54 @@ class _TranslationsFinancialHealthReviewEs implements _TranslationsFinancialHeal
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get very_good => 'Muy buena!';
-	@override String get good => 'Buena';
-	@override String get normal => 'En la media';
-	@override String get bad => 'Regular';
-	@override String get very_bad => 'Muy mala';
-	@override String get insufficient_data => 'Datos insuficientes';
+	@override String very_good({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Excelente!';
+			case GenderContext.female:
+				return 'Excelente!';
+		}
+	}
+	@override String good({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Bueno';
+			case GenderContext.female:
+				return 'Buena';
+		}
+	}
+	@override String normal({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'En la media';
+			case GenderContext.female:
+				return 'En la media';
+		}
+	}
+	@override String bad({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Regular';
+			case GenderContext.female:
+				return 'Regular';
+		}
+	}
+	@override String very_bad({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Muy malo';
+			case GenderContext.female:
+				return 'Muy mala';
+		}
+	}
+	@override String insufficient_data({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Datos insuficientes';
+			case GenderContext.female:
+				return 'Datos insuficientes';
+		}
+	}
 	@override late final _TranslationsFinancialHealthReviewDescrEs descr = _TranslationsFinancialHealthReviewDescrEs._(_root);
 }
 
@@ -2325,12 +2420,12 @@ class _TranslationsFinancialHealthReviewDescrEs implements _TranslationsFinancia
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get insufficient_data => 'Parece que no tenemos gastos suficientes para calcular tu salud financiera. Visita la pestaña de análisis para ver como ahorrar aun mas!';
+	@override String get insufficient_data => 'Parece que no tenemos gastos suficientes para calcular tu salud financiera. Añade unos pocos gastos e ingresos para que podamos ayudarte mas!';
 	@override String get very_good => 'Enhorabuena! Tu salud financiera es formidable. Esperamos que sigas con tu buena racha y que continues aprendiendo con Monekin';
 	@override String get good => 'Genial! Tu salud financiera es buena. Visita la pestaña de análisis para ver como ahorrar aun mas!';
 	@override String get normal => 'Tu salud financiera se encuentra mas o menos en la media del resto de la población para este periodo';
-	@override String get bad => 'Parece que tu situación financiera no es la mejor aun. Explora la pestaña de análisis para conocer mas sobre tus finanzas';
-	@override String get very_bad => 'Mmm, tu salud financera esta muy por debajo de lo que debería. Trata de ver donde esta el problema en la sección de análisis';
+	@override String get bad => 'Parece que tu situación financiera no es la mejor aun. Explora el resto de pestañas de análisis para conocer mas sobre tus finanzas';
+	@override String get very_bad => 'Mmm, tu salud financera esta muy por debajo de lo que debería. Trata de ver donde esta el problema gracias a los distintos gráficos y estadisticas que te proporcionamos';
 }
 
 // Path: financial_health.savings_percentage.text
@@ -2571,18 +2666,60 @@ extension on _TranslationsEn {
 			case 'home.should_create_account_header': return 'Oops!';
 			case 'home.should_create_account_message': return 'You must have at least one no-archived account before you can start creating transactions';
 			case 'financial_health.display': return 'Financial health';
-			case 'financial_health.review.very_good': return 'Very good!';
-			case 'financial_health.review.good': return 'Good';
-			case 'financial_health.review.normal': return 'Average';
-			case 'financial_health.review.bad': return 'Fair';
-			case 'financial_health.review.very_bad': return 'Very Bad';
-			case 'financial_health.review.insufficient_data': return 'Insufficient data';
-			case 'financial_health.review.descr.insufficient_data': return 'It looks like we don\'t have enough expenses to calculate your financial health. Visit the analysis tab to see how to save even more!';
+			case 'financial_health.review.very_good': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Very good!';
+					case GenderContext.female:
+						return 'Very good!';
+				}
+			};
+			case 'financial_health.review.good': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Good';
+					case GenderContext.female:
+						return 'Good';
+				}
+			};
+			case 'financial_health.review.normal': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Average';
+					case GenderContext.female:
+						return 'Average';
+				}
+			};
+			case 'financial_health.review.bad': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Fair';
+					case GenderContext.female:
+						return 'Fair';
+				}
+			};
+			case 'financial_health.review.very_bad': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Very Bad';
+					case GenderContext.female:
+						return 'Very Bad';
+				}
+			};
+			case 'financial_health.review.insufficient_data': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Insufficient data';
+					case GenderContext.female:
+						return 'Insufficient data';
+				}
+			};
+			case 'financial_health.review.descr.insufficient_data': return 'It looks like we don\'t have enough expenses to calculate your financial health. Add some expenses/incomes in this period to allow us to help you!';
 			case 'financial_health.review.descr.very_good': return 'Congratulations! Your financial health is tremendous. We hope you continue your good streak and continue learning with Monekin';
 			case 'financial_health.review.descr.good': return 'Great! Your financial health is good. Visit the analysis tab to see how to save even more!';
 			case 'financial_health.review.descr.normal': return 'Your financial health is more or less in the average of the rest of the population for this period';
-			case 'financial_health.review.descr.bad': return 'It seems that your financial situation is not the best yet. Explore the analysis tab to learn more about your finances';
-			case 'financial_health.review.descr.very_bad': return 'Hmm, your financial health is far below what it should be. Try to see where the problem is in the analysis section';
+			case 'financial_health.review.descr.bad': return 'It seems that your financial situation is not the best yet. Explore the rest of the charts to learn more about your finances';
+			case 'financial_health.review.descr.very_bad': return 'Hmm, your financial health is far below what it should be. Explore the rest of the charts to learn more about your finances';
 			case 'financial_health.months_without_income.title': return 'Survival rate';
 			case 'financial_health.months_without_income.subtitle': return 'Given your balance, amount of time you could go without income';
 			case 'financial_health.months_without_income.text': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
@@ -2610,6 +2747,8 @@ extension on _TranslationsEn {
 			case 'stats.by_categories': return 'By categorías';
 			case 'stats.by_tags': return 'By tags';
 			case 'stats.distribution': return 'Distribution';
+			case 'stats.finance_health_resume': return 'Resume';
+			case 'stats.finance_health_breakdown': return 'Breakdown';
 			case 'icon_selector.name': return 'Name:';
 			case 'icon_selector.icon': return 'Icon';
 			case 'icon_selector.color': return 'Colour';
@@ -3100,18 +3239,60 @@ extension on _TranslationsEs {
 			case 'home.should_create_account_header': return 'Ops!';
 			case 'home.should_create_account_message': return 'Debes tener al menos una cuenta no archivada que no sea de ahorros antes de empezar a crear transacciones';
 			case 'financial_health.display': return 'Salud financiera';
-			case 'financial_health.review.very_good': return 'Muy buena!';
-			case 'financial_health.review.good': return 'Buena';
-			case 'financial_health.review.normal': return 'En la media';
-			case 'financial_health.review.bad': return 'Regular';
-			case 'financial_health.review.very_bad': return 'Muy mala';
-			case 'financial_health.review.insufficient_data': return 'Datos insuficientes';
-			case 'financial_health.review.descr.insufficient_data': return 'Parece que no tenemos gastos suficientes para calcular tu salud financiera. Visita la pestaña de análisis para ver como ahorrar aun mas!';
+			case 'financial_health.review.very_good': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Excelente!';
+					case GenderContext.female:
+						return 'Excelente!';
+				}
+			};
+			case 'financial_health.review.good': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Bueno';
+					case GenderContext.female:
+						return 'Buena';
+				}
+			};
+			case 'financial_health.review.normal': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'En la media';
+					case GenderContext.female:
+						return 'En la media';
+				}
+			};
+			case 'financial_health.review.bad': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Regular';
+					case GenderContext.female:
+						return 'Regular';
+				}
+			};
+			case 'financial_health.review.very_bad': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Muy malo';
+					case GenderContext.female:
+						return 'Muy mala';
+				}
+			};
+			case 'financial_health.review.insufficient_data': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Datos insuficientes';
+					case GenderContext.female:
+						return 'Datos insuficientes';
+				}
+			};
+			case 'financial_health.review.descr.insufficient_data': return 'Parece que no tenemos gastos suficientes para calcular tu salud financiera. Añade unos pocos gastos e ingresos para que podamos ayudarte mas!';
 			case 'financial_health.review.descr.very_good': return 'Enhorabuena! Tu salud financiera es formidable. Esperamos que sigas con tu buena racha y que continues aprendiendo con Monekin';
 			case 'financial_health.review.descr.good': return 'Genial! Tu salud financiera es buena. Visita la pestaña de análisis para ver como ahorrar aun mas!';
 			case 'financial_health.review.descr.normal': return 'Tu salud financiera se encuentra mas o menos en la media del resto de la población para este periodo';
-			case 'financial_health.review.descr.bad': return 'Parece que tu situación financiera no es la mejor aun. Explora la pestaña de análisis para conocer mas sobre tus finanzas';
-			case 'financial_health.review.descr.very_bad': return 'Mmm, tu salud financera esta muy por debajo de lo que debería. Trata de ver donde esta el problema en la sección de análisis';
+			case 'financial_health.review.descr.bad': return 'Parece que tu situación financiera no es la mejor aun. Explora el resto de pestañas de análisis para conocer mas sobre tus finanzas';
+			case 'financial_health.review.descr.very_bad': return 'Mmm, tu salud financera esta muy por debajo de lo que debería. Trata de ver donde esta el problema gracias a los distintos gráficos y estadisticas que te proporcionamos';
 			case 'financial_health.months_without_income.title': return 'Ratio de supervivencia';
 			case 'financial_health.months_without_income.subtitle': return 'Dado tu saldo, cantidad de tiempo que podrías pasar sin ingresos';
 			case 'financial_health.months_without_income.text': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
@@ -3139,6 +3320,8 @@ extension on _TranslationsEs {
 			case 'stats.by_categories': return 'Por categorías';
 			case 'stats.by_tags': return 'Por etiquetas';
 			case 'stats.distribution': return 'Distribución';
+			case 'stats.finance_health_resume': return 'Resumen';
+			case 'stats.finance_health_breakdown': return 'Desglose';
 			case 'icon_selector.name': return 'Nombre:';
 			case 'icon_selector.icon': return 'Icono';
 			case 'icon_selector.color': return 'Color';

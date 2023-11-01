@@ -160,20 +160,25 @@
   "FINANCIAL-HEALTH": {
     "display": "Salud financiera",
     "review": {
-      "very_good": "Muy buena!",
-      "good": "Buena",
-      "normal": "En la media",
-      "bad": "Regular",
-      "very_bad": "Muy mala",
-      "insufficient_data": "Datos insuficientes",
+      "very_good(context=GenderContext)": { "male,female": "Excelente!" },
+      "good(context=GenderContext)": { "male": "Bueno", "female": "Buena" },
+      "normal(context=GenderContext)": { "male,female": "En la media" },
+      "bad(context=GenderContext)": { "male,female": "Regular" },
+      "very_bad(context=GenderContext)": {
+        "male": "Muy malo",
+        "female": "Muy mala"
+      },
+      "insufficient_data(context=GenderContext)": {
+        "male,female": "Datos insuficientes"
+      },
 
       "descr": {
-        "insufficient_data": "Parece que no tenemos gastos suficientes para calcular tu salud financiera. Visita la pestaña de análisis para ver como ahorrar aun mas!",
+        "insufficient_data": "Parece que no tenemos gastos suficientes para calcular tu salud financiera. Añade unos pocos gastos e ingresos para que podamos ayudarte mas!",
         "very_good": "Enhorabuena! Tu salud financiera es formidable. Esperamos que sigas con tu buena racha y que continues aprendiendo con Monekin",
         "good": "Genial! Tu salud financiera es buena. Visita la pestaña de análisis para ver como ahorrar aun mas!",
         "normal": "Tu salud financiera se encuentra mas o menos en la media del resto de la población para este periodo",
-        "bad": "Parece que tu situación financiera no es la mejor aun. Explora la pestaña de análisis para conocer mas sobre tus finanzas",
-        "very_bad": "Mmm, tu salud financera esta muy por debajo de lo que debería. Trata de ver donde esta el problema en la sección de análisis"
+        "bad": "Parece que tu situación financiera no es la mejor aun. Explora el resto de pestañas de análisis para conocer mas sobre tus finanzas",
+        "very_bad": "Mmm, tu salud financera esta muy por debajo de lo que debería. Trata de ver donde esta el problema gracias a los distintos gráficos y estadisticas que te proporcionamos"
       }
     },
     "monthsWithoutIncome": {
@@ -210,7 +215,9 @@
     "by-periods": "Por periodos",
     "by-categories": "Por categorías",
     "by-tags": "Por etiquetas",
-    "distribution": "Distribución"
+    "distribution": "Distribución",
+    "finance-health-resume": "Resumen",
+    "finance-health-breakdown": "Desglose"
   },
   "ICON-SELECTOR": {
     "name": "Nombre:",
