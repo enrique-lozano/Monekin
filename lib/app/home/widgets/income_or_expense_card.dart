@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/i18n/translations.g.dart';
 
 class IncomeOrExpenseCard extends StatelessWidget {
   const IncomeOrExpenseCard(
@@ -23,17 +21,6 @@ class IncomeOrExpenseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
-
-    final isIncome = type == AccountDataFilter.income;
-
-    final Color color = isIncome
-        ? CustomColors.of(context).success
-        : CustomColors.of(context).danger;
-    final String text = isIncome
-        ? t.transaction.types.income(n: 1)
-        : t.transaction.types.expense(n: 1);
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       child: Row(
@@ -45,8 +32,8 @@ class IncomeOrExpenseCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
-              isIncome ? Icons.south_east : Icons.north_east,
-              color: color,
+              type.icon,
+              color: type.color(context),
               size: 22,
             ),
           ),
@@ -54,7 +41,7 @@ class IncomeOrExpenseCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(text),
+              Text(type.displayName(context)),
               StreamBuilder(
                   stream: AccountService.instance.getAccountsBalance(
                     filters: TransactionFilters(
