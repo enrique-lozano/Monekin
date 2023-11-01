@@ -159,32 +159,45 @@
   "FINANCIAL-HEALTH": {
     "display": "Financial health",
     "review": {
-      "very_good": "Very good!",
-      "good": "Good",
-      "normal": "Average",
-      "bad": "Fair",
-      "very_bad": "Very Bad",
+      "very_good(context=GenderContext)": { "male,female": "Very good!" },
+      "good(context=GenderContext)": { "male,female": "Good" },
+      "normal(context=GenderContext)": { "male,female": "Average" },
+      "bad(context=GenderContext)": { "male,female": "Fair" },
+      "very_bad(context=GenderContext)": { "male,female": "Very Bad" },
+      "insufficient_data(context=GenderContext)": {
+        "male,female": "Insufficient data"
+      },
 
       "descr": {
+        "insufficient_data": "It looks like we don't have enough expenses to calculate your financial health. Add some expenses/incomes in this period to allow us to help you!",
         "very_good": "Congratulations! Your financial health is tremendous. We hope you continue your good streak and continue learning with Monekin",
         "good": "Great! Your financial health is good. Visit the analysis tab to see how to save even more!",
         "normal": "Your financial health is more or less in the average of the rest of the population for this period",
-        "bad": "It seems that your financial situation is not the best yet. Explore the analysis tab to learn more about your finances",
-        "very_bad": "Hmm, your financial health is far below what it should be. Try to see where the problem is in the analysis section"
+        "bad": "It seems that your financial situation is not the best yet. Explore the rest of the charts to learn more about your finances",
+        "very_bad": "Hmm, your financial health is far below what it should be. Explore the rest of the charts to learn more about your finances"
       }
     },
     "monthsWithoutIncome": {
-      "good": "Well done! At your current spending rate right now you could survive up to {{x}} months without any income",
-      "normal": "At your current spending rate right now you could survive up to {{x}} months without any income. While this value is acceptable, you can still improve a little more!",
-      "bad": "Wow! You would barely survive {{x}} months without income at your current spending rate. Remember that it is recommended to be able to live at least 6 months without any income",
-      "very_bad": "Wow! You could hardly survive a month without income at your current spending rate. Remember that it is recommended to be able to live at least 6 months without any income",
+      "title": "Survival rate",
+      "subtitle": "Given your balance, amount of time you could go without income",
+      "text": {
+        "zero": "You couldn't survive a month without income at this rate of expenses!",
+        "one": "You could barely survive approximately a month without income at this rate of expenses!",
+        "other": "You could survive approximately <b>{{ n }} months</b> without income at this rate of spending."
+      },
+      "suggestion": "Remember that it is advisable to always keep this ratio above 5 months at least. If you see that you do not have a sufficient savings cushion, reduce unnecessary expenses.",
       "insufficient_data": "It looks like we don't have enough expenses to calculate how many months you could survive without income. Enter a few transactions and come back here to check your financial health"
     },
     "savingsPercentage": {
-      "good": "Congratulations! You have managed to save {{value}}% of your income during this period. It seems that you are already quite an expert. Keep it up!",
-      "normal": "Congratulations, you managed to save {{value}}% of your income during this period. Visit the analysis tab to see where you can save even more!",
-      "bad": "You have managed to save {{value}}% of your income during this period. However, we believe that you can still do much more! Remember that it is recommended to save at least 30% of what you earn",
-      "very_bad": "Wow, you haven't managed to save anything during this period :( Visit the analysis tab to see where your financial weaknesses are. Remember that it is recommended to save at least 30% of what you earn"
+      "title": "Savings percentage",
+      "subtitle": "What part of your income is not spent in this period",
+      "text": {
+        "good": "Congratulations! You have managed to save <b>{{value}}%</b> of your income during this period. It seems that you are already an expert, keep up the good work!",
+        "normal": "Congratulations, you have managed to save <b>{{value}}%</b> of your income during this period.",
+        "bad": "You have managed to save <b>{{value}}%</b> of your income during this period. However, we think you can still do much more!",
+        "very_bad": "Wow, you haven't managed to save anything during this period."
+      },
+      "suggestion": "Remember that it is advisable to save at least 15-20% of what you earn."
     }
   },
   "STATS": {
@@ -198,7 +211,9 @@
     "by-periods": "By periods",
     "by-categories": "By categorías",
     "by-tags": "By tags",
-    "distribution": "Distribution"
+    "distribution": "Distribution",
+    "finance-health-resume": "Resume",
+    "finance-health-breakdown": "Breakdown"
   },
   "ICON-SELECTOR": {
     "name": "Name:",

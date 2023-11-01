@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 
 class CardWithHeader extends StatelessWidget {
-  const CardWithHeader(
-      {super.key,
-      required this.title,
-      required this.body,
-      this.onHeaderButtonClick,
-      this.headerButtonIcon = Icons.arrow_forward_ios_rounded});
+  const CardWithHeader({
+    super.key,
+    required this.title,
+    required this.body,
+    this.onHeaderButtonClick,
+    this.headerButtonIcon = Icons.arrow_forward_ios_rounded,
+    this.bodyPadding = const EdgeInsets.all(0),
+  });
 
   final Widget body;
 
   final String title;
 
   final IconData headerButtonIcon;
+
+  final EdgeInsets bodyPadding;
 
   final void Function()? onHeaderButtonClick;
 
@@ -51,7 +55,10 @@ class CardWithHeader extends StatelessWidget {
             ),
           ),
           const Divider(),
-          body
+          Padding(
+            padding: bodyPadding,
+            child: body,
+          )
         ],
       ),
     );

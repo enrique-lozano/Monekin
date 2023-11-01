@@ -4,6 +4,7 @@ import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/home/widgets/home_drawer.dart';
 import 'package:monekin/app/home/widgets/income_or_expense_card.dart';
 import 'package:monekin/app/stats/widgets/balance_bar_chart_small.dart';
+import 'package:monekin/app/stats/widgets/finance_health/finance_health_main_info.dart';
 import 'package:monekin/app/stats/widgets/fund_evolution_line_chart.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/chart_by_categories.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
@@ -15,7 +16,6 @@ import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
-import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
@@ -404,127 +404,32 @@ class _HomePageState extends State<HomePage> {
                         rowFit: FlexFit.tight,
                         child: CardWithHeader(
                           title: t.financial_health.display,
+                          onHeaderButtonClick: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const StatsPage(initialIndex: 0),
+                            ),
+                          ),
+                          bodyPadding: const EdgeInsets.only(right: 8),
                           body: StreamBuilder(
-                              stream: _accountsStream,
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return const LinearProgressIndicator();
-                                }
+                            stream: FinanceHealthService().getHealthyValue(
+                              filters: TransactionFilters(
+                                minDate: dateRangeService.startDate,
+                                maxDate: dateRangeService.endDate,
+                              ),
+                            ),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return const LinearProgressIndicator();
+                              }
 
-                                final accounts = snapshot.data!;
+                              final financeHealthData = snapshot.data!;
 
-                                return Padding(
-                                    padding: const EdgeInsets.all(16),
-                                    child: StreamBuilder(
-                                        initialData: 0.0,
-                                        stream: FinanceHealthService()
-                                            .getHealthyValue(
-                                          accounts: accounts,
-                                          startDate: dateRangeService.startDate,
-                                          endDate: dateRangeService.endDate,
-                                        ),
-                                        builder: (context, snapshot) {
-                                          Color getHealthyValueColor(
-                                                  double healthyValue) =>
-                                              HSLColor.fromAHSL(
-                                                      1, healthyValue, 1, 0.35)
-                                                  .toColor();
-
-                                          return ConstrainedBox(
-                                            constraints: BoxConstraints(
-                                                maxHeight:
-                                                    BreakPoint.of(context)
-                                                            .isLargerThan(
-                                                                BreakpointID.md)
-                                                        ? 265
-                                                        : 180),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                AnimatedProgressBar(
-                                                  value: snapshot.data! / 100,
-                                                  direction: Axis.vertical,
-                                                  width: 16,
-                                                  color: getHealthyValueColor(
-                                                      snapshot.data!),
-                                                ),
-                                                const SizedBox(width: 16),
-                                                Expanded(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
-                                                    children: [
-                                                      Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Row(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .baseline,
-                                                              textBaseline:
-                                                                  TextBaseline
-                                                                      .alphabetic,
-                                                              children: [
-                                                                Text(
-                                                                  snapshot.data!
-                                                                      .toStringAsFixed(
-                                                                          0),
-                                                                  style: Theme.of(
-                                                                          context)
-                                                                      .textTheme
-                                                                      .headlineMedium!
-                                                                      .copyWith(
-                                                                        color: getHealthyValueColor(
-                                                                            snapshot.data!),
-                                                                        fontWeight:
-                                                                            FontWeight.w700,
-                                                                      ),
-                                                                ),
-                                                                const Text(
-                                                                    ' / 100')
-                                                              ]),
-                                                          Text(
-                                                            FinanceHealthService()
-                                                                .getHealthyValueReviewTitle(
-                                                                    context,
-                                                                    snapshot
-                                                                        .data!),
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .titleMedium!
-                                                                .copyWith(
-                                                                  color: getHealthyValueColor(
-                                                                      snapshot
-                                                                          .data!),
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Text(
-                                                        FinanceHealthService()
-                                                            .getHealthyValueReviewDescr(
-                                                                context,
-                                                                snapshot.data!),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          );
-                                        }));
-                              }),
+                              return FinanceHealthMainInfo(
+                                  financeHealthData: financeHealthData);
+                            },
+                          ),
                         ),
                       ),
                       ResponsiveRowColumnItem(

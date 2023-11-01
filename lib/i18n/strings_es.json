@@ -160,32 +160,48 @@
   "FINANCIAL-HEALTH": {
     "display": "Salud financiera",
     "review": {
-      "very_good": "Muy buena!",
-      "good": "Buena",
-      "normal": "En la media",
-      "bad": "Regular",
-      "very_bad": "Muy mala",
+      "very_good(context=GenderContext)": { "male,female": "Excelente!" },
+      "good(context=GenderContext)": { "male": "Bueno", "female": "Buena" },
+      "normal(context=GenderContext)": { "male,female": "En la media" },
+      "bad(context=GenderContext)": { "male,female": "Regular" },
+      "very_bad(context=GenderContext)": {
+        "male": "Muy malo",
+        "female": "Muy mala"
+      },
+      "insufficient_data(context=GenderContext)": {
+        "male,female": "Datos insuficientes"
+      },
 
       "descr": {
+        "insufficient_data": "Parece que no tenemos gastos suficientes para calcular tu salud financiera. Añade unos pocos gastos e ingresos para que podamos ayudarte mas!",
         "very_good": "Enhorabuena! Tu salud financiera es formidable. Esperamos que sigas con tu buena racha y que continues aprendiendo con Monekin",
         "good": "Genial! Tu salud financiera es buena. Visita la pestaña de análisis para ver como ahorrar aun mas!",
         "normal": "Tu salud financiera se encuentra mas o menos en la media del resto de la población para este periodo",
-        "bad": "Parece que tu situación financiera no es la mejor aun. Explora la pestaña de análisis para conocer mas sobre tus finanzas",
-        "very_bad": "Mmm, tu salud financera esta muy por debajo de lo que debería. Trata de ver donde esta el problema en la sección de análisis"
+        "bad": "Parece que tu situación financiera no es la mejor aun. Explora el resto de pestañas de análisis para conocer mas sobre tus finanzas",
+        "very_bad": "Mmm, tu salud financera esta muy por debajo de lo que debería. Trata de ver donde esta el problema gracias a los distintos gráficos y estadisticas que te proporcionamos"
       }
     },
     "monthsWithoutIncome": {
-      "good": "Bien hecho! Con tu ritmo de gastos actual ahora mismo podrías sobrevivir hasta {{x}} meses sin ningún ingreso",
-      "normal": "Con tu ritmo de gastos actual ahora mismo podrías sobrevivir hasta {{x}} meses sin ningún ingreso. Si bien este valor es aceptable, aun puedes mejorar un poco más!",
-      "bad": "Vaya! Apenás sobrevivirías {{x}} meses sin ingresos con tu ritmo de gastos actual. Recuerda que lo recomendable es poder vivir al menos 6 meses sin ningun ingreso",
-      "very_bad": "Vaya! Apenas sobrevivirías un mes sin ingresos con tu ritmo de gastos actual. Recuerda que lo recomendable es poder vivir al menos 6 meses sin ningun ingreso",
+      "title": "Ratio de supervivencia",
+      "subtitle": "Dado tu saldo, cantidad de tiempo que podrías pasar sin ingresos",
+      "text": {
+        "zero": "No podrías sobrevivir ni un mes sin ingresos con este ritmo de gastos!",
+        "one": "Apenas podrías sobrevivir aproximadatemente un mes sin ingresos con este ritmo de gastos!",
+        "other": "Podrías sobrevivir aproximadamente <b>{{ n }} meses</b> sin ingresos manteniendo este ritmo de gastos."
+      },
+      "suggestion": "Recuerda que es recomendable mantener este ratio siempre por encima de 5 meses como mínimo. Si ves que no tienes un colchon de ahorro suficiente, reduce los gastos no necesarios.",
       "insufficient_data": "Parece que no tenemos gastos suficientes para calcular cuantos meses podrías sobrevivir sin ingresos. Introduce unas pocas transacciones y regresa aquí para consultar tu salud financiera"
     },
     "savingsPercentage": {
-      "good": "Enhorabuena! Has conseguido ahorrar un {{value}}% de tus ingresos durante este periodo. Parece que ya eres todo un expert@. Sigue asi!",
-      "normal": "Enhorabuena, has conseguido ahorrar un {{value}}% de tus ingresos durante este periodo. Visita la pestaña de análisis para ver donde puedes ahorrar aun más!",
-      "bad": "Has conseguido ahorrar un {{value}}% de tus ingresos durante este periodo. Sin embargo, creemos que aun puedes hacer mucho mas! Recuerda que es recomendable ahorrar al menos un 30% de lo que ingresas",
-      "very_bad": "Vaya, no has conseguido ahorrar nada durante este periodo :( Visita la pestaña de análisis para ver donde estan tus debilidades financieras. Recuerda que es recomendable ahorrar al menos un 30% de lo que ingresas"
+      "title": "Porcentaje de ahorro",
+      "subtitle": "Que parte de tus ingresos no son gastados en este periodo",
+      "text": {
+        "good": "Enhorabuena! Has conseguido ahorrar un <b>{{value}}%</b> de tus ingresos durante este periodo. Parece que ya eres todo un expert@, sigue asi!",
+        "normal": "Enhorabuena, has conseguido ahorrar un <b>{{value}}%</b> de tus ingresos durante este periodo.",
+        "bad": "Has conseguido ahorrar un <b>{{value}}%</b> de tus ingresos durante este periodo. Sin embargo, creemos que aun puedes hacer mucho mas!",
+        "very_bad": "Vaya, no has conseguido ahorrar nada durante este periodo."
+      },
+      "suggestion": "Recuerda que es recomendable ahorrar al menos un 15-20% de lo que ingresas."
     }
   },
   "STATS": {
@@ -199,7 +215,9 @@
     "by-periods": "Por periodos",
     "by-categories": "Por categorías",
     "by-tags": "Por etiquetas",
-    "distribution": "Distribución"
+    "distribution": "Distribución",
+    "finance-health-resume": "Resumen",
+    "finance-health-breakdown": "Desglose"
   },
   "ICON-SELECTOR": {
     "name": "Nombre:",
