@@ -178,13 +178,13 @@ class FinanceHealthService {
         AccountService.instance
             .getAccountsBalance(
               filters: filters.copyWith(
-                minDate: (filters.maxDate ?? DateTime.now())
-                    .subtract(Duration(days: i * 30)),
-                maxDate: (filters.maxDate ?? DateTime.now())
-                    .subtract(Duration(days: (i - 1) * 30)),
-              ),
+                  minDate: (filters.maxDate ?? DateTime.now())
+                      .subtract(Duration(days: i * 30)),
+                  maxDate: (filters.maxDate ?? DateTime.now())
+                      .subtract(Duration(days: (i - 1) * 30)),
+                  transactionTypes: [TransactionType.expense]),
             )
-            .map((event) => event * (1.1 - (i / 6)))
+            .map((event) => event.abs() * (1.1 - (i / 6)))
     ], (values) {
       if (values[0] < 6) {
         return null;
@@ -192,7 +192,7 @@ class FinanceHealthService {
 
       final balance = values[1];
       final expensesInLastPeriod =
-          values.whereIndexed((index, element) => index <= 2);
+          values.whereIndexed((index, element) => index >= 2);
 
       if (balance < 0) return 0;
 
