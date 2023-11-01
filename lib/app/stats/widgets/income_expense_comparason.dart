@@ -81,44 +81,67 @@ class IncomeExpenseComparason extends StatelessWidget {
             final expense = snapshot.data![1].abs();
 
             return Column(children: [
-              ListTile(
-                  title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(t.transaction.types.income(n: 1)),
-                        CurrencyDisplayer(amountToConvert: income)
-                      ],
-                    ),
-                    AnimatedProgressBar(
-                        value: income + expense > 0
-                            ? (income / (income + expense))
-                            : 0,
-                        color: CustomColors.of(context).success),
-                  ])),
-              ListTile(
-                  title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(t.transaction.types.expense(n: 1)),
-                        CurrencyDisplayer(amountToConvert: expense)
-                      ],
-                    ),
-                    AnimatedProgressBar(
-                        value: income + expense > 0
-                            ? (expense / (income + expense))
-                            : 0,
-                        color: CustomColors.of(context).danger),
-                  ]))
+              IncomeExpenseTile(
+                type: TransactionType.income,
+                value: income,
+                total: income + expense,
+              ),
+              IncomeExpenseTile(
+                type: TransactionType.expense,
+                value: expense,
+                total: income + expense,
+              ),
             ]);
           },
         ),
       ],
+    );
+  }
+}
+
+class IncomeExpenseTile extends StatelessWidget {
+  const IncomeExpenseTile({
+    super.key,
+    required this.value,
+    required this.total,
+    required this.type,
+  });
+
+  final TransactionType type;
+  final double value;
+  final double total;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+
+    return ListTile(
+      leading: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: appColorScheme(context).surfaceVariant,
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Icon(
+          type.icon,
+          color: type.color(context),
+        ),
+      ),
+      title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(type == TransactionType.expense
+                ? t.transaction.types.expense(n: 1)
+                : t.transaction.types.income(n: 1)),
+            CurrencyDisplayer(amountToConvert: value)
+          ],
+        ),
+      ]),
+      subtitle: AnimatedProgressBar(
+        value: total > 0 ? (value / total) : 0,
+        color: type.color(context),
+      ),
     );
   }
 }
