@@ -28,7 +28,9 @@ class TrendingValue extends StatelessWidget {
       children: [
         if (percentage != 0)
           Icon(
-            percentage > 0 ? Icons.trending_up : Icons.trending_down,
+            percentage > 0
+                ? Icons.trending_up_rounded
+                : Icons.trending_down_rounded,
             size: fontSize * (9 / 7),
             color: _getColorBasedOnPercentage(context),
           ),
