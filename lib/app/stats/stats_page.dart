@@ -132,7 +132,6 @@ class _StatsPageState extends State<StatsPage> {
                           minDate: currentStartDate, maxDate: currentEndDate),
                     )
                   ],
-                  padding: const EdgeInsets.all(0),
                 ),
                 buildContainerWithPadding([
                   CardWithHeader(

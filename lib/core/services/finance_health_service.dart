@@ -11,7 +11,10 @@ import 'package:monekin/i18n/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 
 class FinanceHealthAttrScore {
+  /// A number between 0 and 100
   final double? score;
+
+  /// The weight of this stat in the financial health
   final int weight;
 
   const FinanceHealthAttrScore({
@@ -34,6 +37,16 @@ class FinanceHealthAttrScore {
 
     return toConvert.toStringAsFixed(decimalPlaces);
   }
+
+  String getScoreReviewTitle(
+    BuildContext context, {
+    GenderContext genderContext = GenderContext.male,
+  }) =>
+      FinanceHealthData.getHealthyValueReviewTitle(
+        context,
+        value: score,
+        genderContext: genderContext,
+      );
 }
 
 class FinanceHealthData {
@@ -99,7 +112,9 @@ class FinanceHealthData {
           ? Colors.grey
           : HSLColor.fromAHSL(1, healthyValue, 1, 0.35).toColor();
 
-  String getHealthyValueReviewDescr(BuildContext context) {
+  Color getHealthyScoreColor() => getHealthyValueColor(healthyScore);
+
+  String getHealthyScoreReviewDescr(BuildContext context) {
     final t = Translations.of(context);
 
     if (healthyScore == null) {
@@ -117,21 +132,33 @@ class FinanceHealthData {
     }
   }
 
-  String getHealthyValueReviewTitle(BuildContext context) {
+  String getHealthyScoreReviewTitle(BuildContext context) =>
+      getHealthyValueReviewTitle(
+        context,
+        value: healthyScore,
+        genderContext: GenderContext.female,
+      );
+
+  static String getHealthyValueReviewTitle(
+    BuildContext context, {
+    required double? value,
+    GenderContext genderContext = GenderContext.male,
+  }) {
     final t = Translations.of(context);
 
-    if (healthyScore == null) {
-      return t.financial_health.review.insufficient_data;
-    } else if (healthyScore! < 20) {
-      return t.financial_health.review.very_bad;
-    } else if (healthyScore! < 40) {
-      return t.financial_health.review.bad;
-    } else if (healthyScore! < 60) {
-      return t.financial_health.review.normal;
-    } else if (healthyScore! < 80) {
-      return t.financial_health.review.good;
+    if (value == null) {
+      return t.financial_health.review
+          .insufficient_data(context: genderContext);
+    } else if (value < 20) {
+      return t.financial_health.review.very_bad(context: genderContext);
+    } else if (value < 40) {
+      return t.financial_health.review.bad(context: genderContext);
+    } else if (value < 60) {
+      return t.financial_health.review.normal(context: genderContext);
+    } else if (value < 80) {
+      return t.financial_health.review.good(context: genderContext);
     } else {
-      return t.financial_health.review.very_good;
+      return t.financial_health.review.very_good(context: genderContext);
     }
   }
 }

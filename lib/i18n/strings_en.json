@@ -159,20 +159,22 @@
   "FINANCIAL-HEALTH": {
     "display": "Financial health",
     "review": {
-      "very_good": "Very good!",
-      "good": "Good",
-      "normal": "Average",
-      "bad": "Fair",
-      "very_bad": "Very Bad",
-      "insufficient_data": "Insufficient data",
+      "very_good(context=GenderContext)": { "male,female": "Very good!" },
+      "good(context=GenderContext)": { "male,female": "Good" },
+      "normal(context=GenderContext)": { "male,female": "Average" },
+      "bad(context=GenderContext)": { "male,female": "Fair" },
+      "very_bad(context=GenderContext)": { "male,female": "Very Bad" },
+      "insufficient_data(context=GenderContext)": {
+        "male,female": "Insufficient data"
+      },
 
       "descr": {
-        "insufficient_data": "It looks like we don't have enough expenses to calculate your financial health. Visit the analysis tab to see how to save even more!",
+        "insufficient_data": "It looks like we don't have enough expenses to calculate your financial health. Add some expenses/incomes in this period to allow us to help you!",
         "very_good": "Congratulations! Your financial health is tremendous. We hope you continue your good streak and continue learning with Monekin",
         "good": "Great! Your financial health is good. Visit the analysis tab to see how to save even more!",
         "normal": "Your financial health is more or less in the average of the rest of the population for this period",
-        "bad": "It seems that your financial situation is not the best yet. Explore the analysis tab to learn more about your finances",
-        "very_bad": "Hmm, your financial health is far below what it should be. Try to see where the problem is in the analysis section"
+        "bad": "It seems that your financial situation is not the best yet. Explore the rest of the charts to learn more about your finances",
+        "very_bad": "Hmm, your financial health is far below what it should be. Explore the rest of the charts to learn more about your finances"
       }
     },
     "monthsWithoutIncome": {
@@ -209,7 +211,9 @@
     "by-periods": "By periods",
     "by-categories": "By categorías",
     "by-tags": "By tags",
-    "distribution": "Distribution"
+    "distribution": "Distribution",
+    "finance-health-resume": "Resume",
+    "finance-health-breakdown": "Breakdown"
   },
   "ICON-SELECTOR": {
     "name": "Name:",
