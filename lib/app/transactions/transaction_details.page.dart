@@ -459,10 +459,11 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CurrencyDisplayer(
+                              Flexible(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CurrencyDisplayer(
                                       amountToConvert: transaction.value,
                                       currency: transaction.account.currency,
                                       textStyle: TextStyle(
@@ -484,44 +485,49 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                                 TransactionStatus.voided
                                             ? TextDecoration.lineThrough
                                             : null,
-                                      )),
-                                  Text(
-                                    transaction.displayName(context),
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
+                                      ),
                                     ),
-                                  ),
-                                  if (transaction.recurrentInfo.isNoRecurrent)
                                     Text(
-                                      DateFormat.yMMMMd()
-                                          .add_Hm()
-                                          .format(transaction.date),
-                                    )
-                                  else
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.repeat_rounded,
-                                          size: 14,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        ),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          transaction.recurrentInfo
-                                              .formText(context),
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w300,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
-                                        ),
-                                      ],
+                                      transaction.displayName(context),
+                                      softWrap: true,
+                                      overflow: TextOverflow.fade,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
-                                ],
+                                    if (transaction.recurrentInfo.isNoRecurrent)
+                                      Text(
+                                        DateFormat.yMMMMd()
+                                            .add_Hm()
+                                            .format(transaction.date),
+                                      )
+                                    else
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.repeat_rounded,
+                                            size: 14,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            transaction.recurrentInfo
+                                                .formText(context),
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w300,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary),
+                                          ),
+                                        ],
+                                      ),
+                                  ],
+                                ),
                               ),
+                              const SizedBox(width: 24),
                               Hero(
                                 tag: 'transaction-icon-${transaction.id}',
                                 child: Container(
