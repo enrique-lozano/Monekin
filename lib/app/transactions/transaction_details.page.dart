@@ -542,6 +542,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                           size: 42,
                                         )
                                       : Icon(
+                                          color: transaction.color(context),
                                           TransactionType.transfer.icon,
                                           size: 42,
                                         ),

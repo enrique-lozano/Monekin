@@ -168,7 +168,7 @@ class MoneyTransaction extends TransactionInDB {
   /// Get the color that represent this category. Will be the category color when the transaction is an income or an expense, and the primary color of the app otherwise
   Color color(context) => isIncomeOrExpense
       ? ColorHex.get(category!.color)
-      : Theme.of(context).colorScheme.primary;
+      : appColorScheme(context).primary;
 
   /// The type of the transaction (expense, income or transfer)
   TransactionType get type => isTransfer
