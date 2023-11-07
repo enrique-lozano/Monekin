@@ -349,16 +349,9 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
                                     dataCategory.value, snapshot.data!)))
                       ],
                     ),
-                    leading: Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                          color: ColorHex.get(dataCategory.category.color)
-                              .withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(6)),
-                      child: dataCategory.category.icon.display(
-                          color: ColorHex.get(dataCategory.category.color),
-                          size: 28),
-                    ),
+                    leading: dataCategory.category.icon.displayFilled(
+                        size: 25,
+                        color: ColorHex.get(dataCategory.category.color)),
                     onTap: () {
                       showModalBottomSheet(
                           context: context,
