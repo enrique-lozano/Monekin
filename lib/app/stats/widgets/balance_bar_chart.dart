@@ -80,7 +80,7 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
         await accountService
             .getAccountsBalance(
               filters: widget.filters.copyWith(
-                transactionTypes: [TransactionType.income],
+                transactionTypes: [TransactionType.expense],
                 minDate: startDate,
                 maxDate: endDate,
               ),
