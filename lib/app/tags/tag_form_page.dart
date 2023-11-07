@@ -53,8 +53,7 @@ class _TagFormPageState extends State<TagFormPage> {
 
     if (widget.tag != null) {
       await TagService.instance.updateTag(tagToEdit).then((value) {
-        messager
-            .showSnackBar(SnackBar(content: Text(t.categories.edit_success)));
+        messager.showSnackBar(SnackBar(content: Text(t.tags.edit_success)));
       }).catchError((error) {
         messager.showSnackBar(SnackBar(content: Text(error.toString())));
       });
@@ -76,8 +75,7 @@ class _TagFormPageState extends State<TagFormPage> {
       await TagService.instance.insertTag(tagToEdit).then((value) {
         Navigator.pop(context);
 
-        messager
-            .showSnackBar(SnackBar(content: Text(t.categories.create_success)));
+        messager.showSnackBar(SnackBar(content: Text(t.tags.create_success)));
       }).catchError((error) {
         messager.showSnackBar(SnackBar(content: Text(error.toString())));
       });
