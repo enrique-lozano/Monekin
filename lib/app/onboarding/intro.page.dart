@@ -14,7 +14,7 @@ class IntroPage extends StatelessWidget {
         Row(
           children: [
             Transform.translate(
-              offset: Offset(-12, 0),
+              offset: const Offset(-4, 0),
               child: Image.asset(
                 'assets/resources/appIcon-removebg.png',
                 height: 80,
