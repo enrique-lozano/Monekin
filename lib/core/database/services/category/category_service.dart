@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/i18n/translations.g.dart';
 import 'package:uuid/uuid.dart';
 
 class CategoryService {
@@ -59,10 +60,17 @@ class CategoryService {
   Future<void> initializeCategories(dynamic json) async {
     const uuid = Uuid();
 
+    // The category initialization is done before the app language is set, so we need to trigger
+    String systemLang = AppLocaleUtils.findDeviceLocale().languageCode;
+
+    if (!AppLocaleUtils.supportedLocalesRaw.any((lang) => lang == systemLang)) {
+      systemLang = 'en';
+    }
+
     for (final category in json) {
       final categoryToPush = CategoryInDB(
           id: uuid.v4(),
-          name: category['names']['es'],
+          name: category['names'][systemLang] ?? category['names']['en'],
           iconId: category['icon'],
           color: category['color'],
           type: CategoryType.values.byName(category['type']));
