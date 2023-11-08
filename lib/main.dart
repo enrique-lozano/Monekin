@@ -58,8 +58,14 @@ class MonekinAppEntryPoint extends StatelessWidget {
               print('App language found. Setting the locale to `$lang`...');
               LocaleSettings.setLocaleRaw(lang);
             } else {
-              print('App language found. Setting the user device language...');
+              print(
+                  'App language not found. Setting the user device language...');
+
               LocaleSettings.useDeviceLocale();
+
+              // We have nothing to worry here since the useDeviceLocale() func will set the default lang (english in our case) if
+              // the user is using a non-supported language in his device
+
               UserSettingService.instance
                   .setSetting(
                     SettingKey.appLanguage,
