@@ -543,8 +543,17 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         builder: (context, snapshot) {
           return Scaffold(
             appBar: AppBar(
-              title:
-                  Text(isEditMode ? t.transaction.edit : t.transaction.create),
+              title: Text(
+                isEditMode
+                    ? t.transaction.edit
+                    : widget.mode == TransactionFormMode.transfer
+                        ? t.transfer.create
+                        : selectedCategory == null
+                            ? t.transaction.create
+                            : selectedCategory!.type.isExpense
+                                ? t.transaction.new_expense
+                                : t.transaction.new_income,
+              ),
             ),
             persistentFooterButtons: snapshot.hasData && snapshot.data == '0'
                 ? [
