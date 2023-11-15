@@ -53,6 +53,8 @@ class _AnimatedProgressBarState extends State<AnimatedProgressBar> {
         end: widget.value,
       ),
       builder: (context, value, child) {
+        if (value.isNaN) value = 0;
+
         return Container(
             height: isHorizontal ? widget.width : double.infinity,
             width: isHorizontal ? double.infinity : widget.width,
