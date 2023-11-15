@@ -85,10 +85,10 @@ packages:
     dependency: transitive
     description:
       name: build_resolvers
-      sha256: "6c4dd11d05d056e76320b828a1db0fc01ccd376922526f8e9d6c796a5adbac20"
+      sha256: "64e12b0521812d1684b1917bc80945625391cb9bdd4312536b1d69dcb6133ed8"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.1"
+    version: "2.4.1"
   build_runner:
     dependency: "direct dev"
     description:
@@ -285,18 +285,18 @@ packages:
     dependency: "direct main"
     description:
       name: drift
-      sha256: a255df2476431d3179f5aba7a7435a3678542642fba43de98c330ae0e0393c2e
+      sha256: ef2ddafe89c1f5f26767e5eada65d739de4e9d2820303f7249f15a005999d5fc
       url: "https://pub.dev"
     source: hosted
-    version: "2.11.0"
+    version: "2.13.1"
   drift_dev:
     dependency: "direct dev"
     description:
       name: drift_dev
-      sha256: "5f63cbc64f9e2346a1fd22bf43c5df8a35369e62cc1f7519ea95410cd5ff8ce5"
+      sha256: "369d2769d84e0c2d2cb4cd420e4fdb4f975852c83ebb934733c3b382c62961cd"
       url: "https://pub.dev"
     source: hosted
-    version: "2.11.0"
+    version: "2.13.2"
   dynamic_color:
     dependency: "direct main"
     description:
@@ -990,10 +990,10 @@ packages:
     dependency: transitive
     description:
       name: sqlparser
-      sha256: "60249badd8052dec4ad8d4bf5923da7533dad0009e92e224f8abd221665bfa22"
+      sha256: db6354e8ba71acc50bc4afeafff2a248710ae2c00c9412e2c8b796916d4b1c45
       url: "https://pub.dev"
     source: hosted
-    version: "0.31.0"
+    version: "0.32.1"
   stack_trace:
     dependency: transitive
     description:
