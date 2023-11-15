@@ -443,11 +443,12 @@ class _HomePageState extends State<HomePage> {
                             ),
                             onHeaderButtonClick: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const StatsPage(
-                                            initialIndex: 1,
-                                          )));
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const StatsPage(
+                                          initialIndex: 2,
+                                        )),
+                              );
                             }),
                       ),
                     ],
@@ -472,9 +473,10 @@ class _HomePageState extends State<HomePage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const StatsPage(
-                                            initialIndex: 0,
-                                          )));
+                                    builder: (context) => const StatsPage(
+                                      initialIndex: 1,
+                                    ),
+                                  ));
                             }),
                       ),
                       ResponsiveRowColumnItem(
@@ -489,11 +491,13 @@ class _HomePageState extends State<HomePage> {
                             ),
                             onHeaderButtonClick: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const StatsPage(
-                                            initialIndex: 2,
-                                          )));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const StatsPage(
+                                    initialIndex: 3,
+                                  ),
+                                ),
+                              );
                             }),
                       ),
                     ],
