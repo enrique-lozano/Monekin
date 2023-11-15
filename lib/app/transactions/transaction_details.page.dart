@@ -289,32 +289,50 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
         context: context,
         isScrollControlled: true,
         builder: (context) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ...(_getPayActions(context, transaction).map(
-                (e) => ListTile(
-                  leading: Icon(e.icon),
-                  title: Text(e.label),
-                  enabled: e.onClick != null,
-                  onTap: e.onClick == null
-                      ? null
-                      : () {
-                          Navigator.pop(context);
-                          e.onClick!();
-                        },
-                ),
-              )).toList(),
-              if (transaction.isOnLastPayment)
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Text(
-                    '* ${t.recurrent_transactions.details.last_payment_info}',
-                    style: Theme.of(context).textTheme.labelSmall,
+          return Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ...(_getPayActions(context, transaction).map(
+                  (e) => ListTile(
+                    leading: Icon(e.icon),
+                    title: Text(e.label),
+                    enabled: e.onClick != null,
+                    onTap: e.onClick == null
+                        ? null
+                        : () {
+                            Navigator.pop(context);
+                            e.onClick!();
+                          },
                   ),
-                )
-            ],
+                )).toList(),
+                if (transaction.isOnLastPayment)
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.info_outline_rounded,
+                          size: 14,
+                          weight: 200,
+                        ),
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: Text(
+                            t.recurrent_transactions.details.last_payment_info,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall!
+                                .copyWith(fontWeight: FontWeight.w300),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+              ],
+            ),
           );
         });
   }

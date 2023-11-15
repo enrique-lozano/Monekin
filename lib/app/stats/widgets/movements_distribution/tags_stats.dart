@@ -41,7 +41,10 @@ class TagStats extends StatelessWidget {
           if (trSnapshot.data!.isEmpty) {
             return Padding(
               padding: const EdgeInsets.all(24),
-              child: Text(t.general.insufficient_data),
+              child: Text(
+                t.general.insufficient_data,
+                textAlign: TextAlign.center,
+              ),
             );
           }
 
@@ -64,9 +67,11 @@ class TagStats extends StatelessWidget {
                 if (tags.isEmpty || tagsInfo.isEmpty) {
                   return Padding(
                     padding: const EdgeInsets.all(24),
-                    child: Text(tags.isEmpty
-                        ? t.tags.empty_list
-                        : t.general.insufficient_data),
+                    child: Text(
+                        tags.isEmpty
+                            ? t.tags.empty_list
+                            : t.general.insufficient_data,
+                        textAlign: TextAlign.center),
                   );
                 }
 
