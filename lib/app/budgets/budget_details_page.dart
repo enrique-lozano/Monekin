@@ -83,7 +83,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                   Tab(text: t.transaction.display(n: 1)),
                 ]),
                 actions: [
-                  MonekinPopuMenuButton(actionItems: [
+                  MonekinPopupMenuButton(actionItems: [
                     ListTileActionItem(
                       label: t.budgets.form.edit,
                       icon: Icons.edit,

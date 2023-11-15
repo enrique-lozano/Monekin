@@ -59,7 +59,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
       appBar: AppBar(
         title: Text(t.currencies.exchange_rate),
         actions: [
-          MonekinPopuMenuButton(actionItems: [
+          MonekinPopupMenuButton(actionItems: [
             ListTileActionItem(
                 label: t.general.delete,
                 icon: Icons.delete,
