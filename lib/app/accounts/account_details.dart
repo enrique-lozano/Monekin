@@ -94,7 +94,8 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                   }
                 }),
       ListTileActionItem(
-          label: account.isClosed ? t.general.unarchive : t.general.archive,
+          label:
+              account.isClosed ? t.account.reopen : t.account.close.title_short,
           icon: account.isClosed
               ? Icons.unarchive_rounded
               : Icons.archive_rounded,
@@ -228,8 +229,6 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
               }
 
               final account = snapshot.data!;
-
-              print(account);
 
               final accountDetailsActions = getAccountDetailsActions(
                 context,
