@@ -360,7 +360,9 @@
     "details": "Account details",
     "date": "Opening date",
     "close_date": "Closing date",
-    "reopen": "Re-open",
+    "reopen": "Re-open account",
+    "reopen.short": "Re-open",
+    "reopen.descr": "Are you sure you want to reopen this account?",
     "balance": "Account balance",
     "n_transactions": "Number of transactions",
     "add_money": "Add money",
@@ -401,7 +403,7 @@
       "should-have-zero-balance": "You must have a current balance of 0 in this account to close it. Please edit the account before continuing",
       "should-have-no-transactions": "This account has transactions after the specified close date. Delete them or edit the account close date before continuing",
       "success": "Account closed successfully",
-      "unarchive-succes": "Account successfully unclosed"
+      "unarchive-succes": "Account successfully re-opened"
     },
     "SELECT": {
       "one": "Select an account",

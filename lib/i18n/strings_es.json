@@ -364,7 +364,9 @@
     "details": "Detalles de la cuenta",
     "date": "Fecha de apertura",
     "close_date": "Fecha de cierre",
-    "reopen": "Reabrir",
+    "reopen.short": "Reabrir",
+    "reopen": "Reabrir cuenta",
+    "reopen.descr": "¿Seguro que quieres volver a abrir esta cuenta?",
     "balance": "Saldo de la cuenta",
     "n_transactions": "Número de transacciones",
     "add_money": "Añadir dinero",
@@ -405,7 +407,7 @@
       "should-have-zero-balance": "Debes tener un saldo actual en la cuenta de 0 para poder cerrarla. Edita esta cuenta antes de continuar",
       "should-have-no-transactions": "Esta cuenta posee transacciones posteriores a la fecha de cierre especificada. Borralas o edita la fecha de cierre de la cuenta antes de continuar",
       "success": "Cuenta cerrada exitosamente",
-      "unarchive-succes": "Cuenta descerrada exitosamente"
+      "unarchive-succes": "Cuenta re-abierta exitosamente"
     },
     "SELECT": {
       "one": "Selecciona una cuenta",
