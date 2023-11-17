@@ -94,31 +94,16 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                   }
                 }),
       ListTileActionItem(
-          label:
-              account.isClosed ? t.account.reopen : t.account.close.title_short,
+          label: account.isClosed
+              ? t.account.reopen_short
+              : t.account.close.title_short,
           icon: account.isClosed
               ? Icons.unarchive_rounded
               : Icons.archive_rounded,
           role: ListTileActionRole.warn,
           onClick: () async {
             if (account.isClosed) {
-              await AccountService.instance
-                  .updateAccount(
-                account.copyWith(
-                  closingDate: const drift.Value(null),
-                ),
-              )
-                  .then((value) {
-                if (value) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(t.account.close.unarchive_succes)),
-                  );
-                }
-              }).catchError((err) {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text('$err')));
-              });
-
+              showReopenAccountDialog(account);
               return;
             }
 
@@ -126,7 +111,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                 .getAccountMoney(account: account)
                 .first;
 
-            await showArchiveWarnDialog(account, currentBalance);
+            await showCloseAccountDialog(account, currentBalance);
           }),
       ListTileActionItem(
           label: t.general.delete,
@@ -140,7 +125,54 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
     ];
   }
 
-  Future<bool?> showArchiveWarnDialog(Account account, double currentBalance) {
+  showReopenAccountDialog(Account account) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(t.account.reopen),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [Text(t.account.reopen_descr)],
+          ),
+        ),
+        actions: [
+          TextButton(
+            child: Text(t.general.cancel),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          TextButton(
+            child: Text(t.general.confirm),
+            onPressed: () {
+              AccountService.instance
+                  .updateAccount(
+                    account.copyWith(
+                      closingDate: const drift.Value(null),
+                    ),
+                  )
+                  .then((value) {
+                    if (value) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content: Text(t.account.close.unarchive_succes)),
+                      );
+                    }
+                  })
+                  .whenComplete(() => Navigator.pop(context))
+                  .catchError((err) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text('$err')));
+                  });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<bool?> showCloseAccountDialog(Account account, double currentBalance) {
     return showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
@@ -281,7 +313,8 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                                                       ConnectionState.waiting ||
                                                   currencySnapshot.data != 0 &&
                                                       currencySnapshot.data! ==
-                                                          snapshot.data) {
+                                                          snapshot.data ||
+                                                  snapshot.data! == 0) {
                                                 return Container();
                                               }
 
