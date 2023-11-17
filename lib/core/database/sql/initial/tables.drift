@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS accounts (
     
     iniValue REAL NOT NULL,
 
-    -- Date of creation of this account
+    -- Creation/Opening date of this account. Before this date, no transactions can exists on it.
     date DATETIME NOT NULL,
 
     description TEXT,
@@ -48,8 +48,8 @@ CREATE TABLE IF NOT EXISTS accounts (
     
     iconId TEXT NOT NULL,
 
-    -- If true, the account will be no-selectable for new transactions and will not appear in some stats
-    isArchived BOOLEAN NOT NULL DEFAULT 0,
+    -- The closing date of the account. After this date, no transactions can exists on it.
+    closingDate DATETIME,
 
     -- ID of the currency used by this account and therefore all transactions contained in it
     currencyId TEXT NOT NULL REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,

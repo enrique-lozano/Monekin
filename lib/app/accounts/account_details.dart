@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -94,7 +95,11 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
           onClick: () async {
             if (account.isArchived) {
               await AccountService.instance
-                  .updateAccount(account.copyWith(isArchived: false))
+                  .updateAccount(
+                account.copyWith(
+                  closingDate: const drift.Value.absent(),
+                ),
+              )
                   .then((value) {
                 if (value) {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -147,7 +152,8 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
               }
 
               AccountService.instance
-                  .updateAccount(account.copyWith(isArchived: true))
+                  .updateAccount(account.copyWith(
+                      closingDate: drift.Value(DateTime.now())))
                   .then((value) {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -352,6 +358,17 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                                     ),
                                   ),
                                   const Divider(indent: 12),
+                                  if (account.isArchived) ...[
+                                    ListTile(
+                                      title: Text(t.account.close_date),
+                                      subtitle: Text(
+                                        DateFormat.yMMMMEEEEd()
+                                            .add_Hm()
+                                            .format(account.closingDate!),
+                                      ),
+                                    ),
+                                    const Divider(indent: 12),
+                                  ],
                                   ListTile(
                                     title: Text(t.account.types.title),
                                     subtitle: Text(account.type.title(context)),
