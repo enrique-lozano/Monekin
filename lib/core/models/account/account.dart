@@ -67,7 +67,7 @@ class Account extends AccountInDB {
 
   SupportedIcon get icon => SupportedIconService.instance.getIconByID(iconId);
 
-  bool get isArchived => closingDate != null;
+  bool get isClosed => closingDate != null;
 
   Widget displayIcon(BuildContext context, {double size = 22}) {
     return Container(

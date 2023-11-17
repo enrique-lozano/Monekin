@@ -54,7 +54,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
       ListTileActionItem(
           label: t.transfer.create,
           icon: TransactionType.transfer.icon,
-          onClick: account.isArchived
+          onClick: account.isClosed
               ? null
               : () async {
                   showAccountsWarn() => showDialog(
@@ -94,13 +94,13 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                   }
                 }),
       ListTileActionItem(
-          label: account.isArchived ? t.general.unarchive : t.general.archive,
-          icon: account.isArchived
+          label: account.isClosed ? t.general.unarchive : t.general.archive,
+          icon: account.isClosed
               ? Icons.unarchive_rounded
               : Icons.archive_rounded,
           role: ListTileActionRole.warn,
           onClick: () async {
-            if (account.isArchived) {
+            if (account.isClosed) {
               await AccountService.instance
                   .updateAccount(
                 account.copyWith(
@@ -338,7 +338,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                                     ),
                                   ),
                                   const Divider(indent: 12),
-                                  if (account.isArchived) ...[
+                                  if (account.isClosed) ...[
                                     ListTile(
                                       title: Text(t.account.close_date),
                                       subtitle: Text(
