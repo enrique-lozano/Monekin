@@ -7,13 +7,17 @@ import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
+import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
+import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -29,8 +33,11 @@ class AccountDetailsPage extends StatefulWidget {
 }
 
 class _AccountDetailsPageState extends State<AccountDetailsPage> {
-  List<ListTileActionItem> getAccountDetailsActions(BuildContext context,
-      {required Account account, bool navigateBackOnDelete = false}) {
+  List<ListTileActionItem> getAccountDetailsActions(
+    BuildContext context, {
+    required Account account,
+    bool navigateBackOnDelete = false,
+  }) {
     final t = Translations.of(context);
 
     return [
@@ -97,13 +104,13 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
               await AccountService.instance
                   .updateAccount(
                 account.copyWith(
-                  closingDate: const drift.Value.absent(),
+                  closingDate: const drift.Value(null),
                 ),
               )
                   .then((value) {
                 if (value) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(t.account.archive.unarchive_succes)),
+                    SnackBar(content: Text(t.account.close.unarchive_succes)),
                   );
                 }
               }).catchError((err) {
@@ -118,7 +125,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                 .getAccountMoney(account: account)
                 .first;
 
-            showArchiveWarnDialog(account, currentBalance);
+            await showArchiveWarnDialog(account, currentBalance);
           }),
       ListTileActionItem(
           label: t.general.delete,
@@ -132,42 +139,13 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
     ];
   }
 
-  showArchiveWarnDialog(Account account, double currentBalance) {
-    showDialog(
+  Future<bool?> showArchiveWarnDialog(Account account, double currentBalance) {
+    return showModalBottomSheet<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(currentBalance == 0 ? t.account.archive.title : 'Ops!'),
-        content: SingleChildScrollView(
-            child: Text(currentBalance == 0
-                ? t.account.archive.warn
-                : t.account.archive.should_have_zero_balance)),
-        actions: [
-          TextButton(
-            child: Text(
-                currentBalance == 0 ? t.general.confirm : t.general.understood),
-            onPressed: () {
-              if (currentBalance != 0) {
-                Navigator.pop(context);
-                return;
-              }
-
-              AccountService.instance
-                  .updateAccount(account.copyWith(
-                      closingDate: drift.Value(DateTime.now())))
-                  .then((value) {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(t.account.archive.success)));
-              }).catchError((err) {
-                Navigator.pop(context);
-
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text('$err')));
-              });
-            },
-          ),
-        ],
-      ),
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (context) =>
+          ArchiveWarnDialog(currentBalance: currentBalance, account: account),
     );
   }
 
@@ -250,6 +228,8 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
               }
 
               final account = snapshot.data!;
+
+              print(account);
 
               final accountDetailsActions = getAccountDetailsActions(
                 context,
@@ -429,9 +409,10 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                           ),
                           const SizedBox(height: 16),
                           CardWithHeader(
-                              title: t.general.quick_actions,
-                              body: MonekinQuickActionsButton(
-                                  actions: accountDetailsActions)),
+                            title: t.general.quick_actions,
+                            body: MonekinQuickActionsButton(
+                                actions: accountDetailsActions),
+                          ),
                         ],
                       ),
                     ),
@@ -439,6 +420,122 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                 ],
               );
             }),
+          );
+        });
+  }
+}
+
+class ArchiveWarnDialog extends StatefulWidget {
+  const ArchiveWarnDialog({
+    super.key,
+    required this.currentBalance,
+    required this.account,
+  });
+
+  final double currentBalance;
+  final Account account;
+
+  @override
+  State<ArchiveWarnDialog> createState() => _ArchiveWarnDialogState();
+}
+
+class _ArchiveWarnDialogState extends State<ArchiveWarnDialog> {
+  DateTime date = DateTime.now();
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+        stream: TransactionService.instance.countTransactions(
+          predicate: TransactionFilters(
+              accountsIDs: [widget.account.id], minDate: date),
+          convertToPreferredCurrency: false,
+        ),
+        builder: (context, snapshot) {
+          final hasNoTransactions =
+              !snapshot.hasData || snapshot.data!.numberOfRes == 0;
+
+          return Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          t.account.close.title,
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                        const SizedBox(height: 22),
+                        Text(t.account.close.warn),
+                        const SizedBox(height: 22),
+                        TextFormField(
+                          controller: TextEditingController(
+                              text: DateFormat.yMMMMd().add_Hm().format(date)),
+                          decoration: InputDecoration(
+                              labelText: '${t.account.close_date} *'),
+                          enabled: widget.currentBalance == 0,
+                          readOnly: true,
+                          onTap: () async {
+                            DateTime? pickedDate = await openDateTimePicker(
+                              context,
+                              initialDate: date,
+                              firstDate: widget.account.date,
+                              lastDate: DateTime.now(),
+                              showTimePickerAfterDate: true,
+                            );
+                            if (pickedDate == null) return;
+
+                            setState(() {
+                              date = pickedDate;
+                            });
+                          },
+                        ),
+                        if (!hasNoTransactions ||
+                            widget.currentBalance != 0) ...[
+                          const SizedBox(height: 6),
+                          InlineInfoCard(
+                            mode: InlineInfoCardMode.warn,
+                            text: widget.currentBalance != 0
+                                ? t.account.close.should_have_zero_balance
+                                : t.account.close.should_have_no_transactions,
+                          )
+                        ]
+                      ],
+                    )),
+                BottomSheetFooter(
+                  submitText: t.general.continue_text,
+                  submitIcon: Icons.check,
+                  onSaved: !hasNoTransactions || widget.currentBalance != 0
+                      ? null
+                      : () {
+                          AccountService.instance
+                              .updateAccount(
+                            widget.account.copyWith(
+                              closingDate: drift.Value(date),
+                            ),
+                          )
+                              .then((value) {
+                            Navigator.pop(context, true);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(t.account.close.success)));
+                          }).catchError(
+                            (err) {
+                              Navigator.pop(context);
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('$err')),
+                              );
+                            },
+                          );
+                        },
+                )
+              ],
+            ),
           );
         });
   }
