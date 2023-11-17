@@ -53,7 +53,7 @@ class _AccountSelectorState extends State<AccountSelector> {
           predicate: (acc, curr) => AppDB.instance.buildExpr([
             if (widget.filterSavingAccounts)
               acc.type.equalsValue(AccountType.saving).not(),
-            if (!widget.includeArchivedAccounts) acc.isArchived.isNotValue(true)
+            if (!widget.includeArchivedAccounts) acc.closingDate.isNull()
           ]),
         )
         .first

@@ -52,6 +52,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
   Account? _accountToEdit;
 
   DateTime _openingDate = DateTime.now();
+  DateTime? _closeDate;
 
   submitForm() async {
     final accountService = AccountService.instance;
@@ -86,6 +87,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
       name: _nameController.text,
       iniValue: newBalance,
       date: _openingDate,
+      closingDate: _closeDate,
       type: _type,
       iconId: _icon.id,
       currency: _currency!,
@@ -149,6 +151,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
     _textController.text = _accountToEdit!.description ?? '';
 
     _openingDate = _accountToEdit!.date;
+    _closeDate = _accountToEdit!.closingDate;
 
     _type = _accountToEdit!.type;
 
@@ -284,7 +287,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                         ),
                         keyboardType: TextInputType.number,
                         enabled: !(widget.account != null &&
-                            widget.account!.isArchived),
+                            widget.account!.isClosed),
                         inputFormatters: decimalDigitFormatter,
                         validator: (value) => fieldValidator(value,
                             validator: ValidatorType.double, isRequired: true),
@@ -396,7 +399,8 @@ class _AccountFormPageState extends State<AccountFormPage> {
                                 DateTime? pickedDate = await openDateTimePicker(
                                   context,
                                   initialDate: _openingDate,
-                                  lastDate: DateTime.now(),
+                                  lastDate: _accountToEdit?.closingDate ??
+                                      DateTime.now(),
                                   showTimePickerAfterDate: true,
                                 );
 
@@ -408,6 +412,35 @@ class _AccountFormPageState extends State<AccountFormPage> {
                               },
                             ),
                             const SizedBox(height: 22),
+                            if (_accountToEdit != null &&
+                                _accountToEdit!.isClosed) ...[
+                              TextFormField(
+                                controller: TextEditingController(
+                                    text: DateFormat.yMMMd()
+                                        .add_jm()
+                                        .format(_closeDate!)),
+                                decoration: InputDecoration(
+                                    labelText: t.account.close_date),
+                                readOnly: true,
+                                onTap: () async {
+                                  DateTime? pickedDate =
+                                      await openDateTimePicker(
+                                    context,
+                                    initialDate: _closeDate,
+                                    firstDate: _openingDate,
+                                    lastDate: DateTime.now(),
+                                    showTimePickerAfterDate: true,
+                                  );
+
+                                  if (pickedDate == null) return;
+
+                                  setState(() {
+                                    _closeDate = pickedDate;
+                                  });
+                                },
+                              ),
+                              const SizedBox(height: 22),
+                            ],
                             TextFormField(
                               controller: _ibanController,
                               decoration: InputDecoration(

@@ -13,8 +13,6 @@
     "close_and_save": "Guardar y cerrar",
     "add": "Añadir",
     "edit": "Editar",
-    "archive": "Archivar",
-    "unarchive": "Desarchivar",
     "delete": "Eliminar",
     "balance": "Balance",
     "account": "Cuenta",
@@ -365,6 +363,10 @@
   "ACCOUNT": {
     "details": "Detalles de la cuenta",
     "date": "Fecha de apertura",
+    "close_date": "Fecha de cierre",
+    "reopen.short": "Reabrir",
+    "reopen": "Reabrir cuenta",
+    "reopen.descr": "¿Seguro que quieres volver a abrir esta cuenta?",
     "balance": "Saldo de la cuenta",
     "n_transactions": "Número de transacciones",
     "add_money": "Añadir dinero",
@@ -398,12 +400,14 @@
       "warning-text": "Esta acción borrara esta cuenta y todas sus transacciones",
       "success": "Cuenta eliminada correctamente"
     },
-    "ARCHIVE": {
-      "title": "Archive account",
-      "warn": "This account will no longer appear in certain listings and you will not be able to create new transactions on this account. You can unarchive this account whenever you want",
-      "should-have-zero-balance": "You must have a current balance of 0 to be able to archive this account. Please edit it before continuing",
-      "success": "Account archived successfully",
-      "unarchive-succes": "Account unarchived successfully"
+    "CLOSE": {
+      "title": "Cerrar cuenta",
+      "title.short": "Cerrar",
+      "warn": "Esta cuenta ya no aparecerá en ciertos listados y no podrá crear transacciones en ella con fecha posterior a la especificada debajo. Esta acción no afecta a ninguna transacción ni balance, y además, podrás volver a abrir esta cuenta cuando quieras",
+      "should-have-zero-balance": "Debes tener un saldo actual en la cuenta de 0 para poder cerrarla. Edita esta cuenta antes de continuar",
+      "should-have-no-transactions": "Esta cuenta posee transacciones posteriores a la fecha de cierre especificada. Borralas o edita la fecha de cierre de la cuenta antes de continuar",
+      "success": "Cuenta cerrada exitosamente",
+      "unarchive-succes": "Cuenta re-abierta exitosamente"
     },
     "SELECT": {
       "one": "Selecciona una cuenta",

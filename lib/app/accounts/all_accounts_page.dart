@@ -66,7 +66,7 @@ class AllAccountsPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 4),
-                        if (account.isArchived)
+                        if (account.isClosed)
                           const Icon(Icons.archive_outlined,
                               color: Colors.amber, size: 16)
                       ],
