@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 990 (495 per locale)
+/// Strings: 998 (499 per locale)
 ///
-/// Built on 2023-11-01 at 11:09 UTC
+/// Built on 2023-11-17 at 22:30 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -196,8 +196,6 @@ class _TranslationsGeneralEn {
 	String get close_and_save => 'Save and close';
 	String get add => 'Add';
 	String get edit => 'Edit';
-	String get archive => 'Archive';
-	String get unarchive => 'Unarchive';
 	String get balance => 'Balance';
 	String get delete => 'Delete';
 	String get account => 'Account';
@@ -385,6 +383,10 @@ class _TranslationsAccountEn {
 	// Translations
 	String get details => 'Account details';
 	String get date => 'Opening date';
+	String get close_date => 'Closing date';
+	String get reopen => 'Re-open account';
+	String get reopen_short => 'Re-open';
+	String get reopen_descr => 'Are you sure you want to reopen this account?';
 	String get balance => 'Account balance';
 	String get n_transactions => 'Number of transactions';
 	String get add_money => 'Add money';
@@ -393,7 +395,7 @@ class _TranslationsAccountEn {
 	late final _TranslationsAccountTypesEn types = _TranslationsAccountTypesEn._(_root);
 	late final _TranslationsAccountFormEn form = _TranslationsAccountFormEn._(_root);
 	late final _TranslationsAccountDeleteEn delete = _TranslationsAccountDeleteEn._(_root);
-	late final _TranslationsAccountArchiveEn archive = _TranslationsAccountArchiveEn._(_root);
+	late final _TranslationsAccountCloseEn close = _TranslationsAccountCloseEn._(_root);
 	late final _TranslationsAccountSelectEn select = _TranslationsAccountSelectEn._(_root);
 }
 
@@ -906,18 +908,20 @@ class _TranslationsAccountDeleteEn {
 	String get success => 'Account deleted successfully';
 }
 
-// Path: account.archive
-class _TranslationsAccountArchiveEn {
-	_TranslationsAccountArchiveEn._(this._root);
+// Path: account.close
+class _TranslationsAccountCloseEn {
+	_TranslationsAccountCloseEn._(this._root);
 
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
-	String get title => 'Archive account';
-	String get warn => 'This account will no longer appear in certain listings and you will not be able to create new transactions on this account. You can unarchive this account whenever you want';
-	String get should_have_zero_balance => 'You must have a current balance of 0 to be able to archive this account. Please edit it before continuing';
-	String get success => 'Account archived successfully';
-	String get unarchive_succes => 'Account unarchived successfully';
+	String get title => 'Close account';
+	String get title_short => 'Close';
+	String get warn => 'This account will no longer appear in certain listings and you will not be able to create transactions in it with a date later than the one specified below. This action does not affect any transactions or balance, and you can also reopen this account at any time. ';
+	String get should_have_zero_balance => 'You must have a current balance of 0 in this account to close it. Please edit the account before continuing';
+	String get should_have_no_transactions => 'This account has transactions after the specified close date. Delete them or edit the account close date before continuing';
+	String get success => 'Account closed successfully';
+	String get unarchive_succes => 'Account successfully re-opened';
 }
 
 // Path: account.select
@@ -1391,8 +1395,6 @@ class _TranslationsGeneralEs implements _TranslationsGeneralEn {
 	@override String get close_and_save => 'Guardar y cerrar';
 	@override String get add => 'Añadir';
 	@override String get edit => 'Editar';
-	@override String get archive => 'Archivar';
-	@override String get unarchive => 'Desarchivar';
 	@override String get delete => 'Eliminar';
 	@override String get balance => 'Balance';
 	@override String get account => 'Cuenta';
@@ -1580,6 +1582,10 @@ class _TranslationsAccountEs implements _TranslationsAccountEn {
 	// Translations
 	@override String get details => 'Detalles de la cuenta';
 	@override String get date => 'Fecha de apertura';
+	@override String get close_date => 'Fecha de cierre';
+	@override String get reopen_short => 'Reabrir';
+	@override String get reopen => 'Reabrir cuenta';
+	@override String get reopen_descr => '¿Seguro que quieres volver a abrir esta cuenta?';
 	@override String get balance => 'Saldo de la cuenta';
 	@override String get n_transactions => 'Número de transacciones';
 	@override String get add_money => 'Añadir dinero';
@@ -1588,7 +1594,7 @@ class _TranslationsAccountEs implements _TranslationsAccountEn {
 	@override late final _TranslationsAccountTypesEs types = _TranslationsAccountTypesEs._(_root);
 	@override late final _TranslationsAccountFormEs form = _TranslationsAccountFormEs._(_root);
 	@override late final _TranslationsAccountDeleteEs delete = _TranslationsAccountDeleteEs._(_root);
-	@override late final _TranslationsAccountArchiveEs archive = _TranslationsAccountArchiveEs._(_root);
+	@override late final _TranslationsAccountCloseEs close = _TranslationsAccountCloseEs._(_root);
 	@override late final _TranslationsAccountSelectEs select = _TranslationsAccountSelectEs._(_root);
 }
 
@@ -2101,18 +2107,20 @@ class _TranslationsAccountDeleteEs implements _TranslationsAccountDeleteEn {
 	@override String get success => 'Cuenta eliminada correctamente';
 }
 
-// Path: account.archive
-class _TranslationsAccountArchiveEs implements _TranslationsAccountArchiveEn {
-	_TranslationsAccountArchiveEs._(this._root);
+// Path: account.close
+class _TranslationsAccountCloseEs implements _TranslationsAccountCloseEn {
+	_TranslationsAccountCloseEs._(this._root);
 
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Archive account';
-	@override String get warn => 'This account will no longer appear in certain listings and you will not be able to create new transactions on this account. You can unarchive this account whenever you want';
-	@override String get should_have_zero_balance => 'You must have a current balance of 0 to be able to archive this account. Please edit it before continuing';
-	@override String get success => 'Account archived successfully';
-	@override String get unarchive_succes => 'Account unarchived successfully';
+	@override String get title => 'Cerrar cuenta';
+	@override String get title_short => 'Cerrar';
+	@override String get warn => 'Esta cuenta ya no aparecerá en ciertos listados y no podrá crear transacciones en ella con fecha posterior a la especificada debajo. Esta acción no afecta a ninguna transacción ni balance, y además, podrás volver a abrir esta cuenta cuando quieras';
+	@override String get should_have_zero_balance => 'Debes tener un saldo actual en la cuenta de 0 para poder cerrarla. Edita esta cuenta antes de continuar';
+	@override String get should_have_no_transactions => 'Esta cuenta posee transacciones posteriores a la fecha de cierre especificada. Borralas o edita la fecha de cierre de la cuenta antes de continuar';
+	@override String get success => 'Cuenta cerrada exitosamente';
+	@override String get unarchive_succes => 'Cuenta re-abierta exitosamente';
 }
 
 // Path: account.select
@@ -2543,8 +2551,6 @@ extension on _TranslationsEn {
 			case 'general.close_and_save': return 'Save and close';
 			case 'general.add': return 'Add';
 			case 'general.edit': return 'Edit';
-			case 'general.archive': return 'Archive';
-			case 'general.unarchive': return 'Unarchive';
 			case 'general.balance': return 'Balance';
 			case 'general.delete': return 'Delete';
 			case 'general.account': return 'Account';
@@ -2864,6 +2870,10 @@ extension on _TranslationsEn {
 			case 'recurrent_transactions.details.delete_message': return 'This action is irreversible and will not affect transactions you have already confirmed/paid for';
 			case 'account.details': return 'Account details';
 			case 'account.date': return 'Opening date';
+			case 'account.close_date': return 'Closing date';
+			case 'account.reopen': return 'Re-open account';
+			case 'account.reopen_short': return 'Re-open';
+			case 'account.reopen_descr': return 'Are you sure you want to reopen this account?';
 			case 'account.balance': return 'Account balance';
 			case 'account.n_transactions': return 'Number of transactions';
 			case 'account.add_money': return 'Add money';
@@ -2891,11 +2901,13 @@ extension on _TranslationsEn {
 			case 'account.delete.warning_header': return 'Are you sure?';
 			case 'account.delete.warning_text': return 'This action will delete this account and all its transactions';
 			case 'account.delete.success': return 'Account deleted successfully';
-			case 'account.archive.title': return 'Archive account';
-			case 'account.archive.warn': return 'This account will no longer appear in certain listings and you will not be able to create new transactions on this account. You can unarchive this account whenever you want';
-			case 'account.archive.should_have_zero_balance': return 'You must have a current balance of 0 to be able to archive this account. Please edit it before continuing';
-			case 'account.archive.success': return 'Account archived successfully';
-			case 'account.archive.unarchive_succes': return 'Account unarchived successfully';
+			case 'account.close.title': return 'Close account';
+			case 'account.close.title_short': return 'Close';
+			case 'account.close.warn': return 'This account will no longer appear in certain listings and you will not be able to create transactions in it with a date later than the one specified below. This action does not affect any transactions or balance, and you can also reopen this account at any time. ';
+			case 'account.close.should_have_zero_balance': return 'You must have a current balance of 0 in this account to close it. Please edit the account before continuing';
+			case 'account.close.should_have_no_transactions': return 'This account has transactions after the specified close date. Delete them or edit the account close date before continuing';
+			case 'account.close.success': return 'Account closed successfully';
+			case 'account.close.unarchive_succes': return 'Account successfully re-opened';
 			case 'account.select.one': return 'Select an account';
 			case 'account.select.all': return 'All accounts';
 			case 'account.select.multiple': return 'Select accounts';
@@ -3115,8 +3127,6 @@ extension on _TranslationsEs {
 			case 'general.close_and_save': return 'Guardar y cerrar';
 			case 'general.add': return 'Añadir';
 			case 'general.edit': return 'Editar';
-			case 'general.archive': return 'Archivar';
-			case 'general.unarchive': return 'Desarchivar';
 			case 'general.delete': return 'Eliminar';
 			case 'general.balance': return 'Balance';
 			case 'general.account': return 'Cuenta';
@@ -3437,6 +3447,10 @@ extension on _TranslationsEs {
 			case 'recurrent_transactions.details.delete_message': return 'Esta acción es irreversible y no afectará a transacciones que ya hayas confirmado/pagado';
 			case 'account.details': return 'Detalles de la cuenta';
 			case 'account.date': return 'Fecha de apertura';
+			case 'account.close_date': return 'Fecha de cierre';
+			case 'account.reopen_short': return 'Reabrir';
+			case 'account.reopen': return 'Reabrir cuenta';
+			case 'account.reopen_descr': return '¿Seguro que quieres volver a abrir esta cuenta?';
 			case 'account.balance': return 'Saldo de la cuenta';
 			case 'account.n_transactions': return 'Número de transacciones';
 			case 'account.add_money': return 'Añadir dinero';
@@ -3464,11 +3478,13 @@ extension on _TranslationsEs {
 			case 'account.delete.warning_header': return '¿Estas seguro?';
 			case 'account.delete.warning_text': return 'Esta acción borrara esta cuenta y todas sus transacciones';
 			case 'account.delete.success': return 'Cuenta eliminada correctamente';
-			case 'account.archive.title': return 'Archive account';
-			case 'account.archive.warn': return 'This account will no longer appear in certain listings and you will not be able to create new transactions on this account. You can unarchive this account whenever you want';
-			case 'account.archive.should_have_zero_balance': return 'You must have a current balance of 0 to be able to archive this account. Please edit it before continuing';
-			case 'account.archive.success': return 'Account archived successfully';
-			case 'account.archive.unarchive_succes': return 'Account unarchived successfully';
+			case 'account.close.title': return 'Cerrar cuenta';
+			case 'account.close.title_short': return 'Cerrar';
+			case 'account.close.warn': return 'Esta cuenta ya no aparecerá en ciertos listados y no podrá crear transacciones en ella con fecha posterior a la especificada debajo. Esta acción no afecta a ninguna transacción ni balance, y además, podrás volver a abrir esta cuenta cuando quieras';
+			case 'account.close.should_have_zero_balance': return 'Debes tener un saldo actual en la cuenta de 0 para poder cerrarla. Edita esta cuenta antes de continuar';
+			case 'account.close.should_have_no_transactions': return 'Esta cuenta posee transacciones posteriores a la fecha de cierre especificada. Borralas o edita la fecha de cierre de la cuenta antes de continuar';
+			case 'account.close.success': return 'Cuenta cerrada exitosamente';
+			case 'account.close.unarchive_succes': return 'Cuenta re-abierta exitosamente';
 			case 'account.select.one': return 'Selecciona una cuenta';
 			case 'account.select.multiple': return 'Selecciona cuentas';
 			case 'account.select.all': return 'Todas las cuentas';
