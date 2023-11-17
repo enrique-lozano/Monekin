@@ -287,7 +287,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                         ),
                         keyboardType: TextInputType.number,
                         enabled: !(widget.account != null &&
-                            widget.account!.isArchived),
+                            widget.account!.isClosed),
                         inputFormatters: decimalDigitFormatter,
                         validator: (value) => fieldValidator(value,
                             validator: ValidatorType.double, isRequired: true),
@@ -413,7 +413,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                             ),
                             const SizedBox(height: 22),
                             if (_accountToEdit != null &&
-                                _accountToEdit!.isArchived) ...[
+                                _accountToEdit!.isClosed) ...[
                               TextFormField(
                                 controller: TextEditingController(
                                     text: DateFormat.yMMMd()
