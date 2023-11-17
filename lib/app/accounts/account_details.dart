@@ -529,7 +529,7 @@ class _ArchiveWarnDialogState extends State<ArchiveWarnDialog> {
                         ),
                         if (!hasNoTransactions ||
                             widget.currentBalance != 0) ...[
-                          const SizedBox(height: 6),
+                          const SizedBox(height: 12),
                           InlineInfoCard(
                             mode: InlineInfoCardMode.warn,
                             text: widget.currentBalance != 0
