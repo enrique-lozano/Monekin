@@ -12,3 +12,11 @@ CREATE TABLE IF NOT EXISTS transactionTags (
   transactionID TEXT NOT NULL REFERENCES transactions(id) ON DELETE CASCADE ON UPDATE CASCADE,
   tagID TEXT NOT NULL REFERENCES tags(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+ALTER TABLE accounts ADD COLUMN closingDate TEXT;
+
+UPDATE accounts
+SET closingDate = strftime('%Y-%m-%dT%H:%M:%fZ', 'now', 'localtime')
+WHERE isArchived == 1;
+
+ALTER TABLE accounts DROP COLUMN isArchived;

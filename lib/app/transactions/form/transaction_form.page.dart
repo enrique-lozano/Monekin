@@ -253,7 +253,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
           .getAccounts(
               predicate: (acc, curr) => AppDB.instance.buildExpr([
                     acc.type.equalsValue(AccountType.saving).not(),
-                    acc.isArchived.isNotValue(true)
+                    acc.closingDate.isNull()
                   ]),
               limit: widget.mode == TransactionFormMode.incomeOrExpense ? 1 : 2)
           .first

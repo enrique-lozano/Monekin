@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 990 (495 per locale)
+/// Strings: 992 (496 per locale)
 ///
-/// Built on 2023-11-01 at 11:09 UTC
+/// Built on 2023-11-17 at 12:28 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -385,6 +385,7 @@ class _TranslationsAccountEn {
 	// Translations
 	String get details => 'Account details';
 	String get date => 'Opening date';
+	String get close_date => 'Closing date';
 	String get balance => 'Account balance';
 	String get n_transactions => 'Number of transactions';
 	String get add_money => 'Add money';
@@ -1580,6 +1581,7 @@ class _TranslationsAccountEs implements _TranslationsAccountEn {
 	// Translations
 	@override String get details => 'Detalles de la cuenta';
 	@override String get date => 'Fecha de apertura';
+	@override String get close_date => 'Fecha de cierre';
 	@override String get balance => 'Saldo de la cuenta';
 	@override String get n_transactions => 'Número de transacciones';
 	@override String get add_money => 'Añadir dinero';
@@ -2864,6 +2866,7 @@ extension on _TranslationsEn {
 			case 'recurrent_transactions.details.delete_message': return 'This action is irreversible and will not affect transactions you have already confirmed/paid for';
 			case 'account.details': return 'Account details';
 			case 'account.date': return 'Opening date';
+			case 'account.close_date': return 'Closing date';
 			case 'account.balance': return 'Account balance';
 			case 'account.n_transactions': return 'Number of transactions';
 			case 'account.add_money': return 'Add money';
@@ -3437,6 +3440,7 @@ extension on _TranslationsEs {
 			case 'recurrent_transactions.details.delete_message': return 'Esta acción es irreversible y no afectará a transacciones que ya hayas confirmado/pagado';
 			case 'account.details': return 'Detalles de la cuenta';
 			case 'account.date': return 'Fecha de apertura';
+			case 'account.close_date': return 'Fecha de cierre';
 			case 'account.balance': return 'Saldo de la cuenta';
 			case 'account.n_transactions': return 'Número de transacciones';
 			case 'account.add_money': return 'Añadir dinero';

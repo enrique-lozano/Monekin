@@ -332,8 +332,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   StreamBuilder(
                       stream: AccountService.instance.getAccounts(
-                        predicate: (acc, curr) =>
-                            acc.isArchived.isNotValue(true),
+                        predicate: (acc, curr) => acc.closingDate.isNull(),
                       ),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {

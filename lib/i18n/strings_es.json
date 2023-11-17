@@ -365,6 +365,7 @@
   "ACCOUNT": {
     "details": "Detalles de la cuenta",
     "date": "Fecha de apertura",
+    "close_date": "Fecha de cierre",
     "balance": "Saldo de la cuenta",
     "n_transactions": "Número de transacciones",
     "add_money": "Añadir dinero",

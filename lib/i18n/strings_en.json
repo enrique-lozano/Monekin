@@ -361,6 +361,7 @@
   "ACCOUNT": {
     "details": "Account details",
     "date": "Opening date",
+    "close_date": "Closing date",
     "balance": "Account balance",
     "n_transactions": "Number of transactions",
     "add_money": "Add money",

@@ -199,7 +199,7 @@ class TransactionService {
         .getAccounts(
           predicate: (acc, curr) => AppDB.instance.buildExpr([
             acc.type.equalsValue(AccountType.saving).not(),
-            acc.isArchived.isNotValue(true)
+            acc.closingDate.isNull()
           ]),
           limit: 1,
         )

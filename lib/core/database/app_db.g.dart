@@ -23,9 +23,10 @@ class Currencies extends Table with TableInfo<Currencies, CurrencyInDB> {
   @override
   List<GeneratedColumn> get $columns => [code, symbol];
   @override
-  String get aliasedName => _alias ?? 'currencies';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'currencies';
+  String get actualTableName => $name;
+  static const String $name = 'currencies';
   @override
   VerificationContext validateIntegrity(Insertable<CurrencyInDB> instance,
       {bool isInserting = false}) {
@@ -243,14 +244,13 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
-  static const VerificationMeta _isArchivedMeta =
-      const VerificationMeta('isArchived');
-  late final GeneratedColumn<bool> isArchived = GeneratedColumn<bool>(
-      'isArchived', aliasedName, false,
-      type: DriftSqlType.bool,
+  static const VerificationMeta _closingDateMeta =
+      const VerificationMeta('closingDate');
+  late final GeneratedColumn<DateTime> closingDate = GeneratedColumn<DateTime>(
+      'closingDate', aliasedName, true,
+      type: DriftSqlType.dateTime,
       requiredDuringInsert: false,
-      $customConstraints: 'NOT NULL DEFAULT 0',
-      defaultValue: const CustomExpression('0'));
+      $customConstraints: '');
   static const VerificationMeta _currencyIdMeta =
       const VerificationMeta('currencyId');
   late final GeneratedColumn<String> currencyId = GeneratedColumn<String>(
@@ -280,15 +280,16 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
         description,
         type,
         iconId,
-        isArchived,
+        closingDate,
         currencyId,
         iban,
         swift
       ];
   @override
-  String get aliasedName => _alias ?? 'accounts';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'accounts';
+  String get actualTableName => $name;
+  static const String $name = 'accounts';
   @override
   VerificationContext validateIntegrity(Insertable<AccountInDB> instance,
       {bool isInserting = false}) {
@@ -330,11 +331,11 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
     } else if (isInserting) {
       context.missing(_iconIdMeta);
     }
-    if (data.containsKey('isArchived')) {
+    if (data.containsKey('closingDate')) {
       context.handle(
-          _isArchivedMeta,
-          isArchived.isAcceptableOrUnknown(
-              data['isArchived']!, _isArchivedMeta));
+          _closingDateMeta,
+          closingDate.isAcceptableOrUnknown(
+              data['closingDate']!, _closingDateMeta));
     }
     if (data.containsKey('currencyId')) {
       context.handle(
@@ -375,8 +376,8 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
           .read(DriftSqlType.string, data['${effectivePrefix}type'])!),
       iconId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}iconId'])!,
-      isArchived: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}isArchived'])!,
+      closingDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}closingDate']),
       currencyId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}currencyId'])!,
       iban: attachedDatabase.typeMapping
@@ -404,14 +405,14 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
   final String name;
   final double iniValue;
 
-  /// Date of creation of this account
+  /// Creation/Opening date of this account. Before this date, no transactions can exists on it.
   final DateTime date;
   final String? description;
   final AccountType type;
   final String iconId;
 
-  /// If true, the account will be no-selectable for new transactions and will not appear in some stats
-  final bool isArchived;
+  /// The closing date of the account. After this date, no transactions can exists on it.
+  final DateTime? closingDate;
 
   /// ID of the currency used by this account and therefore all transactions contained in it
   final String currencyId;
@@ -425,7 +426,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       this.description,
       required this.type,
       required this.iconId,
-      required this.isArchived,
+      this.closingDate,
       required this.currencyId,
       this.iban,
       this.swift});
@@ -444,7 +445,9 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       map['type'] = Variable<String>(converter.toSql(type));
     }
     map['iconId'] = Variable<String>(iconId);
-    map['isArchived'] = Variable<bool>(isArchived);
+    if (!nullToAbsent || closingDate != null) {
+      map['closingDate'] = Variable<DateTime>(closingDate);
+    }
     map['currencyId'] = Variable<String>(currencyId);
     if (!nullToAbsent || iban != null) {
       map['iban'] = Variable<String>(iban);
@@ -466,7 +469,9 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           : Value(description),
       type: Value(type),
       iconId: Value(iconId),
-      isArchived: Value(isArchived),
+      closingDate: closingDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(closingDate),
       currencyId: Value(currencyId),
       iban: iban == null && nullToAbsent ? const Value.absent() : Value(iban),
       swift:
@@ -486,7 +491,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       type: Accounts.$convertertype
           .fromJson(serializer.fromJson<String>(json['type'])),
       iconId: serializer.fromJson<String>(json['iconId']),
-      isArchived: serializer.fromJson<bool>(json['isArchived']),
+      closingDate: serializer.fromJson<DateTime?>(json['closingDate']),
       currencyId: serializer.fromJson<String>(json['currencyId']),
       iban: serializer.fromJson<String?>(json['iban']),
       swift: serializer.fromJson<String?>(json['swift']),
@@ -503,7 +508,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       'description': serializer.toJson<String?>(description),
       'type': serializer.toJson<String>(Accounts.$convertertype.toJson(type)),
       'iconId': serializer.toJson<String>(iconId),
-      'isArchived': serializer.toJson<bool>(isArchived),
+      'closingDate': serializer.toJson<DateTime?>(closingDate),
       'currencyId': serializer.toJson<String>(currencyId),
       'iban': serializer.toJson<String?>(iban),
       'swift': serializer.toJson<String?>(swift),
@@ -518,7 +523,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           Value<String?> description = const Value.absent(),
           AccountType? type,
           String? iconId,
-          bool? isArchived,
+          Value<DateTime?> closingDate = const Value.absent(),
           String? currencyId,
           Value<String?> iban = const Value.absent(),
           Value<String?> swift = const Value.absent()}) =>
@@ -530,7 +535,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
         description: description.present ? description.value : this.description,
         type: type ?? this.type,
         iconId: iconId ?? this.iconId,
-        isArchived: isArchived ?? this.isArchived,
+        closingDate: closingDate.present ? closingDate.value : this.closingDate,
         currencyId: currencyId ?? this.currencyId,
         iban: iban.present ? iban.value : this.iban,
         swift: swift.present ? swift.value : this.swift,
@@ -545,7 +550,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           ..write('description: $description, ')
           ..write('type: $type, ')
           ..write('iconId: $iconId, ')
-          ..write('isArchived: $isArchived, ')
+          ..write('closingDate: $closingDate, ')
           ..write('currencyId: $currencyId, ')
           ..write('iban: $iban, ')
           ..write('swift: $swift')
@@ -555,7 +560,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
 
   @override
   int get hashCode => Object.hash(id, name, iniValue, date, description, type,
-      iconId, isArchived, currencyId, iban, swift);
+      iconId, closingDate, currencyId, iban, swift);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -567,7 +572,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           other.description == this.description &&
           other.type == this.type &&
           other.iconId == this.iconId &&
-          other.isArchived == this.isArchived &&
+          other.closingDate == this.closingDate &&
           other.currencyId == this.currencyId &&
           other.iban == this.iban &&
           other.swift == this.swift);
@@ -581,7 +586,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
   final Value<String?> description;
   final Value<AccountType> type;
   final Value<String> iconId;
-  final Value<bool> isArchived;
+  final Value<DateTime?> closingDate;
   final Value<String> currencyId;
   final Value<String?> iban;
   final Value<String?> swift;
@@ -594,7 +599,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     this.description = const Value.absent(),
     this.type = const Value.absent(),
     this.iconId = const Value.absent(),
-    this.isArchived = const Value.absent(),
+    this.closingDate = const Value.absent(),
     this.currencyId = const Value.absent(),
     this.iban = const Value.absent(),
     this.swift = const Value.absent(),
@@ -608,7 +613,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     this.description = const Value.absent(),
     required AccountType type,
     required String iconId,
-    this.isArchived = const Value.absent(),
+    this.closingDate = const Value.absent(),
     required String currencyId,
     this.iban = const Value.absent(),
     this.swift = const Value.absent(),
@@ -628,7 +633,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     Expression<String>? description,
     Expression<String>? type,
     Expression<String>? iconId,
-    Expression<bool>? isArchived,
+    Expression<DateTime>? closingDate,
     Expression<String>? currencyId,
     Expression<String>? iban,
     Expression<String>? swift,
@@ -642,7 +647,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
       if (description != null) 'description': description,
       if (type != null) 'type': type,
       if (iconId != null) 'iconId': iconId,
-      if (isArchived != null) 'isArchived': isArchived,
+      if (closingDate != null) 'closingDate': closingDate,
       if (currencyId != null) 'currencyId': currencyId,
       if (iban != null) 'iban': iban,
       if (swift != null) 'swift': swift,
@@ -658,7 +663,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
       Value<String?>? description,
       Value<AccountType>? type,
       Value<String>? iconId,
-      Value<bool>? isArchived,
+      Value<DateTime?>? closingDate,
       Value<String>? currencyId,
       Value<String?>? iban,
       Value<String?>? swift,
@@ -671,7 +676,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
       description: description ?? this.description,
       type: type ?? this.type,
       iconId: iconId ?? this.iconId,
-      isArchived: isArchived ?? this.isArchived,
+      closingDate: closingDate ?? this.closingDate,
       currencyId: currencyId ?? this.currencyId,
       iban: iban ?? this.iban,
       swift: swift ?? this.swift,
@@ -699,13 +704,14 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     }
     if (type.present) {
       final converter = Accounts.$convertertype;
+
       map['type'] = Variable<String>(converter.toSql(type.value));
     }
     if (iconId.present) {
       map['iconId'] = Variable<String>(iconId.value);
     }
-    if (isArchived.present) {
-      map['isArchived'] = Variable<bool>(isArchived.value);
+    if (closingDate.present) {
+      map['closingDate'] = Variable<DateTime>(closingDate.value);
     }
     if (currencyId.present) {
       map['currencyId'] = Variable<String>(currencyId.value);
@@ -732,7 +738,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
           ..write('description: $description, ')
           ..write('type: $type, ')
           ..write('iconId: $iconId, ')
-          ..write('isArchived: $isArchived, ')
+          ..write('closingDate: $closingDate, ')
           ..write('currencyId: $currencyId, ')
           ..write('iban: $iban, ')
           ..write('swift: $swift, ')
@@ -790,9 +796,10 @@ class Categories extends Table with TableInfo<Categories, CategoryInDB> {
   List<GeneratedColumn> get $columns =>
       [id, name, iconId, color, type, parentCategoryID];
   @override
-  String get aliasedName => _alias ?? 'categories';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'categories';
+  String get actualTableName => $name;
+  static const String $name = 'categories';
   @override
   VerificationContext validateIntegrity(Insertable<CategoryInDB> instance,
       {bool isInserting = false}) {
@@ -1081,6 +1088,7 @@ class CategoriesCompanion extends UpdateCompanion<CategoryInDB> {
     }
     if (type.present) {
       final converter = Categories.$convertertypen;
+
       map['type'] = Variable<String>(converter.toSql(type.value));
     }
     if (parentCategoryID.present) {
@@ -1240,9 +1248,10 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
         remainingTransactions
       ];
   @override
-  String get aliasedName => _alias ?? 'transactions';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'transactions';
+  String get actualTableName => $name;
+  static const String $name = 'transactions';
   @override
   VerificationContext validateIntegrity(Insertable<TransactionInDB> instance,
       {bool isInserting = false}) {
@@ -1826,6 +1835,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     }
     if (status.present) {
       final converter = Transactions.$converterstatusn;
+
       map['status'] = Variable<String>(converter.toSql(status.value));
     }
     if (categoryID.present) {
@@ -1842,6 +1852,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     }
     if (intervalPeriod.present) {
       final converter = Transactions.$converterintervalPeriodn;
+
       map['intervalPeriod'] =
           Variable<String>(converter.toSql(intervalPeriod.value));
     }
@@ -1920,9 +1931,10 @@ class ExchangeRates extends Table
   @override
   List<GeneratedColumn> get $columns => [id, date, currencyCode, exchangeRate];
   @override
-  String get aliasedName => _alias ?? 'exchangeRates';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'exchangeRates';
+  String get actualTableName => $name;
+  static const String $name = 'exchangeRates';
   @override
   VerificationContext validateIntegrity(Insertable<ExchangeRateInDB> instance,
       {bool isInserting = false}) {
@@ -2190,9 +2202,10 @@ class Tags extends Table with TableInfo<Tags, TagInDB> {
   @override
   List<GeneratedColumn> get $columns => [id, name, color, description];
   @override
-  String get aliasedName => _alias ?? 'tags';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'tags';
+  String get actualTableName => $name;
+  static const String $name = 'tags';
   @override
   VerificationContext validateIntegrity(Insertable<TagInDB> instance,
       {bool isInserting = false}) {
@@ -2455,9 +2468,10 @@ class TransactionTags extends Table
   @override
   List<GeneratedColumn> get $columns => [transactionID, tagID];
   @override
-  String get aliasedName => _alias ?? 'transactionTags';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'transactionTags';
+  String get actualTableName => $name;
+  static const String $name = 'transactionTags';
   @override
   VerificationContext validateIntegrity(Insertable<TransactionTag> instance,
       {bool isInserting = false}) {
@@ -2677,9 +2691,10 @@ class Budgets extends Table with TableInfo<Budgets, BudgetInDB> {
   List<GeneratedColumn> get $columns =>
       [id, name, limitAmount, intervalPeriod, startDate, endDate];
   @override
-  String get aliasedName => _alias ?? 'budgets';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'budgets';
+  String get actualTableName => $name;
+  static const String $name = 'budgets';
   @override
   VerificationContext validateIntegrity(Insertable<BudgetInDB> instance,
       {bool isInserting = false}) {
@@ -2970,6 +2985,7 @@ class BudgetsCompanion extends UpdateCompanion<BudgetInDB> {
     }
     if (intervalPeriod.present) {
       final converter = Budgets.$converterintervalPeriodn;
+
       map['intervalPeriod'] =
           Variable<String>(converter.toSql(intervalPeriod.value));
     }
@@ -3025,9 +3041,10 @@ class BudgetCategory extends Table
   @override
   List<GeneratedColumn> get $columns => [budgetID, categoryID];
   @override
-  String get aliasedName => _alias ?? 'budgetCategory';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'budgetCategory';
+  String get actualTableName => $name;
+  static const String $name = 'budgetCategory';
   @override
   VerificationContext validateIntegrity(Insertable<BudgetCategoryData> instance,
       {bool isInserting = false}) {
@@ -3220,9 +3237,10 @@ class BudgetAccount extends Table
   @override
   List<GeneratedColumn> get $columns => [budgetID, accountID];
   @override
-  String get aliasedName => _alias ?? 'budgetAccount';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'budgetAccount';
+  String get actualTableName => $name;
+  static const String $name = 'budgetAccount';
   @override
   VerificationContext validateIntegrity(Insertable<BudgetAccountData> instance,
       {bool isInserting = false}) {
@@ -3416,9 +3434,10 @@ class CurrencyNames extends Table with TableInfo<CurrencyNames, CurrencyName> {
   @override
   List<GeneratedColumn> get $columns => [currencyCode, en, es];
   @override
-  String get aliasedName => _alias ?? 'currencyNames';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'currencyNames';
+  String get actualTableName => $name;
+  static const String $name = 'currencyNames';
   @override
   VerificationContext validateIntegrity(Insertable<CurrencyName> instance,
       {bool isInserting = false}) {
@@ -3637,9 +3656,10 @@ class UserSettings extends Table with TableInfo<UserSettings, UserSetting> {
   @override
   List<GeneratedColumn> get $columns => [settingKey, settingValue];
   @override
-  String get aliasedName => _alias ?? 'userSettings';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'userSettings';
+  String get actualTableName => $name;
+  static const String $name = 'userSettings';
   @override
   VerificationContext validateIntegrity(Insertable<UserSetting> instance,
       {bool isInserting = false}) {
@@ -3794,6 +3814,7 @@ class UserSettingsCompanion extends UpdateCompanion<UserSetting> {
     final map = <String, Expression>{};
     if (settingKey.present) {
       final converter = UserSettings.$convertersettingKey;
+
       map['settingKey'] = Variable<String>(converter.toSql(settingKey.value));
     }
     if (settingValue.present) {
@@ -3839,9 +3860,10 @@ class AppData extends Table with TableInfo<AppData, AppDataData> {
   @override
   List<GeneratedColumn> get $columns => [appDataKey, appDataValue];
   @override
-  String get aliasedName => _alias ?? 'appData';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'appData';
+  String get actualTableName => $name;
+  static const String $name = 'appData';
   @override
   VerificationContext validateIntegrity(Insertable<AppDataData> instance,
       {bool isInserting = false}) {
@@ -3996,6 +4018,7 @@ class AppDataCompanion extends UpdateCompanion<AppDataData> {
     final map = <String, Expression>{};
     if (appDataKey.present) {
       final converter = AppData.$converterappDataKey;
+
       map['appDataKey'] = Variable<String>(converter.toSql(appDataKey.value));
     }
     if (appDataValue.present) {
@@ -4078,7 +4101,7 @@ abstract class _$AppDB extends GeneratedDatabase {
           type: Accounts.$convertertype.fromSql(row.read<String>('type')),
           iconId: row.read<String>('iconId'),
           currency: await currencies.mapFromRow(row, tablePrefix: 'nested_0'),
-          isArchived: row.read<bool>('isArchived'),
+          closingDate: row.readNullable<DateTime>('closingDate'),
           description: row.readNullable<String>('description'),
           iban: row.readNullable<String>('iban'),
           swift: row.readNullable<String>('swift'),
@@ -4129,7 +4152,7 @@ abstract class _$AppDB extends GeneratedDatabase {
         startIndex: $arrayStartIndex);
     $arrayStartIndex += generatedlimit.amountOfVariables;
     return customSelect(
-        'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."iconId" AS "nested_0.iconId", "a"."isArchived" AS "nested_0.isArchived", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."iconId" AS "nested_3.iconId", "ra"."isArchived" AS "nested_3.isArchived", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRate.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id INNER JOIN currencies AS receivingAccountCurrency ON a.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
+        'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."iconId" AS "nested_0.iconId", "a"."closingDate" AS "nested_0.closingDate", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."iconId" AS "nested_3.iconId", "ra"."closingDate" AS "nested_3.closingDate", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRate.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id INNER JOIN currencies AS receivingAccountCurrency ON a.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
         variables: [
           ...generatedpredicate.introducedVariables,
           ...generatedorderBy.introducedVariables,
