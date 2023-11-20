@@ -13,11 +13,11 @@ import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
+import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -505,25 +505,20 @@ class _ArchiveWarnDialogState extends State<ArchiveWarnDialog> {
                         const SizedBox(height: 22),
                         Text(t.account.close.warn),
                         const SizedBox(height: 22),
-                        TextFormField(
-                          controller: TextEditingController(
-                              text: DateFormat.yMMMMd().add_Hm().format(date)),
+                        DateTimeFormField(
                           decoration: InputDecoration(
-                              labelText: '${t.account.close_date} *'),
-                          enabled: widget.currentBalance == 0,
-                          readOnly: true,
-                          onTap: () async {
-                            DateTime? pickedDate = await openDateTimePicker(
-                              context,
-                              initialDate: date,
-                              firstDate: widget.account.date,
-                              lastDate: DateTime.now(),
-                              showTimePickerAfterDate: true,
-                            );
-                            if (pickedDate == null) return;
-
+                            suffixIcon: const Icon(Icons.event),
+                            labelText: '${t.account.close_date} *',
+                          ),
+                          initialDate: date,
+                          firstDate: widget.account.date,
+                          lastDate: DateTime.now(),
+                          dateFormat: DateFormat.yMMMd().add_jm(),
+                          validator: (e) =>
+                              e == null ? t.general.validations.required : null,
+                          onDateSelected: (DateTime value) {
                             setState(() {
-                              date = pickedDate;
+                              date = value;
                             });
                           },
                         ),
