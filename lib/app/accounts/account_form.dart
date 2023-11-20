@@ -13,6 +13,7 @@ import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
+import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/expansion_panel/single_expansion_panel.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
@@ -22,8 +23,6 @@ import 'package:monekin/core/services/supported_icon/supported_icon_service.dart
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:uuid/uuid.dart';
-
-import '../../core/utils/date_time_picker.dart';
 
 class AccountFormPage extends StatefulWidget {
   const AccountFormPage({Key? key, this.account}) : super(key: key);
@@ -387,55 +386,38 @@ class _AccountFormPageState extends State<AccountFormPage> {
                         child: Column(
                           children: [
                             const SizedBox(height: 12),
-                            TextFormField(
-                              controller: TextEditingController(
-                                  text: DateFormat.yMMMd()
-                                      .add_jm()
-                                      .format(_openingDate)),
+                            DateTimeFormField(
                               decoration: InputDecoration(
-                                  labelText: '${t.account.date} *'),
-                              readOnly: true,
-                              onTap: () async {
-                                DateTime? pickedDate = await openDateTimePicker(
-                                  context,
-                                  initialDate: _openingDate,
-                                  lastDate: _accountToEdit?.closingDate ??
-                                      DateTime.now(),
-                                  showTimePickerAfterDate: true,
-                                );
-
-                                if (pickedDate == null) return;
-
+                                suffixIcon: const Icon(Icons.event),
+                                labelText: '${t.account.date} *',
+                              ),
+                              initialDate: _openingDate,
+                              dateFormat: DateFormat.yMMMd().add_jm(),
+                              lastDate: _closeDate ?? DateTime.now(),
+                              validator: (e) => e == null
+                                  ? t.general.validations.required
+                                  : null,
+                              onDateSelected: (DateTime value) {
                                 setState(() {
-                                  _openingDate = pickedDate;
+                                  _openingDate = value;
                                 });
                               },
                             ),
                             const SizedBox(height: 22),
                             if (_accountToEdit != null &&
                                 _accountToEdit!.isClosed) ...[
-                              TextFormField(
-                                controller: TextEditingController(
-                                    text: DateFormat.yMMMd()
-                                        .add_jm()
-                                        .format(_closeDate!)),
+                              DateTimeFormField(
                                 decoration: InputDecoration(
-                                    labelText: t.account.close_date),
-                                readOnly: true,
-                                onTap: () async {
-                                  DateTime? pickedDate =
-                                      await openDateTimePicker(
-                                    context,
-                                    initialDate: _closeDate,
-                                    firstDate: _openingDate,
-                                    lastDate: DateTime.now(),
-                                    showTimePickerAfterDate: true,
-                                  );
-
-                                  if (pickedDate == null) return;
-
+                                  suffixIcon: const Icon(Icons.event),
+                                  labelText: t.account.close_date,
+                                ),
+                                initialDate: _closeDate,
+                                firstDate: _openingDate,
+                                lastDate: DateTime.now(),
+                                dateFormat: DateFormat.yMMMd().add_jm(),
+                                onDateSelected: (DateTime value) {
                                   setState(() {
-                                    _closeDate = pickedDate;
+                                    _closeDate = value;
                                   });
                                 },
                               ),

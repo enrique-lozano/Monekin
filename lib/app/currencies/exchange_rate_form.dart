@@ -7,8 +7,9 @@ import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
+import 'package:monekin/core/presentation/widgets/date_form_field/date_field.dart';
+import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
-import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:uuid/uuid.dart';
@@ -178,24 +179,19 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
-                              child: TextFormField(
-                                controller: TextEditingController(
-                                    text: DateFormat.yMMMd().format(
-                                        date)), //editing controller of this TextField
+                              child: DateTimeFormField(
                                 decoration: InputDecoration(
                                   labelText: '${t.general.time.date} *',
                                 ),
-                                readOnly: true,
-                                onTap: () async {
-                                  DateTime? pickedDate =
-                                      await openDateTimePicker(context,
-                                          showTimePickerAfterDate: false,
-                                          initialDate: date);
-
-                                  if (pickedDate == null) return;
-
+                                mode: DateTimeFieldPickerMode.date,
+                                initialDate: date,
+                                dateFormat: DateFormat.yMMMd(),
+                                validator: (e) => e == null
+                                    ? t.general.validations.required
+                                    : null,
+                                onDateSelected: (DateTime value) {
                                   setState(() {
-                                    date = pickedDate;
+                                    date = value;
                                   });
                                 },
                               ),

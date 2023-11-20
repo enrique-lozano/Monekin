@@ -19,6 +19,7 @@ import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/animations/shake/shake_widget.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/expansion_panel/single_expansion_panel.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -974,25 +975,19 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                                 onClick: () => selectCategory(),
                               ),
                             const SizedBox(height: 24),
-                            TextFormField(
-                              controller: TextEditingController(
-                                  text: DateFormat.yMMMMd()
-                                      .add_Hm()
-                                      .format(date)),
+                            DateTimeFormField(
                               decoration: InputDecoration(
+                                  suffixIcon: const Icon(Icons.event),
                                   labelText: '${t.general.time.datetime} *'),
-                              readOnly: true,
-                              onTap: () async {
-                                DateTime? pickedDate = await openDateTimePicker(
-                                  context,
-                                  initialDate: date,
-                                  firstDate: fromAccount?.date,
-                                  showTimePickerAfterDate: true,
-                                );
-                                if (pickedDate == null) return;
-
+                              initialDate: date,
+                              firstDate: fromAccount?.date,
+                              dateFormat: DateFormat.yMMMd().add_Hm(),
+                              validator: (e) => e == null
+                                  ? t.general.validations.required
+                                  : null,
+                              onDateSelected: (DateTime value) {
                                 setState(() {
-                                  date = pickedDate;
+                                  date = value;
                                 });
                               },
                             ),

@@ -11,11 +11,12 @@ import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:monekin/core/presentation/widgets/date_form_field/date_field.dart';
+import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/status_filter/transaction_status_filter.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/tags_filter/tags_filter_container.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -265,66 +266,38 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                               Row(
                                 children: [
                                   Flexible(
-                                    child: TextFormField(
-                                      controller: TextEditingController(
-                                        text: filtersToReturn.minDate != null
-                                            ? DateFormat.yMMMMd().format(
-                                                filtersToReturn.minDate!)
-                                            : '',
-                                      ),
+                                    child: DateTimeFormField(
                                       decoration: InputDecoration(
+                                        suffixIcon: const Icon(Icons.event),
                                         labelText: t.general.time.from_date,
-                                        hintText: t.general.time.from_date,
-                                        floatingLabelBehavior:
-                                            FloatingLabelBehavior.never,
                                       ),
-                                      readOnly: true,
-                                      onTap: () async {
-                                        DateTime? pickedDate =
-                                            await openDateTimePicker(
-                                          context,
-                                          initialDate: filtersToReturn.minDate,
-                                          lastDate: filtersToReturn.maxDate,
-                                          showTimePickerAfterDate: false,
-                                        );
-                                        if (pickedDate == null) return;
-
+                                      mode: DateTimeFieldPickerMode.date,
+                                      initialDate: filtersToReturn.minDate,
+                                      lastDate: filtersToReturn.maxDate,
+                                      dateFormat: DateFormat.yMMMd(),
+                                      onDateSelected: (DateTime value) {
                                         setState(() {
                                           filtersToReturn = filtersToReturn
-                                              .copyWith(minDate: pickedDate);
+                                              .copyWith(minDate: value);
                                         });
                                       },
                                     ),
                                   ),
                                   const SizedBox(width: 16),
                                   Flexible(
-                                    child: TextFormField(
-                                      controller: TextEditingController(
-                                        text: filtersToReturn.maxDate != null
-                                            ? DateFormat.yMMMMd().format(
-                                                filtersToReturn.maxDate!)
-                                            : '',
-                                      ),
+                                    child: DateTimeFormField(
                                       decoration: InputDecoration(
+                                        suffixIcon: const Icon(Icons.event),
                                         labelText: t.general.time.until_date,
-                                        hintText: t.general.time.until_date,
-                                        floatingLabelBehavior:
-                                            FloatingLabelBehavior.never,
                                       ),
-                                      readOnly: true,
-                                      onTap: () async {
-                                        DateTime? pickedDate =
-                                            await openDateTimePicker(
-                                          context,
-                                          initialDate: filtersToReturn.maxDate,
-                                          firstDate: filtersToReturn.minDate,
-                                          showTimePickerAfterDate: false,
-                                        );
-                                        if (pickedDate == null) return;
-
+                                      mode: DateTimeFieldPickerMode.date,
+                                      initialDate: filtersToReturn.maxDate,
+                                      firstDate: filtersToReturn.minDate,
+                                      dateFormat: DateFormat.yMMMd(),
+                                      onDateSelected: (DateTime value) {
                                         setState(() {
                                           filtersToReturn = filtersToReturn
-                                              .copyWith(maxDate: pickedDate);
+                                              .copyWith(maxDate: value);
                                         });
                                       },
                                     ),
