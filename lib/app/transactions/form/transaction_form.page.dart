@@ -700,64 +700,8 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                                     IconButton.filled(
                                       icon:
                                           const Icon(Icons.text_fields_rounded),
-                                      onPressed: () => showModalBottomSheet(
-                                        context: context,
-                                        showDragHandle: true,
-                                        isScrollControlled: true,
-                                        builder: (context) =>
-                                            DraggableScrollableSheet(
-                                                expand: false,
-                                                maxChildSize: 0.85,
-                                                minChildSize: 0.5,
-                                                initialChildSize: 0.55,
-                                                builder: (context,
-                                                    scrollController) {
-                                                  return Padding(
-                                                    padding: EdgeInsets.only(
-                                                        bottom: MediaQuery.of(
-                                                                context)
-                                                            .viewInsets
-                                                            .bottom),
-                                                    child: Column(
-                                                      children: [
-                                                        Expanded(
-                                                          child:
-                                                              ScrollableWithBottomGradient(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .symmetric(
-                                                              vertical: 8,
-                                                              horizontal: 16,
-                                                            ),
-                                                            controller:
-                                                                scrollController,
-                                                            child: Column(
-                                                              children: [
-                                                                buildTitleField(),
-                                                                const SizedBox(
-                                                                    height: 16),
-                                                                ...buildExtraFields()
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        BottomSheetFooter(
-                                                            submitText: t
-                                                                .general
-                                                                .close_and_save,
-                                                            showCloseIcon:
-                                                                false,
-                                                            submitIcon: Icons
-                                                                .keyboard_arrow_down_rounded,
-                                                            onSaved: () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                            })
-                                                      ],
-                                                    ),
-                                                  );
-                                                }),
-                                      ),
+                                      onPressed: () =>
+                                          showExtraFieldsModal(context),
                                     ),
                                   ],
                                 ),
@@ -1101,5 +1045,58 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
             }),
           );
         });
+  }
+
+  Future<dynamic> showExtraFieldsModal(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      showDragHandle: true,
+      // isDismissible: false,
+      isScrollControlled: true,
+      builder: (context) => DraggableScrollableSheet(
+          expand: false,
+          // TODO: Is this working? See: https://github.com/flutter/flutter/issues/127236
+          // shouldCloseOnMinExtent: false,
+          snap: true,
+          maxChildSize: 1,
+          minChildSize: 0.33,
+          initialChildSize: 0.65,
+          snapSizes: const [0.33, 0.65, 1],
+          builder: (context, scrollController) {
+            return Padding(
+              padding: EdgeInsets.only(
+                top: 12,
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ScrollableWithBottomGradient(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 16,
+                      ),
+                      controller: scrollController,
+                      child: Column(
+                        children: [
+                          buildTitleField(),
+                          const SizedBox(height: 16),
+                          ...buildExtraFields()
+                        ],
+                      ),
+                    ),
+                  ),
+                  BottomSheetFooter(
+                      submitText: t.general.close_and_save,
+                      showCloseIcon: false,
+                      submitIcon: Icons.keyboard_arrow_down_rounded,
+                      onSaved: () {
+                        Navigator.pop(context);
+                      })
+                ],
+              ),
+            );
+          }),
+    );
   }
 }
