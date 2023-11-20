@@ -116,6 +116,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
     return DraggableScrollableSheet(
         expand: false,
         initialChildSize: 0.6,
+        maxChildSize: 1,
         snapSizes: const [0.33, 0.6, 1],
         builder: (context, scrollController) {
           return Column(
