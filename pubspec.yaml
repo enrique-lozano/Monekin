@@ -27,7 +27,7 @@ dependencies:
 
   # General
   cupertino_icons: ^1.0.0
-  collection: ^1.17.0
+  collection: ^1.18.0
   equatable: ^2.0.5
 
   # i18n
