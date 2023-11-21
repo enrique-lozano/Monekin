@@ -29,6 +29,9 @@ dependencies:
   cupertino_icons: ^1.0.0
   collection: ^1.18.0
   equatable: ^2.0.5
+  path: ^1.8.2
+  async: ^2.10.0
+  rxdart: ^0.27.7
 
   # i18n
   intl: ^0.18.0
@@ -42,13 +45,7 @@ dependencies:
   sqlite3: ^2.0.0
   sqlite3_flutter_libs: ^0.5.18
 
-  # Riverpod
-  flutter_riverpod: ^2.3.1
-  riverpod_annotation: ^2.0.1
-  path: ^1.8.2
-
   # Other
-  async: ^2.10.0
   flutter_svg: ^2.0.5
   permission_handler: ^10.2.0
   json_annotation: ^4.8.1
@@ -57,7 +54,6 @@ dependencies:
   share_plus: ^7.1.0
   url_launcher: ^6.1.11
   uuid: ^3.0.7
-  rxdart: ^0.27.7
   csv: ^5.0.2
   dotted_border: ^2.0.0+3
   package_info_plus: ^4.0.2
