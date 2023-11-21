@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/app/settings/purchases/donate_button.dart';
+import 'package:monekin/app/settings/purchases/in_app_purchase.dart';
 import 'package:monekin/app/settings/settings.page.dart';
 import 'package:monekin/core/utils/open_external_url.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -10,6 +12,7 @@ class HelpUsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final iapConnection = IAPConnection.instance;
 
     return Scaffold(
       appBar: AppBar(title: Text(t.settings.help_us.display)),
@@ -61,54 +64,7 @@ class HelpUsPage extends StatelessWidget {
               openExternalURL(context,
                   'https://github.com/enrique-lozano/Monekin/issues/new/choose');
             }),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: InkWell(
-                radius: 8,
-                onTap: () {
-                  // TODO
-                },
-                child: Card(
-                  clipBehavior: Clip.hardEdge,
-                  margin: const EdgeInsets.all(0),
-                  color:
-                      Theme.of(context).colorScheme.tertiary.withOpacity(0.2),
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                          color: Theme.of(context).colorScheme.tertiary,
-                          width: 2),
-                      borderRadius: BorderRadius.circular(8)),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.volunteer_activism_rounded,
-                          color: Theme.of(context).colorScheme.tertiary,
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                t.settings.help_us.donate,
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              Text(
-                                t.settings.help_us.donate_descr,
-                                style: Theme.of(context).textTheme.labelSmall,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            )
+            DonateButton(iapConnection: iapConnection)
           ],
         ),
       ),
