@@ -13,7 +13,7 @@ publish_to: 'none'
 # The X represents the major releases, and can be up to infinity. Never start by a zero
 # The Y represents the minor releases, and can be up to 99. Always start by a zero
 # The Z represents the patch releases, and can be up to 999. Always start by a zero
-version: 4.2.0+420000
+version: 5.0.0+500000beta1
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -65,6 +65,7 @@ dependencies:
   dynamic_color: ^1.6.7
   copy_with_extension: ^5.0.4
   freezed_annotation: ^2.4.1
+  in_app_purchase: ^3.1.11
 
 dev_dependencies:
   flutter_test:

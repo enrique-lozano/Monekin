@@ -67,7 +67,7 @@ class AboutPage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  snapshot.data!.packageName.capitalize(),
+                                  snapshot.data!.appName.capitalize(),
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineMedium,

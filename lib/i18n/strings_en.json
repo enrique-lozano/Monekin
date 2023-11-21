@@ -645,6 +645,8 @@
       "thanks_long": "Your contributions to Monekin and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.",
       "donate": "Make a donation",
       "donate.descr": "With your donation you will help the app continue receiving improvements. What better way than to thank the work done by inviting me to a coffee?",
+      "donate.success": "Donation made. Thank you very much for your contribution! ❤️",
+      "donate.err": "Oops! It seems there was an error receiving your payment",
       "report": "Report bugs, leave suggestions..."
     }
   },
