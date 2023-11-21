@@ -150,6 +150,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const AboutPage()));
               }),
+              const SizedBox(height: 8),
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: InkWell(

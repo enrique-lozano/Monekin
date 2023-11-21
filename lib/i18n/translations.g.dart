@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 998 (499 per locale)
+/// Strings: 1002 (501 per locale)
 ///
-/// Built on 2023-11-17 at 22:30 UTC
+/// Built on 2023-11-21 at 22:56 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -1121,6 +1121,8 @@ class _TranslationsSettingsHelpUsEn {
 	String get thanks_long => 'Your contributions to Monekin and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.';
 	String get donate => 'Make a donation';
 	String get donate_descr => 'With your donation you will help the app continue receiving improvements. What better way than to thank the work done by inviting me to a coffee?';
+	String get donate_success => 'Donation made. Thank you very much for your contribution! ❤️';
+	String get donate_err => 'Oops! It seems there was an error receiving your payment';
 	String get report => 'Report bugs, leave suggestions...';
 }
 
@@ -2321,6 +2323,8 @@ class _TranslationsSettingsHelpUsEs implements _TranslationsSettingsHelpUsEn {
 	@override String get thanks_long => 'Tus contribuciones a Monekin y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir.';
 	@override String get donate => 'Haz una donación';
 	@override String get donate_descr => 'Con tu donación ayudaras a que la app siga recibiendo mejoras. ¿Que mejor forma que agradecer el trabajo realizado invitandome a un cafe?';
+	@override String get donate_success => 'Donación realizada. Muchas gracias por tu contribución! ❤️';
+	@override String get donate_err => 'Ups! Parece que ha habido un error a la hora de recibir tu pago';
 	@override String get report => 'Reporta errores, deja sugerencias...';
 }
 
@@ -3103,6 +3107,8 @@ extension on _TranslationsEn {
 			case 'settings.help_us.thanks_long': return 'Your contributions to Monekin and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.';
 			case 'settings.help_us.donate': return 'Make a donation';
 			case 'settings.help_us.donate_descr': return 'With your donation you will help the app continue receiving improvements. What better way than to thank the work done by inviting me to a coffee?';
+			case 'settings.help_us.donate_success': return 'Donation made. Thank you very much for your contribution! ❤️';
+			case 'settings.help_us.donate_err': return 'Oops! It seems there was an error receiving your payment';
 			case 'settings.help_us.report': return 'Report bugs, leave suggestions...';
 			case 'lang.es': return 'Spanish';
 			case 'lang.en': return 'English';
@@ -3681,6 +3687,8 @@ extension on _TranslationsEs {
 			case 'settings.help_us.thanks_long': return 'Tus contribuciones a Monekin y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir.';
 			case 'settings.help_us.donate': return 'Haz una donación';
 			case 'settings.help_us.donate_descr': return 'Con tu donación ayudaras a que la app siga recibiendo mejoras. ¿Que mejor forma que agradecer el trabajo realizado invitandome a un cafe?';
+			case 'settings.help_us.donate_success': return 'Donación realizada. Muchas gracias por tu contribución! ❤️';
+			case 'settings.help_us.donate_err': return 'Ups! Parece que ha habido un error a la hora de recibir tu pago';
 			case 'settings.help_us.report': return 'Reporta errores, deja sugerencias...';
 			case 'lang.es': return 'Español';
 			case 'lang.en': return 'Inglés';
