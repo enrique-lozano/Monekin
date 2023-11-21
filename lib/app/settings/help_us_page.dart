@@ -64,6 +64,7 @@ class HelpUsPage extends StatelessWidget {
               openExternalURL(context,
                   'https://github.com/enrique-lozano/Monekin/issues/new/choose');
             }),
+            const SizedBox(height: 8),
             DonateButton(iapConnection: iapConnection)
           ],
         ),
