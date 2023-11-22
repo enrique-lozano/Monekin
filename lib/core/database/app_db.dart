@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
@@ -19,10 +18,6 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
 part 'app_db.g.dart';
-
-final databaseProvider = Provider<AppDB>(
-  (ref) => AppDB.instance,
-);
 
 @DriftDatabase(
     include: {'sql/initial/tables.drift', 'sql/queries/select-full-data.drift'})
