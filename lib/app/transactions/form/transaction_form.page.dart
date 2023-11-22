@@ -84,6 +84,8 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
 
   List<Tag> tags = [];
 
+  TransactionType? currentTransactionTypeToAdd;
+
   final _shakeKey = GlobalKey<ShakeWidgetState>();
 
   Widget selector({
@@ -108,25 +110,30 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               icon.displayFilled(color: iconColor, size: 28),
               const SizedBox(width: 8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                        fontWeight: FontWeight.w300,
-                        color: Theme.of(context).colorScheme.onPrimary),
-                  ),
-                  Text(
-                    inputValue ?? t.general.unspecified,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: Theme.of(context).colorScheme.onPrimary),
-                  )
-                ],
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                          fontWeight: FontWeight.w300,
+                          color: Theme.of(context).colorScheme.onPrimary),
+                    ),
+                    Text(
+                      inputValue ?? t.general.unspecified,
+                      softWrap: false,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).colorScheme.onPrimary),
+                    )
+                  ],
+                ),
               )
             ],
           ),
@@ -525,14 +532,23 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
+    if (widget.mode == TransactionFormMode.transfer) {
+      currentTransactionTypeToAdd = TransactionType.transfer;
+    } else if (selectedCategory != null) {
+      if (selectedCategory!.type.isIncome) {
+        currentTransactionTypeToAdd = TransactionType.income;
+      } else {
+        currentTransactionTypeToAdd = TransactionType.expense;
+      }
+    }
+
     final bool isBlue = (widget.mode == TransactionFormMode.transfer ||
         selectedCategory == null);
 
     final trColor = isBlue
         ? CustomColors.of(context).brand.lighten()
-        : (selectedCategory!.type.isIncome
-            ? CustomColors.of(context).success
-            : CustomColors.of(context).danger);
+        : (currentTransactionTypeToAdd?.color(context) ??
+            appColorScheme(context).primary);
 
     final trColorLighten = Theme.of(context).brightness == Brightness.light
         ? trColor.lighten(0.65)
@@ -547,11 +563,12 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
               title: Text(
                 isEditMode
                     ? t.transaction.edit
-                    : widget.mode == TransactionFormMode.transfer
+                    : currentTransactionTypeToAdd == TransactionType.transfer
                         ? t.transfer.create
-                        : selectedCategory == null
+                        : currentTransactionTypeToAdd == null
                             ? t.transaction.create
-                            : selectedCategory!.type.isExpense
+                            : currentTransactionTypeToAdd ==
+                                    TransactionType.expense
                                 ? t.transaction.new_expense
                                 : t.transaction.new_income,
               ),
@@ -706,92 +723,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                                     ),
                                   ],
                                 ),
-                                Card(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  child: DefaultTextStyle.merge(
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          selector(
-                                              isMobile: true,
-                                              title: t.general.account,
-                                              inputValue: fromAccount?.name,
-                                              icon: fromAccount?.icon,
-                                              iconColor: null,
-                                              onClick: () async {
-                                                final modalRes =
-                                                    await showAccountSelector(
-                                                        fromAccount!);
-
-                                                if (modalRes != null &&
-                                                    modalRes.isNotEmpty) {
-                                                  setState(() {
-                                                    fromAccount =
-                                                        modalRes.first;
-                                                  });
-                                                }
-                                              }),
-                                          Icon(
-                                            Icons.arrow_forward,
-                                            color: appColorScheme(context)
-                                                .onPrimary,
-                                          ),
-                                          if (widget.mode ==
-                                              TransactionFormMode.transfer)
-                                            selector(
-                                                isMobile: true,
-                                                title: t.transfer.form.to,
-                                                inputValue: toAccount?.name,
-                                                icon: toAccount?.icon,
-                                                iconColor: null,
-                                                onClick: () async {
-                                                  final modalRes =
-                                                      await showAccountSelector(
-                                                          toAccount!);
-
-                                                  if (modalRes != null &&
-                                                      modalRes.isNotEmpty) {
-                                                    setState(() {
-                                                      toAccount =
-                                                          modalRes.first;
-                                                    });
-                                                  }
-                                                }),
-                                          if (widget.mode ==
-                                              TransactionFormMode
-                                                  .incomeOrExpense)
-                                            ShakeWidget(
-                                              duration: const Duration(
-                                                  milliseconds: 200),
-                                              shakeCount: 1,
-                                              shakeOffset: 10,
-                                              key: _shakeKey,
-                                              child: selector(
-                                                isMobile: true,
-                                                title: t.general.category,
-                                                inputValue:
-                                                    selectedCategory?.name,
-                                                icon: selectedCategory?.icon,
-                                                iconColor: selectedCategory !=
-                                                        null
-                                                    ? ColorHex.get(
-                                                        selectedCategory!.color)
-                                                    : null,
-                                                onClick: () => selectCategory(),
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                buildAccoutAndCategorySelectorRow(context),
                               ],
                             ),
                           ),
@@ -1040,6 +972,93 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
             }),
           );
         });
+  }
+
+  Card buildAccoutAndCategorySelectorRow(BuildContext context) {
+    return Card(
+      color: Theme.of(context).colorScheme.primary,
+      child: DefaultTextStyle.merge(
+        style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+        child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: LayoutBuilder(builder: (context, constraints) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ConstrainedBox(
+                  constraints:
+                      BoxConstraints(maxWidth: constraints.maxWidth * 0.5),
+                  child: selector(
+                      isMobile: true,
+                      title: t.general.account,
+                      inputValue: fromAccount?.name,
+                      icon: fromAccount?.icon,
+                      iconColor: null,
+                      onClick: () async {
+                        final modalRes =
+                            await showAccountSelector(fromAccount!);
+
+                        if (modalRes != null && modalRes.isNotEmpty) {
+                          setState(() {
+                            fromAccount = modalRes.first;
+                          });
+                        }
+                      }),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+                  child: Icon(
+                    Icons.arrow_forward,
+                    color: appColorScheme(context).onPrimary,
+                  ),
+                ),
+                if (widget.mode == TransactionFormMode.transfer)
+                  ConstrainedBox(
+                    constraints:
+                        BoxConstraints(maxWidth: constraints.maxWidth * 0.5),
+                    child: selector(
+                        isMobile: true,
+                        title: t.transfer.form.to,
+                        inputValue: toAccount?.name,
+                        icon: toAccount?.icon,
+                        iconColor: null,
+                        onClick: () async {
+                          final modalRes =
+                              await showAccountSelector(toAccount!);
+
+                          if (modalRes != null && modalRes.isNotEmpty) {
+                            setState(() {
+                              toAccount = modalRes.first;
+                            });
+                          }
+                        }),
+                  ),
+                if (widget.mode == TransactionFormMode.incomeOrExpense)
+                  Flexible(
+                    child: ShakeWidget(
+                      duration: const Duration(milliseconds: 200),
+                      shakeCount: 1,
+                      shakeOffset: 10,
+                      key: _shakeKey,
+                      child: selector(
+                        isMobile: true,
+                        title: t.general.category,
+                        inputValue: selectedCategory?.name,
+                        icon: selectedCategory?.icon,
+                        iconColor: selectedCategory != null
+                            ? ColorHex.get(selectedCategory!.color)
+                            : null,
+                        onClick: () => selectCategory(),
+                      ),
+                    ),
+                  ),
+              ],
+            );
+          }),
+        ),
+      ),
+    );
   }
 
   Future<dynamic> showExtraFieldsModal(BuildContext context) {
