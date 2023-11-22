@@ -39,6 +39,17 @@ enum TransactionType {
     return Icons.swap_vert_rounded;
   }
 
+  /// Get the sign of this transactionType
+  IconData get mathIcon {
+    if (this == income) {
+      return Icons.add;
+    } else if (this == expense) {
+      return Icons.remove;
+    }
+
+    return icon;
+  }
+
   Color color(BuildContext context) {
     if (this == income) {
       return CustomColors.of(context).success;
