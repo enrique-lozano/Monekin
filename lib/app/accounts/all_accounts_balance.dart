@@ -45,9 +45,14 @@ class AllAccountBalancePage extends StatefulWidget {
 }
 
 class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
-  Future<List<AccountWithMoney>> getAccountsWithMoney(DateTime date,
-      {TransactionFilters filters = const TransactionFilters()}) async {
-    final accounts = await filters.accounts().first;
+  Future<List<AccountWithMoney>> getAccountsWithMoney(
+    DateTime date, {
+    TransactionFilters filters = const TransactionFilters(),
+  }) async {
+    final accounts = (await filters.accounts().first).where(
+      (element) =>
+          !element.isClosed || element.closingDate!.compareTo(date) >= 0,
+    );
 
     final balances = accounts.map((account) async => AccountWithMoney(
         money: await AccountService.instance
@@ -67,7 +72,8 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
   }
 
   List<CurrencyWithMoney> getCurrenciesWithMoney(
-      List<AccountWithMoney> accountsWithMoney) {
+    List<AccountWithMoney> accountsWithMoney,
+  ) {
     final toReturn = <CurrencyWithMoney>[];
 
     for (final account in accountsWithMoney) {
