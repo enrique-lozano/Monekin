@@ -108,7 +108,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         onTap: () => onClick(),
         borderRadius: BorderRadius.circular(8),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -121,16 +121,16 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                     Text(
                       title,
                       style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                          fontWeight: FontWeight.w300,
-                          color: Theme.of(context).colorScheme.onPrimary),
+                            fontWeight: FontWeight.w300,
+                          ),
                     ),
                     Text(
                       inputValue ?? t.general.unspecified,
                       softWrap: false,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: Theme.of(context).colorScheme.onPrimary),
+                            fontWeight: FontWeight.w600,
+                          ),
                     )
                   ],
                 ),
@@ -500,7 +500,9 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         padding: const EdgeInsets.all(2.5),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: bgColor,
+            backgroundColor: Theme.of(context).brightness == Brightness.light
+                ? bgColor.darken(0.025)
+                : bgColor.darken(0.15),
             shadowColor: bgColor.darken(0.15),
             surfaceTintColor: bgColor.darken(0.15),
             foregroundColor: textColor,
@@ -551,8 +553,10 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
             appColorScheme(context).primary);
 
     final trColorLighten = Theme.of(context).brightness == Brightness.light
-        ? trColor.lighten(0.65)
-        : trColor.darken(0.65);
+        ? isBlue
+            ? Theme.of(context).primaryColorLight.lighten(0.5)
+            : trColor.lighten(0.75)
+        : trColor.darken(0.5);
 
     return StreamBuilder(
         stream: UserSettingService.instance
@@ -666,6 +670,12 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                                   children: [
                                     Expanded(
                                       child: OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                          side: BorderSide(
+                                              width: 1,
+                                              color: Theme.of(context)
+                                                  .dividerColor),
+                                        ),
                                         child: recurrentRule.isNoRecurrent
                                             ? Text(
                                                 DateFormat.yMMMMd()
@@ -695,7 +705,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                                         },
                                       ),
                                     ),
-                                    IconButton.filled(
+                                    IconButton.filledTonal(
                                       onPressed: () async {
                                         final res =
                                             await showIntervalSelectoHelpDialog(
@@ -715,7 +725,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                                           : const Icon(
                                               Icons.repeat_one_rounded),
                                     ),
-                                    IconButton.filled(
+                                    IconButton.filledTonal(
                                       icon:
                                           const Icon(Icons.text_fields_rounded),
                                       onPressed: () =>
@@ -976,88 +986,81 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
 
   Card buildAccoutAndCategorySelectorRow(BuildContext context) {
     return Card(
-      color: Theme.of(context).colorScheme.primary,
-      child: DefaultTextStyle.merge(
-        style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-        child: Padding(
-          padding: const EdgeInsets.all(4),
-          child: LayoutBuilder(builder: (context, constraints) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ConstrainedBox(
-                  constraints:
-                      BoxConstraints(maxWidth: constraints.maxWidth * 0.5),
-                  child: selector(
-                      isMobile: true,
-                      title: t.general.account,
-                      inputValue: fromAccount?.name,
-                      icon: fromAccount?.icon,
-                      iconColor: null,
-                      onClick: () async {
-                        final modalRes =
-                            await showAccountSelector(fromAccount!);
-
-                        if (modalRes != null && modalRes.isNotEmpty) {
-                          setState(() {
-                            fromAccount = modalRes.first;
-                          });
-                        }
-                      }),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
-                  child: Icon(
-                    Icons.arrow_forward,
-                    color: appColorScheme(context).onPrimary,
-                  ),
-                ),
-                if (widget.mode == TransactionFormMode.transfer)
-                  ConstrainedBox(
-                    constraints:
-                        BoxConstraints(maxWidth: constraints.maxWidth * 0.5),
-                    child: selector(
-                        isMobile: true,
-                        title: t.transfer.form.to,
-                        inputValue: toAccount?.name,
-                        icon: toAccount?.icon,
-                        iconColor: null,
-                        onClick: () async {
-                          final modalRes =
-                              await showAccountSelector(toAccount!);
-
-                          if (modalRes != null && modalRes.isNotEmpty) {
-                            setState(() {
-                              toAccount = modalRes.first;
-                            });
-                          }
-                        }),
-                  ),
-                if (widget.mode == TransactionFormMode.incomeOrExpense)
-                  Flexible(
-                    child: ShakeWidget(
-                      duration: const Duration(milliseconds: 200),
-                      shakeCount: 1,
-                      shakeOffset: 10,
-                      key: _shakeKey,
-                      child: selector(
-                        isMobile: true,
-                        title: t.general.category,
-                        inputValue: selectedCategory?.name,
-                        icon: selectedCategory?.icon,
-                        iconColor: selectedCategory != null
-                            ? ColorHex.get(selectedCategory!.color)
-                            : null,
-                        onClick: () => selectCategory(),
-                      ),
-                    ),
-                  ),
-              ],
-            );
-          }),
-        ),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Theme.of(context).dividerColor, width: 1),
+        borderRadius: BorderRadius.circular(10),
       ),
+      elevation: 0,
+      // color: Theme.of(context).colorScheme.primary,
+      clipBehavior: Clip.hardEdge,
+      child: LayoutBuilder(builder: (context, constraints) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: constraints.maxWidth * 0.5),
+              child: selector(
+                  isMobile: true,
+                  title: t.general.account,
+                  inputValue: fromAccount?.name,
+                  icon: fromAccount?.icon,
+                  iconColor: null,
+                  onClick: () async {
+                    final modalRes = await showAccountSelector(fromAccount!);
+
+                    if (modalRes != null && modalRes.isNotEmpty) {
+                      setState(() {
+                        fromAccount = modalRes.first;
+                      });
+                    }
+                  }),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+              child: Icon(Icons.arrow_forward),
+            ),
+            if (widget.mode == TransactionFormMode.transfer)
+              ConstrainedBox(
+                constraints:
+                    BoxConstraints(maxWidth: constraints.maxWidth * 0.5),
+                child: selector(
+                    isMobile: true,
+                    title: t.transfer.form.to,
+                    inputValue: toAccount?.name,
+                    icon: toAccount?.icon,
+                    iconColor: null,
+                    onClick: () async {
+                      final modalRes = await showAccountSelector(toAccount!);
+
+                      if (modalRes != null && modalRes.isNotEmpty) {
+                        setState(() {
+                          toAccount = modalRes.first;
+                        });
+                      }
+                    }),
+              ),
+            if (widget.mode == TransactionFormMode.incomeOrExpense)
+              Flexible(
+                child: ShakeWidget(
+                  duration: const Duration(milliseconds: 200),
+                  shakeCount: 1,
+                  shakeOffset: 10,
+                  key: _shakeKey,
+                  child: selector(
+                    isMobile: true,
+                    title: t.general.category,
+                    inputValue: selectedCategory?.name,
+                    icon: selectedCategory?.icon,
+                    iconColor: selectedCategory != null
+                        ? ColorHex.get(selectedCategory!.color)
+                        : null,
+                    onClick: () => selectCategory(),
+                  ),
+                ),
+              ),
+          ],
+        );
+      }),
     );
   }
 
