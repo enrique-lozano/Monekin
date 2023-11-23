@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/subcategory_selector.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
@@ -14,7 +15,9 @@ enum CategoriesListMode {
   page,
   modalSelectSubcategory,
   modalSelectCategory,
-  modalSelectMultiCategory
+  modalSelectMultiCategory;
+
+  bool get isModal => this != page;
 }
 
 Future<List<Category>?> showCategoryListModal(
@@ -268,10 +271,26 @@ class _CategoriesListState extends State<CategoriesList> {
                     ],
                   ),
                 ),
-                TabBar(tabs: [
-                  Tab(text: t.transaction.types.income(n: 10)),
-                  Tab(text: t.transaction.types.expense(n: 10)),
-                ]),
+                TabBar(
+                    labelColor:
+                        Theme.of(context).brightness == Brightness.light &&
+                                widget.mode.isModal
+                            ? appColorScheme(context).primary
+                            : null,
+                    unselectedLabelColor:
+                        Theme.of(context).brightness == Brightness.light &&
+                                widget.mode.isModal
+                            ? appColorScheme(context).onBackground.lighten(0.3)
+                            : null,
+                    indicatorColor:
+                        Theme.of(context).brightness == Brightness.light &&
+                                widget.mode.isModal
+                            ? appColorScheme(context).primary
+                            : null,
+                    tabs: [
+                      Tab(text: t.transaction.types.income(n: 10)),
+                      Tab(text: t.transaction.types.expense(n: 10)),
+                    ]),
                 Expanded(
                   child: Stack(
                     children: [
