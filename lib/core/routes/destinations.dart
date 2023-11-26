@@ -44,6 +44,7 @@ class MainMenuDestination {
 
 List<MainMenuDestination> getDestinations(
   BuildContext context, {
+  required bool shortLabels,
   bool showHome = true,
 }) {
   final t = Translations.of(context);
@@ -67,21 +68,25 @@ List<MainMenuDestination> getDestinations(
       icon: Icons.account_balance_rounded,
       destination: const AllAccountsRoute(),
     ),
+    if (MediaQuery.of(context).size.height > 600)
+      MainMenuDestination(
+        label: t.transaction.display(n: 10),
+        icon: Icons.app_registration_rounded,
+        destination: TransactionsRoute(),
+      ),
     MainMenuDestination(
-      label: t.transaction.display(n: 10),
-      icon: Icons.app_registration_rounded,
-      destination: TransactionsRoute(),
-    ),
-    MainMenuDestination(
-      label: t.recurrent_transactions.title,
+      label: shortLabels
+          ? t.recurrent_transactions.title_short
+          : t.recurrent_transactions.title,
       icon: Icons.auto_mode_rounded,
       destination: const RecurrentTransactionRoute(),
     ),
-    MainMenuDestination(
-      label: t.stats.title,
-      icon: Icons.auto_graph_rounded,
-      destination: StatsRoute(),
-    ),
+    if (MediaQuery.of(context).size.height > 650)
+      MainMenuDestination(
+        label: t.stats.title,
+        icon: Icons.auto_graph_rounded,
+        destination: StatsRoute(),
+      ),
     MainMenuDestination(
       label: t.settings.title,
       selectedIcon: Icons.settings,

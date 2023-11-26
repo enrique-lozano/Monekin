@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 1004 (502 per locale)
+/// Strings: 1006 (503 per locale)
 ///
-/// Built on 2023-11-26 at 16:36 UTC
+/// Built on 2023-11-26 at 18:01 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -371,6 +371,7 @@ class _TranslationsRecurrentTransactionsEn {
 
 	// Translations
 	String get title => 'Recurrent transactions';
+	String get title_short => 'Rec. transactions';
 	String get empty => 'It looks like you don\'t have any recurring transactions. Create a monthly, yearly, or weekly recurring transaction and it will appear here';
 	late final _TranslationsRecurrentTransactionsDetailsEn details = _TranslationsRecurrentTransactionsDetailsEn._(_root);
 }
@@ -1016,7 +1017,7 @@ class _TranslationsBackupExportEn {
 
 	// Translations
 	String get title => 'Export your data';
-	String get title_sort => 'Export';
+	String get title_short => 'Export';
 	String get all => 'Full backup';
 	String get all_descr => 'Export all your data (accounts, transactions, budgets, settings...). Import them again at any time so you don\'t lose anything.';
 	String get transactions => 'Transactions backup';
@@ -1036,7 +1037,7 @@ class _TranslationsBackupImportEn {
 
 	// Translations
 	String get title => 'Import your data';
-	String get title_sort => 'Import';
+	String get title_short => 'Import';
 	String get restore_backup => 'Restore Backup';
 	String get restore_backup_warn => 'When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Monekin';
 	String get restore_backup_descr => 'Import a previously saved database from Monekin. This action will replace any current application data with the new data';
@@ -1573,6 +1574,7 @@ class _TranslationsRecurrentTransactionsEs implements _TranslationsRecurrentTran
 
 	// Translations
 	@override String get title => 'Movimientos recurrentes';
+	@override String get title_short => 'Mov. recurrentes';
 	@override String get empty => 'Parece que no posees ninguna transacción recurrente. Crea una transacción que se repita mensual, anual o semanalmente y aparecerá aquí';
 	@override late final _TranslationsRecurrentTransactionsDetailsEs details = _TranslationsRecurrentTransactionsDetailsEs._(_root);
 }
@@ -2218,7 +2220,7 @@ class _TranslationsBackupExportEs implements _TranslationsBackupExportEn {
 
 	// Translations
 	@override String get title => 'Exportar datos';
-	@override String get title_sort => 'Exportar';
+	@override String get title_short => 'Exportar';
 	@override String get all => 'Respaldo total';
 	@override String get all_descr => 'Exporta todos tus datos (cuentas, transacciones, presupuestos, ajustes...). Importalos de nuevo en cualquier momento para no perder nada.';
 	@override String get transactions => 'Respaldo de transacciones';
@@ -2238,7 +2240,7 @@ class _TranslationsBackupImportEs implements _TranslationsBackupImportEn {
 
 	// Translations
 	@override String get title => 'Importar tus datos';
-	@override String get title_sort => 'Importar';
+	@override String get title_short => 'Importar';
 	@override String get restore_backup => 'Restaurar copia de seguridad';
 	@override String get restore_backup_warn => 'Al importar una nueva base de datos, perderas toda la información actualmente guardada en la app. Se recomienda hacer una copia de seguridad antes de continuar. No subas aquí ningún fichero cuyo origen no conozcas, sube solo ficheros que hayas descargado previamente desde Monekin';
 	@override String get restore_backup_descr => 'Importa una base de datos anteriormente guardada desde Monekin. Esta acción remplazará cualquier dato actual de la aplicación por los nuevos datos';
@@ -2869,6 +2871,7 @@ extension on _TranslationsEn {
 			case 'transfer.form.currency_exchange_selector.title': return 'Edit exchange between currencies';
 			case 'transfer.form.currency_exchange_selector.value_in_destiny': return 'Amount transferred in destination';
 			case 'recurrent_transactions.title': return 'Recurrent transactions';
+			case 'recurrent_transactions.title_short': return 'Rec. transactions';
 			case 'recurrent_transactions.empty': return 'It looks like you don\'t have any recurring transactions. Create a monthly, yearly, or weekly recurring transaction and it will appear here';
 			case 'recurrent_transactions.details.title': return 'Recurrent transaction';
 			case 'recurrent_transactions.details.descr': return 'The next moves for this transaction are shown below. You can accept the first move or skip this move';
@@ -3016,7 +3019,7 @@ extension on _TranslationsEn {
 			case 'budgets.details.expend_evolution': return 'Expenditure evolution';
 			case 'budgets.details.no_transactions': return 'It seems that you have not made any expenses related to this budget';
 			case 'backup.export.title': return 'Export your data';
-			case 'backup.export.title_sort': return 'Export';
+			case 'backup.export.title_short': return 'Export';
 			case 'backup.export.all': return 'Full backup';
 			case 'backup.export.all_descr': return 'Export all your data (accounts, transactions, budgets, settings...). Import them again at any time so you don\'t lose anything.';
 			case 'backup.export.transactions': return 'Transactions backup';
@@ -3027,7 +3030,7 @@ extension on _TranslationsEn {
 			case 'backup.export.success_in_data': return 'File saved/downloaded successfully';
 			case 'backup.export.error': return 'Error downloading the file. Please contact the developer via lozin.technologies@gmail.com';
 			case 'backup.import.title': return 'Import your data';
-			case 'backup.import.title_sort': return 'Import';
+			case 'backup.import.title_short': return 'Import';
 			case 'backup.import.restore_backup': return 'Restore Backup';
 			case 'backup.import.restore_backup_warn': return 'When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Monekin';
 			case 'backup.import.restore_backup_descr': return 'Import a previously saved database from Monekin. This action will replace any current application data with the new data';
@@ -3449,6 +3452,7 @@ extension on _TranslationsEs {
 			case 'transfer.form.currency_exchange_selector.title': return 'Editar cambio entre divisas';
 			case 'transfer.form.currency_exchange_selector.value_in_destiny': return 'Cantidad transferida en destino';
 			case 'recurrent_transactions.title': return 'Movimientos recurrentes';
+			case 'recurrent_transactions.title_short': return 'Mov. recurrentes';
 			case 'recurrent_transactions.empty': return 'Parece que no posees ninguna transacción recurrente. Crea una transacción que se repita mensual, anual o semanalmente y aparecerá aquí';
 			case 'recurrent_transactions.details.title': return 'Transaccion recurrente';
 			case 'recurrent_transactions.details.descr': return 'A continuación se muestran próximos movimientos de esta transacción. Podrás aceptar el primero de ellos o saltar este movimiento';
@@ -3596,7 +3600,7 @@ extension on _TranslationsEs {
 			case 'budgets.details.expend_evolution': return 'Evolución del gasto';
 			case 'budgets.details.no_transactions': return 'Parece que no has realizado ningún gasto relativo a este presupuesto';
 			case 'backup.export.title': return 'Exportar datos';
-			case 'backup.export.title_sort': return 'Exportar';
+			case 'backup.export.title_short': return 'Exportar';
 			case 'backup.export.all': return 'Respaldo total';
 			case 'backup.export.all_descr': return 'Exporta todos tus datos (cuentas, transacciones, presupuestos, ajustes...). Importalos de nuevo en cualquier momento para no perder nada.';
 			case 'backup.export.transactions': return 'Respaldo de transacciones';
@@ -3607,7 +3611,7 @@ extension on _TranslationsEs {
 			case 'backup.export.success_in_data': return 'Archivo guardado/enviado correctamente';
 			case 'backup.export.error': return 'Error al descargar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com';
 			case 'backup.import.title': return 'Importar tus datos';
-			case 'backup.import.title_sort': return 'Importar';
+			case 'backup.import.title_short': return 'Importar';
 			case 'backup.import.restore_backup': return 'Restaurar copia de seguridad';
 			case 'backup.import.restore_backup_warn': return 'Al importar una nueva base de datos, perderas toda la información actualmente guardada en la app. Se recomienda hacer una copia de seguridad antes de continuar. No subas aquí ningún fichero cuyo origen no conozcas, sube solo ficheros que hayas descargado previamente desde Monekin';
 			case 'backup.import.restore_backup_descr': return 'Importa una base de datos anteriormente guardada desde Monekin. Esta acción remplazará cualquier dato actual de la aplicación por los nuevos datos';

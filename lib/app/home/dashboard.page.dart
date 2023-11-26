@@ -49,11 +49,15 @@ class _DashboardPageState extends State<DashboardPage> {
 
     final accountService = AccountService.instance;
 
+    final hideDrawerAndFloatingButton =
+        BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md);
+
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: !hideDrawerAndFloatingButton,
         title: const Text('Monekin'),
         elevation: 1,
-        centerTitle: BreakPoint.of(context).isSmallerOrEqualTo(BreakpointID.md),
+        centerTitle: !hideDrawerAndFloatingButton,
         actions: [
           IconButton(
               onPressed: () {
@@ -64,20 +68,26 @@ class _DashboardPageState extends State<DashboardPage> {
               icon: const Icon(Icons.calendar_today))
         ],
       ),
-      floatingActionButton: const NewTransactionButton(),
-      drawer: Drawer(
-        child: HomeDrawer(
-          drawerActions: getDestinations(context, showHome: false),
-          onDestinationSelected: (e) {
-            Navigator.pop(context);
+      floatingActionButton:
+          hideDrawerAndFloatingButton ? null : const NewTransactionButton(),
+      drawer: hideDrawerAndFloatingButton
+          ? null
+          : Drawer(
+              child: Builder(builder: (context) {
+                final drawerItems = getDestinations(context,
+                    showHome: false, shortLabels: false);
 
-            context.router.push(getDestinations(context, showHome: false)
-                .elementAt(e)
-                .destination);
-          },
-          selectedIndex: -1,
-        ),
-      ),
+                return HomeDrawer(
+                  drawerActions: drawerItems,
+                  onDestinationSelected: (e) {
+                    Navigator.pop(context);
+
+                    context.router.push(drawerItems.elementAt(e).destination);
+                  },
+                  selectedIndex: -1,
+                );
+              }),
+            ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -345,7 +355,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 64),
+                  SizedBox(height: hideDrawerAndFloatingButton ? 8 : 64),
                 ],
               ),
             )
