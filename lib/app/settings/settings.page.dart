@@ -2,10 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/settings/edit_profile_modal.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/user_avatar.dart';
+import 'package:monekin/core/routes/app_router.dart';
+import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 @RoutePage()
@@ -142,12 +143,12 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: Card(
                     clipBehavior: Clip.hardEdge,
                     margin: const EdgeInsets.all(0),
-                    color:
-                        Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? appColorScheme(context).primary.lighten(0.8)
+                        : appColorScheme(context).primary.withOpacity(0.2),
                     shape: RoundedRectangleBorder(
                         side: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
-                            width: 2),
+                            color: appColorScheme(context).primary, width: 2),
                         borderRadius: BorderRadius.circular(8)),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -156,7 +157,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         children: [
                           Icon(
                             Icons.favorite,
-                            color: Theme.of(context).colorScheme.primary,
+                            color: appColorScheme(context).primary,
                           ),
                           const SizedBox(width: 12),
                           Expanded(
