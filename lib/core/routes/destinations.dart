@@ -1,11 +1,6 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/accounts/all_accounts_page.dart';
-import 'package:monekin/app/budgets/budgets_page.dart';
-import 'package:monekin/app/settings/settings.page.dart';
-import 'package:monekin/app/stats/stats_page.dart';
-import 'package:monekin/app/transactions/recurrent_transactions_page.dart';
-import 'package:monekin/app/transactions/transactions.page.dart';
-import 'package:monekin/core/services/filters/date_range_service.dart';
+import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 class MainMenuDestination {
@@ -20,7 +15,7 @@ class MainMenuDestination {
   final IconData icon;
   final IconData? selectedIcon;
 
-  final Widget destination;
+  final PageRouteInfo destination;
 
   NavigationDestination toNavigationDestinationWidget() {
     return NavigationDestination(
@@ -50,40 +45,48 @@ class MainMenuDestination {
 List<MainMenuDestination> getDestinations(
   BuildContext context, {
   bool showHome = true,
-  required DateRangeService dateRangeService,
 }) {
   final t = Translations.of(context);
 
   return <MainMenuDestination>[
+    if (showHome)
+      MainMenuDestination(
+        label: t.home.title,
+        icon: Icons.home_outlined,
+        selectedIcon: Icons.home,
+        destination: const DashboardRoute(),
+      ),
     MainMenuDestination(
       label: t.budgets.title,
-      icon: Icons.calculate,
-      destination: const BudgetsPage(),
+      icon: Icons.calculate_outlined,
+      selectedIcon: Icons.calculate,
+      destination: const BudgetsRoute(),
     ),
     MainMenuDestination(
       label: t.general.accounts,
       icon: Icons.account_balance_rounded,
-      destination: const AllAccountsPage(),
+      destination: const AllAccountsRoute(),
     ),
     MainMenuDestination(
-      label: t.transaction.display(n: 1),
+      label: t.transaction.display(n: 10),
       icon: Icons.app_registration_rounded,
-      destination: const TransactionsPage(),
+      destination: TransactionsRoute(),
     ),
     MainMenuDestination(
       label: t.recurrent_transactions.title,
       icon: Icons.auto_mode_rounded,
-      destination: const RecurrentTransactionPage(),
+      destination: const RecurrentTransactionRoute(),
     ),
     MainMenuDestination(
       label: t.stats.title,
       icon: Icons.auto_graph_rounded,
-      destination: const StatsPage(),
+      destination: StatsRoute(),
     ),
     MainMenuDestination(
       label: t.settings.title,
-      icon: Icons.settings,
-      destination: const SettingsPage(),
+      selectedIcon: Icons.settings,
+      icon: Icons.settings_outlined,
+      destination: const SettingsRoute(),
     ),
   ];
 }

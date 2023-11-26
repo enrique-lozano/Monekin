@@ -1,5 +1,5 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/currencies/exchange_rate_details.dart';
 import 'package:monekin/app/currencies/exchange_rate_form.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
@@ -7,10 +7,12 @@ import 'package:monekin/core/database/services/user-setting/user_setting_service
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
+import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/presentation/widgets/empty_indicator.dart';
 
+@RoutePage()
 class CurrencyManagerPage extends StatefulWidget {
   const CurrencyManagerPage({super.key});
 
@@ -184,12 +186,8 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
 
                         if (currency == null) return;
 
-                        Navigator.push(
-                            onTapContext,
-                            MaterialPageRoute(
-                                builder: (context) => ExchangeRateDetailsPage(
-                                      currency: currency,
-                                    )));
+                        onTapContext.pushRoute(
+                            ExchangeRateDetailsRoute(currency: currency));
                       },
                     );
                   },

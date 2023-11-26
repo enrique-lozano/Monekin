@@ -1,7 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/accounts/account_form.dart';
-import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 class NewTransactionButton extends StatelessWidget {
@@ -24,10 +24,7 @@ class NewTransactionButton extends StatelessWidget {
               child: Text(t.general.continue_text),
               onPressed: () {
                 Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AccountFormPage()));
+                context.pushRoute(AccountFormRoute());
               },
             ),
           ],
@@ -44,10 +41,7 @@ class NewTransactionButton extends StatelessWidget {
       if (!value) {
         _showShouldCreateAccountWarn(context);
       } else {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const TransactionFormPage()));
+        context.pushRoute(TransactionFormRoute());
       }
     });
   }

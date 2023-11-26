@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
@@ -8,6 +9,7 @@ import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
+@RoutePage()
 class RecurrentTransactionPage extends StatefulWidget {
   const RecurrentTransactionPage({super.key});
 

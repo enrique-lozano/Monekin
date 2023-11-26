@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 1002 (501 per locale)
+/// Strings: 1004 (502 per locale)
 ///
-/// Built on 2023-11-21 at 22:56 UTC
+/// Built on 2023-11-26 at 16:36 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -249,6 +249,7 @@ class _TranslationsHomeEn {
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
+	String get title => 'Dashboard';
 	String get filter_transactions => 'Filter transactions';
 	String get hello_day => 'Good morning,';
 	String get hello_night => 'Good night,';
@@ -1450,6 +1451,7 @@ class _TranslationsHomeEs implements _TranslationsHomeEn {
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
+	@override String get title => 'Dashboard';
 	@override String get filter_transactions => 'Filtrar transacciones';
 	@override String get hello_day => 'Buenos días,';
 	@override String get hello_night => 'Buenas noches,';
@@ -2664,6 +2666,7 @@ extension on _TranslationsEn {
 			case 'intro.last_slide_title': return 'All ready';
 			case 'intro.last_slide_descr': return 'With Monekin, you can finally achieve the financial independence you want so much. You will have graphs, budgets, tips, statistics and much more about your money.';
 			case 'intro.last_slide_descr2': return 'We hope you enjoy your experience! Do not hesitate to contact us in case of doubts, suggestions...';
+			case 'home.title': return 'Dashboard';
 			case 'home.filter_transactions': return 'Filter transactions';
 			case 'home.hello_day': return 'Good morning,';
 			case 'home.hello_night': return 'Good night,';
@@ -3243,6 +3246,7 @@ extension on _TranslationsEs {
 			case 'intro.last_slide_title': return 'Todo listo!';
 			case 'intro.last_slide_descr': return 'Con Monekin, podrás al fin lograr la independencia financiaria que tanto deseas. Podrás ver gráficas, presupuestos, consejos, estadisticas y mucho más sobre tu dinero.';
 			case 'intro.last_slide_descr2': return 'Esperemos que disfrutes de tu experiencia! No dudes en contactar con nosotros en caso de dudas, sugerencias...';
+			case 'home.title': return 'Dashboard';
 			case 'home.filter_transactions': return 'Filtrar transacciones';
 			case 'home.hello_day': return 'Buenos días,';
 			case 'home.hello_night': return 'Buenas noches,';

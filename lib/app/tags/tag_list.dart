@@ -1,13 +1,14 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/tags/tag_form_page.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/empty_indicator.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
+import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-Future<List<Tag>?> showTagListModal(BuildContext context, TagList page) {
+Future<List<Tag>?> showTagListModal(BuildContext context, TagListPage page) {
   return showModalBottomSheet<List<Tag>>(
     context: context,
     isScrollControlled: true,
@@ -25,8 +26,9 @@ Future<List<Tag>?> showTagListModal(BuildContext context, TagList page) {
   );
 }
 
-class TagList extends StatefulWidget {
-  const TagList({
+@RoutePage()
+class TagListPage extends StatefulWidget {
+  const TagListPage({
     super.key,
     this.isModal = false,
     this.selected = const <Tag>[],
@@ -36,10 +38,10 @@ class TagList extends StatefulWidget {
   final List<Tag> selected;
 
   @override
-  State<TagList> createState() => _TagListState();
+  State<TagListPage> createState() => _TagListPageState();
 }
 
-class _TagListState extends State<TagList> {
+class _TagListPageState extends State<TagListPage> {
   late List<Tag> selectedTags;
 
   @override
@@ -98,11 +100,7 @@ class _TagListState extends State<TagList> {
                 subtitle: tag.description != null && tag.description!.isNotEmpty
                     ? Text(tag.description!)
                     : null,
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TagFormPage(tag: tag),
-                    )),
+                onTap: () => context.pushRoute(TagFormRoute(tag: tag)),
               );
             },
             separatorBuilder: (context, index) => const Divider(),
@@ -146,11 +144,7 @@ class _TagListState extends State<TagList> {
       appBar: AppBar(title: Text(t.tags.display(n: 10))),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add_rounded),
-        onPressed: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const TagFormPage(),
-            )),
+        onPressed: () => context.pushRoute(TagFormRoute()),
       ),
       body: buildList(),
     );

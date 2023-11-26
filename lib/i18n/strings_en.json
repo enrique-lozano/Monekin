@@ -142,6 +142,7 @@
     "lastSlideDescr2": "We hope you enjoy your experience! Do not hesitate to contact us in case of doubts, suggestions..."
   },
   "HOME": {
+    "title": "Dashboard",
     "filter-transactions": "Filter transactions",
     "hello-day": "Good morning,",
     "hello-night": "Good night,",

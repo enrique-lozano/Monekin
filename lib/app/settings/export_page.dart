@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
@@ -13,6 +14,7 @@ import '../../core/database/backup/backup_database_service.dart';
 
 enum _ExportFormats { csv, db }
 
+@RoutePage()
 class ExportDataPage extends StatefulWidget {
   const ExportDataPage({super.key});
 

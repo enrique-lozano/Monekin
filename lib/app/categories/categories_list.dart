@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/subcategory_selector.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
@@ -6,10 +7,9 @@ import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
+import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
-
-import 'form/category_form.dart';
 
 enum CategoriesListMode {
   page,
@@ -37,6 +37,12 @@ Future<List<Category>?> showCategoryListModal(
           });
     },
   );
+}
+
+@RoutePage()
+class CategoriesListPage extends CategoriesList {
+  const CategoriesListPage()
+      : super(mode: CategoriesListMode.page, selectedCategories: const []);
 }
 
 class CategoriesList extends StatefulWidget {
@@ -78,13 +84,8 @@ class _CategoriesListState extends State<CategoriesList> {
         itemBuilder: (context, index) {
           final category = categoriesToDisplay[index];
 
-          goToCategoryForm() => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => CategoryFormPage(
-                          categoryUUID: category.id,
-                        )),
-              );
+          goToCategoryForm() =>
+              context.pushRoute(CategoryFormRoute(categoryUUID: category.id));
 
           if (widget.mode != CategoriesListMode.modalSelectMultiCategory) {
             return ListTile(
@@ -192,11 +193,7 @@ class _CategoriesListState extends State<CategoriesList> {
                   PersistentFooterButton(
                     child: FilledButton.icon(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const CategoryFormPage()));
+                        context.pushRoute(CategoryFormRoute());
                       },
                       icon: const Icon(Icons.add),
                       label: Text(t.categories.create),

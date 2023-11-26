@@ -143,6 +143,7 @@
     "lastSlideDescr2": "Esperemos que disfrutes de tu experiencia! No dudes en contactar con nosotros en caso de dudas, sugerencias..."
   },
   "HOME": {
+    "title": "Dashboard",
     "filter-transactions": "Filtrar transacciones",
     "hello-day": "Buenos días,",
     "hello-night": "Buenas noches,",
