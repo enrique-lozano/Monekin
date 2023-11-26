@@ -94,12 +94,15 @@ class _StatsPageState extends State<StatsPage> {
                 },
                 icon: const Icon(Icons.filter_alt_outlined)),
           ],
-          bottom: TabBar(tabs: [
-            Tab(text: t.financial_health.display),
-            Tab(text: t.stats.distribution),
-            Tab(text: t.stats.balance),
-            Tab(text: t.stats.cash_flow),
-          ], isScrollable: true),
+          bottom: TabBar(
+              tabAlignment: TabAlignment.center,
+              tabs: [
+                Tab(text: t.financial_health.display),
+                Tab(text: t.stats.distribution),
+                Tab(text: t.stats.balance),
+                Tab(text: t.stats.cash_flow),
+              ],
+              isScrollable: true),
         ),
         persistentFooterButtons: [
           FooterSegmentedCalendarButton(
