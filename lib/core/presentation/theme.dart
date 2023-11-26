@@ -8,7 +8,9 @@ bool isAppUsingDynamicColors = false;
 const brandBlue = Color(0xFF0F3375);
 
 CustomColors lightCustomColors = const CustomColors(
-    danger: Colors.red, success: Colors.green, brand: brandBlue);
+    danger: Colors.red,
+    success: Color.fromARGB(255, 55, 161, 59),
+    brand: brandBlue);
 CustomColors darkCustomColors = const CustomColors(
     danger: Colors.redAccent, success: Colors.lightGreen, brand: brandBlue);
 
