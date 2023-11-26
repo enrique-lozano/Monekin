@@ -6,7 +6,7 @@
 /// Locales: 2
 /// Strings: 1006 (503 per locale)
 ///
-/// Built on 2023-11-26 at 18:01 UTC
+/// Built on 2023-11-26 at 22:16 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -291,7 +291,7 @@ class _TranslationsStatsEn {
 	String get balance_evolution => 'Balance evolution';
 	String get compared_to_previous_period => 'Compared to the previous period';
 	String get by_periods => 'By periods';
-	String get by_categories => 'By categorías';
+	String get by_categories => 'By categories';
 	String get by_tags => 'By tags';
 	String get distribution => 'Distribution';
 	String get finance_health_resume => 'Resume';
@@ -411,7 +411,7 @@ class _TranslationsCurrenciesEn {
 	String get currency_converter => 'Currency converter';
 	String get currency => 'Currency';
 	String get currency_manager => 'Currency manager';
-	String get currency_manager_descr => 'Configura tu divisa y sus tipos de cambio con otras';
+	String get currency_manager_descr => 'Configure your currency and its exchange rates with others';
 	String get preferred_currency => 'Preferred/base currency';
 	String get change_preferred_currency_title => 'Change preferred currency';
 	String get change_preferred_currency_msg => 'All stats and budgets will be displayed in this currency from now on. Accounts and transactions will keep the currency they had. All saved exchange rates will be deleted if you execute this action. Do you wish to continue?';
@@ -2759,7 +2759,7 @@ extension on _TranslationsEn {
 			case 'stats.balance_evolution': return 'Balance evolution';
 			case 'stats.compared_to_previous_period': return 'Compared to the previous period';
 			case 'stats.by_periods': return 'By periods';
-			case 'stats.by_categories': return 'By categorías';
+			case 'stats.by_categories': return 'By categories';
 			case 'stats.by_tags': return 'By tags';
 			case 'stats.distribution': return 'Distribution';
 			case 'stats.finance_health_resume': return 'Resume';
@@ -2924,7 +2924,7 @@ extension on _TranslationsEn {
 			case 'currencies.currency_converter': return 'Currency converter';
 			case 'currencies.currency': return 'Currency';
 			case 'currencies.currency_manager': return 'Currency manager';
-			case 'currencies.currency_manager_descr': return 'Configura tu divisa y sus tipos de cambio con otras';
+			case 'currencies.currency_manager_descr': return 'Configure your currency and its exchange rates with others';
 			case 'currencies.preferred_currency': return 'Preferred/base currency';
 			case 'currencies.change_preferred_currency_title': return 'Change preferred currency';
 			case 'currencies.change_preferred_currency_msg': return 'All stats and budgets will be displayed in this currency from now on. Accounts and transactions will keep the currency they had. All saved exchange rates will be deleted if you execute this action. Do you wish to continue?';
