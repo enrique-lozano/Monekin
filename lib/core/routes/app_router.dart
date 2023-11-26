@@ -82,6 +82,7 @@ class AppRouter extends _$AppRouter {
             AutoRoute(page: CategoryFormRoute.page),
             AutoRoute(page: ExchangeRateDetailsRoute.page),
             AutoRoute(page: TagFormRoute.page),
+            AutoRoute(page: TagListRoute.page),
             AutoRoute(page: AccountDetailsRoute.page),
             AutoRoute(page: TransactionFormRoute.page),
             AutoRoute(page: TransactionDetailsRoute.page),
