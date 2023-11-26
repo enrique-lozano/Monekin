@@ -3,11 +3,11 @@ import 'package:monekin/app/accounts/account_details.dart';
 import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/home/widgets/home_drawer.dart';
 import 'package:monekin/app/home/widgets/income_or_expense_card.dart';
+import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
 import 'package:monekin/app/stats/widgets/balance_bar_chart_small.dart';
 import 'package:monekin/app/stats/widgets/finance_health/finance_health_main_info.dart';
 import 'package:monekin/app/stats/widgets/fund_evolution_line_chart.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/chart_by_categories.dart';
-import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
@@ -16,6 +16,7 @@ import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
+import 'package:monekin/core/presentation/routes/destinations.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
@@ -163,6 +164,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -184,329 +187,330 @@ class _HomePageState extends State<HomePage> {
               icon: const Icon(Icons.calendar_today))
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add_rounded),
-          onPressed: () {
-            TransactionService.instance
-                .checkIfCreateTransactionIsPossible()
-                .first
-                .then((value) {
-              if (!value) {
-                _showShouldCreateAccountWarn();
-              } else {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const TransactionFormPage()));
-              }
-            });
-          }),
-      drawer: const Drawer(child: HomeDrawer()),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            DefaultTextStyle.merge(
-              style: TextStyle(
-                  color: Theme.of(context).appBarTheme.foregroundColor),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Theme.of(context).appBarTheme.backgroundColor,
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(16),
-                      bottomRight: Radius.circular(16),
-                    )),
-                padding: EdgeInsets.fromLTRB(
-                    16,
-                    BreakPoint.of(context).isLargerThan(BreakpointID.md)
-                        ? 8
-                        : 24,
-                    16,
-                    8),
-                child: ResponsiveRowColumn(
-                  direction:
-                      BreakPoint.of(context).isLargerThan(BreakpointID.md)
-                          ? Axis.horizontal
-                          : Axis.vertical,
-                  rowSpacing: 40,
-                  columnSpacing: 18,
-                  children: [
-                    ResponsiveRowColumnItem(
-                      child: StreamBuilder(
-                          stream: _accountsStream,
-                          builder: (context, accounts) {
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: BreakPoint.of(context)
-                                      .isLargerThan(BreakpointID.md)
-                                  ? CrossAxisAlignment.start
-                                  : CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                    '${t.home.total_balance} - ${dateRangeService.selectedDateRange.currentText(context)}',
-                                    style: const TextStyle(fontSize: 12)),
-                                if (!accounts.hasData) ...[
-                                  const Skeleton(width: 70, height: 40),
-                                  const Skeleton(width: 30, height: 14),
-                                ],
-                                if (accounts.hasData) ...[
+      floatingActionButton: const NewTransactionButton(),
+      drawer: Drawer(
+        child: HomeDrawer(
+          onDestinationSelected: (e) {
+            Navigator.pop(context);
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => getDestinations(context,
+                          dateRangeService: dateRangeService)
+                      .elementAt(e)
+                      .destination),
+            );
+          },
+          selectedIndex: -1,
+          dateRangeService: dateRangeService,
+        ),
+      ),
+      body: buildHomeBody(context, accountService),
+    );
+  }
+
+  SingleChildScrollView buildHomeBody(
+      BuildContext context, AccountService accountService) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          DefaultTextStyle.merge(
+            style:
+                TextStyle(color: Theme.of(context).appBarTheme.foregroundColor),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Theme.of(context).appBarTheme.backgroundColor,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(16),
+                    bottomRight: Radius.circular(16),
+                  )),
+              padding: EdgeInsets.fromLTRB(
+                  16,
+                  BreakPoint.of(context).isLargerThan(BreakpointID.md) ? 8 : 24,
+                  16,
+                  8),
+              child: ResponsiveRowColumn(
+                direction: BreakPoint.of(context).isLargerThan(BreakpointID.md)
+                    ? Axis.horizontal
+                    : Axis.vertical,
+                rowSpacing: 40,
+                columnSpacing: 18,
+                children: [
+                  ResponsiveRowColumnItem(
+                    child: StreamBuilder(
+                        stream: _accountsStream,
+                        builder: (context, accounts) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: BreakPoint.of(context)
+                                    .isLargerThan(BreakpointID.md)
+                                ? CrossAxisAlignment.start
+                                : CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                  '${t.home.total_balance} - ${dateRangeService.selectedDateRange.currentText(context)}',
+                                  style: const TextStyle(fontSize: 12)),
+                              if (!accounts.hasData) ...[
+                                const Skeleton(width: 70, height: 40),
+                                const Skeleton(width: 30, height: 14),
+                              ],
+                              if (accounts.hasData) ...[
+                                StreamBuilder(
+                                    stream: accountService.getAccountsMoney(
+                                        accountIds:
+                                            accounts.data!.map((e) => e.id)),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return CurrencyDisplayer(
+                                          amountToConvert: snapshot.data!,
+                                          textStyle: const TextStyle(
+                                              fontSize: 40,
+                                              fontWeight: FontWeight.w600),
+                                        );
+                                      }
+
+                                      return const Skeleton(
+                                          width: 90, height: 40);
+                                    }),
+                                if (dateRangeService.startDate != null &&
+                                    dateRangeService.endDate != null)
                                   StreamBuilder(
-                                      stream: accountService.getAccountsMoney(
-                                          accountIds:
-                                              accounts.data!.map((e) => e.id)),
+                                      stream: accountService
+                                          .getAccountsMoneyVariation(
+                                              accounts: accounts.data!,
+                                              startDate:
+                                                  dateRangeService.startDate,
+                                              endDate: dateRangeService.endDate,
+                                              convertToPreferredCurrency: true),
                                       builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return CurrencyDisplayer(
-                                            amountToConvert: snapshot.data!,
-                                            textStyle: const TextStyle(
-                                                fontSize: 40,
-                                                fontWeight: FontWeight.w600),
-                                          );
+                                        if (!snapshot.hasData) {
+                                          return const Skeleton(
+                                              width: 52, height: 22);
                                         }
 
-                                        return const Skeleton(
-                                            width: 90, height: 40);
+                                        return TrendingValue(
+                                          percentage: snapshot.data!,
+                                          filled: true,
+                                          fontWeight: FontWeight.bold,
+                                          outlined: true,
+                                        );
                                       }),
-                                  if (dateRangeService.startDate != null &&
-                                      dateRangeService.endDate != null)
-                                    StreamBuilder(
-                                        stream: accountService
-                                            .getAccountsMoneyVariation(
-                                                accounts: accounts.data!,
-                                                startDate:
-                                                    dateRangeService.startDate,
-                                                endDate:
-                                                    dateRangeService.endDate,
-                                                convertToPreferredCurrency:
-                                                    true),
-                                        builder: (context, snapshot) {
-                                          if (!snapshot.hasData) {
-                                            return const Skeleton(
-                                                width: 52, height: 22);
-                                          }
-
-                                          return TrendingValue(
-                                            percentage: snapshot.data!,
-                                            filled: true,
-                                            fontWeight: FontWeight.bold,
-                                            outlined: true,
-                                          );
-                                        }),
-                                ]
-                              ],
-                            );
-                          }),
-                    ),
-                    ResponsiveRowColumnItem(
-                      child: ResponsiveRowColumn(
-                        direction:
-                            BreakPoint.of(context).isLargerThan(BreakpointID.md)
-                                ? Axis.vertical
-                                : Axis.horizontal,
-                        rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        columnCrossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ResponsiveRowColumnItem(
-                            child: IncomeOrExpenseCard(
-                              type: TransactionType.income,
-                              startDate: dateRangeService.startDate,
-                              endDate: dateRangeService.endDate,
-                            ),
+                              ]
+                            ],
+                          );
+                        }),
+                  ),
+                  ResponsiveRowColumnItem(
+                    child: ResponsiveRowColumn(
+                      direction:
+                          BreakPoint.of(context).isLargerThan(BreakpointID.md)
+                              ? Axis.vertical
+                              : Axis.horizontal,
+                      rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      columnCrossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ResponsiveRowColumnItem(
+                          child: IncomeOrExpenseCard(
+                            type: TransactionType.income,
+                            startDate: dateRangeService.startDate,
+                            endDate: dateRangeService.endDate,
                           ),
-                          ResponsiveRowColumnItem(
-                            child: IncomeOrExpenseCard(
-                              type: TransactionType.expense,
-                              startDate: dateRangeService.startDate,
-                              endDate: dateRangeService.endDate,
-                            ),
+                        ),
+                        ResponsiveRowColumnItem(
+                          child: IncomeOrExpenseCard(
+                            type: TransactionType.expense,
+                            startDate: dateRangeService.startDate,
+                            endDate: dateRangeService.endDate,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
-              child: Column(
-                children: [
-                  StreamBuilder(
-                      stream: AccountService.instance.getAccounts(
-                        predicate: (acc, curr) => acc.closingDate.isNull(),
-                      ),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return CardWithHeader(
-                              title: t.home.active_accounts,
-                              body: const LinearProgressIndicator());
-                        } else {
-                          final accounts = snapshot.data!;
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
+            child: Column(
+              children: [
+                StreamBuilder(
+                    stream: AccountService.instance.getAccounts(
+                      predicate: (acc, curr) => acc.closingDate.isNull(),
+                    ),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return CardWithHeader(
+                            title: t.home.active_accounts,
+                            body: const LinearProgressIndicator());
+                      } else {
+                        final accounts = snapshot.data!;
 
-                          return CardWithHeader(
-                              title: t.home.active_accounts,
-                              headerButtonIcon: Icons.add_rounded,
-                              onHeaderButtonClick: accounts.isEmpty
-                                  ? null
-                                  : () {
+                        return CardWithHeader(
+                            title: t.home.active_accounts,
+                            headerButtonIcon: Icons.add_rounded,
+                            onHeaderButtonClick: accounts.isEmpty
+                                ? null
+                                : () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const AccountFormPage()));
+                                  },
+                            body: buildAccountList(accounts));
+                      }
+                    }),
+                const SizedBox(height: 16),
+                StreamBuilder(
+                    stream: TransactionService.instance
+                        .checkIfCreateTransactionIsPossible(),
+                    builder: (context, accountSnapshot) {
+                      return CardWithHeader(
+                          title: t.home.last_transactions,
+                          onHeaderButtonClick:
+                              accountSnapshot.hasData && accountSnapshot.data!
+                                  ? () {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  const AccountFormPage()));
-                                    },
-                              body: buildAccountList(accounts));
-                        }
-                      }),
-                  const SizedBox(height: 16),
-                  StreamBuilder(
-                      stream: TransactionService.instance
-                          .checkIfCreateTransactionIsPossible(),
-                      builder: (context, accountSnapshot) {
-                        return CardWithHeader(
-                            title: t.home.last_transactions,
-                            onHeaderButtonClick:
-                                accountSnapshot.hasData && accountSnapshot.data!
-                                    ? () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const TransactionsPage()));
-                                      }
-                                    : null,
-                            body: TransactionListComponent(
-                              filters: TransactionFilters(
-                                minDate: dateRangeService.startDate,
-                                maxDate: dateRangeService.endDate,
-                              ),
-                              limit: 5,
-                              showGroupDivider: false,
-                              prevPage: const HomePage(),
-                              onEmptyList: Padding(
-                                padding: const EdgeInsets.all(24),
-                                child: Text(
-                                  t.transaction.list.empty,
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ));
-                      }),
-                  const SizedBox(height: 16),
-                  ResponsiveRowColumn.withSymetricSpacing(
-                    spacing: 16,
-                    direction:
-                        BreakPoint.of(context).isLargerThan(BreakpointID.md)
-                            ? Axis.horizontal
-                            : Axis.vertical,
-                    children: [
-                      ResponsiveRowColumnItem(
-                        rowFit: FlexFit.tight,
-                        child: CardWithHeader(
-                          title: t.financial_health.display,
-                          onHeaderButtonClick: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const StatsPage(initialIndex: 0),
+                                                  const TransactionsPage()));
+                                    }
+                                  : null,
+                          body: TransactionListComponent(
+                            filters: TransactionFilters(
+                              minDate: dateRangeService.startDate,
+                              maxDate: dateRangeService.endDate,
                             ),
-                          ),
-                          bodyPadding: const EdgeInsets.only(right: 8),
-                          body: StreamBuilder(
-                            stream: FinanceHealthService().getHealthyValue(
-                              filters: TransactionFilters(
-                                minDate: dateRangeService.startDate,
-                                maxDate: dateRangeService.endDate,
+                            limit: 5,
+                            showGroupDivider: false,
+                            prevPage: const HomePage(),
+                            onEmptyList: Padding(
+                              padding: const EdgeInsets.all(24),
+                              child: Text(
+                                t.transaction.list.empty,
+                                textAlign: TextAlign.center,
                               ),
                             ),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return const LinearProgressIndicator();
-                              }
-
-                              final financeHealthData = snapshot.data!;
-
-                              return FinanceHealthMainInfo(
-                                  financeHealthData: financeHealthData);
-                            },
+                          ));
+                    }),
+                const SizedBox(height: 16),
+                ResponsiveRowColumn.withSymetricSpacing(
+                  spacing: 16,
+                  direction:
+                      BreakPoint.of(context).isLargerThan(BreakpointID.md)
+                          ? Axis.horizontal
+                          : Axis.vertical,
+                  children: [
+                    ResponsiveRowColumnItem(
+                      rowFit: FlexFit.tight,
+                      child: CardWithHeader(
+                        title: t.financial_health.display,
+                        onHeaderButtonClick: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const StatsPage(initialIndex: 0),
                           ),
                         ),
-                      ),
-                      ResponsiveRowColumnItem(
-                        rowFit: FlexFit.tight,
-                        child: CardWithHeader(
-                            title: t.stats.balance_evolution,
-                            body: FundEvolutionLineChart(
-                              startDate: dateRangeService.startDate,
-                              endDate: dateRangeService.endDate,
-                              dateRange: dateRangeService.selectedDateRange,
+                        bodyPadding: const EdgeInsets.only(right: 8),
+                        body: StreamBuilder(
+                          stream: FinanceHealthService().getHealthyValue(
+                            filters: TransactionFilters(
+                              minDate: dateRangeService.startDate,
+                              maxDate: dateRangeService.endDate,
                             ),
-                            onHeaderButtonClick: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const StatsPage(
-                                          initialIndex: 2,
-                                        )),
-                              );
-                            }),
+                          ),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return const LinearProgressIndicator();
+                            }
+
+                            final financeHealthData = snapshot.data!;
+
+                            return FinanceHealthMainInfo(
+                                financeHealthData: financeHealthData);
+                          },
+                        ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  ResponsiveRowColumn.withSymetricSpacing(
-                    spacing: 16,
-                    direction:
-                        BreakPoint.of(context).isLargerThan(BreakpointID.md)
-                            ? Axis.horizontal
-                            : Axis.vertical,
-                    children: [
-                      ResponsiveRowColumnItem(
-                        rowFit: FlexFit.tight,
-                        child: CardWithHeader(
-                            title: t.stats.by_categories,
-                            body: ChartByCategories(
-                              startDate: dateRangeService.startDate,
-                              endDate: dateRangeService.endDate,
-                            ),
-                            onHeaderButtonClick: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const StatsPage(
-                                      initialIndex: 1,
-                                    ),
-                                  ));
-                            }),
-                      ),
-                      ResponsiveRowColumnItem(
-                        rowFit: FlexFit.tight,
-                        child: CardWithHeader(
-                            title: t.stats.cash_flow,
-                            body: Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 16, left: 16, right: 16),
-                              child: BalanceChartSmall(
-                                  dateRangeService: dateRangeService),
-                            ),
-                            onHeaderButtonClick: () {
-                              Navigator.push(
+                    ),
+                    ResponsiveRowColumnItem(
+                      rowFit: FlexFit.tight,
+                      child: CardWithHeader(
+                          title: t.stats.balance_evolution,
+                          body: FundEvolutionLineChart(
+                            startDate: dateRangeService.startDate,
+                            endDate: dateRangeService.endDate,
+                            dateRange: dateRangeService.selectedDateRange,
+                          ),
+                          onHeaderButtonClick: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const StatsPage(
+                                        initialIndex: 2,
+                                      )),
+                            );
+                          }),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                ResponsiveRowColumn.withSymetricSpacing(
+                  spacing: 16,
+                  direction:
+                      BreakPoint.of(context).isLargerThan(BreakpointID.md)
+                          ? Axis.horizontal
+                          : Axis.vertical,
+                  children: [
+                    ResponsiveRowColumnItem(
+                      rowFit: FlexFit.tight,
+                      child: CardWithHeader(
+                          title: t.stats.by_categories,
+                          body: ChartByCategories(
+                            startDate: dateRangeService.startDate,
+                            endDate: dateRangeService.endDate,
+                          ),
+                          onHeaderButtonClick: () {
+                            Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => const StatsPage(
-                                    initialIndex: 3,
+                                    initialIndex: 1,
                                   ),
+                                ));
+                          }),
+                    ),
+                    ResponsiveRowColumnItem(
+                      rowFit: FlexFit.tight,
+                      child: CardWithHeader(
+                          title: t.stats.cash_flow,
+                          body: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 16, left: 16, right: 16),
+                            child: BalanceChartSmall(
+                                dateRangeService: dateRangeService),
+                          ),
+                          onHeaderButtonClick: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const StatsPage(
+                                  initialIndex: 3,
                                 ),
-                              );
-                            }),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 64),
-                ],
-              ),
-            )
-          ],
-        ),
+                              ),
+                            );
+                          }),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 64),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
