@@ -1,13 +1,13 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/home/home.page.dart';
-import 'package:monekin/app/settings/export_page.dart';
-import 'package:monekin/app/settings/import_csv.dart';
 import 'package:monekin/app/settings/settings.page.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
+import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-class BackupSettings extends StatelessWidget {
-  const BackupSettings({super.key});
+@RoutePage()
+class BackupSettingsPage extends StatelessWidget {
+  const BackupSettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +48,8 @@ class BackupSettings extends StatelessWidget {
                                 return;
                               }
 
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const HomePage(),
-                                  ),
-                                  (route) => false);
+                              context.router
+                                  .replaceAll([const MainLayoutRoute()]);
 
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
@@ -77,10 +73,7 @@ class BackupSettings extends StatelessWidget {
               subtitle: Text(t.backup.import.manual_import.descr),
               minVerticalPadding: 16,
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ImportCSVPage()));
+                context.pushRoute(const ImportCSVRoute());
               },
             ),
             createListSeparator(context, t.backup.export.title_sort),
@@ -89,10 +82,7 @@ class BackupSettings extends StatelessWidget {
               subtitle: Text(t.backup.export.description),
               minVerticalPadding: 16,
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ExportDataPage()));
+                context.pushRoute(const ExportDataRoute());
               },
             ),
           ],

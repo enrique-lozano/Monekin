@@ -1,9 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/accounts/account_form.dart';
-import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
@@ -18,11 +17,13 @@ import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../transactions/form/transaction_form.page.dart';
 
+@RoutePage()
 class AccountDetailsPage extends StatefulWidget {
   const AccountDetailsPage({super.key, required this.account});
 
@@ -42,15 +43,10 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
 
     return [
       ListTileActionItem(
-          label: t.general.edit,
-          icon: Icons.edit,
-          onClick: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AccountFormPage(
-                          account: account,
-                        )),
-              )),
+        label: t.general.edit,
+        icon: Icons.edit,
+        onClick: () => context.pushRoute(AccountFormRoute(account: account)),
+      ),
       ListTileActionItem(
           label: t.transfer.create,
           icon: TransactionType.transfer.icon,
@@ -75,13 +71,12 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                         },
                       );
 
-                  navigateToTransferForm() => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => TransactionFormPage(
-                                fromAccount: account,
-                                mode: TransactionFormMode.transfer,
-                              )));
+                  navigateToTransferForm() => context.pushRoute(
+                        TransactionFormRoute(
+                          fromAccount: account,
+                          mode: TransactionFormMode.transfer,
+                        ),
+                      );
 
                   final numberOfAccounts =
                       (await AccountService.instance.getAccounts().first)
@@ -408,14 +403,10 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                           CardWithHeader(
                             title: t.home.last_transactions,
                             onHeaderButtonClick: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => TransactionsPage(
+                              context.pushRoute(
+                                TransactionsRoute(
                                     filters: TransactionFilters(
-                                        accountsIDs: [widget.account.id]),
-                                  ),
-                                ),
+                                        accountsIDs: [widget.account.id])),
                               );
                             },
                             body: TransactionListComponent(

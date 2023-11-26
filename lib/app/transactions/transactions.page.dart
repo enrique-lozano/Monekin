@@ -1,8 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/home/home.page.dart';
-import 'package:monekin/app/transactions/form/transaction_form.page.dart';
+import 'package:monekin/app/home/main_layout.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/presentation/widgets/empty_indicator.dart';
 import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -11,6 +12,7 @@ import 'package:monekin/core/presentation/widgets/transaction_filter/filter_shee
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
+@RoutePage()
 class TransactionsPage extends StatefulWidget {
   const TransactionsPage({Key? key, this.filters}) : super(key: key);
 
@@ -115,14 +117,12 @@ class _TransactionsPageState extends State<TransactionsPage> {
                   icon: const Icon(Icons.filter_alt_outlined)),
             ]),
         floatingActionButton: FloatingActionButton.extended(
-            icon: const Icon(Icons.add_rounded),
-            label: Text(t.transaction.create),
-            onPressed: () => {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const TransactionFormPage()))
-                }),
+          icon: const Icon(Icons.add_rounded),
+          label: Text(t.transaction.create),
+          onPressed: () => context.pushRoute(
+            TransactionFormRoute(),
+          ),
+        ),
         body: Column(
           children: [
             if (filters.hasFilter) ...[
@@ -175,7 +175,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
             Expanded(
               child: TransactionListComponent(
                 filters: filters.copyWith(searchValue: searchValue),
-                prevPage: const HomePage(),
+                prevPage: const MainLayoutPage(),
                 onEmptyList: EmptyIndicator(
                     title: t.general.empty_warn,
                     description: t.transaction.list.empty),

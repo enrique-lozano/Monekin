@@ -1,10 +1,8 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/presentation/routes/destinations.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
-import 'package:monekin/core/services/filters/date_range_service.dart';
+import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../../core/presentation/widgets/user_avatar.dart';
@@ -14,32 +12,15 @@ class HomeDrawer extends StatelessWidget {
       {super.key,
       required this.selectedIndex,
       this.onDestinationSelected,
-      required this.dateRangeService});
+      required this.drawerActions});
 
   final int selectedIndex;
+  final List<MainMenuDestination> drawerActions;
   final void Function(int)? onDestinationSelected;
-
-  final DateRangeService dateRangeService;
-
-  navigateToRoute(BuildContext context, Widget route) {
-    // Close drawer:
-    Navigator.pop(context);
-
-    // Go to the route:
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => route),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-
-    List<MainMenuDestination> drawerActions = getDestinations(context,
-        dateRangeService: dateRangeService,
-        showHome:
-            BreakPoint.of(context) >= BreakPoint.getById(BreakpointID.md));
 
     return NavigationDrawer(
         selectedIndex: selectedIndex,

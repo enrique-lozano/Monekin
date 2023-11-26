@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
@@ -14,7 +16,6 @@ import 'package:monekin/i18n/translations.g.dart';
 import '../../core/database/services/currency/currency_service.dart';
 import '../../core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import '../../core/presentation/widgets/skeleton.dart';
-import 'account_form.dart';
 
 class AccountWithMoney {
   final double money;
@@ -140,11 +141,9 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                                   size: 22,
                                   color: Theme.of(context).colorScheme.primary,
                                 )),
-                            onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => AccountFormPage(
-                                    account: accountWithMoney.account),
-                              ),
+                            onTap: () => context.pushRoute(
+                              AccountFormRoute(
+                                  account: accountWithMoney.account),
                             ),
                             title: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

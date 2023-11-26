@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,6 +38,7 @@ import 'package:uuid/uuid.dart';
 
 enum TransactionFormMode { transfer, incomeOrExpense }
 
+@RoutePage()
 class TransactionFormPage extends StatefulWidget {
   const TransactionFormPage({
     super.key,
@@ -430,7 +432,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
               label: Text(t.tags.add),
               avatar: const Icon(Icons.add),
               onPressed: () => showTagListModal(
-                      context, TagList(isModal: true, selected: tags))
+                      context, TagListPage(isModal: true, selected: tags))
                   .then((value) {
                 if (value != null) {
                   setState(() {

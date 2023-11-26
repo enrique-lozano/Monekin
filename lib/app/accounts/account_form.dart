@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -24,6 +25,7 @@ import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:uuid/uuid.dart';
 
+@RoutePage()
 class AccountFormPage extends StatefulWidget {
   const AccountFormPage({Key? key, this.account}) : super(key: key);
 

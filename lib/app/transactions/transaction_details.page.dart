@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ class TransactionDetailAction {
   });
 }
 
+@RoutePage()
 class TransactionDetailsPage extends StatefulWidget {
   const TransactionDetailsPage({
     super.key,

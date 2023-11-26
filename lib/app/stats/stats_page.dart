@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/stats/footer_segmented_calendar_button.dart';
 import 'package:monekin/app/stats/widgets/balance_bar_chart.dart';
@@ -17,6 +18,7 @@ import 'package:monekin/i18n/translations.g.dart';
 import '../../core/services/filters/date_range_service.dart';
 import '../accounts/all_accounts_balance.dart';
 
+@RoutePage()
 class StatsPage extends StatefulWidget {
   const StatsPage({super.key, this.initialIndex = 0});
 

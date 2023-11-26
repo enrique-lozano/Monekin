@@ -3,12 +3,11 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/home/home.page.dart';
-import 'package:monekin/app/onboarding/intro.page.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/presentation/theme.dart';
+import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -120,32 +119,27 @@ class MaterialAppContainer extends StatelessWidget {
 
     return DynamicColorBuilder(
         builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
-      return MaterialApp(
-          title: 'Monekin',
-          debugShowCheckedModeBanner: false,
-          locale: TranslationProvider.of(context).flutterLocale,
-          supportedLocales: AppLocaleUtils.supportedLocales,
-          localizationsDelegates: GlobalMaterialLocalizations.delegates,
-          theme: getThemeData(context,
-              isDark: false,
-              amoledMode: amoledMode,
-              lightDynamic: lightDynamic,
-              darkDynamic: darkDynamic,
-              accentColor: accentColor),
-          darkTheme: getThemeData(context,
-              isDark: true,
-              amoledMode: amoledMode,
-              lightDynamic: lightDynamic,
-              darkDynamic: darkDynamic,
-              accentColor: accentColor),
-          themeMode: themeMode,
-          home: Builder(builder: (context) {
-            if (!goToIntro) {
-              return const HomePage();
-            } else {
-              return const IntroPage();
-            }
-          }));
+      return MaterialApp.router(
+        title: 'Monekin',
+        debugShowCheckedModeBanner: false,
+        locale: TranslationProvider.of(context).flutterLocale,
+        supportedLocales: AppLocaleUtils.supportedLocales,
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
+        theme: getThemeData(context,
+            isDark: false,
+            amoledMode: amoledMode,
+            lightDynamic: lightDynamic,
+            darkDynamic: darkDynamic,
+            accentColor: accentColor),
+        darkTheme: getThemeData(context,
+            isDark: true,
+            amoledMode: amoledMode,
+            lightDynamic: lightDynamic,
+            darkDynamic: darkDynamic,
+            accentColor: accentColor),
+        themeMode: themeMode,
+        routerConfig: AppRouter().config(),
+      );
     });
   }
 }

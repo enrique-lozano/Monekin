@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart';
@@ -11,6 +12,7 @@ import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:uuid/uuid.dart';
 
+@RoutePage()
 class TagFormPage extends StatefulWidget {
   const TagFormPage({super.key, this.tag});
 

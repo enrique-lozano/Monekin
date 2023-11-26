@@ -1,11 +1,12 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/accounts/account_details.dart';
-import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/presentation/widgets/empty_indicator.dart';
 
+@RoutePage()
 class AllAccountsPage extends StatelessWidget {
   const AllAccountsPage({super.key});
 
@@ -16,14 +17,10 @@ class AllAccountsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(t.home.my_accounts)),
       floatingActionButton: FloatingActionButton.extended(
-          icon: const Icon(Icons.add_rounded),
-          label: Text(t.account.form.create),
-          onPressed: () => {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AccountFormPage()))
-              }),
+        icon: const Icon(Icons.add_rounded),
+        label: Text(t.account.form.create),
+        onPressed: () => context.pushRoute(AccountFormRoute()),
+      ),
       body: StreamBuilder(
           stream: AccountService.instance.getAccounts(),
           builder: (context, snapshot) {
@@ -76,12 +73,8 @@ class AllAccountsPage extends StatelessWidget {
                       child: account.displayIcon(context),
                     ),
                     subtitle: Text(account.type.title(context)),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              AccountDetailsPage(account: account)),
-                    ),
+                    onTap: () => context
+                        .pushRoute(AccountDetailsRoute(account: account)),
                   );
                 });
           }),
