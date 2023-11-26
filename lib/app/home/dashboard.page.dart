@@ -14,6 +14,7 @@ import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
@@ -23,6 +24,7 @@ import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/services/filters/date_range_service.dart';
 import 'package:monekin/core/services/finance_health_service.dart';
+import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 @RoutePage()
@@ -59,13 +61,35 @@ class _DashboardPageState extends State<DashboardPage> {
         elevation: 1,
         centerTitle: !hideDrawerAndFloatingButton,
         actions: [
-          IconButton(
-              onPressed: () {
-                dateRangeService
-                    .openDateRangeModal(context)
-                    .then((_) => setState(() {}));
-              },
-              icon: const Icon(Icons.calendar_today))
+          if (BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md))
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: ActionChip(
+                label: Text(
+                    dateRangeService.selectedDateRange.currentText(context)),
+                backgroundColor:
+                    appColorScheme(context).primaryContainer.darken(),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                  side: BorderSide(
+                    color: appColorScheme(context).onPrimary,
+                  ),
+                ),
+                onPressed: () {
+                  dateRangeService
+                      .openDateRangeModal(context)
+                      .then((_) => setState(() {}));
+                },
+              ),
+            ),
+          if (BreakPoint.of(context).isSmallerThan(BreakpointID.md))
+            IconButton(
+                onPressed: () {
+                  dateRangeService
+                      .openDateRangeModal(context)
+                      .then((_) => setState(() {}));
+                },
+                icon: const Icon(Icons.calendar_today))
         ],
       ),
       floatingActionButton:
@@ -128,8 +152,9 @@ class _DashboardPageState extends State<DashboardPage> {
                                   : CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                    '${t.home.total_balance} - ${dateRangeService.selectedDateRange.currentText(context)}',
-                                    style: const TextStyle(fontSize: 12)),
+                                  '${t.home.total_balance} - ${dateRangeService.selectedDateRange.currentText(context)}',
+                                  style: const TextStyle(fontSize: 12),
+                                ),
                                 if (!accounts.hasData) ...[
                                   const Skeleton(width: 70, height: 40),
                                   const Skeleton(width: 30, height: 14),
