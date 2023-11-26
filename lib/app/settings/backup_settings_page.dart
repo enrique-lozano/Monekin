@@ -76,7 +76,7 @@ class BackupSettingsPage extends StatelessWidget {
                 context.pushRoute(const ImportCSVRoute());
               },
             ),
-            createListSeparator(context, t.backup.export.title_sort),
+            createListSeparator(context, t.backup.export.title_short),
             ListTile(
               title: Text(t.backup.export.title),
               subtitle: Text(t.backup.export.description),

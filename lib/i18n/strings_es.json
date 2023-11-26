@@ -352,6 +352,7 @@
   },
   "RECURRENT-TRANSACTIONS": {
     "title": "Movimientos recurrentes",
+    "title.short": "Mov. recurrentes",
     "empty": "Parece que no posees ninguna transacción recurrente. Crea una transacción que se repita mensual, anual o semanalmente y aparecerá aquí",
     "DETAILS": {
       "title": "Transaccion recurrente",
@@ -534,7 +535,7 @@
   "BACKUP": {
     "EXPORT": {
       "title": "Exportar datos",
-      "title.sort": "Exportar",
+      "title.short": "Exportar",
       "all": "Respaldo total",
       "all.descr": "Exporta todos tus datos (cuentas, transacciones, presupuestos, ajustes...). Importalos de nuevo en cualquier momento para no perder nada.",
       "transactions": "Respaldo de transacciones",
@@ -547,7 +548,7 @@
     },
     "IMPORT": {
       "title": "Importar tus datos",
-      "title.sort": "Importar",
+      "title.short": "Importar",
       "restore-backup": "Restaurar copia de seguridad",
       "restore-backup-warn": "Al importar una nueva base de datos, perderas toda la información actualmente guardada en la app. Se recomienda hacer una copia de seguridad antes de continuar. No subas aquí ningún fichero cuyo origen no conozcas, sube solo ficheros que hayas descargado previamente desde Monekin",
       "restore-backup-descr": "Importa una base de datos anteriormente guardada desde Monekin. Esta acción remplazará cualquier dato actual de la aplicación por los nuevos datos",

@@ -348,6 +348,7 @@
   },
   "RECURRENT-TRANSACTIONS": {
     "title": "Recurrent transactions",
+    "title.short": "Rec. transactions",
     "empty": "It looks like you don't have any recurring transactions. Create a monthly, yearly, or weekly recurring transaction and it will appear here",
     "DETAILS": {
       "title": "Recurrent transaction",
@@ -530,7 +531,7 @@
   "BACKUP": {
     "EXPORT": {
       "title": "Export your data",
-      "title.sort": "Export",
+      "title.short": "Export",
       "all": "Full backup",
       "all.descr": "Export all your data (accounts, transactions, budgets, settings...). Import them again at any time so you don't lose anything.",
       "transactions": "Transactions backup",
@@ -543,7 +544,7 @@
     },
     "IMPORT": {
       "title": "Import your data",
-      "title.sort": "Import",
+      "title.short": "Import",
       "restore-backup": "Restore Backup",
       "restore-backup-warn": "When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Monekin",
       "restore-backup-descr": "Import a previously saved database from Monekin. This action will replace any current application data with the new data",

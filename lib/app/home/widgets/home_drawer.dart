@@ -1,6 +1,8 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
+import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
+import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -20,8 +22,6 @@ class HomeDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
-
     return NavigationDrawer(
         selectedIndex: selectedIndex,
         onDestinationSelected: onDestinationSelected,
@@ -44,28 +44,38 @@ class HomeDrawer extends StatelessWidget {
                     )
                     .settingValue;
 
+                if (BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.lg)) {
+                  return DrawerHeader(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 8, bottom: 8),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              UserAvatar(avatar: userAvatar),
+                              const SizedBox(width: 12),
+                              UserGreting(userName: userName)
+                            ],
+                          ),
+                          const SizedBox(
+                            width: double.infinity,
+                            child: NewTransactionButton(isExtended: true),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+
                 return UserAccountsDrawerHeader(
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.background,
                   ),
-                  accountName: userName != null
-                      ? Text(
-                          userName,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onBackground,
-                          ),
-                        )
-                      : const Skeleton(width: 25, height: 12),
+                  accountName: UserGreting(userName: userName),
                   currentAccountPicture: UserAvatar(avatar: userAvatar),
                   currentAccountPictureSize: const Size.fromRadius(24),
-                  accountEmail: Text(
-                    t.home.hello_day,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w300,
-                      fontSize: 12,
-                      color: Theme.of(context).colorScheme.onBackground,
-                    ),
-                  ),
+                  accountEmail: null,
                 );
               }),
           ...List.generate(drawerActions.length, (index) {
@@ -74,5 +84,41 @@ class HomeDrawer extends StatelessWidget {
             return item.toNavigationDrawerDestinationWidget();
           }),
         ]);
+  }
+}
+
+class UserGreting extends StatelessWidget {
+  const UserGreting({
+    super.key,
+    required this.userName,
+  });
+  final String? userName;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          t.home.hello_day,
+          style: TextStyle(
+            fontWeight: FontWeight.w300,
+            fontSize: 12,
+            color: Theme.of(context).colorScheme.onBackground,
+          ),
+        ),
+        if (userName == null)
+          const Skeleton(width: 25, height: 12)
+        else
+          Text(
+            userName!,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
+          ),
+      ],
+    );
   }
 }
