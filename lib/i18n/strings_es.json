@@ -582,6 +582,13 @@
       "success": "Importación realizada con exito",
       "cancelled": "La importación fue cancelada por el usuario",
       "error": "Error al importar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com"
+    },
+    "ABOUT": {
+      "title": "Información sobre tu base de datos",
+      "create-date": "Fecha de creación",
+      "modify-date": "Última modificación",
+      "last-backup": "Última copia de seguridad",
+      "size": "Tamaño"
     }
   },
   "SETTINGS": {
