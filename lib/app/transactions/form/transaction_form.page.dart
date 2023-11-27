@@ -395,55 +395,59 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
       ),
       if (recurrentRule.isNoRecurrent) ...[
         const SizedBox(height: 16),
-        TransactionStatusFilter(
-          selectedStatuses: [status],
-          allowMultipleSelection: false,
-          onSelected: (statusSelected, value) {
-            setState(() {
-              status = statusSelected;
-            });
-          },
-        ),
+        StatefulBuilder(builder: (context, setState) {
+          return TransactionStatusFilter(
+            selectedStatuses: [status],
+            allowMultipleSelection: false,
+            onSelected: (statusSelected, value) {
+              setState(() {
+                status = statusSelected;
+              });
+            },
+          );
+        }),
       ],
       const SizedBox(height: 16),
-      TagsFilterContainer(
-        child: Wrap(
-          spacing: 6,
-          runSpacing: 0,
-          children: [
-            ...List.generate(tags.length, (index) {
-              final tag = tags[index];
+      StatefulBuilder(builder: (context, setState) {
+        return TagsFilterContainer(
+          child: Wrap(
+            spacing: 6,
+            runSpacing: 0,
+            children: [
+              ...List.generate(tags.length, (index) {
+                final tag = tags[index];
 
-              return FilterChip(
-                label: Text(
-                  tag.name,
-                  style: TextStyle(color: tag.colorData),
-                ),
-                selected: true,
-                onSelected: (value) => setState(() {
-                  tags.removeWhere((element) => element.id == tag.id);
-                }),
-                showCheckmark: false,
-                selectedColor: tag.colorData.lighten(0.75),
-                avatar: tag.displayIcon(),
-              );
-            }),
-            ActionChip(
-              label: Text(t.tags.add),
-              avatar: const Icon(Icons.add),
-              onPressed: () => showTagListModal(
-                      context, TagListPage(isModal: true, selected: tags))
-                  .then((value) {
-                if (value != null) {
-                  setState(() {
-                    tags = value;
-                  });
-                }
+                return FilterChip(
+                  label: Text(
+                    tag.name,
+                    style: TextStyle(color: tag.colorData),
+                  ),
+                  selected: true,
+                  onSelected: (value) => setState(() {
+                    tags.removeWhere((element) => element.id == tag.id);
+                  }),
+                  showCheckmark: false,
+                  selectedColor: tag.colorData.lighten(0.75),
+                  avatar: tag.displayIcon(),
+                );
               }),
-            ),
-          ],
-        ),
-      )
+              ActionChip(
+                label: Text(t.tags.add),
+                avatar: const Icon(Icons.add),
+                onPressed: () => showTagListModal(
+                        context, TagListPage(isModal: true, selected: tags))
+                    .then((value) {
+                  if (value != null) {
+                    setState(() {
+                      tags = value;
+                    });
+                  }
+                }),
+              ),
+            ],
+          ),
+        );
+      })
     ];
   }
 
