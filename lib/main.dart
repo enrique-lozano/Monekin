@@ -3,13 +3,10 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/i18n/translations.g.dart';
-import 'package:rxdart/rxdart.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,15 +24,11 @@ class MonekinAppEntryPoint extends StatelessWidget {
     print("------------------ APP ENTRY POINT ------------------");
 
     return StreamBuilder(
-        stream: Rx.combineLatest2(
-            UserSettingService.instance.getSettings((p0) =>
-                p0.settingKey.equalsValue(SettingKey.appLanguage) |
-                p0.settingKey.equalsValue(SettingKey.themeMode) |
-                p0.settingKey.equalsValue(SettingKey.amoledMode) |
-                p0.settingKey.equalsValue(SettingKey.accentColor)),
-            AppDataService.instance
-                .getAppDataItems((p0) => AppDB.instance.buildExpr([])),
-            (a, b) => (a, b)),
+        stream: UserSettingService.instance.getSettings((p0) =>
+            p0.settingKey.equalsValue(SettingKey.appLanguage) |
+            p0.settingKey.equalsValue(SettingKey.themeMode) |
+            p0.settingKey.equalsValue(SettingKey.amoledMode) |
+            p0.settingKey.equalsValue(SettingKey.accentColor)),
         builder: (context, snapshot) {
           print('Finding initial user settings...');
 
@@ -43,8 +36,7 @@ class MonekinAppEntryPoint extends StatelessWidget {
             return Container();
           }
 
-          final userSettings = snapshot.data!.$1;
-          final appDataItems = snapshot.data!.$2;
+          final userSettings = snapshot.data!;
 
           final lang = userSettings
               .firstWhere(
@@ -71,15 +63,8 @@ class MonekinAppEntryPoint extends StatelessWidget {
                 .then((value) => null);
           }
 
-          final userHasSeenIntro = appDataItems
-              .firstWhere(
-                (element) => element.appDataKey == AppDataKey.introSeen,
-              )
-              .appDataValue;
-
           return TranslationProvider(
             child: MaterialAppContainer(
-              goToIntro: userHasSeenIntro != '1',
               amoledMode: userSettings
                       .firstWhere((element) =>
                           element.settingKey == SettingKey.amoledMode)
@@ -105,12 +90,10 @@ class MaterialAppContainer extends StatelessWidget {
   const MaterialAppContainer(
       {super.key,
       required this.themeMode,
-      required this.goToIntro,
       required this.accentColor,
       required this.amoledMode});
 
   final ThemeMode themeMode;
-  final bool goToIntro;
   final String accentColor;
   final bool amoledMode;
 
