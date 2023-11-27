@@ -10,7 +10,6 @@ import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/core/services/filters/date_range_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -359,10 +358,7 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
                           builder: (context) {
                             return CategoryStatsModal(
                               categoryData: dataCategory,
-                              dateRangeDisplayName: DateRangeService()
-                                  .getTextOfRange(
-                                      startDate: widget.startDate,
-                                      endDate: widget.endDate),
+                              dateRanges: (widget.startDate, widget.endDate),
                             );
                           });
                     },
