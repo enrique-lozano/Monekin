@@ -35,7 +35,8 @@ class _ExportDataPageState extends State<ExportDataPage> {
   }) {
     final isSelected = selectedExportFormat == exportFormat;
 
-    return Padding(
+    return Container(
+      width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
       child: Card(
         shape: RoundedRectangleBorder(
