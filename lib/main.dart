@@ -99,6 +99,8 @@ class MonekinAppEntryPoint extends StatelessWidget {
   }
 }
 
+final _appRouter = AppRouter();
+
 class MaterialAppContainer extends StatelessWidget {
   const MaterialAppContainer(
       {super.key,
@@ -138,7 +140,7 @@ class MaterialAppContainer extends StatelessWidget {
             darkDynamic: darkDynamic,
             accentColor: accentColor),
         themeMode: themeMode,
-        routerConfig: AppRouter().config(),
+        routerConfig: _appRouter.config(),
       );
     });
   }
