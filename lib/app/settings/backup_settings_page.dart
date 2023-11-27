@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:monekin/app/settings/settings.page.dart';
+import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
 import 'package:monekin/core/routes/app_router.dart';
+import 'package:monekin/core/utils/number_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 @RoutePage()
@@ -20,6 +25,32 @@ class BackupSettingsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            /* Card(
+              margin: const EdgeInsets.all(16),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                child: Row(children: [
+                  SvgPicture.asset(
+                    'assets/icons/backup/db.svg',
+                    height: 36,
+                    width: 36,
+                  ),
+                  const SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Mi base de datos",
+                          style: Theme.of(context).textTheme.headlineSmall),
+                      Text("Fecha de creación: 23 nov 2023 16:18"),
+                      Text("Última modificación: 23 nov 2023 16:18"),
+                      Text("Última copia de seguridad: 23 nov 2023 16:18"),
+                      Text("Tamaño: 2037 kB"),
+                    ],
+                  )
+                ]),
+              ),
+            ), */
             createListSeparator(context, t.backup.import.title),
             ListTile(
               title: Text(t.backup.import.restore_backup),
@@ -84,6 +115,40 @@ class BackupSettingsPage extends StatelessWidget {
               onTap: () {
                 context.pushRoute(const ExportDataRoute());
               },
+            ),
+            createListSeparator(context, t.backup.about.title),
+            ListTile(
+              title: Text(t.backup.about.modify_date),
+              trailing: FutureBuilder(
+                  future: AppDB.instance.databasePath,
+                  builder: (context, snapshot) {
+                    final path = snapshot.data;
+
+                    if (path == null || path.isEmpty) {
+                      return const Text('----');
+                    }
+
+                    return Text(
+                      DateFormat.yMMMd()
+                          .add_Hm()
+                          .format(File(path).lastModifiedSync()),
+                    );
+                  }),
+            ),
+            ListTile(
+              title: Text(t.backup.about.size),
+              trailing: FutureBuilder(
+                  future: AppDB.instance.databasePath
+                      .then((value) => File(value).stat()),
+                  builder: (context, snapshot) {
+                    final fileStats = snapshot.data;
+
+                    if (fileStats == null) {
+                      return const Text('----');
+                    }
+
+                    return Text(fileStats.size.readableFileSize());
+                  }),
             ),
           ],
         ),
