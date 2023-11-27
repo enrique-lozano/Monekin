@@ -159,8 +159,10 @@ class AppDB extends _$AppDB {
 
 LazyDatabase openConnection(String dbName, {bool logStatements = false}) {
   return LazyDatabase(() async {
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(join(dbFolder.path, dbName));
+    // Should be in the same route as the indicated in the databasePath getter of the AppDB class
+    final file =
+        File(join((await getApplicationDocumentsDirectory()).path, dbName));
+
     return NativeDatabase.createBackgroundConnection(file,
         logStatements: logStatements);
   });
