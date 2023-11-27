@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 1006 (503 per locale)
+/// Strings: 1016 (508 per locale)
 ///
-/// Built on 2023-11-27 at 14:54 UTC
+/// Built on 2023-11-27 at 15:58 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -522,6 +522,7 @@ class _TranslationsBackupEn {
 	// Translations
 	late final _TranslationsBackupExportEn export = _TranslationsBackupExportEn._(_root);
 	late final _TranslationsBackupImportEn import = _TranslationsBackupImportEn._(_root);
+	late final _TranslationsBackupAboutEn about = _TranslationsBackupAboutEn._(_root);
 }
 
 // Path: settings
@@ -1047,6 +1048,20 @@ class _TranslationsBackupImportEn {
 	String get success => 'Import performed successfully';
 	String get cancelled => 'Import was cancelled by the user';
 	String get error => 'Error importing file. Please contact developer via lozin.technologies@gmail.com';
+}
+
+// Path: backup.about
+class _TranslationsBackupAboutEn {
+	_TranslationsBackupAboutEn._(this._root);
+
+	final _TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	String get title => 'Information about your database';
+	String get create_date => 'Creation date';
+	String get modify_date => 'Last modified';
+	String get last_backup => 'Last backup';
+	String get size => 'Size';
 }
 
 // Path: settings.general
@@ -1725,6 +1740,7 @@ class _TranslationsBackupEs implements _TranslationsBackupEn {
 	// Translations
 	@override late final _TranslationsBackupExportEs export = _TranslationsBackupExportEs._(_root);
 	@override late final _TranslationsBackupImportEs import = _TranslationsBackupImportEs._(_root);
+	@override late final _TranslationsBackupAboutEs about = _TranslationsBackupAboutEs._(_root);
 }
 
 // Path: settings
@@ -2250,6 +2266,20 @@ class _TranslationsBackupImportEs implements _TranslationsBackupImportEn {
 	@override String get success => 'Importación realizada con exito';
 	@override String get cancelled => 'La importación fue cancelada por el usuario';
 	@override String get error => 'Error al importar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com';
+}
+
+// Path: backup.about
+class _TranslationsBackupAboutEs implements _TranslationsBackupAboutEn {
+	_TranslationsBackupAboutEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Información sobre tu base de datos';
+	@override String get create_date => 'Fecha de creación';
+	@override String get modify_date => 'Última modificación';
+	@override String get last_backup => 'Última copia de seguridad';
+	@override String get size => 'Tamaño';
 }
 
 // Path: settings.general
@@ -3058,6 +3088,11 @@ extension on _TranslationsEn {
 			case 'backup.import.success': return 'Import performed successfully';
 			case 'backup.import.cancelled': return 'Import was cancelled by the user';
 			case 'backup.import.error': return 'Error importing file. Please contact developer via lozin.technologies@gmail.com';
+			case 'backup.about.title': return 'Information about your database';
+			case 'backup.about.create_date': return 'Creation date';
+			case 'backup.about.modify_date': return 'Last modified';
+			case 'backup.about.last_backup': return 'Last backup';
+			case 'backup.about.size': return 'Size';
 			case 'settings.title': return 'Settings';
 			case 'settings.edit_profile': return 'Edit profile';
 			case 'settings.display_name': return 'User name';
@@ -3639,6 +3674,11 @@ extension on _TranslationsEs {
 			case 'backup.import.success': return 'Importación realizada con exito';
 			case 'backup.import.cancelled': return 'La importación fue cancelada por el usuario';
 			case 'backup.import.error': return 'Error al importar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com';
+			case 'backup.about.title': return 'Información sobre tu base de datos';
+			case 'backup.about.create_date': return 'Fecha de creación';
+			case 'backup.about.modify_date': return 'Última modificación';
+			case 'backup.about.last_backup': return 'Última copia de seguridad';
+			case 'backup.about.size': return 'Tamaño';
 			case 'settings.title': return 'Ajustes';
 			case 'settings.edit_profile': return 'Editar perfil';
 			case 'settings.display_name': return 'Nombre de usuario';
