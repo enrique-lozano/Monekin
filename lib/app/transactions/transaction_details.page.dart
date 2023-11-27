@@ -309,7 +309,8 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                           },
                   ),
                 )).toList(),
-                if (transaction.isOnLastPayment)
+                if (transaction.recurrentInfo.isRecurrent &&
+                    transaction.isOnLastPayment)
                   Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -408,28 +409,39 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                     ),
                   ),
                 ),
-                if (transaction.status == TransactionStatus.pending ||
-                    transaction.recurrentInfo.isRecurrent) ...[
+                if (transaction.recurrentInfo.isRecurrent) ...[
                   //const SizedBox(height: 12),
-                  Builder(builder: (context) {
-                    return Column(
-                      children: transaction
-                          .getNextDatesOfRecurrency(limit: 3)
-                          .mapIndexed((index, e) => Column(
-                                children: [
-                                  if (index != 0)
-                                    Divider(
-                                        indent: 48, color: color.darken(0.2)),
-                                  cardPay(
-                                    date: e,
-                                    transaction: transaction,
-                                    isNext: index == 0,
-                                  ),
-                                ],
-                              ))
-                          .toList(),
-                    );
-                  })
+                  Column(
+                    children: transaction
+                        .getNextDatesOfRecurrency(limit: 3)
+                        .mapIndexed((index, e) => Column(
+                              children: [
+                                if (index != 0)
+                                  Divider(indent: 48, color: color.darken(0.2)),
+                                cardPay(
+                                  date: e,
+                                  transaction: transaction,
+                                  isNext: index == 0,
+                                ),
+                              ],
+                            ))
+                        .toList(),
+                  )
+                ],
+                if (transaction.status == TransactionStatus.pending) ...[
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(
+                        backgroundColor: color.darken(0.2),
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: () => showPayModal(context, transaction),
+                      child:
+                          Text(t.transaction.next_payments.accept_dialog_title),
+                    ),
+                  )
                 ]
               ],
             ),
