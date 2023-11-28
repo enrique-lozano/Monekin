@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="assets/resources/appIcon.png"  alt="App Icon" width="100" height="100">
+    <img src="assets/resources/appIcon-with-margin.png"  alt="App Icon" width="100" height="100">
   </a>
 
   <h1 align="center">Monekin - Official repository</h1>
