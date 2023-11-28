@@ -1,19 +1,23 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/subcategory_selector.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
+import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
-
-import 'form/category_form.dart';
 
 enum CategoriesListMode {
   page,
   modalSelectSubcategory,
   modalSelectCategory,
-  modalSelectMultiCategory
+  modalSelectMultiCategory;
+
+  bool get isModal => this != page;
 }
 
 Future<List<Category>?> showCategoryListModal(
@@ -21,9 +25,7 @@ Future<List<Category>?> showCategoryListModal(
   return showModalBottomSheet<List<Category>>(
     context: context,
     isScrollControlled: true,
-    showDragHandle: false,
-    backgroundColor:
-        Theme.of(context).appBarTheme.backgroundColor!.darken(0.02),
+    showDragHandle: true,
     builder: (context) {
       return DraggableScrollableSheet(
           expand: false,
@@ -31,13 +33,16 @@ Future<List<Category>?> showCategoryListModal(
           minChildSize: 0.85,
           initialChildSize: 0.85,
           builder: (context, scrollController) {
-            return Padding(
-              padding: const EdgeInsets.only(top: 5),
-              child: page,
-            );
+            return page;
           });
     },
   );
+}
+
+@RoutePage()
+class CategoriesListPage extends CategoriesList {
+  const CategoriesListPage()
+      : super(mode: CategoriesListMode.page, selectedCategories: const []);
 }
 
 class CategoriesList extends StatefulWidget {
@@ -75,16 +80,12 @@ class _CategoriesListState extends State<CategoriesList> {
 
     return ListView.builder(
         itemCount: categoriesToDisplay.length,
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
         itemBuilder: (context, index) {
           final category = categoriesToDisplay[index];
 
-          goToCategoryForm() => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => CategoryFormPage(
-                          categoryUUID: category.id,
-                        )),
-              );
+          goToCategoryForm() =>
+              context.pushRoute(CategoryFormRoute(categoryUUID: category.id));
 
           if (widget.mode != CategoriesListMode.modalSelectMultiCategory) {
             return ListTile(
@@ -162,120 +163,165 @@ class _CategoriesListState extends State<CategoriesList> {
     final t = Translations.of(context);
 
     return DefaultTabController(
-      length: 2,
-      initialIndex: 1,
-      child: StreamBuilder(
+        length: 2,
+        initialIndex: 1,
+        child: StreamBuilder(
           stream: CategoryService.instance.getMainCategories(),
           builder: (context, categoriesSnapshot) {
-            return Scaffold(
-              appBar: AppBar(
-                elevation: 0,
-                bottom: TabBar(tabs: [
-                  Tab(text: t.general.incomes),
-                  Tab(text: t.general.expenses),
-                ]),
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            if (widget.mode == CategoriesListMode.page) {
+              return Scaffold(
+                appBar: AppBar(
+                  elevation: 0,
+                  bottom: TabBar(tabs: [
+                    Tab(text: t.transaction.types.income(n: 10)),
+                    Tab(text: t.transaction.types.expense(n: 10)),
+                  ]),
+                  title: Text(t.general.categories),
+                  automaticallyImplyLeading:
+                      widget.mode == CategoriesListMode.page,
+                  leading: Navigator.canPop(context) &&
+                          widget.mode != CategoriesListMode.page
+                      ? IconButton(
+                          icon: const Icon(
+                            Icons.close,
+                          ),
+                          onPressed: () => Navigator.of(context).pop(),
+                        )
+                      : null,
+                ),
+                persistentFooterButtons: [
+                  PersistentFooterButton(
+                    child: FilledButton.icon(
+                      onPressed: () {
+                        context.pushRoute(CategoryFormRoute());
+                      },
+                      icon: const Icon(Icons.add),
+                      label: Text(t.categories.create),
+                    ),
+                  )
+                ],
+                body: Column(
                   children: [
-                    Text(t.general.categories),
-                    if (categoriesSnapshot.hasData &&
-                        widget.mode ==
-                            CategoriesListMode.modalSelectMultiCategory)
-                      Builder(builder: (context) {
-                        if (categoriesSnapshot.data!.every((mainCat) =>
-                            selectedCategories
-                                .map((e) => e.id)
-                                .contains(mainCat.id))) {
-                          return IconButton(
-                            onPressed: () {
-                              setState(() {
-                                selectedCategories = [];
-                              });
-                            },
-                            icon: const Icon(Icons.deselect),
-                            tooltip: t.general.deselect_all,
-                          );
-                        }
-
-                        return IconButton(
-                          onPressed: () async {
-                            for (final category in categoriesSnapshot.data!) {
-                              await toggleCategorySelection(true, category);
-                            }
-
-                            setState(() {});
-                          },
-                          icon: const Icon(Icons.select_all),
-                          tooltip: t.general.select_all,
+                    Builder(builder: (context) {
+                      if (!categoriesSnapshot.hasData) {
+                        return const LinearProgressIndicator();
+                      } else {
+                        return Expanded(
+                          child: TabBarView(children: [
+                            buildCategoryList(
+                                CategoryType.I, categoriesSnapshot.data!),
+                            buildCategoryList(
+                                CategoryType.E, categoriesSnapshot.data!),
+                          ]),
                         );
-                      })
+                      }
+                    }),
                   ],
                 ),
-                automaticallyImplyLeading:
-                    widget.mode == CategoriesListMode.page,
-                leading: Navigator.canPop(context) &&
-                        widget.mode != CategoriesListMode.page
-                    ? IconButton(
-                        icon: const Icon(
-                          Icons.close,
-                        ),
-                        onPressed: () => Navigator.of(context).pop(),
-                      )
-                    : null,
-              ),
-              persistentFooterButtons: widget.mode == CategoriesListMode.page
-                  ? [
-                      PersistentFooterButton(
-                        child: FilledButton.icon(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const CategoryFormPage()));
-                          },
-                          icon: const Icon(Icons.add),
-                          label: Text(t.categories.create),
-                        ),
-                      )
-                    ]
-                  : null,
-              body: Column(
-                children: [
-                  Builder(builder: (context) {
-                    if (!categoriesSnapshot.hasData) {
-                      return const LinearProgressIndicator();
-                    } else {
-                      return Expanded(
-                        child: TabBarView(children: [
+              );
+            }
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        t.general.categories,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      if (categoriesSnapshot.hasData &&
+                          widget.mode ==
+                              CategoriesListMode.modalSelectMultiCategory)
+                        Builder(builder: (context) {
+                          if (categoriesSnapshot.data!.every((mainCat) =>
+                              selectedCategories
+                                  .map((e) => e.id)
+                                  .contains(mainCat.id))) {
+                            return IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  selectedCategories = [];
+                                });
+                              },
+                              icon: const Icon(Icons.deselect),
+                              tooltip: t.general.deselect_all,
+                            );
+                          }
+
+                          return IconButton(
+                            onPressed: () async {
+                              for (final category in categoriesSnapshot.data!) {
+                                await toggleCategorySelection(true, category);
+                              }
+
+                              setState(() {});
+                            },
+                            icon: const Icon(Icons.select_all),
+                            tooltip: t.general.select_all,
+                          );
+                        })
+                    ],
+                  ),
+                ),
+                TabBar(
+                    labelColor:
+                        Theme.of(context).brightness == Brightness.light &&
+                                widget.mode.isModal
+                            ? appColorScheme(context).primary
+                            : null,
+                    unselectedLabelColor:
+                        Theme.of(context).brightness == Brightness.light &&
+                                widget.mode.isModal
+                            ? appColorScheme(context).onBackground.lighten(0.3)
+                            : null,
+                    indicatorColor:
+                        Theme.of(context).brightness == Brightness.light &&
+                                widget.mode.isModal
+                            ? appColorScheme(context).primary
+                            : null,
+                    tabs: [
+                      Tab(text: t.transaction.types.income(n: 10)),
+                      Tab(text: t.transaction.types.expense(n: 10)),
+                    ]),
+                Expanded(
+                  child: Stack(
+                    children: [
+                      Builder(builder: (context) {
+                        if (!categoriesSnapshot.hasData) {
+                          return const LinearProgressIndicator();
+                        }
+
+                        return TabBarView(children: [
                           buildCategoryList(
                               CategoryType.I, categoriesSnapshot.data!),
                           buildCategoryList(
                               CategoryType.E, categoriesSnapshot.data!),
-                        ]),
-                      );
-                    }
-                  }),
-                  if (widget.mode ==
-                      CategoriesListMode.modalSelectMultiCategory)
-                    ListView(
-                      shrinkWrap: true,
-                      children: [
-                        const SizedBox(height: 14),
-                        BottomSheetFooter(
-                          onSaved: selectedCategories.isNotEmpty
-                              ? () {
-                                  return Navigator.of(context)
-                                      .pop(selectedCategories);
-                                }
-                              : null,
-                        ),
-                      ],
-                    )
-                ],
-              ),
+                        ]);
+                      }),
+                      if (widget.mode ==
+                          CategoriesListMode.modalSelectMultiCategory)
+                        ScrollableWithBottomGradient.buildPositionedGradient(
+                            Theme.of(context).dialogBackgroundColor),
+                    ],
+                  ),
+                ),
+                if (widget.mode == CategoriesListMode.modalSelectMultiCategory)
+                  BottomSheetFooter(
+                    onSaved: selectedCategories.isNotEmpty
+                        ? () {
+                            return Navigator.of(context)
+                                .pop(selectedCategories);
+                          }
+                        : null,
+                  ),
+              ],
             );
-          }),
-    );
+          },
+        ));
   }
 }

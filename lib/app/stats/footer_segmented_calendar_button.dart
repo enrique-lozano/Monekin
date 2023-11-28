@@ -30,10 +30,10 @@ class _FooterSegmentedCalendarButtonState
       child: IconButton.outlined(
         onPressed: onPressed,
         icon: Icon(icon),
-        color: Theme.of(context).primaryColor,
+        color: Theme.of(context).colorScheme.primary,
         style: ButtonStyle(
           side: MaterialStateProperty.all(
-              BorderSide(color: Theme.of(context).primaryColor)),
+              BorderSide(color: Theme.of(context).colorScheme.primary)),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: borderRadius,

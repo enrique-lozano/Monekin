@@ -1,52 +1,45 @@
-import 'package:drift/drift.dart' as drift;
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/home/home.page.dart';
-import 'package:monekin/app/transactions/form/transaction_form.page.dart';
-import 'package:monekin/app/transactions/transaction_list.dart';
-import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/app/home/main_layout.dart';
+import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/presentation/widgets/empty_indicator.dart';
 import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
-import 'package:monekin/core/presentation/widgets/filter_sheet_modal.dart';
+import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/skeleton.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/filter_sheet_modal.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
+@RoutePage()
 class TransactionsPage extends StatefulWidget {
-  const TransactionsPage({Key? key}) : super(key: key);
+  const TransactionsPage({Key? key, this.filters}) : super(key: key);
+
+  final TransactionFilters? filters;
 
   @override
   State<TransactionsPage> createState() => _TransactionsPageState();
 }
 
 class _TransactionsPageState extends State<TransactionsPage> {
-  TransactionFilters filters = TransactionFilters();
+  late TransactionFilters filters;
 
   bool searchActive = false;
 
   FocusNode searchFocusNode = FocusNode();
   String? searchValue;
 
-  ScrollController listController = ScrollController();
-
-  final int pageSize = 40;
-  late int currentPage = 1;
-
   @override
   void initState() {
     super.initState();
+
+    filters = widget.filters ?? const TransactionFilters();
 
     searchFocusNode.addListener(() {
       if (!searchFocusNode.hasFocus) {
         setState(() {
           searchActive = false;
-        });
-      }
-    });
-
-    listController.addListener(() {
-      if (listController.offset >= listController.position.maxScrollExtent &&
-          !listController.position.outOfRange) {
-        setState(() {
-          currentPage += 1;
         });
       }
     });
@@ -95,7 +88,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                       });
                     },
                   )
-                : Text(t.general.transactions),
+                : Text(t.transaction.display(n: 10)),
             actions: [
               if (!searchActive)
                 IconButton(
@@ -110,13 +103,10 @@ class _TransactionsPageState extends State<TransactionsPage> {
                 ),
               IconButton(
                   onPressed: () async {
-                    final modalRes =
-                        await showModalBottomSheet<TransactionFilters>(
-                            context: context,
-                            isScrollControlled: true,
-                            showDragHandle: true,
-                            builder: (context) =>
-                                FilterSheetModal(preselectedFilter: filters));
+                    final modalRes = await openFilterSheetModal(
+                      context,
+                      FilterSheetModal(preselectedFilter: filters),
+                    );
 
                     if (modalRes != null) {
                       setState(() {
@@ -127,88 +117,68 @@ class _TransactionsPageState extends State<TransactionsPage> {
                   icon: const Icon(Icons.filter_alt_outlined)),
             ]),
         floatingActionButton: FloatingActionButton.extended(
-            icon: const Icon(Icons.add_rounded),
-            label: Text(t.transaction.create),
-            onPressed: () => {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const TransactionFormPage()))
-                }),
+          icon: const Icon(Icons.add_rounded),
+          label: Text(t.transaction.create),
+          onPressed: () => context.pushRoute(
+            TransactionFormRoute(),
+          ),
+        ),
         body: Column(
           children: [
             if (filters.hasFilter) ...[
               FilterRowIndicator(
-                filters: filters,
+                filters: filters.copyWith(searchValue: searchValue),
                 onChange: (newFilters) {
                   setState(() {
                     filters = newFilters;
                   });
                 },
               ),
-              const Divider()
+              const Divider(indent: 12, endIndent: 12)
             ],
-            Expanded(
-              child: StreamBuilder(
-                stream: TransactionService.instance.getTransactions(
-                  predicate: (t, account, accountCurrency, receivingAccount,
-                          receivingAccountCurrency, c, p6) =>
-                      AppDB.instance.buildExpr([
-                    if (searchValue != null && searchValue!.isNotEmpty)
-                      (t.notes.contains(searchValue!) |
-                          t.title.contains(searchValue!) |
-                          c.name.contains(searchValue!)),
-                    if (filters.accounts != null)
-                      t.accountID.isIn(filters.accounts!.map((e) => e.id)),
-                    if (filters.categories != null)
-                      c.id.isIn(filters.categories!.map((e) => e.id)),
-                  ]),
-                  limit: currentPage * pageSize,
-                  orderBy: (p0, p1, p2, p3, p4, p5, p6) => drift.OrderBy([
-                    drift.OrderingTerm(
-                        expression: p0.date, mode: drift.OrderingMode.desc)
-                  ]),
-                ),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Column(
-                      children: [LinearProgressIndicator()],
-                    );
-                  }
+            StreamBuilder(
+              stream: TransactionService.instance.countTransactions(
+                predicate: filters.copyWith(searchValue: searchValue),
+              ),
+              builder: (context, snapshot) {
+                final res = snapshot.data;
 
-                  final transactions = snapshot.data!;
-
-                  if (transactions.isEmpty) {
-                    return Column(
-                      children: [
-                        Expanded(
-                            child: EmptyIndicator(
-                                title: t.general.empty_warn,
-                                description: t.transaction.list.empty)),
-                      ],
-                    );
-                  }
-
-                  return SingleChildScrollView(
-                    controller: listController,
-                    padding: const EdgeInsets.only(bottom: 80),
-                    child: Column(
-                      children: [
-                        TransactionListComponent(
-                          transactions: transactions,
-                          prevPage: const HomePage(),
-                        ),
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) ...[
-                          const SizedBox(height: 10),
-                          const CircularProgressIndicator(),
-                          const SizedBox(height: 10),
-                          Text("Loading data")
-                        ]
-                      ],
+                return Card(
+                  elevation: 3,
+                  //color: appColorScheme(context).primary,
+                  margin: const EdgeInsets.all(0),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0)),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 12, 24, 12),
+                    child: DefaultTextStyle(
+                      style: Theme.of(context).textTheme.titleMedium!,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          if (res != null) ...[
+                            Text(
+                                '${res.numberOfRes} ${t.transaction.display(n: res.numberOfRes).toLowerCase()}'),
+                            CurrencyDisplayer(amountToConvert: res.valueSum)
+                          ],
+                          if (res == null) ...[
+                            const Skeleton(width: 38, height: 18),
+                            const Skeleton(width: 28, height: 18),
+                          ]
+                        ],
+                      ),
                     ),
-                  );
-                },
+                  ),
+                );
+              },
+            ),
+            Expanded(
+              child: TransactionListComponent(
+                filters: filters.copyWith(searchValue: searchValue),
+                prevPage: const MainLayoutPage(),
+                onEmptyList: EmptyIndicator(
+                    title: t.general.empty_warn,
+                    description: t.transaction.list.empty),
               ),
             ),
           ],

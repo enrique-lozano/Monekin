@@ -9,8 +9,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:monekin/main.dart';
 
 void main() {
-  testWidgets('App opens', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MonekinAppEntryPoint());
+  testWidgets('MonekinAppEntryPoint builds correctly',
+      (WidgetTester tester) async {
+    await tester.runAsync(() async {
+      await tester.pumpWidget(const MonekinAppEntryPoint());
+
+      expect(find.byType(MonekinAppEntryPoint), findsOneWidget);
+    });
   });
 }

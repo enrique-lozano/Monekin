@@ -1,24 +1,23 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/budgets/budget_details_page.dart';
-import 'package:monekin/app/budgets/budget_form_page.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/models/budget/budget.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/empty_indicator.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
+import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
+@RoutePage()
 class BudgetsPage extends StatelessWidget {
   const BudgetsPage({super.key});
 
   Widget buildBudgetCard(BuildContext context, Budget budget) {
     return InkWell(
-      onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BudgetDetailsPage(budget: budget))),
+      onTap: () => context.pushRoute(BudgetDetailsRoute(budget: budget)),
       child: Container(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -80,7 +79,7 @@ class BudgetsPage extends StatelessWidget {
                           ? 1
                           : budgetValue ?? 0,
                       color: budgetValue != null && budgetValue >= 1
-                          ? Colors.red
+                          ? CustomColors.of(context).danger
                           : null,
                     );
                   })
@@ -109,14 +108,9 @@ class BudgetsPage extends StatelessWidget {
         floatingActionButton: FloatingActionButton.extended(
             icon: const Icon(Icons.add_rounded),
             label: Text(t.budgets.form.create),
-            onPressed: () => {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const BudgetFormPage(
-                                prevPage: BudgetsPage(),
-                              )))
-                }),
+            onPressed: () => context.pushRoute(
+                  BudgetFormRoute(prevPage: const BudgetsPage()),
+                )),
         body: TabBarView(children: [
           StreamBuilder(
               stream: BudgetServive.instance

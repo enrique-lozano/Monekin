@@ -1,17 +1,29 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/accounts/account_form.dart';
+import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/models/transaction/transaction_status.dart';
+import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
+import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../transactions/form/transaction_form.page.dart';
 
+@RoutePage()
 class AccountDetailsPage extends StatefulWidget {
   const AccountDetailsPage({super.key, required this.account});
 
@@ -22,25 +34,23 @@ class AccountDetailsPage extends StatefulWidget {
 }
 
 class _AccountDetailsPageState extends State<AccountDetailsPage> {
-  List<ListTileActionItem> getAccountDetailsActions(BuildContext context,
-      {required Account account, bool navigateBackOnDelete = false}) {
+  List<ListTileActionItem> getAccountDetailsActions(
+    BuildContext context, {
+    required Account account,
+    bool navigateBackOnDelete = false,
+  }) {
     final t = Translations.of(context);
 
     return [
       ListTileActionItem(
-          label: t.general.edit,
-          icon: Icons.edit,
-          onClick: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AccountFormPage(
-                          account: account,
-                        )),
-              )),
+        label: t.general.edit,
+        icon: Icons.edit,
+        onClick: () => context.pushRoute(AccountFormRoute(account: account)),
+      ),
       ListTileActionItem(
           label: t.transfer.create,
-          icon: Icons.swap_vert_rounded,
-          onClick: account.isArchived
+          icon: TransactionType.transfer.icon,
+          onClick: account.isClosed
               ? null
               : () async {
                   showAccountsWarn() => showDialog(
@@ -61,13 +71,12 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                         },
                       );
 
-                  navigateToTransferForm() => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => TransactionFormPage(
-                                fromAccount: account,
-                                mode: TransactionFormMode.transfer,
-                              )));
+                  navigateToTransferForm() => context.pushRoute(
+                        TransactionFormRoute(
+                          fromAccount: account,
+                          mode: TransactionFormMode.transfer,
+                        ),
+                      );
 
                   final numberOfAccounts =
                       (await AccountService.instance.getAccounts().first)
@@ -80,26 +89,16 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                   }
                 }),
       ListTileActionItem(
-          label: account.isArchived ? t.general.unarchive : t.general.archive,
-          icon: account.isArchived
+          label: account.isClosed
+              ? t.account.reopen_short
+              : t.account.close.title_short,
+          icon: account.isClosed
               ? Icons.unarchive_rounded
               : Icons.archive_rounded,
           role: ListTileActionRole.warn,
           onClick: () async {
-            if (account.isArchived) {
-              await AccountService.instance
-                  .updateAccount(account.copyWith(isArchived: false))
-                  .then((value) {
-                if (value) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(t.account.archive.unarchive_succes)),
-                  );
-                }
-              }).catchError((err) {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text('$err')));
-              });
-
+            if (account.isClosed) {
+              showReopenAccountDialog(account);
               return;
             }
 
@@ -107,7 +106,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                 .getAccountMoney(account: account)
                 .first;
 
-            showArchiveWarnDialog(account, currentBalance);
+            await showCloseAccountDialog(account, currentBalance);
           }),
       ListTileActionItem(
           label: t.general.delete,
@@ -121,41 +120,60 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
     ];
   }
 
-  showArchiveWarnDialog(Account account, double currentBalance) {
+  showReopenAccountDialog(Account account) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(currentBalance == 0 ? t.account.archive.title : 'Ops!'),
+        title: Text(t.account.reopen),
         content: SingleChildScrollView(
-            child: Text(currentBalance == 0
-                ? t.account.archive.warn
-                : t.account.archive.should_have_zero_balance)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [Text(t.account.reopen_descr)],
+          ),
+        ),
         actions: [
           TextButton(
-            child: Text(
-                currentBalance == 0 ? t.general.confirm : t.general.understood),
+            child: Text(t.general.cancel),
             onPressed: () {
-              if (currentBalance != 0) {
-                Navigator.pop(context);
-                return;
-              }
-
+              Navigator.pop(context);
+            },
+          ),
+          TextButton(
+            child: Text(t.general.confirm),
+            onPressed: () {
               AccountService.instance
-                  .updateAccount(account.copyWith(isArchived: true))
+                  .updateAccount(
+                    account.copyWith(
+                      closingDate: const drift.Value(null),
+                    ),
+                  )
                   .then((value) {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(t.account.archive.success)));
-              }).catchError((err) {
-                Navigator.pop(context);
-
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text('$err')));
-              });
+                    if (value) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content: Text(t.account.close.unarchive_succes)),
+                      );
+                    }
+                  })
+                  .whenComplete(() => Navigator.pop(context))
+                  .catchError((err) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text('$err')));
+                  });
             },
           ),
         ],
       ),
+    );
+  }
+
+  Future<bool?> showCloseAccountDialog(Account account, double currentBalance) {
+    return showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (context) =>
+          ArchiveWarnDialog(currentBalance: currentBalance, account: account),
     );
   }
 
@@ -247,51 +265,91 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
 
               return Column(
                 children: [
-                  DefaultTextStyle.merge(
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary),
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(account.name),
-                              StreamBuilder(
-                                  initialData: 0.0,
-                                  stream: AccountService.instance
-                                      .getAccountMoney(account: account),
-                                  builder: (context, snapshot) {
-                                    return CurrencyDisplayer(
-                                      amountToConvert: snapshot.data!,
-                                      currency: account.currency,
-                                      textStyle: const TextStyle(
-                                          fontSize: 32,
-                                          fontWeight: FontWeight.w600),
-                                    );
-                                  }),
-                            ],
-                          ),
-                          Positioned(
-                            bottom: -42,
-                            right: 0,
-                            child: Hero(
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Card(
+                      margin: const EdgeInsets.all(0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(account.name),
+                                StreamBuilder(
+                                    initialData: 0.0,
+                                    stream: AccountService.instance
+                                        .getAccountMoney(account: account),
+                                    builder: (context, snapshot) {
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          CurrencyDisplayer(
+                                            amountToConvert: snapshot.data!,
+                                            currency: account.currency,
+                                            textStyle: const TextStyle(
+                                                fontSize: 32,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          StreamBuilder(
+                                            stream: ExchangeRateService.instance
+                                                .calculateExchangeRateToPreferredCurrency(
+                                              amount: snapshot.data!,
+                                              fromCurrency:
+                                                  account.currency.code,
+                                            ),
+                                            builder:
+                                                (context, currencySnapshot) {
+                                              if (currencySnapshot
+                                                          .connectionState ==
+                                                      ConnectionState.waiting ||
+                                                  currencySnapshot.data != 0 &&
+                                                      currencySnapshot.data! ==
+                                                          snapshot.data ||
+                                                  snapshot.data! == 0) {
+                                                return Container();
+                                              }
+
+                                              return Row(
+                                                children: [
+                                                  Text(
+                                                    String.fromCharCode(Icons
+                                                        .currency_exchange_rounded
+                                                        .codePoint),
+                                                    style: TextStyle(
+                                                      fontFamily: Icons
+                                                          .currency_exchange_rounded
+                                                          .fontFamily,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 4),
+                                                  CurrencyDisplayer(
+                                                      amountToConvert:
+                                                          currencySnapshot
+                                                              .data!),
+                                                ],
+                                              );
+                                            },
+                                          )
+                                        ],
+                                      );
+                                    }),
+                              ],
+                            ),
+                            Hero(
                                 tag: 'account-icon-${widget.account.id}',
                                 child: account.displayIcon(context, size: 48)),
-                          )
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                       child: Column(
                         children: [
                           CardWithHeader(
@@ -307,6 +365,17 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                                     ),
                                   ),
                                   const Divider(indent: 12),
+                                  if (account.isClosed) ...[
+                                    ListTile(
+                                      title: Text(t.account.close_date),
+                                      subtitle: Text(
+                                        DateFormat.yMMMMEEEEd()
+                                            .add_Hm()
+                                            .format(account.closingDate!),
+                                      ),
+                                    ),
+                                    const Divider(indent: 12),
+                                  ],
                                   ListTile(
                                     title: Text(t.account.types.title),
                                     subtitle: Text(account.type.title(context)),
@@ -332,9 +401,41 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                               )),
                           const SizedBox(height: 16),
                           CardWithHeader(
-                              title: t.general.quick_actions,
-                              body: MonekinQuickActionsButton(
-                                  actions: accountDetailsActions)),
+                            title: t.home.last_transactions,
+                            onHeaderButtonClick: () {
+                              context.pushRoute(
+                                TransactionsRoute(
+                                    filters: TransactionFilters(
+                                        accountsIDs: [widget.account.id])),
+                              );
+                            },
+                            body: TransactionListComponent(
+                              filters: TransactionFilters(
+                                status: TransactionStatus.notIn({
+                                  TransactionStatus.pending,
+                                  TransactionStatus.voided
+                                }),
+                                accountsIDs: [widget.account.id],
+                              ),
+                              limit: 5,
+                              showGroupDivider: false,
+                              prevPage:
+                                  AccountDetailsPage(account: widget.account),
+                              onEmptyList: Padding(
+                                padding: const EdgeInsets.all(24),
+                                child: Text(
+                                  t.transaction.list.empty,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          CardWithHeader(
+                            title: t.general.quick_actions,
+                            body: MonekinQuickActionsButton(
+                                actions: accountDetailsActions),
+                          ),
                         ],
                       ),
                     ),
@@ -342,6 +443,117 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                 ],
               );
             }),
+          );
+        });
+  }
+}
+
+class ArchiveWarnDialog extends StatefulWidget {
+  const ArchiveWarnDialog({
+    super.key,
+    required this.currentBalance,
+    required this.account,
+  });
+
+  final double currentBalance;
+  final Account account;
+
+  @override
+  State<ArchiveWarnDialog> createState() => _ArchiveWarnDialogState();
+}
+
+class _ArchiveWarnDialogState extends State<ArchiveWarnDialog> {
+  DateTime date = DateTime.now();
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+        stream: TransactionService.instance.countTransactions(
+          predicate: TransactionFilters(
+              accountsIDs: [widget.account.id], minDate: date),
+          convertToPreferredCurrency: false,
+        ),
+        builder: (context, snapshot) {
+          final hasNoTransactions =
+              !snapshot.hasData || snapshot.data!.numberOfRes == 0;
+
+          return Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          t.account.close.title,
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                        const SizedBox(height: 22),
+                        Text(t.account.close.warn),
+                        const SizedBox(height: 22),
+                        DateTimeFormField(
+                          decoration: InputDecoration(
+                            suffixIcon: const Icon(Icons.event),
+                            labelText: '${t.account.close_date} *',
+                          ),
+                          initialDate: date,
+                          firstDate: widget.account.date,
+                          lastDate: DateTime.now(),
+                          dateFormat: DateFormat.yMMMd().add_jm(),
+                          validator: (e) =>
+                              e == null ? t.general.validations.required : null,
+                          onDateSelected: (DateTime value) {
+                            setState(() {
+                              date = value;
+                            });
+                          },
+                        ),
+                        if (!hasNoTransactions ||
+                            widget.currentBalance != 0) ...[
+                          const SizedBox(height: 12),
+                          InlineInfoCard(
+                            mode: InlineInfoCardMode.warn,
+                            text: widget.currentBalance != 0
+                                ? t.account.close.should_have_zero_balance
+                                : t.account.close.should_have_no_transactions,
+                          )
+                        ]
+                      ],
+                    )),
+                BottomSheetFooter(
+                  submitText: t.general.continue_text,
+                  submitIcon: Icons.check,
+                  onSaved: !hasNoTransactions || widget.currentBalance != 0
+                      ? null
+                      : () {
+                          AccountService.instance
+                              .updateAccount(
+                            widget.account.copyWith(
+                              closingDate: drift.Value(date),
+                            ),
+                          )
+                              .then((value) {
+                            Navigator.pop(context, true);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(t.account.close.success)));
+                          }).catchError(
+                            (err) {
+                              Navigator.pop(context);
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('$err')),
+                              );
+                            },
+                          );
+                        },
+                )
+              ],
+            ),
           );
         });
   }

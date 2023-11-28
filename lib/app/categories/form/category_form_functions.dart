@@ -7,6 +7,7 @@ import 'package:monekin/core/database/services/transaction/transaction_service.d
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/widgets/html_text.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -24,7 +25,7 @@ class CategoryFormFunctions {
           content: SingleChildScrollView(
             child: StreamBuilder(
                 stream: TransactionService.instance
-                    .getTransactions(
+                    .getTransactionsFromPredicate(
                       predicate: (transaction,
                               account,
                               accountCurrency,
@@ -96,16 +97,10 @@ class CategoryFormFunctions {
                 StreamBuilder(
                     stream: TransactionService.instance
                         .getTransactions(
-                          predicate: (transaction,
-                                  account,
-                                  accountCurrency,
-                                  receivingAccount,
-                                  receivingAccountCurrency,
-                                  c,
-                                  p6) =>
-                              c.id.isValue(category.id) |
-                              c.parentCategoryID.isValue(category.id),
-                        )
+                            filters: TransactionFilters(
+                          categories: [category.id],
+                          includeParentCategoriesInSearch: true,
+                        ))
                         .map((event) => event.length),
                     initialData: 0,
                     builder: (context, snapshot) {
@@ -148,16 +143,9 @@ class CategoryFormFunctions {
 
                 for (final tr in await TransactionService.instance
                     .getTransactions(
-                      predicate: (transaction,
-                              account,
-                              accountCurrency,
-                              receivingAccount,
-                              receivingAccountCurrency,
-                              c,
-                              p6) =>
-                          c.id.isValue(category.id) |
-                          c.parentCategoryID.isValue(category.id),
-                    )
+                        filters: TransactionFilters(
+                            categories: [category.id],
+                            includeParentCategoriesInSearch: true))
                     .first) {
                   futures.add(
                     TransactionService.instance.insertOrUpdateTransaction(
@@ -213,16 +201,10 @@ class CategoryFormFunctions {
                 StreamBuilder(
                     stream: TransactionService.instance
                         .getTransactions(
-                          predicate: (transaction,
-                                  account,
-                                  accountCurrency,
-                                  receivingAccount,
-                                  receivingAccountCurrency,
-                                  c,
-                                  p6) =>
-                              c.id.isValue(category.id) |
-                              c.parentCategoryID.isValue(category.id),
-                        )
+                            filters: TransactionFilters(
+                          categories: [category.id],
+                          includeParentCategoriesInSearch: true,
+                        ))
                         .map((event) => event.length),
                     initialData: 0,
                     builder: (context, snapshot) {

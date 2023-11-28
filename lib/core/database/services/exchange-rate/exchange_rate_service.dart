@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flutter/material.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -11,7 +12,16 @@ class ExchangeRateService {
   static final ExchangeRateService instance =
       ExchangeRateService._(AppDB.instance);
 
-  Future<int> insertOrUpdateExchangeRate(ExchangeRateInDB toInsert) {
+  Future<int> insertOrUpdateExchangeRate(ExchangeRateInDB toInsert) async {
+    final elToCompare =
+        (await (getLastExchangeRateOf(currencyCode: toInsert.currencyCode))
+            .first);
+
+    if (elToCompare != null &&
+        DateUtils.isSameDay(elToCompare.date, toInsert.date)) {
+      toInsert = toInsert.copyWith(id: elToCompare.id);
+    }
+
     return db
         .into(db.exchangeRates)
         .insert(toInsert, mode: InsertMode.insertOrReplace);

@@ -1,10 +1,15 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/stats/widgets/chart_by_categories.dart';
+import 'package:monekin/app/stats/widgets/movements_distribution/chart_by_categories.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/routes/app_router.dart';
+import 'package:monekin/core/services/filters/date_range_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -24,12 +29,10 @@ class SubcategoryModalItem {
 
 class CategoryStatsModal extends StatelessWidget {
   const CategoryStatsModal(
-      {super.key,
-      required this.categoryData,
-      required this.dateRangeDisplayName});
+      {super.key, required this.categoryData, required this.dateRanges});
 
-  final ChartByCategoriesDataItem categoryData;
-  final String dateRangeDisplayName;
+  final TrDistributionChartItem<Category> categoryData;
+  final (DateTime?, DateTime?) dateRanges;
 
   Future<List<SubcategoryModalItem>> getSubcategoriesData(
       BuildContext context) async {
@@ -48,9 +51,6 @@ class CategoryStatsModal extends StatelessWidget {
               fromCurrency: transaction.account.currencyId,
               amount: transaction.value.abs())
           .first;
-
-      print(transaction);
-      print("-----------");
 
       if (categoryToEdit != null) {
         categoryToEdit.value += trValue;
@@ -80,23 +80,39 @@ class CategoryStatsModal extends StatelessWidget {
           child: Column(
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  categoryData.category.icon.displayFilled(
-                      color: ColorHex.get(categoryData.category.color),
-                      size: 34),
-                  const SizedBox(width: 16),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
                     children: [
-                      Text(
-                        categoryData.category.name,
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                      Text(
-                        '${categoryData.transactions.length} ${categoryData.transactions.length == 1 ? t.general.transaction : t.general.transactions}'
-                            .toLowerCase(),
+                      categoryData.category.icon.displayFilled(
+                          color: ColorHex.get(categoryData.category.color),
+                          size: 34),
+                      const SizedBox(width: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            categoryData.category.name,
+                            style: Theme.of(context).textTheme.headlineSmall,
+                          ),
+                          Text(
+                            '${categoryData.transactions.length} ${t.transaction.display(n: categoryData.transactions.length)}'
+                                .toLowerCase(),
+                          )
+                        ],
                       )
                     ],
+                  ),
+                  IconButton(
+                    onPressed: () => context.pushRoute(TransactionsRoute(
+                        filters: TransactionFilters(
+                      categories: [categoryData.category.id],
+                      includeParentCategoriesInSearch: true,
+                      minDate: dateRanges.$1,
+                      maxDate: dateRanges.$2,
+                    ))),
+                    icon: const Icon(Icons.open_in_new),
                   )
                 ],
               ),
@@ -105,7 +121,8 @@ class CategoryStatsModal extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    dateRangeDisplayName,
+                    DateRangeService().getTextOfRange(
+                        startDate: dateRanges.$1, endDate: dateRanges.$2),
                     style: const TextStyle(fontWeight: FontWeight.w300),
                   ),
                   CurrencyDisplayer(

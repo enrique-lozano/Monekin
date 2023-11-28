@@ -73,4 +73,9 @@ class BudgetServive {
         )
         .watch();
   }
+
+  Stream<Budget?> getBudgetById(String id) {
+    return getBudgets(predicate: (p0) => p0.id.equals(id), limit: 1)
+        .map((res) => res.firstOrNull);
+  }
 }

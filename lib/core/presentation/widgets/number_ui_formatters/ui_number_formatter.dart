@@ -92,7 +92,9 @@ class UINumberFormatter {
             style: decimalsStyle ??
                 textStyle.copyWith(
                   fontWeight: FontWeight.w300,
-                  fontSize: max(valueFontSize * 0.75, 14),
+                  fontSize: valueFontSize > 12.25
+                      ? max(valueFontSize * 0.75, 12.25)
+                      : valueFontSize,
                 ))
     ];
   }

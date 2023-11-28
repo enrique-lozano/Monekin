@@ -55,11 +55,11 @@ class Account extends AccountInDB {
       required super.type,
       required super.iconId,
       required this.currency,
-      bool isArchived = false,
+      super.closingDate,
       super.description,
       super.iban,
       super.swift})
-      : super(currencyId: currency.code, isArchived: isArchived);
+      : super(currencyId: currency.code);
 
   /// Currency of all the transactions of this account. When you change this currency all transactions in this account
   /// will have the new currency but their amount/value will remain the same.
@@ -67,14 +67,18 @@ class Account extends AccountInDB {
 
   SupportedIcon get icon => SupportedIconService.instance.getIconByID(iconId);
 
+  bool get isClosed => closingDate != null;
+
   Widget displayIcon(BuildContext context, {double size = 22}) {
     return Container(
       padding: EdgeInsets.all(size * 0.185),
       decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.onPrimary,
-          border: Border.all(width: 2, color: Theme.of(context).primaryColor),
+          border: Border.all(
+              width: 2, color: Theme.of(context).colorScheme.primary),
           borderRadius: BorderRadius.circular(1000)),
-      child: icon.display(size: size, color: Theme.of(context).primaryColor),
+      child: icon.display(
+          size: size, color: Theme.of(context).colorScheme.primary),
     );
   }
 
@@ -88,7 +92,7 @@ class Account extends AccountInDB {
         swift: account.swift,
         name: account.name,
         iconId: account.iconId,
-        isArchived: account.isArchived,
+        closingDate: account.closingDate,
         type: account.type,
       );
 }

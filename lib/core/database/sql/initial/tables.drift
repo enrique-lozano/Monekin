@@ -4,6 +4,8 @@
 ---- * --- Remove the imports 
 
 import './../../../models/transaction/transaction.dart';
+import './../../../models/transaction/transaction_status.dart';
+import './../../../models/transaction/transaction_periodicity.dart';
 import './../../../models/category/category.dart';
 import './../../../models/account/account.dart';
 import './../../services/user-setting/user_setting_service.dart';
@@ -38,7 +40,7 @@ CREATE TABLE IF NOT EXISTS accounts (
     
     iniValue REAL NOT NULL,
 
-    -- Date of creation of this account
+    -- Creation/Opening date of this account. Before this date, no transactions can exists on it.
     date DATETIME NOT NULL,
 
     description TEXT,
@@ -46,8 +48,8 @@ CREATE TABLE IF NOT EXISTS accounts (
     
     iconId TEXT NOT NULL,
 
-    -- If true, the account will be no-selectable for new transactions and will not appear in some stats
-    isArchived BOOLEAN NOT NULL DEFAULT 0,
+    -- The closing date of the account. After this date, no transactions can exists on it.
+    closingDate DATETIME,
 
     -- ID of the currency used by this account and therefore all transactions contained in it
     currencyId TEXT NOT NULL REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -128,6 +130,24 @@ CREATE TABLE IF NOT EXISTS transactions (
   -- valueInDestiny can not be defined for non-transfer transactions:
   CHECK (categoryID IS NULL OR valueInDestiny IS NULL)
 ) AS TransactionInDB;
+
+CREATE TABLE IF NOT EXISTS tags (
+    id TEXT NOT NULL PRIMARY KEY,
+
+    -- The name of the tag
+    name TEXT UNIQUE NOT NULL,
+
+    -- The display color of the tag
+    color TEXT NOT NULL,
+
+    -- The description of the tag
+    description TEXT
+) AS TagInDB;
+
+CREATE TABLE IF NOT EXISTS transactionTags (
+  transactionID TEXT NOT NULL REFERENCES transactions(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  tagID TEXT NOT NULL REFERENCES tags(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 
 CREATE TABLE IF NOT EXISTS budgets (

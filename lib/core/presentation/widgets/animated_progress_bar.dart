@@ -8,8 +8,8 @@ class AnimatedProgressBar extends StatefulWidget {
       this.color,
       this.animationDuration = 750,
       this.width = 8,
-      this.direction = Axis.horizontal})
-      : assert(value <= 1 && value >= 0);
+      this.direction =
+          Axis.horizontal}) /* :  assert(value <= 1 && value >= 0) */;
 
   /// Percentage of the bar to occupy. Must be a value between 0 and 1
   final double value;
@@ -43,7 +43,7 @@ class _AnimatedProgressBarState extends State<AnimatedProgressBar> {
       topRight: Radius.circular(widget.radius),
     );
 
-    final barColor = widget.color ?? Theme.of(context).primaryColor;
+    final barColor = widget.color ?? Theme.of(context).colorScheme.primary;
 
     return TweenAnimationBuilder<double>(
       duration: Duration(milliseconds: widget.animationDuration),
@@ -53,6 +53,8 @@ class _AnimatedProgressBarState extends State<AnimatedProgressBar> {
         end: widget.value,
       ),
       builder: (context, value, child) {
+        if (value.isNaN) value = 0;
+
         return Container(
             height: isHorizontal ? widget.width : double.infinity,
             width: isHorizontal ? double.infinity : widget.width,

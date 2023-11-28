@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
@@ -5,14 +6,15 @@ import 'package:monekin/app/categories/categories_list.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/presentation/widgets/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/database/backup/backup_database_service.dart';
 
 enum _ExportFormats { csv, db }
 
+@RoutePage()
 class ExportDataPage extends StatefulWidget {
   const ExportDataPage({super.key});
 
@@ -23,7 +25,7 @@ class ExportDataPage extends StatefulWidget {
 class _ExportDataPageState extends State<ExportDataPage> {
   _ExportFormats selectedExportFormat = _ExportFormats.db;
 
-  final filters = TransactionFilters();
+  TransactionFilters filters = const TransactionFilters();
 
   Widget cardSelector({
     required _ExportFormats exportFormat,
@@ -33,7 +35,8 @@ class _ExportDataPageState extends State<ExportDataPage> {
   }) {
     final isSelected = selectedExportFormat == exportFormat;
 
-    return Padding(
+    return Container(
+      width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
       child: Card(
         shape: RoundedRectangleBorder(
@@ -51,7 +54,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
             selectedExportFormat = exportFormat;
 
             if (selectedExportFormat == _ExportFormats.db) {
-              filters.clearAll();
+              filters = const TransactionFilters();
             }
           }),
           child: Padding(
@@ -176,15 +179,20 @@ class _ExportDataPageState extends State<ExportDataPage> {
                   StreamBuilder(
                       stream: AccountService.instance.getAccounts(),
                       builder: (context, snapshot) {
+                        final selectedAccounts = (snapshot.data ?? []).where(
+                            (element) =>
+                                filters.accountsIDs?.contains(element.id) ??
+                                false);
+
                         return selector(
                             title: t.general.accounts,
-                            inputValue: filters.accounts == null ||
+                            inputValue: filters.accountsIDs == null ||
                                     (snapshot.hasData &&
-                                        filters.accounts!.length ==
+                                        filters.accountsIDs!.length ==
                                             snapshot.data!.length)
                                 ? t.account.select.all
-                                : filters.accounts
-                                    ?.map((e) => e.name)
+                                : selectedAccounts
+                                    .map((e) => e.name)
                                     .join(', '),
                             onClick: selectedExportFormat == _ExportFormats.db
                                 ? null
@@ -196,20 +204,18 @@ class _ExportDataPageState extends State<ExportDataPage> {
                                               allowMultiSelection: true,
                                               filterSavingAccounts: false,
                                               selectedAccounts:
-                                                  filters.accounts ??
-                                                      (snapshot.hasData
-                                                          ? [...snapshot.data!]
-                                                          : []),
+                                                  selectedAccounts.toList(),
                                             ));
 
                                     if (modalRes != null &&
                                         modalRes.isNotEmpty) {
                                       setState(() {
-                                        filters.accounts = snapshot.hasData &&
-                                                modalRes.length ==
-                                                    snapshot.data!.length
-                                            ? null
-                                            : modalRes;
+                                        filters = filters.copyWith(
+                                            accountsIDs: snapshot.hasData &&
+                                                    modalRes.length ==
+                                                        snapshot.data!.length
+                                                ? null
+                                                : modalRes.map((e) => e.id));
                                       });
                                     }
                                   });
@@ -222,6 +228,11 @@ class _ExportDataPageState extends State<ExportDataPage> {
                   StreamBuilder(
                       stream: CategoryService.instance.getMainCategories(),
                       builder: (context, snapshot) {
+                        final selectedCategories = (snapshot.data ?? []).where(
+                            (element) =>
+                                filters.categories?.contains(element.id) ??
+                                false);
+
                         return selector(
                             title: t.general.categories,
                             inputValue: filters.categories == null ||
@@ -229,8 +240,8 @@ class _ExportDataPageState extends State<ExportDataPage> {
                                         filters.categories!.length ==
                                             snapshot.data!.length)
                                 ? t.categories.select.all
-                                : filters.categories
-                                    ?.map((e) => e.name)
+                                : selectedCategories
+                                    .map((e) => e.name)
                                     .join(', '),
                             onClick: selectedExportFormat == _ExportFormats.db
                                 ? null
@@ -242,18 +253,18 @@ class _ExportDataPageState extends State<ExportDataPage> {
                                               mode: CategoriesListMode
                                                   .modalSelectMultiCategory,
                                               selectedCategories:
-                                                  filters.categories ??
-                                                      (snapshot.data ?? []),
+                                                  selectedCategories.toList(),
                                             ));
 
                                     if (modalRes != null &&
                                         modalRes.isNotEmpty) {
                                       setState(() {
-                                        filters.categories = snapshot.hasData &&
-                                                modalRes.length ==
-                                                    snapshot.data!.length
-                                            ? null
-                                            : modalRes;
+                                        filters = filters.copyWith(
+                                            categories: snapshot.hasData &&
+                                                    modalRes.length ==
+                                                        snapshot.data!.length
+                                                ? null
+                                                : modalRes.map((e) => e.id));
                                       });
                                     }
                                   });

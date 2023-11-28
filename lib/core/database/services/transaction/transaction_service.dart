@@ -4,6 +4,25 @@ import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:rxdart/rxdart.dart';
+
+class TransactionQueryStatResult {
+  int numberOfRes;
+  double valueSum;
+
+  TransactionQueryStatResult(
+      {required this.numberOfRes, required this.valueSum});
+}
+
+typedef TransactionQueryOrderBy = OrderBy Function(
+    Transactions transaction,
+    Accounts account,
+    Currencies accountCurrency,
+    Accounts receivingAccount,
+    Currencies receivingAccountCurrency,
+    Categories c,
+    Categories);
 
 class TransactionService {
   final AppDB db;
@@ -39,15 +58,9 @@ class TransactionService {
         .go();
   }
 
-  Stream<List<MoneyTransaction>> getTransactions({
-    Expression<bool> Function(
-            Transactions transaction,
-            Accounts account,
-            Currencies accountCurrency,
-            Accounts receivingAccount,
-            Currencies receivingAccountCurrency,
-            Categories c,
-            Categories)?
+  Stream<List<MoneyTransaction>> getTransactionsFromPredicate({
+    Expression<bool> Function(Transactions, Accounts, Currencies, Accounts,
+            Currencies, Categories, Categories)?
         predicate,
     OrderBy Function(
             Transactions transaction,
@@ -71,13 +84,114 @@ class TransactionService {
         .watch();
   }
 
+  /// Get transactions from the DB based on some filters.
+  ///
+  /// By default, the transactions will be returned ordered by date
+  Stream<List<MoneyTransaction>> getTransactions({
+    TransactionFilters? filters,
+    TransactionQueryOrderBy? orderBy,
+    int? limit,
+    int? offset,
+  }) {
+    return getTransactionsFromPredicate(
+        predicate: filters?.toTransactionExpression(),
+        orderBy: orderBy ??
+            (p0, p1, p2, p3, p4, p5, p6) => OrderBy(
+                [OrderingTerm(expression: p0.date, mode: OrderingMode.desc)]),
+        limit: limit,
+        offset: offset);
+  }
+
+  Stream<TransactionQueryStatResult> countTransactions({
+    TransactionFilters predicate = const TransactionFilters(),
+    bool convertToPreferredCurrency = true,
+    DateTime? exchDate,
+  }) {
+    if (predicate.transactionTypes == null ||
+        predicate.transactionTypes!
+            .map((e) => e.index)
+            .contains(TransactionType.transfer.index)) {
+      // If we should take into account transfers:
+      return Rx.combineLatest([
+        // INCOME AND EXPENSES
+        db
+            .countTransactions(
+              predicate: predicate
+                  .copyWith(
+                    transactionTypes: predicate.transactionTypes
+                            ?.whereNot((element) =>
+                                element.index == TransactionType.transfer.index)
+                            .toList() ??
+                        [TransactionType.income, TransactionType.expense],
+                  )
+                  .toTransactionExpression(),
+              date: (exchDate ?? DateTime.now()),
+            )
+            .watchSingle(),
+
+        // TRANSFERS FROM ORIGIN ACCOUNTS
+        db
+            .countTransactions(
+              predicate: predicate.copyWith(
+                transactionTypes: [TransactionType.transfer],
+                includeReceivingAccountsInAccountFilters: false,
+              ).toTransactionExpression(),
+              date: (exchDate ?? DateTime.now()),
+            )
+            .watchSingle(),
+
+        // TRANSFERS FROM DESTINY ACCOUNTS
+        db
+            .countTransactions(
+              predicate: predicate.copyWith(
+                transactionTypes: [TransactionType.transfer],
+                accountsIDs: null,
+              ).toTransactionExpression(
+                extraFilters: (transaction, account, accountCurrency,
+                        receivingAccount, receivingAccountCurrency, c, p6) =>
+                    [
+                  if (predicate.accountsIDs != null)
+                    transaction.receivingAccountID.isIn(predicate.accountsIDs!)
+                ],
+              ),
+              date: (exchDate ?? DateTime.now()),
+            )
+            .watchSingle()
+      ], (res) {
+        return TransactionQueryStatResult(
+            numberOfRes: res[0].transactionsNumber + res[1].transactionsNumber,
+            valueSum: convertToPreferredCurrency
+                ? res[0].sumInPrefCurrency -
+                    res[1].sumInPrefCurrency +
+                    res[2].sumInDestinyInPrefCurrency
+                : res[0].sum - res[1].sum + res[2].sumInDestiny);
+      });
+    }
+
+    // If we should not take into account transfers, we just return the normal sum
+    return db
+        .countTransactions(
+          predicate: predicate.toTransactionExpression(),
+          date: (exchDate ?? DateTime.now()),
+        )
+        .watchSingle()
+        .map((event) => TransactionQueryStatResult(
+            numberOfRes: event.transactionsNumber,
+            valueSum: convertToPreferredCurrency
+                ? event.sumInPrefCurrency
+                : event.sum));
+  }
+
   Stream<MoneyTransaction?> getTransactionById(String id) {
-    return getTransactions(
-            predicate: (transaction, account, accountCurrency, receivingAccount,
-                    receivingAccountCurrency, c, p6) =>
-                transaction.id.equals(id),
-            limit: 1)
-        .map((res) => res.firstOrNull);
+    return db
+        .getTransactionsWithFullData(
+          predicate: (transaction, account, accountCurrency, receivingAccount,
+                  receivingAccountCurrency, c, p6) =>
+              transaction.id.equals(id),
+          limit: (t, a, accountCurrency, ra, receivingAccountCurrency, c, pc) =>
+              Limit(1, 0),
+        )
+        .watchSingleOrNull();
   }
 
   Stream<bool> checkIfCreateTransactionIsPossible() {
@@ -85,7 +199,7 @@ class TransactionService {
         .getAccounts(
           predicate: (acc, curr) => AppDB.instance.buildExpr([
             acc.type.equalsValue(AccountType.saving).not(),
-            acc.isArchived.isNotValue(true)
+            acc.closingDate.isNull()
           ]),
           limit: 1,
         )

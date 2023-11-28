@@ -1,10 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/categories_list.dart';
-import 'package:monekin/app/transactions/form/widgets/interval_selector_help.dart';
+import 'package:monekin/app/tags/tag_list.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
@@ -12,14 +13,21 @@ import 'package:monekin/core/database/services/user-setting/user_setting_service
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
+import 'package:monekin/core/models/tags/tag.dart';
+import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/animations/shake/shake_widget.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/expansion_panel/single_expansion_panel.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/status_filter/transaction_status_filter.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/tags_filter/tags_filter_container.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/core/utils/constants.dart';
@@ -30,6 +38,7 @@ import 'package:uuid/uuid.dart';
 
 enum TransactionFormMode { transfer, incomeOrExpense }
 
+@RoutePage()
 class TransactionFormPage extends StatefulWidget {
   const TransactionFormPage({
     super.key,
@@ -75,6 +84,10 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
 
   RecurrencyData recurrentRule = const RecurrencyData.noRepeat();
 
+  List<Tag> tags = [];
+
+  TransactionType? currentTransactionTypeToAdd;
+
   final _shakeKey = GlobalKey<ShakeWidgetState>();
 
   Widget selector({
@@ -86,7 +99,9 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     required Function onClick,
   }) {
     icon ??= SupportedIconService.instance.defaultSupportedIcon;
-    iconColor ??= Theme.of(context).colorScheme.primary;
+    iconColor ??= Theme.of(context).brightness == Brightness.light
+        ? Theme.of(context).colorScheme.primary
+        : Theme.of(context).colorScheme.primaryContainer;
 
     final t = Translations.of(context);
 
@@ -95,23 +110,32 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         onTap: () => onClick(),
         borderRadius: BorderRadius.circular(8),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              icon.displayFilled(color: iconColor, size: 24),
+              icon.displayFilled(color: iconColor, size: 28),
               const SizedBox(width: 8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelSmall!
-                        .copyWith(fontWeight: FontWeight.w300),
-                  ),
-                  Text(inputValue ?? t.general.unspecified)
-                ],
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                            fontWeight: FontWeight.w300,
+                          ),
+                    ),
+                    Text(
+                      inputValue ?? t.general.unspecified,
+                      softWrap: false,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                    )
+                  ],
+                ),
               )
             ],
           ),
@@ -138,9 +162,10 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
 
   submitForm() {
     final t = Translations.of(context);
+    final scMessenger = ScaffoldMessenger.of(context);
 
     if (valueToNumber! < 0) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      scMessenger.showSnackBar(SnackBar(
           content: Text(widget.mode == TransactionFormMode.incomeOrExpense
               ? t.transaction.form.validators.negative_transaction
               : t.transaction.form.validators.negative_transfer)));
@@ -149,7 +174,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     }
 
     if (fromAccount != null && fromAccount!.date.compareTo(date) > 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      scMessenger.showSnackBar(
         SnackBar(
             content: Text(
                 t.transaction.form.validators.date_after_account_creation)),
@@ -161,49 +186,69 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     onSuccess() {
       Navigator.pop(context);
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      scMessenger.showSnackBar(SnackBar(
           content: Text(isEditMode
               ? t.transaction.edit_success
               : t.transaction.new_success)));
     }
 
-    late MoneyTransaction toPush;
+    final newTrID = widget.transactionToEdit?.id ?? const Uuid().v4();
 
-    if (widget.mode == TransactionFormMode.incomeOrExpense) {
-      toPush = MoneyTransaction.incomeOrExpense(
-          id: widget.transactionToEdit?.id ?? const Uuid().v4(),
-          account: fromAccount!,
-          date: date,
-          value: selectedCategory!.type.isExpense
-              ? valueToNumber! * -1
-              : valueToNumber!,
-          category: selectedCategory!,
-          status: date.compareTo(DateTime.now()) > 0
-              ? TransactionStatus.pending
-              : status,
-          notes: notesController.text.isEmpty ? null : notesController.text,
-          title: titleController.text.isEmpty ? null : titleController.text,
-          recurrentInfo: recurrentRule);
-    } else {
-      toPush = MoneyTransaction.transfer(
-          id: widget.transactionToEdit?.id ?? const Uuid().v4(),
-          account: fromAccount!,
-          receivingAccount: toAccount!,
-          date: date,
-          value: valueToNumber!,
-          status: date.compareTo(DateTime.now()) > 0
-              ? TransactionStatus.pending
-              : status,
-          notes: notesController.text.isEmpty ? null : notesController.text,
-          title: titleController.text.isEmpty ? null : titleController.text,
-          recurrentInfo: recurrentRule);
-    }
+    TransactionService.instance
+        .insertOrUpdateTransaction(
+      TransactionInDB(
+        id: newTrID,
+        date: date,
+        accountID: fromAccount!.id,
+        value: widget.mode == TransactionFormMode.incomeOrExpense &&
+                selectedCategory!.type.isExpense
+            ? valueToNumber! * -1
+            : valueToNumber!,
+        isHidden: false,
+        status: date.compareTo(DateTime.now()) > 0
+            ? TransactionStatus.pending
+            : status,
+        notes: notesController.text.isEmpty ? null : notesController.text,
+        title: titleController.text.isEmpty ? null : titleController.text,
+        intervalEach: recurrentRule.intervalEach,
+        intervalPeriod: recurrentRule.intervalPeriod,
+        endDate: recurrentRule.ruleRecurrentLimit?.endDate,
+        remainingTransactions:
+            recurrentRule.ruleRecurrentLimit?.remainingIterations,
+        valueInDestiny: widget.mode == TransactionFormMode.transfer
+            ? valueInDestinyToNumber
+            : null,
+        categoryID: widget.mode == TransactionFormMode.incomeOrExpense
+            ? selectedCategory?.id
+            : null,
+        receivingAccountID:
+            widget.mode == TransactionFormMode.transfer ? toAccount?.id : null,
+      ),
+    )
+        .then((value) {
+      final db = AppDB.instance;
 
-    TransactionService.instance.insertOrUpdateTransaction(toPush).then((value) {
-      onSuccess();
+      Future.wait(
+        [
+          for (final tag in tags)
+            if (widget.transactionToEdit != null &&
+                widget.transactionToEdit!.tags
+                    .any((element) => element.id == tag.id))
+              (db.delete(db.transactionTags)
+                    ..where((tbl) => tbl.tagID.isValue(tag.id)))
+                  .go()
+            else
+              db
+                  .into(db.transactionTags)
+                  .insert(TransactionTag(transactionID: newTrID, tagID: tag.id))
+        ],
+      ).then((value) {
+        onSuccess();
+      }).catchError((error) {
+        scMessenger.showSnackBar(SnackBar(content: Text(error.toString())));
+      });
     }).catchError((error) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(error.toString())));
+      scMessenger.showSnackBar(SnackBar(content: Text(error.toString())));
     });
   }
 
@@ -218,7 +263,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
           .getAccounts(
               predicate: (acc, curr) => AppDB.instance.buildExpr([
                     acc.type.equalsValue(AccountType.saving).not(),
-                    acc.isArchived.isNotValue(true)
+                    acc.closingDate.isNull()
                   ]),
               limit: widget.mode == TransactionFormMode.incomeOrExpense ? 1 : 2)
           .first
@@ -279,6 +324,8 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
           selectedCategory!.type = CategoryType.I;
         }
       }
+
+      tags = [...transaction.tags];
     });
 
     notesController.text = transaction.notes ?? '';
@@ -291,36 +338,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
 
   List<Widget> buildExtraFields() {
     return [
-      if (recurrentRule.isNoRecurrent)
-        DropdownButtonFormField<TransactionStatus?>(
-          value: date.compareTo(DateTime.now()) > 0
-              ? TransactionStatus.pending
-              : status,
-          decoration: InputDecoration(
-            labelText: t.transaction.form.status,
-          ),
-          items: [
-            DropdownMenuItem(
-              value: null,
-              child: Text(t.transaction.status.none),
-            ),
-            ...List.generate(
-                TransactionStatus.values.length,
-                (index) => DropdownMenuItem(
-                    value: TransactionStatus.values[index],
-                    child: Text(
-                        TransactionStatus.values[index].displayName(context))))
-          ],
-          onChanged: date.compareTo(DateTime.now()) > 0
-              ? null
-              : (value) {
-                  setState(() {
-                    status = value;
-                  });
-                },
-        ),
       if (widget.mode == TransactionFormMode.transfer) ...[
-        const SizedBox(height: 16),
         TextFormField(
           controller: valueInDestinyController,
           decoration: InputDecoration(
@@ -352,19 +370,19 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
             setState(() {});
           },
         ),
+        const SizedBox(height: 16),
       ],
       if (widget.mode == TransactionFormMode.transfer &&
           valueToNumber != null &&
           valueInDestinyToNumber == null) ...[
-        const SizedBox(height: 16),
         InlineInfoCard(
             text: '${t.transfer.form.currency_info_add(
               x: NumberFormat.currency(symbol: toAccount!.currency.symbol)
                   .format(valueToNumber),
             )} ',
-            mode: InlineInfoCardMode.info)
+            mode: InlineInfoCardMode.info),
+        const SizedBox(height: 16),
       ],
-      const SizedBox(height: 16),
       TextFormField(
         minLines: 2,
         maxLines: 10,
@@ -375,6 +393,61 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
           hintText: t.transaction.form.description_info,
         ),
       ),
+      if (recurrentRule.isNoRecurrent) ...[
+        const SizedBox(height: 16),
+        StatefulBuilder(builder: (context, setState) {
+          return TransactionStatusFilter(
+            selectedStatuses: [status],
+            allowMultipleSelection: false,
+            onSelected: (statusSelected, value) {
+              setState(() {
+                status = statusSelected;
+              });
+            },
+          );
+        }),
+      ],
+      const SizedBox(height: 16),
+      StatefulBuilder(builder: (context, setState) {
+        return TagsFilterContainer(
+          child: Wrap(
+            spacing: 6,
+            runSpacing: 0,
+            children: [
+              ...List.generate(tags.length, (index) {
+                final tag = tags[index];
+
+                return FilterChip(
+                  label: Text(
+                    tag.name,
+                    style: TextStyle(color: tag.colorData),
+                  ),
+                  selected: true,
+                  onSelected: (value) => setState(() {
+                    tags.removeWhere((element) => element.id == tag.id);
+                  }),
+                  showCheckmark: false,
+                  selectedColor: tag.colorData.lighten(0.75),
+                  avatar: tag.displayIcon(),
+                );
+              }),
+              ActionChip(
+                label: Text(t.tags.add),
+                avatar: const Icon(Icons.add),
+                onPressed: () => showTagListModal(
+                        context, TagListPage(isModal: true, selected: tags))
+                    .then((value) {
+                  if (value != null) {
+                    setState(() {
+                      tags = value;
+                    });
+                  }
+                }),
+              ),
+            ],
+          ),
+        );
+      })
     ];
   }
 
@@ -386,12 +459,16 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     );
   }
 
-  Widget buildCalculatorButton({
+  Widget buildCalculatorButton(
+    BuildContext context, {
     required String text,
     int flex = 1,
-    required Color bgColor,
-    Color? textColor = Colors.black,
+    Color? bgColor,
+    Color? textColor,
   }) {
+    textColor ??= Theme.of(context).colorScheme.onBackground;
+    bgColor ??= Theme.of(context).colorScheme.background;
+
     onButtonPress() {
       HapticFeedback.lightImpact();
 
@@ -429,12 +506,14 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         padding: const EdgeInsets.all(2.5),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: bgColor,
+            backgroundColor: Theme.of(context).brightness == Brightness.light
+                ? bgColor.darken(0.025)
+                : bgColor.darken(0.15),
             shadowColor: bgColor.darken(0.15),
             surfaceTintColor: bgColor.darken(0.15),
             foregroundColor: textColor,
-            disabledForegroundColor: textColor,
-            disabledBackgroundColor: bgColor.lighten(0.175),
+            disabledForegroundColor: textColor.withOpacity(0.3),
+            disabledBackgroundColor: bgColor.withOpacity(0.3),
             elevation: 0,
           ),
           onPressed:
@@ -461,16 +540,29 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
+    if (widget.mode == TransactionFormMode.transfer) {
+      currentTransactionTypeToAdd = TransactionType.transfer;
+    } else if (selectedCategory != null) {
+      if (selectedCategory!.type.isIncome) {
+        currentTransactionTypeToAdd = TransactionType.income;
+      } else {
+        currentTransactionTypeToAdd = TransactionType.expense;
+      }
+    }
+
     final bool isBlue = (widget.mode == TransactionFormMode.transfer ||
         selectedCategory == null);
 
     final trColor = isBlue
-        ? Theme.of(context).brightness == Brightness.light
-            ? Theme.of(context).primaryColorLight
-            : Theme.of(context).primaryColor.darken()
-        : (selectedCategory!.type.isIncome ? Colors.green : Colors.red);
+        ? CustomColors.of(context).brand.lighten()
+        : (currentTransactionTypeToAdd?.color(context) ??
+            appColorScheme(context).primary);
 
-    final trColorLighten = trColor.lighten(isBlue ? 0.275 : 0.375);
+    final trColorLighten = Theme.of(context).brightness == Brightness.light
+        ? isBlue
+            ? Theme.of(context).primaryColorLight.lighten(0.5)
+            : trColor.lighten(0.75)
+        : trColor.darken(0.5);
 
     return StreamBuilder(
         stream: UserSettingService.instance
@@ -478,8 +570,18 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         builder: (context, snapshot) {
           return Scaffold(
             appBar: AppBar(
-              title:
-                  Text(isEditMode ? t.transaction.edit : t.transaction.create),
+              title: Text(
+                isEditMode
+                    ? t.transaction.edit
+                    : currentTransactionTypeToAdd == TransactionType.transfer
+                        ? t.transfer.create
+                        : currentTransactionTypeToAdd == null
+                            ? t.transaction.create
+                            : currentTransactionTypeToAdd ==
+                                    TransactionType.expense
+                                ? t.transaction.new_expense
+                                : t.transaction.new_income,
+              ),
             ),
             persistentFooterButtons: snapshot.hasData && snapshot.data == '0'
                 ? [
@@ -510,263 +612,166 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                 ---------- FORM IN A CALCULATOR STYLE ------------
                 ------------------------------------------------- */
 
-                return LayoutBuilder(builder: (context, constrains) {
-                  return Column(
-                    children: [
-                      SizedBox(
-                        height: constrains.maxHeight * 0.6,
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Center(
-                                child: AnimatedDefaultTextStyle(
+                return Column(
+                  children: [
+                    Flexible(
+                      flex: 8,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                AnimatedDefaultTextStyle(
                                   duration: const Duration(milliseconds: 400),
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineLarge!
                                       .copyWith(
                                           fontSize: (valueToNumber ?? 0) >= 1000
-                                              ? 36
-                                              : 42),
+                                              ? (valueToNumber ?? 0) >= 1000000
+                                                  ? 36
+                                                  : 42
+                                              : 56),
                                   child: CurrencyDisplayer(
                                     amountToConvert: valueToNumber ?? 0,
                                     currency: fromAccount?.currency,
                                   ),
                                 ),
-                              ),
-                            ),
-                            if (date.compareTo(DateTime.now()) > 0)
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: InlineInfoCard(
-                                  text: t.transaction.form.validators.date_max,
-                                  mode: InlineInfoCardMode.info,
-                                ),
-                              ),
-                            if (fromAccount != null &&
-                                fromAccount!.date.compareTo(date) > 0 &&
-                                !(date.compareTo(DateTime.now()) > 0))
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: InlineInfoCard(
-                                  text: t.transaction.form.validators
-                                      .date_after_account_creation,
-                                  mode: InlineInfoCardMode.warn,
-                                ),
-                              ),
-                            const Divider(),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          16, 12, 8, 12),
-                                      child: recurrentRule.isNoRecurrent
-                                          ? Text(
-                                              DateFormat.yMMMMd()
-                                                  .add_Hm()
-                                                  .format(date),
-                                              softWrap: false,
-                                              overflow: TextOverflow.fade,
-                                            )
-                                          : Text(
-                                              '${DateFormat.yMMMMd().format(date)} - ${recurrentRule.formText(context)}',
-                                              softWrap: false,
-                                              overflow: TextOverflow.fade,
-                                            ),
+                                if (date.compareTo(DateTime.now()) > 0)
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 32),
+                                    child: InlineInfoCard(
+                                      text: t
+                                          .transaction.form.validators.date_max,
+                                      direction: Axis.horizontal,
+                                      mode: InlineInfoCardMode.info,
                                     ),
-                                    onTap: () async {
-                                      DateTime? pickedDate =
-                                          await openDateTimePicker(
-                                        context,
-                                        initialDate: date,
-                                        firstDate: fromAccount?.date,
-                                        showTimePickerAfterDate: true,
-                                      );
-                                      if (pickedDate == null) return;
-
-                                      setState(() {
-                                        date = pickedDate;
-                                      });
-                                    },
                                   ),
-                                ),
-                                IconButton(
-                                  onPressed: () async {
-                                    final res =
-                                        await showIntervalSelectoHelpDialog(
-                                            context,
-                                            selectedRecurrentRule:
-                                                recurrentRule);
-
-                                    if (res == null) return;
-
-                                    setState(() {
-                                      recurrentRule = res;
-                                    });
-                                  },
-                                  icon: recurrentRule.isRecurrent
-                                      ? const Icon(Icons.event_repeat_rounded)
-                                      : const Icon(Icons.repeat_one_rounded),
-                                ),
-                                const SizedBox(width: 4)
+                                if (fromAccount != null &&
+                                    fromAccount!.date.compareTo(date) > 0 &&
+                                    !(date.compareTo(DateTime.now()) > 0))
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: InlineInfoCard(
+                                      text: t.transaction.form.validators
+                                          .date_after_account_creation,
+                                      direction: Axis.vertical,
+                                      mode: InlineInfoCardMode.warn,
+                                    ),
+                                  ),
                               ],
                             ),
-                            const Divider(),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  selector(
-                                      isMobile: true,
-                                      title: t.general.account,
-                                      inputValue: fromAccount?.name,
-                                      icon: fromAccount?.icon,
-                                      iconColor: null,
-                                      onClick: () async {
-                                        final modalRes =
-                                            await showAccountSelector(
-                                                fromAccount!);
+                          ),
+                          //const Divider(),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                          side: BorderSide(
+                                              width: 1,
+                                              color: Theme.of(context)
+                                                  .dividerColor),
+                                        ),
+                                        child: recurrentRule.isNoRecurrent
+                                            ? Text(
+                                                DateFormat.yMMMMd()
+                                                    .add_Hm()
+                                                    .format(date),
+                                                softWrap: false,
+                                                overflow: TextOverflow.fade,
+                                              )
+                                            : Text(
+                                                '${DateFormat.yMMMMd().format(date)} - ${recurrentRule.formText(context)}',
+                                                softWrap: false,
+                                                overflow: TextOverflow.fade,
+                                              ),
+                                        onPressed: () async {
+                                          DateTime? pickedDate =
+                                              await openDateTimePicker(
+                                            context,
+                                            initialDate: date,
+                                            firstDate: fromAccount?.date,
+                                            showTimePickerAfterDate: true,
+                                          );
+                                          if (pickedDate == null) return;
 
-                                        if (modalRes != null &&
-                                            modalRes.isNotEmpty) {
                                           setState(() {
-                                            fromAccount = modalRes.first;
+                                            date = pickedDate;
                                           });
-                                        }
-                                      }),
-                                  const Icon(Icons.arrow_forward),
-                                  if (widget.mode ==
-                                      TransactionFormMode.transfer)
-                                    selector(
-                                        isMobile: true,
-                                        title: t.transfer.form.to,
-                                        inputValue: toAccount?.name,
-                                        icon: toAccount?.icon,
-                                        iconColor: null,
-                                        onClick: () async {
-                                          final modalRes =
-                                              await showAccountSelector(
-                                                  toAccount!);
-
-                                          if (modalRes != null &&
-                                              modalRes.isNotEmpty) {
-                                            setState(() {
-                                              toAccount = modalRes.first;
-                                            });
-                                          }
-                                        }),
-                                  if (widget.mode ==
-                                      TransactionFormMode.incomeOrExpense)
-                                    ShakeWidget(
-                                      duration:
-                                          const Duration(milliseconds: 200),
-                                      shakeCount: 1,
-                                      shakeOffset: 10,
-                                      key: _shakeKey,
-                                      child: selector(
-                                        isMobile: true,
-                                        title: t.general.category,
-                                        inputValue: selectedCategory?.name,
-                                        icon: selectedCategory?.icon,
-                                        iconColor: selectedCategory != null
-                                            ? ColorHex.get(
-                                                selectedCategory!.color)
-                                            : null,
-                                        onClick: () => selectCategory(),
+                                        },
                                       ),
                                     ),
-                                ],
-                              ),
-                            ),
-                            const Divider(),
-                            InkWell(
-                              child: Container(
-                                padding: const EdgeInsets.all(8),
-                                //color: trColorLighten,
-                                child: Center(
-                                  child: Text(
-                                    t.transaction.form.tap_to_see_more,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w300),
-                                  ),
+                                    IconButton.filledTonal(
+                                      onPressed: () async {
+                                        final res =
+                                            await showIntervalSelectoHelpDialog(
+                                                context,
+                                                selectedRecurrentRule:
+                                                    recurrentRule);
+
+                                        if (res == null) return;
+
+                                        setState(() {
+                                          recurrentRule = res;
+                                        });
+                                      },
+                                      icon: recurrentRule.isRecurrent
+                                          ? const Icon(
+                                              Icons.event_repeat_rounded)
+                                          : const Icon(
+                                              Icons.repeat_one_rounded),
+                                    ),
+                                    IconButton.filledTonal(
+                                      icon:
+                                          const Icon(Icons.text_fields_rounded),
+                                      onPressed: () =>
+                                          showExtraFieldsModal(context),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              onTap: () => showModalBottomSheet(
-                                context: context,
-                                showDragHandle: true,
-                                isScrollControlled: true,
-                                builder: (context) => DraggableScrollableSheet(
-                                    expand: false,
-                                    maxChildSize: 0.85,
-                                    minChildSize: 0.5,
-                                    initialChildSize: 0.55,
-                                    builder: (context, scrollController) {
-                                      return Padding(
-                                        padding: EdgeInsets.only(
-                                            bottom: MediaQuery.of(context)
-                                                .viewInsets
-                                                .bottom),
-                                        child: Column(
-                                          children: [
-                                            Expanded(
-                                              child:
-                                                  ScrollableWithBottomGradient(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                  vertical: 8,
-                                                  horizontal: 16,
-                                                ),
-                                                controller: scrollController,
-                                                child: Column(
-                                                  children: [
-                                                    buildTitleField(),
-                                                    const SizedBox(height: 16),
-                                                    ...buildExtraFields()
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            BottomSheetFooter(
-                                                submitText:
-                                                    t.general.close_and_save,
-                                                showCloseIcon: false,
-                                                submitIcon: Icons
-                                                    .keyboard_arrow_down_rounded,
-                                                onSaved: () {
-                                                  Navigator.pop(context);
-                                                })
-                                          ],
-                                        ),
-                                      );
-                                    }),
-                              ),
+                                buildAccoutAndCategorySelectorRow(context),
+                              ],
                             ),
-                            const Divider(),
-                          ],
-                        ),
+                          ),
+                          // const Divider(),
+                        ],
                       ),
-                      Container(
-                        height: constrains.maxHeight * 0.4,
+                    ),
+
+                    /*  ---------- NUMMBER CALCULATOR BUTTONS ------------ */
+                    Flexible(
+                      flex: 7,
+                      child: Container(
                         padding: const EdgeInsets.all(6),
-                        color: trColorLighten,
+                        decoration: BoxDecoration(
+                            color: trColorLighten,
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(16),
+                              topRight: Radius.circular(16),
+                            )),
                         child: Row(
                           children: [
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '1'),
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '4'),
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '7'),
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '.'),
                                 ],
                               ),
@@ -775,13 +780,13 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '2'),
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '5'),
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '8'),
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '0'),
                                 ],
                               ),
@@ -790,13 +795,13 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '3'),
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '6'),
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '9'),
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: '⌫'),
                                 ],
                               ),
@@ -805,19 +810,22 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  buildCalculatorButton(
+                                  buildCalculatorButton(context,
                                       bgColor: trColorLighten, text: 'AC'),
-                                  buildCalculatorButton(
-                                      bgColor: trColor, text: 'DONE', flex: 3),
+                                  buildCalculatorButton(context,
+                                      bgColor: trColor,
+                                      text: 'DONE',
+                                      textColor: Colors.white,
+                                      flex: 3),
                                 ],
                               ),
                             ),
                           ],
                         ),
-                      )
-                    ],
-                  );
-                });
+                      ),
+                    )
+                  ],
+                );
               }
 
               /* -----------------------------------------------
@@ -915,25 +923,19 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                                 onClick: () => selectCategory(),
                               ),
                             const SizedBox(height: 24),
-                            TextFormField(
-                              controller: TextEditingController(
-                                  text: DateFormat.yMMMMd()
-                                      .add_Hm()
-                                      .format(date)),
+                            DateTimeFormField(
                               decoration: InputDecoration(
+                                  suffixIcon: const Icon(Icons.event),
                                   labelText: '${t.general.time.datetime} *'),
-                              readOnly: true,
-                              onTap: () async {
-                                DateTime? pickedDate = await openDateTimePicker(
-                                  context,
-                                  initialDate: date,
-                                  firstDate: fromAccount?.date,
-                                  showTimePickerAfterDate: true,
-                                );
-                                if (pickedDate == null) return;
-
+                              initialDate: date,
+                              firstDate: fromAccount?.date,
+                              dateFormat: DateFormat.yMMMd().add_Hm(),
+                              validator: (e) => e == null
+                                  ? t.general.validations.required
+                                  : null,
+                              onDateSelected: (DateTime value) {
                                 setState(() {
-                                  date = pickedDate;
+                                  date = value;
                                 });
                               },
                             ),
@@ -973,13 +975,11 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                     ),
                     SingleExpansionPanel(
                       sidePadding: 16,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Column(children: buildExtraFields())),
-                        ],
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: buildExtraFields()),
                       ),
                     ),
                   ],
@@ -988,5 +988,138 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
             }),
           );
         });
+  }
+
+  Card buildAccoutAndCategorySelectorRow(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Theme.of(context).dividerColor, width: 1),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      elevation: 0,
+      // color: Theme.of(context).colorScheme.primary,
+      clipBehavior: Clip.hardEdge,
+      child: LayoutBuilder(builder: (context, constraints) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: constraints.maxWidth * 0.5),
+              child: selector(
+                  isMobile: true,
+                  title: t.general.account,
+                  inputValue: fromAccount?.name,
+                  icon: fromAccount?.icon,
+                  iconColor: null,
+                  onClick: () async {
+                    final modalRes = await showAccountSelector(fromAccount!);
+
+                    if (modalRes != null && modalRes.isNotEmpty) {
+                      setState(() {
+                        fromAccount = modalRes.first;
+                      });
+                    }
+                  }),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+              child: Icon(Icons.arrow_forward),
+            ),
+            if (widget.mode == TransactionFormMode.transfer)
+              ConstrainedBox(
+                constraints:
+                    BoxConstraints(maxWidth: constraints.maxWidth * 0.5),
+                child: selector(
+                    isMobile: true,
+                    title: t.transfer.form.to,
+                    inputValue: toAccount?.name,
+                    icon: toAccount?.icon,
+                    iconColor: null,
+                    onClick: () async {
+                      final modalRes = await showAccountSelector(toAccount!);
+
+                      if (modalRes != null && modalRes.isNotEmpty) {
+                        setState(() {
+                          toAccount = modalRes.first;
+                        });
+                      }
+                    }),
+              ),
+            if (widget.mode == TransactionFormMode.incomeOrExpense)
+              Flexible(
+                child: ShakeWidget(
+                  duration: const Duration(milliseconds: 200),
+                  shakeCount: 1,
+                  shakeOffset: 10,
+                  key: _shakeKey,
+                  child: selector(
+                    isMobile: true,
+                    title: t.general.category,
+                    inputValue: selectedCategory?.name,
+                    icon: selectedCategory?.icon,
+                    iconColor: selectedCategory != null
+                        ? ColorHex.get(selectedCategory!.color)
+                        : null,
+                    onClick: () => selectCategory(),
+                  ),
+                ),
+              ),
+          ],
+        );
+      }),
+    );
+  }
+
+  Future<dynamic> showExtraFieldsModal(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      showDragHandle: true,
+      // isDismissible: false,
+      isScrollControlled: true,
+      builder: (context) => DraggableScrollableSheet(
+          expand: false,
+          // TODO: Is this working? See: https://github.com/flutter/flutter/issues/127236
+          // shouldCloseOnMinExtent: false,
+          snap: true,
+          maxChildSize: 1,
+          minChildSize: 0.33,
+          initialChildSize: 0.65,
+          snapSizes: const [0.33, 0.65, 1],
+          builder: (context, scrollController) {
+            return Padding(
+              padding: EdgeInsets.only(
+                top: 12,
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ScrollableWithBottomGradient(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 16,
+                      ),
+                      controller: scrollController,
+                      child: Column(
+                        children: [
+                          buildTitleField(),
+                          const SizedBox(height: 16),
+                          ...buildExtraFields()
+                        ],
+                      ),
+                    ),
+                  ),
+                  BottomSheetFooter(
+                      submitText: t.general.close_and_save,
+                      showCloseIcon: false,
+                      submitIcon: Icons.keyboard_arrow_down_rounded,
+                      onSaved: () {
+                        Navigator.pop(context);
+                      })
+                ],
+              ),
+            );
+          }),
+    );
   }
 }

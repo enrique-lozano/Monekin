@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:monekin/core/utils/color_utils.dart';
 
 class TrendingValue extends StatelessWidget {
   const TrendingValue(
@@ -24,25 +26,42 @@ class TrendingValue extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(
-          percentage >= 0 ? Icons.trending_up : Icons.trending_down,
-          size: fontSize * (9 / 7),
-          color: _getColorBasedOnPercentage(),
-        ),
+        if (percentage != 0)
+          Icon(
+            percentage > 0
+                ? Icons.trending_up_rounded
+                : Icons.trending_down_rounded,
+            size: fontSize * (9 / 7),
+            color: _getColorBasedOnPercentage(context),
+          ),
+        if (percentage == 0)
+          Text(
+            '=',
+            style: TextStyle(
+              height: 1,
+              fontWeight: FontWeight.w700,
+              fontSize: fontSize * (9 / 7),
+              color: _getColorBasedOnPercentage(context),
+            ),
+          ),
         const SizedBox(width: 6),
         UINumberFormatter.percentage(
           amountToConvert: percentage,
           textStyle: TextStyle(
               fontSize: fontSize,
               fontWeight: fontWeight,
-              color: _getColorBasedOnPercentage()),
+              color: _getColorBasedOnPercentage(context)),
         ).getTextWidget(context)
       ],
     );
   }
 
-  Color _getColorBasedOnPercentage() {
-    return percentage >= 0 ? Colors.green : Colors.red;
+  Color _getColorBasedOnPercentage(BuildContext context) {
+    return percentage == 0
+        ? CustomColors.of(context).brand.lighten(0.35).withBlue(225)
+        : percentage > 0
+            ? CustomColors.of(context).success
+            : CustomColors.of(context).danger;
   }
 
   @override
@@ -53,12 +72,10 @@ class TrendingValue extends StatelessWidget {
         decoration: BoxDecoration(
           color: !filled
               ? null
-              : (percentage >= 0
-                  ? const Color.fromARGB(255, 220, 255, 220)
-                  : const Color.fromARGB(255, 255, 220, 220)),
+              : (_getColorBasedOnPercentage(context).lighten(0.85)),
           borderRadius: BorderRadius.circular(fontSize / 3.5),
           border: outlined
-              ? Border.all(color: _getColorBasedOnPercentage(), width: 1)
+              ? Border.all(color: _getColorBasedOnPercentage(context), width: 1)
               : null,
         ),
         child: paintTrendValue(context),

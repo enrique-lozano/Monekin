@@ -1,45 +1,124 @@
-import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/core/utils/color_utils.dart';
 
-ThemeData getThemeData(bool dark) {
-  ThemeData theme;
+bool isAppUsingDynamicColors = false;
 
-  const FlexSchemeData appColorScheme = FlexSchemeData(
-    name: 'App color scheme',
-    description: 'The app color scheme',
-    light: FlexSchemeColor(
-      primary: Color.fromARGB(255, 15, 51, 117),
-      primaryContainer: Color(0xFFDAE2FF),
-      secondary: Color(0xFF555F71),
-      secondaryContainer: Color(0xFFDAE2F9),
-      tertiary: Color(0xFF735572),
-      tertiaryContainer: Color(0xFFFED7F9),
-    ),
-    dark: FlexSchemeColor(
-      primary: Color(0xFF8FCDFF),
-      primaryContainer: Color(0xFF004B71),
-      secondary: Color(0xFFB8C8D9),
-      secondaryContainer: Color(0xFF394956),
-      tertiary: Color(0xFF735572),
-      tertiaryContainer: Color(0xFFFED7F9),
-    ),
-  );
+/// Monekin brand color.
+const brandBlue = Color(0xFF0F3375);
 
-  if (dark) {
-    theme = FlexThemeData.dark(
-      colors: appColorScheme.dark,
-      useMaterial3: true,
-      fontFamily: 'Nunito',
-      appBarElevation: 3,
-    );
-  } else {
-    theme = FlexThemeData.light(
-      colors: appColorScheme.light,
-      useMaterial3: true,
-      fontFamily: 'Nunito',
-      appBarElevation: 2,
+CustomColors lightCustomColors = const CustomColors(
+    danger: Colors.red,
+    success: Color.fromARGB(255, 55, 161, 59),
+    brand: brandBlue);
+CustomColors darkCustomColors = const CustomColors(
+    danger: Colors.redAccent, success: Colors.lightGreen, brand: brandBlue);
+
+ColorScheme appColorScheme(BuildContext context) {
+  return Theme.of(context).colorScheme;
+}
+
+@immutable
+class CustomColors extends ThemeExtension<CustomColors> {
+  const CustomColors({
+    required this.danger,
+    required this.success,
+    required this.brand,
+  });
+
+  final Color danger;
+  final Color success;
+  final Color brand;
+
+  static CustomColors of(BuildContext context) {
+    return MediaQuery.of(context).platformBrightness == Brightness.dark
+        ? darkCustomColors
+        : lightCustomColors;
+  }
+
+  @override
+  CustomColors copyWith({Color? danger, Color? success, Color? brand}) {
+    return CustomColors(
+      danger: danger ?? this.danger,
+      success: success ?? this.success,
+      brand: brand ?? this.brand,
     );
   }
+
+  @override
+  CustomColors lerp(ThemeExtension<CustomColors>? other, double t) {
+    if (other is! CustomColors) {
+      return this;
+    }
+    return CustomColors(
+      danger: Color.lerp(danger, other.danger, t) ?? danger,
+      success: Color.lerp(success, other.success, t) ?? success,
+      brand: Color.lerp(brand, other.brand, t) ?? brand,
+    );
+  }
+
+  CustomColors harmonized(ColorScheme dynamic) {
+    return copyWith(
+      danger: danger.harmonizeWith(dynamic.primary),
+      brand: brand.harmonizeWith(dynamic.primary),
+      success: success.harmonizeWith(dynamic.primary),
+    );
+  }
+}
+
+ThemeData getThemeData(
+  BuildContext context, {
+  required bool isDark,
+  required bool amoledMode,
+  required ColorScheme? lightDynamic,
+  required ColorScheme? darkDynamic,
+  required String accentColor,
+}) {
+  ThemeData theme;
+
+  ColorScheme lightColorScheme;
+  ColorScheme darkColorScheme;
+
+  if (lightDynamic != null && darkDynamic != null && accentColor == 'auto') {
+    // On Android S+ devices, use the provided dynamic color scheme.
+    // (Recommended) Harmonize the dynamic color scheme' built-in semantic colors.
+    lightColorScheme = lightDynamic.harmonized();
+
+    // (Optional) Customize the scheme as desired. For example, one might
+    // want to use a brand color to override the dynamic [ColorScheme.secondary].
+    // lightColorScheme = lightColorScheme.copyWith(secondary: _brandBlue);
+
+    // (Optional) If applicable, harmonize custom colors.
+    lightCustomColors = lightCustomColors.harmonized(lightColorScheme);
+
+    // Repeat for the dark color scheme.
+    darkColorScheme = darkDynamic.harmonized();
+
+    if (amoledMode) {
+      darkColorScheme = darkColorScheme.copyWith(background: Colors.black);
+    }
+
+    darkCustomColors = darkCustomColors.harmonized(darkColorScheme);
+
+    isAppUsingDynamicColors = true; // ignore, only for demo purposes
+  } else {
+    // Otherwise, use fallback schemes.
+    lightColorScheme = ColorScheme.fromSeed(
+      seedColor: accentColor == 'auto' ? brandBlue : ColorHex.get(accentColor),
+    );
+    darkColorScheme = ColorScheme.fromSeed(
+        seedColor:
+            accentColor == 'auto' ? brandBlue : ColorHex.get(accentColor),
+        brightness: Brightness.dark,
+        background: amoledMode ? Colors.black : null);
+  }
+
+  theme = ThemeData(
+    colorScheme: isDark ? darkColorScheme : lightColorScheme,
+    brightness: isDark ? Brightness.dark : Brightness.light,
+    useMaterial3: true,
+    fontFamily: 'Nunito',
+  );
 
   final listTileSmallText = TextStyle(
       color: theme.textTheme.bodyMedium?.color,
@@ -50,8 +129,12 @@ ThemeData getThemeData(bool dark) {
 
   return theme.copyWith(
     appBarTheme: AppBarTheme(
-      color: theme.colorScheme.primary,
-      foregroundColor: theme.colorScheme.onPrimary,
+      backgroundColor: isDark
+          ? theme.colorScheme.primaryContainer
+          : theme.colorScheme.primary,
+      foregroundColor: isDark
+          ? theme.colorScheme.onPrimaryContainer
+          : theme.colorScheme.onPrimary,
       shadowColor: theme.primaryColorDark,
     ),
     dividerTheme: const DividerThemeData(space: 0),
@@ -77,11 +160,14 @@ ThemeData getThemeData(bool dark) {
       leadingAndTrailingTextStyle: listTileSmallText,
     ),
     tabBarTheme: TabBarTheme(
-        unselectedLabelColor: theme.colorScheme.onPrimary,
-        labelColor: theme.colorScheme.primaryContainer,
-        indicatorColor: theme.colorScheme.primaryContainer),
-    useMaterial3: true,
-    materialTapTargetSize: MaterialTapTargetSize.padded,
-    visualDensity: VisualDensity.standard,
+        unselectedLabelColor: isDark
+            ? theme.colorScheme.onPrimaryContainer
+            : theme.colorScheme.onPrimary,
+        labelColor: isDark
+            ? theme.colorScheme.primary
+            : theme.colorScheme.primaryContainer,
+        indicatorColor: isDark
+            ? theme.colorScheme.primary
+            : theme.colorScheme.primaryContainer),
   );
 }

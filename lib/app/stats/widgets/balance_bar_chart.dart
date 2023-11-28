@@ -5,8 +5,10 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/presentation/widgets/filter_sheet_modal.dart';
+import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/services/filters/date_range_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 
@@ -32,13 +34,13 @@ class BalanceBarChart extends StatefulWidget {
       required this.startDate,
       required this.endDate,
       required this.dateRange,
-      this.filters});
+      this.filters = const TransactionFilters()});
 
   final DateTime? startDate;
   final DateTime? endDate;
   final DateRange dateRange;
 
-  final TransactionFilters? filters;
+  final TransactionFilters filters;
 
   @override
   State<BalanceBarChart> createState() => _BalanceBarChartState();
@@ -61,28 +63,28 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
 
     final accountService = AccountService.instance;
 
-    final accounts =
-        widget.filters?.accounts ?? await accountService.getAccounts().first;
-    final accountsIds = accounts.map((event) => event.id);
+    final accounts = await widget.filters.accounts().first;
 
     getIncomeData(DateTime? startDate, DateTime? endDate) async =>
         await accountService
-            .getAccountsData(
-                accountIds: accountsIds,
-                categoriesIds: widget.filters?.categories?.map((e) => e.id),
-                accountDataFilter: AccountDataFilter.income,
-                startDate: startDate,
-                endDate: endDate)
+            .getAccountsBalance(
+              filters: widget.filters.copyWith(
+                transactionTypes: [TransactionType.income],
+                minDate: startDate,
+                maxDate: endDate,
+              ),
+            )
             .first;
 
     getExpenseData(DateTime? startDate, DateTime? endDate) async =>
         await accountService
-            .getAccountsData(
-                accountIds: accountsIds,
-                categoriesIds: widget.filters?.categories?.map((e) => e.id),
-                accountDataFilter: AccountDataFilter.expense,
-                startDate: startDate,
-                endDate: endDate)
+            .getAccountsBalance(
+              filters: widget.filters.copyWith(
+                transactionTypes: [TransactionType.expense],
+                minDate: startDate,
+                maxDate: endDate,
+              ),
+            )
             .first;
 
     if (range == DateRange.monthly) {
@@ -227,8 +229,8 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
         BarChartRodData(
           toY: income,
           color: isTouched && touchedRodDataIndex == 0
-              ? Colors.green.darken(0.1)
-              : Colors.green,
+              ? CustomColors.of(context).success.darken(0.1)
+              : CustomColors.of(context).success,
           width: width,
           borderRadius: BorderRadius.only(
             topLeft: radius,
@@ -238,8 +240,8 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
         BarChartRodData(
           toY: expense,
           color: isTouched && touchedRodDataIndex == 1
-              ? Colors.red.darken(0.1)
-              : Colors.red,
+              ? CustomColors.of(context).danger.darken(0.1)
+              : CustomColors.of(context).danger,
           width: width,
           borderRadius: BorderRadius.only(
             bottomLeft: radius,

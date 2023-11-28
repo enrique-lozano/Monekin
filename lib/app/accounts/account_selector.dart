@@ -53,7 +53,7 @@ class _AccountSelectorState extends State<AccountSelector> {
           predicate: (acc, curr) => AppDB.instance.buildExpr([
             if (widget.filterSavingAccounts)
               acc.type.equalsValue(AccountType.saving).not(),
-            if (!widget.includeArchivedAccounts) acc.isArchived.isNotValue(true)
+            if (!widget.includeArchivedAccounts) acc.closingDate.isNull()
           ]),
         )
         .first
@@ -102,8 +102,11 @@ class _AccountSelectorState extends State<AccountSelector> {
                     return RadioListTile(
                       value: account.id,
                       title: Text(account.name),
-                      secondary:
-                          account.icon.displayFilled(color: colors.primary),
+                      secondary: account.icon.displayFilled(
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? colors.primary
+                                  : colors.onPrimary),
                       groupValue: selectedAccounts.firstOrNull?.id,
                       onChanged: (value) {
                         setState(() {
@@ -119,8 +122,11 @@ class _AccountSelectorState extends State<AccountSelector> {
                           .map((e) => e.id)
                           .contains(account.id),
                       title: Text(account.name),
-                      secondary:
-                          account.icon.displayFilled(color: colors.primary),
+                      secondary: account.icon.displayFilled(
+                          color:
+                              Theme.of(context).brightness == Brightness.light
+                                  ? colors.primary
+                                  : colors.onPrimary),
                       onChanged: (value) {
                         if (value == true) {
                           selectedAccounts.add(account);
