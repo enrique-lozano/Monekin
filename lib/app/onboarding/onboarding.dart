@@ -1,15 +1,17 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:monekin/app/home/home.page.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
+import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
+@RoutePage()
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
 
@@ -23,11 +25,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   introFinished() {
     AppDataService.instance
         .setAppDataItem(AppDataKey.introSeen, '1')
-        .then((value) => Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomePage(),
-            )));
+        .then((value) => context.replaceRoute(const MainLayoutRoute()));
   }
 
   @override
@@ -124,22 +122,17 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           onTap: () {
                             if (userCurrency == null) return;
 
-                            showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                showDragHandle: true,
-                                builder: (context) {
-                                  return CurrencySelectorModal(
-                                      preselectedCurrency: userCurrency,
-                                      onCurrencySelected: (newCurrency) {
-                                        UserSettingService.instance
-                                            .setSetting(
-                                                SettingKey.preferredCurrency,
-                                                newCurrency.code)
-                                            .then(
-                                                (value) => setState(() => {}));
-                                      });
-                                });
+                            showCurrencySelectorModal(
+                                context,
+                                CurrencySelectorModal(
+                                    preselectedCurrency: userCurrency,
+                                    onCurrencySelected: (newCurrency) {
+                                      UserSettingService.instance
+                                          .setSetting(
+                                              SettingKey.preferredCurrency,
+                                              newCurrency.code)
+                                          .then((value) => setState(() => {}));
+                                    }));
                           },
                         );
                       }),
@@ -194,8 +187,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
           dotsDecorator: DotsDecorator(
             size: const Size.square(10.0),
             activeSize: const Size(20.0, 10.0),
-            activeColor: Theme.of(context).primaryColor,
-            color: Theme.of(context).primaryColor.withOpacity(0.3),
+            activeColor: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
             spacing: const EdgeInsets.symmetric(horizontal: 3.0),
             activeShape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25.0)),

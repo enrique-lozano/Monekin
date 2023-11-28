@@ -1,20 +1,21 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
-import 'package:monekin/core/presentation/widgets/filter_sheet_modal.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/database/services/currency/currency_service.dart';
 import '../../core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import '../../core/presentation/widgets/skeleton.dart';
-import 'account_form.dart';
 
 class AccountWithMoney {
   final double money;
@@ -31,11 +32,14 @@ class CurrencyWithMoney {
 }
 
 class AllAccountBalancePage extends StatefulWidget {
-  const AllAccountBalancePage({super.key, required this.date, this.filters});
+  const AllAccountBalancePage(
+      {super.key,
+      required this.date,
+      this.filters = const TransactionFilters()});
 
   final DateTime date;
 
-  final TransactionFilters? filters;
+  final TransactionFilters filters;
 
   @override
   State<AllAccountBalancePage> createState() => _AllAccountBalancePageState();
@@ -43,15 +47,19 @@ class AllAccountBalancePage extends StatefulWidget {
 
 class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
   Future<List<AccountWithMoney>> getAccountsWithMoney(
-      DateTime date, TransactionFilters? filters) async {
-    final accounts =
-        filters?.accounts ?? await AccountService.instance.getAccounts().first;
+    DateTime date, {
+    TransactionFilters filters = const TransactionFilters(),
+  }) async {
+    final accounts = (await filters.accounts().first).where(
+      (element) =>
+          !element.isClosed || element.closingDate!.compareTo(date) >= 0,
+    );
 
     final balances = accounts.map((account) async => AccountWithMoney(
         money: await AccountService.instance
             .getAccountMoney(
               account: account,
-              categoriesIds: filters?.categories?.map((e) => e.id),
+              trFilters: filters,
               convertToPreferredCurrency: true,
               date: date,
             )
@@ -65,7 +73,8 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
   }
 
   List<CurrencyWithMoney> getCurrenciesWithMoney(
-      List<AccountWithMoney> accountsWithMoney) {
+    List<AccountWithMoney> accountsWithMoney,
+  ) {
     final toReturn = <CurrencyWithMoney>[];
 
     for (final account in accountsWithMoney) {
@@ -97,7 +106,7 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
     final t = Translations.of(context);
 
     return FutureBuilder(
-        future: getAccountsWithMoney(widget.date, widget.filters),
+        future: getAccountsWithMoney(widget.date, filters: widget.filters),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const LinearProgressIndicator();
@@ -123,17 +132,18 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                                 padding: const EdgeInsets.all(4),
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                        width: 2,
-                                        color: Theme.of(context).primaryColor),
+                                      width: 2,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
                                     borderRadius: BorderRadius.circular(1000)),
                                 child: accountWithMoney.account.icon.display(
-                                    size: 22,
-                                    color: Theme.of(context).primaryColor)),
-                            onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => AccountFormPage(
-                                    account: accountWithMoney.account),
-                              ),
+                                  size: 22,
+                                  color: Theme.of(context).colorScheme.primary,
+                                )),
+                            onTap: () => context.pushRoute(
+                              AccountFormRoute(
+                                  account: accountWithMoney.account),
                             ),
                             title: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

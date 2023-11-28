@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -64,8 +66,9 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
 
     return Align(
         child: ConstrainedBox(
-      constraints:
-          BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
+      constraints: BoxConstraints(
+        maxWidth: min(MediaQuery.of(context).size.width * 0.75, 450),
+      ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ColoredBox(

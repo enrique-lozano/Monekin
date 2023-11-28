@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
@@ -8,15 +9,17 @@ import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
+import 'package:monekin/core/presentation/widgets/date_form_field/date_field.dart';
+import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../core/models/account/account.dart';
 import '../../core/presentation/widgets/persistent_footer_button.dart';
-import '../../core/utils/date_time_picker.dart';
 
+@RoutePage()
 class BudgetFormPage extends StatefulWidget {
   const BudgetFormPage({super.key, this.budgetToEdit, required this.prevPage});
 
@@ -303,52 +306,40 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                   Row(
                     children: [
                       Expanded(
-                        child: TextFormField(
-                          controller: TextEditingController(
-                              text: DateFormat.yMMMd().format(startDate)),
+                        child: DateTimeFormField(
                           decoration: InputDecoration(
+                            suffixIcon: const Icon(Icons.event),
                             labelText: '${t.general.time.start_date} *',
                           ),
-                          readOnly: true,
-                          onTap: () async {
-                            DateTime? pickedDate = await openDateTimePicker(
-                                context,
-                                showTimePickerAfterDate: false,
-                                lastDate: endDate,
-                                initialDate: startDate);
-
-                            if (pickedDate == null) return;
-
+                          mode: DateTimeFieldPickerMode.date,
+                          initialDate: startDate,
+                          firstDate: endDate,
+                          dateFormat: DateFormat.yMMMd(),
+                          validator: (e) =>
+                              e == null ? t.general.validations.required : null,
+                          onDateSelected: (DateTime value) {
                             setState(() {
-                              startDate = pickedDate;
+                              startDate = value;
                             });
                           },
                         ),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
-                        child: TextFormField(
-                          controller: TextEditingController(
-                              text: endDate != null
-                                  ? DateFormat.yMMMd().format(endDate!)
-                                  : ''),
+                        child: DateTimeFormField(
                           decoration: InputDecoration(
+                            suffixIcon: const Icon(Icons.event),
                             labelText: '${t.general.time.end_date} *',
                           ),
-                          readOnly: true,
-                          validator: (value) =>
-                              fieldValidator(value, isRequired: true),
-                          onTap: () async {
-                            DateTime? pickedDate = await openDateTimePicker(
-                                context,
-                                showTimePickerAfterDate: false,
-                                initialDate: endDate,
-                                firstDate: startDate);
-
-                            if (pickedDate == null) return;
-
+                          mode: DateTimeFieldPickerMode.date,
+                          initialDate: endDate,
+                          firstDate: startDate,
+                          dateFormat: DateFormat.yMMMd(),
+                          validator: (e) =>
+                              e == null ? t.general.validations.required : null,
+                          onDateSelected: (DateTime value) {
                             setState(() {
-                              endDate = pickedDate;
+                              endDate = value;
                             });
                           },
                         ),

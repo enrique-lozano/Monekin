@@ -16,6 +16,11 @@ targets:
           generate_values_in_copy_with: true
           scoped_dart_components: true
 
+      copy_with_extension_gen:
+        enabled: true
+        options:
+          copy_with_null: true
+
       slang_build_runner:
         options:
           base_locale: en

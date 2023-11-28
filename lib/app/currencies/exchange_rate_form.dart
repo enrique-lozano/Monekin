@@ -7,8 +7,9 @@ import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
+import 'package:monekin/core/presentation/widgets/date_form_field/date_field.dart';
+import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
-import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:uuid/uuid.dart';
@@ -71,7 +72,9 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
     });
 
     CurrencyService.instance.getUserPreferredCurrency().first.then((value) {
-      userPreferredCurrency = value;
+      setState(() {
+        userPreferredCurrency = value;
+      });
     });
   }
 
@@ -144,19 +147,15 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                               return null;
                             },
                             onTap: () {
-                              showModalBottomSheet(
-                                  context: context,
-                                  showDragHandle: true,
-                                  isScrollControlled: true,
-                                  builder: (context) {
-                                    return CurrencySelectorModal(
-                                        preselectedCurrency: _currency,
-                                        onCurrencySelected: (newCurrency) => {
-                                              setState(() {
-                                                _currency = newCurrency;
-                                              })
-                                            });
-                                  });
+                              showCurrencySelectorModal(
+                                  context,
+                                  CurrencySelectorModal(
+                                      preselectedCurrency: _currency,
+                                      onCurrencySelected: (newCurrency) => {
+                                            setState(() {
+                                              _currency = newCurrency;
+                                            })
+                                          }));
                             },
                             decoration: InputDecoration(
                                 labelText: t.currencies.currency,
@@ -180,43 +179,43 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
-                              child: TextFormField(
-                                controller: TextEditingController(
-                                    text: DateFormat.yMMMd().format(
-                                        date)), //editing controller of this TextField
+                              child: DateTimeFormField(
                                 decoration: InputDecoration(
                                   labelText: '${t.general.time.date} *',
                                 ),
-                                readOnly: true,
-                                onTap: () async {
-                                  DateTime? pickedDate =
-                                      await openDateTimePicker(context,
-                                          showTimePickerAfterDate: false,
-                                          initialDate: date);
-
-                                  if (pickedDate == null) return;
-
+                                mode: DateTimeFieldPickerMode.date,
+                                initialDate: date,
+                                dateFormat: DateFormat.yMMMd(),
+                                validator: (e) => e == null
+                                    ? t.general.validations.required
+                                    : null,
+                                onDateSelected: (DateTime value) {
                                   setState(() {
-                                    date = pickedDate;
+                                    date = value;
                                   });
                                 },
                               ),
                             ),
                             const SizedBox(width: 16),
                             Expanded(
-                              child: TextFormField(
-                                controller: rateController,
-                                validator: (value) => fieldValidator(value,
-                                    validator: ValidatorType.double,
-                                    isRequired: true),
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                decoration: InputDecoration(
-                                  labelText: '${t.currencies.exchange_rate} *',
-                                  hintText: 'Ex.: 2.14',
-                                ),
+                                child: TextFormField(
+                              controller: rateController,
+                              validator: (value) => fieldValidator(value,
+                                  validator: ValidatorType.double,
+                                  isRequired: true),
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              decoration: InputDecoration(
+                                labelText: '${t.currencies.exchange_rate} *',
+                                hintText: 'Ex.: 2.14',
+                                helperText: (userPreferredCurrency != null &&
+                                        _currency != null &&
+                                        double.tryParse(rateController.text) !=
+                                            null)
+                                    ? '1 ${_currency?.code} = ${double.parse(rateController.text)} ${userPreferredCurrency?.code ?? ''}'
+                                    : null,
                               ),
-                            )
+                            ))
                           ],
                         ),
                       ],

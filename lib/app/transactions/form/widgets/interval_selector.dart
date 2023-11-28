@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/transactions/form/widgets/interval_selector_help.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/models/transaction/recurrency_data.dart';
+import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
+import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
+import 'package:monekin/core/presentation/widgets/date_form_field/date_field.dart';
+import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
-
-import '../../../../core/utils/date_time_picker.dart';
 
 class IntervalSelector extends StatefulWidget {
   const IntervalSelector({super.key, this.preselectedRecurrentRule});
@@ -183,28 +184,22 @@ class _IntervalSelectorState extends State<IntervalSelector> {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Flexible(child: const Text('Hasta el')),
+                    Flexible(child: Text(t.general.time.until_date)),
                     const SizedBox(width: 8),
                     Flexible(
-                      child: TextFormField(
-                        controller: TextEditingController(
-                            text: DateFormat.yMMMMd().add_Hm().format(endDate)),
+                      child: DateTimeFormField(
                         decoration: InputDecoration(
-                            labelText: '${t.general.time.datetime} *',
-                            isDense: true),
-                        readOnly: true,
+                          suffixIcon: const Icon(Icons.event),
+                          labelText: '${t.general.time.datetime} *',
+                          isDense: true,
+                        ),
+                        mode: DateTimeFieldPickerMode.date,
+                        initialDate: endDate,
                         enabled: ruleUntilMode == RuleUntilMode.date,
-                        onTap: () async {
-                          DateTime? pickedDate = await openDateTimePicker(
-                            context,
-                            initialDate: endDate,
-                            showTimePickerAfterDate: false,
-                          );
-
-                          if (pickedDate == null) return;
-
+                        dateFormat: DateFormat.yMMMd(),
+                        onDateSelected: (DateTime value) {
                           setState(() {
-                            endDate = pickedDate;
+                            endDate = value;
                           });
                         },
                       ),

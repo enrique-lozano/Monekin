@@ -1,6 +1,6 @@
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 
-Set<BreakPoint> appBreakPoints = {
+final Set<BreakPoint> appBreakPoints = {
   const BreakPoint(BreakpointID.xs, width: double.infinity),
   const BreakPoint(BreakpointID.sm, width: 540),
   const BreakPoint(BreakpointID.md, width: 720),

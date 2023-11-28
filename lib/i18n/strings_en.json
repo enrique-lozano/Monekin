@@ -3,7 +3,7 @@
     "cancel": "Cancel",
     "or": "or",
     "understood": "Understood",
-    "unspecified": "Sin especificar",
+    "unspecified": "Unspecified",
     "attention": "Attention ⚠️",
     "confirm": "Confirm",
     "continue_text": "Continue",
@@ -13,21 +13,12 @@
     "close_and_save": "Save and close",
     "add": "Add",
     "edit": "Edit",
-    "archive": "Archive",
-    "unarchive": "Unarchive",
     "balance": "Balance",
     "delete": "Delete",
-    "income": "Income",
-    "expense": "Expense",
-    "incomes": "Incomes",
-    "expenses": "Expenses",
-    "expenses-and-incomes": "Expenses and incomes",
     "account": "Account",
     "accounts": "Accounts",
     "categories": "Categories",
     "category": "Category",
-    "transaction": "Transaction",
-    "transactions": "Transactions",
     "today": "Today",
     "yesterday": "Yesterday",
     "filters": "Filters",
@@ -42,6 +33,8 @@
     "TIME": {
       "start-date": "Start date",
       "end-date": "End date",
+      "from-date": "From date",
+      "until-date": "Until date",
       "date": "Date",
       "datetime": "Datetime",
       "each": "Each",
@@ -122,7 +115,10 @@
       "Date": "By date"
     },
     "VALIDATIONS": {
-      "required": "Required field"
+      "required": "Required field",
+      "positive": "Should be positive",
+      "min_number": "Should be greater than {{x}}",
+      "max_number": "Should be less than {{x}}"
     }
   },
   "INTRO": {
@@ -146,6 +142,7 @@
     "lastSlideDescr2": "We hope you enjoy your experience! Do not hesitate to contact us in case of doubts, suggestions..."
   },
   "HOME": {
+    "title": "Dashboard",
     "filter-transactions": "Filter transactions",
     "hello-day": "Good morning,",
     "hello-night": "Good night,",
@@ -161,32 +158,45 @@
   "FINANCIAL-HEALTH": {
     "display": "Financial health",
     "review": {
-      "very_good": "Very good!",
-      "good": "Good",
-      "normal": "Average",
-      "bad": "Fair",
-      "very_bad": "Very Bad",
+      "very_good(context=GenderContext)": { "male,female": "Very good!" },
+      "good(context=GenderContext)": { "male,female": "Good" },
+      "normal(context=GenderContext)": { "male,female": "Average" },
+      "bad(context=GenderContext)": { "male,female": "Fair" },
+      "very_bad(context=GenderContext)": { "male,female": "Very Bad" },
+      "insufficient_data(context=GenderContext)": {
+        "male,female": "Insufficient data"
+      },
 
       "descr": {
+        "insufficient_data": "It looks like we don't have enough expenses to calculate your financial health. Add some expenses/incomes in this period to allow us to help you!",
         "very_good": "Congratulations! Your financial health is tremendous. We hope you continue your good streak and continue learning with Monekin",
         "good": "Great! Your financial health is good. Visit the analysis tab to see how to save even more!",
         "normal": "Your financial health is more or less in the average of the rest of the population for this period",
-        "bad": "It seems that your financial situation is not the best yet. Explore the analysis tab to learn more about your finances",
-        "very_bad": "Hmm, your financial health is far below what it should be. Try to see where the problem is in the analysis section"
+        "bad": "It seems that your financial situation is not the best yet. Explore the rest of the charts to learn more about your finances",
+        "very_bad": "Hmm, your financial health is far below what it should be. Explore the rest of the charts to learn more about your finances"
       }
     },
     "monthsWithoutIncome": {
-      "good": "Well done! At your current spending rate right now you could survive up to {{x}} months without any income",
-      "normal": "At your current spending rate right now you could survive up to {{x}} months without any income. While this value is acceptable, you can still improve a little more!",
-      "bad": "Wow! You would barely survive {{x}} months without income at your current spending rate. Remember that it is recommended to be able to live at least 6 months without any income",
-      "very_bad": "Wow! You could hardly survive a month without income at your current spending rate. Remember that it is recommended to be able to live at least 6 months without any income",
+      "title": "Survival rate",
+      "subtitle": "Given your balance, amount of time you could go without income",
+      "text": {
+        "zero": "You couldn't survive a month without income at this rate of expenses!",
+        "one": "You could barely survive approximately a month without income at this rate of expenses!",
+        "other": "You could survive approximately <b>{{ n }} months</b> without income at this rate of spending."
+      },
+      "suggestion": "Remember that it is advisable to always keep this ratio above 5 months at least. If you see that you do not have a sufficient savings cushion, reduce unnecessary expenses.",
       "insufficient_data": "It looks like we don't have enough expenses to calculate how many months you could survive without income. Enter a few transactions and come back here to check your financial health"
     },
     "savingsPercentage": {
-      "good": "Congratulations! You have managed to save {{value}}% of your income during this period. It seems that you are already quite an expert. Keep it up!",
-      "normal": "Congratulations, you managed to save {{value}}% of your income during this period. Visit the analysis tab to see where you can save even more!",
-      "bad": "You have managed to save {{value}}% of your income during this period. However, we believe that you can still do much more! Remember that it is recommended to save at least 30% of what you earn",
-      "very_bad": "Wow, you haven't managed to save anything during this period :( Visit the analysis tab to see where your financial weaknesses are. Remember that it is recommended to save at least 30% of what you earn"
+      "title": "Savings percentage",
+      "subtitle": "What part of your income is not spent in this period",
+      "text": {
+        "good": "Congratulations! You have managed to save <b>{{value}}%</b> of your income during this period. It seems that you are already an expert, keep up the good work!",
+        "normal": "Congratulations, you have managed to save <b>{{value}}%</b> of your income during this period.",
+        "bad": "You have managed to save <b>{{value}}%</b> of your income during this period. However, we think you can still do much more!",
+        "very_bad": "Wow, you haven't managed to save anything during this period."
+      },
+      "suggestion": "Remember that it is advisable to save at least 15-20% of what you earn."
     }
   },
   "STATS": {
@@ -198,7 +208,11 @@
     "balance-evolution": "Balance evolution",
     "compared-to-previous-period": "Compared to the previous period",
     "by-periods": "By periods",
-    "by-categories": "By categories"
+    "by-categories": "By categories",
+    "by-tags": "By tags",
+    "distribution": "Distribution",
+    "finance-health-resume": "Resume",
+    "finance-health-breakdown": "Breakdown"
   },
   "ICON-SELECTOR": {
     "name": "Name:",
@@ -219,6 +233,10 @@
     }
   },
   "TRANSACTION": {
+    "display": {
+      "one": "Transaction",
+      "other": "Transactions"
+    },
     "create": "New transaction",
     "new.income": "New income",
     "new.expense": "New expense",
@@ -251,8 +269,15 @@
       "searcher.placeholder": "Search by category, description...",
       "loading": "Loading more transactions..."
     },
+    "FILTERS": {
+      "from_value": "From amount",
+      "to_value": "Up to amount",
+      "from_value_def": "From {{ x }}",
+      "to_value_def": "Up to {{ x }}",
+      "from_date_def": "From the {{ date }}",
+      "to_date_def": "Up to the {{ date }}"
+    },
     "FORM": {
-      "status": "Status",
       "VALIDATORS": {
         "zero": "The value of a transaction cannot be equal to zero",
         "date-max": "The selected date is after the current one. The transaction will be added as pending",
@@ -269,8 +294,12 @@
       "exchange-to-preferred-in-date": "Equivalent to {{ currency }} on {{date}}:"
     },
     "STATUS": {
+      "display": {
+        "one": "Status",
+        "other": "Statuses"
+      },
       "tr_status": "{{ status }} transaction",
-      "none": "Sin estado",
+      "none": "Stateless",
       "reconciled": "Reconciled",
       "reconciled.descr": "This transaction has already been validated and corresponds to a real transaction from your bank",
       "unreconciled": "Unreconciled",
@@ -279,10 +308,29 @@
       "pending.descr": "This transaction is pending and therefore it will not be taken into account when calculating balances and statistics",
       "voided": "Voided",
       "voided.descr": "Void/cancelled transaction due to payment error or any other reason. It will not be taken into account when calculating balances and statistics"
+    },
+    "TYPES": {
+      "display": {
+        "one": "Transaction type",
+        "other": "Transaction types"
+      },
+      "income": {
+        "one": "Income",
+        "other": "Incomes"
+      },
+      "expense": {
+        "one": "Expense",
+        "other": "Expenses"
+      },
+      "transfer": {
+        "one": "Transfer",
+        "other": "Transfers"
+      }
     }
   },
   "TRANSFER": {
     "display": "Transfer",
+    "transfers": "Transfers",
     "transfer-to": "Transfer to {{ account }}",
     "create": "New Transfer",
     "need-two-accounts.warning.header": "Ops!",
@@ -300,11 +348,12 @@
   },
   "RECURRENT-TRANSACTIONS": {
     "title": "Recurrent transactions",
+    "title.short": "Rec. transactions",
     "empty": "It looks like you don't have any recurring transactions. Create a monthly, yearly, or weekly recurring transaction and it will appear here",
     "DETAILS": {
       "title": "Recurrent transaction",
-      "next-payment-info": "The next movement of this transaction will take place on {{date}}. You can choose whether you want to skip this movement or accept it on the date of your choice",
-      "last-payment-info": "The next move for this transaction will take place on {{date}}. This payment will be the last for the recurring rule, so this rule will be automatically removed when this payment is made",
+      "descr": "The next moves for this transaction are shown below. You can accept the first move or skip this move",
+      "last-payment-info": "This movement is the last of the recurring rule, so this rule will be automatically deleted when confirming this action",
       "delete-header": "Delete recurring transaction",
       "delete-message": "This action is irreversible and will not affect transactions you have already confirmed/paid for"
     }
@@ -312,6 +361,10 @@
   "ACCOUNT": {
     "details": "Account details",
     "date": "Opening date",
+    "close_date": "Closing date",
+    "reopen": "Re-open account",
+    "reopen.short": "Re-open",
+    "reopen.descr": "Are you sure you want to reopen this account?",
     "balance": "Account balance",
     "n_transactions": "Number of transactions",
     "add_money": "Add money",
@@ -345,12 +398,14 @@
       "warning-text": "This action will delete this account and all its transactions",
       "success": "Account deleted successfully"
     },
-    "ARCHIVE": {
-      "title": "Archive account",
-      "warn": "This account will no longer appear in certain listings and you will not be able to create new transactions on this account. You can unarchive this account whenever you want",
-      "should-have-zero-balance": "You must have a current balance of 0 to be able to archive this account. Please edit it before continuing",
-      "success": "Account archived successfully",
-      "unarchive-succes": "Account unarchived successfully"
+    "CLOSE": {
+      "title": "Close account",
+      "title.short": "Close",
+      "warn": "This account will no longer appear in certain listings and you will not be able to create transactions in it with a date later than the one specified below. This action does not affect any transactions or balance, and you can also reopen this account at any time. ",
+      "should-have-zero-balance": "You must have a current balance of 0 in this account to close it. Please edit the account before continuing",
+      "should-have-no-transactions": "This account has transactions after the specified close date. Delete them or edit the account close date before continuing",
+      "success": "Account closed successfully",
+      "unarchive-succes": "Account successfully re-opened"
     },
     "SELECT": {
       "one": "Select an account",
@@ -362,6 +417,7 @@
     "currency-converter": "Currency converter",
     "currency": "Currency",
     "currency-manager": "Currency manager",
+    "currency-manager.descr": "Configure your currency and its exchange rates with others",
     "preferred-currency": "Preferred/base currency",
     "change-preferred-currency-title": "Change preferred currency",
     "change-preferred-currency-msg": "All stats and budgets will be displayed in this currency from now on. Accounts and transactions will keep the currency they had. All saved exchange rates will be deleted if you execute this action. Do you wish to continue?",
@@ -381,6 +437,28 @@
     "select-a-currency": "Select a currency",
     "search-title": "Tap to search",
     "search-placeholder": "Search by name or by currency code"
+  },
+  "TAGS": {
+    "display": {
+      "one": "Label",
+      "other": "Tags"
+    },
+    "FORM": {
+      "name": "Tag name",
+      "description": "Description"
+    },
+    "empty-list": "You haven't created any tags yet. Tags and categories are a great way to categorize your movements",
+    "without-tags": "Without tags",
+    "select": "Select tags",
+    "add": "Add tag",
+    "create": "Create label",
+    "create.success": "Label created successfully",
+    "already-exists": "This tag name already exists. You may want to edit it",
+    "edit": "Edit tag",
+    "edit.success": "Tag edited successfully",
+    "delete.success": "Category deleted successfully",
+    "delete-warning-header": "Delete tag?",
+    "delete-warning-message": "This action will not delete transactions that have this tag."
   },
   "CATEGORIES": {
     "unknown": "Unknown category",
@@ -453,12 +531,12 @@
   "BACKUP": {
     "EXPORT": {
       "title": "Export your data",
-      "title.sort": "Export",
+      "title.short": "Export",
       "all": "Full backup",
       "all.descr": "Export all your data (accounts, transactions, budgets, settings...). Import them again at any time so you don't lose anything.",
       "transactions": "Transactions backup",
       "transactions.descr": "Export your transactions in various formats so you can more easily analyze them in other programs or applications.",
-      "description": "Keep a backup of all your accounts, budgets, transactions, settings...",
+      "description": "Download your data in different formats",
       "dialog_title": "Save/Send file",
       "success_in_documents": "File successfully saved to Internal Storage/Documents",
       "success_in_data": "File saved/downloaded successfully",
@@ -466,7 +544,7 @@
     },
     "IMPORT": {
       "title": "Import your data",
-      "title.sort": "Import",
+      "title.short": "Import",
       "restore-backup": "Restore Backup",
       "restore-backup-warn": "When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Monekin",
       "restore-backup-descr": "Import a previously saved database from Monekin. This action will replace any current application data with the new data",
@@ -500,62 +578,85 @@
       "success": "Import performed successfully",
       "cancelled": "Import was cancelled by the user",
       "error": "Error importing file. Please contact developer via lozin.technologies@gmail.com"
+    },
+    "ABOUT": {
+      "title": "Information about your database",
+      "create-date": "Creation date",
+      "modify-date": "Last modified",
+      "last-backup": "Last backup",
+      "size": "Size"
     }
   },
   "SETTINGS": {
     "title": "Settings",
     "edit-profile": "Edit profile",
     "display-name": "User name",
-    "lang": "Language",
+    "lang": "App language",
     "lang.descr": "Language in which the texts will be displayed in the app",
     "locale": "Region",
     "locale.descr": "Set the format to use for dates, numbers...",
     "locale.warn": "When changing region the app will update",
     "first_day_of_week": "First day of week",
     "GENERAL": {
-      "display": "General settings",
       "categories.descr": "Create and edit categories to your liking",
       "other": "Advanced settings",
       "other.descr": "Other general app customization settings",
+      "appearance": "Appearance",
+      "appearance.descr": "App theme, texts...",
+      "app_colors": "App colors",
       "theme": "Theme",
+      "theme.auto": "Defined by the system",
       "theme.light": "Light",
       "theme.dark": "Dark",
+      "amoled-mode": "AMOLED mode",
+      "amoled-mode.descr": "Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens",
+      "dynamic-colors": "Dynamic colors",
+      "dynamic-colors.descr": "Use your system accent color whenever possible",
+      "accent-color": "Accent color",
+      "accent-color.descr": "Choose the color the app will use to emphasize certain parts of the interface",
       "prefer-calc": "Prefer calculator",
       "prefer-calc-descr": "Displays a calculator on the add/edit transaction page that will simplify actions on devices without a keyboard"
     },
     "DATA": {
       "display": "Data",
-      "export.descr": "Download your data in different formats",
+      "display.descr": "Export and import your data so you don't lose anything",
       "delete-all": "Delete my data",
       "delete-all-header1": "Stop right there padawan ⚠️⚠️",
       "delete-all-message1": "Are you sure you want to continue? All your data will be permanently deleted and cannot be recovered",
       "delete-all-header2": "One last step ⚠️⚠️",
       "delete-all-message2": "By deleting an account you will delete all your stored personal data. Your accounts, transactions, budgets and categories will be deleted and cannot be recovered. Do you agree?"
     },
-    "PROJECT": {
-      "display": "Project",
-      "legal": "Terms and privacy",
-      "legal.descr": "Check licenses and other legal terms of our app",
-      "contributors": "Collaborators",
-      "contributors.descr": "All the developers who have made Monekin grow",
-      "contact": "Contact us"
+    "ABOUT_US": {
+      "display": "App information",
+      "description": "Check out the terms and other relevant information about Monekin. Get in touch with the community by reporting bugs, leaving suggestions...",
+      "LEGAL": {
+        "display": "Legal information",
+        "privacy": "Privacy policy",
+        "terms": "Terms of use",
+        "licenses": "Licenses"
+      },
+      "PROJECT": {
+        "display": "Project",
+        "contributors": "Collaborators",
+        "contributors.descr": "All the developers who have made Monekin grow",
+        "contact": "Contact us"
+      }
     },
     "HELP_US": {
       "display": "Help us",
+      "description": "Find out how you can help Monekin become better and better",
       "rate-us": "Rate us",
       "rate-us.descr": "Any rate is welcome!",
       "share": "Share Monekin",
-      "share.text": "Monekin! The best personal finance app",
+      "share.descr": "Share our app to friends and family",
+      "share.text": "Monekin! The best personal finance app. Download it here",
+      "thanks": "Thank you!",
+      "thanks_long": "Your contributions to Monekin and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.",
+      "donate": "Make a donation",
+      "donate.descr": "With your donation you will help the app continue receiving improvements. What better way than to thank the work done by inviting me to a coffee?",
+      "donate.success": "Donation made. Thank you very much for your contribution! ❤️",
+      "donate.err": "Oops! It seems there was an error receiving your payment",
       "report": "Report bugs, leave suggestions..."
-    },
-    "PRIVACY": {
-      "title": "Privacy policy"
-    },
-    "LICENSES": {
-      "title": "Licences"
-    },
-    "TERMS-OF-USE": {
-      "title": "Terms of use"
     }
   },
   "LANG": {

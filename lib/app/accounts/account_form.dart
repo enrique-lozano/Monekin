@@ -1,8 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_type_selector.dart';
+import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
@@ -10,18 +12,20 @@ import 'package:monekin/core/database/services/transaction/transaction_service.d
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
+import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
+import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/expansion_panel/single_expansion_panel.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../core/utils/date_time_picker.dart';
-
+@RoutePage()
 class AccountFormPage extends StatefulWidget {
   const AccountFormPage({Key? key, this.account}) : super(key: key);
 
@@ -49,6 +53,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
   Account? _accountToEdit;
 
   DateTime _openingDate = DateTime.now();
+  DateTime? _closeDate;
 
   submitForm() async {
     final accountService = AccountService.instance;
@@ -61,10 +66,8 @@ class _AccountFormPageState extends State<AccountFormPage> {
     if (_accountToEdit != null) {
       if ((await TransactionService.instance
               .getTransactions(
-                predicate: (transaction, account, accountCurrency,
-                        receivingAccount, receivingAccountCurrency, c, p6) =>
-                    account.id.isValue(_accountToEdit!.id) &
-                    transaction.date.isSmallerThanValue(_openingDate),
+                filters: TransactionFilters(
+                    accountsIDs: [_accountToEdit!.id], maxDate: _openingDate),
                 limit: 2,
               )
               .first)
@@ -85,6 +88,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
       name: _nameController.text,
       iniValue: newBalance,
       date: _openingDate,
+      closingDate: _closeDate,
       type: _type,
       iconId: _icon.id,
       currency: _currency!,
@@ -98,6 +102,20 @@ class _AccountFormPageState extends State<AccountFormPage> {
           .updateAccount(accountToSubmit)
           .then((value) => {navigateBack()});
     } else {
+      final db = AppDB.instance;
+
+      final query = db.select(db.accounts)
+        ..addColumns([db.accounts.id.count()])
+        ..where((tbl) => tbl.name.isValue(_nameController.text));
+
+      if (await query.watchSingleOrNull().first != null) {
+        snackbarDisplayer(SnackBar(
+          content: Text(t.account.form.already_exists),
+        ));
+
+        return;
+      }
+
       await accountService
           .insertAccount(accountToSubmit)
           .then((value) => {navigateBack()});
@@ -134,6 +152,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
     _textController.text = _accountToEdit!.description ?? '';
 
     _openingDate = _accountToEdit!.date;
+    _closeDate = _accountToEdit!.closingDate;
 
     _type = _accountToEdit!.type;
 
@@ -269,7 +288,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                         ),
                         keyboardType: TextInputType.number,
                         enabled: !(widget.account != null &&
-                            widget.account!.isArchived),
+                            widget.account!.isClosed),
                         inputFormatters: decimalDigitFormatter,
                         validator: (value) => fieldValidator(value,
                             validator: ValidatorType.double, isRequired: true),
@@ -286,19 +305,16 @@ class _AccountFormPageState extends State<AccountFormPage> {
                           onTap: () {
                             if (_currency == null) return;
 
-                            showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                showDragHandle: true,
-                                builder: (context) {
-                                  return CurrencySelectorModal(
-                                      preselectedCurrency: _currency!,
-                                      onCurrencySelected: (newCurrency) {
-                                        setState(() {
-                                          _currency = newCurrency;
-                                        });
-                                      });
-                                });
+                            showCurrencySelectorModal(
+                              context,
+                              CurrencySelectorModal(
+                                  preselectedCurrency: _currency!,
+                                  onCurrencySelected: (newCurrency) {
+                                    setState(() {
+                                      _currency = newCurrency;
+                                    });
+                                  }),
+                            );
                           },
                           decoration: InputDecoration(
                               labelText: t.currencies.currency,
@@ -338,20 +354,16 @@ class _AccountFormPageState extends State<AccountFormPage> {
                         stream: _accountToEdit == null
                             ? Stream.value(true)
                             : TransactionService.instance
-                                .getTransactions(
-                                    predicate: (transaction,
-                                            account,
-                                            accountCurrency,
-                                            receivingAccount,
-                                            receivingAccountCurrency,
-                                            c,
-                                            p6) =>
-                                        transaction.receivingAccountID
-                                            .isNull() &
-                                        transaction.accountID
-                                            .isValue(_accountToEdit!.id),
-                                    limit: 1)
-                                .map((event) => event.isEmpty),
+                                .countTransactions(
+                                  predicate: TransactionFilters(
+                                    transactionTypes: [
+                                      TransactionType.expense,
+                                      TransactionType.income
+                                    ],
+                                    accountsIDs: [_accountToEdit!.id],
+                                  ),
+                                )
+                                .map((event) => event.numberOfRes == 0),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData || snapshot.data! == false) {
                             return Container();
@@ -376,30 +388,43 @@ class _AccountFormPageState extends State<AccountFormPage> {
                         child: Column(
                           children: [
                             const SizedBox(height: 12),
-                            TextFormField(
-                              controller: TextEditingController(
-                                  text: DateFormat.yMMMd()
-                                      .add_jm()
-                                      .format(_openingDate)),
+                            DateTimeFormField(
                               decoration: InputDecoration(
-                                  labelText: '${t.account.date} *'),
-                              readOnly: true,
-                              onTap: () async {
-                                DateTime? pickedDate = await openDateTimePicker(
-                                  context,
-                                  initialDate: _openingDate,
-                                  lastDate: DateTime.now(),
-                                  showTimePickerAfterDate: true,
-                                );
-
-                                if (pickedDate == null) return;
-
+                                suffixIcon: const Icon(Icons.event),
+                                labelText: '${t.account.date} *',
+                              ),
+                              initialDate: _openingDate,
+                              dateFormat: DateFormat.yMMMd().add_jm(),
+                              lastDate: _closeDate ?? DateTime.now(),
+                              validator: (e) => e == null
+                                  ? t.general.validations.required
+                                  : null,
+                              onDateSelected: (DateTime value) {
                                 setState(() {
-                                  _openingDate = pickedDate;
+                                  _openingDate = value;
                                 });
                               },
                             ),
                             const SizedBox(height: 22),
+                            if (_accountToEdit != null &&
+                                _accountToEdit!.isClosed) ...[
+                              DateTimeFormField(
+                                decoration: InputDecoration(
+                                  suffixIcon: const Icon(Icons.event),
+                                  labelText: t.account.close_date,
+                                ),
+                                initialDate: _closeDate,
+                                firstDate: _openingDate,
+                                lastDate: DateTime.now(),
+                                dateFormat: DateFormat.yMMMd().add_jm(),
+                                onDateSelected: (DateTime value) {
+                                  setState(() {
+                                    _closeDate = value;
+                                  });
+                                },
+                              ),
+                              const SizedBox(height: 22),
+                            ],
                             TextFormField(
                               controller: _ibanController,
                               decoration: InputDecoration(

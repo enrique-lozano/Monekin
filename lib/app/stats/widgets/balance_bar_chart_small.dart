@@ -2,6 +2,10 @@ import 'package:async/async.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/core/presentation/theme.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/services/filters/date_range_service.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -18,7 +22,7 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
   int touchedGroupIndex = -1;
 
   BarChartGroupData makeGroupData(int x, double expense, double income,
-      {bool disabled = false}) {
+      {bool disabled = false, required CustomColors colors}) {
     const double width = 56;
 
     const radius = BorderRadius.vertical(
@@ -33,8 +37,8 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
           color: disabled
               ? Colors.grey.withOpacity(0.175)
               : x == 0
-                  ? Colors.red.withOpacity(0.4)
-                  : Colors.red,
+                  ? colors.danger.withOpacity(0.4)
+                  : colors.danger,
           borderRadius: radius,
           width: width,
         ),
@@ -43,8 +47,8 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
           color: disabled
               ? Colors.grey.withOpacity(0.175)
               : x == 0
-                  ? Colors.green.withOpacity(0.4)
-                  : Colors.green,
+                  ? colors.success.withOpacity(0.4)
+                  : colors.success,
           borderRadius: radius,
           width: width,
         ),
@@ -58,7 +62,7 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
       rightTitles: AxisTitles(
           sideTitles: SideTitles(
         showTitles: true,
-        reservedSize: 28,
+        reservedSize: 32,
         getTitlesWidget: (value, meta) {
           return Row(
             children: [
@@ -104,7 +108,7 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
     final t = Translations.of(context);
 
     return SizedBox(
-      height: 250,
+      height: BreakPoint.of(context).isLargerThan(BreakpointID.md) ? 325 : 250,
       child: StreamBuilder(
           stream: AccountService.instance.getAccounts(),
           builder: (context, accountsSnapshot) {
@@ -138,8 +142,10 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
                         ),
                       ),
                       barGroups: [
-                        makeGroupData(0, 4, 2, disabled: true),
-                        makeGroupData(1, 5, 7, disabled: true),
+                        makeGroupData(0, 4, 2,
+                            disabled: true, colors: CustomColors.of(context)),
+                        makeGroupData(1, 5, 7,
+                            disabled: true, colors: CustomColors.of(context)),
                       ],
                       gridData: const FlGridData(show: false),
                     ),
@@ -158,30 +164,30 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
 
             return StreamBuilder(
                 stream: StreamZip([
-                  AccountService.instance.getAccountsData(
-                    accountIds: accounts.map((e) => e.id),
-                    accountDataFilter: AccountDataFilter.expense,
-                    startDate: widget.dateRangeService.getDateRange(-1)[0],
-                    endDate: widget.dateRangeService.getDateRange(-1)[1],
-                  ),
-                  AccountService.instance.getAccountsData(
-                    accountIds: accounts.map((e) => e.id),
-                    accountDataFilter: AccountDataFilter.income,
-                    startDate: widget.dateRangeService.getDateRange(-1)[0],
-                    endDate: widget.dateRangeService.getDateRange(-1)[1],
-                  ),
-                  AccountService.instance.getAccountsData(
-                    accountIds: accounts.map((e) => e.id),
-                    accountDataFilter: AccountDataFilter.expense,
-                    startDate: widget.dateRangeService.startDate,
-                    endDate: widget.dateRangeService.endDate,
-                  ),
-                  AccountService.instance.getAccountsData(
-                    accountIds: accounts.map((e) => e.id),
-                    accountDataFilter: AccountDataFilter.income,
-                    startDate: widget.dateRangeService.startDate,
-                    endDate: widget.dateRangeService.endDate,
-                  ),
+                  AccountService.instance.getAccountsBalance(
+                      filters: TransactionFilters(
+                    transactionTypes: [TransactionType.expense],
+                    minDate: widget.dateRangeService.getDateRange(-1)[0],
+                    maxDate: widget.dateRangeService.getDateRange(-1)[1],
+                  )),
+                  AccountService.instance.getAccountsBalance(
+                      filters: TransactionFilters(
+                    transactionTypes: [TransactionType.income],
+                    minDate: widget.dateRangeService.getDateRange(-1)[0],
+                    maxDate: widget.dateRangeService.getDateRange(-1)[1],
+                  )),
+                  AccountService.instance.getAccountsBalance(
+                      filters: TransactionFilters(
+                    transactionTypes: [TransactionType.expense],
+                    minDate: widget.dateRangeService.startDate,
+                    maxDate: widget.dateRangeService.endDate,
+                  )),
+                  AccountService.instance.getAccountsBalance(
+                      filters: TransactionFilters(
+                    transactionTypes: [TransactionType.income],
+                    minDate: widget.dateRangeService.startDate,
+                    maxDate: widget.dateRangeService.endDate,
+                  )),
                 ]),
                 builder: (context, snapshpot) {
                   if (!snapshpot.hasData) {
@@ -209,9 +215,11 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
                       ),
                       barGroups: [
                         makeGroupData(
-                            0, -snapshpot.data![0], snapshpot.data![1]),
+                            0, -snapshpot.data![0], snapshpot.data![1],
+                            colors: CustomColors.of(context)),
                         makeGroupData(
-                            1, -snapshpot.data![2], snapshpot.data![3]),
+                            1, -snapshpot.data![2], snapshpot.data![3],
+                            colors: CustomColors.of(context)),
                       ],
                       gridData: const FlGridData(show: false),
                     ),

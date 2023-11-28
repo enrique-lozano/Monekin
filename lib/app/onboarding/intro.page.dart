@@ -1,9 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/onboarding/onboarding.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
+import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/presentation/widgets/html_text.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
+@RoutePage()
 class IntroPage extends StatelessWidget {
   const IntroPage({super.key});
 
@@ -14,7 +16,7 @@ class IntroPage extends StatelessWidget {
         Row(
           children: [
             Transform.translate(
-              offset: Offset(-12, 0),
+              offset: const Offset(-4, 0),
               child: Image.asset(
                 'assets/resources/appIcon-removebg.png',
                 height: 80,
@@ -38,7 +40,7 @@ class IntroPage extends StatelessWidget {
           style: Theme.of(context)
               .textTheme
               .labelSmall!
-              .copyWith(color: Theme.of(context).primaryColor),
+              .copyWith(color: Theme.of(context).colorScheme.primary),
         ),
       ],
     );
@@ -51,28 +53,31 @@ class IntroPage extends StatelessWidget {
       children: [
         Text(
           t.intro.offline_descr_title,
-          style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600),
+          style: Theme.of(context)
+              .textTheme
+              .labelSmall!
+              .copyWith(fontWeight: FontWeight.w600),
         ),
         Text(
           t.intro.offline_descr,
-          style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w200),
+          style: Theme.of(context)
+              .textTheme
+              .labelSmall!
+              .copyWith(fontWeight: FontWeight.w200),
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 12),
         SizedBox(
           // width: double.infinity,
           child: FilledButton.icon(
-              onPressed: () => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const OnboardingPage()),
-                  ),
-              icon: const Icon(Icons.person_2_rounded),
-              label: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(t.intro.offline_start),
-              )),
+            onPressed: () => context.replaceRoute(const OnboardingRoute()),
+            icon: const Icon(Icons.person_2_rounded),
+            label: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(t.intro.offline_start),
+            ),
+          ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 18),
         HTMLText(
           htmlString: t.intro.welcome_footer,
           defaultTextStyle:

@@ -13,21 +13,12 @@
     "close_and_save": "Guardar y cerrar",
     "add": "Añadir",
     "edit": "Editar",
-    "archive": "Archivar",
-    "unarchive": "Desarchivar",
     "delete": "Eliminar",
     "balance": "Balance",
-    "income": "Ingreso",
-    "expense": "Gasto",
-    "incomes": "Ingresos",
-    "expenses": "Gastos",
-    "expenses-and-incomes": "Gastos e ingresos",
     "account": "Cuenta",
     "accounts": "Cuentas",
     "categories": "Categorías",
     "category": "Categoría",
-    "transaction": "Transacción",
-    "transactions": "Transacciones",
     "today": "Hoy",
     "yesterday": "Ayer",
     "filters": "Filtros",
@@ -42,6 +33,8 @@
     "TIME": {
       "start-date": "Fecha de inicio",
       "end-date": "Fecha de fin",
+      "from-date": "Desde fecha",
+      "until-date": "Hasta fecha",
       "date": "Fecha",
       "datetime": "Fecha y hora",
       "each": "Cada",
@@ -123,7 +116,10 @@
       "Date": "Por fecha"
     },
     "VALIDATIONS": {
-      "required": "Campo obligatorio"
+      "required": "Campo obligatorio",
+      "positive": "Debe ser positivo",
+      "min_number": "Debe ser mayor que {{x}}",
+      "max_number": "Debe ser menor que {{x}}"
     }
   },
   "INTRO": {
@@ -147,6 +143,7 @@
     "lastSlideDescr2": "Esperemos que disfrutes de tu experiencia! No dudes en contactar con nosotros en caso de dudas, sugerencias..."
   },
   "HOME": {
+    "title": "Dashboard",
     "filter-transactions": "Filtrar transacciones",
     "hello-day": "Buenos días,",
     "hello-night": "Buenas noches,",
@@ -162,32 +159,48 @@
   "FINANCIAL-HEALTH": {
     "display": "Salud financiera",
     "review": {
-      "very_good": "Muy buena!",
-      "good": "Buena",
-      "normal": "En la media",
-      "bad": "Regular",
-      "very_bad": "Muy mala",
+      "very_good(context=GenderContext)": { "male,female": "Excelente!" },
+      "good(context=GenderContext)": { "male": "Bueno", "female": "Buena" },
+      "normal(context=GenderContext)": { "male,female": "En la media" },
+      "bad(context=GenderContext)": { "male,female": "Regular" },
+      "very_bad(context=GenderContext)": {
+        "male": "Muy malo",
+        "female": "Muy mala"
+      },
+      "insufficient_data(context=GenderContext)": {
+        "male,female": "Datos insuficientes"
+      },
 
       "descr": {
+        "insufficient_data": "Parece que no tenemos gastos suficientes para calcular tu salud financiera. Añade unos pocos gastos e ingresos para que podamos ayudarte mas!",
         "very_good": "Enhorabuena! Tu salud financiera es formidable. Esperamos que sigas con tu buena racha y que continues aprendiendo con Monekin",
         "good": "Genial! Tu salud financiera es buena. Visita la pestaña de análisis para ver como ahorrar aun mas!",
         "normal": "Tu salud financiera se encuentra mas o menos en la media del resto de la población para este periodo",
-        "bad": "Parece que tu situación financiera no es la mejor aun. Explora la pestaña de análisis para conocer mas sobre tus finanzas",
-        "very_bad": "Mmm, tu salud financera esta muy por debajo de lo que debería. Trata de ver donde esta el problema en la sección de análisis"
+        "bad": "Parece que tu situación financiera no es la mejor aun. Explora el resto de pestañas de análisis para conocer mas sobre tus finanzas",
+        "very_bad": "Mmm, tu salud financera esta muy por debajo de lo que debería. Trata de ver donde esta el problema gracias a los distintos gráficos y estadisticas que te proporcionamos"
       }
     },
     "monthsWithoutIncome": {
-      "good": "Bien hecho! Con tu ritmo de gastos actual ahora mismo podrías sobrevivir hasta {{x}} meses sin ningún ingreso",
-      "normal": "Con tu ritmo de gastos actual ahora mismo podrías sobrevivir hasta {{x}} meses sin ningún ingreso. Si bien este valor es aceptable, aun puedes mejorar un poco más!",
-      "bad": "Vaya! Apenás sobrevivirías {{x}} meses sin ingresos con tu ritmo de gastos actual. Recuerda que lo recomendable es poder vivir al menos 6 meses sin ningun ingreso",
-      "very_bad": "Vaya! Apenas sobrevivirías un mes sin ingresos con tu ritmo de gastos actual. Recuerda que lo recomendable es poder vivir al menos 6 meses sin ningun ingreso",
+      "title": "Ratio de supervivencia",
+      "subtitle": "Dado tu saldo, cantidad de tiempo que podrías pasar sin ingresos",
+      "text": {
+        "zero": "No podrías sobrevivir ni un mes sin ingresos con este ritmo de gastos!",
+        "one": "Apenas podrías sobrevivir aproximadatemente un mes sin ingresos con este ritmo de gastos!",
+        "other": "Podrías sobrevivir aproximadamente <b>{{ n }} meses</b> sin ingresos manteniendo este ritmo de gastos."
+      },
+      "suggestion": "Recuerda que es recomendable mantener este ratio siempre por encima de 5 meses como mínimo. Si ves que no tienes un colchon de ahorro suficiente, reduce los gastos no necesarios.",
       "insufficient_data": "Parece que no tenemos gastos suficientes para calcular cuantos meses podrías sobrevivir sin ingresos. Introduce unas pocas transacciones y regresa aquí para consultar tu salud financiera"
     },
     "savingsPercentage": {
-      "good": "Enhorabuena! Has conseguido ahorrar un {{value}}% de tus ingresos durante este periodo. Parece que ya eres todo un expert@. Sigue asi!",
-      "normal": "Enhorabuena, has conseguido ahorrar un {{value}}% de tus ingresos durante este periodo. Visita la pestaña de análisis para ver donde puedes ahorrar aun más!",
-      "bad": "Has conseguido ahorrar un {{value}}% de tus ingresos durante este periodo. Sin embargo, creemos que aun puedes hacer mucho mas! Recuerda que es recomendable ahorrar al menos un 30% de lo que ingresas",
-      "very_bad": "Vaya, no has conseguido ahorrar nada durante este periodo :( Visita la pestaña de análisis para ver donde estan tus debilidades financieras. Recuerda que es recomendable ahorrar al menos un 30% de lo que ingresas"
+      "title": "Porcentaje de ahorro",
+      "subtitle": "Que parte de tus ingresos no son gastados en este periodo",
+      "text": {
+        "good": "Enhorabuena! Has conseguido ahorrar un <b>{{value}}%</b> de tus ingresos durante este periodo. Parece que ya eres todo un expert@, sigue asi!",
+        "normal": "Enhorabuena, has conseguido ahorrar un <b>{{value}}%</b> de tus ingresos durante este periodo.",
+        "bad": "Has conseguido ahorrar un <b>{{value}}%</b> de tus ingresos durante este periodo. Sin embargo, creemos que aun puedes hacer mucho mas!",
+        "very_bad": "Vaya, no has conseguido ahorrar nada durante este periodo."
+      },
+      "suggestion": "Recuerda que es recomendable ahorrar al menos un 15-20% de lo que ingresas."
     }
   },
   "STATS": {
@@ -199,7 +212,11 @@
     "compared-to-previous-period": "Frente al periodo anterior",
     "cash-flow": "Flujo de caja",
     "by-periods": "Por periodos",
-    "by-categories": "Por categorías"
+    "by-categories": "Por categorías",
+    "by-tags": "Por etiquetas",
+    "distribution": "Distribución",
+    "finance-health-resume": "Resumen",
+    "finance-health-breakdown": "Desglose"
   },
   "ICON-SELECTOR": {
     "name": "Nombre:",
@@ -220,6 +237,10 @@
     }
   },
   "TRANSACTION": {
+    "display": {
+      "one": "Transacción",
+      "other": "Transacciones"
+    },
     "create": "Nueva transacción",
     "new.income": "Nuevo ingreso",
     "new.expense": "Nuevo gasto",
@@ -252,8 +273,15 @@
       "searcher.placeholder": "Busca por categoría, descripción...",
       "loading": "Cargando más transacciones..."
     },
+    "FILTERS": {
+      "from_value": "Desde monto",
+      "to_value": "Hasta monto",
+      "from_value_def": "Desde {{ x }}",
+      "to_value_def": "Hasta {{ x }}",
+      "from_date_def": "Desde el {{ date }}",
+      "to_date_def": "Hasta el {{ date }}"
+    },
     "FORM": {
-      "status": "Estado",
       "VALIDATORS": {
         "zero": "El valor de una transacción no puede ser igual a cero",
         "date-max": "La fecha seleccionada es posterior a la actual. Se añadirá la transacción como pendiente",
@@ -270,6 +298,10 @@
       "exchange-to-preferred-in-date": "Equivalencia a {{ currency }} el {{date}}:"
     },
     "STATUS": {
+      "display": {
+        "one": "Estado",
+        "other": "Estados"
+      },
       "tr_status": "Transacción {{ status }}",
       "none": "Sin estado",
       "reconciled": "Reconciliada",
@@ -280,10 +312,29 @@
       "pending.descr": "Esta transacción esta pendiente y por tanto no será tenida en cuenta a la hora de calcular balances y estadísticas",
       "voided": "Nula",
       "voided.descr": "Transacción nula/cancelada debido a un error en el pago o cualquier otro motivo. No será tenida en cuenta a la hora de calcular balances y estadísticas"
+    },
+    "TYPES": {
+      "display": {
+        "one": "Tipo de transacción",
+        "other": "Tipos de transacción"
+      },
+      "income": {
+        "one": "Ingreso",
+        "other": "Ingresos"
+      },
+      "expense": {
+        "one": "Gasto",
+        "other": "Gastos"
+      },
+      "transfer": {
+        "one": "Transferencia",
+        "other": "Transferencias"
+      }
     }
   },
   "TRANSFER": {
     "display": "Transferencia",
+    "transfers": "Transferencias",
     "transfer-to": "Transferencia hacia {{ account }}",
     "create": "Nueva transferencia",
     "need-two-accounts.warning.header": "Ops!",
@@ -301,11 +352,12 @@
   },
   "RECURRENT-TRANSACTIONS": {
     "title": "Movimientos recurrentes",
+    "title.short": "Mov. recurrentes",
     "empty": "Parece que no posees ninguna transacción recurrente. Crea una transacción que se repita mensual, anual o semanalmente y aparecerá aquí",
     "DETAILS": {
       "title": "Transaccion recurrente",
-      "next-payment-info": "El próximo movimiento de esta transacción tendrá lugar el día {{date}}. Puedes elegir si deseas saltar este movimiento o aceptarlo en la fecha que elijas",
-      "last-payment-info": "El próximo movimiento de esta transacción tendrá lugar el día {{date}}. Este pago será el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al realizar este pago",
+      "descr": "A continuación se muestran próximos movimientos de esta transacción. Podrás aceptar el primero de ellos o saltar este movimiento",
+      "last-payment-info": "Este movimiento es el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al confirmar esta acción",
       "delete-header": "Eliminar transacción recurrente",
       "delete-message": "Esta acción es irreversible y no afectará a transacciones que ya hayas confirmado/pagado"
     }
@@ -313,6 +365,10 @@
   "ACCOUNT": {
     "details": "Detalles de la cuenta",
     "date": "Fecha de apertura",
+    "close_date": "Fecha de cierre",
+    "reopen.short": "Reabrir",
+    "reopen": "Reabrir cuenta",
+    "reopen.descr": "¿Seguro que quieres volver a abrir esta cuenta?",
     "balance": "Saldo de la cuenta",
     "n_transactions": "Número de transacciones",
     "add_money": "Añadir dinero",
@@ -346,12 +402,14 @@
       "warning-text": "Esta acción borrara esta cuenta y todas sus transacciones",
       "success": "Cuenta eliminada correctamente"
     },
-    "ARCHIVE": {
-      "title": "Archive account",
-      "warn": "This account will no longer appear in certain listings and you will not be able to create new transactions on this account. You can unarchive this account whenever you want",
-      "should-have-zero-balance": "You must have a current balance of 0 to be able to archive this account. Please edit it before continuing",
-      "success": "Account archived successfully",
-      "unarchive-succes": "Account unarchived successfully"
+    "CLOSE": {
+      "title": "Cerrar cuenta",
+      "title.short": "Cerrar",
+      "warn": "Esta cuenta ya no aparecerá en ciertos listados y no podrá crear transacciones en ella con fecha posterior a la especificada debajo. Esta acción no afecta a ninguna transacción ni balance, y además, podrás volver a abrir esta cuenta cuando quieras",
+      "should-have-zero-balance": "Debes tener un saldo actual en la cuenta de 0 para poder cerrarla. Edita esta cuenta antes de continuar",
+      "should-have-no-transactions": "Esta cuenta posee transacciones posteriores a la fecha de cierre especificada. Borralas o edita la fecha de cierre de la cuenta antes de continuar",
+      "success": "Cuenta cerrada exitosamente",
+      "unarchive-succes": "Cuenta re-abierta exitosamente"
     },
     "SELECT": {
       "one": "Selecciona una cuenta",
@@ -362,6 +420,7 @@
   "CURRENCIES": {
     "currency-converter": "Conversor de divisas",
     "currency-manager": "Administrador de divisas",
+    "currency-manager.descr": "Configura tu divisa y sus tipos de cambio con otras",
     "currency": "Divisa",
     "preferred-currency": "Divisa predeterminada/base",
     "change-preferred-currency-title": "Cambiar divisa predeterminada",
@@ -382,6 +441,28 @@
     "select-a-currency": "Selecciona una divisa",
     "search-title": "Toca para buscar",
     "search-placeholder": "Busca por nombre o por código de la divisa"
+  },
+  "TAGS": {
+    "display": {
+      "one": "Etiqueta",
+      "other": "Etiquetas"
+    },
+    "FORM": {
+      "name": "Nombre de la etiqueta",
+      "description": "Descripción"
+    },
+    "empty-list": "No has creado ninguna etiqueta aun. Las etiquetas y las categorías son una gran forma de categorizar tus movimientos",
+    "without-tags": "Sin etiquetas",
+    "select": "Selecionar etiquetas",
+    "create": "Crear etiqueta",
+    "add": "Añadir etiqueta",
+    "create.success": "Etiqueta creada correctamente",
+    "already-exists": "El nombre de esta etiqueta ya existe. Puede que quieras editarla",
+    "edit": "Editar etiqueta",
+    "edit.success": "Etiqueta editada correctamente",
+    "delete.success": "Categoría eliminada correctamente",
+    "delete-warning-header": "¿Eliminar etiqueta?",
+    "delete-warning-message": "Esta acción no borrará las transacciones que poseen esta etiqueta."
   },
   "CATEGORIES": {
     "unknown": "Categoría desconocida",
@@ -454,12 +535,12 @@
   "BACKUP": {
     "EXPORT": {
       "title": "Exportar datos",
-      "title.sort": "Exportar",
+      "title.short": "Exportar",
       "all": "Respaldo total",
       "all.descr": "Exporta todos tus datos (cuentas, transacciones, presupuestos, ajustes...). Importalos de nuevo en cualquier momento para no perder nada.",
       "transactions": "Respaldo de transacciones",
       "transactions.descr": "Exporta tus transacciones en diversos formatos para que puedas analizarlas mas facilmente en otros programas o aplicaciones.",
-      "description": "Guarda una copia de seguridad de todas tus cuentas, presupuestos, transacciones, ajustes...",
+      "description": "Exporta tus datos en diferentes formatos",
       "dialog_title": "Guardar/Enviar archivo",
       "success_in_documents": "Archivo guardado correctamente en Almacenamiento interno/Documents",
       "success_in_data": "Archivo guardado/enviado correctamente",
@@ -467,7 +548,7 @@
     },
     "IMPORT": {
       "title": "Importar tus datos",
-      "title.sort": "Importar",
+      "title.short": "Importar",
       "restore-backup": "Restaurar copia de seguridad",
       "restore-backup-warn": "Al importar una nueva base de datos, perderas toda la información actualmente guardada en la app. Se recomienda hacer una copia de seguridad antes de continuar. No subas aquí ningún fichero cuyo origen no conozcas, sube solo ficheros que hayas descargado previamente desde Monekin",
       "restore-backup-descr": "Importa una base de datos anteriormente guardada desde Monekin. Esta acción remplazará cualquier dato actual de la aplicación por los nuevos datos",
@@ -501,13 +582,20 @@
       "success": "Importación realizada con exito",
       "cancelled": "La importación fue cancelada por el usuario",
       "error": "Error al importar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com"
+    },
+    "ABOUT": {
+      "title": "Información sobre tu base de datos",
+      "create-date": "Fecha de creación",
+      "modify-date": "Última modificación",
+      "last-backup": "Última copia de seguridad",
+      "size": "Tamaño"
     }
   },
   "SETTINGS": {
     "title": "Ajustes",
     "edit-profile": "Editar perfil",
     "display-name": "Nombre de usuario",
-    "lang": "Idioma",
+    "lang": "Idioma de la aplicación",
     "lang.descr": "Idioma en el que se mostrarán los textos en la app",
     "locale": "Región",
     "locale.descr": "Establece el formato a usar para fechas, números...",
@@ -518,45 +606,62 @@
       "categories.descr": "Crea y edita categorías a tu gusto",
       "other": "Ajustes avanzados",
       "other.descr": "Otros ajustes generales de personalización de la app",
+      "appearance": "Apariencia",
+      "appearance.descr": "Tema de la aplicación, textos...",
+      "app_colors": "Colores de la aplicación",
       "theme": "Tema",
+      "theme.auto": "Definido por el sistema",
       "theme.light": "Claro",
       "theme.dark": "Oscuro",
+      "amoled-mode": "Modo AMOLED",
+      "amoled-mode.descr": "Usa un fondo de pantalla negro puro cuando sea posible. Esto ayudará ligeramente a la bateria de dispositivos con pantallas AMOLED",
+      "dynamic-colors": "Colores dinámicos",
+      "dynamic-colors.descr": "Usa el color de acentuación de su sistema siempre que sea posible",
+      "accent-color": "Color de acentuación",
+      "accent-color.descr": "Elige el color que usará la app para enfatizar ciertas partes de la interfaz",
       "prefer-calc": "Preferir calculadora",
       "prefer-calc-descr": "Muestra en la página de adición/edición de transacciones una calculadora que simplificará las acciones en dispositivos sin teclado"
     },
     "DATA": {
       "display": "Datos",
-      "export.descr": "Descarga tus datos en diferentes formatos",
+      "display.descr": "Exporta y importa tus datos para no perder nada",
       "delete-all": "Eliminar mis datos",
       "delete-all-header1": "Alto ahí padawan ⚠️⚠️",
       "delete-all-message1": "¿Estas seguro de que quieres continuar? Todos tus datos serán borrados permanentemente y no podrán ser recuperados",
       "delete-all-header2": "Un último paso ⚠️⚠️",
       "delete-all-message2": "Al eliminar una cuenta eliminarás todos tus datos personales almacenados. Tus cuentas, transacciones, presupuestos y categorías serán borrados y no podrán ser recuperados. ¿Estas de acuerdo?"
     },
-    "PROJECT": {
-      "display": "Proyecto",
-      "legal": "Términos y privacidad",
-      "legal.descr": "Revisa licencias y otros terminos legales de nuestra app",
-      "contributors": "Colaboradores",
-      "contributors.descr": "Todos los desarrolladores que han hecho que Monekin crezca",
-      "contact": "Contacta con nosotros"
+    "ABOUT_US": {
+      "display": "Información de la app",
+      "description": "Consulta los terminos y otra información relevante sobre Monekin. Ponte en contacto con la comunidad reportando errores, dejando sugerencias...",
+      "LEGAL": {
+        "display": "Información legal",
+        "privacy": "Política de privacidad",
+        "terms": "Términos de uso",
+        "licenses": "Licencias"
+      },
+      "PROJECT": {
+        "display": "Proyecto",
+        "contributors": "Colaboradores",
+        "contributors.descr": "Todos los desarrolladores que han hecho que Monekin crezca",
+        "contact": "Contacta con nosotros"
+      }
     },
     "HELP_US": {
       "display": "Ayúdanos",
+      "description": "Descubre de que formas puedes ayudar a que Monekin sea cada vez mejor",
       "rate-us": "Califícanos",
       "rate-us.descr": "¡Cualquier valoración es bienvenida!",
       "share": "Comparte Monekin",
-      "share.text": "Monekin! La mejor app de finanzas personales",
+      "share.descr": "Comparte nuestra app a amigos y familiares",
+      "share.text": "Monekin! La mejor app de finanzas personales. Descargala aquí",
+      "thanks": "¡Gracias!",
+      "thanks.long": "Tus contribuciones a Monekin y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir.",
+      "donate": "Haz una donación",
+      "donate.descr": "Con tu donación ayudaras a que la app siga recibiendo mejoras. ¿Que mejor forma que agradecer el trabajo realizado invitandome a un cafe?",
+      "donate.success": "Donación realizada. Muchas gracias por tu contribución! ❤️",
+      "donate.err": "Ups! Parece que ha habido un error a la hora de recibir tu pago",
       "report": "Reporta errores, deja sugerencias..."
-    },
-    "PRIVACY": {
-      "title": "Política de privacidad"
-    },
-    "LICENSES": {
-      "title": "Licencias"
-    },
-    "TERMS-OF-USE": {
-      "title": "Términos de uso"
     }
   },
   "LANG": {

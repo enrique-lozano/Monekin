@@ -3,10 +3,10 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -26,7 +26,7 @@ class FundEvolutionLineChart extends StatelessWidget {
       {super.key,
       required this.startDate,
       required this.endDate,
-      this.accountsFilter,
+      this.filters = const TransactionFilters(),
       required this.dateRange,
       this.showBalanceHeader = false});
 
@@ -36,7 +36,7 @@ class FundEvolutionLineChart extends StatelessWidget {
 
   final bool showBalanceHeader;
 
-  final List<Account>? accountsFilter;
+  final TransactionFilters filters;
 
   Stream<LineChartDataItem?> getEvolutionData() {
     if (startDate == null || endDate == null) return Stream.value(null);
@@ -52,8 +52,8 @@ class FundEvolutionLineChart extends StatelessWidget {
     while (currentDay.compareTo(endDate!) < 0) {
       labels.add(DateFormat.yMMMMd().format(currentDay));
 
-      balance.add(AccountService.instance.getAccountsMoney(
-          accountIds: accountsFilter?.map((e) => e.id), date: currentDay));
+      balance.add(AccountService.instance
+          .getAccountsMoney(trFilters: filters, date: currentDay));
 
       currentDay = currentDay.add(Duration(days: dayRange));
     }
@@ -65,8 +65,8 @@ class FundEvolutionLineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Color> gradientColors = [
-      Theme.of(context).primaryColor,
-      Theme.of(context).primaryColor.lighten(0.3),
+      Theme.of(context).colorScheme.primary,
+      Theme.of(context).colorScheme.primary.lighten(0.3),
     ];
 
     final accountService = AccountService.instance;
@@ -77,9 +77,7 @@ class FundEvolutionLineChart extends StatelessWidget {
       children: [
         if (showBalanceHeader) ...[
           StreamBuilder(
-              stream: accountsFilter != null
-                  ? Stream.value(accountsFilter)
-                  : accountService.getAccounts(),
+              stream: filters.accounts(),
               builder: (context, accountsSnapshot) {
                 if (!accountsSnapshot.hasData) {
                   return Column(
@@ -115,8 +113,10 @@ class FundEvolutionLineChart extends StatelessWidget {
                                 style: const TextStyle(fontSize: 12)),
                             StreamBuilder(
                                 stream: accountService.getAccountsMoney(
-                                    accountIds: accounts.map((e) => e.id),
-                                    date: endDate),
+                                  accountIds: accounts.map((e) => e.id),
+                                  trFilters: filters,
+                                  date: endDate,
+                                ),
                                 builder: (context, snapshot) {
                                   if (!snapshot.hasData) {
                                     return const Skeleton(

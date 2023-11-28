@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 857 (428 per locale)
+/// Strings: 1016 (508 per locale)
 ///
-/// Built on 2023-10-01 at 17:24 UTC
+/// Built on 2023-11-27 at 15:58 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -123,6 +123,13 @@ class AppLocaleUtils extends BaseAppLocaleUtils<AppLocale, _TranslationsEn> {
 	static List<String> get supportedLocalesRaw => instance.supportedLocalesRaw;
 }
 
+// context enums
+
+enum GenderContext {
+	male,
+	female,
+}
+
 // translations
 
 // Path: <root>
@@ -161,6 +168,7 @@ class _TranslationsEn implements BaseTranslations<AppLocale, _TranslationsEn> {
 	late final _TranslationsRecurrentTransactionsEn recurrent_transactions = _TranslationsRecurrentTransactionsEn._(_root);
 	late final _TranslationsAccountEn account = _TranslationsAccountEn._(_root);
 	late final _TranslationsCurrenciesEn currencies = _TranslationsCurrenciesEn._(_root);
+	late final _TranslationsTagsEn tags = _TranslationsTagsEn._(_root);
 	late final _TranslationsCategoriesEn categories = _TranslationsCategoriesEn._(_root);
 	late final _TranslationsBudgetsEn budgets = _TranslationsBudgetsEn._(_root);
 	late final _TranslationsBackupEn backup = _TranslationsBackupEn._(_root);
@@ -178,7 +186,7 @@ class _TranslationsGeneralEn {
 	String get cancel => 'Cancel';
 	String get or => 'or';
 	String get understood => 'Understood';
-	String get unspecified => 'Sin especificar';
+	String get unspecified => 'Unspecified';
 	String get attention => 'Attention ⚠️';
 	String get confirm => 'Confirm';
 	String get continue_text => 'Continue';
@@ -188,21 +196,12 @@ class _TranslationsGeneralEn {
 	String get close_and_save => 'Save and close';
 	String get add => 'Add';
 	String get edit => 'Edit';
-	String get archive => 'Archive';
-	String get unarchive => 'Unarchive';
 	String get balance => 'Balance';
 	String get delete => 'Delete';
-	String get income => 'Income';
-	String get expense => 'Expense';
-	String get incomes => 'Incomes';
-	String get expenses => 'Expenses';
-	String get expenses_and_incomes => 'Expenses and incomes';
 	String get account => 'Account';
 	String get accounts => 'Accounts';
 	String get categories => 'Categories';
 	String get category => 'Category';
-	String get transaction => 'Transaction';
-	String get transactions => 'Transactions';
 	String get today => 'Today';
 	String get yesterday => 'Yesterday';
 	String get filters => 'Filters';
@@ -250,6 +249,7 @@ class _TranslationsHomeEn {
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
+	String get title => 'Dashboard';
 	String get filter_transactions => 'Filter transactions';
 	String get hello_day => 'Good morning,';
 	String get hello_night => 'Good night,';
@@ -292,6 +292,10 @@ class _TranslationsStatsEn {
 	String get compared_to_previous_period => 'Compared to the previous period';
 	String get by_periods => 'By periods';
 	String get by_categories => 'By categories';
+	String get by_tags => 'By tags';
+	String get distribution => 'Distribution';
+	String get finance_health_resume => 'Resume';
+	String get finance_health_breakdown => 'Breakdown';
 }
 
 // Path: icon_selector
@@ -317,6 +321,10 @@ class _TranslationsTransactionEn {
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
+	String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		one: 'Transaction',
+		other: 'Transactions',
+	);
 	String get create => 'New transaction';
 	String get new_income => 'New income';
 	String get new_expense => 'New expense';
@@ -333,8 +341,10 @@ class _TranslationsTransactionEn {
 	String get details => 'Movement details';
 	late final _TranslationsTransactionNextPaymentsEn next_payments = _TranslationsTransactionNextPaymentsEn._(_root);
 	late final _TranslationsTransactionListEn list = _TranslationsTransactionListEn._(_root);
+	late final _TranslationsTransactionFiltersEn filters = _TranslationsTransactionFiltersEn._(_root);
 	late final _TranslationsTransactionFormEn form = _TranslationsTransactionFormEn._(_root);
 	late final _TranslationsTransactionStatusEn status = _TranslationsTransactionStatusEn._(_root);
+	late final _TranslationsTransactionTypesEn types = _TranslationsTransactionTypesEn._(_root);
 }
 
 // Path: transfer
@@ -345,6 +355,7 @@ class _TranslationsTransferEn {
 
 	// Translations
 	String get display => 'Transfer';
+	String get transfers => 'Transfers';
 	String transfer_to({required Object account}) => 'Transfer to ${account}';
 	String get create => 'New Transfer';
 	String get need_two_accounts_warning_header => 'Ops!';
@@ -360,6 +371,7 @@ class _TranslationsRecurrentTransactionsEn {
 
 	// Translations
 	String get title => 'Recurrent transactions';
+	String get title_short => 'Rec. transactions';
 	String get empty => 'It looks like you don\'t have any recurring transactions. Create a monthly, yearly, or weekly recurring transaction and it will appear here';
 	late final _TranslationsRecurrentTransactionsDetailsEn details = _TranslationsRecurrentTransactionsDetailsEn._(_root);
 }
@@ -373,6 +385,10 @@ class _TranslationsAccountEn {
 	// Translations
 	String get details => 'Account details';
 	String get date => 'Opening date';
+	String get close_date => 'Closing date';
+	String get reopen => 'Re-open account';
+	String get reopen_short => 'Re-open';
+	String get reopen_descr => 'Are you sure you want to reopen this account?';
 	String get balance => 'Account balance';
 	String get n_transactions => 'Number of transactions';
 	String get add_money => 'Add money';
@@ -381,7 +397,7 @@ class _TranslationsAccountEn {
 	late final _TranslationsAccountTypesEn types = _TranslationsAccountTypesEn._(_root);
 	late final _TranslationsAccountFormEn form = _TranslationsAccountFormEn._(_root);
 	late final _TranslationsAccountDeleteEn delete = _TranslationsAccountDeleteEn._(_root);
-	late final _TranslationsAccountArchiveEn archive = _TranslationsAccountArchiveEn._(_root);
+	late final _TranslationsAccountCloseEn close = _TranslationsAccountCloseEn._(_root);
 	late final _TranslationsAccountSelectEn select = _TranslationsAccountSelectEn._(_root);
 }
 
@@ -395,6 +411,7 @@ class _TranslationsCurrenciesEn {
 	String get currency_converter => 'Currency converter';
 	String get currency => 'Currency';
 	String get currency_manager => 'Currency manager';
+	String get currency_manager_descr => 'Configure your currency and its exchange rates with others';
 	String get preferred_currency => 'Preferred/base currency';
 	String get change_preferred_currency_title => 'Change preferred currency';
 	String get change_preferred_currency_msg => 'All stats and budgets will be displayed in this currency from now on. Accounts and transactions will keep the currency they had. All saved exchange rates will be deleted if you execute this action. Do you wish to continue?';
@@ -407,6 +424,32 @@ class _TranslationsCurrenciesEn {
 	String get select_a_currency => 'Select a currency';
 	String get search_title => 'Tap to search';
 	String get search_placeholder => 'Search by name or by currency code';
+}
+
+// Path: tags
+class _TranslationsTagsEn {
+	_TranslationsTagsEn._(this._root);
+
+	final _TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		one: 'Label',
+		other: 'Tags',
+	);
+	late final _TranslationsTagsFormEn form = _TranslationsTagsFormEn._(_root);
+	String get empty_list => 'You haven\'t created any tags yet. Tags and categories are a great way to categorize your movements';
+	String get without_tags => 'Without tags';
+	String get select => 'Select tags';
+	String get add => 'Add tag';
+	String get create => 'Create label';
+	String get create_success => 'Label created successfully';
+	String get already_exists => 'This tag name already exists. You may want to edit it';
+	String get edit => 'Edit tag';
+	String get edit_success => 'Tag edited successfully';
+	String get delete_success => 'Category deleted successfully';
+	String get delete_warning_header => 'Delete tag?';
+	String get delete_warning_message => 'This action will not delete transactions that have this tag.';
 }
 
 // Path: categories
@@ -479,6 +522,7 @@ class _TranslationsBackupEn {
 	// Translations
 	late final _TranslationsBackupExportEn export = _TranslationsBackupExportEn._(_root);
 	late final _TranslationsBackupImportEn import = _TranslationsBackupImportEn._(_root);
+	late final _TranslationsBackupAboutEn about = _TranslationsBackupAboutEn._(_root);
 }
 
 // Path: settings
@@ -491,7 +535,7 @@ class _TranslationsSettingsEn {
 	String get title => 'Settings';
 	String get edit_profile => 'Edit profile';
 	String get display_name => 'User name';
-	String get lang => 'Language';
+	String get lang => 'App language';
 	String get lang_descr => 'Language in which the texts will be displayed in the app';
 	String get locale => 'Region';
 	String get locale_descr => 'Set the format to use for dates, numbers...';
@@ -499,11 +543,8 @@ class _TranslationsSettingsEn {
 	String get first_day_of_week => 'First day of week';
 	late final _TranslationsSettingsGeneralEn general = _TranslationsSettingsGeneralEn._(_root);
 	late final _TranslationsSettingsDataEn data = _TranslationsSettingsDataEn._(_root);
-	late final _TranslationsSettingsProjectEn project = _TranslationsSettingsProjectEn._(_root);
+	late final _TranslationsSettingsAboutUsEn about_us = _TranslationsSettingsAboutUsEn._(_root);
 	late final _TranslationsSettingsHelpUsEn help_us = _TranslationsSettingsHelpUsEn._(_root);
-	late final _TranslationsSettingsPrivacyEn privacy = _TranslationsSettingsPrivacyEn._(_root);
-	late final _TranslationsSettingsLicensesEn licenses = _TranslationsSettingsLicensesEn._(_root);
-	late final _TranslationsSettingsTermsOfUseEn terms_of_use = _TranslationsSettingsTermsOfUseEn._(_root);
 }
 
 // Path: lang
@@ -537,6 +578,8 @@ class _TranslationsGeneralTimeEn {
 	// Translations
 	String get start_date => 'Start date';
 	String get end_date => 'End date';
+	String get from_date => 'From date';
+	String get until_date => 'Until date';
 	String get date => 'Date';
 	String get datetime => 'Datetime';
 	String get each => 'Each';
@@ -568,6 +611,9 @@ class _TranslationsGeneralValidationsEn {
 
 	// Translations
 	String get required => 'Required field';
+	String get positive => 'Should be positive';
+	String min_number({required Object x}) => 'Should be greater than ${x}';
+	String max_number({required Object x}) => 'Should be less than ${x}';
 }
 
 // Path: financial_health.review
@@ -577,11 +623,54 @@ class _TranslationsFinancialHealthReviewEn {
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
-	String get very_good => 'Very good!';
-	String get good => 'Good';
-	String get normal => 'Average';
-	String get bad => 'Fair';
-	String get very_bad => 'Very Bad';
+	String very_good({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Very good!';
+			case GenderContext.female:
+				return 'Very good!';
+		}
+	}
+	String good({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Good';
+			case GenderContext.female:
+				return 'Good';
+		}
+	}
+	String normal({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Average';
+			case GenderContext.female:
+				return 'Average';
+		}
+	}
+	String bad({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Fair';
+			case GenderContext.female:
+				return 'Fair';
+		}
+	}
+	String very_bad({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Very Bad';
+			case GenderContext.female:
+				return 'Very Bad';
+		}
+	}
+	String insufficient_data({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Insufficient data';
+			case GenderContext.female:
+				return 'Insufficient data';
+		}
+	}
 	late final _TranslationsFinancialHealthReviewDescrEn descr = _TranslationsFinancialHealthReviewDescrEn._(_root);
 }
 
@@ -592,10 +681,14 @@ class _TranslationsFinancialHealthMonthsWithoutIncomeEn {
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
-	String good({required Object x}) => 'Well done! At your current spending rate right now you could survive up to ${x} months without any income';
-	String normal({required Object x}) => 'At your current spending rate right now you could survive up to ${x} months without any income. While this value is acceptable, you can still improve a little more!';
-	String bad({required Object x}) => 'Wow! You would barely survive ${x} months without income at your current spending rate. Remember that it is recommended to be able to live at least 6 months without any income';
-	String get very_bad => 'Wow! You could hardly survive a month without income at your current spending rate. Remember that it is recommended to be able to live at least 6 months without any income';
+	String get title => 'Survival rate';
+	String get subtitle => 'Given your balance, amount of time you could go without income';
+	String text({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		zero: 'You couldn\'t survive a month without income at this rate of expenses!',
+		one: 'You could barely survive approximately a month without income at this rate of expenses!',
+		other: 'You could survive approximately <b>${n} months</b> without income at this rate of spending.',
+	);
+	String get suggestion => 'Remember that it is advisable to always keep this ratio above 5 months at least. If you see that you do not have a sufficient savings cushion, reduce unnecessary expenses.';
 	String get insufficient_data => 'It looks like we don\'t have enough expenses to calculate how many months you could survive without income. Enter a few transactions and come back here to check your financial health';
 }
 
@@ -606,10 +699,10 @@ class _TranslationsFinancialHealthSavingsPercentageEn {
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
-	String good({required Object value}) => 'Congratulations! You have managed to save ${value}% of your income during this period. It seems that you are already quite an expert. Keep it up!';
-	String normal({required Object value}) => 'Congratulations, you managed to save ${value}% of your income during this period. Visit the analysis tab to see where you can save even more!';
-	String bad({required Object value}) => 'You have managed to save ${value}% of your income during this period. However, we believe that you can still do much more! Remember that it is recommended to save at least 30% of what you earn';
-	String get very_bad => 'Wow, you haven\'t managed to save anything during this period :( Visit the analysis tab to see where your financial weaknesses are. Remember that it is recommended to save at least 30% of what you earn';
+	String get title => 'Savings percentage';
+	String get subtitle => 'What part of your income is not spent in this period';
+	late final _TranslationsFinancialHealthSavingsPercentageTextEn text = _TranslationsFinancialHealthSavingsPercentageTextEn._(_root);
+	String get suggestion => 'Remember that it is advisable to save at least 15-20% of what you earn.';
 }
 
 // Path: icon_selector.scopes
@@ -661,6 +754,21 @@ class _TranslationsTransactionListEn {
 	String get loading => 'Loading more transactions...';
 }
 
+// Path: transaction.filters
+class _TranslationsTransactionFiltersEn {
+	_TranslationsTransactionFiltersEn._(this._root);
+
+	final _TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	String get from_value => 'From amount';
+	String get to_value => 'Up to amount';
+	String from_value_def({required Object x}) => 'From ${x}';
+	String to_value_def({required Object x}) => 'Up to ${x}';
+	String from_date_def({required Object date}) => 'From the ${date}';
+	String to_date_def({required Object date}) => 'Up to the ${date}';
+}
+
 // Path: transaction.form
 class _TranslationsTransactionFormEn {
 	_TranslationsTransactionFormEn._(this._root);
@@ -668,7 +776,6 @@ class _TranslationsTransactionFormEn {
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
-	String get status => 'Status';
 	late final _TranslationsTransactionFormValidatorsEn validators = _TranslationsTransactionFormValidatorsEn._(_root);
 	String get title => 'Transaction title';
 	String get value => 'Value of the transaction';
@@ -686,8 +793,12 @@ class _TranslationsTransactionStatusEn {
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
+	String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		one: 'Status',
+		other: 'Statuses',
+	);
 	String tr_status({required Object status}) => '${status} transaction';
-	String get none => 'Sin estado';
+	String get none => 'Stateless';
 	String get reconciled => 'Reconciled';
 	String get reconciled_descr => 'This transaction has already been validated and corresponds to a real transaction from your bank';
 	String get unreconciled => 'Unreconciled';
@@ -696,6 +807,31 @@ class _TranslationsTransactionStatusEn {
 	String get pending_descr => 'This transaction is pending and therefore it will not be taken into account when calculating balances and statistics';
 	String get voided => 'Voided';
 	String get voided_descr => 'Void/cancelled transaction due to payment error or any other reason. It will not be taken into account when calculating balances and statistics';
+}
+
+// Path: transaction.types
+class _TranslationsTransactionTypesEn {
+	_TranslationsTransactionTypesEn._(this._root);
+
+	final _TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		one: 'Transaction type',
+		other: 'Transaction types',
+	);
+	String income({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		one: 'Income',
+		other: 'Incomes',
+	);
+	String expense({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		one: 'Expense',
+		other: 'Expenses',
+	);
+	String transfer({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		one: 'Transfer',
+		other: 'Transfers',
+	);
 }
 
 // Path: transfer.form
@@ -720,8 +856,8 @@ class _TranslationsRecurrentTransactionsDetailsEn {
 
 	// Translations
 	String get title => 'Recurrent transaction';
-	String next_payment_info({required Object date}) => 'The next movement of this transaction will take place on ${date}. You can choose whether you want to skip this movement or accept it on the date of your choice';
-	String last_payment_info({required Object date}) => 'The next move for this transaction will take place on ${date}. This payment will be the last for the recurring rule, so this rule will be automatically removed when this payment is made';
+	String get descr => 'The next moves for this transaction are shown below. You can accept the first move or skip this move';
+	String get last_payment_info => 'This movement is the last of the recurring rule, so this rule will be automatically deleted when confirming this action';
 	String get delete_header => 'Delete recurring transaction';
 	String get delete_message => 'This action is irreversible and will not affect transactions you have already confirmed/paid for';
 }
@@ -775,18 +911,20 @@ class _TranslationsAccountDeleteEn {
 	String get success => 'Account deleted successfully';
 }
 
-// Path: account.archive
-class _TranslationsAccountArchiveEn {
-	_TranslationsAccountArchiveEn._(this._root);
+// Path: account.close
+class _TranslationsAccountCloseEn {
+	_TranslationsAccountCloseEn._(this._root);
 
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
-	String get title => 'Archive account';
-	String get warn => 'This account will no longer appear in certain listings and you will not be able to create new transactions on this account. You can unarchive this account whenever you want';
-	String get should_have_zero_balance => 'You must have a current balance of 0 to be able to archive this account. Please edit it before continuing';
-	String get success => 'Account archived successfully';
-	String get unarchive_succes => 'Account unarchived successfully';
+	String get title => 'Close account';
+	String get title_short => 'Close';
+	String get warn => 'This account will no longer appear in certain listings and you will not be able to create transactions in it with a date later than the one specified below. This action does not affect any transactions or balance, and you can also reopen this account at any time. ';
+	String get should_have_zero_balance => 'You must have a current balance of 0 in this account to close it. Please edit the account before continuing';
+	String get should_have_no_transactions => 'This account has transactions after the specified close date. Delete them or edit the account close date before continuing';
+	String get success => 'Account closed successfully';
+	String get unarchive_succes => 'Account successfully re-opened';
 }
 
 // Path: account.select
@@ -814,6 +952,17 @@ class _TranslationsCurrenciesFormEn {
 	String get add_success => 'Exchange rate added successfully';
 	String get edit => 'Edit exchange rate';
 	String get edit_success => 'Exchange rate edited successfully';
+}
+
+// Path: tags.form
+class _TranslationsTagsFormEn {
+	_TranslationsTagsFormEn._(this._root);
+
+	final _TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	String get name => 'Tag name';
+	String get description => 'Description';
 }
 
 // Path: categories.select
@@ -869,12 +1018,12 @@ class _TranslationsBackupExportEn {
 
 	// Translations
 	String get title => 'Export your data';
-	String get title_sort => 'Export';
+	String get title_short => 'Export';
 	String get all => 'Full backup';
 	String get all_descr => 'Export all your data (accounts, transactions, budgets, settings...). Import them again at any time so you don\'t lose anything.';
 	String get transactions => 'Transactions backup';
 	String get transactions_descr => 'Export your transactions in various formats so you can more easily analyze them in other programs or applications.';
-	String get description => 'Keep a backup of all your accounts, budgets, transactions, settings...';
+	String get description => 'Download your data in different formats';
 	String get dialog_title => 'Save/Send file';
 	String get success_in_documents => 'File successfully saved to Internal Storage/Documents';
 	String get success_in_data => 'File saved/downloaded successfully';
@@ -889,7 +1038,7 @@ class _TranslationsBackupImportEn {
 
 	// Translations
 	String get title => 'Import your data';
-	String get title_sort => 'Import';
+	String get title_short => 'Import';
 	String get restore_backup => 'Restore Backup';
 	String get restore_backup_warn => 'When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Monekin';
 	String get restore_backup_descr => 'Import a previously saved database from Monekin. This action will replace any current application data with the new data';
@@ -901,6 +1050,20 @@ class _TranslationsBackupImportEn {
 	String get error => 'Error importing file. Please contact developer via lozin.technologies@gmail.com';
 }
 
+// Path: backup.about
+class _TranslationsBackupAboutEn {
+	_TranslationsBackupAboutEn._(this._root);
+
+	final _TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	String get title => 'Information about your database';
+	String get create_date => 'Creation date';
+	String get modify_date => 'Last modified';
+	String get last_backup => 'Last backup';
+	String get size => 'Size';
+}
+
 // Path: settings.general
 class _TranslationsSettingsGeneralEn {
 	_TranslationsSettingsGeneralEn._(this._root);
@@ -908,13 +1071,22 @@ class _TranslationsSettingsGeneralEn {
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
-	String get display => 'General settings';
 	String get categories_descr => 'Create and edit categories to your liking';
 	String get other => 'Advanced settings';
 	String get other_descr => 'Other general app customization settings';
+	String get appearance => 'Appearance';
+	String get appearance_descr => 'App theme, texts...';
+	String get app_colors => 'App colors';
 	String get theme => 'Theme';
+	String get theme_auto => 'Defined by the system';
 	String get theme_light => 'Light';
 	String get theme_dark => 'Dark';
+	String get amoled_mode => 'AMOLED mode';
+	String get amoled_mode_descr => 'Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens';
+	String get dynamic_colors => 'Dynamic colors';
+	String get dynamic_colors_descr => 'Use your system accent color whenever possible';
+	String get accent_color => 'Accent color';
+	String get accent_color_descr => 'Choose the color the app will use to emphasize certain parts of the interface';
 	String get prefer_calc => 'Prefer calculator';
 	String get prefer_calc_descr => 'Displays a calculator on the add/edit transaction page that will simplify actions on devices without a keyboard';
 }
@@ -927,7 +1099,7 @@ class _TranslationsSettingsDataEn {
 
 	// Translations
 	String get display => 'Data';
-	String get export_descr => 'Download your data in different formats';
+	String get display_descr => 'Export and import your data so you don\'t lose anything';
 	String get delete_all => 'Delete my data';
 	String get delete_all_header1 => 'Stop right there padawan ⚠️⚠️';
 	String get delete_all_message1 => 'Are you sure you want to continue? All your data will be permanently deleted and cannot be recovered';
@@ -935,19 +1107,17 @@ class _TranslationsSettingsDataEn {
 	String get delete_all_message2 => 'By deleting an account you will delete all your stored personal data. Your accounts, transactions, budgets and categories will be deleted and cannot be recovered. Do you agree?';
 }
 
-// Path: settings.project
-class _TranslationsSettingsProjectEn {
-	_TranslationsSettingsProjectEn._(this._root);
+// Path: settings.about_us
+class _TranslationsSettingsAboutUsEn {
+	_TranslationsSettingsAboutUsEn._(this._root);
 
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
-	String get display => 'Project';
-	String get legal => 'Terms and privacy';
-	String get legal_descr => 'Check licenses and other legal terms of our app';
-	String get contributors => 'Collaborators';
-	String get contributors_descr => 'All the developers who have made Monekin grow';
-	String get contact => 'Contact us';
+	String get display => 'App information';
+	String get description => 'Check out the terms and other relevant information about Monekin. Get in touch with the community by reporting bugs, leaving suggestions...';
+	late final _TranslationsSettingsAboutUsLegalEn legal = _TranslationsSettingsAboutUsLegalEn._(_root);
+	late final _TranslationsSettingsAboutUsProjectEn project = _TranslationsSettingsAboutUsProjectEn._(_root);
 }
 
 // Path: settings.help_us
@@ -958,41 +1128,19 @@ class _TranslationsSettingsHelpUsEn {
 
 	// Translations
 	String get display => 'Help us';
+	String get description => 'Find out how you can help Monekin become better and better';
 	String get rate_us => 'Rate us';
 	String get rate_us_descr => 'Any rate is welcome!';
 	String get share => 'Share Monekin';
-	String get share_text => 'Monekin! The best personal finance app';
+	String get share_descr => 'Share our app to friends and family';
+	String get share_text => 'Monekin! The best personal finance app. Download it here';
+	String get thanks => 'Thank you!';
+	String get thanks_long => 'Your contributions to Monekin and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.';
+	String get donate => 'Make a donation';
+	String get donate_descr => 'With your donation you will help the app continue receiving improvements. What better way than to thank the work done by inviting me to a coffee?';
+	String get donate_success => 'Donation made. Thank you very much for your contribution! ❤️';
+	String get donate_err => 'Oops! It seems there was an error receiving your payment';
 	String get report => 'Report bugs, leave suggestions...';
-}
-
-// Path: settings.privacy
-class _TranslationsSettingsPrivacyEn {
-	_TranslationsSettingsPrivacyEn._(this._root);
-
-	final _TranslationsEn _root; // ignore: unused_field
-
-	// Translations
-	String get title => 'Privacy policy';
-}
-
-// Path: settings.licenses
-class _TranslationsSettingsLicensesEn {
-	_TranslationsSettingsLicensesEn._(this._root);
-
-	final _TranslationsEn _root; // ignore: unused_field
-
-	// Translations
-	String get title => 'Licences';
-}
-
-// Path: settings.terms_of_use
-class _TranslationsSettingsTermsOfUseEn {
-	_TranslationsSettingsTermsOfUseEn._(this._root);
-
-	final _TranslationsEn _root; // ignore: unused_field
-
-	// Translations
-	String get title => 'Terms of use';
 }
 
 // Path: general.time.ranges
@@ -1098,11 +1246,25 @@ class _TranslationsFinancialHealthReviewDescrEn {
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
+	String get insufficient_data => 'It looks like we don\'t have enough expenses to calculate your financial health. Add some expenses/incomes in this period to allow us to help you!';
 	String get very_good => 'Congratulations! Your financial health is tremendous. We hope you continue your good streak and continue learning with Monekin';
 	String get good => 'Great! Your financial health is good. Visit the analysis tab to see how to save even more!';
 	String get normal => 'Your financial health is more or less in the average of the rest of the population for this period';
-	String get bad => 'It seems that your financial situation is not the best yet. Explore the analysis tab to learn more about your finances';
-	String get very_bad => 'Hmm, your financial health is far below what it should be. Try to see where the problem is in the analysis section';
+	String get bad => 'It seems that your financial situation is not the best yet. Explore the rest of the charts to learn more about your finances';
+	String get very_bad => 'Hmm, your financial health is far below what it should be. Explore the rest of the charts to learn more about your finances';
+}
+
+// Path: financial_health.savings_percentage.text
+class _TranslationsFinancialHealthSavingsPercentageTextEn {
+	_TranslationsFinancialHealthSavingsPercentageTextEn._(this._root);
+
+	final _TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	String good({required Object value}) => 'Congratulations! You have managed to save <b>${value}%</b> of your income during this period. It seems that you are already an expert, keep up the good work!';
+	String normal({required Object value}) => 'Congratulations, you have managed to save <b>${value}%</b> of your income during this period.';
+	String bad({required Object value}) => 'You have managed to save <b>${value}%</b> of your income during this period. However, we think you can still do much more!';
+	String get very_bad => 'Wow, you haven\'t managed to save anything during this period.';
 }
 
 // Path: transaction.form.validators
@@ -1162,6 +1324,32 @@ class _TranslationsBackupImportManualImportEn {
 	String success({required Object x}) => 'Successfully imported ${x} transactions';
 }
 
+// Path: settings.about_us.legal
+class _TranslationsSettingsAboutUsLegalEn {
+	_TranslationsSettingsAboutUsLegalEn._(this._root);
+
+	final _TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	String get display => 'Legal information';
+	String get privacy => 'Privacy policy';
+	String get terms => 'Terms of use';
+	String get licenses => 'Licenses';
+}
+
+// Path: settings.about_us.project
+class _TranslationsSettingsAboutUsProjectEn {
+	_TranslationsSettingsAboutUsProjectEn._(this._root);
+
+	final _TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	String get display => 'Project';
+	String get contributors => 'Collaborators';
+	String get contributors_descr => 'All the developers who have made Monekin grow';
+	String get contact => 'Contact us';
+}
+
 // Path: <root>
 class _TranslationsEs implements _TranslationsEn {
 
@@ -1198,6 +1386,7 @@ class _TranslationsEs implements _TranslationsEn {
 	@override late final _TranslationsRecurrentTransactionsEs recurrent_transactions = _TranslationsRecurrentTransactionsEs._(_root);
 	@override late final _TranslationsAccountEs account = _TranslationsAccountEs._(_root);
 	@override late final _TranslationsCurrenciesEs currencies = _TranslationsCurrenciesEs._(_root);
+	@override late final _TranslationsTagsEs tags = _TranslationsTagsEs._(_root);
 	@override late final _TranslationsCategoriesEs categories = _TranslationsCategoriesEs._(_root);
 	@override late final _TranslationsBudgetsEs budgets = _TranslationsBudgetsEs._(_root);
 	@override late final _TranslationsBackupEs backup = _TranslationsBackupEs._(_root);
@@ -1225,21 +1414,12 @@ class _TranslationsGeneralEs implements _TranslationsGeneralEn {
 	@override String get close_and_save => 'Guardar y cerrar';
 	@override String get add => 'Añadir';
 	@override String get edit => 'Editar';
-	@override String get archive => 'Archivar';
-	@override String get unarchive => 'Desarchivar';
 	@override String get delete => 'Eliminar';
 	@override String get balance => 'Balance';
-	@override String get income => 'Ingreso';
-	@override String get expense => 'Gasto';
-	@override String get incomes => 'Ingresos';
-	@override String get expenses => 'Gastos';
-	@override String get expenses_and_incomes => 'Gastos e ingresos';
 	@override String get account => 'Cuenta';
 	@override String get accounts => 'Cuentas';
 	@override String get categories => 'Categorías';
 	@override String get category => 'Categoría';
-	@override String get transaction => 'Transacción';
-	@override String get transactions => 'Transacciones';
 	@override String get today => 'Hoy';
 	@override String get yesterday => 'Ayer';
 	@override String get filters => 'Filtros';
@@ -1287,6 +1467,7 @@ class _TranslationsHomeEs implements _TranslationsHomeEn {
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
+	@override String get title => 'Dashboard';
 	@override String get filter_transactions => 'Filtrar transacciones';
 	@override String get hello_day => 'Buenos días,';
 	@override String get hello_night => 'Buenas noches,';
@@ -1329,6 +1510,10 @@ class _TranslationsStatsEs implements _TranslationsStatsEn {
 	@override String get cash_flow => 'Flujo de caja';
 	@override String get by_periods => 'Por periodos';
 	@override String get by_categories => 'Por categorías';
+	@override String get by_tags => 'Por etiquetas';
+	@override String get distribution => 'Distribución';
+	@override String get finance_health_resume => 'Resumen';
+	@override String get finance_health_breakdown => 'Desglose';
 }
 
 // Path: icon_selector
@@ -1354,6 +1539,10 @@ class _TranslationsTransactionEs implements _TranslationsTransactionEn {
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		one: 'Transacción',
+		other: 'Transacciones',
+	);
 	@override String get create => 'Nueva transacción';
 	@override String get new_income => 'Nuevo ingreso';
 	@override String get new_expense => 'Nuevo gasto';
@@ -1370,8 +1559,10 @@ class _TranslationsTransactionEs implements _TranslationsTransactionEn {
 	@override String get details => 'Detalles del movimiento';
 	@override late final _TranslationsTransactionNextPaymentsEs next_payments = _TranslationsTransactionNextPaymentsEs._(_root);
 	@override late final _TranslationsTransactionListEs list = _TranslationsTransactionListEs._(_root);
+	@override late final _TranslationsTransactionFiltersEs filters = _TranslationsTransactionFiltersEs._(_root);
 	@override late final _TranslationsTransactionFormEs form = _TranslationsTransactionFormEs._(_root);
 	@override late final _TranslationsTransactionStatusEs status = _TranslationsTransactionStatusEs._(_root);
+	@override late final _TranslationsTransactionTypesEs types = _TranslationsTransactionTypesEs._(_root);
 }
 
 // Path: transfer
@@ -1382,6 +1573,7 @@ class _TranslationsTransferEs implements _TranslationsTransferEn {
 
 	// Translations
 	@override String get display => 'Transferencia';
+	@override String get transfers => 'Transferencias';
 	@override String transfer_to({required Object account}) => 'Transferencia hacia ${account}';
 	@override String get create => 'Nueva transferencia';
 	@override String get need_two_accounts_warning_header => 'Ops!';
@@ -1397,6 +1589,7 @@ class _TranslationsRecurrentTransactionsEs implements _TranslationsRecurrentTran
 
 	// Translations
 	@override String get title => 'Movimientos recurrentes';
+	@override String get title_short => 'Mov. recurrentes';
 	@override String get empty => 'Parece que no posees ninguna transacción recurrente. Crea una transacción que se repita mensual, anual o semanalmente y aparecerá aquí';
 	@override late final _TranslationsRecurrentTransactionsDetailsEs details = _TranslationsRecurrentTransactionsDetailsEs._(_root);
 }
@@ -1410,6 +1603,10 @@ class _TranslationsAccountEs implements _TranslationsAccountEn {
 	// Translations
 	@override String get details => 'Detalles de la cuenta';
 	@override String get date => 'Fecha de apertura';
+	@override String get close_date => 'Fecha de cierre';
+	@override String get reopen_short => 'Reabrir';
+	@override String get reopen => 'Reabrir cuenta';
+	@override String get reopen_descr => '¿Seguro que quieres volver a abrir esta cuenta?';
 	@override String get balance => 'Saldo de la cuenta';
 	@override String get n_transactions => 'Número de transacciones';
 	@override String get add_money => 'Añadir dinero';
@@ -1418,7 +1615,7 @@ class _TranslationsAccountEs implements _TranslationsAccountEn {
 	@override late final _TranslationsAccountTypesEs types = _TranslationsAccountTypesEs._(_root);
 	@override late final _TranslationsAccountFormEs form = _TranslationsAccountFormEs._(_root);
 	@override late final _TranslationsAccountDeleteEs delete = _TranslationsAccountDeleteEs._(_root);
-	@override late final _TranslationsAccountArchiveEs archive = _TranslationsAccountArchiveEs._(_root);
+	@override late final _TranslationsAccountCloseEs close = _TranslationsAccountCloseEs._(_root);
 	@override late final _TranslationsAccountSelectEs select = _TranslationsAccountSelectEs._(_root);
 }
 
@@ -1431,6 +1628,7 @@ class _TranslationsCurrenciesEs implements _TranslationsCurrenciesEn {
 	// Translations
 	@override String get currency_converter => 'Conversor de divisas';
 	@override String get currency_manager => 'Administrador de divisas';
+	@override String get currency_manager_descr => 'Configura tu divisa y sus tipos de cambio con otras';
 	@override String get currency => 'Divisa';
 	@override String get preferred_currency => 'Divisa predeterminada/base';
 	@override String get change_preferred_currency_title => 'Cambiar divisa predeterminada';
@@ -1444,6 +1642,32 @@ class _TranslationsCurrenciesEs implements _TranslationsCurrenciesEn {
 	@override String get select_a_currency => 'Selecciona una divisa';
 	@override String get search_title => 'Toca para buscar';
 	@override String get search_placeholder => 'Busca por nombre o por código de la divisa';
+}
+
+// Path: tags
+class _TranslationsTagsEs implements _TranslationsTagsEn {
+	_TranslationsTagsEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		one: 'Etiqueta',
+		other: 'Etiquetas',
+	);
+	@override late final _TranslationsTagsFormEs form = _TranslationsTagsFormEs._(_root);
+	@override String get empty_list => 'No has creado ninguna etiqueta aun. Las etiquetas y las categorías son una gran forma de categorizar tus movimientos';
+	@override String get without_tags => 'Sin etiquetas';
+	@override String get select => 'Selecionar etiquetas';
+	@override String get create => 'Crear etiqueta';
+	@override String get add => 'Añadir etiqueta';
+	@override String get create_success => 'Etiqueta creada correctamente';
+	@override String get already_exists => 'El nombre de esta etiqueta ya existe. Puede que quieras editarla';
+	@override String get edit => 'Editar etiqueta';
+	@override String get edit_success => 'Etiqueta editada correctamente';
+	@override String get delete_success => 'Categoría eliminada correctamente';
+	@override String get delete_warning_header => '¿Eliminar etiqueta?';
+	@override String get delete_warning_message => 'Esta acción no borrará las transacciones que poseen esta etiqueta.';
 }
 
 // Path: categories
@@ -1516,6 +1740,7 @@ class _TranslationsBackupEs implements _TranslationsBackupEn {
 	// Translations
 	@override late final _TranslationsBackupExportEs export = _TranslationsBackupExportEs._(_root);
 	@override late final _TranslationsBackupImportEs import = _TranslationsBackupImportEs._(_root);
+	@override late final _TranslationsBackupAboutEs about = _TranslationsBackupAboutEs._(_root);
 }
 
 // Path: settings
@@ -1528,7 +1753,7 @@ class _TranslationsSettingsEs implements _TranslationsSettingsEn {
 	@override String get title => 'Ajustes';
 	@override String get edit_profile => 'Editar perfil';
 	@override String get display_name => 'Nombre de usuario';
-	@override String get lang => 'Idioma';
+	@override String get lang => 'Idioma de la aplicación';
 	@override String get lang_descr => 'Idioma en el que se mostrarán los textos en la app';
 	@override String get locale => 'Región';
 	@override String get locale_descr => 'Establece el formato a usar para fechas, números...';
@@ -1536,11 +1761,8 @@ class _TranslationsSettingsEs implements _TranslationsSettingsEn {
 	@override String get first_day_of_week => 'Primer día de la semana';
 	@override late final _TranslationsSettingsGeneralEs general = _TranslationsSettingsGeneralEs._(_root);
 	@override late final _TranslationsSettingsDataEs data = _TranslationsSettingsDataEs._(_root);
-	@override late final _TranslationsSettingsProjectEs project = _TranslationsSettingsProjectEs._(_root);
+	@override late final _TranslationsSettingsAboutUsEs about_us = _TranslationsSettingsAboutUsEs._(_root);
 	@override late final _TranslationsSettingsHelpUsEs help_us = _TranslationsSettingsHelpUsEs._(_root);
-	@override late final _TranslationsSettingsPrivacyEs privacy = _TranslationsSettingsPrivacyEs._(_root);
-	@override late final _TranslationsSettingsLicensesEs licenses = _TranslationsSettingsLicensesEs._(_root);
-	@override late final _TranslationsSettingsTermsOfUseEs terms_of_use = _TranslationsSettingsTermsOfUseEs._(_root);
 }
 
 // Path: lang
@@ -1574,6 +1796,8 @@ class _TranslationsGeneralTimeEs implements _TranslationsGeneralTimeEn {
 	// Translations
 	@override String get start_date => 'Fecha de inicio';
 	@override String get end_date => 'Fecha de fin';
+	@override String get from_date => 'Desde fecha';
+	@override String get until_date => 'Hasta fecha';
 	@override String get date => 'Fecha';
 	@override String get datetime => 'Fecha y hora';
 	@override String get each => 'Cada';
@@ -1605,6 +1829,9 @@ class _TranslationsGeneralValidationsEs implements _TranslationsGeneralValidatio
 
 	// Translations
 	@override String get required => 'Campo obligatorio';
+	@override String get positive => 'Debe ser positivo';
+	@override String min_number({required Object x}) => 'Debe ser mayor que ${x}';
+	@override String max_number({required Object x}) => 'Debe ser menor que ${x}';
 }
 
 // Path: financial_health.review
@@ -1614,11 +1841,54 @@ class _TranslationsFinancialHealthReviewEs implements _TranslationsFinancialHeal
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get very_good => 'Muy buena!';
-	@override String get good => 'Buena';
-	@override String get normal => 'En la media';
-	@override String get bad => 'Regular';
-	@override String get very_bad => 'Muy mala';
+	@override String very_good({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Excelente!';
+			case GenderContext.female:
+				return 'Excelente!';
+		}
+	}
+	@override String good({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Bueno';
+			case GenderContext.female:
+				return 'Buena';
+		}
+	}
+	@override String normal({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'En la media';
+			case GenderContext.female:
+				return 'En la media';
+		}
+	}
+	@override String bad({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Regular';
+			case GenderContext.female:
+				return 'Regular';
+		}
+	}
+	@override String very_bad({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Muy malo';
+			case GenderContext.female:
+				return 'Muy mala';
+		}
+	}
+	@override String insufficient_data({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Datos insuficientes';
+			case GenderContext.female:
+				return 'Datos insuficientes';
+		}
+	}
 	@override late final _TranslationsFinancialHealthReviewDescrEs descr = _TranslationsFinancialHealthReviewDescrEs._(_root);
 }
 
@@ -1629,10 +1899,14 @@ class _TranslationsFinancialHealthMonthsWithoutIncomeEs implements _Translations
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String good({required Object x}) => 'Bien hecho! Con tu ritmo de gastos actual ahora mismo podrías sobrevivir hasta ${x} meses sin ningún ingreso';
-	@override String normal({required Object x}) => 'Con tu ritmo de gastos actual ahora mismo podrías sobrevivir hasta ${x} meses sin ningún ingreso. Si bien este valor es aceptable, aun puedes mejorar un poco más!';
-	@override String bad({required Object x}) => 'Vaya! Apenás sobrevivirías ${x} meses sin ingresos con tu ritmo de gastos actual. Recuerda que lo recomendable es poder vivir al menos 6 meses sin ningun ingreso';
-	@override String get very_bad => 'Vaya! Apenas sobrevivirías un mes sin ingresos con tu ritmo de gastos actual. Recuerda que lo recomendable es poder vivir al menos 6 meses sin ningun ingreso';
+	@override String get title => 'Ratio de supervivencia';
+	@override String get subtitle => 'Dado tu saldo, cantidad de tiempo que podrías pasar sin ingresos';
+	@override String text({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		zero: 'No podrías sobrevivir ni un mes sin ingresos con este ritmo de gastos!',
+		one: 'Apenas podrías sobrevivir aproximadatemente un mes sin ingresos con este ritmo de gastos!',
+		other: 'Podrías sobrevivir aproximadamente <b>${n} meses</b> sin ingresos manteniendo este ritmo de gastos.',
+	);
+	@override String get suggestion => 'Recuerda que es recomendable mantener este ratio siempre por encima de 5 meses como mínimo. Si ves que no tienes un colchon de ahorro suficiente, reduce los gastos no necesarios.';
 	@override String get insufficient_data => 'Parece que no tenemos gastos suficientes para calcular cuantos meses podrías sobrevivir sin ingresos. Introduce unas pocas transacciones y regresa aquí para consultar tu salud financiera';
 }
 
@@ -1643,10 +1917,10 @@ class _TranslationsFinancialHealthSavingsPercentageEs implements _TranslationsFi
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String good({required Object value}) => 'Enhorabuena! Has conseguido ahorrar un ${value}% de tus ingresos durante este periodo. Parece que ya eres todo un expert@. Sigue asi!';
-	@override String normal({required Object value}) => 'Enhorabuena, has conseguido ahorrar un ${value}% de tus ingresos durante este periodo. Visita la pestaña de análisis para ver donde puedes ahorrar aun más!';
-	@override String bad({required Object value}) => 'Has conseguido ahorrar un ${value}% de tus ingresos durante este periodo. Sin embargo, creemos que aun puedes hacer mucho mas! Recuerda que es recomendable ahorrar al menos un 30% de lo que ingresas';
-	@override String get very_bad => 'Vaya, no has conseguido ahorrar nada durante este periodo :( Visita la pestaña de análisis para ver donde estan tus debilidades financieras. Recuerda que es recomendable ahorrar al menos un 30% de lo que ingresas';
+	@override String get title => 'Porcentaje de ahorro';
+	@override String get subtitle => 'Que parte de tus ingresos no son gastados en este periodo';
+	@override late final _TranslationsFinancialHealthSavingsPercentageTextEs text = _TranslationsFinancialHealthSavingsPercentageTextEs._(_root);
+	@override String get suggestion => 'Recuerda que es recomendable ahorrar al menos un 15-20% de lo que ingresas.';
 }
 
 // Path: icon_selector.scopes
@@ -1698,6 +1972,21 @@ class _TranslationsTransactionListEs implements _TranslationsTransactionListEn {
 	@override String get loading => 'Cargando más transacciones...';
 }
 
+// Path: transaction.filters
+class _TranslationsTransactionFiltersEs implements _TranslationsTransactionFiltersEn {
+	_TranslationsTransactionFiltersEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get from_value => 'Desde monto';
+	@override String get to_value => 'Hasta monto';
+	@override String from_value_def({required Object x}) => 'Desde ${x}';
+	@override String to_value_def({required Object x}) => 'Hasta ${x}';
+	@override String from_date_def({required Object date}) => 'Desde el ${date}';
+	@override String to_date_def({required Object date}) => 'Hasta el ${date}';
+}
+
 // Path: transaction.form
 class _TranslationsTransactionFormEs implements _TranslationsTransactionFormEn {
 	_TranslationsTransactionFormEs._(this._root);
@@ -1705,7 +1994,6 @@ class _TranslationsTransactionFormEs implements _TranslationsTransactionFormEn {
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get status => 'Estado';
 	@override late final _TranslationsTransactionFormValidatorsEs validators = _TranslationsTransactionFormValidatorsEs._(_root);
 	@override String get title => 'Título de la transacción';
 	@override String get value => 'Valor de la transacción';
@@ -1723,6 +2011,10 @@ class _TranslationsTransactionStatusEs implements _TranslationsTransactionStatus
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		one: 'Estado',
+		other: 'Estados',
+	);
 	@override String tr_status({required Object status}) => 'Transacción ${status}';
 	@override String get none => 'Sin estado';
 	@override String get reconciled => 'Reconciliada';
@@ -1733,6 +2025,31 @@ class _TranslationsTransactionStatusEs implements _TranslationsTransactionStatus
 	@override String get pending_descr => 'Esta transacción esta pendiente y por tanto no será tenida en cuenta a la hora de calcular balances y estadísticas';
 	@override String get voided => 'Nula';
 	@override String get voided_descr => 'Transacción nula/cancelada debido a un error en el pago o cualquier otro motivo. No será tenida en cuenta a la hora de calcular balances y estadísticas';
+}
+
+// Path: transaction.types
+class _TranslationsTransactionTypesEs implements _TranslationsTransactionTypesEn {
+	_TranslationsTransactionTypesEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		one: 'Tipo de transacción',
+		other: 'Tipos de transacción',
+	);
+	@override String income({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		one: 'Ingreso',
+		other: 'Ingresos',
+	);
+	@override String expense({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		one: 'Gasto',
+		other: 'Gastos',
+	);
+	@override String transfer({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		one: 'Transferencia',
+		other: 'Transferencias',
+	);
 }
 
 // Path: transfer.form
@@ -1757,8 +2074,8 @@ class _TranslationsRecurrentTransactionsDetailsEs implements _TranslationsRecurr
 
 	// Translations
 	@override String get title => 'Transaccion recurrente';
-	@override String next_payment_info({required Object date}) => 'El próximo movimiento de esta transacción tendrá lugar el día ${date}. Puedes elegir si deseas saltar este movimiento o aceptarlo en la fecha que elijas';
-	@override String last_payment_info({required Object date}) => 'El próximo movimiento de esta transacción tendrá lugar el día ${date}. Este pago será el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al realizar este pago';
+	@override String get descr => 'A continuación se muestran próximos movimientos de esta transacción. Podrás aceptar el primero de ellos o saltar este movimiento';
+	@override String get last_payment_info => 'Este movimiento es el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al confirmar esta acción';
 	@override String get delete_header => 'Eliminar transacción recurrente';
 	@override String get delete_message => 'Esta acción es irreversible y no afectará a transacciones que ya hayas confirmado/pagado';
 }
@@ -1812,18 +2129,20 @@ class _TranslationsAccountDeleteEs implements _TranslationsAccountDeleteEn {
 	@override String get success => 'Cuenta eliminada correctamente';
 }
 
-// Path: account.archive
-class _TranslationsAccountArchiveEs implements _TranslationsAccountArchiveEn {
-	_TranslationsAccountArchiveEs._(this._root);
+// Path: account.close
+class _TranslationsAccountCloseEs implements _TranslationsAccountCloseEn {
+	_TranslationsAccountCloseEs._(this._root);
 
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Archive account';
-	@override String get warn => 'This account will no longer appear in certain listings and you will not be able to create new transactions on this account. You can unarchive this account whenever you want';
-	@override String get should_have_zero_balance => 'You must have a current balance of 0 to be able to archive this account. Please edit it before continuing';
-	@override String get success => 'Account archived successfully';
-	@override String get unarchive_succes => 'Account unarchived successfully';
+	@override String get title => 'Cerrar cuenta';
+	@override String get title_short => 'Cerrar';
+	@override String get warn => 'Esta cuenta ya no aparecerá en ciertos listados y no podrá crear transacciones en ella con fecha posterior a la especificada debajo. Esta acción no afecta a ninguna transacción ni balance, y además, podrás volver a abrir esta cuenta cuando quieras';
+	@override String get should_have_zero_balance => 'Debes tener un saldo actual en la cuenta de 0 para poder cerrarla. Edita esta cuenta antes de continuar';
+	@override String get should_have_no_transactions => 'Esta cuenta posee transacciones posteriores a la fecha de cierre especificada. Borralas o edita la fecha de cierre de la cuenta antes de continuar';
+	@override String get success => 'Cuenta cerrada exitosamente';
+	@override String get unarchive_succes => 'Cuenta re-abierta exitosamente';
 }
 
 // Path: account.select
@@ -1851,6 +2170,17 @@ class _TranslationsCurrenciesFormEs implements _TranslationsCurrenciesFormEn {
 	@override String get add_success => 'Tipo de cambio añadido correctamente';
 	@override String get edit => 'Editar tipo de cambio';
 	@override String get edit_success => 'Tipo de cambio editado correctamente';
+}
+
+// Path: tags.form
+class _TranslationsTagsFormEs implements _TranslationsTagsFormEn {
+	_TranslationsTagsFormEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Nombre de la etiqueta';
+	@override String get description => 'Descripción';
 }
 
 // Path: categories.select
@@ -1906,12 +2236,12 @@ class _TranslationsBackupExportEs implements _TranslationsBackupExportEn {
 
 	// Translations
 	@override String get title => 'Exportar datos';
-	@override String get title_sort => 'Exportar';
+	@override String get title_short => 'Exportar';
 	@override String get all => 'Respaldo total';
 	@override String get all_descr => 'Exporta todos tus datos (cuentas, transacciones, presupuestos, ajustes...). Importalos de nuevo en cualquier momento para no perder nada.';
 	@override String get transactions => 'Respaldo de transacciones';
 	@override String get transactions_descr => 'Exporta tus transacciones en diversos formatos para que puedas analizarlas mas facilmente en otros programas o aplicaciones.';
-	@override String get description => 'Guarda una copia de seguridad de todas tus cuentas, presupuestos, transacciones, ajustes...';
+	@override String get description => 'Exporta tus datos en diferentes formatos';
 	@override String get dialog_title => 'Guardar/Enviar archivo';
 	@override String get success_in_documents => 'Archivo guardado correctamente en Almacenamiento interno/Documents';
 	@override String get success_in_data => 'Archivo guardado/enviado correctamente';
@@ -1926,7 +2256,7 @@ class _TranslationsBackupImportEs implements _TranslationsBackupImportEn {
 
 	// Translations
 	@override String get title => 'Importar tus datos';
-	@override String get title_sort => 'Importar';
+	@override String get title_short => 'Importar';
 	@override String get restore_backup => 'Restaurar copia de seguridad';
 	@override String get restore_backup_warn => 'Al importar una nueva base de datos, perderas toda la información actualmente guardada en la app. Se recomienda hacer una copia de seguridad antes de continuar. No subas aquí ningún fichero cuyo origen no conozcas, sube solo ficheros que hayas descargado previamente desde Monekin';
 	@override String get restore_backup_descr => 'Importa una base de datos anteriormente guardada desde Monekin. Esta acción remplazará cualquier dato actual de la aplicación por los nuevos datos';
@@ -1936,6 +2266,20 @@ class _TranslationsBackupImportEs implements _TranslationsBackupImportEn {
 	@override String get success => 'Importación realizada con exito';
 	@override String get cancelled => 'La importación fue cancelada por el usuario';
 	@override String get error => 'Error al importar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com';
+}
+
+// Path: backup.about
+class _TranslationsBackupAboutEs implements _TranslationsBackupAboutEn {
+	_TranslationsBackupAboutEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Información sobre tu base de datos';
+	@override String get create_date => 'Fecha de creación';
+	@override String get modify_date => 'Última modificación';
+	@override String get last_backup => 'Última copia de seguridad';
+	@override String get size => 'Tamaño';
 }
 
 // Path: settings.general
@@ -1949,9 +2293,19 @@ class _TranslationsSettingsGeneralEs implements _TranslationsSettingsGeneralEn {
 	@override String get categories_descr => 'Crea y edita categorías a tu gusto';
 	@override String get other => 'Ajustes avanzados';
 	@override String get other_descr => 'Otros ajustes generales de personalización de la app';
+	@override String get appearance => 'Apariencia';
+	@override String get appearance_descr => 'Tema de la aplicación, textos...';
+	@override String get app_colors => 'Colores de la aplicación';
 	@override String get theme => 'Tema';
+	@override String get theme_auto => 'Definido por el sistema';
 	@override String get theme_light => 'Claro';
 	@override String get theme_dark => 'Oscuro';
+	@override String get amoled_mode => 'Modo AMOLED';
+	@override String get amoled_mode_descr => 'Usa un fondo de pantalla negro puro cuando sea posible. Esto ayudará ligeramente a la bateria de dispositivos con pantallas AMOLED';
+	@override String get dynamic_colors => 'Colores dinámicos';
+	@override String get dynamic_colors_descr => 'Usa el color de acentuación de su sistema siempre que sea posible';
+	@override String get accent_color => 'Color de acentuación';
+	@override String get accent_color_descr => 'Elige el color que usará la app para enfatizar ciertas partes de la interfaz';
 	@override String get prefer_calc => 'Preferir calculadora';
 	@override String get prefer_calc_descr => 'Muestra en la página de adición/edición de transacciones una calculadora que simplificará las acciones en dispositivos sin teclado';
 }
@@ -1964,7 +2318,7 @@ class _TranslationsSettingsDataEs implements _TranslationsSettingsDataEn {
 
 	// Translations
 	@override String get display => 'Datos';
-	@override String get export_descr => 'Descarga tus datos en diferentes formatos';
+	@override String get display_descr => 'Exporta y importa tus datos para no perder nada';
 	@override String get delete_all => 'Eliminar mis datos';
 	@override String get delete_all_header1 => 'Alto ahí padawan ⚠️⚠️';
 	@override String get delete_all_message1 => '¿Estas seguro de que quieres continuar? Todos tus datos serán borrados permanentemente y no podrán ser recuperados';
@@ -1972,19 +2326,17 @@ class _TranslationsSettingsDataEs implements _TranslationsSettingsDataEn {
 	@override String get delete_all_message2 => 'Al eliminar una cuenta eliminarás todos tus datos personales almacenados. Tus cuentas, transacciones, presupuestos y categorías serán borrados y no podrán ser recuperados. ¿Estas de acuerdo?';
 }
 
-// Path: settings.project
-class _TranslationsSettingsProjectEs implements _TranslationsSettingsProjectEn {
-	_TranslationsSettingsProjectEs._(this._root);
+// Path: settings.about_us
+class _TranslationsSettingsAboutUsEs implements _TranslationsSettingsAboutUsEn {
+	_TranslationsSettingsAboutUsEs._(this._root);
 
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get display => 'Proyecto';
-	@override String get legal => 'Términos y privacidad';
-	@override String get legal_descr => 'Revisa licencias y otros terminos legales de nuestra app';
-	@override String get contributors => 'Colaboradores';
-	@override String get contributors_descr => 'Todos los desarrolladores que han hecho que Monekin crezca';
-	@override String get contact => 'Contacta con nosotros';
+	@override String get display => 'Información de la app';
+	@override String get description => 'Consulta los terminos y otra información relevante sobre Monekin. Ponte en contacto con la comunidad reportando errores, dejando sugerencias...';
+	@override late final _TranslationsSettingsAboutUsLegalEs legal = _TranslationsSettingsAboutUsLegalEs._(_root);
+	@override late final _TranslationsSettingsAboutUsProjectEs project = _TranslationsSettingsAboutUsProjectEs._(_root);
 }
 
 // Path: settings.help_us
@@ -1995,41 +2347,19 @@ class _TranslationsSettingsHelpUsEs implements _TranslationsSettingsHelpUsEn {
 
 	// Translations
 	@override String get display => 'Ayúdanos';
+	@override String get description => 'Descubre de que formas puedes ayudar a que Monekin sea cada vez mejor';
 	@override String get rate_us => 'Califícanos';
 	@override String get rate_us_descr => '¡Cualquier valoración es bienvenida!';
 	@override String get share => 'Comparte Monekin';
-	@override String get share_text => 'Monekin! La mejor app de finanzas personales';
+	@override String get share_descr => 'Comparte nuestra app a amigos y familiares';
+	@override String get share_text => 'Monekin! La mejor app de finanzas personales. Descargala aquí';
+	@override String get thanks => '¡Gracias!';
+	@override String get thanks_long => 'Tus contribuciones a Monekin y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir.';
+	@override String get donate => 'Haz una donación';
+	@override String get donate_descr => 'Con tu donación ayudaras a que la app siga recibiendo mejoras. ¿Que mejor forma que agradecer el trabajo realizado invitandome a un cafe?';
+	@override String get donate_success => 'Donación realizada. Muchas gracias por tu contribución! ❤️';
+	@override String get donate_err => 'Ups! Parece que ha habido un error a la hora de recibir tu pago';
 	@override String get report => 'Reporta errores, deja sugerencias...';
-}
-
-// Path: settings.privacy
-class _TranslationsSettingsPrivacyEs implements _TranslationsSettingsPrivacyEn {
-	_TranslationsSettingsPrivacyEs._(this._root);
-
-	@override final _TranslationsEs _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Política de privacidad';
-}
-
-// Path: settings.licenses
-class _TranslationsSettingsLicensesEs implements _TranslationsSettingsLicensesEn {
-	_TranslationsSettingsLicensesEs._(this._root);
-
-	@override final _TranslationsEs _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Licencias';
-}
-
-// Path: settings.terms_of_use
-class _TranslationsSettingsTermsOfUseEs implements _TranslationsSettingsTermsOfUseEn {
-	_TranslationsSettingsTermsOfUseEs._(this._root);
-
-	@override final _TranslationsEs _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Términos de uso';
 }
 
 // Path: general.time.ranges
@@ -2136,11 +2466,25 @@ class _TranslationsFinancialHealthReviewDescrEs implements _TranslationsFinancia
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
+	@override String get insufficient_data => 'Parece que no tenemos gastos suficientes para calcular tu salud financiera. Añade unos pocos gastos e ingresos para que podamos ayudarte mas!';
 	@override String get very_good => 'Enhorabuena! Tu salud financiera es formidable. Esperamos que sigas con tu buena racha y que continues aprendiendo con Monekin';
 	@override String get good => 'Genial! Tu salud financiera es buena. Visita la pestaña de análisis para ver como ahorrar aun mas!';
 	@override String get normal => 'Tu salud financiera se encuentra mas o menos en la media del resto de la población para este periodo';
-	@override String get bad => 'Parece que tu situación financiera no es la mejor aun. Explora la pestaña de análisis para conocer mas sobre tus finanzas';
-	@override String get very_bad => 'Mmm, tu salud financera esta muy por debajo de lo que debería. Trata de ver donde esta el problema en la sección de análisis';
+	@override String get bad => 'Parece que tu situación financiera no es la mejor aun. Explora el resto de pestañas de análisis para conocer mas sobre tus finanzas';
+	@override String get very_bad => 'Mmm, tu salud financera esta muy por debajo de lo que debería. Trata de ver donde esta el problema gracias a los distintos gráficos y estadisticas que te proporcionamos';
+}
+
+// Path: financial_health.savings_percentage.text
+class _TranslationsFinancialHealthSavingsPercentageTextEs implements _TranslationsFinancialHealthSavingsPercentageTextEn {
+	_TranslationsFinancialHealthSavingsPercentageTextEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String good({required Object value}) => 'Enhorabuena! Has conseguido ahorrar un <b>${value}%</b> de tus ingresos durante este periodo. Parece que ya eres todo un expert@, sigue asi!';
+	@override String normal({required Object value}) => 'Enhorabuena, has conseguido ahorrar un <b>${value}%</b> de tus ingresos durante este periodo.';
+	@override String bad({required Object value}) => 'Has conseguido ahorrar un <b>${value}%</b> de tus ingresos durante este periodo. Sin embargo, creemos que aun puedes hacer mucho mas!';
+	@override String get very_bad => 'Vaya, no has conseguido ahorrar nada durante este periodo.';
 }
 
 // Path: transaction.form.validators
@@ -2200,6 +2544,32 @@ class _TranslationsBackupImportManualImportEs implements _TranslationsBackupImpo
 	];
 }
 
+// Path: settings.about_us.legal
+class _TranslationsSettingsAboutUsLegalEs implements _TranslationsSettingsAboutUsLegalEn {
+	_TranslationsSettingsAboutUsLegalEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Información legal';
+	@override String get privacy => 'Política de privacidad';
+	@override String get terms => 'Términos de uso';
+	@override String get licenses => 'Licencias';
+}
+
+// Path: settings.about_us.project
+class _TranslationsSettingsAboutUsProjectEs implements _TranslationsSettingsAboutUsProjectEn {
+	_TranslationsSettingsAboutUsProjectEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Proyecto';
+	@override String get contributors => 'Colaboradores';
+	@override String get contributors_descr => 'Todos los desarrolladores que han hecho que Monekin crezca';
+	@override String get contact => 'Contacta con nosotros';
+}
+
 /// Flat map(s) containing all translations.
 /// Only for edge cases! For simple maps, use the map function of this library.
 
@@ -2209,7 +2579,7 @@ extension on _TranslationsEn {
 			case 'general.cancel': return 'Cancel';
 			case 'general.or': return 'or';
 			case 'general.understood': return 'Understood';
-			case 'general.unspecified': return 'Sin especificar';
+			case 'general.unspecified': return 'Unspecified';
 			case 'general.attention': return 'Attention ⚠️';
 			case 'general.confirm': return 'Confirm';
 			case 'general.continue_text': return 'Continue';
@@ -2219,21 +2589,12 @@ extension on _TranslationsEn {
 			case 'general.close_and_save': return 'Save and close';
 			case 'general.add': return 'Add';
 			case 'general.edit': return 'Edit';
-			case 'general.archive': return 'Archive';
-			case 'general.unarchive': return 'Unarchive';
 			case 'general.balance': return 'Balance';
 			case 'general.delete': return 'Delete';
-			case 'general.income': return 'Income';
-			case 'general.expense': return 'Expense';
-			case 'general.incomes': return 'Incomes';
-			case 'general.expenses': return 'Expenses';
-			case 'general.expenses_and_incomes': return 'Expenses and incomes';
 			case 'general.account': return 'Account';
 			case 'general.accounts': return 'Accounts';
 			case 'general.categories': return 'Categories';
 			case 'general.category': return 'Category';
-			case 'general.transaction': return 'Transaction';
-			case 'general.transactions': return 'Transactions';
 			case 'general.today': return 'Today';
 			case 'general.yesterday': return 'Yesterday';
 			case 'general.filters': return 'Filters';
@@ -2245,6 +2606,8 @@ extension on _TranslationsEn {
 			case 'general.clipboard.error': return 'Error al copiar';
 			case 'general.time.start_date': return 'Start date';
 			case 'general.time.end_date': return 'End date';
+			case 'general.time.from_date': return 'From date';
+			case 'general.time.until_date': return 'Until date';
 			case 'general.time.date': return 'Date';
 			case 'general.time.datetime': return 'Datetime';
 			case 'general.time.each': return 'Each';
@@ -2314,6 +2677,9 @@ extension on _TranslationsEn {
 			case 'general.transaction_order.quantity': return 'By quantity';
 			case 'general.transaction_order.date': return 'By date';
 			case 'general.validations.required': return 'Required field';
+			case 'general.validations.positive': return 'Should be positive';
+			case 'general.validations.min_number': return ({required Object x}) => 'Should be greater than ${x}';
+			case 'general.validations.max_number': return ({required Object x}) => 'Should be less than ${x}';
 			case 'intro.start': return 'Start';
 			case 'intro.skip': return 'Skip';
 			case 'intro.next': return 'Next';
@@ -2332,6 +2698,7 @@ extension on _TranslationsEn {
 			case 'intro.last_slide_title': return 'All ready';
 			case 'intro.last_slide_descr': return 'With Monekin, you can finally achieve the financial independence you want so much. You will have graphs, budgets, tips, statistics and much more about your money.';
 			case 'intro.last_slide_descr2': return 'We hope you enjoy your experience! Do not hesitate to contact us in case of doubts, suggestions...';
+			case 'home.title': return 'Dashboard';
 			case 'home.filter_transactions': return 'Filter transactions';
 			case 'home.hello_day': return 'Good morning,';
 			case 'home.hello_night': return 'Good night,';
@@ -2344,25 +2711,76 @@ extension on _TranslationsEn {
 			case 'home.should_create_account_header': return 'Oops!';
 			case 'home.should_create_account_message': return 'You must have at least one no-archived account before you can start creating transactions';
 			case 'financial_health.display': return 'Financial health';
-			case 'financial_health.review.very_good': return 'Very good!';
-			case 'financial_health.review.good': return 'Good';
-			case 'financial_health.review.normal': return 'Average';
-			case 'financial_health.review.bad': return 'Fair';
-			case 'financial_health.review.very_bad': return 'Very Bad';
+			case 'financial_health.review.very_good': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Very good!';
+					case GenderContext.female:
+						return 'Very good!';
+				}
+			};
+			case 'financial_health.review.good': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Good';
+					case GenderContext.female:
+						return 'Good';
+				}
+			};
+			case 'financial_health.review.normal': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Average';
+					case GenderContext.female:
+						return 'Average';
+				}
+			};
+			case 'financial_health.review.bad': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Fair';
+					case GenderContext.female:
+						return 'Fair';
+				}
+			};
+			case 'financial_health.review.very_bad': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Very Bad';
+					case GenderContext.female:
+						return 'Very Bad';
+				}
+			};
+			case 'financial_health.review.insufficient_data': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Insufficient data';
+					case GenderContext.female:
+						return 'Insufficient data';
+				}
+			};
+			case 'financial_health.review.descr.insufficient_data': return 'It looks like we don\'t have enough expenses to calculate your financial health. Add some expenses/incomes in this period to allow us to help you!';
 			case 'financial_health.review.descr.very_good': return 'Congratulations! Your financial health is tremendous. We hope you continue your good streak and continue learning with Monekin';
 			case 'financial_health.review.descr.good': return 'Great! Your financial health is good. Visit the analysis tab to see how to save even more!';
 			case 'financial_health.review.descr.normal': return 'Your financial health is more or less in the average of the rest of the population for this period';
-			case 'financial_health.review.descr.bad': return 'It seems that your financial situation is not the best yet. Explore the analysis tab to learn more about your finances';
-			case 'financial_health.review.descr.very_bad': return 'Hmm, your financial health is far below what it should be. Try to see where the problem is in the analysis section';
-			case 'financial_health.months_without_income.good': return ({required Object x}) => 'Well done! At your current spending rate right now you could survive up to ${x} months without any income';
-			case 'financial_health.months_without_income.normal': return ({required Object x}) => 'At your current spending rate right now you could survive up to ${x} months without any income. While this value is acceptable, you can still improve a little more!';
-			case 'financial_health.months_without_income.bad': return ({required Object x}) => 'Wow! You would barely survive ${x} months without income at your current spending rate. Remember that it is recommended to be able to live at least 6 months without any income';
-			case 'financial_health.months_without_income.very_bad': return 'Wow! You could hardly survive a month without income at your current spending rate. Remember that it is recommended to be able to live at least 6 months without any income';
+			case 'financial_health.review.descr.bad': return 'It seems that your financial situation is not the best yet. Explore the rest of the charts to learn more about your finances';
+			case 'financial_health.review.descr.very_bad': return 'Hmm, your financial health is far below what it should be. Explore the rest of the charts to learn more about your finances';
+			case 'financial_health.months_without_income.title': return 'Survival rate';
+			case 'financial_health.months_without_income.subtitle': return 'Given your balance, amount of time you could go without income';
+			case 'financial_health.months_without_income.text': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+				zero: 'You couldn\'t survive a month without income at this rate of expenses!',
+				one: 'You could barely survive approximately a month without income at this rate of expenses!',
+				other: 'You could survive approximately <b>${n} months</b> without income at this rate of spending.',
+			);
+			case 'financial_health.months_without_income.suggestion': return 'Remember that it is advisable to always keep this ratio above 5 months at least. If you see that you do not have a sufficient savings cushion, reduce unnecessary expenses.';
 			case 'financial_health.months_without_income.insufficient_data': return 'It looks like we don\'t have enough expenses to calculate how many months you could survive without income. Enter a few transactions and come back here to check your financial health';
-			case 'financial_health.savings_percentage.good': return ({required Object value}) => 'Congratulations! You have managed to save ${value}% of your income during this period. It seems that you are already quite an expert. Keep it up!';
-			case 'financial_health.savings_percentage.normal': return ({required Object value}) => 'Congratulations, you managed to save ${value}% of your income during this period. Visit the analysis tab to see where you can save even more!';
-			case 'financial_health.savings_percentage.bad': return ({required Object value}) => 'You have managed to save ${value}% of your income during this period. However, we believe that you can still do much more! Remember that it is recommended to save at least 30% of what you earn';
-			case 'financial_health.savings_percentage.very_bad': return 'Wow, you haven\'t managed to save anything during this period :( Visit the analysis tab to see where your financial weaknesses are. Remember that it is recommended to save at least 30% of what you earn';
+			case 'financial_health.savings_percentage.title': return 'Savings percentage';
+			case 'financial_health.savings_percentage.subtitle': return 'What part of your income is not spent in this period';
+			case 'financial_health.savings_percentage.text.good': return ({required Object value}) => 'Congratulations! You have managed to save <b>${value}%</b> of your income during this period. It seems that you are already an expert, keep up the good work!';
+			case 'financial_health.savings_percentage.text.normal': return ({required Object value}) => 'Congratulations, you have managed to save <b>${value}%</b> of your income during this period.';
+			case 'financial_health.savings_percentage.text.bad': return ({required Object value}) => 'You have managed to save <b>${value}%</b> of your income during this period. However, we think you can still do much more!';
+			case 'financial_health.savings_percentage.text.very_bad': return 'Wow, you haven\'t managed to save anything during this period.';
+			case 'financial_health.savings_percentage.suggestion': return 'Remember that it is advisable to save at least 15-20% of what you earn.';
 			case 'stats.title': return 'Statistics';
 			case 'stats.balance': return 'Balance';
 			case 'stats.balance_by_account': return 'Balance by accounts';
@@ -2372,6 +2790,10 @@ extension on _TranslationsEn {
 			case 'stats.compared_to_previous_period': return 'Compared to the previous period';
 			case 'stats.by_periods': return 'By periods';
 			case 'stats.by_categories': return 'By categories';
+			case 'stats.by_tags': return 'By tags';
+			case 'stats.distribution': return 'Distribution';
+			case 'stats.finance_health_resume': return 'Resume';
+			case 'stats.finance_health_breakdown': return 'Breakdown';
 			case 'icon_selector.name': return 'Name:';
 			case 'icon_selector.icon': return 'Icon';
 			case 'icon_selector.color': return 'Colour';
@@ -2386,6 +2808,10 @@ extension on _TranslationsEn {
 			case 'icon_selector.scopes.technology': return 'Technology';
 			case 'icon_selector.scopes.other': return 'Others';
 			case 'icon_selector.scopes.logos_financial_institutions': return 'Financial institutions';
+			case 'transaction.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+				one: 'Transaction',
+				other: 'Transactions',
+			);
 			case 'transaction.create': return 'New transaction';
 			case 'transaction.new_income': return 'New income';
 			case 'transaction.new_expense': return 'New expense';
@@ -2414,7 +2840,12 @@ extension on _TranslationsEn {
 			case 'transaction.list.empty': return 'No transactions found to display here. Add a transaction by clicking the \'+\' button at the bottom';
 			case 'transaction.list.searcher_placeholder': return 'Search by category, description...';
 			case 'transaction.list.loading': return 'Loading more transactions...';
-			case 'transaction.form.status': return 'Status';
+			case 'transaction.filters.from_value': return 'From amount';
+			case 'transaction.filters.to_value': return 'Up to amount';
+			case 'transaction.filters.from_value_def': return ({required Object x}) => 'From ${x}';
+			case 'transaction.filters.to_value_def': return ({required Object x}) => 'Up to ${x}';
+			case 'transaction.filters.from_date_def': return ({required Object date}) => 'From the ${date}';
+			case 'transaction.filters.to_date_def': return ({required Object date}) => 'Up to the ${date}';
 			case 'transaction.form.validators.zero': return 'The value of a transaction cannot be equal to zero';
 			case 'transaction.form.validators.date_max': return 'The selected date is after the current one. The transaction will be added as pending';
 			case 'transaction.form.validators.date_after_account_creation': return 'You cannot create a transaction whose date is before the creation date of the account it belongs to';
@@ -2427,8 +2858,12 @@ extension on _TranslationsEn {
 			case 'transaction.form.description_info': return 'Adding a note will help you find this transaction faster in the future';
 			case 'transaction.form.exchange_to_preferred_today': return ({required Object currency}) => 'Equivalent to ${currency} today:';
 			case 'transaction.form.exchange_to_preferred_in_date': return ({required Object currency, required Object date}) => 'Equivalent to ${currency} on ${date}:';
+			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+				one: 'Status',
+				other: 'Statuses',
+			);
 			case 'transaction.status.tr_status': return ({required Object status}) => '${status} transaction';
-			case 'transaction.status.none': return 'Sin estado';
+			case 'transaction.status.none': return 'Stateless';
 			case 'transaction.status.reconciled': return 'Reconciled';
 			case 'transaction.status.reconciled_descr': return 'This transaction has already been validated and corresponds to a real transaction from your bank';
 			case 'transaction.status.unreconciled': return 'Unreconciled';
@@ -2437,7 +2872,24 @@ extension on _TranslationsEn {
 			case 'transaction.status.pending_descr': return 'This transaction is pending and therefore it will not be taken into account when calculating balances and statistics';
 			case 'transaction.status.voided': return 'Voided';
 			case 'transaction.status.voided_descr': return 'Void/cancelled transaction due to payment error or any other reason. It will not be taken into account when calculating balances and statistics';
+			case 'transaction.types.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+				one: 'Transaction type',
+				other: 'Transaction types',
+			);
+			case 'transaction.types.income': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+				one: 'Income',
+				other: 'Incomes',
+			);
+			case 'transaction.types.expense': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+				one: 'Expense',
+				other: 'Expenses',
+			);
+			case 'transaction.types.transfer': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+				one: 'Transfer',
+				other: 'Transfers',
+			);
 			case 'transfer.display': return 'Transfer';
+			case 'transfer.transfers': return 'Transfers';
 			case 'transfer.transfer_to': return ({required Object account}) => 'Transfer to ${account}';
 			case 'transfer.create': return 'New Transfer';
 			case 'transfer.need_two_accounts_warning_header': return 'Ops!';
@@ -2449,14 +2901,19 @@ extension on _TranslationsEn {
 			case 'transfer.form.currency_exchange_selector.title': return 'Edit exchange between currencies';
 			case 'transfer.form.currency_exchange_selector.value_in_destiny': return 'Amount transferred in destination';
 			case 'recurrent_transactions.title': return 'Recurrent transactions';
+			case 'recurrent_transactions.title_short': return 'Rec. transactions';
 			case 'recurrent_transactions.empty': return 'It looks like you don\'t have any recurring transactions. Create a monthly, yearly, or weekly recurring transaction and it will appear here';
 			case 'recurrent_transactions.details.title': return 'Recurrent transaction';
-			case 'recurrent_transactions.details.next_payment_info': return ({required Object date}) => 'The next movement of this transaction will take place on ${date}. You can choose whether you want to skip this movement or accept it on the date of your choice';
-			case 'recurrent_transactions.details.last_payment_info': return ({required Object date}) => 'The next move for this transaction will take place on ${date}. This payment will be the last for the recurring rule, so this rule will be automatically removed when this payment is made';
+			case 'recurrent_transactions.details.descr': return 'The next moves for this transaction are shown below. You can accept the first move or skip this move';
+			case 'recurrent_transactions.details.last_payment_info': return 'This movement is the last of the recurring rule, so this rule will be automatically deleted when confirming this action';
 			case 'recurrent_transactions.details.delete_header': return 'Delete recurring transaction';
 			case 'recurrent_transactions.details.delete_message': return 'This action is irreversible and will not affect transactions you have already confirmed/paid for';
 			case 'account.details': return 'Account details';
 			case 'account.date': return 'Opening date';
+			case 'account.close_date': return 'Closing date';
+			case 'account.reopen': return 'Re-open account';
+			case 'account.reopen_short': return 'Re-open';
+			case 'account.reopen_descr': return 'Are you sure you want to reopen this account?';
 			case 'account.balance': return 'Account balance';
 			case 'account.n_transactions': return 'Number of transactions';
 			case 'account.add_money': return 'Add money';
@@ -2484,17 +2941,20 @@ extension on _TranslationsEn {
 			case 'account.delete.warning_header': return 'Are you sure?';
 			case 'account.delete.warning_text': return 'This action will delete this account and all its transactions';
 			case 'account.delete.success': return 'Account deleted successfully';
-			case 'account.archive.title': return 'Archive account';
-			case 'account.archive.warn': return 'This account will no longer appear in certain listings and you will not be able to create new transactions on this account. You can unarchive this account whenever you want';
-			case 'account.archive.should_have_zero_balance': return 'You must have a current balance of 0 to be able to archive this account. Please edit it before continuing';
-			case 'account.archive.success': return 'Account archived successfully';
-			case 'account.archive.unarchive_succes': return 'Account unarchived successfully';
+			case 'account.close.title': return 'Close account';
+			case 'account.close.title_short': return 'Close';
+			case 'account.close.warn': return 'This account will no longer appear in certain listings and you will not be able to create transactions in it with a date later than the one specified below. This action does not affect any transactions or balance, and you can also reopen this account at any time. ';
+			case 'account.close.should_have_zero_balance': return 'You must have a current balance of 0 in this account to close it. Please edit the account before continuing';
+			case 'account.close.should_have_no_transactions': return 'This account has transactions after the specified close date. Delete them or edit the account close date before continuing';
+			case 'account.close.success': return 'Account closed successfully';
+			case 'account.close.unarchive_succes': return 'Account successfully re-opened';
 			case 'account.select.one': return 'Select an account';
 			case 'account.select.all': return 'All accounts';
 			case 'account.select.multiple': return 'Select accounts';
 			case 'currencies.currency_converter': return 'Currency converter';
 			case 'currencies.currency': return 'Currency';
 			case 'currencies.currency_manager': return 'Currency manager';
+			case 'currencies.currency_manager_descr': return 'Configure your currency and its exchange rates with others';
 			case 'currencies.preferred_currency': return 'Preferred/base currency';
 			case 'currencies.change_preferred_currency_title': return 'Change preferred currency';
 			case 'currencies.change_preferred_currency_msg': return 'All stats and budgets will be displayed in this currency from now on. Accounts and transactions will keep the currency they had. All saved exchange rates will be deleted if you execute this action. Do you wish to continue?';
@@ -2512,6 +2972,24 @@ extension on _TranslationsEn {
 			case 'currencies.select_a_currency': return 'Select a currency';
 			case 'currencies.search_title': return 'Tap to search';
 			case 'currencies.search_placeholder': return 'Search by name or by currency code';
+			case 'tags.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+				one: 'Label',
+				other: 'Tags',
+			);
+			case 'tags.form.name': return 'Tag name';
+			case 'tags.form.description': return 'Description';
+			case 'tags.empty_list': return 'You haven\'t created any tags yet. Tags and categories are a great way to categorize your movements';
+			case 'tags.without_tags': return 'Without tags';
+			case 'tags.select': return 'Select tags';
+			case 'tags.add': return 'Add tag';
+			case 'tags.create': return 'Create label';
+			case 'tags.create_success': return 'Label created successfully';
+			case 'tags.already_exists': return 'This tag name already exists. You may want to edit it';
+			case 'tags.edit': return 'Edit tag';
+			case 'tags.edit_success': return 'Tag edited successfully';
+			case 'tags.delete_success': return 'Category deleted successfully';
+			case 'tags.delete_warning_header': return 'Delete tag?';
+			case 'tags.delete_warning_message': return 'This action will not delete transactions that have this tag.';
 			case 'categories.unknown': return 'Unknown category';
 			case 'categories.create': return 'Create category';
 			case 'categories.create_success': return 'Category created correctly';
@@ -2571,18 +3049,18 @@ extension on _TranslationsEn {
 			case 'budgets.details.expend_evolution': return 'Expenditure evolution';
 			case 'budgets.details.no_transactions': return 'It seems that you have not made any expenses related to this budget';
 			case 'backup.export.title': return 'Export your data';
-			case 'backup.export.title_sort': return 'Export';
+			case 'backup.export.title_short': return 'Export';
 			case 'backup.export.all': return 'Full backup';
 			case 'backup.export.all_descr': return 'Export all your data (accounts, transactions, budgets, settings...). Import them again at any time so you don\'t lose anything.';
 			case 'backup.export.transactions': return 'Transactions backup';
 			case 'backup.export.transactions_descr': return 'Export your transactions in various formats so you can more easily analyze them in other programs or applications.';
-			case 'backup.export.description': return 'Keep a backup of all your accounts, budgets, transactions, settings...';
+			case 'backup.export.description': return 'Download your data in different formats';
 			case 'backup.export.dialog_title': return 'Save/Send file';
 			case 'backup.export.success_in_documents': return 'File successfully saved to Internal Storage/Documents';
 			case 'backup.export.success_in_data': return 'File saved/downloaded successfully';
 			case 'backup.export.error': return 'Error downloading the file. Please contact the developer via lozin.technologies@gmail.com';
 			case 'backup.import.title': return 'Import your data';
-			case 'backup.import.title_sort': return 'Import';
+			case 'backup.import.title_short': return 'Import';
 			case 'backup.import.restore_backup': return 'Restore Backup';
 			case 'backup.import.restore_backup_warn': return 'When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Monekin';
 			case 'backup.import.restore_backup_descr': return 'Import a previously saved database from Monekin. This action will replace any current application data with the new data';
@@ -2610,46 +3088,69 @@ extension on _TranslationsEn {
 			case 'backup.import.success': return 'Import performed successfully';
 			case 'backup.import.cancelled': return 'Import was cancelled by the user';
 			case 'backup.import.error': return 'Error importing file. Please contact developer via lozin.technologies@gmail.com';
+			case 'backup.about.title': return 'Information about your database';
+			case 'backup.about.create_date': return 'Creation date';
+			case 'backup.about.modify_date': return 'Last modified';
+			case 'backup.about.last_backup': return 'Last backup';
+			case 'backup.about.size': return 'Size';
 			case 'settings.title': return 'Settings';
 			case 'settings.edit_profile': return 'Edit profile';
 			case 'settings.display_name': return 'User name';
-			case 'settings.lang': return 'Language';
+			case 'settings.lang': return 'App language';
 			case 'settings.lang_descr': return 'Language in which the texts will be displayed in the app';
 			case 'settings.locale': return 'Region';
 			case 'settings.locale_descr': return 'Set the format to use for dates, numbers...';
 			case 'settings.locale_warn': return 'When changing region the app will update';
 			case 'settings.first_day_of_week': return 'First day of week';
-			case 'settings.general.display': return 'General settings';
 			case 'settings.general.categories_descr': return 'Create and edit categories to your liking';
 			case 'settings.general.other': return 'Advanced settings';
 			case 'settings.general.other_descr': return 'Other general app customization settings';
+			case 'settings.general.appearance': return 'Appearance';
+			case 'settings.general.appearance_descr': return 'App theme, texts...';
+			case 'settings.general.app_colors': return 'App colors';
 			case 'settings.general.theme': return 'Theme';
+			case 'settings.general.theme_auto': return 'Defined by the system';
 			case 'settings.general.theme_light': return 'Light';
 			case 'settings.general.theme_dark': return 'Dark';
+			case 'settings.general.amoled_mode': return 'AMOLED mode';
+			case 'settings.general.amoled_mode_descr': return 'Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens';
+			case 'settings.general.dynamic_colors': return 'Dynamic colors';
+			case 'settings.general.dynamic_colors_descr': return 'Use your system accent color whenever possible';
+			case 'settings.general.accent_color': return 'Accent color';
+			case 'settings.general.accent_color_descr': return 'Choose the color the app will use to emphasize certain parts of the interface';
 			case 'settings.general.prefer_calc': return 'Prefer calculator';
 			case 'settings.general.prefer_calc_descr': return 'Displays a calculator on the add/edit transaction page that will simplify actions on devices without a keyboard';
 			case 'settings.data.display': return 'Data';
-			case 'settings.data.export_descr': return 'Download your data in different formats';
+			case 'settings.data.display_descr': return 'Export and import your data so you don\'t lose anything';
 			case 'settings.data.delete_all': return 'Delete my data';
 			case 'settings.data.delete_all_header1': return 'Stop right there padawan ⚠️⚠️';
 			case 'settings.data.delete_all_message1': return 'Are you sure you want to continue? All your data will be permanently deleted and cannot be recovered';
 			case 'settings.data.delete_all_header2': return 'One last step ⚠️⚠️';
 			case 'settings.data.delete_all_message2': return 'By deleting an account you will delete all your stored personal data. Your accounts, transactions, budgets and categories will be deleted and cannot be recovered. Do you agree?';
-			case 'settings.project.display': return 'Project';
-			case 'settings.project.legal': return 'Terms and privacy';
-			case 'settings.project.legal_descr': return 'Check licenses and other legal terms of our app';
-			case 'settings.project.contributors': return 'Collaborators';
-			case 'settings.project.contributors_descr': return 'All the developers who have made Monekin grow';
-			case 'settings.project.contact': return 'Contact us';
+			case 'settings.about_us.display': return 'App information';
+			case 'settings.about_us.description': return 'Check out the terms and other relevant information about Monekin. Get in touch with the community by reporting bugs, leaving suggestions...';
+			case 'settings.about_us.legal.display': return 'Legal information';
+			case 'settings.about_us.legal.privacy': return 'Privacy policy';
+			case 'settings.about_us.legal.terms': return 'Terms of use';
+			case 'settings.about_us.legal.licenses': return 'Licenses';
+			case 'settings.about_us.project.display': return 'Project';
+			case 'settings.about_us.project.contributors': return 'Collaborators';
+			case 'settings.about_us.project.contributors_descr': return 'All the developers who have made Monekin grow';
+			case 'settings.about_us.project.contact': return 'Contact us';
 			case 'settings.help_us.display': return 'Help us';
+			case 'settings.help_us.description': return 'Find out how you can help Monekin become better and better';
 			case 'settings.help_us.rate_us': return 'Rate us';
 			case 'settings.help_us.rate_us_descr': return 'Any rate is welcome!';
 			case 'settings.help_us.share': return 'Share Monekin';
-			case 'settings.help_us.share_text': return 'Monekin! The best personal finance app';
+			case 'settings.help_us.share_descr': return 'Share our app to friends and family';
+			case 'settings.help_us.share_text': return 'Monekin! The best personal finance app. Download it here';
+			case 'settings.help_us.thanks': return 'Thank you!';
+			case 'settings.help_us.thanks_long': return 'Your contributions to Monekin and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.';
+			case 'settings.help_us.donate': return 'Make a donation';
+			case 'settings.help_us.donate_descr': return 'With your donation you will help the app continue receiving improvements. What better way than to thank the work done by inviting me to a coffee?';
+			case 'settings.help_us.donate_success': return 'Donation made. Thank you very much for your contribution! ❤️';
+			case 'settings.help_us.donate_err': return 'Oops! It seems there was an error receiving your payment';
 			case 'settings.help_us.report': return 'Report bugs, leave suggestions...';
-			case 'settings.privacy.title': return 'Privacy policy';
-			case 'settings.licenses.title': return 'Licences';
-			case 'settings.terms_of_use.title': return 'Terms of use';
 			case 'lang.es': return 'Spanish';
 			case 'lang.en': return 'English';
 			default: return null;
@@ -2673,21 +3174,12 @@ extension on _TranslationsEs {
 			case 'general.close_and_save': return 'Guardar y cerrar';
 			case 'general.add': return 'Añadir';
 			case 'general.edit': return 'Editar';
-			case 'general.archive': return 'Archivar';
-			case 'general.unarchive': return 'Desarchivar';
 			case 'general.delete': return 'Eliminar';
 			case 'general.balance': return 'Balance';
-			case 'general.income': return 'Ingreso';
-			case 'general.expense': return 'Gasto';
-			case 'general.incomes': return 'Ingresos';
-			case 'general.expenses': return 'Gastos';
-			case 'general.expenses_and_incomes': return 'Gastos e ingresos';
 			case 'general.account': return 'Cuenta';
 			case 'general.accounts': return 'Cuentas';
 			case 'general.categories': return 'Categorías';
 			case 'general.category': return 'Categoría';
-			case 'general.transaction': return 'Transacción';
-			case 'general.transactions': return 'Transacciones';
 			case 'general.today': return 'Hoy';
 			case 'general.yesterday': return 'Ayer';
 			case 'general.filters': return 'Filtros';
@@ -2699,6 +3191,8 @@ extension on _TranslationsEs {
 			case 'general.clipboard.error': return 'Error al copiar';
 			case 'general.time.start_date': return 'Fecha de inicio';
 			case 'general.time.end_date': return 'Fecha de fin';
+			case 'general.time.from_date': return 'Desde fecha';
+			case 'general.time.until_date': return 'Hasta fecha';
 			case 'general.time.date': return 'Fecha';
 			case 'general.time.datetime': return 'Fecha y hora';
 			case 'general.time.each': return 'Cada';
@@ -2769,6 +3263,9 @@ extension on _TranslationsEs {
 			case 'general.transaction_order.quantity': return 'Por cantidad';
 			case 'general.transaction_order.date': return 'Por fecha';
 			case 'general.validations.required': return 'Campo obligatorio';
+			case 'general.validations.positive': return 'Debe ser positivo';
+			case 'general.validations.min_number': return ({required Object x}) => 'Debe ser mayor que ${x}';
+			case 'general.validations.max_number': return ({required Object x}) => 'Debe ser menor que ${x}';
 			case 'intro.start': return 'Empecemos';
 			case 'intro.skip': return 'Saltar';
 			case 'intro.next': return 'Siguiente';
@@ -2787,6 +3284,7 @@ extension on _TranslationsEs {
 			case 'intro.last_slide_title': return 'Todo listo!';
 			case 'intro.last_slide_descr': return 'Con Monekin, podrás al fin lograr la independencia financiaria que tanto deseas. Podrás ver gráficas, presupuestos, consejos, estadisticas y mucho más sobre tu dinero.';
 			case 'intro.last_slide_descr2': return 'Esperemos que disfrutes de tu experiencia! No dudes en contactar con nosotros en caso de dudas, sugerencias...';
+			case 'home.title': return 'Dashboard';
 			case 'home.filter_transactions': return 'Filtrar transacciones';
 			case 'home.hello_day': return 'Buenos días,';
 			case 'home.hello_night': return 'Buenas noches,';
@@ -2799,25 +3297,76 @@ extension on _TranslationsEs {
 			case 'home.should_create_account_header': return 'Ops!';
 			case 'home.should_create_account_message': return 'Debes tener al menos una cuenta no archivada que no sea de ahorros antes de empezar a crear transacciones';
 			case 'financial_health.display': return 'Salud financiera';
-			case 'financial_health.review.very_good': return 'Muy buena!';
-			case 'financial_health.review.good': return 'Buena';
-			case 'financial_health.review.normal': return 'En la media';
-			case 'financial_health.review.bad': return 'Regular';
-			case 'financial_health.review.very_bad': return 'Muy mala';
+			case 'financial_health.review.very_good': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Excelente!';
+					case GenderContext.female:
+						return 'Excelente!';
+				}
+			};
+			case 'financial_health.review.good': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Bueno';
+					case GenderContext.female:
+						return 'Buena';
+				}
+			};
+			case 'financial_health.review.normal': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'En la media';
+					case GenderContext.female:
+						return 'En la media';
+				}
+			};
+			case 'financial_health.review.bad': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Regular';
+					case GenderContext.female:
+						return 'Regular';
+				}
+			};
+			case 'financial_health.review.very_bad': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Muy malo';
+					case GenderContext.female:
+						return 'Muy mala';
+				}
+			};
+			case 'financial_health.review.insufficient_data': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Datos insuficientes';
+					case GenderContext.female:
+						return 'Datos insuficientes';
+				}
+			};
+			case 'financial_health.review.descr.insufficient_data': return 'Parece que no tenemos gastos suficientes para calcular tu salud financiera. Añade unos pocos gastos e ingresos para que podamos ayudarte mas!';
 			case 'financial_health.review.descr.very_good': return 'Enhorabuena! Tu salud financiera es formidable. Esperamos que sigas con tu buena racha y que continues aprendiendo con Monekin';
 			case 'financial_health.review.descr.good': return 'Genial! Tu salud financiera es buena. Visita la pestaña de análisis para ver como ahorrar aun mas!';
 			case 'financial_health.review.descr.normal': return 'Tu salud financiera se encuentra mas o menos en la media del resto de la población para este periodo';
-			case 'financial_health.review.descr.bad': return 'Parece que tu situación financiera no es la mejor aun. Explora la pestaña de análisis para conocer mas sobre tus finanzas';
-			case 'financial_health.review.descr.very_bad': return 'Mmm, tu salud financera esta muy por debajo de lo que debería. Trata de ver donde esta el problema en la sección de análisis';
-			case 'financial_health.months_without_income.good': return ({required Object x}) => 'Bien hecho! Con tu ritmo de gastos actual ahora mismo podrías sobrevivir hasta ${x} meses sin ningún ingreso';
-			case 'financial_health.months_without_income.normal': return ({required Object x}) => 'Con tu ritmo de gastos actual ahora mismo podrías sobrevivir hasta ${x} meses sin ningún ingreso. Si bien este valor es aceptable, aun puedes mejorar un poco más!';
-			case 'financial_health.months_without_income.bad': return ({required Object x}) => 'Vaya! Apenás sobrevivirías ${x} meses sin ingresos con tu ritmo de gastos actual. Recuerda que lo recomendable es poder vivir al menos 6 meses sin ningun ingreso';
-			case 'financial_health.months_without_income.very_bad': return 'Vaya! Apenas sobrevivirías un mes sin ingresos con tu ritmo de gastos actual. Recuerda que lo recomendable es poder vivir al menos 6 meses sin ningun ingreso';
+			case 'financial_health.review.descr.bad': return 'Parece que tu situación financiera no es la mejor aun. Explora el resto de pestañas de análisis para conocer mas sobre tus finanzas';
+			case 'financial_health.review.descr.very_bad': return 'Mmm, tu salud financera esta muy por debajo de lo que debería. Trata de ver donde esta el problema gracias a los distintos gráficos y estadisticas que te proporcionamos';
+			case 'financial_health.months_without_income.title': return 'Ratio de supervivencia';
+			case 'financial_health.months_without_income.subtitle': return 'Dado tu saldo, cantidad de tiempo que podrías pasar sin ingresos';
+			case 'financial_health.months_without_income.text': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+				zero: 'No podrías sobrevivir ni un mes sin ingresos con este ritmo de gastos!',
+				one: 'Apenas podrías sobrevivir aproximadatemente un mes sin ingresos con este ritmo de gastos!',
+				other: 'Podrías sobrevivir aproximadamente <b>${n} meses</b> sin ingresos manteniendo este ritmo de gastos.',
+			);
+			case 'financial_health.months_without_income.suggestion': return 'Recuerda que es recomendable mantener este ratio siempre por encima de 5 meses como mínimo. Si ves que no tienes un colchon de ahorro suficiente, reduce los gastos no necesarios.';
 			case 'financial_health.months_without_income.insufficient_data': return 'Parece que no tenemos gastos suficientes para calcular cuantos meses podrías sobrevivir sin ingresos. Introduce unas pocas transacciones y regresa aquí para consultar tu salud financiera';
-			case 'financial_health.savings_percentage.good': return ({required Object value}) => 'Enhorabuena! Has conseguido ahorrar un ${value}% de tus ingresos durante este periodo. Parece que ya eres todo un expert@. Sigue asi!';
-			case 'financial_health.savings_percentage.normal': return ({required Object value}) => 'Enhorabuena, has conseguido ahorrar un ${value}% de tus ingresos durante este periodo. Visita la pestaña de análisis para ver donde puedes ahorrar aun más!';
-			case 'financial_health.savings_percentage.bad': return ({required Object value}) => 'Has conseguido ahorrar un ${value}% de tus ingresos durante este periodo. Sin embargo, creemos que aun puedes hacer mucho mas! Recuerda que es recomendable ahorrar al menos un 30% de lo que ingresas';
-			case 'financial_health.savings_percentage.very_bad': return 'Vaya, no has conseguido ahorrar nada durante este periodo :( Visita la pestaña de análisis para ver donde estan tus debilidades financieras. Recuerda que es recomendable ahorrar al menos un 30% de lo que ingresas';
+			case 'financial_health.savings_percentage.title': return 'Porcentaje de ahorro';
+			case 'financial_health.savings_percentage.subtitle': return 'Que parte de tus ingresos no son gastados en este periodo';
+			case 'financial_health.savings_percentage.text.good': return ({required Object value}) => 'Enhorabuena! Has conseguido ahorrar un <b>${value}%</b> de tus ingresos durante este periodo. Parece que ya eres todo un expert@, sigue asi!';
+			case 'financial_health.savings_percentage.text.normal': return ({required Object value}) => 'Enhorabuena, has conseguido ahorrar un <b>${value}%</b> de tus ingresos durante este periodo.';
+			case 'financial_health.savings_percentage.text.bad': return ({required Object value}) => 'Has conseguido ahorrar un <b>${value}%</b> de tus ingresos durante este periodo. Sin embargo, creemos que aun puedes hacer mucho mas!';
+			case 'financial_health.savings_percentage.text.very_bad': return 'Vaya, no has conseguido ahorrar nada durante este periodo.';
+			case 'financial_health.savings_percentage.suggestion': return 'Recuerda que es recomendable ahorrar al menos un 15-20% de lo que ingresas.';
 			case 'stats.title': return 'Estadísticas';
 			case 'stats.balance': return 'Saldo';
 			case 'stats.balance_by_account': return 'Saldo por cuentas';
@@ -2827,6 +3376,10 @@ extension on _TranslationsEs {
 			case 'stats.cash_flow': return 'Flujo de caja';
 			case 'stats.by_periods': return 'Por periodos';
 			case 'stats.by_categories': return 'Por categorías';
+			case 'stats.by_tags': return 'Por etiquetas';
+			case 'stats.distribution': return 'Distribución';
+			case 'stats.finance_health_resume': return 'Resumen';
+			case 'stats.finance_health_breakdown': return 'Desglose';
 			case 'icon_selector.name': return 'Nombre:';
 			case 'icon_selector.icon': return 'Icono';
 			case 'icon_selector.color': return 'Color';
@@ -2841,6 +3394,10 @@ extension on _TranslationsEs {
 			case 'icon_selector.scopes.technology': return 'Technología';
 			case 'icon_selector.scopes.other': return 'Otros';
 			case 'icon_selector.scopes.logos_financial_institutions': return 'Financial institutions';
+			case 'transaction.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+				one: 'Transacción',
+				other: 'Transacciones',
+			);
 			case 'transaction.create': return 'Nueva transacción';
 			case 'transaction.new_income': return 'Nuevo ingreso';
 			case 'transaction.new_expense': return 'Nuevo gasto';
@@ -2869,7 +3426,12 @@ extension on _TranslationsEs {
 			case 'transaction.list.empty': return 'No se han encontrado transacciones que mostrar aquí. Añade una transacción pulsando el botón \'+\' de la parte inferior';
 			case 'transaction.list.searcher_placeholder': return 'Busca por categoría, descripción...';
 			case 'transaction.list.loading': return 'Cargando más transacciones...';
-			case 'transaction.form.status': return 'Estado';
+			case 'transaction.filters.from_value': return 'Desde monto';
+			case 'transaction.filters.to_value': return 'Hasta monto';
+			case 'transaction.filters.from_value_def': return ({required Object x}) => 'Desde ${x}';
+			case 'transaction.filters.to_value_def': return ({required Object x}) => 'Hasta ${x}';
+			case 'transaction.filters.from_date_def': return ({required Object date}) => 'Desde el ${date}';
+			case 'transaction.filters.to_date_def': return ({required Object date}) => 'Hasta el ${date}';
 			case 'transaction.form.validators.zero': return 'El valor de una transacción no puede ser igual a cero';
 			case 'transaction.form.validators.date_max': return 'La fecha seleccionada es posterior a la actual. Se añadirá la transacción como pendiente';
 			case 'transaction.form.validators.date_after_account_creation': return 'No puedes crear una transacción cuya fecha es anterior a la fecha de creación de la cuenta a la que pertenece';
@@ -2882,6 +3444,10 @@ extension on _TranslationsEs {
 			case 'transaction.form.description_info': return 'Añadir una nota te ayudará a encontrar más rapidamente esta transacción en un futuro';
 			case 'transaction.form.exchange_to_preferred_today': return ({required Object currency}) => 'Equivalencia a ${currency} hoy:';
 			case 'transaction.form.exchange_to_preferred_in_date': return ({required Object currency, required Object date}) => 'Equivalencia a ${currency} el ${date}:';
+			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+				one: 'Estado',
+				other: 'Estados',
+			);
 			case 'transaction.status.tr_status': return ({required Object status}) => 'Transacción ${status}';
 			case 'transaction.status.none': return 'Sin estado';
 			case 'transaction.status.reconciled': return 'Reconciliada';
@@ -2892,7 +3458,24 @@ extension on _TranslationsEs {
 			case 'transaction.status.pending_descr': return 'Esta transacción esta pendiente y por tanto no será tenida en cuenta a la hora de calcular balances y estadísticas';
 			case 'transaction.status.voided': return 'Nula';
 			case 'transaction.status.voided_descr': return 'Transacción nula/cancelada debido a un error en el pago o cualquier otro motivo. No será tenida en cuenta a la hora de calcular balances y estadísticas';
+			case 'transaction.types.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+				one: 'Tipo de transacción',
+				other: 'Tipos de transacción',
+			);
+			case 'transaction.types.income': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+				one: 'Ingreso',
+				other: 'Ingresos',
+			);
+			case 'transaction.types.expense': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+				one: 'Gasto',
+				other: 'Gastos',
+			);
+			case 'transaction.types.transfer': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+				one: 'Transferencia',
+				other: 'Transferencias',
+			);
 			case 'transfer.display': return 'Transferencia';
+			case 'transfer.transfers': return 'Transferencias';
 			case 'transfer.transfer_to': return ({required Object account}) => 'Transferencia hacia ${account}';
 			case 'transfer.create': return 'Nueva transferencia';
 			case 'transfer.need_two_accounts_warning_header': return 'Ops!';
@@ -2904,14 +3487,19 @@ extension on _TranslationsEs {
 			case 'transfer.form.currency_exchange_selector.title': return 'Editar cambio entre divisas';
 			case 'transfer.form.currency_exchange_selector.value_in_destiny': return 'Cantidad transferida en destino';
 			case 'recurrent_transactions.title': return 'Movimientos recurrentes';
+			case 'recurrent_transactions.title_short': return 'Mov. recurrentes';
 			case 'recurrent_transactions.empty': return 'Parece que no posees ninguna transacción recurrente. Crea una transacción que se repita mensual, anual o semanalmente y aparecerá aquí';
 			case 'recurrent_transactions.details.title': return 'Transaccion recurrente';
-			case 'recurrent_transactions.details.next_payment_info': return ({required Object date}) => 'El próximo movimiento de esta transacción tendrá lugar el día ${date}. Puedes elegir si deseas saltar este movimiento o aceptarlo en la fecha que elijas';
-			case 'recurrent_transactions.details.last_payment_info': return ({required Object date}) => 'El próximo movimiento de esta transacción tendrá lugar el día ${date}. Este pago será el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al realizar este pago';
+			case 'recurrent_transactions.details.descr': return 'A continuación se muestran próximos movimientos de esta transacción. Podrás aceptar el primero de ellos o saltar este movimiento';
+			case 'recurrent_transactions.details.last_payment_info': return 'Este movimiento es el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al confirmar esta acción';
 			case 'recurrent_transactions.details.delete_header': return 'Eliminar transacción recurrente';
 			case 'recurrent_transactions.details.delete_message': return 'Esta acción es irreversible y no afectará a transacciones que ya hayas confirmado/pagado';
 			case 'account.details': return 'Detalles de la cuenta';
 			case 'account.date': return 'Fecha de apertura';
+			case 'account.close_date': return 'Fecha de cierre';
+			case 'account.reopen_short': return 'Reabrir';
+			case 'account.reopen': return 'Reabrir cuenta';
+			case 'account.reopen_descr': return '¿Seguro que quieres volver a abrir esta cuenta?';
 			case 'account.balance': return 'Saldo de la cuenta';
 			case 'account.n_transactions': return 'Número de transacciones';
 			case 'account.add_money': return 'Añadir dinero';
@@ -2939,16 +3527,19 @@ extension on _TranslationsEs {
 			case 'account.delete.warning_header': return '¿Estas seguro?';
 			case 'account.delete.warning_text': return 'Esta acción borrara esta cuenta y todas sus transacciones';
 			case 'account.delete.success': return 'Cuenta eliminada correctamente';
-			case 'account.archive.title': return 'Archive account';
-			case 'account.archive.warn': return 'This account will no longer appear in certain listings and you will not be able to create new transactions on this account. You can unarchive this account whenever you want';
-			case 'account.archive.should_have_zero_balance': return 'You must have a current balance of 0 to be able to archive this account. Please edit it before continuing';
-			case 'account.archive.success': return 'Account archived successfully';
-			case 'account.archive.unarchive_succes': return 'Account unarchived successfully';
+			case 'account.close.title': return 'Cerrar cuenta';
+			case 'account.close.title_short': return 'Cerrar';
+			case 'account.close.warn': return 'Esta cuenta ya no aparecerá en ciertos listados y no podrá crear transacciones en ella con fecha posterior a la especificada debajo. Esta acción no afecta a ninguna transacción ni balance, y además, podrás volver a abrir esta cuenta cuando quieras';
+			case 'account.close.should_have_zero_balance': return 'Debes tener un saldo actual en la cuenta de 0 para poder cerrarla. Edita esta cuenta antes de continuar';
+			case 'account.close.should_have_no_transactions': return 'Esta cuenta posee transacciones posteriores a la fecha de cierre especificada. Borralas o edita la fecha de cierre de la cuenta antes de continuar';
+			case 'account.close.success': return 'Cuenta cerrada exitosamente';
+			case 'account.close.unarchive_succes': return 'Cuenta re-abierta exitosamente';
 			case 'account.select.one': return 'Selecciona una cuenta';
 			case 'account.select.multiple': return 'Selecciona cuentas';
 			case 'account.select.all': return 'Todas las cuentas';
 			case 'currencies.currency_converter': return 'Conversor de divisas';
 			case 'currencies.currency_manager': return 'Administrador de divisas';
+			case 'currencies.currency_manager_descr': return 'Configura tu divisa y sus tipos de cambio con otras';
 			case 'currencies.currency': return 'Divisa';
 			case 'currencies.preferred_currency': return 'Divisa predeterminada/base';
 			case 'currencies.change_preferred_currency_title': return 'Cambiar divisa predeterminada';
@@ -2967,6 +3558,24 @@ extension on _TranslationsEs {
 			case 'currencies.select_a_currency': return 'Selecciona una divisa';
 			case 'currencies.search_title': return 'Toca para buscar';
 			case 'currencies.search_placeholder': return 'Busca por nombre o por código de la divisa';
+			case 'tags.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+				one: 'Etiqueta',
+				other: 'Etiquetas',
+			);
+			case 'tags.form.name': return 'Nombre de la etiqueta';
+			case 'tags.form.description': return 'Descripción';
+			case 'tags.empty_list': return 'No has creado ninguna etiqueta aun. Las etiquetas y las categorías son una gran forma de categorizar tus movimientos';
+			case 'tags.without_tags': return 'Sin etiquetas';
+			case 'tags.select': return 'Selecionar etiquetas';
+			case 'tags.create': return 'Crear etiqueta';
+			case 'tags.add': return 'Añadir etiqueta';
+			case 'tags.create_success': return 'Etiqueta creada correctamente';
+			case 'tags.already_exists': return 'El nombre de esta etiqueta ya existe. Puede que quieras editarla';
+			case 'tags.edit': return 'Editar etiqueta';
+			case 'tags.edit_success': return 'Etiqueta editada correctamente';
+			case 'tags.delete_success': return 'Categoría eliminada correctamente';
+			case 'tags.delete_warning_header': return '¿Eliminar etiqueta?';
+			case 'tags.delete_warning_message': return 'Esta acción no borrará las transacciones que poseen esta etiqueta.';
 			case 'categories.unknown': return 'Categoría desconocida';
 			case 'categories.create': return 'Crear categoría';
 			case 'categories.create_success': return 'Categoría creada correctamente';
@@ -3026,18 +3635,18 @@ extension on _TranslationsEs {
 			case 'budgets.details.expend_evolution': return 'Evolución del gasto';
 			case 'budgets.details.no_transactions': return 'Parece que no has realizado ningún gasto relativo a este presupuesto';
 			case 'backup.export.title': return 'Exportar datos';
-			case 'backup.export.title_sort': return 'Exportar';
+			case 'backup.export.title_short': return 'Exportar';
 			case 'backup.export.all': return 'Respaldo total';
 			case 'backup.export.all_descr': return 'Exporta todos tus datos (cuentas, transacciones, presupuestos, ajustes...). Importalos de nuevo en cualquier momento para no perder nada.';
 			case 'backup.export.transactions': return 'Respaldo de transacciones';
 			case 'backup.export.transactions_descr': return 'Exporta tus transacciones en diversos formatos para que puedas analizarlas mas facilmente en otros programas o aplicaciones.';
-			case 'backup.export.description': return 'Guarda una copia de seguridad de todas tus cuentas, presupuestos, transacciones, ajustes...';
+			case 'backup.export.description': return 'Exporta tus datos en diferentes formatos';
 			case 'backup.export.dialog_title': return 'Guardar/Enviar archivo';
 			case 'backup.export.success_in_documents': return 'Archivo guardado correctamente en Almacenamiento interno/Documents';
 			case 'backup.export.success_in_data': return 'Archivo guardado/enviado correctamente';
 			case 'backup.export.error': return 'Error al descargar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com';
 			case 'backup.import.title': return 'Importar tus datos';
-			case 'backup.import.title_sort': return 'Importar';
+			case 'backup.import.title_short': return 'Importar';
 			case 'backup.import.restore_backup': return 'Restaurar copia de seguridad';
 			case 'backup.import.restore_backup_warn': return 'Al importar una nueva base de datos, perderas toda la información actualmente guardada en la app. Se recomienda hacer una copia de seguridad antes de continuar. No subas aquí ningún fichero cuyo origen no conozcas, sube solo ficheros que hayas descargado previamente desde Monekin';
 			case 'backup.import.restore_backup_descr': return 'Importa una base de datos anteriormente guardada desde Monekin. Esta acción remplazará cualquier dato actual de la aplicación por los nuevos datos';
@@ -3065,10 +3674,15 @@ extension on _TranslationsEs {
 			case 'backup.import.success': return 'Importación realizada con exito';
 			case 'backup.import.cancelled': return 'La importación fue cancelada por el usuario';
 			case 'backup.import.error': return 'Error al importar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com';
+			case 'backup.about.title': return 'Información sobre tu base de datos';
+			case 'backup.about.create_date': return 'Fecha de creación';
+			case 'backup.about.modify_date': return 'Última modificación';
+			case 'backup.about.last_backup': return 'Última copia de seguridad';
+			case 'backup.about.size': return 'Tamaño';
 			case 'settings.title': return 'Ajustes';
 			case 'settings.edit_profile': return 'Editar perfil';
 			case 'settings.display_name': return 'Nombre de usuario';
-			case 'settings.lang': return 'Idioma';
+			case 'settings.lang': return 'Idioma de la aplicación';
 			case 'settings.lang_descr': return 'Idioma en el que se mostrarán los textos en la app';
 			case 'settings.locale': return 'Región';
 			case 'settings.locale_descr': return 'Establece el formato a usar para fechas, números...';
@@ -3078,33 +3692,52 @@ extension on _TranslationsEs {
 			case 'settings.general.categories_descr': return 'Crea y edita categorías a tu gusto';
 			case 'settings.general.other': return 'Ajustes avanzados';
 			case 'settings.general.other_descr': return 'Otros ajustes generales de personalización de la app';
+			case 'settings.general.appearance': return 'Apariencia';
+			case 'settings.general.appearance_descr': return 'Tema de la aplicación, textos...';
+			case 'settings.general.app_colors': return 'Colores de la aplicación';
 			case 'settings.general.theme': return 'Tema';
+			case 'settings.general.theme_auto': return 'Definido por el sistema';
 			case 'settings.general.theme_light': return 'Claro';
 			case 'settings.general.theme_dark': return 'Oscuro';
+			case 'settings.general.amoled_mode': return 'Modo AMOLED';
+			case 'settings.general.amoled_mode_descr': return 'Usa un fondo de pantalla negro puro cuando sea posible. Esto ayudará ligeramente a la bateria de dispositivos con pantallas AMOLED';
+			case 'settings.general.dynamic_colors': return 'Colores dinámicos';
+			case 'settings.general.dynamic_colors_descr': return 'Usa el color de acentuación de su sistema siempre que sea posible';
+			case 'settings.general.accent_color': return 'Color de acentuación';
+			case 'settings.general.accent_color_descr': return 'Elige el color que usará la app para enfatizar ciertas partes de la interfaz';
 			case 'settings.general.prefer_calc': return 'Preferir calculadora';
 			case 'settings.general.prefer_calc_descr': return 'Muestra en la página de adición/edición de transacciones una calculadora que simplificará las acciones en dispositivos sin teclado';
 			case 'settings.data.display': return 'Datos';
-			case 'settings.data.export_descr': return 'Descarga tus datos en diferentes formatos';
+			case 'settings.data.display_descr': return 'Exporta y importa tus datos para no perder nada';
 			case 'settings.data.delete_all': return 'Eliminar mis datos';
 			case 'settings.data.delete_all_header1': return 'Alto ahí padawan ⚠️⚠️';
 			case 'settings.data.delete_all_message1': return '¿Estas seguro de que quieres continuar? Todos tus datos serán borrados permanentemente y no podrán ser recuperados';
 			case 'settings.data.delete_all_header2': return 'Un último paso ⚠️⚠️';
 			case 'settings.data.delete_all_message2': return 'Al eliminar una cuenta eliminarás todos tus datos personales almacenados. Tus cuentas, transacciones, presupuestos y categorías serán borrados y no podrán ser recuperados. ¿Estas de acuerdo?';
-			case 'settings.project.display': return 'Proyecto';
-			case 'settings.project.legal': return 'Términos y privacidad';
-			case 'settings.project.legal_descr': return 'Revisa licencias y otros terminos legales de nuestra app';
-			case 'settings.project.contributors': return 'Colaboradores';
-			case 'settings.project.contributors_descr': return 'Todos los desarrolladores que han hecho que Monekin crezca';
-			case 'settings.project.contact': return 'Contacta con nosotros';
+			case 'settings.about_us.display': return 'Información de la app';
+			case 'settings.about_us.description': return 'Consulta los terminos y otra información relevante sobre Monekin. Ponte en contacto con la comunidad reportando errores, dejando sugerencias...';
+			case 'settings.about_us.legal.display': return 'Información legal';
+			case 'settings.about_us.legal.privacy': return 'Política de privacidad';
+			case 'settings.about_us.legal.terms': return 'Términos de uso';
+			case 'settings.about_us.legal.licenses': return 'Licencias';
+			case 'settings.about_us.project.display': return 'Proyecto';
+			case 'settings.about_us.project.contributors': return 'Colaboradores';
+			case 'settings.about_us.project.contributors_descr': return 'Todos los desarrolladores que han hecho que Monekin crezca';
+			case 'settings.about_us.project.contact': return 'Contacta con nosotros';
 			case 'settings.help_us.display': return 'Ayúdanos';
+			case 'settings.help_us.description': return 'Descubre de que formas puedes ayudar a que Monekin sea cada vez mejor';
 			case 'settings.help_us.rate_us': return 'Califícanos';
 			case 'settings.help_us.rate_us_descr': return '¡Cualquier valoración es bienvenida!';
 			case 'settings.help_us.share': return 'Comparte Monekin';
-			case 'settings.help_us.share_text': return 'Monekin! La mejor app de finanzas personales';
+			case 'settings.help_us.share_descr': return 'Comparte nuestra app a amigos y familiares';
+			case 'settings.help_us.share_text': return 'Monekin! La mejor app de finanzas personales. Descargala aquí';
+			case 'settings.help_us.thanks': return '¡Gracias!';
+			case 'settings.help_us.thanks_long': return 'Tus contribuciones a Monekin y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir.';
+			case 'settings.help_us.donate': return 'Haz una donación';
+			case 'settings.help_us.donate_descr': return 'Con tu donación ayudaras a que la app siga recibiendo mejoras. ¿Que mejor forma que agradecer el trabajo realizado invitandome a un cafe?';
+			case 'settings.help_us.donate_success': return 'Donación realizada. Muchas gracias por tu contribución! ❤️';
+			case 'settings.help_us.donate_err': return 'Ups! Parece que ha habido un error a la hora de recibir tu pago';
 			case 'settings.help_us.report': return 'Reporta errores, deja sugerencias...';
-			case 'settings.privacy.title': return 'Política de privacidad';
-			case 'settings.licenses.title': return 'Licencias';
-			case 'settings.terms_of_use.title': return 'Términos de uso';
 			case 'lang.es': return 'Español';
 			case 'lang.en': return 'Inglés';
 			default: return null;

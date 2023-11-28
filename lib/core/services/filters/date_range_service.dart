@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/services/filters/custom_date_range_picker.dart';
@@ -284,7 +286,9 @@ class DateRangeService {
         return Align(
             child: ConstrainedBox(
           constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * 0.75),
+            maxWidth: min(MediaQuery.of(context).size.width * 0.75, 450),
+            maxHeight: MediaQuery.of(context).size.height * 0.75,
+          ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: Column(
@@ -298,7 +302,8 @@ class DateRangeService {
                 ),
                 GridView.count(
                   crossAxisCount: 2,
-                  childAspectRatio: 1.8,
+                  childAspectRatio:
+                      MediaQuery.of(context).size.height < 550 ? 3 : 1.8,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   children: [

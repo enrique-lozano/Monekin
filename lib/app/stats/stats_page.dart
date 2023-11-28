@@ -1,19 +1,24 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/stats/footer_segmented_calendar_button.dart';
 import 'package:monekin/app/stats/widgets/balance_bar_chart.dart';
-import 'package:monekin/app/stats/widgets/chart_by_categories.dart';
+import 'package:monekin/app/stats/widgets/finance_health_details.dart';
 import 'package:monekin/app/stats/widgets/fund_evolution_line_chart.dart';
 import 'package:monekin/app/stats/widgets/income_expense_comparason.dart';
+import 'package:monekin/app/stats/widgets/movements_distribution/chart_by_categories.dart';
+import 'package:monekin/app/stats/widgets/movements_distribution/tags_stats.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
-import 'package:monekin/core/presentation/widgets/filter_sheet_modal.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/filter_sheet_modal.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/services/filters/date_range_service.dart';
 import '../accounts/all_accounts_balance.dart';
 
+@RoutePage()
 class StatsPage extends StatefulWidget {
   const StatsPage({super.key, this.initialIndex = 0});
 
@@ -33,7 +38,7 @@ class _StatsPageState extends State<StatsPage> {
 
   late DateRange currentDateRange;
 
-  TransactionFilters filters = TransactionFilters();
+  TransactionFilters filters = const TransactionFilters();
 
   @override
   void initState() {
@@ -46,9 +51,11 @@ class _StatsPageState extends State<StatsPage> {
     currentDateRange = dateRangeService.selectedDateRange;
   }
 
-  Widget buildContainerWithPadding(List<Widget> children,
-      {EdgeInsetsGeometry padding =
-          const EdgeInsets.symmetric(vertical: 24, horizontal: 16)}) {
+  Widget buildContainerWithPadding(
+    List<Widget> children, {
+    EdgeInsetsGeometry padding =
+        const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+  }) {
     return SingleChildScrollView(
       padding: padding,
       child: Column(
@@ -64,20 +71,20 @@ class _StatsPageState extends State<StatsPage> {
 
     return DefaultTabController(
       initialIndex: widget.initialIndex,
-      length: 3,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           title: Text(t.stats.title),
           actions: [
             IconButton(
                 onPressed: () async {
-                  final modalRes =
-                      await showModalBottomSheet<TransactionFilters>(
-                          context: context,
-                          isScrollControlled: true,
-                          showDragHandle: true,
-                          builder: (context) =>
-                              FilterSheetModal(preselectedFilter: filters));
+                  final modalRes = await openFilterSheetModal(
+                    context,
+                    FilterSheetModal(
+                      preselectedFilter: filters,
+                      showDateFilter: false,
+                    ),
+                  );
 
                   if (modalRes != null) {
                     setState(() {
@@ -87,11 +94,15 @@ class _StatsPageState extends State<StatsPage> {
                 },
                 icon: const Icon(Icons.filter_alt_outlined)),
           ],
-          bottom: TabBar(tabs: [
-            Tab(text: t.stats.by_categories),
-            Tab(text: t.stats.balance),
-            Tab(text: t.stats.cash_flow),
-          ], isScrollable: true),
+          bottom: TabBar(
+              tabAlignment: TabAlignment.center,
+              tabs: [
+                Tab(text: t.financial_health.display),
+                Tab(text: t.stats.distribution),
+                Tab(text: t.stats.balance),
+                Tab(text: t.stats.cash_flow),
+              ],
+              isScrollable: true),
         ),
         persistentFooterButtons: [
           FooterSegmentedCalendarButton(
@@ -119,34 +130,53 @@ class _StatsPageState extends State<StatsPage> {
             ],
             Expanded(
               child: TabBarView(children: [
-                buildContainerWithPadding([
-                  ChartByCategories(
-                    startDate: currentStartDate,
-                    endDate: currentEndDate,
-                    showList: true,
-                    initialSelectedType: TransactionType.expense,
-                    filters: filters,
-                  ),
-                ], padding: const EdgeInsets.all(0)),
                 buildContainerWithPadding(
                   [
-                    CardWithHeader(
-                      title: t.stats.balance_evolution,
-                      body: FundEvolutionLineChart(
-                        showBalanceHeader: true,
-                        startDate: currentStartDate,
-                        endDate: currentEndDate,
-                        dateRange: currentDateRange,
-                        accountsFilter: filters.accounts,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    AllAccountBalancePage(
-                      date: currentEndDate ?? DateTime.now(),
-                      filters: filters,
-                    ),
+                    FinanceHealthDetails(
+                      filters: filters.copyWith(
+                          minDate: currentStartDate, maxDate: currentEndDate),
+                    )
                   ],
                 ),
+                buildContainerWithPadding([
+                  CardWithHeader(
+                    title: t.stats.by_categories,
+                    body: ChartByCategories(
+                      startDate: currentStartDate,
+                      endDate: currentEndDate,
+                      showList: true,
+                      initialSelectedType: TransactionType.expense,
+                      filters: filters,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  CardWithHeader(
+                    title: t.stats.by_tags,
+                    body: TagStats(
+                      filters: filters.copyWith(
+                        minDate: currentStartDate,
+                        maxDate: currentEndDate,
+                      ),
+                    ),
+                  ),
+                ]),
+                buildContainerWithPadding([
+                  CardWithHeader(
+                    title: t.stats.balance_evolution,
+                    body: FundEvolutionLineChart(
+                      showBalanceHeader: true,
+                      startDate: currentStartDate,
+                      endDate: currentEndDate,
+                      dateRange: currentDateRange,
+                      filters: filters,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  AllAccountBalancePage(
+                    date: currentEndDate ?? DateTime.now(),
+                    filters: filters,
+                  ),
+                ]),
                 buildContainerWithPadding([
                   CardWithHeader(
                     title: t.stats.cash_flow,
@@ -159,14 +189,12 @@ class _StatsPageState extends State<StatsPage> {
                   const SizedBox(height: 16),
                   CardWithHeader(
                     title: t.stats.by_periods,
-                    body: Padding(
-                      padding: const EdgeInsets.only(bottom: 10, top: 16),
-                      child: BalanceBarChart(
-                        startDate: currentStartDate,
-                        endDate: currentEndDate,
-                        dateRange: currentDateRange,
-                        filters: filters,
-                      ),
+                    bodyPadding: const EdgeInsets.only(bottom: 12, top: 16),
+                    body: BalanceBarChart(
+                      startDate: currentStartDate,
+                      endDate: currentEndDate,
+                      dateRange: currentDateRange,
+                      filters: filters,
                     ),
                   )
                 ]),

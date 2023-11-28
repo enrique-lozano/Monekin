@@ -1,9 +1,12 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/form/category_form_functions.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
+import 'package:monekin/core/presentation/widgets/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
@@ -13,6 +16,7 @@ import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:uuid/uuid.dart';
 
+@RoutePage()
 class CategoryFormPage extends StatefulWidget {
   const CategoryFormPage({super.key, this.categoryUUID});
 
@@ -34,45 +38,6 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
 
   String _color = '000000';
   CategoryType _type = CategoryType.E;
-
-  final colorOptions = [
-    'B71C1C',
-    'D50000',
-    'E53935',
-    'EF5350',
-    '880E4F',
-    'C51162',
-    'D81B60',
-    'EC407A',
-    '4A148C',
-    'AA00FF',
-    '8E24AA',
-    'AB47BC',
-    '1A237E',
-    '2962FF',
-    '2979FF',
-    '42A5F5',
-    '006064',
-    '00897B',
-    '00BFA5',
-    '4DB6AC',
-    '1B5E20',
-    '388E3C',
-    '8BC34A',
-    'D4E157',
-    'BF360C',
-    'F4511E',
-    'FB8C00',
-    'FFA726',
-    'E65100',
-    'FFA000',
-    'FFAB00',
-    'FFCA28',
-    '546E7A',
-    '90A4AE',
-    '795548',
-    '757575',
-  ];
 
   @override
   void initState() {
@@ -107,7 +72,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
     super.dispose();
   }
 
-  submitForm() {
+  submitForm() async {
     final messager = ScaffoldMessenger.of(context);
 
     if (categoryToEdit != null) {
@@ -119,14 +84,30 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
           parentCategory: categoryToEdit!.parentCategory,
           type: categoryToEdit!.type);
 
-      CategoryService.instance.updateCategory(categoryToEdit!).then((value) {
+      await CategoryService.instance
+          .updateCategory(categoryToEdit!)
+          .then((value) {
         messager
             .showSnackBar(SnackBar(content: Text(t.categories.edit_success)));
       }).catchError((error) {
         messager.showSnackBar(SnackBar(content: Text(error.toString())));
       });
     } else {
-      CategoryService.instance
+      final db = AppDB.instance;
+
+      final query = db.select(db.categories)
+        ..addColumns([db.categories.id.count()])
+        ..where((tbl) => tbl.name.isValue(_nameController.text));
+
+      if (await query.watchSingleOrNull().first != null) {
+        messager.showSnackBar(SnackBar(
+          content: Text(t.categories.already_exists),
+        ));
+
+        return;
+      }
+
+      await CategoryService.instance
           .insertCategory(CategoryInDB(
               id: const Uuid().v4(),
               name: _nameController.text,
@@ -134,6 +115,8 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
               type: _type,
               color: _color))
           .then((value) {
+        Navigator.pop(context);
+
         messager
             .showSnackBar(SnackBar(content: Text(t.categories.create_success)));
       }).catchError((error) {
@@ -220,157 +203,110 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Form(
-                            key: _formKey,
-                            child: Column(
+                      padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        showIconSelectorModal(
-                                          context,
-                                          IconSelectorModal(
-                                            preselectedIconID: _icon.id,
-                                            subtitle: t.icon_selector
-                                                .select_category_icon,
-                                            onIconSelected: (selectedIcon) {
-                                              setState(() {
-                                                _icon = selectedIcon;
-                                              });
-                                            },
-                                          ),
-                                        );
-                                      },
-                                      child: Builder(builder: (context) {
-                                        final iconColor = ColorHex.get(_color);
-
-                                        return Container(
-                                            padding: const EdgeInsets.all(6),
-                                            decoration: BoxDecoration(
-                                                color:
-                                                    iconColor.withOpacity(0.05),
-                                                border: Border.all(
-                                                    width: 1.625,
-                                                    color: iconColor),
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(6))),
-                                            child: _icon.display(
-                                                size: 48, color: iconColor));
-                                      }),
-                                    ),
-                                    const SizedBox(width: 20),
-                                    Expanded(
-                                      child: TextFormField(
-                                        controller: _nameController,
-                                        maxLength:
-                                            maxLabelLenghtForDisplayNames,
-                                        decoration: InputDecoration(
-                                          labelText: '${t.categories.name} *',
-                                          hintText: 'Ex.: Food',
-                                        ),
-                                        validator: (value) => fieldValidator(
-                                            value,
-                                            isRequired: true),
-                                        autovalidateMode:
-                                            AutovalidateMode.onUserInteraction,
-                                        textInputAction: TextInputAction.next,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 14,
-                                ),
-                                DropdownButtonFormField<CategoryType>(
-                                  decoration: InputDecoration(
-                                      labelText: '${t.categories.type} *'),
-                                  items: [
-                                    DropdownMenuItem(
-                                        value: CategoryType.I,
-                                        child: Text(t.general.income)),
-                                    DropdownMenuItem(
-                                        value: CategoryType.E,
-                                        child: Text(t.general.expense)),
-                                    DropdownMenuItem(
-                                        value: CategoryType.B,
-                                        child: Text(t.categories.both_types))
-                                  ],
-                                  value: _type,
-                                  onChanged: widget.categoryUUID != null
-                                      ? null
-                                      : (value) {
+                                InkWell(
+                                  onTap: () {
+                                    showIconSelectorModal(
+                                      context,
+                                      IconSelectorModal(
+                                        preselectedIconID: _icon.id,
+                                        subtitle: t
+                                            .icon_selector.select_category_icon,
+                                        onIconSelected: (selectedIcon) {
                                           setState(() {
-                                            if (value != null) {
-                                              _type = value;
-                                            }
+                                            _icon = selectedIcon;
                                           });
                                         },
-                                ),
-                                const SizedBox(
-                                  height: 24,
-                                ),
-                                Text(t.icon_selector.color)
-                              ],
-                            ))),
-                    SizedBox(
-                      height: 46,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: colorOptions.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final colorItem = colorOptions[index];
-
-                          return Container(
-                            clipBehavior: Clip.hardEdge,
-                            width: 46,
-                            height: 46,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            margin: EdgeInsets.only(
-                                left: index == 0 ? 16 : 4,
-                                right:
-                                    index == colorOptions.length - 1 ? 16 : 4),
-                            child: Stack(
-                              children: [
-                                DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    color: ColorHex.get(colorItem),
-                                  ),
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(onTap: () {
-                                      setState(() {
-                                        _color = colorItem;
-                                      });
-                                    }),
-                                  ),
-                                ),
-                                if (colorItem == _color)
-                                  const DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        color:
-                                            Color.fromARGB(47, 255, 255, 255),
                                       ),
-                                      child: Center(
-                                          child: Icon(
-                                        Icons.check,
-                                        color: Colors.white,
-                                      )))
+                                    );
+                                  },
+                                  child: Builder(builder: (context) {
+                                    final iconColor = ColorHex.get(_color);
+
+                                    return Container(
+                                        padding: const EdgeInsets.all(6),
+                                        decoration: BoxDecoration(
+                                            color: iconColor.withOpacity(0.05),
+                                            border: Border.all(
+                                                width: 1.625, color: iconColor),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(6))),
+                                        child: _icon.display(
+                                            size: 48, color: iconColor));
+                                  }),
+                                ),
+                                const SizedBox(width: 20),
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: _nameController,
+                                    maxLength: maxLabelLenghtForDisplayNames,
+                                    decoration: InputDecoration(
+                                      labelText: '${t.categories.name} *',
+                                      hintText: 'Ex.: Food',
+                                    ),
+                                    validator: (value) =>
+                                        fieldValidator(value, isRequired: true),
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    textInputAction: TextInputAction.next,
+                                  ),
+                                )
                               ],
                             ),
-                          );
-                        },
+                            const SizedBox(height: 14),
+                            DropdownButtonFormField<CategoryType>(
+                              decoration: InputDecoration(
+                                  labelText: '${t.categories.type} *'),
+                              items: [
+                                DropdownMenuItem(
+                                    value: CategoryType.I,
+                                    child:
+                                        Text(t.transaction.types.income(n: 1))),
+                                DropdownMenuItem(
+                                    value: CategoryType.E,
+                                    child: Text(
+                                        t.transaction.types.expense(n: 1))),
+                                DropdownMenuItem(
+                                    value: CategoryType.B,
+                                    child: Text(t.categories.both_types))
+                              ],
+                              value: _type,
+                              onChanged: widget.categoryUUID != null
+                                  ? null
+                                  : (value) {
+                                      setState(() {
+                                        if (value != null) {
+                                          _type = value;
+                                        }
+                                      });
+                                    },
+                            ),
+                            const SizedBox(height: 24),
+                            Text(t.icon_selector.color)
+                          ],
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    ColorPicker(
+                      colorOptions: colorOptions,
+                      selectedColor: _color,
+                      onColorSelected: (selectedColor) {
+                        setState(() {
+                          _color = selectedColor;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 6),
                     if (widget.categoryUUID != null) ...[
                       Padding(
                         padding: const EdgeInsets.symmetric(
