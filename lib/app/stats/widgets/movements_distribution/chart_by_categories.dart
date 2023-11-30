@@ -51,6 +51,20 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
   int touchedIndex = -1;
   late TransactionType transactionsType;
 
+  TransactionFilters _getTransactionFilters() {
+    return widget.filters.copyWith(
+      status:
+          TransactionStatus.getStatusThatCountsForStats(widget.filters.status),
+      transactionTypes: [
+        if (transactionsType == TransactionType.expense)
+          TransactionType.expense,
+        if (transactionsType == TransactionType.income) TransactionType.income
+      ],
+      minDate: widget.startDate,
+      maxDate: widget.endDate,
+    );
+  }
+
   Future<List<TrDistributionChartItem<Category>>> getEvolutionData(
     BuildContext context,
   ) async {
@@ -59,20 +73,7 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
     final transactionService = TransactionService.instance;
 
     final transactions = await transactionService
-        .getTransactions(
-          filters: widget.filters.copyWith(
-            status: TransactionStatus.getStatusThatCountsForStats(
-                widget.filters.status),
-            transactionTypes: [
-              if (transactionsType == TransactionType.expense)
-                TransactionType.expense,
-              if (transactionsType == TransactionType.income)
-                TransactionType.income
-            ],
-            minDate: widget.startDate,
-            maxDate: widget.endDate,
-          ),
-        )
+        .getTransactions(filters: _getTransactionFilters())
         .first;
 
     for (final transaction in transactions) {
@@ -358,7 +359,7 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
                           builder: (context) {
                             return CategoryStatsModal(
                               categoryData: dataCategory,
-                              dateRanges: (widget.startDate, widget.endDate),
+                              filters: _getTransactionFilters(),
                             );
                           });
                     },
