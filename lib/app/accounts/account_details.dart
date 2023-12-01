@@ -12,6 +12,7 @@ import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
+import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
@@ -53,23 +54,13 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
           onClick: account.isClosed
               ? null
               : () async {
-                  showAccountsWarn() => showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text(
-                                t.transfer.need_two_accounts_warning_header),
-                            content: SingleChildScrollView(
-                                child: Text(t.transfer
-                                    .need_two_accounts_warning_message)),
-                            actions: [
-                              TextButton(
-                                  child: Text(t.general.understood),
-                                  onPressed: () => Navigator.pop(context)),
-                            ],
-                          );
-                        },
-                      );
+                  showAccountsWarn() async =>
+                      await showConfirmDialog(context,
+                          dialogTitle:
+                              t.transfer.need_two_accounts_warning_header,
+                          contentParagraphs: [
+                            Text(t.transfer.need_two_accounts_warning_message)
+                          ]);
 
                   navigateToTransferForm() => context.pushRoute(
                         TransactionFormRoute(
@@ -78,9 +69,13 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                         ),
                       );
 
-                  final numberOfAccounts =
-                      (await AccountService.instance.getAccounts().first)
-                          .length;
+                  final numberOfAccounts = (await AccountService.instance
+                          .getAccounts(
+                            predicate: (acc, curr) =>
+                                acc.closingDate.isNotNull(),
+                          )
+                          .first)
+                      .length;
 
                   if (numberOfAccounts <= 1) {
                     await showAccountsWarn();
@@ -112,59 +107,43 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
           label: t.general.delete,
           icon: Icons.delete,
           role: ListTileActionRole.delete,
-          onClick: () => deleteTransactionWithAlertAndSnackBar(
-                context,
-                transactionId: account.id,
-                navigateBack: navigateBackOnDelete,
-              )),
+          onClick: () {
+            deleteAccountWithAlertAndSnackBar(
+              context,
+              accountId: account.id,
+              navigateBack: navigateBackOnDelete,
+            );
+          }),
     ];
   }
 
   showReopenAccountDialog(Account account) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(t.account.reopen),
-        content: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [Text(t.account.reopen_descr)],
-          ),
+    showConfirmDialog(
+      context,
+      showCancelButton: true,
+      dialogTitle: t.account.reopen,
+      contentParagraphs: [
+        Text(t.account.reopen_descr),
+      ],
+      confirmationText: t.general.confirm,
+    ).then((isConfirmed) {
+      AccountService.instance
+          .updateAccount(
+        account.copyWith(
+          closingDate: const drift.Value(null),
         ),
-        actions: [
-          TextButton(
-            child: Text(t.general.cancel),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          TextButton(
-            child: Text(t.general.confirm),
-            onPressed: () {
-              AccountService.instance
-                  .updateAccount(
-                    account.copyWith(
-                      closingDate: const drift.Value(null),
-                    ),
-                  )
-                  .then((value) {
-                    if (value) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                            content: Text(t.account.close.unarchive_succes)),
-                      );
-                    }
-                  })
-                  .whenComplete(() => Navigator.pop(context))
-                  .catchError((err) {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text('$err')));
-                  });
-            },
-          ),
-        ],
-      ),
-    );
+      )
+          .then((value) {
+        if (value) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(t.account.close.unarchive_succes)),
+          );
+        }
+      }).catchError((err) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('$err')));
+      });
+    });
   }
 
   Future<bool?> showCloseAccountDialog(Account account, double currentBalance) {
@@ -177,42 +156,33 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
     );
   }
 
-  deleteTransactionWithAlertAndSnackBar(BuildContext context,
-      {required String transactionId, required bool navigateBack}) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(t.account.delete.warning_header),
-          content:
-              SingleChildScrollView(child: Text(t.account.delete.warning_text)),
-          actions: [
-            TextButton(
-              child: Text(t.general.confirm),
-              onPressed: () {
-                AccountService.instance
-                    .deleteAccount(transactionId)
-                    .then((value) {
-                  Navigator.pop(context);
+  deleteAccountWithAlertAndSnackBar(
+    BuildContext context, {
+    required String accountId,
+    required bool navigateBack,
+  }) {
+    final scaffold = ScaffoldMessenger.of(context);
 
-                  if (navigateBack) {
-                    Navigator.pop(context);
-                  }
+    showConfirmDialog(
+      context,
+      dialogTitle: t.account.delete.warning_header,
+      contentParagraphs: [Text(t.account.delete.warning_text)],
+      confirmationText: t.general.continue_text,
+      showCancelButton: true,
+    ).then((isConfirmed) {
+      if (isConfirmed != true) return;
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(t.account.delete.success)));
-                }).catchError((err) {
-                  Navigator.pop(context);
+      AccountService.instance.deleteAccount(accountId).then((value) {
+        if (navigateBack) {
+          Navigator.pop(context);
+        }
 
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text('$err')));
-                });
-              },
-            ),
-          ],
-        );
-      },
-    );
+        scaffold
+            .showSnackBar(SnackBar(content: Text(t.account.delete.success)));
+      }).catchError((err) {
+        scaffold.showSnackBar(SnackBar(content: Text('$err')));
+      });
+    });
   }
 
   ListTile buildCopyableTile(String title, String value) {

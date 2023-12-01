@@ -10,6 +10,7 @@ import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
+import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
@@ -178,64 +179,53 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
   showSkipTransactionModal(BuildContext context, MoneyTransaction transaction) {
     final nextPaymentDate = transaction.followingDateToNext;
 
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(t.transaction.next_payments.skip_dialog_title),
-            content: SingleChildScrollView(
-              child: Text(nextPaymentDate != null
-                  ? t.transaction.next_payments.skip_dialog_msg(
-                      date: DateFormat.yMMMd().format(nextPaymentDate),
-                    )
-                  : t.recurrent_transactions.details.last_payment_info),
+    showConfirmDialog(
+      context,
+      dialogTitle: t.transaction.next_payments.skip_dialog_title,
+      confirmationText: t.general.confirm,
+      contentParagraphs: [
+        Text(nextPaymentDate != null
+            ? t.transaction.next_payments.skip_dialog_msg(
+                date: DateFormat.yMMMd().format(nextPaymentDate),
+              )
+            : t.recurrent_transactions.details.last_payment_info),
+      ],
+    ).then((isConfirmed) {
+      if (nextPaymentDate == null) {
+        TransactionService.instance
+            .deleteTransaction(transaction.id)
+            .then((value) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                  '${t.transaction.next_payments.skip_success}. ${t.transaction.next_payments.recurrent_rule_finished}'),
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  if (nextPaymentDate == null) {
-                    TransactionService.instance
-                        .deleteTransaction(transaction.id)
-                        .then((value) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                              '${t.transaction.next_payments.skip_success}. ${t.transaction.next_payments.recurrent_rule_finished}'),
-                        ),
-                      );
-
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    });
-
-                    return;
-                  }
-
-                  // Change the next payment date and the remaining iterations (if required)
-                  int? remainingIterations = transaction
-                      .recurrentInfo.ruleRecurrentLimit!.remainingIterations;
-
-                  TransactionService.instance
-                      .insertOrUpdateTransaction(transaction.copyWith(
-                          date: transaction.followingDateToNext,
-                          remainingTransactions: remainingIterations != null
-                              ? drift.Value(remainingIterations - 1)
-                              : const drift.Value(null)))
-                      .then((inserted) {
-                    if (inserted == 0) return;
-
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(t.transaction.next_payments.skip_success),
-                    ));
-
-                    Navigator.pop(context);
-                  });
-                },
-                child: Text(t.general.continue_text),
-              ),
-            ],
           );
+
+          Navigator.pop(context);
         });
+
+        return;
+      }
+
+      // Change the next payment date and the remaining iterations (if required)
+      int? remainingIterations =
+          transaction.recurrentInfo.ruleRecurrentLimit!.remainingIterations;
+
+      TransactionService.instance
+          .insertOrUpdateTransaction(transaction.copyWith(
+              date: transaction.followingDateToNext,
+              remainingTransactions: remainingIterations != null
+                  ? drift.Value(remainingIterations - 1)
+                  : const drift.Value(null)))
+          .then((inserted) {
+        if (inserted == 0) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(t.transaction.next_payments.skip_success),
+        ));
+      });
+    });
   }
 
   Widget cardPay({
@@ -308,7 +298,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                             e.onClick!();
                           },
                   ),
-                )).toList(),
+                )),
                 if (transaction.recurrentInfo.isRecurrent &&
                     transaction.isOnLastPayment)
                   Padding(
@@ -811,9 +801,10 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                           ),
                           const SizedBox(height: 16),
                           CardWithHeader(
-                              title: t.general.quick_actions,
-                              body: MonekinQuickActionsButton(
-                                  actions: transactionDetailsActions)),
+                            title: t.general.quick_actions,
+                            body: MonekinQuickActionsButton(
+                                actions: transactionDetailsActions),
+                          ),
                         ],
                       ),
                     ),
