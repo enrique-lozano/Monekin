@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -10,16 +11,17 @@ import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart'
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-class IntervalSelector extends StatefulWidget {
-  const IntervalSelector({super.key, this.preselectedRecurrentRule});
+@RoutePage()
+class IntervalSelectorPage extends StatefulWidget {
+  const IntervalSelectorPage({super.key, this.preselectedRecurrentRule});
 
   final RecurrencyData? preselectedRecurrentRule;
 
   @override
-  State<IntervalSelector> createState() => _IntervalSelectorState();
+  State<IntervalSelectorPage> createState() => _IntervalSelectorPageState();
 }
 
-class _IntervalSelectorState extends State<IntervalSelector> {
+class _IntervalSelectorPageState extends State<IntervalSelectorPage> {
   final _formKey = GlobalKey<FormState>();
 
   TransactionPeriodicity intervalPeriod = TransactionPeriodicity.month;
