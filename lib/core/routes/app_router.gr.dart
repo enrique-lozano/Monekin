@@ -144,6 +144,17 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const ImportCSVPage(),
       );
     },
+    IntervalSelectorRoute.name: (routeData) {
+      final args = routeData.argsAs<IntervalSelectorRouteArgs>(
+          orElse: () => const IntervalSelectorRouteArgs());
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: IntervalSelectorPage(
+          key: args.key,
+          preselectedRecurrentRule: args.preselectedRecurrentRule,
+        ),
+      );
+    },
     IntroRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -633,6 +644,44 @@ class ImportCSVRoute extends PageRouteInfo<void> {
   static const String name = 'ImportCSVRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [IntervalSelectorPage]
+class IntervalSelectorRoute extends PageRouteInfo<IntervalSelectorRouteArgs> {
+  IntervalSelectorRoute({
+    Key? key,
+    RecurrencyData? preselectedRecurrentRule,
+    List<PageRouteInfo>? children,
+  }) : super(
+          IntervalSelectorRoute.name,
+          args: IntervalSelectorRouteArgs(
+            key: key,
+            preselectedRecurrentRule: preselectedRecurrentRule,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'IntervalSelectorRoute';
+
+  static const PageInfo<IntervalSelectorRouteArgs> page =
+      PageInfo<IntervalSelectorRouteArgs>(name);
+}
+
+class IntervalSelectorRouteArgs {
+  const IntervalSelectorRouteArgs({
+    this.key,
+    this.preselectedRecurrentRule,
+  });
+
+  final Key? key;
+
+  final RecurrencyData? preselectedRecurrentRule;
+
+  @override
+  String toString() {
+    return 'IntervalSelectorRouteArgs{key: $key, preselectedRecurrentRule: $preselectedRecurrentRule}';
+  }
 }
 
 /// generated route for
