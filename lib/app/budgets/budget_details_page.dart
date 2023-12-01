@@ -12,6 +12,7 @@ import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
+import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
@@ -72,6 +73,8 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
         stream: BudgetServive.instance.getBudgetById(widget.budget.id),
         initialData: widget.budget,
         builder: (context, snapshot) {
+          if (!snapshot.hasData) return Container();
+
           final budget = snapshot.data!;
 
           return DefaultTabController(
@@ -101,37 +104,28 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                       label: t.general.delete,
                       icon: Icons.delete,
                       role: ListTileActionRole.delete,
-                      onClick: () async {
-                        await showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text(t.budgets.delete),
-                              content: Text(t.budgets.delete_warning),
-                              actions: [
-                                TextButton(
-                                  child: Text(t.general.confirm),
-                                  onPressed: () {
-                                    BudgetServive.instance
-                                        .deleteBudget(budget.id)
-                                        .then((value) {
-                                      Navigator.pop(context);
+                      onClick: () {
+                        showConfirmDialog(
+                          context,
+                          dialogTitle: t.budgets.delete,
+                          contentParagraphs: [Text(t.budgets.delete_warning)],
+                          confirmationText: t.general.confirm,
+                        ).then((confirmed) {
+                          if (confirmed != true) return;
 
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                              content: Text(t.general.delete)));
-                                    }).catchError((err) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                              SnackBar(content: Text('$err')));
-                                    }).whenComplete(
-                                            () => Navigator.pop(context));
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                          BudgetServive.instance
+                              .deleteBudget(budget.id)
+                              .then((value) {
+                            Navigator.pop(context);
+
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(t.budgets.delete),
+                            ));
+                          }).catchError((err) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(SnackBar(content: Text('$err')));
+                          });
+                        });
                       },
                     )
                   ])

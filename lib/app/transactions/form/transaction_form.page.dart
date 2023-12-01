@@ -712,17 +712,14 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                                       ),
                                     ),
                                     IconButton.filledTonal(
-                                      onPressed: () async {
-                                        final res =
-                                            await showIntervalSelectoHelpDialog(
-                                                context,
-                                                selectedRecurrentRule:
-                                                    recurrentRule);
-
-                                        if (res == null) return;
-
-                                        setState(() {
-                                          recurrentRule = res;
+                                      onPressed: () {
+                                        showIntervalSelectoHelpDialog(context,
+                                            selectedRecurrentRule:
+                                                recurrentRule,
+                                            onRecurrentRuleSelected: (res) {
+                                          setState(() {
+                                            recurrentRule = res;
+                                          });
                                         });
                                       },
                                       icon: recurrentRule.isRecurrent
@@ -951,15 +948,13 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                               controller: TextEditingController(
                                   text: recurrentRule.formText(context)),
                               readOnly: true,
-                              onTap: () async {
-                                final res = await showIntervalSelectoHelpDialog(
-                                    context,
-                                    selectedRecurrentRule: recurrentRule);
-
-                                if (res == null) return;
-
-                                setState(() {
-                                  recurrentRule = res;
+                              onTap: () {
+                                showIntervalSelectoHelpDialog(context,
+                                    selectedRecurrentRule: recurrentRule,
+                                    onRecurrentRuleSelected: (res) {
+                                  setState(() {
+                                    recurrentRule = res;
+                                  });
                                 });
                               },
                               decoration: InputDecoration(
