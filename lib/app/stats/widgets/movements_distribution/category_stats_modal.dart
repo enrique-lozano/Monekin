@@ -29,10 +29,10 @@ class SubcategoryModalItem {
 
 class CategoryStatsModal extends StatelessWidget {
   const CategoryStatsModal(
-      {super.key, required this.categoryData, required this.dateRanges});
+      {super.key, required this.categoryData, required this.filters});
 
   final TrDistributionChartItem<Category> categoryData;
-  final (DateTime?, DateTime?) dateRanges;
+  final TransactionFilters filters;
 
   Future<List<SubcategoryModalItem>> getSubcategoriesData(
       BuildContext context) async {
@@ -105,13 +105,14 @@ class CategoryStatsModal extends StatelessWidget {
                     ],
                   ),
                   IconButton(
-                    onPressed: () => context.pushRoute(TransactionsRoute(
-                        filters: TransactionFilters(
-                      categories: [categoryData.category.id],
-                      includeParentCategoriesInSearch: true,
-                      minDate: dateRanges.$1,
-                      maxDate: dateRanges.$2,
-                    ))),
+                    onPressed: () => context.pushRoute(
+                      TransactionsRoute(
+                        filters: filters.copyWith(
+                          categories: [categoryData.category.id],
+                          includeParentCategoriesInSearch: true,
+                        ),
+                      ),
+                    ),
                     icon: const Icon(Icons.open_in_new),
                   )
                 ],
@@ -122,7 +123,9 @@ class CategoryStatsModal extends StatelessWidget {
                 children: [
                   Text(
                     DateRangeService().getTextOfRange(
-                        startDate: dateRanges.$1, endDate: dateRanges.$2),
+                      startDate: filters.minDate,
+                      endDate: filters.maxDate,
+                    ),
                     style: const TextStyle(fontWeight: FontWeight.w300),
                   ),
                   CurrencyDisplayer(

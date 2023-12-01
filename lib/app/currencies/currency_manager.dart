@@ -5,6 +5,7 @@ import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/models/currency/currency.dart';
+import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/routes/app_router.dart';
@@ -37,36 +38,25 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
   changePreferredCurrency(Currency newCurrency) {
     final t = Translations.of(context);
 
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(t.currencies.change_preferred_currency_title),
-          content: SingleChildScrollView(
-              child: Text(t.currencies.change_preferred_currency_msg)),
-          actions: [
-            TextButton(
-              child: Text(t.general.confirm),
-              onPressed: () {
-                UserSettingService.instance
-                    .setSetting(SettingKey.preferredCurrency, newCurrency.code)
-                    .then(
-                  (value) {
-                    setState(() {
-                      _userCurrency = newCurrency;
-                    });
+    showConfirmDialog(
+      context,
+      dialogTitle: t.currencies.change_preferred_currency_title,
+      contentParagraphs: [Text(t.currencies.change_preferred_currency_msg)],
+    ).then((isConfirmed) {
+      if (isConfirmed != true) return;
 
-                    ExchangeRateService.instance.deleteExchangeRates();
-                  },
-                );
+      UserSettingService.instance
+          .setSetting(SettingKey.preferredCurrency, newCurrency.code)
+          .then(
+        (value) {
+          setState(() {
+            _userCurrency = newCurrency;
+          });
 
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
+          ExchangeRateService.instance.deleteExchangeRates();
+        },
+      );
+    });
   }
 
   @override

@@ -87,9 +87,11 @@ class RecurrencyData extends Equatable {
   List<dynamic> get props => [ruleRecurrentLimit, intervalEach, intervalPeriod];
 }
 
-Future<RecurrencyData?> showIntervalSelectoHelpDialog(BuildContext context,
-    {required RecurrencyData selectedRecurrentRule}) async {
-  return await showDialog<RecurrencyData?>(
+Future<void> showIntervalSelectoHelpDialog(BuildContext context,
+    {required RecurrencyData selectedRecurrentRule,
+    required void Function(RecurrencyData selectedRule)
+        onRecurrentRuleSelected}) async {
+  return await showDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
@@ -97,6 +99,7 @@ Future<RecurrencyData?> showIntervalSelectoHelpDialog(BuildContext context,
         clipBehavior: Clip.hardEdge,
         content: IntervalSelectorHelp(
           selectedRecurrentRule: selectedRecurrentRule,
+          onRecurrentRuleSelected: onRecurrentRuleSelected,
         ),
       );
     },
