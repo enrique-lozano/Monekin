@@ -25,6 +25,7 @@ import 'package:monekin/app/stats/stats_page.dart';
 import 'package:monekin/app/tags/tag_form_page.dart';
 import 'package:monekin/app/tags/tag_list.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
+import 'package:monekin/app/transactions/form/widgets/interval_selector.dart';
 import 'package:monekin/app/transactions/recurrent_transactions_page.dart';
 import 'package:monekin/app/transactions/transaction_details.page.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
@@ -33,6 +34,7 @@ import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/tags/tag.dart';
+import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 
@@ -80,6 +82,7 @@ class AppRouter extends _$AppRouter {
             AutoRoute(page: CurrencyManagerRoute.page),
             AutoRoute(page: CategoriesListRoute.page),
             AutoRoute(page: CategoryFormRoute.page),
+            AutoRoute(page: IntervalSelectorRoute.page),
             AutoRoute(page: ExchangeRateDetailsRoute.page),
             AutoRoute(page: TagFormRoute.page),
             AutoRoute(page: TagListRoute.page),
