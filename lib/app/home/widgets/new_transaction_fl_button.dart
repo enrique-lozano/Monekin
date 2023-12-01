@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -12,25 +13,16 @@ class NewTransactionButton extends StatelessWidget {
   _showShouldCreateAccountWarn(BuildContext context) {
     final t = Translations.of(context);
 
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog.adaptive(
-          title: Text(t.home.should_create_account_header),
-          content: SingleChildScrollView(
-              child: Text(t.home.should_create_account_message)),
-          actions: [
-            TextButton(
-              child: Text(t.general.continue_text),
-              onPressed: () {
-                Navigator.pop(context);
-                context.pushRoute(AccountFormRoute());
-              },
-            ),
-          ],
-        );
-      },
-    );
+    showConfirmDialog(
+      context,
+      dialogTitle: t.home.should_create_account_header,
+      contentParagraphs: [Text(t.home.should_create_account_message)],
+      confirmationText: t.general.continue_text,
+    ).then((value) {
+      if (value != true) return;
+
+      context.pushRoute(AccountFormRoute());
+    });
   }
 
   _onPressed(BuildContext context) {
