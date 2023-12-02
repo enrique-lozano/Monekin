@@ -71,8 +71,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
 
                   final numberOfAccounts = (await AccountService.instance
                           .getAccounts(
-                            predicate: (acc, curr) =>
-                                acc.closingDate.isNotNull(),
+                            predicate: (acc, curr) => acc.closingDate.isNull(),
                           )
                           .first)
                       .length;
