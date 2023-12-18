@@ -35,7 +35,7 @@ dependencies:
 
   # i18n
   intl: ^0.18.0
-  slang: ^3.18.1
+  slang: ^3.27.0
   slang_flutter: ^3.18.0
 
   # Drift
