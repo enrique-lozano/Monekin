@@ -1,12 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
-import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/services/view-actions/transaction_view_actions_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 
@@ -202,22 +203,18 @@ class TransactionListTile extends StatelessWidget {
       ),
       leading: Hero(
         tag: 'transaction-icon-${transaction.id}',
-        child: Container(
-          padding: const EdgeInsets.all(6),
-          decoration: BoxDecoration(
-              color: transaction.color(context).lighten(0.82),
-              borderRadius: BorderRadius.circular(6)),
-          child: transaction.isIncomeOrExpense
-              ? transaction.category!.icon.display(
-                  color: transaction.color(context),
-                  size: 28,
-                )
-              : Icon(
-                  TransactionType.transfer.icon,
-                  color: TransactionType.transfer.color(context),
-                  size: 28,
-                ),
-        ),
+        child: transaction.isIncomeOrExpense
+            ? IconDisplayer.fromCategory(
+                category: transaction.category!,
+                size: 28,
+                padding: 6,
+              )
+            : IconDisplayer(
+                icon: TransactionType.transfer.icon,
+                mainColor: TransactionType.transfer.color(context),
+                size: 28,
+                padding: 6,
+              ),
       ),
       onTap: () {
         context.pushRoute(

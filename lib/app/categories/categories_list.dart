@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/routes/app_router.dart';
@@ -85,8 +86,10 @@ class _CategoriesListState extends State<CategoriesList> {
 
           return CheckboxListTile(
               title: Text(category.name),
-              secondary: category.icon
-                  .displayFilled(size: 25, color: ColorHex.get(category.color)),
+              secondary: IconDisplayer.fromCategory(
+                category: category,
+                size: 25,
+              ),
               value: selectedCategories.map((e) => e.id).contains(category.id),
               onChanged: (value) async {
                 await toggleCategorySelection(value, category);

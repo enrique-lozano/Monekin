@@ -100,8 +100,8 @@ class _MultiCategorySelectorState extends State<MultiCategorySelector> {
 
                               return Column(
                                 children: [
-                                  IconDisplayer(
-                                    supportedIcon: categoryToDisplay.icon,
+                                  IconDisplayer.fromCategory(
+                                    category: categoryToDisplay,
                                     size: iconSize,
                                     padding: iconPadding,
                                     isOutline: isCategorySelected,
@@ -133,8 +133,6 @@ class _MultiCategorySelectorState extends State<MultiCategorySelector> {
                                         widget.onChange!(selectedCategories);
                                       }
                                     },
-                                    mainColor:
-                                        ColorHex.get(categoryToDisplay.color),
                                   ),
                                   const SizedBox(height: 4),
                                   ButtonSelectorLabel(

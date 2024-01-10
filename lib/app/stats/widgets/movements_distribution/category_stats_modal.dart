@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/chart_by_categories.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -85,9 +86,10 @@ class CategoryStatsModal extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      categoryData.category.icon.displayFilled(
-                          color: ColorHex.get(categoryData.category.color),
-                          size: 34),
+                      IconDisplayer.fromCategory(
+                        category: categoryData.category,
+                        size: 34,
+                      ),
                       const SizedBox(width: 16),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,8 +154,9 @@ class CategoryStatsModal extends StatelessWidget {
                   final subcategoryData = subcategories[index];
 
                   return ListTile(
-                    leading: subcategoryData.icon.displayFilled(
-                      color: ColorHex.get(categoryData.category.color),
+                    leading: IconDisplayer(
+                      supportedIcon: subcategoryData.icon,
+                      mainColor: ColorHex.get(categoryData.category.color),
                     ),
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
