@@ -50,14 +50,23 @@ class SupportedIcon {
       double size = 22,
       double? padding,
       double? borderRadius,
+      double borderWidth = 0,
       Color? bgColor}) {
     final padAndRadius = size / (22 / 6);
 
-    return Container(
+    return AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        width: size + padAndRadius * 2,
+        height: size + padAndRadius * 2,
         padding: EdgeInsets.all(padding ?? padAndRadius),
         decoration: BoxDecoration(
-            color: bgColor ?? color.lighten(0.82),
+            border: Border.all(
+              width: borderWidth,
+              style: borderWidth == 0 ? BorderStyle.none : BorderStyle.solid,
+              color: bgColor ?? color.lighten(0.82),
+            ),
+            color: color,
             borderRadius: BorderRadius.circular(borderRadius ?? padAndRadius)),
-        child: display(size: size, color: color));
+        child: display(size: size, color: bgColor ?? color.lighten(0.82)));
   }
 }
