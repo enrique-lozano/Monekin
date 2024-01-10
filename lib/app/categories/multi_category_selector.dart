@@ -60,25 +60,22 @@ class _MultiCategorySelectorState extends State<MultiCategorySelector> {
               children: [
                 Column(
                   children: [
-                    InkWell(
-                        borderRadius: BorderRadius.circular(12),
-                        onTap: () {
-                          setState(() {
-                            selectedCategories = null;
-                          });
+                    IconDisplayer(
+                      icon: Icons.select_all,
+                      size: iconSize,
+                      padding: iconPadding,
+                      isOutline: selectedCategories == null,
+                      mainColor: appColorScheme(context).background.darken(0.4),
+                      onTap: () {
+                        setState(() {
+                          selectedCategories = null;
+                        });
 
-                          if (widget.onChange != null) {
-                            widget.onChange!(selectedCategories);
-                          }
-                        },
-                        child: IconDisplayer(
-                          icon: Icons.select_all,
-                          size: iconSize,
-                          padding: iconPadding,
-                          isOutline: selectedCategories == null,
-                          mainColor:
-                              appColorScheme(context).background.darken(0.4),
-                        )),
+                        if (widget.onChange != null) {
+                          widget.onChange!(selectedCategories);
+                        }
+                      },
+                    ),
                     const SizedBox(height: 4),
                     ButtonSelectorLabel(label: t.categories.select.all_short)
                   ],
@@ -103,44 +100,42 @@ class _MultiCategorySelectorState extends State<MultiCategorySelector> {
 
                               return Column(
                                 children: [
-                                  InkWell(
-                                      borderRadius: BorderRadius.circular(12),
-                                      onTap: () {
-                                        if (!isCategorySelected) {
-                                          if (selectedCategories == null) {
-                                            selectedCategories = [
-                                              categoryToDisplay
-                                            ];
-                                          } else {
-                                            selectedCategories!
-                                                .add(categoryToDisplay);
-                                          }
+                                  IconDisplayer(
+                                    supportedIcon: categoryToDisplay.icon,
+                                    size: iconSize,
+                                    padding: iconPadding,
+                                    isOutline: isCategorySelected,
+                                    onTap: () {
+                                      if (!isCategorySelected) {
+                                        if (selectedCategories == null) {
+                                          selectedCategories = [
+                                            categoryToDisplay
+                                          ];
                                         } else {
-                                          selectedCategories!.removeWhere(
-                                              (element) =>
-                                                  element.id ==
-                                                  categoryToDisplay.id);
-
-                                          if (selectedCategories != null &&
-                                              selectedCategories!.isEmpty) {
-                                            selectedCategories = null;
-                                          }
+                                          selectedCategories!
+                                              .add(categoryToDisplay);
                                         }
+                                      } else {
+                                        selectedCategories!.removeWhere(
+                                            (element) =>
+                                                element.id ==
+                                                categoryToDisplay.id);
 
-                                        setState(() {});
-
-                                        if (widget.onChange != null) {
-                                          widget.onChange!(selectedCategories);
+                                        if (selectedCategories != null &&
+                                            selectedCategories!.isEmpty) {
+                                          selectedCategories = null;
                                         }
-                                      },
-                                      child: IconDisplayer(
-                                        supportedIcon: categoryToDisplay.icon,
-                                        size: iconSize,
-                                        padding: iconPadding,
-                                        isOutline: isCategorySelected,
-                                        mainColor: ColorHex.get(
-                                            categoryToDisplay.color),
-                                      )),
+                                      }
+
+                                      setState(() {});
+
+                                      if (widget.onChange != null) {
+                                        widget.onChange!(selectedCategories);
+                                      }
+                                    },
+                                    mainColor:
+                                        ColorHex.get(categoryToDisplay.color),
+                                  ),
                                   const SizedBox(height: 4),
                                   ButtonSelectorLabel(
                                       label: categoryToDisplay.name),

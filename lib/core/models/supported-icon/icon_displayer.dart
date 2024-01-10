@@ -12,6 +12,9 @@ class IconDisplayer extends StatelessWidget {
     this.padding,
     this.borderRadius = 12,
     this.isOutline = false,
+    this.onDoubleTap,
+    this.onTap,
+    this.onLongPress,
   }) : assert(
             (icon == null && supportedIcon != null) ||
                 (icon != null && supportedIcon == null),
@@ -26,44 +29,61 @@ class IconDisplayer extends StatelessWidget {
   final double borderRadius;
   final bool isOutline;
 
+  final void Function()? onTap;
+  final void Function()? onDoubleTap;
+  final void Function()? onLongPress;
+
   @override
   Widget build(BuildContext context) {
     final calculatedPadding = padding ?? (size / (22 / 6));
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      width: size + calculatedPadding * 2,
-      height: size + calculatedPadding * 2,
-      padding: EdgeInsets.all(calculatedPadding),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: isOutline ? 3 : 0,
-          style: !isOutline ? BorderStyle.none : BorderStyle.solid,
-          color: mainColor.lighten(0.82),
-        ),
-        color: mainColor,
+    return Material(
+      color: mainColor,
+      borderRadius: BorderRadius.circular(borderRadius),
+      child: InkWell(
+        onTap: onTap,
+        onLongPress: onLongPress,
+        onDoubleTap: onDoubleTap,
         borderRadius: BorderRadius.circular(borderRadius),
-      ),
-      child: Builder(
-        builder: (context) {
-          if (supportedIcon != null) {
-            return supportedIcon!
-                .display(size: size, color: mainColor.lighten(0.82));
-          }
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          width: size + calculatedPadding * 2,
+          height: size + calculatedPadding * 2,
+          padding: EdgeInsets.all(calculatedPadding),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: isOutline ? 3 : 0,
+              style: !isOutline ? BorderStyle.none : BorderStyle.solid,
+              color: mainColor.lighten(0.82),
+            ),
+            borderRadius: BorderRadius.circular(borderRadius),
+            /* --- 
+              The bgColor of the container is specified in the top Material Widget to achieve the splash effect
+            --- */
+            // color: mainColor,
+          ),
+          child: Builder(
+            builder: (context) {
+              if (supportedIcon != null) {
+                return supportedIcon!
+                    .display(size: size, color: mainColor.lighten(0.82));
+              }
 
-          return FittedBox(
-            fit: BoxFit.contain,
-            child: SizedBox(
-                height: size,
-                width: size,
-                child: Icon(
-                  icon,
-                  color: mainColor.lighten(0.82),
-                  size: size,
-                )),
-          );
-        },
+              return FittedBox(
+                fit: BoxFit.contain,
+                child: SizedBox(
+                    height: size,
+                    width: size,
+                    child: Icon(
+                      icon,
+                      color: mainColor.lighten(0.82),
+                      size: size,
+                    )),
+              );
+            },
+          ),
+        ),
       ),
     );
   }
