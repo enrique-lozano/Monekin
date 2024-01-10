@@ -6,6 +6,7 @@ import 'package:monekin/app/stats/widgets/movements_distribution/category_stats_
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -349,9 +350,10 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
                                     dataCategory.value, snapshot.data!)))
                       ],
                     ),
-                    leading: dataCategory.category.icon.displayFilled(
-                        size: 25,
-                        color: ColorHex.get(dataCategory.category.color)),
+                    leading: IconDisplayer.fromCategory(
+                      category: dataCategory.category,
+                      size: 25,
+                    ),
                     onTap: () {
                       showModalBottomSheet(
                           context: context,

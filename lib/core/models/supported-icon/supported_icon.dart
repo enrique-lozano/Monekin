@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:monekin/core/utils/color_utils.dart';
 
 part 'supported_icon.g.dart';
 
@@ -37,36 +36,5 @@ class SupportedIcon {
             color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
       ),
     );
-  }
-
-  /// Display the icon surrounded by a filled container in any widget
-  ///
-  /// The [color] attribute is the only attribute required here
-  ///
-  /// By default, a padding and a border radius of the 27% aprox. of the icon size will be applied.
-  /// The bgColor will be by default a lighter version of the icon color
-  Widget displayFilled(
-      {required Color color,
-      double size = 22,
-      double? padding,
-      double? borderRadius,
-      double borderWidth = 0,
-      Color? bgColor}) {
-    final padAndRadius = size / (22 / 6);
-
-    return AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: size + padAndRadius * 2,
-        height: size + padAndRadius * 2,
-        padding: EdgeInsets.all(padding ?? padAndRadius),
-        decoration: BoxDecoration(
-            border: Border.all(
-              width: borderWidth,
-              style: borderWidth == 0 ? BorderStyle.none : BorderStyle.solid,
-              color: bgColor ?? color.lighten(0.82),
-            ),
-            color: color,
-            borderRadius: BorderRadius.circular(borderRadius ?? padAndRadius)),
-        child: display(size: size, color: bgColor ?? color.lighten(0.82)));
   }
 }

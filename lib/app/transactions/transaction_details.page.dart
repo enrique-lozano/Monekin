@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/theme.dart';
@@ -552,29 +553,21 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                               const SizedBox(width: 24),
                               Hero(
                                 tag: 'transaction-icon-${transaction.id}',
-                                child: Container(
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    color: transaction
-                                        .color(context)
-                                        .lighten(0.82),
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                      color: transaction.color(context),
-                                      width: 2,
-                                    ),
-                                  ),
-                                  child: transaction.isIncomeOrExpense
-                                      ? transaction.category!.icon.display(
-                                          color: transaction.color(context),
-                                          size: 42,
-                                        )
-                                      : Icon(
-                                          color: transaction.color(context),
-                                          TransactionType.transfer.icon,
-                                          size: 42,
-                                        ),
-                                ),
+                                child: transaction.isIncomeOrExpense
+                                    ? IconDisplayer.fromCategory(
+                                        category: transaction.category!,
+                                        size: 42,
+                                        isOutline: true,
+                                        padding: 12,
+                                      )
+                                    : IconDisplayer(
+                                        icon: TransactionType.transfer.icon,
+                                        mainColor: TransactionType.transfer
+                                            .color(context),
+                                        size: 42,
+                                        isOutline: true,
+                                        padding: 12,
+                                      ),
                               ),
                             ],
                           ),
@@ -603,11 +596,12 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                       trailing: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          transaction.account.icon
-                                              .displayFilled(
+                                          IconDisplayer(
                                             padding: 2,
                                             borderRadius: 100,
-                                            color:
+                                            supportedIcon:
+                                                transaction.account.icon,
+                                            mainColor:
                                                 Theme.of(context).brightness ==
                                                         Brightness.light
                                                     ? appColorScheme(context)
@@ -628,17 +622,20 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           transaction.isIncomeOrExpense
-                                              ? transaction.category!.icon
-                                                  .displayFilled(
-                                                  color: transaction
+                                              ? IconDisplayer(
+                                                  supportedIcon: transaction
+                                                      .category!.icon,
+                                                  mainColor: transaction
                                                       .color(context),
                                                   padding: 2,
                                                   borderRadius: 100,
                                                 )
-                                              : widget.transaction
-                                                  .receivingAccount!.icon
-                                                  .displayFilled(
-                                                  color: transaction
+                                              : IconDisplayer(
+                                                  supportedIcon: widget
+                                                      .transaction
+                                                      .receivingAccount!
+                                                      .icon,
+                                                  mainColor: transaction
                                                       .color(context),
                                                   padding: 2,
                                                   borderRadius: 100,
