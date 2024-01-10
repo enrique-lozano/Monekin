@@ -494,7 +494,8 @@
       "select-one": "Selecciona una categoría",
       "select-subcategory": "Elige una subcategoría",
       "without-subcategory": "Sin subcategoría",
-      "all": "Todas las categorías"
+      "all": "Todas las categorías",
+      "all.short": "Todas"
     }
   },
   "BUDGETS": {

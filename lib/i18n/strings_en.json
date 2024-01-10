@@ -490,7 +490,8 @@
       "select-one": "Select a category",
       "select-subcategory": "Choose a subcategory",
       "without-subcategory": "Without subcategory",
-      "all": "All categories"
+      "all": "All categories",
+      "all.short": "All"
     }
   },
   "BUDGETS": {
