@@ -1,7 +1,14 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/utils/color_utils.dart';
+
+enum IconDisplayMode {
+  decoratedBox,
+  polygon,
+}
 
 class IconDisplayer extends StatelessWidget {
   const IconDisplayer({
@@ -17,6 +24,7 @@ class IconDisplayer extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     this.secondaryColor,
+    this.displayMode = IconDisplayMode.decoratedBox,
   }) : assert(
             (icon == null && supportedIcon != null) ||
                 (icon != null && supportedIcon == null),
@@ -29,6 +37,7 @@ class IconDisplayer extends StatelessWidget {
     double? padding,
     double borderRadius = 12,
     bool isOutline = false,
+    IconDisplayMode displayMode = IconDisplayMode.decoratedBox,
     void Function()? onDoubleTap,
     void Function()? onTap,
     void Function()? onLongPress,
@@ -42,6 +51,7 @@ class IconDisplayer extends StatelessWidget {
       supportedIcon: category.icon,
       isOutline: isOutline,
       borderRadius: borderRadius,
+      displayMode: displayMode,
       size: size,
       padding: padding,
       onDoubleTap: onDoubleTap,
@@ -59,6 +69,7 @@ class IconDisplayer extends StatelessWidget {
   final double? padding;
   final double borderRadius;
   final bool isOutline;
+  final IconDisplayMode displayMode;
 
   final void Function()? onTap;
   final void Function()? onDoubleTap;
@@ -69,32 +80,49 @@ class IconDisplayer extends StatelessWidget {
     final calculatedPadding = padding ?? (size / (22 / 6));
     final secondaryColorInBuild = secondaryColor ?? mainColor.lighten(0.82);
 
+    final borderSide = BorderSide(
+      width: isOutline ? 3 : 0,
+      style: !isOutline ? BorderStyle.none : BorderStyle.solid,
+      color: mainColor,
+    );
+
+    final polygonBorder = StarBorder.polygon(
+      sides: 5,
+      rotation: 0,
+      pointRounding: min(1, borderRadius * 2.5 / 100),
+      side: borderSide,
+      squash: 0.00,
+    );
+
     return Material(
       color: secondaryColorInBuild,
-      borderRadius: BorderRadius.circular(borderRadius),
+      borderRadius: displayMode == IconDisplayMode.polygon
+          ? null
+          : BorderRadius.circular(borderRadius),
+      shape: displayMode == IconDisplayMode.polygon ? polygonBorder : null,
       child: InkWell(
         onTap: onTap,
         onLongPress: onLongPress,
         onDoubleTap: onDoubleTap,
-        borderRadius: BorderRadius.circular(borderRadius),
+        customBorder:
+            displayMode == IconDisplayMode.polygon ? polygonBorder : null,
+        borderRadius: displayMode == IconDisplayMode.polygon
+            ? null
+            : BorderRadius.circular(borderRadius),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 250),
           width: size + calculatedPadding * 2,
           height: size + calculatedPadding * 2,
           padding: EdgeInsets.all(calculatedPadding),
           alignment: Alignment.center,
-          decoration: BoxDecoration(
-            border: Border.all(
-              width: isOutline ? 3.3 : 0,
-              style: !isOutline ? BorderStyle.none : BorderStyle.solid,
-              color: mainColor,
-            ),
-            borderRadius: BorderRadius.circular(borderRadius),
-            /* --- 
-              The bgColor of the container is specified in the top Material Widget to achieve the splash effect
-            --- */
-            // color: mainColor,
-          ),
+          decoration: displayMode == IconDisplayMode.polygon
+              ? ShapeDecoration(
+                  shape: polygonBorder,
+                )
+              : BoxDecoration(
+                  border: Border.fromBorderSide(borderSide),
+                  borderRadius: BorderRadius.circular(borderRadius),
+                ),
           child: Builder(
             builder: (context) {
               if (supportedIcon != null) {
