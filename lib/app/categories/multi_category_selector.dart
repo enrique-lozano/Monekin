@@ -29,7 +29,7 @@ class MultiCategorySelector extends StatefulWidget {
 }
 
 class _MultiCategorySelectorState extends State<MultiCategorySelector> {
-  final double iconSize = 32;
+  final double iconSize = 38;
   final double iconPadding = 8;
 
   buildCategoriesOptions({

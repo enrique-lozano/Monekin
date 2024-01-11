@@ -87,6 +87,7 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
               ),
               Expanded(
                 child: ScrollableWithBottomGradient(
+                  controller: scrollController,
                   child: Column(
                       children: iconsByScope.keys.toList().map((scope) {
                     return Column(

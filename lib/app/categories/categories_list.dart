@@ -28,10 +28,10 @@ Future<List<Category>?> showCategoryListModal(
       return DraggableScrollableSheet(
           expand: false,
           maxChildSize: 0.85,
-          minChildSize: 0.55,
-          initialChildSize: 0.55,
+          minChildSize: 0.5,
+          initialChildSize: 0.5,
           builder: (context, scrollController) {
-            return page;
+            return page.copyWith(scrollController: scrollController);
           });
     },
   );
@@ -45,11 +45,28 @@ class CategoriesListPage extends CategoriesList {
 
 class CategoriesList extends StatefulWidget {
   const CategoriesList(
-      {super.key, required this.mode, this.selectedCategories = const []});
+      {super.key,
+      required this.mode,
+      this.selectedCategories = const [],
+      this.scrollController});
 
   final CategoriesListMode mode;
-
+  final ScrollController? scrollController;
   final List<Category> selectedCategories;
+
+  CategoriesList copyWith({
+    Key? key,
+    CategoriesListMode? mode,
+    List<Category>? selectedCategories,
+    ScrollController? scrollController,
+  }) {
+    return CategoriesList(
+      key: key ?? this.key,
+      mode: mode ?? this.mode,
+      selectedCategories: selectedCategories ?? this.selectedCategories,
+      scrollController: scrollController ?? this.scrollController,
+    );
+  }
 
   @override
   State<CategoriesList> createState() => _CategoriesListState();
@@ -76,8 +93,10 @@ class _CategoriesListState extends State<CategoriesList> {
             : mainCategories.where((cat) => cat.type.isIncome))
         .toList();
 
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
+      controller: widget.scrollController,
+      scrollDirection: Axis.vertical,
       child: MultiCategorySelector(
         availableCategories: categoriesToDisplay,
         selectedCategories: selectedCategories,
@@ -122,27 +141,6 @@ class _CategoriesListState extends State<CategoriesList> {
         },
       ),
     );
-  }
-
-  toggleCategorySelection(bool? isNowSelected, Category category) async {
-    if (isNowSelected == true) {
-      if (!selectedCategories.map((e) => e.id).contains(category.id)) {
-        selectedCategories.add(category);
-
-        final subcats = await CategoryService.instance
-            .getChildCategories(parentId: category.id)
-            .first;
-
-        for (final subcat in subcats) {
-          if (!selectedCategories.map((e) => e.id).contains(subcat.id)) {
-            selectedCategories.add(subcat);
-          }
-        }
-      }
-    } else {
-      selectedCategories.removeWhere((element) =>
-          element.id == category.id || element.parentCategoryID == category.id);
-    }
   }
 
   @override
