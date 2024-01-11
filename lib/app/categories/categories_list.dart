@@ -1,8 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/app/categories/multi_category_selector.dart';
+import 'package:monekin/app/categories/subcategory_selector.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/routes/app_router.dart';
@@ -27,8 +28,8 @@ Future<List<Category>?> showCategoryListModal(
       return DraggableScrollableSheet(
           expand: false,
           maxChildSize: 0.85,
-          minChildSize: 0.85,
-          initialChildSize: 0.85,
+          minChildSize: 0.55,
+          initialChildSize: 0.55,
           builder: (context, scrollController) {
             return page;
           });
@@ -75,27 +76,52 @@ class _CategoriesListState extends State<CategoriesList> {
             : mainCategories.where((cat) => cat.type.isIncome))
         .toList();
 
-    return ListView.builder(
-        itemCount: categoriesToDisplay.length,
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-        itemBuilder: (context, index) {
-          final category = categoriesToDisplay[index];
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: MultiCategorySelector(
+        availableCategories: categoriesToDisplay,
+        selectedCategories: selectedCategories,
+        direction: Axis.vertical,
+        onChange: (selectedItems) async {
+          final category = selectedItems?.elementAt(0);
+
+          if (category == null) {
+            return;
+          }
 
           goToCategoryForm() =>
               context.pushRoute(CategoryFormRoute(categoryUUID: category.id));
 
-          return CheckboxListTile(
-              title: Text(category.name),
-              secondary: IconDisplayer.fromCategory(
-                category: category,
-                size: 25,
-              ),
-              value: selectedCategories.map((e) => e.id).contains(category.id),
-              onChanged: (value) async {
-                await toggleCategorySelection(value, category);
-                setState(() {});
-              });
-        });
+          if (widget.mode == CategoriesListMode.page) {
+            await goToCategoryForm();
+          } else if (widget.mode == CategoriesListMode.modalSelectCategory) {
+            category.type = type;
+
+            Navigator.of(context).pop([category]);
+          } else if (widget.mode == CategoriesListMode.modalSelectSubcategory) {
+            final modalRes = await showModalBottomSheet<Category?>(
+                context: context,
+                isScrollControlled: true,
+                showDragHandle: true,
+                builder: (context) {
+                  return SubcategorySelector(parentCategory: category);
+                });
+
+            if (modalRes != null) {
+              if (modalRes.isChildCategory) {
+                modalRes.parentCategory!.type = type;
+              } else {
+                modalRes.type = type;
+              }
+
+              Navigator.of(context).pop([modalRes]);
+            }
+          }
+
+          setState(() {});
+        },
+      ),
+    );
   }
 
   toggleCategorySelection(bool? isNowSelected, Category category) async {
