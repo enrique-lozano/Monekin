@@ -205,8 +205,8 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                             Text('${t.general.categories}:'),
                             const SizedBox(height: 6),
                             StreamBuilder(
-                                stream:
-                                    CategoryService.instance.getCategories(),
+                                stream: CategoryService.instance
+                                    .getMainCategories(),
                                 builder: (context, snapshot) {
                                   final selectedCategories =
                                       (snapshot.data ?? []).where((element) =>
@@ -215,6 +215,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                                           false);
 
                                   return MultiCategorySelector(
+                                    availableCategories: snapshot.data,
                                     selectedCategories:
                                         selectedCategories.toList(),
                                     onChange: (selection) {

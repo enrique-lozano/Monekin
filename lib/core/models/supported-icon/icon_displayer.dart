@@ -22,7 +22,8 @@ class IconDisplayer extends StatelessWidget {
                 (icon != null && supportedIcon == null),
             'Only one of icon or supportedIcon should be defined');
 
-  factory IconDisplayer.fromCategory({
+  factory IconDisplayer.fromCategory(
+    BuildContext context, {
     required Category category,
     double size = 22,
     double? padding,
@@ -31,18 +32,23 @@ class IconDisplayer extends StatelessWidget {
     void Function()? onDoubleTap,
     void Function()? onTap,
     void Function()? onLongPress,
-  }) =>
-      IconDisplayer(
-        mainColor: ColorHex.get(category.color),
-        supportedIcon: category.icon,
-        isOutline: isOutline,
-        borderRadius: borderRadius,
-        size: size,
-        padding: padding,
-        onDoubleTap: onDoubleTap,
-        onTap: onTap,
-        onLongPress: onLongPress,
-      );
+  }) {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
+    Color categoryColor = ColorHex.get(category.color);
+
+    return IconDisplayer(
+      mainColor: isDark ? categoryColor.lighten(0.82) : categoryColor,
+      secondaryColor: isDark ? categoryColor : categoryColor.lighten(0.82),
+      supportedIcon: category.icon,
+      isOutline: isOutline,
+      borderRadius: borderRadius,
+      size: size,
+      padding: padding,
+      onDoubleTap: onDoubleTap,
+      onTap: onTap,
+      onLongPress: onLongPress,
+    );
+  }
 
   final IconData? icon;
   final SupportedIcon? supportedIcon;
@@ -72,7 +78,7 @@ class IconDisplayer extends StatelessWidget {
         onDoubleTap: onDoubleTap,
         borderRadius: BorderRadius.circular(borderRadius),
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 220),
+          duration: const Duration(milliseconds: 250),
           width: size + calculatedPadding * 2,
           height: size + calculatedPadding * 2,
           padding: EdgeInsets.all(calculatedPadding),

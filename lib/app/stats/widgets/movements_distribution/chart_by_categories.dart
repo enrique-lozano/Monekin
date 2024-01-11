@@ -351,6 +351,7 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
                       ],
                     ),
                     leading: IconDisplayer.fromCategory(
+                      context,
                       category: dataCategory.category,
                       size: 25,
                     ),

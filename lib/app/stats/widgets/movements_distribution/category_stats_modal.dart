@@ -87,6 +87,7 @@ class CategoryStatsModal extends StatelessWidget {
                   Row(
                     children: [
                       IconDisplayer.fromCategory(
+                        context,
                         category: categoryData.category,
                         size: 34,
                       ),

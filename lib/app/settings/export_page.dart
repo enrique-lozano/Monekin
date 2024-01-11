@@ -239,17 +239,25 @@ class _ExportDataPageState extends State<ExportDataPage> {
                                   filters.categories?.contains(element.id) ??
                                   false);
 
-                          return MultiCategorySelector(
-                            selectedCategories: selectedCategories.toList(),
-                            onChange: (selection) {
-                              setState(() {
-                                filters = filters.copyWith(
-                                  categories:
-                                      selection?.map((e) => e.id).toList(),
+                          return StreamBuilder(
+                              stream:
+                                  CategoryService.instance.getMainCategories(),
+                              builder: (context, snapshot) {
+                                return MultiCategorySelector(
+                                  availableCategories: snapshot.data,
+                                  selectedCategories:
+                                      selectedCategories.toList(),
+                                  onChange: (selection) {
+                                    setState(() {
+                                      filters = filters.copyWith(
+                                        categories: selection
+                                            ?.map((e) => e.id)
+                                            .toList(),
+                                      );
+                                    });
+                                  },
                                 );
                               });
-                            },
-                          );
                         }),
                   ],
                 ),

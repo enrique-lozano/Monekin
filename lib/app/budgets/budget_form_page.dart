@@ -267,16 +267,22 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                     Text('${t.general.categories}:'),
                     const SizedBox(height: 6),
                     StreamBuilder(
-                        stream: CategoryService.instance.getCategories(),
+                        stream: CategoryService.instance.getMainCategories(),
                         builder: (context, snapshot) {
-                          return MultiCategorySelector(
-                            selectedCategories: categories,
-                            onChange: (selection) {
-                              setState(() {
-                                categories = selection ?? [];
+                          return StreamBuilder(
+                              stream:
+                                  CategoryService.instance.getMainCategories(),
+                              builder: (context, snapshot) {
+                                return MultiCategorySelector(
+                                  availableCategories: snapshot.data,
+                                  selectedCategories: categories,
+                                  onChange: (selection) {
+                                    setState(() {
+                                      categories = selection ?? [];
+                                    });
+                                  },
+                                );
                               });
-                            },
-                          );
                         }),
                     const SizedBox(height: 24),
                     DropdownButtonFormField(

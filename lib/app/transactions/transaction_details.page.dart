@@ -555,6 +555,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                 tag: 'transaction-icon-${transaction.id}',
                                 child: transaction.isIncomeOrExpense
                                     ? IconDisplayer.fromCategory(
+                                        context,
                                         category: transaction.category!,
                                         size: 42,
                                         isOutline: true,

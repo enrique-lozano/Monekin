@@ -205,6 +205,7 @@ class TransactionListTile extends StatelessWidget {
         tag: 'transaction-icon-${transaction.id}',
         child: transaction.isIncomeOrExpense
             ? IconDisplayer.fromCategory(
+                context,
                 category: transaction.category!,
                 size: 28,
                 padding: 6,
