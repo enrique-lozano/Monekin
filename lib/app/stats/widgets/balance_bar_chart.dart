@@ -6,11 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/services/filters/date_range_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
+
+import '../../../core/presentation/app_colors.dart';
 
 class IncomeExpenseChartDataItem {
   List<double> income;
@@ -229,8 +230,8 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
         BarChartRodData(
           toY: income,
           color: isTouched && touchedRodDataIndex == 0
-              ? CustomColors.of(context).success.darken(0.1)
-              : CustomColors.of(context).success,
+              ? AppColors.of(context).success.darken(0.1)
+              : AppColors.of(context).success,
           width: width,
           borderRadius: BorderRadius.only(
             topLeft: radius,
@@ -240,8 +241,8 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
         BarChartRodData(
           toY: expense,
           color: isTouched && touchedRodDataIndex == 1
-              ? CustomColors.of(context).danger.darken(0.1)
-              : CustomColors.of(context).danger,
+              ? AppColors.of(context).danger.darken(0.1)
+              : AppColors.of(context).danger,
           width: width,
           borderRadius: BorderRadius.only(
             bottomLeft: radius,
@@ -292,7 +293,7 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
               barTouchData: BarTouchData(
                 touchTooltipData: BarTouchTooltipData(
                   tooltipMargin: -10,
-                  tooltipBgColor: Theme.of(context).colorScheme.background,
+                  tooltipBgColor: AppColors.of(context).background,
                   getTooltipItem: (group, groupIndex, rod, rodIndex) {
                     return BarTooltipItem(
                       '${snapshot.data!.longTitles[group.x]}\n',

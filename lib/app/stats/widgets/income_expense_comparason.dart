@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
+
+import '../../../core/presentation/app_colors.dart';
 
 class IncomeExpenseComparason extends StatelessWidget {
   const IncomeExpenseComparason(
@@ -119,7 +120,7 @@ class IncomeExpenseTile extends StatelessWidget {
       leading: Container(
         padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
-          color: appColorScheme(context).surfaceVariant,
+          color: AppColors.of(context).light,
           borderRadius: BorderRadius.circular(4),
         ),
         child: Icon(

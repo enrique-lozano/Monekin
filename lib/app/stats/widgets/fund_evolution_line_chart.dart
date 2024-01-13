@@ -12,6 +12,7 @@ import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../../core/presentation/app_colors.dart';
 import '../../../core/services/filters/date_range_service.dart';
 
 class LineChartDataItem {
@@ -65,8 +66,8 @@ class FundEvolutionLineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Color> gradientColors = [
-      Theme.of(context).colorScheme.primary,
-      Theme.of(context).colorScheme.primary.lighten(0.3),
+      AppColors.of(context).primary,
+      AppColors.of(context).primary.lighten(0.3),
     ];
 
     final accountService = AccountService.instance;
@@ -214,8 +215,7 @@ class FundEvolutionLineChart extends StatelessWidget {
                           enabled: snapshot.hasData,
                           touchTooltipData: LineTouchTooltipData(
                             tooltipMargin: -10,
-                            tooltipBgColor:
-                                Theme.of(context).colorScheme.background,
+                            tooltipBgColor: AppColors.of(context).background,
                             getTooltipItems: (touchedSpots) {
                               return touchedSpots.map((barSpot) {
                                 final flSpot = barSpot;

@@ -4,9 +4,10 @@ import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
-import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+
+import '../../../core/presentation/app_colors.dart';
 
 class TransactionListComponent extends StatefulWidget {
   const TransactionListComponent({
@@ -74,7 +75,7 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
       child: Container(
         padding: const EdgeInsets.fromLTRB(16, 4, 12, 4),
         decoration: BoxDecoration(
-          color: appColorScheme(context).surfaceVariant,
+          color: AppColors.of(context).light,
           borderRadius: const BorderRadius.only(
             bottomRight: Radius.circular(120),
             topRight: Radius.circular(120),

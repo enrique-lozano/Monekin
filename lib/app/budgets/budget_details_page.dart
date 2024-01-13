@@ -9,7 +9,6 @@ import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
-import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
@@ -21,6 +20,7 @@ import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
+import '../../core/presentation/app_colors.dart';
 import '../../core/presentation/widgets/empty_indicator.dart';
 
 @RoutePage()
@@ -201,7 +201,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                                   : budgetCurrentPercentage ?? 0,
                               color: budgetCurrentPercentage != null &&
                                       budgetCurrentPercentage! >= 1
-                                  ? CustomColors.of(context).danger
+                                  ? AppColors.of(context).danger
                                   : null,
                             )
                           ],

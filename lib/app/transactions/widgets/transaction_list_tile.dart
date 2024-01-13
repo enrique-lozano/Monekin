@@ -4,11 +4,13 @@ import 'package:intl/intl.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
-import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/services/view-actions/transaction_view_actions_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
+
+import '../../../core/presentation/app_colors.dart';
 
 class TransactionListTile extends StatelessWidget {
   const TransactionListTile(
@@ -74,7 +76,7 @@ class TransactionListTile extends StatelessWidget {
                   Icon(
                     transaction.status?.icon ?? Icons.repeat,
                     color: transaction.status?.color.darken(0.1) ??
-                        Theme.of(context).colorScheme.primary,
+                        AppColors.of(context).primary,
                     size: 12,
                   )
               ],
