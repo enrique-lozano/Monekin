@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/models/budget/budget.dart';
-import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/empty_indicator.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/i18n/translations.g.dart';
+
+import '../../core/presentation/app_colors.dart';
 
 @RoutePage()
 class BudgetsPage extends StatelessWidget {
@@ -36,8 +37,7 @@ class BudgetsPage extends StatelessWidget {
                   Chip(
                       side:
                           const BorderSide(width: 0, color: Colors.transparent),
-                      backgroundColor:
-                          Theme.of(context).colorScheme.primaryContainer,
+                      backgroundColor: AppColors.of(context).primaryContainer,
                       padding: const EdgeInsets.all(0),
                       label: Text(
                         budget.intervalPeriod?.allThePeriodsText(context) ??
@@ -79,7 +79,7 @@ class BudgetsPage extends StatelessWidget {
                           ? 1
                           : budgetValue ?? 0,
                       color: budgetValue != null && budgetValue >= 1
-                          ? CustomColors.of(context).danger
+                          ? AppColors.of(context).danger
                           : null,
                     );
                   })

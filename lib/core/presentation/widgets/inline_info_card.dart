@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
 
+import '../app_colors.dart';
+
 enum InlineInfoCardMode { warn, info }
 
 class InlineInfoCard extends StatelessWidget {
@@ -19,7 +21,7 @@ class InlineInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color color = mode == InlineInfoCardMode.info
-        ? Theme.of(context).colorScheme.primary
+        ? AppColors.of(context).primary
         : Colors.amber;
 
     return Card(

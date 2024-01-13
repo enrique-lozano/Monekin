@@ -14,7 +14,6 @@ import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
-import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
@@ -26,6 +25,8 @@ import 'package:monekin/core/services/filters/date_range_service.dart';
 import 'package:monekin/core/services/finance_health_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
+
+import '../../core/presentation/app_colors.dart';
 
 @RoutePage()
 class DashboardPage extends StatefulWidget {
@@ -68,11 +69,11 @@ class _DashboardPageState extends State<DashboardPage> {
                 label: Text(
                     dateRangeService.selectedDateRange.currentText(context)),
                 backgroundColor:
-                    appColorScheme(context).primaryContainer.darken(),
+                    AppColors.of(context).primaryContainer.darken(),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
                   side: BorderSide(
-                    color: appColorScheme(context).onPrimary,
+                    color: AppColors.of(context).onPrimary,
                   ),
                 ),
                 onPressed: () {

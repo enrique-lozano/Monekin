@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
+import '../../presentation/app_colors.dart';
 import '../../utils/date_time_picker.dart';
 
 class CustomDateRangePicker extends StatefulWidget {
@@ -72,7 +73,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ColoredBox(
-          color: Theme.of(context).colorScheme.background,
+          color: AppColors.of(context).background,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
