@@ -6,6 +6,8 @@ import 'package:monekin/core/services/filters/custom_date_range_picker.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
+import '../../presentation/app_colors.dart';
+
 enum DateRange {
   weekly,
   monthly,
@@ -114,8 +116,7 @@ class DateRangeService {
                       const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
                   child: Text(
                     iconText,
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.background),
+                    style: TextStyle(color: AppColors.of(context).background),
                   ),
                 ),
               if (icon != null) Icon(icon, size: 25),

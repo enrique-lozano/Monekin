@@ -11,6 +11,7 @@ import 'package:monekin/core/presentation/widgets/transaction_filter/transaction
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/database/backup/backup_database_service.dart';
+import '../../core/presentation/app_colors.dart';
 
 enum _ExportFormats { csv, db }
 
@@ -43,9 +44,8 @@ class _ExportDataPageState extends State<ExportDataPage> {
           borderRadius: BorderRadius.circular(16),
           side: BorderSide(
             width: 1.25,
-            color: isSelected
-                ? Theme.of(context).colorScheme.primary
-                : Colors.transparent,
+            color:
+                isSelected ? AppColors.of(context).primary : Colors.transparent,
           ),
         ),
         clipBehavior: Clip.hardEdge,
@@ -72,7 +72,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
                   title,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: isSelected
-                          ? Theme.of(context).colorScheme.primary
+                          ? AppColors.of(context).primary
                           : Theme.of(context).colorScheme.onSurfaceVariant),
                 ),
                 Text(

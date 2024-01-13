@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../app_colors.dart';
+
 class AnimatedProgressBar extends StatefulWidget {
   const AnimatedProgressBar(
       {super.key,
@@ -43,7 +45,7 @@ class _AnimatedProgressBarState extends State<AnimatedProgressBar> {
       topRight: Radius.circular(widget.radius),
     );
 
-    final barColor = widget.color ?? Theme.of(context).colorScheme.primary;
+    final barColor = widget.color ?? AppColors.of(context).primary;
 
     return TweenAnimationBuilder<double>(
       duration: Duration(milliseconds: widget.animationDuration),

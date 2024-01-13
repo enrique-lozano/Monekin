@@ -144,13 +144,15 @@ class _TransactionsPageState extends State<TransactionsPage> {
                 final res = snapshot.data;
 
                 return Card(
-                  elevation: 3,
-                  //color: appColorScheme(context).primary,
-                  margin: const EdgeInsets.all(0),
+                  elevation: 2,
+                  //color: AppColors.of(context).primary,
+                  margin: const EdgeInsets.all(8),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0)),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 12, 24, 12),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
                     child: DefaultTextStyle(
                       style: Theme.of(context).textTheme.titleMedium!,
                       child: Row(

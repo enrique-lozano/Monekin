@@ -22,6 +22,7 @@ import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
+import '../../core/presentation/app_colors.dart';
 import '../transactions/form/transaction_form.page.dart';
 
 @RoutePage()
@@ -234,91 +235,88 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
 
               return Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Card(
-                      margin: const EdgeInsets.all(0),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(account.name),
-                                StreamBuilder(
-                                    initialData: 0.0,
-                                    stream: AccountService.instance
-                                        .getAccountMoney(account: account),
-                                    builder: (context, snapshot) {
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          CurrencyDisplayer(
-                                            amountToConvert: snapshot.data!,
-                                            currency: account.currency,
-                                            textStyle: const TextStyle(
-                                                fontSize: 32,
-                                                fontWeight: FontWeight.w600),
+                  Card(
+                    color: AppColors.of(context).light,
+                    elevation: 0,
+                    margin: const EdgeInsets.only(
+                        left: 16, right: 16, bottom: 8, top: 16),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(account.name),
+                              StreamBuilder(
+                                  initialData: 0.0,
+                                  stream: AccountService.instance
+                                      .getAccountMoney(account: account),
+                                  builder: (context, snapshot) {
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        CurrencyDisplayer(
+                                          amountToConvert: snapshot.data!,
+                                          currency: account.currency,
+                                          textStyle: const TextStyle(
+                                              fontSize: 32,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        StreamBuilder(
+                                          stream: ExchangeRateService.instance
+                                              .calculateExchangeRateToPreferredCurrency(
+                                            amount: snapshot.data!,
+                                            fromCurrency: account.currency.code,
                                           ),
-                                          StreamBuilder(
-                                            stream: ExchangeRateService.instance
-                                                .calculateExchangeRateToPreferredCurrency(
-                                              amount: snapshot.data!,
-                                              fromCurrency:
-                                                  account.currency.code,
-                                            ),
-                                            builder:
-                                                (context, currencySnapshot) {
-                                              if (currencySnapshot
-                                                          .connectionState ==
-                                                      ConnectionState.waiting ||
-                                                  currencySnapshot.data != 0 &&
-                                                      currencySnapshot.data! ==
-                                                          snapshot.data ||
-                                                  snapshot.data! == 0) {
-                                                return Container();
-                                              }
+                                          builder: (context, currencySnapshot) {
+                                            if (currencySnapshot
+                                                        .connectionState ==
+                                                    ConnectionState.waiting ||
+                                                currencySnapshot.data != 0 &&
+                                                    currencySnapshot.data! ==
+                                                        snapshot.data ||
+                                                snapshot.data! == 0) {
+                                              return Container();
+                                            }
 
-                                              return Row(
-                                                children: [
-                                                  Text(
-                                                    String.fromCharCode(Icons
+                                            return Row(
+                                              children: [
+                                                Text(
+                                                  String.fromCharCode(Icons
+                                                      .currency_exchange_rounded
+                                                      .codePoint),
+                                                  style: TextStyle(
+                                                    fontFamily: Icons
                                                         .currency_exchange_rounded
-                                                        .codePoint),
-                                                    style: TextStyle(
-                                                      fontFamily: Icons
-                                                          .currency_exchange_rounded
-                                                          .fontFamily,
-                                                    ),
+                                                        .fontFamily,
                                                   ),
-                                                  const SizedBox(width: 4),
-                                                  CurrencyDisplayer(
-                                                      amountToConvert:
-                                                          currencySnapshot
-                                                              .data!),
-                                                ],
-                                              );
-                                            },
-                                          )
-                                        ],
-                                      );
-                                    }),
-                              ],
-                            ),
-                            Hero(
-                                tag: 'account-icon-${widget.account.id}',
-                                child: account.displayIcon(context, size: 48)),
-                          ],
-                        ),
+                                                ),
+                                                const SizedBox(width: 4),
+                                                CurrencyDisplayer(
+                                                    amountToConvert:
+                                                        currencySnapshot.data!),
+                                              ],
+                                            );
+                                          },
+                                        )
+                                      ],
+                                    );
+                                  }),
+                            ],
+                          ),
+                          Hero(
+                              tag: 'account-icon-${widget.account.id}',
+                              child: account.displayIcon(context, size: 48)),
+                        ],
                       ),
                     ),
                   ),
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
                       child: Column(
                         children: [
                           CardWithHeader(

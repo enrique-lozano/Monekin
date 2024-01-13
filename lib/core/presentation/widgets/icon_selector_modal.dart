@@ -76,7 +76,7 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
                     ),
                     Chip(
                       side: BorderSide(color: colors.primary, width: 2),
-                      //  backgroundColor: Theme.of(context).colorScheme.primaryLight,
+                      //  backgroundColor: AppColors.of(context).primaryLight,
                       label: _selectedIcon!
                           .display(size: 34, color: colors.onBackground),
                     )
