@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/services/filters/date_range_service.dart';
 
+import '../../core/presentation/app_colors.dart';
+
 class FooterSegmentedCalendarButton extends StatefulWidget {
   const FooterSegmentedCalendarButton(
       {super.key, required this.onDateRangeChanged});
@@ -30,10 +32,11 @@ class _FooterSegmentedCalendarButtonState
       child: IconButton.outlined(
         onPressed: onPressed,
         icon: Icon(icon),
-        color: Theme.of(context).colorScheme.primary,
+        color: AppColors.of(context).primary,
         style: ButtonStyle(
           side: MaterialStateProperty.all(
-              BorderSide(color: Theme.of(context).colorScheme.primary)),
+            BorderSide(color: AppColors.of(context).primary),
+          ),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: borderRadius,

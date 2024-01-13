@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
-import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/i18n/translations.g.dart';
+
+import '../../../app_colors.dart';
 
 class TransactionStatusFilterChip extends StatelessWidget {
   const TransactionStatusFilterChip(
@@ -25,7 +26,7 @@ class TransactionStatusFilterChip extends StatelessWidget {
         showCheckmark: false,
         avatar: Icon(
           status?.icon ?? Icons.circle_outlined,
-          color: status?.color ?? appColorScheme(context).primary,
+          color: status?.color ?? AppColors.of(context).primary,
         ),
         onSelected: onSelected);
   }

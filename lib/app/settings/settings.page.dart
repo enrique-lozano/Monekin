@@ -2,12 +2,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/settings/edit_profile_modal.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/user_avatar.dart';
 import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
+
+import '../../core/presentation/app_colors.dart';
 
 @RoutePage()
 class SettingsPage extends StatefulWidget {
@@ -22,8 +23,7 @@ Widget createListSeparator(BuildContext context, String title) {
     padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
     child: Text(
       title.toUpperCase(),
-      style:
-          TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.primary),
+      style: TextStyle(fontSize: 14, color: AppColors.of(context).primary),
     ),
   );
 }
@@ -42,7 +42,7 @@ ListTile createSettingItem(BuildContext context,
         children: [
           Icon(
             icon,
-            color: appColorScheme(context).primary,
+            color: AppColors.of(context).primary,
           ),
         ],
       ),
@@ -144,11 +144,11 @@ class _SettingsPageState extends State<SettingsPage> {
                     clipBehavior: Clip.hardEdge,
                     margin: const EdgeInsets.all(0),
                     color: Theme.of(context).brightness == Brightness.light
-                        ? appColorScheme(context).primary.lighten(0.8)
-                        : appColorScheme(context).primary.withOpacity(0.2),
+                        ? AppColors.of(context).primary.lighten(0.8)
+                        : AppColors.of(context).primary.withOpacity(0.2),
                     shape: RoundedRectangleBorder(
                         side: BorderSide(
-                            color: appColorScheme(context).primary, width: 2),
+                            color: AppColors.of(context).primary, width: 2),
                         borderRadius: BorderRadius.circular(8)),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -157,7 +157,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         children: [
                           Icon(
                             Icons.favorite,
-                            color: appColorScheme(context).primary,
+                            color: AppColors.of(context).primary,
                           ),
                           const SizedBox(width: 12),
                           Expanded(

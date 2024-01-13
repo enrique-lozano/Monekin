@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../app_colors.dart';
+
 class CardWithHeader extends StatelessWidget {
   const CardWithHeader({
     super.key,
@@ -24,20 +26,41 @@ class CardWithHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     const double iconSize = 16;
 
-    return Card(
-      elevation: 1,
+    return Container(
       clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: AppColors.of(context).background,
+        border: Border.all(
+          width: 1,
+          color: Theme.of(context).dividerColor,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.of(context).shadowColorLight,
+            blurRadius: 12,
+            offset: const Offset(0, 0),
+            spreadRadius: 4,
+          ),
+        ],
+      ),
       margin: const EdgeInsets.all(0),
       child: Column(
         children: [
           Container(
+            clipBehavior: Clip.hardEdge,
             padding: EdgeInsets.fromLTRB(
                 16,
                 onHeaderButtonClick != null ? 2 : iconSize - 6,
                 2,
                 onHeaderButtonClick != null ? 2 : iconSize - 6),
             decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primaryContainer),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+              color: AppColors.of(context).light,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -48,7 +71,7 @@ class CardWithHeader extends StatelessWidget {
                   IconButton(
                     onPressed: onHeaderButtonClick,
                     iconSize: iconSize,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: AppColors.of(context).primary,
                     icon: Icon(headerButtonIcon),
                   )
               ],
