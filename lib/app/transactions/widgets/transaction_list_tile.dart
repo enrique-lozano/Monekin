@@ -11,6 +11,8 @@ import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/services/view-actions/transaction_view_actions_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 
+import '../../../core/presentation/app_colors.dart';
+
 class TransactionListTile extends StatelessWidget {
   const TransactionListTile(
       {super.key,
@@ -75,7 +77,7 @@ class TransactionListTile extends StatelessWidget {
                   Icon(
                     transaction.status?.icon ?? Icons.repeat,
                     color: transaction.status?.color.darken(0.1) ??
-                        Theme.of(context).colorScheme.primary,
+                        AppColors.of(context).primary,
                     size: 12,
                   )
               ],

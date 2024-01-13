@@ -24,6 +24,8 @@ import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../core/presentation/app_colors.dart';
+
 @RoutePage()
 class ImportCSVPage extends StatefulWidget {
   const ImportCSVPage({super.key});
@@ -95,7 +97,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
     final t = Translations.of(context);
 
     icon ??= SupportedIconService.instance.defaultSupportedIcon;
-    iconColor ??= Theme.of(context).colorScheme.primary;
+    iconColor ??= AppColors.of(context).primary;
 
     return TextFormField(
         controller:

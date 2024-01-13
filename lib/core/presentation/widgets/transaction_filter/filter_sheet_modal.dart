@@ -9,7 +9,6 @@ import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
-import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_field.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
@@ -19,6 +18,8 @@ import 'package:monekin/core/presentation/widgets/transaction_filter/tags_filter
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
+
+import '../../app_colors.dart';
 
 Future<TransactionFilters?> openFilterSheetModal(
     BuildContext context, FilterSheetModal modalData) {
@@ -518,8 +519,8 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                                         }),
                                         showCheckmark: false,
                                         avatar: Icon(Icons.label_off_rounded,
-                                            color: appColorScheme(context)
-                                                .primary),
+                                            color:
+                                                AppColors.of(context).primary),
                                       ),
                                       if (snapshot.data != null)
                                         ...List.generate(snapshot.data!.length,
@@ -577,7 +578,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                       ),
                     ),
                     ScrollableWithBottomGradient.buildPositionedGradient(
-                        appColorScheme(context).background),
+                        AppColors.of(context).background),
                   ],
                 ),
               ),

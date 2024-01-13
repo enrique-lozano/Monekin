@@ -9,7 +9,6 @@ import 'package:monekin/core/database/services/transaction/transaction_service.d
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
-import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
@@ -21,6 +20,8 @@ import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:slang/builder/utils/string_extensions.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../core/presentation/app_colors.dart';
 
 class TransactionDetailAction {
   final String label;
@@ -238,7 +239,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
       subtitleTextStyle: Theme.of(context).textTheme.labelSmall!.copyWith(
             color: isNext
                 ? transaction.nextPayStatus!.color(context)
-                : appColorScheme(context).onSecondary,
+                : AppColors.of(context).dark,
           ),
       leading: Icon(
         isNext ? transaction.nextPayStatus!.icon : Icons.access_time,
@@ -246,7 +247,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
       ),
       title: Text(
         DateFormat.yMMMd().format(date),
-        style: TextStyle(color: appColorScheme(context).onSecondary),
+        style: TextStyle(color: AppColors.of(context).dark),
       ),
       subtitle: !isNext
           ? null
@@ -256,8 +257,8 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
             ),
       trailing: Row(mainAxisSize: MainAxisSize.min, children: [
         IconButton(
-          color: CustomColors.of(context).danger,
-          disabledColor: CustomColors.of(context).danger.withOpacity(0.3),
+          color: AppColors.of(context).danger,
+          disabledColor: AppColors.of(context).danger.withOpacity(0.3),
           icon: const Icon(Icons.cancel_rounded),
           tooltip: t.transaction.next_payments.skip,
           onPressed: !isNext
@@ -267,10 +268,10 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
         const SizedBox(width: 4),
         IconButton(
           onPressed: !isNext ? null : () => showPayModal(context, transaction),
-          color: appColorScheme(context).primaryContainer,
+          color: AppColors.of(context).primaryContainer,
           tooltip: t.transaction.next_payments.accept,
           disabledColor:
-              appColorScheme(context).primaryContainer.withOpacity(0.3),
+              AppColors.of(context).primaryContainer.withOpacity(0.3),
           icon: const Icon(Icons.price_check_rounded),
         ),
       ]),
@@ -342,7 +343,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
     final color = showRecurrencyStatus
         ? isDarkTheme
             ? Theme.of(context).colorScheme.secondary.darken(0.15)
-            : Theme.of(context).colorScheme.primary.lighten(0.2)
+            : AppColors.of(context).primary.lighten(0.2)
         : transaction.status!.color;
 
     return Card(
@@ -368,9 +369,8 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: isDarkTheme
-                          ? Theme.of(context).colorScheme.background
-                          : null,
+                      color:
+                          isDarkTheme ? AppColors.of(context).background : null,
                     )),
                 Icon(
                   showRecurrencyStatus
@@ -394,9 +394,8 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                         ? t.recurrent_transactions.details.descr
                         : transaction.status!.description(context),
                     style: TextStyle(
-                      color: isDarkTheme
-                          ? Theme.of(context).colorScheme.background
-                          : null,
+                      color:
+                          isDarkTheme ? AppColors.of(context).background : null,
                     ),
                   ),
                 ),
@@ -473,112 +472,116 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Card(
-                        margin: const EdgeInsets.all(0),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Flexible(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CurrencyDisplayer(
-                                      amountToConvert: transaction.value,
-                                      currency: transaction.account.currency,
-                                      textStyle: TextStyle(
-                                        fontSize: 34,
-                                        fontWeight: FontWeight.w600,
-                                        color: transaction.status ==
-                                                TransactionStatus.voided
-                                            ? Colors.grey.shade400
-                                            : transaction.type ==
-                                                    TransactionType.income
-                                                ? CustomColors.of(context)
-                                                    .success
-                                                : transaction.type ==
-                                                        TransactionType.expense
-                                                    ? CustomColors.of(context)
-                                                        .danger
-                                                    : null,
-                                        decoration: transaction.status ==
-                                                TransactionStatus.voided
-                                            ? TextDecoration.lineThrough
-                                            : null,
-                                      ),
+                    child: Card(
+                      margin: const EdgeInsets.only(
+                          left: 16, right: 16, bottom: 8, top: 16),
+                      elevation: 0,
+                      color: AppColors.of(context).light,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CurrencyDisplayer(
+                                    amountToConvert: transaction.value,
+                                    currency: transaction.account.currency,
+                                    textStyle: TextStyle(
+                                      fontSize: 34,
+                                      fontWeight: FontWeight.w600,
+                                      color: transaction.status ==
+                                              TransactionStatus.voided
+                                          ? Colors.grey.shade400
+                                          : transaction.type ==
+                                                  TransactionType.income
+                                              ? AppColors.of(context).success
+                                              : transaction.type ==
+                                                      TransactionType.expense
+                                                  ? AppColors.of(context).danger
+                                                  : null,
+                                      decoration: transaction.status ==
+                                              TransactionStatus.voided
+                                          ? TextDecoration.lineThrough
+                                          : null,
                                     ),
+                                  ),
+                                  Text(
+                                    transaction.displayName(context),
+                                    softWrap: true,
+                                    overflow: TextOverflow.fade,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  if (transaction.recurrentInfo.isNoRecurrent)
                                     Text(
-                                      transaction.displayName(context),
-                                      softWrap: true,
-                                      overflow: TextOverflow.fade,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                                      DateFormat.yMMMMd()
+                                          .add_Hm()
+                                          .format(transaction.date),
+                                    )
+                                  else
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.repeat_rounded,
+                                          size: 14,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          transaction.recurrentInfo
+                                              .formText(context),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary),
+                                        ),
+                                      ],
                                     ),
-                                    if (transaction.recurrentInfo.isNoRecurrent)
-                                      Text(
-                                        DateFormat.yMMMMd()
-                                            .add_Hm()
-                                            .format(transaction.date),
-                                      )
-                                    else
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.repeat_rounded,
-                                            size: 14,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                          ),
-                                          const SizedBox(width: 4),
-                                          Text(
-                                            transaction.recurrentInfo
-                                                .formText(context),
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w300,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary),
-                                          ),
-                                        ],
-                                      ),
-                                  ],
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 24),
+                            Hero(
+                              tag: 'transaction-icon-${transaction.id}',
+                              child: Container(
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color:
+                                      transaction.color(context).lighten(0.82),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: transaction.color(context),
+                                    width: 2,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 24),
-                              Hero(
-                                tag: 'transaction-icon-${transaction.id}',
                                 child: transaction.isIncomeOrExpense
-                                    ? IconDisplayer.fromCategory(
-                                        context,
-                                        category: transaction.category!,
+                                    ? transaction.category!.icon.display(
+                                        color: transaction.color(context),
                                         size: 42,
-                                        isOutline: true,
-                                        padding: 12,
                                       )
-                                    : IconDisplayer(
-                                        icon: TransactionType.transfer.icon,
-                                        mainColor: TransactionType.transfer
-                                            .color(context),
+                                    : Icon(
+                                        color: transaction.color(context),
+                                        TransactionType.transfer.icon,
                                         size: 42,
-                                        isOutline: true,
-                                        padding: 12,
                                       ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
                       child: Column(
                         children: [
                           if (transaction.status != null ||
@@ -600,15 +603,12 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                           IconDisplayer(
                                             padding: 2,
                                             borderRadius: 100,
-                                            supportedIcon:
-                                                transaction.account.icon,
-                                            mainColor:
-                                                Theme.of(context).brightness ==
-                                                        Brightness.light
-                                                    ? appColorScheme(context)
-                                                        .primary
-                                                    : appColorScheme(context)
-                                                        .primaryContainer,
+                                            mainColor: Theme.of(context)
+                                                        .brightness ==
+                                                    Brightness.light
+                                                ? AppColors.of(context).primary
+                                                : AppColors.of(context)
+                                                    .primaryContainer,
                                           ),
                                           const SizedBox(width: 6),
                                           Text(transaction.account.name)

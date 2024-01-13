@@ -19,7 +19,6 @@ import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/animations/shake/shake_widget.dart';
-import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/expansion_panel/single_expansion_panel.dart';
@@ -36,6 +35,8 @@ import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../../core/presentation/app_colors.dart';
 
 enum TransactionFormMode { transfer, incomeOrExpense }
 
@@ -101,8 +102,8 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   }) {
     icon ??= SupportedIconService.instance.defaultSupportedIcon;
     iconColor ??= Theme.of(context).brightness == Brightness.light
-        ? Theme.of(context).colorScheme.primary
-        : Theme.of(context).colorScheme.primaryContainer;
+        ? AppColors.of(context).primary
+        : AppColors.of(context).primaryContainer;
 
     final t = Translations.of(context);
 
@@ -472,7 +473,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     Color? textColor,
   }) {
     textColor ??= Theme.of(context).colorScheme.onBackground;
-    bgColor ??= Theme.of(context).colorScheme.background;
+    bgColor ??= AppColors.of(context).background;
 
     onButtonPress() {
       HapticFeedback.lightImpact();
@@ -559,9 +560,9 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         selectedCategory == null);
 
     final trColor = isBlue
-        ? CustomColors.of(context).brand.lighten()
+        ? AppColors.of(context).brand.lighten()
         : (currentTransactionTypeToAdd?.color(context) ??
-            appColorScheme(context).primary);
+            AppColors.of(context).primary);
 
     final trColorLighten = Theme.of(context).brightness == Brightness.light
         ? isBlue
@@ -997,7 +998,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         borderRadius: BorderRadius.circular(10),
       ),
       elevation: 0,
-      // color: Theme.of(context).colorScheme.primary,
+      // color: AppColors.of(context).primary,
       clipBehavior: Clip.hardEdge,
       child: LayoutBuilder(builder: (context, constraints) {
         return Row(

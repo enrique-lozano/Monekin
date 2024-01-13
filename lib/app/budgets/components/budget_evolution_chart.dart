@@ -1,13 +1,15 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:monekin/app/stats/widgets/fund_evolution_line_chart.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
+import '../../../core/presentation/app_colors.dart';
 
 class BudgetEvolutionChart extends StatelessWidget {
   const BudgetEvolutionChart({super.key, required this.budget});
@@ -43,8 +45,8 @@ class BudgetEvolutionChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Color> gradientColors = [
-      Theme.of(context).colorScheme.primary,
-      Theme.of(context).colorScheme.primary.lighten(0.3),
+      AppColors.of(context).primary,
+      AppColors.of(context).primary.lighten(0.3),
     ];
 
     final t = Translations.of(context);
@@ -87,7 +89,7 @@ class BudgetEvolutionChart extends StatelessWidget {
               ]),
               lineTouchData: LineTouchData(
                   touchTooltipData: LineTouchTooltipData(
-                tooltipBgColor: Theme.of(context).colorScheme.background,
+                tooltipBgColor: AppColors.of(context).background,
                 tooltipHorizontalAlignment: FLHorizontalAlignment.right,
                 tooltipMargin: -10,
                 getTooltipItems: (touchedSpots) {

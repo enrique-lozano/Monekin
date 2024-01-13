@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
-import 'package:monekin/core/presentation/theme.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -136,12 +136,12 @@ class _MultiCategorySelectorState extends State<MultiCategorySelector> {
                   size: iconSize,
                   padding: iconPadding,
                   isOutline: selectedCategories == null,
-                  secondaryColor: appColorScheme(context).background.darken(
+                  secondaryColor: AppColors.of(context).background.darken(
                         Theme.of(context).brightness == Brightness.dark
                             ? 0.6
                             : 0.1,
                       ),
-                  mainColor: appColorScheme(context).onBackground,
+                  mainColor: AppColors.of(context).onBackground,
                   onTap: () {
                     setState(() {
                       selectedCategories = null;
