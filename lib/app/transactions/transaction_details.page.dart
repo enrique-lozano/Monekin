@@ -551,28 +551,21 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                             const SizedBox(width: 24),
                             Hero(
                               tag: 'transaction-icon-${transaction.id}',
-                              child: Container(
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color:
-                                      transaction.color(context).lighten(0.82),
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    color: transaction.color(context),
-                                    width: 2,
-                                  ),
-                                ),
-                                child: transaction.isIncomeOrExpense
-                                    ? transaction.category!.icon.display(
-                                        color: transaction.color(context),
-                                        size: 42,
-                                      )
-                                    : Icon(
-                                        color: transaction.color(context),
-                                        TransactionType.transfer.icon,
-                                        size: 42,
-                                      ),
-                              ),
+                              child: transaction.isIncomeOrExpense
+                                  ? IconDisplayer.fromCategory(
+                                      context,
+                                      category: transaction.category!,
+                                      size: 42,
+                                      isOutline: true,
+                                      borderRadius: 18,
+                                    )
+                                  : IconDisplayer(
+                                      mainColor: transaction.color(context),
+                                      icon: TransactionType.transfer.icon,
+                                      size: 42,
+                                      isOutline: true,
+                                      borderRadius: 18,
+                                    ),
                             ),
                           ],
                         ),
@@ -601,6 +594,8 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           IconDisplayer(
+                                            supportedIcon:
+                                                transaction.account.icon,
                                             padding: 2,
                                             borderRadius: 100,
                                             mainColor: Theme.of(context)
@@ -623,12 +618,11 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           transaction.isIncomeOrExpense
-                                              ? IconDisplayer(
-                                                  supportedIcon: transaction
-                                                      .category!.icon,
-                                                  mainColor: transaction
-                                                      .color(context),
-                                                  padding: 2,
+                                              ? IconDisplayer.fromCategory(
+                                                  context,
+                                                  category:
+                                                      transaction.category!,
+                                                  padding: 4,
                                                   borderRadius: 100,
                                                 )
                                               : IconDisplayer(
