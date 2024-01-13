@@ -4,6 +4,8 @@ import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
+import '../../presentation/app_colors.dart';
+
 enum AccountType {
   /// A normal type of account The default type
   normal,
@@ -74,11 +76,9 @@ class Account extends AccountInDB {
       padding: EdgeInsets.all(size * 0.185),
       decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.onPrimary,
-          border: Border.all(
-              width: 2, color: Theme.of(context).colorScheme.primary),
+          border: Border.all(width: 2, color: AppColors.of(context).primary),
           borderRadius: BorderRadius.circular(1000)),
-      child: icon.display(
-          size: size, color: Theme.of(context).colorScheme.primary),
+      child: icon.display(size: size, color: AppColors.of(context).primary),
     );
   }
 

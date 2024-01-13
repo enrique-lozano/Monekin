@@ -4,11 +4,12 @@ import 'package:monekin/app/categories/multi_category_selector.dart';
 import 'package:monekin/app/categories/subcategory_selector.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
+
+import '../../core/presentation/app_colors.dart';
 
 enum CategoriesListMode {
   page,
@@ -226,17 +227,17 @@ class _CategoriesListState extends State<CategoriesList> {
                     labelColor:
                         Theme.of(context).brightness == Brightness.light &&
                                 widget.mode.isModal
-                            ? appColorScheme(context).primary
+                            ? AppColors.of(context).primary
                             : null,
                     unselectedLabelColor:
                         Theme.of(context).brightness == Brightness.light &&
                                 widget.mode.isModal
-                            ? appColorScheme(context).onBackground.lighten(0.3)
+                            ? AppColors.of(context).onBackground.lighten(0.3)
                             : null,
                     indicatorColor:
                         Theme.of(context).brightness == Brightness.light &&
                                 widget.mode.isModal
-                            ? appColorScheme(context).primary
+                            ? AppColors.of(context).primary
                             : null,
                     tabs: [
                       Tab(text: t.transaction.types.income(n: 10)),

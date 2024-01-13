@@ -7,9 +7,10 @@ import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
 import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
-import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
+
+import '../../presentation/app_colors.dart';
 
 /// All the possible types of a transaction
 enum TransactionType {
@@ -52,12 +53,12 @@ enum TransactionType {
 
   Color color(BuildContext context) {
     if (this == income) {
-      return CustomColors.of(context).success;
+      return AppColors.of(context).success;
     } else if (this == expense) {
-      return CustomColors.of(context).danger;
+      return AppColors.of(context).danger;
     }
 
-    return appColorScheme(context).primary;
+    return AppColors.of(context).primary;
   }
 }
 
@@ -73,9 +74,9 @@ enum NextPayStatus {
 
   Color color(BuildContext context) {
     if (this == planified) {
-      return appColorScheme(context).primary;
+      return AppColors.of(context).primary;
     } else if (this == delayed) {
-      return CustomColors.of(context).danger;
+      return AppColors.of(context).danger;
     }
 
     return Colors.amber;
@@ -179,7 +180,7 @@ class MoneyTransaction extends TransactionInDB {
   /// Get the color that represent this category. Will be the category color when the transaction is an income or an expense, and the primary color of the app otherwise
   Color color(context) => isIncomeOrExpense
       ? ColorHex.get(category!.color)
-      : appColorScheme(context).primary;
+      : AppColors.of(context).primary;
 
   /// The type of the transaction (expense, income or transfer)
   TransactionType get type => isTransfer

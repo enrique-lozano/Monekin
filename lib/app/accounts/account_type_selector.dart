@@ -1,5 +1,7 @@
-import 'package:monekin/core/models/account/account.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/core/models/account/account.dart';
+
+import '../../core/presentation/app_colors.dart';
 
 class AccountTypeSelector extends StatefulWidget {
   const AccountTypeSelector(
@@ -75,9 +77,8 @@ class MonekinFilterChip extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           side: BorderSide(
             width: 1.25,
-            color: isSelected
-                ? Theme.of(context).colorScheme.primary
-                : Colors.transparent,
+            color:
+                isSelected ? AppColors.of(context).primary : Colors.transparent,
           ),
         ),
         clipBehavior: Clip.hardEdge,
@@ -92,7 +93,7 @@ class MonekinFilterChip extends StatelessWidget {
                   accountType.icon,
                   size: 28,
                   color: isSelected
-                      ? Theme.of(context).colorScheme.primary
+                      ? AppColors.of(context).primary
                       : Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
                 const SizedBox(height: 18),
@@ -100,7 +101,7 @@ class MonekinFilterChip extends StatelessWidget {
                   accountType.title(context),
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: isSelected
-                          ? Theme.of(context).colorScheme.primary
+                          ? AppColors.of(context).primary
                           : Theme.of(context).colorScheme.onSurfaceVariant),
                 ),
                 Text(accountType.description(context),

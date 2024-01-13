@@ -7,6 +7,7 @@ import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
+import '../../../core/presentation/app_colors.dart';
 import '../../../core/presentation/widgets/user_avatar.dart';
 
 class HomeDrawer extends StatelessWidget {
@@ -70,7 +71,7 @@ class HomeDrawer extends StatelessWidget {
 
                 return UserAccountsDrawerHeader(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.background,
+                    color: AppColors.of(context).background,
                   ),
                   accountName: UserGreting(userName: userName),
                   currentAccountPicture: UserAvatar(avatar: userAvatar),

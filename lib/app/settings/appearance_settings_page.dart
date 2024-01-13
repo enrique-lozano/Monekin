@@ -7,6 +7,8 @@ import 'package:monekin/core/presentation/widgets/color_picker.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
+import '../../core/presentation/app_colors.dart';
+
 @RoutePage()
 class AdvancedSettingsPage extends StatefulWidget {
   const AdvancedSettingsPage({super.key});
@@ -201,7 +203,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                   late final Color color;
 
                   if (snapshot.data! == 'auto') {
-                    color = Theme.of(context).colorScheme.primary;
+                    color = AppColors.of(context).primary;
                   } else {
                     color = ColorHex.get(snapshot.data!);
                   }
