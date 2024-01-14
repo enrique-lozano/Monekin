@@ -14,6 +14,7 @@ import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/widgets/loading_overlay.dart';
 import 'package:monekin/core/routes/app_router.dart';
@@ -110,7 +111,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
           suffixIcon: const Icon(Icons.arrow_drop_down),
           prefixIcon: Container(
             margin: const EdgeInsets.fromLTRB(14, 8, 8, 8),
-            child: icon.displayFilled(color: iconColor),
+            child: IconDisplayer(mainColor: iconColor, supportedIcon: icon),
           ),
         ));
   }

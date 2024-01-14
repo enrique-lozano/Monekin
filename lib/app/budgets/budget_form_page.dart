@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
-import 'package:monekin/app/categories/categories_list.dart';
+import 'package:monekin/app/categories/category_selector.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
@@ -193,161 +193,170 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
             child: Form(
               key: _formKey,
-              child: Column(mainAxisSize: MainAxisSize.min, children: [
-                TextFormField(
-                  controller: nameController,
-                  maxLength: 15,
-                  validator: (value) => fieldValidator(value, isRequired: true),
-                  decoration: InputDecoration(
-                    labelText: '${t.budgets.form.name} *',
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: valueController,
-                  decoration: InputDecoration(
-                    labelText: '${t.budgets.form.value} *',
-                    hintText: 'Ex.: 200',
-                    suffix: StreamBuilder(
-                        stream:
-                            CurrencyService.instance.getUserPreferredCurrency(),
-                        builder: (context, snapshot) {
-                          return Text(snapshot.data?.symbol ?? '');
-                        }),
-                  ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    final defaultNumberValidatorResult = fieldValidator(value,
-                        isRequired: true, validator: ValidatorType.double);
-
-                    if (defaultNumberValidatorResult != null) {
-                      return defaultNumberValidatorResult;
-                    }
-
-                    if (valueToNumber! == 0) {
-                      return t.transaction.form.validators.zero;
-                    }
-
-                    return null;
-                  },
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  textInputAction: TextInputAction.next,
-                  onChanged: (value) {
-                    setState(() {});
-                  },
-                ),
-                const SizedBox(height: 16),
-                selector(
-                    title: '${t.general.accounts} *',
-                    inputValue: accounts.isNotEmpty
-                        ? accounts.map((e) => e.name).join(', ')
-                        : null,
-                    onClick: () async {
-                      final modalRes = await showAccountSelectorBottomSheet(
-                          context,
-                          AccountSelector(
-                            allowMultiSelection: true,
-                            filterSavingAccounts: false,
-                            selectedAccounts: accounts,
-                          ));
-
-                      if (modalRes != null) {
-                        setState(() {
-                          accounts = modalRes;
-                        });
-                      }
-                    }),
-                const SizedBox(height: 16),
-                selector(
-                    title: '${t.general.categories} *',
-                    inputValue: categories.isNotEmpty
-                        ? categories.map((e) => e.name).join(', ')
-                        : null,
-                    onClick: () async {
-                      final modalRes = await showCategoryListModal(
-                          context,
-                          CategoriesList(
-                            mode: CategoriesListMode.modalSelectMultiCategory,
-                            selectedCategories: categories,
-                          ));
-
-                      if (modalRes != null) {
-                        setState(() {
-                          categories = modalRes;
-                        });
-                      }
-                    }),
-                const SizedBox(height: 16),
-                DropdownButtonFormField(
-                  value: intervalPeriod,
-                  decoration: InputDecoration(
-                    labelText: '${t.general.time.periodicity.display} *',
-                  ),
-                  items: [
-                    DropdownMenuItem(
-                      value: null,
-                      child: Text(t.general.time.periodicity.no_repeat),
+              child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextFormField(
+                      controller: nameController,
+                      maxLength: 15,
+                      validator: (value) =>
+                          fieldValidator(value, isRequired: true),
+                      decoration: InputDecoration(
+                        labelText: '${t.budgets.form.name} *',
+                      ),
                     ),
-                    ...List.generate(
-                        TransactionPeriodicity.values.length,
-                        (index) => DropdownMenuItem(
-                            value: TransactionPeriodicity.values[index],
-                            child: Text(TransactionPeriodicity.values[index]
-                                .allThePeriodsText(context))))
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      intervalPeriod = value;
-                    });
-                  },
-                ),
-                if (intervalPeriod == null) ...[
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: DateTimeFormField(
-                          decoration: InputDecoration(
-                            suffixIcon: const Icon(Icons.event),
-                            labelText: '${t.general.time.start_date} *',
-                          ),
-                          mode: DateTimeFieldPickerMode.date,
-                          initialDate: startDate,
-                          firstDate: endDate,
-                          dateFormat: DateFormat.yMMMd(),
-                          validator: (e) =>
-                              e == null ? t.general.validations.required : null,
-                          onDateSelected: (DateTime value) {
-                            setState(() {
-                              startDate = value;
-                            });
-                          },
-                        ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: valueController,
+                      decoration: InputDecoration(
+                        labelText: '${t.budgets.form.value} *',
+                        hintText: 'Ex.: 200',
+                        suffix: StreamBuilder(
+                            stream: CurrencyService.instance
+                                .getUserPreferredCurrency(),
+                            builder: (context, snapshot) {
+                              return Text(snapshot.data?.symbol ?? '');
+                            }),
                       ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: DateTimeFormField(
-                          decoration: InputDecoration(
-                            suffixIcon: const Icon(Icons.event),
-                            labelText: '${t.general.time.end_date} *',
-                          ),
-                          mode: DateTimeFieldPickerMode.date,
-                          initialDate: endDate,
-                          firstDate: startDate,
-                          dateFormat: DateFormat.yMMMd(),
-                          validator: (e) =>
-                              e == null ? t.general.validations.required : null,
-                          onDateSelected: (DateTime value) {
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        final defaultNumberValidatorResult = fieldValidator(
+                            value,
+                            isRequired: true,
+                            validator: ValidatorType.double);
+
+                        if (defaultNumberValidatorResult != null) {
+                          return defaultNumberValidatorResult;
+                        }
+
+                        if (valueToNumber! == 0) {
+                          return t.transaction.form.validators.zero;
+                        }
+
+                        return null;
+                      },
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      textInputAction: TextInputAction.next,
+                      onChanged: (value) {
+                        setState(() {});
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    selector(
+                        title: '${t.general.accounts} *',
+                        inputValue: accounts.isNotEmpty
+                            ? accounts.map((e) => e.name).join(', ')
+                            : null,
+                        onClick: () async {
+                          final modalRes = await showAccountSelectorBottomSheet(
+                              context,
+                              AccountSelector(
+                                allowMultiSelection: true,
+                                filterSavingAccounts: false,
+                                selectedAccounts: accounts,
+                              ));
+
+                          if (modalRes != null) {
                             setState(() {
-                              endDate = value;
+                              accounts = modalRes;
                             });
-                          },
-                        ),
+                          }
+                        }),
+                    const SizedBox(height: 16),
+                    Text('${t.general.categories}:'),
+                    const SizedBox(height: 6),
+                    StreamBuilder(
+                        stream: CategoryService.instance.getMainCategories(),
+                        builder: (context, snapshot) {
+                          return StreamBuilder(
+                              stream:
+                                  CategoryService.instance.getMainCategories(),
+                              builder: (context, snapshot) {
+                                return CategorySelector(
+                                  availableCategories: snapshot.data,
+                                  selectedCategories: categories,
+                                  onChange: (selection) {
+                                    setState(() {
+                                      categories = selection ?? [];
+                                    });
+                                  },
+                                );
+                              });
+                        }),
+                    const SizedBox(height: 24),
+                    DropdownButtonFormField(
+                      value: intervalPeriod,
+                      decoration: InputDecoration(
+                        labelText: '${t.general.time.periodicity.display} *',
                       ),
-                    ],
-                  ),
-                ]
-              ]),
+                      items: [
+                        DropdownMenuItem(
+                          value: null,
+                          child: Text(t.general.time.periodicity.no_repeat),
+                        ),
+                        ...List.generate(
+                            TransactionPeriodicity.values.length,
+                            (index) => DropdownMenuItem(
+                                value: TransactionPeriodicity.values[index],
+                                child: Text(TransactionPeriodicity.values[index]
+                                    .allThePeriodsText(context))))
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          intervalPeriod = value;
+                        });
+                      },
+                    ),
+                    if (intervalPeriod == null) ...[
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: DateTimeFormField(
+                              decoration: InputDecoration(
+                                suffixIcon: const Icon(Icons.event),
+                                labelText: '${t.general.time.start_date} *',
+                              ),
+                              mode: DateTimeFieldPickerMode.date,
+                              initialDate: startDate,
+                              firstDate: endDate,
+                              dateFormat: DateFormat.yMMMd(),
+                              validator: (e) => e == null
+                                  ? t.general.validations.required
+                                  : null,
+                              onDateSelected: (DateTime value) {
+                                setState(() {
+                                  startDate = value;
+                                });
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: DateTimeFormField(
+                              decoration: InputDecoration(
+                                suffixIcon: const Icon(Icons.event),
+                                labelText: '${t.general.time.end_date} *',
+                              ),
+                              mode: DateTimeFieldPickerMode.date,
+                              initialDate: endDate,
+                              firstDate: startDate,
+                              dateFormat: DateFormat.yMMMd(),
+                              validator: (e) => e == null
+                                  ? t.general.validations.required
+                                  : null,
+                              onDateSelected: (DateTime value) {
+                                setState(() {
+                                  endDate = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ]
+                  ]),
             )));
   }
 }

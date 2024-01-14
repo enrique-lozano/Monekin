@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 
@@ -79,71 +78,62 @@ class _ColorPickerState extends State<ColorPicker> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 46 + widget.padding.top + widget.padding.bottom,
-      child: ScrollConfiguration(
-        behavior: const MaterialScrollBehavior().copyWith(dragDevices: {
-          PointerDeviceKind.mouse,
-          PointerDeviceKind.touch,
-          PointerDeviceKind.trackpad,
-          PointerDeviceKind.stylus,
-          PointerDeviceKind.unknown
-        }, scrollbars: true),
-        child: Scrollbar(
-          controller: _scrollController,
-          child: Padding(
-            padding: widget.padding,
-            child: ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              controller: _scrollController,
-              itemCount: widget.colorOptions.length,
-              itemBuilder: (BuildContext context, int index) {
-                final colorItem = widget.colorOptions[index];
+      child: Scrollbar(
+        controller: _scrollController,
+        child: Padding(
+          padding: widget.padding,
+          child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            controller: _scrollController,
+            itemCount: widget.colorOptions.length,
+            itemBuilder: (BuildContext context, int index) {
+              final colorItem = widget.colorOptions[index];
 
-                return Container(
-                  clipBehavior: Clip.hardEdge,
-                  width: 46,
-                  height: 46,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  margin: EdgeInsets.only(
-                      left: index == 0 ? 16 : 4,
-                      right: index == widget.colorOptions.length - 1 ? 16 : 4),
-                  child: Stack(
-                    children: [
-                      DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: ColorHex.get(colorItem),
-                        ),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(onTap: () {
-                            setState(() {
-                              _color = colorItem;
-                            });
-
-                            if (widget.onColorSelected != null) {
-                              widget.onColorSelected!(colorItem);
-                            }
-                          }),
-                        ),
+              return Container(
+                clipBehavior: Clip.hardEdge,
+                width: 46,
+                height: 46,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                margin: EdgeInsets.only(
+                    left: index == 0 ? 16 : 4,
+                    right: index == widget.colorOptions.length - 1 ? 16 : 4),
+                child: Stack(
+                  children: [
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: ColorHex.get(colorItem),
                       ),
-                      if (_color != null &&
-                          ColorHex.get('#$colorItem') == ColorHex.get(_color!))
-                        const DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: Color.fromARGB(47, 255, 255, 255),
-                            ),
-                            child: Center(
-                                child: Icon(
-                              Icons.check,
-                              color: Colors.white,
-                            )))
-                    ],
-                  ),
-                );
-              },
-            ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(onTap: () {
+                          setState(() {
+                            _color = colorItem;
+                          });
+
+                          if (widget.onColorSelected != null) {
+                            widget.onColorSelected!(colorItem);
+                          }
+                        }),
+                      ),
+                    ),
+                    if (_color != null &&
+                        ColorHex.get('#$colorItem') == ColorHex.get(_color!))
+                      const DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: Color.fromARGB(47, 255, 255, 255),
+                          ),
+                          child: Center(
+                              child: Icon(
+                            Icons.check,
+                            color: Colors.white,
+                          )))
+                  ],
+                ),
+              );
+            },
           ),
         ),
       ),

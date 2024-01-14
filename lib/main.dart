@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/routes/app_router.dart';
+import 'package:monekin/core/utils/scroll_behavior_override.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 void main() {
@@ -108,6 +109,7 @@ class MaterialAppContainer extends StatelessWidget {
         title: 'Monekin',
         debugShowCheckedModeBanner: false,
         locale: TranslationProvider.of(context).flutterLocale,
+        scrollBehavior: ScrollBehaviorOverride(),
         supportedLocales: AppLocaleUtils.supportedLocales,
         localizationsDelegates: GlobalMaterialLocalizations.delegates,
         theme: getThemeData(context,

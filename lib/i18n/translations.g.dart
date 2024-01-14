@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 1016 (508 per locale)
+/// Strings: 1018 (509 per locale)
 ///
-/// Built on 2023-12-01 at 12:33 UTC
+/// Built on 2024-01-14 at 11:55 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -977,6 +977,7 @@ class _TranslationsCategoriesSelectEn {
 	String get select_subcategory => 'Choose a subcategory';
 	String get without_subcategory => 'Without subcategory';
 	String get all => 'All categories';
+	String get all_short => 'All';
 }
 
 // Path: budgets.form
@@ -2195,6 +2196,7 @@ class _TranslationsCategoriesSelectEs implements _TranslationsCategoriesSelectEn
 	@override String get select_subcategory => 'Elige una subcategoría';
 	@override String get without_subcategory => 'Sin subcategoría';
 	@override String get all => 'Todas las categorías';
+	@override String get all_short => 'Todas';
 }
 
 // Path: budgets.form
@@ -3019,6 +3021,7 @@ extension on _TranslationsEn {
 			case 'categories.select.select_subcategory': return 'Choose a subcategory';
 			case 'categories.select.without_subcategory': return 'Without subcategory';
 			case 'categories.select.all': return 'All categories';
+			case 'categories.select.all_short': return 'All';
 			case 'budgets.title': return 'Budgets';
 			case 'budgets.repeated': return 'Recurring';
 			case 'budgets.one_time': return 'Once';
@@ -3605,6 +3608,7 @@ extension on _TranslationsEs {
 			case 'categories.select.select_subcategory': return 'Elige una subcategoría';
 			case 'categories.select.without_subcategory': return 'Sin subcategoría';
 			case 'categories.select.all': return 'Todas las categorías';
+			case 'categories.select.all_short': return 'Todas';
 			case 'budgets.title': return 'Presupuestos';
 			case 'budgets.repeated': return 'Periódicos';
 			case 'budgets.one_time': return 'Una vez';
