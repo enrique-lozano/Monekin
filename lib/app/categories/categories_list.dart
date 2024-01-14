@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/categories/multi_category_selector.dart';
+import 'package:monekin/app/categories/category_selector.dart';
 import 'package:monekin/app/categories/subcategory_selector.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/models/category/category.dart';
@@ -98,7 +98,7 @@ class _CategoriesListState extends State<CategoriesList> {
       padding: const EdgeInsets.all(16),
       controller: widget.scrollController,
       scrollDirection: Axis.vertical,
-      child: MultiCategorySelector(
+      child: CategorySelector(
         availableCategories: categoriesToDisplay,
         selectedCategories: selectedCategories,
         direction: Axis.vertical,

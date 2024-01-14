@@ -1,15 +1,19 @@
 import 'dart:math';
 
+import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/utils/color_utils.dart';
+
+part 'icon_displayer.g.dart';
 
 enum IconDisplayMode {
   decoratedBox,
   polygon,
 }
 
+@CopyWith()
 class IconDisplayer extends StatelessWidget {
   const IconDisplayer({
     super.key,
