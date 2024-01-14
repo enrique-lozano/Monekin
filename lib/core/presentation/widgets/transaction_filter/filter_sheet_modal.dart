@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
-import 'package:monekin/app/categories/multi_category_selector.dart';
+import 'package:monekin/app/categories/category_selector.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
@@ -215,7 +215,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                                               ?.contains(element.id) ??
                                           false);
 
-                                  return MultiCategorySelector(
+                                  return CategorySelector(
                                     availableCategories: snapshot.data,
                                     selectedCategories:
                                         selectedCategories.toList(),

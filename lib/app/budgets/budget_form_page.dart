@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
-import 'package:monekin/app/categories/multi_category_selector.dart';
+import 'package:monekin/app/categories/category_selector.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
@@ -273,7 +273,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                               stream:
                                   CategoryService.instance.getMainCategories(),
                               builder: (context, snapshot) {
-                                return MultiCategorySelector(
+                                return CategorySelector(
                                   availableCategories: snapshot.data,
                                   selectedCategories: categories,
                                   onChange: (selection) {
