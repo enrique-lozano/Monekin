@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
-import 'package:monekin/app/categories/categories_list.dart';
+import 'package:monekin/app/categories/category_selector.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
@@ -203,9 +203,11 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                             /* ---------------------------------- */
 
                             const SizedBox(height: 16),
+                            Text('${t.general.categories}:'),
+                            const SizedBox(height: 6),
                             StreamBuilder(
-                                stream:
-                                    CategoryService.instance.getCategories(),
+                                stream: CategoryService.instance
+                                    .getMainCategories(),
                                 builder: (context, snapshot) {
                                   final selectedCategories =
                                       (snapshot.data ?? []).where((element) =>
@@ -213,51 +215,23 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                                               ?.contains(element.id) ??
                                           false);
 
-                                  return selector(
-                                      title: t.general.categories,
-                                      inputValue:
-                                          filtersToReturn.categories == null ||
-                                                  (snapshot.hasData &&
-                                                      filtersToReturn
-                                                              .categories!
-                                                              .length ==
-                                                          snapshot.data!.length)
-                                              ? t.categories.select.all
-                                              : selectedCategories
-                                                  .where((element) =>
-                                                      element.isMainCategory)
-                                                  .map((e) => e.name)
-                                                  .join(', '),
-                                      onClick: () async {
-                                        final modalRes =
-                                            await showCategoryListModal(
-                                          context,
-                                          CategoriesList(
-                                            mode: CategoriesListMode
-                                                .modalSelectMultiCategory,
-                                            selectedCategories:
-                                                selectedCategories.toList(),
-                                          ),
+                                  return CategorySelector(
+                                    availableCategories: snapshot.data,
+                                    selectedCategories:
+                                        selectedCategories.toList(),
+                                    onChange: (selection) {
+                                      setState(() {
+                                        filtersToReturn =
+                                            filtersToReturn.copyWith(
+                                          categories: selection
+                                              ?.map((e) => e.id)
+                                              .toList(),
                                         );
-
-                                        if (modalRes != null &&
-                                            modalRes.isNotEmpty) {
-                                          setState(() {
-                                            filtersToReturn =
-                                                filtersToReturn.copyWith(
-                                                    categories: snapshot
-                                                                .hasData &&
-                                                            modalRes.length ==
-                                                                snapshot.data!
-                                                                    .length
-                                                        ? null
-                                                        : modalRes
-                                                            .map((e) => e.id));
-                                          });
-                                        }
                                       });
+                                    },
+                                  );
                                 }),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 24),
 
                             /* ---------------------------------- */
                             /* -------- TRANSACTION DATE -------- */

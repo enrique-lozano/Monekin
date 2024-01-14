@@ -12,6 +12,7 @@ import 'package:monekin/core/database/services/transaction/transaction_service.d
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/recurrency_data.dart';
@@ -115,7 +116,11 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              icon.displayFilled(color: iconColor, size: 28),
+              IconDisplayer(
+                mainColor: iconColor,
+                supportedIcon: icon,
+                size: 28,
+              ),
               const SizedBox(width: 8),
               Flexible(
                 child: Column(
@@ -156,7 +161,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
           suffixIcon: const Icon(Icons.arrow_drop_down),
           prefixIcon: Container(
             margin: const EdgeInsets.fromLTRB(14, 8, 8, 8),
-            child: icon.displayFilled(color: iconColor),
+            child: IconDisplayer(mainColor: iconColor, supportedIcon: icon),
           ),
         ));
   }

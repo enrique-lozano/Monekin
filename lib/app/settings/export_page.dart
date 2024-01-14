@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
-import 'package:monekin/app/categories/categories_list.dart';
+import 'package:monekin/app/categories/category_selector.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
@@ -37,8 +37,8 @@ class _ExportDataPageState extends State<ExportDataPage> {
     final isSelected = selectedExportFormat == exportFormat;
 
     return Container(
+      padding: const EdgeInsets.only(left: 16, right: 16),
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
@@ -138,7 +138,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
                     .exportSpreadsheet(
                         context,
                         await TransactionService.instance
-                            .getTransactions()
+                            .getTransactions(filters: filters)
                             .first)
                     .then((value) {
                   messeger.showSnackBar(SnackBar(
@@ -154,7 +154,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
           ))
         ],
         body: SingleChildScrollView(
-          padding: const EdgeInsets.only(top: 12, bottom: 16),
+          padding: const EdgeInsets.only(bottom: 12, top: 16),
           child: Column(
             children: [
               cardSelector(
@@ -170,106 +170,97 @@ class _ExportDataPageState extends State<ExportDataPage> {
                 iconName: 'table_file',
               ),
               const SizedBox(height: 8),
-              Column(
-                children: [
-                  /* ---------------------------------- */
-                  /* -------- ACCOUNT SELECTOR -------- */
-                  /* ---------------------------------- */
+              Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    /* ---------------------------------- */
+                    /* -------- ACCOUNT SELECTOR -------- */
+                    /* ---------------------------------- */
 
-                  StreamBuilder(
-                      stream: AccountService.instance.getAccounts(),
-                      builder: (context, snapshot) {
-                        final selectedAccounts = (snapshot.data ?? []).where(
-                            (element) =>
-                                filters.accountsIDs?.contains(element.id) ??
-                                false);
+                    StreamBuilder(
+                        stream: AccountService.instance.getAccounts(),
+                        builder: (context, snapshot) {
+                          final selectedAccounts = (snapshot.data ?? []).where(
+                              (element) =>
+                                  filters.accountsIDs?.contains(element.id) ??
+                                  false);
 
-                        return selector(
-                            title: t.general.accounts,
-                            inputValue: filters.accountsIDs == null ||
-                                    (snapshot.hasData &&
-                                        filters.accountsIDs!.length ==
-                                            snapshot.data!.length)
-                                ? t.account.select.all
-                                : selectedAccounts
-                                    .map((e) => e.name)
-                                    .join(', '),
-                            onClick: selectedExportFormat == _ExportFormats.db
-                                ? null
-                                : () async {
-                                    final modalRes =
-                                        await showAccountSelectorBottomSheet(
-                                            context,
-                                            AccountSelector(
-                                              allowMultiSelection: true,
-                                              filterSavingAccounts: false,
-                                              selectedAccounts:
-                                                  selectedAccounts.toList(),
-                                            ));
+                          return selector(
+                              title: t.general.accounts,
+                              inputValue: filters.accountsIDs == null ||
+                                      (snapshot.hasData &&
+                                          filters.accountsIDs!.length ==
+                                              snapshot.data!.length)
+                                  ? t.account.select.all
+                                  : selectedAccounts
+                                      .map((e) => e.name)
+                                      .join(', '),
+                              onClick: selectedExportFormat == _ExportFormats.db
+                                  ? null
+                                  : () async {
+                                      final modalRes =
+                                          await showAccountSelectorBottomSheet(
+                                              context,
+                                              AccountSelector(
+                                                allowMultiSelection: true,
+                                                filterSavingAccounts: false,
+                                                selectedAccounts:
+                                                    selectedAccounts.toList(),
+                                              ));
 
-                                    if (modalRes != null &&
-                                        modalRes.isNotEmpty) {
-                                      setState(() {
-                                        filters = filters.copyWith(
-                                            accountsIDs: snapshot.hasData &&
-                                                    modalRes.length ==
-                                                        snapshot.data!.length
-                                                ? null
-                                                : modalRes.map((e) => e.id));
-                                      });
-                                    }
-                                  });
-                      }),
+                                      if (modalRes != null &&
+                                          modalRes.isNotEmpty) {
+                                        setState(() {
+                                          filters = filters.copyWith(
+                                              accountsIDs: snapshot.hasData &&
+                                                      modalRes.length ==
+                                                          snapshot.data!.length
+                                                  ? null
+                                                  : modalRes.map((e) => e.id));
+                                        });
+                                      }
+                                    });
+                        }),
 
-                  /* ---------------------------------- */
-                  /* -------- CATEGORY SELECTOR ------- */
-                  /* ---------------------------------- */
+                    /* ---------------------------------- */
+                    /* -------- CATEGORY SELECTOR ------- */
+                    /* ---------------------------------- */
 
-                  StreamBuilder(
-                      stream: CategoryService.instance.getMainCategories(),
-                      builder: (context, snapshot) {
-                        final selectedCategories = (snapshot.data ?? []).where(
-                            (element) =>
-                                filters.categories?.contains(element.id) ??
-                                false);
+                    const SizedBox(height: 16),
+                    Text('${t.general.categories}:'),
+                    const SizedBox(height: 6),
+                    StreamBuilder(
+                        stream: CategoryService.instance.getCategories(),
+                        builder: (context, snapshot) {
+                          final selectedCategories = (snapshot.data ?? [])
+                              .where((element) =>
+                                  filters.categories?.contains(element.id) ??
+                                  false);
 
-                        return selector(
-                            title: t.general.categories,
-                            inputValue: filters.categories == null ||
-                                    (snapshot.hasData &&
-                                        filters.categories!.length ==
-                                            snapshot.data!.length)
-                                ? t.categories.select.all
-                                : selectedCategories
-                                    .map((e) => e.name)
-                                    .join(', '),
-                            onClick: selectedExportFormat == _ExportFormats.db
-                                ? null
-                                : () async {
-                                    final modalRes =
-                                        await showCategoryListModal(
-                                            context,
-                                            CategoriesList(
-                                              mode: CategoriesListMode
-                                                  .modalSelectMultiCategory,
-                                              selectedCategories:
-                                                  selectedCategories.toList(),
-                                            ));
-
-                                    if (modalRes != null &&
-                                        modalRes.isNotEmpty) {
-                                      setState(() {
-                                        filters = filters.copyWith(
-                                            categories: snapshot.hasData &&
-                                                    modalRes.length ==
-                                                        snapshot.data!.length
-                                                ? null
-                                                : modalRes.map((e) => e.id));
-                                      });
-                                    }
-                                  });
-                      }),
-                ],
+                          return StreamBuilder(
+                              stream:
+                                  CategoryService.instance.getMainCategories(),
+                              builder: (context, snapshot) {
+                                return CategorySelector(
+                                  availableCategories: snapshot.data,
+                                  selectedCategories:
+                                      selectedCategories.toList(),
+                                  onChange: (selection) {
+                                    setState(() {
+                                      filters = filters.copyWith(
+                                        categories: selection
+                                            ?.map((e) => e.id)
+                                            .toList(),
+                                      );
+                                    });
+                                  },
+                                );
+                              });
+                        }),
+                  ],
+                ),
               )
             ],
           ),

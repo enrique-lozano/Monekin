@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/app/categories/category_selector.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -35,43 +37,12 @@ class _SubcategorySelectorState extends State<SubcategorySelector> {
     });
   }
 
-  Widget subcategoryChip(Category category) {
-    final isSelected = selectedCategory.id == category.id;
-
-    final isSubcategorySelected = category.id != widget.parentCategory.id;
-
-    return ActionChip(
-        avatar: isSubcategorySelected
-            ? category.icon.display(
-                color: isSelected
-                    ? Colors.white
-                    : Theme.of(context).colorScheme.onBackground)
-            : Icon(
-                Icons.hide_source,
-                color: isSelected
-                    ? Colors.white
-                    : Theme.of(context).colorScheme.onBackground,
-              ),
-        backgroundColor:
-            isSelected ? ColorHex.get(widget.parentCategory.color) : null,
-        onPressed: () {
-          if (!isSelected) {
-            setState(() {
-              selectedCategory = category;
-            });
-          }
-        },
-        label: Text(
-          isSubcategorySelected
-              ? category.name
-              : t.categories.select.without_subcategory,
-          style: isSelected ? const TextStyle(color: Colors.white) : null,
-        ));
-  }
-
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
+    Color categoryColor = ColorHex.get(widget.parentCategory.color);
 
     return Column(
         mainAxisSize: MainAxisSize.min,
@@ -88,25 +59,39 @@ class _SubcategorySelectorState extends State<SubcategorySelector> {
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 22),
-                Builder(
-                  builder: (_) {
-                    if (childCategories == null) {
-                      return const LinearProgressIndicator();
-                    } else {
-                      return Wrap(
-                        runSpacing: 0,
-                        spacing: 6,
-                        children: [
-                          subcategoryChip(widget.parentCategory),
-                          ...List.generate(
-                              childCategories!.length,
-                              (index) =>
-                                  subcategoryChip(childCategories![index]))
-                        ],
-                      );
+                CategorySelector(
+                  selectedCategories: [selectedCategory],
+                  direction: Axis.vertical,
+                  multiSelection: false,
+                  availableCategories: childCategories,
+                  extraHeaderButtons: [
+                    CategoryButtonSelector(
+                        iconWidget: IconDisplayer(
+                          icon: Icons.block,
+                          isOutline:
+                              selectedCategory.id == widget.parentCategory.id,
+                          secondaryColor: isDark
+                              ? categoryColor
+                              : categoryColor.lighten(0.82),
+                          mainColor: isDark
+                              ? categoryColor.lighten(0.82)
+                              : categoryColor,
+                          onTap: () {
+                            setState(() {
+                              selectedCategory = widget.parentCategory;
+                            });
+                          },
+                        ),
+                        label: t.categories.select.without_subcategory)
+                  ],
+                  onChange: (sel) {
+                    if (sel != null) {
+                      setState(() {
+                        selectedCategory = sel[0];
+                      });
                     }
                   },
-                ),
+                )
               ],
             ),
           ),
