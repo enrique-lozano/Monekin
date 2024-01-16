@@ -620,6 +620,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
       isScrollControlled: true,
       showDragHandle: true,
       builder: (context) => AmountSelector(
+        title: t.transaction.form.value,
         amountToConvert: valueToNumber ?? 0,
         onSubmit: (amount) {
           setState(() {

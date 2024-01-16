@@ -12,7 +12,10 @@ class AmountSelector extends StatefulWidget {
     required this.amountToConvert,
     this.currency,
     this.onSubmit,
+    required this.title,
   });
+
+  final String title;
 
   final double amountToConvert;
   final CurrencyInDB? currency;
@@ -141,7 +144,7 @@ class _AmountSelectorState extends State<AmountSelector> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    t.transaction.create,
+                    widget.title,
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 22),
