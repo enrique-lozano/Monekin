@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
+import 'package:monekin/core/presentation/widgets/wrap/wrap_extended.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -166,21 +167,19 @@ class _CategorySelectorState extends State<CategorySelector> {
       }
 
       if (widget.direction == Axis.vertical) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Wrap(
-            runSpacing: 12,
-            spacing: 24,
-            crossAxisAlignment: WrapCrossAlignment.start,
-            alignment: WrapAlignment.start,
-            children: [
-              if (extraHeaderButtonsWithSameSize != null)
-                ...extraHeaderButtonsWithSameSize,
-              ...buildCategoriesOptions(
-                selectedCategories: selectedCategories,
-              )
-            ],
-          ),
+        return WrapSuper(
+          wrapType: WrapType.balanced,
+          wrapFit: WrapFit.min,
+          lineSpacing: 12,
+          spacing: 24,
+          alignment: WrapSuperAlignment.center,
+          children: [
+            if (extraHeaderButtonsWithSameSize != null)
+              ...extraHeaderButtonsWithSameSize,
+            ...buildCategoriesOptions(
+              selectedCategories: selectedCategories,
+            )
+          ],
         );
       }
 

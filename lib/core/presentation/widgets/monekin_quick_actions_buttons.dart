@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/core/presentation/widgets/wrap/wrap_extended.dart';
 
 import '../../utils/list_tile_action_item.dart';
 
@@ -12,14 +13,17 @@ class MonekinQuickActionsButton extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
-      child: LayoutBuilder(builder: (context, constraints) {
-        return Wrap(
-          spacing: 14,
-          runSpacing: 16,
-          direction: Axis.horizontal,
-          alignment: WrapAlignment.start,
-          children: actions
-              .map((item) => SizedBox(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return WrapSuper(
+            spacing: 14,
+            wrapType: WrapType.balanced,
+            wrapFit: WrapFit.min,
+            lineSpacing: 16,
+            alignment: WrapSuperAlignment.left,
+            children: actions
+                .map(
+                  (item) => SizedBox(
                     width: constraints.maxWidth > 600 ? 100 : 62,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -48,10 +52,12 @@ class MonekinQuickActionsButton extends StatelessWidget {
                         )
                       ],
                     ),
-                  ))
-              .toList(),
-        );
-      }),
+                  ),
+                )
+                .toList(),
+          );
+        },
+      ),
     );
   }
 }
