@@ -22,12 +22,6 @@ ThemeData getThemeData(
   ColorScheme lightColorScheme;
   ColorScheme darkColorScheme;
 
-  /// Fallback scheme for a not-dynamic mode in dark or light mode:
-  ColorScheme fallbackScheme = ColorScheme.fromSeed(
-      seedColor: accentColor == 'auto' ? brandBlue : ColorHex.get(accentColor),
-      brightness: isDark ? Brightness.dark : Brightness.light,
-      background: isDark && amoledMode ? Colors.black : null);
-
   if (lightDynamic != null && darkDynamic != null && accentColor == 'auto') {
     // On Android S+ devices, use the provided dynamic color scheme.
     // (Recommended) Harmonize the dynamic color scheme' built-in semantic colors.
@@ -42,7 +36,15 @@ ThemeData getThemeData(
 
     isAppUsingDynamicColors = true; // ignore, only for demo purposes
   } else {
-    // Otherwise, use fallback schemes.
+    // Otherwise, use fallback schemes:
+
+    /// Fallback scheme for a not-dynamic mode in dark or light mode:
+    ColorScheme fallbackScheme = ColorScheme.fromSeed(
+        seedColor:
+            accentColor == 'auto' ? brandBlue : ColorHex.get(accentColor),
+        brightness: isDark ? Brightness.dark : Brightness.light,
+        background: isDark && amoledMode ? Colors.black : null);
+
     lightColorScheme = fallbackScheme;
     darkColorScheme = fallbackScheme;
   }
@@ -52,7 +54,9 @@ ThemeData getThemeData(
       brightness: isDark ? Brightness.dark : Brightness.light,
       useMaterial3: true,
       fontFamily: 'Nunito',
-      extensions: [AppColors.fromColorScheme(fallbackScheme)]);
+      extensions: [
+        AppColors.fromColorScheme(isDark ? darkColorScheme : lightColorScheme)
+      ]);
 
   final listTileSmallText = TextStyle(
       color: theme.textTheme.bodyMedium?.color,
