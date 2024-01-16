@@ -98,7 +98,7 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
 
                   return CurrencyDisplayer(
                     amountToConvert: partialBalance,
-                    textStyle:
+                    integerStyle:
                         Theme.of(context).textTheme.labelMedium!.copyWith(
                               fontWeight: FontWeight.w400,
                             ),

@@ -126,7 +126,7 @@ class FundEvolutionLineChart extends StatelessWidget {
 
                                   return CurrencyDisplayer(
                                       amountToConvert: snapshot.data!,
-                                      textStyle: Theme.of(context)
+                                      integerStyle: Theme.of(context)
                                           .textTheme
                                           .headlineSmall!);
                                 }),
@@ -229,7 +229,7 @@ class FundEvolutionLineChart extends StatelessWidget {
                                     children: UINumberFormatter.decimal(
                                             amountToConvert: snapshot.data!
                                                 .balance[flSpot.x.toInt()],
-                                            textStyle: const TextStyle(
+                                            integerStyle: const TextStyle(
                                                 fontWeight: FontWeight.bold))
                                         .getTextSpanList(context));
                               }).toList();

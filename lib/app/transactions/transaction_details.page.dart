@@ -489,7 +489,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                   CurrencyDisplayer(
                                     amountToConvert: transaction.value,
                                     currency: transaction.account.currency,
-                                    textStyle: TextStyle(
+                                    integerStyle: TextStyle(
                                       fontSize: 34,
                                       fontWeight: FontWeight.w600,
                                       color: transaction.status ==
@@ -724,7 +724,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
 
                                                       return CurrencyDisplayer(
                                                         currency: userCurrency,
-                                                        textStyle:
+                                                        integerStyle:
                                                             const TextStyle(
                                                           fontWeight:
                                                               FontWeight.w700,
@@ -766,7 +766,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
 
                                                       return CurrencyDisplayer(
                                                         currency: userCurrency,
-                                                        textStyle:
+                                                        integerStyle:
                                                             const TextStyle(
                                                           fontWeight:
                                                               FontWeight.w700,

@@ -261,7 +261,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                                         CurrencyDisplayer(
                                           amountToConvert: snapshot.data!,
                                           currency: account.currency,
-                                          textStyle: const TextStyle(
+                                          integerStyle: const TextStyle(
                                               fontSize: 32,
                                               fontWeight: FontWeight.w600),
                                         ),

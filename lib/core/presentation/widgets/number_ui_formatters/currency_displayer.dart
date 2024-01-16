@@ -6,38 +6,57 @@ import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'ui_number_formatter.dart';
 
 class CurrencyDisplayer extends StatelessWidget {
-  /// Creates a widget that takes an amount and display it in a localized currency format with the decimals smaller that the rest of the text. This widget is not in charge of the conversion to any currency, that is, the amount will be remain as it is.
-  const CurrencyDisplayer(
-      {super.key,
-      required this.amountToConvert,
-      this.currency,
-      this.showDecimals = true,
-      this.textStyle = const TextStyle(inherit: true),
-      this.decimalsStyle});
+  /// Creates a widget that takes an amount and display it in a localized currency
+  /// format with the decimals smaller that the rest of the text.
+  ///
+  /// This widget is not in charge of the conversion to any currency,
+  /// that is, the amount will be remain as it is specified in
+  /// the `amountToConvert` attribute.
+  const CurrencyDisplayer({
+    super.key,
+    required this.amountToConvert,
+    this.currency,
+    this.showDecimals = true,
+    this.integerStyle = const TextStyle(inherit: true),
+    this.decimalsStyle,
+    this.currencyStyle,
+  });
 
   final double amountToConvert;
 
-  /// The currency of the amount, used to display the symbol. If not specified, will be the user preferred currency
+  /// The currency of the amount, used to display the symbol.
+  /// If not specified, will be the user preferred currency
   final CurrencyInDB? currency;
 
-  final TextStyle textStyle;
+  /// Style of the text that corresponds to the integer part of the number to be displayed
+  final TextStyle integerStyle;
+
+  /// Style of the text that corresponds to the integer part of the number to be displayed.
+  /// If not defined, we will try to use a less prominent style than the one used in the integer
+  /// part of the number
   final TextStyle? decimalsStyle;
+
+  /// Style of the text that corresponds to the currency symbol. By default will be
+  /// the same as the `decimalStyle`. This property is only defined and
+  /// used if the `UINumberFormatterMode` of this Widget is set to `currency`.
+  final TextStyle? currencyStyle;
 
   final bool showDecimals;
 
   @override
   Widget build(BuildContext context) {
-    final valueFontSize =
-        (textStyle.fontSize ?? DefaultTextStyle.of(context).style.fontSize) ??
-            16;
+    final valueFontSize = (integerStyle.fontSize ??
+            DefaultTextStyle.of(context).style.fontSize) ??
+        16;
 
     if (currency != null) {
       return UINumberFormatter.currency(
         amountToConvert: amountToConvert,
         currency: currency,
         showDecimals: showDecimals,
-        textStyle: textStyle,
+        integerStyle: integerStyle,
         decimalsStyle: decimalsStyle,
+        currencyStyle: currencyStyle,
       ).getTextWidget(context);
     }
 
@@ -53,8 +72,9 @@ class CurrencyDisplayer extends StatelessWidget {
             currency: CurrencyInDB(
                 code: snapshot.data!.code, symbol: snapshot.data!.symbol),
             showDecimals: showDecimals,
-            textStyle: textStyle,
+            integerStyle: integerStyle,
             decimalsStyle: decimalsStyle,
+            currencyStyle: currencyStyle,
           ).getTextWidget(context);
         });
   }

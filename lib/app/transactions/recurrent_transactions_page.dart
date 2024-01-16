@@ -120,7 +120,7 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
                               builder: (context, snapshot) {
                                 return CurrencyDisplayer(
                                   amountToConvert: snapshot.data!,
-                                  textStyle:
+                                  integerStyle:
                                       Theme.of(context).textTheme.titleLarge!,
                                 );
                               }),

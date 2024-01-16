@@ -6,7 +6,7 @@
 /// Locales: 2
 /// Strings: 1018 (509 per locale)
 ///
-/// Built on 2024-01-14 at 11:55 UTC
+/// Built on 2024-01-16 at 15:06 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -843,8 +843,8 @@ class _TranslationsTransferFormEn {
 	// Translations
 	String get from => 'Origin account';
 	String get to => 'Destination account';
-	String currency_info_add({required Object x}) => '${x} will be transferred to the destination account &#183; Click to edit';
-	String currency_info_edit({required Object x}) => '${x} have been transferred to the destination account &#183; Click to edit';
+	String currency_info_add({required Object x}) => '${x} will be transferred to the destination account';
+	String currency_info_edit({required Object x}) => '${x} have been transferred to the destination account';
 	late final _TranslationsTransferFormCurrencyExchangeSelectorEn currency_exchange_selector = _TranslationsTransferFormCurrencyExchangeSelectorEn._(_root);
 }
 
@@ -2898,8 +2898,8 @@ extension on _TranslationsEn {
 			case 'transfer.need_two_accounts_warning_message': return 'At least two accounts are needed to perform this action. If you need to adjust or edit the current balance of this account, click the edit button';
 			case 'transfer.form.from': return 'Origin account';
 			case 'transfer.form.to': return 'Destination account';
-			case 'transfer.form.currency_info_add': return ({required Object x}) => '${x} will be transferred to the destination account &#183; Click to edit';
-			case 'transfer.form.currency_info_edit': return ({required Object x}) => '${x} have been transferred to the destination account &#183; Click to edit';
+			case 'transfer.form.currency_info_add': return ({required Object x}) => '${x} will be transferred to the destination account';
+			case 'transfer.form.currency_info_edit': return ({required Object x}) => '${x} have been transferred to the destination account';
 			case 'transfer.form.currency_exchange_selector.title': return 'Edit exchange between currencies';
 			case 'transfer.form.currency_exchange_selector.value_in_destiny': return 'Amount transferred in destination';
 			case 'recurrent_transactions.title': return 'Recurrent transactions';
