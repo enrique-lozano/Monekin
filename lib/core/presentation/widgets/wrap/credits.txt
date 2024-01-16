@@ -1,0 +1,2 @@
+Many thanks to Marcelo Glasberg for this awesome Widget!!
+See the full package at: https://pub.dev/packages/assorted_layout_widgets
