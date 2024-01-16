@@ -9,7 +9,6 @@ import 'package:monekin/app/transactions/form/calculator_modal.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
@@ -503,122 +502,115 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
       currentTransactionTypeToAdd = TransactionType.expense;
     }
 
-    return StreamBuilder(
-      stream: UserSettingService.instance
-          .getSetting(SettingKey.transactionMobileMode),
-      builder: (context, snapshot) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(
-              isEditMode
-                  ? t.transaction.edit
-                  : currentTransactionTypeToAdd == TransactionType.transfer
-                      ? t.transfer.create
-                      : currentTransactionTypeToAdd == TransactionType.expense
-                          ? t.transaction.new_expense
-                          : t.transaction.new_income,
-            ),
-          ),
-          persistentFooterButtons: [
-            PersistentFooterButton(
-              child: FilledButton.icon(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          isEditMode
+              ? t.transaction.edit
+              : currentTransactionTypeToAdd == TransactionType.transfer
+                  ? t.transfer.create
+                  : currentTransactionTypeToAdd == TransactionType.expense
+                      ? t.transaction.new_expense
+                      : t.transaction.new_income,
+        ),
+      ),
+      persistentFooterButtons: [
+        PersistentFooterButton(
+          child: FilledButton.icon(
+            onPressed: () {
+              if (_formKey.currentState!.validate()) {
+                _formKey.currentState!.save();
 
-                    submitForm();
-                  }
-                },
-                icon: const Icon(Icons.save),
-                label: Text(
-                    isEditMode ? t.transaction.edit : t.transaction.create),
-              ),
-            )
-          ],
-          body: Form(
-            key: _formKey,
-            child: BreakpointContainer(
-              lgChild: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          buildAmountContainer(context),
-                          const SizedBox(height: 18),
-                          buildAccoutAndCategorySelectorRow(context),
-                          const SizedBox(height: 12),
-                          buildTransactionDateSelector(),
-                          const SizedBox(height: 12),
-                          buildTitleField(),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const VerticalDivider(),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 0, vertical: 16),
-                      child: Column(
-                        children: [...buildExtraFields()],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        buildAmountContainer(context),
-                        const SizedBox(height: 18),
-                        buildAccoutAndCategorySelectorRow(context),
-                      ],
-                    ),
-                  ),
-                  //   const Divider(),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          // const Divider(thickness: 2.2),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 0),
-                            child: Column(
-                              children: [
-                                const SizedBox(height: 4),
-                                buildTransactionDateSelector(),
-                                const SizedBox(height: 12),
-                                buildTitleField(),
-                              ],
-                            ),
-                          ),
-                          //       ...buildExtraFields()
-                          SingleExpansionPanel(
-                            child: Column(
-                              children: [
-                                const SizedBox(height: 6),
-                                ...buildExtraFields()
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
+                submitForm();
+              }
+            },
+            icon: const Icon(Icons.save),
+            label: Text(isEditMode ? t.transaction.edit : t.transaction.create),
           ),
-        );
-      },
+        )
+      ],
+      body: Form(
+        key: _formKey,
+        child: BreakpointContainer(
+          lgChild: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      buildAmountContainer(context),
+                      const SizedBox(height: 18),
+                      buildAccoutAndCategorySelectorRow(context),
+                      const SizedBox(height: 12),
+                      buildTransactionDateSelector(),
+                      const SizedBox(height: 12),
+                      buildTitleField(),
+                    ],
+                  ),
+                ),
+              ),
+              const VerticalDivider(),
+              Expanded(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 0, vertical: 16),
+                  child: Column(
+                    children: [...buildExtraFields()],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    buildAmountContainer(context),
+                    const SizedBox(height: 18),
+                    buildAccoutAndCategorySelectorRow(context),
+                  ],
+                ),
+              ),
+              //   const Divider(),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      // const Divider(thickness: 2.2),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 0),
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 4),
+                            buildTransactionDateSelector(),
+                            const SizedBox(height: 12),
+                            buildTitleField(),
+                          ],
+                        ),
+                      ),
+                      //       ...buildExtraFields()
+                      SingleExpansionPanel(
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 6),
+                            ...buildExtraFields()
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 

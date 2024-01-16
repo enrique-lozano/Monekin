@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS accounts (
     
     -- Account name (unique among user accounts)
     name TEXT UNIQUE NOT NULL,
+
     
     iniValue REAL NOT NULL,
 
@@ -47,6 +48,9 @@ CREATE TABLE IF NOT EXISTS accounts (
     type ENUMNAME(AccountType) NOT NULL CHECK(type IN ('normal', 'saving')),
     
     iconId TEXT NOT NULL,
+
+    -- If null, an automatic color will be applied
+    color TEXT,
 
     -- The closing date of the account. After this date, no transactions can exists on it.
     closingDate DATETIME,
