@@ -1,10 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
 import 'package:monekin/i18n/translations.g.dart';
-
-import '../../presentation/app_colors.dart';
 
 enum AccountType {
   /// A normal type of account The default type
@@ -71,14 +73,23 @@ class Account extends AccountInDB {
 
   bool get isClosed => closingDate != null;
 
-  Widget displayIcon(BuildContext context, {double size = 22}) {
-    return Container(
-      padding: EdgeInsets.all(size * 0.185),
-      decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onPrimary,
-          border: Border.all(width: 2, color: AppColors.of(context).primary),
-          borderRadius: BorderRadius.circular(1000)),
-      child: icon.display(size: size, color: AppColors.of(context).primary),
+  Widget displayIcon(
+    BuildContext context, {
+    double size = 22,
+    double? padding,
+    bool isOutline = false,
+  }) {
+    final color =
+        Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
+
+    return IconDisplayer(
+      supportedIcon: icon,
+      mainColor: AppColors.of(context).onPrimary,
+      displayMode: IconDisplayMode.polygon,
+      size: size,
+      borderRadius: 20,
+      isOutline: isOutline,
+      padding: padding,
     );
   }
 

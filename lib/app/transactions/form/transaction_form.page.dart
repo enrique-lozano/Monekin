@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/categories_list.dart';
 import 'package:monekin/app/tags/tag_list.dart';
+import 'package:monekin/app/transactions/form/calculator_modal.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
@@ -13,25 +13,21 @@ import 'package:monekin/core/database/services/user-setting/user_setting_service
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
-import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/animations/shake/shake_widget.dart';
-import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/expansion_panel/single_expansion_panel.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/status_filter/transaction_status_filter.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/tags_filter/tags_filter_container.dart';
-import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/core/utils/constants.dart';
-import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:uuid/uuid.dart';
@@ -88,85 +84,64 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
 
   List<Tag> tags = [];
 
-  TransactionType? currentTransactionTypeToAdd;
+  TransactionType currentTransactionTypeToAdd = TransactionType.expense;
 
   final _shakeKey = GlobalKey<ShakeWidgetState>();
 
   Widget selector({
-    required bool isMobile,
     required String title,
     required String? inputValue,
-    required SupportedIcon? icon,
-    required Color? iconColor,
+    required Widget icon,
     required Function onClick,
   }) {
-    icon ??= SupportedIconService.instance.defaultSupportedIcon;
-    iconColor ??= Theme.of(context).brightness == Brightness.light
-        ? AppColors.of(context).primary
-        : AppColors.of(context).primaryContainer;
-
     final t = Translations.of(context);
 
-    if (isMobile) {
-      return InkWell(
-        onTap: () => onClick(),
-        borderRadius: BorderRadius.circular(8),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconDisplayer(
-                mainColor: iconColor,
-                supportedIcon: icon,
-                size: 28,
+    return InkWell(
+      onTap: () => onClick(),
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            icon,
+            const SizedBox(width: 8),
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    softWrap: false,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                          fontWeight: FontWeight.w300,
+                        ),
+                  ),
+                  Text(
+                    inputValue ?? t.general.unspecified,
+                    softWrap: false,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                  )
+                ],
               ),
-              const SizedBox(width: 8),
-              Flexible(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                            fontWeight: FontWeight.w300,
-                          ),
-                    ),
-                    Text(
-                      inputValue ?? t.general.unspecified,
-                      softWrap: false,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
-      );
-    }
-
-    return TextFormField(
-        controller:
-            TextEditingController(text: inputValue ?? t.general.unspecified),
-        readOnly: true,
-        validator: (_) => fieldValidator(inputValue, isRequired: true),
-        onTap: () => onClick(),
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        decoration: InputDecoration(
-          labelText: title,
-          suffixIcon: const Icon(Icons.arrow_drop_down),
-          prefixIcon: Container(
-            margin: const EdgeInsets.fromLTRB(14, 8, 8, 8),
-            child: IconDisplayer(mainColor: iconColor, supportedIcon: icon),
-          ),
-        ));
+      ),
+    );
   }
 
   submitForm() {
+    if (widget.mode == TransactionFormMode.incomeOrExpense &&
+        selectedCategory == null) {
+      _shakeKey.currentState?.shake();
+      return;
+    }
+
     final t = Translations.of(context);
     final scMessenger = ScaffoldMessenger.of(context);
 
@@ -265,6 +240,10 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     if (widget.transactionToEdit != null) {
       fillForm(widget.transactionToEdit!);
     } else {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        displayAmountModal(context);
+      });
+
       AccountService.instance
           .getAccounts(
               predicate: (acc, curr) => AppDB.instance.buildExpr([
@@ -344,116 +323,150 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
 
   List<Widget> buildExtraFields() {
     return [
-      if (widget.mode == TransactionFormMode.transfer) ...[
-        TextFormField(
-          controller: valueInDestinyController,
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+        child: TextField(
+          controller:
+              TextEditingController(text: recurrentRule.formText(context)),
+          readOnly: true,
+          onTap: () {
+            showIntervalSelectoHelpDialog(context,
+                selectedRecurrentRule: recurrentRule,
+                onRecurrentRuleSelected: (res) {
+              setState(() {
+                recurrentRule = res;
+              });
+            });
+          },
           decoration: InputDecoration(
-              labelText:
-                  '${t.transfer.form.currency_exchange_selector.value_in_destiny}  *',
-              hintText: 'Ex.: 200',
-              suffixText: toAccount?.currency.symbol),
-          keyboardType: TextInputType.number,
-          inputFormatters: decimalDigitFormatter,
-          validator: (value) {
-            final defaultNumberValidatorResult = fieldValidator(value,
-                isRequired: false, validator: ValidatorType.double);
-
-            if (defaultNumberValidatorResult != null) {
-              return defaultNumberValidatorResult;
-            }
-
-            if (valueToNumber == null) {
-              return null;
-            } else if (valueToNumber! == 0) {
-              return t.transaction.form.validators.zero;
-            }
-
-            return null;
-          },
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          textInputAction: TextInputAction.next,
-          onChanged: (value) {
-            setState(() {});
-          },
+            labelText: t.general.time.periodicity.display,
+            suffixIcon: const Icon(Icons.arrow_drop_down),
+          ),
         ),
-        const SizedBox(height: 16),
-      ],
-      if (widget.mode == TransactionFormMode.transfer &&
-          valueToNumber != null &&
-          valueInDestinyToNumber == null) ...[
-        InlineInfoCard(
+      ),
+      const SizedBox(height: 12),
+      if (widget.mode == TransactionFormMode.transfer) ...[
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+          child: TextFormField(
+            controller: valueInDestinyController,
+            decoration: InputDecoration(
+                labelText:
+                    t.transfer.form.currency_exchange_selector.value_in_destiny,
+                hintText: 'Ex.: 200',
+                suffixText: toAccount?.currency.symbol),
+            keyboardType: TextInputType.number,
+            inputFormatters: decimalDigitFormatter,
+            validator: (value) {
+              final defaultNumberValidatorResult = fieldValidator(value,
+                  isRequired: false, validator: ValidatorType.double);
+
+              if (defaultNumberValidatorResult != null) {
+                return defaultNumberValidatorResult;
+              }
+
+              if (valueToNumber == null) {
+                return null;
+              } else if (valueToNumber! == 0) {
+                return t.transaction.form.validators.zero;
+              }
+
+              return null;
+            },
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            textInputAction: TextInputAction.next,
+            onChanged: (value) {
+              setState(() {});
+            },
+          ),
+        ),
+        if (widget.mode == TransactionFormMode.transfer &&
+            valueToNumber != null &&
+            valueInDestinyToNumber == null)
+          InlineInfoCard(
             text: '${t.transfer.form.currency_info_add(
               x: NumberFormat.currency(symbol: toAccount!.currency.symbol)
                   .format(valueToNumber),
             )} ',
-            mode: InlineInfoCardMode.info),
-        const SizedBox(height: 16),
+            mode: InlineInfoCardMode.info,
+            margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+          ),
+        const SizedBox(height: 12),
       ],
-      TextFormField(
-        minLines: 2,
-        maxLines: 10,
-        controller: notesController,
-        decoration: InputDecoration(
-          labelText: t.transaction.form.description,
-          alignLabelWithHint: true,
-          hintText: t.transaction.form.description_info,
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+        child: TextFormField(
+          minLines: 2,
+          maxLines: 10,
+          controller: notesController,
+          decoration: InputDecoration(
+            labelText: t.transaction.form.description,
+            alignLabelWithHint: true,
+            hintText: t.transaction.form.description_info,
+          ),
         ),
       ),
       if (recurrentRule.isNoRecurrent) ...[
         const SizedBox(height: 16),
         StatefulBuilder(builder: (context, setState) {
-          return TransactionStatusFilter(
-            selectedStatuses: [status],
-            allowMultipleSelection: false,
-            onSelected: (statusSelected, value) {
-              setState(() {
-                status = statusSelected;
-              });
-            },
+          return Padding(
+            padding: const EdgeInsets.only(left: 16.0),
+            child: TransactionStatusFilter(
+              selectedStatuses: [status],
+              allowMultipleSelection: false,
+              onSelected: (statusSelected, value) {
+                setState(() {
+                  status = statusSelected;
+                });
+              },
+            ),
           );
         }),
       ],
       const SizedBox(height: 16),
-      StatefulBuilder(builder: (context, setState) {
-        return TagsFilterContainer(
-          child: Wrap(
-            spacing: 6,
-            runSpacing: 0,
-            children: [
-              ...List.generate(tags.length, (index) {
-                final tag = tags[index];
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: StatefulBuilder(builder: (context, setState) {
+          return TagsFilterContainer(
+            child: Wrap(
+              spacing: 6,
+              runSpacing: 0,
+              children: [
+                ...List.generate(tags.length, (index) {
+                  final tag = tags[index];
 
-                return FilterChip(
-                  label: Text(
-                    tag.name,
-                    style: TextStyle(color: tag.colorData),
-                  ),
-                  selected: true,
-                  onSelected: (value) => setState(() {
-                    tags.removeWhere((element) => element.id == tag.id);
-                  }),
-                  showCheckmark: false,
-                  selectedColor: tag.colorData.lighten(0.75),
-                  avatar: tag.displayIcon(),
-                );
-              }),
-              ActionChip(
-                label: Text(t.tags.add),
-                avatar: const Icon(Icons.add),
-                onPressed: () => showTagListModal(
-                        context, TagListPage(isModal: true, selected: tags))
-                    .then((value) {
-                  if (value != null) {
-                    setState(() {
-                      tags = value;
-                    });
-                  }
+                  return FilterChip(
+                    label: Text(
+                      tag.name,
+                      style: TextStyle(color: tag.colorData),
+                    ),
+                    selected: true,
+                    onSelected: (value) => setState(() {
+                      tags.removeWhere((element) => element.id == tag.id);
+                    }),
+                    showCheckmark: false,
+                    selectedColor: tag.colorData.lighten(0.75),
+                    avatar: tag.displayIcon(),
+                  );
                 }),
-              ),
-            ],
-          ),
-        );
-      })
+                ActionChip(
+                  label: Text(t.tags.add),
+                  avatar: const Icon(Icons.add),
+                  onPressed: () => showTagListModal(
+                          context, TagListPage(isModal: true, selected: tags))
+                      .then((value) {
+                    if (value != null) {
+                      setState(() {
+                        tags = value;
+                      });
+                    }
+                  }),
+                ),
+              ],
+            ),
+          );
+        }),
+      )
     ];
   }
 
@@ -461,83 +474,9 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     return TextFormField(
       controller: titleController,
       maxLength: maxLabelLenghtForDisplayNames,
-      decoration: InputDecoration(labelText: t.transaction.form.title),
-    );
-  }
-
-  Widget buildCalculatorButton(
-    BuildContext context, {
-    required String text,
-    int flex = 1,
-    Color? bgColor,
-    Color? textColor,
-  }) {
-    textColor ??= Theme.of(context).colorScheme.onBackground;
-    bgColor ??= AppColors.of(context).background;
-
-    onButtonPress() {
-      HapticFeedback.lightImpact();
-
-      final decimalPlaces = valueController.text.split('.').elementAtOrNull(1);
-
-      if (text == 'DONE') {
-        if (widget.mode == TransactionFormMode.incomeOrExpense &&
-            selectedCategory == null) {
-          _shakeKey.currentState?.shake();
-          return;
-        }
-
-        submitForm();
-        return;
-      }
-
-      if (text == 'AC') {
-        valueController.text = '0';
-      } else if (text == '⌫' && valueToNumber != null) {
-        valueController.text =
-            valueController.text.substring(0, valueController.text.length - 1);
-      } else {
-        if (decimalPlaces != null && decimalPlaces.length >= 2) {
-          return;
-        }
-
-        valueController.text += text;
-      }
-      setState(() {});
-    }
-
-    return Expanded(
-      flex: flex,
-      child: Padding(
-        padding: const EdgeInsets.all(2.5),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).brightness == Brightness.light
-                ? bgColor.darken(0.025)
-                : bgColor.darken(0.15),
-            shadowColor: bgColor.darken(0.15),
-            surfaceTintColor: bgColor.darken(0.15),
-            foregroundColor: textColor,
-            disabledForegroundColor: textColor.withOpacity(0.3),
-            disabledBackgroundColor: bgColor.withOpacity(0.3),
-            elevation: 0,
-          ),
-          onPressed:
-              text == 'DONE' && (valueToNumber == null || valueToNumber == 0)
-                  ? null
-                  : () => onButtonPress(),
-          child: text == '⌫' || text == 'DONE'
-              ? Icon(
-                  text == '⌫' ? Icons.backspace_rounded : Icons.check_rounded)
-              : Text(
-                  text,
-                  softWrap: false,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-        ),
+      decoration: InputDecoration(
+        suffixIcon: const Icon(Icons.title_rounded),
+        labelText: t.transaction.form.title,
       ),
     );
   }
@@ -554,449 +493,231 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
       } else {
         currentTransactionTypeToAdd = TransactionType.expense;
       }
+    } else {
+      currentTransactionTypeToAdd = TransactionType.expense;
     }
 
-    final bool isBlue = (widget.mode == TransactionFormMode.transfer ||
-        selectedCategory == null);
-
-    final trColor = isBlue
-        ? AppColors.of(context).brand.lighten()
-        : (currentTransactionTypeToAdd?.color(context) ??
-            AppColors.of(context).primary);
-
-    final trColorLighten = Theme.of(context).brightness == Brightness.light
-        ? isBlue
-            ? Theme.of(context).primaryColorLight.lighten(0.5)
-            : trColor.lighten(0.75)
-        : trColor.darken(0.5);
-
     return StreamBuilder(
-        stream: UserSettingService.instance
-            .getSetting(SettingKey.transactionMobileMode),
-        builder: (context, snapshot) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(
-                isEditMode
-                    ? t.transaction.edit
-                    : currentTransactionTypeToAdd == TransactionType.transfer
-                        ? t.transfer.create
-                        : currentTransactionTypeToAdd == null
-                            ? t.transaction.create
-                            : currentTransactionTypeToAdd ==
-                                    TransactionType.expense
-                                ? t.transaction.new_expense
-                                : t.transaction.new_income,
-              ),
+      stream: UserSettingService.instance
+          .getSetting(SettingKey.transactionMobileMode),
+      builder: (context, snapshot) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              isEditMode
+                  ? t.transaction.edit
+                  : currentTransactionTypeToAdd == TransactionType.transfer
+                      ? t.transfer.create
+                      : currentTransactionTypeToAdd == TransactionType.expense
+                          ? t.transaction.new_expense
+                          : t.transaction.new_income,
             ),
-            persistentFooterButtons: snapshot.hasData && snapshot.data == '0'
-                ? [
-                    PersistentFooterButton(
-                      child: FilledButton.icon(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
+          ),
+          persistentFooterButtons: [
+            PersistentFooterButton(
+              child: FilledButton.icon(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
 
-                            submitForm();
-                          }
-                        },
-                        icon: const Icon(Icons.save),
-                        label: Text(isEditMode
-                            ? t.transaction.edit
-                            : t.transaction.create),
-                      ),
-                    )
-                  ]
-                : null,
-            body: Builder(builder: (context) {
-              if (!snapshot.hasData) {
-                return const LinearProgressIndicator();
-              }
-
-              if (snapshot.data == '1') {
-                /* -----------------------------------------------
-                ---------- FORM IN A CALCULATOR STYLE ------------
-                ------------------------------------------------- */
-
-                return Column(
-                  children: [
-                    Flexible(
-                      flex: 8,
+                    submitForm();
+                  }
+                },
+                icon: const Icon(Icons.save),
+                label: Text(
+                    isEditMode ? t.transaction.edit : t.transaction.create),
+              ),
+            )
+          ],
+          body: Form(
+            key: _formKey,
+            child: BreakpointContainer(
+              lgChild: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
                       child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                AnimatedDefaultTextStyle(
-                                  duration: const Duration(milliseconds: 400),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineLarge!
-                                      .copyWith(
-                                          fontSize: (valueToNumber ?? 0) >= 1000
-                                              ? (valueToNumber ?? 0) >= 1000000
-                                                  ? 36
-                                                  : 42
-                                              : 56),
-                                  child: CurrencyDisplayer(
-                                    amountToConvert: valueToNumber ?? 0,
-                                    currency: fromAccount?.currency,
-                                  ),
-                                ),
-                                if (date.compareTo(DateTime.now()) > 0)
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8, horizontal: 32),
-                                    child: InlineInfoCard(
-                                      text: t
-                                          .transaction.form.validators.date_max,
-                                      direction: Axis.horizontal,
-                                      mode: InlineInfoCardMode.info,
-                                    ),
-                                  ),
-                                if (fromAccount != null &&
-                                    fromAccount!.date.compareTo(date) > 0 &&
-                                    !(date.compareTo(DateTime.now()) > 0))
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: InlineInfoCard(
-                                      text: t.transaction.form.validators
-                                          .date_after_account_creation,
-                                      direction: Axis.vertical,
-                                      mode: InlineInfoCardMode.warn,
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
-                          //const Divider(),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: OutlinedButton(
-                                        style: OutlinedButton.styleFrom(
-                                          side: BorderSide(
-                                              width: 1,
-                                              color: Theme.of(context)
-                                                  .dividerColor),
-                                        ),
-                                        child: recurrentRule.isNoRecurrent
-                                            ? Text(
-                                                DateFormat.yMMMMd()
-                                                    .add_Hm()
-                                                    .format(date),
-                                                softWrap: false,
-                                                overflow: TextOverflow.fade,
-                                              )
-                                            : Text(
-                                                '${DateFormat.yMMMMd().format(date)} - ${recurrentRule.formText(context)}',
-                                                softWrap: false,
-                                                overflow: TextOverflow.fade,
-                                              ),
-                                        onPressed: () async {
-                                          DateTime? pickedDate =
-                                              await openDateTimePicker(
-                                            context,
-                                            initialDate: date,
-                                            firstDate: fromAccount?.date,
-                                            showTimePickerAfterDate: true,
-                                          );
-                                          if (pickedDate == null) return;
-
-                                          setState(() {
-                                            date = pickedDate;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                    IconButton.filledTonal(
-                                      onPressed: () {
-                                        showIntervalSelectoHelpDialog(context,
-                                            selectedRecurrentRule:
-                                                recurrentRule,
-                                            onRecurrentRuleSelected: (res) {
-                                          setState(() {
-                                            recurrentRule = res;
-                                          });
-                                        });
-                                      },
-                                      icon: recurrentRule.isRecurrent
-                                          ? const Icon(
-                                              Icons.event_repeat_rounded)
-                                          : const Icon(
-                                              Icons.repeat_one_rounded),
-                                    ),
-                                    IconButton.filledTonal(
-                                      icon:
-                                          const Icon(Icons.text_fields_rounded),
-                                      onPressed: () =>
-                                          showExtraFieldsModal(context),
-                                    ),
-                                  ],
-                                ),
-                                buildAccoutAndCategorySelectorRow(context),
-                              ],
-                            ),
-                          ),
-                          // const Divider(),
+                          buildAmountContainer(context),
+                          const SizedBox(height: 18),
+                          buildAccoutAndCategorySelectorRow(context),
+                          const SizedBox(height: 12),
+                          buildTransactionDateSelector(),
+                          const SizedBox(height: 12),
+                          buildTitleField(),
                         ],
                       ),
                     ),
-
-                    /*  ---------- NUMMBER CALCULATOR BUTTONS ------------ */
-                    Flexible(
-                      flex: 7,
-                      child: Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                            color: trColorLighten,
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(16),
-                              topRight: Radius.circular(16),
-                            )),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  buildCalculatorButton(context,
-                                      bgColor: trColorLighten, text: '1'),
-                                  buildCalculatorButton(context,
-                                      bgColor: trColorLighten, text: '4'),
-                                  buildCalculatorButton(context,
-                                      bgColor: trColorLighten, text: '7'),
-                                  buildCalculatorButton(context,
-                                      bgColor: trColorLighten, text: '.'),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  buildCalculatorButton(context,
-                                      bgColor: trColorLighten, text: '2'),
-                                  buildCalculatorButton(context,
-                                      bgColor: trColorLighten, text: '5'),
-                                  buildCalculatorButton(context,
-                                      bgColor: trColorLighten, text: '8'),
-                                  buildCalculatorButton(context,
-                                      bgColor: trColorLighten, text: '0'),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  buildCalculatorButton(context,
-                                      bgColor: trColorLighten, text: '3'),
-                                  buildCalculatorButton(context,
-                                      bgColor: trColorLighten, text: '6'),
-                                  buildCalculatorButton(context,
-                                      bgColor: trColorLighten, text: '9'),
-                                  buildCalculatorButton(context,
-                                      bgColor: trColorLighten, text: '⌫'),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  buildCalculatorButton(context,
-                                      bgColor: trColorLighten, text: 'AC'),
-                                  buildCalculatorButton(context,
-                                      bgColor: trColor,
-                                      text: 'DONE',
-                                      textColor: Colors.white,
-                                      flex: 3),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                );
-              }
-
-              /* -----------------------------------------------
-              ---------- FORM IN IT'S DEFAULT STYLE ------------
-              ------------------------------------------------- */
-
-              return SingleChildScrollView(
-                padding: const EdgeInsets.only(bottom: 24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          children: [
-                            TextFormField(
-                              controller: valueController,
-                              decoration: InputDecoration(
-                                  labelText: '${t.transaction.form.value} *',
-                                  hintText: 'Ex.: 200',
-                                  suffixText: fromAccount?.currency.symbol),
-                              keyboardType: TextInputType.number,
-                              validator: (value) {
-                                final defaultNumberValidatorResult =
-                                    fieldValidator(value,
-                                        isRequired: true,
-                                        validator: ValidatorType.double);
-
-                                if (defaultNumberValidatorResult != null) {
-                                  return defaultNumberValidatorResult;
-                                }
-
-                                if (valueToNumber! == 0) {
-                                  return t.transaction.form.validators.zero;
-                                }
-
-                                return null;
-                              },
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              textInputAction: TextInputAction.next,
-                              inputFormatters: decimalDigitFormatter,
-                              onChanged: (value) {
-                                setState(() {});
-                              },
-                            ),
-                            const SizedBox(height: 16),
-                            selector(
-                                isMobile: false,
-                                title: '${t.general.account} *',
-                                inputValue: fromAccount?.name,
-                                icon: fromAccount?.icon,
-                                iconColor: null,
-                                onClick: () async {
-                                  final modalRes =
-                                      await showAccountSelector(fromAccount!);
-
-                                  if (modalRes != null && modalRes.isNotEmpty) {
-                                    setState(() {
-                                      fromAccount = modalRes.first;
-                                    });
-                                  }
-                                }),
-                            const SizedBox(height: 16),
-                            if (widget.mode == TransactionFormMode.transfer)
-                              selector(
-                                  isMobile: false,
-                                  title: '${t.transfer.form.to} *',
-                                  inputValue: toAccount?.name,
-                                  icon: toAccount?.icon,
-                                  iconColor: null,
-                                  onClick: () async {
-                                    final modalRes =
-                                        await showAccountSelector(toAccount!);
-
-                                    if (modalRes != null &&
-                                        modalRes.isNotEmpty) {
-                                      setState(() {
-                                        toAccount = modalRes.first;
-                                      });
-                                    }
-                                  }),
-                            if (widget.mode ==
-                                TransactionFormMode.incomeOrExpense)
-                              selector(
-                                isMobile: false,
-                                title: '${t.general.category} *',
-                                inputValue: selectedCategory?.name,
-                                icon: selectedCategory?.icon,
-                                iconColor: selectedCategory != null
-                                    ? ColorHex.get(selectedCategory!.color)
-                                    : null,
-                                onClick: () => selectCategory(),
-                              ),
-                            const SizedBox(height: 24),
-                            DateTimeFormField(
-                              decoration: InputDecoration(
-                                  suffixIcon: const Icon(Icons.event),
-                                  labelText: '${t.general.time.datetime} *'),
-                              initialDate: date,
-                              firstDate: fromAccount?.date,
-                              dateFormat: DateFormat.yMMMd().add_Hm(),
-                              validator: (e) => e == null
-                                  ? t.general.validations.required
-                                  : null,
-                              onDateSelected: (DateTime value) {
-                                setState(() {
-                                  date = value;
-                                });
-                              },
-                            ),
-                            if (date.compareTo(DateTime.now()) > 0) ...[
-                              const SizedBox(height: 8),
-                              InlineInfoCard(
-                                  text: t.transaction.form.validators.date_max,
-                                  mode: InlineInfoCardMode.info),
-                              const SizedBox(height: 4),
-                            ],
-                            const SizedBox(height: 16),
-                            TextField(
-                              controller: TextEditingController(
-                                  text: recurrentRule.formText(context)),
-                              readOnly: true,
-                              onTap: () {
-                                showIntervalSelectoHelpDialog(context,
-                                    selectedRecurrentRule: recurrentRule,
-                                    onRecurrentRuleSelected: (res) {
-                                  setState(() {
-                                    recurrentRule = res;
-                                  });
-                                });
-                              },
-                              decoration: InputDecoration(
-                                labelText: t.general.time.periodicity.display,
-                                suffixIcon: const Icon(Icons.arrow_drop_down),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            buildTitleField()
-                          ],
-                        ),
+                  ),
+                  const VerticalDivider(),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 0, vertical: 16),
+                      child: Column(
+                        children: [...buildExtraFields()],
                       ),
                     ),
-                    SingleExpansionPanel(
-                      sidePadding: 16,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: buildExtraFields()),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        buildAmountContainer(context),
+                        const SizedBox(height: 18),
+                        buildAccoutAndCategorySelectorRow(context),
+                      ],
+                    ),
+                  ),
+                  //   const Divider(),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          // const Divider(thickness: 2.2),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 0),
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 4),
+                                buildTransactionDateSelector(),
+                                const SizedBox(height: 12),
+                                buildTitleField(),
+                              ],
+                            ),
+                          ),
+                          //       ...buildExtraFields()
+                          SingleExpansionPanel(
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 6),
+                                ...buildExtraFields()
+                              ],
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void displayAmountModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (context) => AmountSelector(
+        amountToConvert: valueToNumber ?? 0,
+        onSubmit: (amount) {
+          setState(() {
+            valueController.text = amount.toString();
+            Navigator.pop(context);
+          });
+        },
+      ),
+    );
+  }
+
+  Widget buildAmountContainer(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(6),
+      onTap: () => displayAmountModal(context),
+      child: Container(
+        decoration: BoxDecoration(
+          color: currentTransactionTypeToAdd.color(context).withOpacity(0.7),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconDisplayer(
+              mainColor: currentTransactionTypeToAdd.color(context),
+              secondaryColor: Colors.white,
+              padding: 2,
+              borderRadius: 4,
+              icon: currentTransactionTypeToAdd.mathIcon,
+            ),
+            Builder(builder: (context) {
+              final bigTextStyle =
+                  Theme.of(context).textTheme.headlineLarge!.copyWith(
+                      fontWeight: FontWeight.w800,
+                      fontSize: (valueToNumber ?? 0) >= 1000
+                          ? (valueToNumber ?? 0) >= 1000000
+                              ? 28
+                              : 34
+                          : 38);
+
+              return CurrencyDisplayer(
+                amountToConvert: valueToNumber ?? 0,
+                currency: fromAccount?.currency,
+                currencyStyle: bigTextStyle,
+                integerStyle: bigTextStyle,
               );
             }),
-          );
-        });
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildTransactionDateSelector() {
+    return Column(
+      children: [
+        DateTimeFormField(
+          decoration: InputDecoration(
+            suffixIcon: const Icon(Icons.event),
+            labelText: '${t.general.time.date} *',
+          ),
+          initialDate: date,
+          dateFormat: DateFormat.yMMMd().add_jm(),
+          validator: (e) => e == null ? t.general.validations.required : null,
+          onDateSelected: (DateTime value) {
+            setState(() {
+              date = value;
+            });
+          },
+        ),
+        if (date.compareTo(DateTime.now()) > 0)
+          InlineInfoCard(
+            margin: const EdgeInsets.fromLTRB(0, 8, 0, 4),
+            text: t.transaction.form.validators.date_max,
+            mode: InlineInfoCardMode.info,
+          ),
+        if (fromAccount != null &&
+            fromAccount!.date.compareTo(date) > 0 &&
+            !(date.compareTo(DateTime.now()) > 0))
+          InlineInfoCard(
+            margin: const EdgeInsets.fromLTRB(0, 8, 0, 4),
+            text: t.transaction.form.validators.date_after_account_creation,
+            mode: InlineInfoCardMode.warn,
+          ),
+      ],
+    );
   }
 
   Card buildAccoutAndCategorySelectorRow(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
         side: BorderSide(color: Theme.of(context).dividerColor, width: 1),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(6),
       ),
+      margin: const EdgeInsets.all(0),
       elevation: 0,
       // color: AppColors.of(context).primary,
       clipBehavior: Clip.hardEdge,
@@ -1004,47 +725,58 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: constraints.maxWidth * 0.5),
-              child: selector(
-                  isMobile: true,
-                  title: t.general.account,
-                  inputValue: fromAccount?.name,
-                  icon: fromAccount?.icon,
-                  iconColor: null,
-                  onClick: () async {
-                    final modalRes = await showAccountSelector(fromAccount!);
-
-                    if (modalRes != null && modalRes.isNotEmpty) {
-                      setState(() {
-                        fromAccount = modalRes.first;
-                      });
-                    }
-                  }),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 4),
-              child: Icon(Icons.arrow_forward),
-            ),
-            if (widget.mode == TransactionFormMode.transfer)
-              ConstrainedBox(
+            Flexible(
+              child: ConstrainedBox(
                 constraints:
                     BoxConstraints(maxWidth: constraints.maxWidth * 0.5),
                 child: selector(
-                    isMobile: true,
-                    title: t.transfer.form.to,
-                    inputValue: toAccount?.name,
-                    icon: toAccount?.icon,
-                    iconColor: null,
+                    title: t.general.account,
+                    inputValue: fromAccount?.name,
+                    icon: fromAccount?.displayIcon(context) ??
+                        IconDisplayer(
+                          displayMode: IconDisplayMode.polygon,
+                          icon: Icons.question_mark_rounded,
+                          mainColor: AppColors.of(context).primary,
+                        ),
                     onClick: () async {
-                      final modalRes = await showAccountSelector(toAccount!);
+                      final modalRes = await showAccountSelector(fromAccount!);
 
                       if (modalRes != null && modalRes.isNotEmpty) {
                         setState(() {
-                          toAccount = modalRes.first;
+                          fromAccount = modalRes.first;
                         });
                       }
                     }),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+              child: Icon(Icons.arrow_forward, size: 16),
+            ),
+            if (widget.mode == TransactionFormMode.transfer)
+              Flexible(
+                child: ConstrainedBox(
+                  constraints:
+                      BoxConstraints(maxWidth: constraints.maxWidth * 0.5),
+                  child: selector(
+                      title: t.transfer.form.to,
+                      inputValue: toAccount?.name,
+                      icon: toAccount?.displayIcon(context) ??
+                          IconDisplayer(
+                            displayMode: IconDisplayMode.polygon,
+                            icon: Icons.question_mark_rounded,
+                            mainColor: AppColors.of(context).primary,
+                          ),
+                      onClick: () async {
+                        final modalRes = await showAccountSelector(toAccount!);
+
+                        if (modalRes != null && modalRes.isNotEmpty) {
+                          setState(() {
+                            toAccount = modalRes.first;
+                          });
+                        }
+                      }),
+                ),
               ),
             if (widget.mode == TransactionFormMode.incomeOrExpense)
               Flexible(
@@ -1053,74 +785,27 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                   shakeCount: 1,
                   shakeOffset: 10,
                   key: _shakeKey,
-                  child: selector(
-                    isMobile: true,
-                    title: t.general.category,
-                    inputValue: selectedCategory?.name,
-                    icon: selectedCategory?.icon,
-                    iconColor: selectedCategory != null
-                        ? ColorHex.get(selectedCategory!.color)
-                        : null,
-                    onClick: () => selectCategory(),
+                  child: ConstrainedBox(
+                    constraints:
+                        BoxConstraints(maxWidth: constraints.maxWidth * 0.5),
+                    child: selector(
+                      title: t.general.category,
+                      inputValue: selectedCategory?.name,
+                      icon: selectedCategory != null
+                          ? IconDisplayer.fromCategory(context,
+                              category: selectedCategory!)
+                          : IconDisplayer(
+                              icon: Icons.question_mark_rounded,
+                              mainColor: AppColors.of(context).primary,
+                            ),
+                      onClick: () => selectCategory(),
+                    ),
                   ),
                 ),
               ),
           ],
         );
       }),
-    );
-  }
-
-  Future<dynamic> showExtraFieldsModal(BuildContext context) {
-    return showModalBottomSheet(
-      context: context,
-      showDragHandle: true,
-      // isDismissible: false,
-      isScrollControlled: true,
-      builder: (context) => DraggableScrollableSheet(
-          expand: false,
-          // TODO: Is this working? See: https://github.com/flutter/flutter/issues/127236
-          // shouldCloseOnMinExtent: false,
-          snap: true,
-          maxChildSize: 1,
-          minChildSize: 0.33,
-          initialChildSize: 0.65,
-          snapSizes: const [0.33, 0.65, 1],
-          builder: (context, scrollController) {
-            return Padding(
-              padding: EdgeInsets.only(
-                top: 12,
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-              ),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ScrollableWithBottomGradient(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 8,
-                        horizontal: 16,
-                      ),
-                      controller: scrollController,
-                      child: Column(
-                        children: [
-                          buildTitleField(),
-                          const SizedBox(height: 16),
-                          ...buildExtraFields()
-                        ],
-                      ),
-                    ),
-                  ),
-                  BottomSheetFooter(
-                      submitText: t.general.close_and_save,
-                      showCloseIcon: false,
-                      submitIcon: Icons.keyboard_arrow_down_rounded,
-                      onSaved: () {
-                        Navigator.pop(context);
-                      })
-                ],
-              ),
-            );
-          }),
     );
   }
 }

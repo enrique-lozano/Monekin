@@ -169,7 +169,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                         if (snapshot.hasData) {
                                           return CurrencyDisplayer(
                                             amountToConvert: snapshot.data!,
-                                            textStyle: const TextStyle(
+                                            integerStyle: const TextStyle(
                                                 fontSize: 40,
                                                 fontWeight: FontWeight.w600),
                                           );
