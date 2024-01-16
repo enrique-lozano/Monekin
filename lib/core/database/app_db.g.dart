@@ -244,6 +244,12 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
+  static const VerificationMeta _colorMeta = const VerificationMeta('color');
+  late final GeneratedColumn<String> color = GeneratedColumn<String>(
+      'color', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: '');
   static const VerificationMeta _closingDateMeta =
       const VerificationMeta('closingDate');
   late final GeneratedColumn<DateTime> closingDate = GeneratedColumn<DateTime>(
@@ -280,6 +286,7 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
         description,
         type,
         iconId,
+        color,
         closingDate,
         currencyId,
         iban,
@@ -331,6 +338,10 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
     } else if (isInserting) {
       context.missing(_iconIdMeta);
     }
+    if (data.containsKey('color')) {
+      context.handle(
+          _colorMeta, color.isAcceptableOrUnknown(data['color']!, _colorMeta));
+    }
     if (data.containsKey('closingDate')) {
       context.handle(
           _closingDateMeta,
@@ -376,6 +387,8 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
           .read(DriftSqlType.string, data['${effectivePrefix}type'])!),
       iconId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}iconId'])!,
+      color: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}color']),
       closingDate: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}closingDate']),
       currencyId: attachedDatabase.typeMapping
@@ -411,6 +424,9 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
   final AccountType type;
   final String iconId;
 
+  /// If null, an automatic color will be applied
+  final String? color;
+
   /// The closing date of the account. After this date, no transactions can exists on it.
   final DateTime? closingDate;
 
@@ -426,6 +442,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       this.description,
       required this.type,
       required this.iconId,
+      this.color,
       this.closingDate,
       required this.currencyId,
       this.iban,
@@ -445,6 +462,9 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       map['type'] = Variable<String>(converter.toSql(type));
     }
     map['iconId'] = Variable<String>(iconId);
+    if (!nullToAbsent || color != null) {
+      map['color'] = Variable<String>(color);
+    }
     if (!nullToAbsent || closingDate != null) {
       map['closingDate'] = Variable<DateTime>(closingDate);
     }
@@ -469,6 +489,8 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           : Value(description),
       type: Value(type),
       iconId: Value(iconId),
+      color:
+          color == null && nullToAbsent ? const Value.absent() : Value(color),
       closingDate: closingDate == null && nullToAbsent
           ? const Value.absent()
           : Value(closingDate),
@@ -491,6 +513,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       type: Accounts.$convertertype
           .fromJson(serializer.fromJson<String>(json['type'])),
       iconId: serializer.fromJson<String>(json['iconId']),
+      color: serializer.fromJson<String?>(json['color']),
       closingDate: serializer.fromJson<DateTime?>(json['closingDate']),
       currencyId: serializer.fromJson<String>(json['currencyId']),
       iban: serializer.fromJson<String?>(json['iban']),
@@ -508,6 +531,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       'description': serializer.toJson<String?>(description),
       'type': serializer.toJson<String>(Accounts.$convertertype.toJson(type)),
       'iconId': serializer.toJson<String>(iconId),
+      'color': serializer.toJson<String?>(color),
       'closingDate': serializer.toJson<DateTime?>(closingDate),
       'currencyId': serializer.toJson<String>(currencyId),
       'iban': serializer.toJson<String?>(iban),
@@ -523,6 +547,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           Value<String?> description = const Value.absent(),
           AccountType? type,
           String? iconId,
+          Value<String?> color = const Value.absent(),
           Value<DateTime?> closingDate = const Value.absent(),
           String? currencyId,
           Value<String?> iban = const Value.absent(),
@@ -535,6 +560,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
         description: description.present ? description.value : this.description,
         type: type ?? this.type,
         iconId: iconId ?? this.iconId,
+        color: color.present ? color.value : this.color,
         closingDate: closingDate.present ? closingDate.value : this.closingDate,
         currencyId: currencyId ?? this.currencyId,
         iban: iban.present ? iban.value : this.iban,
@@ -550,6 +576,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           ..write('description: $description, ')
           ..write('type: $type, ')
           ..write('iconId: $iconId, ')
+          ..write('color: $color, ')
           ..write('closingDate: $closingDate, ')
           ..write('currencyId: $currencyId, ')
           ..write('iban: $iban, ')
@@ -560,7 +587,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
 
   @override
   int get hashCode => Object.hash(id, name, iniValue, date, description, type,
-      iconId, closingDate, currencyId, iban, swift);
+      iconId, color, closingDate, currencyId, iban, swift);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -572,6 +599,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           other.description == this.description &&
           other.type == this.type &&
           other.iconId == this.iconId &&
+          other.color == this.color &&
           other.closingDate == this.closingDate &&
           other.currencyId == this.currencyId &&
           other.iban == this.iban &&
@@ -586,6 +614,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
   final Value<String?> description;
   final Value<AccountType> type;
   final Value<String> iconId;
+  final Value<String?> color;
   final Value<DateTime?> closingDate;
   final Value<String> currencyId;
   final Value<String?> iban;
@@ -599,6 +628,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     this.description = const Value.absent(),
     this.type = const Value.absent(),
     this.iconId = const Value.absent(),
+    this.color = const Value.absent(),
     this.closingDate = const Value.absent(),
     this.currencyId = const Value.absent(),
     this.iban = const Value.absent(),
@@ -613,6 +643,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     this.description = const Value.absent(),
     required AccountType type,
     required String iconId,
+    this.color = const Value.absent(),
     this.closingDate = const Value.absent(),
     required String currencyId,
     this.iban = const Value.absent(),
@@ -633,6 +664,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     Expression<String>? description,
     Expression<String>? type,
     Expression<String>? iconId,
+    Expression<String>? color,
     Expression<DateTime>? closingDate,
     Expression<String>? currencyId,
     Expression<String>? iban,
@@ -647,6 +679,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
       if (description != null) 'description': description,
       if (type != null) 'type': type,
       if (iconId != null) 'iconId': iconId,
+      if (color != null) 'color': color,
       if (closingDate != null) 'closingDate': closingDate,
       if (currencyId != null) 'currencyId': currencyId,
       if (iban != null) 'iban': iban,
@@ -663,6 +696,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
       Value<String?>? description,
       Value<AccountType>? type,
       Value<String>? iconId,
+      Value<String?>? color,
       Value<DateTime?>? closingDate,
       Value<String>? currencyId,
       Value<String?>? iban,
@@ -676,6 +710,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
       description: description ?? this.description,
       type: type ?? this.type,
       iconId: iconId ?? this.iconId,
+      color: color ?? this.color,
       closingDate: closingDate ?? this.closingDate,
       currencyId: currencyId ?? this.currencyId,
       iban: iban ?? this.iban,
@@ -710,6 +745,9 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     if (iconId.present) {
       map['iconId'] = Variable<String>(iconId.value);
     }
+    if (color.present) {
+      map['color'] = Variable<String>(color.value);
+    }
     if (closingDate.present) {
       map['closingDate'] = Variable<DateTime>(closingDate.value);
     }
@@ -738,6 +776,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
           ..write('description: $description, ')
           ..write('type: $type, ')
           ..write('iconId: $iconId, ')
+          ..write('color: $color, ')
           ..write('closingDate: $closingDate, ')
           ..write('currencyId: $currencyId, ')
           ..write('iban: $iban, ')
@@ -4152,7 +4191,7 @@ abstract class _$AppDB extends GeneratedDatabase {
         startIndex: $arrayStartIndex);
     $arrayStartIndex += generatedlimit.amountOfVariables;
     return customSelect(
-        'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."iconId" AS "nested_0.iconId", "a"."closingDate" AS "nested_0.closingDate", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."iconId" AS "nested_3.iconId", "ra"."closingDate" AS "nested_3.closingDate", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRate.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id INNER JOIN currencies AS receivingAccountCurrency ON a.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
+        'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."iconId" AS "nested_0.iconId", "a"."color" AS "nested_0.color", "a"."closingDate" AS "nested_0.closingDate", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."iconId" AS "nested_3.iconId", "ra"."color" AS "nested_3.color", "ra"."closingDate" AS "nested_3.closingDate", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRate.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id INNER JOIN currencies AS receivingAccountCurrency ON a.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
         variables: [
           ...generatedpredicate.introducedVariables,
           ...generatedorderBy.introducedVariables,
