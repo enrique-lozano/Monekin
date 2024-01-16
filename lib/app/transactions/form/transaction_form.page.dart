@@ -144,11 +144,20 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     final t = Translations.of(context);
     final scMessenger = ScaffoldMessenger.of(context);
 
+    if (valueToNumber == null || valueToNumber == 0) {
+      scMessenger.showSnackBar(
+        SnackBar(content: Text(t.transaction.form.validators.zero)),
+      );
+
+      return;
+    }
+
     if (valueToNumber! < 0) {
       scMessenger.showSnackBar(SnackBar(
-          content: Text(widget.mode == TransactionFormMode.incomeOrExpense
-              ? t.transaction.form.validators.negative_transaction
-              : t.transaction.form.validators.negative_transfer)));
+        content: Text(widget.mode == TransactionFormMode.incomeOrExpense
+            ? t.transaction.form.validators.negative_transaction
+            : t.transaction.form.validators.negative_transfer),
+      ));
 
       return;
     }
