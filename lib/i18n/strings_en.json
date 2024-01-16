@@ -338,8 +338,8 @@
     "FORM": {
       "from": "Origin account",
       "to": "Destination account",
-      "currency-info-add": "{{x}} will be transferred to the destination account &#183; Click to edit",
-      "currency-info-edit": "{{x}} have been transferred to the destination account &#183; Click to edit",
+      "currency-info-add": "{{x}} will be transferred to the destination account",
+      "currency-info-edit": "{{x}} have been transferred to the destination account",
       "currency-exchange-selector": {
         "title": "Edit exchange between currencies",
         "value-in-destiny": "Amount transferred in destination"

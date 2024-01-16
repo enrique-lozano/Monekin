@@ -14,7 +14,6 @@ import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/database/services/currency/currency_service.dart';
-import '../../core/presentation/app_colors.dart';
 import '../../core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import '../../core/presentation/widgets/skeleton.dart';
 
@@ -129,18 +128,8 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                           final accountWithMoney = accounts[index];
 
                           return ListTile(
-                            leading: Container(
-                                padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      width: 2,
-                                      color: AppColors.of(context).primary,
-                                    ),
-                                    borderRadius: BorderRadius.circular(1000)),
-                                child: accountWithMoney.account.icon.display(
-                                  size: 22,
-                                  color: AppColors.of(context).primary,
-                                )),
+                            leading:
+                                accountWithMoney.account.displayIcon(context),
                             onTap: () => context.pushRoute(
                               AccountFormRoute(
                                   account: accountWithMoney.account),

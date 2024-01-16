@@ -134,7 +134,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
                   });
                 },
               ),
-              const Divider(indent: 12, endIndent: 12)
             ],
             StreamBuilder(
               stream: TransactionService.instance.countTransactions(

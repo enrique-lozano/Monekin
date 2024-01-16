@@ -303,7 +303,7 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
                       ),
                       children: UINumberFormatter.decimal(
                               amountToConvert: rod.toY,
-                              textStyle: const TextStyle(fontSize: 16))
+                              integerStyle: const TextStyle(fontSize: 16))
                           .getTextSpanList(context),
                     );
                   },

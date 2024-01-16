@@ -164,7 +164,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
 
                                         return CurrencyDisplayer(
                                           amountToConvert: budgetCurrentValue!,
-                                          textStyle: Theme.of(context)
+                                          integerStyle: Theme.of(context)
                                               .textTheme
                                               .headlineSmall!
                                               .copyWith(
@@ -183,7 +183,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                                       ),
                                       CurrencyDisplayer(
                                         amountToConvert: budget.limitAmount,
-                                        textStyle: Theme.of(context)
+                                        integerStyle: Theme.of(context)
                                             .textTheme
                                             .headlineSmall!
                                             .copyWith(

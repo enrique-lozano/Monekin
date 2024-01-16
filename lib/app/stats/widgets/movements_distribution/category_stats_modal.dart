@@ -133,7 +133,7 @@ class CategoryStatsModal extends StatelessWidget {
                   ),
                   CurrencyDisplayer(
                     amountToConvert: categoryData.value,
-                    textStyle: Theme.of(context).textTheme.titleLarge!,
+                    integerStyle: Theme.of(context).textTheme.titleLarge!,
                   )
                 ],
               ),
