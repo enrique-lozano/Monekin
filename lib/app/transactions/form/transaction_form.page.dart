@@ -412,13 +412,19 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
           return Padding(
             padding: const EdgeInsets.only(left: 16.0),
             child: TransactionStatusFilter(
-              selectedStatuses: [status],
+              selectedStatuses: [
+                date.compareTo(DateTime.now()) > 0
+                    ? TransactionStatus.pending
+                    : status
+              ],
               allowMultipleSelection: false,
-              onSelected: (statusSelected, value) {
-                setState(() {
-                  status = statusSelected;
-                });
-              },
+              onSelected: date.compareTo(DateTime.now()) > 0
+                  ? null
+                  : (statusSelected, value) {
+                      setState(() {
+                        status = statusSelected;
+                      });
+                    },
             ),
           );
         }),
