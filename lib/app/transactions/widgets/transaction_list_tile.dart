@@ -89,7 +89,7 @@ class TransactionListTile extends StatelessWidget {
                     periodicity: periodicityInfo!)
                 : transaction.value,
             currency: transaction.account.currency,
-            textStyle: TextStyle(
+            integerStyle: TextStyle(
                 color: transaction.status == TransactionStatus.voided
                     ? Colors.grey.shade400
                     : transaction.isIncomeOrExpense

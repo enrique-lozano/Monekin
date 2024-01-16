@@ -49,7 +49,8 @@ class IncomeExpenseComparason extends StatelessWidget {
 
                     return CurrencyDisplayer(
                         amountToConvert: snapshot.data!,
-                        textStyle: Theme.of(context).textTheme.headlineSmall!);
+                        integerStyle:
+                            Theme.of(context).textTheme.headlineSmall!);
                   },
                 )
               ],

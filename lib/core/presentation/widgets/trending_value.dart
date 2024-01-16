@@ -48,7 +48,7 @@ class TrendingValue extends StatelessWidget {
         const SizedBox(width: 6),
         UINumberFormatter.percentage(
           amountToConvert: percentage,
-          textStyle: TextStyle(
+          integerStyle: TextStyle(
               fontSize: fontSize,
               fontWeight: fontWeight,
               color: _getColorBasedOnPercentage(context)),

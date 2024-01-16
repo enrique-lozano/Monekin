@@ -91,11 +91,11 @@ class IconDisplayer extends StatelessWidget {
     );
 
     final polygonBorder = StarBorder.polygon(
-      sides: 5,
+      sides: 8,
       rotation: 0,
       pointRounding: min(1, borderRadius * 2.5 / 100),
       side: borderSide,
-      squash: 0.00,
+      squash: 0,
     );
 
     return Material(

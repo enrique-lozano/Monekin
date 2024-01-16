@@ -254,26 +254,6 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     ),
                   );
                 }),
-            createListSeparator(context, t.transaction.display(n: 2)),
-            StreamBuilder(
-                stream: UserSettingService.instance
-                    .getSetting(SettingKey.transactionMobileMode),
-                builder: (context, snapshot) {
-                  bool isActive = snapshot.data == '1';
-
-                  return SwitchListTile(
-                    title: Text(t.settings.general.prefer_calc),
-                    subtitle: Text(t.settings.general.prefer_calc_descr),
-                    value: isActive,
-                    onChanged: (bool value) {
-                      setState(() {
-                        UserSettingService.instance.setSetting(
-                            SettingKey.transactionMobileMode,
-                            isActive ? '0' : '1');
-                      });
-                    },
-                  );
-                })
           ],
         ),
       ),

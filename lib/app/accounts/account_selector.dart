@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -103,13 +102,7 @@ class _AccountSelectorState extends State<AccountSelector> {
                     return RadioListTile(
                       value: account.id,
                       title: Text(account.name),
-                      secondary: IconDisplayer(
-                        mainColor:
-                            Theme.of(context).brightness == Brightness.light
-                                ? colors.primary
-                                : colors.onPrimary,
-                        supportedIcon: account.icon,
-                      ),
+                      secondary: account.displayIcon(context),
                       groupValue: selectedAccounts.firstOrNull?.id,
                       onChanged: (value) {
                         setState(() {
@@ -125,13 +118,7 @@ class _AccountSelectorState extends State<AccountSelector> {
                           .map((e) => e.id)
                           .contains(account.id),
                       title: Text(account.name),
-                      secondary: IconDisplayer(
-                        mainColor:
-                            Theme.of(context).brightness == Brightness.light
-                                ? colors.primary
-                                : colors.onPrimary,
-                        supportedIcon: account.icon,
-                      ),
+                      secondary: account.displayIcon(context),
                       onChanged: (value) {
                         if (value == true) {
                           selectedAccounts.add(account);
