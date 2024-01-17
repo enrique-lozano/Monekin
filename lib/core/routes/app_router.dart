@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/accounts/account_details.dart';
 import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/all_accounts_page.dart';
+import 'package:monekin/app/accounts/details/account_details.dart';
 import 'package:monekin/app/budgets/budget_details_page.dart';
 import 'package:monekin/app/budgets/budget_form_page.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
