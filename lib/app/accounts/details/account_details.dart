@@ -3,27 +3,23 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/app/accounts/details/account_details_actions.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
-import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/routes/app_router.dart';
-import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/translations.g.dart';
-
-import '../../core/presentation/app_colors.dart';
-import '../transactions/form/transaction_form.page.dart';
 
 @RoutePage()
 class AccountDetailsPage extends StatefulWidget {
@@ -36,155 +32,6 @@ class AccountDetailsPage extends StatefulWidget {
 }
 
 class _AccountDetailsPageState extends State<AccountDetailsPage> {
-  List<ListTileActionItem> getAccountDetailsActions(
-    BuildContext context, {
-    required Account account,
-    bool navigateBackOnDelete = false,
-  }) {
-    final t = Translations.of(context);
-
-    return [
-      ListTileActionItem(
-        label: t.general.edit,
-        icon: Icons.edit,
-        onClick: () => context.pushRoute(AccountFormRoute(account: account)),
-      ),
-      ListTileActionItem(
-          label: t.transfer.create,
-          icon: TransactionType.transfer.icon,
-          onClick: account.isClosed
-              ? null
-              : () async {
-                  showAccountsWarn() async =>
-                      await showConfirmDialog(context,
-                          dialogTitle:
-                              t.transfer.need_two_accounts_warning_header,
-                          contentParagraphs: [
-                            Text(t.transfer.need_two_accounts_warning_message)
-                          ]);
-
-                  navigateToTransferForm() => context.pushRoute(
-                        TransactionFormRoute(
-                          fromAccount: account,
-                          mode: TransactionFormMode.transfer,
-                        ),
-                      );
-
-                  final numberOfAccounts = (await AccountService.instance
-                          .getAccounts(
-                            predicate: (acc, curr) => acc.closingDate.isNull(),
-                          )
-                          .first)
-                      .length;
-
-                  if (numberOfAccounts <= 1) {
-                    await showAccountsWarn();
-                  } else {
-                    await navigateToTransferForm();
-                  }
-                }),
-      ListTileActionItem(
-          label: account.isClosed
-              ? t.account.reopen_short
-              : t.account.close.title_short,
-          icon: account.isClosed
-              ? Icons.unarchive_rounded
-              : Icons.archive_rounded,
-          role: ListTileActionRole.warn,
-          onClick: () async {
-            if (account.isClosed) {
-              showReopenAccountDialog(account);
-              return;
-            }
-
-            final currentBalance = await AccountService.instance
-                .getAccountMoney(account: account)
-                .first;
-
-            await showCloseAccountDialog(account, currentBalance);
-          }),
-      ListTileActionItem(
-          label: t.general.delete,
-          icon: Icons.delete,
-          role: ListTileActionRole.delete,
-          onClick: () {
-            deleteAccountWithAlertAndSnackBar(
-              context,
-              accountId: account.id,
-              navigateBack: navigateBackOnDelete,
-            );
-          }),
-    ];
-  }
-
-  showReopenAccountDialog(Account account) {
-    showConfirmDialog(
-      context,
-      showCancelButton: true,
-      dialogTitle: t.account.reopen,
-      contentParagraphs: [
-        Text(t.account.reopen_descr),
-      ],
-      confirmationText: t.general.confirm,
-    ).then((isConfirmed) {
-      AccountService.instance
-          .updateAccount(
-        account.copyWith(
-          closingDate: const drift.Value(null),
-        ),
-      )
-          .then((value) {
-        if (value) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(t.account.close.unarchive_succes)),
-          );
-        }
-      }).catchError((err) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('$err')));
-      });
-    });
-  }
-
-  Future<bool?> showCloseAccountDialog(Account account, double currentBalance) {
-    return showModalBottomSheet<bool>(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (context) =>
-          ArchiveWarnDialog(currentBalance: currentBalance, account: account),
-    );
-  }
-
-  deleteAccountWithAlertAndSnackBar(
-    BuildContext context, {
-    required String accountId,
-    required bool navigateBack,
-  }) {
-    final scaffold = ScaffoldMessenger.of(context);
-
-    showConfirmDialog(
-      context,
-      dialogTitle: t.account.delete.warning_header,
-      contentParagraphs: [Text(t.account.delete.warning_text)],
-      confirmationText: t.general.continue_text,
-      showCancelButton: true,
-    ).then((isConfirmed) {
-      if (isConfirmed != true) return;
-
-      AccountService.instance.deleteAccount(accountId).then((value) {
-        if (navigateBack) {
-          Navigator.pop(context);
-        }
-
-        scaffold
-            .showSnackBar(SnackBar(content: Text(t.account.delete.success)));
-      }).catchError((err) {
-        scaffold.showSnackBar(SnackBar(content: Text('$err')));
-      });
-    });
-  }
-
   ListTile buildCopyableTile(String title, String value) {
     final snackbarDisplayer = ScaffoldMessenger.of(context).showSnackBar;
 
@@ -227,7 +74,8 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
 
               final account = snapshot.data!;
 
-              final accountDetailsActions = getAccountDetailsActions(
+              final accountDetailsActions =
+                  AccountDetailsActions.getAccountDetailsActions(
                 context,
                 account: account,
                 navigateBackOnDelete: true,
