@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/utils/color_utils.dart';
+
+/// Monekin brand color.
+const brandBlue = Color(0xFF0F3375);
 
 class AppColors extends ThemeExtension<AppColors> {
   const AppColors({

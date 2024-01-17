@@ -6,9 +6,6 @@ import 'app_colors.dart';
 
 bool isAppUsingDynamicColors = false;
 
-/// Monekin brand color.
-const brandBlue = Color(0xFF0F3375);
-
 ThemeData getThemeData(
   BuildContext context, {
   required bool isDark,
