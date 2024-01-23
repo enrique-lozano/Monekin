@@ -25,32 +25,6 @@ class BackupSettingsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /* Card(
-              margin: const EdgeInsets.all(16),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                child: Row(children: [
-                  SvgPicture.asset(
-                    'assets/icons/backup/db.svg',
-                    height: 36,
-                    width: 36,
-                  ),
-                  const SizedBox(width: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Mi base de datos",
-                          style: Theme.of(context).textTheme.headlineSmall),
-                      Text("Fecha de creación: 23 nov 2023 16:18"),
-                      Text("Última modificación: 23 nov 2023 16:18"),
-                      Text("Última copia de seguridad: 23 nov 2023 16:18"),
-                      Text("Tamaño: 2037 kB"),
-                    ],
-                  )
-                ]),
-              ),
-            ), */
             createListSeparator(context, t.backup.import.title),
             ListTile(
               title: Text(t.backup.import.restore_backup),
