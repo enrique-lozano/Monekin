@@ -110,6 +110,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                           dialogTitle: t.budgets.delete,
                           contentParagraphs: [Text(t.budgets.delete_warning)],
                           confirmationText: t.general.confirm,
+                          icon: Icons.delete,
                         ).then((confirmed) {
                           if (confirmed != true) return;
 

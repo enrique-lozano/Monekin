@@ -6,7 +6,7 @@
 /// Locales: 2
 /// Strings: 1018 (509 per locale)
 ///
-/// Built on 2024-01-17 at 07:50 UTC
+/// Built on 2024-01-24 at 16:04 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -906,7 +906,7 @@ class _TranslationsAccountDeleteEn {
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
-	String get warning_header => 'Are you sure?';
+	String get warning_header => 'Delete account?';
 	String get warning_text => 'This action will delete this account and all its transactions';
 	String get success => 'Account deleted successfully';
 }
@@ -2125,8 +2125,8 @@ class _TranslationsAccountDeleteEs implements _TranslationsAccountDeleteEn {
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get warning_header => '¿Estas seguro?';
-	@override String get warning_text => 'Esta acción borrara esta cuenta y todas sus transacciones';
+	@override String get warning_header => '¿Eliminar cuenta?';
+	@override String get warning_text => 'Esta acción borrara esta cuenta y todas sus transacciones. No podrás volver a recuperar esta información tras el borrado.';
 	@override String get success => 'Cuenta eliminada correctamente';
 }
 
@@ -2940,7 +2940,7 @@ extension on _TranslationsEn {
 			case 'account.form.tr_before_opening_date': return 'There are transactions in this account with a date before the opening date';
 			case 'account.form.iban': return 'IBAN';
 			case 'account.form.swift': return 'SWIFT';
-			case 'account.delete.warning_header': return 'Are you sure?';
+			case 'account.delete.warning_header': return 'Delete account?';
 			case 'account.delete.warning_text': return 'This action will delete this account and all its transactions';
 			case 'account.delete.success': return 'Account deleted successfully';
 			case 'account.close.title': return 'Close account';
@@ -3527,8 +3527,8 @@ extension on _TranslationsEs {
 			case 'account.form.already_exists': return 'Ya existe otra cuenta con el mismo nombre. Por favor, escriba otro';
 			case 'account.form.iban': return 'IBAN';
 			case 'account.form.swift': return 'SWIFT';
-			case 'account.delete.warning_header': return '¿Estas seguro?';
-			case 'account.delete.warning_text': return 'Esta acción borrara esta cuenta y todas sus transacciones';
+			case 'account.delete.warning_header': return '¿Eliminar cuenta?';
+			case 'account.delete.warning_text': return 'Esta acción borrara esta cuenta y todas sus transacciones. No podrás volver a recuperar esta información tras el borrado.';
 			case 'account.delete.success': return 'Cuenta eliminada correctamente';
 			case 'account.close.title': return 'Cerrar cuenta';
 			case 'account.close.title_short': return 'Cerrar';

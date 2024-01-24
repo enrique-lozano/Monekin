@@ -394,7 +394,7 @@
       "swift": "SWIFT"
     },
     "DELETE": {
-      "warning-header": "Are you sure?",
+      "warning-header": "Delete account?",
       "warning-text": "This action will delete this account and all its transactions",
       "success": "Account deleted successfully"
     },

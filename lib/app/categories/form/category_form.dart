@@ -167,7 +167,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                           value: 'merge',
                           child: ListTile(
                             contentPadding: EdgeInsets.zero,
-                            leading: const Icon(Icons.merge_type),
+                            leading: const Icon(Icons.merge_type_rounded),
                             minLeadingWidth: 26,
                             title: Text(t.categories.merge),
                           )),
@@ -349,8 +349,8 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                                           value: 'merge',
                                           child: ListTile(
                                             contentPadding: EdgeInsets.zero,
-                                            leading:
-                                                const Icon(Icons.merge_type),
+                                            leading: const Icon(
+                                                Icons.merge_type_rounded),
                                             minLeadingWidth: 26,
                                             title: Text(t.categories.merge),
                                           )),

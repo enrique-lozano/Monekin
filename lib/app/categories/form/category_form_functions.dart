@@ -21,6 +21,7 @@ class CategoryFormFunctions {
     confirmDialog(
       context,
       dialogTitle: t.categories.delete_warning_header,
+      icon: Icons.delete,
       contentParagraphs: [
         StreamBuilder(
             stream: TransactionService.instance
@@ -71,6 +72,7 @@ class CategoryFormFunctions {
       confirmDialog(
         context,
         dialogTitle: t.categories.merge,
+        icon: Icons.merge_type_rounded,
         contentParagraphs: [
           StreamBuilder(
               stream: TransactionService.instance

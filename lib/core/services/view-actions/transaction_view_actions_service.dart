@@ -37,7 +37,7 @@ class TransactionViewActionService {
       if (transaction.recurrentInfo.isNoRecurrent)
         ListTileActionItem(
           label: t.transaction.duplicate_short,
-          icon: Icons.control_point_duplicate,
+          icon: Icons.control_point_duplicate_rounded,
           onClick: () => TransactionViewActionService()
               .cloneTransactionWithAlertAndSnackBar(context,
                   transaction: transaction),
@@ -67,6 +67,7 @@ class TransactionViewActionService {
 
     confirmDialog(
       context,
+      icon: Icons.delete,
       dialogTitle: !isRecurrent
           ? t.transaction.delete
           : t.recurrent_transactions.details.delete_header,
@@ -110,6 +111,7 @@ class TransactionViewActionService {
 
     confirmDialog(
       context,
+      icon: Icons.control_point_duplicate_rounded,
       dialogTitle: t.transaction.duplicate,
       contentParagraphs: [Text(t.transaction.duplicate_warning_message)],
       confirmationText: t.general.continue_text,
