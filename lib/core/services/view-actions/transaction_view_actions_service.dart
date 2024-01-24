@@ -65,7 +65,7 @@ class TransactionViewActionService {
     final t = Translations.of(context);
     final scaffold = ScaffoldMessenger.of(context);
 
-    showConfirmDialog(
+    confirmDialog(
       context,
       dialogTitle: !isRecurrent
           ? t.transaction.delete
@@ -108,7 +108,7 @@ class TransactionViewActionService {
     final t = Translations.of(context);
     final scaffold = ScaffoldMessenger.of(context);
 
-    showConfirmDialog(
+    confirmDialog(
       context,
       dialogTitle: t.transaction.duplicate,
       contentParagraphs: [Text(t.transaction.duplicate_warning_message)],

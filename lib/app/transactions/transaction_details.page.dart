@@ -181,7 +181,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
   showSkipTransactionModal(BuildContext context, MoneyTransaction transaction) {
     final nextPaymentDate = transaction.followingDateToNext;
 
-    showConfirmDialog(
+    confirmDialog(
       context,
       dialogTitle: t.transaction.next_payments.skip_dialog_title,
       confirmationText: t.general.confirm,
