@@ -107,7 +107,7 @@ class UserGreting extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.w300,
             fontSize: 12,
-            color: Theme.of(context).colorScheme.onBackground,
+            color: AppColors.of(context).onBackground,
           ),
         ),
         if (userName == null)
@@ -116,7 +116,7 @@ class UserGreting extends StatelessWidget {
           Text(
             userName!,
             style: TextStyle(
-              color: Theme.of(context).colorScheme.onBackground,
+              color: AppColors.of(context).onBackground,
             ),
           ),
       ],

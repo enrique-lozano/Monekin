@@ -110,7 +110,7 @@ class DateRangeService {
               if (iconText != null)
                 Container(
                   decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.onBackground,
+                      color: AppColors.of(context).onBackground,
                       borderRadius: BorderRadius.circular(4)),
                   padding:
                       const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
