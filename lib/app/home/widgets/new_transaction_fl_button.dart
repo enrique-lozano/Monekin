@@ -13,7 +13,7 @@ class NewTransactionButton extends StatelessWidget {
   _showShouldCreateAccountWarn(BuildContext context) {
     final t = Translations.of(context);
 
-    showConfirmDialog(
+    confirmDialog(
       context,
       dialogTitle: t.home.should_create_account_header,
       contentParagraphs: [Text(t.home.should_create_account_message)],

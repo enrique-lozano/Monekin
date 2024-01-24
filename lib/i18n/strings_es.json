@@ -398,8 +398,8 @@
       "swift": "SWIFT"
     },
     "DELETE": {
-      "warning-header": "¿Estas seguro?",
-      "warning-text": "Esta acción borrara esta cuenta y todas sus transacciones",
+      "warning-header": "¿Eliminar cuenta?",
+      "warning-text": "Esta acción borrara esta cuenta y todas sus transacciones. No podrás volver a recuperar esta información tras el borrado.",
       "success": "Cuenta eliminada correctamente"
     },
     "CLOSE": {
