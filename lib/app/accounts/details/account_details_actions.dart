@@ -147,6 +147,7 @@ abstract class AccountDetailsActions {
       contentParagraphs: [Text(t.account.delete.warning_text)],
       confirmationText: t.general.continue_text,
       showCancelButton: true,
+      icon: Icons.delete,
     ).then((isConfirmed) {
       if (isConfirmed != true) return;
 

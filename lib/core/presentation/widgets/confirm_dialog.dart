@@ -11,36 +11,43 @@ Future<bool?> confirmDialog(
   required List<Widget> contentParagraphs,
   bool showCancelButton = false,
   String? confirmationText,
+  IconData? icon,
+  bool canPop = true,
 }) {
   final t = Translations.of(context);
 
   return showDialog<bool>(
     context: context,
-    builder: (context) => AlertDialog.adaptive(
-      title: Text(dialogTitle),
-      content: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: contentParagraphs
-              .expand((element) => [element, const SizedBox(height: 6)])
-              .toList(),
+    barrierDismissible: canPop,
+    builder: (context) => PopScope(
+      canPop: canPop,
+      child: AlertDialog.adaptive(
+        title: Text(dialogTitle),
+        icon: icon != null ? Icon(icon, size: 36) : null,
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: contentParagraphs
+                .expand((element) => [element, const SizedBox(height: 6)])
+                .toList(),
+          ),
         ),
-      ),
-      actions: [
-        if (showCancelButton)
+        actions: [
+          if (showCancelButton)
+            TextButton(
+              child: Text(t.general.cancel),
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop(false);
+              },
+            ),
           TextButton(
-            child: Text(t.general.cancel),
+            child: Text(confirmationText ?? t.general.understood),
             onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop(false);
+              Navigator.of(context, rootNavigator: true).pop(true);
             },
           ),
-        TextButton(
-          child: Text(confirmationText ?? t.general.understood),
-          onPressed: () {
-            Navigator.of(context, rootNavigator: true).pop(true);
-          },
-        ),
-      ],
+        ],
+      ),
     ),
   );
 }
