@@ -32,7 +32,7 @@ abstract class AccountDetailsActions {
               ? null
               : () async {
                   showAccountsWarn() async =>
-                      await showConfirmDialog(context,
+                      await confirmDialog(context,
                           dialogTitle:
                               t.transfer.need_two_accounts_warning_header,
                           contentParagraphs: [
@@ -95,7 +95,7 @@ abstract class AccountDetailsActions {
   }
 
   static showReopenAccountDialog(BuildContext context, Account account) {
-    showConfirmDialog(
+    confirmDialog(
       context,
       showCancelButton: true,
       dialogTitle: t.account.reopen,
@@ -141,12 +141,13 @@ abstract class AccountDetailsActions {
   }) {
     final scaffold = ScaffoldMessenger.of(context);
 
-    showConfirmDialog(
+    confirmDialog(
       context,
       dialogTitle: t.account.delete.warning_header,
       contentParagraphs: [Text(t.account.delete.warning_text)],
       confirmationText: t.general.continue_text,
       showCancelButton: true,
+      icon: Icons.delete,
     ).then((isConfirmed) {
       if (isConfirmed != true) return;
 
