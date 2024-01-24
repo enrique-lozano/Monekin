@@ -105,7 +105,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                       icon: Icons.delete,
                       role: ListTileActionRole.delete,
                       onClick: () {
-                        showConfirmDialog(
+                        confirmDialog(
                           context,
                           dialogTitle: t.budgets.delete,
                           contentParagraphs: [Text(t.budgets.delete_warning)],

@@ -38,7 +38,7 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
   changePreferredCurrency(Currency newCurrency) {
     final t = Translations.of(context);
 
-    showConfirmDialog(
+    confirmDialog(
       context,
       dialogTitle: t.currencies.change_preferred_currency_title,
       contentParagraphs: [Text(t.currencies.change_preferred_currency_msg)],

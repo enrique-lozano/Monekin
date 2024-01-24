@@ -18,7 +18,7 @@ class CategoryFormFunctions {
   static deleteCategory(BuildContext context, String categoryId) {
     final t = Translations.of(context);
 
-    showConfirmDialog(
+    confirmDialog(
       context,
       dialogTitle: t.categories.delete_warning_header,
       contentParagraphs: [
@@ -68,7 +68,7 @@ class CategoryFormFunctions {
 
       final selCategory = value.first;
 
-      showConfirmDialog(
+      confirmDialog(
         context,
         dialogTitle: t.categories.merge,
         contentParagraphs: [
@@ -149,7 +149,7 @@ class CategoryFormFunctions {
 
       final selCategory = value.first;
 
-      showConfirmDialog(
+      confirmDialog(
         context,
         dialogTitle: t.categories.make_child,
         contentParagraphs: [
