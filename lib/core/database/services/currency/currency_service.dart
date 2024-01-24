@@ -7,6 +7,8 @@ class CurrencyService {
   final _currencyTableName = 'currencies';
   final _currencyNamesTableName = 'currencyNames';
 
+  // TODO: i18n
+
   String get _baseQuery =>
       'SELECT currency.code, currency.symbol, names.es as name FROM $_currencyTableName as currency'
       ' JOIN $_currencyNamesTableName as names ON currency.code = names.currencyCode';

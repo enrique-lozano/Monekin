@@ -63,7 +63,7 @@ class _AmountSelectorState extends State<AmountSelector> {
     Color? bgColor,
     Color? textColor,
   }) {
-    textColor ??= Theme.of(context).colorScheme.onBackground;
+    textColor ??= AppColors.of(context).onBackground;
     bgColor ??= AppColors.of(context).background;
 
     onButtonPress() {
