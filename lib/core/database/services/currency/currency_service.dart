@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/models/currency/currency.dart';
+import 'package:monekin/i18n/translations.g.dart';
 
 class CurrencyService {
   final _currencyTableName = 'currencies';
@@ -10,7 +11,7 @@ class CurrencyService {
   // TODO: i18n
 
   String get _baseQuery =>
-      'SELECT currency.code, currency.symbol, names.es as name FROM $_currencyTableName as currency'
+      'SELECT currency.code, currency.symbol, names.${LocaleSettings.currentLocale.languageCode} as name FROM $_currencyTableName as currency'
       ' JOIN $_currencyNamesTableName as names ON currency.code = names.currencyCode';
 
   final AppDB db;
@@ -54,7 +55,7 @@ class CurrencyService {
     toSearch = '%${toSearch.trim()}%';
 
     return (db.customSelect(
-            '$_baseQuery WHERE currency.code LIKE ? OR names.es LIKE ?',
+            '$_baseQuery WHERE currency.code LIKE ? OR names.${LocaleSettings.currentLocale.languageCode} LIKE ?',
             variables: [
           Variable.withString(toSearch),
           Variable.withString(toSearch)
