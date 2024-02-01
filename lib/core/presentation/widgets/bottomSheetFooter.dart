@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/i18n/translations.g.dart';
 
 class BottomSheetFooter extends StatelessWidget {
   const BottomSheetFooter(
       {super.key,
       this.onSaved,
       this.showCloseIcon = true,
-      this.submitText = 'Save',
+      this.submitText,
       this.submitIcon = Icons.save});
 
-  final String submitText;
+  /// The text inside the submiit button. Defaults to "save" in the current language
+  final String? submitText;
+
   final IconData submitIcon;
 
   final bool showCloseIcon;
@@ -19,6 +22,8 @@ class BottomSheetFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colors = Theme.of(context).colorScheme;
+
+    final t = Translations.of(context);
 
     return Stack(
       alignment: AlignmentDirectional.center,
@@ -57,7 +62,7 @@ class BottomSheetFooter extends StatelessWidget {
                     disabledForegroundColor: Colors.grey, //Text Color
                   ),
                   icon: Icon(submitIcon),
-                  label: Text(submitText),
+                  label: Text(submitText ?? t.general.save),
                   onPressed: onSaved != null
                       ? () {
                           onSaved!();
