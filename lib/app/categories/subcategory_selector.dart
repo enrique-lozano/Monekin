@@ -4,6 +4,7 @@ import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -44,63 +45,44 @@ class _SubcategorySelectorState extends State<SubcategorySelector> {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
     Color categoryColor = ColorHex.get(widget.parentCategory.color);
 
-    return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  t.categories.select.select_subcategory,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 22),
-                CategorySelector(
-                  selectedCategories: [selectedCategory],
-                  direction: Axis.vertical,
-                  multiSelection: false,
-                  availableCategories: childCategories,
-                  extraHeaderButtons: [
-                    CategoryButtonSelector(
-                        iconWidget: IconDisplayer(
-                          icon: Icons.block,
-                          isOutline:
-                              selectedCategory.id == widget.parentCategory.id,
-                          secondaryColor: isDark
-                              ? categoryColor
-                              : categoryColor.lighten(0.82),
-                          mainColor: isDark
-                              ? categoryColor.lighten(0.82)
-                              : categoryColor,
-                          onTap: () {
-                            setState(() {
-                              selectedCategory = widget.parentCategory;
-                            });
-                          },
-                        ),
-                        label: t.categories.select.without_subcategory)
-                  ],
-                  onChange: (sel) {
-                    if (sel != null) {
-                      setState(() {
-                        selectedCategory = sel[0];
-                      });
-                    }
+    return ModalContainer(
+        title: t.categories.select.select_subcategory,
+        footer: BottomSheetFooter(
+            submitText: t.general.continue_text,
+            submitIcon: Icons.arrow_forward_ios,
+            onSaved: () {
+              Navigator.of(context).pop(selectedCategory);
+            }),
+        bodyPadding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+        body: CategorySelector(
+          selectedCategories: [selectedCategory],
+          direction: Axis.vertical,
+          multiSelection: false,
+          availableCategories: childCategories,
+          extraHeaderButtons: [
+            CategoryButtonSelector(
+                iconWidget: IconDisplayer(
+                  icon: Icons.block,
+                  isOutline: selectedCategory.id == widget.parentCategory.id,
+                  secondaryColor:
+                      isDark ? categoryColor : categoryColor.lighten(0.82),
+                  mainColor:
+                      isDark ? categoryColor.lighten(0.82) : categoryColor,
+                  onTap: () {
+                    setState(() {
+                      selectedCategory = widget.parentCategory;
+                    });
                   },
-                )
-              ],
-            ),
-          ),
-          BottomSheetFooter(
-              submitText: t.general.continue_text,
-              submitIcon: Icons.arrow_forward_ios,
-              onSaved: () {
-                Navigator.of(context).pop(selectedCategory);
-              })
-        ]);
+                ),
+                label: t.categories.select.without_subcategory)
+          ],
+          onChange: (sel) {
+            if (sel != null) {
+              setState(() {
+                selectedCategory = sel[0];
+              });
+            }
+          },
+        ));
   }
 }
