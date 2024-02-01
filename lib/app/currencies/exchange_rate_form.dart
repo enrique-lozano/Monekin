@@ -9,6 +9,7 @@ import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_field.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -105,127 +106,100 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Padding(
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
+    return ModalContainer(
+        title: isEditMode ? t.currencies.form.edit : t.currencies.form.add,
+        footer: BottomSheetFooter(onSaved: () => onSubmitted()),
+        bodyPadding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+        body: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                  controller: TextEditingController(
+                      text: _currency != null
+                          ? _currency?.name
+                          : t.general.unspecified),
+                  readOnly: true,
+                  validator: (value) {
+                    if (_currency == null) {
+                      return t.currencies.form.specify_a_currency;
+                    } else if (_currency!.code == userPreferredCurrency?.code) {
+                      return t.currencies.form.equal_to_preferred_warn;
+                    }
+
+                    return null;
+                  },
+                  onTap: () {
+                    showCurrencySelectorModal(
+                        context,
+                        CurrencySelectorModal(
+                            preselectedCurrency: _currency,
+                            onCurrencySelected: (newCurrency) => {
+                                  setState(() {
+                                    _currency = newCurrency;
+                                  })
+                                }));
+                  },
+                  decoration: InputDecoration(
+                      labelText: t.currencies.currency,
+                      suffixIcon: const Icon(Icons.arrow_drop_down),
+                      prefixIcon: Container(
+                        margin: const EdgeInsets.all(10),
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        child: _currency != null
+                            ? SvgPicture.asset(
+                                'assets/icons/currency_flags/${_currency!.code.toLowerCase()}.svg',
+                                height: 25,
+                                width: 25,
+                              )
+                            : const Skeleton(width: 28, height: 28),
+                      ))),
+              const SizedBox(height: 22),
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    isEditMode ? t.currencies.form.edit : t.currencies.form.add,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  const SizedBox(
-                    height: 22,
-                  ),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        TextFormField(
-                            controller: TextEditingController(
-                                text: _currency != null
-                                    ? _currency?.name
-                                    : t.general.unspecified),
-                            readOnly: true,
-                            validator: (value) {
-                              if (_currency == null) {
-                                return t.currencies.form.specify_a_currency;
-                              } else if (_currency!.code ==
-                                  userPreferredCurrency?.code) {
-                                return t
-                                    .currencies.form.equal_to_preferred_warn;
-                              }
-
-                              return null;
-                            },
-                            onTap: () {
-                              showCurrencySelectorModal(
-                                  context,
-                                  CurrencySelectorModal(
-                                      preselectedCurrency: _currency,
-                                      onCurrencySelected: (newCurrency) => {
-                                            setState(() {
-                                              _currency = newCurrency;
-                                            })
-                                          }));
-                            },
-                            decoration: InputDecoration(
-                                labelText: t.currencies.currency,
-                                suffixIcon: const Icon(Icons.arrow_drop_down),
-                                prefixIcon: Container(
-                                  margin: const EdgeInsets.all(10),
-                                  clipBehavior: Clip.hardEdge,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                  ),
-                                  child: _currency != null
-                                      ? SvgPicture.asset(
-                                          'assets/icons/currency_flags/${_currency!.code.toLowerCase()}.svg',
-                                          height: 25,
-                                          width: 25,
-                                        )
-                                      : const Skeleton(width: 28, height: 28),
-                                ))),
-                        const SizedBox(height: 22),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: DateTimeFormField(
-                                decoration: InputDecoration(
-                                  labelText: '${t.general.time.date} *',
-                                ),
-                                mode: DateTimeFieldPickerMode.date,
-                                initialDate: date,
-                                dateFormat: DateFormat.yMMMd(),
-                                validator: (e) => e == null
-                                    ? t.general.validations.required
-                                    : null,
-                                onDateSelected: (DateTime value) {
-                                  setState(() {
-                                    date = value;
-                                  });
-                                },
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                                child: TextFormField(
-                              controller: rateController,
-                              validator: (value) => fieldValidator(value,
-                                  validator: ValidatorType.double,
-                                  isRequired: true),
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              decoration: InputDecoration(
-                                labelText: '${t.currencies.exchange_rate} *',
-                                hintText: 'Ex.: 2.14',
-                                helperText: (userPreferredCurrency != null &&
-                                        _currency != null &&
-                                        double.tryParse(rateController.text) !=
-                                            null)
-                                    ? '1 ${_currency?.code} = ${double.parse(rateController.text)} ${userPreferredCurrency?.code ?? ''}'
-                                    : null,
-                              ),
-                            ))
-                          ],
-                        ),
-                      ],
+                  Expanded(
+                    child: DateTimeFormField(
+                      decoration: InputDecoration(
+                        labelText: '${t.general.time.date} *',
+                      ),
+                      mode: DateTimeFieldPickerMode.date,
+                      initialDate: date,
+                      dateFormat: DateFormat.yMMMd(),
+                      validator: (e) =>
+                          e == null ? t.general.validations.required : null,
+                      onDateSelected: (DateTime value) {
+                        setState(() {
+                          date = value;
+                        });
+                      },
                     ),
-                  )
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                      child: TextFormField(
+                    controller: rateController,
+                    validator: (value) => fieldValidator(value,
+                        validator: ValidatorType.double, isRequired: true),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: InputDecoration(
+                      labelText: '${t.currencies.exchange_rate} *',
+                      hintText: 'Ex.: 2.14',
+                      helperText: (userPreferredCurrency != null &&
+                              _currency != null &&
+                              double.tryParse(rateController.text) != null)
+                          ? '1 ${_currency?.code} = ${double.parse(rateController.text)} ${userPreferredCurrency?.code ?? ''}'
+                          : null,
+                    ),
+                  ))
                 ],
               ),
-            ),
-            BottomSheetFooter(onSaved: () => onSubmitted())
-          ]),
-    );
+            ],
+          ),
+        ));
   }
 }
