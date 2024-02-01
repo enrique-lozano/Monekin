@@ -15,6 +15,7 @@ import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
+import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
@@ -292,81 +293,68 @@ class _ArchiveWarnDialogState extends State<ArchiveWarnDialog> {
           final hasNoTransactions =
               !snapshot.hasData || snapshot.data!.numberOfRes == 0;
 
-          return Padding(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          t.account.close.title,
-                          style: Theme.of(context).textTheme.headlineSmall,
+          return ModalContainer(
+            title: t.account.close.title,
+            footer: BottomSheetFooter(
+              submitText: t.general.continue_text,
+              submitIcon: Icons.check,
+              onSaved: !hasNoTransactions || widget.currentBalance != 0
+                  ? null
+                  : () {
+                      AccountService.instance
+                          .updateAccount(
+                        widget.account.copyWith(
+                          closingDate: drift.Value(date),
                         ),
-                        const SizedBox(height: 22),
-                        Text(t.account.close.warn),
-                        const SizedBox(height: 22),
-                        DateTimeFormField(
-                          decoration: InputDecoration(
-                            suffixIcon: const Icon(Icons.event),
-                            labelText: '${t.account.close_date} *',
-                          ),
-                          initialDate: date,
-                          firstDate: widget.account.date,
-                          lastDate: DateTime.now(),
-                          dateFormat: DateFormat.yMMMd().add_jm(),
-                          validator: (e) =>
-                              e == null ? t.general.validations.required : null,
-                          onDateSelected: (DateTime value) {
-                            setState(() {
-                              date = value;
-                            });
-                          },
-                        ),
-                        if (!hasNoTransactions ||
-                            widget.currentBalance != 0) ...[
-                          const SizedBox(height: 12),
-                          InlineInfoCard(
-                            mode: InlineInfoCardMode.warn,
-                            text: widget.currentBalance != 0
-                                ? t.account.close.should_have_zero_balance
-                                : t.account.close.should_have_no_transactions,
-                          )
-                        ]
-                      ],
-                    )),
-                BottomSheetFooter(
-                  submitText: t.general.continue_text,
-                  submitIcon: Icons.check,
-                  onSaved: !hasNoTransactions || widget.currentBalance != 0
-                      ? null
-                      : () {
-                          AccountService.instance
-                              .updateAccount(
-                            widget.account.copyWith(
-                              closingDate: drift.Value(date),
-                            ),
-                          )
-                              .then((value) {
-                            Navigator.pop(context, true);
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(t.account.close.success)));
-                          }).catchError(
-                            (err) {
-                              Navigator.pop(context);
+                      )
+                          .then((value) {
+                        Navigator.pop(context, true);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(t.account.close.success)));
+                      }).catchError(
+                        (err) {
+                          Navigator.pop(context);
 
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('$err')),
-                              );
-                            },
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('$err')),
                           );
                         },
-                )
+                      );
+                    },
+            ),
+            bodyPadding: const EdgeInsets.symmetric(horizontal: 16),
+            body: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(t.account.close.warn),
+                const SizedBox(height: 22),
+                DateTimeFormField(
+                  decoration: InputDecoration(
+                    suffixIcon: const Icon(Icons.event),
+                    labelText: '${t.account.close_date} *',
+                  ),
+                  initialDate: date,
+                  firstDate: widget.account.date,
+                  lastDate: DateTime.now(),
+                  dateFormat: DateFormat.yMMMd().add_jm(),
+                  validator: (e) =>
+                      e == null ? t.general.validations.required : null,
+                  onDateSelected: (DateTime value) {
+                    setState(() {
+                      date = value;
+                    });
+                  },
+                ),
+                if (!hasNoTransactions || widget.currentBalance != 0) ...[
+                  const SizedBox(height: 12),
+                  InlineInfoCard(
+                    mode: InlineInfoCardMode.warn,
+                    text: widget.currentBalance != 0
+                        ? t.account.close.should_have_zero_balance
+                        : t.account.close.should_have_no_transactions,
+                  )
+                ],
+                const SizedBox(height: 16),
               ],
             ),
           );
