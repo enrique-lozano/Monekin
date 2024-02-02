@@ -216,6 +216,7 @@ abstract class _$AppRouter extends RootStackRouter {
           key: args.key,
           isModal: args.isModal,
           selected: args.selected,
+          scrollController: args.scrollController,
         ),
       );
     },
@@ -836,6 +837,7 @@ class TagListRoute extends PageRouteInfo<TagListRouteArgs> {
     Key? key,
     bool isModal = false,
     List<Tag> selected = const <Tag>[],
+    ScrollController? scrollController,
     List<PageRouteInfo>? children,
   }) : super(
           TagListRoute.name,
@@ -843,6 +845,7 @@ class TagListRoute extends PageRouteInfo<TagListRouteArgs> {
             key: key,
             isModal: isModal,
             selected: selected,
+            scrollController: scrollController,
           ),
           initialChildren: children,
         );
@@ -858,6 +861,7 @@ class TagListRouteArgs {
     this.key,
     this.isModal = false,
     this.selected = const <Tag>[],
+    this.scrollController,
   });
 
   final Key? key;
@@ -866,9 +870,11 @@ class TagListRouteArgs {
 
   final List<Tag> selected;
 
+  final ScrollController? scrollController;
+
   @override
   String toString() {
-    return 'TagListRouteArgs{key: $key, isModal: $isModal, selected: $selected}';
+    return 'TagListRouteArgs{key: $key, isModal: $isModal, selected: $selected, scrollController: $scrollController}';
   }
 }
 

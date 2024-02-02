@@ -46,59 +46,59 @@ class AllAccountsPage extends StatelessWidget {
           }
 
           return MonekinReorderableList(
-              itemBuilder: (context, index) {
-                final account = accounts.elementAt(index);
+            totalItemCount: accounts.length,
+            itemBuilder: (context, index) {
+              final account = accounts.elementAt(index);
 
-                return Tappable(
-                  onTap: () => context.pushRoute(
-                    AccountDetailsRoute(account: account),
-                  ),
-                  bgColor: AppColors.of(context).light,
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  borderRadius: 12,
-                  child: ListTile(
-                    trailing: ReorderableDragIcon(index: index),
-                    title: Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            account.name,
-                            softWrap: false,
-                            overflow: TextOverflow.fade,
-                          ),
+              return Tappable(
+                onTap: () => context.pushRoute(
+                  AccountDetailsRoute(account: account),
+                ),
+                bgColor: AppColors.of(context).light,
+                margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                borderRadius: 12,
+                child: ListTile(
+                  trailing: ReorderableDragIcon(index: index),
+                  title: Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          account.name,
+                          softWrap: false,
+                          overflow: TextOverflow.fade,
                         ),
-                        const SizedBox(width: 4),
-                        if (account.isClosed)
-                          const Icon(Icons.archive_outlined,
-                              color: Colors.amber, size: 16)
-                      ],
-                    ),
-                    leading: Hero(
-                      tag: 'account-icon-${account.id}',
-                      child: account.displayIcon(context),
-                    ),
-                    subtitle: Text(
-                      account.type.title(context),
-                    ),
+                      ),
+                      const SizedBox(width: 4),
+                      if (account.isClosed)
+                        const Icon(Icons.archive_outlined,
+                            color: Colors.amber, size: 16)
+                    ],
                   ),
-                );
-              },
-              onReorder: (from, to) async {
-                if (to > from) to--;
-
-                final item = accounts.removeAt(from);
-                accounts.insert(to, item);
-
-                Future.wait(
-                  accounts.mapIndexed(
-                    (index, element) => AccountService.instance.updateAccount(
-                      element.copyWith(displayOrder: index),
-                    ),
+                  leading: Hero(
+                    tag: 'account-icon-${account.id}',
+                    child: account.displayIcon(context),
                   ),
-                );
-              },
-              totalItemCount: accounts.length);
+                  subtitle: Text(
+                    account.type.title(context),
+                  ),
+                ),
+              );
+            },
+            onReorder: (from, to) async {
+              if (to > from) to--;
+
+              final item = accounts.removeAt(from);
+              accounts.insert(to, item);
+
+              Future.wait(
+                accounts.mapIndexed(
+                  (index, element) => AccountService.instance.updateAccount(
+                    element.copyWith(displayOrder: index),
+                  ),
+                ),
+              );
+            },
+          );
         },
       ),
     );

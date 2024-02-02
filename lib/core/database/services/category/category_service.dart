@@ -70,6 +70,7 @@ class CategoryService {
     for (final category in json) {
       final categoryToPush = CategoryInDB(
           id: uuid.v4(),
+          displayOrder: 10,
           name: category['names'][systemLang] ?? category['names']['en'],
           iconId: category['icon'],
           color: category['color'],
@@ -82,6 +83,7 @@ class CategoryService {
         for (final subcategory in category['subcategories']) {
           final subcategoryToPush = CategoryInDB(
               id: uuid.v4(),
+              displayOrder: 10,
               name: subcategory['names']['es'],
               iconId: subcategory['icon'],
               parentCategoryID: categoryToPush.id);
