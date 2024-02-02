@@ -49,6 +49,9 @@ CREATE TABLE IF NOT EXISTS accounts (
     
     iconId TEXT NOT NULL,
 
+    -- The display order when listing accounts
+    displayOrder INTEGER NOT NULL,
+
     -- If null, an automatic color will be applied
     color TEXT,
 
