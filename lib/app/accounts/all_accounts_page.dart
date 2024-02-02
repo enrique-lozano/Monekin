@@ -58,7 +58,9 @@ class AllAccountsPage extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 borderRadius: 12,
                 child: ListTile(
-                  trailing: ReorderableDragIcon(index: index),
+                  trailing: accounts.length > 1
+                      ? ReorderableDragIcon(index: index)
+                      : null,
                   title: Row(
                     children: [
                       Flexible(

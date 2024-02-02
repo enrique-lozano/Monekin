@@ -31,6 +31,7 @@ class _MonekinReorderableListState extends State<MonekinReorderableList> {
         opacity: isOrderingItem == null || isOrderingItem == index ? 1 : 0.4,
         child: ReorderableDelayedDragStartListener(
           index: index,
+          enabled: widget.totalItemCount > 1,
           child: widget.itemBuilder(context, index),
         ),
       ),
