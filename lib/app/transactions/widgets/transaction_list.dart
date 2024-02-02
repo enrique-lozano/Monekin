@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
+import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 
@@ -40,7 +40,7 @@ class TransactionListComponent extends StatefulWidget {
   final bool showGroupDivider;
 
   /// If defined, display info about the periodicity of the recurrent transactions, and the days to the next payment. Will show the amount of the recurrency based on the specified periodicity
-  final TransactionPeriodicity? periodicityInfo;
+  final Periodicity? periodicityInfo;
 
   final Widget prevPage;
 

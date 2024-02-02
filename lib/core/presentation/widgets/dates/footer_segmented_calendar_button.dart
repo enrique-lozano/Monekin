@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/services/filters/date_range_service.dart';
 
-import '../../core/presentation/app_colors.dart';
+import '../../app_colors.dart';
 
 class FooterSegmentedCalendarButton extends StatefulWidget {
   const FooterSegmentedCalendarButton(
