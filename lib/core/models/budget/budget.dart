@@ -1,6 +1,6 @@
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
+import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/services/filters/date_range_service.dart';
 import 'package:monekin/core/utils/constants.dart';
@@ -22,7 +22,7 @@ class Budget extends BudgetInDB {
 
   List<DateTime> get currentDateRange {
     if (intervalPeriod != null) {
-      if (intervalPeriod == TransactionPeriodicity.day) {
+      if (intervalPeriod == Periodicity.day) {
         return [
           DateTime(currentYear, currentMonth, currentDayOfMonth),
           DateTime(currentYear, currentMonth, currentDayOfMonth + 1)
@@ -30,9 +30,9 @@ class Budget extends BudgetInDB {
       }
 
       final dateRangeServ = DateRangeService(
-          selectedDateRange: intervalPeriod == TransactionPeriodicity.month
+          selectedDateRange: intervalPeriod == Periodicity.month
               ? DateRange.monthly
-              : intervalPeriod == TransactionPeriodicity.year
+              : intervalPeriod == Periodicity.year
                   ? DateRange.annualy
                   : DateRange.weekly);
 

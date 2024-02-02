@@ -1,9 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
-import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
 import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -26,16 +26,16 @@ class _IntervalSelectorHelpState extends State<IntervalSelectorHelp> {
     const RecurrencyData.noRepeat(),
     const RecurrencyData.withLimit(
         ruleRecurrentLimit: RecurrentRuleLimit.infinite(),
-        intervalPeriod: TransactionPeriodicity.day),
+        intervalPeriod: Periodicity.day),
     const RecurrencyData.withLimit(
         ruleRecurrentLimit: RecurrentRuleLimit.infinite(),
-        intervalPeriod: TransactionPeriodicity.week),
+        intervalPeriod: Periodicity.week),
     const RecurrencyData.withLimit(
         ruleRecurrentLimit: RecurrentRuleLimit.infinite(),
-        intervalPeriod: TransactionPeriodicity.month),
+        intervalPeriod: Periodicity.month),
     const RecurrencyData.withLimit(
         ruleRecurrentLimit: RecurrentRuleLimit.infinite(),
-        intervalPeriod: TransactionPeriodicity.year),
+        intervalPeriod: Periodicity.year),
   ];
 
   @override

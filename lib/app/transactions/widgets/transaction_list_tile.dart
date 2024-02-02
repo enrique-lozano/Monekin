@@ -1,9 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
@@ -25,7 +25,7 @@ class TransactionListTile extends StatelessWidget {
   final MoneyTransaction transaction;
 
   final Widget prevPage;
-  final TransactionPeriodicity? periodicityInfo;
+  final Periodicity? periodicityInfo;
   final bool showDate;
   final bool showTime;
 
@@ -195,7 +195,8 @@ class TransactionListTile extends StatelessWidget {
                       text: transaction.recurrentInfo.intervalPeriod!
                           .periodText(
                             context,
-                            transaction.recurrentInfo.intervalEach!,
+                            isPlural:
+                                transaction.recurrentInfo.intervalEach! > 1,
                           )
                           .toLowerCase())
                 ]),

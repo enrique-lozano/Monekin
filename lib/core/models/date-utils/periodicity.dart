@@ -1,14 +1,15 @@
 import 'package:flutter/widgets.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-enum TransactionPeriodicity {
+enum Periodicity {
   day,
   week,
   month,
   year;
 
-  String periodText(BuildContext context, int n) {
+  String periodText(BuildContext context, {required bool isPlural}) {
     final t = Translations.of(context);
+    final n = isPlural ? 2 : 1;
 
     if (this == day) {
       return t.general.time.ranges.day(n: n);
