@@ -131,6 +131,7 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
         category: Category(
             id: 'Other',
             name: 'Other',
+            displayOrder: 1000,
             iconId: 'iconId',
             type: CategoryType.B,
             color: 'DEDEDE'));

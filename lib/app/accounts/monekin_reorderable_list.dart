@@ -28,7 +28,7 @@ class _MonekinReorderableListState extends State<MonekinReorderableList> {
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) => Opacity(
         key: Key(index.toString()),
-        opacity: isOrderingItem == null || isOrderingItem == index ? 1 : 0.3,
+        opacity: isOrderingItem == null || isOrderingItem == index ? 1 : 0.4,
         child: ReorderableDelayedDragStartListener(
           index: index,
           child: widget.itemBuilder(context, index),
