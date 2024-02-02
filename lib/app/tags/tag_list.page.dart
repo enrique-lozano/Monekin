@@ -96,7 +96,9 @@ class _TagListPageState extends State<TagListPage> {
                 margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 borderRadius: 12,
                 child: ListTile(
-                  trailing: ReorderableDragIcon(index: index),
+                  trailing: tags.length > 1
+                      ? ReorderableDragIcon(index: index)
+                      : null,
                   leading: tag.displayIcon(),
                   title: Text(tag.name),
                   subtitle:
