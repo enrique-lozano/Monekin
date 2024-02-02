@@ -1,6 +1,10 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/app/accounts/monekin_reorderable_list.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
+import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -22,37 +26,39 @@ class AllAccountsPage extends StatelessWidget {
         onPressed: () => context.pushRoute(AccountFormRoute()),
       ),
       body: StreamBuilder(
-          stream: AccountService.instance.getAccounts(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const LinearProgressIndicator();
-            }
+        stream: AccountService.instance.getAccounts(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const LinearProgressIndicator();
+          }
 
-            final accounts = snapshot.data!;
+          final accounts = snapshot.data!;
 
-            if (accounts.isEmpty) {
-              return Column(
-                children: [
-                  Expanded(
-                      child: EmptyIndicator(
-                          title: t.general.empty_warn,
-                          description: t.account.no_accounts)),
-                ],
-              );
-            }
+          if (accounts.isEmpty) {
+            return Column(
+              children: [
+                Expanded(
+                    child: EmptyIndicator(
+                        title: t.general.empty_warn,
+                        description: t.account.no_accounts)),
+              ],
+            );
+          }
 
-            return ListView.separated(
-                padding: EdgeInsets.zero,
-                itemCount: accounts.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                separatorBuilder: (context, index) {
-                  return const Divider(indent: 56);
-                },
-                itemBuilder: (context, index) {
-                  final account = accounts[index];
+          return MonekinReorderableList(
+              itemBuilder: (context, index) {
+                final account = accounts.elementAt(index);
 
-                  return ListTile(
+                return Tappable(
+                  onTap: () => context.pushRoute(
+                    AccountDetailsRoute(account: account),
+                  ),
+                  bgColor: AppColors.of(context).light,
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  borderRadius: 12,
+                  child: ListTile(
+                    trailing: ReorderableDragIcon(index: index),
                     title: Row(
                       children: [
                         Flexible(
@@ -72,12 +78,47 @@ class AllAccountsPage extends StatelessWidget {
                       tag: 'account-icon-${account.id}',
                       child: account.displayIcon(context),
                     ),
-                    subtitle: Text(account.type.title(context)),
-                    onTap: () => context
-                        .pushRoute(AccountDetailsRoute(account: account)),
-                  );
-                });
-          }),
+                    subtitle: Text(
+                      account.type.title(context),
+                    ),
+                  ),
+                );
+              },
+              onReorder: (from, to) async {
+                if (to > from) to--;
+
+                final item = accounts.removeAt(from);
+                accounts.insert(to, item);
+
+                Future.wait(
+                  accounts.mapIndexed(
+                    (index, element) => AccountService.instance.updateAccount(
+                      element.copyWith(displayOrder: index),
+                    ),
+                  ),
+                );
+              },
+              totalItemCount: accounts.length);
+        },
+      ),
+    );
+  }
+}
+
+class ReorderableDragIcon extends StatelessWidget {
+  const ReorderableDragIcon({super.key, required this.index});
+
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return ReorderableDragStartListener(
+      index: index,
+      child: Container(
+          padding: const EdgeInsets.fromLTRB(14, 4, 2, 4),
+          // Padding to increase the dragabble area
+          //color: Colors.red,
+          child: const Icon(Icons.drag_handle_rounded)),
     );
   }
 }

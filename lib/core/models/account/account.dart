@@ -83,7 +83,7 @@ class Account extends AccountInDB {
 
   Widget displayIcon(
     BuildContext context, {
-    double size = 22,
+    double size = 24,
     double? padding,
     bool isOutline = false,
   }) {
