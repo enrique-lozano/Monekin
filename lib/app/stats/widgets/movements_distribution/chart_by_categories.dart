@@ -6,6 +6,7 @@ import 'package:monekin/app/stats/widgets/movements_distribution/category_stats_
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
@@ -29,14 +30,12 @@ class TrDistributionChartItem<T> {
 class ChartByCategories extends StatefulWidget {
   const ChartByCategories(
       {super.key,
-      required this.startDate,
-      required this.endDate,
+      required this.datePeriodState,
       this.showList = false,
       this.initialSelectedType = TransactionType.expense,
       this.filters = const TransactionFilters()});
 
-  final DateTime? startDate;
-  final DateTime? endDate;
+  final DatePeriodState datePeriodState;
 
   final bool showList;
 
@@ -61,8 +60,8 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
           TransactionType.expense,
         if (transactionsType == TransactionType.income) TransactionType.income
       ],
-      minDate: widget.startDate,
-      maxDate: widget.endDate,
+      minDate: widget.datePeriodState.startDate,
+      maxDate: widget.datePeriodState.endDate,
     );
   }
 
@@ -363,6 +362,8 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
                           builder: (context) {
                             return CategoryStatsModal(
                               categoryData: dataCategory,
+                              dateRangeText:
+                                  widget.datePeriodState.getText(context),
                               filters: _getTransactionFilters(),
                             );
                           });

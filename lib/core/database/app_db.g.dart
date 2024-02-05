@@ -1321,15 +1321,14 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
       defaultValue: const CustomExpression('0'));
   static const VerificationMeta _intervalPeriodMeta =
       const VerificationMeta('intervalPeriod');
-  late final GeneratedColumnWithTypeConverter<TransactionPeriodicity?,
+  late final GeneratedColumnWithTypeConverter<Periodicity?,
       String> intervalPeriod = GeneratedColumn<String>(
           'intervalPeriod', aliasedName, true,
           type: DriftSqlType.string,
           requiredDuringInsert: false,
           $customConstraints:
               'CHECK (intervalPeriod IN (\'day\', \'week\', \'month\', \'year\'))')
-      .withConverter<TransactionPeriodicity?>(
-          Transactions.$converterintervalPeriodn);
+      .withConverter<Periodicity?>(Transactions.$converterintervalPeriodn);
   static const VerificationMeta _intervalEachMeta =
       const VerificationMeta('intervalEach');
   late final GeneratedColumn<int> intervalEach = GeneratedColumn<int>(
@@ -1504,11 +1503,10 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
       const EnumNameConverter<TransactionStatus>(TransactionStatus.values);
   static JsonTypeConverter2<TransactionStatus?, String?, String?>
       $converterstatusn = JsonTypeConverter2.asNullable($converterstatus);
-  static JsonTypeConverter2<TransactionPeriodicity, String, String>
+  static JsonTypeConverter2<Periodicity, String, String>
       $converterintervalPeriod =
-      const EnumNameConverter<TransactionPeriodicity>(
-          TransactionPeriodicity.values);
-  static JsonTypeConverter2<TransactionPeriodicity?, String?, String?>
+      const EnumNameConverter<Periodicity>(Periodicity.values);
+  static JsonTypeConverter2<Periodicity?, String?, String?>
       $converterintervalPeriodn =
       JsonTypeConverter2.asNullable($converterintervalPeriod);
   @override
@@ -1546,7 +1544,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
 
   /// The time range with which new transactions to be paid will appear (weekly, monthly...)
   /// --- Recurrency data ---
-  final TransactionPeriodicity? intervalPeriod;
+  final Periodicity? intervalPeriod;
 
   /// Within the time range chosen in the `intervalPeriod` attribute, every few times new transactions will appear to be paid. For example, putting a 2 here and having monthly as `intervalPeriod`, new payments will appear every two months
   final int? intervalEach;
@@ -1713,7 +1711,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           Value<double?> valueInDestiny = const Value.absent(),
           Value<String?> receivingAccountID = const Value.absent(),
           bool? isHidden,
-          Value<TransactionPeriodicity?> intervalPeriod = const Value.absent(),
+          Value<Periodicity?> intervalPeriod = const Value.absent(),
           Value<int?> intervalEach = const Value.absent(),
           Value<DateTime?> endDate = const Value.absent(),
           Value<int?> remainingTransactions = const Value.absent()}) =>
@@ -1813,7 +1811,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
   final Value<double?> valueInDestiny;
   final Value<String?> receivingAccountID;
   final Value<bool> isHidden;
-  final Value<TransactionPeriodicity?> intervalPeriod;
+  final Value<Periodicity?> intervalPeriod;
   final Value<int?> intervalEach;
   final Value<DateTime?> endDate;
   final Value<int?> remainingTransactions;
@@ -1908,7 +1906,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
       Value<double?>? valueInDestiny,
       Value<String?>? receivingAccountID,
       Value<bool>? isHidden,
-      Value<TransactionPeriodicity?>? intervalPeriod,
+      Value<Periodicity?>? intervalPeriod,
       Value<int?>? intervalEach,
       Value<DateTime?>? endDate,
       Value<int?>? remainingTransactions,
@@ -2828,15 +2826,14 @@ class Budgets extends Table with TableInfo<Budgets, BudgetInDB> {
       $customConstraints: 'NOT NULL');
   static const VerificationMeta _intervalPeriodMeta =
       const VerificationMeta('intervalPeriod');
-  late final GeneratedColumnWithTypeConverter<TransactionPeriodicity?,
+  late final GeneratedColumnWithTypeConverter<Periodicity?,
       String> intervalPeriod = GeneratedColumn<String>(
           'intervalPeriod', aliasedName, true,
           type: DriftSqlType.string,
           requiredDuringInsert: false,
           $customConstraints:
               'CHECK (intervalPeriod IN (\'day\', \'week\', \'month\', \'year\'))')
-      .withConverter<TransactionPeriodicity?>(
-          Budgets.$converterintervalPeriodn);
+      .withConverter<Periodicity?>(Budgets.$converterintervalPeriodn);
   static const VerificationMeta _startDateMeta =
       const VerificationMeta('startDate');
   late final GeneratedColumn<DateTime> startDate = GeneratedColumn<DateTime>(
@@ -2922,11 +2919,10 @@ class Budgets extends Table with TableInfo<Budgets, BudgetInDB> {
     return Budgets(attachedDatabase, alias);
   }
 
-  static JsonTypeConverter2<TransactionPeriodicity, String, String>
+  static JsonTypeConverter2<Periodicity, String, String>
       $converterintervalPeriod =
-      const EnumNameConverter<TransactionPeriodicity>(
-          TransactionPeriodicity.values);
-  static JsonTypeConverter2<TransactionPeriodicity?, String?, String?>
+      const EnumNameConverter<Periodicity>(Periodicity.values);
+  static JsonTypeConverter2<Periodicity?, String?, String?>
       $converterintervalPeriodn =
       JsonTypeConverter2.asNullable($converterintervalPeriod);
   @override
@@ -2947,7 +2943,7 @@ class BudgetInDB extends DataClass implements Insertable<BudgetInDB> {
   final double limitAmount;
 
   /// Periodicity of the budget. If null, the budget is a single-time budget
-  final TransactionPeriodicity? intervalPeriod;
+  final Periodicity? intervalPeriod;
 
   /// Custom start date. Only if the budget has no periodicity
   final DateTime? startDate;
@@ -3028,7 +3024,7 @@ class BudgetInDB extends DataClass implements Insertable<BudgetInDB> {
           {String? id,
           String? name,
           double? limitAmount,
-          Value<TransactionPeriodicity?> intervalPeriod = const Value.absent(),
+          Value<Periodicity?> intervalPeriod = const Value.absent(),
           Value<DateTime?> startDate = const Value.absent(),
           Value<DateTime?> endDate = const Value.absent()}) =>
       BudgetInDB(
@@ -3072,7 +3068,7 @@ class BudgetsCompanion extends UpdateCompanion<BudgetInDB> {
   final Value<String> id;
   final Value<String> name;
   final Value<double> limitAmount;
-  final Value<TransactionPeriodicity?> intervalPeriod;
+  final Value<Periodicity?> intervalPeriod;
   final Value<DateTime?> startDate;
   final Value<DateTime?> endDate;
   final Value<int> rowid;
@@ -3120,7 +3116,7 @@ class BudgetsCompanion extends UpdateCompanion<BudgetInDB> {
       {Value<String>? id,
       Value<String>? name,
       Value<double>? limitAmount,
-      Value<TransactionPeriodicity?>? intervalPeriod,
+      Value<Periodicity?>? intervalPeriod,
       Value<DateTime?>? startDate,
       Value<DateTime?>? endDate,
       Value<int>? rowid}) {
