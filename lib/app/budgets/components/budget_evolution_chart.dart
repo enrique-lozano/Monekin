@@ -22,8 +22,8 @@ class BudgetEvolutionChart extends StatelessWidget {
     List<Future<double>> balance = [];
     List<String> labels = [];
 
-    final startDate = budget.currentDateRange[0];
-    final endDate = budget.currentDateRange[1];
+    final startDate = budget.currentDateRange.$1;
+    final endDate = budget.currentDateRange.$2;
 
     DateTime currentDay =
         DateTime(startDate.year, startDate.month, startDate.day);

@@ -5,10 +5,13 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/models/date-utils/date_period.dart';
+import 'package:monekin/core/models/date-utils/date_period_state.dart';
+import 'package:monekin/core/models/date-utils/period_type.dart';
+import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/core/services/filters/date_range_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 
 import '../../../core/presentation/app_colors.dart';
@@ -32,14 +35,10 @@ class IncomeExpenseChartDataItem {
 class BalanceBarChart extends StatefulWidget {
   const BalanceBarChart(
       {super.key,
-      required this.startDate,
-      required this.endDate,
       required this.dateRange,
       this.filters = const TransactionFilters()});
 
-  final DateTime? startDate;
-  final DateTime? endDate;
-  final DateRange dateRange;
+  final DatePeriodState dateRange;
 
   final TransactionFilters filters;
 
@@ -52,8 +51,11 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
   int touchedRodDataIndex = -1;
 
   Future<IncomeExpenseChartDataItem?> getDataByPeriods(
-      DateTime? startDate, DateTime? endDate, DateRange range) async {
-    if (startDate == null && range != DateRange.infinite) return null;
+      DateTime? startDate, DateTime? endDate, DatePeriodState range) async {
+    /*   if (startDate == null &&
+        range.datePeriod.periodType != PeriodType.allTime) {
+      return null;
+    } */
 
     List<String> shortTitles = [];
     List<String> longTitles = [];
@@ -88,7 +90,8 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
             )
             .first;
 
-    if (range == DateRange.monthly) {
+    if (range.datePeriod.periodType == PeriodType.cycle &&
+        range.datePeriod.periodicity == Periodicity.month) {
       for (final range in [
         [1, 6],
         [6, 10],
@@ -117,7 +120,8 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
         expense.add(expenseToAdd);
         balance.add(incomeToAdd + expenseToAdd);
       }
-    } else if (range == DateRange.annualy) {
+    } else if (range.datePeriod.periodType == PeriodType.cycle &&
+        range.datePeriod.periodicity == Periodicity.year) {
       for (var i = 1; i <= 12; i++) {
         final selStartDate = DateTime(startDate!.year, i);
         final endDate = DateTime(startDate.year, i + 1);
@@ -132,22 +136,8 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
         expense.add(expenseToAdd);
         balance.add(incomeToAdd + expenseToAdd);
       }
-    } else if (range == DateRange.quaterly) {
-      for (var i = startDate!.month; i < startDate.month + 3; i++) {
-        final selStartDate = DateTime(startDate.year, i);
-        final endDate = DateTime(startDate.year, i + 1);
-
-        shortTitles.add(DateFormat.MMM().format(selStartDate));
-        longTitles.add(DateFormat.MMMM().format(selStartDate));
-
-        final incomeToAdd = await getIncomeData(selStartDate, endDate);
-        final expenseToAdd = await getExpenseData(selStartDate, endDate);
-
-        income.add(incomeToAdd);
-        expense.add(expenseToAdd);
-        balance.add(incomeToAdd + expenseToAdd);
-      }
-    } else if (range == DateRange.weekly) {
+    } else if (range.datePeriod.periodType == PeriodType.cycle &&
+        range.datePeriod.periodicity == Periodicity.week) {
       for (var i = 0; i < DateTime.daysPerWeek; i++) {
         final selStartDate =
             DateTime(startDate!.year, startDate.month, startDate.day + i);
@@ -164,7 +154,7 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
         expense.add(expenseToAdd);
         balance.add(incomeToAdd + expenseToAdd);
       }
-    } else if (range == DateRange.custom) {
+    } else if (range.datePeriod.periodType == PeriodType.dateRange) {
       if (endDate == null) {
         throw Exception("End date can not be null");
       }
@@ -172,13 +162,26 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
       final dateDiff = endDate.difference(startDate!).inDays;
 
       if (dateDiff <= 7) {
-        return getDataByPeriods(startDate, endDate, DateRange.weekly);
+        return getDataByPeriods(
+            startDate,
+            endDate,
+            const DatePeriodState(
+                datePeriod: DatePeriod.withPeriods(Periodicity.week)));
       } else if (dateDiff <= 31) {
-        return getDataByPeriods(startDate, endDate, DateRange.monthly);
+        return getDataByPeriods(
+            startDate,
+            endDate,
+            const DatePeriodState(
+                datePeriod: DatePeriod.withPeriods(Periodicity.month)));
       } else if (dateDiff <= 365) {
-        return getDataByPeriods(startDate, endDate, DateRange.annualy);
+        return getDataByPeriods(
+            startDate,
+            endDate,
+            const DatePeriodState(
+                datePeriod: DatePeriod.withPeriods(Periodicity.year)));
       } else {
-        return getDataByPeriods(startDate, endDate, DateRange.infinite);
+        return getDataByPeriods(startDate, endDate,
+            const DatePeriodState(datePeriod: DatePeriod.allTime()));
       }
     } else {
       // INFINITE:
@@ -259,8 +262,8 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
     return SizedBox(
       height: 300,
       child: FutureBuilder(
-          future: getDataByPeriods(
-              widget.startDate, widget.endDate, widget.dateRange),
+          future: getDataByPeriods(widget.dateRange.startDate,
+              widget.dateRange.endDate, widget.dateRange),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const Column(

@@ -41,7 +41,7 @@ class BudgetsPage extends StatelessWidget {
                       padding: const EdgeInsets.all(0),
                       label: Text(
                         budget.intervalPeriod?.allThePeriodsText(context) ??
-                            '${DateFormat.yMMMd().format(budget.currentDateRange[0])} - ${DateFormat.yMMMd().format(budget.currentDateRange[1])}',
+                            '${DateFormat.yMMMd().format(budget.currentDateRange.$1)} - ${DateFormat.yMMMd().format(budget.currentDateRange.$2)}',
                         style: Theme.of(context).textTheme.labelSmall,
                       ))
                 ],

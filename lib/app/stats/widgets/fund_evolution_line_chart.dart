@@ -3,6 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
@@ -13,7 +14,6 @@ import 'package:monekin/i18n/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../core/presentation/app_colors.dart';
-import '../../../core/services/filters/date_range_service.dart';
 
 class LineChartDataItem {
   List<double> balance;
@@ -25,32 +25,31 @@ class LineChartDataItem {
 class FundEvolutionLineChart extends StatelessWidget {
   const FundEvolutionLineChart(
       {super.key,
-      required this.startDate,
-      required this.endDate,
       this.filters = const TransactionFilters(),
       required this.dateRange,
       this.showBalanceHeader = false});
 
-  final DateTime? startDate;
-  final DateTime? endDate;
-  final DateRange dateRange;
+  final DatePeriodState dateRange;
 
   final bool showBalanceHeader;
 
   final TransactionFilters filters;
 
   Stream<LineChartDataItem?> getEvolutionData() {
-    if (startDate == null || endDate == null) return Stream.value(null);
+    if (dateRange.startDate == null || dateRange.endDate == null)
+      return Stream.value(null);
 
     List<Stream<double>> balance = [];
     List<String> labels = [];
 
-    DateTime currentDay =
-        DateTime(startDate!.year, startDate!.month, startDate!.day);
+    DateTime currentDay = DateTime(dateRange.startDate!.year,
+        dateRange.startDate!.month, dateRange.startDate!.day);
 
-    final dayRange = (endDate!.difference(startDate!).inDays / 100).ceil();
+    final dayRange =
+        (dateRange.endDate!.difference(dateRange.startDate!).inDays / 100)
+            .ceil();
 
-    while (currentDay.compareTo(endDate!) < 0) {
+    while (currentDay.compareTo(dateRange.endDate!) < 0) {
       labels.add(DateFormat.yMMMMd().format(currentDay));
 
       balance.add(AccountService.instance
@@ -85,8 +84,7 @@ class FundEvolutionLineChart extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                          'Final balance - ${DateRangeService().getTextOfRange(startDate: startDate, endDate: endDate, dateRange: dateRange)}',
+                      Text('Final balance - ${dateRange.getText(context)}',
                           style: const TextStyle(fontSize: 12)),
                       const Skeleton(width: 70, height: 40),
                       const Skeleton(width: 30, height: 14),
@@ -105,18 +103,16 @@ class FundEvolutionLineChart extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                                'F. balance - ${DateRangeService().getTextOfRange(
+                                'F. balance - ${dateRange.getText(
+                                  context,
                                   showLongMonth: false,
-                                  startDate: startDate,
-                                  endDate: endDate,
-                                  dateRange: dateRange,
                                 )}',
                                 style: const TextStyle(fontSize: 12)),
                             StreamBuilder(
                                 stream: accountService.getAccountsMoney(
                                   accountIds: accounts.map((e) => e.id),
                                   trFilters: filters,
-                                  date: endDate,
+                                  date: dateRange.endDate,
                                 ),
                                 builder: (context, snapshot) {
                                   if (!snapshot.hasData) {
@@ -143,10 +139,11 @@ class FundEvolutionLineChart extends StatelessWidget {
                             StreamBuilder(
                                 stream:
                                     accountService.getAccountsMoneyVariation(
-                                        accounts: accounts,
-                                        startDate: startDate,
-                                        endDate: endDate,
-                                        convertToPreferredCurrency: true),
+                                  accounts: accounts,
+                                  startDate: dateRange.startDate,
+                                  endDate: dateRange.endDate,
+                                  convertToPreferredCurrency: true,
+                                ),
                                 builder: (context, snapshot) {
                                   if (!snapshot.hasData) {
                                     return const Skeleton(
