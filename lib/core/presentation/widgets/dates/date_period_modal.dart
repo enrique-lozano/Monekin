@@ -94,10 +94,15 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
                             .toList(),
                       );
                     } else if (periodType == PeriodType.lastDays) {
+                      final textToTransformArray = t.general.time.ranges.types
+                          .last_days_form(x: '***')
+                          .split('***');
+
                       return Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text("Last"),
+                          if (textToTransformArray[0].trim().isNotEmpty)
+                            Text(textToTransformArray[0]),
                           SizedBox(
                             width: 72,
                             child: TextFormField(
@@ -124,7 +129,8 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
                               },
                             ),
                           ),
-                          Text("days"),
+                          if (textToTransformArray[1].trim().isNotEmpty)
+                            Text(textToTransformArray[1]),
                         ],
                       );
                     } else if (periodType == PeriodType.dateRange) {
@@ -202,12 +208,12 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
               controller: TextEditingController(
                   text: dateToSelect != null
                       ? DateFormat.yMMMMd().format(dateToSelect)
-                      : ""),
+                      : ''),
               readOnly: true,
               textAlign: TextAlign.center,
               decoration: InputDecoration(
                 border: const UnderlineInputBorder(),
-                hintText: "-- ${t.general.unspecified} --",
+                hintText: '-- ${t.general.unspecified} --',
               ),
               onTap: () {
                 openDateTimePicker(

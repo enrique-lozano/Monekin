@@ -1,51 +1,36 @@
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/models/date-utils/periodicity.dart';
+import 'package:monekin/core/models/date-utils/date_period.dart';
+import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/core/services/filters/date_range_service.dart';
-import 'package:monekin/core/utils/constants.dart';
 
 class Budget extends BudgetInDB {
   List<String> categories;
   List<String> accounts;
 
-  Budget(
-      {required super.id,
-      required super.name,
-      required super.limitAmount,
-      required this.categories,
-      required this.accounts,
-      super.intervalPeriod,
-      super.startDate,
-      super.endDate})
-      : assert(categories.isNotEmpty && accounts.isNotEmpty);
+  Budget({
+    required super.id,
+    required super.name,
+    required super.limitAmount,
+    required this.categories,
+    required this.accounts,
+    super.intervalPeriod,
+    super.startDate,
+    super.endDate,
+  }) : assert(categories.isNotEmpty && accounts.isNotEmpty);
 
-  List<DateTime> get currentDateRange {
-    if (intervalPeriod != null) {
-      if (intervalPeriod == Periodicity.day) {
-        return [
-          DateTime(currentYear, currentMonth, currentDayOfMonth),
-          DateTime(currentYear, currentMonth, currentDayOfMonth + 1)
-        ];
-      }
+  (DateTime, DateTime) get currentDateRange {
+    final toReturn = DatePeriodState(
+            datePeriod: intervalPeriod != null
+                ? DatePeriod.withPeriods(intervalPeriod!)
+                : DatePeriod.customRange(startDate, endDate))
+        .getDates();
 
-      final dateRangeServ = DateRangeService(
-          selectedDateRange: intervalPeriod == Periodicity.month
-              ? DateRange.monthly
-              : intervalPeriod == Periodicity.year
-                  ? DateRange.annualy
-                  : DateRange.weekly);
-
-      final dates = dateRangeServ.getCurrentDateRange();
-
-      return [dates[0]!, dates[1]!];
-    }
-
-    return [startDate!, endDate!];
+    return (toReturn.$1!, toReturn.$2!);
   }
 
   int get daysLeft {
-    return DateTime.now().difference(currentDateRange[1]).inDays;
+    return DateTime.now().difference(currentDateRange.$2).inDays;
   }
 
   /// Get the amount of money relative to this budget for a given date
@@ -57,7 +42,7 @@ class Budget extends BudgetInDB {
       filters: TransactionFilters(
         accountsIDs: accounts,
         categories: categories,
-        minDate: currentDateRange[0],
+        minDate: currentDateRange.$1,
         maxDate: date,
       ),
     )
