@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 1030 (515 per locale)
+/// Strings: 1028 (514 per locale)
 ///
-/// Built on 2024-02-02 at 22:48 UTC
+/// Built on 2024-02-05 at 12:47 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -1361,8 +1361,7 @@ class _TranslationsGeneralTimeRangesTypesEn {
 	// Translations
 	String get cycle => 'Cycles';
 	String get last_days => 'Last days';
-	String get last_days_form => 'Previous days';
-	String get last_days_form_split_number => '1';
+	String last_days_form({required Object x}) => '${x} previous days';
 	String get all => 'Always';
 	String get date_range => 'Custom range';
 }
@@ -2598,8 +2597,7 @@ class _TranslationsGeneralTimeRangesTypesEs implements _TranslationsGeneralTimeR
 	// Translations
 	@override String get cycle => 'Ciclos';
 	@override String get last_days => 'Últimos días';
-	@override String get last_days_form => 'Días anteriores';
-	@override String get last_days_form_split_number => '0';
+	@override String last_days_form({required Object x}) => '${x} días anteriores';
 	@override String get all => 'Siempre';
 	@override String get date_range => 'Rango personalizado';
 }
@@ -2652,8 +2650,7 @@ extension on _TranslationsEn {
 			case 'general.time.ranges.forever': return 'Forever';
 			case 'general.time.ranges.types.cycle': return 'Cycles';
 			case 'general.time.ranges.types.last_days': return 'Last days';
-			case 'general.time.ranges.types.last_days_form': return 'Previous days';
-			case 'general.time.ranges.types.last_days_form_split_number': return '1';
+			case 'general.time.ranges.types.last_days_form': return ({required Object x}) => '${x} previous days';
 			case 'general.time.ranges.types.all': return 'Always';
 			case 'general.time.ranges.types.date_range': return 'Custom range';
 			case 'general.time.ranges.each_range': return ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
@@ -3243,8 +3240,7 @@ extension on _TranslationsEs {
 			case 'general.time.ranges.it_ends': return 'Termina';
 			case 'general.time.ranges.types.cycle': return 'Ciclos';
 			case 'general.time.ranges.types.last_days': return 'Últimos días';
-			case 'general.time.ranges.types.last_days_form': return 'Días anteriores';
-			case 'general.time.ranges.types.last_days_form_split_number': return '0';
+			case 'general.time.ranges.types.last_days_form': return ({required Object x}) => '${x} días anteriores';
 			case 'general.time.ranges.types.all': return 'Siempre';
 			case 'general.time.ranges.types.date_range': return 'Rango personalizado';
 			case 'general.time.ranges.each_range': return ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,

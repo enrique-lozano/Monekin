@@ -6,14 +6,14 @@ import 'package:monekin/core/models/date-utils/period_type.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/utils/constants.dart';
 
-part 'date_period_service.g.dart';
+part 'date_period_state.g.dart';
 
 @CopyWith()
-class DatePeriodService {
+class DatePeriodState {
   final DatePeriod datePeriod;
   final int periodModifier;
 
-  const DatePeriodService({
+  const DatePeriodState({
     this.datePeriod = const DatePeriod(periodType: PeriodType.cycle),
     this.periodModifier = 0,
   });

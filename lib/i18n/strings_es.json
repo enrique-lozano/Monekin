@@ -46,8 +46,7 @@
         "TYPES": {
           "cycle": "Ciclos",
           "last_days": "Últimos días",
-          "last_days_form": "Días anteriores",
-          "last_days_form_split_number": "0",
+          "last_days_form": "{{x}} días anteriores",
           "all": "Siempre",
           "date_range": "Rango personalizado"
         },

@@ -11,17 +11,18 @@ import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
+import 'package:monekin/core/presentation/widgets/dates/date_period_modal.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/routes/destinations.dart';
-import 'package:monekin/core/services/filters/date_range_service.dart';
 import 'package:monekin/core/services/finance_health_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -37,13 +38,11 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  final dateRangeService = DateRangeService();
+  DatePeriodState dateRangeService = const DatePeriodState();
 
   @override
   void initState() {
     super.initState();
-
-    dateRangeService.resetDateRanges();
   }
 
   @override
@@ -66,8 +65,7 @@ class _DashboardPageState extends State<DashboardPage> {
             Padding(
               padding: const EdgeInsets.only(right: 16),
               child: ActionChip(
-                label: Text(
-                    dateRangeService.selectedDateRange.currentText(context)),
+                label: Text(dateRangeService.getText(context)),
                 backgroundColor:
                     AppColors.of(context).primaryContainer.darken(),
                 shape: RoundedRectangleBorder(
@@ -77,18 +75,32 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                 ),
                 onPressed: () {
-                  dateRangeService
-                      .openDateRangeModal(context)
-                      .then((_) => setState(() {}));
+                  openDatePeriodModal(
+                      context,
+                      DatePeriodModal(
+                        initialDatePeriod: dateRangeService.datePeriod,
+                      )).then((_) => setState(() {}));
                 },
               ),
             ),
           if (BreakPoint.of(context).isSmallerThan(BreakpointID.md))
             IconButton(
                 onPressed: () {
-                  dateRangeService
-                      .openDateRangeModal(context)
-                      .then((_) => setState(() {}));
+                  openDatePeriodModal(
+                    context,
+                    DatePeriodModal(
+                      initialDatePeriod: dateRangeService.datePeriod,
+                    ),
+                  ).then((value) {
+                    if (value == null) return;
+
+                    setState(() {
+                      dateRangeService = dateRangeService.copyWith(
+                        periodModifier: 0,
+                        datePeriod: value,
+                      );
+                    });
+                  });
                 },
                 icon: const Icon(Icons.calendar_today))
         ],
@@ -153,7 +165,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                   : CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  '${t.home.total_balance} - ${dateRangeService.selectedDateRange.currentText(context)}',
+                                  '${t.home.total_balance} - ${dateRangeService.getText(context)}',
                                   style: const TextStyle(fontSize: 12),
                                 ),
                                 if (!accounts.hasData) ...[
@@ -181,28 +193,27 @@ class _DashboardPageState extends State<DashboardPage> {
                                   if (dateRangeService.startDate != null &&
                                       dateRangeService.endDate != null)
                                     StreamBuilder(
-                                        stream: accountService
-                                            .getAccountsMoneyVariation(
-                                                accounts: accounts.data!,
-                                                startDate:
-                                                    dateRangeService.startDate,
-                                                endDate:
-                                                    dateRangeService.endDate,
-                                                convertToPreferredCurrency:
-                                                    true),
-                                        builder: (context, snapshot) {
-                                          if (!snapshot.hasData) {
-                                            return const Skeleton(
-                                                width: 52, height: 22);
-                                          }
+                                      stream: accountService
+                                          .getAccountsMoneyVariation(
+                                              accounts: accounts.data!,
+                                              startDate:
+                                                  dateRangeService.startDate,
+                                              endDate: dateRangeService.endDate,
+                                              convertToPreferredCurrency: true),
+                                      builder: (context, snapshot) {
+                                        if (!snapshot.hasData) {
+                                          return const Skeleton(
+                                              width: 52, height: 22);
+                                        }
 
-                                          return TrendingValue(
-                                            percentage: snapshot.data!,
-                                            filled: true,
-                                            fontWeight: FontWeight.bold,
-                                            outlined: true,
-                                          );
-                                        }),
+                                        return TrendingValue(
+                                          percentage: snapshot.data!,
+                                          filled: true,
+                                          fontWeight: FontWeight.bold,
+                                          outlined: true,
+                                        );
+                                      },
+                                    ),
                                 ]
                               ],
                             );
@@ -335,9 +346,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         child: CardWithHeader(
                             title: t.stats.balance_evolution,
                             body: FundEvolutionLineChart(
-                              startDate: dateRangeService.startDate,
-                              endDate: dateRangeService.endDate,
-                              dateRange: dateRangeService.selectedDateRange,
+                              dateRange: dateRangeService,
                             ),
                             onHeaderButtonClick: () {
                               context.pushRoute(StatsRoute(initialIndex: 2));
@@ -358,9 +367,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         child: CardWithHeader(
                             title: t.stats.by_categories,
                             body: ChartByCategories(
-                              startDate: dateRangeService.startDate,
-                              endDate: dateRangeService.endDate,
-                            ),
+                                datePeriodState: dateRangeService),
                             onHeaderButtonClick: () {
                               context.pushRoute(StatsRoute(initialIndex: 1));
                             }),

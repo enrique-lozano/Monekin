@@ -47,8 +47,7 @@
         "TYPES": {
           "cycle": "Cycles",
           "last_days": "Last days",
-          "last_days_form": "Previous days",
-          "last_days_form_split_number": "1",
+          "last_days_form": "{{x}} previous days",
           "all": "Always",
           "date_range": "Custom range"
         },
