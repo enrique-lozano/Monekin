@@ -9,7 +9,7 @@ import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
+import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_field.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
@@ -44,7 +44,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
   List<Category> categories = [];
   List<Account> accounts = [];
 
-  TransactionPeriodicity? intervalPeriod = TransactionPeriodicity.month;
+  Periodicity? intervalPeriod = Periodicity.month;
 
   DateTime startDate = DateTime.now();
   DateTime? endDate;
@@ -296,10 +296,10 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                           child: Text(t.general.time.periodicity.no_repeat),
                         ),
                         ...List.generate(
-                            TransactionPeriodicity.values.length,
+                            Periodicity.values.length,
                             (index) => DropdownMenuItem(
-                                value: TransactionPeriodicity.values[index],
-                                child: Text(TransactionPeriodicity.values[index]
+                                value: Periodicity.values[index],
+                                child: Text(Periodicity.values[index]
                                     .allThePeriodsText(context))))
                       ],
                       onChanged: (value) {

@@ -2,9 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
-import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_field.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
@@ -24,7 +24,7 @@ class IntervalSelectorPage extends StatefulWidget {
 class _IntervalSelectorPageState extends State<IntervalSelectorPage> {
   final _formKey = GlobalKey<FormState>();
 
-  TransactionPeriodicity intervalPeriod = TransactionPeriodicity.month;
+  Periodicity intervalPeriod = Periodicity.month;
   int intervalEach = 1;
   int remainingIterations = 1;
   DateTime endDate = DateTime.now();
@@ -37,8 +37,8 @@ class _IntervalSelectorPageState extends State<IntervalSelectorPage> {
 
     if (widget.preselectedRecurrentRule != null) {
       intervalEach = widget.preselectedRecurrentRule!.intervalEach ?? 1;
-      intervalPeriod = widget.preselectedRecurrentRule!.intervalPeriod ??
-          TransactionPeriodicity.month;
+      intervalPeriod =
+          widget.preselectedRecurrentRule!.intervalPeriod ?? Periodicity.month;
 
       remainingIterations = widget.preselectedRecurrentRule!.ruleRecurrentLimit
               ?.remainingIterations ??
@@ -156,11 +156,14 @@ class _IntervalSelectorPageState extends State<IntervalSelectorPage> {
                           helperText: '',
                         ),
                         items: List.generate(
-                            TransactionPeriodicity.values.length,
-                            (index) => DropdownMenuItem(
-                                value: TransactionPeriodicity.values[index],
-                                child: Text(TransactionPeriodicity.values[index]
-                                    .periodText(context, intervalEach)))),
+                          Periodicity.values.length,
+                          (index) => DropdownMenuItem(
+                            value: Periodicity.values[index],
+                            child: Text(Periodicity.values[index].periodText(
+                                context,
+                                isPlural: intervalEach > 1)),
+                          ),
+                        ),
                         onChanged: (value) {
                           if (value == null) return;
                           setState(() {

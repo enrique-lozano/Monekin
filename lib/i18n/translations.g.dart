@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 1018 (509 per locale)
+/// Strings: 1028 (514 per locale)
 ///
-/// Built on 2024-01-24 at 16:04 UTC
+/// Built on 2024-02-05 at 12:47 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -1155,6 +1155,7 @@ class _TranslationsGeneralTimeRangesEn {
 	String get it_repeat => 'Repeats';
 	String get it_ends => 'Ends';
 	String get forever => 'Forever';
+	late final _TranslationsGeneralTimeRangesTypesEn types = _TranslationsGeneralTimeRangesTypesEn._(_root);
 	String each_range({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 		one: 'Every ${range}',
 		other: 'Every ${n} ${range}',
@@ -1349,6 +1350,20 @@ class _TranslationsSettingsAboutUsProjectEn {
 	String get contributors => 'Collaborators';
 	String get contributors_descr => 'All the developers who have made Monekin grow';
 	String get contact => 'Contact us';
+}
+
+// Path: general.time.ranges.types
+class _TranslationsGeneralTimeRangesTypesEn {
+	_TranslationsGeneralTimeRangesTypesEn._(this._root);
+
+	final _TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	String get cycle => 'Cycles';
+	String get last_days => 'Last days';
+	String last_days_form({required Object x}) => '${x} previous days';
+	String get all => 'Always';
+	String get date_range => 'Custom range';
 }
 
 // Path: <root>
@@ -2374,6 +2389,7 @@ class _TranslationsGeneralTimeRangesEs implements _TranslationsGeneralTimeRanges
 	@override String get display => 'Rango temporal';
 	@override String get it_repeat => 'Se repite';
 	@override String get it_ends => 'Termina';
+	@override late final _TranslationsGeneralTimeRangesTypesEs types = _TranslationsGeneralTimeRangesTypesEs._(_root);
 	@override String each_range({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
 		one: 'Cada ${range}',
 		other: 'Cada ${n} ${range}',
@@ -2572,6 +2588,20 @@ class _TranslationsSettingsAboutUsProjectEs implements _TranslationsSettingsAbou
 	@override String get contact => 'Contacta con nosotros';
 }
 
+// Path: general.time.ranges.types
+class _TranslationsGeneralTimeRangesTypesEs implements _TranslationsGeneralTimeRangesTypesEn {
+	_TranslationsGeneralTimeRangesTypesEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get cycle => 'Ciclos';
+	@override String get last_days => 'Últimos días';
+	@override String last_days_form({required Object x}) => '${x} días anteriores';
+	@override String get all => 'Siempre';
+	@override String get date_range => 'Rango personalizado';
+}
+
 /// Flat map(s) containing all translations.
 /// Only for edge cases! For simple maps, use the map function of this library.
 
@@ -2618,6 +2648,11 @@ extension on _TranslationsEn {
 			case 'general.time.ranges.it_repeat': return 'Repeats';
 			case 'general.time.ranges.it_ends': return 'Ends';
 			case 'general.time.ranges.forever': return 'Forever';
+			case 'general.time.ranges.types.cycle': return 'Cycles';
+			case 'general.time.ranges.types.last_days': return 'Last days';
+			case 'general.time.ranges.types.last_days_form': return ({required Object x}) => '${x} previous days';
+			case 'general.time.ranges.types.all': return 'Always';
+			case 'general.time.ranges.types.date_range': return 'Custom range';
 			case 'general.time.ranges.each_range': return ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 				one: 'Every ${range}',
 				other: 'Every ${n} ${range}',
@@ -3203,6 +3238,11 @@ extension on _TranslationsEs {
 			case 'general.time.ranges.display': return 'Rango temporal';
 			case 'general.time.ranges.it_repeat': return 'Se repite';
 			case 'general.time.ranges.it_ends': return 'Termina';
+			case 'general.time.ranges.types.cycle': return 'Ciclos';
+			case 'general.time.ranges.types.last_days': return 'Últimos días';
+			case 'general.time.ranges.types.last_days_form': return ({required Object x}) => '${x} días anteriores';
+			case 'general.time.ranges.types.all': return 'Siempre';
+			case 'general.time.ranges.types.date_range': return 'Rango personalizado';
 			case 'general.time.ranges.each_range': return ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
 				one: 'Cada ${range}',
 				other: 'Cada ${n} ${range}',
