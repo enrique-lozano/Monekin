@@ -58,7 +58,7 @@ enum TransactionType {
       return AppColors.of(context).danger;
     }
 
-    return AppColors.of(context).primary;
+    return AppColors.of(context).brand;
   }
 }
 
@@ -178,9 +178,9 @@ class MoneyTransaction extends TransactionInDB {
   }
 
   /// Get the color that represent this category. Will be the category color when the transaction is an income or an expense, and the primary color of the app otherwise
-  Color color(context) => isIncomeOrExpense
+  Color color(BuildContext context) => isIncomeOrExpense
       ? ColorHex.get(category!.color)
-      : AppColors.of(context).primary;
+      : TransactionType.transfer.color(context);
 
   /// The type of the transaction (expense, income or transfer)
   TransactionType get type => isTransfer
