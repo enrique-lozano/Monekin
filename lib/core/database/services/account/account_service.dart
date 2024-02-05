@@ -37,7 +37,8 @@ class AccountService {
     return db
         .getAccountsWithFullData(
           predicate: predicate,
-          orderBy: orderBy,
+          orderBy: orderBy ??
+              (acc, curr) => OrderBy([OrderingTerm.asc(acc.displayOrder)]),
           limit: (a, currency) => Limit(limit ?? -1, offset),
         )
         .watch();

@@ -50,6 +50,7 @@ class Category extends CategoryInDB {
       {required super.id,
       required super.name,
       required super.iconId,
+      required super.displayOrder,
       String? color,
       CategoryType? type,
       CategoryInDB? parentCategory})
@@ -72,6 +73,7 @@ class Category extends CategoryInDB {
   static Category fromDB(CategoryInDB cat, CategoryInDB? parentCategory) =>
       Category(
           id: cat.id,
+          displayOrder: cat.displayOrder,
           name: cat.name,
           iconId: cat.iconId,
           parentCategory: parentCategory,

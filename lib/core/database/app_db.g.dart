@@ -244,6 +244,13 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
+  static const VerificationMeta _displayOrderMeta =
+      const VerificationMeta('displayOrder');
+  late final GeneratedColumn<int> displayOrder = GeneratedColumn<int>(
+      'displayOrder', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
   static const VerificationMeta _colorMeta = const VerificationMeta('color');
   late final GeneratedColumn<String> color = GeneratedColumn<String>(
       'color', aliasedName, true,
@@ -286,6 +293,7 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
         description,
         type,
         iconId,
+        displayOrder,
         color,
         closingDate,
         currencyId,
@@ -338,6 +346,14 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
     } else if (isInserting) {
       context.missing(_iconIdMeta);
     }
+    if (data.containsKey('displayOrder')) {
+      context.handle(
+          _displayOrderMeta,
+          displayOrder.isAcceptableOrUnknown(
+              data['displayOrder']!, _displayOrderMeta));
+    } else if (isInserting) {
+      context.missing(_displayOrderMeta);
+    }
     if (data.containsKey('color')) {
       context.handle(
           _colorMeta, color.isAcceptableOrUnknown(data['color']!, _colorMeta));
@@ -387,6 +403,8 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
           .read(DriftSqlType.string, data['${effectivePrefix}type'])!),
       iconId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}iconId'])!,
+      displayOrder: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}displayOrder'])!,
       color: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}color']),
       closingDate: attachedDatabase.typeMapping
@@ -424,6 +442,9 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
   final AccountType type;
   final String iconId;
 
+  /// The display order when listing accounts
+  final int displayOrder;
+
   /// If null, an automatic color will be applied
   final String? color;
 
@@ -442,6 +463,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       this.description,
       required this.type,
       required this.iconId,
+      required this.displayOrder,
       this.color,
       this.closingDate,
       required this.currencyId,
@@ -462,6 +484,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       map['type'] = Variable<String>(converter.toSql(type));
     }
     map['iconId'] = Variable<String>(iconId);
+    map['displayOrder'] = Variable<int>(displayOrder);
     if (!nullToAbsent || color != null) {
       map['color'] = Variable<String>(color);
     }
@@ -489,6 +512,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           : Value(description),
       type: Value(type),
       iconId: Value(iconId),
+      displayOrder: Value(displayOrder),
       color:
           color == null && nullToAbsent ? const Value.absent() : Value(color),
       closingDate: closingDate == null && nullToAbsent
@@ -513,6 +537,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       type: Accounts.$convertertype
           .fromJson(serializer.fromJson<String>(json['type'])),
       iconId: serializer.fromJson<String>(json['iconId']),
+      displayOrder: serializer.fromJson<int>(json['displayOrder']),
       color: serializer.fromJson<String?>(json['color']),
       closingDate: serializer.fromJson<DateTime?>(json['closingDate']),
       currencyId: serializer.fromJson<String>(json['currencyId']),
@@ -531,6 +556,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       'description': serializer.toJson<String?>(description),
       'type': serializer.toJson<String>(Accounts.$convertertype.toJson(type)),
       'iconId': serializer.toJson<String>(iconId),
+      'displayOrder': serializer.toJson<int>(displayOrder),
       'color': serializer.toJson<String?>(color),
       'closingDate': serializer.toJson<DateTime?>(closingDate),
       'currencyId': serializer.toJson<String>(currencyId),
@@ -547,6 +573,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           Value<String?> description = const Value.absent(),
           AccountType? type,
           String? iconId,
+          int? displayOrder,
           Value<String?> color = const Value.absent(),
           Value<DateTime?> closingDate = const Value.absent(),
           String? currencyId,
@@ -560,6 +587,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
         description: description.present ? description.value : this.description,
         type: type ?? this.type,
         iconId: iconId ?? this.iconId,
+        displayOrder: displayOrder ?? this.displayOrder,
         color: color.present ? color.value : this.color,
         closingDate: closingDate.present ? closingDate.value : this.closingDate,
         currencyId: currencyId ?? this.currencyId,
@@ -576,6 +604,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           ..write('description: $description, ')
           ..write('type: $type, ')
           ..write('iconId: $iconId, ')
+          ..write('displayOrder: $displayOrder, ')
           ..write('color: $color, ')
           ..write('closingDate: $closingDate, ')
           ..write('currencyId: $currencyId, ')
@@ -587,7 +616,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
 
   @override
   int get hashCode => Object.hash(id, name, iniValue, date, description, type,
-      iconId, color, closingDate, currencyId, iban, swift);
+      iconId, displayOrder, color, closingDate, currencyId, iban, swift);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -599,6 +628,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           other.description == this.description &&
           other.type == this.type &&
           other.iconId == this.iconId &&
+          other.displayOrder == this.displayOrder &&
           other.color == this.color &&
           other.closingDate == this.closingDate &&
           other.currencyId == this.currencyId &&
@@ -614,6 +644,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
   final Value<String?> description;
   final Value<AccountType> type;
   final Value<String> iconId;
+  final Value<int> displayOrder;
   final Value<String?> color;
   final Value<DateTime?> closingDate;
   final Value<String> currencyId;
@@ -628,6 +659,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     this.description = const Value.absent(),
     this.type = const Value.absent(),
     this.iconId = const Value.absent(),
+    this.displayOrder = const Value.absent(),
     this.color = const Value.absent(),
     this.closingDate = const Value.absent(),
     this.currencyId = const Value.absent(),
@@ -643,6 +675,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     this.description = const Value.absent(),
     required AccountType type,
     required String iconId,
+    required int displayOrder,
     this.color = const Value.absent(),
     this.closingDate = const Value.absent(),
     required String currencyId,
@@ -655,6 +688,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
         date = Value(date),
         type = Value(type),
         iconId = Value(iconId),
+        displayOrder = Value(displayOrder),
         currencyId = Value(currencyId);
   static Insertable<AccountInDB> custom({
     Expression<String>? id,
@@ -664,6 +698,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     Expression<String>? description,
     Expression<String>? type,
     Expression<String>? iconId,
+    Expression<int>? displayOrder,
     Expression<String>? color,
     Expression<DateTime>? closingDate,
     Expression<String>? currencyId,
@@ -679,6 +714,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
       if (description != null) 'description': description,
       if (type != null) 'type': type,
       if (iconId != null) 'iconId': iconId,
+      if (displayOrder != null) 'displayOrder': displayOrder,
       if (color != null) 'color': color,
       if (closingDate != null) 'closingDate': closingDate,
       if (currencyId != null) 'currencyId': currencyId,
@@ -696,6 +732,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
       Value<String?>? description,
       Value<AccountType>? type,
       Value<String>? iconId,
+      Value<int>? displayOrder,
       Value<String?>? color,
       Value<DateTime?>? closingDate,
       Value<String>? currencyId,
@@ -710,6 +747,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
       description: description ?? this.description,
       type: type ?? this.type,
       iconId: iconId ?? this.iconId,
+      displayOrder: displayOrder ?? this.displayOrder,
       color: color ?? this.color,
       closingDate: closingDate ?? this.closingDate,
       currencyId: currencyId ?? this.currencyId,
@@ -745,6 +783,9 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     if (iconId.present) {
       map['iconId'] = Variable<String>(iconId.value);
     }
+    if (displayOrder.present) {
+      map['displayOrder'] = Variable<int>(displayOrder.value);
+    }
     if (color.present) {
       map['color'] = Variable<String>(color.value);
     }
@@ -776,6 +817,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
           ..write('description: $description, ')
           ..write('type: $type, ')
           ..write('iconId: $iconId, ')
+          ..write('displayOrder: $displayOrder, ')
           ..write('color: $color, ')
           ..write('closingDate: $closingDate, ')
           ..write('currencyId: $currencyId, ')
@@ -816,6 +858,13 @@ class Categories extends Table with TableInfo<Categories, CategoryInDB> {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: '');
+  static const VerificationMeta _displayOrderMeta =
+      const VerificationMeta('displayOrder');
+  late final GeneratedColumn<int> displayOrder = GeneratedColumn<int>(
+      'displayOrder', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
   static const VerificationMeta _typeMeta = const VerificationMeta('type');
   late final GeneratedColumnWithTypeConverter<CategoryType?, String> type =
       GeneratedColumn<String>('type', aliasedName, true,
@@ -833,7 +882,7 @@ class Categories extends Table with TableInfo<Categories, CategoryInDB> {
           'REFERENCES categories(id)ON UPDATE CASCADE ON DELETE CASCADE');
   @override
   List<GeneratedColumn> get $columns =>
-      [id, name, iconId, color, type, parentCategoryID];
+      [id, name, iconId, color, displayOrder, type, parentCategoryID];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -865,6 +914,14 @@ class Categories extends Table with TableInfo<Categories, CategoryInDB> {
       context.handle(
           _colorMeta, color.isAcceptableOrUnknown(data['color']!, _colorMeta));
     }
+    if (data.containsKey('displayOrder')) {
+      context.handle(
+          _displayOrderMeta,
+          displayOrder.isAcceptableOrUnknown(
+              data['displayOrder']!, _displayOrderMeta));
+    } else if (isInserting) {
+      context.missing(_displayOrderMeta);
+    }
     context.handle(_typeMeta, const VerificationResult.success());
     if (data.containsKey('parentCategoryID')) {
       context.handle(
@@ -889,6 +946,8 @@ class Categories extends Table with TableInfo<Categories, CategoryInDB> {
           .read(DriftSqlType.string, data['${effectivePrefix}iconId'])!,
       color: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}color']),
+      displayOrder: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}displayOrder'])!,
       type: Categories.$convertertypen.fromSql(attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}type'])),
       parentCategoryID: attachedDatabase.typeMapping.read(
@@ -926,6 +985,9 @@ class CategoryInDB extends DataClass implements Insertable<CategoryInDB> {
   /// Color that will be used to represent this category in some screens. If null, the color of the parent's category will be used
   final String? color;
 
+  /// The display order when listing categories
+  final int displayOrder;
+
   /// Type of the category. If null, the type of the parent's category will be used
   final CategoryType? type;
 
@@ -936,6 +998,7 @@ class CategoryInDB extends DataClass implements Insertable<CategoryInDB> {
       required this.name,
       required this.iconId,
       this.color,
+      required this.displayOrder,
       this.type,
       this.parentCategoryID});
   @override
@@ -947,6 +1010,7 @@ class CategoryInDB extends DataClass implements Insertable<CategoryInDB> {
     if (!nullToAbsent || color != null) {
       map['color'] = Variable<String>(color);
     }
+    map['displayOrder'] = Variable<int>(displayOrder);
     if (!nullToAbsent || type != null) {
       final converter = Categories.$convertertypen;
       map['type'] = Variable<String>(converter.toSql(type));
@@ -964,6 +1028,7 @@ class CategoryInDB extends DataClass implements Insertable<CategoryInDB> {
       iconId: Value(iconId),
       color:
           color == null && nullToAbsent ? const Value.absent() : Value(color),
+      displayOrder: Value(displayOrder),
       type: type == null && nullToAbsent ? const Value.absent() : Value(type),
       parentCategoryID: parentCategoryID == null && nullToAbsent
           ? const Value.absent()
@@ -979,6 +1044,7 @@ class CategoryInDB extends DataClass implements Insertable<CategoryInDB> {
       name: serializer.fromJson<String>(json['name']),
       iconId: serializer.fromJson<String>(json['iconId']),
       color: serializer.fromJson<String?>(json['color']),
+      displayOrder: serializer.fromJson<int>(json['displayOrder']),
       type: Categories.$convertertypen
           .fromJson(serializer.fromJson<String?>(json['type'])),
       parentCategoryID: serializer.fromJson<String?>(json['parentCategoryID']),
@@ -992,6 +1058,7 @@ class CategoryInDB extends DataClass implements Insertable<CategoryInDB> {
       'name': serializer.toJson<String>(name),
       'iconId': serializer.toJson<String>(iconId),
       'color': serializer.toJson<String?>(color),
+      'displayOrder': serializer.toJson<int>(displayOrder),
       'type':
           serializer.toJson<String?>(Categories.$convertertypen.toJson(type)),
       'parentCategoryID': serializer.toJson<String?>(parentCategoryID),
@@ -1003,6 +1070,7 @@ class CategoryInDB extends DataClass implements Insertable<CategoryInDB> {
           String? name,
           String? iconId,
           Value<String?> color = const Value.absent(),
+          int? displayOrder,
           Value<CategoryType?> type = const Value.absent(),
           Value<String?> parentCategoryID = const Value.absent()}) =>
       CategoryInDB(
@@ -1010,6 +1078,7 @@ class CategoryInDB extends DataClass implements Insertable<CategoryInDB> {
         name: name ?? this.name,
         iconId: iconId ?? this.iconId,
         color: color.present ? color.value : this.color,
+        displayOrder: displayOrder ?? this.displayOrder,
         type: type.present ? type.value : this.type,
         parentCategoryID: parentCategoryID.present
             ? parentCategoryID.value
@@ -1022,6 +1091,7 @@ class CategoryInDB extends DataClass implements Insertable<CategoryInDB> {
           ..write('name: $name, ')
           ..write('iconId: $iconId, ')
           ..write('color: $color, ')
+          ..write('displayOrder: $displayOrder, ')
           ..write('type: $type, ')
           ..write('parentCategoryID: $parentCategoryID')
           ..write(')'))
@@ -1029,8 +1099,8 @@ class CategoryInDB extends DataClass implements Insertable<CategoryInDB> {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, name, iconId, color, type, parentCategoryID);
+  int get hashCode => Object.hash(
+      id, name, iconId, color, displayOrder, type, parentCategoryID);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1039,6 +1109,7 @@ class CategoryInDB extends DataClass implements Insertable<CategoryInDB> {
           other.name == this.name &&
           other.iconId == this.iconId &&
           other.color == this.color &&
+          other.displayOrder == this.displayOrder &&
           other.type == this.type &&
           other.parentCategoryID == this.parentCategoryID);
 }
@@ -1048,6 +1119,7 @@ class CategoriesCompanion extends UpdateCompanion<CategoryInDB> {
   final Value<String> name;
   final Value<String> iconId;
   final Value<String?> color;
+  final Value<int> displayOrder;
   final Value<CategoryType?> type;
   final Value<String?> parentCategoryID;
   final Value<int> rowid;
@@ -1056,6 +1128,7 @@ class CategoriesCompanion extends UpdateCompanion<CategoryInDB> {
     this.name = const Value.absent(),
     this.iconId = const Value.absent(),
     this.color = const Value.absent(),
+    this.displayOrder = const Value.absent(),
     this.type = const Value.absent(),
     this.parentCategoryID = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -1065,17 +1138,20 @@ class CategoriesCompanion extends UpdateCompanion<CategoryInDB> {
     required String name,
     required String iconId,
     this.color = const Value.absent(),
+    required int displayOrder,
     this.type = const Value.absent(),
     this.parentCategoryID = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : id = Value(id),
         name = Value(name),
-        iconId = Value(iconId);
+        iconId = Value(iconId),
+        displayOrder = Value(displayOrder);
   static Insertable<CategoryInDB> custom({
     Expression<String>? id,
     Expression<String>? name,
     Expression<String>? iconId,
     Expression<String>? color,
+    Expression<int>? displayOrder,
     Expression<String>? type,
     Expression<String>? parentCategoryID,
     Expression<int>? rowid,
@@ -1085,6 +1161,7 @@ class CategoriesCompanion extends UpdateCompanion<CategoryInDB> {
       if (name != null) 'name': name,
       if (iconId != null) 'iconId': iconId,
       if (color != null) 'color': color,
+      if (displayOrder != null) 'displayOrder': displayOrder,
       if (type != null) 'type': type,
       if (parentCategoryID != null) 'parentCategoryID': parentCategoryID,
       if (rowid != null) 'rowid': rowid,
@@ -1096,6 +1173,7 @@ class CategoriesCompanion extends UpdateCompanion<CategoryInDB> {
       Value<String>? name,
       Value<String>? iconId,
       Value<String?>? color,
+      Value<int>? displayOrder,
       Value<CategoryType?>? type,
       Value<String?>? parentCategoryID,
       Value<int>? rowid}) {
@@ -1104,6 +1182,7 @@ class CategoriesCompanion extends UpdateCompanion<CategoryInDB> {
       name: name ?? this.name,
       iconId: iconId ?? this.iconId,
       color: color ?? this.color,
+      displayOrder: displayOrder ?? this.displayOrder,
       type: type ?? this.type,
       parentCategoryID: parentCategoryID ?? this.parentCategoryID,
       rowid: rowid ?? this.rowid,
@@ -1124,6 +1203,9 @@ class CategoriesCompanion extends UpdateCompanion<CategoryInDB> {
     }
     if (color.present) {
       map['color'] = Variable<String>(color.value);
+    }
+    if (displayOrder.present) {
+      map['displayOrder'] = Variable<int>(displayOrder.value);
     }
     if (type.present) {
       final converter = Categories.$convertertypen;
@@ -1146,6 +1228,7 @@ class CategoriesCompanion extends UpdateCompanion<CategoryInDB> {
           ..write('name: $name, ')
           ..write('iconId: $iconId, ')
           ..write('color: $color, ')
+          ..write('displayOrder: $displayOrder, ')
           ..write('type: $type, ')
           ..write('parentCategoryID: $parentCategoryID, ')
           ..write('rowid: $rowid')
@@ -2229,6 +2312,13 @@ class Tags extends Table with TableInfo<Tags, TagInDB> {
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
+  static const VerificationMeta _displayOrderMeta =
+      const VerificationMeta('displayOrder');
+  late final GeneratedColumn<int> displayOrder = GeneratedColumn<int>(
+      'displayOrder', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
   static const VerificationMeta _descriptionMeta =
       const VerificationMeta('description');
   late final GeneratedColumn<String> description = GeneratedColumn<String>(
@@ -2237,7 +2327,8 @@ class Tags extends Table with TableInfo<Tags, TagInDB> {
       requiredDuringInsert: false,
       $customConstraints: '');
   @override
-  List<GeneratedColumn> get $columns => [id, name, color, description];
+  List<GeneratedColumn> get $columns =>
+      [id, name, color, displayOrder, description];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2265,6 +2356,14 @@ class Tags extends Table with TableInfo<Tags, TagInDB> {
     } else if (isInserting) {
       context.missing(_colorMeta);
     }
+    if (data.containsKey('displayOrder')) {
+      context.handle(
+          _displayOrderMeta,
+          displayOrder.isAcceptableOrUnknown(
+              data['displayOrder']!, _displayOrderMeta));
+    } else if (isInserting) {
+      context.missing(_displayOrderMeta);
+    }
     if (data.containsKey('description')) {
       context.handle(
           _descriptionMeta,
@@ -2286,6 +2385,8 @@ class Tags extends Table with TableInfo<Tags, TagInDB> {
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       color: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}color'])!,
+      displayOrder: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}displayOrder'])!,
       description: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}description']),
     );
@@ -2309,12 +2410,16 @@ class TagInDB extends DataClass implements Insertable<TagInDB> {
   /// The display color of the tag
   final String color;
 
+  /// The display order when listing tag
+  final int displayOrder;
+
   /// The description of the tag
   final String? description;
   const TagInDB(
       {required this.id,
       required this.name,
       required this.color,
+      required this.displayOrder,
       this.description});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2322,6 +2427,7 @@ class TagInDB extends DataClass implements Insertable<TagInDB> {
     map['id'] = Variable<String>(id);
     map['name'] = Variable<String>(name);
     map['color'] = Variable<String>(color);
+    map['displayOrder'] = Variable<int>(displayOrder);
     if (!nullToAbsent || description != null) {
       map['description'] = Variable<String>(description);
     }
@@ -2333,6 +2439,7 @@ class TagInDB extends DataClass implements Insertable<TagInDB> {
       id: Value(id),
       name: Value(name),
       color: Value(color),
+      displayOrder: Value(displayOrder),
       description: description == null && nullToAbsent
           ? const Value.absent()
           : Value(description),
@@ -2346,6 +2453,7 @@ class TagInDB extends DataClass implements Insertable<TagInDB> {
       id: serializer.fromJson<String>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       color: serializer.fromJson<String>(json['color']),
+      displayOrder: serializer.fromJson<int>(json['displayOrder']),
       description: serializer.fromJson<String?>(json['description']),
     );
   }
@@ -2356,6 +2464,7 @@ class TagInDB extends DataClass implements Insertable<TagInDB> {
       'id': serializer.toJson<String>(id),
       'name': serializer.toJson<String>(name),
       'color': serializer.toJson<String>(color),
+      'displayOrder': serializer.toJson<int>(displayOrder),
       'description': serializer.toJson<String?>(description),
     };
   }
@@ -2364,11 +2473,13 @@ class TagInDB extends DataClass implements Insertable<TagInDB> {
           {String? id,
           String? name,
           String? color,
+          int? displayOrder,
           Value<String?> description = const Value.absent()}) =>
       TagInDB(
         id: id ?? this.id,
         name: name ?? this.name,
         color: color ?? this.color,
+        displayOrder: displayOrder ?? this.displayOrder,
         description: description.present ? description.value : this.description,
       );
   @override
@@ -2377,13 +2488,14 @@ class TagInDB extends DataClass implements Insertable<TagInDB> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('color: $color, ')
+          ..write('displayOrder: $displayOrder, ')
           ..write('description: $description')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, color, description);
+  int get hashCode => Object.hash(id, name, color, displayOrder, description);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2391,6 +2503,7 @@ class TagInDB extends DataClass implements Insertable<TagInDB> {
           other.id == this.id &&
           other.name == this.name &&
           other.color == this.color &&
+          other.displayOrder == this.displayOrder &&
           other.description == this.description);
 }
 
@@ -2398,12 +2511,14 @@ class TagsCompanion extends UpdateCompanion<TagInDB> {
   final Value<String> id;
   final Value<String> name;
   final Value<String> color;
+  final Value<int> displayOrder;
   final Value<String?> description;
   final Value<int> rowid;
   const TagsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.color = const Value.absent(),
+    this.displayOrder = const Value.absent(),
     this.description = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -2411,15 +2526,18 @@ class TagsCompanion extends UpdateCompanion<TagInDB> {
     required String id,
     required String name,
     required String color,
+    required int displayOrder,
     this.description = const Value.absent(),
     this.rowid = const Value.absent(),
   })  : id = Value(id),
         name = Value(name),
-        color = Value(color);
+        color = Value(color),
+        displayOrder = Value(displayOrder);
   static Insertable<TagInDB> custom({
     Expression<String>? id,
     Expression<String>? name,
     Expression<String>? color,
+    Expression<int>? displayOrder,
     Expression<String>? description,
     Expression<int>? rowid,
   }) {
@@ -2427,6 +2545,7 @@ class TagsCompanion extends UpdateCompanion<TagInDB> {
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (color != null) 'color': color,
+      if (displayOrder != null) 'displayOrder': displayOrder,
       if (description != null) 'description': description,
       if (rowid != null) 'rowid': rowid,
     });
@@ -2436,12 +2555,14 @@ class TagsCompanion extends UpdateCompanion<TagInDB> {
       {Value<String>? id,
       Value<String>? name,
       Value<String>? color,
+      Value<int>? displayOrder,
       Value<String?>? description,
       Value<int>? rowid}) {
     return TagsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
       color: color ?? this.color,
+      displayOrder: displayOrder ?? this.displayOrder,
       description: description ?? this.description,
       rowid: rowid ?? this.rowid,
     );
@@ -2459,6 +2580,9 @@ class TagsCompanion extends UpdateCompanion<TagInDB> {
     if (color.present) {
       map['color'] = Variable<String>(color.value);
     }
+    if (displayOrder.present) {
+      map['displayOrder'] = Variable<int>(displayOrder.value);
+    }
     if (description.present) {
       map['description'] = Variable<String>(description.value);
     }
@@ -2474,6 +2598,7 @@ class TagsCompanion extends UpdateCompanion<TagInDB> {
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('color: $color, ')
+          ..write('displayOrder: $displayOrder, ')
           ..write('description: $description, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -4134,6 +4259,7 @@ abstract class _$AppDB extends GeneratedDatabase {
           iniValue: row.read<double>('iniValue'),
           date: row.read<DateTime>('date'),
           type: Accounts.$convertertype.fromSql(row.read<String>('type')),
+          displayOrder: row.read<int>('displayOrder'),
           iconId: row.read<String>('iconId'),
           currency: await currencies.mapFromRow(row, tablePrefix: 'nested_0'),
           closingDate: row.readNullable<DateTime>('closingDate'),
@@ -4187,7 +4313,7 @@ abstract class _$AppDB extends GeneratedDatabase {
         startIndex: $arrayStartIndex);
     $arrayStartIndex += generatedlimit.amountOfVariables;
     return customSelect(
-        'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."iconId" AS "nested_0.iconId", "a"."color" AS "nested_0.color", "a"."closingDate" AS "nested_0.closingDate", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."iconId" AS "nested_3.iconId", "ra"."color" AS "nested_3.color", "ra"."closingDate" AS "nested_3.closingDate", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRate.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id INNER JOIN currencies AS receivingAccountCurrency ON a.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
+        'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."iconId" AS "nested_0.iconId", "a"."displayOrder" AS "nested_0.displayOrder", "a"."color" AS "nested_0.color", "a"."closingDate" AS "nested_0.closingDate", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."iconId" AS "nested_3.iconId", "ra"."displayOrder" AS "nested_3.displayOrder", "ra"."color" AS "nested_3.color", "ra"."closingDate" AS "nested_3.closingDate", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."displayOrder" AS "nested_4.displayOrder", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."displayOrder" AS "nested_5.displayOrder", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRate.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id INNER JOIN currencies AS receivingAccountCurrency ON a.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
         variables: [
           ...generatedpredicate.introducedVariables,
           ...generatedorderBy.introducedVariables,
@@ -4299,7 +4425,7 @@ abstract class _$AppDB extends GeneratedDatabase {
         startIndex: $arrayStartIndex);
     $arrayStartIndex += generatedpredicate.amountOfVariables;
     return customSelect(
-        'SELECT a.*,"parentCategory"."id" AS "nested_0.id", "parentCategory"."name" AS "nested_0.name", "parentCategory"."iconId" AS "nested_0.iconId", "parentCategory"."color" AS "nested_0.color", "parentCategory"."type" AS "nested_0.type", "parentCategory"."parentCategoryID" AS "nested_0.parentCategoryID" FROM categories AS a LEFT JOIN categories AS parentCategory ON a.parentCategoryID = parentCategory.id WHERE ${generatedpredicate.sql} LIMIT ?1',
+        'SELECT a.*,"parentCategory"."id" AS "nested_0.id", "parentCategory"."name" AS "nested_0.name", "parentCategory"."iconId" AS "nested_0.iconId", "parentCategory"."color" AS "nested_0.color", "parentCategory"."displayOrder" AS "nested_0.displayOrder", "parentCategory"."type" AS "nested_0.type", "parentCategory"."parentCategoryID" AS "nested_0.parentCategoryID" FROM categories AS a LEFT JOIN categories AS parentCategory ON a.parentCategoryID = parentCategory.id WHERE ${generatedpredicate.sql} LIMIT ?1',
         variables: [
           Variable<double>(limit),
           ...generatedpredicate.introducedVariables
@@ -4311,6 +4437,7 @@ abstract class _$AppDB extends GeneratedDatabase {
           id: row.read<String>('id'),
           name: row.read<String>('name'),
           iconId: row.read<String>('iconId'),
+          displayOrder: row.read<int>('displayOrder'),
           color: row.readNullable<String>('color'),
           type: NullAwareTypeConverter.wrapFromSql(
               Categories.$convertertype, row.readNullable<String>('type')),
