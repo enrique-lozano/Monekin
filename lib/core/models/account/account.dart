@@ -50,19 +50,20 @@ enum AccountType {
 }
 
 class Account extends AccountInDB {
-  Account(
-      {required super.id,
-      required super.name,
-      required super.iniValue,
-      required super.date,
-      required super.type,
-      required super.iconId,
-      required this.currency,
-      super.closingDate,
-      super.description,
-      super.iban,
-      super.swift})
-      : super(currencyId: currency.code);
+  Account({
+    required super.id,
+    required super.name,
+    required super.iniValue,
+    required super.date,
+    required super.type,
+    required super.displayOrder,
+    required super.iconId,
+    required this.currency,
+    super.closingDate,
+    super.description,
+    super.iban,
+    super.swift,
+  }) : super(currencyId: currency.code);
 
   /// Currency of all the transactions of this account. When you change this currency all transactions in this account
   /// will have the new currency but their amount/value will remain the same.
@@ -82,7 +83,7 @@ class Account extends AccountInDB {
 
   Widget displayIcon(
     BuildContext context, {
-    double size = 22,
+    double size = 24,
     double? padding,
     bool isOutline = false,
   }) {
@@ -102,6 +103,7 @@ class Account extends AccountInDB {
         currency: currency,
         iniValue: account.iniValue,
         date: account.date,
+        displayOrder: account.displayOrder,
         description: account.description,
         iban: account.iban,
         swift: account.swift,

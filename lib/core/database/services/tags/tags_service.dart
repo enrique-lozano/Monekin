@@ -29,6 +29,7 @@ class TagService {
 
     return (db.select(db.tags)
           ..where(filter ?? (tbl) => const CustomExpression('(TRUE)'))
+          ..orderBy([(acc) => OrderingTerm.asc(acc.displayOrder)])
           ..limit(limit, offset: offset))
         .watch()
         .map(

@@ -197,6 +197,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
               id: accountID,
               name: row[accountColumn!].toString(),
               iniValue: 0,
+              displayOrder: 10,
               date: DateTime.now(),
               type: AccountType.normal,
               iconId: SupportedIconService.instance.defaultSupportedIcon.id,
