@@ -43,6 +43,13 @@
         "display": "Rango temporal",
         "it-repeat": "Se repite",
         "it-ends": "Termina",
+        "TYPES": {
+          "cycle": "Ciclos",
+          "last_days": "Últimos días",
+          "last_days_form": "{{x}} días anteriores",
+          "all": "Siempre",
+          "date_range": "Rango personalizado"
+        },
         "each-range": {
           "one": "Cada {{range}}",
           "other": "Cada {{n}} {{range}}"

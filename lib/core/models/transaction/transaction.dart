@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
-import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -215,7 +215,7 @@ class MoneyTransaction extends TransactionInDB {
 
   /// Get the money that this transaction would generate for a given periodicity, without taken into account the start and end dates of a recurrency
   double getUnifiedMoneyForAPeriod({
-    required TransactionPeriodicity periodicity,
+    required Periodicity periodicity,
     bool convertToPreferredCurrency = true,
   }) {
     final baseValue =
@@ -227,44 +227,44 @@ class MoneyTransaction extends TransactionInDB {
 
     if (periodicity == recurrentInfo.intervalPeriod) {
       return baseValue / recurrentInfo.intervalEach!;
-    } else if (recurrentInfo.intervalPeriod == TransactionPeriodicity.day) {
-      if (periodicity == TransactionPeriodicity.week) {
+    } else if (recurrentInfo.intervalPeriod == Periodicity.day) {
+      if (periodicity == Periodicity.week) {
         return baseValue / 7;
       }
-      if (periodicity == TransactionPeriodicity.month) {
+      if (periodicity == Periodicity.month) {
         return baseValue / 30;
       }
-      if (periodicity == TransactionPeriodicity.year) {
+      if (periodicity == Periodicity.year) {
         return baseValue / 365;
       }
-    } else if (recurrentInfo.intervalPeriod == TransactionPeriodicity.week) {
-      if (periodicity == TransactionPeriodicity.day) {
+    } else if (recurrentInfo.intervalPeriod == Periodicity.week) {
+      if (periodicity == Periodicity.day) {
         return baseValue * 7;
       }
-      if (periodicity == TransactionPeriodicity.month) {
+      if (periodicity == Periodicity.month) {
         return baseValue / 4;
       }
-      if (periodicity == TransactionPeriodicity.year) {
+      if (periodicity == Periodicity.year) {
         return baseValue / 52;
       }
-    } else if (recurrentInfo.intervalPeriod == TransactionPeriodicity.month) {
-      if (periodicity == TransactionPeriodicity.day) {
+    } else if (recurrentInfo.intervalPeriod == Periodicity.month) {
+      if (periodicity == Periodicity.day) {
         return baseValue * 30;
       }
-      if (periodicity == TransactionPeriodicity.week) {
+      if (periodicity == Periodicity.week) {
         return baseValue * 4;
       }
-      if (periodicity == TransactionPeriodicity.year) {
+      if (periodicity == Periodicity.year) {
         return baseValue / 12;
       }
-    } else if (recurrentInfo.intervalPeriod == TransactionPeriodicity.year) {
-      if (periodicity == TransactionPeriodicity.day) {
+    } else if (recurrentInfo.intervalPeriod == Periodicity.year) {
+      if (periodicity == Periodicity.day) {
         return baseValue * 365;
       }
-      if (periodicity == TransactionPeriodicity.week) {
+      if (periodicity == Periodicity.week) {
         return baseValue * 52;
       }
-      if (periodicity == TransactionPeriodicity.month) {
+      if (periodicity == Periodicity.month) {
         return baseValue * 12;
       }
     }
@@ -316,13 +316,13 @@ class MoneyTransaction extends TransactionInDB {
 
       int multiplier = toReturn.length;
 
-      if (recurrentInfo.intervalPeriod == TransactionPeriodicity.day) {
+      if (recurrentInfo.intervalPeriod == Periodicity.day) {
         toPush =
             date.add(Duration(days: recurrentInfo.intervalEach! * multiplier));
-      } else if (recurrentInfo.intervalPeriod == TransactionPeriodicity.week) {
+      } else if (recurrentInfo.intervalPeriod == Periodicity.week) {
         toPush = date
             .add(Duration(days: recurrentInfo.intervalEach! * 7 * multiplier));
-      } else if (recurrentInfo.intervalPeriod == TransactionPeriodicity.month) {
+      } else if (recurrentInfo.intervalPeriod == Periodicity.month) {
         toPush = date.copyWith(
             month: date.month + recurrentInfo.intervalEach! * multiplier);
 
@@ -331,7 +331,7 @@ class MoneyTransaction extends TransactionInDB {
           toPush = date.copyWith(
               month: date.month + recurrentInfo.intervalEach! * multiplier + 1);
         }
-      } else if (recurrentInfo.intervalPeriod == TransactionPeriodicity.year) {
+      } else if (recurrentInfo.intervalPeriod == Periodicity.year) {
         toPush = date.copyWith(
             year: date.year + recurrentInfo.intervalEach! * multiplier);
       }

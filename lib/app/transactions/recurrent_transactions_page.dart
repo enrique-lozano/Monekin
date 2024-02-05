@@ -3,7 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
+import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/presentation/widgets/empty_indicator.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
@@ -19,7 +19,7 @@ class RecurrentTransactionPage extends StatefulWidget {
 }
 
 class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
-  TransactionPeriodicity periodicity = TransactionPeriodicity.month;
+  Periodicity periodicity = Periodicity.month;
 
   @override
   Widget build(BuildContext context) {
@@ -66,10 +66,10 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
               clipBehavior: Clip.hardEdge,
               child: InkWell(
                 onTap: () {
-                  periodicity = TransactionPeriodicity.values.firstWhereOrNull(
+                  periodicity = Periodicity.values.firstWhereOrNull(
                         (element) => element.index == periodicity.index + 1,
                       ) ??
-                      TransactionPeriodicity.day;
+                      Periodicity.day;
 
                   setState(() {});
                 },
@@ -126,10 +126,11 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
                               }),
                           Text(
                             t.general.time.ranges.each_range(
-                                n: 1,
-                                range: periodicity
-                                    .periodText(context, 1)
-                                    .toLowerCase()),
+                              n: 1,
+                              range: periodicity
+                                  .periodText(context, isPlural: false)
+                                  .toLowerCase(),
+                            ),
                             style: Theme.of(context).textTheme.labelSmall,
                           ),
                         ],

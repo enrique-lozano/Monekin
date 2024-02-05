@@ -44,6 +44,13 @@
         "it-repeat": "Repeats",
         "it-ends": "Ends",
         "forever": "Forever",
+        "TYPES": {
+          "cycle": "Cycles",
+          "last_days": "Last days",
+          "last_days_form": "{{x}} previous days",
+          "all": "Always",
+          "date_range": "Custom range"
+        },
         "each-range": {
           "one": "Every {{range}}",
           "other": "Every {{n}} {{range}}"

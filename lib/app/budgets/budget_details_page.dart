@@ -223,12 +223,12 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                               ListTile(
                                   title: Text(t.general.time.start_date),
                                   trailing: Text(DateFormat.yMMMd()
-                                      .format(budget.currentDateRange[0]))),
+                                      .format(budget.currentDateRange.$1))),
                               const Divider(indent: 12),
                               ListTile(
                                   title: Text(t.general.time.end_date),
                                   trailing: Text(DateFormat.yMMMd()
-                                      .format(budget.currentDateRange[1]))),
+                                      .format(budget.currentDateRange.$2))),
                               const Divider(indent: 12),
                               ListTile(
                                 title:
@@ -265,8 +265,8 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                         TransactionStatus.pending,
                         TransactionStatus.voided
                       }),
-                      minDate: budget.currentDateRange[0],
-                      maxDate: budget.currentDateRange[1],
+                      minDate: budget.currentDateRange.$1,
+                      maxDate: budget.currentDateRange.$2,
                       includeParentCategoriesInSearch: true,
                       categories: budget.categories,
                       accountsIDs: budget.accounts,

@@ -5,7 +5,7 @@
 
 import './../../../models/transaction/transaction.dart';
 import './../../../models/transaction/transaction_status.dart';
-import './../../../models/transaction/transaction_periodicity.dart';
+import './../../../models/date-utils/periodicity.dart';
 import './../../../models/category/category.dart';
 import './../../../models/account/account.dart';
 import './../../services/user-setting/user_setting_service.dart';
@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS transactions (
   /* --- Recurrency data --- */
 
   -- The time range with which new transactions to be paid will appear (weekly, monthly...)
-  intervalPeriod ENUMNAME(TransactionPeriodicity) CHECK(intervalPeriod IN ('day','week','month','year')),
+  intervalPeriod ENUMNAME(Periodicity) CHECK(intervalPeriod IN ('day','week','month','year')),
 
   -- Within the time range chosen in the `intervalPeriod` attribute, every few times new transactions will appear to be paid. For example, putting a 2 here and having monthly as `intervalPeriod`, new payments will appear every two months
   intervalEach INTEGER,
@@ -173,7 +173,7 @@ CREATE TABLE IF NOT EXISTS budgets (
   limitAmount REAL NOT NULL,
 
   -- Periodicity of the budget. If null, the budget is a single-time budget
-  intervalPeriod ENUMNAME(TransactionPeriodicity) CHECK(intervalPeriod IN ('day','week','month','year')),
+  intervalPeriod ENUMNAME(Periodicity) CHECK(intervalPeriod IN ('day','week','month','year')),
 
   -- Custom start date. Only if the budget has no periodicity
   startDate DATETIME,
