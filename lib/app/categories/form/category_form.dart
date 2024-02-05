@@ -79,6 +79,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
       categoryToEdit = Category(
           id: categoryToEdit!.id,
           name: _nameController.text,
+          displayOrder: categoryToEdit!.displayOrder,
           iconId: _icon.id,
           color: _color,
           parentCategory: categoryToEdit!.parentCategory,
@@ -112,6 +113,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
               id: const Uuid().v4(),
               name: _nameController.text,
               iconId: _icon.id,
+              displayOrder: 10,
               type: _type,
               color: _color))
           .then((value) {
@@ -390,6 +392,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                                         CategoryService.instance.updateCategory(
                                             CategoryInDB(
                                                 id: subcategory.id,
+                                                displayOrder: 10,
                                                 name: name,
                                                 iconId: icon.id,
                                                 parentCategoryID:
@@ -413,6 +416,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                               CategoryService.instance.insertCategory(
                                   CategoryInDB(
                                       id: const Uuid().v4(),
+                                      displayOrder: 10,
                                       name: name,
                                       iconId: icon.id,
                                       parentCategoryID: categoryToEdit!.id));

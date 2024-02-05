@@ -49,6 +49,9 @@ CREATE TABLE IF NOT EXISTS accounts (
     
     iconId TEXT NOT NULL,
 
+    -- The display order when listing accounts
+    displayOrder INTEGER NOT NULL,
+
     -- If null, an automatic color will be applied
     color TEXT,
 
@@ -73,6 +76,9 @@ CREATE TABLE IF NOT EXISTS categories (
 
     -- Color that will be used to represent this category in some screens. If null, the color of the parent's category will be used
     color TEXT,
+
+    -- The display order when listing categories
+    displayOrder INTEGER NOT NULL,
 
     -- Type of the category. If null, the type of the parent's category will be used
     type ENUMNAME(CategoryType) CHECK(type IN ('E', 'I', 'B')),
@@ -143,6 +149,9 @@ CREATE TABLE IF NOT EXISTS tags (
 
     -- The display color of the tag
     color TEXT NOT NULL,
+
+    -- The display order when listing tag
+    displayOrder INTEGER NOT NULL,
 
     -- The description of the tag
     description TEXT

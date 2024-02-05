@@ -27,7 +27,7 @@ import 'package:uuid/uuid.dart';
 
 @RoutePage()
 class AccountFormPage extends StatefulWidget {
-  const AccountFormPage({Key? key, this.account}) : super(key: key);
+  const AccountFormPage({super.key, this.account});
 
   /// Account UUID to edit (if any)
   final Account? account;
@@ -86,6 +86,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
     Account accountToSubmit = Account(
       id: _accountToEdit?.id ?? const Uuid().v4(),
       name: _nameController.text,
+      displayOrder: 10,
       iniValue: newBalance,
       date: _openingDate,
       closingDate: _closeDate,

@@ -42,7 +42,7 @@ class AppDB extends _$AppDB {
   Future<String> get databasePath async =>
       join((await getApplicationDocumentsDirectory()).path, dbName);
 
-  migrateDB(int from, int to) async {
+  Future<void> migrateDB(int from, int to) async {
     print('Executing migrations from previous version...');
 
     for (var i = from + 1; i <= to; i++) {
@@ -58,6 +58,7 @@ class AppDB extends _$AppDB {
           .toList();
 
       for (final sqlStatement in statements) {
+        print("Running custom statement: $sqlStatement");
         await customStatement(sqlStatement);
       }
 
