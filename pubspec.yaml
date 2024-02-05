@@ -47,7 +47,7 @@ dependencies:
 
   # Other
   flutter_svg: ^2.0.5
-  permission_handler: ^11.1.0
+  permission_handler: ^11.2.0
   json_annotation: ^4.8.1
   fl_chart: ^0.66.1
   file_picker: ^6.1.1
