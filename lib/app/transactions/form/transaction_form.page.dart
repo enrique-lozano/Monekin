@@ -647,7 +647,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
       onTap: () => displayAmountModal(context),
       child: Container(
         decoration: BoxDecoration(
-          color: currentTransactionTypeToAdd.color(context).withOpacity(0.7),
+          color: currentTransactionTypeToAdd.color(context).withOpacity(0.85),
           borderRadius: BorderRadius.circular(6),
         ),
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
@@ -665,6 +665,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
               final bigTextStyle =
                   Theme.of(context).textTheme.headlineLarge!.copyWith(
                       fontWeight: FontWeight.w800,
+                      color: Colors.white,
                       fontSize: (valueToNumber ?? 0) >= 1000
                           ? (valueToNumber ?? 0) >= 1000000
                               ? 28
