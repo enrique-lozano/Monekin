@@ -14,7 +14,7 @@ import 'package:monekin/i18n/translations.g.dart';
 
 @RoutePage()
 class TransactionsPage extends StatefulWidget {
-  const TransactionsPage({Key? key, this.filters}) : super(key: key);
+  const TransactionsPage({super.key, this.filters});
 
   final TransactionFilters? filters;
 
@@ -37,7 +37,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
     filters = widget.filters ?? const TransactionFilters();
 
     searchFocusNode.addListener(() {
-      if (!searchFocusNode.hasFocus) {
+      if (!searchFocusNode.hasFocus &&
+          (searchValue == null || searchValue!.isEmpty)) {
         setState(() {
           searchActive = false;
         });
@@ -55,14 +56,24 @@ class _TransactionsPageState extends State<TransactionsPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return WillPopScope(
-      onWillPop: () async {
-        if (searchFocusNode.hasFocus) {
+    return PopScope(
+      canPop: !searchActive,
+      onPopInvoked: (didPop) {
+        // if (didPop) return;
+
+        if (searchFocusNode.hasFocus &&
+            (searchValue != null && searchValue!.isNotEmpty)) {
           searchFocusNode.unfocus();
-          return false;
+          return;
+        } else if (searchActive && !searchFocusNode.hasFocus) {
+          setState(() {
+            searchActive = false;
+          });
+
+          return;
         }
 
-        return true;
+        Navigator.pop(context);
       },
       child: Scaffold(
         appBar: AppBar(
