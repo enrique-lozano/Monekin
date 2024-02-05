@@ -23,7 +23,7 @@ import 'package:monekin/app/settings/import_csv.dart';
 import 'package:monekin/app/settings/settings.page.dart';
 import 'package:monekin/app/stats/stats_page.dart';
 import 'package:monekin/app/tags/tag_form_page.dart';
-import 'package:monekin/app/tags/tag_list.dart';
+import 'package:monekin/app/tags/tag_list.page.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/app/transactions/form/widgets/interval_selector.dart';
 import 'package:monekin/app/transactions/recurrent_transactions_page.dart';

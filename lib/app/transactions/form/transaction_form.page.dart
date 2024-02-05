@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/categories_list.dart';
-import 'package:monekin/app/tags/tag_list.dart';
+import 'package:monekin/app/tags/tag_list.page.dart';
 import 'package:monekin/app/transactions/form/calculator_modal.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
@@ -466,15 +466,16 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                 ActionChip(
                   label: Text(t.tags.add),
                   avatar: const Icon(Icons.add),
-                  onPressed: () => showTagListModal(
-                          context, TagListPage(isModal: true, selected: tags))
-                      .then((value) {
-                    if (value != null) {
-                      setState(() {
-                        tags = value;
-                      });
-                    }
-                  }),
+                  onPressed: () =>
+                      showTagListModal(context, selectedTags: tags).then(
+                    (value) {
+                      if (value != null) {
+                        setState(() {
+                          tags = value;
+                        });
+                      }
+                    },
+                  ),
                 ),
               ],
             ),
