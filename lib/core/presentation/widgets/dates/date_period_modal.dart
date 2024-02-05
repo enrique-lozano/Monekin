@@ -75,107 +75,112 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
                   },
                   periodType: periodType,
                   selectedCycle: toReturn.periodType,
-                  extraWidget: Builder(builder: (context) {
-                    if (periodType == PeriodType.cycle) {
-                      return DropdownMenu(
-                        initialSelection: toReturn.periodicity,
-                        onSelected: (value) {
-                          toReturn = toReturn.copyWith(periodicity: value);
-                        },
-                        inputDecorationTheme: const InputDecorationTheme(
-                            border: UnderlineInputBorder()),
-                        dropdownMenuEntries: Periodicity.values
-                            .map(
-                              (e) => DropdownMenuEntry(
-                                value: e,
-                                label: e.periodText(context, isPlural: true),
-                              ),
-                            )
-                            .toList(),
-                      );
-                    } else if (periodType == PeriodType.lastDays) {
-                      final textToTransformArray = t.general.time.ranges.types
-                          .last_days_form(x: '***')
-                          .split('***');
-
-                      return Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (textToTransformArray[0].trim().isNotEmpty)
-                            Text(textToTransformArray[0]),
-                          SizedBox(
-                            width: 72,
-                            child: TextFormField(
-                              initialValue: toReturn.lastDays.toString(),
-                              keyboardType: TextInputType.number,
-                              maxLength: 3,
-                              textAlign: TextAlign.center,
-                              decoration: const InputDecoration(
-                                border: UnderlineInputBorder(),
-                                counterText: '',
-                              ),
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              validator: (value) => fieldValidator(
-                                value,
-                                validator: ValidatorType.int,
-                              ),
-                              onChanged: (value) {
-                                toReturn = toReturn.copyWith(
-                                    lastDays: value.isEmpty
-                                        ? null
-                                        : int.parse(value));
+                  extraWidget: periodType == PeriodType.allTime
+                      ? null
+                      : Builder(builder: (context) {
+                          if (periodType == PeriodType.cycle) {
+                            return DropdownMenu(
+                              initialSelection: toReturn.periodicity,
+                              onSelected: (value) {
+                                toReturn =
+                                    toReturn.copyWith(periodicity: value);
                               },
-                            ),
-                          ),
-                          if (textToTransformArray[1].trim().isNotEmpty)
-                            Text(textToTransformArray[1]),
-                        ],
-                      );
-                    } else if (periodType == PeriodType.dateRange) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          createDateSelectorRow(
-                            context,
-                            dateToSelect: toReturn.customDateRange.$1,
-                            lastDate: toReturn.customDateRange.$2,
-                            label: t.general.time.start_date,
-                            onDateSelected: (value) {
-                              toReturn = toReturn.copyWith(
-                                customDateRange: (
-                                  value,
-                                  toReturn.customDateRange.$2,
+                              inputDecorationTheme: const InputDecorationTheme(
+                                  border: UnderlineInputBorder()),
+                              dropdownMenuEntries: Periodicity.values
+                                  .map(
+                                    (e) => DropdownMenuEntry(
+                                      value: e,
+                                      label:
+                                          e.periodText(context, isPlural: true),
+                                    ),
+                                  )
+                                  .toList(),
+                            );
+                          } else if (periodType == PeriodType.lastDays) {
+                            final textToTransformArray = t
+                                .general.time.ranges.types
+                                .last_days_form(x: '***')
+                                .split('***');
+
+                            return Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (textToTransformArray[0].trim().isNotEmpty)
+                                  Text(textToTransformArray[0]),
+                                SizedBox(
+                                  width: 72,
+                                  child: TextFormField(
+                                    initialValue: toReturn.lastDays.toString(),
+                                    keyboardType: TextInputType.number,
+                                    maxLength: 3,
+                                    textAlign: TextAlign.center,
+                                    decoration: const InputDecoration(
+                                      border: UnderlineInputBorder(),
+                                      counterText: '',
+                                    ),
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
+                                    validator: (value) => fieldValidator(
+                                      value,
+                                      validator: ValidatorType.int,
+                                    ),
+                                    onChanged: (value) {
+                                      toReturn = toReturn.copyWith(
+                                          lastDays: value.isEmpty
+                                              ? null
+                                              : int.parse(value));
+                                    },
+                                  ),
                                 ),
-                              );
+                                if (textToTransformArray[1].trim().isNotEmpty)
+                                  Text(textToTransformArray[1]),
+                              ],
+                            );
+                          } else if (periodType == PeriodType.dateRange) {
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                createDateSelectorRow(
+                                  context,
+                                  dateToSelect: toReturn.customDateRange.$1,
+                                  lastDate: toReturn.customDateRange.$2,
+                                  label: t.general.time.start_date,
+                                  onDateSelected: (value) {
+                                    toReturn = toReturn.copyWith(
+                                      customDateRange: (
+                                        value,
+                                        toReturn.customDateRange.$2,
+                                      ),
+                                    );
 
-                              setState(() {});
-                            },
-                          ),
-                          const SizedBox(height: 6),
-                          createDateSelectorRow(
-                            context,
-                            dateToSelect: toReturn.customDateRange.$2,
-                            firstDate: toReturn.customDateRange.$1,
-                            label: t.general.time.end_date,
-                            onDateSelected: (value) {
-                              toReturn = toReturn.copyWith(
-                                customDateRange: (
-                                  toReturn.customDateRange.$1,
-                                  value,
+                                    setState(() {});
+                                  },
                                 ),
-                              );
+                                const SizedBox(height: 6),
+                                createDateSelectorRow(
+                                  context,
+                                  dateToSelect: toReturn.customDateRange.$2,
+                                  firstDate: toReturn.customDateRange.$1,
+                                  label: t.general.time.end_date,
+                                  onDateSelected: (value) {
+                                    toReturn = toReturn.copyWith(
+                                      customDateRange: (
+                                        toReturn.customDateRange.$1,
+                                        value,
+                                      ),
+                                    );
 
-                              setState(() {});
-                            },
-                          ),
-                        ],
-                      );
-                    }
+                                    setState(() {});
+                                  },
+                                ),
+                              ],
+                            );
+                          }
 
-                    return Container();
-                  }),
+                          return Container();
+                        }),
                 )
             ],
           ),
