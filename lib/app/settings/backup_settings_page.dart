@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:monekin/app/settings/settings.page.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
+import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/utils/number_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -31,46 +32,39 @@ class BackupSettingsPage extends StatelessWidget {
               subtitle: Text(t.backup.import.restore_backup_descr),
               minVerticalPadding: 16,
               onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text(t.general.attention),
-                    content: Text(t.backup.import.restore_backup_warn),
-                    actions: [
-                      TextButton(
-                          onPressed: () {
-                            BackupDatabaseService()
-                                .importDatabase()
-                                .then((value) {
-                              if (!value) {
-                                Navigator.pop(context);
+                confirmDialog(context,
+                    icon: Icons.warning_rounded,
+                    dialogTitle: t.backup.import.restore_backup_warn_title,
+                    contentParagraphs: [
+                      Text(t.backup.import.restore_backup_warn_description)
+                    ]).then((value) {
+                  if (value == null || !value) {
+                    return;
+                  }
 
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text(t.backup.import.cancelled)),
-                                );
+                  BackupDatabaseService().importDatabase().then((value) {
+                    if (!value) {
+                      Navigator.pop(context);
 
-                                return;
-                              }
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(t.backup.import.cancelled)),
+                      );
 
-                              context.router
-                                  .replaceAll([const MainLayoutRoute()]);
+                      return;
+                    }
 
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                    content: Text(t.backup.import.success)),
-                              );
-                            }).catchError((err) {
-                              Navigator.pop(context);
+                    context.router.replaceAll([const MainLayoutRoute()]);
 
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(err.toString())));
-                            });
-                          },
-                          child: Text(t.general.confirm))
-                    ],
-                  ),
-                );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(t.backup.import.success)),
+                    );
+                  }).catchError((err) {
+                    Navigator.pop(context);
+
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text(err.toString())));
+                  });
+                });
               },
             ),
             ListTile(
