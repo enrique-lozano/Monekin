@@ -31,36 +31,31 @@ class _ExportDataPageState extends State<ExportDataPage> {
     required _ExportFormats exportFormat,
     required String title,
     required String descr,
-    required String iconName,
   }) {
     final isSelected = selectedExportFormat == exportFormat;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
-      child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 500),
-        opacity: isSelected ? 1 : 1,
-        child: OutlinedButtonStacked(
-          text: title,
-          filled: isSelected,
-          fontSize: 20,
-          alignLeft: true,
-          alignBeside: true,
-          padding: const EdgeInsets.all(10),
-          onTap: () {
-            selectedExportFormat = exportFormat;
+      child: OutlinedButtonStacked(
+        text: title,
+        filled: isSelected,
+        fontSize: 20,
+        alignLeft: true,
+        alignBeside: true,
+        padding: const EdgeInsets.all(10),
+        onTap: () {
+          selectedExportFormat = exportFormat;
 
-            if (selectedExportFormat == _ExportFormats.db) {
-              filters = const TransactionFilters();
-            }
+          if (selectedExportFormat == _ExportFormats.db) {
+            filters = const TransactionFilters();
+          }
 
-            setState(() {});
-          },
-          iconData: exportFormat == _ExportFormats.csv
-              ? Icons.format_quote
-              : Icons.security,
-          afterWidget: Text(descr),
-        ),
+          setState(() {});
+        },
+        iconData: exportFormat == _ExportFormats.csv
+            ? Icons.format_quote
+            : Icons.security,
+        afterWidget: Text(descr),
       ),
     );
   }
@@ -80,7 +75,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
         enabled: onClick != null,
         decoration: InputDecoration(
           labelText: title,
-          contentPadding: const EdgeInsets.only(left: 16, top: 16, bottom: 10),
+          contentPadding: const EdgeInsets.only(left: 6, top: 16, bottom: 10),
           suffixIcon: const Icon(Icons.arrow_drop_down),
           border: const UnderlineInputBorder(),
         ));
@@ -118,7 +113,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
                             .first)
                     .then((value) {
                   messeger.showSnackBar(SnackBar(
-                    content: Text('Fichero descargado con exito en $value'),
+                    content: Text(t.backup.export.success(x: value)),
                   ));
                 }).catchError((err) {
                   messeger.showSnackBar(SnackBar(
@@ -137,100 +132,112 @@ class _ExportDataPageState extends State<ExportDataPage> {
                 exportFormat: _ExportFormats.db,
                 title: t.backup.export.all,
                 descr: t.backup.export.all_descr,
-                iconName: 'db',
               ),
               cardSelector(
                 exportFormat: _ExportFormats.csv,
                 title: t.backup.export.transactions,
                 descr: t.backup.export.transactions_descr,
-                iconName: 'table_file',
               ),
               const SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.only(left: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    /* ---------------------------------- */
-                    /* -------- ACCOUNT SELECTOR -------- */
-                    /* ---------------------------------- */
+              IgnorePointer(
+                ignoring: selectedExportFormat == _ExportFormats.db,
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 400),
+                  opacity: selectedExportFormat == _ExportFormats.db ? 0.3 : 1,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 18),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        /* ---------------------------------- */
+                        /* -------- ACCOUNT SELECTOR -------- */
+                        /* ---------------------------------- */
 
-                    StreamBuilder(
-                        stream: AccountService.instance.getAccounts(),
-                        builder: (context, snapshot) {
-                          final selectedAccounts = (snapshot.data ?? []).where(
-                              (element) =>
-                                  filters.accountsIDs?.contains(element.id) ??
-                                  false);
+                        StreamBuilder(
+                            stream: AccountService.instance.getAccounts(),
+                            builder: (context, snapshot) {
+                              final selectedAccounts = (snapshot.data ?? [])
+                                  .where((element) =>
+                                      filters.accountsIDs
+                                          ?.contains(element.id) ??
+                                      false);
 
-                          return selector(
-                              title: t.general.accounts,
-                              inputValue: filters.accountsIDs == null ||
-                                      (snapshot.hasData &&
-                                          filters.accountsIDs!.length ==
-                                              snapshot.data!.length)
-                                  ? t.account.select.all
-                                  : selectedAccounts
-                                      .map((e) => e.name)
-                                      .join(', '),
-                              onClick: selectedExportFormat == _ExportFormats.db
-                                  ? null
-                                  : () async {
-                                      final modalRes =
-                                          await showAccountSelectorBottomSheet(
-                                              context,
-                                              AccountSelector(
-                                                allowMultiSelection: true,
-                                                filterSavingAccounts: false,
-                                                selectedAccounts:
-                                                    selectedAccounts.toList(),
-                                              ));
+                              return selector(
+                                  title: t.general.accounts,
+                                  inputValue: filters.accountsIDs == null ||
+                                          (snapshot.hasData &&
+                                              filters.accountsIDs!.length ==
+                                                  snapshot.data!.length)
+                                      ? t.account.select.all
+                                      : selectedAccounts
+                                          .map((e) => e.name)
+                                          .join(', '),
+                                  onClick: selectedExportFormat ==
+                                          _ExportFormats.db
+                                      ? null
+                                      : () async {
+                                          final modalRes =
+                                              await showAccountSelectorBottomSheet(
+                                                  context,
+                                                  AccountSelector(
+                                                    allowMultiSelection: true,
+                                                    filterSavingAccounts: false,
+                                                    selectedAccounts:
+                                                        selectedAccounts
+                                                            .toList(),
+                                                  ));
 
-                                      if (modalRes != null &&
-                                          modalRes.isNotEmpty) {
-                                        setState(() {
-                                          filters = filters.copyWith(
-                                              accountsIDs: snapshot.hasData &&
-                                                      modalRes.length ==
-                                                          snapshot.data!.length
-                                                  ? null
-                                                  : modalRes.map((e) => e.id));
+                                          if (modalRes != null &&
+                                              modalRes.isNotEmpty) {
+                                            setState(() {
+                                              filters = filters.copyWith(
+                                                  accountsIDs: snapshot
+                                                              .hasData &&
+                                                          modalRes.length ==
+                                                              snapshot
+                                                                  .data!.length
+                                                      ? null
+                                                      : modalRes
+                                                          .map((e) => e.id));
+                                            });
+                                          }
                                         });
-                                      }
-                                    });
-                        }),
+                            }),
 
-                    /* ---------------------------------- */
-                    /* -------- CATEGORY SELECTOR ------- */
-                    /* ---------------------------------- */
+                        /* ---------------------------------- */
+                        /* -------- CATEGORY SELECTOR ------- */
+                        /* ---------------------------------- */
 
-                    const SizedBox(height: 16),
-                    Text('${t.general.categories}:'),
-                    const SizedBox(height: 6),
-                    StreamBuilder(
-                        stream: CategoryService.instance.getMainCategories(),
-                        builder: (context, snapshot) {
-                          return CategorySelector(
-                            availableCategories: snapshot.data,
-                            selectedCategories: filters.categories == null
-                                ? null
-                                : (snapshot.data ?? [])
-                                    .where(
-                                      (element) => filters.categories!
-                                          .contains(element.id),
-                                    )
-                                    .toList(),
-                            onChange: (selection) {
-                              setState(() {
-                                filters = filters.copyWith(
-                                  categories:
-                                      selection?.map((e) => e.id).toList(),
-                                );
-                              });
-                            },
-                          );
-                        }),
-                  ],
+                        const SizedBox(height: 16),
+                        Text('${t.general.categories}:'),
+                        const SizedBox(height: 6),
+                        StreamBuilder(
+                            stream:
+                                CategoryService.instance.getMainCategories(),
+                            builder: (context, snapshot) {
+                              return CategorySelector(
+                                availableCategories: snapshot.data,
+                                selectedCategories: filters.categories == null
+                                    ? null
+                                    : (snapshot.data ?? [])
+                                        .where(
+                                          (element) => filters.categories!
+                                              .contains(element.id),
+                                        )
+                                        .toList(),
+                                onChange: (selection) {
+                                  setState(() {
+                                    filters = filters.copyWith(
+                                      categories:
+                                          selection?.map((e) => e.id).toList(),
+                                    );
+                                  });
+                                },
+                              );
+                            }),
+                      ],
+                    ),
+                  ),
                 ),
               )
             ],
