@@ -101,6 +101,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             icon,
@@ -806,11 +807,15 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                       title: t.general.category,
                       inputValue: selectedCategory?.name,
                       icon: selectedCategory != null
-                          ? IconDisplayer.fromCategory(context,
-                              category: selectedCategory!)
+                          ? IconDisplayer.fromCategory(
+                              context,
+                              category: selectedCategory!,
+                              size: 24,
+                            )
                           : IconDisplayer(
                               icon: Icons.question_mark_rounded,
                               mainColor: AppColors.of(context).primary,
+                              size: 24,
                             ),
                       onClick: () => selectCategory(),
                     ),
