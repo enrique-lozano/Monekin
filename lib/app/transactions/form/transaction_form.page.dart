@@ -288,8 +288,12 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   Future<void> selectCategory() async {
     final modalRes = await showCategoryListModal(
       context,
-      const CategoriesList(
+      CategoriesList(
         mode: CategoriesListMode.modalSelectSubcategory,
+        selectedCategories: [
+          if (selectedCategory != null)
+            selectedCategory!.parentCategory ?? selectedCategory!
+        ],
       ),
     );
 

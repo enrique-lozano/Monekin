@@ -101,9 +101,10 @@ class _CategoriesListState extends State<CategoriesList> {
       child: CategorySelector(
         availableCategories: categoriesToDisplay,
         selectedCategories: selectedCategories,
+        multiSelection: false,
         direction: Axis.vertical,
         onChange: (selectedItems) async {
-          final category = selectedItems?.elementAt(0);
+          final category = selectedItems?.elementAtOrNull(0);
 
           if (category == null) {
             return;
@@ -135,6 +136,8 @@ class _CategoriesListState extends State<CategoriesList> {
               }
 
               Navigator.of(context).pop([modalRes]);
+            } else {
+              selectedCategories = [...widget.selectedCategories];
             }
           }
 

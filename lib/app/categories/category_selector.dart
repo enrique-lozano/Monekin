@@ -2,10 +2,10 @@ import 'dart:ui';
 
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/presentation/widgets/wrap/wrap_extended.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -20,7 +20,7 @@ class CategorySelector extends StatefulWidget {
     required this.availableCategories,
     this.extraHeaderButtons,
     this.multiSelection = true,
-    this.iconSize = 38,
+    this.iconSize = 48,
     this.iconPadding = 8,
   });
 
@@ -58,10 +58,11 @@ class _CategorySelectorState extends State<CategorySelector> {
       for (final (index, categoryToDisplay)
           in widget.availableCategories!.indexed) ...[
         Builder(builder: (context) {
-          final isCategorySelected = selectedCategories != null &&
+          final isCategorySelected = selectedCategories == null ||
               selectedCategories!.any((cat) => cat.id == categoryToDisplay.id);
 
           return CategoryButtonSelector(
+              maxTextSize: widget.iconSize * 1.2,
               iconWidget: IconDisplayer.fromCategory(
                 context,
                 category: categoryToDisplay,
@@ -69,8 +70,12 @@ class _CategorySelectorState extends State<CategorySelector> {
                 padding: widget.iconPadding,
                 isOutline: isCategorySelected,
                 onTap: () {
+                  HapticFeedback.lightImpact();
+
                   if (!widget.multiSelection) {
                     selectedCategories = [categoryToDisplay];
+
+                    print(selectedCategories);
 
                     setState(() {});
 
@@ -85,15 +90,17 @@ class _CategorySelectorState extends State<CategorySelector> {
                       selectedCategories = [categoryToDisplay];
                     } else {
                       selectedCategories!.add(categoryToDisplay);
+
+                      if (selectedCategories!.length ==
+                          widget.availableCategories!.length) {
+                        selectedCategories = null;
+                      }
                     }
                   } else {
+                    selectedCategories ??= [...widget.availableCategories!];
+
                     selectedCategories!.removeWhere(
                         (element) => element.id == categoryToDisplay.id);
-
-                    if (selectedCategories != null &&
-                        selectedCategories!.isEmpty) {
-                      selectedCategories = null;
-                    }
                   }
 
                   setState(() {});
@@ -112,13 +119,14 @@ class _CategorySelectorState extends State<CategorySelector> {
     ];
   }
 
-  buildSelectAllButton(
+  Widget buildSelectAllButton(
     BuildContext context, {
     required List<Category>? selectedCategories,
   }) {
     final t = Translations.of(context);
 
     return CategoryButtonSelector(
+      maxTextSize: widget.iconSize * 1.2,
       iconWidget: IconDisplayer(
         icon: Icons.select_all,
         size: widget.iconSize,
@@ -129,9 +137,17 @@ class _CategorySelectorState extends State<CategorySelector> {
             ),
         mainColor: AppColors.of(context).onBackground,
         onTap: () {
-          setState(() {
+          print(selectedCategories);
+
+          if (selectedCategories == null) {
+            selectedCategories = [];
+          } else {
             selectedCategories = null;
-          });
+          }
+
+          setState(() {});
+
+          HapticFeedback.lightImpact();
 
           if (widget.onChange != null) {
             widget.onChange!(selectedCategories);
@@ -157,29 +173,27 @@ class _CategorySelectorState extends State<CategorySelector> {
         )
         .toList();
 
-    if (selectedCategories != null && selectedCategories.isEmpty) {
-      selectedCategories = null;
-    }
-
     return Builder(builder: (context) {
       if (widget.availableCategories == null) {
         return Container();
       }
 
       if (widget.direction == Axis.vertical) {
-        return WrapSuper(
-          wrapType: WrapType.balanced,
-          wrapFit: WrapFit.min,
-          lineSpacing: 12,
-          spacing: 24,
-          alignment: WrapSuperAlignment.center,
-          children: [
-            if (extraHeaderButtonsWithSameSize != null)
-              ...extraHeaderButtonsWithSameSize,
-            ...buildCategoriesOptions(
-              selectedCategories: selectedCategories,
-            )
-          ],
+        return Align(
+          alignment: Alignment.center,
+          heightFactor: 1,
+          child: Wrap(
+            runAlignment: WrapAlignment.center,
+            runSpacing: 12,
+            spacing: 24,
+            children: [
+              if (extraHeaderButtonsWithSameSize != null)
+                ...extraHeaderButtonsWithSameSize,
+              ...buildCategoriesOptions(
+                selectedCategories: selectedCategories,
+              )
+            ],
+          ),
         );
       }
 
@@ -229,10 +243,15 @@ class _CategorySelectorState extends State<CategorySelector> {
 @CopyWith()
 class CategoryButtonSelector extends StatelessWidget {
   const CategoryButtonSelector(
-      {super.key, required this.iconWidget, required this.label});
+      {super.key,
+      required this.iconWidget,
+      required this.label,
+      required this.maxTextSize});
 
   final IconDisplayer iconWidget;
   final String label;
+
+  final double maxTextSize;
 
   @override
   Widget build(BuildContext context) {
@@ -241,13 +260,13 @@ class CategoryButtonSelector extends StatelessWidget {
         iconWidget,
         const SizedBox(height: 4),
         SizedBox(
-          width: 48,
+          width: maxTextSize,
           child: Text(
             label,
             maxLines: 1,
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.labelSmall,
+            style: Theme.of(context).textTheme.labelMedium,
           ),
         ),
       ],

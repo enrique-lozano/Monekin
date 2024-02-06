@@ -8,6 +8,7 @@ import 'package:monekin/app/budgets/components/budget_evolution_chart.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/models/budget/budget.dart';
+import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
@@ -265,6 +266,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                         TransactionStatus.pending,
                         TransactionStatus.voided
                       }),
+                      transactionTypes: [TransactionType.expense],
                       minDate: budget.currentDateRange.$1,
                       maxDate: budget.currentDateRange.$2,
                       includeParentCategoriesInSearch: true,

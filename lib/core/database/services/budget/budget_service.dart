@@ -18,15 +18,18 @@ class BudgetServive {
           startDate: budget.startDate,
           endDate: budget.endDate));
 
-      for (final category in budget.categories) {
-        await db.into(db.budgetCategory).insert(
-            BudgetCategoryData(budgetID: budget.id, categoryID: category));
+      if (budget.categories != null) {
+        for (final category in budget.categories!) {
+          await db.into(db.budgetCategory).insert(
+              BudgetCategoryData(budgetID: budget.id, categoryID: category));
+        }
       }
 
-      for (final account in budget.accounts) {
-        await db
-            .into(db.budgetAccount)
-            .insert(BudgetAccountData(budgetID: budget.id, accountID: account));
+      if (budget.accounts != null) {
+        for (final account in budget.accounts!) {
+          await db.into(db.budgetAccount).insert(
+              BudgetAccountData(budgetID: budget.id, accountID: account));
+        }
       }
 
       return true;

@@ -41,8 +41,8 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
 
   TextEditingController nameController = TextEditingController();
 
-  List<Category> categories = [];
-  List<Account> accounts = [];
+  List<Category>? categories;
+  List<Account>? accounts;
 
   Periodicity? intervalPeriod = Periodicity.month;
 
@@ -99,8 +99,8 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
       intervalPeriod: intervalPeriod,
       startDate: intervalPeriod == null ? startDate : null,
       endDate: intervalPeriod == null ? endDate : null,
-      categories: categories.map((e) => e.id).toList(),
-      accounts: accounts.map((e) => e.id).toList(),
+      categories: categories?.map((e) => e.id).toList(),
+      accounts: accounts?.map((e) => e.id).toList(),
     );
 
     if (isEditMode) {
@@ -129,7 +129,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
     }
   }
 
-  fillForm(Budget budget) {
+  fillForm(Budget budget) async {
     nameController.text = budget.name;
     valueController.text = budget.limitAmount.abs().toString();
 
@@ -138,31 +138,25 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
       endDate = budget.endDate;
     }
 
-    CategoryService.instance
-        .getCategories(
-          predicate: (p0, p1) => p0.id.isIn(budget.categories),
-        )
-        .first
-        .then((value) {
-      setState(() {
-        categories = value;
-      });
-    });
+    categories = budget.categories == null
+        ? null
+        : await CategoryService.instance
+            .getCategories(
+              predicate: (p0, p1) => p0.id.isIn(budget.categories!),
+            )
+            .first;
 
-    AccountService.instance
-        .getAccounts(
-          predicate: (p0, p1) => p0.id.isIn(budget.accounts),
-        )
-        .first
-        .then((value) {
-      setState(() {
-        accounts = value;
-      });
-    });
+    accounts = budget.accounts == null
+        ? null
+        : await AccountService.instance
+            .getAccounts(
+              predicate: (p0, p1) => p0.id.isIn(budget.accounts!),
+            )
+            .first;
 
-    setState(() {
-      intervalPeriod = budget.intervalPeriod;
-    });
+    intervalPeriod = budget.intervalPeriod;
+
+    setState(() {});
   }
 
   @override
@@ -176,13 +170,15 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
         persistentFooterButtons: [
           PersistentFooterButton(
             child: FilledButton.icon(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
+              onPressed: categories != null && categories!.isEmpty
+                  ? null
+                  : () {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
 
-                  submitForm();
-                }
-              },
+                        submitForm();
+                      }
+                    },
               icon: const Icon(Icons.save),
               label: Text(
                   isEditMode ? t.budgets.form.edit : t.budgets.form.create),
@@ -245,8 +241,8 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                     const SizedBox(height: 16),
                     selector(
                         title: '${t.general.accounts} *',
-                        inputValue: accounts.isNotEmpty
-                            ? accounts.map((e) => e.name).join(', ')
+                        inputValue: accounts != null && accounts!.isNotEmpty
+                            ? accounts!.map((e) => e.name).join(', ')
                             : null,
                         onClick: () async {
                           final modalRes = await showAccountSelectorBottomSheet(
@@ -254,7 +250,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                               AccountSelector(
                                 allowMultiSelection: true,
                                 filterSavingAccounts: false,
-                                selectedAccounts: accounts,
+                                selectedAccounts: accounts ?? [],
                               ));
 
                           if (modalRes != null) {
@@ -278,7 +274,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                                   selectedCategories: categories,
                                   onChange: (selection) {
                                     setState(() {
-                                      categories = selection ?? [];
+                                      categories = selection;
                                     });
                                   },
                                 );
