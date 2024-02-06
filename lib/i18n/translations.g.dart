@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 1028 (514 per locale)
+/// Strings: 1026 (513 per locale)
 ///
-/// Built on 2024-02-05 at 12:59 UTC
+/// Built on 2024-02-06 at 18:53 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -187,7 +187,6 @@ class _TranslationsGeneralEn {
 	String get or => 'or';
 	String get understood => 'Understood';
 	String get unspecified => 'Unspecified';
-	String get attention => 'Attention ⚠️';
 	String get confirm => 'Confirm';
 	String get continue_text => 'Continue';
 	String get quick_actions => 'Quick actions';
@@ -1023,11 +1022,10 @@ class _TranslationsBackupExportEn {
 	String get all => 'Full backup';
 	String get all_descr => 'Export all your data (accounts, transactions, budgets, settings...). Import them again at any time so you don\'t lose anything.';
 	String get transactions => 'Transactions backup';
-	String get transactions_descr => 'Export your transactions in various formats so you can more easily analyze them in other programs or applications.';
+	String get transactions_descr => 'Export your transactions in CSV so you can more easily analyze them in other programs or applications.';
 	String get description => 'Download your data in different formats';
 	String get dialog_title => 'Save/Send file';
-	String get success_in_documents => 'File successfully saved to Internal Storage/Documents';
-	String get success_in_data => 'File saved/downloaded successfully';
+	String success({required Object x}) => 'File saved/downloaded successfully in ${x}';
 	String get error => 'Error downloading the file. Please contact the developer via lozin.technologies@gmail.com';
 }
 
@@ -1041,8 +1039,9 @@ class _TranslationsBackupImportEn {
 	String get title => 'Import your data';
 	String get title_short => 'Import';
 	String get restore_backup => 'Restore Backup';
-	String get restore_backup_warn => 'When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Monekin';
 	String get restore_backup_descr => 'Import a previously saved database from Monekin. This action will replace any current application data with the new data';
+	String get restore_backup_warn_description => 'When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Monekin';
+	String get restore_backup_warn_title => 'Overwrite all data';
 	String get select_other_file => 'Select other file';
 	String get tap_to_select_file => 'Tap to select a file';
 	late final _TranslationsBackupImportManualImportEn manual_import = _TranslationsBackupImportManualImportEn._(_root);
@@ -1421,7 +1420,6 @@ class _TranslationsGeneralEs implements _TranslationsGeneralEn {
 	@override String get or => 'o';
 	@override String get understood => 'Entendido';
 	@override String get unspecified => 'Sin especificar';
-	@override String get attention => 'Atención ⚠️';
 	@override String get confirm => 'Confirmar';
 	@override String get continue_text => 'Continuar';
 	@override String get quick_actions => 'Acciones rápidas';
@@ -2257,11 +2255,10 @@ class _TranslationsBackupExportEs implements _TranslationsBackupExportEn {
 	@override String get all => 'Respaldo total';
 	@override String get all_descr => 'Exporta todos tus datos (cuentas, transacciones, presupuestos, ajustes...). Importalos de nuevo en cualquier momento para no perder nada.';
 	@override String get transactions => 'Respaldo de transacciones';
-	@override String get transactions_descr => 'Exporta tus transacciones en diversos formatos para que puedas analizarlas mas facilmente en otros programas o aplicaciones.';
+	@override String get transactions_descr => 'Exporta tus transacciones en CSV para que puedas analizarlas mas facilmente en otros programas o aplicaciones.';
 	@override String get description => 'Exporta tus datos en diferentes formatos';
 	@override String get dialog_title => 'Guardar/Enviar archivo';
-	@override String get success_in_documents => 'Archivo guardado correctamente en Almacenamiento interno/Documents';
-	@override String get success_in_data => 'Archivo guardado/enviado correctamente';
+	@override String success({required Object x}) => 'Archivo guardado/enviado correctamente en ${x}';
 	@override String get error => 'Error al descargar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com';
 }
 
@@ -2275,8 +2272,9 @@ class _TranslationsBackupImportEs implements _TranslationsBackupImportEn {
 	@override String get title => 'Importar tus datos';
 	@override String get title_short => 'Importar';
 	@override String get restore_backup => 'Restaurar copia de seguridad';
-	@override String get restore_backup_warn => 'Al importar una nueva base de datos, perderas toda la información actualmente guardada en la app. Se recomienda hacer una copia de seguridad antes de continuar. No subas aquí ningún fichero cuyo origen no conozcas, sube solo ficheros que hayas descargado previamente desde Monekin';
 	@override String get restore_backup_descr => 'Importa una base de datos anteriormente guardada desde Monekin. Esta acción remplazará cualquier dato actual de la aplicación por los nuevos datos';
+	@override String get restore_backup_warn_title => 'Sobreescribir todos los datos';
+	@override String get restore_backup_warn_description => 'Al importar una nueva base de datos, perderas toda la información actualmente guardada en la app. Se recomienda hacer una copia de seguridad antes de continuar. No subas aquí ningún fichero cuyo origen no conozcas, sube solo ficheros que hayas descargado previamente desde Monekin';
 	@override String get tap_to_select_file => 'Pulsa para seleccionar un archivo';
 	@override String get select_other_file => 'Selecciona otro fichero';
 	@override late final _TranslationsBackupImportManualImportEs manual_import = _TranslationsBackupImportManualImportEs._(_root);
@@ -2612,7 +2610,6 @@ extension on _TranslationsEn {
 			case 'general.or': return 'or';
 			case 'general.understood': return 'Understood';
 			case 'general.unspecified': return 'Unspecified';
-			case 'general.attention': return 'Attention ⚠️';
 			case 'general.confirm': return 'Confirm';
 			case 'general.continue_text': return 'Continue';
 			case 'general.quick_actions': return 'Quick actions';
@@ -3091,17 +3088,17 @@ extension on _TranslationsEn {
 			case 'backup.export.all': return 'Full backup';
 			case 'backup.export.all_descr': return 'Export all your data (accounts, transactions, budgets, settings...). Import them again at any time so you don\'t lose anything.';
 			case 'backup.export.transactions': return 'Transactions backup';
-			case 'backup.export.transactions_descr': return 'Export your transactions in various formats so you can more easily analyze them in other programs or applications.';
+			case 'backup.export.transactions_descr': return 'Export your transactions in CSV so you can more easily analyze them in other programs or applications.';
 			case 'backup.export.description': return 'Download your data in different formats';
 			case 'backup.export.dialog_title': return 'Save/Send file';
-			case 'backup.export.success_in_documents': return 'File successfully saved to Internal Storage/Documents';
-			case 'backup.export.success_in_data': return 'File saved/downloaded successfully';
+			case 'backup.export.success': return ({required Object x}) => 'File saved/downloaded successfully in ${x}';
 			case 'backup.export.error': return 'Error downloading the file. Please contact the developer via lozin.technologies@gmail.com';
 			case 'backup.import.title': return 'Import your data';
 			case 'backup.import.title_short': return 'Import';
 			case 'backup.import.restore_backup': return 'Restore Backup';
-			case 'backup.import.restore_backup_warn': return 'When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Monekin';
 			case 'backup.import.restore_backup_descr': return 'Import a previously saved database from Monekin. This action will replace any current application data with the new data';
+			case 'backup.import.restore_backup_warn_description': return 'When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Monekin';
+			case 'backup.import.restore_backup_warn_title': return 'Overwrite all data';
 			case 'backup.import.select_other_file': return 'Select other file';
 			case 'backup.import.tap_to_select_file': return 'Tap to select a file';
 			case 'backup.import.manual_import.title': return 'Manual import';
@@ -3203,7 +3200,6 @@ extension on _TranslationsEs {
 			case 'general.or': return 'o';
 			case 'general.understood': return 'Entendido';
 			case 'general.unspecified': return 'Sin especificar';
-			case 'general.attention': return 'Atención ⚠️';
 			case 'general.confirm': return 'Confirmar';
 			case 'general.continue_text': return 'Continuar';
 			case 'general.quick_actions': return 'Acciones rápidas';
@@ -3683,17 +3679,17 @@ extension on _TranslationsEs {
 			case 'backup.export.all': return 'Respaldo total';
 			case 'backup.export.all_descr': return 'Exporta todos tus datos (cuentas, transacciones, presupuestos, ajustes...). Importalos de nuevo en cualquier momento para no perder nada.';
 			case 'backup.export.transactions': return 'Respaldo de transacciones';
-			case 'backup.export.transactions_descr': return 'Exporta tus transacciones en diversos formatos para que puedas analizarlas mas facilmente en otros programas o aplicaciones.';
+			case 'backup.export.transactions_descr': return 'Exporta tus transacciones en CSV para que puedas analizarlas mas facilmente en otros programas o aplicaciones.';
 			case 'backup.export.description': return 'Exporta tus datos en diferentes formatos';
 			case 'backup.export.dialog_title': return 'Guardar/Enviar archivo';
-			case 'backup.export.success_in_documents': return 'Archivo guardado correctamente en Almacenamiento interno/Documents';
-			case 'backup.export.success_in_data': return 'Archivo guardado/enviado correctamente';
+			case 'backup.export.success': return ({required Object x}) => 'Archivo guardado/enviado correctamente en ${x}';
 			case 'backup.export.error': return 'Error al descargar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com';
 			case 'backup.import.title': return 'Importar tus datos';
 			case 'backup.import.title_short': return 'Importar';
 			case 'backup.import.restore_backup': return 'Restaurar copia de seguridad';
-			case 'backup.import.restore_backup_warn': return 'Al importar una nueva base de datos, perderas toda la información actualmente guardada en la app. Se recomienda hacer una copia de seguridad antes de continuar. No subas aquí ningún fichero cuyo origen no conozcas, sube solo ficheros que hayas descargado previamente desde Monekin';
 			case 'backup.import.restore_backup_descr': return 'Importa una base de datos anteriormente guardada desde Monekin. Esta acción remplazará cualquier dato actual de la aplicación por los nuevos datos';
+			case 'backup.import.restore_backup_warn_title': return 'Sobreescribir todos los datos';
+			case 'backup.import.restore_backup_warn_description': return 'Al importar una nueva base de datos, perderas toda la información actualmente guardada en la app. Se recomienda hacer una copia de seguridad antes de continuar. No subas aquí ningún fichero cuyo origen no conozcas, sube solo ficheros que hayas descargado previamente desde Monekin';
 			case 'backup.import.tap_to_select_file': return 'Pulsa para seleccionar un archivo';
 			case 'backup.import.select_other_file': return 'Selecciona otro fichero';
 			case 'backup.import.manual_import.title': return 'Importación manual';
