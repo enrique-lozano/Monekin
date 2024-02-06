@@ -61,6 +61,7 @@ class _SubcategorySelectorState extends State<SubcategorySelector> {
           availableCategories: childCategories,
           extraHeaderButtons: [
             CategoryButtonSelector(
+                maxTextSize: 48 * 1.2,
                 iconWidget: IconDisplayer(
                   icon: Icons.block,
                   isOutline: selectedCategory.id == widget.parentCategory.id,

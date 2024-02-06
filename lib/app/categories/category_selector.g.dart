@@ -13,6 +13,8 @@ abstract class _$CategoryButtonSelectorCWProxy {
 
   CategoryButtonSelector label(String label);
 
+  CategoryButtonSelector maxTextSize(double maxTextSize);
+
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `CategoryButtonSelector(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
@@ -23,6 +25,7 @@ abstract class _$CategoryButtonSelectorCWProxy {
     Key? key,
     IconDisplayer? iconWidget,
     String? label,
+    double? maxTextSize,
   });
 }
 
@@ -44,6 +47,10 @@ class _$CategoryButtonSelectorCWProxyImpl
   CategoryButtonSelector label(String label) => this(label: label);
 
   @override
+  CategoryButtonSelector maxTextSize(double maxTextSize) =>
+      this(maxTextSize: maxTextSize);
+
+  @override
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `CategoryButtonSelector(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -55,6 +62,7 @@ class _$CategoryButtonSelectorCWProxyImpl
     Object? key = const $CopyWithPlaceholder(),
     Object? iconWidget = const $CopyWithPlaceholder(),
     Object? label = const $CopyWithPlaceholder(),
+    Object? maxTextSize = const $CopyWithPlaceholder(),
   }) {
     return CategoryButtonSelector(
       key: key == const $CopyWithPlaceholder()
@@ -70,6 +78,11 @@ class _$CategoryButtonSelectorCWProxyImpl
           ? _value.label
           // ignore: cast_nullable_to_non_nullable
           : label as String,
+      maxTextSize:
+          maxTextSize == const $CopyWithPlaceholder() || maxTextSize == null
+              ? _value.maxTextSize
+              // ignore: cast_nullable_to_non_nullable
+              : maxTextSize as double,
     );
   }
 }
@@ -93,6 +106,7 @@ extension $CategoryButtonSelectorCopyWith on CategoryButtonSelector {
       key: key == true ? null : this.key,
       iconWidget: iconWidget,
       label: label,
+      maxTextSize: maxTextSize,
     );
   }
 }

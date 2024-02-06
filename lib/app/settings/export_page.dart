@@ -1,17 +1,16 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/category_selector.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/presentation/widgets/dates/outlinedButtonStacked.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/database/backup/backup_database_service.dart';
-import '../../core/presentation/app_colors.dart';
 
 enum _ExportFormats { csv, db }
 
@@ -37,53 +36,30 @@ class _ExportDataPageState extends State<ExportDataPage> {
     final isSelected = selectedExportFormat == exportFormat;
 
     return Container(
-      padding: const EdgeInsets.only(left: 16, right: 16),
-      width: double.infinity,
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: BorderSide(
-            width: 1.25,
-            color:
-                isSelected ? AppColors.of(context).primary : Colors.transparent,
-          ),
-        ),
-        clipBehavior: Clip.hardEdge,
-        child: InkWell(
-          onTap: () => setState(() {
+      margin: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 500),
+        opacity: isSelected ? 1 : 1,
+        child: OutlinedButtonStacked(
+          text: title,
+          filled: isSelected,
+          fontSize: 20,
+          alignLeft: true,
+          alignBeside: true,
+          padding: const EdgeInsets.all(10),
+          onTap: () {
             selectedExportFormat = exportFormat;
 
             if (selectedExportFormat == _ExportFormats.db) {
               filters = const TransactionFilters();
             }
-          }),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SvgPicture.asset(
-                  'assets/icons/backup/$iconName.svg',
-                  height: 36,
-                  width: 36,
-                ),
-                const SizedBox(height: 18),
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: isSelected
-                          ? AppColors.of(context).primary
-                          : Theme.of(context).colorScheme.onSurfaceVariant),
-                ),
-                Text(
-                  descr,
-                  softWrap: true,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w300, fontSize: 14),
-                ),
-              ],
-            ),
-          ),
+
+            setState(() {});
+          },
+          iconData: exportFormat == _ExportFormats.csv
+              ? Icons.format_quote
+              : Icons.security,
+          afterWidget: Text(descr),
         ),
       ),
     );
@@ -171,7 +147,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
               ),
               const SizedBox(height: 8),
               Padding(
-                padding: const EdgeInsets.only(left: 16),
+                padding: const EdgeInsets.only(left: 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -232,32 +208,27 @@ class _ExportDataPageState extends State<ExportDataPage> {
                     Text('${t.general.categories}:'),
                     const SizedBox(height: 6),
                     StreamBuilder(
-                        stream: CategoryService.instance.getCategories(),
+                        stream: CategoryService.instance.getMainCategories(),
                         builder: (context, snapshot) {
-                          final selectedCategories = (snapshot.data ?? [])
-                              .where((element) =>
-                                  filters.categories?.contains(element.id) ??
-                                  false);
-
-                          return StreamBuilder(
-                              stream:
-                                  CategoryService.instance.getMainCategories(),
-                              builder: (context, snapshot) {
-                                return CategorySelector(
-                                  availableCategories: snapshot.data,
-                                  selectedCategories:
-                                      selectedCategories.toList(),
-                                  onChange: (selection) {
-                                    setState(() {
-                                      filters = filters.copyWith(
-                                        categories: selection
-                                            ?.map((e) => e.id)
-                                            .toList(),
-                                      );
-                                    });
-                                  },
+                          return CategorySelector(
+                            availableCategories: snapshot.data,
+                            selectedCategories: filters.categories == null
+                                ? null
+                                : (snapshot.data ?? [])
+                                    .where(
+                                      (element) => filters.categories!
+                                          .contains(element.id),
+                                    )
+                                    .toList(),
+                            onChange: (selection) {
+                              setState(() {
+                                filters = filters.copyWith(
+                                  categories:
+                                      selection?.map((e) => e.id).toList(),
                                 );
                               });
+                            },
+                          );
                         }),
                   ],
                 ),

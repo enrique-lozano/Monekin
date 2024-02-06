@@ -74,23 +74,24 @@ class TransactionFilters {
       : AccountService.instance.getAccounts();
 
   Expression<bool> Function(
-          Transactions transaction,
-          Accounts account,
-          Currencies accountCurrency,
-          Accounts receivingAccount,
-          Currencies receivingAccountCurrency,
-          Categories c,
-          Categories)?
-      toTransactionExpression(
-          {Iterable<Expression<bool>> Function(
-                  Transactions transaction,
-                  Accounts account,
-                  Currencies accountCurrency,
-                  Accounts receivingAccount,
-                  Currencies receivingAccountCurrency,
-                  Categories c,
-                  Categories)?
-              extraFilters}) {
+    Transactions transaction,
+    Accounts account,
+    Currencies accountCurrency,
+    Accounts receivingAccount,
+    Currencies receivingAccountCurrency,
+    Categories c,
+    Categories,
+  )? toTransactionExpression({
+    Iterable<Expression<bool>> Function(
+            Transactions transaction,
+            Accounts account,
+            Currencies accountCurrency,
+            Accounts receivingAccount,
+            Currencies receivingAccountCurrency,
+            Categories c,
+            Categories)?
+        extraFilters,
+  }) {
     return (transaction, account, accountCurrency, receivingAccount,
             receivingAccountCurrency, c, p6) =>
         AppDB.instance.buildExpr([

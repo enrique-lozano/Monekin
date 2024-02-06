@@ -204,15 +204,18 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                             stream:
                                 CategoryService.instance.getMainCategories(),
                             builder: (context, snapshot) {
-                              final selectedCategories = (snapshot.data ?? [])
-                                  .where((element) =>
-                                      filtersToReturn.categories
-                                          ?.contains(element.id) ??
-                                      false);
-
                               return CategorySelector(
                                 availableCategories: snapshot.data,
-                                selectedCategories: selectedCategories.toList(),
+                                selectedCategories:
+                                    filtersToReturn.categories == null
+                                        ? null
+                                        : (snapshot.data ?? [])
+                                            .where(
+                                              (element) => filtersToReturn
+                                                  .categories!
+                                                  .contains(element.id),
+                                            )
+                                            .toList(),
                                 onChange: (selection) {
                                   setState(() {
                                     filtersToReturn = filtersToReturn.copyWith(

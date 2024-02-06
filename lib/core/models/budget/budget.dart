@@ -2,22 +2,28 @@ import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/date-utils/date_period.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
+import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 
 class Budget extends BudgetInDB {
-  List<String> categories;
-  List<String> accounts;
+  List<String>? categories;
+  List<String>? accounts;
 
   Budget({
     required super.id,
     required super.name,
     required super.limitAmount,
-    required this.categories,
-    required this.accounts,
+    required List<String>? categories,
+    required List<String>? accounts,
     super.intervalPeriod,
     super.startDate,
     super.endDate,
-  }) : assert(categories.isNotEmpty && accounts.isNotEmpty);
+  }) {
+    this.categories =
+        categories != null && categories.isEmpty ? null : categories;
+
+    this.accounts = accounts != null && accounts.isEmpty ? null : accounts;
+  }
 
   (DateTime, DateTime) get currentDateRange {
     final toReturn = DatePeriodState(
@@ -40,7 +46,9 @@ class Budget extends BudgetInDB {
     return AccountService.instance
         .getAccountsBalance(
       filters: TransactionFilters(
+        transactionTypes: [TransactionType.expense],
         accountsIDs: accounts,
+        includeParentCategoriesInSearch: true,
         categories: categories,
         minDate: currentDateRange.$1,
         maxDate: date,
