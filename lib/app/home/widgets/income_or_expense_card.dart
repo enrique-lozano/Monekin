@@ -24,7 +24,7 @@ class IncomeOrExpenseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       child: Row(
         children: [
           Container(
