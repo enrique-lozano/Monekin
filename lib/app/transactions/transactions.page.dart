@@ -59,7 +59,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
     return PopScope(
       canPop: !searchActive,
       onPopInvoked: (didPop) {
-        // if (didPop) return;
+        if (didPop) return;
 
         if (searchFocusNode.hasFocus &&
             (searchValue != null && searchValue!.isNotEmpty)) {

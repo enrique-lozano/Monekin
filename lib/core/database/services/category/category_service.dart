@@ -77,7 +77,7 @@ class CategoryService {
           type: CategoryType.values.byName(category['type']));
 
       await db.customStatement(
-          "INSERT INTO categories(id, name, iconId, color, type) VALUES ('${categoryToPush.id}', '${categoryToPush.name}', '${categoryToPush.iconId}', '${categoryToPush.color}', '${categoryToPush.type?.name}')");
+          "INSERT INTO categories(id, name, iconId, color, type, displayOrder) VALUES ('${categoryToPush.id}', '${categoryToPush.name}', '${categoryToPush.iconId}', '${categoryToPush.color}', '${categoryToPush.type?.name}', ${categoryToPush.displayOrder})");
 
       if (category['subcategories'] != null) {
         for (final subcategory in category['subcategories']) {
@@ -89,7 +89,7 @@ class CategoryService {
               parentCategoryID: categoryToPush.id);
 
           await db.customStatement(
-              "INSERT INTO categories(id, name, iconId, parentCategoryID) VALUES ('${subcategoryToPush.id}', '${subcategoryToPush.name}', '${subcategoryToPush.iconId}', '${subcategoryToPush.parentCategoryID}')");
+              "INSERT INTO categories(id, name, iconId, parentCategoryID, displayOrder) VALUES ('${subcategoryToPush.id}', '${subcategoryToPush.name}', '${subcategoryToPush.iconId}', '${subcategoryToPush.parentCategoryID}', ${subcategoryToPush.displayOrder})");
         }
       }
     }
