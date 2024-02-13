@@ -49,6 +49,7 @@ class NewTransactionButton extends StatelessWidget {
     }
 
     return FloatingActionButton(
+      heroTag: "new-transaction-floating-button",
       tooltip: t.transaction.create,
       onPressed: () => _onPressed(context),
       child: const Icon(Icons.add_rounded),

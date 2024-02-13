@@ -30,6 +30,7 @@ import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/presentation/app_colors.dart';
 
+@RoutePage()
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
 

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 final mainLayoutRouterKey = GlobalKey<AutoRouterState>();
+final tabsLayoutKey = GlobalKey<AutoTabsRouterState>();
+
 StreamController<String?> layoutInsideRouteName = BehaviorSubject();
 
 class MainLayoutNavObserver extends RouteObserver<ModalRoute<dynamic>> {
@@ -18,7 +20,7 @@ class MainLayoutNavObserver extends RouteObserver<ModalRoute<dynamic>> {
 
   @override
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
-    // print('Main layout nav observer: Did replace');
+    //print('Main layout nav observer: Did replace');
     layoutInsideRouteName.add(_router?.current.name);
   }
 
