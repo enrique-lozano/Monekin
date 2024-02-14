@@ -3,9 +3,13 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/app/home/root_navigator_observer.dart';
+import 'package:monekin/app/layout/navigation_sidebar.dart';
+import 'package:monekin/app/layout/tabs.dart';
+import 'package:monekin/app/onboarding/intro.page.dart';
+import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/utils/scroll_behavior_override.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -14,6 +18,10 @@ void main() {
 
   runApp(const MonekinAppEntryPoint());
 }
+
+final GlobalKey<TabsPageState> tabsPageKey = GlobalKey();
+final GlobalKey<NavigationSidebarState> navigationSidebarKey = GlobalKey();
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class MonekinAppEntryPoint extends StatelessWidget {
   const MonekinAppEntryPoint({
@@ -65,38 +73,52 @@ class MonekinAppEntryPoint extends StatelessWidget {
           }
 
           return TranslationProvider(
-            child: MaterialAppContainer(
-              amoledMode: userSettings
-                      .firstWhere((element) =>
-                          element.settingKey == SettingKey.amoledMode)
-                      .settingValue! ==
-                  '1',
-              accentColor: userSettings
-                  .firstWhere(
-                      (element) => element.settingKey == SettingKey.accentColor)
-                  .settingValue!,
-              themeMode: ThemeMode.values.byName(userSettings
-                  .firstWhere(
-                      (element) => element.settingKey == SettingKey.themeMode)
-                  .settingValue!),
-            ),
+            child: StreamBuilder(
+                stream: AppDataService.instance
+                    .getAppDataItem(AppDataKey.introSeen)
+                    .map((event) => event == '1'),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Container();
+                  }
+
+                  return MaterialAppContainer(
+                    introSeen: snapshot.data!,
+                    amoledMode: userSettings
+                            .firstWhere((element) =>
+                                element.settingKey == SettingKey.amoledMode)
+                            .settingValue! ==
+                        '1',
+                    accentColor: userSettings
+                        .firstWhere((element) =>
+                            element.settingKey == SettingKey.accentColor)
+                        .settingValue!,
+                    themeMode: ThemeMode.values.byName(userSettings
+                        .firstWhere((element) =>
+                            element.settingKey == SettingKey.themeMode)
+                        .settingValue!),
+                  );
+                }),
           );
         });
   }
 }
 
-final _appRouter = AppRouter();
+int refresh = 1;
 
 class MaterialAppContainer extends StatelessWidget {
   const MaterialAppContainer(
       {super.key,
       required this.themeMode,
       required this.accentColor,
-      required this.amoledMode});
+      required this.amoledMode,
+      required this.introSeen});
 
   final ThemeMode themeMode;
   final String accentColor;
   final bool amoledMode;
+
+  final bool introSeen;
 
   @override
   Widget build(BuildContext context) {
@@ -105,8 +127,9 @@ class MaterialAppContainer extends StatelessWidget {
 
     return DynamicColorBuilder(
         builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
-      return MaterialApp.router(
+      return MaterialApp(
         title: 'Monekin',
+        key: ValueKey(refresh),
         debugShowCheckedModeBanner: false,
         locale: TranslationProvider.of(context).flutterLocale,
         scrollBehavior: ScrollBehaviorOverride(),
@@ -125,7 +148,32 @@ class MaterialAppContainer extends StatelessWidget {
             darkDynamic: darkDynamic,
             accentColor: accentColor),
         themeMode: themeMode,
-        routerConfig: _appRouter.config(),
+        navigatorKey: navigatorKey,
+        navigatorObservers: [MainLayoutNavObserver()],
+        builder: (context, child) {
+          return Overlay(initialEntries: [
+            OverlayEntry(
+              builder: (context) => Stack(
+                children: [
+                  Row(
+                    children: [
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 1500),
+                        curve: Curves.easeInOutCubicEmphasized,
+                        width:
+                            introSeen ? getNavigationSidebarWidth(context) : 0,
+                        color: Theme.of(context).canvasColor,
+                      ),
+                      Expanded(child: child ?? const SizedBox.shrink()),
+                    ],
+                  ),
+                  if (introSeen) NavigationSidebar(key: navigationSidebarKey)
+                ],
+              ),
+            ),
+          ]);
+        },
+        home: introSeen ? TabsPage(key: tabsPageKey) : IntroPage(),
       );
     });
   }

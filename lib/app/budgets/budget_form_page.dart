@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
@@ -19,7 +18,6 @@ import 'package:uuid/uuid.dart';
 import '../../core/models/account/account.dart';
 import '../../core/presentation/widgets/persistent_footer_button.dart';
 
-@RoutePage()
 class BudgetFormPage extends StatefulWidget {
   const BudgetFormPage({super.key, this.budgetToEdit, required this.prevPage});
 

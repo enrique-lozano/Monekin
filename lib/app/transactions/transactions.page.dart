@@ -1,6 +1,6 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/home/main_layout.dart';
+import 'package:monekin/app/layout/tabs.dart';
+import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/presentation/widgets/empty_indicator.dart';
@@ -9,10 +9,9 @@ import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/core/routes/app_router.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-@RoutePage()
 class TransactionsPage extends StatefulWidget {
   const TransactionsPage({super.key, this.filters});
 
@@ -131,8 +130,9 @@ class _TransactionsPageState extends State<TransactionsPage> {
         floatingActionButton: FloatingActionButton.extended(
           icon: const Icon(Icons.add_rounded),
           label: Text(t.transaction.create),
-          onPressed: () => context.pushRoute(
-            TransactionFormRoute(),
+          onPressed: () => RouteUtils.pushRoute(
+            context,
+            TransactionFormPage(),
           ),
         ),
         body: Column(
@@ -187,8 +187,9 @@ class _TransactionsPageState extends State<TransactionsPage> {
             ),
             Expanded(
               child: TransactionListComponent(
+                heroTagBuilder: (tr) => 'transactions-page__tr-icon-${tr.id}',
                 filters: filters.copyWith(searchValue: searchValue),
-                prevPage: const MainLayoutPage(),
+                prevPage: const TabsPage(),
                 onEmptyList: EmptyIndicator(
                     title: t.general.empty_warn,
                     description: t.transaction.list.empty),

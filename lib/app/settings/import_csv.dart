@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:drift/drift.dart' as drift;
@@ -6,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/categories_list.dart';
+import 'package:monekin/app/layout/tabs.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
@@ -17,7 +17,7 @@ import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/widgets/loading_overlay.dart';
-import 'package:monekin/core/routes/app_router.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
@@ -26,7 +26,6 @@ import 'package:uuid/uuid.dart';
 
 import '../../core/presentation/app_colors.dart';
 
-@RoutePage()
 class ImportCSVPage extends StatefulWidget {
   const ImportCSVPage({super.key});
 
@@ -163,7 +162,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
     final loadingOverlay = LoadingOverlay.of(context);
 
     onSuccess() {
-      context.pushRoute(const MainLayoutRoute());
+      RouteUtils.pushRoute(context, const TabsPage());
 
       snackbarDisplayer(
         SnackBar(

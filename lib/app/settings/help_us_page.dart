@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/settings/purchases/donate_button.dart';
 import 'package:monekin/app/settings/purchases/in_app_purchase.dart';
@@ -7,7 +6,6 @@ import 'package:monekin/core/utils/open_external_url.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:share_plus/share_plus.dart';
 
-@RoutePage()
 class HelpUsPage extends StatelessWidget {
   const HelpUsPage({super.key});
 

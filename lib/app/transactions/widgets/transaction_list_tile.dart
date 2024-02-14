@@ -1,26 +1,28 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/app/transactions/transaction_details.page.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
-import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/services/view-actions/transaction_view_actions_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 
 import '../../../core/presentation/app_colors.dart';
 
 class TransactionListTile extends StatelessWidget {
-  const TransactionListTile(
-      {super.key,
-      required this.transaction,
-      required this.prevPage,
-      this.showDate = true,
-      this.showTime = true,
-      this.periodicityInfo});
+  const TransactionListTile({
+    super.key,
+    required this.transaction,
+    required this.prevPage,
+    this.showDate = true,
+    this.showTime = true,
+    this.periodicityInfo,
+    required this.heroTag,
+  });
 
   final MoneyTransaction transaction;
 
@@ -28,6 +30,8 @@ class TransactionListTile extends StatelessWidget {
   final Periodicity? periodicityInfo;
   final bool showDate;
   final bool showTime;
+
+  final Object? heroTag;
 
   showTransactionActions(BuildContext context, MoneyTransaction transaction) {
     showModalBottomSheet(
@@ -205,7 +209,7 @@ class TransactionListTile extends StatelessWidget {
         ),
       ),
       leading: Hero(
-        tag: 'transaction-icon-${transaction.id}',
+        tag: heroTag ?? UniqueKey(),
         child: transaction.isIncomeOrExpense
             ? IconDisplayer.fromCategory(
                 context,
@@ -221,8 +225,13 @@ class TransactionListTile extends StatelessWidget {
               ),
       ),
       onTap: () {
-        context.pushRoute(
-          TransactionDetailsRoute(transaction: transaction, prevPage: prevPage),
+        RouteUtils.pushRoute(
+          context,
+          TransactionDetailsPage(
+            transaction: transaction,
+            heroTag: heroTag,
+            prevPage: prevPage,
+          ),
         );
       },
       onLongPress: () => showTransactionActions(context, transaction),

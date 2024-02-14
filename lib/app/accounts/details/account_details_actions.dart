@@ -1,13 +1,13 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
+import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/details/account_details.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/routes/app_router.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -23,7 +23,8 @@ abstract class AccountDetailsActions {
       ListTileActionItem(
         label: t.general.edit,
         icon: Icons.edit,
-        onClick: () => context.pushRoute(AccountFormRoute(account: account)),
+        onClick: () =>
+            RouteUtils.pushRoute(context, AccountFormPage(account: account)),
       ),
       ListTileActionItem(
           label: t.transfer.create,
@@ -39,8 +40,9 @@ abstract class AccountDetailsActions {
                             Text(t.transfer.need_two_accounts_warning_message)
                           ]);
 
-                  navigateToTransferForm() => context.pushRoute(
-                        TransactionFormRoute(
+                  navigateToTransferForm() => RouteUtils.pushRoute(
+                        context,
+                        TransactionFormPage(
                           fromAccount: account,
                           mode: TransactionFormMode.transfer,
                         ),

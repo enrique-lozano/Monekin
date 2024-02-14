@@ -1,8 +1,9 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/app/accounts/account_form.dart';
+import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 class NewTransactionButton extends StatelessWidget {
@@ -21,7 +22,7 @@ class NewTransactionButton extends StatelessWidget {
     ).then((value) {
       if (value != true) return;
 
-      context.pushRoute(AccountFormRoute());
+      RouteUtils.pushRoute(context, AccountFormPage());
     });
   }
 
@@ -33,7 +34,7 @@ class NewTransactionButton extends StatelessWidget {
       if (!value) {
         _showShouldCreateAccountWarn(context);
       } else {
-        context.pushRoute(TransactionFormRoute());
+        RouteUtils.pushRoute(context, TransactionFormPage());
       }
     });
   }
@@ -42,6 +43,7 @@ class NewTransactionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     if (isExtended) {
       return FloatingActionButton.extended(
+        heroTag: null,
         onPressed: () => _onPressed(context),
         label: Text(t.transaction.create),
         icon: const Icon(Icons.add_rounded),
