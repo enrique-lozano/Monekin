@@ -1,8 +1,11 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/app/accounts/account_form.dart';
+import 'package:monekin/app/accounts/details/account_details.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/app/home/widgets/home_drawer.dart';
 import 'package:monekin/app/home/widgets/income_or_expense_card.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
+import 'package:monekin/app/stats/stats_page.dart';
 import 'package:monekin/app/stats/widgets/balance_bar_chart_small.dart';
 import 'package:monekin/app/stats/widgets/finance_health/finance_health_main_info.dart';
 import 'package:monekin/app/stats/widgets/fund_evolution_line_chart.dart';
@@ -22,7 +25,6 @@ import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/presentation/widgets/user_avatar.dart';
-import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/services/finance_health_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
@@ -30,7 +32,6 @@ import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/presentation/app_colors.dart';
 
-@RoutePage()
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
 
@@ -282,8 +283,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         rowFit: FlexFit.tight,
                         child: CardWithHeader(
                           title: t.financial_health.display,
-                          onHeaderButtonClick: () =>
-                              context.pushRoute(StatsRoute(initialIndex: 0)),
+                          onHeaderButtonClick: () => RouteUtils.pushRoute(
+                              context, const StatsPage(initialIndex: 0)),
                           bodyPadding: const EdgeInsets.only(right: 8),
                           body: StreamBuilder(
                             stream: FinanceHealthService().getHealthyValue(
@@ -313,7 +314,8 @@ class _DashboardPageState extends State<DashboardPage> {
                               dateRange: dateRangeService,
                             ),
                             onHeaderButtonClick: () {
-                              context.pushRoute(StatsRoute(initialIndex: 2));
+                              RouteUtils.pushRoute(
+                                  context, const StatsPage(initialIndex: 2));
                             }),
                       ),
                     ],
@@ -333,7 +335,8 @@ class _DashboardPageState extends State<DashboardPage> {
                             body: ChartByCategories(
                                 datePeriodState: dateRangeService),
                             onHeaderButtonClick: () {
-                              context.pushRoute(StatsRoute(initialIndex: 1));
+                              RouteUtils.pushRoute(
+                                  context, const StatsPage(initialIndex: 1));
                             }),
                       ),
                       ResponsiveRowColumnItem(
@@ -347,7 +350,8 @@ class _DashboardPageState extends State<DashboardPage> {
                                   dateRangeService: dateRangeService),
                             ),
                             onHeaderButtonClick: () {
-                              context.pushRoute(StatsRoute(initialIndex: 3));
+                              RouteUtils.pushRoute(
+                                  context, const StatsPage(initialIndex: 3));
                             }),
                       ),
                     ],
@@ -384,8 +388,8 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                       const SizedBox(height: 8),
                       FilledButton(
-                          onPressed: () =>
-                              context.pushRoute(AccountFormRoute()),
+                          onPressed: () => RouteUtils.pushRoute(
+                              context, const AccountFormPage()),
                           child: Text(t.account.form.create))
                     ],
                   ))
@@ -405,10 +409,14 @@ class _DashboardPageState extends State<DashboardPage> {
               final account = accounts[index];
 
               return ListTile(
-                onTap: () =>
-                    context.pushRoute(AccountDetailsRoute(account: account)),
+                onTap: () => RouteUtils.pushRoute(
+                    context,
+                    AccountDetailsPage(
+                        account: account,
+                        accountIconHeroTag:
+                            'dashboard-page__account-icon-${account.id}')),
                 leading: Hero(
-                    tag: 'account-icon-${account.id}',
+                    tag: 'dashboard-page__account-icon-${account.id}',
                     child: account.displayIcon(context)),
                 trailing: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -479,8 +487,13 @@ class _HorizontalScrollableAccountList extends StatelessWidget {
                     color: Colors.transparent,
                     elevation: 0,
                     child: Tappable(
-                      onTap: () => context.pushRoute(
-                        AccountDetailsRoute(account: account),
+                      onTap: () => RouteUtils.pushRoute(
+                        context,
+                        AccountDetailsPage(
+                          account: account,
+                          accountIconHeroTag:
+                              'dashboard-page__account-icon-${account.id}',
+                        ),
                       ),
                       bgColor: AppColors.of(context).light,
                       borderRadius: 12,
@@ -492,7 +505,8 @@ class _HorizontalScrollableAccountList extends StatelessWidget {
                             children: [
                               Row(children: [
                                 Hero(
-                                  tag: 'account-icon-${account.id}',
+                                  tag:
+                                      'dashboard-page__account-icon-${account.id}',
                                   child: account.displayIcon(
                                     context,
                                     size: 28,
@@ -571,7 +585,7 @@ class _HorizontalScrollableAccountList extends StatelessWidget {
                   child: Tappable(
                     //   bgColor: AppColors.of(context).light,
                     onTap: () {
-                      context.pushRoute(AccountFormRoute());
+                      RouteUtils.pushRoute(context, const AccountFormPage());
                     },
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),

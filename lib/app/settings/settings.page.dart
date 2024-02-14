@@ -1,16 +1,21 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/app/categories/categories_list.dart';
+import 'package:monekin/app/currencies/currency_manager.dart';
+import 'package:monekin/app/settings/about_page.dart';
+import 'package:monekin/app/settings/appearance_settings_page.dart';
+import 'package:monekin/app/settings/backup_settings_page.dart';
 import 'package:monekin/app/settings/edit_profile_modal.dart';
+import 'package:monekin/app/settings/help_us_page.dart';
+import 'package:monekin/app/tags/tag_list.page.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/user_avatar.dart';
-import 'package:monekin/core/routes/app_router.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/presentation/app_colors.dart';
 
-@RoutePage()
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -100,49 +105,54 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: t.general.categories,
                 subtitle: t.settings.general.categories_descr,
                 icon: Icons.category_rounded,
-                onTap: () => context.pushRoute(const CategoriesListRoute()),
+                onTap: () =>
+                    RouteUtils.pushRoute(context, const CategoriesListPage()),
               ),
               createSettingItem(
                 context,
                 title: t.tags.display(n: 10),
                 subtitle: t.settings.general.categories_descr,
                 icon: Icons.label_outline_rounded,
-                onTap: () => context.pushRoute(TagListRoute()),
+                onTap: () => RouteUtils.pushRoute(context, const TagListPage()),
               ),
               createSettingItem(
                 context,
                 title: t.currencies.currency_manager,
                 subtitle: t.currencies.currency_manager_descr,
                 icon: Icons.currency_exchange,
-                onTap: () => context.pushRoute(const CurrencyManagerRoute()),
+                onTap: () =>
+                    RouteUtils.pushRoute(context, const CurrencyManagerPage()),
               ),
               createSettingItem(
                 context,
                 title: t.settings.general.appearance,
                 subtitle: t.settings.general.appearance_descr,
                 icon: Icons.palette_outlined,
-                onTap: () => context.pushRoute(const AdvancedSettingsRoute()),
+                onTap: () =>
+                    RouteUtils.pushRoute(context, const AdvancedSettingsPage()),
               ),
               createSettingItem(
                 context,
                 title: t.settings.data.display,
                 subtitle: t.settings.data.display_descr,
                 icon: Icons.storage_rounded,
-                onTap: () => context.pushRoute(const BackupSettingsRoute()),
+                onTap: () =>
+                    RouteUtils.pushRoute(context, const BackupSettingsPage()),
               ),
               createSettingItem(
                 context,
                 title: t.settings.about_us.display,
                 subtitle: t.settings.about_us.description,
                 icon: Icons.info_outline_rounded,
-                onTap: () => context.pushRoute(const AboutRoute()),
+                onTap: () => RouteUtils.pushRoute(context, const AboutPage()),
               ),
               const SizedBox(height: 8),
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: InkWell(
                   radius: 8,
-                  onTap: () => context.pushRoute(const HelpUsRoute()),
+                  onTap: () =>
+                      RouteUtils.pushRoute(context, const HelpUsPage()),
                   child: Card(
                     clipBehavior: Clip.hardEdge,
                     margin: const EdgeInsets.all(0),

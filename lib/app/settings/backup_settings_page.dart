@@ -1,17 +1,17 @@
 import 'dart:io';
 
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/app/settings/export_page.dart';
+import 'package:monekin/app/settings/import_csv.dart';
 import 'package:monekin/app/settings/settings.page.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/utils/number_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-@RoutePage()
 class BackupSettingsPage extends StatelessWidget {
   const BackupSettingsPage({super.key});
 
@@ -53,7 +53,8 @@ class BackupSettingsPage extends StatelessWidget {
                       return;
                     }
 
-                    context.router.replaceAll([const MainLayoutRoute()]);
+                    // TODO: REPLACE ALL
+                    //   context.router.replaceAll([const MainLayoutRoute()]);
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(t.backup.import.success)),
@@ -72,7 +73,7 @@ class BackupSettingsPage extends StatelessWidget {
               subtitle: Text(t.backup.import.manual_import.descr),
               minVerticalPadding: 16,
               onTap: () {
-                context.pushRoute(const ImportCSVRoute());
+                RouteUtils.pushRoute(context, const ImportCSVPage());
               },
             ),
             createListSeparator(context, t.backup.export.title_short),
@@ -81,7 +82,7 @@ class BackupSettingsPage extends StatelessWidget {
               subtitle: Text(t.backup.export.description),
               minVerticalPadding: 16,
               onTap: () {
-                context.pushRoute(const ExportDataRoute());
+                RouteUtils.pushRoute(context, const ExportDataPage());
               },
             ),
             createListSeparator(context, t.backup.about.title),

@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/settings/settings.page.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
@@ -7,7 +6,6 @@ import 'package:monekin/i18n/translations.g.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:slang/builder/utils/string_extensions.dart';
 
-@RoutePage()
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
 

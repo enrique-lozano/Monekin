@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/stats/widgets/balance_bar_chart.dart';
 import 'package:monekin/app/stats/widgets/finance_health_details.dart';
@@ -19,7 +18,6 @@ import 'package:monekin/i18n/translations.g.dart';
 
 import '../accounts/all_accounts_balance.dart';
 
-@RoutePage()
 class StatsPage extends StatefulWidget {
   const StatsPage({super.key, this.initialIndex = 0});
 

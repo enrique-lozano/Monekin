@@ -62,7 +62,6 @@ dependencies:
   copy_with_extension: ^5.0.4
   freezed_annotation: ^2.4.1
   in_app_purchase: ^3.1.11
-  auto_route: ^7.8.4
 
 dev_dependencies:
   flutter_test:
@@ -78,7 +77,6 @@ dev_dependencies:
   slang_build_runner: ^3.18.0 # To regenerate the translations run 'dart run slang'
   copy_with_extension_gen: ^5.0.4
   freezed: ^2.4.5
-  auto_route_generator: ^7.3.2
 
 flutter_launcher_icons:
   image_path: 'assets/resources/appIcon-removebg.png'
