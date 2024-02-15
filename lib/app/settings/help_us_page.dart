@@ -15,7 +15,7 @@ class HelpUsPage extends StatelessWidget {
     final iapConnection = IAPConnection.instance;
 
     return Scaffold(
-      appBar: AppBar(title: Text(t.settings.help_us.display)),
+      appBar: AppBar(title: Text(t.more.help_us.display)),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -34,37 +34,49 @@ class HelpUsPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          t.settings.help_us.thanks,
+                          t.more.help_us.thanks,
                           style: Theme.of(context).textTheme.headlineSmall,
                         ),
-                        Text(t.settings.help_us.thanks_long)
+                        Text(t.more.help_us.thanks_long)
                       ],
                     ),
                   )
                 ],
               ),
             ),
-            createSettingItem(context,
-                title: t.settings.help_us.rate_us,
-                subtitle: t.settings.help_us.rate_us_descr,
-                icon: Icons.star_rounded, onTap: () {
-              openExternalURL(context,
-                  'https://play.google.com/store/apps/details?id=com.monekin.app');
-            }),
-            createSettingItem(context,
-                title: t.settings.help_us.share,
-                subtitle: t.settings.help_us.share_descr,
-                icon: Icons.share, onTap: () {
-              Share.share(
-                  '${t.settings.help_us.share_text}: https://play.google.com/store/apps/details?id=com.monekin.app');
-            }),
-            createSettingItem(context,
-                title: t.settings.help_us.report,
-                icon: Icons.rate_review_outlined, onTap: () {
-              openExternalURL(context,
-                  'https://github.com/enrique-lozano/Monekin/issues/new/choose');
-            }),
-            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  createSettingItem(context,
+                      title: t.more.help_us.rate_us,
+                      subtitle: t.more.help_us.rate_us_descr,
+                      icon: Icons.star_rounded,
+                      mainAxis: Axis.horizontal, onTap: () {
+                    openExternalURL(context,
+                        'https://play.google.com/store/apps/details?id=com.monekin.app');
+                  }),
+                  const SizedBox(height: 8),
+                  createSettingItem(context,
+                      title: t.more.help_us.share,
+                      subtitle: t.more.help_us.share_descr,
+                      icon: Icons.share,
+                      mainAxis: Axis.horizontal, onTap: () {
+                    Share.share(
+                        '${t.more.help_us.share_text}: https://play.google.com/store/apps/details?id=com.monekin.app');
+                  }),
+                  const SizedBox(height: 8),
+                  createSettingItem(context,
+                      title: t.more.help_us.report,
+                      icon: Icons.rate_review_outlined,
+                      mainAxis: Axis.horizontal, onTap: () {
+                    openExternalURL(context,
+                        'https://github.com/enrique-lozano/Monekin/issues/new/choose');
+                  }),
+                ],
+              ),
+            ),
             DonateButton(iapConnection: iapConnection)
           ],
         ),
