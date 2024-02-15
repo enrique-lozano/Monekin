@@ -9,6 +9,7 @@ import 'package:monekin/app/layout/tabs.dart';
 import 'package:monekin/app/onboarding/intro.page.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
+import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/utils/scroll_behavior_override.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -164,6 +165,12 @@ class MaterialAppContainer extends StatelessWidget {
                             introSeen ? getNavigationSidebarWidth(context) : 0,
                         color: Theme.of(context).canvasColor,
                       ),
+                      if (BreakPoint.of(context).isLargerThan(BreakpointID.sm))
+                        Container(
+                          width: 2,
+                          height: MediaQuery.of(context).size.height,
+                          color: Theme.of(context).dividerColor,
+                        ),
                       Expanded(child: child ?? const SizedBox.shrink()),
                     ],
                   ),
