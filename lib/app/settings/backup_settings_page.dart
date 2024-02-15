@@ -8,9 +8,11 @@ import 'package:monekin/app/settings/settings.page.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
+import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/number_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/main.dart';
 
 class BackupSettingsPage extends StatelessWidget {
   const BackupSettingsPage({super.key});
@@ -53,8 +55,13 @@ class BackupSettingsPage extends StatelessWidget {
                       return;
                     }
 
-                    // TODO: REPLACE ALL
-                    //   context.router.replaceAll([const MainLayoutRoute()]);
+                    RouteUtils.popAllRoutesExceptFirst();
+
+                    tabsPageKey.currentState!.changePage(
+                      getAllDestinations(context, shortLabels: false)
+                          .firstWhere((element) =>
+                              element.id == AppMenuDestinationsID.dashboard),
+                    );
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(t.backup.import.success)),

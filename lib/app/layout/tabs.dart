@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/layout/lazy_indexed_stack.dart';
-import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/main.dart';
@@ -17,6 +16,8 @@ class TabsPageState extends State<TabsPage> {
   MainMenuDestination? selectedDestination;
 
   void changePage(MainMenuDestination destination) {
+    print("HOLA");
+
     navigationSidebarKey.currentState?.setSelectedDestination(destination);
 
     setState(() {
@@ -57,14 +58,7 @@ class TabsPageState extends State<TabsPage> {
           index: allDestinations
               .indexWhere((element) => element.id == selectedDestination?.id),
           duration: const Duration(milliseconds: 300),
-          children: allDestinations
-              .map(
-                (e) => BreakpointContainer(
-                  mdChild: _RightWidgetContainer(child: e.destination),
-                  child: e.destination,
-                ),
-              )
-              .toList(),
+          children: allDestinations.map((e) => e.destination).toList(),
         );
       }),
       // selectedDestination?.destination ?? const SizedBox.shrink(),
@@ -131,33 +125,6 @@ class FadeIndexedStackState extends State<FadeIndexedStack>
         textDirection: widget.textDirection,
         sizing: widget.sizing,
         children: widget.children,
-      ),
-    );
-  }
-}
-
-class _RightWidgetContainer extends StatelessWidget {
-  const _RightWidgetContainer({
-    super.key,
-    required this.child,
-  });
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        margin: const EdgeInsets.all(16),
-        child: Card(
-          elevation: 4,
-          clipBehavior: Clip.hardEdge,
-          child: child,
-        ),
       ),
     );
   }

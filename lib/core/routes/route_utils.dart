@@ -9,7 +9,17 @@ abstract class RouteUtils {
   }) {
     if (navigatorKey.currentState == null) return Future.value(null);
 
-    var pageRouteBuilder = PageRouteBuilder<T>(
+    var pageRouteBuilder = getPageRouteBuilder<T>(page);
+
+    if (withReplacement) {
+      return navigatorKey.currentState!.pushReplacement(pageRouteBuilder);
+    }
+
+    return navigatorKey.currentState!.push(pageRouteBuilder);
+  }
+
+  static PageRouteBuilder<T> getPageRouteBuilder<T>(Widget page) {
+    return PageRouteBuilder<T>(
       opaque: false,
       transitionDuration: const Duration(milliseconds: 300),
       reverseTransitionDuration: const Duration(milliseconds: 125),
@@ -30,11 +40,18 @@ abstract class RouteUtils {
         return page;
       },
     );
+  }
 
-    if (withReplacement) {
-      return navigatorKey.currentState!.pushReplacement(pageRouteBuilder);
-    }
+  /// Pop all the routes in the stack except the first one without any animation
+  static void popAllRoutesExceptFirst() {
+    // This function can be useful when we want to return to the main layout page
+    navigatorKey.currentState!.pushAndRemoveUntil(
+        PageRouteBuilder(
+          pageBuilder: (context, animation1, animation2) => const SizedBox(),
+          transitionDuration: const Duration(seconds: 0),
+        ),
+        (route) => route.isFirst);
 
-    return navigatorKey.currentState!.push(pageRouteBuilder);
+    navigatorKey.currentState!.pop();
   }
 }

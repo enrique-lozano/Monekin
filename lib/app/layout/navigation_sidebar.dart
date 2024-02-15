@@ -6,6 +6,7 @@ import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/user_avatar.dart';
 import 'package:monekin/core/routes/destinations.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/main.dart';
 
 double getNavigationSidebarWidth(BuildContext context) {
@@ -52,6 +53,11 @@ class NavigationSidebarState extends State<NavigationSidebar> {
     final selectedNavItemIndex = menuItems
         .indexWhere((element) => element.id == selectedDestination!.id);
 
+    onDestinationSelected(int e) {
+      RouteUtils.popAllRoutesExceptFirst();
+      tabsPageKey.currentState?.changePage(menuItems.elementAt(e));
+    }
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 1500),
       curve: Curves.easeInOutCubicEmphasized,
@@ -84,27 +90,14 @@ class NavigationSidebarState extends State<NavigationSidebar> {
               destinations: menuItems
                   .map((e) => e.toNavigationRailDestinationWidget())
                   .toList(),
-              onDestinationSelected: (e) =>
-                  tabsPageKey.currentState?.changePage(menuItems.elementAt(e)),
+              onDestinationSelected: onDestinationSelected,
               selectedIndex:
                   selectedNavItemIndex < 0 ? null : selectedNavItemIndex),
         ),
         xlChild: SafeArea(
           child: HomeDrawer(
             drawerActions: menuItems,
-            onDestinationSelected: (e) {
-              // Pop all routes without animation:
-              navigatorKey.currentState!.pushAndRemoveUntil(
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) =>
-                        const SizedBox(),
-                    transitionDuration: const Duration(seconds: 0),
-                  ),
-                  (route) => route.isFirst);
-              navigatorKey.currentState!.pop();
-
-              tabsPageKey.currentState?.changePage(menuItems.elementAt(e));
-            },
+            onDestinationSelected: onDestinationSelected,
             selectedIndex: selectedNavItemIndex,
           ),
         ),
