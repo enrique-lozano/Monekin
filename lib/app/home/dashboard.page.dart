@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/details/account_details.dart';
-import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/app/home/widgets/home_drawer.dart';
 import 'package:monekin/app/home/widgets/income_or_expense_card.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
+import 'package:monekin/app/settings/edit_profile_modal.dart';
 import 'package:monekin/app/stats/stats_page.dart';
 import 'package:monekin/app/stats/widgets/balance_bar_chart_small.dart';
 import 'package:monekin/app/stats/widgets/finance_health/finance_health_main_info.dart';
@@ -26,6 +26,7 @@ import 'package:monekin/core/presentation/widgets/transaction_filter/transaction
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/presentation/widgets/user_avatar.dart';
 import 'package:monekin/core/routes/destinations.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/finance_health_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -100,44 +101,70 @@ class _DashboardPageState extends State<DashboardPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: [
-                              StreamBuilder(
-                                  stream: UserSettingService.instance
-                                      .getSetting(SettingKey.avatar),
-                                  builder: (context, snapshot) {
-                                    return UserAvatar(avatar: snapshot.data);
-                                  }),
-                              const SizedBox(width: 8),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                          Tappable(
+                            onTap: () {
+                              showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  showDragHandle: true,
+                                  builder: (context) {
+                                    return const EditProfileModal();
+                                  });
+                            },
+                            bgColor: Colors.transparent,
+                            borderRadius: 12,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Row(
                                 children: [
-                                  Text(
-                                    "Welcome again!",
-                                    style:
-                                        Theme.of(context).textTheme.labelSmall!,
-                                  ),
-                                  StreamBuilder(
-                                      stream: UserSettingService.instance
-                                          .getSetting(SettingKey.userName),
-                                      builder: (context, snapshot) {
-                                        if (!snapshot.hasData) {
-                                          return const Skeleton(
-                                              width: 70, height: 12);
-                                        }
+                                  if (BreakPoint.of(context)
+                                      .isSmallerThan(BreakpointID.md)) ...[
+                                    StreamBuilder(
+                                        stream: UserSettingService.instance
+                                            .getSetting(SettingKey.avatar),
+                                        builder: (context, snapshot) {
+                                          return UserAvatar(
+                                              avatar: snapshot.data);
+                                        }),
+                                    const SizedBox(width: 8),
+                                  ],
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Welcome again!",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .copyWith(
+                                              fontWeight: FontWeight.w300,
+                                            ),
+                                      ),
+                                      StreamBuilder(
+                                          stream: UserSettingService.instance
+                                              .getSetting(SettingKey.userName),
+                                          builder: (context, snapshot) {
+                                            if (!snapshot.hasData) {
+                                              return const Skeleton(
+                                                  width: 70, height: 12);
+                                            }
 
-                                        return Text(
-                                          snapshot.data!,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium!
-                                              .copyWith(
-                                                  fontWeight: FontWeight.bold),
-                                        );
-                                      }),
+                                            return Text(
+                                              snapshot.data!,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleLarge!
+                                                  .copyWith(
+                                                      // fontWeight: FontWeight.bold,
+                                                      ),
+                                            );
+                                          }),
+                                    ],
+                                  )
                                 ],
-                              )
-                            ],
+                              ),
+                            ),
                           ),
                           ActionChip(
                             label: Text(dateRangeService.getText(context)),
@@ -170,7 +197,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           ),
                         ],
                       ),
-                      const Divider(height: 24),
+                      const Divider(height: 16),
+                      const SizedBox(height: 8),
                       StreamBuilder(
                         stream: AccountService.instance.getAccounts(),
                         builder: (context, accounts) {

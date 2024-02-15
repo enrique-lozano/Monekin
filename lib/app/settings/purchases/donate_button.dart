@@ -45,7 +45,7 @@ class _DonateButtonState extends State<DonateButton> {
     }, onDone: () {
       _subscription?.cancel();
     }, onError: (error) {
-      showSnackbarMessage(context, t.settings.help_us.donate_err);
+      showSnackbarMessage(context, t.more.help_us.donate_err);
     }) as StreamSubscription<List<PurchaseDetails>>;
   }
 
@@ -57,9 +57,9 @@ class _DonateButtonState extends State<DonateButton> {
         // LOADING
       } else {
         if (purchaseDetails.status == PurchaseStatus.error) {
-          showSnackbarMessage(context, t.settings.help_us.donate_err);
+          showSnackbarMessage(context, t.more.help_us.donate_err);
         } else if (purchaseDetails.status == PurchaseStatus.purchased) {
-          showSnackbarMessage(context, t.settings.help_us.donate_success);
+          showSnackbarMessage(context, t.more.help_us.donate_success);
         }
         if (purchaseDetails.pendingCompletePurchase) {
           await InAppPurchase.instance.completePurchase(purchaseDetails);
@@ -151,11 +151,11 @@ class _DonateButtonState extends State<DonateButton> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        t.settings.help_us.donate,
+                        t.more.help_us.donate,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       Text(
-                        t.settings.help_us.donate_descr,
+                        t.more.help_us.donate_descr,
                         style: Theme.of(context).textTheme.labelSmall,
                       ),
                     ],

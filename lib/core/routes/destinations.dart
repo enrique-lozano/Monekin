@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/accounts/all_accounts_page.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/home/dashboard.page.dart';
 import 'package:monekin/app/settings/settings.page.dart';
 import 'package:monekin/app/stats/stats_page.dart';
-import 'package:monekin/app/transactions/recurrent_transactions_page.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -87,38 +85,37 @@ List<MainMenuDestination> getAllDestinations(
       selectedIcon: Icons.calculate,
       destination: const BudgetsPage(),
     ),
-    MainMenuDestination(
+    /*   MainMenuDestination(
       AppMenuDestinationsID.accounts,
       label: t.general.accounts,
       icon: Icons.account_balance_rounded,
       destination: const AllAccountsPage(),
-    ),
+    ), */
     MainMenuDestination(
       AppMenuDestinationsID.transactions,
       label: t.transaction.display(n: 10),
       icon: Icons.app_registration_rounded,
-      destination: TransactionsPage(),
+      destination: const TransactionsPage(),
     ),
-    MainMenuDestination(
+    /*   MainMenuDestination(
       AppMenuDestinationsID.recurrentTransactions,
       label: shortLabels
           ? t.recurrent_transactions.title_short
           : t.recurrent_transactions.title,
       icon: Icons.auto_mode_rounded,
-      destination: RecurrentTransactionPage(),
+      destination: const RecurrentTransactionPage(),
+    ), */
+    MainMenuDestination(
+      AppMenuDestinationsID.stats,
+      label: t.stats.title,
+      icon: Icons.auto_graph_rounded,
+      destination: const StatsPage(),
     ),
-    if (MediaQuery.of(context).size.height > 650)
-      MainMenuDestination(
-        AppMenuDestinationsID.stats,
-        label: t.stats.title,
-        icon: Icons.auto_graph_rounded,
-        destination: StatsPage(),
-      ),
     MainMenuDestination(
       AppMenuDestinationsID.settings,
-      label: t.settings.title,
-      selectedIcon: Icons.settings,
-      icon: Icons.settings_outlined,
+      label: t.more.title,
+      selectedIcon: Icons.more_horiz_rounded,
+      icon: Icons.more_horiz_rounded,
       destination: const SettingsPage(),
     ),
   ];

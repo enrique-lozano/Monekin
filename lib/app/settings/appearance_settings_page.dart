@@ -99,15 +99,15 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(t.settings.general.appearance),
+        title: Text(t.settings.title_short),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            createListSeparator(context, t.settings.lang),
+            createListSeparator(context, t.settings.lang_section),
             buildSelector(
-              title: t.settings.lang,
+              title: t.settings.lang_title,
               dialogDescr: t.settings.lang_descr,
               items: [
                 SelectItem(value: 'es', label: t.lang.es),
@@ -122,22 +122,17 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     .then((value) => null);
               },
             ),
-            createListSeparator(context, t.settings.general.app_colors),
+            createListSeparator(context, t.settings.theme_and_colors),
             StreamBuilder(
                 stream: UserSettingService.instance
                     .getSetting(SettingKey.themeMode),
                 builder: (context, snapshot) {
                   return buildSelector(
-                    title: t.settings.general.theme,
+                    title: t.settings.theme,
                     items: [
-                      SelectItem(
-                          value: 'system',
-                          label: t.settings.general.theme_auto),
-                      SelectItem(
-                          value: 'light',
-                          label: t.settings.general.theme_light),
-                      SelectItem(
-                          value: 'dark', label: t.settings.general.theme_dark)
+                      SelectItem(value: 'system', label: t.settings.theme_auto),
+                      SelectItem(value: 'light', label: t.settings.theme_light),
+                      SelectItem(value: 'dark', label: t.settings.theme_dark)
                     ],
                     selected: snapshot.data ?? 'system',
                     onChanged: (value) {
@@ -154,8 +149,8 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                 initialData: true,
                 builder: (context, snapshot) {
                   return SwitchListTile(
-                    title: Text(t.settings.general.amoled_mode),
-                    subtitle: Text(t.settings.general.amoled_mode_descr),
+                    title: Text(t.settings.amoled_mode),
+                    subtitle: Text(t.settings.amoled_mode_descr),
                     value: snapshot.data!,
                     onChanged: Theme.of(context).brightness == Brightness.light
                         ? null
@@ -174,8 +169,8 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                 initialData: true,
                 builder: (context, snapshot) {
                   return SwitchListTile(
-                    title: Text(t.settings.general.dynamic_colors),
-                    subtitle: Text(t.settings.general.dynamic_colors_descr),
+                    title: Text(t.settings.dynamic_colors),
+                    subtitle: Text(t.settings.dynamic_colors_descr),
                     value: snapshot.data!,
                     onChanged: (bool value) {
                       if (value) {
@@ -217,8 +212,8 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     child: Opacity(
                       opacity: snapshot.data! == 'auto' ? 0.4 : 1,
                       child: ExpansionTile(
-                        title: Text(t.settings.general.accent_color),
-                        subtitle: Text(t.settings.general.accent_color_descr),
+                        title: Text(t.settings.accent_color),
+                        subtitle: Text(t.settings.accent_color_descr),
                         controller: expTileController,
                         trailing: SizedBox(
                           height: 46,
