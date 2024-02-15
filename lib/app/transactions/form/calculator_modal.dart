@@ -4,7 +4,6 @@ import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/utils/color_utils.dart';
-import 'package:monekin/i18n/translations.g.dart';
 
 class AmountSelector extends StatefulWidget {
   const AmountSelector({
@@ -30,6 +29,12 @@ class _AmountSelectorState extends State<AmountSelector> {
   late String selectedAmount;
   double get valueToNumber => double.tryParse(selectedAmount) ?? 0;
 
+  FocusNode _focusNode = FocusNode();
+  late FocusAttachment _focusAttachment;
+
+  /// String that identifies the remove character button
+  final removeID = '⌫';
+
   @override
   void initState() {
     super.initState();
@@ -40,6 +45,81 @@ class _AmountSelectorState extends State<AmountSelector> {
       selectedAmount =
           removeTrailingZeroes(widget.amountToConvert.toStringAsFixed(2));
     }
+
+    _focusAttachment = _focusNode.attach(context, onKeyEvent: (node, event) {
+      bool keyIsPressed = event.runtimeType == KeyDownEvent ||
+          event.runtimeType == KeyRepeatEvent;
+
+      if (!keyIsPressed) {
+        return KeyEventResult.handled;
+      }
+
+      if ((event.logicalKey == LogicalKeyboardKey.browserBack ||
+          event.logicalKey == LogicalKeyboardKey.goBack ||
+          event.logicalKey == LogicalKeyboardKey.escape)) {
+        Navigator.pop(context);
+      }
+
+      for (final (index, element) in [
+        LogicalKeyboardKey.digit0,
+        LogicalKeyboardKey.digit1,
+        LogicalKeyboardKey.digit2,
+        LogicalKeyboardKey.digit3,
+        LogicalKeyboardKey.digit4,
+        LogicalKeyboardKey.digit5,
+        LogicalKeyboardKey.digit6,
+        LogicalKeyboardKey.digit7,
+        LogicalKeyboardKey.digit8,
+        LogicalKeyboardKey.digit9,
+      ].indexed) {
+        if (event.logicalKey == element) {
+          addToAmount(index.toStringAsFixed(0));
+          break;
+        }
+      }
+
+      for (final (index, element) in [
+        LogicalKeyboardKey.numpad0,
+        LogicalKeyboardKey.numpad1,
+        LogicalKeyboardKey.numpad2,
+        LogicalKeyboardKey.numpad3,
+        LogicalKeyboardKey.numpad4,
+        LogicalKeyboardKey.numpad5,
+        LogicalKeyboardKey.numpad6,
+        LogicalKeyboardKey.numpad7,
+        LogicalKeyboardKey.numpad8,
+        LogicalKeyboardKey.numpad9,
+      ].indexed) {
+        if (event.logicalKey == element) {
+          addToAmount(index.toStringAsFixed(0));
+          break;
+        }
+      }
+
+      if (event.logicalKey == LogicalKeyboardKey.period) {
+        addToAmount('.');
+      } else if (event.logicalKey == LogicalKeyboardKey.numpadDecimal) {
+        addToAmount('.');
+      } else if (event.logicalKey == LogicalKeyboardKey.comma) {
+        addToAmount('.');
+      } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
+        onButtonPress(removeID);
+      } else if (event.logicalKey == LogicalKeyboardKey.delete) {
+        onButtonPress(removeID);
+      } else if (event.logicalKey == LogicalKeyboardKey.enter) {
+        submitAmount();
+      }
+
+      return KeyEventResult.handled;
+    });
+
+    _focusNode.requestFocus();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   String removeTrailingZeroes(String input) {
@@ -56,6 +136,49 @@ class _AmountSelectorState extends State<AmountSelector> {
     return input.substring(0, index + 1);
   }
 
+  void addToAmount(String text) {
+    final decimalPlaces = selectedAmount.split('.').elementAtOrNull(1);
+
+    if (decimalPlaces != null && decimalPlaces.length >= 2) {
+      return;
+    }
+
+    setState(() {
+      selectedAmount += text;
+    });
+  }
+
+  submitAmount() {
+    HapticFeedback.lightImpact();
+
+    if (widget.onSubmit != null) {
+      widget.onSubmit!(valueToNumber);
+    }
+  }
+
+  void onButtonPress(String text) {
+    if (text == 'DONE') {
+      submitAmount();
+      return;
+    }
+
+    HapticFeedback.lightImpact();
+
+    if (text == 'AC') {
+      setState(() {
+        selectedAmount = '0';
+      });
+    } else if (text == removeID) {
+      if (valueToNumber == 0) return;
+
+      setState(() {
+        selectedAmount = selectedAmount.substring(0, selectedAmount.length - 1);
+      });
+    } else {
+      addToAmount(text);
+    }
+  }
+
   Widget buildCalculatorButton(
     BuildContext context, {
     required String text,
@@ -65,33 +188,6 @@ class _AmountSelectorState extends State<AmountSelector> {
   }) {
     textColor ??= AppColors.of(context).onBackground;
     bgColor ??= AppColors.of(context).background;
-
-    onButtonPress() {
-      HapticFeedback.lightImpact();
-
-      final decimalPlaces = selectedAmount.split('.').elementAtOrNull(1);
-
-      if (text == 'DONE') {
-        if (widget.onSubmit != null) {
-          widget.onSubmit!(valueToNumber);
-        }
-
-        return;
-      }
-
-      if (text == 'AC') {
-        selectedAmount = '0';
-      } else if (text == '⌫' && valueToNumber != 0) {
-        selectedAmount = selectedAmount.substring(0, selectedAmount.length - 1);
-      } else {
-        if (decimalPlaces != null && decimalPlaces.length >= 2) {
-          return;
-        }
-
-        selectedAmount += text;
-      }
-      setState(() {});
-    }
 
     return Expanded(
       flex: flex,
@@ -111,10 +207,11 @@ class _AmountSelectorState extends State<AmountSelector> {
           ),
           onPressed: text == 'DONE' && (valueToNumber == 0)
               ? null
-              : () => onButtonPress(),
-          child: text == '⌫' || text == 'DONE'
-              ? Icon(
-                  text == '⌫' ? Icons.backspace_rounded : Icons.check_rounded)
+              : () => onButtonPress(text),
+          child: text == removeID || text == 'DONE'
+              ? Icon(text == removeID
+                  ? Icons.backspace_rounded
+                  : Icons.check_rounded)
               : Text(
                   text,
                   softWrap: false,
@@ -130,7 +227,7 @@ class _AmountSelectorState extends State<AmountSelector> {
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
+    _focusAttachment.reparent();
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
@@ -220,7 +317,7 @@ class _AmountSelectorState extends State<AmountSelector> {
                             buildCalculatorButton(context, text: '3'),
                             buildCalculatorButton(context, text: '6'),
                             buildCalculatorButton(context, text: '9'),
-                            buildCalculatorButton(context, text: '⌫'),
+                            buildCalculatorButton(context, text: removeID),
                           ],
                         ),
                       ),
