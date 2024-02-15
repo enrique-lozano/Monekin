@@ -1,11 +1,11 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/category_selector.dart';
+import 'package:monekin/app/categories/form/category_form.dart';
 import 'package:monekin/app/categories/subcategory_selector.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/routes/app_router.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -38,7 +38,6 @@ Future<List<Category>?> showCategoryListModal(
   );
 }
 
-@RoutePage()
 class CategoriesListPage extends CategoriesList {
   const CategoriesListPage()
       : super(mode: CategoriesListMode.page, selectedCategories: const []);
@@ -110,8 +109,8 @@ class _CategoriesListState extends State<CategoriesList> {
             return;
           }
 
-          goToCategoryForm() =>
-              context.pushRoute(CategoryFormRoute(categoryUUID: category.id));
+          goToCategoryForm() => RouteUtils.pushRoute(
+              context, CategoryFormPage(categoryUUID: category.id));
 
           if (widget.mode == CategoriesListMode.page) {
             await goToCategoryForm();
@@ -182,7 +181,7 @@ class _CategoriesListState extends State<CategoriesList> {
                   PersistentFooterButton(
                     child: FilledButton.icon(
                       onPressed: () {
-                        context.pushRoute(CategoryFormRoute());
+                        RouteUtils.pushRoute(context, const CategoryFormPage());
                       },
                       icon: const Icon(Icons.add),
                       label: Text(t.categories.create),

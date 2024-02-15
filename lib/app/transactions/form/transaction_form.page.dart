@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -35,7 +34,6 @@ import '../../../core/presentation/app_colors.dart';
 
 enum TransactionFormMode { transfer, incomeOrExpense }
 
-@RoutePage()
 class TransactionFormPage extends StatefulWidget {
   const TransactionFormPage({
     super.key,

@@ -8,11 +8,15 @@ class IAPConnection {
 
   /// Overwrite the deafult method to check if the platform is supported
   static Future<bool> isAvailable() async {
-    final instanceAv = await _instance?.isAvailable();
+    try {
+      final instanceAv = await _instance?.isAvailable();
 
-    return instanceAv != null &&
-        instanceAv == true &&
-        (Platform.isIOS || Platform.isAndroid);
+      return instanceAv != null &&
+          instanceAv == true &&
+          (Platform.isIOS || Platform.isAndroid);
+    } catch (e) {
+      return Future.value(false);
+    }
   }
 
   static set instance(InAppPurchase value) {

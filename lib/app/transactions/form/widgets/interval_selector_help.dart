@@ -1,10 +1,10 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/app/transactions/form/widgets/interval_selector.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
-import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 class IntervalSelectorHelp extends StatefulWidget {
@@ -73,13 +73,12 @@ class _IntervalSelectorHelpState extends State<IntervalSelectorHelp> {
             onChanged: (value) {
               Navigator.of(context, rootNavigator: true).pop();
 
-              context
-                  .pushRoute(
-                IntervalSelectorRoute(
+              RouteUtils.pushRoute(
+                context,
+                IntervalSelectorPage(
                   preselectedRecurrentRule: widget.selectedRecurrentRule,
                 ),
-              )
-                  .then((value) {
+              ).then((value) {
                 if (value == null) return;
 
                 widget.onRecurrentRuleSelected(value as RecurrencyData);

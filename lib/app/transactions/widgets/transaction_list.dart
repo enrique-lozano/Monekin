@@ -4,6 +4,7 @@ import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
+import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 
@@ -24,6 +25,7 @@ class TransactionListComponent extends StatefulWidget {
       ],
     ),
     required this.onEmptyList,
+    required this.heroTagBuilder,
   });
 
   final TransactionFilters filters;
@@ -43,6 +45,8 @@ class TransactionListComponent extends StatefulWidget {
   final Periodicity? periodicityInfo;
 
   final Widget prevPage;
+
+  final Object? Function(MoneyTransaction tr)? heroTagBuilder;
 
   @override
   State<TransactionListComponent> createState() =>
@@ -144,12 +148,17 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
 
                 final transaction = transactions[index - 1];
 
+                final heroTag = widget.heroTagBuilder != null
+                    ? widget.heroTagBuilder!(transaction)
+                    : null;
+
                 return TransactionListTile(
                   transaction: transaction,
                   prevPage: widget.prevPage,
                   periodicityInfo: widget.periodicityInfo,
                   showDate: !widget.showGroupDivider,
                   showTime: widget.showGroupDivider,
+                  heroTag: heroTag,
                 );
               },
               separatorBuilder: (context, index) {
