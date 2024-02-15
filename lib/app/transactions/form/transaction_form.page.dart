@@ -597,10 +597,9 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                       // const Divider(thickness: 2.2),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 0),
+                            horizontal: 16, vertical: 4),
                         child: Column(
                           children: [
-                            const SizedBox(height: 4),
                             buildTransactionDateSelector(),
                             const SizedBox(height: 12),
                             buildTitleField(),
@@ -612,7 +611,8 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                         child: Column(
                           children: [
                             const SizedBox(height: 6),
-                            ...buildExtraFields()
+                            ...buildExtraFields(),
+                            const SizedBox(height: 16),
                           ],
                         ),
                       )
