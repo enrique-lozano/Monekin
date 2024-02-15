@@ -1,9 +1,10 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/details/account_details_actions.dart';
+import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
@@ -19,14 +20,18 @@ import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-@RoutePage()
 class AccountDetailsPage extends StatefulWidget {
-  const AccountDetailsPage({super.key, required this.account});
+  const AccountDetailsPage({
+    super.key,
+    required this.account,
+    required this.accountIconHeroTag,
+  });
 
   final Account account;
+
+  final Object? accountIconHeroTag;
 
   @override
   State<AccountDetailsPage> createState() => _AccountDetailsPageState();
@@ -157,8 +162,9 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                             ],
                           ),
                           Hero(
-                              tag: 'account-icon-${widget.account.id}',
-                              child: account.displayIcon(context, size: 48)),
+                            tag: widget.accountIconHeroTag ?? UniqueKey(),
+                            child: account.displayIcon(context, size: 48),
+                          ),
                         ],
                       ),
                     ),
@@ -219,13 +225,16 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                           CardWithHeader(
                             title: t.home.last_transactions,
                             onHeaderButtonClick: () {
-                              context.pushRoute(
-                                TransactionsRoute(
+                              RouteUtils.pushRoute(
+                                context,
+                                TransactionsPage(
                                     filters: TransactionFilters(
                                         accountsIDs: [widget.account.id])),
                               );
                             },
                             body: TransactionListComponent(
+                              heroTagBuilder: (tr) =>
+                                  'account-details-page__tr-icon-${tr.id}',
                               filters: TransactionFilters(
                                 status: TransactionStatus.notIn({
                                   TransactionStatus.pending,
@@ -235,8 +244,10 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                               ),
                               limit: 5,
                               showGroupDivider: false,
-                              prevPage:
-                                  AccountDetailsPage(account: widget.account),
+                              prevPage: AccountDetailsPage(
+                                  account: widget.account,
+                                  accountIconHeroTag:
+                                      widget.accountIconHeroTag),
                               onEmptyList: Padding(
                                 padding: const EdgeInsets.all(24),
                                 child: Text(

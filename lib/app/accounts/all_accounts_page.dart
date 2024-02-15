@@ -1,16 +1,16 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/app/accounts/account_form.dart';
+import 'package:monekin/app/accounts/details/account_details.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/monekin_reorderable_list.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
-import 'package:monekin/core/routes/app_router.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/presentation/widgets/empty_indicator.dart';
 
-@RoutePage()
 class AllAccountsPage extends StatelessWidget {
   const AllAccountsPage({super.key});
 
@@ -21,9 +21,10 @@ class AllAccountsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(t.home.my_accounts)),
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: UniqueKey(),
         icon: const Icon(Icons.add_rounded),
         label: Text(t.account.form.create),
-        onPressed: () => context.pushRoute(AccountFormRoute()),
+        onPressed: () => RouteUtils.pushRoute(context, const AccountFormPage()),
       ),
       body: StreamBuilder(
         stream: AccountService.instance.getAccounts(),
@@ -51,8 +52,12 @@ class AllAccountsPage extends StatelessWidget {
               final account = accounts.elementAt(index);
 
               return Tappable(
-                onTap: () => context.pushRoute(
-                  AccountDetailsRoute(account: account),
+                onTap: () => RouteUtils.pushRoute(
+                  context,
+                  AccountDetailsPage(
+                      account: account,
+                      accountIconHeroTag:
+                          'all-accounts-page__account-icon-${account.id}'),
                 ),
                 bgColor: AppColors.of(context).light,
                 margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -77,7 +82,7 @@ class AllAccountsPage extends StatelessWidget {
                     ],
                   ),
                   leading: Hero(
-                    tag: 'account-icon-${account.id}',
+                    tag: 'all-accounts-page__account-icon-${account.id}',
                     child: account.displayIcon(context),
                   ),
                   subtitle: Text(

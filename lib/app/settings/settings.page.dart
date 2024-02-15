@@ -1,16 +1,22 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/settings/edit_profile_modal.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/presentation/widgets/skeleton.dart';
-import 'package:monekin/core/presentation/widgets/user_avatar.dart';
-import 'package:monekin/core/routes/app_router.dart';
+import 'package:monekin/app/budgets/budgets_page.dart';
+import 'package:monekin/app/categories/categories_list.dart';
+import 'package:monekin/app/currencies/currency_manager.dart';
+import 'package:monekin/app/settings/about_page.dart';
+import 'package:monekin/app/settings/appearance_settings_page.dart';
+import 'package:monekin/app/settings/backup_settings_page.dart';
+import 'package:monekin/app/settings/help_us_page.dart';
+import 'package:monekin/app/stats/stats_page.dart';
+import 'package:monekin/app/tags/tag_list.page.dart';
+import 'package:monekin/app/transactions/recurrent_transactions_page.dart';
+import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/core/presentation/widgets/tappable.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/presentation/app_colors.dart';
 
-@RoutePage()
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -31,25 +37,83 @@ Widget createListSeparator(BuildContext context, String title) {
   );
 }
 
-ListTile createSettingItem(BuildContext context,
-    {required String title,
-    String? subtitle,
-    required IconData icon,
-    required Function() onTap}) {
-  return ListTile(
-      title: Text(title),
-      subtitle: subtitle != null ? Text(subtitle) : null,
-      leading: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+Widget createSettingItem(
+  BuildContext context, {
+  required String title,
+  String? subtitle,
+  required IconData icon,
+  required Function() onTap,
+  Axis mainAxis = Axis.vertical,
+  bool isPrimary = false,
+}) {
+  return Tappable(
+    bgColor: isPrimary
+        ? Theme.of(context).brightness == Brightness.light
+            ? AppColors.of(context).primary.lighten(0.8)
+            : AppColors.of(context).primary.darken(0.8)
+        : null,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+      side: BorderSide(
+        width: 2,
+        color: isPrimary
+            ? AppColors.of(context).primary
+            : Theme.of(context).dividerColor,
+      ),
+    ),
+    onTap: () => onTap(),
+    child: Container(
+      padding: EdgeInsets.symmetric(
+        vertical: mainAxis == Axis.horizontal ? 12 : 12,
+        horizontal: mainAxis == Axis.horizontal ? 16 : 16,
+      ),
+      child: Flex(
+        direction: mainAxis,
+        //mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
             icon,
-            color: AppColors.of(context).primary,
+            color: isPrimary ? AppColors.of(context).primary : null,
+            size: mainAxis == Axis.horizontal ? 24 : 28,
+            // color: AppColors.of(context).primary,
           ),
+          if (mainAxis == Axis.horizontal) const SizedBox(width: 12),
+          if (mainAxis == Axis.vertical) const SizedBox(height: 8),
+          Builder(builder: (context) {
+            final toReturn = Column(
+              crossAxisAlignment: mainAxis == Axis.vertical
+                  ? CrossAxisAlignment.center
+                  : CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleMedium,
+                  softWrap: false,
+                  overflow: TextOverflow.fade,
+                  textAlign: mainAxis == Axis.vertical
+                      ? TextAlign.center
+                      : TextAlign.start,
+                ),
+                if (subtitle != null)
+                  Text(
+                    subtitle,
+                    style: Theme.of(context).textTheme.bodySmall,
+                    textAlign: mainAxis == Axis.vertical
+                        ? TextAlign.center
+                        : TextAlign.start,
+                  )
+              ],
+            );
+
+            return mainAxis == Axis.vertical
+                ? toReturn
+                : Expanded(child: toReturn);
+          })
         ],
       ),
-      onTap: () => onTap());
+    ),
+  );
 }
 
 class _SettingsPageState extends State<SettingsPage> {
@@ -57,134 +121,146 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    final settingService = UserSettingService.instance;
-
     return Scaffold(
         appBar: AppBar(
-          title: Text(t.settings.title),
+          title: Text(t.more.title_long),
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.only(top: 8),
+          padding:
+              const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ListTile(
-                  onTap: () {
-                    showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        showDragHandle: true,
-                        builder: (context) {
-                          return const EditProfileModal();
-                        });
-                  },
-                  title: Text(t.settings.edit_profile),
-                  subtitle: StreamBuilder(
-                      stream: settingService.getSetting(SettingKey.userName),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Skeleton(width: 70, height: 12);
-                        }
-
-                        return Text(snapshot.data!);
-                      }),
-                  leading: StreamBuilder(
-                      stream: UserSettingService.instance
-                          .getSetting(SettingKey.avatar),
-                      builder: (context, snapshot) {
-                        return UserAvatar(avatar: snapshot.data);
-                      })),
-              const SizedBox(height: 12),
               createSettingItem(
                 context,
-                title: t.general.categories,
-                subtitle: t.settings.general.categories_descr,
-                icon: Icons.category_rounded,
-                onTap: () => context.pushRoute(const CategoriesListRoute()),
+                isPrimary: true,
+                title: t.more.help_us.display,
+                subtitle: t.more.help_us.description,
+                icon: Icons.favorite_rounded,
+                mainAxis: Axis.horizontal,
+                onTap: () => RouteUtils.pushRoute(context, const HelpUsPage()),
               ),
+              const SizedBox(height: 8),
               createSettingItem(
                 context,
-                title: t.tags.display(n: 10),
-                subtitle: t.settings.general.categories_descr,
-                icon: Icons.label_outline_rounded,
-                onTap: () => context.pushRoute(TagListRoute()),
+                title: t.settings.title_long,
+                subtitle: t.settings.description,
+                icon: Icons.palette_outlined,
+                mainAxis: Axis.horizontal,
+                onTap: () =>
+                    RouteUtils.pushRoute(context, const AdvancedSettingsPage()),
               ),
+              const SizedBox(height: 8),
               createSettingItem(
                 context,
                 title: t.currencies.currency_manager,
                 subtitle: t.currencies.currency_manager_descr,
                 icon: Icons.currency_exchange,
-                onTap: () => context.pushRoute(const CurrencyManagerRoute()),
-              ),
-              createSettingItem(
-                context,
-                title: t.settings.general.appearance,
-                subtitle: t.settings.general.appearance_descr,
-                icon: Icons.palette_outlined,
-                onTap: () => context.pushRoute(const AdvancedSettingsRoute()),
-              ),
-              createSettingItem(
-                context,
-                title: t.settings.data.display,
-                subtitle: t.settings.data.display_descr,
-                icon: Icons.storage_rounded,
-                onTap: () => context.pushRoute(const BackupSettingsRoute()),
-              ),
-              createSettingItem(
-                context,
-                title: t.settings.about_us.display,
-                subtitle: t.settings.about_us.description,
-                icon: Icons.info_outline_rounded,
-                onTap: () => context.pushRoute(const AboutRoute()),
+                mainAxis: Axis.horizontal,
+                onTap: () =>
+                    RouteUtils.pushRoute(context, const CurrencyManagerPage()),
               ),
               const SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: InkWell(
-                  radius: 8,
-                  onTap: () => context.pushRoute(const HelpUsRoute()),
-                  child: Card(
-                    clipBehavior: Clip.hardEdge,
-                    margin: const EdgeInsets.all(0),
-                    color: Theme.of(context).brightness == Brightness.light
-                        ? AppColors.of(context).primary.lighten(0.8)
-                        : AppColors.of(context).primary.withOpacity(0.2),
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                            color: AppColors.of(context).primary, width: 2),
-                        borderRadius: BorderRadius.circular(8)),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.favorite,
-                            color: AppColors.of(context).primary,
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  t.settings.help_us.display,
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium,
-                                ),
-                                Text(
-                                  t.settings.help_us.description,
-                                  style: Theme.of(context).textTheme.labelSmall,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+              createSettingItem(
+                context,
+                title: t.more.data.display,
+                subtitle: t.more.data.display_descr,
+                icon: Icons.storage_rounded,
+                mainAxis: Axis.horizontal,
+                onTap: () =>
+                    RouteUtils.pushRoute(context, const BackupSettingsPage()),
+              ),
+              const SizedBox(height: 8),
+              createSettingItem(
+                context,
+                title: t.more.about_us.display,
+                subtitle: t.more.about_us.description,
+                icon: Icons.info_outline_rounded,
+                mainAxis: Axis.horizontal,
+                onTap: () => RouteUtils.pushRoute(context, const AboutPage()),
+              ),
+              if (BreakPoint.of(context).isSmallerThan(BreakpointID.md)) ...[
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: createSettingItem(
+                        context,
+                        title: t.stats.title,
+                        icon: Icons.area_chart_rounded,
+                        onTap: () =>
+                            RouteUtils.pushRoute(context, const StatsPage()),
                       ),
                     ),
-                  ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: createSettingItem(
+                        context,
+                        title: t.budgets.title,
+                        icon: Icons.pie_chart_rounded,
+                        onTap: () =>
+                            RouteUtils.pushRoute(context, const BudgetsPage()),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: createSettingItem(
+                        context,
+                        title: t.recurrent_transactions.title_short,
+                        icon: Icons.repeat_rounded,
+                        onTap: () => RouteUtils.pushRoute(
+                            context, const RecurrentTransactionPage()),
+                      ),
+                    ),
+                  ],
                 ),
-              )
+              ],
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: createSettingItem(
+                      context,
+                      title: t.general.categories,
+                      icon: Icons.category_rounded,
+                      onTap: () => RouteUtils.pushRoute(
+                          context, const CategoriesListPage()),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: createSettingItem(
+                      context,
+                      title: t.tags.display(n: 10),
+                      icon: Icons.label_outline_rounded,
+                      onTap: () =>
+                          RouteUtils.pushRoute(context, const TagListPage()),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: createSettingItem(
+                      context,
+                      title: t.general.accounts,
+                      icon: Icons.account_balance_wallet_rounded,
+                      onTap: () =>
+                          RouteUtils.pushRoute(context, const TagListPage()),
+                    ),
+                  ),
+                  if (BreakPoint.of(context).isLargerThan(BreakpointID.sm)) ...[
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: createSettingItem(
+                        context,
+                        title: t.recurrent_transactions.title_short,
+                        icon: Icons.repeat_rounded,
+                        onTap: () => RouteUtils.pushRoute(
+                            context, const RecurrentTransactionPage()),
+                      ),
+                    ),
+                  ]
+                ],
+              ),
             ],
           ),
         ));

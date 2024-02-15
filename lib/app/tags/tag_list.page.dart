@@ -1,7 +1,7 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/accounts/all_accounts_page.dart';
+import 'package:monekin/app/tags/tag_form_page.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
@@ -11,7 +11,7 @@ import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/monekin_reorderable_list.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
-import 'package:monekin/core/routes/app_router.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 Future<List<Tag>?> showTagListModal(
@@ -39,7 +39,6 @@ Future<List<Tag>?> showTagListModal(
   );
 }
 
-@RoutePage()
 class TagListPage extends StatefulWidget {
   const TagListPage({
     super.key,
@@ -91,7 +90,8 @@ class _TagListPageState extends State<TagListPage> {
               final tag = tags.elementAt(index);
 
               return Tappable(
-                onTap: () => context.pushRoute(TagFormRoute(tag: tag)),
+                onTap: () =>
+                    RouteUtils.pushRoute(context, TagFormPage(tag: tag)),
                 bgColor: AppColors.of(context).light,
                 margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 borderRadius: 12,
@@ -182,7 +182,7 @@ class _TagListPageState extends State<TagListPage> {
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.add_rounded),
         label: Text(t.tags.add),
-        onPressed: () => context.pushRoute(TagFormRoute()),
+        onPressed: () => RouteUtils.pushRoute(context, const TagFormPage()),
       ),
       body: buildList(),
     );

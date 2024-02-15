@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
@@ -36,15 +35,17 @@ class TransactionDetailAction {
   });
 }
 
-@RoutePage()
 class TransactionDetailsPage extends StatefulWidget {
   const TransactionDetailsPage({
     super.key,
     required this.transaction,
     required this.prevPage,
+    required this.heroTag,
   });
 
   final MoneyTransaction transaction;
+
+  final Object? heroTag;
 
   /// Widget to navigate if the transaction is removed
   final Widget prevPage;
@@ -550,7 +551,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                             ),
                             const SizedBox(width: 24),
                             Hero(
-                              tag: 'transaction-icon-${transaction.id}',
+                              tag: widget.heroTag ?? UniqueKey(),
                               child: transaction.isIncomeOrExpense
                                   ? IconDisplayer.fromCategory(
                                       context,

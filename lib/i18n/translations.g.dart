@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 1026 (513 per locale)
+/// Strings: 1019 (509 per locale)
 ///
-/// Built on 2024-02-06 at 18:53 UTC
+/// Built on 2024-02-15 at 11:04 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -173,6 +173,7 @@ class _TranslationsEn implements BaseTranslations<AppLocale, _TranslationsEn> {
 	late final _TranslationsBudgetsEn budgets = _TranslationsBudgetsEn._(_root);
 	late final _TranslationsBackupEn backup = _TranslationsBackupEn._(_root);
 	late final _TranslationsSettingsEn settings = _TranslationsSettingsEn._(_root);
+	late final _TranslationsMoreEn more = _TranslationsMoreEn._(_root);
 	late final _TranslationsLangEn lang = _TranslationsLangEn._(_root);
 }
 
@@ -531,19 +532,42 @@ class _TranslationsSettingsEn {
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
-	String get title => 'Settings';
+	String get title_long => 'Settings and appearance';
+	String get title_short => 'Settings';
+	String get description => 'App theme, texts and other general settings';
 	String get edit_profile => 'Edit profile';
-	String get display_name => 'User name';
-	String get lang => 'App language';
+	String get lang_section => 'Language and texts';
+	String get lang_title => 'App language';
 	String get lang_descr => 'Language in which the texts will be displayed in the app';
 	String get locale => 'Region';
 	String get locale_descr => 'Set the format to use for dates, numbers...';
 	String get locale_warn => 'When changing region the app will update';
 	String get first_day_of_week => 'First day of week';
-	late final _TranslationsSettingsGeneralEn general = _TranslationsSettingsGeneralEn._(_root);
-	late final _TranslationsSettingsDataEn data = _TranslationsSettingsDataEn._(_root);
-	late final _TranslationsSettingsAboutUsEn about_us = _TranslationsSettingsAboutUsEn._(_root);
-	late final _TranslationsSettingsHelpUsEn help_us = _TranslationsSettingsHelpUsEn._(_root);
+	String get theme_and_colors => 'Theme and colors';
+	String get theme => 'Theme';
+	String get theme_auto => 'Defined by the system';
+	String get theme_light => 'Light';
+	String get theme_dark => 'Dark';
+	String get amoled_mode => 'AMOLED mode';
+	String get amoled_mode_descr => 'Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens';
+	String get dynamic_colors => 'Dynamic colors';
+	String get dynamic_colors_descr => 'Use your system accent color whenever possible';
+	String get accent_color => 'Accent color';
+	String get accent_color_descr => 'Choose the color the app will use to emphasize certain parts of the interface';
+}
+
+// Path: more
+class _TranslationsMoreEn {
+	_TranslationsMoreEn._(this._root);
+
+	final _TranslationsEn _root; // ignore: unused_field
+
+	// Translations
+	String get title => 'More';
+	String get title_long => 'More actions';
+	late final _TranslationsMoreDataEn data = _TranslationsMoreDataEn._(_root);
+	late final _TranslationsMoreAboutUsEn about_us = _TranslationsMoreAboutUsEn._(_root);
+	late final _TranslationsMoreHelpUsEn help_us = _TranslationsMoreHelpUsEn._(_root);
 }
 
 // Path: lang
@@ -1064,36 +1088,9 @@ class _TranslationsBackupAboutEn {
 	String get size => 'Size';
 }
 
-// Path: settings.general
-class _TranslationsSettingsGeneralEn {
-	_TranslationsSettingsGeneralEn._(this._root);
-
-	final _TranslationsEn _root; // ignore: unused_field
-
-	// Translations
-	String get categories_descr => 'Create and edit categories to your liking';
-	String get other => 'Advanced settings';
-	String get other_descr => 'Other general app customization settings';
-	String get appearance => 'Appearance';
-	String get appearance_descr => 'App theme, texts...';
-	String get app_colors => 'App colors';
-	String get theme => 'Theme';
-	String get theme_auto => 'Defined by the system';
-	String get theme_light => 'Light';
-	String get theme_dark => 'Dark';
-	String get amoled_mode => 'AMOLED mode';
-	String get amoled_mode_descr => 'Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens';
-	String get dynamic_colors => 'Dynamic colors';
-	String get dynamic_colors_descr => 'Use your system accent color whenever possible';
-	String get accent_color => 'Accent color';
-	String get accent_color_descr => 'Choose the color the app will use to emphasize certain parts of the interface';
-	String get prefer_calc => 'Prefer calculator';
-	String get prefer_calc_descr => 'Displays a calculator on the add/edit transaction page that will simplify actions on devices without a keyboard';
-}
-
-// Path: settings.data
-class _TranslationsSettingsDataEn {
-	_TranslationsSettingsDataEn._(this._root);
+// Path: more.data
+class _TranslationsMoreDataEn {
+	_TranslationsMoreDataEn._(this._root);
 
 	final _TranslationsEn _root; // ignore: unused_field
 
@@ -1107,22 +1104,22 @@ class _TranslationsSettingsDataEn {
 	String get delete_all_message2 => 'By deleting an account you will delete all your stored personal data. Your accounts, transactions, budgets and categories will be deleted and cannot be recovered. Do you agree?';
 }
 
-// Path: settings.about_us
-class _TranslationsSettingsAboutUsEn {
-	_TranslationsSettingsAboutUsEn._(this._root);
+// Path: more.about_us
+class _TranslationsMoreAboutUsEn {
+	_TranslationsMoreAboutUsEn._(this._root);
 
 	final _TranslationsEn _root; // ignore: unused_field
 
 	// Translations
 	String get display => 'App information';
 	String get description => 'Check out the terms and other relevant information about Monekin. Get in touch with the community by reporting bugs, leaving suggestions...';
-	late final _TranslationsSettingsAboutUsLegalEn legal = _TranslationsSettingsAboutUsLegalEn._(_root);
-	late final _TranslationsSettingsAboutUsProjectEn project = _TranslationsSettingsAboutUsProjectEn._(_root);
+	late final _TranslationsMoreAboutUsLegalEn legal = _TranslationsMoreAboutUsLegalEn._(_root);
+	late final _TranslationsMoreAboutUsProjectEn project = _TranslationsMoreAboutUsProjectEn._(_root);
 }
 
-// Path: settings.help_us
-class _TranslationsSettingsHelpUsEn {
-	_TranslationsSettingsHelpUsEn._(this._root);
+// Path: more.help_us
+class _TranslationsMoreHelpUsEn {
+	_TranslationsMoreHelpUsEn._(this._root);
 
 	final _TranslationsEn _root; // ignore: unused_field
 
@@ -1325,9 +1322,9 @@ class _TranslationsBackupImportManualImportEn {
 	String success({required Object x}) => 'Successfully imported ${x} transactions';
 }
 
-// Path: settings.about_us.legal
-class _TranslationsSettingsAboutUsLegalEn {
-	_TranslationsSettingsAboutUsLegalEn._(this._root);
+// Path: more.about_us.legal
+class _TranslationsMoreAboutUsLegalEn {
+	_TranslationsMoreAboutUsLegalEn._(this._root);
 
 	final _TranslationsEn _root; // ignore: unused_field
 
@@ -1338,9 +1335,9 @@ class _TranslationsSettingsAboutUsLegalEn {
 	String get licenses => 'Licenses';
 }
 
-// Path: settings.about_us.project
-class _TranslationsSettingsAboutUsProjectEn {
-	_TranslationsSettingsAboutUsProjectEn._(this._root);
+// Path: more.about_us.project
+class _TranslationsMoreAboutUsProjectEn {
+	_TranslationsMoreAboutUsProjectEn._(this._root);
 
 	final _TranslationsEn _root; // ignore: unused_field
 
@@ -1406,6 +1403,7 @@ class _TranslationsEs implements _TranslationsEn {
 	@override late final _TranslationsBudgetsEs budgets = _TranslationsBudgetsEs._(_root);
 	@override late final _TranslationsBackupEs backup = _TranslationsBackupEs._(_root);
 	@override late final _TranslationsSettingsEs settings = _TranslationsSettingsEs._(_root);
+	@override late final _TranslationsMoreEs more = _TranslationsMoreEs._(_root);
 	@override late final _TranslationsLangEs lang = _TranslationsLangEs._(_root);
 }
 
@@ -1764,19 +1762,42 @@ class _TranslationsSettingsEs implements _TranslationsSettingsEn {
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Ajustes';
+	@override String get title_long => 'Configuración y apariencia';
+	@override String get title_short => 'Configuración';
+	@override String get description => 'Tema de la aplicación, textos y otras configuraciones generales';
 	@override String get edit_profile => 'Editar perfil';
-	@override String get display_name => 'Nombre de usuario';
-	@override String get lang => 'Idioma de la aplicación';
-	@override String get lang_descr => 'Idioma en el que se mostrarán los textos en la app';
+	@override String get lang_section => 'Idioma y textos';
+	@override String get lang_title => 'Idioma de la aplicación';
+	@override String get lang_descr => 'Idioma en el que se mostrarán los textos en la aplicación';
 	@override String get locale => 'Región';
-	@override String get locale_descr => 'Establece el formato a usar para fechas, números...';
-	@override String get locale_warn => 'Al cambiar de región la app se refrescará';
+	@override String get locale_descr => 'Establecer el formato a utilizar para fechas, números...';
+	@override String get locale_warn => 'Al cambiar la región, la aplicación se actualizará';
 	@override String get first_day_of_week => 'Primer día de la semana';
-	@override late final _TranslationsSettingsGeneralEs general = _TranslationsSettingsGeneralEs._(_root);
-	@override late final _TranslationsSettingsDataEs data = _TranslationsSettingsDataEs._(_root);
-	@override late final _TranslationsSettingsAboutUsEs about_us = _TranslationsSettingsAboutUsEs._(_root);
-	@override late final _TranslationsSettingsHelpUsEs help_us = _TranslationsSettingsHelpUsEs._(_root);
+	@override String get theme_and_colors => 'Tema y colores';
+	@override String get theme => 'Tema';
+	@override String get theme_auto => 'Definido por el sistema';
+	@override String get theme_light => 'Claro';
+	@override String get theme_dark => 'Oscuro';
+	@override String get amoled_mode => 'Modo AMOLED';
+	@override String get amoled_mode_descr => 'Usar un fondo negro puro cuando sea posible. Esto ayudará ligeramente a la batería de dispositivos con pantallas AMOLED';
+	@override String get dynamic_colors => 'Colores dinámicos';
+	@override String get dynamic_colors_descr => 'Usar el color de acento de su sistema siempre que sea posible';
+	@override String get accent_color => 'Color de acento';
+	@override String get accent_color_descr => 'Elegir el color que la aplicación usará para enfatizar ciertas partes de la interfaz';
+}
+
+// Path: more
+class _TranslationsMoreEs implements _TranslationsMoreEn {
+	_TranslationsMoreEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Más';
+	@override String get title_long => 'Más acciones';
+	@override late final _TranslationsMoreDataEs data = _TranslationsMoreDataEs._(_root);
+	@override late final _TranslationsMoreAboutUsEs about_us = _TranslationsMoreAboutUsEs._(_root);
+	@override late final _TranslationsMoreHelpUsEs help_us = _TranslationsMoreHelpUsEs._(_root);
 }
 
 // Path: lang
@@ -2297,37 +2318,9 @@ class _TranslationsBackupAboutEs implements _TranslationsBackupAboutEn {
 	@override String get size => 'Tamaño';
 }
 
-// Path: settings.general
-class _TranslationsSettingsGeneralEs implements _TranslationsSettingsGeneralEn {
-	_TranslationsSettingsGeneralEs._(this._root);
-
-	@override final _TranslationsEs _root; // ignore: unused_field
-
-	// Translations
-	@override String get display => 'Ajustes generales';
-	@override String get categories_descr => 'Crea y edita categorías a tu gusto';
-	@override String get other => 'Ajustes avanzados';
-	@override String get other_descr => 'Otros ajustes generales de personalización de la app';
-	@override String get appearance => 'Apariencia';
-	@override String get appearance_descr => 'Tema de la aplicación, textos...';
-	@override String get app_colors => 'Colores de la aplicación';
-	@override String get theme => 'Tema';
-	@override String get theme_auto => 'Definido por el sistema';
-	@override String get theme_light => 'Claro';
-	@override String get theme_dark => 'Oscuro';
-	@override String get amoled_mode => 'Modo AMOLED';
-	@override String get amoled_mode_descr => 'Usa un fondo de pantalla negro puro cuando sea posible. Esto ayudará ligeramente a la bateria de dispositivos con pantallas AMOLED';
-	@override String get dynamic_colors => 'Colores dinámicos';
-	@override String get dynamic_colors_descr => 'Usa el color de acentuación de su sistema siempre que sea posible';
-	@override String get accent_color => 'Color de acentuación';
-	@override String get accent_color_descr => 'Elige el color que usará la app para enfatizar ciertas partes de la interfaz';
-	@override String get prefer_calc => 'Preferir calculadora';
-	@override String get prefer_calc_descr => 'Muestra en la página de adición/edición de transacciones una calculadora que simplificará las acciones en dispositivos sin teclado';
-}
-
-// Path: settings.data
-class _TranslationsSettingsDataEs implements _TranslationsSettingsDataEn {
-	_TranslationsSettingsDataEs._(this._root);
+// Path: more.data
+class _TranslationsMoreDataEs implements _TranslationsMoreDataEn {
+	_TranslationsMoreDataEs._(this._root);
 
 	@override final _TranslationsEs _root; // ignore: unused_field
 
@@ -2341,22 +2334,22 @@ class _TranslationsSettingsDataEs implements _TranslationsSettingsDataEn {
 	@override String get delete_all_message2 => 'Al eliminar una cuenta eliminarás todos tus datos personales almacenados. Tus cuentas, transacciones, presupuestos y categorías serán borrados y no podrán ser recuperados. ¿Estas de acuerdo?';
 }
 
-// Path: settings.about_us
-class _TranslationsSettingsAboutUsEs implements _TranslationsSettingsAboutUsEn {
-	_TranslationsSettingsAboutUsEs._(this._root);
+// Path: more.about_us
+class _TranslationsMoreAboutUsEs implements _TranslationsMoreAboutUsEn {
+	_TranslationsMoreAboutUsEs._(this._root);
 
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
 	@override String get display => 'Información de la app';
 	@override String get description => 'Consulta los terminos y otra información relevante sobre Monekin. Ponte en contacto con la comunidad reportando errores, dejando sugerencias...';
-	@override late final _TranslationsSettingsAboutUsLegalEs legal = _TranslationsSettingsAboutUsLegalEs._(_root);
-	@override late final _TranslationsSettingsAboutUsProjectEs project = _TranslationsSettingsAboutUsProjectEs._(_root);
+	@override late final _TranslationsMoreAboutUsLegalEs legal = _TranslationsMoreAboutUsLegalEs._(_root);
+	@override late final _TranslationsMoreAboutUsProjectEs project = _TranslationsMoreAboutUsProjectEs._(_root);
 }
 
-// Path: settings.help_us
-class _TranslationsSettingsHelpUsEs implements _TranslationsSettingsHelpUsEn {
-	_TranslationsSettingsHelpUsEs._(this._root);
+// Path: more.help_us
+class _TranslationsMoreHelpUsEs implements _TranslationsMoreHelpUsEn {
+	_TranslationsMoreHelpUsEs._(this._root);
 
 	@override final _TranslationsEs _root; // ignore: unused_field
 
@@ -2560,9 +2553,9 @@ class _TranslationsBackupImportManualImportEs implements _TranslationsBackupImpo
 	];
 }
 
-// Path: settings.about_us.legal
-class _TranslationsSettingsAboutUsLegalEs implements _TranslationsSettingsAboutUsLegalEn {
-	_TranslationsSettingsAboutUsLegalEs._(this._root);
+// Path: more.about_us.legal
+class _TranslationsMoreAboutUsLegalEs implements _TranslationsMoreAboutUsLegalEn {
+	_TranslationsMoreAboutUsLegalEs._(this._root);
 
 	@override final _TranslationsEs _root; // ignore: unused_field
 
@@ -2573,9 +2566,9 @@ class _TranslationsSettingsAboutUsLegalEs implements _TranslationsSettingsAboutU
 	@override String get licenses => 'Licencias';
 }
 
-// Path: settings.about_us.project
-class _TranslationsSettingsAboutUsProjectEs implements _TranslationsSettingsAboutUsProjectEn {
-	_TranslationsSettingsAboutUsProjectEs._(this._root);
+// Path: more.about_us.project
+class _TranslationsMoreAboutUsProjectEs implements _TranslationsMoreAboutUsProjectEn {
+	_TranslationsMoreAboutUsProjectEs._(this._root);
 
 	@override final _TranslationsEs _root; // ignore: unused_field
 
@@ -3128,64 +3121,61 @@ extension on _TranslationsEn {
 			case 'backup.about.modify_date': return 'Last modified';
 			case 'backup.about.last_backup': return 'Last backup';
 			case 'backup.about.size': return 'Size';
-			case 'settings.title': return 'Settings';
+			case 'settings.title_long': return 'Settings and appearance';
+			case 'settings.title_short': return 'Settings';
+			case 'settings.description': return 'App theme, texts and other general settings';
 			case 'settings.edit_profile': return 'Edit profile';
-			case 'settings.display_name': return 'User name';
-			case 'settings.lang': return 'App language';
+			case 'settings.lang_section': return 'Language and texts';
+			case 'settings.lang_title': return 'App language';
 			case 'settings.lang_descr': return 'Language in which the texts will be displayed in the app';
 			case 'settings.locale': return 'Region';
 			case 'settings.locale_descr': return 'Set the format to use for dates, numbers...';
 			case 'settings.locale_warn': return 'When changing region the app will update';
 			case 'settings.first_day_of_week': return 'First day of week';
-			case 'settings.general.categories_descr': return 'Create and edit categories to your liking';
-			case 'settings.general.other': return 'Advanced settings';
-			case 'settings.general.other_descr': return 'Other general app customization settings';
-			case 'settings.general.appearance': return 'Appearance';
-			case 'settings.general.appearance_descr': return 'App theme, texts...';
-			case 'settings.general.app_colors': return 'App colors';
-			case 'settings.general.theme': return 'Theme';
-			case 'settings.general.theme_auto': return 'Defined by the system';
-			case 'settings.general.theme_light': return 'Light';
-			case 'settings.general.theme_dark': return 'Dark';
-			case 'settings.general.amoled_mode': return 'AMOLED mode';
-			case 'settings.general.amoled_mode_descr': return 'Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens';
-			case 'settings.general.dynamic_colors': return 'Dynamic colors';
-			case 'settings.general.dynamic_colors_descr': return 'Use your system accent color whenever possible';
-			case 'settings.general.accent_color': return 'Accent color';
-			case 'settings.general.accent_color_descr': return 'Choose the color the app will use to emphasize certain parts of the interface';
-			case 'settings.general.prefer_calc': return 'Prefer calculator';
-			case 'settings.general.prefer_calc_descr': return 'Displays a calculator on the add/edit transaction page that will simplify actions on devices without a keyboard';
-			case 'settings.data.display': return 'Data';
-			case 'settings.data.display_descr': return 'Export and import your data so you don\'t lose anything';
-			case 'settings.data.delete_all': return 'Delete my data';
-			case 'settings.data.delete_all_header1': return 'Stop right there padawan ⚠️⚠️';
-			case 'settings.data.delete_all_message1': return 'Are you sure you want to continue? All your data will be permanently deleted and cannot be recovered';
-			case 'settings.data.delete_all_header2': return 'One last step ⚠️⚠️';
-			case 'settings.data.delete_all_message2': return 'By deleting an account you will delete all your stored personal data. Your accounts, transactions, budgets and categories will be deleted and cannot be recovered. Do you agree?';
-			case 'settings.about_us.display': return 'App information';
-			case 'settings.about_us.description': return 'Check out the terms and other relevant information about Monekin. Get in touch with the community by reporting bugs, leaving suggestions...';
-			case 'settings.about_us.legal.display': return 'Legal information';
-			case 'settings.about_us.legal.privacy': return 'Privacy policy';
-			case 'settings.about_us.legal.terms': return 'Terms of use';
-			case 'settings.about_us.legal.licenses': return 'Licenses';
-			case 'settings.about_us.project.display': return 'Project';
-			case 'settings.about_us.project.contributors': return 'Collaborators';
-			case 'settings.about_us.project.contributors_descr': return 'All the developers who have made Monekin grow';
-			case 'settings.about_us.project.contact': return 'Contact us';
-			case 'settings.help_us.display': return 'Help us';
-			case 'settings.help_us.description': return 'Find out how you can help Monekin become better and better';
-			case 'settings.help_us.rate_us': return 'Rate us';
-			case 'settings.help_us.rate_us_descr': return 'Any rate is welcome!';
-			case 'settings.help_us.share': return 'Share Monekin';
-			case 'settings.help_us.share_descr': return 'Share our app to friends and family';
-			case 'settings.help_us.share_text': return 'Monekin! The best personal finance app. Download it here';
-			case 'settings.help_us.thanks': return 'Thank you!';
-			case 'settings.help_us.thanks_long': return 'Your contributions to Monekin and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.';
-			case 'settings.help_us.donate': return 'Make a donation';
-			case 'settings.help_us.donate_descr': return 'With your donation you will help the app continue receiving improvements. What better way than to thank the work done by inviting me to a coffee?';
-			case 'settings.help_us.donate_success': return 'Donation made. Thank you very much for your contribution! ❤️';
-			case 'settings.help_us.donate_err': return 'Oops! It seems there was an error receiving your payment';
-			case 'settings.help_us.report': return 'Report bugs, leave suggestions...';
+			case 'settings.theme_and_colors': return 'Theme and colors';
+			case 'settings.theme': return 'Theme';
+			case 'settings.theme_auto': return 'Defined by the system';
+			case 'settings.theme_light': return 'Light';
+			case 'settings.theme_dark': return 'Dark';
+			case 'settings.amoled_mode': return 'AMOLED mode';
+			case 'settings.amoled_mode_descr': return 'Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens';
+			case 'settings.dynamic_colors': return 'Dynamic colors';
+			case 'settings.dynamic_colors_descr': return 'Use your system accent color whenever possible';
+			case 'settings.accent_color': return 'Accent color';
+			case 'settings.accent_color_descr': return 'Choose the color the app will use to emphasize certain parts of the interface';
+			case 'more.title': return 'More';
+			case 'more.title_long': return 'More actions';
+			case 'more.data.display': return 'Data';
+			case 'more.data.display_descr': return 'Export and import your data so you don\'t lose anything';
+			case 'more.data.delete_all': return 'Delete my data';
+			case 'more.data.delete_all_header1': return 'Stop right there padawan ⚠️⚠️';
+			case 'more.data.delete_all_message1': return 'Are you sure you want to continue? All your data will be permanently deleted and cannot be recovered';
+			case 'more.data.delete_all_header2': return 'One last step ⚠️⚠️';
+			case 'more.data.delete_all_message2': return 'By deleting an account you will delete all your stored personal data. Your accounts, transactions, budgets and categories will be deleted and cannot be recovered. Do you agree?';
+			case 'more.about_us.display': return 'App information';
+			case 'more.about_us.description': return 'Check out the terms and other relevant information about Monekin. Get in touch with the community by reporting bugs, leaving suggestions...';
+			case 'more.about_us.legal.display': return 'Legal information';
+			case 'more.about_us.legal.privacy': return 'Privacy policy';
+			case 'more.about_us.legal.terms': return 'Terms of use';
+			case 'more.about_us.legal.licenses': return 'Licenses';
+			case 'more.about_us.project.display': return 'Project';
+			case 'more.about_us.project.contributors': return 'Collaborators';
+			case 'more.about_us.project.contributors_descr': return 'All the developers who have made Monekin grow';
+			case 'more.about_us.project.contact': return 'Contact us';
+			case 'more.help_us.display': return 'Help us';
+			case 'more.help_us.description': return 'Find out how you can help Monekin become better and better';
+			case 'more.help_us.rate_us': return 'Rate us';
+			case 'more.help_us.rate_us_descr': return 'Any rate is welcome!';
+			case 'more.help_us.share': return 'Share Monekin';
+			case 'more.help_us.share_descr': return 'Share our app to friends and family';
+			case 'more.help_us.share_text': return 'Monekin! The best personal finance app. Download it here';
+			case 'more.help_us.thanks': return 'Thank you!';
+			case 'more.help_us.thanks_long': return 'Your contributions to Monekin and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.';
+			case 'more.help_us.donate': return 'Make a donation';
+			case 'more.help_us.donate_descr': return 'With your donation you will help the app continue receiving improvements. What better way than to thank the work done by inviting me to a coffee?';
+			case 'more.help_us.donate_success': return 'Donation made. Thank you very much for your contribution! ❤️';
+			case 'more.help_us.donate_err': return 'Oops! It seems there was an error receiving your payment';
+			case 'more.help_us.report': return 'Report bugs, leave suggestions...';
 			case 'lang.es': return 'Spanish';
 			case 'lang.en': return 'English';
 			default: return null;
@@ -3719,65 +3709,61 @@ extension on _TranslationsEs {
 			case 'backup.about.modify_date': return 'Última modificación';
 			case 'backup.about.last_backup': return 'Última copia de seguridad';
 			case 'backup.about.size': return 'Tamaño';
-			case 'settings.title': return 'Ajustes';
+			case 'settings.title_long': return 'Configuración y apariencia';
+			case 'settings.title_short': return 'Configuración';
+			case 'settings.description': return 'Tema de la aplicación, textos y otras configuraciones generales';
 			case 'settings.edit_profile': return 'Editar perfil';
-			case 'settings.display_name': return 'Nombre de usuario';
-			case 'settings.lang': return 'Idioma de la aplicación';
-			case 'settings.lang_descr': return 'Idioma en el que se mostrarán los textos en la app';
+			case 'settings.lang_section': return 'Idioma y textos';
+			case 'settings.lang_title': return 'Idioma de la aplicación';
+			case 'settings.lang_descr': return 'Idioma en el que se mostrarán los textos en la aplicación';
 			case 'settings.locale': return 'Región';
-			case 'settings.locale_descr': return 'Establece el formato a usar para fechas, números...';
-			case 'settings.locale_warn': return 'Al cambiar de región la app se refrescará';
+			case 'settings.locale_descr': return 'Establecer el formato a utilizar para fechas, números...';
+			case 'settings.locale_warn': return 'Al cambiar la región, la aplicación se actualizará';
 			case 'settings.first_day_of_week': return 'Primer día de la semana';
-			case 'settings.general.display': return 'Ajustes generales';
-			case 'settings.general.categories_descr': return 'Crea y edita categorías a tu gusto';
-			case 'settings.general.other': return 'Ajustes avanzados';
-			case 'settings.general.other_descr': return 'Otros ajustes generales de personalización de la app';
-			case 'settings.general.appearance': return 'Apariencia';
-			case 'settings.general.appearance_descr': return 'Tema de la aplicación, textos...';
-			case 'settings.general.app_colors': return 'Colores de la aplicación';
-			case 'settings.general.theme': return 'Tema';
-			case 'settings.general.theme_auto': return 'Definido por el sistema';
-			case 'settings.general.theme_light': return 'Claro';
-			case 'settings.general.theme_dark': return 'Oscuro';
-			case 'settings.general.amoled_mode': return 'Modo AMOLED';
-			case 'settings.general.amoled_mode_descr': return 'Usa un fondo de pantalla negro puro cuando sea posible. Esto ayudará ligeramente a la bateria de dispositivos con pantallas AMOLED';
-			case 'settings.general.dynamic_colors': return 'Colores dinámicos';
-			case 'settings.general.dynamic_colors_descr': return 'Usa el color de acentuación de su sistema siempre que sea posible';
-			case 'settings.general.accent_color': return 'Color de acentuación';
-			case 'settings.general.accent_color_descr': return 'Elige el color que usará la app para enfatizar ciertas partes de la interfaz';
-			case 'settings.general.prefer_calc': return 'Preferir calculadora';
-			case 'settings.general.prefer_calc_descr': return 'Muestra en la página de adición/edición de transacciones una calculadora que simplificará las acciones en dispositivos sin teclado';
-			case 'settings.data.display': return 'Datos';
-			case 'settings.data.display_descr': return 'Exporta y importa tus datos para no perder nada';
-			case 'settings.data.delete_all': return 'Eliminar mis datos';
-			case 'settings.data.delete_all_header1': return 'Alto ahí padawan ⚠️⚠️';
-			case 'settings.data.delete_all_message1': return '¿Estas seguro de que quieres continuar? Todos tus datos serán borrados permanentemente y no podrán ser recuperados';
-			case 'settings.data.delete_all_header2': return 'Un último paso ⚠️⚠️';
-			case 'settings.data.delete_all_message2': return 'Al eliminar una cuenta eliminarás todos tus datos personales almacenados. Tus cuentas, transacciones, presupuestos y categorías serán borrados y no podrán ser recuperados. ¿Estas de acuerdo?';
-			case 'settings.about_us.display': return 'Información de la app';
-			case 'settings.about_us.description': return 'Consulta los terminos y otra información relevante sobre Monekin. Ponte en contacto con la comunidad reportando errores, dejando sugerencias...';
-			case 'settings.about_us.legal.display': return 'Información legal';
-			case 'settings.about_us.legal.privacy': return 'Política de privacidad';
-			case 'settings.about_us.legal.terms': return 'Términos de uso';
-			case 'settings.about_us.legal.licenses': return 'Licencias';
-			case 'settings.about_us.project.display': return 'Proyecto';
-			case 'settings.about_us.project.contributors': return 'Colaboradores';
-			case 'settings.about_us.project.contributors_descr': return 'Todos los desarrolladores que han hecho que Monekin crezca';
-			case 'settings.about_us.project.contact': return 'Contacta con nosotros';
-			case 'settings.help_us.display': return 'Ayúdanos';
-			case 'settings.help_us.description': return 'Descubre de que formas puedes ayudar a que Monekin sea cada vez mejor';
-			case 'settings.help_us.rate_us': return 'Califícanos';
-			case 'settings.help_us.rate_us_descr': return '¡Cualquier valoración es bienvenida!';
-			case 'settings.help_us.share': return 'Comparte Monekin';
-			case 'settings.help_us.share_descr': return 'Comparte nuestra app a amigos y familiares';
-			case 'settings.help_us.share_text': return 'Monekin! La mejor app de finanzas personales. Descargala aquí';
-			case 'settings.help_us.thanks': return '¡Gracias!';
-			case 'settings.help_us.thanks_long': return 'Tus contribuciones a Monekin y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir.';
-			case 'settings.help_us.donate': return 'Haz una donación';
-			case 'settings.help_us.donate_descr': return 'Con tu donación ayudaras a que la app siga recibiendo mejoras. ¿Que mejor forma que agradecer el trabajo realizado invitandome a un cafe?';
-			case 'settings.help_us.donate_success': return 'Donación realizada. Muchas gracias por tu contribución! ❤️';
-			case 'settings.help_us.donate_err': return 'Ups! Parece que ha habido un error a la hora de recibir tu pago';
-			case 'settings.help_us.report': return 'Reporta errores, deja sugerencias...';
+			case 'settings.theme_and_colors': return 'Tema y colores';
+			case 'settings.theme': return 'Tema';
+			case 'settings.theme_auto': return 'Definido por el sistema';
+			case 'settings.theme_light': return 'Claro';
+			case 'settings.theme_dark': return 'Oscuro';
+			case 'settings.amoled_mode': return 'Modo AMOLED';
+			case 'settings.amoled_mode_descr': return 'Usar un fondo negro puro cuando sea posible. Esto ayudará ligeramente a la batería de dispositivos con pantallas AMOLED';
+			case 'settings.dynamic_colors': return 'Colores dinámicos';
+			case 'settings.dynamic_colors_descr': return 'Usar el color de acento de su sistema siempre que sea posible';
+			case 'settings.accent_color': return 'Color de acento';
+			case 'settings.accent_color_descr': return 'Elegir el color que la aplicación usará para enfatizar ciertas partes de la interfaz';
+			case 'more.title': return 'Más';
+			case 'more.title_long': return 'Más acciones';
+			case 'more.data.display': return 'Datos';
+			case 'more.data.display_descr': return 'Exporta y importa tus datos para no perder nada';
+			case 'more.data.delete_all': return 'Eliminar mis datos';
+			case 'more.data.delete_all_header1': return 'Alto ahí padawan ⚠️⚠️';
+			case 'more.data.delete_all_message1': return '¿Estas seguro de que quieres continuar? Todos tus datos serán borrados permanentemente y no podrán ser recuperados';
+			case 'more.data.delete_all_header2': return 'Un último paso ⚠️⚠️';
+			case 'more.data.delete_all_message2': return 'Al eliminar una cuenta eliminarás todos tus datos personales almacenados. Tus cuentas, transacciones, presupuestos y categorías serán borrados y no podrán ser recuperados. ¿Estas de acuerdo?';
+			case 'more.about_us.display': return 'Información de la app';
+			case 'more.about_us.description': return 'Consulta los terminos y otra información relevante sobre Monekin. Ponte en contacto con la comunidad reportando errores, dejando sugerencias...';
+			case 'more.about_us.legal.display': return 'Información legal';
+			case 'more.about_us.legal.privacy': return 'Política de privacidad';
+			case 'more.about_us.legal.terms': return 'Términos de uso';
+			case 'more.about_us.legal.licenses': return 'Licencias';
+			case 'more.about_us.project.display': return 'Proyecto';
+			case 'more.about_us.project.contributors': return 'Colaboradores';
+			case 'more.about_us.project.contributors_descr': return 'Todos los desarrolladores que han hecho que Monekin crezca';
+			case 'more.about_us.project.contact': return 'Contacta con nosotros';
+			case 'more.help_us.display': return 'Ayúdanos';
+			case 'more.help_us.description': return 'Descubre de que formas puedes ayudar a que Monekin sea cada vez mejor';
+			case 'more.help_us.rate_us': return 'Califícanos';
+			case 'more.help_us.rate_us_descr': return '¡Cualquier valoración es bienvenida!';
+			case 'more.help_us.share': return 'Comparte Monekin';
+			case 'more.help_us.share_descr': return 'Comparte nuestra app a amigos y familiares';
+			case 'more.help_us.share_text': return 'Monekin! La mejor app de finanzas personales. Descargala aquí';
+			case 'more.help_us.thanks': return '¡Gracias!';
+			case 'more.help_us.thanks_long': return 'Tus contribuciones a Monekin y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir.';
+			case 'more.help_us.donate': return 'Haz una donación';
+			case 'more.help_us.donate_descr': return 'Con tu donación ayudaras a que la app siga recibiendo mejoras. ¿Que mejor forma que agradecer el trabajo realizado invitandome a un cafe?';
+			case 'more.help_us.donate_success': return 'Donación realizada. Muchas gracias por tu contribución! ❤️';
+			case 'more.help_us.donate_err': return 'Ups! Parece que ha habido un error a la hora de recibir tu pago';
+			case 'more.help_us.report': return 'Reporta errores, deja sugerencias...';
 			case 'lang.es': return 'Español';
 			case 'lang.en': return 'Inglés';
 			default: return null;

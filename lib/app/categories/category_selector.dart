@@ -75,8 +75,6 @@ class _CategorySelectorState extends State<CategorySelector> {
                   if (!widget.multiSelection) {
                     selectedCategories = [categoryToDisplay];
 
-                    print(selectedCategories);
-
                     setState(() {});
 
                     if (widget.onChange != null) {
@@ -137,8 +135,6 @@ class _CategorySelectorState extends State<CategorySelector> {
             ),
         mainColor: AppColors.of(context).onBackground,
         onTap: () {
-          print(selectedCategories);
-
           if (selectedCategories == null) {
             selectedCategories = [];
           } else {
