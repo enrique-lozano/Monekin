@@ -469,109 +469,9 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
 
               return Column(
                 children: [
-                  DefaultTextStyle.merge(
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    child: Card(
-                      margin: const EdgeInsets.only(
-                          left: 16, right: 16, bottom: 8, top: 16),
-                      elevation: 0,
-                      color: AppColors.of(context).light,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Flexible(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CurrencyDisplayer(
-                                    amountToConvert: transaction.value,
-                                    currency: transaction.account.currency,
-                                    integerStyle: TextStyle(
-                                      fontSize: 34,
-                                      fontWeight: FontWeight.w600,
-                                      color: transaction.status ==
-                                              TransactionStatus.voided
-                                          ? Colors.grey.shade400
-                                          : transaction.type ==
-                                                  TransactionType.income
-                                              ? AppColors.of(context).success
-                                              : transaction.type ==
-                                                      TransactionType.expense
-                                                  ? AppColors.of(context).danger
-                                                  : null,
-                                      decoration: transaction.status ==
-                                              TransactionStatus.voided
-                                          ? TextDecoration.lineThrough
-                                          : null,
-                                    ),
-                                  ),
-                                  Text(
-                                    transaction.displayName(context),
-                                    softWrap: true,
-                                    overflow: TextOverflow.fade,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  if (transaction.recurrentInfo.isNoRecurrent)
-                                    Text(
-                                      DateFormat.yMMMMd()
-                                          .add_Hm()
-                                          .format(transaction.date),
-                                    )
-                                  else
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.repeat_rounded,
-                                          size: 14,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        ),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          transaction.recurrentInfo
-                                              .formText(context),
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w300,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
-                                        ),
-                                      ],
-                                    ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 24),
-                            Hero(
-                              tag: widget.heroTag ?? UniqueKey(),
-                              child: transaction.isIncomeOrExpense
-                                  ? IconDisplayer.fromCategory(
-                                      context,
-                                      category: transaction.category!,
-                                      size: 42,
-                                      isOutline: true,
-                                      borderRadius: 18,
-                                    )
-                                  : IconDisplayer(
-                                      mainColor: transaction.color(context),
-                                      icon: TransactionType.transfer.icon,
-                                      size: 42,
-                                      isOutline: true,
-                                      borderRadius: 18,
-                                    ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                  _TransactionDetailHeader(
+                    transaction: transaction,
+                    heroTag: widget.heroTag,
                   ),
                   Expanded(
                     child: SingleChildScrollView(
@@ -807,5 +707,105 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
             }),
           );
         });
+  }
+}
+
+class _TransactionDetailHeader extends StatelessWidget {
+  const _TransactionDetailHeader({
+    super.key,
+    required this.transaction,
+    required this.heroTag,
+  });
+
+  final MoneyTransaction transaction;
+  final Object? heroTag;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 16),
+      elevation: 0,
+      color: AppColors.of(context).light,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CurrencyDisplayer(
+                    amountToConvert: transaction.value,
+                    currency: transaction.account.currency,
+                    integerStyle: TextStyle(
+                      fontSize: 34,
+                      fontWeight: FontWeight.w600,
+                      color: transaction.status == TransactionStatus.voided
+                          ? Colors.grey.shade400
+                          : transaction.type == TransactionType.transfer
+                              ? null
+                              : transaction.type.color(context),
+                      decoration: transaction.status == TransactionStatus.voided
+                          ? TextDecoration.lineThrough
+                          : null,
+                    ),
+                  ),
+                  Text(
+                    transaction.displayName(context),
+                    softWrap: true,
+                    overflow: TextOverflow.fade,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  if (transaction.recurrentInfo.isNoRecurrent)
+                    Text(
+                      DateFormat.yMMMMd().add_Hm().format(transaction.date),
+                    )
+                  else
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.repeat_rounded,
+                          size: 14,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          transaction.recurrentInfo.formText(context),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                              color: Theme.of(context).colorScheme.primary),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 24),
+            Hero(
+              tag: heroTag ?? UniqueKey(),
+              child: transaction.isIncomeOrExpense
+                  ? IconDisplayer.fromCategory(
+                      context,
+                      category: transaction.category!,
+                      size: 42,
+                      isOutline: true,
+                      borderRadius: 18,
+                    )
+                  : IconDisplayer(
+                      mainColor: transaction.color(context),
+                      icon: TransactionType.transfer.icon,
+                      size: 42,
+                      isOutline: true,
+                      borderRadius: 18,
+                    ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
