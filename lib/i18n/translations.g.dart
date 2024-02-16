@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 1019 (509 per locale)
+/// Strings: 1017 (508 per locale)
 ///
-/// Built on 2024-02-15 at 11:04 UTC
+/// Built on 2024-02-16 at 18:58 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -502,7 +502,7 @@ class _TranslationsBudgetsEn {
 	String get actives => 'Actives';
 	String get pending => 'Pending start';
 	String get finish => 'Finished';
-	String get to_expend => 'to spend';
+	String get from_budgeted => 'left of ';
 	String get days_left => 'days left';
 	String get days_to_start => 'days to start';
 	String get since_expiration => 'days since expiration';
@@ -1026,10 +1026,9 @@ class _TranslationsBudgetsDetailsEn {
 
 	// Translations
 	String get title => 'Budget Details';
-	String get budget_value => 'Budgeted';
 	String get statistics => 'Statistics';
-	String get you_already_expend => 'Spent';
-	String get expend_diary_left => 'Remaining recommended daily spend';
+	String get budget_value => 'Budgeted';
+	String expend_diary_left({required Object dailyAmount, required Object remainingDays}) => 'You can spend ${dailyAmount}/day for ${remainingDays} remaining days';
 	String get expend_evolution => 'Expenditure evolution';
 	String get no_transactions => 'It seems that you have not made any expenses related to this budget';
 }
@@ -1732,7 +1731,7 @@ class _TranslationsBudgetsEs implements _TranslationsBudgetsEn {
 	@override String get actives => 'Activos';
 	@override String get pending => 'Pendientes de comenzar';
 	@override String get finish => 'Finalizados';
-	@override String get to_expend => 'por gastar';
+	@override String get from_budgeted => 'De un total de';
 	@override String get days_left => 'días restantes';
 	@override String get days_to_start => 'días para empezar';
 	@override String get since_expiration => 'días desde su expiración';
@@ -2258,8 +2257,7 @@ class _TranslationsBudgetsDetailsEs implements _TranslationsBudgetsDetailsEn {
 	@override String get title => 'Detalles del presupuesto';
 	@override String get budget_value => 'Presupuestado';
 	@override String get statistics => 'Estadísticas';
-	@override String get you_already_expend => 'Gastado';
-	@override String get expend_diary_left => 'Gasto diario restante recomendado';
+	@override String expend_diary_left({required Object dailyAmount, required Object remainingDays}) => 'Puedes gastar ${dailyAmount}/día por los ${remainingDays} días restantes';
 	@override String get expend_evolution => 'Evolución del gasto';
 	@override String get no_transactions => 'Parece que no has realizado ningún gasto relativo a este presupuesto';
 }
@@ -3056,7 +3054,7 @@ extension on _TranslationsEn {
 			case 'budgets.actives': return 'Actives';
 			case 'budgets.pending': return 'Pending start';
 			case 'budgets.finish': return 'Finished';
-			case 'budgets.to_expend': return 'to spend';
+			case 'budgets.from_budgeted': return 'left of ';
 			case 'budgets.days_left': return 'days left';
 			case 'budgets.days_to_start': return 'days to start';
 			case 'budgets.since_expiration': return 'days since expiration';
@@ -3070,10 +3068,9 @@ extension on _TranslationsEn {
 			case 'budgets.form.edit': return 'Edit budget';
 			case 'budgets.form.negative_warn': return 'The budgets can not have a negative amount';
 			case 'budgets.details.title': return 'Budget Details';
-			case 'budgets.details.budget_value': return 'Budgeted';
 			case 'budgets.details.statistics': return 'Statistics';
-			case 'budgets.details.you_already_expend': return 'Spent';
-			case 'budgets.details.expend_diary_left': return 'Remaining recommended daily spend';
+			case 'budgets.details.budget_value': return 'Budgeted';
+			case 'budgets.details.expend_diary_left': return ({required Object dailyAmount, required Object remainingDays}) => 'You can spend ${dailyAmount}/day for ${remainingDays} remaining days';
 			case 'budgets.details.expend_evolution': return 'Expenditure evolution';
 			case 'budgets.details.no_transactions': return 'It seems that you have not made any expenses related to this budget';
 			case 'backup.export.title': return 'Export your data';
@@ -3644,7 +3641,7 @@ extension on _TranslationsEs {
 			case 'budgets.actives': return 'Activos';
 			case 'budgets.pending': return 'Pendientes de comenzar';
 			case 'budgets.finish': return 'Finalizados';
-			case 'budgets.to_expend': return 'por gastar';
+			case 'budgets.from_budgeted': return 'De un total de';
 			case 'budgets.days_left': return 'días restantes';
 			case 'budgets.days_to_start': return 'días para empezar';
 			case 'budgets.since_expiration': return 'días desde su expiración';
@@ -3660,8 +3657,7 @@ extension on _TranslationsEs {
 			case 'budgets.details.title': return 'Detalles del presupuesto';
 			case 'budgets.details.budget_value': return 'Presupuestado';
 			case 'budgets.details.statistics': return 'Estadísticas';
-			case 'budgets.details.you_already_expend': return 'Gastado';
-			case 'budgets.details.expend_diary_left': return 'Gasto diario restante recomendado';
+			case 'budgets.details.expend_diary_left': return ({required Object dailyAmount, required Object remainingDays}) => 'Puedes gastar ${dailyAmount}/día por los ${remainingDays} días restantes';
 			case 'budgets.details.expend_evolution': return 'Evolución del gasto';
 			case 'budgets.details.no_transactions': return 'Parece que no has realizado ningún gasto relativo a este presupuesto';
 			case 'backup.export.title': return 'Exportar datos';

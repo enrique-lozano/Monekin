@@ -510,7 +510,7 @@
     "actives": "Actives",
     "pending": "Pending start",
     "finish": "Finished",
-    "to-expend": "to spend",
+    "from-budgeted": "left of ",
     "days-left": "days left",
     "days-to-start": "days to start",
     "since-expiration": "days since expiration",
@@ -527,10 +527,9 @@
     },
     "DETAILS": {
       "title": "Budget Details",
-      "budget-value": "Budgeted",
       "statistics": "Statistics",
-      "you-already-expend": "Spent",
-      "expend-diary-left": "Remaining recommended daily spend",
+      "budget-value": "Budgeted",
+      "expend-diary-left": "You can spend {{ dailyAmount }}/day for {{ remainingDays }} remaining days",
       "expend-evolution": "Expenditure evolution",
       "no-transactions": "It seems that you have not made any expenses related to this budget"
     }

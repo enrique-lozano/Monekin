@@ -1,93 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:monekin/app/budgets/budget_details_page.dart';
 import 'package:monekin/app/budgets/budget_form_page.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
-import 'package:monekin/core/models/budget/budget.dart';
-import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/empty_indicator.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-import '../../core/presentation/app_colors.dart';
+import 'components/budget_card.dart';
 
 class BudgetsPage extends StatelessWidget {
   const BudgetsPage({super.key});
-
-  Widget buildBudgetCard(BuildContext context, Budget budget) {
-    return InkWell(
-      onTap: () =>
-          RouteUtils.pushRoute(context, BudgetDetailsPage(budget: budget)),
-      child: Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    budget.name,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(fontWeight: FontWeight.w700),
-                  ),
-                  Chip(
-                      side:
-                          const BorderSide(width: 0, color: Colors.transparent),
-                      backgroundColor: AppColors.of(context).primaryContainer,
-                      padding: const EdgeInsets.all(0),
-                      label: Text(
-                        budget.intervalPeriod?.allThePeriodsText(context) ??
-                            '${DateFormat.yMMMd().format(budget.currentDateRange.$1)} - ${DateFormat.yMMMd().format(budget.currentDateRange.$2)}',
-                        style: Theme.of(context).textTheme.labelSmall,
-                      ))
-                ],
-              ),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  StreamBuilder(
-                      stream: budget.currentValue,
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Skeleton(width: 25, height: 16);
-                        }
-
-                        return CurrencyDisplayer(
-                          amountToConvert: snapshot.data!,
-                          showDecimals: false,
-                        );
-                      }),
-                  CurrencyDisplayer(
-                    amountToConvert: budget.limitAmount,
-                    showDecimals: false,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 6),
-              StreamBuilder(
-                  stream: budget.percentageAlreadyUsed,
-                  builder: (context, snapshot) {
-                    final budgetValue = snapshot.data;
-
-                    return AnimatedProgressBar(
-                      value: budgetValue != null && budgetValue >= 1
-                          ? 1
-                          : budgetValue ?? 0,
-                      color: budgetValue != null && budgetValue >= 1
-                          ? AppColors.of(context).danger
-                          : null,
-                    );
-                  })
-            ],
-          )),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,13 +60,14 @@ class BudgetsPage extends StatelessWidget {
                 }
 
                 return ListView.separated(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     itemBuilder: (context, index) {
                       final budget = budgets[index];
 
-                      return buildBudgetCard(context, budget);
+                      return BudgetCard(budget: budget);
                     },
                     separatorBuilder: (context, index) {
-                      return const Divider();
+                      return const SizedBox.shrink();
                     },
                     itemCount: budgets.length);
               }),
@@ -173,13 +95,14 @@ class BudgetsPage extends StatelessWidget {
                 }
 
                 return ListView.separated(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     itemBuilder: (context, index) {
                       final budget = budgets[index];
 
-                      return buildBudgetCard(context, budget);
+                      return BudgetCard(budget: budget);
                     },
                     separatorBuilder: (context, index) {
-                      return const Divider();
+                      return const SizedBox.shrink();
                     },
                     itemCount: budgets.length);
               }),

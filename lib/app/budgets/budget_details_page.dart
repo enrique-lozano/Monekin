@@ -1,28 +1,23 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:monekin/app/budgets/budget_form_page.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/budgets/components/budget_evolution_chart.dart';
+import 'package:monekin/app/stats/stats_page.dart';
+import 'package:monekin/app/stats/widgets/movements_distribution/chart_by_categories.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/models/budget/budget.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_status.dart';
-import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/skeleton.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-import '../../core/presentation/app_colors.dart';
 import '../../core/presentation/widgets/empty_indicator.dart';
+import 'components/budget_card.dart';
 
 class BudgetDetailsPage extends StatefulWidget {
   const BudgetDetailsPage({super.key, required this.budget});
@@ -134,146 +129,44 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                 ],
               ),
               body: TabBarView(children: [
-                SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      CardWithHeader(
-                        title: budget.name,
-                        body: Column(
+                Column(
+                  children: [
+                    BudgetCard(
+                      budget: budget,
+                      isHeader: true,
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Column(
-                                    children: [
-                                      Text(
-                                        t.budgets.details.you_already_expend,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelSmall,
-                                      ),
-                                      Builder(builder: (context) {
-                                        if (budgetCurrentValue == null) {
-                                          return const Skeleton(
-                                              width: 25, height: 16);
-                                        }
-
-                                        return CurrencyDisplayer(
-                                          amountToConvert: budgetCurrentValue!,
-                                          integerStyle: Theme.of(context)
-                                              .textTheme
-                                              .headlineSmall!
-                                              .copyWith(
-                                                  fontWeight: FontWeight.w700),
-                                        );
-                                      }),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        t.budgets.details.budget_value,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelSmall,
-                                      ),
-                                      CurrencyDisplayer(
-                                        amountToConvert: budget.limitAmount,
-                                        integerStyle: Theme.of(context)
-                                            .textTheme
-                                            .headlineSmall!
-                                            .copyWith(
-                                                fontWeight: FontWeight.w700),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            AnimatedProgressBar(
-                              value: budgetCurrentPercentage != null &&
-                                      budgetCurrentPercentage! >= 1
-                                  ? 1
-                                  : budgetCurrentPercentage ?? 0,
-                              color: budgetCurrentPercentage != null &&
-                                      budgetCurrentPercentage! >= 1
-                                  ? AppColors.of(context).danger
-                                  : null,
-                            )
+                            CardWithHeader(
+                                title: t.budgets.details.expend_evolution,
+                                body: BudgetEvolutionChart(budget: budget)),
+                            const SizedBox(height: 16),
+                            CardWithHeader(
+                                title: t.stats.by_categories,
+                                body: ChartByCategories(
+                                  filters: budget.trFilters,
+                                  datePeriodState: budget.periodState,
+                                ),
+                                onHeaderButtonClick: () {
+                                  RouteUtils.pushRoute(
+                                    context,
+                                    const StatsPage(initialIndex: 1),
+                                  );
+                                }),
                           ],
                         ),
                       ),
-                      const SizedBox(height: 16),
-                      CardWithHeader(
-                          title: 'Info',
-                          body: Column(
-                            children: [
-                              ListTile(
-                                  title:
-                                      Text(t.general.time.periodicity.display),
-                                  trailing: Text(budget.intervalPeriod
-                                          ?.allThePeriodsText(context) ??
-                                      t.general.time.periodicity.no_repeat)),
-                              const Divider(indent: 12),
-                              ListTile(
-                                  title: Text(t.general.time.start_date),
-                                  trailing: Text(DateFormat.yMMMd()
-                                      .format(budget.currentDateRange.$1))),
-                              const Divider(indent: 12),
-                              ListTile(
-                                  title: Text(t.general.time.end_date),
-                                  trailing: Text(DateFormat.yMMMd()
-                                      .format(budget.currentDateRange.$2))),
-                              const Divider(indent: 12),
-                              ListTile(
-                                title:
-                                    Text(t.budgets.details.expend_diary_left),
-                                trailing: Builder(builder: (context) {
-                                  if (budgetCurrentValue == null) {
-                                    return const Skeleton(
-                                        width: 25, height: 16);
-                                  }
-
-                                  return CurrencyDisplayer(
-                                      amountToConvert: ((budget.limitAmount -
-                                                  budgetCurrentValue!) >
-                                              0)
-                                          ? ((budget.limitAmount -
-                                                  budgetCurrentValue!) /
-                                              budget.daysLeft)
-                                          : 0);
-                                }),
-                              )
-                            ],
-                          )),
-                      const SizedBox(height: 16),
-                      CardWithHeader(
-                          title: t.budgets.details.expend_evolution,
-                          body: BudgetEvolutionChart(budget: budget))
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 SingleChildScrollView(
                   child: TransactionListComponent(
                     heroTagBuilder: (tr) => 'budgets-page__tr-icon-${tr.id}',
-                    filters: TransactionFilters(
-                      status: TransactionStatus.notIn({
-                        TransactionStatus.pending,
-                        TransactionStatus.voided
-                      }),
-                      transactionTypes: [TransactionType.expense],
-                      minDate: budget.currentDateRange.$1,
-                      maxDate: budget.currentDateRange.$2,
-                      includeParentCategoriesInSearch: true,
-                      categories: budget.categories,
-                      accountsIDs: budget.accounts,
-                    ),
+                    filters: budget.trFilters,
                     prevPage: BudgetDetailsPage(budget: budget),
                     onEmptyList: EmptyIndicator(
                         title: t.general.empty_warn,
