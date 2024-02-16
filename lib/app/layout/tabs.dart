@@ -16,8 +16,6 @@ class TabsPageState extends State<TabsPage> {
   MainMenuDestination? selectedDestination;
 
   void changePage(MainMenuDestination destination) {
-    print("HOLA");
-
     navigationSidebarKey.currentState?.setSelectedDestination(destination);
 
     setState(() {
