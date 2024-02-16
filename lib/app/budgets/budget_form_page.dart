@@ -314,7 +314,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                               ),
                               mode: DateTimeFieldPickerMode.date,
                               initialDate: startDate,
-                              firstDate: endDate,
+                              lastDate: endDate,
                               dateFormat: DateFormat.yMMMd(),
                               validator: (e) => e == null
                                   ? t.general.validations.required
