@@ -514,7 +514,7 @@
     "actives": "Activos",
     "pending": "Pendientes de comenzar",
     "finish": "Finalizados",
-    "to-expend": "por gastar",
+    "from-budgeted": "De un total de",
     "days-left": "días restantes",
     "days-to-start": "días para empezar",
     "since-expiration": "días desde su expiración",
@@ -533,8 +533,7 @@
       "title": "Detalles del presupuesto",
       "budget-value": "Presupuestado",
       "statistics": "Estadísticas",
-      "you-already-expend": "Gastado",
-      "expend-diary-left": "Gasto diario restante recomendado",
+      "expend-diary-left": "Puedes gastar {{ dailyAmount }}/día por los {{ remainingDays }} días restantes",
       "expend-evolution": "Evolución del gasto",
       "no-transactions": "Parece que no has realizado ningún gasto relativo a este presupuesto"
     }
