@@ -22,8 +22,8 @@ class BudgetEvolutionChart extends StatelessWidget {
     List<Future<double>> balance = [];
     List<String> labels = [];
 
-    final startDate = budget.currentDateRange.$1;
-    final endDate = budget.currentDateRange.$2;
+    final startDate = budget.currentDateRange.start;
+    final endDate = budget.currentDateRange.end;
 
     DateTime currentDay =
         DateTime(startDate.year, startDate.month, startDate.day);
@@ -76,13 +76,13 @@ class BudgetEvolutionChart extends StatelessWidget {
               extraLinesData: ExtraLinesData(horizontalLines: [
                 HorizontalLine(
                     y: budget.limitAmount,
-                    color: Colors.orange,
+                    color: Theme.of(context).colorScheme.tertiary,
                     dashArray: [12, 2],
                     label: HorizontalLineLabel(
                       show: true,
                       padding: const EdgeInsets.only(left: 2),
-                      style: const TextStyle(
-                        color: Colors.orange,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.tertiary,
                       ),
                       labelResolver: (p0) => t.budgets.details.budget_value,
                     ))
