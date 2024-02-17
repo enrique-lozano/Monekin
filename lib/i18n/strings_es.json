@@ -36,6 +36,7 @@
       "until-date": "Hasta fecha",
       "date": "Fecha",
       "datetime": "Fecha y hora",
+      "time": "Hora",
       "each": "Cada",
       "after": "Tras",
       "RANGES": {
@@ -300,8 +301,8 @@
       "tap-to-see-more": "Toca para ver más detalles",
       "description": "Descripción",
       "description-info": "Añadir una nota te ayudará a encontrar más rapidamente esta transacción en un futuro",
-      "exchange-to-preferred-today": "Equivalencia a {{ currency }} hoy:",
-      "exchange-to-preferred-in-date": "Equivalencia a {{ currency }} el {{date}}:"
+      "exchange-to-preferred-title": "Cambio a {{ currency }}",
+      "exchange-to-preferred-in-date": "El día de la transacción"
     },
     "STATUS": {
       "display": {

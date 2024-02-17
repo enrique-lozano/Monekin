@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 1017 (508 per locale)
+/// Strings: 1019 (509 per locale)
 ///
-/// Built on 2024-02-16 at 18:58 UTC
+/// Built on 2024-02-17 at 10:51 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -605,6 +605,7 @@ class _TranslationsGeneralTimeEn {
 	String get until_date => 'Until date';
 	String get date => 'Date';
 	String get datetime => 'Datetime';
+	String get time => 'Time';
 	String get each => 'Each';
 	String get after => 'After';
 	late final _TranslationsGeneralTimeRangesEn ranges = _TranslationsGeneralTimeRangesEn._(_root);
@@ -805,8 +806,8 @@ class _TranslationsTransactionFormEn {
 	String get tap_to_see_more => 'Tap to see more details';
 	String get description => 'Description';
 	String get description_info => 'Adding a note will help you find this transaction faster in the future';
-	String exchange_to_preferred_today({required Object currency}) => 'Equivalent to ${currency} today:';
-	String exchange_to_preferred_in_date({required Object currency, required Object date}) => 'Equivalent to ${currency} on ${date}:';
+	String exchange_to_preferred_title({required Object currency}) => 'Exchnage rate to ${currency}';
+	String get exchange_to_preferred_in_date => 'On transaction date';
 }
 
 // Path: transaction.status
@@ -1834,6 +1835,7 @@ class _TranslationsGeneralTimeEs implements _TranslationsGeneralTimeEn {
 	@override String get until_date => 'Hasta fecha';
 	@override String get date => 'Fecha';
 	@override String get datetime => 'Fecha y hora';
+	@override String get time => 'Hora';
 	@override String get each => 'Cada';
 	@override String get after => 'Tras';
 	@override late final _TranslationsGeneralTimeRangesEs ranges = _TranslationsGeneralTimeRangesEs._(_root);
@@ -2034,8 +2036,8 @@ class _TranslationsTransactionFormEs implements _TranslationsTransactionFormEn {
 	@override String get tap_to_see_more => 'Toca para ver más detalles';
 	@override String get description => 'Descripción';
 	@override String get description_info => 'Añadir una nota te ayudará a encontrar más rapidamente esta transacción en un futuro';
-	@override String exchange_to_preferred_today({required Object currency}) => 'Equivalencia a ${currency} hoy:';
-	@override String exchange_to_preferred_in_date({required Object currency, required Object date}) => 'Equivalencia a ${currency} el ${date}:';
+	@override String exchange_to_preferred_title({required Object currency}) => 'Cambio a ${currency}';
+	@override String get exchange_to_preferred_in_date => 'El día de la transacción';
 }
 
 // Path: transaction.status
@@ -2630,6 +2632,7 @@ extension on _TranslationsEn {
 			case 'general.time.until_date': return 'Until date';
 			case 'general.time.date': return 'Date';
 			case 'general.time.datetime': return 'Datetime';
+			case 'general.time.time': return 'Time';
 			case 'general.time.each': return 'Each';
 			case 'general.time.after': return 'After';
 			case 'general.time.ranges.display': return 'Time range';
@@ -2881,8 +2884,8 @@ extension on _TranslationsEn {
 			case 'transaction.form.tap_to_see_more': return 'Tap to see more details';
 			case 'transaction.form.description': return 'Description';
 			case 'transaction.form.description_info': return 'Adding a note will help you find this transaction faster in the future';
-			case 'transaction.form.exchange_to_preferred_today': return ({required Object currency}) => 'Equivalent to ${currency} today:';
-			case 'transaction.form.exchange_to_preferred_in_date': return ({required Object currency, required Object date}) => 'Equivalent to ${currency} on ${date}:';
+			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => 'Exchnage rate to ${currency}';
+			case 'transaction.form.exchange_to_preferred_in_date': return 'On transaction date';
 			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 				one: 'Status',
 				other: 'Statuses',
@@ -3216,6 +3219,7 @@ extension on _TranslationsEs {
 			case 'general.time.until_date': return 'Hasta fecha';
 			case 'general.time.date': return 'Fecha';
 			case 'general.time.datetime': return 'Fecha y hora';
+			case 'general.time.time': return 'Hora';
 			case 'general.time.each': return 'Cada';
 			case 'general.time.after': return 'Tras';
 			case 'general.time.ranges.display': return 'Rango temporal';
@@ -3468,8 +3472,8 @@ extension on _TranslationsEs {
 			case 'transaction.form.tap_to_see_more': return 'Toca para ver más detalles';
 			case 'transaction.form.description': return 'Descripción';
 			case 'transaction.form.description_info': return 'Añadir una nota te ayudará a encontrar más rapidamente esta transacción en un futuro';
-			case 'transaction.form.exchange_to_preferred_today': return ({required Object currency}) => 'Equivalencia a ${currency} hoy:';
-			case 'transaction.form.exchange_to_preferred_in_date': return ({required Object currency, required Object date}) => 'Equivalencia a ${currency} el ${date}:';
+			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => 'Cambio a ${currency}';
+			case 'transaction.form.exchange_to_preferred_in_date': return 'El día de la transacción';
 			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
 				one: 'Estado',
 				other: 'Estados',
