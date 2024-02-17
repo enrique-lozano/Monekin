@@ -46,6 +46,7 @@ class CardWithHeader extends StatelessWidget {
       ),
       margin: const EdgeInsets.all(0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             clipBehavior: Clip.hardEdge,

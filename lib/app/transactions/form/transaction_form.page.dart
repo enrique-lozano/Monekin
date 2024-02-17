@@ -462,7 +462,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                       tags.removeWhere((element) => element.id == tag.id);
                     }),
                     showCheckmark: false,
-                    selectedColor: tag.colorData.lighten(0.75),
+                    selectedColor: tag.colorData.lighten(0.8),
                     avatar: tag.displayIcon(),
                   );
                 }),

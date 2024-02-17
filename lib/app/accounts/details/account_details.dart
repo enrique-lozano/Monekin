@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/details/account_details_actions.dart';
-import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
@@ -11,7 +10,6 @@ import 'package:monekin/core/database/services/exchange-rate/exchange_rate_servi
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
@@ -20,6 +18,7 @@ import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 class AccountDetailsPage extends StatefulWidget {
@@ -44,6 +43,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
     return ListTile(
       title: Text(title),
       subtitle: Text(value),
+      contentPadding: const EdgeInsets.only(left: 16, right: 12),
       trailing: IconButton(
           onPressed: () {
             Clipboard.setData(ClipboardData(text: value)).then((_) {
@@ -89,89 +89,14 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
 
               return Column(
                 children: [
-                  Card(
-                    color: AppColors.of(context).light,
-                    elevation: 0,
-                    margin: const EdgeInsets.only(
-                        left: 16, right: 16, bottom: 8, top: 16),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(account.name),
-                              StreamBuilder(
-                                  initialData: 0.0,
-                                  stream: AccountService.instance
-                                      .getAccountMoney(account: account),
-                                  builder: (context, snapshot) {
-                                    return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        CurrencyDisplayer(
-                                          amountToConvert: snapshot.data!,
-                                          currency: account.currency,
-                                          integerStyle: const TextStyle(
-                                              fontSize: 32,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        StreamBuilder(
-                                          stream: ExchangeRateService.instance
-                                              .calculateExchangeRateToPreferredCurrency(
-                                            amount: snapshot.data!,
-                                            fromCurrency: account.currency.code,
-                                          ),
-                                          builder: (context, currencySnapshot) {
-                                            if (currencySnapshot
-                                                        .connectionState ==
-                                                    ConnectionState.waiting ||
-                                                currencySnapshot.data != 0 &&
-                                                    currencySnapshot.data! ==
-                                                        snapshot.data ||
-                                                snapshot.data! == 0) {
-                                              return Container();
-                                            }
-
-                                            return Row(
-                                              children: [
-                                                Text(
-                                                  String.fromCharCode(Icons
-                                                      .currency_exchange_rounded
-                                                      .codePoint),
-                                                  style: TextStyle(
-                                                    fontFamily: Icons
-                                                        .currency_exchange_rounded
-                                                        .fontFamily,
-                                                  ),
-                                                ),
-                                                const SizedBox(width: 4),
-                                                CurrencyDisplayer(
-                                                    amountToConvert:
-                                                        currencySnapshot.data!),
-                                              ],
-                                            );
-                                          },
-                                        )
-                                      ],
-                                    );
-                                  }),
-                            ],
-                          ),
-                          Hero(
-                            tag: widget.accountIconHeroTag ?? UniqueKey(),
-                            child: account.displayIcon(context, size: 48),
-                          ),
-                        ],
-                      ),
-                    ),
+                  _AccountDetailHeader(
+                    account: account,
+                    accountIconHeroTag: widget.accountIconHeroTag,
                   ),
+                  const Divider(thickness: 2),
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                      padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
                       child: Column(
                         children: [
                           CardWithHeader(
@@ -186,7 +111,6 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                                           .format(account.date),
                                     ),
                                   ),
-                                  const Divider(indent: 12),
                                   if (account.isClosed) ...[
                                     ListTile(
                                       title: Text(t.account.close_date),
@@ -196,26 +120,22 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                                             .format(account.closingDate!),
                                       ),
                                     ),
-                                    const Divider(indent: 12),
                                   ],
                                   ListTile(
                                     title: Text(t.account.types.title),
                                     subtitle: Text(account.type.title(context)),
                                   ),
                                   if (account.description != null) ...[
-                                    const Divider(indent: 12),
                                     ListTile(
                                       title: Text(t.account.form.notes),
                                       subtitle: Text(account.description!),
                                     ),
                                   ],
                                   if (account.iban != null) ...[
-                                    const Divider(indent: 12),
                                     buildCopyableTile(
                                         t.account.form.iban, account.iban!)
                                   ],
                                   if (account.swift != null) ...[
-                                    const Divider(indent: 12),
                                     buildCopyableTile(
                                         t.account.form.swift, account.swift!)
                                   ]
@@ -272,6 +192,88 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
             }),
           );
         });
+  }
+}
+
+class _AccountDetailHeader extends StatelessWidget {
+  const _AccountDetailHeader({
+    super.key,
+    required this.account,
+    required this.accountIconHeroTag,
+  });
+
+  final Account account;
+  final Object? accountIconHeroTag;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(account.name),
+              StreamBuilder(
+                  initialData: 0.0,
+                  stream:
+                      AccountService.instance.getAccountMoney(account: account),
+                  builder: (context, snapshot) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CurrencyDisplayer(
+                          amountToConvert: snapshot.data!,
+                          currency: account.currency,
+                          integerStyle: const TextStyle(
+                              fontSize: 32, fontWeight: FontWeight.w600),
+                        ),
+                        StreamBuilder(
+                          stream: ExchangeRateService.instance
+                              .calculateExchangeRateToPreferredCurrency(
+                            amount: snapshot.data!,
+                            fromCurrency: account.currency.code,
+                          ),
+                          builder: (context, currencySnapshot) {
+                            if (currencySnapshot.connectionState ==
+                                    ConnectionState.waiting ||
+                                currencySnapshot.data != 0 &&
+                                    currencySnapshot.data! == snapshot.data ||
+                                snapshot.data! == 0) {
+                              return Container();
+                            }
+
+                            return Row(
+                              children: [
+                                Text(
+                                  String.fromCharCode(Icons
+                                      .currency_exchange_rounded.codePoint),
+                                  style: TextStyle(
+                                    fontFamily: Icons
+                                        .currency_exchange_rounded.fontFamily,
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                CurrencyDisplayer(
+                                    amountToConvert: currencySnapshot.data!),
+                              ],
+                            );
+                          },
+                        )
+                      ],
+                    );
+                  }),
+            ],
+          ),
+          Hero(
+            tag: accountIconHeroTag ?? UniqueKey(),
+            child: account.displayIcon(context, size: 48),
+          ),
+        ],
+      ),
+    );
   }
 }
 
