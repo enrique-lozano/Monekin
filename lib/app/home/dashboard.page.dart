@@ -313,7 +313,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           title: t.financial_health.display,
                           onHeaderButtonClick: () => RouteUtils.pushRoute(
                               context, const StatsPage(initialIndex: 0)),
-                          bodyPadding: const EdgeInsets.only(right: 8),
+                          bodyPadding: const EdgeInsets.all(16),
                           body: StreamBuilder(
                             stream: FinanceHealthService().getHealthyValue(
                               filters: TransactionFilters(
