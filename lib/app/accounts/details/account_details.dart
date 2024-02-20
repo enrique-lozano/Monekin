@@ -10,6 +10,7 @@ import 'package:monekin/core/database/services/exchange-rate/exchange_rate_servi
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
@@ -87,15 +88,15 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                 navigateBackOnDelete: true,
               );
 
-              return Column(
-                children: [
-                  _AccountDetailHeader(
-                    account: account,
-                    accountIconHeroTag: widget.accountIconHeroTag,
-                  ),
-                  const Divider(thickness: 2),
-                  Expanded(
-                    child: SingleChildScrollView(
+              return CustomScrollView(
+                slivers: [
+                  SliverPersistentHeader(
+                      pinned: true,
+                      delegate: _AccountDetailHeader(
+                          account: account,
+                          accountIconHeroTag: widget.accountIconHeroTag)),
+                  SliverToBoxAdapter(
+                    child: Padding(
                       padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
                       child: Column(
                         children: [
@@ -195,9 +196,8 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
   }
 }
 
-class _AccountDetailHeader extends StatelessWidget {
+class _AccountDetailHeader extends SliverPersistentHeaderDelegate {
   const _AccountDetailHeader({
-    super.key,
     required this.account,
     required this.accountIconHeroTag,
   });
@@ -206,14 +206,27 @@ class _AccountDetailHeader extends StatelessWidget {
   final Object? accountIconHeroTag;
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
+  Widget build(BuildContext context, double shrinkOffset, bool overlap) {
+    final shrinkPercent = shrinkOffset / maxExtent;
+
+    return Container(
       padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.of(context).background,
+        border: Border(
+          bottom: BorderSide(
+            width: 2,
+            color: Theme.of(context).dividerColor,
+          ),
+        ),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(account.name),
               StreamBuilder(
@@ -224,11 +237,19 @@ class _AccountDetailHeader extends StatelessWidget {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CurrencyDisplayer(
-                          amountToConvert: snapshot.data!,
-                          currency: account.currency,
-                          integerStyle: const TextStyle(
-                              fontSize: 32, fontWeight: FontWeight.w600),
+                        AnimatedDefaultTextStyle(
+                          duration: const Duration(milliseconds: 100),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium!
+                              .copyWith(
+                                fontSize: 32 - shrinkPercent * 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                          child: CurrencyDisplayer(
+                            amountToConvert: snapshot.data!,
+                            currency: account.currency,
+                          ),
                         ),
                         StreamBuilder(
                           stream: ExchangeRateService.instance
@@ -269,12 +290,22 @@ class _AccountDetailHeader extends StatelessWidget {
           ),
           Hero(
             tag: accountIconHeroTag ?? UniqueKey(),
-            child: account.displayIcon(context, size: 48),
+            child: account.displayIcon(context, size: 48 - shrinkPercent * 20),
           ),
         ],
       ),
     );
   }
+
+  @override
+  double get maxExtent => 120;
+
+  @override
+  double get minExtent => 80;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
+      false;
 }
 
 class ArchiveWarnDialog extends StatefulWidget {
