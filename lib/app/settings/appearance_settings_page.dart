@@ -200,50 +200,41 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     color = ColorHex.get(snapshot.data!);
                   }
 
-                  return IgnorePointer(
-                    ignoring: snapshot.data! == 'auto',
-
-                    // For some reason Flutter decided to put an enabled attribute in the
-                    // ListTile but not in the ExpansionTile, so we have to do this to
-                    // simulate this behaviour.
-
-                    // TODO: Track issue https://github.com/flutter/flutter/issues/135770 to refactor this code
-
-                    child: Opacity(
-                      opacity: snapshot.data! == 'auto' ? 0.4 : 1,
-                      child: ExpansionTile(
-                        title: Text(t.settings.accent_color),
-                        subtitle: Text(t.settings.accent_color_descr),
-                        controller: expTileController,
-                        trailing: SizedBox(
-                          height: 46,
-                          child: Container(
-                            clipBehavior: Clip.hardEdge,
-                            width: 46,
-                            height: 46,
-                            decoration: BoxDecoration(
-                              color: color,
-                              borderRadius: BorderRadius.circular(100),
-                            ),
+                  return ExpansionTile(
+                    title: Text(t.settings.accent_color),
+                    subtitle: Text(t.settings.accent_color_descr),
+                    controller: expTileController,
+                    enabled: snapshot.data! != 'auto',
+                    trailing: SizedBox(
+                      height: 46,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        clipBehavior: Clip.hardEdge,
+                        width: 46,
+                        height: 46,
+                        decoration: BoxDecoration(
+                          color: color.withOpacity(
+                            snapshot.data! != 'auto' ? 1 : 0.4,
                           ),
+                          borderRadius: BorderRadius.circular(100),
                         ),
-                        children: [
-                          ColorPicker(
-                            colorOptions: [
-                              brandBlue.toHex(leadingHashSign: false),
-                              ...colorOptions
-                            ],
-                            selectedColor: color.toHex(),
-                            onColorSelected: (selectedColor) {
-                              setState(() {
-                                UserSettingService.instance.setSetting(
-                                    SettingKey.accentColor, selectedColor);
-                              });
-                            },
-                          ),
-                        ],
                       ),
                     ),
+                    children: [
+                      ColorPicker(
+                        colorOptions: [
+                          brandBlue.toHex(leadingHashSign: false),
+                          ...colorOptions
+                        ],
+                        selectedColor: color.toHex(),
+                        onColorSelected: (selectedColor) {
+                          setState(() {
+                            UserSettingService.instance.setSetting(
+                                SettingKey.accentColor, selectedColor);
+                          });
+                        },
+                      ),
+                    ],
                   );
                 }),
           ],
