@@ -292,24 +292,26 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
 
             _HorizontalScrollableAccountList(
-                dateRangeService: dateRangeService),
+              dateRangeService: dateRangeService,
+            ),
 
             // ------------- STATS GENERAL CARDS --------------
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
-              child: Column(
+              child: ResponsiveRowColumn(
+                direction: BreakPoint.of(context).isLargerThan(BreakpointID.md)
+                    ? Axis.horizontal
+                    : Axis.vertical,
+                rowCrossAxisAlignment: CrossAxisAlignment.start,
+                rowSpacing: 16,
                 children: [
-                  ResponsiveRowColumn.withSymetricSpacing(
-                    spacing: 16,
-                    direction:
-                        BreakPoint.of(context).isLargerThan(BreakpointID.md)
-                            ? Axis.horizontal
-                            : Axis.vertical,
-                    children: [
-                      ResponsiveRowColumnItem(
-                        rowFit: FlexFit.tight,
-                        child: CardWithHeader(
+                  ResponsiveRowColumnItem(
+                    rowFit: FlexFit.tight,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CardWithHeader(
                           title: t.financial_health.display,
                           onHeaderButtonClick: () => RouteUtils.pushRoute(
                               context, const StatsPage(initialIndex: 0)),
@@ -333,10 +335,8 @@ class _DashboardPageState extends State<DashboardPage> {
                             },
                           ),
                         ),
-                      ),
-                      ResponsiveRowColumnItem(
-                        rowFit: FlexFit.tight,
-                        child: CardWithHeader(
+                        const SizedBox(height: 16),
+                        CardWithHeader(
                             title: t.stats.balance_evolution,
                             body: FundEvolutionLineChart(
                               dateRange: dateRangeService,
@@ -345,20 +345,15 @@ class _DashboardPageState extends State<DashboardPage> {
                               RouteUtils.pushRoute(
                                   context, const StatsPage(initialIndex: 2));
                             }),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 16),
-                  ResponsiveRowColumn.withSymetricSpacing(
-                    spacing: 16,
-                    direction:
-                        BreakPoint.of(context).isLargerThan(BreakpointID.md)
-                            ? Axis.horizontal
-                            : Axis.vertical,
-                    children: [
-                      ResponsiveRowColumnItem(
-                        rowFit: FlexFit.tight,
-                        child: CardWithHeader(
+                  ResponsiveRowColumnItem(
+                    rowFit: FlexFit.tight,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CardWithHeader(
                             title: t.stats.by_categories,
                             body: ChartByCategories(
                                 datePeriodState: dateRangeService),
@@ -366,10 +361,8 @@ class _DashboardPageState extends State<DashboardPage> {
                               RouteUtils.pushRoute(
                                   context, const StatsPage(initialIndex: 1));
                             }),
-                      ),
-                      ResponsiveRowColumnItem(
-                        rowFit: FlexFit.tight,
-                        child: CardWithHeader(
+                        const SizedBox(height: 16),
+                        CardWithHeader(
                             title: t.stats.cash_flow,
                             body: Padding(
                               padding: const EdgeInsets.only(
@@ -381,10 +374,9 @@ class _DashboardPageState extends State<DashboardPage> {
                               RouteUtils.pushRoute(
                                   context, const StatsPage(initialIndex: 3));
                             }),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                  SizedBox(height: hideDrawerAndFloatingButton ? 8 : 64),
                 ],
               ),
             )
