@@ -82,7 +82,7 @@ class _FinanceHealthDetailsState extends State<FinanceHealthDetails> {
             children: [
               CardWithHeader(
                 title: t.stats.finance_health_resume,
-                bodyPadding: const EdgeInsets.only(right: 8),
+                bodyPadding: const EdgeInsets.all(16),
                 body:
                     FinanceHealthMainInfo(financeHealthData: financeHealthData),
               ),

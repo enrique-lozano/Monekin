@@ -11,6 +11,7 @@ import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -110,43 +111,8 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
     return (elementValue / items.map((e) => e.value).sum);
   }
 
-  List<TrDistributionChartItem> deleteUnimportantItems(
-      List<TrDistributionChartItem> data) {
-    const limit = 0.05;
-
-    final unimportantItems = data.where(
-        (element) => getElementPercentageInTotal(element.value, data) < limit);
-
-    if (unimportantItems.length <= 1) return data;
-
-    final toReturn = data
-        .where((element) =>
-            getElementPercentageInTotal(element.value, data) >= limit)
-        .toList();
-
-    final toAdd = TrDistributionChartItem(
-        value: 0,
-        transactions: [],
-        category: Category(
-            id: 'Other',
-            name: 'Other',
-            displayOrder: 1000,
-            iconId: 'iconId',
-            type: CategoryType.B,
-            color: 'DEDEDE'));
-
-    for (final item in unimportantItems) {
-      toAdd.value += item.value;
-      toAdd.transactions = [...toAdd.transactions, ...item.transactions];
-    }
-
-    toReturn.add(toAdd);
-
-    return toReturn;
-  }
-
   List<PieChartSectionData> showingSections(
-      List<TrDistributionChartItem> data) {
+      List<TrDistributionChartItem<Category>> data) {
     if (data.isEmpty) {
       return [
         PieChartSectionData(
@@ -158,57 +124,82 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
       ];
     }
 
-    return data.mapIndexed((index, element) {
-      final isTouched = index == touchedIndex;
-      final fontSize = isTouched ? 25.0 : 16.0;
-      final radius = isTouched ? 60.0 : 50.0;
+    double totalPercentAccumulated = 0;
 
-      final percentage = getElementPercentageInTotal(element.value, data);
+    return data.mapIndexed(
+      (index, element) {
+        final isTouched = index == touchedIndex;
+        final radius = isTouched ? 60.0 : 50.0;
 
-      return PieChartSectionData(
-        color: ColorHex.get(element.category.color),
-        value: percentage,
-        title: NumberFormat.percentPattern().format(percentage),
-        radius: radius,
-        titleStyle: TextStyle(
-          color: Colors.white,
-          fontSize: fontSize,
-          fontWeight: FontWeight.bold,
-        ),
-      );
-    }).toList();
-  }
+        final percentage = getElementPercentageInTotal(element.value, data);
+        totalPercentAccumulated = totalPercentAccumulated + percentage;
 
-  Widget indicator({
-    required Color color,
-    required String text,
-    required bool isSquare,
-    double size = 12,
-    Color? textColor,
-  }) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
-            shape: isSquare ? BoxShape.rectangle : BoxShape.circle,
-            color: color,
-          ),
-        ),
-        const SizedBox(
-          width: 4,
-        ),
-        Text(
-          text,
-          style: TextStyle(
-            fontSize: 14,
-            color: textColor,
-          ),
-        )
-      ],
-    );
+        final showIcon = percentage > 0.05;
+
+        return PieChartSectionData(
+          color: ColorHex.get(element.category.color),
+          value: percentage,
+          title: '',
+          radius: radius,
+          titlePositionPercentageOffset: 1.4,
+          badgePositionPercentageOffset: .98,
+          badgeWidget: !showIcon
+              ? null
+              : Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    AnimatedOpacity(
+                      duration: const Duration(milliseconds: 200),
+                      opacity: isTouched ? 1 : 0,
+                      child: Center(
+                        child: Transform.translate(
+                          offset: Offset(
+                            0,
+                            // Prevent overlapping labels when displayed on top
+                            // Divider percent by 2, because the label is in the middle
+                            // This means any label location that is past 50% will change orientation
+                            totalPercentAccumulated - percentage / 2 < 0.5
+                                ? -34
+                                : 34,
+                          ),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: ColorHex.get(element.category.color),
+                                width: 1.5,
+                              ),
+                              color: Theme.of(context).canvasColor,
+                            ),
+                            child: UINumberFormatter.percentage(
+                              amountToConvert: percentage,
+                              showDecimals: false,
+                              integerStyle: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
+                            ).getTextWidget(context),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Theme.of(context).canvasColor,
+                            border: Border.all(
+                              width: 2,
+                              color: ColorHex.get(element.category.color),
+                            )),
+                        padding: const EdgeInsets.all(6),
+                        child: element.category.icon.display(
+                            color: ColorHex.get(element.category.color))),
+                  ],
+                ),
+        );
+      },
+    ).toList();
   }
 
   @override
@@ -229,7 +220,7 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
           return const LinearProgressIndicator();
         }
 
-        final filteredDataItems = deleteUnimportantItems(snapshot.data!);
+        final dataItems = snapshot.data!;
 
         return Column(
           children: [
@@ -282,7 +273,7 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
                       ),
                       sectionsSpace: 0,
                       centerSpaceRadius: 40,
-                      sections: showingSections(filteredDataItems),
+                      sections: showingSections(dataItems),
                     ),
                   ),
                   if (snapshot.data!.isEmpty)
@@ -295,25 +286,6 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
                           )),
                     ),
                 ],
-              ),
-            ),
-
-            /* ----------------------------- */
-            /* ------- CHART LEGEND -------- */
-            /* ----------------------------- */
-
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8, left: 12, right: 12),
-              child: Wrap(
-                spacing: 10, // gap between adjacent cards
-                runSpacing: 2, // gap between lines
-                alignment: WrapAlignment.center,
-                children: filteredDataItems
-                    .map((e) => indicator(
-                        color: ColorHex.get(e.category.color),
-                        text: e.category.name,
-                        isSquare: false))
-                    .toList(),
               ),
             ),
 
