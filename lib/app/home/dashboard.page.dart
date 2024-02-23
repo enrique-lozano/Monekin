@@ -312,7 +312,10 @@ class _DashboardPageState extends State<DashboardPage> {
                         child: CardWithHeader(
                           title: t.financial_health.display,
                           onHeaderButtonClick: () => RouteUtils.pushRoute(
-                              context, const StatsPage(initialIndex: 0)),
+                              context,
+                              StatsPage(
+                                  dateRangeService: dateRangeService,
+                                  initialIndex: 0)),
                           bodyPadding: const EdgeInsets.only(right: 8),
                           body: StreamBuilder(
                             stream: FinanceHealthService().getHealthyValue(
@@ -343,7 +346,11 @@ class _DashboardPageState extends State<DashboardPage> {
                             ),
                             onHeaderButtonClick: () {
                               RouteUtils.pushRoute(
-                                  context, const StatsPage(initialIndex: 2));
+                                context,
+                                StatsPage(
+                                    dateRangeService: dateRangeService,
+                                    initialIndex: 2),
+                              );
                             }),
                       ),
                     ],
@@ -364,7 +371,11 @@ class _DashboardPageState extends State<DashboardPage> {
                                 datePeriodState: dateRangeService),
                             onHeaderButtonClick: () {
                               RouteUtils.pushRoute(
-                                  context, const StatsPage(initialIndex: 1));
+                                context,
+                                StatsPage(
+                                    dateRangeService: dateRangeService,
+                                    initialIndex: 1),
+                              );
                             }),
                       ),
                       ResponsiveRowColumnItem(
@@ -379,7 +390,11 @@ class _DashboardPageState extends State<DashboardPage> {
                             ),
                             onHeaderButtonClick: () {
                               RouteUtils.pushRoute(
-                                  context, const StatsPage(initialIndex: 3));
+                                context,
+                                StatsPage(
+                                    dateRangeService: dateRangeService,
+                                    initialIndex: 3),
+                              );
                             }),
                       ),
                     ],
