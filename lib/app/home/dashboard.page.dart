@@ -299,12 +299,12 @@ class _DashboardPageState extends State<DashboardPage> {
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
-              child: ResponsiveRowColumn(
+              child: ResponsiveRowColumn.withSymetricSpacing(
                 direction: BreakPoint.of(context).isLargerThan(BreakpointID.md)
                     ? Axis.horizontal
                     : Axis.vertical,
                 rowCrossAxisAlignment: CrossAxisAlignment.start,
-                rowSpacing: 16,
+                spacing: 16,
                 children: [
                   ResponsiveRowColumnItem(
                     rowFit: FlexFit.tight,
@@ -337,13 +337,12 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                         const SizedBox(height: 16),
                         CardWithHeader(
-                            title: t.stats.balance_evolution,
-                            body: FundEvolutionLineChart(
-                              dateRange: dateRangeService,
-                            ),
+                            title: t.stats.by_categories,
+                            body: ChartByCategories(
+                                datePeriodState: dateRangeService),
                             onHeaderButtonClick: () {
                               RouteUtils.pushRoute(
-                                  context, const StatsPage(initialIndex: 2));
+                                  context, const StatsPage(initialIndex: 1));
                             }),
                       ],
                     ),
@@ -354,12 +353,13 @@ class _DashboardPageState extends State<DashboardPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         CardWithHeader(
-                            title: t.stats.by_categories,
-                            body: ChartByCategories(
-                                datePeriodState: dateRangeService),
+                            title: t.stats.balance_evolution,
+                            body: FundEvolutionLineChart(
+                              dateRange: dateRangeService,
+                            ),
                             onHeaderButtonClick: () {
                               RouteUtils.pushRoute(
-                                  context, const StatsPage(initialIndex: 1));
+                                  context, const StatsPage(initialIndex: 2));
                             }),
                         const SizedBox(height: 16),
                         CardWithHeader(
