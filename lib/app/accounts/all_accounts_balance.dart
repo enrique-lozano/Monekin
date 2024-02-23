@@ -120,6 +120,7 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
             children: [
               CardWithHeader(
                 title: t.stats.balance_by_account,
+                bodyPadding: const EdgeInsets.symmetric(vertical: 4),
                 body: accounts.isEmpty
                     ? emptyAccountsIndicator()
                     : ListView.separated(
@@ -155,6 +156,7 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                                   ],
                                 ),
                                 AnimatedProgressBar(
+                                    width: 6,
                                     value: min(
                                         max(accountWithMoney.money / totalMoney,
                                             0),
@@ -164,7 +166,7 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                           );
                         },
                         separatorBuilder: (context, index) {
-                          return const Divider(indent: 56);
+                          return const SizedBox(height: 2);
                         },
                         itemCount: accounts.length,
                         shrinkWrap: true,
@@ -173,6 +175,7 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
               const SizedBox(height: 16),
               CardWithHeader(
                 title: t.stats.balance_by_currency,
+                bodyPadding: const EdgeInsets.symmetric(vertical: 4),
                 body: Builder(builder: (context) {
                   final currenciesWithMoney = getCurrenciesWithMoney(accounts);
 
@@ -236,6 +239,7 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                               ],
                             ),
                             AnimatedProgressBar(
+                                width: 6,
                                 value: min(
                                     max(currencyWithMoney.money / totalMoney,
                                         0),
@@ -245,7 +249,7 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                       );
                     },
                     separatorBuilder: (context, index) {
-                      return const Divider(indent: 56);
+                      return const SizedBox.shrink();
                     },
                     itemCount: currenciesWithMoney.length,
                     shrinkWrap: true,
