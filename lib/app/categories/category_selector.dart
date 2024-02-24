@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -193,44 +191,32 @@ class _CategorySelectorState extends State<CategorySelector> {
         );
       }
 
-      return ScrollConfiguration(
-        behavior: const MaterialScrollBehavior().copyWith(
-          dragDevices: {
-            PointerDeviceKind.mouse,
-            PointerDeviceKind.touch,
-            PointerDeviceKind.trackpad,
-            PointerDeviceKind.stylus,
-            PointerDeviceKind.unknown
-          },
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            buildSelectAllButton(context,
-                selectedCategories: selectedCategories),
-            const SizedBox(width: 6),
-            if (extraHeaderButtonsWithSameSize != null)
-              for (final button in extraHeaderButtonsWithSameSize) ...[
-                const SizedBox(width: 6),
-                button,
-                const SizedBox(width: 6)
-              ],
-            Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.only(right: 16),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 6),
-                  child: Row(
-                    children: buildCategoriesOptions(
-                        selectedCategories: selectedCategories),
-                  ),
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          buildSelectAllButton(context, selectedCategories: selectedCategories),
+          const SizedBox(width: 6),
+          if (extraHeaderButtonsWithSameSize != null)
+            for (final button in extraHeaderButtonsWithSameSize) ...[
+              const SizedBox(width: 6),
+              button,
+              const SizedBox(width: 6)
+            ],
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.only(right: 16),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 6),
+                child: Row(
+                  children: buildCategoriesOptions(
+                      selectedCategories: selectedCategories),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       );
     });
   }
