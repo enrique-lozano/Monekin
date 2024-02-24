@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:monekin/app/categories/category_selector.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
@@ -12,6 +11,8 @@ import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
+
+import '../../core/presentation/widgets/icon_displayer_widgets.dart';
 
 Future<List<Account>?> showAccountSelectorBottomSheet(
     BuildContext context, AccountSelectorModal accountSelector) {
@@ -91,53 +92,56 @@ class _AccountSelectorModalState extends State<AccountSelectorModal> {
                 ));
           }
 
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ...List.generate(allAccounts!.length, (index) {
-                final account = allAccounts![index];
+          return SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ...List.generate(allAccounts!.length, (index) {
+                  final account = allAccounts![index];
 
-                if (!widget.allowMultiSelection) {
-                  return RadioListTile(
-                    value: account.id,
-                    title: Text(account.name),
-                    secondary: account.displayIcon(context),
-                    groupValue: selectedAccounts.firstOrNull?.id,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedAccounts = [account];
+                  if (!widget.allowMultiSelection) {
+                    return RadioListTile(
+                      value: account.id,
+                      title: Text(account.name),
+                      secondary: account.displayIcon(context),
+                      groupValue: selectedAccounts.firstOrNull?.id,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedAccounts = [account];
 
-                        Navigator.of(context).pop(selectedAccounts);
-                      });
-                    },
-                  );
-                } else {
-                  return CheckboxListTile(
-                    value:
-                        selectedAccounts.map((e) => e.id).contains(account.id),
-                    title: Text(account.name),
-                    secondary: account.displayIcon(context),
-                    onChanged: (value) {
-                      if (value == true) {
-                        selectedAccounts.add(account);
-                      } else {
-                        selectedAccounts
-                            .removeWhere((element) => element.id == account.id);
-                      }
+                          Navigator.of(context).pop(selectedAccounts);
+                        });
+                      },
+                    );
+                  } else {
+                    return CheckboxListTile(
+                      value: selectedAccounts
+                          .map((e) => e.id)
+                          .contains(account.id),
+                      title: Text(account.name),
+                      secondary: account.displayIcon(context),
+                      onChanged: (value) {
+                        if (value == true) {
+                          selectedAccounts.add(account);
+                        } else {
+                          selectedAccounts.removeWhere(
+                              (element) => element.id == account.id);
+                        }
 
-                      setState(() {});
-                    },
-                  );
-                }
-              }),
-              if (widget.allowMultiSelection) ...[
-                const SizedBox(height: 14),
-                BottomSheetFooter(
-                    onSaved: selectedAccounts.isNotEmpty
-                        ? () => Navigator.of(context).pop(selectedAccounts)
-                        : null)
-              ]
-            ],
+                        setState(() {});
+                      },
+                    );
+                  }
+                }),
+                if (widget.allowMultiSelection) ...[
+                  const SizedBox(height: 14),
+                  BottomSheetFooter(
+                      onSaved: selectedAccounts.isNotEmpty
+                          ? () => Navigator.of(context).pop(selectedAccounts)
+                          : null)
+                ]
+              ],
+            ),
           );
         } else {
           return const LinearProgressIndicator();
@@ -148,123 +152,89 @@ class _AccountSelectorModalState extends State<AccountSelectorModal> {
 }
 
 class AccountSelector extends StatefulWidget {
-  const AccountSelector({
+  const AccountSelector(
+    this.params, {
     super.key,
-    required this.selectedAccounts,
-    this.onChange,
-    this.direction = Axis.horizontal,
-    required this.availableAccounts,
-    this.extraHeaderButtons,
-    this.multiSelection = true,
-    this.iconSize = 48,
-    this.iconPadding = 8,
   });
 
-  final List<Account>? selectedAccounts;
-  final void Function(List<Account>? selectedAccounts)? onChange;
-  final Axis direction;
-
-  /// Extra options to add before the categories options. The size and padding of
-  /// the `IconDisplayer` attribute here will be ignored to match the rest of the
-  /// options
-  final List<CategoryButtonSelector>? extraHeaderButtons;
-
-  /// Wheter the user can select multiple categories
-  final bool multiSelection;
-
-  /// Size of all the icon options of the Widget
-  final double iconSize;
-
-  /// Padding of all the icon options of the Widget
-  final double iconPadding;
-
-  /// List of the available categories to choose. If null, the component will
-  /// display an empty container
-  final List<Account>? availableAccounts;
+  final IconDisplayerSelectorData<Account> params;
 
   @override
   State<AccountSelector> createState() => _AccountSelectorState();
 }
 
 class _AccountSelectorState extends State<AccountSelector> {
-  buildAccountsOptions({
-    required List<Account>? selectedAccounts,
+  List<CategoryButtonSelector> buildAccountsOptions({
+    required List<Account>? selectedItems,
   }) {
-    return [
-      for (final (index, categoryToDisplay)
-          in widget.availableAccounts!.indexed) ...[
-        Builder(builder: (context) {
-          final isAccountSelected = selectedAccounts == null ||
-              selectedAccounts!.any((cat) => cat.id == categoryToDisplay.id);
+    return widget.params.availableItems!.map((accountToDisplay) {
+      final isAccountSelected = selectedItems == null ||
+          selectedItems!.any((cat) => cat.id == accountToDisplay.id);
 
-          return CategoryButtonSelector(
-            maxTextSize: widget.iconSize * 1.2,
-            iconWidget: categoryToDisplay.displayIcon(
-              context,
-              size: widget.iconSize,
-              padding: widget.iconPadding,
-              isOutline: isAccountSelected,
-              onTap: () {
-                HapticFeedback.lightImpact();
+      return CategoryButtonSelector(
+        maxTextSize: widget.params.iconSize + widget.params.iconPadding * 2,
+        iconWidget: accountToDisplay.displayIcon(
+          context,
+          size: widget.params.iconSize,
+          padding: widget.params.iconPadding,
+          isOutline: isAccountSelected,
+          onTap: () {
+            HapticFeedback.lightImpact();
 
-                if (!widget.multiSelection) {
-                  selectedAccounts = [categoryToDisplay];
+            if (!widget.params.multiSelection) {
+              selectedItems = [accountToDisplay];
 
-                  setState(() {});
+              setState(() {});
 
-                  if (widget.onChange != null) {
-                    widget.onChange!(selectedAccounts);
-                  }
-                  return;
+              if (widget.params.onChange != null) {
+                widget.params.onChange!(selectedItems);
+              }
+              return;
+            }
+
+            if (!isAccountSelected) {
+              if (selectedItems == null) {
+                selectedItems = [accountToDisplay];
+              } else {
+                selectedItems!.add(accountToDisplay);
+
+                if (selectedItems!.length ==
+                    widget.params.availableItems!.length) {
+                  selectedItems = null;
                 }
+              }
+            } else {
+              selectedItems ??= [...widget.params.availableItems!];
 
-                if (!isAccountSelected) {
-                  if (selectedAccounts == null) {
-                    selectedAccounts = [categoryToDisplay];
-                  } else {
-                    selectedAccounts!.add(categoryToDisplay);
+              selectedItems!
+                  .removeWhere((element) => element.id == accountToDisplay.id);
+            }
 
-                    if (selectedAccounts!.length ==
-                        widget.availableAccounts!.length) {
-                      selectedAccounts = null;
-                    }
-                  }
-                } else {
-                  selectedAccounts ??= [...widget.availableAccounts!];
+            setState(() {});
 
-                  selectedAccounts!.removeWhere(
-                      (element) => element.id == categoryToDisplay.id);
-                }
-
-                setState(() {});
-
-                if (widget.onChange != null) {
-                  widget.onChange!(selectedAccounts);
-                }
-              },
-            ),
-            label: categoryToDisplay.name,
-          );
-        }),
-        if (index < widget.availableAccounts!.length - 1 &&
-            widget.direction == Axis.horizontal)
-          const SizedBox(width: 12)
-      ]
-    ];
+            if (widget.params.onChange != null) {
+              widget.params.onChange!(selectedItems);
+            }
+          },
+        ),
+        label: accountToDisplay.name,
+      );
+    }).toList();
   }
 
-  Widget buildSelectAllButton(
+  CategoryButtonSelector buildSelectAllButton(
     BuildContext context, {
     required List<Account>? selectedAccounts,
   }) {
     final t = Translations.of(context);
 
     return CategoryButtonSelector(
-      maxTextSize: widget.iconSize * 1.2,
+      maxTextSize: widget.params.iconSize + widget.params.iconPadding * 2,
       iconWidget: IconDisplayer(
         icon: Icons.select_all,
-        size: widget.iconSize,
-        padding: widget.iconPadding,
+        displayMode: IconDisplayMode.polygon,
+        size: widget.params.iconSize,
+        padding: widget.params.iconPadding,
         isOutline: selectedAccounts == null,
         secondaryColor: AppColors.of(context).background.darken(
               Theme.of(context).brightness == Brightness.dark ? 0.6 : 0.1,
@@ -281,8 +251,8 @@ class _AccountSelectorState extends State<AccountSelector> {
 
           HapticFeedback.lightImpact();
 
-          if (widget.onChange != null) {
-            widget.onChange!(selectedAccounts);
+          if (widget.params.onChange != null) {
+            widget.params.onChange!(selectedAccounts);
           }
         },
       ),
@@ -292,71 +262,34 @@ class _AccountSelectorState extends State<AccountSelector> {
 
   @override
   Widget build(BuildContext context) {
-    List<Account>? selectedAccounts = widget.selectedAccounts;
+    List<Account>? selectedAccounts = widget.params.selectedItems;
 
-    final extraHeaderButtonsWithSameSize = widget.extraHeaderButtons
+    final extraHeaderButtonsWithSameSize = widget.params.extraHeaderButtons
         ?.map(
           (e) => e.copyWith(
             iconWidget: e.iconWidget.copyWith(
-              size: widget.iconSize,
-              padding: widget.iconPadding,
+              size: widget.params.iconSize,
+              padding: widget.params.iconPadding,
             ),
           ),
         )
         .toList();
 
     return Builder(builder: (context) {
-      if (widget.availableAccounts == null) {
+      if (widget.params.availableItems == null) {
         return Container();
       }
 
-      if (widget.direction == Axis.vertical) {
-        return Align(
-          alignment: Alignment.center,
-          heightFactor: 1,
-          child: Wrap(
-            runAlignment: WrapAlignment.center,
-            runSpacing: 12,
-            spacing: 24,
-            children: [
-              if (extraHeaderButtonsWithSameSize != null)
-                ...extraHeaderButtonsWithSameSize,
-              ...buildAccountsOptions(
-                selectedAccounts: selectedAccounts,
-              )
-            ],
-          ),
-        );
-      }
-
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          buildSelectAllButton(context, selectedAccounts: selectedAccounts),
-          const SizedBox(width: 6),
+      return IconDisplayerSelectorRow(
+        direction: widget.params.direction,
+        extraHeaderButtons: [
+          if (widget.params.direction == Axis.horizontal)
+            buildSelectAllButton(context, selectedAccounts: selectedAccounts),
           if (extraHeaderButtonsWithSameSize != null)
-            for (final button in extraHeaderButtonsWithSameSize) ...[
-              const SizedBox(width: 6),
-              button,
-              const SizedBox(width: 6)
-            ],
-          Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.only(right: 16),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 6),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children:
-                      buildAccountsOptions(selectedAccounts: selectedAccounts),
-                ),
-              ),
-            ),
-          ),
+            ...extraHeaderButtonsWithSameSize
         ],
+        scrollableOptions:
+            buildAccountsOptions(selectedItems: selectedAccounts),
       );
     });
   }

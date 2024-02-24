@@ -5,6 +5,7 @@ import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/presentation/widgets/dates/outlinedButtonStacked.dart';
+import 'package:monekin/core/presentation/widgets/icon_displayer_widgets.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -135,11 +136,11 @@ class _ExportDataPageState extends State<ExportDataPage> {
                         StreamBuilder(
                           stream: AccountService.instance.getAccounts(),
                           builder: (context, snapshot) {
-                            return AccountSelector(
-                              availableAccounts: snapshot.data,
+                            return AccountSelector(IconDisplayerSelectorData(
+                              availableItems: snapshot.data,
                               iconPadding: 12,
                               iconSize: 40,
-                              selectedAccounts: filters.accountsIDs == null
+                              selectedItems: filters.accountsIDs == null
                                   ? null
                                   : (snapshot.data ?? [])
                                       .where(
@@ -155,7 +156,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
 
                                 setState(() {});
                               },
-                            );
+                            ));
                           },
                         ),
 
@@ -170,9 +171,9 @@ class _ExportDataPageState extends State<ExportDataPage> {
                             stream:
                                 CategoryService.instance.getMainCategories(),
                             builder: (context, snapshot) {
-                              return CategorySelector(
-                                availableCategories: snapshot.data,
-                                selectedCategories: filters.categories == null
+                              return CategorySelector(IconDisplayerSelectorData(
+                                availableItems: snapshot.data,
+                                selectedItems: filters.categories == null
                                     ? null
                                     : (snapshot.data ?? [])
                                         .where(
@@ -188,7 +189,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
                                     );
                                   });
                                 },
-                              );
+                              ));
                             }),
                       ],
                     ),

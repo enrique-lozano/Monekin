@@ -11,6 +11,7 @@ import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_field.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/icon_displayer_widgets.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:uuid/uuid.dart';
@@ -309,15 +310,17 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
               StreamBuilder(
                 stream: AccountService.instance.getAccounts(),
                 builder: (context, snapshot) {
-                  return AccountSelector(
-                    availableAccounts: snapshot.data,
-                    selectedAccounts: accounts,
+                  return AccountSelector(IconDisplayerSelectorData(
+                    iconPadding: 12,
+                    iconSize: 40,
+                    availableItems: snapshot.data,
+                    selectedItems: accounts,
                     onChange: (selection) {
                       setState(() {
                         accounts = selection;
                       });
                     },
-                  );
+                  ));
                 },
               ),
               Text('${t.general.categories}:'),
@@ -328,15 +331,15 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                     return StreamBuilder(
                         stream: CategoryService.instance.getMainCategories(),
                         builder: (context, snapshot) {
-                          return CategorySelector(
-                            availableCategories: snapshot.data,
-                            selectedCategories: categories,
+                          return CategorySelector(IconDisplayerSelectorData(
+                            availableItems: snapshot.data,
+                            selectedItems: categories,
                             onChange: (selection) {
                               setState(() {
                                 categories = selection;
                               });
                             },
-                          );
+                          ));
                         });
                   }),
               const SizedBox(height: 24),
