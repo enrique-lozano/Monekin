@@ -23,6 +23,7 @@ class IconDisplayer extends StatelessWidget {
     this.size = 22,
     this.padding,
     this.borderRadius = 12,
+    this.outlineWidth = 4,
     this.isOutline = false,
     this.onDoubleTap,
     this.onTap,
@@ -72,7 +73,10 @@ class IconDisplayer extends StatelessWidget {
   final double size;
   final double? padding;
   final double borderRadius;
+
+  final double outlineWidth;
   final bool isOutline;
+
   final IconDisplayMode displayMode;
 
   final void Function()? onTap;
@@ -85,13 +89,13 @@ class IconDisplayer extends StatelessWidget {
     final secondaryColorInBuild = secondaryColor ?? mainColor.lighten(0.82);
 
     final borderSide = BorderSide(
-      width: isOutline ? 3 : 0,
+      width: isOutline ? outlineWidth : 0,
       style: !isOutline ? BorderStyle.none : BorderStyle.solid,
       color: mainColor,
     );
 
     final polygonBorder = StarBorder.polygon(
-      sides: 8,
+      sides: 6,
       rotation: 0,
       pointRounding: min(1, borderRadius * 2.5 / 100),
       side: borderSide,

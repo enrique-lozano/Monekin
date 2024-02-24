@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/app/accounts/all_accounts_page.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/categories/categories_list.dart';
 import 'package:monekin/app/currencies/currency_manager.dart';
@@ -243,8 +244,8 @@ class _SettingsPageState extends State<SettingsPage> {
                       context,
                       title: t.general.accounts,
                       icon: Icons.account_balance_wallet_rounded,
-                      onTap: () =>
-                          RouteUtils.pushRoute(context, const TagListPage()),
+                      onTap: () => RouteUtils.pushRoute(
+                          context, const AllAccountsPage()),
                     ),
                   ),
                   if (BreakPoint.of(context).isLargerThan(BreakpointID.sm)) ...[

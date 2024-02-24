@@ -275,7 +275,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   Future<List<Account>?> showAccountSelector(Account account) {
     return showAccountSelectorBottomSheet(
         context,
-        AccountSelector(
+        AccountSelectorModal(
           allowMultiSelection: false,
           filterSavingAccounts:
               widget.mode == TransactionFormMode.incomeOrExpense,
@@ -462,7 +462,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                       tags.removeWhere((element) => element.id == tag.id);
                     }),
                     showCheckmark: false,
-                    selectedColor: tag.colorData.lighten(0.75),
+                    selectedColor: tag.colorData.lighten(0.8),
                     avatar: tag.displayIcon(),
                   );
                 }),
