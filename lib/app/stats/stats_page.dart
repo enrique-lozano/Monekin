@@ -19,23 +19,34 @@ import 'package:monekin/i18n/translations.g.dart';
 import '../accounts/all_accounts_balance.dart';
 
 class StatsPage extends StatefulWidget {
-  const StatsPage({super.key, this.initialIndex = 0});
+  const StatsPage({
+    super.key,
+    this.initialIndex = 0,
+    this.filters = const TransactionFilters(),
+    this.dateRangeService = const DatePeriodState(),
+  });
 
   final int initialIndex;
+
+  final TransactionFilters filters;
+  final DatePeriodState dateRangeService;
 
   @override
   State<StatsPage> createState() => _StatsPageState();
 }
 
 class _StatsPageState extends State<StatsPage> {
-  DatePeriodState dateRangeService = const DatePeriodState();
   final accountService = AccountService.instance;
 
-  TransactionFilters filters = const TransactionFilters();
+  late TransactionFilters filters;
+  late DatePeriodState dateRangeService;
 
   @override
   void initState() {
     super.initState();
+
+    filters = widget.filters;
+    dateRangeService = widget.dateRangeService;
   }
 
   Widget buildContainerWithPadding(
