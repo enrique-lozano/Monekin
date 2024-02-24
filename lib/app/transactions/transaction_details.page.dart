@@ -196,6 +196,8 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
             : t.recurrent_transactions.details.last_payment_info),
       ],
     ).then((isConfirmed) {
+      if (isConfirmed != true) return;
+
       if (nextPaymentDate == null) {
         TransactionService.instance
             .deleteTransaction(transaction.id)
@@ -238,46 +240,65 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
     required DateTime date,
     bool isNext = false,
   }) {
-    return ListTile(
-      subtitleTextStyle: Theme.of(context).textTheme.labelSmall!.copyWith(
-            color: isNext
-                ? transaction.nextPayStatus!.color(context)
-                : AppColors.of(context).dark,
-          ),
-      leading: Icon(
-        isNext ? transaction.nextPayStatus!.icon : Icons.access_time,
-        color: isNext ? transaction.nextPayStatus!.color(context) : null,
-      ),
-      title: Text(
-        DateFormat.yMMMd().format(date),
-        style: TextStyle(color: AppColors.of(context).dark),
-      ),
-      subtitle: !isNext
-          ? null
-          : Text(
-              transaction.nextPayStatus!
-                  .displayDaysToPay(context, transaction.daysToPay()),
+    return Card(
+      color: Colors.transparent,
+      elevation: 0,
+      margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(6),
+          side: BorderSide(
+            width: 1,
+            color: transaction.nextPayStatus!
+                .color(context)
+                .darken(0.6)
+                .withOpacity(isNext ? 1 : 0.3),
+          )),
+      child: ListTile(
+        contentPadding: const EdgeInsets.only(left: 16, right: 6),
+        subtitleTextStyle: Theme.of(context).textTheme.labelSmall!.copyWith(
+              color: isNext
+                  ? transaction.nextPayStatus!.color(context).darken(0.6)
+                  : AppColors.of(context).primaryContainer,
             ),
-      trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-        IconButton(
-          color: AppColors.of(context).danger,
-          disabledColor: AppColors.of(context).danger.withOpacity(0.3),
-          icon: const Icon(Icons.cancel_rounded),
-          tooltip: t.transaction.next_payments.skip,
-          onPressed: !isNext
-              ? null
-              : () => showSkipTransactionModal(context, transaction),
+        leading: Icon(
+          isNext ? transaction.nextPayStatus!.icon : Icons.access_time,
+          color: transaction.nextPayStatus!
+              .color(context)
+              .darken(0.6)
+              .withOpacity(isNext ? 1 : 0.3),
         ),
-        const SizedBox(width: 4),
-        IconButton(
-          onPressed: !isNext ? null : () => showPayModal(context, transaction),
-          color: AppColors.of(context).primaryContainer,
-          tooltip: t.transaction.next_payments.accept,
-          disabledColor:
-              AppColors.of(context).primaryContainer.withOpacity(0.3),
-          icon: const Icon(Icons.price_check_rounded),
+        title: Text(
+          DateFormat.yMMMd().format(date),
+          style: TextStyle(color: Colors.black.withOpacity(isNext ? 1 : 0.3)),
         ),
-      ]),
+        subtitle: !isNext
+            ? null
+            : Text(
+                transaction.nextPayStatus!
+                    .displayDaysToPay(context, transaction.daysToPay()),
+              ),
+        trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+          IconButton(
+            color: AppColors.of(context).danger,
+            disabledColor: AppColors.of(context).danger.withOpacity(0.3),
+            icon: const Icon(Icons.cancel_rounded),
+            tooltip: t.transaction.next_payments.skip,
+            onPressed: !isNext
+                ? null
+                : () => showSkipTransactionModal(context, transaction),
+          ),
+          const SizedBox(width: 4),
+          IconButton(
+            onPressed:
+                !isNext ? null : () => showPayModal(context, transaction),
+            color: AppColors.of(context).success.darken(0.4),
+            tooltip: !isNext ? null : t.transaction.next_payments.accept,
+            disabledColor:
+                AppColors.of(context).success.darken(0.4).withOpacity(0.3),
+            icon: const Icon(Icons.price_check_rounded),
+          ),
+        ]),
+      ),
     );
   }
 
@@ -345,7 +366,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
 
     final color = showRecurrencyStatus
         ? isDarkTheme
-            ? Theme.of(context).colorScheme.secondary.darken(0.15)
+            ? AppColors.of(context).primaryContainer
             : AppColors.of(context).primary.lighten(0.2)
         : transaction.status!.color;
 
@@ -409,13 +430,12 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                         .getNextDatesOfRecurrency(limit: 3)
                         .mapIndexed((index, e) => Column(
                               children: [
-                                if (index != 0)
-                                  Divider(indent: 48, color: color.darken(0.2)),
                                 cardPay(
                                   date: e,
                                   transaction: transaction,
                                   isNext: index == 0,
                                 ),
+                                if (index == 2) const SizedBox(height: 8),
                               ],
                             ))
                         .toList(),

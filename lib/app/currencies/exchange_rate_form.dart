@@ -185,6 +185,9 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                     controller: rateController,
                     validator: (value) => fieldValidator(value,
                         validator: ValidatorType.double, isRequired: true),
+                    onChanged: (value) {
+                      setState(() {});
+                    },
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: InputDecoration(
                       labelText: '${t.currencies.exchange_rate} *',
