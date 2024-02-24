@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 1019 (509 per locale)
+/// Strings: 1021 (510 per locale)
 ///
-/// Built on 2024-02-24 at 12:01 UTC
+/// Built on 2024-02-24 at 16:14 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -285,6 +285,7 @@ class _TranslationsStatsEn {
 	// Translations
 	String get title => 'Statistics';
 	String get balance => 'Balance';
+	String get final_balance => 'Final balance';
 	String get balance_by_account => 'Balance by accounts';
 	String get balance_by_currency => 'Balance by currency';
 	String get cash_flow => 'Cash flow';
@@ -477,7 +478,7 @@ class _TranslationsCategoriesEn {
 	String make_child_warning2({required Object x, required Object destiny}) => 'Their transactions <b>(${x})</b> will be moved to the new subcategories created within the <b>${destiny}</b> category.';
 	String get make_child_success => 'Subcategories created successfully';
 	String get merge => 'Merge with another category';
-	String merge_warning1({required Object x, required Object from, required Object destiny}) => 'All transactions (<b>${x}</b>) associated with the category <b>${from}</b> will be moved to the category <b>${destiny}</b>';
+	String merge_warning1({required Object x, required Object from, required Object destiny}) => 'All transactions (${x}) associated with the category <b>${from}</b> will be moved to the category <b>${destiny}</b>';
 	String merge_warning2({required Object from}) => 'The category <b>${from}</b> will be irreversibly deleted.';
 	String get merge_success => 'Category merged successfully';
 	String get delete_success => 'Category deleted correctly';
@@ -1515,6 +1516,7 @@ class _TranslationsStatsEs implements _TranslationsStatsEn {
 	// Translations
 	@override String get title => 'Estadísticas';
 	@override String get balance => 'Saldo';
+	@override String get final_balance => 'Saldo final';
 	@override String get balance_by_account => 'Saldo por cuentas';
 	@override String get balance_by_currency => 'Saldo por divisas';
 	@override String get balance_evolution => 'Tendencia de saldo';
@@ -1707,7 +1709,7 @@ class _TranslationsCategoriesEs implements _TranslationsCategoriesEn {
 	@override String make_child_warning2({required Object x, required Object destiny}) => 'Sus transacciones <b>(${x})</b> pasarán a las nuevas subcategorías creadas dentro de la categoría <b>${destiny}</b>.';
 	@override String get make_child_success => 'Subcategorías creadas con exito';
 	@override String get merge => 'Fusionar con otra categoría';
-	@override String merge_warning1({required Object x, required Object from, required Object destiny}) => 'Todas las transacciones (<b>${x}</b>) asocidadas con la categoría <b>${from}</b> serán movidas a la categoría <b>${destiny}</b>.';
+	@override String merge_warning1({required Object x, required Object from, required Object destiny}) => 'Todas las transacciones (${x}) asocidadas con la categoría <b>${from}</b> serán movidas a la categoría <b>${destiny}</b>.';
 	@override String merge_warning2({required Object from}) => 'La categoría <b>${from}</b> será eliminada de forma irreversible.';
 	@override String get merge_success => 'Categoría fusionada correctamente';
 	@override String get delete_success => 'Categoría eliminada correctamente';
@@ -2811,6 +2813,7 @@ extension on _TranslationsEn {
 			case 'financial_health.savings_percentage.suggestion': return 'Remember that it is advisable to save at least 15-20% of what you earn.';
 			case 'stats.title': return 'Statistics';
 			case 'stats.balance': return 'Balance';
+			case 'stats.final_balance': return 'Final balance';
 			case 'stats.balance_by_account': return 'Balance by accounts';
 			case 'stats.balance_by_currency': return 'Balance by currency';
 			case 'stats.cash_flow': return 'Cash flow';
@@ -3036,7 +3039,7 @@ extension on _TranslationsEn {
 			case 'categories.make_child_warning2': return ({required Object x, required Object destiny}) => 'Their transactions <b>(${x})</b> will be moved to the new subcategories created within the <b>${destiny}</b> category.';
 			case 'categories.make_child_success': return 'Subcategories created successfully';
 			case 'categories.merge': return 'Merge with another category';
-			case 'categories.merge_warning1': return ({required Object x, required Object from, required Object destiny}) => 'All transactions (<b>${x}</b>) associated with the category <b>${from}</b> will be moved to the category <b>${destiny}</b>';
+			case 'categories.merge_warning1': return ({required Object x, required Object from, required Object destiny}) => 'All transactions (${x}) associated with the category <b>${from}</b> will be moved to the category <b>${destiny}</b>';
 			case 'categories.merge_warning2': return ({required Object from}) => 'The category <b>${from}</b> will be irreversibly deleted.';
 			case 'categories.merge_success': return 'Category merged successfully';
 			case 'categories.delete_success': return 'Category deleted correctly';
@@ -3399,6 +3402,7 @@ extension on _TranslationsEs {
 			case 'financial_health.savings_percentage.suggestion': return 'Recuerda que es recomendable ahorrar al menos un 15-20% de lo que ingresas.';
 			case 'stats.title': return 'Estadísticas';
 			case 'stats.balance': return 'Saldo';
+			case 'stats.final_balance': return 'Saldo final';
 			case 'stats.balance_by_account': return 'Saldo por cuentas';
 			case 'stats.balance_by_currency': return 'Saldo por divisas';
 			case 'stats.balance_evolution': return 'Tendencia de saldo';
@@ -3624,7 +3628,7 @@ extension on _TranslationsEs {
 			case 'categories.make_child_warning2': return ({required Object x, required Object destiny}) => 'Sus transacciones <b>(${x})</b> pasarán a las nuevas subcategorías creadas dentro de la categoría <b>${destiny}</b>.';
 			case 'categories.make_child_success': return 'Subcategorías creadas con exito';
 			case 'categories.merge': return 'Fusionar con otra categoría';
-			case 'categories.merge_warning1': return ({required Object x, required Object from, required Object destiny}) => 'Todas las transacciones (<b>${x}</b>) asocidadas con la categoría <b>${from}</b> serán movidas a la categoría <b>${destiny}</b>.';
+			case 'categories.merge_warning1': return ({required Object x, required Object from, required Object destiny}) => 'Todas las transacciones (${x}) asocidadas con la categoría <b>${from}</b> serán movidas a la categoría <b>${destiny}</b>.';
 			case 'categories.merge_warning2': return ({required Object from}) => 'La categoría <b>${from}</b> será eliminada de forma irreversible.';
 			case 'categories.merge_success': return 'Categoría fusionada correctamente';
 			case 'categories.delete_success': return 'Categoría eliminada correctamente';

@@ -209,6 +209,7 @@
   "STATS": {
     "title": "Statistics",
     "balance": "Balance",
+    "final-balance": "Final balance",
     "balance-by-account": "Balance by accounts",
     "balance-by-currency": "Balance by currency",
     "cash-flow": "Cash flow",
@@ -486,7 +487,7 @@
     "make-child.warning2": "Their transactions <b>({{x}})</b> will be moved to the new subcategories created within the <b>{{destiny}}</b> category.",
     "make-child.success": "Subcategories created successfully",
     "merge": "Merge with another category",
-    "merge.warning1": "All transactions (<b>{{x}}</b>) associated with the category <b>{{from}}</b> will be moved to the category <b>{{destiny}}</b>",
+    "merge.warning1": "All transactions ({{x}}) associated with the category <b>{{from}}</b> will be moved to the category <b>{{destiny}}</b>",
     "merge.warning2": "The category <b>{{from}}</b> will be irreversibly deleted.",
     "merge.success": "Category merged successfully",
     "delete.success": "Category deleted correctly",
