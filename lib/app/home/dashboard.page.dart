@@ -58,340 +58,339 @@ class _DashboardPageState extends State<DashboardPage> {
         BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md);
 
     return Scaffold(
-      appBar: EmptyAppBar(color: AppColors.of(context).light),
-      floatingActionButton:
-          hideDrawerAndFloatingButton ? null : const NewTransactionButton(),
-      drawer: hideDrawerAndFloatingButton
-          ? null
-          : Drawer(
-              child: Builder(builder: (context) {
-                final drawerItems = getDestinations(context,
-                    showHome: false, shortLabels: false);
+        appBar: EmptyAppBar(color: AppColors.of(context).light),
+        floatingActionButton:
+            hideDrawerAndFloatingButton ? null : const NewTransactionButton(),
+        drawer: hideDrawerAndFloatingButton
+            ? null
+            : Drawer(
+                child: Builder(builder: (context) {
+                  final drawerItems = getDestinations(context,
+                      showHome: false, shortLabels: false);
 
-                return HomeDrawer(
-                  drawerActions: drawerItems,
-                  onDestinationSelected: (e) {
-                    Navigator.pop(context);
+                  return HomeDrawer(
+                    drawerActions: drawerItems,
+                    onDestinationSelected: (e) {
+                      Navigator.pop(context);
 
 //                    context.router.push(drawerItems.elementAt(e).destination);
-                  },
-                  selectedIndex: -1,
-                );
-              }),
-            ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            DefaultTextStyle.merge(
-              style: TextStyle(
-                  color: Theme.of(context).appBarTheme.foregroundColor),
-              child: Card(
-                margin: const EdgeInsets.only(bottom: 24),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(16),
-                    bottomRight: Radius.circular(16),
-                  ),
+                    },
+                    selectedIndex: -1,
+                  );
+                }),
+              ),
+        body: SingleChildScrollView(
+            child: Column(children: [
+          DefaultTextStyle.merge(
+            style:
+                TextStyle(color: Theme.of(context).appBarTheme.foregroundColor),
+            child: Card(
+              margin: const EdgeInsets.only(bottom: 24),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(16),
+                  bottomRight: Radius.circular(16),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Tappable(
-                            onTap: () {
-                              showModalBottomSheet(
-                                  context: context,
-                                  isScrollControlled: true,
-                                  showDragHandle: true,
-                                  builder: (context) {
-                                    return const EditProfileModal();
-                                  });
-                            },
-                            bgColor: Colors.transparent,
-                            borderRadius: 12,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Row(
-                                children: [
-                                  if (BreakPoint.of(context)
-                                      .isSmallerThan(BreakpointID.md)) ...[
+              ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Tappable(
+                          onTap: () {
+                            showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                showDragHandle: true,
+                                builder: (context) {
+                                  return const EditProfileModal();
+                                });
+                          },
+                          bgColor: Colors.transparent,
+                          borderRadius: 12,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Row(
+                              children: [
+                                if (BreakPoint.of(context)
+                                    .isSmallerThan(BreakpointID.md)) ...[
+                                  StreamBuilder(
+                                      stream: UserSettingService.instance
+                                          .getSetting(SettingKey.avatar),
+                                      builder: (context, snapshot) {
+                                        return UserAvatar(
+                                            avatar: snapshot.data);
+                                      }),
+                                  const SizedBox(width: 8),
+                                ],
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Welcome again!",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                    ),
                                     StreamBuilder(
                                         stream: UserSettingService.instance
-                                            .getSetting(SettingKey.avatar),
-                                        builder: (context, snapshot) {
-                                          return UserAvatar(
-                                              avatar: snapshot.data);
-                                        }),
-                                    const SizedBox(width: 8),
-                                  ],
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Welcome again!",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium!
-                                            .copyWith(
-                                              fontWeight: FontWeight.w300,
-                                            ),
-                                      ),
-                                      StreamBuilder(
-                                          stream: UserSettingService.instance
-                                              .getSetting(SettingKey.userName),
-                                          builder: (context, snapshot) {
-                                            if (!snapshot.hasData) {
-                                              return const Skeleton(
-                                                  width: 70, height: 12);
-                                            }
-
-                                            return Text(
-                                              snapshot.data!,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleLarge!
-                                                  .copyWith(
-                                                      // fontWeight: FontWeight.bold,
-                                                      ),
-                                            );
-                                          }),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          ActionChip(
-                            label: Text(dateRangeService.getText(context)),
-                            backgroundColor:
-                                AppColors.of(context).primaryContainer.darken(),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                              side: BorderSide(
-                                color: AppColors.of(context).onPrimary,
-                              ),
-                            ),
-                            onPressed: () {
-                              openDatePeriodModal(
-                                context,
-                                DatePeriodModal(
-                                  initialDatePeriod:
-                                      dateRangeService.datePeriod,
-                                ),
-                              ).then((value) {
-                                if (value == null) return;
-
-                                setState(() {
-                                  dateRangeService = dateRangeService.copyWith(
-                                    periodModifier: 0,
-                                    datePeriod: value,
-                                  );
-                                });
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                      const Divider(height: 16),
-                      const SizedBox(height: 8),
-                      StreamBuilder(
-                        stream: AccountService.instance.getAccounts(),
-                        builder: (context, accounts) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    t.home.total_balance,
-                                    style:
-                                        Theme.of(context).textTheme.labelSmall!,
-                                  ),
-                                  if (!accounts.hasData) ...[
-                                    const Skeleton(width: 70, height: 40),
-                                    const Skeleton(width: 30, height: 14),
-                                  ],
-                                  if (accounts.hasData) ...[
-                                    StreamBuilder(
-                                        stream: accountService.getAccountsMoney(
-                                            accountIds: accounts.data!
-                                                .map((e) => e.id)),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData) {
-                                            return CurrencyDisplayer(
-                                              amountToConvert: snapshot.data!,
-                                              integerStyle: const TextStyle(
-                                                fontSize: 32,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            );
-                                          }
-
-                                          return const Skeleton(
-                                              width: 90, height: 40);
-                                        }),
-                                    if (dateRangeService.startDate != null &&
-                                        dateRangeService.endDate != null)
-                                      StreamBuilder(
-                                        stream: accountService
-                                            .getAccountsMoneyVariation(
-                                                accounts: accounts.data!,
-                                                startDate:
-                                                    dateRangeService.startDate,
-                                                endDate:
-                                                    dateRangeService.endDate,
-                                                convertToPreferredCurrency:
-                                                    true),
+                                            .getSetting(SettingKey.userName),
                                         builder: (context, snapshot) {
                                           if (!snapshot.hasData) {
                                             return const Skeleton(
-                                                width: 52, height: 22);
+                                                width: 70, height: 12);
                                           }
 
-                                          return TrendingValue(
-                                            percentage: snapshot.data!,
-                                            filled: true,
-                                            fontWeight: FontWeight.bold,
-                                            outlined: true,
+                                          return Text(
+                                            snapshot.data!,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge!
+                                                .copyWith(
+                                                    // fontWeight: FontWeight.bold,
+                                                    ),
                                           );
-                                        },
-                                      ),
-                                  ]
-                                ],
+                                        }),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        ActionChip(
+                          label: Text(dateRangeService.getText(context)),
+                          backgroundColor:
+                              AppColors.of(context).primaryContainer.darken(),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            side: BorderSide(
+                              color: AppColors.of(context).onPrimary,
+                            ),
+                          ),
+                          onPressed: () {
+                            openDatePeriodModal(
+                              context,
+                              DatePeriodModal(
+                                initialDatePeriod: dateRangeService.datePeriod,
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  IncomeOrExpenseCard(
-                                    type: TransactionType.income,
-                                    startDate: dateRangeService.startDate,
-                                    endDate: dateRangeService.endDate,
-                                  ),
-                                  IncomeOrExpenseCard(
-                                    type: TransactionType.expense,
-                                    startDate: dateRangeService.startDate,
-                                    endDate: dateRangeService.endDate,
-                                  ),
+                            ).then((value) {
+                              if (value == null) return;
+
+                              setState(() {
+                                dateRangeService = dateRangeService.copyWith(
+                                  periodModifier: 0,
+                                  datePeriod: value,
+                                );
+                              });
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                    const Divider(height: 16),
+                    const SizedBox(height: 8),
+                    StreamBuilder(
+                      stream: AccountService.instance.getAccounts(),
+                      builder: (context, accounts) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  t.home.total_balance,
+                                  style:
+                                      Theme.of(context).textTheme.labelSmall!,
+                                ),
+                                if (!accounts.hasData) ...[
+                                  const Skeleton(width: 70, height: 40),
+                                  const Skeleton(width: 30, height: 14),
                                 ],
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                                if (accounts.hasData) ...[
+                                  StreamBuilder(
+                                      stream: accountService.getAccountsMoney(
+                                          accountIds:
+                                              accounts.data!.map((e) => e.id)),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          return CurrencyDisplayer(
+                                            amountToConvert: snapshot.data!,
+                                            integerStyle: const TextStyle(
+                                              fontSize: 32,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          );
+                                        }
+
+                                        return const Skeleton(
+                                            width: 90, height: 40);
+                                      }),
+                                  if (dateRangeService.startDate != null &&
+                                      dateRangeService.endDate != null)
+                                    StreamBuilder(
+                                      stream: accountService
+                                          .getAccountsMoneyVariation(
+                                              accounts: accounts.data!,
+                                              startDate:
+                                                  dateRangeService.startDate,
+                                              endDate: dateRangeService.endDate,
+                                              convertToPreferredCurrency: true),
+                                      builder: (context, snapshot) {
+                                        if (!snapshot.hasData) {
+                                          return const Skeleton(
+                                              width: 52, height: 22);
+                                        }
+
+                                        return TrendingValue(
+                                          percentage: snapshot.data!,
+                                          filled: true,
+                                          fontWeight: FontWeight.bold,
+                                          outlined: true,
+                                        );
+                                      },
+                                    ),
+                                ]
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                IncomeOrExpenseCard(
+                                  type: TransactionType.income,
+                                  startDate: dateRangeService.startDate,
+                                  endDate: dateRangeService.endDate,
+                                ),
+                                IncomeOrExpenseCard(
+                                  type: TransactionType.expense,
+                                  startDate: dateRangeService.startDate,
+                                  endDate: dateRangeService.endDate,
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),
+          ),
 
-            _HorizontalScrollableAccountList(
-                dateRangeService: dateRangeService),
+          _HorizontalScrollableAccountList(
+            dateRangeService: dateRangeService,
+          ),
 
-            // ------------- STATS GENERAL CARDS --------------
+          // ------------- STATS GENERAL CARDS --------------
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
-              child: Column(
-                children: [
-                  ResponsiveRowColumn.withSymetricSpacing(
-                    spacing: 16,
-                    direction:
-                        BreakPoint.of(context).isLargerThan(BreakpointID.md)
-                            ? Axis.horizontal
-                            : Axis.vertical,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
+            child: ResponsiveRowColumn.withSymetricSpacing(
+              direction: BreakPoint.of(context).isLargerThan(BreakpointID.md)
+                  ? Axis.horizontal
+                  : Axis.vertical,
+              rowCrossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 16,
+              children: [
+                ResponsiveRowColumnItem(
+                  rowFit: FlexFit.tight,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      ResponsiveRowColumnItem(
-                        rowFit: FlexFit.tight,
-                        child: CardWithHeader(
-                          title: t.financial_health.display,
-                          onHeaderButtonClick: () => RouteUtils.pushRoute(
-                              context, const StatsPage(initialIndex: 0)),
-                          bodyPadding: const EdgeInsets.all(16),
-                          body: StreamBuilder(
-                            stream: FinanceHealthService().getHealthyValue(
-                              filters: TransactionFilters(
-                                minDate: dateRangeService.startDate,
-                                maxDate: dateRangeService.endDate,
-                              ),
+                      CardWithHeader(
+                        title: t.financial_health.display,
+                        onHeaderButtonClick: () => RouteUtils.pushRoute(
+                            context,
+                            StatsPage(
+                                dateRangeService: dateRangeService,
+                                initialIndex: 0)),
+                        bodyPadding: const EdgeInsets.all(16),
+                        body: StreamBuilder(
+                          stream: FinanceHealthService().getHealthyValue(
+                            filters: TransactionFilters(
+                              minDate: dateRangeService.startDate,
+                              maxDate: dateRangeService.endDate,
                             ),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return const LinearProgressIndicator();
-                              }
-
-                              final financeHealthData = snapshot.data!;
-
-                              return FinanceHealthMainInfo(
-                                  financeHealthData: financeHealthData);
-                            },
                           ),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return const LinearProgressIndicator();
+                            }
+
+                            final financeHealthData = snapshot.data!;
+
+                            return FinanceHealthMainInfo(
+                                financeHealthData: financeHealthData);
+                          },
                         ),
                       ),
-                      ResponsiveRowColumnItem(
-                        rowFit: FlexFit.tight,
-                        child: CardWithHeader(
-                            title: t.stats.balance_evolution,
-                            body: FundEvolutionLineChart(
-                              dateRange: dateRangeService,
-                            ),
-                            onHeaderButtonClick: () {
-                              RouteUtils.pushRoute(
-                                  context, const StatsPage(initialIndex: 2));
-                            }),
-                      ),
+                      const SizedBox(height: 16),
+                      CardWithHeader(
+                          title: t.stats.by_categories,
+                          body: ChartByCategories(
+                              datePeriodState: dateRangeService),
+                          onHeaderButtonClick: () {
+                            RouteUtils.pushRoute(
+                              context,
+                              StatsPage(
+                                  dateRangeService: dateRangeService,
+                                  initialIndex: 1),
+                            );
+                          }),
                     ],
                   ),
-                  const SizedBox(height: 16),
-                  ResponsiveRowColumn.withSymetricSpacing(
-                    spacing: 16,
-                    direction:
-                        BreakPoint.of(context).isLargerThan(BreakpointID.md)
-                            ? Axis.horizontal
-                            : Axis.vertical,
+                ),
+                ResponsiveRowColumnItem(
+                  rowFit: FlexFit.tight,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      ResponsiveRowColumnItem(
-                        rowFit: FlexFit.tight,
-                        child: CardWithHeader(
-                            title: t.stats.by_categories,
-                            body: ChartByCategories(
-                                datePeriodState: dateRangeService),
-                            onHeaderButtonClick: () {
-                              RouteUtils.pushRoute(
-                                  context, const StatsPage(initialIndex: 1));
-                            }),
-                      ),
-                      ResponsiveRowColumnItem(
-                        rowFit: FlexFit.tight,
-                        child: CardWithHeader(
-                            title: t.stats.cash_flow,
-                            body: Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 16, left: 16, right: 16),
-                              child: BalanceChartSmall(
-                                  dateRangeService: dateRangeService),
-                            ),
-                            onHeaderButtonClick: () {
-                              RouteUtils.pushRoute(
-                                  context, const StatsPage(initialIndex: 3));
-                            }),
-                      ),
+                      CardWithHeader(
+                          title: t.stats.balance_evolution,
+                          body: FundEvolutionLineChart(
+                            dateRange: dateRangeService,
+                          ),
+                          onHeaderButtonClick: () {
+                            RouteUtils.pushRoute(
+                              context,
+                              StatsPage(
+                                  dateRangeService: dateRangeService,
+                                  initialIndex: 2),
+                            );
+                          }),
+                      const SizedBox(height: 16),
+                      CardWithHeader(
+                          title: t.stats.cash_flow,
+                          body: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 16, left: 16, right: 16),
+                            child: BalanceChartSmall(
+                                dateRangeService: dateRangeService),
+                          ),
+                          onHeaderButtonClick: () {
+                            RouteUtils.pushRoute(
+                              context,
+                              StatsPage(
+                                  dateRangeService: dateRangeService,
+                                  initialIndex: 3),
+                            );
+                          }),
                     ],
                   ),
-                  SizedBox(height: hideDrawerAndFloatingButton ? 8 : 64),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+                )
+              ],
+            ),
+          ),
+        ])));
   }
 
   Widget buildAccountList(List<Account> accounts) {
