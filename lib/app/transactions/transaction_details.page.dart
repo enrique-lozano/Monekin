@@ -507,7 +507,12 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                     buildInfoTileWithIconAndColor(
                                       icon: transaction.category!.icon,
                                       color: ColorHex.get(
-                                          transaction.category!.color),
+                                              transaction.category!.color)
+                                          .lighten(
+                                              Theme.of(context).brightness ==
+                                                      Brightness.dark
+                                                  ? 0.5
+                                                  : 0),
                                       data: transaction.category!.name,
                                       title: t.general.category,
                                     ),

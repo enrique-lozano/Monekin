@@ -16,7 +16,11 @@ extension ColorHex on Color {
 
 extension ColorBrightness on Color {
   Color darken([double amount = .1]) {
-    assert(amount >= 0 && amount <= 1);
+    assert(amount >= -1 && amount <= 1);
+
+    if (amount < 0) {
+      return lighten(amount.abs());
+    }
 
     var f = 1 - amount;
 
@@ -25,7 +29,11 @@ extension ColorBrightness on Color {
   }
 
   Color lighten([double amount = .1]) {
-    assert(amount >= 0 && amount <= 1);
+    assert(amount >= -1 && amount <= 1);
+
+    if (amount < 0) {
+      return lighten(amount.abs());
+    }
 
     return Color.fromARGB(
         alpha,

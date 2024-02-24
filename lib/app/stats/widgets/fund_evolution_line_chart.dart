@@ -324,7 +324,7 @@ class FundEvolutionLineChart extends StatelessWidget {
                                 color: snapshot.hasData
                                     ? lineColor
                                     : Colors.grey.withOpacity(0.2),
-                                barWidth: 5,
+                                barWidth: 3,
                                 isStrokeCapRound: true,
                                 dotData: const FlDotData(show: false),
                                 belowBarData: BarAreaData(
