@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:monekin/i18n/translations.g.dart';
 
 /// A text input formatter that only allow two decimal places, replacing incorrect decimal symbols
 List<FilteringTextInputFormatter> get decimalDigitFormatter => [
@@ -20,7 +21,7 @@ String? fieldValidator(String? value,
     // If the field is not required and is empty, we don't return any error
     return null;
   } else if (value == null || value.isEmpty) {
-    return 'This field is required';
+    return t.general.validations.required;
   }
 
   if (validator.isNumber && (double.tryParse(value) == null)) {

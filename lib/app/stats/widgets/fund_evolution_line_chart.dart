@@ -103,11 +103,7 @@ class FundEvolutionLineChart extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                                'F. balance - ${dateRange.getText(
-                                  context,
-                                  showLongMonth: false,
-                                )}',
+                            Text(t.stats.final_balance,
                                 style: const TextStyle(fontSize: 12)),
                             StreamBuilder(
                                 stream: accountService.getAccountsMoney(

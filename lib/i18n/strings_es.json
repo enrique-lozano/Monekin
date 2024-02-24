@@ -213,6 +213,7 @@
   "STATS": {
     "title": "Estadísticas",
     "balance": "Saldo",
+    "final-balance": "Saldo final",
     "balance-by-account": "Saldo por cuentas",
     "balance-by-currency": "Saldo por divisas",
     "balance-evolution": "Tendencia de saldo",
@@ -490,7 +491,7 @@
     "make-child.warning2": "Sus transacciones <b>({{x}})</b> pasarán a las nuevas subcategorías creadas dentro de la categoría <b>{{destiny}}</b>.",
     "make-child.success": "Subcategorías creadas con exito",
     "merge": "Fusionar con otra categoría",
-    "merge.warning1": "Todas las transacciones (<b>{{x}}</b>) asocidadas con la categoría <b>{{from}}</b> serán movidas a la categoría <b>{{destiny}}</b>.",
+    "merge.warning1": "Todas las transacciones ({{x}}) asocidadas con la categoría <b>{{from}}</b> serán movidas a la categoría <b>{{destiny}}</b>.",
     "merge.warning2": "La categoría <b>{{from}}</b> será eliminada de forma irreversible.",
     "merge.success": "Categoría fusionada correctamente",
     "delete.success": "Categoría eliminada correctamente",
