@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'category_selector.dart';
+part of 'icon_displayer_widgets.dart';
 
 // **************************************************************************
 // CopyWithGenerator

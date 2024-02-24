@@ -81,20 +81,31 @@ class Account extends AccountInDB {
             : AppColors.of(context).primary;
   }
 
-  Widget displayIcon(
+  IconDisplayer displayIcon(
     BuildContext context, {
     double size = 24,
     double? padding,
+    double outlineWidth = 4,
     bool isOutline = false,
+    void Function()? onTap,
   }) {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
+
     return IconDisplayer(
       supportedIcon: icon,
-      mainColor: getComputedColor(context),
+      mainColor: isDark
+          ? getComputedColor(context).lighten(0.82)
+          : getComputedColor(context).lighten(),
+      secondaryColor: isDark
+          ? getComputedColor(context).lighten()
+          : getComputedColor(context).lighten(0.82),
       displayMode: IconDisplayMode.polygon,
       size: size,
       borderRadius: 20,
+      outlineWidth: outlineWidth,
       isOutline: isOutline,
       padding: padding,
+      onTap: onTap,
     );
   }
 

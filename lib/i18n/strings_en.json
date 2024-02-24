@@ -36,6 +36,7 @@
       "until-date": "Until date",
       "date": "Date",
       "datetime": "Datetime",
+      "time": "Time",
       "each": "Each",
       "after": "After",
       "RANGES": {
@@ -296,8 +297,8 @@
       "tap-to-see-more": "Tap to see more details",
       "description": "Description",
       "description-info": "Adding a note will help you find this transaction faster in the future",
-      "exchange-to-preferred-today": "Equivalent to {{ currency }} today:",
-      "exchange-to-preferred-in-date": "Equivalent to {{ currency }} on {{date}}:"
+      "exchange-to-preferred-title": "Exchnage rate to {{ currency }}",
+      "exchange-to-preferred-in-date": "On transaction date"
     },
     "STATUS": {
       "display": {

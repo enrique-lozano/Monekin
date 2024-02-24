@@ -4,6 +4,7 @@ import 'package:monekin/app/categories/form/category_form.dart';
 import 'package:monekin/app/categories/subcategory_selector.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/presentation/widgets/icon_displayer_widgets.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/color_utils.dart';
@@ -94,56 +95,59 @@ class _CategoriesListState extends State<CategoriesList> {
         .toList();
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      controller: widget.scrollController,
-      scrollDirection: Axis.vertical,
-      child: CategorySelector(
-        availableCategories: categoriesToDisplay,
-        selectedCategories: selectedCategories,
-        multiSelection: false,
-        direction: Axis.vertical,
-        onChange: (selectedItems) async {
-          final category = selectedItems?.elementAtOrNull(0);
+        padding: const EdgeInsets.all(16),
+        controller: widget.scrollController,
+        scrollDirection: Axis.vertical,
+        child: CategorySelector(
+          IconDisplayerSelectorData(
+            availableItems: categoriesToDisplay,
+            selectedItems: selectedCategories,
+            multiSelection: false,
+            direction: Axis.vertical,
+            onChange: (selectedItems) async {
+              final category = selectedItems?.elementAtOrNull(0);
 
-          if (category == null) {
-            return;
-          }
-
-          goToCategoryForm() => RouteUtils.pushRoute(
-              context, CategoryFormPage(categoryUUID: category.id));
-
-          if (widget.mode == CategoriesListMode.page) {
-            await goToCategoryForm();
-          } else if (widget.mode == CategoriesListMode.modalSelectCategory) {
-            category.type = type;
-
-            Navigator.of(context).pop([category]);
-          } else if (widget.mode == CategoriesListMode.modalSelectSubcategory) {
-            final modalRes = await showModalBottomSheet<Category?>(
-                context: context,
-                isScrollControlled: true,
-                showDragHandle: true,
-                builder: (context) {
-                  return SubcategorySelector(parentCategory: category);
-                });
-
-            if (modalRes != null) {
-              if (modalRes.isChildCategory) {
-                modalRes.parentCategory!.type = type;
-              } else {
-                modalRes.type = type;
+              if (category == null) {
+                return;
               }
 
-              Navigator.of(context).pop([modalRes]);
-            } else {
-              selectedCategories = [...widget.selectedCategories];
-            }
-          }
+              goToCategoryForm() => RouteUtils.pushRoute(
+                  context, CategoryFormPage(categoryUUID: category.id));
 
-          setState(() {});
-        },
-      ),
-    );
+              if (widget.mode == CategoriesListMode.page) {
+                await goToCategoryForm();
+              } else if (widget.mode ==
+                  CategoriesListMode.modalSelectCategory) {
+                category.type = type;
+
+                Navigator.of(context).pop([category]);
+              } else if (widget.mode ==
+                  CategoriesListMode.modalSelectSubcategory) {
+                final modalRes = await showModalBottomSheet<Category?>(
+                    context: context,
+                    isScrollControlled: true,
+                    showDragHandle: true,
+                    builder: (context) {
+                      return SubcategorySelector(parentCategory: category);
+                    });
+
+                if (modalRes != null) {
+                  if (modalRes.isChildCategory) {
+                    modalRes.parentCategory!.type = type;
+                  } else {
+                    modalRes.type = type;
+                  }
+
+                  Navigator.of(context).pop([modalRes]);
+                } else {
+                  selectedCategories = [...widget.selectedCategories];
+                }
+              }
+
+              setState(() {});
+            },
+          ),
+        ));
   }
 
   @override
