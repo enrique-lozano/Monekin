@@ -134,7 +134,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
               children: [
                 SingleChildScrollView(
                   controller: scrollController,
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                  padding: const EdgeInsets.fromLTRB(16, 2, 16, 24),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -144,88 +144,69 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                         /* -------- ACCOUNT SELECTOR -------- */
                         /* ---------------------------------- */
 
+                        Text('${t.general.accounts}:'),
+                        const SizedBox(height: 6),
                         StreamBuilder(
-                            stream: AccountService.instance.getAccounts(),
-                            builder: (context, snapshot) {
-                              final selectedAccounts = (snapshot.data ?? [])
-                                  .where((element) =>
-                                      filtersToReturn.accountsIDs
-                                          ?.contains(element.id) ??
-                                      false);
+                          stream: AccountService.instance.getAccounts(),
+                          builder: (context, snapshot) {
+                            return AccountSelector(
+                              availableAccounts: snapshot.data,
+                              iconPadding: 12,
+                              iconSize: 40,
+                              selectedAccounts:
+                                  filtersToReturn.accountsIDs == null
+                                      ? null
+                                      : (snapshot.data ?? [])
+                                          .where(
+                                            (element) => filtersToReturn
+                                                .accountsIDs!
+                                                .contains(element.id),
+                                          )
+                                          .toList(),
+                              onChange: (selection) {
+                                filtersToReturn = filtersToReturn.copyWith(
+                                  accountsIDs:
+                                      selection?.map((e) => e.id).toList(),
+                                );
 
-                              return selector(
-                                  title: t.general.accounts,
-                                  inputValue:
-                                      filtersToReturn.accountsIDs == null ||
-                                              (snapshot.hasData &&
-                                                  filtersToReturn.accountsIDs!
-                                                          .length ==
-                                                      snapshot.data!.length)
-                                          ? t.account.select.all
-                                          : selectedAccounts
-                                              .map((e) => e.name)
-                                              .join(', '),
-                                  onClick: () async {
-                                    final modalRes =
-                                        await showAccountSelectorBottomSheet(
-                                            context,
-                                            AccountSelector(
-                                              allowMultiSelection: true,
-                                              filterSavingAccounts: false,
-                                              selectedAccounts:
-                                                  selectedAccounts.toList(),
-                                            ));
-
-                                    if (modalRes != null &&
-                                        modalRes.isNotEmpty) {
-                                      setState(() {
-                                        filtersToReturn =
-                                            filtersToReturn.copyWith(
-                                                accountsIDs: snapshot.hasData &&
-                                                        modalRes.length ==
-                                                            snapshot
-                                                                .data!.length
-                                                    ? null
-                                                    : modalRes
-                                                        .map((e) => e.id));
-                                      });
-                                    }
-                                  });
-                            }),
+                                setState(() {});
+                              },
+                            );
+                          },
+                        ),
 
                         /* ---------------------------------- */
                         /* -------- CATEGORY SELECTOR ------- */
                         /* ---------------------------------- */
 
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 6),
                         Text('${t.general.categories}:'),
                         const SizedBox(height: 6),
                         StreamBuilder(
-                            stream:
-                                CategoryService.instance.getMainCategories(),
-                            builder: (context, snapshot) {
-                              return CategorySelector(
-                                availableCategories: snapshot.data,
-                                selectedCategories:
-                                    filtersToReturn.categories == null
-                                        ? null
-                                        : (snapshot.data ?? [])
-                                            .where(
-                                              (element) => filtersToReturn
-                                                  .categories!
-                                                  .contains(element.id),
-                                            )
-                                            .toList(),
-                                onChange: (selection) {
-                                  setState(() {
-                                    filtersToReturn = filtersToReturn.copyWith(
-                                      categories:
-                                          selection?.map((e) => e.id).toList(),
-                                    );
-                                  });
-                                },
-                              );
-                            }),
+                          stream: CategoryService.instance.getMainCategories(),
+                          builder: (context, snapshot) {
+                            return CategorySelector(
+                              availableCategories: snapshot.data,
+                              selectedCategories: filtersToReturn.categories ==
+                                      null
+                                  ? null
+                                  : (snapshot.data ?? [])
+                                      .where(
+                                        (element) => filtersToReturn.categories!
+                                            .contains(element.id),
+                                      )
+                                      .toList(),
+                              onChange: (selection) {
+                                filtersToReturn = filtersToReturn.copyWith(
+                                  categories:
+                                      selection?.map((e) => e.id).toList(),
+                                );
+
+                                setState(() {});
+                              },
+                            );
+                          },
+                        ),
                         const SizedBox(height: 24),
 
                         /* ---------------------------------- */
