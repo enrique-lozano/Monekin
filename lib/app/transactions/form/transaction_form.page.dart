@@ -275,7 +275,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   Future<List<Account>?> showAccountSelector(Account account) {
     return showAccountSelectorBottomSheet(
         context,
-        AccountSelector(
+        AccountSelectorModal(
           allowMultiSelection: false,
           filterSavingAccounts:
               widget.mode == TransactionFormMode.incomeOrExpense,

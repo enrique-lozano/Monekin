@@ -49,7 +49,7 @@ class CategorySelector extends StatefulWidget {
 }
 
 class _CategorySelectorState extends State<CategorySelector> {
-  buildCategoriesOptions({
+  List<Widget> buildCategoriesOptions({
     required List<Category>? selectedCategories,
   }) {
     return [
@@ -193,6 +193,7 @@ class _CategorySelectorState extends State<CategorySelector> {
 
       return Row(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           buildSelectAllButton(context, selectedCategories: selectedCategories),
           const SizedBox(width: 6),
@@ -210,6 +211,7 @@ class _CategorySelectorState extends State<CategorySelector> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 6),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: buildCategoriesOptions(
                       selectedCategories: selectedCategories),
                 ),
@@ -245,10 +247,10 @@ class CategoryButtonSelector extends StatelessWidget {
           width: maxTextSize,
           child: Text(
             label,
-            maxLines: 1,
+            maxLines: 2,
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.labelMedium,
+            style: Theme.of(context).textTheme.labelSmall,
           ),
         ),
       ],

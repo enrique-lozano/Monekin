@@ -447,7 +447,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                     onClick: () async {
                       final modalRes = await showAccountSelectorBottomSheet(
                           context,
-                          AccountSelector(
+                          AccountSelectorModal(
                             allowMultiSelection: false,
                             filterSavingAccounts: true,
                             selectedAccounts: [
