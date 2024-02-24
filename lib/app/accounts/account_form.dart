@@ -10,8 +10,10 @@ import 'package:monekin/core/database/services/exchange-rate/exchange_rate_servi
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/currency/currency.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/expansion_panel/single_expansion_panel.dart';
@@ -20,6 +22,7 @@ import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
+import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:uuid/uuid.dart';
@@ -227,38 +230,42 @@ class _AccountFormPageState extends State<AccountFormPage> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          InkWell(
-                            onTap: () {
-                              showIconSelectorModal(
-                                context,
-                                IconSelectorModal(
-                                  preselectedIconID: _icon.id,
-                                  subtitle: t.icon_selector.select_account_icon,
-                                  onIconSelected: (selectedIcon) {
-                                    setState(() {
-                                      _icon = selectedIcon;
-                                    });
-                                  },
-                                ),
-                              );
-                            },
-                            child: Container(
-                                padding: const EdgeInsets.all(6),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 1.625,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .outline),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(6))),
-                                child: _icon.display(
-                                    size: 48,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onBackground)),
-                          ),
-                          const SizedBox(width: 20),
+                          Builder(builder: (context) {
+                            final isDark =
+                                Theme.of(context).brightness == Brightness.dark;
+
+                            return IconDisplayer(
+                              supportedIcon: _icon,
+                              size: 40,
+                              isOutline: true,
+                              outlineWidth: 1.5,
+                              mainColor: (isDark
+                                      ? AppColors.of(context).onPrimary
+                                      : AppColors.of(context).primary)
+                                  .lighten(isDark ? 0.82 : 0),
+                              secondaryColor: (isDark
+                                      ? AppColors.of(context).onPrimary
+                                      : AppColors.of(context).primary)
+                                  .lighten(isDark ? 0 : 0.82),
+                              displayMode: IconDisplayMode.polygon,
+                              onTap: () {
+                                showIconSelectorModal(
+                                  context,
+                                  IconSelectorModal(
+                                    preselectedIconID: _icon.id,
+                                    subtitle:
+                                        t.icon_selector.select_account_icon,
+                                    onIconSelected: (selectedIcon) {
+                                      setState(() {
+                                        _icon = selectedIcon;
+                                      });
+                                    },
+                                  ),
+                                );
+                              },
+                            );
+                          }),
+                          const SizedBox(width: 10),
                           Expanded(
                             child: TextFormField(
                               controller: _nameController,

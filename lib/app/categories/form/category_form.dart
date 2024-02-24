@@ -1,10 +1,10 @@
-import 'package:monekin/core/routes/route_utils.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/form/category_form_functions.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/widgets/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
@@ -214,7 +214,23 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                InkWell(
+                                IconDisplayer(
+                                  mainColor: ColorHex.get(_color).lighten(
+                                      Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? 0.8
+                                          : 0),
+                                  secondaryColor: ColorHex.get(_color).lighten(
+                                      Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? 0
+                                          : 0.8),
+                                  supportedIcon: _icon,
+                                  size: 48,
+                                  isOutline: true,
+                                  outlineWidth: 1,
+                                  padding: 6,
+                                  borderRadius: 4,
                                   onTap: () {
                                     showIconSelectorModal(
                                       context,
@@ -230,23 +246,8 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                                       ),
                                     );
                                   },
-                                  child: Builder(builder: (context) {
-                                    final iconColor = ColorHex.get(_color);
-
-                                    return Container(
-                                        padding: const EdgeInsets.all(6),
-                                        decoration: BoxDecoration(
-                                            color: iconColor.withOpacity(0.05),
-                                            border: Border.all(
-                                                width: 1.625, color: iconColor),
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(6))),
-                                        child: _icon.display(
-                                            size: 48, color: iconColor));
-                                  }),
                                 ),
-                                const SizedBox(width: 20),
+                                const SizedBox(width: 10),
                                 Expanded(
                                   child: TextFormField(
                                     controller: _nameController,
