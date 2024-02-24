@@ -44,11 +44,7 @@ class BudgetEvolutionChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Color> gradientColors = [
-      AppColors.of(context).primary,
-      AppColors.of(context).primary.lighten(0.3),
-    ];
-
+    final lineColor = AppColors.of(context).primary;
     final t = Translations.of(context);
 
     return SizedBox(
@@ -72,7 +68,7 @@ class BudgetEvolutionChart extends StatelessWidget {
             }
 
             return LineChart(LineChartData(
-              gridData: FlGridData(show: true, drawVerticalLine: false),
+              gridData: const FlGridData(show: true, drawVerticalLine: false),
               extraLinesData: ExtraLinesData(horizontalLines: [
                 HorizontalLine(
                     y: budget.limitAmount,
@@ -115,10 +111,10 @@ class BudgetEvolutionChart extends StatelessWidget {
               )),
               titlesData: FlTitlesData(
                 show: true,
-                leftTitles: AxisTitles(
+                leftTitles: const AxisTitles(
                   sideTitles: SideTitles(showTitles: false),
                 ),
-                topTitles: AxisTitles(
+                topTitles: const AxisTitles(
                   sideTitles: SideTitles(showTitles: false),
                 ),
                 bottomTitles: AxisTitles(
@@ -169,20 +165,23 @@ class BudgetEvolutionChart extends StatelessWidget {
                           index.toDouble(), snapshot.data!.balance[index])),
                   isCurved: true,
                   curveSmoothness: 0.025,
-                  color: gradientColors[0],
-                  barWidth: 5,
+                  color: lineColor,
+                  barWidth: 3,
                   isStrokeCapRound: true,
-                  dotData: FlDotData(
+                  dotData: const FlDotData(
                     show: false,
                   ),
                   belowBarData: BarAreaData(
                     show: true,
+                    applyCutOffY: true,
+                    cutOffY: 0,
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: gradientColors
-                          .map((color) => color.withOpacity(0.3))
-                          .toList(),
+                      colors: [
+                        lineColor.withAlpha(100),
+                        lineColor.withAlpha(1)
+                      ],
                     ),
                   ),
                 ),

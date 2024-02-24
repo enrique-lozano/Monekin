@@ -52,7 +52,10 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
   int touchedRodDataIndex = -1;
 
   Future<IncomeExpenseChartDataItem?> getDataByPeriods(
-      DateTime? startDate, DateTime? endDate, DatePeriodState range) async {
+    DateTime? startDate,
+    DateTime? endDate,
+    DatePeriodState range,
+  ) async {
     /*   if (startDate == null &&
         range.datePeriod.periodType != PeriodType.allTime) {
       return null;
