@@ -4,6 +4,7 @@ import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:monekin/core/presentation/widgets/icon_displayer_widgets.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -54,11 +55,11 @@ class _SubcategorySelectorState extends State<SubcategorySelector> {
               Navigator.of(context).pop(selectedCategory);
             }),
         bodyPadding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-        body: CategorySelector(
-          selectedCategories: [selectedCategory],
+        body: CategorySelector(IconDisplayerSelectorData(
+          selectedItems: [selectedCategory],
           direction: Axis.vertical,
           multiSelection: false,
-          availableCategories: childCategories,
+          availableItems: childCategories,
           extraHeaderButtons: [
             CategoryButtonSelector(
                 maxTextSize: 48 * 1.2,
@@ -84,6 +85,6 @@ class _SubcategorySelectorState extends State<SubcategorySelector> {
               });
             }
           },
-        ));
+        )));
   }
 }

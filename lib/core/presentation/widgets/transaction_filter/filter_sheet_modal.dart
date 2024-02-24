@@ -12,6 +12,7 @@ import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_field.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/icon_displayer_widgets.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/status_filter/transaction_status_filter.dart';
@@ -149,20 +150,19 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                         StreamBuilder(
                           stream: AccountService.instance.getAccounts(),
                           builder: (context, snapshot) {
-                            return AccountSelector(
-                              availableAccounts: snapshot.data,
+                            return AccountSelector(IconDisplayerSelectorData(
+                              availableItems: snapshot.data,
                               iconPadding: 12,
                               iconSize: 40,
-                              selectedAccounts:
-                                  filtersToReturn.accountsIDs == null
-                                      ? null
-                                      : (snapshot.data ?? [])
-                                          .where(
-                                            (element) => filtersToReturn
-                                                .accountsIDs!
-                                                .contains(element.id),
-                                          )
-                                          .toList(),
+                              selectedItems: filtersToReturn.accountsIDs == null
+                                  ? null
+                                  : (snapshot.data ?? [])
+                                      .where(
+                                        (element) => filtersToReturn
+                                            .accountsIDs!
+                                            .contains(element.id),
+                                      )
+                                      .toList(),
                               onChange: (selection) {
                                 filtersToReturn = filtersToReturn.copyWith(
                                   accountsIDs:
@@ -171,7 +171,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
 
                                 setState(() {});
                               },
-                            );
+                            ));
                           },
                         ),
 
@@ -185,10 +185,9 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                         StreamBuilder(
                           stream: CategoryService.instance.getMainCategories(),
                           builder: (context, snapshot) {
-                            return CategorySelector(
-                              availableCategories: snapshot.data,
-                              selectedCategories: filtersToReturn.categories ==
-                                      null
+                            return CategorySelector(IconDisplayerSelectorData(
+                              availableItems: snapshot.data,
+                              selectedItems: filtersToReturn.categories == null
                                   ? null
                                   : (snapshot.data ?? [])
                                       .where(
@@ -204,7 +203,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
 
                                 setState(() {});
                               },
-                            );
+                            ));
                           },
                         ),
                         const SizedBox(height: 24),

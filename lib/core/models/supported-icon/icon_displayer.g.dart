@@ -21,6 +21,8 @@ abstract class _$IconDisplayerCWProxy {
 
   IconDisplayer borderRadius(double borderRadius);
 
+  IconDisplayer outlineWidth(double outlineWidth);
+
   IconDisplayer isOutline(bool isOutline);
 
   IconDisplayer onDoubleTap(void Function()? onDoubleTap);
@@ -47,6 +49,7 @@ abstract class _$IconDisplayerCWProxy {
     double? size,
     double? padding,
     double? borderRadius,
+    double? outlineWidth,
     bool? isOutline,
     void Function()? onDoubleTap,
     void Function()? onTap,
@@ -86,6 +89,10 @@ class _$IconDisplayerCWProxyImpl implements _$IconDisplayerCWProxy {
       this(borderRadius: borderRadius);
 
   @override
+  IconDisplayer outlineWidth(double outlineWidth) =>
+      this(outlineWidth: outlineWidth);
+
+  @override
   IconDisplayer isOutline(bool isOutline) => this(isOutline: isOutline);
 
   @override
@@ -123,6 +130,7 @@ class _$IconDisplayerCWProxyImpl implements _$IconDisplayerCWProxy {
     Object? size = const $CopyWithPlaceholder(),
     Object? padding = const $CopyWithPlaceholder(),
     Object? borderRadius = const $CopyWithPlaceholder(),
+    Object? outlineWidth = const $CopyWithPlaceholder(),
     Object? isOutline = const $CopyWithPlaceholder(),
     Object? onDoubleTap = const $CopyWithPlaceholder(),
     Object? onTap = const $CopyWithPlaceholder(),
@@ -160,6 +168,11 @@ class _$IconDisplayerCWProxyImpl implements _$IconDisplayerCWProxy {
               ? _value.borderRadius
               // ignore: cast_nullable_to_non_nullable
               : borderRadius as double,
+      outlineWidth:
+          outlineWidth == const $CopyWithPlaceholder() || outlineWidth == null
+              ? _value.outlineWidth
+              // ignore: cast_nullable_to_non_nullable
+              : outlineWidth as double,
       isOutline: isOutline == const $CopyWithPlaceholder() || isOutline == null
           ? _value.isOutline
           // ignore: cast_nullable_to_non_nullable
@@ -218,6 +231,7 @@ extension $IconDisplayerCopyWith on IconDisplayer {
       size: size,
       padding: padding == true ? null : this.padding,
       borderRadius: borderRadius,
+      outlineWidth: outlineWidth,
       isOutline: isOutline,
       onDoubleTap: onDoubleTap == true ? null : this.onDoubleTap,
       onTap: onTap == true ? null : this.onTap,
