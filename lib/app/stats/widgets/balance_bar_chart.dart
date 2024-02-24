@@ -5,6 +5,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/models/date-utils/date_period.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/date-utils/period_type.dart';
@@ -228,28 +229,27 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
 
     return BarChartGroupData(
       x: x,
-      groupVertically: true,
       barRods: [
         BarChartRodData(
           toY: income,
-          color: isTouched && touchedRodDataIndex == 0
-              ? AppColors.of(context).success.darken(0.1)
+          color: isTouched
+              ? AppColors.of(context).success.lighten(0.2)
               : AppColors.of(context).success,
-          width: width,
+          width: width * (isTouched ? 1.2 : 1),
           borderRadius: BorderRadius.only(
             topLeft: radius,
             topRight: radius,
           ),
         ),
         BarChartRodData(
-          toY: expense,
-          color: isTouched && touchedRodDataIndex == 1
-              ? AppColors.of(context).danger.darken(0.1)
+          toY: -expense,
+          color: isTouched
+              ? AppColors.of(context).danger.lighten(0.2)
               : AppColors.of(context).danger,
-          width: width,
+          width: width * (isTouched ? 1.2 : 1),
           borderRadius: BorderRadius.only(
-            bottomLeft: radius,
-            bottomRight: radius,
+            topLeft: radius,
+            topRight: radius,
           ),
         )
       ],
@@ -261,151 +261,180 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 300,
-      child: FutureBuilder(
-          future: getDataByPeriods(widget.dateRange.startDate,
-              widget.dateRange.endDate, widget.dateRange),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(),
-                    ],
-                  ),
-                ],
-              );
-            }
-
-            final ultraLightBorderColor =
-                Theme.of(context).brightness == Brightness.light
-                    ? Colors.black12
-                    : Colors.white12;
-
-            final lightBorderColor =
-                Theme.of(context).brightness == Brightness.light
-                    ? Colors.black26
-                    : Colors.white24;
-
-            return BarChart(BarChartData(
-              maxY: max(100, snapshot.data!.income.max),
-              minY: min(-100, snapshot.data!.expense.min),
-              barTouchData: BarTouchData(
-                touchTooltipData: BarTouchTooltipData(
-                  tooltipMargin: -10,
-                  tooltipBgColor: AppColors.of(context).background,
-                  getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                    return BarTooltipItem(
-                      '${snapshot.data!.longTitles[group.x]}\n',
-                      const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                      ),
-                      children: UINumberFormatter.decimal(
-                              amountToConvert: rod.toY,
-                              integerStyle: const TextStyle(fontSize: 16))
-                          .getTextSpanList(context),
-                    );
-                  },
-                ),
-                touchCallback: (event, barTouchResponse) {
-                  if (!event.isInterestedForInteractions ||
-                      barTouchResponse == null ||
-                      barTouchResponse.spot == null) {
-                    touchedBarGroupIndex = -1;
-                    touchedRodDataIndex = -1;
-                    return;
-                  }
-
-                  touchedBarGroupIndex =
-                      barTouchResponse.spot!.touchedBarGroupIndex;
-
-                  touchedRodDataIndex =
-                      barTouchResponse.spot!.touchedRodDataIndex;
-
-                  setState(() {});
-                },
-              ),
-              titlesData: FlTitlesData(
-                show: true,
-                bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    getTitlesWidget: (value, meta) {
-                      return SideTitleWidget(
-                        axisSide: meta.axisSide,
-                        child: Text(
-                          snapshot.data!.shortTitles[value.toInt()],
-                          style: const TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                rightTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    getTitlesWidget: (value, meta) {
-                      return SideTitleWidget(
-                        axisSide: meta.axisSide,
-                        space: 0,
-                        child: Row(
+      child: StreamBuilder(
+          stream: CurrencyService.instance.getUserPreferredCurrency(),
+          builder: (context, userCurrencySnapshot) {
+            return FutureBuilder(
+                future: getDataByPeriods(widget.dateRange.startDate,
+                    widget.dateRange.endDate, widget.dateRange),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Container(
-                              width: 5,
-                              height: 1,
-                              color: ultraLightBorderColor,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              meta.formattedValue,
-                              style: const TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w300,
-                              ),
-                            ),
+                            CircularProgressIndicator(),
                           ],
                         ),
-                      );
-                    },
-                    reservedSize: 42,
-                  ),
-                ),
-                leftTitles:
-                    const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                topTitles:
-                    const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-              ),
-              borderData: FlBorderData(
-                  show: true,
-                  border: Border(
-                    bottom: BorderSide(width: 1, color: ultraLightBorderColor),
-                    right: BorderSide(width: 1, color: ultraLightBorderColor),
-                  )),
-              gridData: FlGridData(
-                drawVerticalLine: false,
-                getDrawingHorizontalLine: (value) {
-                  if (value != 0) {
-                    return defaultGridLine(value).copyWith(
-                        strokeWidth: 0.5, color: ultraLightBorderColor);
+                      ],
+                    );
                   }
 
-                  return defaultGridLine(value)
-                      .copyWith(strokeWidth: 0.75, color: lightBorderColor);
-                },
-              ),
-              barGroups: List.generate(snapshot.data!.income.length, (i) {
-                return makeGroupData(
-                    i, snapshot.data!.income[i], snapshot.data!.expense[i],
-                    width: 156 / snapshot.data!.income.length);
-              }),
-            ));
+                  final ultraLightBorderColor =
+                      Theme.of(context).brightness == Brightness.light
+                          ? Colors.black12
+                          : Colors.white12;
+
+                  final lightBorderColor =
+                      Theme.of(context).brightness == Brightness.light
+                          ? Colors.black26
+                          : Colors.white24;
+
+                  return BarChart(BarChartData(
+                    barTouchData: BarTouchData(
+                      touchTooltipData: BarTouchTooltipData(
+                        tooltipMargin: -10,
+                        tooltipBgColor: AppColors.of(context).background,
+                        getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                          final barRodsToY = group.barRods.map((e) => e.toY);
+
+                          return BarTooltipItem(
+                            '${snapshot.data!.longTitles[group.x]}\n',
+                            const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                              decoration: TextDecoration.underline,
+                            ),
+                            textAlign: TextAlign.start,
+                            children: [
+                              TextSpan(
+                                  text: "↑ ",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: AppColors.of(context).success,
+                                    decoration: TextDecoration.none,
+                                  ),
+                                  children: UINumberFormatter.currency(
+                                    currency: userCurrencySnapshot.data,
+                                    amountToConvert: barRodsToY.elementAt(0),
+                                  ).getTextSpanList(context)),
+                              TextSpan(text: "\n"),
+                              TextSpan(
+                                  text: "↓ ",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: AppColors.of(context).danger,
+                                    decoration: TextDecoration.none,
+                                  ),
+                                  children: UINumberFormatter.currency(
+                                    currency: userCurrencySnapshot.data,
+                                    amountToConvert: barRodsToY.elementAt(1),
+                                  ).getTextSpanList(context)),
+                            ],
+                          );
+                        },
+                      ),
+                      touchCallback: (event, barTouchResponse) {
+                        if (!event.isInterestedForInteractions ||
+                            barTouchResponse == null ||
+                            barTouchResponse.spot == null) {
+                          touchedBarGroupIndex = -1;
+                          touchedRodDataIndex = -1;
+                          return;
+                        }
+
+                        touchedBarGroupIndex =
+                            barTouchResponse.spot!.touchedBarGroupIndex;
+
+                        touchedRodDataIndex =
+                            barTouchResponse.spot!.touchedRodDataIndex;
+
+                        setState(() {});
+                      },
+                    ),
+                    titlesData: FlTitlesData(
+                      show: true,
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          getTitlesWidget: (value, meta) {
+                            return SideTitleWidget(
+                              axisSide: meta.axisSide,
+                              child: Text(
+                                snapshot.data!.shortTitles[value.toInt()],
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      rightTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          getTitlesWidget: (value, meta) {
+                            return SideTitleWidget(
+                              axisSide: meta.axisSide,
+                              space: 0,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 5,
+                                    height: 1,
+                                    color: ultraLightBorderColor,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    meta.formattedValue,
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                          reservedSize: 42,
+                        ),
+                      ),
+                      leftTitles: const AxisTitles(
+                          sideTitles: SideTitles(showTitles: false)),
+                      topTitles: const AxisTitles(
+                          sideTitles: SideTitles(showTitles: false)),
+                    ),
+                    borderData: FlBorderData(
+                        show: true,
+                        border: Border(
+                          bottom: BorderSide(
+                              width: 1, color: ultraLightBorderColor),
+                          right: BorderSide(
+                              width: 1, color: ultraLightBorderColor),
+                        )),
+                    gridData: FlGridData(
+                      drawVerticalLine: false,
+                      getDrawingHorizontalLine: (value) {
+                        if (value != 0) {
+                          return defaultGridLine(value).copyWith(
+                              strokeWidth: 0.5, color: ultraLightBorderColor);
+                        }
+
+                        return defaultGridLine(value).copyWith(
+                            strokeWidth: 0.75, color: lightBorderColor);
+                      },
+                    ),
+                    barGroups: List.generate(snapshot.data!.income.length, (i) {
+                      return makeGroupData(i, snapshot.data!.income[i],
+                          snapshot.data!.expense[i],
+                          width: 75 / snapshot.data!.income.length);
+                    }),
+                  ));
+                });
           }),
     );
   }
