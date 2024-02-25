@@ -10,9 +10,9 @@ import 'package:monekin/core/database/services/user-setting/user_setting_service
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -42,7 +42,7 @@ class AppDB extends _$AppDB {
   Future<String> get databasePath async =>
       join((await getApplicationDocumentsDirectory()).path, dbName);
 
-  migrateDB(int from, int to) async {
+  Future<void> migrateDB(int from, int to) async {
     print('Executing migrations from previous version...');
 
     for (var i = from + 1; i <= to; i++) {
@@ -58,6 +58,7 @@ class AppDB extends _$AppDB {
           .toList();
 
       for (final sqlStatement in statements) {
+        print("Running custom statement: $sqlStatement");
         await customStatement(sqlStatement);
       }
 
@@ -69,7 +70,7 @@ class AppDB extends _$AppDB {
   }
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration {
@@ -96,10 +97,7 @@ class AppDB extends _$AppDB {
             }
 
             await customStatement(
-                "INSERT INTO appData VALUES ('dbVersion', '${schemaVersion.toStringAsFixed(0)}'), ('introSeen', '0'), ('lastExportDate', null)");
-
-            await customStatement(
-                "INSERT INTO userSettings VALUES ('${SettingKey.transactionMobileMode.name}', '${Platform.isIOS || Platform.isAndroid ? '1' : '0'}')");
+                "INSERT INTO appData VALUES ('${AppDataKey.dbVersion.name}', '${schemaVersion.toStringAsFixed(0)}'), ('${AppDataKey.introSeen.name}', '0'), ('${AppDataKey.lastExportDate.name}', null)");
 
             String defaultCategories = await rootBundle
                 .loadString('assets/sql/default_categories.json');

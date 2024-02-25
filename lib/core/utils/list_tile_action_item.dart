@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/theme.dart';
+
+import '../presentation/app_colors.dart';
 
 enum ListTileActionRole { delete, warn }
 
@@ -21,12 +22,12 @@ class ListTileActionItem {
   Color getColorBasedOnRole(BuildContext context) {
     if (role != null) {
       if (role == ListTileActionRole.delete) {
-        return CustomColors.of(context).danger;
+        return AppColors.of(context).danger;
       } else if (role == ListTileActionRole.warn) {
         return Colors.amber.shade400;
       }
     }
 
-    return Theme.of(context).colorScheme.primary;
+    return AppColors.of(context).primary;
   }
 }

@@ -1,15 +1,15 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/chart_by_categories.dart';
+import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/core/routes/app_router.dart';
-import 'package:monekin/core/services/filters/date_range_service.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -28,11 +28,17 @@ class SubcategoryModalItem {
 }
 
 class CategoryStatsModal extends StatelessWidget {
-  const CategoryStatsModal(
-      {super.key, required this.categoryData, required this.filters});
+  const CategoryStatsModal({
+    super.key,
+    required this.categoryData,
+    required this.filters,
+    required this.dateRangeText,
+  });
 
   final TrDistributionChartItem<Category> categoryData;
   final TransactionFilters filters;
+
+  final String dateRangeText;
 
   Future<List<SubcategoryModalItem>> getSubcategoriesData(
       BuildContext context) async {
@@ -85,9 +91,11 @@ class CategoryStatsModal extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      categoryData.category.icon.displayFilled(
-                          color: ColorHex.get(categoryData.category.color),
-                          size: 34),
+                      IconDisplayer.fromCategory(
+                        context,
+                        category: categoryData.category,
+                        size: 34,
+                      ),
                       const SizedBox(width: 16),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,8 +113,9 @@ class CategoryStatsModal extends StatelessWidget {
                     ],
                   ),
                   IconButton(
-                    onPressed: () => context.pushRoute(
-                      TransactionsRoute(
+                    onPressed: () => RouteUtils.pushRoute(
+                      context,
+                      TransactionsPage(
                         filters: filters.copyWith(
                           categories: [categoryData.category.id],
                           includeParentCategoriesInSearch: true,
@@ -122,15 +131,12 @@ class CategoryStatsModal extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    DateRangeService().getTextOfRange(
-                      startDate: filters.minDate,
-                      endDate: filters.maxDate,
-                    ),
+                    dateRangeText,
                     style: const TextStyle(fontWeight: FontWeight.w300),
                   ),
                   CurrencyDisplayer(
                     amountToConvert: categoryData.value,
-                    textStyle: Theme.of(context).textTheme.titleLarge!,
+                    integerStyle: Theme.of(context).textTheme.titleLarge!,
                   )
                 ],
               ),
@@ -152,8 +158,9 @@ class CategoryStatsModal extends StatelessWidget {
                   final subcategoryData = subcategories[index];
 
                   return ListTile(
-                    leading: subcategoryData.icon.displayFilled(
-                      color: ColorHex.get(categoryData.category.color),
+                    leading: IconDisplayer(
+                      supportedIcon: subcategoryData.icon,
+                      mainColor: ColorHex.get(categoryData.category.color),
                     ),
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

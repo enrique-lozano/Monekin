@@ -1,10 +1,10 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/presentation/widgets/color_picker.dart';
+import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/core/utils/constants.dart';
@@ -12,7 +12,6 @@ import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:uuid/uuid.dart';
 
-@RoutePage()
 class TagFormPage extends StatefulWidget {
   const TagFormPage({super.key, this.tag});
 
@@ -89,8 +88,40 @@ class _TagFormPageState extends State<TagFormPage> {
     final t = Translations.of(context);
 
     return Scaffold(
-      appBar:
-          AppBar(title: Text(widget.tag != null ? t.tags.edit : t.tags.add)),
+      appBar: AppBar(
+        title: Text(widget.tag != null ? t.tags.edit : t.tags.add),
+        actions: [
+          if (widget.tag != null)
+            IconButton(
+              onPressed: () {
+                final scaffold = ScaffoldMessenger.of(context);
+
+                confirmDialog(
+                  context,
+                  dialogTitle: t.tags.delete_warning_header,
+                  contentParagraphs: [Text(t.tags.delete_warning_message)],
+                  confirmationText: t.general.continue_text,
+                  showCancelButton: true,
+                  icon: Icons.delete,
+                ).then(
+                  (isConfirmed) {
+                    if (isConfirmed != true) return;
+
+                    TagService.instance.deleteTag(widget.tag!.id).then((value) {
+                      Navigator.pop(context);
+
+                      scaffold.showSnackBar(
+                          SnackBar(content: Text(t.tags.delete_success)));
+                    }).catchError((err) {
+                      scaffold.showSnackBar(SnackBar(content: Text('$err')));
+                    });
+                  },
+                );
+              },
+              icon: const Icon(Icons.delete),
+            )
+        ],
+      ),
       persistentFooterButtons: [
         PersistentFooterButton(
           child: FilledButton.icon(

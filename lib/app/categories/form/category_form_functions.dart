@@ -18,9 +18,10 @@ class CategoryFormFunctions {
   static deleteCategory(BuildContext context, String categoryId) {
     final t = Translations.of(context);
 
-    showConfirmDialog(
+    confirmDialog(
       context,
       dialogTitle: t.categories.delete_warning_header,
+      icon: Icons.delete,
       contentParagraphs: [
         StreamBuilder(
             stream: TransactionService.instance
@@ -68,9 +69,10 @@ class CategoryFormFunctions {
 
       final selCategory = value.first;
 
-      showConfirmDialog(
+      confirmDialog(
         context,
         dialogTitle: t.categories.merge,
+        icon: Icons.merge_type_rounded,
         contentParagraphs: [
           StreamBuilder(
               stream: TransactionService.instance
@@ -149,7 +151,7 @@ class CategoryFormFunctions {
 
       final selCategory = value.first;
 
-      showConfirmDialog(
+      confirmDialog(
         context,
         dialogTitle: t.categories.make_child,
         contentParagraphs: [

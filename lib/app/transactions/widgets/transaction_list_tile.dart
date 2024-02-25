@@ -1,30 +1,37 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/app/transactions/transaction_details.page.dart';
+import 'package:monekin/core/models/date-utils/periodicity.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
-import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/services/view-actions/transaction_view_actions_service.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 
+import '../../../core/presentation/app_colors.dart';
+
 class TransactionListTile extends StatelessWidget {
-  const TransactionListTile(
-      {super.key,
-      required this.transaction,
-      required this.prevPage,
-      this.showDate = true,
-      this.showTime = true,
-      this.periodicityInfo});
+  const TransactionListTile({
+    super.key,
+    required this.transaction,
+    required this.prevPage,
+    this.showDate = true,
+    this.showTime = true,
+    this.periodicityInfo,
+    required this.heroTag,
+  });
 
   final MoneyTransaction transaction;
 
   final Widget prevPage;
-  final TransactionPeriodicity? periodicityInfo;
+  final Periodicity? periodicityInfo;
   final bool showDate;
   final bool showTime;
+
+  final Object? heroTag;
 
   showTransactionActions(BuildContext context, MoneyTransaction transaction) {
     showModalBottomSheet(
@@ -74,7 +81,7 @@ class TransactionListTile extends StatelessWidget {
                   Icon(
                     transaction.status?.icon ?? Icons.repeat,
                     color: transaction.status?.color.darken(0.1) ??
-                        Theme.of(context).colorScheme.primary,
+                        AppColors.of(context).primary,
                     size: 12,
                   )
               ],
@@ -86,7 +93,7 @@ class TransactionListTile extends StatelessWidget {
                     periodicity: periodicityInfo!)
                 : transaction.value,
             currency: transaction.account.currency,
-            textStyle: TextStyle(
+            integerStyle: TextStyle(
                 color: transaction.status == TransactionStatus.voided
                     ? Colors.grey.shade400
                     : transaction.isIncomeOrExpense
@@ -192,7 +199,8 @@ class TransactionListTile extends StatelessWidget {
                       text: transaction.recurrentInfo.intervalPeriod!
                           .periodText(
                             context,
-                            transaction.recurrentInfo.intervalEach!,
+                            isPlural:
+                                transaction.recurrentInfo.intervalEach! > 1,
                           )
                           .toLowerCase())
                 ]),
@@ -201,27 +209,29 @@ class TransactionListTile extends StatelessWidget {
         ),
       ),
       leading: Hero(
-        tag: 'transaction-icon-${transaction.id}',
-        child: Container(
-          padding: const EdgeInsets.all(6),
-          decoration: BoxDecoration(
-              color: transaction.color(context).lighten(0.82),
-              borderRadius: BorderRadius.circular(6)),
-          child: transaction.isIncomeOrExpense
-              ? transaction.category!.icon.display(
-                  color: transaction.color(context),
-                  size: 28,
-                )
-              : Icon(
-                  TransactionType.transfer.icon,
-                  color: TransactionType.transfer.color(context),
-                  size: 28,
-                ),
-        ),
+        tag: heroTag ?? UniqueKey(),
+        child: transaction.isIncomeOrExpense
+            ? IconDisplayer.fromCategory(
+                context,
+                category: transaction.category!,
+                size: 28,
+                padding: 6,
+              )
+            : IconDisplayer(
+                icon: TransactionType.transfer.icon,
+                mainColor: TransactionType.transfer.color(context),
+                size: 28,
+                padding: 6,
+              ),
       ),
       onTap: () {
-        context.pushRoute(
-          TransactionDetailsRoute(transaction: transaction, prevPage: prevPage),
+        RouteUtils.pushRoute(
+          context,
+          TransactionDetailsPage(
+            transaction: transaction,
+            heroTag: heroTag,
+            prevPage: prevPage,
+          ),
         );
       },
       onLongPress: () => showTransactionActions(context, transaction),

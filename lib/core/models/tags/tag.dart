@@ -7,6 +7,7 @@ class Tag extends TagInDB {
     required super.id,
     required super.name,
     required super.color,
+    super.displayOrder = 10,
     super.description,
   });
 

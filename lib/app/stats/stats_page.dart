@@ -1,6 +1,4 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/stats/footer_segmented_calendar_button.dart';
 import 'package:monekin/app/stats/widgets/balance_bar_chart.dart';
 import 'package:monekin/app/stats/widgets/finance_health_details.dart';
 import 'package:monekin/app/stats/widgets/fund_evolution_line_chart.dart';
@@ -8,47 +6,47 @@ import 'package:monekin/app/stats/widgets/income_expense_comparason.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/chart_by_categories.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/tags_stats.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
+import 'package:monekin/core/presentation/widgets/dates/segmented_calendar_button.dart';
 import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
+import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-import '../../core/services/filters/date_range_service.dart';
 import '../accounts/all_accounts_balance.dart';
 
-@RoutePage()
 class StatsPage extends StatefulWidget {
-  const StatsPage({super.key, this.initialIndex = 0});
+  const StatsPage({
+    super.key,
+    this.initialIndex = 0,
+    this.filters = const TransactionFilters(),
+    this.dateRangeService = const DatePeriodState(),
+  });
 
   final int initialIndex;
+
+  final TransactionFilters filters;
+  final DatePeriodState dateRangeService;
 
   @override
   State<StatsPage> createState() => _StatsPageState();
 }
 
 class _StatsPageState extends State<StatsPage> {
-  final dateRangeService = DateRangeService();
   final accountService = AccountService.instance;
 
-  late DateTime? currentStartDate;
-
-  late DateTime? currentEndDate;
-
-  late DateRange currentDateRange;
-
-  TransactionFilters filters = const TransactionFilters();
+  late TransactionFilters filters;
+  late DatePeriodState dateRangeService;
 
   @override
   void initState() {
     super.initState();
 
-    final dates = dateRangeService.getDateRange(0);
-
-    currentStartDate = dates[0];
-    currentEndDate = dates[1];
-    currentDateRange = dateRangeService.selectedDateRange;
+    filters = widget.filters;
+    dateRangeService = widget.dateRangeService;
   }
 
   Widget buildContainerWithPadding(
@@ -105,14 +103,15 @@ class _StatsPageState extends State<StatsPage> {
               isScrollable: true),
         ),
         persistentFooterButtons: [
-          FooterSegmentedCalendarButton(
-            onDateRangeChanged: (newStartDate, newEndDate, newDateRange) {
-              setState(() {
-                currentStartDate = newStartDate;
-                currentEndDate = newEndDate;
-                currentDateRange = newDateRange;
-              });
-            },
+          PersistentFooterButton(
+            child: SegmentedCalendarButton(
+              initialDatePeriodService: dateRangeService,
+              onChanged: (value) {
+                setState(() {
+                  dateRangeService = value;
+                });
+              },
+            ),
           )
         ],
         body: Column(
@@ -134,7 +133,8 @@ class _StatsPageState extends State<StatsPage> {
                   [
                     FinanceHealthDetails(
                       filters: filters.copyWith(
-                          minDate: currentStartDate, maxDate: currentEndDate),
+                          minDate: dateRangeService.startDate,
+                          maxDate: dateRangeService.endDate),
                     )
                   ],
                 ),
@@ -142,8 +142,7 @@ class _StatsPageState extends State<StatsPage> {
                   CardWithHeader(
                     title: t.stats.by_categories,
                     body: ChartByCategories(
-                      startDate: currentStartDate,
-                      endDate: currentEndDate,
+                      datePeriodState: dateRangeService,
                       showList: true,
                       initialSelectedType: TransactionType.expense,
                       filters: filters,
@@ -154,8 +153,8 @@ class _StatsPageState extends State<StatsPage> {
                     title: t.stats.by_tags,
                     body: TagStats(
                       filters: filters.copyWith(
-                        minDate: currentStartDate,
-                        maxDate: currentEndDate,
+                        minDate: dateRangeService.startDate,
+                        maxDate: dateRangeService.endDate,
                       ),
                     ),
                   ),
@@ -165,15 +164,13 @@ class _StatsPageState extends State<StatsPage> {
                     title: t.stats.balance_evolution,
                     body: FundEvolutionLineChart(
                       showBalanceHeader: true,
-                      startDate: currentStartDate,
-                      endDate: currentEndDate,
-                      dateRange: currentDateRange,
+                      dateRange: dateRangeService,
                       filters: filters,
                     ),
                   ),
                   const SizedBox(height: 16),
                   AllAccountBalancePage(
-                    date: currentEndDate ?? DateTime.now(),
+                    date: dateRangeService.endDate ?? DateTime.now(),
                     filters: filters,
                   ),
                 ]),
@@ -181,8 +178,8 @@ class _StatsPageState extends State<StatsPage> {
                   CardWithHeader(
                     title: t.stats.cash_flow,
                     body: IncomeExpenseComparason(
-                      startDate: currentStartDate,
-                      endDate: currentEndDate,
+                      startDate: dateRangeService.startDate,
+                      endDate: dateRangeService.endDate,
                       filters: filters,
                     ),
                   ),
@@ -191,9 +188,7 @@ class _StatsPageState extends State<StatsPage> {
                     title: t.stats.by_periods,
                     bodyPadding: const EdgeInsets.only(bottom: 12, top: 16),
                     body: BalanceBarChart(
-                      startDate: currentStartDate,
-                      endDate: currentEndDate,
-                      dateRange: currentDateRange,
+                      dateRange: dateRangeService,
                       filters: filters,
                     ),
                   )

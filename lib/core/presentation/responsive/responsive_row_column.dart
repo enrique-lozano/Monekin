@@ -184,7 +184,7 @@ class ResponsiveRowColumnItem extends StatelessWidget {
   final FlexFit? columnFit;
 
   const ResponsiveRowColumnItem(
-      {Key? key,
+      {super.key,
       required this.child,
       this.rowOrder = 1073741823,
       this.columnOrder = 1073741823,
@@ -192,8 +192,7 @@ class ResponsiveRowColumnItem extends StatelessWidget {
       this.rowFlex,
       this.columnFlex,
       this.rowFit,
-      this.columnFit})
-      : super(key: key);
+      this.columnFit});
 
   /// Build a `SizedBox` inside the responsive row/column layout. The [space] define the height of the `SizedBox` in Column mode and the width in row mode
   ResponsiveRowColumnItem.spacer(double space,

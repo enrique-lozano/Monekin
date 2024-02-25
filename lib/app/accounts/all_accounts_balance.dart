@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/database/services/currency/currency_service.dart';
@@ -120,6 +120,7 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
             children: [
               CardWithHeader(
                 title: t.stats.balance_by_account,
+                bodyPadding: const EdgeInsets.symmetric(vertical: 4),
                 body: accounts.isEmpty
                     ? emptyAccountsIndicator()
                     : ListView.separated(
@@ -128,21 +129,11 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                           final accountWithMoney = accounts[index];
 
                           return ListTile(
-                            leading: Container(
-                                padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      width: 2,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
-                                    borderRadius: BorderRadius.circular(1000)),
-                                child: accountWithMoney.account.icon.display(
-                                  size: 22,
-                                  color: Theme.of(context).colorScheme.primary,
-                                )),
-                            onTap: () => context.pushRoute(
-                              AccountFormRoute(
+                            leading:
+                                accountWithMoney.account.displayIcon(context),
+                            onTap: () => RouteUtils.pushRoute(
+                              context,
+                              AccountFormPage(
                                   account: accountWithMoney.account),
                             ),
                             title: Column(
@@ -165,6 +156,7 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                                   ],
                                 ),
                                 AnimatedProgressBar(
+                                    width: 6,
                                     value: min(
                                         max(accountWithMoney.money / totalMoney,
                                             0),
@@ -174,7 +166,7 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                           );
                         },
                         separatorBuilder: (context, index) {
-                          return const Divider(indent: 56);
+                          return const SizedBox(height: 2);
                         },
                         itemCount: accounts.length,
                         shrinkWrap: true,
@@ -183,6 +175,7 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
               const SizedBox(height: 16),
               CardWithHeader(
                 title: t.stats.balance_by_currency,
+                bodyPadding: const EdgeInsets.symmetric(vertical: 4),
                 body: Builder(builder: (context) {
                   final currenciesWithMoney = getCurrenciesWithMoney(accounts);
 
@@ -246,6 +239,7 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                               ],
                             ),
                             AnimatedProgressBar(
+                                width: 6,
                                 value: min(
                                     max(currencyWithMoney.money / totalMoney,
                                         0),
@@ -255,7 +249,7 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                       );
                     },
                     separatorBuilder: (context, index) {
-                      return const Divider(indent: 56);
+                      return const SizedBox.shrink();
                     },
                     itemCount: currenciesWithMoney.length,
                     shrinkWrap: true,

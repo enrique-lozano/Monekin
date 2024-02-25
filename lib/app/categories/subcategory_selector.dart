@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/app/categories/category_selector.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:monekin/core/presentation/widgets/icon_displayer_widgets.dart';
+import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -35,87 +39,52 @@ class _SubcategorySelectorState extends State<SubcategorySelector> {
     });
   }
 
-  Widget subcategoryChip(Category category) {
-    final isSelected = selectedCategory.id == category.id;
-
-    final isSubcategorySelected = category.id != widget.parentCategory.id;
-
-    return ActionChip(
-        avatar: isSubcategorySelected
-            ? category.icon.display(
-                color: isSelected
-                    ? Colors.white
-                    : Theme.of(context).colorScheme.onBackground)
-            : Icon(
-                Icons.hide_source,
-                color: isSelected
-                    ? Colors.white
-                    : Theme.of(context).colorScheme.onBackground,
-              ),
-        backgroundColor:
-            isSelected ? ColorHex.get(widget.parentCategory.color) : null,
-        onPressed: () {
-          if (!isSelected) {
-            setState(() {
-              selectedCategory = category;
-            });
-          }
-        },
-        label: Text(
-          isSubcategorySelected
-              ? category.name
-              : t.categories.select.without_subcategory,
-          style: isSelected ? const TextStyle(color: Colors.white) : null,
-        ));
-  }
-
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  t.categories.select.select_subcategory,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 22),
-                Builder(
-                  builder: (_) {
-                    if (childCategories == null) {
-                      return const LinearProgressIndicator();
-                    } else {
-                      return Wrap(
-                        runSpacing: 0,
-                        spacing: 6,
-                        children: [
-                          subcategoryChip(widget.parentCategory),
-                          ...List.generate(
-                              childCategories!.length,
-                              (index) =>
-                                  subcategoryChip(childCategories![index]))
-                        ],
-                      );
-                    }
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
+    Color categoryColor = ColorHex.get(widget.parentCategory.color);
+
+    return ModalContainer(
+        title: t.categories.select.select_subcategory,
+        footer: BottomSheetFooter(
+            submitText: t.general.continue_text,
+            submitIcon: Icons.arrow_forward_ios,
+            onSaved: () {
+              Navigator.of(context).pop(selectedCategory);
+            }),
+        bodyPadding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+        body: CategorySelector(IconDisplayerSelectorData(
+          selectedItems: [selectedCategory],
+          direction: Axis.vertical,
+          multiSelection: false,
+          availableItems: childCategories,
+          extraHeaderButtons: [
+            CategoryButtonSelector(
+                maxTextSize: 48 * 1.2,
+                iconWidget: IconDisplayer(
+                  icon: Icons.block,
+                  isOutline: selectedCategory.id == widget.parentCategory.id,
+                  secondaryColor:
+                      isDark ? categoryColor : categoryColor.lighten(0.82),
+                  mainColor:
+                      isDark ? categoryColor.lighten(0.82) : categoryColor,
+                  onTap: () {
+                    setState(() {
+                      selectedCategory = widget.parentCategory;
+                    });
                   },
                 ),
-              ],
-            ),
-          ),
-          BottomSheetFooter(
-              submitText: t.general.continue_text,
-              submitIcon: Icons.arrow_forward_ios,
-              onSaved: () {
-                Navigator.of(context).pop(selectedCategory);
-              })
-        ]);
+                label: t.categories.select.without_subcategory)
+          ],
+          onChange: (sel) {
+            if (sel != null) {
+              setState(() {
+                selectedCategory = sel[0];
+              });
+            }
+          },
+        )));
   }
 }

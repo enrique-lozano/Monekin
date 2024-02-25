@@ -4,7 +4,6 @@
     "or": "or",
     "understood": "Understood",
     "unspecified": "Unspecified",
-    "attention": "Attention ⚠️",
     "confirm": "Confirm",
     "continue_text": "Continue",
     "quick_actions": "Quick actions",
@@ -37,6 +36,7 @@
       "until-date": "Until date",
       "date": "Date",
       "datetime": "Datetime",
+      "time": "Time",
       "each": "Each",
       "after": "After",
       "RANGES": {
@@ -44,6 +44,13 @@
         "it-repeat": "Repeats",
         "it-ends": "Ends",
         "forever": "Forever",
+        "TYPES": {
+          "cycle": "Cycles",
+          "last_days": "Last days",
+          "last_days_form": "{{x}} previous days",
+          "all": "Always",
+          "date_range": "Custom range"
+        },
         "each-range": {
           "one": "Every {{range}}",
           "other": "Every {{n}} {{range}}"
@@ -202,6 +209,7 @@
   "STATS": {
     "title": "Statistics",
     "balance": "Balance",
+    "final-balance": "Final balance",
     "balance-by-account": "Balance by accounts",
     "balance-by-currency": "Balance by currency",
     "cash-flow": "Cash flow",
@@ -267,6 +275,7 @@
     "LIST": {
       "empty": "No transactions found to display here. Add a transaction by clicking the '+' button at the bottom",
       "searcher.placeholder": "Search by category, description...",
+      "searcher.no-results": "No transactions found matching the search criteria",
       "loading": "Loading more transactions..."
     },
     "FILTERS": {
@@ -290,8 +299,8 @@
       "tap-to-see-more": "Tap to see more details",
       "description": "Description",
       "description-info": "Adding a note will help you find this transaction faster in the future",
-      "exchange-to-preferred-today": "Equivalent to {{ currency }} today:",
-      "exchange-to-preferred-in-date": "Equivalent to {{ currency }} on {{date}}:"
+      "exchange-to-preferred-title": "Exchnage rate to {{ currency }}",
+      "exchange-to-preferred-in-date": "On transaction date"
     },
     "STATUS": {
       "display": {
@@ -338,8 +347,8 @@
     "FORM": {
       "from": "Origin account",
       "to": "Destination account",
-      "currency-info-add": "{{x}} will be transferred to the destination account &#183; Click to edit",
-      "currency-info-edit": "{{x}} have been transferred to the destination account &#183; Click to edit",
+      "currency-info-add": "{{x}} will be transferred to the destination account",
+      "currency-info-edit": "{{x}} have been transferred to the destination account",
       "currency-exchange-selector": {
         "title": "Edit exchange between currencies",
         "value-in-destiny": "Amount transferred in destination"
@@ -394,7 +403,7 @@
       "swift": "SWIFT"
     },
     "DELETE": {
-      "warning-header": "Are you sure?",
+      "warning-header": "Delete account?",
       "warning-text": "This action will delete this account and all its transactions",
       "success": "Account deleted successfully"
     },
@@ -479,7 +488,7 @@
     "make-child.warning2": "Their transactions <b>({{x}})</b> will be moved to the new subcategories created within the <b>{{destiny}}</b> category.",
     "make-child.success": "Subcategories created successfully",
     "merge": "Merge with another category",
-    "merge.warning1": "All transactions (<b>{{x}}</b>) associated with the category <b>{{from}}</b> will be moved to the category <b>{{destiny}}</b>",
+    "merge.warning1": "All transactions ({{x}}) associated with the category <b>{{from}}</b> will be moved to the category <b>{{destiny}}</b>",
     "merge.warning2": "The category <b>{{from}}</b> will be irreversibly deleted.",
     "merge.success": "Category merged successfully",
     "delete.success": "Category deleted correctly",
@@ -490,7 +499,8 @@
       "select-one": "Select a category",
       "select-subcategory": "Choose a subcategory",
       "without-subcategory": "Without subcategory",
-      "all": "All categories"
+      "all": "All categories",
+      "all.short": "All"
     }
   },
   "BUDGETS": {
@@ -503,7 +513,7 @@
     "actives": "Actives",
     "pending": "Pending start",
     "finish": "Finished",
-    "to-expend": "to spend",
+    "from-budgeted": "left of ",
     "days-left": "days left",
     "days-to-start": "days to start",
     "since-expiration": "days since expiration",
@@ -520,10 +530,9 @@
     },
     "DETAILS": {
       "title": "Budget Details",
-      "budget-value": "Budgeted",
       "statistics": "Statistics",
-      "you-already-expend": "Spent",
-      "expend-diary-left": "Remaining recommended daily spend",
+      "budget-value": "Budgeted",
+      "expend-diary-left": "You can spend {{ dailyAmount }}/day for {{ remainingDays }} remaining days",
       "expend-evolution": "Expenditure evolution",
       "no-transactions": "It seems that you have not made any expenses related to this budget"
     }
@@ -535,19 +544,19 @@
       "all": "Full backup",
       "all.descr": "Export all your data (accounts, transactions, budgets, settings...). Import them again at any time so you don't lose anything.",
       "transactions": "Transactions backup",
-      "transactions.descr": "Export your transactions in various formats so you can more easily analyze them in other programs or applications.",
+      "transactions.descr": "Export your transactions in CSV so you can more easily analyze them in other programs or applications.",
       "description": "Download your data in different formats",
       "dialog_title": "Save/Send file",
-      "success_in_documents": "File successfully saved to Internal Storage/Documents",
-      "success_in_data": "File saved/downloaded successfully",
+      "success": "File saved/downloaded successfully in {{x}}",
       "error": "Error downloading the file. Please contact the developer via lozin.technologies@gmail.com"
     },
     "IMPORT": {
       "title": "Import your data",
       "title.short": "Import",
       "restore-backup": "Restore Backup",
-      "restore-backup-warn": "When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Monekin",
       "restore-backup-descr": "Import a previously saved database from Monekin. This action will replace any current application data with the new data",
+      "restore-backup-warn.description": "When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Monekin",
+      "restore-backup-warn.title": "Overwrite all data",
       "select-other-file": "Select other file",
       "tap-to-select-file": "Tap to select a file",
       "MANUAL-IMPORT": {
@@ -588,35 +597,32 @@
     }
   },
   "SETTINGS": {
-    "title": "Settings",
-    "edit-profile": "Edit profile",
-    "display-name": "User name",
-    "lang": "App language",
+    "title_long": "Settings and appearance",
+    "title_short": "Settings",
+    "description": "App theme, texts and other general settings",
+    "edit_profile": "Edit profile",
+    "lang.section": "Language and texts",
+    "lang.title": "App language",
     "lang.descr": "Language in which the texts will be displayed in the app",
     "locale": "Region",
     "locale.descr": "Set the format to use for dates, numbers...",
     "locale.warn": "When changing region the app will update",
     "first_day_of_week": "First day of week",
-    "GENERAL": {
-      "categories.descr": "Create and edit categories to your liking",
-      "other": "Advanced settings",
-      "other.descr": "Other general app customization settings",
-      "appearance": "Appearance",
-      "appearance.descr": "App theme, texts...",
-      "app_colors": "App colors",
-      "theme": "Theme",
-      "theme.auto": "Defined by the system",
-      "theme.light": "Light",
-      "theme.dark": "Dark",
-      "amoled-mode": "AMOLED mode",
-      "amoled-mode.descr": "Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens",
-      "dynamic-colors": "Dynamic colors",
-      "dynamic-colors.descr": "Use your system accent color whenever possible",
-      "accent-color": "Accent color",
-      "accent-color.descr": "Choose the color the app will use to emphasize certain parts of the interface",
-      "prefer-calc": "Prefer calculator",
-      "prefer-calc-descr": "Displays a calculator on the add/edit transaction page that will simplify actions on devices without a keyboard"
-    },
+    "theme_and_colors": "Theme and colors",
+    "theme": "Theme",
+    "theme.auto": "Defined by the system",
+    "theme.light": "Light",
+    "theme.dark": "Dark",
+    "amoled-mode": "AMOLED mode",
+    "amoled-mode.descr": "Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens",
+    "dynamic-colors": "Dynamic colors",
+    "dynamic-colors.descr": "Use your system accent color whenever possible",
+    "accent-color": "Accent color",
+    "accent-color.descr": "Choose the color the app will use to emphasize certain parts of the interface"
+  },
+  "MORE": {
+    "title": "More",
+    "title_long": "More actions",
     "DATA": {
       "display": "Data",
       "display.descr": "Export and import your data so you don't lose anything",

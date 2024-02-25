@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/utils/color_utils.dart';
+
+import '../app_colors.dart';
 
 class TrendingValue extends StatelessWidget {
   const TrendingValue(
@@ -47,7 +48,7 @@ class TrendingValue extends StatelessWidget {
         const SizedBox(width: 6),
         UINumberFormatter.percentage(
           amountToConvert: percentage,
-          textStyle: TextStyle(
+          integerStyle: TextStyle(
               fontSize: fontSize,
               fontWeight: fontWeight,
               color: _getColorBasedOnPercentage(context)),
@@ -58,10 +59,10 @@ class TrendingValue extends StatelessWidget {
 
   Color _getColorBasedOnPercentage(BuildContext context) {
     return percentage == 0
-        ? CustomColors.of(context).brand.lighten(0.35).withBlue(225)
+        ? AppColors.of(context).brand.lighten(0.35).withBlue(225)
         : percentage > 0
-            ? CustomColors.of(context).success
-            : CustomColors.of(context).danger;
+            ? AppColors.of(context).success
+            : AppColors.of(context).danger;
   }
 
   @override

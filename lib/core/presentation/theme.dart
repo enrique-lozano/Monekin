@@ -2,69 +2,9 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 
+import 'app_colors.dart';
+
 bool isAppUsingDynamicColors = false;
-
-/// Monekin brand color.
-const brandBlue = Color(0xFF0F3375);
-
-CustomColors lightCustomColors = const CustomColors(
-    danger: Colors.red,
-    success: Color.fromARGB(255, 55, 161, 59),
-    brand: brandBlue);
-CustomColors darkCustomColors = const CustomColors(
-    danger: Colors.redAccent, success: Colors.lightGreen, brand: brandBlue);
-
-ColorScheme appColorScheme(BuildContext context) {
-  return Theme.of(context).colorScheme;
-}
-
-@immutable
-class CustomColors extends ThemeExtension<CustomColors> {
-  const CustomColors({
-    required this.danger,
-    required this.success,
-    required this.brand,
-  });
-
-  final Color danger;
-  final Color success;
-  final Color brand;
-
-  static CustomColors of(BuildContext context) {
-    return MediaQuery.of(context).platformBrightness == Brightness.dark
-        ? darkCustomColors
-        : lightCustomColors;
-  }
-
-  @override
-  CustomColors copyWith({Color? danger, Color? success, Color? brand}) {
-    return CustomColors(
-      danger: danger ?? this.danger,
-      success: success ?? this.success,
-      brand: brand ?? this.brand,
-    );
-  }
-
-  @override
-  CustomColors lerp(ThemeExtension<CustomColors>? other, double t) {
-    if (other is! CustomColors) {
-      return this;
-    }
-    return CustomColors(
-      danger: Color.lerp(danger, other.danger, t) ?? danger,
-      success: Color.lerp(success, other.success, t) ?? success,
-      brand: Color.lerp(brand, other.brand, t) ?? brand,
-    );
-  }
-
-  CustomColors harmonized(ColorScheme dynamic) {
-    return copyWith(
-      danger: danger.harmonizeWith(dynamic.primary),
-      brand: brand.harmonizeWith(dynamic.primary),
-      success: success.harmonizeWith(dynamic.primary),
-    );
-  }
-}
 
 ThemeData getThemeData(
   BuildContext context, {
@@ -84,13 +24,6 @@ ThemeData getThemeData(
     // (Recommended) Harmonize the dynamic color scheme' built-in semantic colors.
     lightColorScheme = lightDynamic.harmonized();
 
-    // (Optional) Customize the scheme as desired. For example, one might
-    // want to use a brand color to override the dynamic [ColorScheme.secondary].
-    // lightColorScheme = lightColorScheme.copyWith(secondary: _brandBlue);
-
-    // (Optional) If applicable, harmonize custom colors.
-    lightCustomColors = lightCustomColors.harmonized(lightColorScheme);
-
     // Repeat for the dark color scheme.
     darkColorScheme = darkDynamic.harmonized();
 
@@ -98,27 +31,29 @@ ThemeData getThemeData(
       darkColorScheme = darkColorScheme.copyWith(background: Colors.black);
     }
 
-    darkCustomColors = darkCustomColors.harmonized(darkColorScheme);
-
     isAppUsingDynamicColors = true; // ignore, only for demo purposes
   } else {
-    // Otherwise, use fallback schemes.
-    lightColorScheme = ColorScheme.fromSeed(
-      seedColor: accentColor == 'auto' ? brandBlue : ColorHex.get(accentColor),
-    );
-    darkColorScheme = ColorScheme.fromSeed(
+    // Otherwise, use fallback schemes:
+
+    /// Fallback scheme for a not-dynamic mode in dark or light mode:
+    ColorScheme fallbackScheme = ColorScheme.fromSeed(
         seedColor:
             accentColor == 'auto' ? brandBlue : ColorHex.get(accentColor),
-        brightness: Brightness.dark,
-        background: amoledMode ? Colors.black : null);
+        brightness: isDark ? Brightness.dark : Brightness.light,
+        background: isDark && amoledMode ? Colors.black : null);
+
+    lightColorScheme = fallbackScheme;
+    darkColorScheme = fallbackScheme;
   }
 
   theme = ThemeData(
-    colorScheme: isDark ? darkColorScheme : lightColorScheme,
-    brightness: isDark ? Brightness.dark : Brightness.light,
-    useMaterial3: true,
-    fontFamily: 'Nunito',
-  );
+      colorScheme: isDark ? darkColorScheme : lightColorScheme,
+      brightness: isDark ? Brightness.dark : Brightness.light,
+      useMaterial3: true,
+      fontFamily: 'Nunito',
+      extensions: [
+        AppColors.fromColorScheme(isDark ? darkColorScheme : lightColorScheme)
+      ]);
 
   final listTileSmallText = TextStyle(
       color: theme.textTheme.bodyMedium?.color,
@@ -128,15 +63,6 @@ ThemeData getThemeData(
       fontFamily: 'Nunito');
 
   return theme.copyWith(
-    appBarTheme: AppBarTheme(
-      backgroundColor: isDark
-          ? theme.colorScheme.primaryContainer
-          : theme.colorScheme.primary,
-      foregroundColor: isDark
-          ? theme.colorScheme.onPrimaryContainer
-          : theme.colorScheme.onPrimary,
-      shadowColor: theme.primaryColorDark,
-    ),
     dividerTheme: const DividerThemeData(space: 0),
     cardColor: theme.colorScheme.surface,
     inputDecorationTheme: const InputDecorationTheme(
@@ -159,15 +85,5 @@ ThemeData getThemeData(
           listTileSmallText.copyWith(fontWeight: FontWeight.w300),
       leadingAndTrailingTextStyle: listTileSmallText,
     ),
-    tabBarTheme: TabBarTheme(
-        unselectedLabelColor: isDark
-            ? theme.colorScheme.onPrimaryContainer
-            : theme.colorScheme.onPrimary,
-        labelColor: isDark
-            ? theme.colorScheme.primary
-            : theme.colorScheme.primaryContainer,
-        indicatorColor: isDark
-            ? theme.colorScheme.primary
-            : theme.colorScheme.primaryContainer),
   );
 }

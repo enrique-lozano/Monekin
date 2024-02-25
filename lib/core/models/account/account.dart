@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
+import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 enum AccountType {
@@ -47,19 +50,20 @@ enum AccountType {
 }
 
 class Account extends AccountInDB {
-  Account(
-      {required super.id,
-      required super.name,
-      required super.iniValue,
-      required super.date,
-      required super.type,
-      required super.iconId,
-      required this.currency,
-      super.closingDate,
-      super.description,
-      super.iban,
-      super.swift})
-      : super(currencyId: currency.code);
+  Account({
+    required super.id,
+    required super.name,
+    required super.iniValue,
+    required super.date,
+    required super.type,
+    required super.displayOrder,
+    required super.iconId,
+    required this.currency,
+    super.closingDate,
+    super.description,
+    super.iban,
+    super.swift,
+  }) : super(currencyId: currency.code);
 
   /// Currency of all the transactions of this account. When you change this currency all transactions in this account
   /// will have the new currency but their amount/value will remain the same.
@@ -69,16 +73,35 @@ class Account extends AccountInDB {
 
   bool get isClosed => closingDate != null;
 
-  Widget displayIcon(BuildContext context, {double size = 22}) {
-    return Container(
-      padding: EdgeInsets.all(size * 0.185),
-      decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onPrimary,
-          border: Border.all(
-              width: 2, color: Theme.of(context).colorScheme.primary),
-          borderRadius: BorderRadius.circular(1000)),
-      child: icon.display(
-          size: size, color: Theme.of(context).colorScheme.primary),
+  Color getComputedColor(BuildContext context) {
+    return color != null
+        ? ColorHex.get(color!)
+        : Theme.of(context).brightness == Brightness.dark
+            ? AppColors.of(context).onPrimary
+            : AppColors.of(context).primary;
+  }
+
+  IconDisplayer displayIcon(
+    BuildContext context, {
+    double size = 24,
+    double? padding,
+    double outlineWidth = 4,
+    bool isOutline = false,
+    void Function()? onTap,
+  }) {
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return IconDisplayer(
+      supportedIcon: icon,
+      mainColor: getComputedColor(context).lighten(isDark ? 0.82 : 0),
+      secondaryColor: getComputedColor(context).lighten(isDark ? 0 : 0.82),
+      displayMode: IconDisplayMode.polygon,
+      size: size,
+      borderRadius: 20,
+      outlineWidth: outlineWidth,
+      isOutline: isOutline,
+      padding: padding,
+      onTap: onTap,
     );
   }
 
@@ -87,6 +110,7 @@ class Account extends AccountInDB {
         currency: currency,
         iniValue: account.iniValue,
         date: account.date,
+        displayOrder: account.displayOrder,
         description: account.description,
         iban: account.iban,
         swift: account.swift,

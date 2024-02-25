@@ -5,7 +5,7 @@
 
 import './../../../models/transaction/transaction.dart';
 import './../../../models/transaction/transaction_status.dart';
-import './../../../models/transaction/transaction_periodicity.dart';
+import './../../../models/date-utils/periodicity.dart';
 import './../../../models/category/category.dart';
 import './../../../models/account/account.dart';
 import './../../services/user-setting/user_setting_service.dart';
@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS accounts (
     
     -- Account name (unique among user accounts)
     name TEXT UNIQUE NOT NULL,
+
     
     iniValue REAL NOT NULL,
 
@@ -47,6 +48,12 @@ CREATE TABLE IF NOT EXISTS accounts (
     type ENUMNAME(AccountType) NOT NULL CHECK(type IN ('normal', 'saving')),
     
     iconId TEXT NOT NULL,
+
+    -- The display order when listing accounts
+    displayOrder INTEGER NOT NULL,
+
+    -- If null, an automatic color will be applied
+    color TEXT,
 
     -- The closing date of the account. After this date, no transactions can exists on it.
     closingDate DATETIME,
@@ -69,6 +76,9 @@ CREATE TABLE IF NOT EXISTS categories (
 
     -- Color that will be used to represent this category in some screens. If null, the color of the parent's category will be used
     color TEXT,
+
+    -- The display order when listing categories
+    displayOrder INTEGER NOT NULL,
 
     -- Type of the category. If null, the type of the parent's category will be used
     type ENUMNAME(CategoryType) CHECK(type IN ('E', 'I', 'B')),
@@ -107,7 +117,7 @@ CREATE TABLE IF NOT EXISTS transactions (
   /* --- Recurrency data --- */
 
   -- The time range with which new transactions to be paid will appear (weekly, monthly...)
-  intervalPeriod ENUMNAME(TransactionPeriodicity) CHECK(intervalPeriod IN ('day','week','month','year')),
+  intervalPeriod ENUMNAME(Periodicity) CHECK(intervalPeriod IN ('day','week','month','year')),
 
   -- Within the time range chosen in the `intervalPeriod` attribute, every few times new transactions will appear to be paid. For example, putting a 2 here and having monthly as `intervalPeriod`, new payments will appear every two months
   intervalEach INTEGER,
@@ -140,6 +150,9 @@ CREATE TABLE IF NOT EXISTS tags (
     -- The display color of the tag
     color TEXT NOT NULL,
 
+    -- The display order when listing tag
+    displayOrder INTEGER NOT NULL,
+
     -- The description of the tag
     description TEXT
 ) AS TagInDB;
@@ -160,7 +173,7 @@ CREATE TABLE IF NOT EXISTS budgets (
   limitAmount REAL NOT NULL,
 
   -- Periodicity of the budget. If null, the budget is a single-time budget
-  intervalPeriod ENUMNAME(TransactionPeriodicity) CHECK(intervalPeriod IN ('day','week','month','year')),
+  intervalPeriod ENUMNAME(Periodicity) CHECK(intervalPeriod IN ('day','week','month','year')),
 
   -- Custom start date. Only if the budget has no periodicity
   startDate DATETIME,

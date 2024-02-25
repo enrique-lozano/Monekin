@@ -1,10 +1,10 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/form/category_form_functions.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/widgets/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
@@ -16,7 +16,6 @@ import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:uuid/uuid.dart';
 
-@RoutePage()
 class CategoryFormPage extends StatefulWidget {
   const CategoryFormPage({super.key, this.categoryUUID});
 
@@ -79,6 +78,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
       categoryToEdit = Category(
           id: categoryToEdit!.id,
           name: _nameController.text,
+          displayOrder: categoryToEdit!.displayOrder,
           iconId: _icon.id,
           color: _color,
           parentCategory: categoryToEdit!.parentCategory,
@@ -112,6 +112,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
               id: const Uuid().v4(),
               name: _nameController.text,
               iconId: _icon.id,
+              displayOrder: 10,
               type: _type,
               color: _color))
           .then((value) {
@@ -167,7 +168,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                           value: 'merge',
                           child: ListTile(
                             contentPadding: EdgeInsets.zero,
-                            leading: const Icon(Icons.merge_type),
+                            leading: const Icon(Icons.merge_type_rounded),
                             minLeadingWidth: 26,
                             title: Text(t.categories.merge),
                           )),
@@ -213,7 +214,23 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                InkWell(
+                                IconDisplayer(
+                                  mainColor: ColorHex.get(_color).lighten(
+                                      Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? 0.8
+                                          : 0),
+                                  secondaryColor: ColorHex.get(_color).lighten(
+                                      Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? 0
+                                          : 0.8),
+                                  supportedIcon: _icon,
+                                  size: 48,
+                                  isOutline: true,
+                                  outlineWidth: 1,
+                                  padding: 6,
+                                  borderRadius: 4,
                                   onTap: () {
                                     showIconSelectorModal(
                                       context,
@@ -229,23 +246,8 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                                       ),
                                     );
                                   },
-                                  child: Builder(builder: (context) {
-                                    final iconColor = ColorHex.get(_color);
-
-                                    return Container(
-                                        padding: const EdgeInsets.all(6),
-                                        decoration: BoxDecoration(
-                                            color: iconColor.withOpacity(0.05),
-                                            border: Border.all(
-                                                width: 1.625, color: iconColor),
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(6))),
-                                        child: _icon.display(
-                                            size: 48, color: iconColor));
-                                  }),
                                 ),
-                                const SizedBox(width: 20),
+                                const SizedBox(width: 10),
                                 Expanded(
                                   child: TextFormField(
                                     controller: _nameController,
@@ -349,8 +351,8 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                                           value: 'merge',
                                           child: ListTile(
                                             contentPadding: EdgeInsets.zero,
-                                            leading:
-                                                const Icon(Icons.merge_type),
+                                            leading: const Icon(
+                                                Icons.merge_type_rounded),
                                             minLeadingWidth: 26,
                                             title: Text(t.categories.merge),
                                           )),
@@ -390,6 +392,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                                         CategoryService.instance.updateCategory(
                                             CategoryInDB(
                                                 id: subcategory.id,
+                                                displayOrder: 10,
                                                 name: name,
                                                 iconId: icon.id,
                                                 parentCategoryID:
@@ -413,6 +416,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                               CategoryService.instance.insertCategory(
                                   CategoryInDB(
                                       id: const Uuid().v4(),
+                                      displayOrder: 10,
                                       name: name,
                                       iconId: icon.id,
                                       parentCategoryID: categoryToEdit!.id));

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
@@ -16,11 +17,12 @@ showIconSelectorModal(BuildContext context, IconSelectorModal component) {
 }
 
 class IconSelectorModal extends StatefulWidget {
-  const IconSelectorModal(
-      {super.key,
-      required this.preselectedIconID,
-      this.onIconSelected,
-      required this.subtitle});
+  const IconSelectorModal({
+    super.key,
+    required this.preselectedIconID,
+    this.onIconSelected,
+    required this.subtitle,
+  });
 
   final String preselectedIconID;
   final String? subtitle;
@@ -76,7 +78,7 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
                     ),
                     Chip(
                       side: BorderSide(color: colors.primary, width: 2),
-                      //  backgroundColor: Theme.of(context).colorScheme.primaryLight,
+                      //  backgroundColor: AppColors.of(context).primaryLight,
                       label: _selectedIcon!
                           .display(size: 34, color: colors.onBackground),
                     )
@@ -85,6 +87,7 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
               ),
               Expanded(
                 child: ScrollableWithBottomGradient(
+                  controller: scrollController,
                   child: Column(
                       children: iconsByScope.keys.toList().map((scope) {
                     return Column(
@@ -118,20 +121,19 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
                                       color: _selectedIcon?.id == e.id
                                           ? colors.primary
                                           : null,
-                                      child: InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            _selectedIcon = e;
-                                          });
-                                        },
-                                        child: Container(
-                                            padding: const EdgeInsets.all(6),
-                                            child: e.display(
-                                                size: 34,
-                                                color: _selectedIcon?.id == e.id
-                                                    ? colors.onPrimary
-                                                    : colors.onBackground)),
-                                      ),
+                                      child: IconDisplayer(
+                                          supportedIcon: e,
+                                          onTap: () {
+                                            setState(() {
+                                              _selectedIcon = e;
+                                            });
+                                          },
+                                          size: 32,
+                                          secondaryColor: Colors.transparent,
+                                          isOutline: _selectedIcon?.id == e.id,
+                                          mainColor: _selectedIcon?.id == e.id
+                                              ? colors.onPrimary
+                                              : colors.onBackground),
                                     ))
                                 .toList(),
                           ),

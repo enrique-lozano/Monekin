@@ -1,13 +1,12 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/settings/settings.page.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/color_picker.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-@RoutePage()
+import '../../core/presentation/app_colors.dart';
+
 class AdvancedSettingsPage extends StatefulWidget {
   const AdvancedSettingsPage({super.key});
 
@@ -100,15 +99,15 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(t.settings.general.appearance),
+        title: Text(t.settings.title_short),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            createListSeparator(context, t.settings.lang),
+            createListSeparator(context, t.settings.lang_section),
             buildSelector(
-              title: t.settings.lang,
+              title: t.settings.lang_title,
               dialogDescr: t.settings.lang_descr,
               items: [
                 SelectItem(value: 'es', label: t.lang.es),
@@ -123,22 +122,17 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     .then((value) => null);
               },
             ),
-            createListSeparator(context, t.settings.general.app_colors),
+            createListSeparator(context, t.settings.theme_and_colors),
             StreamBuilder(
                 stream: UserSettingService.instance
                     .getSetting(SettingKey.themeMode),
                 builder: (context, snapshot) {
                   return buildSelector(
-                    title: t.settings.general.theme,
+                    title: t.settings.theme,
                     items: [
-                      SelectItem(
-                          value: 'system',
-                          label: t.settings.general.theme_auto),
-                      SelectItem(
-                          value: 'light',
-                          label: t.settings.general.theme_light),
-                      SelectItem(
-                          value: 'dark', label: t.settings.general.theme_dark)
+                      SelectItem(value: 'system', label: t.settings.theme_auto),
+                      SelectItem(value: 'light', label: t.settings.theme_light),
+                      SelectItem(value: 'dark', label: t.settings.theme_dark)
                     ],
                     selected: snapshot.data ?? 'system',
                     onChanged: (value) {
@@ -155,8 +149,8 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                 initialData: true,
                 builder: (context, snapshot) {
                   return SwitchListTile(
-                    title: Text(t.settings.general.amoled_mode),
-                    subtitle: Text(t.settings.general.amoled_mode_descr),
+                    title: Text(t.settings.amoled_mode),
+                    subtitle: Text(t.settings.amoled_mode_descr),
                     value: snapshot.data!,
                     onChanged: Theme.of(context).brightness == Brightness.light
                         ? null
@@ -175,8 +169,8 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                 initialData: true,
                 builder: (context, snapshot) {
                   return SwitchListTile(
-                    title: Text(t.settings.general.dynamic_colors),
-                    subtitle: Text(t.settings.general.dynamic_colors_descr),
+                    title: Text(t.settings.dynamic_colors),
+                    subtitle: Text(t.settings.dynamic_colors_descr),
                     value: snapshot.data!,
                     onChanged: (bool value) {
                       if (value) {
@@ -201,77 +195,48 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                   late final Color color;
 
                   if (snapshot.data! == 'auto') {
-                    color = Theme.of(context).colorScheme.primary;
+                    color = AppColors.of(context).primary;
                   } else {
                     color = ColorHex.get(snapshot.data!);
                   }
 
-                  return IgnorePointer(
-                    ignoring: snapshot.data! == 'auto',
-
-                    // For some reason Flutter decided to put an enabled attribute in the
-                    // ListTile but not in the ExpansionTile, so we have to do this to
-                    // simulate this behaviour.
-
-                    // TODO: Track issue https://github.com/flutter/flutter/issues/135770 to refactor this code
-
-                    child: Opacity(
-                      opacity: snapshot.data! == 'auto' ? 0.4 : 1,
-                      child: ExpansionTile(
-                        title: Text(t.settings.general.accent_color),
-                        subtitle: Text(t.settings.general.accent_color_descr),
-                        controller: expTileController,
-                        trailing: SizedBox(
-                          height: 46,
-                          child: Container(
-                            clipBehavior: Clip.hardEdge,
-                            width: 46,
-                            height: 46,
-                            decoration: BoxDecoration(
-                              color: color,
-                              borderRadius: BorderRadius.circular(100),
-                            ),
+                  return ExpansionTile(
+                    title: Text(t.settings.accent_color),
+                    subtitle: Text(t.settings.accent_color_descr),
+                    controller: expTileController,
+                    enabled: snapshot.data! != 'auto',
+                    trailing: SizedBox(
+                      height: 46,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        clipBehavior: Clip.hardEdge,
+                        width: 46,
+                        height: 46,
+                        decoration: BoxDecoration(
+                          color: color.withOpacity(
+                            snapshot.data! != 'auto' ? 1 : 0.4,
                           ),
+                          borderRadius: BorderRadius.circular(100),
                         ),
-                        children: [
-                          ColorPicker(
-                            colorOptions: [
-                              brandBlue.toHex(leadingHashSign: false),
-                              ...colorOptions
-                            ],
-                            selectedColor: color.toHex(),
-                            onColorSelected: (selectedColor) {
-                              setState(() {
-                                UserSettingService.instance.setSetting(
-                                    SettingKey.accentColor, selectedColor);
-                              });
-                            },
-                          ),
-                        ],
                       ),
                     ),
+                    children: [
+                      ColorPicker(
+                        colorOptions: [
+                          brandBlue.toHex(leadingHashSign: false),
+                          ...colorOptions
+                        ],
+                        selectedColor: color.toHex(),
+                        onColorSelected: (selectedColor) {
+                          setState(() {
+                            UserSettingService.instance.setSetting(
+                                SettingKey.accentColor, selectedColor);
+                          });
+                        },
+                      ),
+                    ],
                   );
                 }),
-            createListSeparator(context, t.transaction.display(n: 2)),
-            StreamBuilder(
-                stream: UserSettingService.instance
-                    .getSetting(SettingKey.transactionMobileMode),
-                builder: (context, snapshot) {
-                  bool isActive = snapshot.data == '1';
-
-                  return SwitchListTile(
-                    title: Text(t.settings.general.prefer_calc),
-                    subtitle: Text(t.settings.general.prefer_calc_descr),
-                    value: isActive,
-                    onChanged: (bool value) {
-                      setState(() {
-                        UserSettingService.instance.setSetting(
-                            SettingKey.transactionMobileMode,
-                            isActive ? '0' : '1');
-                      });
-                    },
-                  );
-                })
           ],
         ),
       ),

@@ -2,15 +2,15 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/transactions/form/widgets/interval_selector_help.dart';
+import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
-import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 class RecurrencyData extends Equatable {
   final RecurrentRuleLimit? ruleRecurrentLimit;
 
   final int? intervalEach;
-  final TransactionPeriodicity? intervalPeriod;
+  final Periodicity? intervalPeriod;
 
   const RecurrencyData({
     this.intervalEach,
@@ -49,8 +49,9 @@ class RecurrencyData extends Equatable {
       if (ruleRecurrentLimit!.untilMode == RuleUntilMode.infinity) {
         return t.general.time.ranges.each_range(
           n: intervalEach!,
-          range:
-              intervalPeriod!.periodText(context, intervalEach!).toLowerCase(),
+          range: intervalPeriod!
+              .periodText(context, isPlural: intervalEach! > 1)
+              .toLowerCase(),
         );
       } else {
         if (ruleRecurrentLimit!.untilMode == RuleUntilMode.date) {
@@ -58,7 +59,7 @@ class RecurrencyData extends Equatable {
             n: intervalEach!,
             day: DateFormat.yMMMd().format(ruleRecurrentLimit!.endDate!),
             range: intervalPeriod!
-                .periodText(context, intervalEach!)
+                .periodText(context, isPlural: intervalEach! > 1)
                 .toLowerCase(),
           );
         } else {
@@ -66,7 +67,7 @@ class RecurrencyData extends Equatable {
             return t.general.time.ranges.each_range_until_once(
               n: intervalEach!,
               range: intervalPeriod!
-                  .periodText(context, intervalEach!)
+                  .periodText(context, isPlural: intervalEach! > 1)
                   .toLowerCase(),
             );
           } else {
@@ -74,7 +75,7 @@ class RecurrencyData extends Equatable {
               n: intervalEach!,
               limit: ruleRecurrentLimit!.remainingIterations!,
               range: intervalPeriod!
-                  .periodText(context, intervalEach!)
+                  .periodText(context, isPlural: intervalEach! > 1)
                   .toLowerCase(),
             );
           }

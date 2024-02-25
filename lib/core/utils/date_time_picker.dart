@@ -33,11 +33,7 @@ Future<DateTime?> openDateTimePicker(BuildContext context,
       initialEntryMode: initialEntryMode,
       lastDate: lastDate);
 
-  if (pickedDate == null) return null;
-
-  if (!showTimePickerAfterDate) {
-    return pickedDate;
-  }
+  if (pickedDate == null || !showTimePickerAfterDate) return pickedDate;
 
   final timePicked = await showTimePickerDef();
 

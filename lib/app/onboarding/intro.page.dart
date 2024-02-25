@@ -1,11 +1,12 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/app/onboarding/onboarding.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
-import 'package:monekin/core/routes/app_router.dart';
 import 'package:monekin/core/presentation/widgets/html_text.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-@RoutePage()
+import '../../core/presentation/app_colors.dart';
+
 class IntroPage extends StatelessWidget {
   const IntroPage({super.key});
 
@@ -40,7 +41,7 @@ class IntroPage extends StatelessWidget {
           style: Theme.of(context)
               .textTheme
               .labelSmall!
-              .copyWith(color: Theme.of(context).colorScheme.primary),
+              .copyWith(color: AppColors.of(context).primary),
         ),
       ],
     );
@@ -69,7 +70,9 @@ class IntroPage extends StatelessWidget {
         SizedBox(
           // width: double.infinity,
           child: FilledButton.icon(
-            onPressed: () => context.replaceRoute(const OnboardingRoute()),
+            onPressed: () => RouteUtils.pushRoute(
+                context, const OnboardingPage(),
+                withReplacement: true),
             icon: const Icon(Icons.person_2_rounded),
             label: Align(
               alignment: Alignment.centerLeft,

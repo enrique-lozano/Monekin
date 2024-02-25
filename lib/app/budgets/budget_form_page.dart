@@ -1,17 +1,17 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
-import 'package:monekin/app/categories/categories_list.dart';
+import 'package:monekin/app/categories/category_selector.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
+import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_field.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/icon_displayer_widgets.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:uuid/uuid.dart';
@@ -19,7 +19,6 @@ import 'package:uuid/uuid.dart';
 import '../../core/models/account/account.dart';
 import '../../core/presentation/widgets/persistent_footer_button.dart';
 
-@RoutePage()
 class BudgetFormPage extends StatefulWidget {
   const BudgetFormPage({super.key, this.budgetToEdit, required this.prevPage});
 
@@ -41,10 +40,10 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
 
   TextEditingController nameController = TextEditingController();
 
-  List<Category> categories = [];
-  List<Account> accounts = [];
+  List<Category>? categories;
+  List<Account>? accounts;
 
-  TransactionPeriodicity? intervalPeriod = TransactionPeriodicity.month;
+  Periodicity? intervalPeriod = Periodicity.month;
 
   DateTime startDate = DateTime.now();
   DateTime? endDate;
@@ -99,8 +98,8 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
       intervalPeriod: intervalPeriod,
       startDate: intervalPeriod == null ? startDate : null,
       endDate: intervalPeriod == null ? endDate : null,
-      categories: categories.map((e) => e.id).toList(),
-      accounts: accounts.map((e) => e.id).toList(),
+      categories: categories?.map((e) => e.id).toList(),
+      accounts: accounts?.map((e) => e.id).toList(),
     );
 
     if (isEditMode) {
@@ -129,7 +128,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
     }
   }
 
-  fillForm(Budget budget) {
+  fillForm(Budget budget) async {
     nameController.text = budget.name;
     valueController.text = budget.limitAmount.abs().toString();
 
@@ -138,31 +137,25 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
       endDate = budget.endDate;
     }
 
-    CategoryService.instance
-        .getCategories(
-          predicate: (p0, p1) => p0.id.isIn(budget.categories),
-        )
-        .first
-        .then((value) {
-      setState(() {
-        categories = value;
-      });
-    });
+    categories = budget.categories == null
+        ? null
+        : await CategoryService.instance
+            .getCategories(
+              predicate: (p0, p1) => p0.id.isIn(budget.categories!),
+            )
+            .first;
 
-    AccountService.instance
-        .getAccounts(
-          predicate: (p0, p1) => p0.id.isIn(budget.accounts),
-        )
-        .first
-        .then((value) {
-      setState(() {
-        accounts = value;
-      });
-    });
+    accounts = budget.accounts == null
+        ? null
+        : await AccountService.instance
+            .getAccounts(
+              predicate: (p0, p1) => p0.id.isIn(budget.accounts!),
+            )
+            .first;
 
-    setState(() {
-      intervalPeriod = budget.intervalPeriod;
-    });
+    intervalPeriod = budget.intervalPeriod;
+
+    setState(() {});
   }
 
   @override
@@ -170,184 +163,190 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
     final t = Translations.of(context);
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text(isEditMode ? t.budgets.form.edit : t.budgets.form.create),
-        ),
-        persistentFooterButtons: [
-          PersistentFooterButton(
-            child: FilledButton.icon(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
+      appBar: AppBar(
+        title: Text(isEditMode ? t.budgets.form.edit : t.budgets.form.create),
+      ),
+      persistentFooterButtons: [
+        PersistentFooterButton(
+          child: FilledButton.icon(
+            onPressed: categories != null && categories!.isEmpty
+                ? null
+                : () {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
 
-                  submitForm();
-                }
-              },
-              icon: const Icon(Icons.save),
-              label: Text(
-                  isEditMode ? t.budgets.form.edit : t.budgets.form.create),
-            ),
-          )
-        ],
-        body: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-            child: Form(
-              key: _formKey,
-              child: Column(mainAxisSize: MainAxisSize.min, children: [
-                TextFormField(
-                  controller: nameController,
-                  maxLength: 15,
-                  validator: (value) => fieldValidator(value, isRequired: true),
-                  decoration: InputDecoration(
-                    labelText: '${t.budgets.form.name} *',
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: valueController,
-                  decoration: InputDecoration(
-                    labelText: '${t.budgets.form.value} *',
-                    hintText: 'Ex.: 200',
-                    suffix: StreamBuilder(
-                        stream:
-                            CurrencyService.instance.getUserPreferredCurrency(),
-                        builder: (context, snapshot) {
-                          return Text(snapshot.data?.symbol ?? '');
-                        }),
-                  ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    final defaultNumberValidatorResult = fieldValidator(value,
-                        isRequired: true, validator: ValidatorType.double);
-
-                    if (defaultNumberValidatorResult != null) {
-                      return defaultNumberValidatorResult;
+                      submitForm();
                     }
-
-                    if (valueToNumber! == 0) {
-                      return t.transaction.form.validators.zero;
-                    }
-
-                    return null;
                   },
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  textInputAction: TextInputAction.next,
-                  onChanged: (value) {
-                    setState(() {});
-                  },
+            icon: const Icon(Icons.save),
+            label:
+                Text(isEditMode ? t.budgets.form.edit : t.budgets.form.create),
+          ),
+        )
+      ],
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextFormField(
+                controller: nameController,
+                maxLength: 15,
+                validator: (value) => fieldValidator(value, isRequired: true),
+                decoration: InputDecoration(
+                  labelText: '${t.budgets.form.name} *',
                 ),
-                const SizedBox(height: 16),
-                selector(
-                    title: '${t.general.accounts} *',
-                    inputValue: accounts.isNotEmpty
-                        ? accounts.map((e) => e.name).join(', ')
-                        : null,
-                    onClick: () async {
-                      final modalRes = await showAccountSelectorBottomSheet(
-                          context,
-                          AccountSelector(
-                            allowMultiSelection: true,
-                            filterSavingAccounts: false,
-                            selectedAccounts: accounts,
-                          ));
+              ),
+              const SizedBox(height: 8),
+              TextFormField(
+                controller: valueController,
+                decoration: InputDecoration(
+                  labelText: '${t.budgets.form.value} *',
+                  hintText: 'Ex.: 200',
+                  suffix: StreamBuilder(
+                      stream:
+                          CurrencyService.instance.getUserPreferredCurrency(),
+                      builder: (context, snapshot) {
+                        return Text(snapshot.data?.symbol ?? '');
+                      }),
+                ),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  final defaultNumberValidatorResult = fieldValidator(value,
+                      isRequired: true, validator: ValidatorType.double);
 
-                      if (modalRes != null) {
-                        setState(() {
-                          accounts = modalRes;
-                        });
-                      }
-                    }),
-                const SizedBox(height: 16),
-                selector(
-                    title: '${t.general.categories} *',
-                    inputValue: categories.isNotEmpty
-                        ? categories.map((e) => e.name).join(', ')
-                        : null,
-                    onClick: () async {
-                      final modalRes = await showCategoryListModal(
-                          context,
-                          CategoriesList(
-                            mode: CategoriesListMode.modalSelectMultiCategory,
-                            selectedCategories: categories,
-                          ));
+                  if (defaultNumberValidatorResult != null) {
+                    return defaultNumberValidatorResult;
+                  }
 
-                      if (modalRes != null) {
-                        setState(() {
-                          categories = modalRes;
-                        });
-                      }
-                    }),
-                const SizedBox(height: 16),
-                DropdownButtonFormField(
-                  value: intervalPeriod,
-                  decoration: InputDecoration(
-                    labelText: '${t.general.time.periodicity.display} *',
+                  if (valueToNumber! == 0) {
+                    return t.transaction.form.validators.zero;
+                  }
+
+                  return null;
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                textInputAction: TextInputAction.next,
+                onChanged: (value) {
+                  setState(() {});
+                },
+              ),
+              const SizedBox(height: 16),
+              DropdownButtonFormField(
+                value: intervalPeriod,
+                decoration: InputDecoration(
+                  labelText: '${t.general.time.periodicity.display} *',
+                ),
+                items: [
+                  DropdownMenuItem(
+                    value: null,
+                    child: Text(t.general.time.periodicity.no_repeat),
                   ),
-                  items: [
-                    DropdownMenuItem(
-                      value: null,
-                      child: Text(t.general.time.periodicity.no_repeat),
+                  ...List.generate(
+                      Periodicity.values.length,
+                      (index) => DropdownMenuItem(
+                          value: Periodicity.values[index],
+                          child: Text(Periodicity.values[index]
+                              .allThePeriodsText(context))))
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    intervalPeriod = value;
+                  });
+                },
+              ),
+              if (intervalPeriod == null) ...[
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: DateTimeFormField(
+                        decoration: InputDecoration(
+                          suffixIcon: const Icon(Icons.event),
+                          labelText: '${t.general.time.start_date} *',
+                        ),
+                        mode: DateTimeFieldPickerMode.date,
+                        initialDate: startDate,
+                        lastDate: endDate,
+                        dateFormat: DateFormat.yMMMd(),
+                        validator: (e) =>
+                            e == null ? t.general.validations.required : null,
+                        onDateSelected: (DateTime value) {
+                          setState(() {
+                            startDate = value;
+                          });
+                        },
+                      ),
                     ),
-                    ...List.generate(
-                        TransactionPeriodicity.values.length,
-                        (index) => DropdownMenuItem(
-                            value: TransactionPeriodicity.values[index],
-                            child: Text(TransactionPeriodicity.values[index]
-                                .allThePeriodsText(context))))
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: DateTimeFormField(
+                        decoration: InputDecoration(
+                          suffixIcon: const Icon(Icons.event),
+                          labelText: '${t.general.time.end_date} *',
+                        ),
+                        mode: DateTimeFieldPickerMode.date,
+                        initialDate: endDate,
+                        firstDate: startDate,
+                        dateFormat: DateFormat.yMMMd(),
+                        validator: (e) =>
+                            e == null ? t.general.validations.required : null,
+                        onDateSelected: (DateTime value) {
+                          setState(() {
+                            endDate = value;
+                          });
+                        },
+                      ),
+                    ),
                   ],
-                  onChanged: (value) {
-                    setState(() {
-                      intervalPeriod = value;
-                    });
-                  },
                 ),
-                if (intervalPeriod == null) ...[
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: DateTimeFormField(
-                          decoration: InputDecoration(
-                            suffixIcon: const Icon(Icons.event),
-                            labelText: '${t.general.time.start_date} *',
-                          ),
-                          mode: DateTimeFieldPickerMode.date,
-                          initialDate: startDate,
-                          firstDate: endDate,
-                          dateFormat: DateFormat.yMMMd(),
-                          validator: (e) =>
-                              e == null ? t.general.validations.required : null,
-                          onDateSelected: (DateTime value) {
-                            setState(() {
-                              startDate = value;
-                            });
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: DateTimeFormField(
-                          decoration: InputDecoration(
-                            suffixIcon: const Icon(Icons.event),
-                            labelText: '${t.general.time.end_date} *',
-                          ),
-                          mode: DateTimeFieldPickerMode.date,
-                          initialDate: endDate,
-                          firstDate: startDate,
-                          dateFormat: DateFormat.yMMMd(),
-                          validator: (e) =>
-                              e == null ? t.general.validations.required : null,
-                          onDateSelected: (DateTime value) {
-                            setState(() {
-                              endDate = value;
-                            });
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ]
-              ]),
-            )));
+              ],
+              const SizedBox(height: 16),
+              Text('${t.general.accounts}:'),
+              const SizedBox(height: 6),
+              StreamBuilder(
+                stream: AccountService.instance.getAccounts(),
+                builder: (context, snapshot) {
+                  return AccountSelector(IconDisplayerSelectorData(
+                    iconPadding: 12,
+                    iconSize: 40,
+                    availableItems: snapshot.data,
+                    selectedItems: accounts,
+                    onChange: (selection) {
+                      setState(() {
+                        accounts = selection;
+                      });
+                    },
+                  ));
+                },
+              ),
+              Text('${t.general.categories}:'),
+              const SizedBox(height: 6),
+              StreamBuilder(
+                  stream: CategoryService.instance.getMainCategories(),
+                  builder: (context, snapshot) {
+                    return StreamBuilder(
+                        stream: CategoryService.instance.getMainCategories(),
+                        builder: (context, snapshot) {
+                          return CategorySelector(IconDisplayerSelectorData(
+                            availableItems: snapshot.data,
+                            selectedItems: categories,
+                            onChange: (selection) {
+                              setState(() {
+                                categories = selection;
+                              });
+                            },
+                          ));
+                        });
+                  }),
+              const SizedBox(height: 24),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

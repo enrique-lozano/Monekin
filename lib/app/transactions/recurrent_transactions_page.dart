@@ -1,15 +1,13 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
-import 'package:monekin/core/presentation/widgets/empty_indicator.dart';
+import 'package:monekin/core/models/date-utils/periodicity.dart';
+import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-@RoutePage()
 class RecurrentTransactionPage extends StatefulWidget {
   const RecurrentTransactionPage({super.key});
 
@@ -19,7 +17,7 @@ class RecurrentTransactionPage extends StatefulWidget {
 }
 
 class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
-  TransactionPeriodicity periodicity = TransactionPeriodicity.month;
+  Periodicity periodicity = Periodicity.month;
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +50,10 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
               prevPage: const RecurrentTransactionPage(),
               periodicityInfo: periodicity,
               showGroupDivider: false,
+              heroTagBuilder: (tr) =>
+                  'recurrent-transactions-page__tr-icon-${tr.id}',
               onEmptyList: Center(
-                child: EmptyIndicator(
+                child: NoResults(
                     title: t.general.empty_warn,
                     description: t.recurrent_transactions.empty),
               ),
@@ -66,10 +66,10 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
               clipBehavior: Clip.hardEdge,
               child: InkWell(
                 onTap: () {
-                  periodicity = TransactionPeriodicity.values.firstWhereOrNull(
+                  periodicity = Periodicity.values.firstWhereOrNull(
                         (element) => element.index == periodicity.index + 1,
                       ) ??
-                      TransactionPeriodicity.day;
+                      Periodicity.day;
 
                   setState(() {});
                 },
@@ -120,16 +120,17 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
                               builder: (context, snapshot) {
                                 return CurrencyDisplayer(
                                   amountToConvert: snapshot.data!,
-                                  textStyle:
+                                  integerStyle:
                                       Theme.of(context).textTheme.titleLarge!,
                                 );
                               }),
                           Text(
                             t.general.time.ranges.each_range(
-                                n: 1,
-                                range: periodicity
-                                    .periodText(context, 1)
-                                    .toLowerCase()),
+                              n: 1,
+                              range: periodicity
+                                  .periodText(context, isPlural: false)
+                                  .toLowerCase(),
+                            ),
                             style: Theme.of(context).textTheme.labelSmall,
                           ),
                         ],
