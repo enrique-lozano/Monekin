@@ -3,9 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:monekin/app/settings/purchases/in_app_purchase.dart';
-import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
+
+import '../../../core/presentation/app_colors.dart';
 
 class DonateButton extends StatefulWidget {
   const DonateButton({
@@ -44,7 +45,7 @@ class _DonateButtonState extends State<DonateButton> {
     }, onDone: () {
       _subscription?.cancel();
     }, onError: (error) {
-      showSnackbarMessage(context, t.settings.help_us.donate_err);
+      showSnackbarMessage(context, t.more.help_us.donate_err);
     }) as StreamSubscription<List<PurchaseDetails>>;
   }
 
@@ -56,9 +57,9 @@ class _DonateButtonState extends State<DonateButton> {
         // LOADING
       } else {
         if (purchaseDetails.status == PurchaseStatus.error) {
-          showSnackbarMessage(context, t.settings.help_us.donate_err);
+          showSnackbarMessage(context, t.more.help_us.donate_err);
         } else if (purchaseDetails.status == PurchaseStatus.purchased) {
-          showSnackbarMessage(context, t.settings.help_us.donate_success);
+          showSnackbarMessage(context, t.more.help_us.donate_success);
         }
         if (purchaseDetails.pendingCompletePurchase) {
           await InAppPurchase.instance.completePurchase(purchaseDetails);
@@ -130,8 +131,8 @@ class _DonateButtonState extends State<DonateButton> {
           clipBehavior: Clip.hardEdge,
           margin: const EdgeInsets.all(0),
           color: Theme.of(context).brightness == Brightness.light
-              ? CustomColors.of(context).danger.lighten(0.8)
-              : CustomColors.of(context).danger.withOpacity(0.2),
+              ? AppColors.of(context).danger.lighten(0.8)
+              : AppColors.of(context).danger.withOpacity(0.2),
           shape: RoundedRectangleBorder(
               side: BorderSide(
                   color: Theme.of(context).colorScheme.tertiary, width: 2),
@@ -150,11 +151,11 @@ class _DonateButtonState extends State<DonateButton> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        t.settings.help_us.donate,
+                        t.more.help_us.donate,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       Text(
-                        t.settings.help_us.donate_descr,
+                        t.more.help_us.donate_descr,
                         style: Theme.of(context).textTheme.labelSmall,
                       ),
                     ],

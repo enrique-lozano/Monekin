@@ -1,11 +1,10 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/routes/app_router.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:uuid/uuid.dart';
 
@@ -27,17 +26,19 @@ class TransactionViewActionService {
       ListTileActionItem(
         label: t.general.edit,
         icon: Icons.edit,
-        onClick: () => context.pushRoute(TransactionFormRoute(
-          transactionToEdit: transaction,
-          mode: transaction.isIncomeOrExpense
-              ? TransactionFormMode.incomeOrExpense
-              : TransactionFormMode.transfer,
-        )),
+        onClick: () => RouteUtils.pushRoute(
+            context,
+            TransactionFormPage(
+              transactionToEdit: transaction,
+              mode: transaction.isIncomeOrExpense
+                  ? TransactionFormMode.incomeOrExpense
+                  : TransactionFormMode.transfer,
+            )),
       ),
       if (transaction.recurrentInfo.isNoRecurrent)
         ListTileActionItem(
           label: t.transaction.duplicate_short,
-          icon: Icons.control_point_duplicate,
+          icon: Icons.control_point_duplicate_rounded,
           onClick: () => TransactionViewActionService()
               .cloneTransactionWithAlertAndSnackBar(context,
                   transaction: transaction),
@@ -65,8 +66,9 @@ class TransactionViewActionService {
     final t = Translations.of(context);
     final scaffold = ScaffoldMessenger.of(context);
 
-    showConfirmDialog(
+    confirmDialog(
       context,
+      icon: Icons.delete,
       dialogTitle: !isRecurrent
           ? t.transaction.delete
           : t.recurrent_transactions.details.delete_header,
@@ -108,8 +110,9 @@ class TransactionViewActionService {
     final t = Translations.of(context);
     final scaffold = ScaffoldMessenger.of(context);
 
-    showConfirmDialog(
+    confirmDialog(
       context,
+      icon: Icons.control_point_duplicate_rounded,
       dialogTitle: t.transaction.duplicate,
       contentParagraphs: [Text(t.transaction.duplicate_warning_message)],
       confirmationText: t.general.continue_text,

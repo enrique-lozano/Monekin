@@ -5,6 +5,8 @@ import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 
+import '../../../core/presentation/app_colors.dart';
+
 class IncomeOrExpenseCard extends StatelessWidget {
   const IncomeOrExpenseCard(
       {super.key,
@@ -22,18 +24,18 @@ class IncomeOrExpenseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
+              color: type.color(context),
+              borderRadius: BorderRadius.circular(80),
             ),
             child: Icon(
               type.icon,
-              color: type.color(context),
+              color: AppColors.of(context).background,
               size: 22,
             ),
           ),
@@ -59,7 +61,7 @@ class IncomeOrExpenseCard extends StatelessWidget {
 
                     return CurrencyDisplayer(
                       amountToConvert: snapshot.data!,
-                      textStyle: const TextStyle(fontSize: 18),
+                      integerStyle: const TextStyle(fontSize: 18),
                     );
                   })
             ],

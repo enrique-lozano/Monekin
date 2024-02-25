@@ -1,13 +1,15 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:monekin/app/stats/widgets/fund_evolution_line_chart.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
+import '../../../core/presentation/app_colors.dart';
 
 class BudgetEvolutionChart extends StatelessWidget {
   const BudgetEvolutionChart({super.key, required this.budget});
@@ -20,8 +22,8 @@ class BudgetEvolutionChart extends StatelessWidget {
     List<Future<double>> balance = [];
     List<String> labels = [];
 
-    final startDate = budget.currentDateRange[0];
-    final endDate = budget.currentDateRange[1];
+    final startDate = budget.currentDateRange.start;
+    final endDate = budget.currentDateRange.end;
 
     DateTime currentDay =
         DateTime(startDate.year, startDate.month, startDate.day);
@@ -42,11 +44,7 @@ class BudgetEvolutionChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Color> gradientColors = [
-      Theme.of(context).colorScheme.primary,
-      Theme.of(context).colorScheme.primary.lighten(0.3),
-    ];
-
+    final lineColor = AppColors.of(context).primary;
     final t = Translations.of(context);
 
     return SizedBox(
@@ -70,24 +68,24 @@ class BudgetEvolutionChart extends StatelessWidget {
             }
 
             return LineChart(LineChartData(
-              gridData: FlGridData(show: true, drawVerticalLine: false),
+              gridData: const FlGridData(show: true, drawVerticalLine: false),
               extraLinesData: ExtraLinesData(horizontalLines: [
                 HorizontalLine(
                     y: budget.limitAmount,
-                    color: Colors.orange,
+                    color: Theme.of(context).colorScheme.tertiary,
                     dashArray: [12, 2],
                     label: HorizontalLineLabel(
                       show: true,
                       padding: const EdgeInsets.only(left: 2),
-                      style: const TextStyle(
-                        color: Colors.orange,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.tertiary,
                       ),
                       labelResolver: (p0) => t.budgets.details.budget_value,
                     ))
               ]),
               lineTouchData: LineTouchData(
                   touchTooltipData: LineTouchTooltipData(
-                tooltipBgColor: Theme.of(context).colorScheme.background,
+                tooltipBgColor: AppColors.of(context).background,
                 tooltipHorizontalAlignment: FLHorizontalAlignment.right,
                 tooltipMargin: -10,
                 getTooltipItems: (touchedSpots) {
@@ -113,10 +111,10 @@ class BudgetEvolutionChart extends StatelessWidget {
               )),
               titlesData: FlTitlesData(
                 show: true,
-                leftTitles: AxisTitles(
+                leftTitles: const AxisTitles(
                   sideTitles: SideTitles(showTitles: false),
                 ),
-                topTitles: AxisTitles(
+                topTitles: const AxisTitles(
                   sideTitles: SideTitles(showTitles: false),
                 ),
                 bottomTitles: AxisTitles(
@@ -167,20 +165,23 @@ class BudgetEvolutionChart extends StatelessWidget {
                           index.toDouble(), snapshot.data!.balance[index])),
                   isCurved: true,
                   curveSmoothness: 0.025,
-                  color: gradientColors[0],
-                  barWidth: 5,
+                  color: lineColor,
+                  barWidth: 3,
                   isStrokeCapRound: true,
-                  dotData: FlDotData(
+                  dotData: const FlDotData(
                     show: false,
                   ),
                   belowBarData: BarAreaData(
                     show: true,
+                    applyCutOffY: true,
+                    cutOffY: 0,
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: gradientColors
-                          .map((color) => color.withOpacity(0.3))
-                          .toList(),
+                      colors: [
+                        lineColor.withAlpha(100),
+                        lineColor.withAlpha(1)
+                      ],
                     ),
                   ),
                 ),

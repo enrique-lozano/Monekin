@@ -4,11 +4,12 @@ import 'package:monekin/core/presentation/widgets/transaction_filter/status_filt
 import 'package:monekin/i18n/translations.g.dart';
 
 class TransactionStatusFilter extends StatelessWidget {
-  const TransactionStatusFilter(
-      {super.key,
-      this.onSelected,
-      required this.selectedStatuses,
-      required this.allowMultipleSelection});
+  const TransactionStatusFilter({
+    super.key,
+    this.onSelected,
+    required this.selectedStatuses,
+    required this.allowMultipleSelection,
+  });
 
   final void Function(TransactionStatus? statusSelected, bool value)?
       onSelected;

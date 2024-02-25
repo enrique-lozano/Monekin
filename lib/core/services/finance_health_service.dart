@@ -1,12 +1,12 @@
 import 'dart:math';
 
 import 'package:async/async.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -87,7 +87,7 @@ class FinanceHealthData {
         score: monthsWithoutIncome == null
             ? null
             : min(monthsWithoutIncome! * 10, 100),
-        weight: 50);
+        weight: monthsWithoutIncomeWeight);
   }
 
   FinanceHealthAttrScore get savingPercentageScore {
@@ -101,7 +101,8 @@ class FinanceHealthData {
     // To desmos: \frac{100}{1+e^{-1.25+-0.2\left(x-\ 15\right)}}
     toReturn = 100 / (1 + exp(-1.25 - 0.2 * (savingsPercentage - 15))) - 2;
 
-    return FinanceHealthAttrScore(score: toReturn, weight: 50);
+    return FinanceHealthAttrScore(
+        score: toReturn, weight: savingPercentageWeight);
   }
 
   final int savingPercentageWeight = 50;
@@ -168,37 +169,37 @@ class FinanceHealthService {
   Stream<double?> getMonthsWithoutIncome({
     required TransactionFilters filters,
   }) {
-    return Rx.combineLatest([
-      TransactionService.instance
-          .countTransactions(predicate: filters)
-          .map((event) => event.numberOfRes),
-      AccountService.instance
-          .getAccountsMoney(date: filters.maxDate, trFilters: filters),
-      for (var i = 1; i <= 6; i++)
+    final minDate = filters.minDate ?? kDefaultFirstSelectableDate;
+    final maxDate = filters.maxDate ?? DateTime.now();
+
+    return Rx.combineLatest4(
+        TransactionService.instance
+            .countTransactions(predicate: filters)
+            .map((event) => event.numberOfRes),
+        AccountService.instance.getAccountsBalance(
+          filters: filters,
+        ),
         AccountService.instance
             .getAccountsBalance(
               filters: filters.copyWith(
-                  minDate: (filters.maxDate ?? DateTime.now())
-                      .subtract(Duration(days: i * 30)),
-                  maxDate: (filters.maxDate ?? DateTime.now())
-                      .subtract(Duration(days: (i - 1) * 30)),
-                  transactionTypes: [TransactionType.expense]),
+                transactionTypes: [TransactionType.expense],
+              ),
             )
-            .map((event) => event.abs() * (1.1 - (i / 6)))
-    ], (values) {
-      if (values[0] < 6) {
+            .map((e) => e.abs()),
+        AccountService.instance
+            .getAccountsMoney(
+              date: minDate,
+              trFilters: filters.copyWith(minDate: null),
+            )
+            .map((event) => max(event, 0)),
+        (numberOfTransactions, balance, expense, initialMoney) {
+      if (numberOfTransactions < 4) {
         return null;
       }
 
-      final balance = values[1];
-      final expensesInLastPeriod =
-          values.whereIndexed((index, element) => index >= 2);
+      final dateDiff = maxDate.difference(minDate).inDays;
 
-      if (balance < 0) return 0;
-
-      return balance /
-          (expensesInLastPeriod.sum /
-              [for (var i = 1; i <= 6; i++) (1.1 - (i / 6))].sum);
+      return (initialMoney + balance) / expense / dateDiff * 30;
     });
   }
 

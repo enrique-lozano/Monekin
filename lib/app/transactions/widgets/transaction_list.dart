@@ -3,10 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/models/transaction/transaction_periodicity.dart';
-import 'package:monekin/core/presentation/theme.dart';
+import 'package:monekin/core/models/date-utils/periodicity.dart';
+import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+
+import '../../../core/presentation/app_colors.dart';
 
 class TransactionListComponent extends StatefulWidget {
   const TransactionListComponent({
@@ -23,6 +25,7 @@ class TransactionListComponent extends StatefulWidget {
       ],
     ),
     required this.onEmptyList,
+    required this.heroTagBuilder,
   });
 
   final TransactionFilters filters;
@@ -39,9 +42,11 @@ class TransactionListComponent extends StatefulWidget {
   final bool showGroupDivider;
 
   /// If defined, display info about the periodicity of the recurrent transactions, and the days to the next payment. Will show the amount of the recurrency based on the specified periodicity
-  final TransactionPeriodicity? periodicityInfo;
+  final Periodicity? periodicityInfo;
 
   final Widget prevPage;
+
+  final Object? Function(MoneyTransaction tr)? heroTagBuilder;
 
   @override
   State<TransactionListComponent> createState() =>
@@ -74,7 +79,7 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
       child: Container(
         padding: const EdgeInsets.fromLTRB(16, 4, 12, 4),
         decoration: BoxDecoration(
-          color: appColorScheme(context).surfaceVariant,
+          color: AppColors.of(context).light,
           borderRadius: const BorderRadius.only(
             bottomRight: Radius.circular(120),
             topRight: Radius.circular(120),
@@ -97,7 +102,7 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
 
                   return CurrencyDisplayer(
                     amountToConvert: partialBalance,
-                    textStyle:
+                    integerStyle:
                         Theme.of(context).textTheme.labelMedium!.copyWith(
                               fontWeight: FontWeight.w400,
                             ),
@@ -143,12 +148,17 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
 
                 final transaction = transactions[index - 1];
 
+                final heroTag = widget.heroTagBuilder != null
+                    ? widget.heroTagBuilder!(transaction)
+                    : null;
+
                 return TransactionListTile(
                   transaction: transaction,
                   prevPage: widget.prevPage,
                   periodicityInfo: widget.periodicityInfo,
                   showDate: !widget.showGroupDivider,
                   showTime: widget.showGroupDivider,
+                  heroTag: heroTag,
                 );
               },
               separatorBuilder: (context, index) {

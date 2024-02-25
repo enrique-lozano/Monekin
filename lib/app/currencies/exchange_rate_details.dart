@@ -1,4 +1,4 @@
-import 'package:auto_route/auto_route.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/currencies/exchange_rate_form.dart';
@@ -10,7 +10,6 @@ import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart'
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-@RoutePage()
 class ExchangeRateDetailsPage extends StatefulWidget {
   const ExchangeRateDetailsPage({super.key, required this.currency});
 

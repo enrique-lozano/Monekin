@@ -13,7 +13,7 @@ publish_to: 'none'
 # The X represents the major releases, and can be up to infinity. Never start by a zero
 # The Y represents the minor releases, and can be up to 99. Always start by a zero
 # The Z represents the patch releases, and can be up to 999. Always start by a zero
-version: 5.0.2+500002
+version: 6.0.0+600000
 
 environment:
   sdk: '>=3.2.0 <4.0.0'
@@ -49,7 +49,7 @@ dependencies:
   flutter_svg: ^2.0.5
   permission_handler: ^11.1.0
   json_annotation: ^4.8.1
-  fl_chart: ^0.63.0
+  fl_chart: ^0.66.1
   file_picker: ^6.1.1
   share_plus: ^7.1.0
   url_launcher: ^6.1.11
@@ -62,7 +62,6 @@ dependencies:
   copy_with_extension: ^5.0.4
   freezed_annotation: ^2.4.1
   in_app_purchase: ^3.1.11
-  auto_route: ^7.8.4
 
 dev_dependencies:
   flutter_test:
@@ -78,7 +77,6 @@ dev_dependencies:
   slang_build_runner: ^3.18.0 # To regenerate the translations run 'dart run slang'
   copy_with_extension_gen: ^5.0.4
   freezed: ^2.4.5
-  auto_route_generator: ^7.3.2
 
 flutter_launcher_icons:
   image_path: 'assets/resources/appIcon-removebg.png'
@@ -108,7 +106,6 @@ flutter:
     - assets/icons/supported_selectable_icons/logos/financial_institutions/
     - assets/sql/
     - assets/sql/migrations/
-    - assets/icons/backup/
 
   fonts:
     - family: Nunito

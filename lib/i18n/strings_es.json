@@ -4,7 +4,6 @@
     "or": "o",
     "understood": "Entendido",
     "unspecified": "Sin especificar",
-    "attention": "Atención ⚠️",
     "confirm": "Confirmar",
     "continue_text": "Continuar",
     "quick_actions": "Acciones rápidas",
@@ -37,12 +36,20 @@
       "until-date": "Hasta fecha",
       "date": "Fecha",
       "datetime": "Fecha y hora",
+      "time": "Hora",
       "each": "Cada",
       "after": "Tras",
       "RANGES": {
         "display": "Rango temporal",
         "it-repeat": "Se repite",
         "it-ends": "Termina",
+        "TYPES": {
+          "cycle": "Ciclos",
+          "last_days": "Últimos días",
+          "last_days_form": "{{x}} días anteriores",
+          "all": "Siempre",
+          "date_range": "Rango personalizado"
+        },
         "each-range": {
           "one": "Cada {{range}}",
           "other": "Cada {{n}} {{range}}"
@@ -206,6 +213,7 @@
   "STATS": {
     "title": "Estadísticas",
     "balance": "Saldo",
+    "final-balance": "Saldo final",
     "balance-by-account": "Saldo por cuentas",
     "balance-by-currency": "Saldo por divisas",
     "balance-evolution": "Tendencia de saldo",
@@ -271,6 +279,7 @@
     "LIST": {
       "empty": "No se han encontrado transacciones que mostrar aquí. Añade una transacción pulsando el botón '+' de la parte inferior",
       "searcher.placeholder": "Busca por categoría, descripción...",
+      "searcher.no-results": "No se han encontrado transacciones que coincidan con los criterios de busqueda",
       "loading": "Cargando más transacciones..."
     },
     "FILTERS": {
@@ -294,8 +303,8 @@
       "tap-to-see-more": "Toca para ver más detalles",
       "description": "Descripción",
       "description-info": "Añadir una nota te ayudará a encontrar más rapidamente esta transacción en un futuro",
-      "exchange-to-preferred-today": "Equivalencia a {{ currency }} hoy:",
-      "exchange-to-preferred-in-date": "Equivalencia a {{ currency }} el {{date}}:"
+      "exchange-to-preferred-title": "Cambio a {{ currency }}",
+      "exchange-to-preferred-in-date": "El día de la transacción"
     },
     "STATUS": {
       "display": {
@@ -398,8 +407,8 @@
       "swift": "SWIFT"
     },
     "DELETE": {
-      "warning-header": "¿Estas seguro?",
-      "warning-text": "Esta acción borrara esta cuenta y todas sus transacciones",
+      "warning-header": "¿Eliminar cuenta?",
+      "warning-text": "Esta acción borrara esta cuenta y todas sus transacciones. No podrás volver a recuperar esta información tras el borrado.",
       "success": "Cuenta eliminada correctamente"
     },
     "CLOSE": {
@@ -483,7 +492,7 @@
     "make-child.warning2": "Sus transacciones <b>({{x}})</b> pasarán a las nuevas subcategorías creadas dentro de la categoría <b>{{destiny}}</b>.",
     "make-child.success": "Subcategorías creadas con exito",
     "merge": "Fusionar con otra categoría",
-    "merge.warning1": "Todas las transacciones (<b>{{x}}</b>) asocidadas con la categoría <b>{{from}}</b> serán movidas a la categoría <b>{{destiny}}</b>.",
+    "merge.warning1": "Todas las transacciones ({{x}}) asocidadas con la categoría <b>{{from}}</b> serán movidas a la categoría <b>{{destiny}}</b>.",
     "merge.warning2": "La categoría <b>{{from}}</b> será eliminada de forma irreversible.",
     "merge.success": "Categoría fusionada correctamente",
     "delete.success": "Categoría eliminada correctamente",
@@ -494,7 +503,8 @@
       "select-one": "Selecciona una categoría",
       "select-subcategory": "Elige una subcategoría",
       "without-subcategory": "Sin subcategoría",
-      "all": "Todas las categorías"
+      "all": "Todas las categorías",
+      "all.short": "Todas"
     }
   },
   "BUDGETS": {
@@ -507,7 +517,7 @@
     "actives": "Activos",
     "pending": "Pendientes de comenzar",
     "finish": "Finalizados",
-    "to-expend": "por gastar",
+    "from-budgeted": "De un total de",
     "days-left": "días restantes",
     "days-to-start": "días para empezar",
     "since-expiration": "días desde su expiración",
@@ -526,8 +536,7 @@
       "title": "Detalles del presupuesto",
       "budget-value": "Presupuestado",
       "statistics": "Estadísticas",
-      "you-already-expend": "Gastado",
-      "expend-diary-left": "Gasto diario restante recomendado",
+      "expend-diary-left": "Puedes gastar {{ dailyAmount }}/día por los {{ remainingDays }} días restantes",
       "expend-evolution": "Evolución del gasto",
       "no-transactions": "Parece que no has realizado ningún gasto relativo a este presupuesto"
     }
@@ -539,19 +548,19 @@
       "all": "Respaldo total",
       "all.descr": "Exporta todos tus datos (cuentas, transacciones, presupuestos, ajustes...). Importalos de nuevo en cualquier momento para no perder nada.",
       "transactions": "Respaldo de transacciones",
-      "transactions.descr": "Exporta tus transacciones en diversos formatos para que puedas analizarlas mas facilmente en otros programas o aplicaciones.",
+      "transactions.descr": "Exporta tus transacciones en CSV para que puedas analizarlas mas facilmente en otros programas o aplicaciones.",
       "description": "Exporta tus datos en diferentes formatos",
       "dialog_title": "Guardar/Enviar archivo",
-      "success_in_documents": "Archivo guardado correctamente en Almacenamiento interno/Documents",
-      "success_in_data": "Archivo guardado/enviado correctamente",
+      "success": "Archivo guardado/enviado correctamente en {{x}}",
       "error": "Error al descargar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com"
     },
     "IMPORT": {
       "title": "Importar tus datos",
       "title.short": "Importar",
       "restore-backup": "Restaurar copia de seguridad",
-      "restore-backup-warn": "Al importar una nueva base de datos, perderas toda la información actualmente guardada en la app. Se recomienda hacer una copia de seguridad antes de continuar. No subas aquí ningún fichero cuyo origen no conozcas, sube solo ficheros que hayas descargado previamente desde Monekin",
       "restore-backup-descr": "Importa una base de datos anteriormente guardada desde Monekin. Esta acción remplazará cualquier dato actual de la aplicación por los nuevos datos",
+      "restore-backup-warn.title": "Sobreescribir todos los datos",
+      "restore-backup-warn.description": "Al importar una nueva base de datos, perderas toda la información actualmente guardada en la app. Se recomienda hacer una copia de seguridad antes de continuar. No subas aquí ningún fichero cuyo origen no conozcas, sube solo ficheros que hayas descargado previamente desde Monekin",
       "tap-to-select-file": "Pulsa para seleccionar un archivo",
       "select-other-file": "Selecciona otro fichero",
       "MANUAL-IMPORT": {
@@ -592,36 +601,32 @@
     }
   },
   "SETTINGS": {
-    "title": "Ajustes",
-    "edit-profile": "Editar perfil",
-    "display-name": "Nombre de usuario",
-    "lang": "Idioma de la aplicación",
-    "lang.descr": "Idioma en el que se mostrarán los textos en la app",
+    "title_long": "Configuración y apariencia",
+    "title_short": "Configuración",
+    "description": "Tema de la aplicación, textos y otras configuraciones generales",
+    "edit_profile": "Editar perfil",
+    "lang.section": "Idioma y textos",
+    "lang.title": "Idioma de la aplicación",
+    "lang.descr": "Idioma en el que se mostrarán los textos en la aplicación",
     "locale": "Región",
-    "locale.descr": "Establece el formato a usar para fechas, números...",
-    "locale.warn": "Al cambiar de región la app se refrescará",
+    "locale.descr": "Establecer el formato a utilizar para fechas, números...",
+    "locale.warn": "Al cambiar la región, la aplicación se actualizará",
     "first_day_of_week": "Primer día de la semana",
-    "GENERAL": {
-      "display": "Ajustes generales",
-      "categories.descr": "Crea y edita categorías a tu gusto",
-      "other": "Ajustes avanzados",
-      "other.descr": "Otros ajustes generales de personalización de la app",
-      "appearance": "Apariencia",
-      "appearance.descr": "Tema de la aplicación, textos...",
-      "app_colors": "Colores de la aplicación",
-      "theme": "Tema",
-      "theme.auto": "Definido por el sistema",
-      "theme.light": "Claro",
-      "theme.dark": "Oscuro",
-      "amoled-mode": "Modo AMOLED",
-      "amoled-mode.descr": "Usa un fondo de pantalla negro puro cuando sea posible. Esto ayudará ligeramente a la bateria de dispositivos con pantallas AMOLED",
-      "dynamic-colors": "Colores dinámicos",
-      "dynamic-colors.descr": "Usa el color de acentuación de su sistema siempre que sea posible",
-      "accent-color": "Color de acentuación",
-      "accent-color.descr": "Elige el color que usará la app para enfatizar ciertas partes de la interfaz",
-      "prefer-calc": "Preferir calculadora",
-      "prefer-calc-descr": "Muestra en la página de adición/edición de transacciones una calculadora que simplificará las acciones en dispositivos sin teclado"
-    },
+    "theme_and_colors": "Tema y colores",
+    "theme": "Tema",
+    "theme.auto": "Definido por el sistema",
+    "theme.light": "Claro",
+    "theme.dark": "Oscuro",
+    "amoled-mode": "Modo AMOLED",
+    "amoled-mode.descr": "Usar un fondo negro puro cuando sea posible. Esto ayudará ligeramente a la batería de dispositivos con pantallas AMOLED",
+    "dynamic-colors": "Colores dinámicos",
+    "dynamic-colors.descr": "Usar el color de acento de su sistema siempre que sea posible",
+    "accent-color": "Color de acento",
+    "accent-color.descr": "Elegir el color que la aplicación usará para enfatizar ciertas partes de la interfaz"
+  },
+  "MORE": {
+    "title": "Más",
+    "title_long": "Más acciones",
     "DATA": {
       "display": "Datos",
       "display.descr": "Exporta y importa tus datos para no perder nada",

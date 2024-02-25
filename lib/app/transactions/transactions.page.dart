@@ -1,20 +1,19 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/home/main_layout.dart';
+import 'package:monekin/app/layout/tabs.dart';
+import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/presentation/widgets/empty_indicator.dart';
 import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
+import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/core/routes/app_router.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-@RoutePage()
 class TransactionsPage extends StatefulWidget {
-  const TransactionsPage({Key? key, this.filters}) : super(key: key);
+  const TransactionsPage({super.key, this.filters});
 
   final TransactionFilters? filters;
 
@@ -37,7 +36,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
     filters = widget.filters ?? const TransactionFilters();
 
     searchFocusNode.addListener(() {
-      if (!searchFocusNode.hasFocus) {
+      if (!searchFocusNode.hasFocus &&
+          (searchValue == null || searchValue!.isEmpty)) {
         setState(() {
           searchActive = false;
         });
@@ -55,14 +55,24 @@ class _TransactionsPageState extends State<TransactionsPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return WillPopScope(
-      onWillPop: () async {
-        if (searchFocusNode.hasFocus) {
+    return PopScope(
+      canPop: !searchActive,
+      onPopInvoked: (didPop) {
+        if (didPop) return;
+
+        if (searchFocusNode.hasFocus &&
+            (searchValue != null && searchValue!.isNotEmpty)) {
           searchFocusNode.unfocus();
-          return false;
+          return;
+        } else if (searchActive && !searchFocusNode.hasFocus) {
+          setState(() {
+            searchActive = false;
+          });
+
+          return;
         }
 
-        return true;
+        Navigator.pop(context);
       },
       child: Scaffold(
         appBar: AppBar(
@@ -110,7 +120,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
 
                     if (modalRes != null) {
                       setState(() {
-                        filters = modalRes;
+                        filters = modalRes.copyWith(
+                            includeParentCategoriesInSearch: true);
                       });
                     }
                   },
@@ -119,8 +130,9 @@ class _TransactionsPageState extends State<TransactionsPage> {
         floatingActionButton: FloatingActionButton.extended(
           icon: const Icon(Icons.add_rounded),
           label: Text(t.transaction.create),
-          onPressed: () => context.pushRoute(
-            TransactionFormRoute(),
+          onPressed: () => RouteUtils.pushRoute(
+            context,
+            TransactionFormPage(),
           ),
         ),
         body: Column(
@@ -134,7 +146,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
                   });
                 },
               ),
-              const Divider(indent: 12, endIndent: 12)
             ],
             StreamBuilder(
               stream: TransactionService.instance.countTransactions(
@@ -144,13 +155,15 @@ class _TransactionsPageState extends State<TransactionsPage> {
                 final res = snapshot.data;
 
                 return Card(
-                  elevation: 3,
-                  //color: appColorScheme(context).primary,
-                  margin: const EdgeInsets.all(0),
+                  elevation: 2,
+                  //color: AppColors.of(context).primary,
+                  margin: const EdgeInsets.all(8),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0)),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 12, 24, 12),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
                     child: DefaultTextStyle(
                       style: Theme.of(context).textTheme.titleMedium!,
                       child: Row(
@@ -174,11 +187,16 @@ class _TransactionsPageState extends State<TransactionsPage> {
             ),
             Expanded(
               child: TransactionListComponent(
+                heroTagBuilder: (tr) => 'transactions-page__tr-icon-${tr.id}',
                 filters: filters.copyWith(searchValue: searchValue),
-                prevPage: const MainLayoutPage(),
-                onEmptyList: EmptyIndicator(
-                    title: t.general.empty_warn,
-                    description: t.transaction.list.empty),
+                prevPage: const TabsPage(),
+                onEmptyList: NoResults(
+                  title: filters.hasFilter ? null : t.general.empty_warn,
+                  description: filters.hasFilter
+                      ? t.transaction.list.searcher_no_results
+                      : t.transaction.list.empty,
+                  noSearchResultsVariation: filters.hasFilter,
+                ),
               ),
             ),
           ],
