@@ -279,6 +279,7 @@
     "LIST": {
       "empty": "No se han encontrado transacciones que mostrar aquí. Añade una transacción pulsando el botón '+' de la parte inferior",
       "searcher.placeholder": "Busca por categoría, descripción...",
+      "searcher.no-results": "No se han encontrado transacciones que coincidan con los criterios de busqueda",
       "loading": "Cargando más transacciones..."
     },
     "FILTERS": {

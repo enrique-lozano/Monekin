@@ -9,7 +9,7 @@ import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-import '../../core/presentation/widgets/empty_indicator.dart';
+import '../../core/presentation/widgets/no_results.dart';
 
 class AllAccountsPage extends StatelessWidget {
   const AllAccountsPage({super.key});
@@ -39,7 +39,7 @@ class AllAccountsPage extends StatelessWidget {
             return Column(
               children: [
                 Expanded(
-                    child: EmptyIndicator(
+                    child: NoResults(
                         title: t.general.empty_warn,
                         description: t.account.no_accounts)),
               ],
