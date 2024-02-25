@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/budgets/budget_form_page.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
-import 'package:monekin/core/presentation/widgets/empty_indicator.dart';
+import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -52,7 +52,7 @@ class BudgetsPage extends StatelessWidget {
                   return Column(
                     children: [
                       Expanded(
-                          child: EmptyIndicator(
+                          child: NoResults(
                               title: t.general.empty_warn,
                               description: t.budgets.no_budgets)),
                     ],
@@ -87,7 +87,7 @@ class BudgetsPage extends StatelessWidget {
                   return Column(
                     children: [
                       Expanded(
-                          child: EmptyIndicator(
+                          child: NoResults(
                               title: t.general.empty_warn,
                               description: t.budgets.no_budgets)),
                     ],

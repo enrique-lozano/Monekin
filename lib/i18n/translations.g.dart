@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 1021 (510 per locale)
+/// Strings: 1023 (511 per locale)
 ///
-/// Built on 2024-02-24 at 16:14 UTC
+/// Built on 2024-02-25 at 12:29 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -776,6 +776,7 @@ class _TranslationsTransactionListEn {
 	// Translations
 	String get empty => 'No transactions found to display here. Add a transaction by clicking the \'+\' button at the bottom';
 	String get searcher_placeholder => 'Search by category, description...';
+	String get searcher_no_results => 'No transactions found matching the search criteria';
 	String get loading => 'Loading more transactions...';
 }
 
@@ -2007,6 +2008,7 @@ class _TranslationsTransactionListEs implements _TranslationsTransactionListEn {
 	// Translations
 	@override String get empty => 'No se han encontrado transacciones que mostrar aquí. Añade una transacción pulsando el botón \'+\' de la parte inferior';
 	@override String get searcher_placeholder => 'Busca por categoría, descripción...';
+	@override String get searcher_no_results => 'No se han encontrado transacciones que coincidan con los criterios de busqueda';
 	@override String get loading => 'Cargando más transacciones...';
 }
 
@@ -2870,6 +2872,7 @@ extension on _TranslationsEn {
 			case 'transaction.next_payments.recurrent_rule_finished': return 'The recurring rule has been completed, there are no more payments to make!';
 			case 'transaction.list.empty': return 'No transactions found to display here. Add a transaction by clicking the \'+\' button at the bottom';
 			case 'transaction.list.searcher_placeholder': return 'Search by category, description...';
+			case 'transaction.list.searcher_no_results': return 'No transactions found matching the search criteria';
 			case 'transaction.list.loading': return 'Loading more transactions...';
 			case 'transaction.filters.from_value': return 'From amount';
 			case 'transaction.filters.to_value': return 'Up to amount';
@@ -3459,6 +3462,7 @@ extension on _TranslationsEs {
 			case 'transaction.next_payments.recurrent_rule_finished': return 'La regla recurrente se ha completado, ya no hay mas pagos a realizar!';
 			case 'transaction.list.empty': return 'No se han encontrado transacciones que mostrar aquí. Añade una transacción pulsando el botón \'+\' de la parte inferior';
 			case 'transaction.list.searcher_placeholder': return 'Busca por categoría, descripción...';
+			case 'transaction.list.searcher_no_results': return 'No se han encontrado transacciones que coincidan con los criterios de busqueda';
 			case 'transaction.list.loading': return 'Cargando más transacciones...';
 			case 'transaction.filters.from_value': return 'Desde monto';
 			case 'transaction.filters.to_value': return 'Hasta monto';

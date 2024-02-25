@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:monekin/core/presentation/animations/animation_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/core/presentation/animations/animation_controller.dart';
 
 class ShakeWidget extends StatefulWidget {
   const ShakeWidget({
@@ -33,7 +33,7 @@ class SineCurve extends Curve {
 }
 
 class ShakeWidgetState extends AnimationControllerState<ShakeWidget> {
-  ShakeWidgetState(Duration duration) : super(duration);
+  ShakeWidgetState(super.duration);
 
   late final Animation<double> _sineAnimation =
       Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
