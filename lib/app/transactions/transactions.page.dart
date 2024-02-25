@@ -3,8 +3,8 @@ import 'package:monekin/app/layout/tabs.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/presentation/widgets/empty_indicator.dart';
 import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
+import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/filter_sheet_modal.dart';
@@ -190,9 +190,13 @@ class _TransactionsPageState extends State<TransactionsPage> {
                 heroTagBuilder: (tr) => 'transactions-page__tr-icon-${tr.id}',
                 filters: filters.copyWith(searchValue: searchValue),
                 prevPage: const TabsPage(),
-                onEmptyList: EmptyIndicator(
-                    title: t.general.empty_warn,
-                    description: t.transaction.list.empty),
+                onEmptyList: NoResults(
+                  title: filters.hasFilter ? null : t.general.empty_warn,
+                  description: filters.hasFilter
+                      ? t.transaction.list.searcher_no_results
+                      : t.transaction.list.empty,
+                  noSearchResultsVariation: filters.hasFilter,
+                ),
               ),
             ),
           ],

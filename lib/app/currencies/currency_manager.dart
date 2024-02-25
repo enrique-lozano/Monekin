@@ -11,7 +11,7 @@ import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-import '../../core/presentation/widgets/empty_indicator.dart';
+import '../../core/presentation/widgets/no_results.dart';
 
 class CurrencyManagerPage extends StatefulWidget {
   const CurrencyManagerPage({super.key});
@@ -122,7 +122,7 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
               if (snapshot.data!.isEmpty) {
                 // Data has loaded but is empty:
                 return Expanded(
-                    child: EmptyIndicator(
+                    child: NoResults(
                         title: t.general.empty_warn,
                         description: t.currencies.empty));
               }

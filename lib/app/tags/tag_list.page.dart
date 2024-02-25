@@ -6,9 +6,9 @@ import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
-import 'package:monekin/core/presentation/widgets/empty_indicator.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/monekin_reorderable_list.dart';
+import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/routes/route_utils.dart';
@@ -75,7 +75,7 @@ class _TagListPageState extends State<TagListPage> {
         }
 
         if (snapshot.data!.isEmpty) {
-          return EmptyIndicator(
+          return NoResults(
             title: t.general.empty_warn,
             description: t.tags.empty_list,
           );

@@ -16,7 +16,7 @@ import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-import '../../core/presentation/widgets/empty_indicator.dart';
+import '../../core/presentation/widgets/no_results.dart';
 import 'components/budget_card.dart';
 
 class BudgetDetailsPage extends StatefulWidget {
@@ -168,7 +168,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                     heroTagBuilder: (tr) => 'budgets-page__tr-icon-${tr.id}',
                     filters: budget.trFilters,
                     prevPage: BudgetDetailsPage(budget: budget),
-                    onEmptyList: EmptyIndicator(
+                    onEmptyList: NoResults(
                         title: t.general.empty_warn,
                         description: t.budgets.details.no_transactions),
                   ),
