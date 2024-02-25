@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
-import 'package:monekin/core/presentation/widgets/empty_indicator.dart';
+import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -53,7 +53,7 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
               heroTagBuilder: (tr) =>
                   'recurrent-transactions-page__tr-icon-${tr.id}',
               onEmptyList: Center(
-                child: EmptyIndicator(
+                child: NoResults(
                     title: t.general.empty_warn,
                     description: t.recurrent_transactions.empty),
               ),
