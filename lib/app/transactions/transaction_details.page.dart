@@ -635,8 +635,8 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                               stream: ExchangeRateService
                                                   .instance
                                                   .getLastExchangeRateOf(
-                                                    currencyCode:
-                                                        userCurrency.code,
+                                                    currencyCode: transaction
+                                                        .account.currency.code,
                                                     date: DateTime.now(),
                                                   )
                                                   .map((event) =>
@@ -674,8 +674,8 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                               stream: ExchangeRateService
                                                   .instance
                                                   .getLastExchangeRateOf(
-                                                    currencyCode:
-                                                        userCurrency.code,
+                                                    currencyCode: transaction
+                                                        .account.currency.code,
                                                     date: transaction.date,
                                                   )
                                                   .map((event) =>
