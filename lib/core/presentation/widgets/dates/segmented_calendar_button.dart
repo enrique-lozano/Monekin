@@ -138,6 +138,7 @@ class _SegmentedCalendarButtonState extends State<SegmentedCalendarButton> {
                 borderRadius: BorderRadius.zero,
               ),
               fixedSize: Size.fromHeight(widget.buttonHeight),
+              minimumSize: const Size.fromHeight(0),
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
             child: Row(
