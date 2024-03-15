@@ -6,7 +6,7 @@
 /// Locales: 2
 /// Strings: 1023 (511 per locale)
 ///
-/// Built on 2024-02-25 at 12:29 UTC
+/// Built on 2024-03-15 at 14:43 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -1735,7 +1735,7 @@ class _TranslationsBudgetsEs implements _TranslationsBudgetsEn {
 	@override String get actives => 'Activos';
 	@override String get pending => 'Pendientes de comenzar';
 	@override String get finish => 'Finalizados';
-	@override String get from_budgeted => 'De un total de';
+	@override String get from_budgeted => 'De un total de ';
 	@override String get days_left => 'días restantes';
 	@override String get days_to_start => 'días para empezar';
 	@override String get since_expiration => 'días desde su expiración';
@@ -3653,7 +3653,7 @@ extension on _TranslationsEs {
 			case 'budgets.actives': return 'Activos';
 			case 'budgets.pending': return 'Pendientes de comenzar';
 			case 'budgets.finish': return 'Finalizados';
-			case 'budgets.from_budgeted': return 'De un total de';
+			case 'budgets.from_budgeted': return 'De un total de ';
 			case 'budgets.days_left': return 'días restantes';
 			case 'budgets.days_to_start': return 'días para empezar';
 			case 'budgets.since_expiration': return 'días desde su expiración';
