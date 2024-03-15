@@ -49,12 +49,15 @@ class _SegmentedCalendarButtonState extends State<SegmentedCalendarButton> {
     required BorderRadiusGeometry borderRadius,
     bool disabled = false,
   }) {
+    final padding = widget.buttonHeight * 0.225;
+
     return Expanded(
       child: Opacity(
         opacity: disabled ? 0.3 : 1,
         child: IconButton.outlined(
           onPressed: disabled ? null : onPressed,
           icon: Icon(icon),
+          iconSize: widget.buttonHeight - padding * 2,
           disabledColor: AppColors.of(context).primary,
           color: AppColors.of(context).primary,
           style: ButtonStyle(
@@ -64,6 +67,8 @@ class _SegmentedCalendarButtonState extends State<SegmentedCalendarButton> {
             fixedSize: MaterialStateProperty.all(
               Size.fromHeight(widget.buttonHeight),
             ),
+            padding: MaterialStateProperty.all(EdgeInsets.all(padding)),
+            minimumSize: MaterialStateProperty.all(const Size.fromHeight(0)),
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(borderRadius: borderRadius),
             ),
@@ -133,6 +138,7 @@ class _SegmentedCalendarButtonState extends State<SegmentedCalendarButton> {
                 borderRadius: BorderRadius.zero,
               ),
               fixedSize: Size.fromHeight(widget.buttonHeight),
+              minimumSize: const Size.fromHeight(0),
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
             child: Row(

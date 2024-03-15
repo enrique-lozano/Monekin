@@ -60,7 +60,7 @@ class IncomeOrExpenseCard extends StatelessWidget {
                     }
 
                     return CurrencyDisplayer(
-                      amountToConvert: snapshot.data!,
+                      amountToConvert: snapshot.data!.abs(),
                       integerStyle: const TextStyle(fontSize: 18),
                     );
                   })

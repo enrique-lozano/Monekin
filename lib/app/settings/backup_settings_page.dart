@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/settings/export_page.dart';
 import 'package:monekin/app/settings/import_csv.dart';
-import 'package:monekin/app/settings/settings.page.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
@@ -13,6 +12,8 @@ import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/number_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:monekin/main.dart';
+
+import 'widgets/settings_list_separator.dart';
 
 class BackupSettingsPage extends StatelessWidget {
   const BackupSettingsPage({super.key});
