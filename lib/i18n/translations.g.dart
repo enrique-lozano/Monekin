@@ -6,7 +6,7 @@
 /// Locales: 2
 /// Strings: 1023 (511 per locale)
 ///
-/// Built on 2024-03-15 at 14:43 UTC
+/// Built on 2024-03-15 at 14:47 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -24,8 +24,8 @@ const AppLocale _baseLocale = AppLocale.en;
 /// - LocaleSettings.setLocale(AppLocale.en) // set locale
 /// - Locale locale = AppLocale.en.flutterLocale // get flutter locale from enum
 /// - if (LocaleSettings.currentLocale == AppLocale.en) // locale check
-enum AppLocale with BaseAppLocale<AppLocale, _TranslationsEn> {
-	en(languageCode: 'en', build: _TranslationsEn.build),
+enum AppLocale with BaseAppLocale<AppLocale, Translations> {
+	en(languageCode: 'en', build: Translations.build),
 	es(languageCode: 'es', build: _TranslationsEs.build);
 
 	const AppLocale({required this.languageCode, this.scriptCode, this.countryCode, required this.build}); // ignore: unused_element
@@ -33,10 +33,10 @@ enum AppLocale with BaseAppLocale<AppLocale, _TranslationsEn> {
 	@override final String languageCode;
 	@override final String? scriptCode;
 	@override final String? countryCode;
-	@override final TranslationBuilder<AppLocale, _TranslationsEn> build;
+	@override final TranslationBuilder<AppLocale, Translations> build;
 
 	/// Gets current instance managed by [LocaleSettings].
-	_TranslationsEn get translations => LocaleSettings.instance.translationMap[this]!;
+	Translations get translations => LocaleSettings.instance.translationMap[this]!;
 }
 
 /// Method A: Simple
@@ -48,7 +48,7 @@ enum AppLocale with BaseAppLocale<AppLocale, _TranslationsEn> {
 /// Usage:
 /// String a = t.someKey.anotherKey;
 /// String b = t['someKey.anotherKey']; // Only for edge cases!
-_TranslationsEn get t => LocaleSettings.instance.currentTranslations;
+Translations get t => LocaleSettings.instance.currentTranslations;
 
 /// Method B: Advanced
 ///
@@ -65,17 +65,10 @@ _TranslationsEn get t => LocaleSettings.instance.currentTranslations;
 /// final t = Translations.of(context); // Get t variable.
 /// String a = t.someKey.anotherKey; // Use t variable.
 /// String b = t['someKey.anotherKey']; // Only for edge cases!
-class Translations {
-	Translations._(); // no constructor
-
-	static _TranslationsEn of(BuildContext context) => InheritedLocaleData.of<AppLocale, _TranslationsEn>(context).translations;
-}
-
-/// The provider for method B
-class TranslationProvider extends BaseTranslationProvider<AppLocale, _TranslationsEn> {
+class TranslationProvider extends BaseTranslationProvider<AppLocale, Translations> {
 	TranslationProvider({required super.child}) : super(settings: LocaleSettings.instance);
 
-	static InheritedLocaleData<AppLocale, _TranslationsEn> of(BuildContext context) => InheritedLocaleData.of<AppLocale, _TranslationsEn>(context);
+	static InheritedLocaleData<AppLocale, Translations> of(BuildContext context) => InheritedLocaleData.of<AppLocale, Translations>(context);
 }
 
 /// Method B shorthand via [BuildContext] extension method.
@@ -84,11 +77,11 @@ class TranslationProvider extends BaseTranslationProvider<AppLocale, _Translatio
 /// Usage (e.g. in a widget's build method):
 /// context.t.someKey.anotherKey
 extension BuildContextTranslationsExtension on BuildContext {
-	_TranslationsEn get t => TranslationProvider.of(this).translations;
+	Translations get t => TranslationProvider.of(this).translations;
 }
 
 /// Manages all translation instances and the current locale
-class LocaleSettings extends BaseFlutterLocaleSettings<AppLocale, _TranslationsEn> {
+class LocaleSettings extends BaseFlutterLocaleSettings<AppLocale, Translations> {
 	LocaleSettings._() : super(utils: AppLocaleUtils.instance);
 
 	static final instance = LocaleSettings._();
@@ -110,7 +103,7 @@ class LocaleSettings extends BaseFlutterLocaleSettings<AppLocale, _TranslationsE
 }
 
 /// Provides utility functions without any side effects.
-class AppLocaleUtils extends BaseAppLocaleUtils<AppLocale, _TranslationsEn> {
+class AppLocaleUtils extends BaseAppLocaleUtils<AppLocale, Translations> {
 	AppLocaleUtils._() : super(baseLocale: _baseLocale, locales: AppLocale.values);
 
 	static final instance = AppLocaleUtils._();
@@ -133,11 +126,16 @@ enum GenderContext {
 // translations
 
 // Path: <root>
-class _TranslationsEn implements BaseTranslations<AppLocale, _TranslationsEn> {
+class Translations implements BaseTranslations<AppLocale, Translations> {
+	/// Returns the current translations of the given [context].
+	///
+	/// Usage:
+	/// final t = Translations.of(context);
+	static Translations of(BuildContext context) => InheritedLocaleData.of<AppLocale, Translations>(context).translations;
 
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
-	_TranslationsEn.build({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver})
+	Translations.build({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver})
 		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
 		  $meta = TranslationMetadata(
 		    locale: AppLocale.en,
@@ -149,12 +147,12 @@ class _TranslationsEn implements BaseTranslations<AppLocale, _TranslationsEn> {
 	}
 
 	/// Metadata for the translations of <en>.
-	@override final TranslationMetadata<AppLocale, _TranslationsEn> $meta;
+	@override final TranslationMetadata<AppLocale, Translations> $meta;
 
 	/// Access flat map
 	dynamic operator[](String key) => $meta.getTranslation(key);
 
-	late final _TranslationsEn _root = this; // ignore: unused_field
+	late final Translations _root = this; // ignore: unused_field
 
 	// Translations
 	late final _TranslationsGeneralEn general = _TranslationsGeneralEn._(_root);
@@ -181,7 +179,7 @@ class _TranslationsEn implements BaseTranslations<AppLocale, _TranslationsEn> {
 class _TranslationsGeneralEn {
 	_TranslationsGeneralEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get cancel => 'Cancel';
@@ -219,7 +217,7 @@ class _TranslationsGeneralEn {
 class _TranslationsIntroEn {
 	_TranslationsIntroEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get start => 'Start';
@@ -246,7 +244,7 @@ class _TranslationsIntroEn {
 class _TranslationsHomeEn {
 	_TranslationsHomeEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get title => 'Dashboard';
@@ -267,7 +265,7 @@ class _TranslationsHomeEn {
 class _TranslationsFinancialHealthEn {
 	_TranslationsFinancialHealthEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get display => 'Financial health';
@@ -280,7 +278,7 @@ class _TranslationsFinancialHealthEn {
 class _TranslationsStatsEn {
 	_TranslationsStatsEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get title => 'Statistics';
@@ -303,7 +301,7 @@ class _TranslationsStatsEn {
 class _TranslationsIconSelectorEn {
 	_TranslationsIconSelectorEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get name => 'Name:';
@@ -319,7 +317,7 @@ class _TranslationsIconSelectorEn {
 class _TranslationsTransactionEn {
 	_TranslationsTransactionEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
@@ -352,7 +350,7 @@ class _TranslationsTransactionEn {
 class _TranslationsTransferEn {
 	_TranslationsTransferEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get display => 'Transfer';
@@ -368,7 +366,7 @@ class _TranslationsTransferEn {
 class _TranslationsRecurrentTransactionsEn {
 	_TranslationsRecurrentTransactionsEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get title => 'Recurrent transactions';
@@ -381,7 +379,7 @@ class _TranslationsRecurrentTransactionsEn {
 class _TranslationsAccountEn {
 	_TranslationsAccountEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get details => 'Account details';
@@ -406,7 +404,7 @@ class _TranslationsAccountEn {
 class _TranslationsCurrenciesEn {
 	_TranslationsCurrenciesEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get currency_converter => 'Currency converter';
@@ -431,7 +429,7 @@ class _TranslationsCurrenciesEn {
 class _TranslationsTagsEn {
 	_TranslationsTagsEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
@@ -457,7 +455,7 @@ class _TranslationsTagsEn {
 class _TranslationsCategoriesEn {
 	_TranslationsCategoriesEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get unknown => 'Unknown category';
@@ -491,7 +489,7 @@ class _TranslationsCategoriesEn {
 class _TranslationsBudgetsEn {
 	_TranslationsBudgetsEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get title => 'Budgets';
@@ -518,7 +516,7 @@ class _TranslationsBudgetsEn {
 class _TranslationsBackupEn {
 	_TranslationsBackupEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	late final _TranslationsBackupExportEn export = _TranslationsBackupExportEn._(_root);
@@ -530,7 +528,7 @@ class _TranslationsBackupEn {
 class _TranslationsSettingsEn {
 	_TranslationsSettingsEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get title_long => 'Settings and appearance';
@@ -561,7 +559,7 @@ class _TranslationsSettingsEn {
 class _TranslationsMoreEn {
 	_TranslationsMoreEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get title => 'More';
@@ -575,7 +573,7 @@ class _TranslationsMoreEn {
 class _TranslationsLangEn {
 	_TranslationsLangEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get es => 'Spanish';
@@ -586,7 +584,7 @@ class _TranslationsLangEn {
 class _TranslationsGeneralClipboardEn {
 	_TranslationsGeneralClipboardEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String success({required Object x}) => '${x} copiado al portapapeles';
@@ -597,7 +595,7 @@ class _TranslationsGeneralClipboardEn {
 class _TranslationsGeneralTimeEn {
 	_TranslationsGeneralTimeEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get start_date => 'Start date';
@@ -619,7 +617,7 @@ class _TranslationsGeneralTimeEn {
 class _TranslationsGeneralTransactionOrderEn {
 	_TranslationsGeneralTransactionOrderEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get display => 'Order transactions';
@@ -632,7 +630,7 @@ class _TranslationsGeneralTransactionOrderEn {
 class _TranslationsGeneralValidationsEn {
 	_TranslationsGeneralValidationsEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get required => 'Required field';
@@ -645,7 +643,7 @@ class _TranslationsGeneralValidationsEn {
 class _TranslationsFinancialHealthReviewEn {
 	_TranslationsFinancialHealthReviewEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String very_good({required GenderContext context}) {
@@ -703,7 +701,7 @@ class _TranslationsFinancialHealthReviewEn {
 class _TranslationsFinancialHealthMonthsWithoutIncomeEn {
 	_TranslationsFinancialHealthMonthsWithoutIncomeEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get title => 'Survival rate';
@@ -721,7 +719,7 @@ class _TranslationsFinancialHealthMonthsWithoutIncomeEn {
 class _TranslationsFinancialHealthSavingsPercentageEn {
 	_TranslationsFinancialHealthSavingsPercentageEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get title => 'Savings percentage';
@@ -734,7 +732,7 @@ class _TranslationsFinancialHealthSavingsPercentageEn {
 class _TranslationsIconSelectorScopesEn {
 	_TranslationsIconSelectorScopesEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get transport => 'Transport';
@@ -751,7 +749,7 @@ class _TranslationsIconSelectorScopesEn {
 class _TranslationsTransactionNextPaymentsEn {
 	_TranslationsTransactionNextPaymentsEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get accept => 'Accept';
@@ -771,7 +769,7 @@ class _TranslationsTransactionNextPaymentsEn {
 class _TranslationsTransactionListEn {
 	_TranslationsTransactionListEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get empty => 'No transactions found to display here. Add a transaction by clicking the \'+\' button at the bottom';
@@ -784,7 +782,7 @@ class _TranslationsTransactionListEn {
 class _TranslationsTransactionFiltersEn {
 	_TranslationsTransactionFiltersEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get from_value => 'From amount';
@@ -799,7 +797,7 @@ class _TranslationsTransactionFiltersEn {
 class _TranslationsTransactionFormEn {
 	_TranslationsTransactionFormEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	late final _TranslationsTransactionFormValidatorsEn validators = _TranslationsTransactionFormValidatorsEn._(_root);
@@ -816,7 +814,7 @@ class _TranslationsTransactionFormEn {
 class _TranslationsTransactionStatusEn {
 	_TranslationsTransactionStatusEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
@@ -839,7 +837,7 @@ class _TranslationsTransactionStatusEn {
 class _TranslationsTransactionTypesEn {
 	_TranslationsTransactionTypesEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
@@ -864,7 +862,7 @@ class _TranslationsTransactionTypesEn {
 class _TranslationsTransferFormEn {
 	_TranslationsTransferFormEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get from => 'Origin account';
@@ -878,7 +876,7 @@ class _TranslationsTransferFormEn {
 class _TranslationsRecurrentTransactionsDetailsEn {
 	_TranslationsRecurrentTransactionsDetailsEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get title => 'Recurrent transaction';
@@ -892,7 +890,7 @@ class _TranslationsRecurrentTransactionsDetailsEn {
 class _TranslationsAccountTypesEn {
 	_TranslationsAccountTypesEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get title => 'Account type';
@@ -907,7 +905,7 @@ class _TranslationsAccountTypesEn {
 class _TranslationsAccountFormEn {
 	_TranslationsAccountFormEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get name => 'Account name';
@@ -929,7 +927,7 @@ class _TranslationsAccountFormEn {
 class _TranslationsAccountDeleteEn {
 	_TranslationsAccountDeleteEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get warning_header => 'Delete account?';
@@ -941,7 +939,7 @@ class _TranslationsAccountDeleteEn {
 class _TranslationsAccountCloseEn {
 	_TranslationsAccountCloseEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get title => 'Close account';
@@ -957,7 +955,7 @@ class _TranslationsAccountCloseEn {
 class _TranslationsAccountSelectEn {
 	_TranslationsAccountSelectEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get one => 'Select an account';
@@ -969,7 +967,7 @@ class _TranslationsAccountSelectEn {
 class _TranslationsCurrenciesFormEn {
 	_TranslationsCurrenciesFormEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get equal_to_preferred_warn => 'The currency cannot be equal to the user currency';
@@ -984,7 +982,7 @@ class _TranslationsCurrenciesFormEn {
 class _TranslationsTagsFormEn {
 	_TranslationsTagsFormEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get name => 'Tag name';
@@ -995,7 +993,7 @@ class _TranslationsTagsFormEn {
 class _TranslationsCategoriesSelectEn {
 	_TranslationsCategoriesSelectEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get title => 'Select categories';
@@ -1010,7 +1008,7 @@ class _TranslationsCategoriesSelectEn {
 class _TranslationsBudgetsFormEn {
 	_TranslationsBudgetsFormEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get title => 'Add a budget';
@@ -1025,7 +1023,7 @@ class _TranslationsBudgetsFormEn {
 class _TranslationsBudgetsDetailsEn {
 	_TranslationsBudgetsDetailsEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get title => 'Budget Details';
@@ -1040,7 +1038,7 @@ class _TranslationsBudgetsDetailsEn {
 class _TranslationsBackupExportEn {
 	_TranslationsBackupExportEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get title => 'Export your data';
@@ -1059,7 +1057,7 @@ class _TranslationsBackupExportEn {
 class _TranslationsBackupImportEn {
 	_TranslationsBackupImportEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get title => 'Import your data';
@@ -1080,7 +1078,7 @@ class _TranslationsBackupImportEn {
 class _TranslationsBackupAboutEn {
 	_TranslationsBackupAboutEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get title => 'Information about your database';
@@ -1094,7 +1092,7 @@ class _TranslationsBackupAboutEn {
 class _TranslationsMoreDataEn {
 	_TranslationsMoreDataEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get display => 'Data';
@@ -1110,7 +1108,7 @@ class _TranslationsMoreDataEn {
 class _TranslationsMoreAboutUsEn {
 	_TranslationsMoreAboutUsEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get display => 'App information';
@@ -1123,7 +1121,7 @@ class _TranslationsMoreAboutUsEn {
 class _TranslationsMoreHelpUsEn {
 	_TranslationsMoreHelpUsEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get display => 'Help us';
@@ -1146,7 +1144,7 @@ class _TranslationsMoreHelpUsEn {
 class _TranslationsGeneralTimeRangesEn {
 	_TranslationsGeneralTimeRangesEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get display => 'Time range';
@@ -1192,7 +1190,7 @@ class _TranslationsGeneralTimeRangesEn {
 class _TranslationsGeneralTimePeriodicityEn {
 	_TranslationsGeneralTimePeriodicityEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get display => 'Recurrence';
@@ -1214,7 +1212,7 @@ class _TranslationsGeneralTimePeriodicityEn {
 class _TranslationsGeneralTimeCurrentEn {
 	_TranslationsGeneralTimeCurrentEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get monthly => 'This month';
@@ -1229,7 +1227,7 @@ class _TranslationsGeneralTimeCurrentEn {
 class _TranslationsGeneralTimeAllEn {
 	_TranslationsGeneralTimeAllEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get diary => 'Every day';
@@ -1243,7 +1241,7 @@ class _TranslationsGeneralTimeAllEn {
 class _TranslationsFinancialHealthReviewDescrEn {
 	_TranslationsFinancialHealthReviewDescrEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get insufficient_data => 'It looks like we don\'t have enough expenses to calculate your financial health. Add some expenses/incomes in this period to allow us to help you!';
@@ -1258,7 +1256,7 @@ class _TranslationsFinancialHealthReviewDescrEn {
 class _TranslationsFinancialHealthSavingsPercentageTextEn {
 	_TranslationsFinancialHealthSavingsPercentageTextEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String good({required Object value}) => 'Congratulations! You have managed to save <b>${value}%</b> of your income during this period. It seems that you are already an expert, keep up the good work!';
@@ -1271,7 +1269,7 @@ class _TranslationsFinancialHealthSavingsPercentageTextEn {
 class _TranslationsTransactionFormValidatorsEn {
 	_TranslationsTransactionFormValidatorsEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get zero => 'The value of a transaction cannot be equal to zero';
@@ -1285,7 +1283,7 @@ class _TranslationsTransactionFormValidatorsEn {
 class _TranslationsTransferFormCurrencyExchangeSelectorEn {
 	_TranslationsTransferFormCurrencyExchangeSelectorEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get title => 'Edit exchange between currencies';
@@ -1296,7 +1294,7 @@ class _TranslationsTransferFormCurrencyExchangeSelectorEn {
 class _TranslationsBackupImportManualImportEn {
 	_TranslationsBackupImportManualImportEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get title => 'Manual import';
@@ -1328,7 +1326,7 @@ class _TranslationsBackupImportManualImportEn {
 class _TranslationsMoreAboutUsLegalEn {
 	_TranslationsMoreAboutUsLegalEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get display => 'Legal information';
@@ -1341,7 +1339,7 @@ class _TranslationsMoreAboutUsLegalEn {
 class _TranslationsMoreAboutUsProjectEn {
 	_TranslationsMoreAboutUsProjectEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get display => 'Project';
@@ -1354,7 +1352,7 @@ class _TranslationsMoreAboutUsProjectEn {
 class _TranslationsGeneralTimeRangesTypesEn {
 	_TranslationsGeneralTimeRangesTypesEn._(this._root);
 
-	final _TranslationsEn _root; // ignore: unused_field
+	final Translations _root; // ignore: unused_field
 
 	// Translations
 	String get cycle => 'Cycles';
@@ -1365,8 +1363,7 @@ class _TranslationsGeneralTimeRangesTypesEn {
 }
 
 // Path: <root>
-class _TranslationsEs implements _TranslationsEn {
-
+class _TranslationsEs implements Translations {
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
 	_TranslationsEs.build({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver})
@@ -1381,7 +1378,7 @@ class _TranslationsEs implements _TranslationsEn {
 	}
 
 	/// Metadata for the translations of <es>.
-	@override final TranslationMetadata<AppLocale, _TranslationsEn> $meta;
+	@override final TranslationMetadata<AppLocale, Translations> $meta;
 
 	/// Access flat map
 	@override dynamic operator[](String key) => $meta.getTranslation(key);
@@ -2600,7 +2597,7 @@ class _TranslationsGeneralTimeRangesTypesEs implements _TranslationsGeneralTimeR
 /// Flat map(s) containing all translations.
 /// Only for edge cases! For simple maps, use the map function of this library.
 
-extension on _TranslationsEn {
+extension on Translations {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
 			case 'general.cancel': return 'Cancel';
