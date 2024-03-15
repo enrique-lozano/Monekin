@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/categories_list.dart';
 import 'package:monekin/app/tags/tag_list.page.dart';
-import 'package:monekin/app/transactions/form/calculator_modal.dart';
+import 'package:monekin/app/transactions/form/amount_selector.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
@@ -247,10 +247,6 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     if (widget.transactionToEdit != null) {
       fillForm(widget.transactionToEdit!);
     } else {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        displayAmountModal(context);
-      });
-
       AccountService.instance
           .getAccounts(
               predicate: (acc, curr) => AppDB.instance.buildExpr([
@@ -261,6 +257,10 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
           .first
           .then((acc) {
         fromAccount = widget.fromAccount ?? acc[0];
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          displayAmountModal(context);
+        });
 
         if (widget.mode == TransactionFormMode.transfer) {
           toAccount = widget.toAccount ??
@@ -635,6 +635,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
       builder: (context) => AmountSelector(
         title: t.transaction.form.value,
         amountToConvert: valueToNumber ?? 0,
+        currency: fromAccount?.currency,
         onSubmit: (amount) {
           setState(() {
             valueController.text = amount.toString();
