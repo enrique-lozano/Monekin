@@ -134,6 +134,6 @@ class DatePeriodState {
       return defaultFormatting();
     }
 
-    return "";
+    return datePeriod.periodType.titleText(context);
   }
 }
