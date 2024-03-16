@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/app/settings/about_page.dart';
 import 'package:monekin/app/settings/purchases/donate_button.dart';
 import 'package:monekin/app/settings/purchases/in_app_purchase.dart';
 import 'package:monekin/app/settings/widgets/setting_card_item.dart';
@@ -18,34 +19,31 @@ class HelpUsPage extends StatelessWidget {
       appBar: AppBar(title: Text(t.more.help_us.display)),
       body: SingleChildScrollView(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    'assets/resources/appIcon-removebg.png',
-                    height: 80,
+                  const DisplayAppIcon(height: 80),
+                  const SizedBox(height: 18),
+                  Text(
+                    t.more.help_us.thanks,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                    textAlign: TextAlign.center,
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          t.more.help_us.thanks,
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                        Text(t.more.help_us.thanks_long)
-                      ],
-                    ),
+                  const SizedBox(height: 6),
+                  Text(
+                    t.more.help_us.thanks_long,
+                    textAlign: TextAlign.center,
                   )
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

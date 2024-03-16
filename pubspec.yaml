@@ -79,7 +79,7 @@ dev_dependencies:
   freezed: ^2.4.5
 
 flutter_launcher_icons:
-  image_path: 'assets/resources/appIcon-removebg.png'
+  image_path: 'assets/resources/appIcon.png'
   android: true
   ios: false
   windows:
