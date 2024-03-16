@@ -28,7 +28,6 @@ import 'package:monekin/core/presentation/widgets/user_avatar.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/finance_health_service.dart';
-import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/presentation/app_colors.dart';
@@ -152,10 +151,11 @@ class _DashboardPageState extends State<DashboardPage> {
                                             snapshot.data!,
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .titleLarge!
+                                                .titleSmall!
                                                 .copyWith(
-                                                    // fontWeight: FontWeight.bold,
-                                                    ),
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 18,
+                                                ),
                                           );
                                         }),
                                   ],
@@ -167,10 +167,11 @@ class _DashboardPageState extends State<DashboardPage> {
                         ActionChip(
                           label: Text(dateRangeService.getText(context)),
                           backgroundColor:
-                              AppColors.of(context).primaryContainer.darken(),
+                              AppColors.of(context).primaryContainer,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
+                            borderRadius: BorderRadius.circular(8.0),
                             side: BorderSide(
+                              style: BorderStyle.none,
                               color: AppColors.of(context).onPrimary,
                             ),
                           ),
