@@ -50,12 +50,9 @@ class FinanceHealthMainInfo extends StatelessWidget {
         const SizedBox(height: 12),
         Text(
           financeHealthData.getHealthyScoreReviewDescr(context),
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium!
-              .copyWith(fontWeight: FontWeight.w200, fontSize: 13.2),
+          style: Theme.of(context).textTheme.bodySmall!,
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 2),
         // Row(
         //   children: [
         //     Icon(

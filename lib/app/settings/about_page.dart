@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/settings/settings.page.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
+import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/core/utils/open_external_url.dart';
+import 'package:monekin/core/utils/string_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:slang/builder/utils/string_extensions.dart';
+
+import 'widgets/settings_list_separator.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
@@ -40,58 +42,47 @@ class AboutPage extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(16),
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Image.asset(
-                        'assets/resources/appIcon-removebg.png',
-                        height: 80,
-                      ),
-                      const SizedBox(width: 16),
-                      FutureBuilder(
-                          future: PackageInfo.fromPlatform(),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData) {
-                              return const Column(
-                                children: [
-                                  Skeleton(width: 25, height: 16),
-                                  Skeleton(width: 12, height: 12),
-                                ],
-                              );
-                            }
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const DisplayAppIcon(height: 80),
+                  const SizedBox(width: 16),
+                  FutureBuilder(
+                      future: PackageInfo.fromPlatform(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Column(
+                            children: [
+                              Skeleton(width: 25, height: 16),
+                              Skeleton(width: 12, height: 12),
+                            ],
+                          );
+                        }
 
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  snapshot.data!.appName.capitalize(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium,
-                                ),
-                                Text(
-                                  'v${snapshot.data!.version} (${snapshot.data!.buildNumber})',
-                                  style: Theme.of(context).textTheme.labelSmall,
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  t.intro.welcome_subtitle2,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelSmall!
-                                      .copyWith(
-                                          color:
-                                              Theme.of(context).primaryColor),
-                                ),
-                              ],
-                            );
-                          })
-                    ],
-                  ),
-                ),
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              snapshot.data!.appName.capitalize(),
+                              style: Theme.of(context).textTheme.headlineMedium,
+                            ),
+                            Text(
+                              'v${snapshot.data!.version} (${snapshot.data!.buildNumber})',
+                              style: Theme.of(context).textTheme.labelSmall,
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              t.intro.welcome_subtitle2,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelSmall!
+                                  .copyWith(
+                                      color: Theme.of(context).primaryColor),
+                            ),
+                          ],
+                        );
+                      })
+                ],
               ),
             ),
             createListSeparator(context, t.more.about_us.project.display),
@@ -144,6 +135,41 @@ class AboutPage extends StatelessWidget {
               },
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class DisplayAppIcon extends StatelessWidget {
+  const DisplayAppIcon({
+    super.key,
+    required this.height,
+  });
+
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      height: height,
+      decoration: BoxDecoration(
+        border: Border.all(width: 1, color: Colors.white),
+        borderRadius: BorderRadius.circular(12),
+        color: ColorHex.get('0F3375'),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        clipBehavior: Clip.hardEdge,
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: Image.asset(
+            'assets/resources/appIcon.png',
+            fit: BoxFit.fill,
+          ),
         ),
       ),
     );

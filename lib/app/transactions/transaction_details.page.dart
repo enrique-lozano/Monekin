@@ -18,8 +18,8 @@ import 'package:monekin/core/services/view-actions/transaction_view_actions_serv
 import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
+import 'package:monekin/core/utils/string_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
-import 'package:slang/builder/utils/string_extensions.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../core/presentation/app_colors.dart';

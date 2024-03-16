@@ -180,7 +180,7 @@ class MaterialAppContainer extends StatelessWidget {
             ),
           ]);
         },
-        home: introSeen ? TabsPage(key: tabsPageKey) : IntroPage(),
+        home: introSeen ? TabsPage(key: tabsPageKey) : const IntroPage(),
       );
     });
   }

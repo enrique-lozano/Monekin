@@ -35,7 +35,7 @@ dependencies:
 
   # i18n
   intl: ^0.18.0
-  slang: ^3.18.1
+  slang: ^3.30.1
   slang_flutter: ^3.18.0
 
   # Drift
@@ -47,7 +47,7 @@ dependencies:
 
   # Other
   flutter_svg: ^2.0.5
-  permission_handler: ^11.1.0
+  permission_handler: ^11.3.0
   json_annotation: ^4.8.1
   fl_chart: ^0.66.1
   file_picker: ^6.1.1
@@ -79,8 +79,8 @@ dev_dependencies:
   freezed: ^2.4.5
 
 flutter_launcher_icons:
-  image_path: 'assets/resources/appIcon-removebg.png'
-  android: true
+  image_path: 'assets/resources/appIcon.png'
+  android: false
   ios: false
   windows:
     generate: true
