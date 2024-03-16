@@ -80,7 +80,7 @@ dev_dependencies:
 
 flutter_launcher_icons:
   image_path: 'assets/resources/appIcon.png'
-  android: true
+  android: false
   ios: false
   windows:
     generate: true
