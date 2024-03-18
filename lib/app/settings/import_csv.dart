@@ -192,8 +192,6 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                   : row[accountColumn!].toString().toLowerCase())))
             .getSingleOrNull();
 
-        print(account);
-
         final accountID = account != null
             ? account.id
             : defaultAccount != null
