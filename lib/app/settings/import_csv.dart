@@ -154,11 +154,16 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
   }
 
   Future<void> addTransactions() async {
-    if (accountColumn == null || amountColumn == null) {
-      throw Exception('Account and amount columns can not be null');
+    final snackbarDisplayer = ScaffoldMessenger.of(context).showSnackBar;
+
+    if (amountColumn == null) {
+      snackbarDisplayer(
+        const SnackBar(content: Text('Amount column can not be null')),
+      );
+
+      return;
     }
 
-    final snackbarDisplayer = ScaffoldMessenger.of(context).showSnackBar;
     final loadingOverlay = LoadingOverlay.of(context);
 
     onSuccess() {
@@ -178,12 +183,16 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
       final csvRows = csvData!.slice(1).toList();
       final db = AppDB.instance;
 
+      const unknownAccountName = 'Account imported';
+
       for (final row in csvRows) {
         final account = await (db.select(db.accounts)
-              ..where((tbl) => tbl.name
-                  .lower()
-                  .isValue(row[accountColumn!].toString().toLowerCase())))
+              ..where((tbl) => tbl.name.lower().isValue(accountColumn == null
+                  ? unknownAccountName.toLowerCase()
+                  : row[accountColumn!].toString().toLowerCase())))
             .getSingleOrNull();
+
+        print(account);
 
         final accountID = account != null
             ? account.id
@@ -194,7 +203,9 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
         if (account == null && defaultAccount == null) {
           await AccountService.instance.insertAccount(AccountInDB(
               id: accountID,
-              name: row[accountColumn!].toString(),
+              name: accountColumn == null
+                  ? unknownAccountName
+                  : row[accountColumn!].toString(),
               iniValue: 0,
               displayOrder: 10,
               date: DateTime.now(),
@@ -206,19 +217,29 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                   .code));
         }
 
-        final categoryToFind =
-            row[categoryColumn!].toString().toLowerCase().trim();
+        final categoryToFind = categoryColumn == null
+            ? null
+            : row[categoryColumn!].toString().toLowerCase().trim();
 
-        final String categoryID = (await CategoryService.instance
-                    .getCategories(
-                      predicate: (catTable, pCatTable) =>
-                          catTable.name.lower().trim().isValue(categoryToFind) |
-                          pCatTable.name.lower().trim().isValue(categoryToFind),
-                    )
-                    .first)
-                .firstOrNull
-                ?.id ??
-            defaultCategory!.id;
+        final String categoryID = categoryToFind == null
+            ? defaultCategory!.id
+            : (await CategoryService.instance
+                        .getCategories(
+                          limit: 1,
+                          predicate: (catTable, pCatTable) =>
+                              catTable.name
+                                  .lower()
+                                  .trim()
+                                  .isValue(categoryToFind) |
+                              pCatTable.name
+                                  .lower()
+                                  .trim()
+                                  .isValue(categoryToFind),
+                        )
+                        .first)
+                    .firstOrNull
+                    ?.id ??
+                defaultCategory!.id;
 
         await TransactionService.instance.insertTransaction(TransactionInDB(
           id: const Uuid().v4(),
@@ -242,6 +263,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
       loadingOverlay.hide();
       onSuccess();
     } catch (e) {
+      print(e);
       loadingOverlay.hide();
       snackbarDisplayer(SnackBar(content: Text(e.toString())));
     }
