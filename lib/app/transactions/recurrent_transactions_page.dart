@@ -83,11 +83,11 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Gasto total por periodo',
+                              t.recurrent_transactions.total_expense_title,
                               style: Theme.of(context).textTheme.titleMedium!,
                             ),
                             Text(
-                              '* Sin considerar la fecha de inicio y fin de cada recurrencia',
+                              t.recurrent_transactions.total_expense_descr,
                               style: Theme.of(context)
                                   .textTheme
                                   .labelSmall!

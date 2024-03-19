@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 1023 (511 per locale)
+/// Strings: 1031 (515 per locale)
 ///
-/// Built on 2024-03-15 at 14:47 UTC
+/// Built on 2024-03-19 at 22:39 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -207,6 +207,8 @@ class _TranslationsGeneralEn {
 	String get deselect_all => 'Deselect all';
 	String get empty_warn => 'Ops! This is very empty';
 	String get insufficient_data => 'Insufficient data';
+	String get show_more_fields => 'Show more fields';
+	String get show_less_fields => 'Show less fields';
 	late final _TranslationsGeneralClipboardEn clipboard = _TranslationsGeneralClipboardEn._(_root);
 	late final _TranslationsGeneralTimeEn time = _TranslationsGeneralTimeEn._(_root);
 	late final _TranslationsGeneralTransactionOrderEn transaction_order = _TranslationsGeneralTransactionOrderEn._(_root);
@@ -372,6 +374,8 @@ class _TranslationsRecurrentTransactionsEn {
 	String get title => 'Recurrent transactions';
 	String get title_short => 'Rec. transactions';
 	String get empty => 'It looks like you don\'t have any recurring transactions. Create a monthly, yearly, or weekly recurring transaction and it will appear here';
+	String get total_expense_title => 'Total expense per period';
+	String get total_expense_descr => '* Without considering the start and end date of each recurrence';
 	late final _TranslationsRecurrentTransactionsDetailsEn details = _TranslationsRecurrentTransactionsDetailsEn._(_root);
 }
 
@@ -1438,6 +1442,8 @@ class _TranslationsGeneralEs implements _TranslationsGeneralEn {
 	@override String get deselect_all => 'Deseleccionar todo';
 	@override String get empty_warn => 'Ops! Esto esta muy vacio';
 	@override String get insufficient_data => 'Datos insuficientes';
+	@override String get show_more_fields => 'Show more fields';
+	@override String get show_less_fields => 'Show less fields';
 	@override late final _TranslationsGeneralClipboardEs clipboard = _TranslationsGeneralClipboardEs._(_root);
 	@override late final _TranslationsGeneralTimeEs time = _TranslationsGeneralTimeEs._(_root);
 	@override late final _TranslationsGeneralTransactionOrderEs transaction_order = _TranslationsGeneralTransactionOrderEs._(_root);
@@ -1603,6 +1609,8 @@ class _TranslationsRecurrentTransactionsEs implements _TranslationsRecurrentTran
 	@override String get title => 'Movimientos recurrentes';
 	@override String get title_short => 'Mov. recurrentes';
 	@override String get empty => 'Parece que no posees ninguna transacción recurrente. Crea una transacción que se repita mensual, anual o semanalmente y aparecerá aquí';
+	@override String get total_expense_title => 'Gasto total por periodo';
+	@override String get total_expense_descr => '* Sin considerar la fecha de inicio y fin de cada recurrencia';
 	@override late final _TranslationsRecurrentTransactionsDetailsEs details = _TranslationsRecurrentTransactionsDetailsEs._(_root);
 }
 
@@ -2625,6 +2633,8 @@ extension on Translations {
 			case 'general.deselect_all': return 'Deselect all';
 			case 'general.empty_warn': return 'Ops! This is very empty';
 			case 'general.insufficient_data': return 'Insufficient data';
+			case 'general.show_more_fields': return 'Show more fields';
+			case 'general.show_less_fields': return 'Show less fields';
 			case 'general.clipboard.success': return ({required Object x}) => '${x} copiado al portapapeles';
 			case 'general.clipboard.error': return 'Error al copiar';
 			case 'general.time.start_date': return 'Start date';
@@ -2934,6 +2944,8 @@ extension on Translations {
 			case 'recurrent_transactions.title': return 'Recurrent transactions';
 			case 'recurrent_transactions.title_short': return 'Rec. transactions';
 			case 'recurrent_transactions.empty': return 'It looks like you don\'t have any recurring transactions. Create a monthly, yearly, or weekly recurring transaction and it will appear here';
+			case 'recurrent_transactions.total_expense_title': return 'Total expense per period';
+			case 'recurrent_transactions.total_expense_descr': return '* Without considering the start and end date of each recurrence';
 			case 'recurrent_transactions.details.title': return 'Recurrent transaction';
 			case 'recurrent_transactions.details.descr': return 'The next moves for this transaction are shown below. You can accept the first move or skip this move';
 			case 'recurrent_transactions.details.last_payment_info': return 'This movement is the last of the recurring rule, so this rule will be automatically deleted when confirming this action';
@@ -3214,6 +3226,8 @@ extension on _TranslationsEs {
 			case 'general.deselect_all': return 'Deseleccionar todo';
 			case 'general.empty_warn': return 'Ops! Esto esta muy vacio';
 			case 'general.insufficient_data': return 'Datos insuficientes';
+			case 'general.show_more_fields': return 'Show more fields';
+			case 'general.show_less_fields': return 'Show less fields';
 			case 'general.clipboard.success': return ({required Object x}) => '${x} copiado al portapapeles';
 			case 'general.clipboard.error': return 'Error al copiar';
 			case 'general.time.start_date': return 'Fecha de inicio';
@@ -3524,6 +3538,8 @@ extension on _TranslationsEs {
 			case 'recurrent_transactions.title': return 'Movimientos recurrentes';
 			case 'recurrent_transactions.title_short': return 'Mov. recurrentes';
 			case 'recurrent_transactions.empty': return 'Parece que no posees ninguna transacción recurrente. Crea una transacción que se repita mensual, anual o semanalmente y aparecerá aquí';
+			case 'recurrent_transactions.total_expense_title': return 'Gasto total por periodo';
+			case 'recurrent_transactions.total_expense_descr': return '* Sin considerar la fecha de inicio y fin de cada recurrencia';
 			case 'recurrent_transactions.details.title': return 'Transaccion recurrente';
 			case 'recurrent_transactions.details.descr': return 'A continuación se muestran próximos movimientos de esta transacción. Podrás aceptar el primero de ellos o saltar este movimiento';
 			case 'recurrent_transactions.details.last_payment_info': return 'Este movimiento es el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al confirmar esta acción';

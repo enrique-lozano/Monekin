@@ -25,6 +25,8 @@
     "deselect-all": "Deselect all",
     "empty-warn": "Ops! This is very empty",
     "insufficient-data": "Insufficient data",
+    "show-more-fields": "Show more fields",
+    "show-less-fields": "Show less fields",
     "CLIPBOARD": {
       "success": "{{x}} copiado al portapapeles",
       "error": "Error al copiar"
@@ -359,6 +361,8 @@
     "title": "Recurrent transactions",
     "title.short": "Rec. transactions",
     "empty": "It looks like you don't have any recurring transactions. Create a monthly, yearly, or weekly recurring transaction and it will appear here",
+    "total-expense.title": "Total expense per period",
+    "total-expense.descr": "* Without considering the start and end date of each recurrence",
     "DETAILS": {
       "title": "Recurrent transaction",
       "descr": "The next moves for this transaction are shown below. You can accept the first move or skip this move",
