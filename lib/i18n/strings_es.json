@@ -25,6 +25,8 @@
     "deselect-all": "Deseleccionar todo",
     "empty-warn": "Ops! Esto esta muy vacio",
     "insufficient-data": "Datos insuficientes",
+    "show-more-fields": "Show more fields",
+    "show-less-fields": "Show less fields",
     "CLIPBOARD": {
       "success": "{{x}} copiado al portapapeles",
       "error": "Error al copiar"
@@ -363,6 +365,8 @@
     "title": "Movimientos recurrentes",
     "title.short": "Mov. recurrentes",
     "empty": "Parece que no posees ninguna transacción recurrente. Crea una transacción que se repita mensual, anual o semanalmente y aparecerá aquí",
+    "total-expense.title": "Gasto total por periodo",
+    "total-expense.descr": "* Sin considerar la fecha de inicio y fin de cada recurrencia",
     "DETAILS": {
       "title": "Transaccion recurrente",
       "descr": "A continuación se muestran próximos movimientos de esta transacción. Podrás aceptar el primero de ellos o saltar este movimiento",
