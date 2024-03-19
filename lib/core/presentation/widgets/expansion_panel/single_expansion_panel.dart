@@ -1,5 +1,6 @@
-import 'package:monekin/core/presentation/widgets/expansion_panel/expansion_panel_without_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/core/presentation/widgets/expansion_panel/expansion_panel_without_icon.dart';
+import 'package:monekin/i18n/translations.g.dart';
 
 class SingleExpansionPanel extends StatefulWidget {
   const SingleExpansionPanel(
@@ -17,6 +18,8 @@ class _SingleExpansionPanelState extends State<SingleExpansionPanel> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
+
     return ExpansionPanelListWithoutIcon(
       elevation: 0,
       expansionCallback: (panelIndex, isExpanded) {
@@ -35,18 +38,20 @@ class _SingleExpansionPanelState extends State<SingleExpansionPanel> {
                 children: [
                   const Expanded(child: Divider()),
                   TextButton.icon(
-                      onPressed: () {
-                        setState(() {
-                          expanded = !expanded;
-                        });
-                      },
-                      icon: AnimatedRotation(
-                          duration: const Duration(milliseconds: 250),
-                          turns: expanded ? 0.5 : 0,
-                          child: const Icon(Icons.arrow_drop_down)),
-                      label: Text(expanded
-                          ? 'Mostrar menos campos'
-                          : 'Mostrar mas campos')),
+                    onPressed: () {
+                      setState(() {
+                        expanded = !expanded;
+                      });
+                    },
+                    icon: AnimatedRotation(
+                      duration: const Duration(milliseconds: 250),
+                      turns: expanded ? 0.5 : 0,
+                      child: const Icon(Icons.arrow_drop_down),
+                    ),
+                    label: Text(expanded
+                        ? t.general.show_less_fields
+                        : t.general.show_more_fields),
+                  ),
                   const Expanded(child: Divider()),
                 ],
               ),

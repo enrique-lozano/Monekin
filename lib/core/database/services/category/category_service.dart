@@ -84,7 +84,8 @@ class CategoryService {
           final subcategoryToPush = CategoryInDB(
               id: uuid.v4(),
               displayOrder: 10,
-              name: subcategory['names']['es'],
+              name: subcategory['names'][systemLang] ??
+                  subcategory['names']['en'],
               iconId: subcategory['icon'],
               parentCategoryID: categoryToPush.id);
 
