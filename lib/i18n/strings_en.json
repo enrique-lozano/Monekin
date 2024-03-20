@@ -162,7 +162,9 @@
     "no-accounts.descr": "Start using all the magic of Monekin. Create at least one account to start adding transactions",
     "last-transactions": "Last transactions",
     "should-create-account.header": "Oops!",
-    "should-create-account.message": "You must have at least one no-archived account before you can start creating transactions"
+    "should-create-account.message": "You must have at least one no-archived account before you can start creating transactions",
+    "balance-bar-chart.this-period": "This period",
+    "balance-bar-chart.previous-period": "Previous period"
   },
   "FINANCIAL-HEALTH": {
     "display": "Financial health",

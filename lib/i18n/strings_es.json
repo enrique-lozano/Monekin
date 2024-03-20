@@ -163,7 +163,10 @@
     "no-accounts.descr": "Empieza a usar toda la magia de Monekin. Crea al menos una cuenta para empezar a añadir tranacciones",
     "last-transactions": "Últimas transacciones",
     "should-create-account.header": "Ops!",
-    "should-create-account.message": "Debes tener al menos una cuenta no archivada que no sea de ahorros antes de empezar a crear transacciones"
+    "should-create-account.message": "Debes tener al menos una cuenta no archivada que no sea de ahorros antes de empezar a crear transacciones",
+    "balance-bar-chart.this-period": "Este Periodo",
+    "balance-bar-chart.previous-period": "Periodo anterior"
+
   },
   "FINANCIAL-HEALTH": {
     "display": "Salud financiera",

@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 1031 (515 per locale)
+/// Strings: 1035 (517 per locale)
 ///
-/// Built on 2024-03-19 at 22:39 UTC
+/// Built on 2024-03-20 at 15:30 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -261,6 +261,8 @@ class _TranslationsHomeEn {
 	String get last_transactions => 'Last transactions';
 	String get should_create_account_header => 'Oops!';
 	String get should_create_account_message => 'You must have at least one no-archived account before you can start creating transactions';
+	String get balance_bar_chart_this_period => 'This period';
+	String get balance_bar_chart_previous_period => 'Previous period';
 }
 
 // Path: financial_health
@@ -1496,6 +1498,8 @@ class _TranslationsHomeEs implements _TranslationsHomeEn {
 	@override String get last_transactions => 'Últimas transacciones';
 	@override String get should_create_account_header => 'Ops!';
 	@override String get should_create_account_message => 'Debes tener al menos una cuenta no archivada que no sea de ahorros antes de empezar a crear transacciones';
+	@override String get balance_bar_chart_this_period => 'Este Periodo';
+	@override String get balance_bar_chart_previous_period => 'Periodo anterior';
 }
 
 // Path: financial_health
@@ -2749,6 +2753,8 @@ extension on Translations {
 			case 'home.last_transactions': return 'Last transactions';
 			case 'home.should_create_account_header': return 'Oops!';
 			case 'home.should_create_account_message': return 'You must have at least one no-archived account before you can start creating transactions';
+			case 'home.balance_bar_chart_this_period': return 'This period';
+			case 'home.balance_bar_chart_previous_period': return 'Previous period';
 			case 'financial_health.display': return 'Financial health';
 			case 'financial_health.review.very_good': return ({required GenderContext context}) {
 				switch (context) {
@@ -3343,6 +3349,8 @@ extension on _TranslationsEs {
 			case 'home.last_transactions': return 'Últimas transacciones';
 			case 'home.should_create_account_header': return 'Ops!';
 			case 'home.should_create_account_message': return 'Debes tener al menos una cuenta no archivada que no sea de ahorros antes de empezar a crear transacciones';
+			case 'home.balance_bar_chart_this_period': return 'Este Periodo';
+			case 'home.balance_bar_chart_previous_period': return 'Periodo anterior';
 			case 'financial_health.display': return 'Salud financiera';
 			case 'financial_health.review.very_good': return ({required GenderContext context}) {
 				switch (context) {

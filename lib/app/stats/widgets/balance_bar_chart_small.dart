@@ -58,6 +58,7 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
   }
 
   FlTitlesData getTitlesData(Color borderColor) {
+    final t = Translations.of(context);
     return FlTitlesData(
       show: true,
       rightTitles: AxisTitles(
@@ -91,7 +92,7 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
           reservedSize: 24,
           getTitlesWidget: (value, meta) {
             return Text(
-              value == 0 ? 'Periodo anterior' : 'Este periodo',
+              value == 0 ? t.home.balance_bar_chart_previous_period : t.home.balance_bar_chart_this_period,
               style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w300,
