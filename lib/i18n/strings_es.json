@@ -192,11 +192,10 @@
     "monthsWithoutIncome": {
       "title": "Ratio de supervivencia",
       "subtitle": "Dado tu saldo, cantidad de tiempo que podrías pasar sin ingresos",
-      "text": {
-        "zero": "No podrías sobrevivir ni un mes sin ingresos con este ritmo de gastos!",
-        "one": "Apenas podrías sobrevivir aproximadatemente un mes sin ingresos con este ritmo de gastos!",
-        "other": "Podrías sobrevivir aproximadamente <b>{{ n }} meses</b> sin ingresos manteniendo este ritmo de gastos."
-      },
+      "text.zero": "¡No podrías sobrevivir un mes sin ingresos con este ritmo de gastos!",
+      "text.one": "¡Apenas podrías sobrevivir aproximadamente un mes sin ingresos con este ritmo de gastos!",
+      "text.other": "Podrías sobrevivir aproximadamente <b>{{ n }} meses</b> sin ingresos a este ritmo de gasto.",
+      "text.infinite": "Podrías sobrevivir aproximadamente <b>casi toda tu vida</b> sin ingresos a este ritmo de gasto.",
       "suggestion": "Recuerda que es recomendable mantener este ratio siempre por encima de 5 meses como mínimo. Si ves que no tienes un colchon de ahorro suficiente, reduce los gastos no necesarios.",
       "insufficient_data": "Parece que no tenemos gastos suficientes para calcular cuantos meses podrías sobrevivir sin ingresos. Introduce unas pocas transacciones y regresa aquí para consultar tu salud financiera"
     },
