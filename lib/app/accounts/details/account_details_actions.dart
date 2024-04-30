@@ -5,11 +5,12 @@ import 'package:monekin/app/accounts/details/account_details.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/translations.g.dart';
+
+import '../../../core/models/transaction/transaction_type.enum.dart';
 
 abstract class AccountDetailsActions {
   static List<ListTileActionItem> getAccountDetailsActions(

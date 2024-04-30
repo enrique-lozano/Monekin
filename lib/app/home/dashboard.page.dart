@@ -14,7 +14,6 @@ import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
@@ -30,6 +29,7 @@ import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/finance_health_service.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
+import '../../core/models/transaction/transaction_type.enum.dart';
 import '../../core/presentation/app_colors.dart';
 
 class DashboardPage extends StatefulWidget {

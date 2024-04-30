@@ -7,8 +7,7 @@ import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_status.dart';
+import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_field.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
@@ -21,6 +20,7 @@ import 'package:monekin/core/presentation/widgets/transaction_filter/transaction
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
+import '../../../models/transaction/transaction_type.enum.dart';
 import '../../app_colors.dart';
 
 Future<TransactionFilters?> openFilterSheetModal(

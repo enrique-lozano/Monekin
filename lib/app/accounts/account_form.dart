@@ -13,7 +13,6 @@ import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
@@ -26,6 +25,8 @@ import 'package:monekin/core/services/supported_icon/supported_icon_service.dart
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
+
+import '../../core/models/transaction/transaction_type.enum.dart';
 
 class AccountFormPage extends StatefulWidget {
   const AccountFormPage({super.key, this.account});
