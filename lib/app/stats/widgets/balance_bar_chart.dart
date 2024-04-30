@@ -13,7 +13,7 @@ import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/core/utils/color_utils.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 
 import '../../../core/presentation/app_colors.dart';
 

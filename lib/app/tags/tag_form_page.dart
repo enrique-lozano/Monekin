@@ -6,7 +6,7 @@ import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/presentation/widgets/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/utils/color_utils.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';

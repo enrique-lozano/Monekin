@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/presentation/widgets/color_picker.dart';
-import 'package:monekin/core/utils/color_utils.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/presentation/app_colors.dart';

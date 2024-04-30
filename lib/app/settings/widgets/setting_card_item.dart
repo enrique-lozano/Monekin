@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
-import 'package:monekin/core/utils/color_utils.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 
 class SettingCardItem extends StatelessWidget {
   const SettingCardItem({

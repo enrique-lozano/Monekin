@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/utils/color_utils.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 
 final colorOptions = [
   'B71C1C',

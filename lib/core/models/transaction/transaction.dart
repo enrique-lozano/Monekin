@@ -7,7 +7,7 @@ import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
 import 'package:monekin/core/models/transaction/transaction_status.dart';
-import 'package:monekin/core/utils/color_utils.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../presentation/app_colors.dart';
