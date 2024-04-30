@@ -33,6 +33,8 @@ class ImportCSVPage extends StatefulWidget {
   State<ImportCSVPage> createState() => _ImportCSVPageState();
 }
 
+const _rowsToPreview = 5;
+
 class _ImportCSVPageState extends State<ImportCSVPage> {
   int currentStep = 0;
 
@@ -291,6 +293,8 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
+    print("csv data: $csvData");
+
     return Scaffold(
         appBar: AppBar(title: Text(t.backup.import.manual_import.title)),
         body: Stepper(
@@ -408,7 +412,11 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                         .map((item) => DataColumn(label: Text(item)))
                         .toList(),
                     rows: csvData!
-                        .sublist(1, 5)
+                        .sublist(
+                            1,
+                            _rowsToPreview > csvData!.length
+                                ? null
+                                : _rowsToPreview)
                         .map(
                           (csvrow) => DataRow(
                             cells: csvrow
@@ -420,9 +428,9 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                         .toList(),
                   ),
                 ),
-                if (csvData!.length - 4 >= 1)
+                if (csvData!.length - _rowsToPreview >= 1)
                   Text(
-                    '+${csvData!.length - 4} rows',
+                    '+${csvData!.length - _rowsToPreview} rows',
                     textAlign: TextAlign.left,
                     style: Theme.of(context).textTheme.labelSmall,
                   ),
