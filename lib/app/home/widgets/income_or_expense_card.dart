@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 
+import '../../../core/models/transaction/transaction_type.enum.dart';
 import '../../../core/presentation/app_colors.dart';
 
 class IncomeOrExpenseCard extends StatelessWidget {

@@ -4,11 +4,12 @@ import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
+
+import '../models/transaction/transaction_type.enum.dart';
 
 class FinanceHealthAttrScore {
   /// A number between 0 and 100

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/models/transaction/transaction_status.dart';
+import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/status_filter/transaction_status_filter_chip.dart';
 import 'package:monekin/i18n/translations.g.dart';
 

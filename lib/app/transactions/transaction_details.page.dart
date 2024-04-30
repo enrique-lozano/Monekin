@@ -11,7 +11,7 @@ import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_status.dart';
+import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
@@ -22,6 +22,7 @@ import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
+import '../../core/models/transaction/transaction_type.enum.dart';
 import '../../core/presentation/app_colors.dart';
 
 class TransactionDetailAction {

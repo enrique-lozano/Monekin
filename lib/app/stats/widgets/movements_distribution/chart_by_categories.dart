@@ -5,16 +5,18 @@ import 'package:intl/intl.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/category_stats_modal.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_status.dart';
+import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/i18n/translations.g.dart';
+
+import '../../../../core/models/transaction/transaction_type.enum.dart';
 
 class TrDistributionChartItem<T> {
   T category;

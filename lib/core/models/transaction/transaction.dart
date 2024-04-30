@@ -1,111 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
-import 'package:monekin/core/models/transaction/transaction_status.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-import '../../presentation/app_colors.dart';
-
-/// All the possible types of a transaction
-enum TransactionType {
-  income,
-  expense,
-  transfer;
-
-  String displayName(BuildContext context, {bool plural = false}) {
-    if (this == income) {
-      return t.transaction.types.income(n: plural ? 10 : 1);
-    } else if (this == expense) {
-      return t.transaction.types.expense(n: plural ? 10 : 1);
-    } else if (this == transfer) {
-      return t.transaction.types.transfer(n: plural ? 10 : 1);
-    }
-
-    return '';
-  }
-
-  IconData get icon {
-    if (this == income) {
-      return Icons.south_east_rounded;
-    } else if (this == expense) {
-      return Icons.north_east_rounded;
-    }
-
-    return Icons.swap_vert_rounded;
-  }
-
-  /// Get the sign of this transactionType
-  IconData get mathIcon {
-    if (this == income) {
-      return Icons.add;
-    } else if (this == expense) {
-      return Icons.remove;
-    }
-
-    return icon;
-  }
-
-  Color color(BuildContext context) {
-    if (this == income) {
-      return AppColors.of(context).success;
-    } else if (this == expense) {
-      return AppColors.of(context).danger;
-    }
-
-    return AppColors.of(context).brand;
-  }
-}
-
-enum NextPayStatus {
-  /// The payment date has not yet arrived, but it is very close
-  comingSoon,
-
-  /// The payment should have already been made, that is, it was scheduled before the current date
-  delayed,
-
-  /// The payment date has not yet arrived nor is it close
-  planified;
-
-  Color color(BuildContext context) {
-    if (this == planified) {
-      return AppColors.of(context).primary;
-    } else if (this == delayed) {
-      return AppColors.of(context).danger;
-    }
-
-    return Colors.amber;
-  }
-
-  IconData get icon {
-    if (this == planified) {
-      return Icons.event_rounded;
-    } else if (this == delayed) {
-      return Icons.warning_rounded;
-    }
-
-    return Icons.upcoming;
-  }
-
-  String displayDaysToPay(BuildContext context, int days) {
-    final t = Translations.of(context);
-
-    if (days == 0) {
-      return t.general.today;
-    }
-
-    if (this == delayed) {
-      return 'Atrasado por ${days.abs()}d';
-    }
-
-    return 'In ${days.abs()} days';
-  }
-}
+import 'next_pay_status.enum.dart';
+import 'transaction_type.enum.dart';
 
 class MoneyTransaction extends TransactionInDB {
   Category? category;

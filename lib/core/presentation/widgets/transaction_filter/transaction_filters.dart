@@ -3,8 +3,9 @@ import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_status.dart';
+import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
+
+import '../../../models/transaction/transaction_type.enum.dart';
 
 part 'transaction_filters.g.dart';
 

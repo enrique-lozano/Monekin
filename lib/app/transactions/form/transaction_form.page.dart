@@ -15,7 +15,7 @@ import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_status.dart';
+import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/animations/shake/shake_widget.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
@@ -30,6 +30,7 @@ import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
+import '../../../core/models/transaction/transaction_type.enum.dart';
 import '../../../core/presentation/app_colors.dart';
 
 enum TransactionFormMode { transfer, incomeOrExpense }
