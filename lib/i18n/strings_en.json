@@ -188,11 +188,10 @@
     "monthsWithoutIncome": {
       "title": "Survival rate",
       "subtitle": "Given your balance, amount of time you could go without income",
-      "text": {
-        "zero": "You couldn't survive a month without income at this rate of expenses!",
-        "one": "You could barely survive approximately a month without income at this rate of expenses!",
-        "other": "You could survive approximately <b>{{ n }} months</b> without income at this rate of spending."
-      },
+      "text.zero": "You couldn't survive a month without income at this rate of expenses!",
+      "text.one": "You could barely survive approximately a month without income at this rate of expenses!",
+      "text.other": "You could survive approximately <b>{{ n }} months</b> without income at this rate of spending.",
+      "text.infinite": "You could survive approximately <b>all your life</b> without income at this rate of spending.",
       "suggestion": "Remember that it is advisable to always keep this ratio above 5 months at least. If you see that you do not have a sufficient savings cushion, reduce unnecessary expenses.",
       "insufficient_data": "It looks like we don't have enough expenses to calculate how many months you could survive without income. Enter a few transactions and come back here to check your financial health"
     },

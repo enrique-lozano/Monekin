@@ -293,8 +293,6 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    print("csv data: $csvData");
-
     return Scaffold(
         appBar: AppBar(title: Text(t.backup.import.manual_import.title)),
         body: Stepper(
