@@ -16,8 +16,6 @@ class FinanceHealthDetails extends StatefulWidget {
 }
 
 class _FinanceHealthDetailsState extends State<FinanceHealthDetails> {
-  List<bool> _isOpen = [false, false];
-
   Widget buildExpansionPanel({
     required FinanceHealthAttrScore attrScore,
     required int index,

@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 
 class Skeleton extends StatelessWidget {
   const Skeleton(
-      {Key? key,
+      {super.key,
       required this.width,
       required this.height,
-      this.applyMarging = true})
-      : super(key: key);
+      this.applyMarging = true});
 
   final double width, height;
   final bool applyMarging;
