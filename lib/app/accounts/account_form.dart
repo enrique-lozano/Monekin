@@ -8,6 +8,7 @@ import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
@@ -22,10 +23,9 @@ import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
+import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
-import 'package:uuid/uuid.dart';
 
 class AccountFormPage extends StatefulWidget {
   const AccountFormPage({super.key, this.account});
@@ -85,7 +85,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
     }
 
     Account accountToSubmit = Account(
-      id: _accountToEdit?.id ?? const Uuid().v4(),
+      id: _accountToEdit?.id ?? generateUUID(),
       name: _nameController.text,
       displayOrder: 10,
       iniValue: newBalance,

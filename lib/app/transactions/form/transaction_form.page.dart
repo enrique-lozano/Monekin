@@ -8,6 +8,7 @@ import 'package:monekin/app/transactions/form/amount_selector.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
@@ -24,11 +25,10 @@ import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/status_filter/transaction_status_filter.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/tags_filter/tags_filter_container.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
+import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../../core/presentation/app_colors.dart';
 
@@ -180,7 +180,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
               : t.transaction.new_success)));
     }
 
-    final newTrID = widget.transactionToEdit?.id ?? const Uuid().v4();
+    final newTrID = widget.transactionToEdit?.id ?? generateUUID();
 
     TransactionService.instance
         .insertOrUpdateTransaction(

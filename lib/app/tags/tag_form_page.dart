@@ -2,15 +2,15 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/presentation/widgets/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
+import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
-import 'package:uuid/uuid.dart';
 
 class TagFormPage extends StatefulWidget {
   const TagFormPage({super.key, this.tag});
@@ -46,7 +46,7 @@ class _TagFormPageState extends State<TagFormPage> {
     final messager = ScaffoldMessenger.of(context);
 
     final tagToEdit = Tag(
-      id: widget.tag?.id ?? const Uuid().v4(),
+      id: widget.tag?.id ?? generateUUID(),
       name: _nameController.text,
       description: _descrController.text.isEmpty ? null : _descrController.text,
       color: _color,

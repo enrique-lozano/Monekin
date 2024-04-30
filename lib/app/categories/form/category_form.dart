@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/form/category_form_functions.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
@@ -10,11 +11,10 @@ import 'package:monekin/core/presentation/widgets/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
+import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
-import 'package:uuid/uuid.dart';
 
 class CategoryFormPage extends StatefulWidget {
   const CategoryFormPage({super.key, this.categoryUUID});
@@ -109,7 +109,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
 
       await CategoryService.instance
           .insertCategory(CategoryInDB(
-              id: const Uuid().v4(),
+              id: generateUUID(),
               name: _nameController.text,
               iconId: _icon.id,
               displayOrder: 10,
@@ -415,7 +415,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                                 color: _color, onSubmit: (name, icon) {
                               CategoryService.instance.insertCategory(
                                   CategoryInDB(
-                                      id: const Uuid().v4(),
+                                      id: generateUUID(),
                                       displayOrder: 10,
                                       name: name,
                                       iconId: icon.id,
