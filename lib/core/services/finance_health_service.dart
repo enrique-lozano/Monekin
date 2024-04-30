@@ -162,6 +162,29 @@ class FinanceHealthData {
       return t.financial_health.review.very_good(context: genderContext);
     }
   }
+
+  String getMonthsWithoutIncomeResume(BuildContext context) {
+    final t = Translations.of(context);
+
+    if (monthsWithoutIncome == null) {
+      return t.financial_health.months_without_income.insufficient_data;
+    }
+
+    if (monthsWithoutIncome == 0) {
+      return t.financial_health.months_without_income.text_zero;
+    }
+
+    if (monthsWithoutIncome == 1) {
+      return t.financial_health.months_without_income.text_one;
+    }
+
+    if (monthsWithoutIncome! > 999) {
+      return t.financial_health.months_without_income.text_infinite;
+    }
+
+    return t.financial_health.months_without_income
+        .text_other(n: monthsWithoutIncome!.toStringAsFixed(0));
+  }
 }
 
 class FinanceHealthService {
@@ -193,7 +216,7 @@ class FinanceHealthService {
             )
             .map((event) => max(event, 0)),
         (numberOfTransactions, balance, expense, initialMoney) {
-      if (numberOfTransactions < 4) {
+      if (numberOfTransactions < 4 || expense == 0) {
         return null;
       }
 

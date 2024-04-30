@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 1031 (515 per locale)
+/// Strings: 1033 (516 per locale)
 ///
-/// Built on 2024-03-19 at 22:39 UTC
+/// Built on 2024-04-30 at 17:28 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -710,11 +710,10 @@ class _TranslationsFinancialHealthMonthsWithoutIncomeEn {
 	// Translations
 	String get title => 'Survival rate';
 	String get subtitle => 'Given your balance, amount of time you could go without income';
-	String text({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
-		zero: 'You couldn\'t survive a month without income at this rate of expenses!',
-		one: 'You could barely survive approximately a month without income at this rate of expenses!',
-		other: 'You could survive approximately <b>${n} months</b> without income at this rate of spending.',
-	);
+	String get text_zero => 'You couldn\'t survive a month without income at this rate of expenses!';
+	String get text_one => 'You could barely survive approximately a month without income at this rate of expenses!';
+	String text_other({required Object n}) => 'You could survive approximately <b>${n} months</b> without income at this rate of spending.';
+	String get text_infinite => 'You could survive approximately <b>all your life</b> without income at this rate of spending.';
 	String get suggestion => 'Remember that it is advisable to always keep this ratio above 5 months at least. If you see that you do not have a sufficient savings cushion, reduce unnecessary expenses.';
 	String get insufficient_data => 'It looks like we don\'t have enough expenses to calculate how many months you could survive without income. Enter a few transactions and come back here to check your financial health';
 }
@@ -1945,11 +1944,10 @@ class _TranslationsFinancialHealthMonthsWithoutIncomeEs implements _Translations
 	// Translations
 	@override String get title => 'Ratio de supervivencia';
 	@override String get subtitle => 'Dado tu saldo, cantidad de tiempo que podrías pasar sin ingresos';
-	@override String text({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
-		zero: 'No podrías sobrevivir ni un mes sin ingresos con este ritmo de gastos!',
-		one: 'Apenas podrías sobrevivir aproximadatemente un mes sin ingresos con este ritmo de gastos!',
-		other: 'Podrías sobrevivir aproximadamente <b>${n} meses</b> sin ingresos manteniendo este ritmo de gastos.',
-	);
+	@override String get text_zero => '¡No podrías sobrevivir un mes sin ingresos con este ritmo de gastos!';
+	@override String get text_one => '¡Apenas podrías sobrevivir aproximadamente un mes sin ingresos con este ritmo de gastos!';
+	@override String text_other({required Object n}) => 'Podrías sobrevivir aproximadamente <b>${n} meses</b> sin ingresos a este ritmo de gasto.';
+	@override String get text_infinite => 'Podrías sobrevivir aproximadamente <b>casi toda tu vida</b> sin ingresos a este ritmo de gasto.';
 	@override String get suggestion => 'Recuerda que es recomendable mantener este ratio siempre por encima de 5 meses como mínimo. Si ves que no tienes un colchon de ahorro suficiente, reduce los gastos no necesarios.';
 	@override String get insufficient_data => 'Parece que no tenemos gastos suficientes para calcular cuantos meses podrías sobrevivir sin ingresos. Introduce unas pocas transacciones y regresa aquí para consultar tu salud financiera';
 }
@@ -2806,11 +2804,10 @@ extension on Translations {
 			case 'financial_health.review.descr.very_bad': return 'Hmm, your financial health is far below what it should be. Explore the rest of the charts to learn more about your finances';
 			case 'financial_health.months_without_income.title': return 'Survival rate';
 			case 'financial_health.months_without_income.subtitle': return 'Given your balance, amount of time you could go without income';
-			case 'financial_health.months_without_income.text': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
-				zero: 'You couldn\'t survive a month without income at this rate of expenses!',
-				one: 'You could barely survive approximately a month without income at this rate of expenses!',
-				other: 'You could survive approximately <b>${n} months</b> without income at this rate of spending.',
-			);
+			case 'financial_health.months_without_income.text_zero': return 'You couldn\'t survive a month without income at this rate of expenses!';
+			case 'financial_health.months_without_income.text_one': return 'You could barely survive approximately a month without income at this rate of expenses!';
+			case 'financial_health.months_without_income.text_other': return ({required Object n}) => 'You could survive approximately <b>${n} months</b> without income at this rate of spending.';
+			case 'financial_health.months_without_income.text_infinite': return 'You could survive approximately <b>all your life</b> without income at this rate of spending.';
 			case 'financial_health.months_without_income.suggestion': return 'Remember that it is advisable to always keep this ratio above 5 months at least. If you see that you do not have a sufficient savings cushion, reduce unnecessary expenses.';
 			case 'financial_health.months_without_income.insufficient_data': return 'It looks like we don\'t have enough expenses to calculate how many months you could survive without income. Enter a few transactions and come back here to check your financial health';
 			case 'financial_health.savings_percentage.title': return 'Savings percentage';
@@ -3400,11 +3397,10 @@ extension on _TranslationsEs {
 			case 'financial_health.review.descr.very_bad': return 'Mmm, tu salud financera esta muy por debajo de lo que debería. Trata de ver donde esta el problema gracias a los distintos gráficos y estadisticas que te proporcionamos';
 			case 'financial_health.months_without_income.title': return 'Ratio de supervivencia';
 			case 'financial_health.months_without_income.subtitle': return 'Dado tu saldo, cantidad de tiempo que podrías pasar sin ingresos';
-			case 'financial_health.months_without_income.text': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
-				zero: 'No podrías sobrevivir ni un mes sin ingresos con este ritmo de gastos!',
-				one: 'Apenas podrías sobrevivir aproximadatemente un mes sin ingresos con este ritmo de gastos!',
-				other: 'Podrías sobrevivir aproximadamente <b>${n} meses</b> sin ingresos manteniendo este ritmo de gastos.',
-			);
+			case 'financial_health.months_without_income.text_zero': return '¡No podrías sobrevivir un mes sin ingresos con este ritmo de gastos!';
+			case 'financial_health.months_without_income.text_one': return '¡Apenas podrías sobrevivir aproximadamente un mes sin ingresos con este ritmo de gastos!';
+			case 'financial_health.months_without_income.text_other': return ({required Object n}) => 'Podrías sobrevivir aproximadamente <b>${n} meses</b> sin ingresos a este ritmo de gasto.';
+			case 'financial_health.months_without_income.text_infinite': return 'Podrías sobrevivir aproximadamente <b>casi toda tu vida</b> sin ingresos a este ritmo de gasto.';
 			case 'financial_health.months_without_income.suggestion': return 'Recuerda que es recomendable mantener este ratio siempre por encima de 5 meses como mínimo. Si ves que no tienes un colchon de ahorro suficiente, reduce los gastos no necesarios.';
 			case 'financial_health.months_without_income.insufficient_data': return 'Parece que no tenemos gastos suficientes para calcular cuantos meses podrías sobrevivir sin ingresos. Introduce unas pocas transacciones y regresa aquí para consultar tu salud financiera';
 			case 'financial_health.savings_percentage.title': return 'Porcentaje de ahorro';
