@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
@@ -16,11 +17,10 @@ import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/services/view-actions/transaction_view_actions_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
+import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../core/presentation/app_colors.dart';
 
@@ -83,7 +83,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                 child: Text(t.general.continue_text),
                 onPressed: () {
                   final newId = transaction.recurrentInfo.isRecurrent
-                      ? const Uuid().v4()
+                      ? generateUUID()
                       : transaction.id;
 
                   const nullValue = drift.Value(null);

@@ -13,8 +13,8 @@ import 'package:monekin/core/presentation/widgets/date_form_field/date_field.dar
 import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/icon_displayer_widgets.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
+import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../core/models/account/account.dart';
 import '../../core/presentation/widgets/persistent_footer_button.dart';
@@ -92,7 +92,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
     final Budget toPush;
 
     toPush = Budget(
-      id: isEditMode ? widget.budgetToEdit!.id : const Uuid().v4(),
+      id: isEditMode ? widget.budgetToEdit!.id : generateUUID(),
       name: nameController.text,
       limitAmount: valueToNumber!,
       intervalPeriod: intervalPeriod,

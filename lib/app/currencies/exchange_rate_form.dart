@@ -12,8 +12,8 @@ import 'package:monekin/core/presentation/widgets/date_form_field/date_form_fiel
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
+import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
-import 'package:uuid/uuid.dart';
 
 showExchangeRateFormDialog(
   BuildContext context,
@@ -88,7 +88,7 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
 
     ExchangeRateService.instance
         .insertOrUpdateExchangeRate(ExchangeRate(
-            id: widget.idToEdit ?? const Uuid().v4(),
+            id: widget.idToEdit ?? generateUUID(),
             currency: _currency!,
             date: date,
             exchangeRate: double.parse(rateController.text)))

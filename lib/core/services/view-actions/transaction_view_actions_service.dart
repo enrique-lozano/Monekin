@@ -6,7 +6,7 @@ import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
-import 'package:uuid/uuid.dart';
+import 'package:monekin/core/utils/uuid.dart';
 
 import '../../../i18n/translations.g.dart';
 
@@ -122,7 +122,7 @@ class TransactionViewActionService {
       transactionService
           .insertTransaction(
         TransactionInDB(
-          id: const Uuid().v4(),
+          id: generateUUID(),
           accountID: transaction.accountID,
           date: transaction.date,
           value: transaction.value,

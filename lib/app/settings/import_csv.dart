@@ -12,6 +12,7 @@ import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
@@ -19,10 +20,9 @@ import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/widgets/loading_overlay.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
+import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../core/presentation/app_colors.dart';
 
@@ -198,7 +198,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
             ? account.id
             : defaultAccount != null
                 ? defaultAccount!.id
-                : const Uuid().v4();
+                : generateUUID();
 
         if (account == null && defaultAccount == null) {
           await AccountService.instance.insertAccount(AccountInDB(
@@ -242,7 +242,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                 defaultCategory!.id;
 
         await TransactionService.instance.insertTransaction(TransactionInDB(
-          id: const Uuid().v4(),
+          id: generateUUID(),
           date: dateColumn == null
               ? DateTime.now()
               : DateFormat(_dateFormatController.text, 'en_US')
