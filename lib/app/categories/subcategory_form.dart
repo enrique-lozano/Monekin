@@ -1,4 +1,8 @@
+import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
@@ -64,7 +68,15 @@ class _SubcategoryFormDialogState extends State<SubcategoryFormDialog> {
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          InkWell(
+          IconDisplayer.fromCategory(
+            context,
+            category: Category.fromDB(
+                Category.unkown().copyWith(
+                  color: Value(widget.color.toHex()),
+                  iconId: _icon.id,
+                ),
+                null),
+            size: 32,
             onTap: () => showIconSelectorModal(
               context,
               IconSelectorModal(
@@ -77,20 +89,8 @@ class _SubcategoryFormDialogState extends State<SubcategoryFormDialog> {
                 },
               ),
             ),
-            child: Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                    color: _color.withOpacity(0.05),
-                    border: Border.all(
-                      width: 1,
-                      color: _color,
-                    ),
-                    borderRadius: const BorderRadius.all(Radius.circular(6))),
-                child: _icon.display(size: 50, color: _color)),
           ),
-          const SizedBox(
-            width: 20,
-          ),
+          const SizedBox(width: 12),
           Expanded(
             child: Form(
               key: _formKey,
