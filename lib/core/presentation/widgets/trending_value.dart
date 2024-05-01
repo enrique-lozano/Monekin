@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 
 import '../app_colors.dart';
@@ -61,8 +62,7 @@ class TrendingValue extends StatelessWidget {
     return percentage == 0
         ? AppColors.of(context)
             .brand
-            .lighten(
-                Theme.of(context).brightness == Brightness.dark ? 0.45 : 0.25)
+            .lighten(isAppInDarkBrightness(context) ? 0.45 : 0.25)
             .withBlue(225)
         : percentage > 0
             ? AppColors.of(context).success

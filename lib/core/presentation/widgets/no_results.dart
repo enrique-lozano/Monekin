@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:monekin/core/presentation/animations/shake/fade_in.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
+import 'package:monekin/core/presentation/theme.dart';
 
 class NoResults extends StatelessWidget {
   const NoResults({
@@ -23,7 +24,7 @@ class NoResults extends StatelessWidget {
   Widget build(BuildContext context) {
     return FadeIn(
       child: Opacity(
-        opacity: Theme.of(context).brightness == Brightness.light ? 1 : 0.8,
+        opacity: isAppInLightBrightness(context) ? 1 : 0.9,
         child: Center(
           child: Padding(
             padding: padding ??

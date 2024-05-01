@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -119,10 +120,9 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
 
             final accounts = accountsSnapshot.data!;
 
-            final ultraLightBorderColor =
-                Theme.of(context).brightness == Brightness.light
-                    ? Colors.black12
-                    : Colors.white12;
+            final ultraLightBorderColor = isAppInLightBrightness(context)
+                ? Colors.black12
+                : Colors.white12;
 
             if (accounts.isEmpty) {
               return Stack(

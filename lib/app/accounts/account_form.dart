@@ -230,8 +230,6 @@ class _AccountFormPageState extends State<AccountFormPage> {
           return const LinearProgressIndicator();
         }
 
-        final isDark = Theme.of(context).brightness == Brightness.dark;
-
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Form(

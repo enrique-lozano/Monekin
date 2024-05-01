@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:monekin/app/settings/purchases/in_app_purchase.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../../core/presentation/app_colors.dart';
@@ -130,7 +131,7 @@ class _DonateButtonState extends State<DonateButton> {
         child: Card(
           clipBehavior: Clip.hardEdge,
           margin: const EdgeInsets.all(0),
-          color: Theme.of(context).brightness == Brightness.light
+          color: isAppInLightBrightness(context)
               ? AppColors.of(context).danger.lighten(0.8)
               : AppColors.of(context).danger.withOpacity(0.2),
           shape: RoundedRectangleBorder(

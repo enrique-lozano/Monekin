@@ -11,6 +11,7 @@ import 'package:monekin/core/models/date-utils/date_period.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/date-utils/period_type.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 
@@ -286,15 +287,13 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
                     );
                   }
 
-                  final ultraLightBorderColor =
-                      Theme.of(context).brightness == Brightness.light
-                          ? Colors.black12
-                          : Colors.white12;
+                  final ultraLightBorderColor = isAppInLightBrightness(context)
+                      ? Colors.black12
+                      : Colors.white12;
 
-                  final lightBorderColor =
-                      Theme.of(context).brightness == Brightness.light
-                          ? Colors.black26
-                          : Colors.white24;
+                  final lightBorderColor = isAppInLightBrightness(context)
+                      ? Colors.black26
+                      : Colors.white24;
 
                   return BarChart(BarChartData(
                     barTouchData: BarTouchData(
