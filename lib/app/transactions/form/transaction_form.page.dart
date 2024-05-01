@@ -23,6 +23,7 @@ import 'package:monekin/core/presentation/widgets/expansion_panel/single_expansi
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/status_filter/transaction_status_filter.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/tags_filter/tags_filter_container.dart';
 import 'package:monekin/core/utils/constants.dart';
@@ -98,7 +99,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
       onTap: () => onClick(),
       borderRadius: BorderRadius.circular(8),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -356,7 +357,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
           ),
         ),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: 16),
       if (widget.mode == TransactionFormMode.transfer) ...[
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
@@ -557,9 +558,9 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                       buildAmountContainer(context),
                       const SizedBox(height: 18),
                       buildAccoutAndCategorySelectorRow(context),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 16),
                       buildTransactionDateSelector(),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 16),
                       buildTitleField(),
                     ],
                   ),
@@ -601,8 +602,9 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                             horizontal: 16, vertical: 4),
                         child: Column(
                           children: [
+                            const SizedBox(height: 4),
                             buildTransactionDateSelector(),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 16),
                             buildTitleField(),
                           ],
                         ),
@@ -648,14 +650,11 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   }
 
   Widget buildAmountContainer(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(6),
+    return Tappable(
+      borderRadius: 12,
+      bgColor: currentTransactionTypeToAdd.color(context).withOpacity(0.85),
       onTap: () => displayAmountModal(context),
-      child: Container(
-        decoration: BoxDecoration(
-          color: currentTransactionTypeToAdd.color(context).withOpacity(0.85),
-          borderRadius: BorderRadius.circular(6),
-        ),
+      child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -697,10 +696,14 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         DateTimeFormField(
           decoration: InputDecoration(
             suffixIcon: const Icon(Icons.event),
-            labelText: '${t.general.time.date} *',
+            labelText: recurrentRule.isNoRecurrent
+                ? null
+                : '${t.general.time.start_date} *',
           ),
           initialDate: date,
-          dateFormat: DateFormat.yMMMd().add_jm(),
+          dateFormat: date.year == currentYear
+              ? DateFormat.MMMMd().add_jm()
+              : DateFormat.yMMMd().add_jm(),
           validator: (e) => e == null ? t.general.validations.required : null,
           onDateSelected: (DateTime value) {
             setState(() {
@@ -729,8 +732,8 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   Card buildAccoutAndCategorySelectorRow(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: Theme.of(context).dividerColor, width: 1),
-        borderRadius: BorderRadius.circular(6),
+        side: BorderSide(color: Theme.of(context).dividerColor, width: 2),
+        borderRadius: BorderRadius.circular(12),
       ),
       margin: const EdgeInsets.all(0),
       elevation: 0,
