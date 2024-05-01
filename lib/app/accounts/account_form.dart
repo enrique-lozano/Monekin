@@ -17,8 +17,9 @@ import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
-import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/expansion_panel/single_expansion_panel.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_field.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
@@ -289,12 +290,10 @@ class _AccountFormPageState extends State<AccountFormPage> {
                   textInputAction: TextInputAction.next,
                 ),
                 const SizedBox(height: 16),
-                TextField(
-                    controller: TextEditingController(
-                        text: _currency != null
-                            ? _currency?.name
-                            : t.general.unspecified),
-                    readOnly: true,
+                ReadOnlyTextFormField(
+                    displayValue: _currency != null
+                        ? _currency!.name
+                        : t.general.unspecified,
                     onTap: () {
                       if (_currency == null) return;
 
