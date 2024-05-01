@@ -128,7 +128,11 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
             footer: BottomSheetFooter(
                 onSaved: !(_formKey.currentState?.validate() ?? true) ||
                         filtersToReturn.tagsIDs != null &&
-                            filtersToReturn.tagsIDs!.isEmpty
+                            filtersToReturn.tagsIDs!.isEmpty ||
+                        filtersToReturn.accountsIDs != null &&
+                            filtersToReturn.accountsIDs!.isEmpty ||
+                        filtersToReturn.categories != null &&
+                            filtersToReturn.categories!.isEmpty
                     ? null
                     : () => Navigator.of(context).pop(filtersToReturn)),
             body: Stack(
