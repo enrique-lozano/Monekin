@@ -816,6 +816,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                               icon: Icons.question_mark_rounded,
                               mainColor: AppColors.of(context).primary,
                               size: 24,
+                              borderRadius: 99999,
                             ),
                       onClick: () => selectCategory(),
                     ),

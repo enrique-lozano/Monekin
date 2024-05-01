@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/chart_by_categories.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
@@ -10,7 +11,6 @@ import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 class SubcategoryModalItem {
@@ -158,9 +158,13 @@ class CategoryStatsModal extends StatelessWidget {
                   final subcategoryData = subcategories[index];
 
                   return ListTile(
-                    leading: IconDisplayer(
-                      supportedIcon: subcategoryData.icon,
-                      mainColor: ColorHex.get(categoryData.category.color),
+                    leading: IconDisplayer.fromCategory(
+                      context,
+                      category: Category.fromDB(
+                        categoryData.category
+                            .copyWith(iconId: subcategoryData.icon.id),
+                        categoryData.category,
+                      ),
                     ),
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

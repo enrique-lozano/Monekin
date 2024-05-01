@@ -40,7 +40,7 @@ class IconDisplayer extends StatelessWidget {
     required Category category,
     double size = 22,
     double? padding,
-    double borderRadius = 12,
+    double borderRadius = 99999,
     bool isOutline = false,
     IconDisplayMode displayMode = IconDisplayMode.decoratedBox,
     void Function()? onDoubleTap,

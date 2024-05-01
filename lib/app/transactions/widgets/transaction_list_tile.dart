@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:monekin/app/transactions/transaction_details.page.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
-import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -11,7 +10,6 @@ import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/view-actions/transaction_view_actions_service.dart';
 
-import '../../../core/models/transaction/transaction_type.enum.dart';
 import '../../../core/presentation/app_colors.dart';
 
 class TransactionListTile extends StatelessWidget {
@@ -211,19 +209,7 @@ class TransactionListTile extends StatelessWidget {
       ),
       leading: Hero(
         tag: heroTag ?? UniqueKey(),
-        child: transaction.isIncomeOrExpense
-            ? IconDisplayer.fromCategory(
-                context,
-                category: transaction.category!,
-                size: 28,
-                padding: 6,
-              )
-            : IconDisplayer(
-                icon: TransactionType.transfer.icon,
-                mainColor: TransactionType.transfer.color(context),
-                size: 28,
-                padding: 6,
-              ),
+        child: transaction.getDisplayIcon(context, size: 28, padding: 6),
       ),
       onTap: () {
         RouteUtils.pushRoute(
