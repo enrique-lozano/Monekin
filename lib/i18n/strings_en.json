@@ -226,8 +226,9 @@
   "ICON-SELECTOR": {
     "name": "Name:",
     "icon": "Icon",
-    "color": "Colour",
+    "color": "Color",
     "select-icon": "Select an icon",
+    "select-color": "Select a color",
     "select-account-icon": "Identify your account",
     "select-category-icon": "Identify your category",
     "SCOPES": {

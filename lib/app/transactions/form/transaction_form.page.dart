@@ -809,18 +809,12 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                     child: selector(
                       title: t.general.category,
                       inputValue: selectedCategory?.name,
-                      icon: selectedCategory != null
-                          ? IconDisplayer.fromCategory(
-                              context,
-                              category: selectedCategory!,
-                              size: 24,
-                            )
-                          : IconDisplayer(
-                              icon: Icons.question_mark_rounded,
-                              mainColor: AppColors.of(context).primary,
-                              size: 24,
-                              borderRadius: 99999,
-                            ),
+                      icon: IconDisplayer.fromCategory(
+                        context,
+                        category: selectedCategory ??
+                            Category.fromDB(Category.unkown(), null),
+                        size: 24,
+                      ),
                       onClick: () => selectCategory(),
                     ),
                   ),

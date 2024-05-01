@@ -480,8 +480,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       map['description'] = Variable<String>(description);
     }
     {
-      final converter = Accounts.$convertertype;
-      map['type'] = Variable<String>(converter.toSql(type));
+      map['type'] = Variable<String>(Accounts.$convertertype.toSql(type));
     }
     map['iconId'] = Variable<String>(iconId);
     map['displayOrder'] = Variable<int>(displayOrder);
@@ -776,9 +775,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
       map['description'] = Variable<String>(description.value);
     }
     if (type.present) {
-      final converter = Accounts.$convertertype;
-
-      map['type'] = Variable<String>(converter.toSql(type.value));
+      map['type'] = Variable<String>(Accounts.$convertertype.toSql(type.value));
     }
     if (iconId.present) {
       map['iconId'] = Variable<String>(iconId.value);
@@ -1012,8 +1009,7 @@ class CategoryInDB extends DataClass implements Insertable<CategoryInDB> {
     }
     map['displayOrder'] = Variable<int>(displayOrder);
     if (!nullToAbsent || type != null) {
-      final converter = Categories.$convertertypen;
-      map['type'] = Variable<String>(converter.toSql(type));
+      map['type'] = Variable<String>(Categories.$convertertypen.toSql(type));
     }
     if (!nullToAbsent || parentCategoryID != null) {
       map['parentCategoryID'] = Variable<String>(parentCategoryID);
@@ -1208,9 +1204,8 @@ class CategoriesCompanion extends UpdateCompanion<CategoryInDB> {
       map['displayOrder'] = Variable<int>(displayOrder.value);
     }
     if (type.present) {
-      final converter = Categories.$convertertypen;
-
-      map['type'] = Variable<String>(converter.toSql(type.value));
+      map['type'] =
+          Variable<String>(Categories.$convertertypen.toSql(type.value));
     }
     if (parentCategoryID.present) {
       map['parentCategoryID'] = Variable<String>(parentCategoryID.value);
@@ -1584,8 +1579,8 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       map['notes'] = Variable<String>(notes);
     }
     if (!nullToAbsent || status != null) {
-      final converter = Transactions.$converterstatusn;
-      map['status'] = Variable<String>(converter.toSql(status));
+      map['status'] =
+          Variable<String>(Transactions.$converterstatusn.toSql(status));
     }
     if (!nullToAbsent || categoryID != null) {
       map['categoryID'] = Variable<String>(categoryID);
@@ -1598,8 +1593,8 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
     }
     map['isHidden'] = Variable<bool>(isHidden);
     if (!nullToAbsent || intervalPeriod != null) {
-      final converter = Transactions.$converterintervalPeriodn;
-      map['intervalPeriod'] = Variable<String>(converter.toSql(intervalPeriod));
+      map['intervalPeriod'] = Variable<String>(
+          Transactions.$converterintervalPeriodn.toSql(intervalPeriod));
     }
     if (!nullToAbsent || intervalEach != null) {
       map['intervalEach'] = Variable<int>(intervalEach);
@@ -1954,9 +1949,8 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
       map['notes'] = Variable<String>(notes.value);
     }
     if (status.present) {
-      final converter = Transactions.$converterstatusn;
-
-      map['status'] = Variable<String>(converter.toSql(status.value));
+      map['status'] =
+          Variable<String>(Transactions.$converterstatusn.toSql(status.value));
     }
     if (categoryID.present) {
       map['categoryID'] = Variable<String>(categoryID.value);
@@ -1971,10 +1965,8 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
       map['isHidden'] = Variable<bool>(isHidden.value);
     }
     if (intervalPeriod.present) {
-      final converter = Transactions.$converterintervalPeriodn;
-
-      map['intervalPeriod'] =
-          Variable<String>(converter.toSql(intervalPeriod.value));
+      map['intervalPeriod'] = Variable<String>(
+          Transactions.$converterintervalPeriodn.toSql(intervalPeriod.value));
     }
     if (intervalEach.present) {
       map['intervalEach'] = Variable<int>(intervalEach.value);
@@ -2964,8 +2956,8 @@ class BudgetInDB extends DataClass implements Insertable<BudgetInDB> {
     map['name'] = Variable<String>(name);
     map['limitAmount'] = Variable<double>(limitAmount);
     if (!nullToAbsent || intervalPeriod != null) {
-      final converter = Budgets.$converterintervalPeriodn;
-      map['intervalPeriod'] = Variable<String>(converter.toSql(intervalPeriod));
+      map['intervalPeriod'] = Variable<String>(
+          Budgets.$converterintervalPeriodn.toSql(intervalPeriod));
     }
     if (!nullToAbsent || startDate != null) {
       map['startDate'] = Variable<DateTime>(startDate);
@@ -3144,10 +3136,8 @@ class BudgetsCompanion extends UpdateCompanion<BudgetInDB> {
       map['limitAmount'] = Variable<double>(limitAmount.value);
     }
     if (intervalPeriod.present) {
-      final converter = Budgets.$converterintervalPeriodn;
-
-      map['intervalPeriod'] =
-          Variable<String>(converter.toSql(intervalPeriod.value));
+      map['intervalPeriod'] = Variable<String>(
+          Budgets.$converterintervalPeriodn.toSql(intervalPeriod.value));
     }
     if (startDate.present) {
       map['startDate'] = Variable<DateTime>(startDate.value);
@@ -3868,8 +3858,8 @@ class UserSetting extends DataClass implements Insertable<UserSetting> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     {
-      final converter = UserSettings.$convertersettingKey;
-      map['settingKey'] = Variable<String>(converter.toSql(settingKey));
+      map['settingKey'] =
+          Variable<String>(UserSettings.$convertersettingKey.toSql(settingKey));
     }
     if (!nullToAbsent || settingValue != null) {
       map['settingValue'] = Variable<String>(settingValue);
@@ -3973,9 +3963,8 @@ class UserSettingsCompanion extends UpdateCompanion<UserSetting> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (settingKey.present) {
-      final converter = UserSettings.$convertersettingKey;
-
-      map['settingKey'] = Variable<String>(converter.toSql(settingKey.value));
+      map['settingKey'] = Variable<String>(
+          UserSettings.$convertersettingKey.toSql(settingKey.value));
     }
     if (settingValue.present) {
       map['settingValue'] = Variable<String>(settingValue.value);
@@ -4072,8 +4061,8 @@ class AppDataData extends DataClass implements Insertable<AppDataData> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     {
-      final converter = AppData.$converterappDataKey;
-      map['appDataKey'] = Variable<String>(converter.toSql(appDataKey));
+      map['appDataKey'] =
+          Variable<String>(AppData.$converterappDataKey.toSql(appDataKey));
     }
     if (!nullToAbsent || appDataValue != null) {
       map['appDataValue'] = Variable<String>(appDataValue);
@@ -4177,9 +4166,8 @@ class AppDataCompanion extends UpdateCompanion<AppDataData> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     if (appDataKey.present) {
-      final converter = AppData.$converterappDataKey;
-
-      map['appDataKey'] = Variable<String>(converter.toSql(appDataKey.value));
+      map['appDataKey'] = Variable<String>(
+          AppData.$converterappDataKey.toSql(appDataKey.value));
     }
     if (appDataValue.present) {
       map['appDataValue'] = Variable<String>(appDataValue.value);
@@ -4266,6 +4254,7 @@ abstract class _$AppDB extends GeneratedDatabase {
           description: row.readNullable<String>('description'),
           iban: row.readNullable<String>('iban'),
           swift: row.readNullable<String>('swift'),
+          color: row.readNullable<String>('color'),
         ));
   }
 

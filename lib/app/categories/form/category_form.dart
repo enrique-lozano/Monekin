@@ -1,16 +1,19 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/form/category_form_functions.dart';
+import 'package:monekin/app/categories/form/icon_and_color_selector.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
-import 'package:monekin/core/presentation/widgets/color_picker.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
+import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
+import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
@@ -33,9 +36,8 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
 
   final TextEditingController _nameController = TextEditingController();
 
-  SupportedIcon _icon = SupportedIconService.instance.defaultSupportedIcon;
-
-  String _color = '000000';
+  SupportedIcon _icon = Category.unkown().icon;
+  String _color = defaultColorPickerOptions.randomItem();
   CategoryType _type = CategoryType.E;
 
   @override
@@ -211,59 +213,45 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                IconDisplayer(
-                                  mainColor: ColorHex.get(_color).lighten(
-                                      Theme.of(context).brightness ==
-                                              Brightness.dark
-                                          ? 0.8
-                                          : 0),
-                                  secondaryColor: ColorHex.get(_color).lighten(
-                                      Theme.of(context).brightness ==
-                                              Brightness.dark
-                                          ? 0
-                                          : 0.8),
-                                  supportedIcon: _icon,
-                                  size: 48,
-                                  isOutline: true,
-                                  outlineWidth: 1,
-                                  padding: 6,
-                                  borderRadius: 4,
-                                  onTap: () {
-                                    showIconSelectorModal(
-                                      context,
-                                      IconSelectorModal(
-                                        preselectedIconID: _icon.id,
-                                        subtitle: t
-                                            .icon_selector.select_category_icon,
-                                        onIconSelected: (selectedIcon) {
-                                          setState(() {
-                                            _icon = selectedIcon;
-                                          });
-                                        },
-                                      ),
-                                    );
-                                  },
+                            IconAndColorSelector(
+                              iconSelectorModalSubtitle:
+                                  t.icon_selector.select_category_icon,
+                              iconDisplayer: IconDisplayer.fromCategory(
+                                context,
+                                category: Category.fromDB(
+                                  Category.unkown().copyWith(
+                                      iconId: _icon.id,
+                                      color: drift.Value(_color)),
+                                  null,
                                 ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: TextFormField(
-                                    controller: _nameController,
-                                    maxLength: maxLabelLenghtForDisplayNames,
-                                    decoration: InputDecoration(
-                                      labelText: '${t.categories.name} *',
-                                      hintText: 'Ex.: Food',
-                                    ),
-                                    validator: (value) =>
-                                        fieldValidator(value, isRequired: true),
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    textInputAction: TextInputAction.next,
-                                  ),
-                                )
-                              ],
+                                isOutline: true,
+                                size: 48,
+                                padding: 6,
+                              ),
+                              onDataChange: ((data) {
+                                setState(() {
+                                  _icon = data.icon;
+                                  _color = data.color.toHex();
+                                });
+                              }),
+                              data: (
+                                color: ColorHex.get(_color),
+                                icon: _icon,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            TextFormField(
+                              controller: _nameController,
+                              maxLength: maxLabelLenghtForDisplayNames,
+                              decoration: InputDecoration(
+                                labelText: '${t.categories.name} *',
+                                hintText: 'Ex.: Food',
+                              ),
+                              validator: (value) =>
+                                  fieldValidator(value, isRequired: true),
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              textInputAction: TextInputAction.next,
                             ),
                             const SizedBox(height: 14),
                             DropdownButtonFormField<CategoryType>(
@@ -293,22 +281,11 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                                       });
                                     },
                             ),
-                            const SizedBox(height: 24),
-                            Text(t.icon_selector.color)
+                            const SizedBox(height: 16),
                           ],
                         ),
                       ),
                     ),
-                    ColorPicker(
-                      colorOptions: colorOptions,
-                      selectedColor: _color,
-                      onColorSelected: (selectedColor) {
-                        setState(() {
-                          _color = selectedColor;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 6),
                     if (widget.categoryUUID != null) ...[
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -427,5 +404,80 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                   ],
                 ),
               ));
+  }
+
+  Container buildIconAndColorSelector(BuildContext context, Translations t) {
+    return Container(
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        color: AppColors.of(context).inputFill,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+            child: Builder(builder: (context) {
+              final isDark = Theme.of(context).brightness == Brightness.dark;
+
+              return IconDisplayer(
+                supportedIcon: _icon,
+                size: 36,
+                isOutline: true,
+                outlineWidth: 1.5,
+                mainColor: (isDark
+                        ? AppColors.of(context).onPrimary
+                        : AppColors.of(context).primary)
+                    .lighten(isDark ? 0.82 : 0),
+                secondaryColor: (isDark
+                        ? AppColors.of(context).onPrimary
+                        : AppColors.of(context).primary)
+                    .lighten(isDark ? 0 : 0.82),
+                displayMode: IconDisplayMode.polygon,
+              );
+            }),
+          ),
+          Flexible(
+            child: Column(
+              children: [
+                Tappable(
+                  onTap: () {
+                    showIconSelectorModal(
+                      context,
+                      IconSelectorModal(
+                        preselectedIconID: _icon.id,
+                        subtitle: t.icon_selector.select_account_icon,
+                        onIconSelected: (selectedIcon) {
+                          setState(() {
+                            _icon = selectedIcon;
+                          });
+                        },
+                      ),
+                    );
+                  },
+                  bgColor: AppColors.of(context).inputFill,
+                  child: ListTile(
+                    title: Text("Icon"),
+                    trailing: Icon(Icons.arrow_forward_ios_rounded, size: 12),
+                  ),
+                ),
+                Divider(color: AppColors.of(context).inputFill.darken()),
+                Tappable(
+                  onTap: () => true,
+                  bgColor: AppColors.of(context).inputFill,
+                  child: ListTile(
+                    title: Text("Icon"),
+                    trailing: Icon(
+                      Icons.circle,
+                      color: AppColors.of(context).primary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

@@ -71,11 +71,21 @@ class Category extends CategoryInDB {
 
   static Category fromDB(CategoryInDB cat, CategoryInDB? parentCategory) =>
       Category(
-          id: cat.id,
-          displayOrder: cat.displayOrder,
-          name: cat.name,
-          iconId: cat.iconId,
-          parentCategory: parentCategory,
-          color: cat.color,
-          type: cat.type);
+        id: cat.id,
+        displayOrder: cat.displayOrder,
+        name: cat.name,
+        iconId: cat.iconId,
+        parentCategory: parentCategory,
+        color: cat.color,
+        type: cat.type,
+      );
+
+  static Category unkown() => Category(
+        id: 'unknown-category',
+        displayOrder: 1000,
+        iconId: SupportedIconService.instance.defaultSupportedIcon.id,
+        name: 'Unknown Category',
+        type: CategoryType.B,
+        color: '737373',
+      );
 }

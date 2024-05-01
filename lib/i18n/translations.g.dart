@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 1033 (516 per locale)
+/// Strings: 1035 (517 per locale)
 ///
-/// Built on 2024-04-30 at 17:28 UTC
+/// Built on 2024-05-01 at 14:05 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -308,8 +308,9 @@ class _TranslationsIconSelectorEn {
 	// Translations
 	String get name => 'Name:';
 	String get icon => 'Icon';
-	String get color => 'Colour';
+	String get color => 'Color';
 	String get select_icon => 'Select an icon';
+	String get select_color => 'Select a color';
 	String get select_account_icon => 'Identify your account';
 	String get select_category_icon => 'Identify your category';
 	late final _TranslationsIconSelectorScopesEn scopes = _TranslationsIconSelectorScopesEn._(_root);
@@ -1544,6 +1545,7 @@ class _TranslationsIconSelectorEs implements _TranslationsIconSelectorEn {
 	@override String get icon => 'Icono';
 	@override String get color => 'Color';
 	@override String get select_icon => 'Selecciona un icono';
+	@override String get select_color => 'Selecciona un color';
 	@override String get select_account_icon => 'Identifica tu cuenta';
 	@override String get select_category_icon => 'Identifica tu categoría';
 	@override late final _TranslationsIconSelectorScopesEs scopes = _TranslationsIconSelectorScopesEs._(_root);
@@ -2833,8 +2835,9 @@ extension on Translations {
 			case 'stats.finance_health_breakdown': return 'Breakdown';
 			case 'icon_selector.name': return 'Name:';
 			case 'icon_selector.icon': return 'Icon';
-			case 'icon_selector.color': return 'Colour';
+			case 'icon_selector.color': return 'Color';
 			case 'icon_selector.select_icon': return 'Select an icon';
+			case 'icon_selector.select_color': return 'Select a color';
 			case 'icon_selector.select_account_icon': return 'Identify your account';
 			case 'icon_selector.select_category_icon': return 'Identify your category';
 			case 'icon_selector.scopes.transport': return 'Transport';
@@ -3428,6 +3431,7 @@ extension on _TranslationsEs {
 			case 'icon_selector.icon': return 'Icono';
 			case 'icon_selector.color': return 'Color';
 			case 'icon_selector.select_icon': return 'Selecciona un icono';
+			case 'icon_selector.select_color': return 'Selecciona un color';
 			case 'icon_selector.select_account_icon': return 'Identifica tu cuenta';
 			case 'icon_selector.select_category_icon': return 'Identifica tu categoría';
 			case 'icon_selector.scopes.transport': return 'Transporte';
