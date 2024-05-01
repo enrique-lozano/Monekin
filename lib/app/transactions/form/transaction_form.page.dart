@@ -18,8 +18,9 @@ import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/animations/shake/shake_widget.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
-import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/expansion_panel/single_expansion_panel.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_field.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
@@ -338,10 +339,8 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     return [
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-        child: TextField(
-          controller:
-              TextEditingController(text: recurrentRule.formText(context)),
-          readOnly: true,
+        child: ReadOnlyTextFormField(
+          displayValue: recurrentRule.formText(context),
           onTap: () {
             showIntervalSelectoHelpDialog(context,
                 selectedRecurrentRule: recurrentRule,

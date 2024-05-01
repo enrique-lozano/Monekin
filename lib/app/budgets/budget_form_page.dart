@@ -9,8 +9,8 @@ import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
-import 'package:monekin/core/presentation/widgets/date_form_field/date_field.dart';
-import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/icon_displayer_widgets.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
@@ -47,28 +47,6 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
 
   DateTime startDate = DateTime.now();
   DateTime? endDate;
-
-  Widget selector({
-    required String title,
-    required String? inputValue,
-    required Function onClick,
-  }) {
-    return TextFormField(
-        controller: TextEditingController(text: inputValue ?? ''),
-        readOnly: true,
-        onTap: () => onClick(),
-        validator: (value) {
-          if (inputValue == null) {
-            return 'Please, specify at least one item here';
-          }
-
-          return null;
-        },
-        decoration: InputDecoration(
-          labelText: title,
-          suffixIcon: const Icon(Icons.arrow_drop_down),
-        ));
-  }
 
   submitForm() {
     final t = Translations.of(context);
