@@ -9,11 +9,8 @@ import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
-import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
@@ -404,80 +401,5 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                   ],
                 ),
               ));
-  }
-
-  Container buildIconAndColorSelector(BuildContext context, Translations t) {
-    return Container(
-      clipBehavior: Clip.hardEdge,
-      decoration: BoxDecoration(
-        color: AppColors.of(context).inputFill,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-            child: Builder(builder: (context) {
-              final isDark = Theme.of(context).brightness == Brightness.dark;
-
-              return IconDisplayer(
-                supportedIcon: _icon,
-                size: 36,
-                isOutline: true,
-                outlineWidth: 1.5,
-                mainColor: (isDark
-                        ? AppColors.of(context).onPrimary
-                        : AppColors.of(context).primary)
-                    .lighten(isDark ? 0.82 : 0),
-                secondaryColor: (isDark
-                        ? AppColors.of(context).onPrimary
-                        : AppColors.of(context).primary)
-                    .lighten(isDark ? 0 : 0.82),
-                displayMode: IconDisplayMode.polygon,
-              );
-            }),
-          ),
-          Flexible(
-            child: Column(
-              children: [
-                Tappable(
-                  onTap: () {
-                    showIconSelectorModal(
-                      context,
-                      IconSelectorModal(
-                        preselectedIconID: _icon.id,
-                        subtitle: t.icon_selector.select_account_icon,
-                        onIconSelected: (selectedIcon) {
-                          setState(() {
-                            _icon = selectedIcon;
-                          });
-                        },
-                      ),
-                    );
-                  },
-                  bgColor: AppColors.of(context).inputFill,
-                  child: ListTile(
-                    title: Text("Icon"),
-                    trailing: Icon(Icons.arrow_forward_ios_rounded, size: 12),
-                  ),
-                ),
-                Divider(color: AppColors.of(context).inputFill.darken()),
-                Tappable(
-                  onTap: () => true,
-                  bgColor: AppColors.of(context).inputFill,
-                  child: ListTile(
-                    title: Text("Icon"),
-                    trailing: Icon(
-                      Icons.circle,
-                      color: AppColors.of(context).primary,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
   }
 }
