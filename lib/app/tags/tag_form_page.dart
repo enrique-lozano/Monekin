@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/tags/tag.dart';
-import 'package:monekin/core/presentation/widgets/color_picker.dart';
+import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
+import 'package:monekin/core/presentation/widgets/color_picker/color_picker_modal.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/utils/constants.dart';
@@ -39,7 +41,7 @@ class _TagFormPageState extends State<TagFormPage> {
     _descrController.value =
         TextEditingValue(text: widget.tag?.description ?? '');
 
-    _color = widget.tag?.color ?? '000000';
+    _color = widget.tag?.color ?? defaultColorPickerOptions.randomItem();
   }
 
   submitForm() async {
@@ -138,63 +140,71 @@ class _TagFormPageState extends State<TagFormPage> {
         )
       ],
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(Tag.icon, color: _colorObj, size: 48),
-                        const SizedBox(width: 20),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _nameController,
-                            maxLength: maxLabelLenghtForDisplayNames,
-                            decoration: InputDecoration(
-                              labelText: '${t.tags.form.name} *',
-                              hintText: 'Ex.: Food',
-                            ),
-                            validator: (value) =>
-                                fieldValidator(value, isRequired: true),
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            textInputAction: TextInputAction.next,
+            Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(Tag.icon, color: _colorObj, size: 48),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: TextFormField(
+                          controller: _nameController,
+                          maxLength: maxLabelLenghtForDisplayNames,
+                          decoration: InputDecoration(
+                            labelText: '${t.tags.form.name} *',
+                            hintText: 'Ex.: Food',
                           ),
-                        )
-                      ],
+                          validator: (value) =>
+                              fieldValidator(value, isRequired: true),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          textInputAction: TextInputAction.next,
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      hintText: t.icon_selector.color,
+                      suffixIcon: Icon(Icons.circle),
+                      suffixIconColor: ColorHex.get(_color),
                     ),
-                    const SizedBox(height: 12),
-                    TextFormField(
-                      controller: _descrController,
-                      maxLines: 2,
-                      decoration: InputDecoration(
-                        labelText: t.tags.form.description,
-                        hintText: 'Ex.: Food',
-                        alignLabelWithHint: true,
+                    textInputAction: TextInputAction.next,
+                    onTap: () => showColorPickerModal(
+                      context,
+                      ColorPickerModal(
+                        colorOptions: defaultColorPickerOptions,
+                        selectedColor: _color,
                       ),
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      textInputAction: TextInputAction.next,
+                    ).then((value) {
+                      if (value == null) return;
+
+                      setState(() {
+                        _color = value.toHex();
+                      });
+                    }),
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _descrController,
+                    maxLines: 2,
+                    decoration: InputDecoration(
+                      hintText: t.tags.form.description,
+                      alignLabelWithHint: true,
                     ),
-                    const SizedBox(height: 12),
-                    Text(t.icon_selector.color),
-                  ],
-                ),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    textInputAction: TextInputAction.next,
+                  ),
+                ],
               ),
-            ),
-            ColorPicker(
-              colorOptions: colorOptions,
-              selectedColor: _color,
-              onColorSelected: (selectedColor) {
-                setState(() {
-                  _color = selectedColor;
-                });
-              },
             ),
           ],
         ),

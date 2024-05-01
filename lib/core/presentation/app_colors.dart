@@ -13,6 +13,7 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.shadowColor,
     required this.shadowColorLight,
     required this.brand,
+    required this.inputFill,
     required this.primary,
     required this.onPrimary,
     required this.primaryContainer,
@@ -24,6 +25,7 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color danger;
   final Color success;
   final Color brand;
+  final Color inputFill;
   final Color light;
   final Color dark;
   final Color shadowColor;
@@ -62,6 +64,8 @@ class AppColors extends ThemeExtension<AppColors> {
           ? const Color.fromARGB(40, 116, 116, 116)
           : const Color.fromARGB(44, 90, 90, 90),
 
+      inputFill: colorScheme.surfaceVariant,
+
       // Colors from the material color scheme:
       primary: colorScheme.primary,
       onPrimary: colorScheme.onPrimary,
@@ -82,6 +86,7 @@ class AppColors extends ThemeExtension<AppColors> {
       Color? success,
       Color? brand,
       Color? primary,
+      Color? inputFill,
       Color? dark,
       Color? light,
       Color? shadowColor,
@@ -94,6 +99,7 @@ class AppColors extends ThemeExtension<AppColors> {
     return AppColors(
       danger: danger ?? this.danger,
       success: success ?? this.success,
+      inputFill: inputFill ?? this.inputFill,
       light: light ?? this.light,
       dark: dark ?? this.dark,
       brand: brand ?? this.brand,
@@ -116,6 +122,7 @@ class AppColors extends ThemeExtension<AppColors> {
     return AppColors(
       danger: Color.lerp(danger, other.danger, t) ?? danger,
       success: Color.lerp(success, other.success, t) ?? success,
+      inputFill: Color.lerp(inputFill, other.inputFill, t) ?? inputFill,
       light: Color.lerp(light, other.light, t) ?? light,
       dark: Color.lerp(dark, other.dark, t) ?? dark,
       shadowColor: Color.lerp(shadowColor, other.shadowColor, t) ?? shadowColor,
