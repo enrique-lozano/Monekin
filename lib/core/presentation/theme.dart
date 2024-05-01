@@ -65,8 +65,20 @@ ThemeData getThemeData(
   return theme.copyWith(
     dividerTheme: const DividerThemeData(space: 0),
     cardColor: theme.colorScheme.surface,
-    inputDecorationTheme: const InputDecorationTheme(
-      border: OutlineInputBorder(),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: theme.colorScheme.surfaceVariant,
+      isDense: true,
+      floatingLabelStyle: TextStyle(
+        backgroundColor: theme.colorScheme.background.withOpacity(0.5),
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10.0),
+        borderSide: BorderSide(
+          width: 0,
+          style: BorderStyle.none,
+        ),
+      ),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: theme.colorScheme.primary,

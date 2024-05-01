@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 enum AccountType {
@@ -63,6 +63,7 @@ class Account extends AccountInDB {
     super.description,
     super.iban,
     super.swift,
+    super.color,
   }) : super(currencyId: currency.code);
 
   /// Currency of all the transactions of this account. When you change this currency all transactions in this account
@@ -77,7 +78,7 @@ class Account extends AccountInDB {
     return color != null
         ? ColorHex.get(color!)
         : Theme.of(context).brightness == Brightness.dark
-            ? AppColors.of(context).onPrimary
+            ? AppColors.of(context).primaryContainer
             : AppColors.of(context).primary;
   }
 

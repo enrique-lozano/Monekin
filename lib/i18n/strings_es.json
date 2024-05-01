@@ -232,6 +232,7 @@
     "icon": "Icono",
     "color": "Color",
     "select-icon": "Selecciona un icono",
+    "select-color": "Selecciona un color",
     "select-account-icon": "Identifica tu cuenta",
     "select-category-icon": "Identifica tu categoría",
     "SCOPES": {
