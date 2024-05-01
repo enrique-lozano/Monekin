@@ -7,7 +7,6 @@ import 'package:monekin/core/database/services/exchange-rate/exchange_rate_servi
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
-import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
@@ -883,21 +882,10 @@ class _TransactionDetailHeader extends SliverPersistentHeaderDelegate {
           const SizedBox(width: 24),
           Hero(
             tag: heroTag ?? UniqueKey(),
-            child: transaction.isIncomeOrExpense
-                ? IconDisplayer.fromCategory(
-                    context,
-                    category: transaction.category!,
-                    size: 42 - shrinkPercent * 16,
-                    isOutline: true,
-                    borderRadius: 18,
-                  )
-                : IconDisplayer(
-                    mainColor: transaction.color(context),
-                    icon: TransactionType.transfer.icon,
-                    size: 42 - shrinkPercent * 16,
-                    isOutline: true,
-                    borderRadius: 18,
-                  ),
+            child: transaction.getDisplayIcon(
+              context,
+              size: 42 - shrinkPercent * 16,
+            ),
           ),
         ],
       ),
