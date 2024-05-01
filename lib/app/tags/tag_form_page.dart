@@ -8,6 +8,7 @@ import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker_modal.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_field.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
@@ -170,14 +171,13 @@ class _TagFormPageState extends State<TagFormPage> {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
-                    readOnly: true,
+                  ReadOnlyTextFormField(
+                    displayValue: null,
                     decoration: InputDecoration(
                       hintText: t.icon_selector.color,
-                      suffixIcon: Icon(Icons.circle),
+                      suffixIcon: const Icon(Icons.circle),
                       suffixIconColor: ColorHex.get(_color),
                     ),
-                    textInputAction: TextInputAction.next,
                     onTap: () => showColorPickerModal(
                       context,
                       ColorPickerModal(
