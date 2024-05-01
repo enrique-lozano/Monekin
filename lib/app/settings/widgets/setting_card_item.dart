@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
+import 'package:monekin/core/presentation/theme.dart';
+import 'package:monekin/core/presentation/widgets/tappable.dart';
 
 class SettingCardItem extends StatelessWidget {
   const SettingCardItem({
@@ -25,7 +26,7 @@ class SettingCardItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Tappable(
       bgColor: isPrimary
-          ? Theme.of(context).brightness == Brightness.light
+          ? isAppInLightBrightness(context)
               ? AppColors.of(context).primary.lighten(0.8)
               : AppColors.of(context).primary.darken(0.8)
           : null,

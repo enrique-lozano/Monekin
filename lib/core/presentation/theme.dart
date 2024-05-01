@@ -6,6 +6,11 @@ import 'app_colors.dart';
 
 bool isAppUsingDynamicColors = false;
 
+bool isAppInDarkBrightness(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.dark;
+bool isAppInLightBrightness(BuildContext context) =>
+    !isAppInDarkBrightness(context);
+
 ThemeData getThemeData(
   BuildContext context, {
   required bool isDark,

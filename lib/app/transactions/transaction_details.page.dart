@@ -11,6 +11,7 @@ import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
@@ -529,8 +530,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                       color: ColorHex.get(
                                               transaction.category!.color)
                                           .lighten(
-                                              Theme.of(context).brightness ==
-                                                      Brightness.dark
+                                              isAppInDarkBrightness(context)
                                                   ? 0.5
                                                   : 0),
                                       data: transaction.category!.name,
