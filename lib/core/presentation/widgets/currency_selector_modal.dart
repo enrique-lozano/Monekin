@@ -100,12 +100,13 @@ class _CurrencySelectorModalState extends State<CurrencySelectorModal> {
             ),
             TextField(
               decoration: InputDecoration(
+                filled: false,
+                isDense: false,
                 hintText: t.currencies.search_placeholder,
                 labelText: t.currencies.search_title,
+                floatingLabelStyle: const TextStyle(height: -0.0005),
                 prefixIcon: const Icon(Icons.search),
                 border: const UnderlineInputBorder(),
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               ),
               onChanged: (value) {
                 CurrencyService.instance
