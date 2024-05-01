@@ -58,6 +58,7 @@ class IconAndColorSelector extends StatelessWidget {
                   },
                   bgColor: AppColors.of(context).inputFill,
                   child: ListTile(
+                    mouseCursor: SystemMouseCursors.click,
                     title: Text(t.icon_selector.icon),
                     trailing:
                         const Icon(Icons.arrow_forward_ios_rounded, size: 12),
@@ -78,6 +79,7 @@ class IconAndColorSelector extends StatelessWidget {
                   }),
                   bgColor: AppColors.of(context).inputFill,
                   child: ListTile(
+                    mouseCursor: SystemMouseCursors.click,
                     title: Text(t.icon_selector.color),
                     trailing: Icon(
                       Icons.circle,
