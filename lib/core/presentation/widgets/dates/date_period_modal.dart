@@ -117,6 +117,7 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
                                     textAlign: TextAlign.center,
                                     decoration: const InputDecoration(
                                       border: UnderlineInputBorder(),
+                                      filled: false,
                                       counterText: '',
                                     ),
                                     inputFormatters: [
@@ -218,6 +219,7 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
               textAlign: TextAlign.center,
               decoration: InputDecoration(
                 border: const UnderlineInputBorder(),
+                filled: false,
                 hintText: '-- ${t.general.unspecified} --',
               ),
               onTap: () {
