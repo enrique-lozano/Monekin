@@ -253,9 +253,8 @@ class _DashboardPageState extends State<DashboardPage> {
 
                                         return TrendingValue(
                                           percentage: snapshot.data!,
-                                          filled: true,
                                           fontWeight: FontWeight.bold,
-                                          outlined: true,
+                                          fontSize: 16,
                                         );
                                       },
                                     ),
