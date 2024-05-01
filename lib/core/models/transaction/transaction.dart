@@ -4,6 +4,7 @@ import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
@@ -94,6 +95,27 @@ class MoneyTransaction extends TransactionInDB {
       : value < 0
           ? TransactionType.expense
           : TransactionType.income;
+
+  IconDisplayer getDisplayIcon(
+    BuildContext context, {
+    double size = 22,
+    double? padding,
+  }) =>
+      isIncomeOrExpense
+          ? IconDisplayer.fromCategory(
+              context,
+              category: category!,
+              size: size,
+              padding: padding,
+              borderRadius: 999999,
+            )
+          : IconDisplayer(
+              mainColor: color(context),
+              icon: TransactionType.transfer.icon,
+              size: size,
+              padding: padding,
+              borderRadius: 999999,
+            );
 
   NextPayStatus? get nextPayStatus {
     if (recurrentInfo.isNoRecurrent && status != TransactionStatus.pending) {

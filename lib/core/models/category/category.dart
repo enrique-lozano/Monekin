@@ -23,6 +23,7 @@ enum CategoryType {
 class Category extends CategoryInDB {
   String? _color;
   CategoryType? _type;
+  final Category? parentCategory;
 
   @override
   String get color => _color ?? parentCategory!.color;
@@ -59,8 +60,6 @@ class Category extends CategoryInDB {
         parentCategory =
             parentCategory != null ? fromDB(parentCategory, null) : null,
         super(parentCategoryID: parentCategory?.id);
-
-  Category? parentCategory;
 
   /// Returns whether the category is a main (or root) category or not
   bool get isMainCategory => parentCategoryID == null;
