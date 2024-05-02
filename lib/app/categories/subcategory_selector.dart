@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/category_selector.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/icon_displayer_widgets.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 class SubcategorySelector extends StatefulWidget {
@@ -66,6 +66,7 @@ class _SubcategorySelectorState extends State<SubcategorySelector> {
                 iconWidget: IconDisplayer(
                   icon: Icons.block,
                   isOutline: selectedCategory.id == widget.parentCategory.id,
+                  borderRadius: 9999,
                   secondaryColor:
                       isDark ? categoryColor : categoryColor.lighten(0.82),
                   mainColor:
