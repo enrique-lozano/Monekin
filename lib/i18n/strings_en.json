@@ -253,6 +253,8 @@
     "new.success": "Transaction created successfully",
     "edit": "Edit transaction",
     "edit.success": "Transaction edited successfully",
+    "edit.multiple": "Edit transactions",
+    "edit.multiple.success": "{{ x }} transactions edited successfully",
     "duplicate": "Clone transaction",
     "duplicate.short": "Clone",
     "duplicate.warning-message": "A transaction identical to this will be created with the same date, do you want to continue?",
@@ -260,6 +262,9 @@
     "delete": "Delete transaction",
     "delete.warning-message": "This action is irreversible. The current balance of your accounts and all your statistics will be recalculated",
     "delete.success": "Transaction deleted correctly",
+    "delete.multiple": "Delete transactions",
+    "delete.multiple.warning-message": "This action is irreversible and will remove {{ x }} transactions. The current balance of your accounts and all your statistics will be recalculated",
+    "delete.multiple.success": "{{x}} transactions deleted correctly",
     "details": "Movement details",
     "NEXT-PAYMENTS": {
       "accept": "Accept",
@@ -278,7 +283,16 @@
       "empty": "No transactions found to display here. Add a transaction by clicking the '+' button at the bottom",
       "searcher.placeholder": "Search by category, description...",
       "searcher.no-results": "No transactions found matching the search criteria",
-      "loading": "Loading more transactions..."
+      "loading": "Loading more transactions...",
+      "selected.short": { "one": "{{n}} selected", "other": "{{n}} selected" },
+      "selected.long": {
+        "one": "{{n}} transaction selected",
+        "other": "{{n}} transactions selected"
+      },
+      "BULK_EDIT": {
+        "dates": "Edit dates",
+        "categories": "Edit categories"
+      }
     },
     "FILTERS": {
       "from_value": "From amount",

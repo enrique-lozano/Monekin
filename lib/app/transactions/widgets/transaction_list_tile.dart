@@ -21,6 +21,9 @@ class TransactionListTile extends StatelessWidget {
     this.showTime = true,
     this.periodicityInfo,
     required this.heroTag,
+    this.onLongPress,
+    this.onTap,
+    this.isSelected = false,
   });
 
   final MoneyTransaction transaction;
@@ -31,6 +34,17 @@ class TransactionListTile extends StatelessWidget {
   final bool showTime;
 
   final Object? heroTag;
+
+  /// Action to trigger when the tile is long pressed. If `null`,
+  /// the tile will display a modal with some quick actions for
+  /// this transaction
+  final void Function()? onLongPress;
+
+  /// Action to trigger when the tile is pressed. If `null`,
+  /// the tile will redirect to the `transaction-details-page`
+  final void Function()? onTap;
+
+  final bool isSelected;
 
   showTransactionActions(BuildContext context, MoneyTransaction transaction) {
     showModalBottomSheet(
@@ -209,19 +223,35 @@ class TransactionListTile extends StatelessWidget {
       ),
       leading: Hero(
         tag: heroTag ?? UniqueKey(),
-        child: transaction.getDisplayIcon(context, size: 28, padding: 6),
+        child: isSelected
+            ? Stack(
+                alignment: Alignment.center,
+                children: [
+                  const Icon(Icons.circle, size: 28 + 12),
+                  Icon(
+                    Icons.check,
+                    size: 24,
+                    color: AppColors.of(context).background,
+                  ),
+                ],
+              )
+            : transaction.getDisplayIcon(context, size: 28, padding: 6),
       ),
-      onTap: () {
-        RouteUtils.pushRoute(
-          context,
-          TransactionDetailsPage(
-            transaction: transaction,
-            heroTag: heroTag,
-            prevPage: prevPage,
-          ),
-        );
-      },
-      onLongPress: () => showTransactionActions(context, transaction),
+      selected: isSelected,
+      selectedTileColor: AppColors.of(context).primary.withOpacity(0.15),
+      onTap: onTap ??
+          () {
+            RouteUtils.pushRoute(
+              context,
+              TransactionDetailsPage(
+                transaction: transaction,
+                heroTag: heroTag,
+                prevPage: prevPage,
+              ),
+            );
+          },
+      onLongPress:
+          onLongPress ?? () => showTransactionActions(context, transaction),
     );
   }
 }
