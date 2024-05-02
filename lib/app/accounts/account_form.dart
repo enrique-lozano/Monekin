@@ -69,6 +69,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
     final snackbarDisplayer = ScaffoldMessenger.of(context).showSnackBar;
 
     if (_accountToEdit != null) {
+      // Check if there are transactions before the opening date of the account:
       if ((await TransactionService.instance
               .getTransactions(
                 filters: TransactionFilters(
@@ -91,7 +92,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
     Account accountToSubmit = Account(
       id: _accountToEdit?.id ?? generateUUID(),
       name: _nameController.text,
-      displayOrder: 10,
+      displayOrder: _accountToEdit?.displayOrder ?? 10,
       iniValue: newBalance,
       date: _openingDate,
       closingDate: _closeDate,
@@ -104,13 +105,10 @@ class _AccountFormPageState extends State<AccountFormPage> {
       swift: _swiftController.text.isEmpty ? null : _swiftController.text,
     );
 
-    if (_accountToEdit != null) {
-      await accountService
-          .updateAccount(accountToSubmit)
-          .then((value) => {navigateBack()});
-    } else {
+    // Check for accounts with same names before continue:
+    if (_accountToEdit == null ||
+        _accountToEdit!.name != accountToSubmit.name) {
       final db = AppDB.instance;
-
       final query = db.select(db.accounts)
         ..addColumns([db.accounts.id.count()])
         ..where((tbl) => tbl.name.isValue(_nameController.text));
@@ -122,7 +120,13 @@ class _AccountFormPageState extends State<AccountFormPage> {
 
         return;
       }
+    }
 
+    if (_accountToEdit != null) {
+      await accountService
+          .updateAccount(accountToSubmit)
+          .then((value) => {navigateBack()});
+    } else {
       await accountService
           .insertAccount(accountToSubmit)
           .then((value) => {navigateBack()});
