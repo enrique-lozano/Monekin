@@ -14,23 +14,29 @@ class MonekinPopupMenuButton extends StatelessWidget {
           final actionItem = actionItems[index];
 
           return PopupMenuItem(
-              value: index,
-              child: ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: Icon(
-                  actionItem.icon,
-                  color: actionItem.role != null
-                      ? actionItem.getColorBasedOnRole(context)
-                      : null,
-                ),
-                minLeadingWidth: 26,
-                title: Text(actionItem.label,
-                    style: TextStyle(
-                      color: actionItem.role != null
-                          ? actionItem.getColorBasedOnRole(context)
-                          : null,
-                    )),
-              ));
+            value: index,
+            enabled: actionItems[index].onClick != null,
+            child: ListTile(
+              contentPadding: EdgeInsets.zero,
+              enabled: actionItems[index].onClick != null,
+              mouseCursor: actionItems[index].onClick != null
+                  ? SystemMouseCursors.click
+                  : null,
+              leading: Icon(
+                actionItem.icon,
+                color: actionItem.role != null
+                    ? actionItem.getColorBasedOnRole(context)
+                    : null,
+              ),
+              minLeadingWidth: 26,
+              title: Text(actionItem.label,
+                  style: TextStyle(
+                    color: actionItem.role != null
+                        ? actionItem.getColorBasedOnRole(context)
+                        : null,
+                  )),
+            ),
+          );
         });
       },
       onSelected: (int value) {
