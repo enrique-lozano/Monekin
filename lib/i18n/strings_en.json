@@ -28,8 +28,8 @@
     "show-more-fields": "Show more fields",
     "show-less-fields": "Show less fields",
     "CLIPBOARD": {
-      "success": "{{x}} copiado al portapapeles",
-      "error": "Error al copiar"
+      "success": "{{x}} copied to the clipboard",
+      "error": "Error copying"
     },
     "TIME": {
       "start-date": "Start date",
