@@ -520,7 +520,11 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                 children: [
                                   buildInfoTileWithIconAndColor(
                                     icon: transaction.account.icon,
-                                    color: AppColors.of(context).primary,
+                                    color: transaction.account
+                                        .getComputedColor(context)
+                                        .lighten(isAppInDarkBrightness(context)
+                                            ? 0.5
+                                            : 0),
                                     data: transaction.account.name,
                                     title: t.general.account,
                                   ),

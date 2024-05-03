@@ -108,17 +108,17 @@ class Account extends AccountInDB {
   }
 
   static Account fromDB(AccountInDB account, CurrencyInDB currency) => Account(
-        id: account.id,
-        currency: currency,
-        iniValue: account.iniValue,
-        date: account.date,
-        displayOrder: account.displayOrder,
-        description: account.description,
-        iban: account.iban,
-        swift: account.swift,
-        name: account.name,
-        iconId: account.iconId,
-        closingDate: account.closingDate,
-        type: account.type,
-      );
+      id: account.id,
+      currency: currency,
+      iniValue: account.iniValue,
+      date: account.date,
+      displayOrder: account.displayOrder,
+      description: account.description,
+      iban: account.iban,
+      swift: account.swift,
+      name: account.name,
+      iconId: account.iconId,
+      closingDate: account.closingDate,
+      type: account.type,
+      color: account.color);
 }
