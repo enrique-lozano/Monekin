@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 1035 (517 per locale)
+/// Strings: 1057 (528 per locale)
 ///
-/// Built on 2024-05-01 at 14:05 UTC
+/// Built on 2024-05-02 at 14:20 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -333,6 +333,8 @@ class _TranslationsTransactionEn {
 	String get new_success => 'Transaction created successfully';
 	String get edit => 'Edit transaction';
 	String get edit_success => 'Transaction edited successfully';
+	String get edit_multiple => 'Edit transactions';
+	String edit_multiple_success({required Object x}) => '${x} transactions edited successfully';
 	String get duplicate => 'Clone transaction';
 	String get duplicate_short => 'Clone';
 	String get duplicate_warning_message => 'A transaction identical to this will be created with the same date, do you want to continue?';
@@ -340,6 +342,9 @@ class _TranslationsTransactionEn {
 	String get delete => 'Delete transaction';
 	String get delete_warning_message => 'This action is irreversible. The current balance of your accounts and all your statistics will be recalculated';
 	String get delete_success => 'Transaction deleted correctly';
+	String get delete_multiple => 'Delete transactions';
+	String delete_multiple_warning_message({required Object x}) => 'This action is irreversible and will remove ${x} transactions. The current balance of your accounts and all your statistics will be recalculated';
+	String delete_multiple_success({required Object x}) => '${x} transactions deleted correctly';
 	String get details => 'Movement details';
 	late final _TranslationsTransactionNextPaymentsEn next_payments = _TranslationsTransactionNextPaymentsEn._(_root);
 	late final _TranslationsTransactionListEn list = _TranslationsTransactionListEn._(_root);
@@ -780,6 +785,15 @@ class _TranslationsTransactionListEn {
 	String get searcher_placeholder => 'Search by category, description...';
 	String get searcher_no_results => 'No transactions found matching the search criteria';
 	String get loading => 'Loading more transactions...';
+	String selected_short({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		one: '${n} selected',
+		other: '${n} selected',
+	);
+	String selected_long({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		one: '${n} transaction selected',
+		other: '${n} transactions selected',
+	);
+	late final _TranslationsTransactionListBulkEditEn bulk_edit = _TranslationsTransactionListBulkEditEn._(_root);
 }
 
 // Path: transaction.filters
@@ -1269,6 +1283,17 @@ class _TranslationsFinancialHealthSavingsPercentageTextEn {
 	String get very_bad => 'Wow, you haven\'t managed to save anything during this period.';
 }
 
+// Path: transaction.list.bulk_edit
+class _TranslationsTransactionListBulkEditEn {
+	_TranslationsTransactionListBulkEditEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get dates => 'Edit dates';
+	String get categories => 'Edit categories';
+}
+
 // Path: transaction.form.validators
 class _TranslationsTransactionFormValidatorsEn {
 	_TranslationsTransactionFormValidatorsEn._(this._root);
@@ -1568,6 +1593,8 @@ class _TranslationsTransactionEs implements _TranslationsTransactionEn {
 	@override String get new_success => 'Transacción creada correctamente';
 	@override String get edit => 'Editar transacción';
 	@override String get edit_success => 'Transacción editada correctamente';
+	@override String get edit_multiple => 'Editar transacciones';
+	@override String edit_multiple_success({required Object x}) => '${x} transacciones editadas correctamente';
 	@override String get duplicate => 'Clonar transacción';
 	@override String get duplicate_short => 'Clonar';
 	@override String get duplicate_warning_message => 'Se creará una transacción identica a esta con su misma fecha, ¿deseas continuar?';
@@ -1575,6 +1602,9 @@ class _TranslationsTransactionEs implements _TranslationsTransactionEn {
 	@override String get delete => 'Eliminar transacción';
 	@override String get delete_warning_message => 'Esta acción es irreversible. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas';
 	@override String get delete_success => 'Transacción eliminada correctamente';
+	@override String get delete_multiple => 'Eliminar transacciones';
+	@override String delete_multiple_warning_message({required Object x}) => 'Esta acción es irreversible y borrará definitivamente ${x} transacciones. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas';
+	@override String delete_multiple_success({required Object x}) => '${x} transacciones eliminadas correctamente';
 	@override String get details => 'Detalles del movimiento';
 	@override late final _TranslationsTransactionNextPaymentsEs next_payments = _TranslationsTransactionNextPaymentsEs._(_root);
 	@override late final _TranslationsTransactionListEs list = _TranslationsTransactionListEs._(_root);
@@ -2015,6 +2045,15 @@ class _TranslationsTransactionListEs implements _TranslationsTransactionListEn {
 	@override String get searcher_placeholder => 'Busca por categoría, descripción...';
 	@override String get searcher_no_results => 'No se han encontrado transacciones que coincidan con los criterios de busqueda';
 	@override String get loading => 'Cargando más transacciones...';
+	@override String selected_short({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		one: '${n} seleccionada',
+		other: '${n} seleccionadas',
+	);
+	@override String selected_long({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		one: '${n} transacción seleccionada',
+		other: '${n} transacciones seleccionadas',
+	);
+	@override late final _TranslationsTransactionListBulkEditEs bulk_edit = _TranslationsTransactionListBulkEditEs._(_root);
 }
 
 // Path: transaction.filters
@@ -2505,6 +2544,17 @@ class _TranslationsFinancialHealthSavingsPercentageTextEs implements _Translatio
 	@override String get very_bad => 'Vaya, no has conseguido ahorrar nada durante este periodo.';
 }
 
+// Path: transaction.list.bulk_edit
+class _TranslationsTransactionListBulkEditEs implements _TranslationsTransactionListBulkEditEn {
+	_TranslationsTransactionListBulkEditEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get dates => 'Editar fechas';
+	@override String get categories => 'Editar categorías';
+}
+
 // Path: transaction.form.validators
 class _TranslationsTransactionFormValidatorsEs implements _TranslationsTransactionFormValidatorsEn {
 	_TranslationsTransactionFormValidatorsEs._(this._root);
@@ -2858,6 +2908,8 @@ extension on Translations {
 			case 'transaction.new_success': return 'Transaction created successfully';
 			case 'transaction.edit': return 'Edit transaction';
 			case 'transaction.edit_success': return 'Transaction edited successfully';
+			case 'transaction.edit_multiple': return 'Edit transactions';
+			case 'transaction.edit_multiple_success': return ({required Object x}) => '${x} transactions edited successfully';
 			case 'transaction.duplicate': return 'Clone transaction';
 			case 'transaction.duplicate_short': return 'Clone';
 			case 'transaction.duplicate_warning_message': return 'A transaction identical to this will be created with the same date, do you want to continue?';
@@ -2865,6 +2917,9 @@ extension on Translations {
 			case 'transaction.delete': return 'Delete transaction';
 			case 'transaction.delete_warning_message': return 'This action is irreversible. The current balance of your accounts and all your statistics will be recalculated';
 			case 'transaction.delete_success': return 'Transaction deleted correctly';
+			case 'transaction.delete_multiple': return 'Delete transactions';
+			case 'transaction.delete_multiple_warning_message': return ({required Object x}) => 'This action is irreversible and will remove ${x} transactions. The current balance of your accounts and all your statistics will be recalculated';
+			case 'transaction.delete_multiple_success': return ({required Object x}) => '${x} transactions deleted correctly';
 			case 'transaction.details': return 'Movement details';
 			case 'transaction.next_payments.accept': return 'Accept';
 			case 'transaction.next_payments.skip': return 'Skip';
@@ -2881,6 +2936,16 @@ extension on Translations {
 			case 'transaction.list.searcher_placeholder': return 'Search by category, description...';
 			case 'transaction.list.searcher_no_results': return 'No transactions found matching the search criteria';
 			case 'transaction.list.loading': return 'Loading more transactions...';
+			case 'transaction.list.selected_short': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+				one: '${n} selected',
+				other: '${n} selected',
+			);
+			case 'transaction.list.selected_long': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+				one: '${n} transaction selected',
+				other: '${n} transactions selected',
+			);
+			case 'transaction.list.bulk_edit.dates': return 'Edit dates';
+			case 'transaction.list.bulk_edit.categories': return 'Edit categories';
 			case 'transaction.filters.from_value': return 'From amount';
 			case 'transaction.filters.to_value': return 'Up to amount';
 			case 'transaction.filters.from_value_def': return ({required Object x}) => 'From ${x}';
@@ -3452,6 +3517,8 @@ extension on _TranslationsEs {
 			case 'transaction.new_success': return 'Transacción creada correctamente';
 			case 'transaction.edit': return 'Editar transacción';
 			case 'transaction.edit_success': return 'Transacción editada correctamente';
+			case 'transaction.edit_multiple': return 'Editar transacciones';
+			case 'transaction.edit_multiple_success': return ({required Object x}) => '${x} transacciones editadas correctamente';
 			case 'transaction.duplicate': return 'Clonar transacción';
 			case 'transaction.duplicate_short': return 'Clonar';
 			case 'transaction.duplicate_warning_message': return 'Se creará una transacción identica a esta con su misma fecha, ¿deseas continuar?';
@@ -3459,6 +3526,9 @@ extension on _TranslationsEs {
 			case 'transaction.delete': return 'Eliminar transacción';
 			case 'transaction.delete_warning_message': return 'Esta acción es irreversible. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas';
 			case 'transaction.delete_success': return 'Transacción eliminada correctamente';
+			case 'transaction.delete_multiple': return 'Eliminar transacciones';
+			case 'transaction.delete_multiple_warning_message': return ({required Object x}) => 'Esta acción es irreversible y borrará definitivamente ${x} transacciones. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas';
+			case 'transaction.delete_multiple_success': return ({required Object x}) => '${x} transacciones eliminadas correctamente';
 			case 'transaction.details': return 'Detalles del movimiento';
 			case 'transaction.next_payments.skip': return 'Saltar';
 			case 'transaction.next_payments.skip_success': return 'Transacción saltada con exito';
@@ -3475,6 +3545,16 @@ extension on _TranslationsEs {
 			case 'transaction.list.searcher_placeholder': return 'Busca por categoría, descripción...';
 			case 'transaction.list.searcher_no_results': return 'No se han encontrado transacciones que coincidan con los criterios de busqueda';
 			case 'transaction.list.loading': return 'Cargando más transacciones...';
+			case 'transaction.list.selected_short': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+				one: '${n} seleccionada',
+				other: '${n} seleccionadas',
+			);
+			case 'transaction.list.selected_long': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+				one: '${n} transacción seleccionada',
+				other: '${n} transacciones seleccionadas',
+			);
+			case 'transaction.list.bulk_edit.dates': return 'Editar fechas';
+			case 'transaction.list.bulk_edit.categories': return 'Editar categorías';
 			case 'transaction.filters.from_value': return 'Desde monto';
 			case 'transaction.filters.to_value': return 'Hasta monto';
 			case 'transaction.filters.from_value_def': return ({required Object x}) => 'Desde ${x}';

@@ -96,6 +96,17 @@ class MoneyTransaction extends TransactionInDB {
           ? TransactionType.expense
           : TransactionType.income;
 
+  /// Get the balance (positive or negative) that this transaction cause to the user accounts
+  double getCurrentBalanceInPreferredCurrency() {
+    if (type == TransactionType.transfer) {
+      return (currentValueInDestinyInPreferredCurrency ??
+              currentValueInPreferredCurrency) -
+          currentValueInPreferredCurrency;
+    }
+
+    return currentValueInPreferredCurrency;
+  }
+
   IconDisplayer getDisplayIcon(
     BuildContext context, {
     double size = 22,
