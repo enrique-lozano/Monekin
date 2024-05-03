@@ -29,7 +29,7 @@
     "show-less-fields": "Show less fields",
     "CLIPBOARD": {
       "success": "{{x}} copied to the clipboard",
-      "error": "Error copyingr"
+      "error": "Error copying"
     },
     "TIME": {
       "start-date": "Start date",
