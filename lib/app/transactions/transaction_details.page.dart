@@ -526,7 +526,9 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                             ? 0.5
                                             : 0),
                                     data: transaction.account.name,
-                                    title: t.general.account,
+                                    title: transaction.isTransfer
+                                        ? t.transfer.form.from
+                                        : t.general.account,
                                   ),
                                   if (transaction.isIncomeOrExpense)
                                     buildInfoTileWithIconAndColor(
@@ -545,7 +547,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                       icon: transaction.receivingAccount!.icon,
                                       color: AppColors.of(context).primary,
                                       data: transaction.receivingAccount!.name,
-                                      title: t.transfer.form.from,
+                                      title: t.transfer.form.to,
                                     ),
                                   buildInfoListTile(
                                     trailing: Text(
