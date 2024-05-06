@@ -54,7 +54,7 @@ dependencies:
   share_plus: ^7.2.2
   url_launcher: ^6.1.11
   uuid: ^4.4.0
-  csv: ^5.0.2
+  csv: ^6.0.0
   dotted_border: ^2.0.0+3
   package_info_plus: ^8.0.0
   introduction_screen: ^3.1.11
