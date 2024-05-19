@@ -682,9 +682,5 @@
       "donate.err": "Oops! It seems there was an error receiving your payment",
       "report": "Report bugs, leave suggestions..."
     }
-  },
-  "LANG": {
-    "es": "Spanish",
-    "en": "English"
   }
 }

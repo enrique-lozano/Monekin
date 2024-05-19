@@ -110,8 +110,9 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               title: t.settings.lang_title,
               dialogDescr: t.settings.lang_descr,
               items: [
-                SelectItem(value: 'es', label: t.lang.es),
-                SelectItem(value: 'en', label: t.lang.en)
+                SelectItem(value: 'es', label: 'Español'),
+                SelectItem(value: 'en', label: 'English'),
+                SelectItem(value: 'uk', label: 'українська'),
               ],
               selected: LocaleSettings.currentLocale.languageTag,
               onChanged: (value) {
