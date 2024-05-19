@@ -23,6 +23,7 @@ enum CategoryType {
 class Category extends CategoryInDB {
   String? _color;
   CategoryType? _type;
+  final Category? parentCategory;
 
   @override
   String get color => _color ?? parentCategory!.color;
@@ -60,8 +61,6 @@ class Category extends CategoryInDB {
             parentCategory != null ? fromDB(parentCategory, null) : null,
         super(parentCategoryID: parentCategory?.id);
 
-  Category? parentCategory;
-
   /// Returns whether the category is a main (or root) category or not
   bool get isMainCategory => parentCategoryID == null;
 
@@ -72,11 +71,21 @@ class Category extends CategoryInDB {
 
   static Category fromDB(CategoryInDB cat, CategoryInDB? parentCategory) =>
       Category(
-          id: cat.id,
-          displayOrder: cat.displayOrder,
-          name: cat.name,
-          iconId: cat.iconId,
-          parentCategory: parentCategory,
-          color: cat.color,
-          type: cat.type);
+        id: cat.id,
+        displayOrder: cat.displayOrder,
+        name: cat.name,
+        iconId: cat.iconId,
+        parentCategory: parentCategory,
+        color: cat.color,
+        type: cat.type,
+      );
+
+  static Category unkown() => Category(
+        id: 'unknown-category',
+        displayOrder: 1000,
+        iconId: SupportedIconService.instance.defaultSupportedIcon.id,
+        name: 'Unknown Category',
+        type: CategoryType.B,
+        color: '737373',
+      );
 }

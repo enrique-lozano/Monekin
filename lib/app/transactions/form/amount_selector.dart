@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/utils/color_utils.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 
 class AmountSelector extends StatefulWidget {
   const AmountSelector({

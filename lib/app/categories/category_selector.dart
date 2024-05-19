@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/utils/color_utils.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/presentation/widgets/icon_displayer_widgets.dart';
@@ -91,9 +92,10 @@ class _CategorySelectorState extends State<CategorySelector> {
         icon: Icons.select_all,
         size: widget.params.iconSize,
         padding: widget.params.iconPadding,
+        borderRadius: 99999,
         isOutline: selectedCategories == null,
         secondaryColor: AppColors.of(context).background.darken(
-              Theme.of(context).brightness == Brightness.dark ? 0.6 : 0.1,
+              isAppInDarkBrightness(context) ? 0.6 : 0.1,
             ),
         mainColor: AppColors.of(context).onBackground,
         onTap: () {

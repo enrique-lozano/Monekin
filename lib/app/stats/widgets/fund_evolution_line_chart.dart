@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
-import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
@@ -190,10 +191,9 @@ class FundEvolutionLineChart extends StatelessWidget {
                   );
                 }
 
-                final ultraLightBorderColor =
-                    Theme.of(context).brightness == Brightness.light
-                        ? Colors.black12
-                        : Colors.white12;
+                final ultraLightBorderColor = isAppInLightBrightness(context)
+                    ? Colors.black12
+                    : Colors.white12;
 
                 return StreamBuilder(
                     stream: CurrencyService.instance.getUserPreferredCurrency(),
@@ -213,7 +213,7 @@ class FundEvolutionLineChart extends StatelessWidget {
                               enabled: snapshot.hasData,
                               touchTooltipData: LineTouchTooltipData(
                                 tooltipMargin: -10,
-                                tooltipBgColor:
+                                getTooltipColor: (spot) =>
                                     AppColors.of(context).background,
                                 getTooltipItems: (touchedSpots) {
                                   return touchedSpots.map((barSpot) {

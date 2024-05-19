@@ -7,11 +7,10 @@ import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_status.dart';
+import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
-import 'package:monekin/core/presentation/widgets/date_form_field/date_field.dart';
-import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/icon_displayer_widgets.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
@@ -21,6 +20,7 @@ import 'package:monekin/core/presentation/widgets/transaction_filter/transaction
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
+import '../../../models/transaction/transaction_type.enum.dart';
 import '../../app_colors.dart';
 
 Future<TransactionFilters?> openFilterSheetModal(
@@ -62,24 +62,6 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
   bool isTagSelected(String? tagId) {
     return filtersToReturn.tagsIDs == null ||
         filtersToReturn.tagsIDs!.any((element) => element == tagId);
-  }
-
-  Widget selector({
-    required String title,
-    required String? inputValue,
-    required Function onClick,
-  }) {
-    final t = Translations.of(context);
-
-    return TextField(
-        controller:
-            TextEditingController(text: inputValue ?? t.general.unspecified),
-        readOnly: true,
-        onTap: () => onClick(),
-        decoration: InputDecoration(
-          labelText: title,
-          suffixIcon: const Icon(Icons.arrow_drop_down),
-        ));
   }
 
   FilterChip transactionTypeFilter(BuildContext context, TransactionType type) {
@@ -128,7 +110,11 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
             footer: BottomSheetFooter(
                 onSaved: !(_formKey.currentState?.validate() ?? true) ||
                         filtersToReturn.tagsIDs != null &&
-                            filtersToReturn.tagsIDs!.isEmpty
+                            filtersToReturn.tagsIDs!.isEmpty ||
+                        filtersToReturn.accountsIDs != null &&
+                            filtersToReturn.accountsIDs!.isEmpty ||
+                        filtersToReturn.categories != null &&
+                            filtersToReturn.categories!.isEmpty
                     ? null
                     : () => Navigator.of(context).pop(filtersToReturn)),
             body: Stack(

@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 1031 (515 per locale)
+/// Strings: 1057 (528 per locale)
 ///
-/// Built on 2024-03-19 at 22:39 UTC
+/// Built on 2024-05-02 at 14:20 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -308,8 +308,9 @@ class _TranslationsIconSelectorEn {
 	// Translations
 	String get name => 'Name:';
 	String get icon => 'Icon';
-	String get color => 'Colour';
+	String get color => 'Color';
 	String get select_icon => 'Select an icon';
+	String get select_color => 'Select a color';
 	String get select_account_icon => 'Identify your account';
 	String get select_category_icon => 'Identify your category';
 	late final _TranslationsIconSelectorScopesEn scopes = _TranslationsIconSelectorScopesEn._(_root);
@@ -332,6 +333,8 @@ class _TranslationsTransactionEn {
 	String get new_success => 'Transaction created successfully';
 	String get edit => 'Edit transaction';
 	String get edit_success => 'Transaction edited successfully';
+	String get edit_multiple => 'Edit transactions';
+	String edit_multiple_success({required Object x}) => '${x} transactions edited successfully';
 	String get duplicate => 'Clone transaction';
 	String get duplicate_short => 'Clone';
 	String get duplicate_warning_message => 'A transaction identical to this will be created with the same date, do you want to continue?';
@@ -339,6 +342,9 @@ class _TranslationsTransactionEn {
 	String get delete => 'Delete transaction';
 	String get delete_warning_message => 'This action is irreversible. The current balance of your accounts and all your statistics will be recalculated';
 	String get delete_success => 'Transaction deleted correctly';
+	String get delete_multiple => 'Delete transactions';
+	String delete_multiple_warning_message({required Object x}) => 'This action is irreversible and will remove ${x} transactions. The current balance of your accounts and all your statistics will be recalculated';
+	String delete_multiple_success({required Object x}) => '${x} transactions deleted correctly';
 	String get details => 'Movement details';
 	late final _TranslationsTransactionNextPaymentsEn next_payments = _TranslationsTransactionNextPaymentsEn._(_root);
 	late final _TranslationsTransactionListEn list = _TranslationsTransactionListEn._(_root);
@@ -710,11 +716,10 @@ class _TranslationsFinancialHealthMonthsWithoutIncomeEn {
 	// Translations
 	String get title => 'Survival rate';
 	String get subtitle => 'Given your balance, amount of time you could go without income';
-	String text({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
-		zero: 'You couldn\'t survive a month without income at this rate of expenses!',
-		one: 'You could barely survive approximately a month without income at this rate of expenses!',
-		other: 'You could survive approximately <b>${n} months</b> without income at this rate of spending.',
-	);
+	String get text_zero => 'You couldn\'t survive a month without income at this rate of expenses!';
+	String get text_one => 'You could barely survive approximately a month without income at this rate of expenses!';
+	String text_other({required Object n}) => 'You could survive approximately <b>${n} months</b> without income at this rate of spending.';
+	String get text_infinite => 'You could survive approximately <b>all your life</b> without income at this rate of spending.';
 	String get suggestion => 'Remember that it is advisable to always keep this ratio above 5 months at least. If you see that you do not have a sufficient savings cushion, reduce unnecessary expenses.';
 	String get insufficient_data => 'It looks like we don\'t have enough expenses to calculate how many months you could survive without income. Enter a few transactions and come back here to check your financial health';
 }
@@ -780,6 +785,15 @@ class _TranslationsTransactionListEn {
 	String get searcher_placeholder => 'Search by category, description...';
 	String get searcher_no_results => 'No transactions found matching the search criteria';
 	String get loading => 'Loading more transactions...';
+	String selected_short({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		one: '${n} selected',
+		other: '${n} selected',
+	);
+	String selected_long({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		one: '${n} transaction selected',
+		other: '${n} transactions selected',
+	);
+	late final _TranslationsTransactionListBulkEditEn bulk_edit = _TranslationsTransactionListBulkEditEn._(_root);
 }
 
 // Path: transaction.filters
@@ -1269,6 +1283,17 @@ class _TranslationsFinancialHealthSavingsPercentageTextEn {
 	String get very_bad => 'Wow, you haven\'t managed to save anything during this period.';
 }
 
+// Path: transaction.list.bulk_edit
+class _TranslationsTransactionListBulkEditEn {
+	_TranslationsTransactionListBulkEditEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get dates => 'Edit dates';
+	String get categories => 'Edit categories';
+}
+
 // Path: transaction.form.validators
 class _TranslationsTransactionFormValidatorsEn {
 	_TranslationsTransactionFormValidatorsEn._(this._root);
@@ -1545,6 +1570,7 @@ class _TranslationsIconSelectorEs implements _TranslationsIconSelectorEn {
 	@override String get icon => 'Icono';
 	@override String get color => 'Color';
 	@override String get select_icon => 'Selecciona un icono';
+	@override String get select_color => 'Selecciona un color';
 	@override String get select_account_icon => 'Identifica tu cuenta';
 	@override String get select_category_icon => 'Identifica tu categoría';
 	@override late final _TranslationsIconSelectorScopesEs scopes = _TranslationsIconSelectorScopesEs._(_root);
@@ -1567,6 +1593,8 @@ class _TranslationsTransactionEs implements _TranslationsTransactionEn {
 	@override String get new_success => 'Transacción creada correctamente';
 	@override String get edit => 'Editar transacción';
 	@override String get edit_success => 'Transacción editada correctamente';
+	@override String get edit_multiple => 'Editar transacciones';
+	@override String edit_multiple_success({required Object x}) => '${x} transacciones editadas correctamente';
 	@override String get duplicate => 'Clonar transacción';
 	@override String get duplicate_short => 'Clonar';
 	@override String get duplicate_warning_message => 'Se creará una transacción identica a esta con su misma fecha, ¿deseas continuar?';
@@ -1574,6 +1602,9 @@ class _TranslationsTransactionEs implements _TranslationsTransactionEn {
 	@override String get delete => 'Eliminar transacción';
 	@override String get delete_warning_message => 'Esta acción es irreversible. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas';
 	@override String get delete_success => 'Transacción eliminada correctamente';
+	@override String get delete_multiple => 'Eliminar transacciones';
+	@override String delete_multiple_warning_message({required Object x}) => 'Esta acción es irreversible y borrará definitivamente ${x} transacciones. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas';
+	@override String delete_multiple_success({required Object x}) => '${x} transacciones eliminadas correctamente';
 	@override String get details => 'Detalles del movimiento';
 	@override late final _TranslationsTransactionNextPaymentsEs next_payments = _TranslationsTransactionNextPaymentsEs._(_root);
 	@override late final _TranslationsTransactionListEs list = _TranslationsTransactionListEs._(_root);
@@ -1945,11 +1976,10 @@ class _TranslationsFinancialHealthMonthsWithoutIncomeEs implements _Translations
 	// Translations
 	@override String get title => 'Ratio de supervivencia';
 	@override String get subtitle => 'Dado tu saldo, cantidad de tiempo que podrías pasar sin ingresos';
-	@override String text({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
-		zero: 'No podrías sobrevivir ni un mes sin ingresos con este ritmo de gastos!',
-		one: 'Apenas podrías sobrevivir aproximadatemente un mes sin ingresos con este ritmo de gastos!',
-		other: 'Podrías sobrevivir aproximadamente <b>${n} meses</b> sin ingresos manteniendo este ritmo de gastos.',
-	);
+	@override String get text_zero => '¡No podrías sobrevivir un mes sin ingresos con este ritmo de gastos!';
+	@override String get text_one => '¡Apenas podrías sobrevivir aproximadamente un mes sin ingresos con este ritmo de gastos!';
+	@override String text_other({required Object n}) => 'Podrías sobrevivir aproximadamente <b>${n} meses</b> sin ingresos a este ritmo de gasto.';
+	@override String get text_infinite => 'Podrías sobrevivir aproximadamente <b>casi toda tu vida</b> sin ingresos a este ritmo de gasto.';
 	@override String get suggestion => 'Recuerda que es recomendable mantener este ratio siempre por encima de 5 meses como mínimo. Si ves que no tienes un colchon de ahorro suficiente, reduce los gastos no necesarios.';
 	@override String get insufficient_data => 'Parece que no tenemos gastos suficientes para calcular cuantos meses podrías sobrevivir sin ingresos. Introduce unas pocas transacciones y regresa aquí para consultar tu salud financiera';
 }
@@ -2015,6 +2045,15 @@ class _TranslationsTransactionListEs implements _TranslationsTransactionListEn {
 	@override String get searcher_placeholder => 'Busca por categoría, descripción...';
 	@override String get searcher_no_results => 'No se han encontrado transacciones que coincidan con los criterios de busqueda';
 	@override String get loading => 'Cargando más transacciones...';
+	@override String selected_short({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		one: '${n} seleccionada',
+		other: '${n} seleccionadas',
+	);
+	@override String selected_long({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		one: '${n} transacción seleccionada',
+		other: '${n} transacciones seleccionadas',
+	);
+	@override late final _TranslationsTransactionListBulkEditEs bulk_edit = _TranslationsTransactionListBulkEditEs._(_root);
 }
 
 // Path: transaction.filters
@@ -2505,6 +2544,17 @@ class _TranslationsFinancialHealthSavingsPercentageTextEs implements _Translatio
 	@override String get very_bad => 'Vaya, no has conseguido ahorrar nada durante este periodo.';
 }
 
+// Path: transaction.list.bulk_edit
+class _TranslationsTransactionListBulkEditEs implements _TranslationsTransactionListBulkEditEn {
+	_TranslationsTransactionListBulkEditEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get dates => 'Editar fechas';
+	@override String get categories => 'Editar categorías';
+}
+
 // Path: transaction.form.validators
 class _TranslationsTransactionFormValidatorsEs implements _TranslationsTransactionFormValidatorsEn {
 	_TranslationsTransactionFormValidatorsEs._(this._root);
@@ -2806,11 +2856,10 @@ extension on Translations {
 			case 'financial_health.review.descr.very_bad': return 'Hmm, your financial health is far below what it should be. Explore the rest of the charts to learn more about your finances';
 			case 'financial_health.months_without_income.title': return 'Survival rate';
 			case 'financial_health.months_without_income.subtitle': return 'Given your balance, amount of time you could go without income';
-			case 'financial_health.months_without_income.text': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
-				zero: 'You couldn\'t survive a month without income at this rate of expenses!',
-				one: 'You could barely survive approximately a month without income at this rate of expenses!',
-				other: 'You could survive approximately <b>${n} months</b> without income at this rate of spending.',
-			);
+			case 'financial_health.months_without_income.text_zero': return 'You couldn\'t survive a month without income at this rate of expenses!';
+			case 'financial_health.months_without_income.text_one': return 'You could barely survive approximately a month without income at this rate of expenses!';
+			case 'financial_health.months_without_income.text_other': return ({required Object n}) => 'You could survive approximately <b>${n} months</b> without income at this rate of spending.';
+			case 'financial_health.months_without_income.text_infinite': return 'You could survive approximately <b>all your life</b> without income at this rate of spending.';
 			case 'financial_health.months_without_income.suggestion': return 'Remember that it is advisable to always keep this ratio above 5 months at least. If you see that you do not have a sufficient savings cushion, reduce unnecessary expenses.';
 			case 'financial_health.months_without_income.insufficient_data': return 'It looks like we don\'t have enough expenses to calculate how many months you could survive without income. Enter a few transactions and come back here to check your financial health';
 			case 'financial_health.savings_percentage.title': return 'Savings percentage';
@@ -2836,8 +2885,9 @@ extension on Translations {
 			case 'stats.finance_health_breakdown': return 'Breakdown';
 			case 'icon_selector.name': return 'Name:';
 			case 'icon_selector.icon': return 'Icon';
-			case 'icon_selector.color': return 'Colour';
+			case 'icon_selector.color': return 'Color';
 			case 'icon_selector.select_icon': return 'Select an icon';
+			case 'icon_selector.select_color': return 'Select a color';
 			case 'icon_selector.select_account_icon': return 'Identify your account';
 			case 'icon_selector.select_category_icon': return 'Identify your category';
 			case 'icon_selector.scopes.transport': return 'Transport';
@@ -2858,6 +2908,8 @@ extension on Translations {
 			case 'transaction.new_success': return 'Transaction created successfully';
 			case 'transaction.edit': return 'Edit transaction';
 			case 'transaction.edit_success': return 'Transaction edited successfully';
+			case 'transaction.edit_multiple': return 'Edit transactions';
+			case 'transaction.edit_multiple_success': return ({required Object x}) => '${x} transactions edited successfully';
 			case 'transaction.duplicate': return 'Clone transaction';
 			case 'transaction.duplicate_short': return 'Clone';
 			case 'transaction.duplicate_warning_message': return 'A transaction identical to this will be created with the same date, do you want to continue?';
@@ -2865,6 +2917,9 @@ extension on Translations {
 			case 'transaction.delete': return 'Delete transaction';
 			case 'transaction.delete_warning_message': return 'This action is irreversible. The current balance of your accounts and all your statistics will be recalculated';
 			case 'transaction.delete_success': return 'Transaction deleted correctly';
+			case 'transaction.delete_multiple': return 'Delete transactions';
+			case 'transaction.delete_multiple_warning_message': return ({required Object x}) => 'This action is irreversible and will remove ${x} transactions. The current balance of your accounts and all your statistics will be recalculated';
+			case 'transaction.delete_multiple_success': return ({required Object x}) => '${x} transactions deleted correctly';
 			case 'transaction.details': return 'Movement details';
 			case 'transaction.next_payments.accept': return 'Accept';
 			case 'transaction.next_payments.skip': return 'Skip';
@@ -2881,6 +2936,16 @@ extension on Translations {
 			case 'transaction.list.searcher_placeholder': return 'Search by category, description...';
 			case 'transaction.list.searcher_no_results': return 'No transactions found matching the search criteria';
 			case 'transaction.list.loading': return 'Loading more transactions...';
+			case 'transaction.list.selected_short': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+				one: '${n} selected',
+				other: '${n} selected',
+			);
+			case 'transaction.list.selected_long': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+				one: '${n} transaction selected',
+				other: '${n} transactions selected',
+			);
+			case 'transaction.list.bulk_edit.dates': return 'Edit dates';
+			case 'transaction.list.bulk_edit.categories': return 'Edit categories';
 			case 'transaction.filters.from_value': return 'From amount';
 			case 'transaction.filters.to_value': return 'Up to amount';
 			case 'transaction.filters.from_value_def': return ({required Object x}) => 'From ${x}';
@@ -3400,11 +3465,10 @@ extension on _TranslationsEs {
 			case 'financial_health.review.descr.very_bad': return 'Mmm, tu salud financera esta muy por debajo de lo que debería. Trata de ver donde esta el problema gracias a los distintos gráficos y estadisticas que te proporcionamos';
 			case 'financial_health.months_without_income.title': return 'Ratio de supervivencia';
 			case 'financial_health.months_without_income.subtitle': return 'Dado tu saldo, cantidad de tiempo que podrías pasar sin ingresos';
-			case 'financial_health.months_without_income.text': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
-				zero: 'No podrías sobrevivir ni un mes sin ingresos con este ritmo de gastos!',
-				one: 'Apenas podrías sobrevivir aproximadatemente un mes sin ingresos con este ritmo de gastos!',
-				other: 'Podrías sobrevivir aproximadamente <b>${n} meses</b> sin ingresos manteniendo este ritmo de gastos.',
-			);
+			case 'financial_health.months_without_income.text_zero': return '¡No podrías sobrevivir un mes sin ingresos con este ritmo de gastos!';
+			case 'financial_health.months_without_income.text_one': return '¡Apenas podrías sobrevivir aproximadamente un mes sin ingresos con este ritmo de gastos!';
+			case 'financial_health.months_without_income.text_other': return ({required Object n}) => 'Podrías sobrevivir aproximadamente <b>${n} meses</b> sin ingresos a este ritmo de gasto.';
+			case 'financial_health.months_without_income.text_infinite': return 'Podrías sobrevivir aproximadamente <b>casi toda tu vida</b> sin ingresos a este ritmo de gasto.';
 			case 'financial_health.months_without_income.suggestion': return 'Recuerda que es recomendable mantener este ratio siempre por encima de 5 meses como mínimo. Si ves que no tienes un colchon de ahorro suficiente, reduce los gastos no necesarios.';
 			case 'financial_health.months_without_income.insufficient_data': return 'Parece que no tenemos gastos suficientes para calcular cuantos meses podrías sobrevivir sin ingresos. Introduce unas pocas transacciones y regresa aquí para consultar tu salud financiera';
 			case 'financial_health.savings_percentage.title': return 'Porcentaje de ahorro';
@@ -3432,6 +3496,7 @@ extension on _TranslationsEs {
 			case 'icon_selector.icon': return 'Icono';
 			case 'icon_selector.color': return 'Color';
 			case 'icon_selector.select_icon': return 'Selecciona un icono';
+			case 'icon_selector.select_color': return 'Selecciona un color';
 			case 'icon_selector.select_account_icon': return 'Identifica tu cuenta';
 			case 'icon_selector.select_category_icon': return 'Identifica tu categoría';
 			case 'icon_selector.scopes.transport': return 'Transporte';
@@ -3452,6 +3517,8 @@ extension on _TranslationsEs {
 			case 'transaction.new_success': return 'Transacción creada correctamente';
 			case 'transaction.edit': return 'Editar transacción';
 			case 'transaction.edit_success': return 'Transacción editada correctamente';
+			case 'transaction.edit_multiple': return 'Editar transacciones';
+			case 'transaction.edit_multiple_success': return ({required Object x}) => '${x} transacciones editadas correctamente';
 			case 'transaction.duplicate': return 'Clonar transacción';
 			case 'transaction.duplicate_short': return 'Clonar';
 			case 'transaction.duplicate_warning_message': return 'Se creará una transacción identica a esta con su misma fecha, ¿deseas continuar?';
@@ -3459,6 +3526,9 @@ extension on _TranslationsEs {
 			case 'transaction.delete': return 'Eliminar transacción';
 			case 'transaction.delete_warning_message': return 'Esta acción es irreversible. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas';
 			case 'transaction.delete_success': return 'Transacción eliminada correctamente';
+			case 'transaction.delete_multiple': return 'Eliminar transacciones';
+			case 'transaction.delete_multiple_warning_message': return ({required Object x}) => 'Esta acción es irreversible y borrará definitivamente ${x} transacciones. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas';
+			case 'transaction.delete_multiple_success': return ({required Object x}) => '${x} transacciones eliminadas correctamente';
 			case 'transaction.details': return 'Detalles del movimiento';
 			case 'transaction.next_payments.skip': return 'Saltar';
 			case 'transaction.next_payments.skip_success': return 'Transacción saltada con exito';
@@ -3475,6 +3545,16 @@ extension on _TranslationsEs {
 			case 'transaction.list.searcher_placeholder': return 'Busca por categoría, descripción...';
 			case 'transaction.list.searcher_no_results': return 'No se han encontrado transacciones que coincidan con los criterios de busqueda';
 			case 'transaction.list.loading': return 'Cargando más transacciones...';
+			case 'transaction.list.selected_short': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+				one: '${n} seleccionada',
+				other: '${n} seleccionadas',
+			);
+			case 'transaction.list.selected_long': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+				one: '${n} transacción seleccionada',
+				other: '${n} transacciones seleccionadas',
+			);
+			case 'transaction.list.bulk_edit.dates': return 'Editar fechas';
+			case 'transaction.list.bulk_edit.categories': return 'Editar categorías';
 			case 'transaction.filters.from_value': return 'Desde monto';
 			case 'transaction.filters.to_value': return 'Hasta monto';
 			case 'transaction.filters.from_value_def': return ({required Object x}) => 'Desde ${x}';

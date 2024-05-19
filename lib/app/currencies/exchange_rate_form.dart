@@ -3,17 +3,19 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
-import 'package:monekin/core/presentation/widgets/date_form_field/date_field.dart';
-import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
-import 'package:monekin/core/presentation/widgets/skeleton.dart';
+import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
+import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
-import 'package:uuid/uuid.dart';
 
 showExchangeRateFormDialog(
   BuildContext context,
@@ -88,7 +90,7 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
 
     ExchangeRateService.instance
         .insertOrUpdateExchangeRate(ExchangeRate(
-            id: widget.idToEdit ?? const Uuid().v4(),
+            id: widget.idToEdit ?? generateUUID(),
             currency: _currency!,
             date: date,
             exchangeRate: double.parse(rateController.text)))
@@ -116,48 +118,58 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextFormField(
-                  controller: TextEditingController(
-                      text: _currency != null
-                          ? _currency?.name
-                          : t.general.unspecified),
-                  readOnly: true,
-                  validator: (value) {
-                    if (_currency == null) {
-                      return t.currencies.form.specify_a_currency;
-                    } else if (_currency!.code == userPreferredCurrency?.code) {
-                      return t.currencies.form.equal_to_preferred_warn;
-                    }
+                controller: TextEditingController(
+                    text: _currency != null
+                        ? _currency?.name
+                        : t.general.unspecified),
+                readOnly: true,
+                mouseCursor: SystemMouseCursors.click,
+                validator: (value) {
+                  if (_currency == null) {
+                    return t.currencies.form.specify_a_currency;
+                  } else if (_currency!.code == userPreferredCurrency?.code) {
+                    return t.currencies.form.equal_to_preferred_warn;
+                  }
 
-                    return null;
-                  },
-                  onTap: () {
-                    showCurrencySelectorModal(
-                        context,
-                        CurrencySelectorModal(
-                            preselectedCurrency: _currency,
-                            onCurrencySelected: (newCurrency) => {
-                                  setState(() {
-                                    _currency = newCurrency;
-                                  })
-                                }));
-                  },
-                  decoration: InputDecoration(
-                      labelText: t.currencies.currency,
-                      suffixIcon: const Icon(Icons.arrow_drop_down),
-                      prefixIcon: Container(
-                        margin: const EdgeInsets.all(10),
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
+                  return null;
+                },
+                onTap: () {
+                  showCurrencySelectorModal(
+                      context,
+                      CurrencySelectorModal(
+                          preselectedCurrency: _currency,
+                          onCurrencySelected: (newCurrency) => {
+                                setState(() {
+                                  _currency = newCurrency;
+                                })
+                              }));
+                },
+                decoration: InputDecoration(
+                  labelText: t.currencies.currency,
+                  suffixIcon: const Icon(Icons.arrow_drop_down),
+                  prefixIcon: _currency != null
+                      ? Container(
+                          margin: const EdgeInsets.all(10),
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                          child: SvgPicture.asset(
+                            'assets/icons/currency_flags/${_currency!.code.toLowerCase()}.svg',
+                            height: 25,
+                            width: 25,
+                          ),
+                        )
+                      : Container(
+                          margin: const EdgeInsets.all(10),
+                          child: Icon(
+                            Icons.circle,
+                            size: 25,
+                            color: AppColors.of(context).inputFill.darken(0.2),
+                          ),
                         ),
-                        child: _currency != null
-                            ? SvgPicture.asset(
-                                'assets/icons/currency_flags/${_currency!.code.toLowerCase()}.svg',
-                                height: 25,
-                                width: 25,
-                              )
-                            : const Skeleton(width: 28, height: 28),
-                      ))),
+                ),
+              ),
               const SizedBox(height: 22),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,7 +181,9 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                       ),
                       mode: DateTimeFieldPickerMode.date,
                       initialDate: date,
-                      dateFormat: DateFormat.yMMMd(),
+                      dateFormat: date.year == currentYear
+                          ? DateFormat.MMMMd()
+                          : DateFormat.yMMMd(),
                       validator: (e) =>
                           e == null ? t.general.validations.required : null,
                       onDateSelected: (DateTime value) {
@@ -179,7 +193,7 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                       },
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 8),
                   Expanded(
                       child: TextFormField(
                     controller: rateController,

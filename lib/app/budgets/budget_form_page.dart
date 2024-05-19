@@ -9,12 +9,12 @@ import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
-import 'package:monekin/core/presentation/widgets/date_form_field/date_field.dart';
-import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/icon_displayer_widgets.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
+import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../core/models/account/account.dart';
 import '../../core/presentation/widgets/persistent_footer_button.dart';
@@ -48,28 +48,6 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
   DateTime startDate = DateTime.now();
   DateTime? endDate;
 
-  Widget selector({
-    required String title,
-    required String? inputValue,
-    required Function onClick,
-  }) {
-    return TextFormField(
-        controller: TextEditingController(text: inputValue ?? ''),
-        readOnly: true,
-        onTap: () => onClick(),
-        validator: (value) {
-          if (inputValue == null) {
-            return 'Please, specify at least one item here';
-          }
-
-          return null;
-        },
-        decoration: InputDecoration(
-          labelText: title,
-          suffixIcon: const Icon(Icons.arrow_drop_down),
-        ));
-  }
-
   submitForm() {
     final t = Translations.of(context);
 
@@ -92,7 +70,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
     final Budget toPush;
 
     toPush = Budget(
-      id: isEditMode ? widget.budgetToEdit!.id : const Uuid().v4(),
+      id: isEditMode ? widget.budgetToEdit!.id : generateUUID(),
       name: nameController.text,
       limitAmount: valueToNumber!,
       intervalPeriod: intervalPeriod,

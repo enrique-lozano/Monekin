@@ -6,6 +6,7 @@ import 'package:monekin/core/models/date-utils/period_type.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/dates/outlinedButtonStacked.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_field.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
@@ -117,6 +118,7 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
                                     textAlign: TextAlign.center,
                                     decoration: const InputDecoration(
                                       border: UnderlineInputBorder(),
+                                      filled: false,
                                       counterText: '',
                                     ),
                                     inputFormatters: [
@@ -209,15 +211,14 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: TextFormField(
-              controller: TextEditingController(
-                  text: dateToSelect != null
-                      ? DateFormat.yMMMMd().format(dateToSelect)
-                      : ''),
-              readOnly: true,
+            child: ReadOnlyTextFormField(
+              displayValue: dateToSelect != null
+                  ? DateFormat.yMMMMd().format(dateToSelect)
+                  : '',
               textAlign: TextAlign.center,
               decoration: InputDecoration(
                 border: const UnderlineInputBorder(),
+                filled: false,
                 hintText: '-- ${t.general.unspecified} --',
               ),
               onTap: () {

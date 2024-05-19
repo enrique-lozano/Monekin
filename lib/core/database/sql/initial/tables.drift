@@ -4,7 +4,8 @@
 ---- * --- Remove the imports 
 
 import './../../../models/transaction/transaction.dart';
-import './../../../models/transaction/transaction_status.dart';
+import './../../../models/transaction/transaction_status.enum.dart';
+import './../../../models/transaction/transaction_type.enum.dart';
 import './../../../models/date-utils/periodicity.dart';
 import './../../../models/category/category.dart';
 import './../../../models/account/account.dart';

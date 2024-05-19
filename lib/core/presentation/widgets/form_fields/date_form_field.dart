@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/core/presentation/widgets/date_form_field/date_field.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 
 /// A [FormField] that contains a [DateTimeField].
 ///
@@ -13,12 +13,12 @@ import 'package:monekin/core/presentation/widgets/date_form_field/date_field.dar
 /// save or reset the form field.
 class DateTimeFormField extends FormField<DateTime> {
   DateTimeFormField({
-    Key? key,
-    FormFieldSetter<DateTime>? onSaved,
-    FormFieldValidator<DateTime>? validator,
+    super.key,
+    super.onSaved,
+    super.validator,
     DateTime? initialValue,
-    AutovalidateMode? autovalidateMode,
-    bool enabled = true,
+    super.autovalidateMode,
+    super.enabled,
     bool use24hFormat = false,
     TextStyle? dateTextStyle,
     DateFormat? dateFormat,
@@ -33,12 +33,7 @@ class DateTimeFormField extends FormField<DateTime> {
     TimePickerEntryMode initialTimePickerEntryMode = TimePickerEntryMode.dial,
     DateTimeFieldCreator fieldCreator = DateTimeField.new,
   }) : super(
-          key: key,
           initialValue: initialValue ?? initialDate,
-          onSaved: onSaved,
-          validator: validator,
-          autovalidateMode: autovalidateMode,
-          enabled: enabled,
           builder: (FormFieldState<DateTime> field) {
             // Theme defaults are applied inside the _InputDropdown widget
             final InputDecoration _decorationWithThemeDefaults =

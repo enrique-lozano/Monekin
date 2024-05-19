@@ -35,7 +35,7 @@ typedef DateTimeFieldCreator = DateTimeField Function({
 class DateTimeField extends StatelessWidget {
   // Note: This should match the definition of the [DateTimeFieldCreator]
   DateTimeField({
-    Key? key,
+    super.key,
     required this.onDateSelected,
     required this.selectedDate,
     this.initialDatePickerMode = DatePickerMode.day,
@@ -52,11 +52,10 @@ class DateTimeField extends StatelessWidget {
     this.initialTimePickerEntryMode = TimePickerEntryMode.dial,
   })  : dateFormat = dateFormat ?? getDateFormatFromDateFieldPickerMode(mode),
         firstDate = firstDate ?? kDefaultFirstSelectableDate,
-        lastDate = lastDate ?? kDefaultLastSelectableDate,
-        super(key: key);
+        lastDate = lastDate ?? kDefaultLastSelectableDate;
 
   DateTimeField.time({
-    Key? key,
+    super.key,
     this.onDateSelected,
     this.selectedDate,
     this.decoration,
@@ -72,8 +71,7 @@ class DateTimeField extends StatelessWidget {
         mode = DateTimeFieldPickerMode.time,
         dateFormat = DateFormat.jm(),
         firstDate = firstDate ?? DateTime(2000),
-        lastDate = lastDate ?? DateTime(2001),
-        super(key: key);
+        lastDate = lastDate ?? DateTime(2001);
 
   /// Callback for whenever the user selects a [DateTime]
   final ValueChanged<DateTime>? onDateSelected;
@@ -192,6 +190,7 @@ class DateTimeField extends StatelessWidget {
           hintText: '-- ${t.general.unspecified.toLowerCase()} --'),
       style: dateTextStyle,
       readOnly: true,
+      mouseCursor: SystemMouseCursors.click,
       enabled: enabled,
       onTap: enabled! ? () => _selectDate(context) : null,
     );

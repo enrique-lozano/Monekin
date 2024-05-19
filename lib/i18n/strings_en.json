@@ -28,8 +28,8 @@
     "show-more-fields": "Show more fields",
     "show-less-fields": "Show less fields",
     "CLIPBOARD": {
-      "success": "{{x}} copiado al portapapeles",
-      "error": "Error al copiar"
+      "success": "{{x}} copied to the clipboard",
+      "error": "Error copying"
     },
     "TIME": {
       "start-date": "Start date",
@@ -188,11 +188,10 @@
     "monthsWithoutIncome": {
       "title": "Survival rate",
       "subtitle": "Given your balance, amount of time you could go without income",
-      "text": {
-        "zero": "You couldn't survive a month without income at this rate of expenses!",
-        "one": "You could barely survive approximately a month without income at this rate of expenses!",
-        "other": "You could survive approximately <b>{{ n }} months</b> without income at this rate of spending."
-      },
+      "text.zero": "You couldn't survive a month without income at this rate of expenses!",
+      "text.one": "You could barely survive approximately a month without income at this rate of expenses!",
+      "text.other": "You could survive approximately <b>{{ n }} months</b> without income at this rate of spending.",
+      "text.infinite": "You could survive approximately <b>all your life</b> without income at this rate of spending.",
       "suggestion": "Remember that it is advisable to always keep this ratio above 5 months at least. If you see that you do not have a sufficient savings cushion, reduce unnecessary expenses.",
       "insufficient_data": "It looks like we don't have enough expenses to calculate how many months you could survive without income. Enter a few transactions and come back here to check your financial health"
     },
@@ -227,8 +226,9 @@
   "ICON-SELECTOR": {
     "name": "Name:",
     "icon": "Icon",
-    "color": "Colour",
+    "color": "Color",
     "select-icon": "Select an icon",
+    "select-color": "Select a color",
     "select-account-icon": "Identify your account",
     "select-category-icon": "Identify your category",
     "SCOPES": {
@@ -253,6 +253,8 @@
     "new.success": "Transaction created successfully",
     "edit": "Edit transaction",
     "edit.success": "Transaction edited successfully",
+    "edit.multiple": "Edit transactions",
+    "edit.multiple.success": "{{ x }} transactions edited successfully",
     "duplicate": "Clone transaction",
     "duplicate.short": "Clone",
     "duplicate.warning-message": "A transaction identical to this will be created with the same date, do you want to continue?",
@@ -260,6 +262,9 @@
     "delete": "Delete transaction",
     "delete.warning-message": "This action is irreversible. The current balance of your accounts and all your statistics will be recalculated",
     "delete.success": "Transaction deleted correctly",
+    "delete.multiple": "Delete transactions",
+    "delete.multiple.warning-message": "This action is irreversible and will remove {{ x }} transactions. The current balance of your accounts and all your statistics will be recalculated",
+    "delete.multiple.success": "{{x}} transactions deleted correctly",
     "details": "Movement details",
     "NEXT-PAYMENTS": {
       "accept": "Accept",
@@ -278,7 +283,16 @@
       "empty": "No transactions found to display here. Add a transaction by clicking the '+' button at the bottom",
       "searcher.placeholder": "Search by category, description...",
       "searcher.no-results": "No transactions found matching the search criteria",
-      "loading": "Loading more transactions..."
+      "loading": "Loading more transactions...",
+      "selected.short": { "one": "{{n}} selected", "other": "{{n}} selected" },
+      "selected.long": {
+        "one": "{{n}} transaction selected",
+        "other": "{{n}} transactions selected"
+      },
+      "BULK_EDIT": {
+        "dates": "Edit dates",
+        "categories": "Edit categories"
+      }
     },
     "FILTERS": {
       "from_value": "From amount",

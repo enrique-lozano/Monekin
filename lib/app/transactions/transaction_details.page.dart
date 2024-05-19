@@ -5,23 +5,24 @@ import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_status.dart';
+import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/services/view-actions/transaction_view_actions_service.dart';
-import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
-import 'package:monekin/core/utils/string_utils.dart';
+import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
-import 'package:uuid/uuid.dart';
 
+import '../../core/models/transaction/transaction_type.enum.dart';
 import '../../core/presentation/app_colors.dart';
 
 class TransactionDetailAction {
@@ -83,7 +84,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                 child: Text(t.general.continue_text),
                 onPressed: () {
                   final newId = transaction.recurrentInfo.isRecurrent
-                      ? const Uuid().v4()
+                      ? generateUUID()
                       : transaction.id;
 
                   const nullValue = drift.Value(null);
@@ -519,9 +520,15 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                 children: [
                                   buildInfoTileWithIconAndColor(
                                     icon: transaction.account.icon,
-                                    color: AppColors.of(context).primary,
+                                    color: transaction.account
+                                        .getComputedColor(context)
+                                        .lighten(isAppInDarkBrightness(context)
+                                            ? 0.5
+                                            : 0),
                                     data: transaction.account.name,
-                                    title: t.general.account,
+                                    title: transaction.isTransfer
+                                        ? t.transfer.form.from
+                                        : t.general.account,
                                   ),
                                   if (transaction.isIncomeOrExpense)
                                     buildInfoTileWithIconAndColor(
@@ -529,8 +536,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                       color: ColorHex.get(
                                               transaction.category!.color)
                                           .lighten(
-                                              Theme.of(context).brightness ==
-                                                      Brightness.dark
+                                              isAppInDarkBrightness(context)
                                                   ? 0.5
                                                   : 0),
                                       data: transaction.category!.name,
@@ -541,7 +547,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                       icon: transaction.receivingAccount!.icon,
                                       color: AppColors.of(context).primary,
                                       data: transaction.receivingAccount!.name,
-                                      title: t.transfer.form.from,
+                                      title: t.transfer.form.to,
                                     ),
                                   buildInfoListTile(
                                     trailing: Text(
@@ -882,21 +888,10 @@ class _TransactionDetailHeader extends SliverPersistentHeaderDelegate {
           const SizedBox(width: 24),
           Hero(
             tag: heroTag ?? UniqueKey(),
-            child: transaction.isIncomeOrExpense
-                ? IconDisplayer.fromCategory(
-                    context,
-                    category: transaction.category!,
-                    size: 42 - shrinkPercent * 16,
-                    isOutline: true,
-                    borderRadius: 18,
-                  )
-                : IconDisplayer(
-                    mainColor: transaction.color(context),
-                    icon: TransactionType.transfer.icon,
-                    size: 42 - shrinkPercent * 16,
-                    isOutline: true,
-                    borderRadius: 18,
-                  ),
+            child: transaction.getDisplayIcon(
+              context,
+              size: 42 - shrinkPercent * 16,
+            ),
           ),
         ],
       ),

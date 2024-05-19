@@ -3,29 +3,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_type_selector.dart';
+import 'package:monekin/app/categories/form/icon_and_color_selector.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
+import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
-import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/expansion_panel/single_expansion_panel.dart';
-import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_field.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
-import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
+import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
-import 'package:uuid/uuid.dart';
+
+import '../../core/models/transaction/transaction_type.enum.dart';
 
 class AccountFormPage extends StatefulWidget {
   const AccountFormPage({super.key, this.account});
@@ -48,6 +51,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
 
   AccountType _type = AccountType.normal;
   SupportedIcon _icon = SupportedIconService.instance.defaultSupportedIcon;
+  Color _color = ColorHex.get(defaultColorPickerOptions.randomItem());
   Currency? _currency;
   Currency? _userPrCurrency;
 
@@ -65,6 +69,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
     final snackbarDisplayer = ScaffoldMessenger.of(context).showSnackBar;
 
     if (_accountToEdit != null) {
+      // Check if there are transactions before the opening date of the account:
       if ((await TransactionService.instance
               .getTransactions(
                 filters: TransactionFilters(
@@ -85,27 +90,25 @@ class _AccountFormPageState extends State<AccountFormPage> {
     }
 
     Account accountToSubmit = Account(
-      id: _accountToEdit?.id ?? const Uuid().v4(),
+      id: _accountToEdit?.id ?? generateUUID(),
       name: _nameController.text,
-      displayOrder: 10,
+      displayOrder: _accountToEdit?.displayOrder ?? 10,
       iniValue: newBalance,
       date: _openingDate,
       closingDate: _closeDate,
       type: _type,
       iconId: _icon.id,
+      color: _color.toHex(leadingHashSign: false),
       currency: _currency!,
       iban: _ibanController.text.isEmpty ? null : _ibanController.text,
       description: _textController.text.isEmpty ? null : _textController.text,
       swift: _swiftController.text.isEmpty ? null : _swiftController.text,
     );
 
-    if (_accountToEdit != null) {
-      await accountService
-          .updateAccount(accountToSubmit)
-          .then((value) => {navigateBack()});
-    } else {
+    // Check for accounts with same names before continue:
+    if (_accountToEdit == null ||
+        _accountToEdit!.name != accountToSubmit.name) {
       final db = AppDB.instance;
-
       final query = db.select(db.accounts)
         ..addColumns([db.accounts.id.count()])
         ..where((tbl) => tbl.name.isValue(_nameController.text));
@@ -117,7 +120,13 @@ class _AccountFormPageState extends State<AccountFormPage> {
 
         return;
       }
+    }
 
+    if (_accountToEdit != null) {
+      await accountService
+          .updateAccount(accountToSubmit)
+          .then((value) => {navigateBack()});
+    } else {
       await accountService
           .insertAccount(accountToSubmit)
           .then((value) => {navigateBack()});
@@ -163,6 +172,9 @@ class _AccountFormPageState extends State<AccountFormPage> {
         .first
         .then((value) {
       _balanceController.text = value.toString();
+
+      print(_accountToEdit!.color);
+      _color = _accountToEdit!.getComputedColor(context);
     });
 
     _icon = _accountToEdit!.icon;
@@ -217,256 +229,228 @@ class _AccountFormPageState extends State<AccountFormPage> {
             ? t.account.form.edit
             : t.account.form.create),
       ),
-      body: widget.account != null && _accountToEdit == null
-          ? const LinearProgressIndicator()
-          : SingleChildScrollView(
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Builder(builder: (context) {
-                            final isDark =
-                                Theme.of(context).brightness == Brightness.dark;
+      body: Builder(builder: (context) {
+        if (widget.account != null && _accountToEdit == null) {
+          return const LinearProgressIndicator();
+        }
 
-                            return IconDisplayer(
-                              supportedIcon: _icon,
-                              size: 40,
-                              isOutline: true,
-                              outlineWidth: 1.5,
-                              mainColor: (isDark
-                                      ? AppColors.of(context).onPrimary
-                                      : AppColors.of(context).primary)
-                                  .lighten(isDark ? 0.82 : 0),
-                              secondaryColor: (isDark
-                                      ? AppColors.of(context).onPrimary
-                                      : AppColors.of(context).primary)
-                                  .lighten(isDark ? 0 : 0.82),
-                              displayMode: IconDisplayMode.polygon,
-                              onTap: () {
-                                showIconSelectorModal(
-                                  context,
-                                  IconSelectorModal(
-                                    preselectedIconID: _icon.id,
-                                    subtitle:
-                                        t.icon_selector.select_account_icon,
-                                    onIconSelected: (selectedIcon) {
-                                      setState(() {
-                                        _icon = selectedIcon;
-                                      });
-                                    },
-                                  ),
-                                );
-                              },
-                            );
-                          }),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: TextFormField(
-                              controller: _nameController,
-                              decoration: InputDecoration(
-                                labelText: '${t.account.form.name} *',
-                                hintText: 'Ex.: My account',
-                              ),
-                              validator: (value) =>
-                                  fieldValidator(value, isRequired: true),
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              textInputAction: TextInputAction.next,
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                IconAndColorSelector(
+                  iconSelectorModalSubtitle:
+                      t.icon_selector.select_account_icon,
+                  iconDisplayer: IconDisplayer(
+                    supportedIcon: _icon,
+                    size: 36,
+                    isOutline: true,
+                    outlineWidth: 1.5,
+                    mainColor: _color.lighten(0.82),
+                    secondaryColor: _color,
+                    displayMode: IconDisplayMode.polygon,
+                  ),
+                  onDataChange: ((data) {
+                    setState(() {
+                      _icon = data.icon;
+                      _color = data.color;
+                    });
+                  }),
+                  data: (color: _color, icon: _icon),
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    labelText: '${t.account.form.name} *',
+                    hintText: 'Ex.: My account',
+                  ),
+                  validator: (value) => fieldValidator(value, isRequired: true),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  textInputAction: TextInputAction.next,
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _balanceController,
+                  decoration: InputDecoration(
+                    labelText: widget.account != null
+                        ? '${t.account.form.current_balance} *'
+                        : '${t.account.form.initial_balance} *',
+                    hintText: 'Ex.: 200',
+                    suffixText: _currency?.symbol,
+                  ),
+                  keyboardType: TextInputType.number,
+                  enabled:
+                      !(widget.account != null && widget.account!.isClosed),
+                  inputFormatters: decimalDigitFormatter,
+                  validator: (value) => fieldValidator(value,
+                      validator: ValidatorType.double, isRequired: true),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  textInputAction: TextInputAction.next,
+                ),
+                const SizedBox(height: 16),
+                ReadOnlyTextFormField(
+                    displayValue: _currency != null
+                        ? _currency!.name
+                        : t.general.unspecified,
+                    onTap: () {
+                      if (_currency == null) return;
+
+                      showCurrencySelectorModal(
+                        context,
+                        CurrencySelectorModal(
+                            preselectedCurrency: _currency!,
+                            onCurrencySelected: (newCurrency) {
+                              setState(() {
+                                _currency = newCurrency;
+                              });
+                            }),
+                      );
+                    },
+                    decoration: InputDecoration(
+                        labelText: t.currencies.currency,
+                        suffixIcon: const Icon(Icons.arrow_drop_down),
+                        prefixIcon: _currency != null
+                            ? Container(
+                                margin: const EdgeInsets.all(10),
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100)),
+                                child: SvgPicture.asset(
+                                  _currency!.currencyIconPath,
+                                  height: 25,
+                                  width: 25,
+                                ),
+                              )
+                            : null)),
+                const SizedBox(height: 12),
+                if (_currency != null)
+                  StreamBuilder(
+                      stream: ExchangeRateService.instance
+                          .getLastExchangeRateOf(currencyCode: _currency!.code),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData ||
+                            _currency?.code == _userPrCurrency?.code) {
+                          return Container();
+                        } else {
+                          return InlineInfoCard(
+                              text: t.account.form.currency_not_found_warn,
+                              mode: InlineInfoCardMode.warn);
+                        }
+                      }),
+                StreamBuilder(
+                  stream: _accountToEdit == null
+                      ? Stream.value(true)
+                      : TransactionService.instance
+                          .countTransactions(
+                            predicate: TransactionFilters(
+                              transactionTypes: [
+                                TransactionType.expense,
+                                TransactionType.income
+                              ],
+                              accountsIDs: [_accountToEdit!.id],
                             ),
                           )
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        controller: _balanceController,
-                        decoration: InputDecoration(
-                          labelText: widget.account != null
-                              ? '${t.account.form.current_balance} *'
-                              : '${t.account.form.initial_balance} *',
-                          hintText: 'Ex.: 200',
-                          suffixText: _currency?.symbol,
-                        ),
-                        keyboardType: TextInputType.number,
-                        enabled: !(widget.account != null &&
-                            widget.account!.isClosed),
-                        inputFormatters: decimalDigitFormatter,
-                        validator: (value) => fieldValidator(value,
-                            validator: ValidatorType.double, isRequired: true),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        textInputAction: TextInputAction.next,
-                      ),
-                      const SizedBox(height: 20),
-                      TextField(
-                          controller: TextEditingController(
-                              text: _currency != null
-                                  ? _currency?.name
-                                  : t.general.unspecified),
-                          readOnly: true,
-                          onTap: () {
-                            if (_currency == null) return;
+                          .map((event) => event.numberOfRes == 0),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData || snapshot.data! == false) {
+                      return Container();
+                    }
 
-                            showCurrencySelectorModal(
-                              context,
-                              CurrencySelectorModal(
-                                  preselectedCurrency: _currency!,
-                                  onCurrencySelected: (newCurrency) {
-                                    setState(() {
-                                      _currency = newCurrency;
-                                    });
-                                  }),
-                            );
-                          },
-                          decoration: InputDecoration(
-                              labelText: t.currencies.currency,
-                              suffixIcon: const Icon(Icons.arrow_drop_down),
-                              prefixIcon: _currency != null
-                                  ? Container(
-                                      margin: const EdgeInsets.all(10),
-                                      clipBehavior: Clip.hardEdge,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(100)),
-                                      child: SvgPicture.asset(
-                                        _currency!.currencyIconPath,
-                                        height: 25,
-                                        width: 25,
-                                      ),
-                                    )
-                                  : null)),
+                    return Column(
+                      children: [
+                        const SizedBox(height: 12),
+                        AccountTypeSelector(
+                            selectedType: _type,
+                            onSelected: (newType) {
+                              setState(() {
+                                _type = newType;
+                              });
+                            })
+                      ],
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+                SingleExpansionPanel(
+                  child: Column(
+                    children: [
                       const SizedBox(height: 12),
-                      if (_currency != null)
-                        StreamBuilder(
-                            stream: ExchangeRateService.instance
-                                .getLastExchangeRateOf(
-                                    currencyCode: _currency!.code),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData ||
-                                  _currency?.code == _userPrCurrency?.code) {
-                                return Container();
-                              } else {
-                                return InlineInfoCard(
-                                    text:
-                                        t.account.form.currency_not_found_warn,
-                                    mode: InlineInfoCardMode.warn);
-                              }
-                            }),
-                      StreamBuilder(
-                        stream: _accountToEdit == null
-                            ? Stream.value(true)
-                            : TransactionService.instance
-                                .countTransactions(
-                                  predicate: TransactionFilters(
-                                    transactionTypes: [
-                                      TransactionType.expense,
-                                      TransactionType.income
-                                    ],
-                                    accountsIDs: [_accountToEdit!.id],
-                                  ),
-                                )
-                                .map((event) => event.numberOfRes == 0),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData || snapshot.data! == false) {
-                            return Container();
-                          }
-
-                          return Column(
-                            children: [
-                              const SizedBox(height: 12),
-                              AccountTypeSelector(
-                                  selectedType: _type,
-                                  onSelected: (newType) {
-                                    setState(() {
-                                      _type = newType;
-                                    });
-                                  })
-                            ],
-                          );
+                      DateTimeFormField(
+                        decoration: InputDecoration(
+                          suffixIcon: const Icon(Icons.event),
+                          labelText: '${t.account.date} *',
+                        ),
+                        initialDate: _openingDate,
+                        dateFormat: DateFormat.yMMMd().add_jm(),
+                        lastDate: _closeDate ?? DateTime.now(),
+                        validator: (e) =>
+                            e == null ? t.general.validations.required : null,
+                        onDateSelected: (DateTime value) {
+                          setState(() {
+                            _openingDate = value;
+                          });
                         },
                       ),
-                      const SizedBox(height: 16),
-                      SingleExpansionPanel(
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 12),
-                            DateTimeFormField(
-                              decoration: InputDecoration(
-                                suffixIcon: const Icon(Icons.event),
-                                labelText: '${t.account.date} *',
-                              ),
-                              initialDate: _openingDate,
-                              dateFormat: DateFormat.yMMMd().add_jm(),
-                              lastDate: _closeDate ?? DateTime.now(),
-                              validator: (e) => e == null
-                                  ? t.general.validations.required
-                                  : null,
-                              onDateSelected: (DateTime value) {
-                                setState(() {
-                                  _openingDate = value;
-                                });
-                              },
-                            ),
-                            const SizedBox(height: 22),
-                            if (_accountToEdit != null &&
-                                _accountToEdit!.isClosed) ...[
-                              DateTimeFormField(
-                                decoration: InputDecoration(
-                                  suffixIcon: const Icon(Icons.event),
-                                  labelText: t.account.close_date,
-                                ),
-                                initialDate: _closeDate,
-                                firstDate: _openingDate,
-                                lastDate: DateTime.now(),
-                                dateFormat: DateFormat.yMMMd().add_jm(),
-                                onDateSelected: (DateTime value) {
-                                  setState(() {
-                                    _closeDate = value;
-                                  });
-                                },
-                              ),
-                              const SizedBox(height: 22),
-                            ],
-                            TextFormField(
-                              controller: _ibanController,
-                              decoration: InputDecoration(
-                                labelText: t.account.form.iban,
-                              ),
-                              textInputAction: TextInputAction.next,
-                            ),
-                            const SizedBox(height: 22),
-                            TextFormField(
-                              controller: _swiftController,
-                              decoration: InputDecoration(
-                                labelText: t.account.form.swift,
-                              ),
-                              textInputAction: TextInputAction.next,
-                            ),
-                            const SizedBox(height: 22),
-                            TextFormField(
-                              minLines: 2,
-                              maxLines: 10,
-                              controller: _textController,
-                              decoration: InputDecoration(
-                                labelText: t.account.form.notes,
-                                hintText: t.account.form.notes_placeholder,
-                                alignLabelWithHint: true,
-                              ),
-                              textInputAction: TextInputAction.next,
-                            ),
-                            const SizedBox(height: 22),
-                          ],
+                      const SizedBox(height: 22),
+                      if (_accountToEdit != null &&
+                          _accountToEdit!.isClosed) ...[
+                        DateTimeFormField(
+                          decoration: InputDecoration(
+                            suffixIcon: const Icon(Icons.event),
+                            labelText: t.account.close_date,
+                          ),
+                          initialDate: _closeDate,
+                          firstDate: _openingDate,
+                          lastDate: DateTime.now(),
+                          dateFormat: DateFormat.yMMMd().add_jm(),
+                          onDateSelected: (DateTime value) {
+                            setState(() {
+                              _closeDate = value;
+                            });
+                          },
                         ),
+                        const SizedBox(height: 22),
+                      ],
+                      TextFormField(
+                        controller: _ibanController,
+                        decoration: InputDecoration(
+                          labelText: t.account.form.iban,
+                        ),
+                        textInputAction: TextInputAction.next,
                       ),
+                      const SizedBox(height: 22),
+                      TextFormField(
+                        controller: _swiftController,
+                        decoration: InputDecoration(
+                          labelText: t.account.form.swift,
+                        ),
+                        textInputAction: TextInputAction.next,
+                      ),
+                      const SizedBox(height: 22),
+                      TextFormField(
+                        minLines: 2,
+                        maxLines: 10,
+                        controller: _textController,
+                        decoration: InputDecoration(
+                          labelText: t.account.form.notes,
+                          hintText: t.account.form.notes_placeholder,
+                          alignLabelWithHint: true,
+                        ),
+                        textInputAction: TextInputAction.next,
+                      ),
+                      const SizedBox(height: 22),
                     ],
                   ),
                 ),
-              ),
+              ],
             ),
+          ),
+        );
+      }),
     );
   }
 }

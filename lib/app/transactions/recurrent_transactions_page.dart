@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_brace_in_string_interps
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';

@@ -192,11 +192,10 @@
     "monthsWithoutIncome": {
       "title": "Ratio de supervivencia",
       "subtitle": "Dado tu saldo, cantidad de tiempo que podrías pasar sin ingresos",
-      "text": {
-        "zero": "No podrías sobrevivir ni un mes sin ingresos con este ritmo de gastos!",
-        "one": "Apenas podrías sobrevivir aproximadatemente un mes sin ingresos con este ritmo de gastos!",
-        "other": "Podrías sobrevivir aproximadamente <b>{{ n }} meses</b> sin ingresos manteniendo este ritmo de gastos."
-      },
+      "text.zero": "¡No podrías sobrevivir un mes sin ingresos con este ritmo de gastos!",
+      "text.one": "¡Apenas podrías sobrevivir aproximadamente un mes sin ingresos con este ritmo de gastos!",
+      "text.other": "Podrías sobrevivir aproximadamente <b>{{ n }} meses</b> sin ingresos a este ritmo de gasto.",
+      "text.infinite": "Podrías sobrevivir aproximadamente <b>casi toda tu vida</b> sin ingresos a este ritmo de gasto.",
       "suggestion": "Recuerda que es recomendable mantener este ratio siempre por encima de 5 meses como mínimo. Si ves que no tienes un colchon de ahorro suficiente, reduce los gastos no necesarios.",
       "insufficient_data": "Parece que no tenemos gastos suficientes para calcular cuantos meses podrías sobrevivir sin ingresos. Introduce unas pocas transacciones y regresa aquí para consultar tu salud financiera"
     },
@@ -233,6 +232,7 @@
     "icon": "Icono",
     "color": "Color",
     "select-icon": "Selecciona un icono",
+    "select-color": "Selecciona un color",
     "select-account-icon": "Identifica tu cuenta",
     "select-category-icon": "Identifica tu categoría",
     "SCOPES": {
@@ -257,6 +257,8 @@
     "new.success": "Transacción creada correctamente",
     "edit": "Editar transacción",
     "edit.success": "Transacción editada correctamente",
+    "edit.multiple": "Editar transacciones",
+    "edit.multiple.success": "{{ x }} transacciones editadas correctamente",
     "duplicate": "Clonar transacción",
     "duplicate.short": "Clonar",
     "duplicate.warning-message": "Se creará una transacción identica a esta con su misma fecha, ¿deseas continuar?",
@@ -264,6 +266,9 @@
     "delete": "Eliminar transacción",
     "delete.warning-message": "Esta acción es irreversible. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas",
     "delete.success": "Transacción eliminada correctamente",
+    "delete.multiple": "Eliminar transacciones",
+    "delete.multiple.warning-message": "Esta acción es irreversible y borrará definitivamente {{ x }} transacciones. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas",
+    "delete.multiple.success": "{{ x }} transacciones eliminadas correctamente",
     "details": "Detalles del movimiento",
     "NEXT-PAYMENTS": {
       "skip": "Saltar",
@@ -282,7 +287,19 @@
       "empty": "No se han encontrado transacciones que mostrar aquí. Añade una transacción pulsando el botón '+' de la parte inferior",
       "searcher.placeholder": "Busca por categoría, descripción...",
       "searcher.no-results": "No se han encontrado transacciones que coincidan con los criterios de busqueda",
-      "loading": "Cargando más transacciones..."
+      "loading": "Cargando más transacciones...",
+      "selected.short": {
+        "one": "{{n}} seleccionada",
+        "other": "{{n}} seleccionadas"
+      },
+      "selected.long": {
+        "one": "{{n}} transacción seleccionada",
+        "other": "{{n}} transacciones seleccionadas"
+      },
+      "BULK_EDIT": {
+        "dates": "Editar fechas",
+        "categories": "Editar categorías"
+      }
     },
     "FILTERS": {
       "from_value": "Desde monto",

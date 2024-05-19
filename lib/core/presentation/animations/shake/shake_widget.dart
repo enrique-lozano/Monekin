@@ -9,8 +9,8 @@ class ShakeWidget extends StatefulWidget {
     required this.duration,
     required this.shakeCount,
     required this.shakeOffset,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Widget child;
   final double shakeOffset;
