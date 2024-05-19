@@ -35,9 +35,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
   late TransactionFilters filters;
 
   bool searchActive = false;
-
   FocusNode searchFocusNode = FocusNode();
-  String? searchValue;
+  final searchController = TextEditingController();
 
   List<MoneyTransaction> selectedTransactions = [];
 
@@ -48,8 +47,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
     filters = widget.filters ?? const TransactionFilters();
 
     searchFocusNode.addListener(() {
-      if (!searchFocusNode.hasFocus &&
-          (searchValue == null || searchValue!.isEmpty)) {
+      if (!searchFocusNode.hasFocus && searchController.text.isEmpty) {
         setState(() {
           searchActive = false;
         });
@@ -60,6 +58,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
   @override
   void dispose() {
     searchFocusNode.dispose();
+    searchController.dispose();
     super.dispose();
   }
 
@@ -68,17 +67,22 @@ class _TransactionsPageState extends State<TransactionsPage> {
     final t = Translations.of(context);
 
     return PopScope(
-      canPop: !searchActive,
+      canPop: !searchActive && selectedTransactions.isEmpty,
       onPopInvoked: (didPop) {
         if (didPop) return;
 
-        if (searchFocusNode.hasFocus &&
-            (searchValue != null && searchValue!.isNotEmpty)) {
+        if (selectedTransactions.isNotEmpty) {
+          cleanSelectedTransactions();
+          return;
+        }
+
+        if (searchFocusNode.hasFocus && searchController.text.isNotEmpty) {
           searchFocusNode.unfocus();
           return;
         } else if (searchActive && !searchFocusNode.hasFocus) {
           setState(() {
             searchActive = false;
+            searchController.text = "";
           });
 
           return;
@@ -95,21 +99,21 @@ class _TransactionsPageState extends State<TransactionsPage> {
                         onPressed: () {
                           setState(() {
                             searchActive = false;
-                            searchValue = null;
+                            searchController.text = "";
                           });
                         },
                         icon: const Icon(Icons.close))
                     : null,
                 title: searchActive
                     ? TextField(
+                        controller: searchController,
                         focusNode: searchFocusNode,
                         decoration: InputDecoration(
-                            hintText: t.transaction.list.searcher_placeholder,
-                            border: const UnderlineInputBorder()),
-                        onChanged: (value) {
-                          setState(() {
-                            searchValue = value;
-                          });
+                          hintText: t.transaction.list.searcher_placeholder,
+                          border: const UnderlineInputBorder(),
+                        ),
+                        onChanged: (text) {
+                          setState(() {});
                         },
                       )
                     : Text(t.transaction.display(n: 10)),
@@ -154,7 +158,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
           children: [
             if (filters.hasFilter) ...[
               FilterRowIndicator(
-                filters: filters.copyWith(searchValue: searchValue),
+                filters: filters.copyWith(searchValue: searchController.text),
                 onChange: (newFilters) {
                   setState(() {
                     filters = newFilters;
@@ -164,7 +168,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
             ],
             StreamBuilder(
               stream: TransactionService.instance.countTransactions(
-                predicate: filters.copyWith(searchValue: searchValue),
+                predicate: filters.copyWith(searchValue: searchController.text),
               ),
               builder: (context, snapshot) {
                 final res = snapshot.data;
@@ -244,7 +248,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
             Expanded(
               child: TransactionListComponent(
                 heroTagBuilder: (tr) => 'transactions-page__tr-icon-${tr.id}',
-                filters: filters.copyWith(searchValue: searchValue),
+                filters: filters.copyWith(searchValue: searchController.text),
                 prevPage: const TabsPage(),
                 selectedTransactions: selectedTransactions,
                 onLongPress: (tr) {
@@ -278,9 +282,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
       foregroundColor: AppColors.of(context).onPrimary,
       leading: IconButton(
         onPressed: () {
-          setState(() {
-            selectedTransactions = [];
-          });
+          cleanSelectedTransactions();
         },
         icon: const Icon(Icons.close),
       ),
@@ -357,6 +359,13 @@ class _TransactionsPageState extends State<TransactionsPage> {
         ])
       ],
     );
+  }
+
+  /// Clear all the selected transactions (remove the selection)
+  void cleanSelectedTransactions() {
+    setState(() {
+      selectedTransactions = [];
+    });
   }
 
   void toggleTransaction(MoneyTransaction tr) {
