@@ -299,7 +299,8 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
                     barTouchData: BarTouchData(
                       touchTooltipData: BarTouchTooltipData(
                         tooltipMargin: -10,
-                        tooltipBgColor: AppColors.of(context).background,
+                        getTooltipColor: (spot) =>
+                            AppColors.of(context).background,
                         getTooltipItem: (group, groupIndex, rod, rodIndex) {
                           final barRodsToY = group.barRods.map((e) => e.toY);
 

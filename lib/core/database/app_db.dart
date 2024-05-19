@@ -38,7 +38,7 @@ class AppDB extends _$AppDB {
   final bool inMemory;
   final bool logStatements;
 
-  /// Get teh path to the DB, that is `xxxx/xxxx/.../filename.db`
+  /// Get the path to the DB, that is `xxxx/xxxx/.../filename.db`
   Future<String> get databasePath async =>
       join((await getApplicationDocumentsDirectory()).path, dbName);
 

@@ -213,7 +213,7 @@ class FundEvolutionLineChart extends StatelessWidget {
                               enabled: snapshot.hasData,
                               touchTooltipData: LineTouchTooltipData(
                                 tooltipMargin: -10,
-                                tooltipBgColor:
+                                getTooltipColor: (spot) =>
                                     AppColors.of(context).background,
                                 getTooltipItems: (touchedSpots) {
                                   return touchedSpots.map((barSpot) {
