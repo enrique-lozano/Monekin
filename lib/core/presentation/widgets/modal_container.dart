@@ -47,7 +47,10 @@ class ModalContainer extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: Theme.of(context).textTheme.headlineSmall,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall!
+                          .copyWith(fontWeight: FontWeight.w800),
                     ),
                     if (subtitle != null) ...[
                       const SizedBox(height: 2),
