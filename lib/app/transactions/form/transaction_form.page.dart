@@ -8,28 +8,31 @@ import 'package:monekin/app/transactions/form/amount_selector.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_status.dart';
+import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/animations/shake/shake_widget.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
-import 'package:monekin/core/presentation/widgets/date_form_field/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/expansion_panel/single_expansion_panel.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_field.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/status_filter/transaction_status_filter.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/tags_filter/tags_filter_container.dart';
-import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
+import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
-import 'package:uuid/uuid.dart';
 
+import '../../../core/models/transaction/transaction_type.enum.dart';
 import '../../../core/presentation/app_colors.dart';
 
 enum TransactionFormMode { transfer, incomeOrExpense }
@@ -97,7 +100,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
       onTap: () => onClick(),
       borderRadius: BorderRadius.circular(8),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -180,7 +183,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
               : t.transaction.new_success)));
     }
 
-    final newTrID = widget.transactionToEdit?.id ?? const Uuid().v4();
+    final newTrID = widget.transactionToEdit?.id ?? generateUUID();
 
     TransactionService.instance
         .insertOrUpdateTransaction(
@@ -336,10 +339,8 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     return [
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-        child: TextField(
-          controller:
-              TextEditingController(text: recurrentRule.formText(context)),
-          readOnly: true,
+        child: ReadOnlyTextFormField(
+          displayValue: recurrentRule.formText(context),
           onTap: () {
             showIntervalSelectoHelpDialog(context,
                 selectedRecurrentRule: recurrentRule,
@@ -355,7 +356,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
           ),
         ),
       ),
-      const SizedBox(height: 12),
+      const SizedBox(height: 16),
       if (widget.mode == TransactionFormMode.transfer) ...[
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
@@ -556,9 +557,9 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                       buildAmountContainer(context),
                       const SizedBox(height: 18),
                       buildAccoutAndCategorySelectorRow(context),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 16),
                       buildTransactionDateSelector(),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 16),
                       buildTitleField(),
                     ],
                   ),
@@ -600,8 +601,9 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                             horizontal: 16, vertical: 4),
                         child: Column(
                           children: [
+                            const SizedBox(height: 4),
                             buildTransactionDateSelector(),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 16),
                             buildTitleField(),
                           ],
                         ),
@@ -647,14 +649,11 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   }
 
   Widget buildAmountContainer(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(6),
+    return Tappable(
+      borderRadius: 12,
+      bgColor: currentTransactionTypeToAdd.color(context).withOpacity(0.85),
       onTap: () => displayAmountModal(context),
-      child: Container(
-        decoration: BoxDecoration(
-          color: currentTransactionTypeToAdd.color(context).withOpacity(0.85),
-          borderRadius: BorderRadius.circular(6),
-        ),
+      child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -696,10 +695,14 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         DateTimeFormField(
           decoration: InputDecoration(
             suffixIcon: const Icon(Icons.event),
-            labelText: '${t.general.time.date} *',
+            labelText: recurrentRule.isNoRecurrent
+                ? null
+                : '${t.general.time.start_date} *',
           ),
           initialDate: date,
-          dateFormat: DateFormat.yMMMd().add_jm(),
+          dateFormat: date.year == currentYear
+              ? DateFormat.MMMMd().add_jm()
+              : DateFormat.yMMMd().add_jm(),
           validator: (e) => e == null ? t.general.validations.required : null,
           onDateSelected: (DateTime value) {
             setState(() {
@@ -728,8 +731,8 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   Card buildAccoutAndCategorySelectorRow(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: Theme.of(context).dividerColor, width: 1),
-        borderRadius: BorderRadius.circular(6),
+        side: BorderSide(color: Theme.of(context).dividerColor, width: 2),
+        borderRadius: BorderRadius.circular(12),
       ),
       margin: const EdgeInsets.all(0),
       elevation: 0,
@@ -805,17 +808,12 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                     child: selector(
                       title: t.general.category,
                       inputValue: selectedCategory?.name,
-                      icon: selectedCategory != null
-                          ? IconDisplayer.fromCategory(
-                              context,
-                              category: selectedCategory!,
-                              size: 24,
-                            )
-                          : IconDisplayer(
-                              icon: Icons.question_mark_rounded,
-                              mainColor: AppColors.of(context).primary,
-                              size: 24,
-                            ),
+                      icon: IconDisplayer.fromCategory(
+                        context,
+                        category: selectedCategory ??
+                            Category.fromDB(Category.unkown(), null),
+                        size: 24,
+                      ),
                       onClick: () => selectCategory(),
                     ),
                   ),

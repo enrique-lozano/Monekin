@@ -26,6 +26,10 @@ class TransactionListComponent extends StatefulWidget {
     ),
     required this.onEmptyList,
     required this.heroTagBuilder,
+    this.onLongPress,
+    this.onTap,
+    this.selectedTransactions = const [],
+    this.onTransactionsLoaded,
   });
 
   final TransactionFilters filters;
@@ -47,6 +51,20 @@ class TransactionListComponent extends StatefulWidget {
   final Widget prevPage;
 
   final Object? Function(MoneyTransaction tr)? heroTagBuilder;
+
+  /// Action to trigger when a transaction tile is long pressed. If `null`,
+  /// the tile will display a modal with some quick actions for
+  /// this transaction
+  final void Function(MoneyTransaction tr)? onLongPress;
+
+  /// Action to trigger when a transaction tile is pressed. If `null`,
+  /// the tile will redirect to the `transaction-details-page`
+  final void Function(MoneyTransaction tr)? onTap;
+
+  final void Function({List<MoneyTransaction> allTransactions})?
+      onTransactionsLoaded;
+
+  final List<MoneyTransaction> selectedTransactions;
 
   @override
   State<TransactionListComponent> createState() =>
@@ -129,6 +147,10 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
 
           final transactions = snapshot.data!;
 
+          if (widget.onTransactionsLoaded != null) {
+            widget.onTransactionsLoaded!(allTransactions: transactions);
+          }
+
           if (transactions.isEmpty) {
             return widget.onEmptyList;
           }
@@ -159,6 +181,14 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
                   showDate: !widget.showGroupDivider,
                   showTime: widget.showGroupDivider,
                   heroTag: heroTag,
+                  onTap: widget.onTap == null
+                      ? null
+                      : (() => widget.onTap!(transaction)),
+                  onLongPress: widget.onLongPress == null
+                      ? null
+                      : (() => widget.onLongPress!(transaction)),
+                  isSelected: widget.selectedTransactions
+                      .any((element) => element.id == transaction.id),
                 );
               },
               separatorBuilder: (context, index) {

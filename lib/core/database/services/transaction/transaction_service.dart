@@ -7,6 +7,8 @@ import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../../models/transaction/transaction_type.enum.dart';
+
 class TransactionQueryStatResult {
   int numberOfRes;
   double valueSum;

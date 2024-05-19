@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
-import 'package:monekin/core/utils/color_utils.dart';
 
 import '../app_colors.dart';
 
@@ -24,6 +25,9 @@ class TrendingValue extends StatelessWidget {
   final bool filled, outlined;
 
   Widget paintTrendValue(BuildContext context) {
+    final textColor =
+        _getColorBasedOnPercentage(context).lighten(filled ? 0.85 : 0);
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -33,7 +37,7 @@ class TrendingValue extends StatelessWidget {
                 ? Icons.trending_up_rounded
                 : Icons.trending_down_rounded,
             size: fontSize * (9 / 7),
-            color: _getColorBasedOnPercentage(context),
+            color: textColor,
           ),
         if (percentage == 0)
           Text(
@@ -42,16 +46,17 @@ class TrendingValue extends StatelessWidget {
               height: 1,
               fontWeight: FontWeight.w700,
               fontSize: fontSize * (9 / 7),
-              color: _getColorBasedOnPercentage(context),
+              color: textColor,
             ),
           ),
         const SizedBox(width: 6),
         UINumberFormatter.percentage(
           amountToConvert: percentage,
           integerStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: fontWeight,
-              color: _getColorBasedOnPercentage(context)),
+            fontSize: fontSize,
+            fontWeight: fontWeight,
+            color: textColor,
+          ),
         ).getTextWidget(context)
       ],
     );
@@ -59,7 +64,10 @@ class TrendingValue extends StatelessWidget {
 
   Color _getColorBasedOnPercentage(BuildContext context) {
     return percentage == 0
-        ? AppColors.of(context).brand.lighten(0.35).withBlue(225)
+        ? AppColors.of(context)
+            .brand
+            .lighten(isAppInDarkBrightness(context) ? 0.45 : 0.25)
+            .withBlue(225)
         : percentage > 0
             ? AppColors.of(context).success
             : AppColors.of(context).danger;
@@ -67,16 +75,16 @@ class TrendingValue extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (filled || outlined) {
+    if (filled) {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
         decoration: BoxDecoration(
-          color: !filled
-              ? null
-              : (_getColorBasedOnPercentage(context).lighten(0.85)),
-          borderRadius: BorderRadius.circular(fontSize / 3.5),
+          color: !filled ? null : (_getColorBasedOnPercentage(context)),
+          borderRadius: BorderRadius.circular(9999),
           border: outlined
-              ? Border.all(color: _getColorBasedOnPercentage(context), width: 1)
+              ? Border.all(
+                  color: _getColorBasedOnPercentage(context).lighten(0.85),
+                  width: 1)
               : null,
         ),
         child: paintTrendValue(context),

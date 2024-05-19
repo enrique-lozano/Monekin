@@ -3,11 +3,12 @@ import 'package:monekin/app/categories/category_selector.dart';
 import 'package:monekin/app/categories/form/category_form.dart';
 import 'package:monekin/app/categories/subcategory_selector.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/icon_displayer_widgets.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/presentation/app_colors.dart';
@@ -231,18 +232,15 @@ class _CategoriesListState extends State<CategoriesList> {
                 ),
                 TabBar(
                     labelColor:
-                        Theme.of(context).brightness == Brightness.light &&
-                                widget.mode.isModal
+                        isAppInLightBrightness(context) && widget.mode.isModal
                             ? AppColors.of(context).primary
                             : null,
                     unselectedLabelColor:
-                        Theme.of(context).brightness == Brightness.light &&
-                                widget.mode.isModal
+                        isAppInLightBrightness(context) && widget.mode.isModal
                             ? AppColors.of(context).onBackground.lighten(0.3)
                             : null,
                     indicatorColor:
-                        Theme.of(context).brightness == Brightness.light &&
-                                widget.mode.isModal
+                        isAppInLightBrightness(context) && widget.mode.isModal
                             ? AppColors.of(context).primary
                             : null,
                     tabs: [

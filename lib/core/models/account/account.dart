@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
-import 'package:monekin/core/utils/color_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 enum AccountType {
@@ -63,6 +64,7 @@ class Account extends AccountInDB {
     super.description,
     super.iban,
     super.swift,
+    super.color,
   }) : super(currencyId: currency.code);
 
   /// Currency of all the transactions of this account. When you change this currency all transactions in this account
@@ -77,7 +79,7 @@ class Account extends AccountInDB {
     return color != null
         ? ColorHex.get(color!)
         : Theme.of(context).brightness == Brightness.dark
-            ? AppColors.of(context).onPrimary
+            ? AppColors.of(context).primaryContainer
             : AppColors.of(context).primary;
   }
 
@@ -89,7 +91,7 @@ class Account extends AccountInDB {
     bool isOutline = false,
     void Function()? onTap,
   }) {
-    bool isDark = Theme.of(context).brightness == Brightness.dark;
+    bool isDark = isAppInDarkBrightness(context);
 
     return IconDisplayer(
       supportedIcon: icon,
@@ -106,17 +108,17 @@ class Account extends AccountInDB {
   }
 
   static Account fromDB(AccountInDB account, CurrencyInDB currency) => Account(
-        id: account.id,
-        currency: currency,
-        iniValue: account.iniValue,
-        date: account.date,
-        displayOrder: account.displayOrder,
-        description: account.description,
-        iban: account.iban,
-        swift: account.swift,
-        name: account.name,
-        iconId: account.iconId,
-        closingDate: account.closingDate,
-        type: account.type,
-      );
+      id: account.id,
+      currency: currency,
+      iniValue: account.iniValue,
+      date: account.date,
+      displayOrder: account.displayOrder,
+      description: account.description,
+      iban: account.iban,
+      swift: account.swift,
+      name: account.name,
+      iconId: account.iconId,
+      closingDate: account.closingDate,
+      type: account.type,
+      color: account.color);
 }

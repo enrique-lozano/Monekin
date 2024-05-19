@@ -16,8 +16,6 @@ class FinanceHealthDetails extends StatefulWidget {
 }
 
 class _FinanceHealthDetailsState extends State<FinanceHealthDetails> {
-  List<bool> _isOpen = [false, false];
-
   Widget buildExpansionPanel({
     required FinanceHealthAttrScore attrScore,
     required int index,
@@ -115,9 +113,8 @@ class _FinanceHealthDetailsState extends State<FinanceHealthDetails> {
                           title: t.financial_health.months_without_income.title,
                           subtitle:
                               t.financial_health.months_without_income.subtitle,
-                          text: '${financeHealthData.monthsWithoutIncome == null ? t.financial_health.months_without_income.insufficient_data : t.financial_health.months_without_income.text(
-                              n: financeHealthData.monthsWithoutIncome!.round(),
-                            )}\n\n${t.financial_health.months_without_income.suggestion}',
+                          text:
+                              '${financeHealthData.getMonthsWithoutIncomeResume(context)}\n\n${t.financial_health.months_without_income.suggestion}',
                           index: 0),
                       buildExpansionPanel(
                           attrScore: financeHealthData.savingPercentageScore,

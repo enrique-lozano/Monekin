@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
-import 'package:monekin/core/utils/color_utils.dart';
 
 part 'icon_displayer.g.dart';
 
@@ -40,7 +40,7 @@ class IconDisplayer extends StatelessWidget {
     required Category category,
     double size = 22,
     double? padding,
-    double borderRadius = 12,
+    double borderRadius = 99999,
     bool isOutline = false,
     IconDisplayMode displayMode = IconDisplayMode.decoratedBox,
     void Function()? onDoubleTap,

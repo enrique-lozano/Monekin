@@ -3,11 +3,12 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
+import '../../../core/models/transaction/transaction_type.enum.dart';
 import '../../../core/presentation/app_colors.dart';
 
 class BalanceChartSmall extends StatefulWidget {
@@ -119,10 +120,9 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
 
             final accounts = accountsSnapshot.data!;
 
-            final ultraLightBorderColor =
-                Theme.of(context).brightness == Brightness.light
-                    ? Colors.black12
-                    : Colors.white12;
+            final ultraLightBorderColor = isAppInLightBrightness(context)
+                ? Colors.black12
+                : Colors.white12;
 
             if (accounts.isEmpty) {
               return Stack(
@@ -199,7 +199,8 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
                     BarChartData(
                       barTouchData: BarTouchData(
                         touchTooltipData: BarTouchTooltipData(
-                          tooltipBgColor: AppColors.of(context).background,
+                          getTooltipColor: (group) =>
+                              AppColors.of(context).background,
                           getTooltipItem: (a, b, c, d) => null,
                         ),
                       ),

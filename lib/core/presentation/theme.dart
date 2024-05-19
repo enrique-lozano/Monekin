@@ -1,10 +1,15 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/core/utils/color_utils.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 
 import 'app_colors.dart';
 
 bool isAppUsingDynamicColors = false;
+
+bool isAppInDarkBrightness(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.dark;
+bool isAppInLightBrightness(BuildContext context) =>
+    !isAppInDarkBrightness(context);
 
 ThemeData getThemeData(
   BuildContext context, {
@@ -65,8 +70,20 @@ ThemeData getThemeData(
   return theme.copyWith(
     dividerTheme: const DividerThemeData(space: 0),
     cardColor: theme.colorScheme.surface,
-    inputDecorationTheme: const InputDecorationTheme(
-      border: OutlineInputBorder(),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: theme.colorScheme.surfaceVariant,
+      isDense: true,
+      floatingLabelStyle: TextStyle(
+        backgroundColor: theme.colorScheme.background.withOpacity(0.5),
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10.0),
+        borderSide: BorderSide(
+          width: 0,
+          style: BorderStyle.none,
+        ),
+      ),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: theme.colorScheme.primary,

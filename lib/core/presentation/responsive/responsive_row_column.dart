@@ -53,7 +53,7 @@ class ResponsiveRowColumn extends StatelessWidget {
 
   /// The [ResponsiveRowColumn] constructor
   const ResponsiveRowColumn(
-      {Key? key,
+      {super.key,
       this.children = const [],
       required this.direction,
       this.rowMainAxisAlignment = MainAxisAlignment.start,
@@ -71,12 +71,11 @@ class ResponsiveRowColumn extends StatelessWidget {
       this.rowSpacing,
       this.columnSpacing,
       this.rowPadding = EdgeInsets.zero,
-      this.columnPadding = EdgeInsets.zero})
-      : super(key: key);
+      this.columnPadding = EdgeInsets.zero});
 
   /// Create a [ResponsiveRowColumn] with the same padding and space between children for row and column mode
   const ResponsiveRowColumn.withSymetricSpacing(
-      {Key? key,
+      {super.key,
       this.children = const [],
       required this.direction,
       this.rowMainAxisAlignment = MainAxisAlignment.start,
@@ -96,8 +95,7 @@ class ResponsiveRowColumn extends StatelessWidget {
       : rowPadding = padding,
         columnPadding = padding,
         rowSpacing = spacing,
-        columnSpacing = spacing,
-        super(key: key);
+        columnSpacing = spacing;
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +194,7 @@ class ResponsiveRowColumnItem extends StatelessWidget {
 
   /// Build a `SizedBox` inside the responsive row/column layout. The [space] define the height of the `SizedBox` in Column mode and the width in row mode
   ResponsiveRowColumnItem.spacer(double space,
-      {Key? key,
+      {super.key,
       this.rowOrder = 1073741823,
       this.columnOrder = 1073741823,
       this.rowColumn = true,
@@ -205,8 +203,7 @@ class ResponsiveRowColumnItem extends StatelessWidget {
       this.rowFit,
       this.columnFit})
       : child = SizedBox(
-            height: rowColumn ? space : null, width: !rowColumn ? space : null),
-        super(key: key);
+            height: rowColumn ? space : null, width: !rowColumn ? space : null);
 
   @override
   Widget build(BuildContext context) {

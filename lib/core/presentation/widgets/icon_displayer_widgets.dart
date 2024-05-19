@@ -12,8 +12,8 @@ class IconDisplayerSelectorData<T extends Object> {
     required this.availableItems,
     this.extraHeaderButtons,
     this.multiSelection = true,
-    this.iconSize = 48,
-    this.iconPadding = 8,
+    this.iconSize = 40,
+    this.iconPadding = 10,
   });
 
   final List<T>? selectedItems;
