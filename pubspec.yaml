@@ -34,7 +34,7 @@ dependencies:
   rxdart: ^0.27.7
 
   # i18n
-  intl: ^0.18.0
+  intl: ^0.19.0
   slang: ^3.30.1
   slang_flutter: ^3.18.0
 
