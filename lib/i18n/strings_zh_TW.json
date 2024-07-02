@@ -254,7 +254,7 @@
     "edit": "編輯交易",
     "edit.success": "交易編輯成功",
     "edit.multiple": "編輯交易",
-    "edit.multiple.success": "{{ x }} 筆交易已成功編輯",
+    "edit.multiple.success": "{{x}} 筆交易已成功編輯",
     "duplicate": "克隆交易",
     "duplicate.short": "複製",
     "duplicate.warning-message": "將在同一日期創建與此相同的交易，您想繼續嗎？",
@@ -263,7 +263,7 @@
     "delete.warning-message": "此操作不可逆轉。您的帳戶當前餘額和所有統計資料都將重新計算",
     "delete.success": "交易已正確刪除",
     "delete.multiple": "刪除交易",
-    "delete.multiple.warning-message": "此操作不可逆轉，將刪除 {{ x }} 筆交易。您帳戶的當前餘額和所有統計資料都將重新計算",
+    "delete.multiple.warning-message": "此操作不可逆轉，將刪除 {{x}} 筆交易。您帳戶的當前餘額和所有統計資料都將重新計算",
     "delete.multiple.success": "正確刪除了 {{x}} 筆交易",
     "details": "動作詳情",
     "NEXT-PAYMENTS": {
@@ -280,7 +280,7 @@
       "recurrent-rule-finished": "循環規則已完成，無需再支付！"
     },
     "LIST": {
-      "empty": "未發現此處顯示的交易。請點選底部的『+』按鈕新增交易",
+      "empty": "未發現此處顯示的交易。請點選底部的 '+' 按鈕新增交易",
       "searcher.placeholder": "按類別、描述搜尋...",
       "searcher.no-results": "未找到符合搜尋條件的交易",
       "loading": "正在加載更多交易...",
@@ -297,10 +297,10 @@
     "FILTERS": {
       "from_value": "從金額",
       "to_value": "最多金額",
-      "from_value_def": "來自 {{ x }}",
-      "to_value_def": "最多 {{ x }}",
+      "from_value_def": "來自 {{x}}",
+      "to_value_def": "最多 {{x}}",
       "from_date_def": "從{{日期}}開始",
-      "to_date_def": "截至 {{ 日期 }}"
+      "to_date_def": "截至 {{日期}}"
     },
     "FORM": {
       "VALIDATORS": {
@@ -396,7 +396,7 @@
     "n_transactions":"交易數量",
     "add_money":"加錢",
     "withdraw_money":"取錢",
-    "no-accounts": "未發現此處顯示的交易。請點選底部的『+』按鈕新增交易",
+    "no-accounts": "未發現此處顯示的交易。請點選底部的 '+' 按鈕新增交易",
     "TYPES": {
       "title":"帳戶類型",
       "warning":"帳戶類型一旦選擇，以後將無法更改",
@@ -417,8 +417,8 @@
       "currency-not-found-warn": "您沒有該貨幣的匯率資訊。1.0 將用作預設匯率。您可以在設定中修改",
       "already-exists":"已經有另一個同名，請再寫一個",
       "tr-before-opening-date":"該帳戶中有日期早於開戶日期的交易",
-      "iban":"本來打算",
-      "swift": "迅速"
+      "iban":"iban",
+      "swift": "swift"
     },
     "DELETE": {
       "warning-header":"刪除帳戶？",
@@ -467,8 +467,8 @@
   },
   "TAGS": {
     "display": {
-      "one": "標籤",
-      "other": "標籤"
+      "one": "one",
+      "other": "other"
     },
     "FORM": {
       "name": "標籤名",
@@ -522,7 +522,7 @@
     }
   },
   "BUDGETS": {
-    "title": "預算",
+    "title": "title",
     "repeated": "再次發生的",
     "one-time": "一次",
     "annual":  "annual",
@@ -629,9 +629,9 @@
     "theme_and_colors": "主題和顏色",
     "theme": "主題",
     "theme.auto": "由系統定義",
-    "theme.light": "光",
-    "theme.dark": "黑暗的",
-    "amoled-mode": "AMOLED 模式",
+    "theme.light": "明亮",
+    "theme.dark": "黑暗",
+    "amoled-mode": "amoled mode",
     "amoled-mode.descr": "盡可能使用純黑色壁紙。這對 AMOLED 螢幕設備的電池略有幫助",
     "dynamic-colors": "動態色彩",
     "dynamic-colors.descr": "盡可能使用系統強調色",
