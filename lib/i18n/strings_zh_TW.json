@@ -358,7 +358,7 @@
     "transfers":"轉帳",
     "transfer-to": "轉帳至{{帳戶}}",
     "create":"新轉移",
-    "need-two-accounts.warning.header":"哦！",
+    "need-two-accounts.warning.header":"Ops!",
     "need-two-accounts.warning.message": "至少需要兩個帳戶才能執行此操作。如果您需要調整或編輯該帳戶的當前餘額，請點擊編輯按鈕",
     "FORM": {
       "from":"原始帳戶",
@@ -558,7 +558,7 @@
   "BACKUP": {
     "EXPORT": {
       "title": "匯出您的資料",
-      "title.short": "出口",
+      "title.short": "匯出",
       "all": "完整備份",
       "all.descr": "匯出您的所有資料（帳戶、交易、預算、設定...）。隨時重新匯入它們，這樣您就不會丟失任何內容。",
       "transactions": "交易備份",
