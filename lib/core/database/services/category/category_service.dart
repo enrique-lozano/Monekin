@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/utils/uuid.dart';
@@ -57,8 +60,17 @@ class CategoryService {
         .map((res) => res.firstOrNull);
   }
 
-  Future<void> initializeCategories(dynamic json) async {
-    // The category initialization is done before the app language is set, so we need to trigger
+  /// Get the `assets/sql/initial_categories.json` file and seed the user categories with its info, based
+  /// on the current language of the device.
+  ///
+  /// This function is called only when the user database is created.
+  Future<void> initializeCategories() async {
+    String defaultCategories =
+        await rootBundle.loadString('assets/sql/initial_categories.json');
+
+    dynamic json = jsonDecode(defaultCategories);
+
+    // The category initialization is done before the app language is set, so we need to trigger this:
     String systemLang = AppLocaleUtils.findDeviceLocale().languageCode;
 
     if (!AppLocaleUtils.supportedLocalesRaw.any((lang) => lang == systemLang)) {
