@@ -691,8 +691,8 @@
     }
   },
   "LANG": {
-    "es": "Español",
     "en": "Inglés",
+    "es": "Español",
     "zh_TW" : "繁體中文"
   }
 }
