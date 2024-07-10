@@ -89,7 +89,11 @@ class CurrencyService {
 
       await db.customStatement("""
             INSERT INTO currencies(code, symbol, name) 
-            VALUES ('${currencyToPush.code}', '${currencyToPush.symbol}', '${currencyToPush.name}')
+            VALUES (
+              '${currencyToPush.code}', 
+              '${currencyToPush.symbol.replaceAll("'", "''")}', 
+              '${currencyToPush.name.replaceAll("'", "''")}'
+            )
           """);
     }
   }
