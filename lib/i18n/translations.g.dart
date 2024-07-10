@@ -6,7 +6,7 @@
 /// Locales: 2
 /// Strings: 1057 (528 per locale)
 ///
-/// Built on 2024-05-02 at 14:20 UTC
+/// Built on 2024-07-09 at 16:44 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -597,8 +597,8 @@ class _TranslationsGeneralClipboardEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String success({required Object x}) => '${x} copiado al portapapeles';
-	String get error => 'Error al copiar';
+	String success({required Object x}) => '${x} copied to the clipboard';
+	String get error => 'Error copying';
 }
 
 // Path: general.time
@@ -2685,8 +2685,8 @@ extension on Translations {
 			case 'general.insufficient_data': return 'Insufficient data';
 			case 'general.show_more_fields': return 'Show more fields';
 			case 'general.show_less_fields': return 'Show less fields';
-			case 'general.clipboard.success': return ({required Object x}) => '${x} copiado al portapapeles';
-			case 'general.clipboard.error': return 'Error al copiar';
+			case 'general.clipboard.success': return ({required Object x}) => '${x} copied to the clipboard';
+			case 'general.clipboard.error': return 'Error copying';
 			case 'general.time.start_date': return 'Start date';
 			case 'general.time.end_date': return 'End date';
 			case 'general.time.from_date': return 'From date';
