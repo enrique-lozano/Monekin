@@ -1,9 +1,7 @@
-import 'package:monekin/core/database/app_db.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:monekin/core/database/app_db.dart';
 
 class Currency extends CurrencyInDB {
-  final String name;
-
   String get currencyIconPath =>
       'assets/icons/currency_flags/${code.toLowerCase()}.svg';
 
@@ -15,5 +13,12 @@ class Currency extends CurrencyInDB {
     );
   }
 
-  Currency({required this.name, required super.code, required super.symbol});
+  Currency({required super.name, required super.code, required super.symbol});
+
+  Currency.fromDB({required CurrencyInDB currencyInDB})
+      : this(
+          code: currencyInDB.code,
+          name: currencyInDB.name,
+          symbol: currencyInDB.symbol,
+        );
 }

@@ -69,8 +69,7 @@ class CurrencyDisplayer extends StatelessWidget {
 
           return UINumberFormatter.currency(
             amountToConvert: amountToConvert,
-            currency: CurrencyInDB(
-                code: snapshot.data!.code, symbol: snapshot.data!.symbol),
+            currency: snapshot.data!,
             showDecimals: showDecimals,
             integerStyle: integerStyle,
             decimalsStyle: decimalsStyle,
