@@ -2,7 +2,8 @@
   {
     "names": {
       "en": "Aesthetics & Health",
-      "es": "Salud & belleza"
+      "es": "Salud & belleza",
+      "zh_TW": "醫美 & 健康"
     },
     "icon": "ecg_heart",
     "color": "CC0605",
@@ -11,22 +12,25 @@
       {
         "icon": "self_care",
         "names": {
+          "en": "Personal care",
           "es": "Cuidado personal",
-          "en": "Personal care"
+          "zh_TW": "個人護理"
         }
       },
       {
         "icon": "medication",
         "names": {
+          "en": "Medical",
           "es": "Médico",
-          "en": "Medical"
+          "zh_TW": "醫療"
         }
       },
       {
         "icon": "fitness_center",
         "names": {
+          "en": "Fitness",
           "es": "Fitness",
-          "en": "Fitness"
+          "zh_TW": "健康"
         }
       }
     ]
@@ -34,7 +38,8 @@
   {
     "names": {
       "en": "Food & Dining",
-      "es": "Alimentación"
+      "es": "Alimentación",
+      "zh_TW": "食品 & 餐飲"
     },
     "icon": "shopping_cart",
     "color": "F4A900",
@@ -43,15 +48,17 @@
       {
         "icon": "dinner_dining",
         "names": {
+          "en": "Eating out",
           "es": "Comer fuera",
-          "en": "Eating out"
+          "zh_TW": "外出用餐"
         }
       },
       {
         "icon": "nutrition",
         "names": {
+          "en": "Groceries",
           "es": "Comestibles",
-          "en": "Groceries"
+          "zh_TW": "雜貨"
         }
       }
     ]
@@ -59,7 +66,8 @@
   {
     "names": {
       "en": "Purchases",
-      "es": "Compras"
+      "es": "Compras",
+      "zh_TW": "購買"
     },
     "icon": "shopping_bag",
     "color": "3D642D",
@@ -68,22 +76,25 @@
       {
         "icon": "library_books",
         "names": {
+          "en": "Stationery",
           "es": "Papelería",
-          "en": "Stationery"
+          "zh_TW": "文具"
         }
       },
       {
         "icon": "computer",
         "names": {
+          "en": "Electronics",
           "es": "Electrónica",
-          "en": "Electronics"
+          "zh_TW": "電子產品"
         }
       },
       {
         "icon": "checkroom",
         "names": {
+          "en": "Clothes",
           "es": "Ropa",
-          "en": "Clothes"
+          "zh_TW": "服裝"
         }
       }
     ]
@@ -91,7 +102,8 @@
   {
     "names": {
       "en": "Leisure",
-      "es": "Entretenimiento"
+      "es": "Entretenimiento",
+      "zh_TW": "閒暇"
     },
     "icon": "golf_course",
     "color": "2A6478",
@@ -100,29 +112,33 @@
       {
         "icon": "celebration",
         "names": {
+          "en": "Party",
           "es": "Fiesta",
-          "en": "Party"
+          "zh_TW": "派對"
         }
       },
       {
         "icon": "museum",
         "names": {
+          "en": "Sites of interest and events",
           "es": "Eventos y sitios de interes",
-          "en": "Sites of interest and events"
+          "zh_TW": "名勝古蹟 & 活動"
         }
       },
       {
         "icon": "music_note",
         "names": {
+          "en": "Music",
           "es": "Música y conciertos",
-          "en": "Music"
+          "zh_TW": "音樂"
         }
       },
       {
         "icon": "movie",
         "names": {
+          "en": "TV-shows and movies",
           "es": "Cine y TV",
-          "en": "TV-shows and movies"
+          "zh_TW": "電視節目 & 電影"
         }
       }
     ]
@@ -130,7 +146,8 @@
   {
     "names": {
       "en": "Transportation",
-      "es": "Transporte"
+      "es": "Transporte",
+      "zh_TW": "交通"
     },
     "icon": "tram",
     "color": "84C3BE",
@@ -139,36 +156,41 @@
       {
         "icon": "train",
         "names": {
+          "en": "Public Transport",
           "es": "Transporte público",
-          "en": "Public Transport"
+          "zh_TW": "大眾運輸"
         }
       },
       {
         "icon": "speed",
         "names": {
+          "en": "Fuel",
           "es": "Gasolina",
-          "en": "Fuel"
+          "zh_TW": "燃料"
         }
       },
       {
         "icon": "receipt_long",
         "names": {
+          "en": "Tolls and parking",
           "es": "Multas y parkimétros",
-          "en": "Tolls and parking"
+          "zh_TW": "通行費 & 停車費"
         }
       },
       {
         "icon": "receipt",
         "names": {
+          "en": "Taxes and car insurance",
           "es": "Seguro e impuestos",
-          "en": "Taxes and car insurance"
+          "zh_TW": "稅金 & 汽車保險"
         }
       },
       {
         "icon": "car_repair",
         "names": {
+          "en": "Maintenance",
           "es": "Mantenimiento",
-          "en": "Maintenance"
+          "zh_TW": "維修"
         }
       }
     ]
@@ -176,7 +198,8 @@
   {
     "names": {
       "en": "Housing",
-      "es": "Hogar"
+      "es": "Hogar",
+      "zh_TW": "居家"
     },
     "icon": "home",
     "color": "4E5452",
@@ -185,50 +208,57 @@
       {
         "icon": "key",
         "names": {
+          "en": "Rental",
           "es": "Alquiler",
-          "en": "Rental"
+          "zh_TW": "房租"
         }
       },
       {
         "icon": "water",
         "names": {
+          "en": "Water",
           "es": "Agua",
-          "en": "Water"
+          "zh_TW": "水"
         }
       },
       {
         "icon": "bolt",
         "names": {
+          "en": "Electricity",
           "es": "Luz",
-          "en": "Electricity"
+          "zh_TW": "電"
         }
       },
       {
         "icon": "language",
         "names": {
+          "en": "Internet",
           "es": "Internet",
-          "en": "Internet"
+          "zh_TW": "電"
         }
       },
       {
         "icon": "call",
         "names": {
+          "en": "Phone",
           "es": "Teléfono",
-          "en": "Phone"
+          "zh_TW": "電話"
         }
       },
       {
         "icon": "sprinkler",
         "names": {
+          "en": "Home supplies",
           "es": "Productos para el hogar",
-          "en": "Home supplies"
+          "zh_TW": "電話"
         }
       },
       {
         "icon": "bed",
         "names": {
+          "en": "Furniture and appliances",
           "es": "Muebles y accesorios",
-          "en": "Furniture and appliances"
+          "zh_TW": "電話"
         }
       }
     ]
@@ -236,7 +266,8 @@
   {
     "names": {
       "en": "Taxes",
-      "es": "Impuestos"
+      "es": "Impuestos",
+      "zh_TW": "稅款"
     },
     "icon": "receipt",
     "color": "B32821",
@@ -245,7 +276,8 @@
   {
     "names": {
       "en": "Plants & Pets",
-      "es": "Plantas & mascotas"
+      "es": "Plantas & mascotas",
+      "zh_TW": "植物 & 寵物"
     },
     "icon": "pets",
     "color": "587246",
@@ -255,7 +287,8 @@
   {
     "names": {
       "en": "Holidays",
-      "es": "Vacaciones"
+      "es": "Vacaciones",
+      "zh_TW": "假期"
     },
     "icon": "landscape",
     "color": "FF7514",
@@ -264,15 +297,17 @@
       {
         "icon": "flight",
         "names": {
+          "en": "Travel",
           "es": "Viaje",
-          "en": "Travel"
+          "zh_TW": "旅行"
         }
       },
       {
         "icon": "bed",
         "names": {
+          "en": "Accommodation",
           "es": "Alojamiento",
-          "en": "Accommodation"
+          "zh_TW": "旅行"
         }
       }
     ]
@@ -280,7 +315,8 @@
   {
     "names": {
       "en": "Salary",
-      "es": "Salario"
+      "es": "Salario",
+      "zh_TW": "薪水"
     },
     "icon": "work",
     "color": "4C9141",
@@ -289,7 +325,8 @@
   {
     "names": {
       "en": "Gifts & Donations",
-      "es": "Regalos & Donaciones"
+      "es": "Regalos & Donaciones",
+      "zh_TW": "禮品 & 贈與"
     },
     "icon": "redeem",
     "color": "BB4B4B",
@@ -298,7 +335,8 @@
   {
     "names": {
       "en": "Sale",
-      "es": "Venta"
+      "es": "Venta",
+      "zh_TW": "銷售"
     },
     "icon": "logout",
     "color": "CDA434",
@@ -307,7 +345,8 @@
   {
     "names": {
       "en": "Investments",
-      "es": "Inversión"
+      "es": "Inversión",
+      "zh_TW": "投資"
     },
     "icon": "auto_graph",
     "color": "1E2460",
@@ -316,7 +355,8 @@
   {
     "names": {
       "en": "Gambling",
-      "es": "Juegos & apuestas"
+      "es": "Juegos & apuestas",
+      "zh_TW": "賭博"
     },
     "icon": "casino",
     "color": "2A6478",
@@ -325,7 +365,8 @@
   {
     "names": {
       "en": "Awards & Honours",
-      "es": "Premios & reconocimientos"
+      "es": "Premios & reconocimientos",
+      "zh_TW": "獎項 & 榮譽"
     },
     "icon": "military_tech",
     "color": "F39F18",
@@ -334,7 +375,8 @@
   {
     "names": {
       "en": "Debts",
-      "es": "Deudas & devoluciones"
+      "es": "Deudas & devoluciones",
+      "zh_TW": "債務"
     },
     "icon": "redo",
     "color": "781F19",
@@ -343,7 +385,8 @@
   {
     "names": {
       "en": "Loans",
-      "es": "Préstamos"
+      "es": "Préstamos",
+      "zh_TW": "貸款"
     },
     "icon": "undo",
     "color": "781F19",
@@ -352,7 +395,8 @@
   {
     "names": {
       "en": "Others",
-      "es": "Otros"
+      "es": "Otros",
+      "zh_TW": "其他"
     },
     "icon": "inventory_2",
     "color": "403A3A",
