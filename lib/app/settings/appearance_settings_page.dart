@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/app/settings/widgets/language_selector.dart';
+import 'package:monekin/app/settings/widgets/supported_locales.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
@@ -106,21 +108,42 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             createListSeparator(context, t.settings.lang_section),
-            buildSelector(
-              title: t.settings.lang_title,
-              dialogDescr: t.settings.lang_descr,
-              items: [
-                SelectItem(value: 'es', label: 'Español'),
-                SelectItem(value: 'en', label: 'English'),
-                SelectItem(value: 'uk', label: 'українська'),
-              ],
-              selected: LocaleSettings.currentLocale.languageTag,
-              onChanged: (value) {
-                LocaleSettings.setLocaleRaw(value, listenToDeviceLocale: true);
+            ListTile(
+              title: Text(t.settings.lang_title),
+              subtitle: Text(
+                appSupportedLocales
+                    .firstWhere((element) =>
+                        element.locale.languageTag ==
+                        LocaleSettings.currentLocale.languageTag)
+                    .label,
+              ),
+              onTap: () async {
+                final snackbarDisplayer =
+                    ScaffoldMessenger.of(context).showSnackBar;
 
-                UserSettingService.instance
-                    .setSetting(SettingKey.appLanguage, value)
-                    .then((value) => null);
+                final newLang = await showLanguageSelectorBottomSheet(
+                  context,
+                  LanguageSelector(
+                      selectedLangTag:
+                          LocaleSettings.currentLocale.languageTag),
+                );
+
+                if (newLang == null) {
+                  return;
+                }
+
+                LocaleSettings.setLocaleRaw(newLang,
+                    listenToDeviceLocale: true);
+
+                try {
+                  await UserSettingService.instance
+                      .setSetting(SettingKey.appLanguage, newLang);
+                } catch (e) {
+                  snackbarDisplayer(const SnackBar(
+                    content: Text(
+                        'There was an error persisting this setting on your device. Contact the developers for more information'),
+                  ));
+                }
               },
             ),
             createListSeparator(context, t.settings.theme_and_colors),
