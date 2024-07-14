@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:drift/drift.dart';
@@ -6,6 +5,7 @@ import 'package:drift/native.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
+import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/budget/budget.dart';
@@ -38,7 +38,7 @@ class AppDB extends _$AppDB {
   final bool inMemory;
   final bool logStatements;
 
-  /// Get teh path to the DB, that is `xxxx/xxxx/.../filename.db`
+  /// Get the path to the DB, that is `xxxx/xxxx/.../filename.db`
   Future<String> get databasePath async =>
       join((await getApplicationDocumentsDirectory()).path, dbName);
 
@@ -51,13 +51,7 @@ class AppDB extends _$AppDB {
       String initialSQL =
           await rootBundle.loadString('assets/sql/migrations/v$i.sql');
 
-      final statements = initialSQL
-          .split(RegExp(r"(?<![';\/])\s*;\s*"))
-          .map((e) => e.trim())
-          .where((e) => e.isNotEmpty)
-          .toList();
-
-      for (final sqlStatement in statements) {
+      for (final sqlStatement in splitSQLStatements(initialSQL)) {
         print("Running custom statement: $sqlStatement");
         await customStatement(sqlStatement);
       }
@@ -70,7 +64,7 @@ class AppDB extends _$AppDB {
   }
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration {
@@ -86,24 +80,15 @@ class AppDB extends _$AppDB {
             String initialSQL =
                 await rootBundle.loadString('assets/sql/initial_data.sql');
 
-            final statements = initialSQL
-                .split(RegExp(r"(?<![';\/])\s*;\s*"))
-                .map((e) => e.trim())
-                .where((e) => e.isNotEmpty)
-                .toList();
-
-            for (final sqlStatement in statements) {
+            for (final sqlStatement in splitSQLStatements(initialSQL)) {
               await customStatement(sqlStatement);
             }
 
             await customStatement(
                 "INSERT INTO appData VALUES ('${AppDataKey.dbVersion.name}', '${schemaVersion.toStringAsFixed(0)}'), ('${AppDataKey.introSeen.name}', '0'), ('${AppDataKey.lastExportDate.name}', null)");
 
-            String defaultCategories = await rootBundle
-                .loadString('assets/sql/default_categories.json');
-
-            await CategoryService.instance
-                .initializeCategories(jsonDecode(defaultCategories));
+            await CategoryService.instance.initializeCategories();
+            await CurrencyService.instance.initializeCurrencies();
 
             print('Initial data correctly inserted!');
           } catch (e) {
@@ -164,4 +149,27 @@ LazyDatabase openConnection(String dbName, {bool logStatements = false}) {
     return NativeDatabase.createBackgroundConnection(file,
         logStatements: logStatements);
   });
+}
+
+/// Splits a string containing multiple SQL statements into a list of individual statements.
+///
+/// This function takes a string of SQL commands separated by semicolons and
+/// splits them into individual statements.
+///
+/// Example:
+/// ```dart
+/// String sql = "CREATE TABLE users (id INT); INSERT INTO users (id) VALUES (1);";
+/// List<String> statements = splitSQLStatements(sql);
+/// print(statements); // Output: ["CREATE TABLE users (id INT)", "INSERT INTO users (id) VALUES (1)"]
+/// ```
+///
+/// [sqliteStr] - The input string containing multiple SQL statements.
+///
+/// Returns a list of individual SQL statements.
+List<String> splitSQLStatements(String sqliteStr) {
+  return sqliteStr
+      .split(RegExp(r';\s'))
+      .map((e) => e.trim())
+      .where((e) => e.isNotEmpty)
+      .toList();
 }
