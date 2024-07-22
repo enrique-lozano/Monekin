@@ -426,7 +426,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                               .copyWith(
                                 fontWeight: FontWeight.w800,
                                 color: transactionType.color(context),
-                                fontSize: transactionAmount >= 1000
+                                fontSize: transactionAmount.abs() >= 1000
                                     ? transactionAmount >= 1000000
                                         ? 32
                                         : 38
