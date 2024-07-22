@@ -112,21 +112,21 @@ class TransactionFilters {
           if (transactionTypes != null &&
               transactionTypes!
                   .map((e) => e.index)
-                  .contains(TransactionType.transfer.index))
+                  .contains(TransactionType.T.index))
             transaction.receivingAccountID.isNotNull(),
           if (transactionTypes != null &&
               !transactionTypes!
                   .map((e) => e.index)
-                  .contains(TransactionType.transfer.index))
+                  .contains(TransactionType.T.index))
             transaction.receivingAccountID.isNull(),
           if (transactionTypes != null &&
               transactionTypes!.length == 1 &&
-              transactionTypes![0].index == TransactionType.income.index)
+              transactionTypes![0].index == TransactionType.I.index)
             transaction.value.isBiggerThanValue(0) &
                 transaction.receivingAccountID.isNull(),
           if (transactionTypes != null &&
               transactionTypes!.length == 1 &&
-              transactionTypes![0].index == TransactionType.expense.index)
+              transactionTypes![0].index == TransactionType.E.index)
             transaction.value.isSmallerThanValue(0) &
                 transaction.receivingAccountID.isNull(),
 

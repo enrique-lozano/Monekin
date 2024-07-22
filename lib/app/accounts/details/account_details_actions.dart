@@ -29,7 +29,7 @@ abstract class AccountDetailsActions {
       ),
       ListTileActionItem(
           label: t.transfer.create,
-          icon: TransactionType.transfer.icon,
+          icon: TransactionType.T.icon,
           onClick: account.isClosed
               ? null
               : () async {
@@ -45,7 +45,7 @@ abstract class AccountDetailsActions {
                         context,
                         TransactionFormPage(
                           fromAccount: account,
-                          mode: TransactionType.transfer,
+                          mode: TransactionType.T,
                         ),
                       );
 

@@ -61,14 +61,14 @@ class IncomeExpenseComparason extends StatelessWidget {
           stream: Rx.combineLatest2(
               AccountService.instance.getAccountsBalance(
                 filters: filters.copyWith(
-                  transactionTypes: [TransactionType.income],
+                  transactionTypes: [TransactionType.I],
                   minDate: startDate,
                   maxDate: endDate,
                 ),
               ),
               AccountService.instance.getAccountsBalance(
                 filters: filters.copyWith(
-                  transactionTypes: [TransactionType.expense],
+                  transactionTypes: [TransactionType.E],
                   minDate: startDate,
                   maxDate: endDate,
                 ),
@@ -84,12 +84,12 @@ class IncomeExpenseComparason extends StatelessWidget {
 
             return Column(children: [
               IncomeExpenseTile(
-                type: TransactionType.income,
+                type: TransactionType.I,
                 value: income,
                 total: income + expense,
               ),
               IncomeExpenseTile(
-                type: TransactionType.expense,
+                type: TransactionType.E,
                 value: expense,
                 total: income + expense,
               ),
@@ -133,7 +133,7 @@ class IncomeExpenseTile extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(type == TransactionType.expense
+            Text(type == TransactionType.E
                 ? t.transaction.types.expense(n: 1)
                 : t.transaction.types.income(n: 1)),
             CurrencyDisplayer(amountToConvert: value)

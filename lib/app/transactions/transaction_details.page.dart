@@ -820,7 +820,7 @@ class _TransactionDetailHeader extends SliverPersistentHeaderDelegate {
                         fontWeight: FontWeight.w600,
                         color: transaction.status == TransactionStatus.voided
                             ? Colors.grey.shade400
-                            : transaction.type == TransactionType.transfer
+                            : transaction.type == TransactionType.T
                                 ? null
                                 : transaction.type.color(context),
                         decoration:

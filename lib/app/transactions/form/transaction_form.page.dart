@@ -32,7 +32,7 @@ import 'widgets/account_or_category_selector.dart';
 class TransactionFormPage extends StatefulWidget {
   const TransactionFormPage(
       {super.key,
-      this.mode = TransactionType.expense,
+      this.mode = TransactionType.E,
       this.fromAccount,
       this.toAccount,
       this.transactionToEdit});
@@ -83,7 +83,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
 
     transactionType = widget.mode;
 
-    if (transactionType == TransactionType.expense) {
+    if (transactionType == TransactionType.E) {
       transactionAmount = transactionAmount * -1;
     }
 
@@ -96,12 +96,12 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                     acc.type.equalsValue(AccountType.saving).not(),
                     acc.closingDate.isNull()
                   ]),
-              limit: widget.mode == TransactionType.transfer ? 2 : 1)
+              limit: widget.mode == TransactionType.T ? 2 : 1)
           .first
           .then((acc) {
         fromAccount = widget.fromAccount ?? acc[0];
 
-        if (widget.mode == TransactionType.transfer) {
+        if (widget.mode == TransactionType.T) {
           toAccount = widget.toAccount ??
               (acc[1].id != fromAccount!.id ? acc[1] : acc[0]);
         }
@@ -280,7 +280,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 4),
               child: Icon(Icons.arrow_forward, size: 16),
             ),
-            if (transactionType == TransactionType.transfer)
+            if (transactionType == TransactionType.T)
               Flexible(
                 child: ConstrainedBox(
                   constraints:
@@ -305,7 +305,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                       }),
                 ),
               ),
-            if (transactionType != TransactionType.transfer)
+            if (transactionType != TransactionType.T)
               Flexible(
                 child: ShakeWidget(
                   duration: const Duration(milliseconds: 200),
@@ -389,7 +389,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
             setState(() {
               transactionType = newMode.first;
 
-              if (transactionType == TransactionType.expense &&
+              if (transactionType == TransactionType.E &&
                   !transactionAmount.isNegative) {
                 transactionAmount = transactionAmount * -1;
               } else if (transactionAmount.isNegative) {

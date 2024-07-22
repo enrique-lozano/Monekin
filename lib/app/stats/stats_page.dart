@@ -144,7 +144,7 @@ class _StatsPageState extends State<StatsPage> {
                     body: ChartByCategories(
                       datePeriodState: dateRangeService,
                       showList: true,
-                      initialSelectedType: TransactionType.expense,
+                      initialSelectedType: TransactionType.E,
                       filters: filters,
                     ),
                   ),

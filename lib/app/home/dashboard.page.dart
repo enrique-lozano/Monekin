@@ -265,12 +265,12 @@ class _DashboardPageState extends State<DashboardPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 IncomeOrExpenseCard(
-                                  type: TransactionType.income,
+                                  type: TransactionType.I,
                                   startDate: dateRangeService.startDate,
                                   endDate: dateRangeService.endDate,
                                 ),
                                 IncomeOrExpenseCard(
-                                  type: TransactionType.expense,
+                                  type: TransactionType.E,
                                   startDate: dateRangeService.startDate,
                                   endDate: dateRangeService.endDate,
                                 ),

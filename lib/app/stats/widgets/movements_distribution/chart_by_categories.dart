@@ -35,7 +35,7 @@ class ChartByCategories extends StatefulWidget {
       {super.key,
       required this.datePeriodState,
       this.showList = false,
-      this.initialSelectedType = TransactionType.expense,
+      this.initialSelectedType = TransactionType.E,
       this.filters = const TransactionFilters()});
 
   final DatePeriodState datePeriodState;
@@ -59,9 +59,8 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
       status:
           TransactionStatus.getStatusThatCountsForStats(widget.filters.status),
       transactionTypes: [
-        if (transactionsType == TransactionType.expense)
-          TransactionType.expense,
-        if (transactionsType == TransactionType.income) TransactionType.income
+        if (transactionsType == TransactionType.E) TransactionType.E,
+        if (transactionsType == TransactionType.I) TransactionType.I
       ],
       minDate: widget.datePeriodState.startDate,
       maxDate: widget.datePeriodState.endDate,
@@ -231,11 +230,11 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
               child: SegmentedButton(
                 segments: [
                   ButtonSegment(
-                    value: TransactionType.expense,
+                    value: TransactionType.E,
                     label: Text(t.transaction.types.expense(n: 1)),
                   ),
                   ButtonSegment(
-                    value: TransactionType.income,
+                    value: TransactionType.I,
                     label: Text(t.transaction.types.income(n: 1)),
                   ),
                 ],

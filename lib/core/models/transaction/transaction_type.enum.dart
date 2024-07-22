@@ -4,13 +4,18 @@ import 'package:monekin/i18n/translations.g.dart';
 
 /// All the possible types of a transaction
 enum TransactionType {
-  income,
-  expense,
-  transfer;
+  /// An income transaction
+  I,
+
+  /// An expense transaction
+  E,
+
+  /// A transfer transaction
+  T;
 
   /// Wheter the type is `income` or `expense`.
   bool get isIncomeOrExpense {
-    if (this == transfer) {
+    if (this == T) {
       return false;
     }
 
@@ -26,11 +31,11 @@ enum TransactionType {
   }
 
   String displayName(BuildContext context, {bool plural = false}) {
-    if (this == income) {
+    if (this == I) {
       return t.transaction.types.income(n: plural ? 10 : 1);
-    } else if (this == expense) {
+    } else if (this == E) {
       return t.transaction.types.expense(n: plural ? 10 : 1);
-    } else if (this == transfer) {
+    } else if (this == T) {
       return t.transaction.types.transfer(n: plural ? 10 : 1);
     }
 
@@ -38,9 +43,9 @@ enum TransactionType {
   }
 
   IconData get icon {
-    if (this == income) {
+    if (this == I) {
       return Icons.south_east_rounded;
-    } else if (this == expense) {
+    } else if (this == E) {
       return Icons.north_east_rounded;
     }
 
@@ -49,9 +54,9 @@ enum TransactionType {
 
   /// Get the sign of this transactionType
   IconData get mathIcon {
-    if (this == income) {
+    if (this == I) {
       return Icons.add;
-    } else if (this == expense) {
+    } else if (this == E) {
       return Icons.remove;
     }
 
@@ -59,9 +64,9 @@ enum TransactionType {
   }
 
   Color color(BuildContext context) {
-    if (this == income) {
+    if (this == I) {
       return AppColors.of(context).success;
-    } else if (this == expense) {
+    } else if (this == E) {
       return AppColors.of(context).danger;
     }
 

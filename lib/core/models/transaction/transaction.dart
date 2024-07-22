@@ -87,18 +87,18 @@ class MoneyTransaction extends TransactionInDB {
   /// Get the color that represent this category. Will be the category color when the transaction is an income or an expense, and the primary color of the app otherwise
   Color color(BuildContext context) => isIncomeOrExpense
       ? ColorHex.get(category!.color)
-      : TransactionType.transfer.color(context);
+      : TransactionType.T.color(context);
 
   /// The type of the transaction (expense, income or transfer)
   TransactionType get type => isTransfer
-      ? TransactionType.transfer
+      ? TransactionType.T
       : value < 0
-          ? TransactionType.expense
-          : TransactionType.income;
+          ? TransactionType.E
+          : TransactionType.I;
 
   /// Get the balance (positive or negative) that this transaction cause to the user accounts
   double getCurrentBalanceInPreferredCurrency() {
-    if (type == TransactionType.transfer) {
+    if (type == TransactionType.T) {
       return (currentValueInDestinyInPreferredCurrency ??
               currentValueInPreferredCurrency) -
           currentValueInPreferredCurrency;
@@ -122,7 +122,7 @@ class MoneyTransaction extends TransactionInDB {
             )
           : IconDisplayer(
               mainColor: color(context),
-              icon: TransactionType.transfer.icon,
+              icon: TransactionType.T.icon,
               size: size,
               padding: padding,
               borderRadius: 999999,

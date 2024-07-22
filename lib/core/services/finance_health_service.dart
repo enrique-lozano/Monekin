@@ -206,7 +206,7 @@ class FinanceHealthService {
         AccountService.instance
             .getAccountsBalance(
               filters: filters.copyWith(
-                transactionTypes: [TransactionType.expense],
+                transactionTypes: [TransactionType.E],
               ),
             )
             .map((e) => e.abs()),
@@ -234,12 +234,12 @@ class FinanceHealthService {
     return StreamZip([
       AccountService.instance.getAccountsBalance(
         filters: filters.copyWith(
-          transactionTypes: [TransactionType.income],
+          transactionTypes: [TransactionType.I],
         ),
       ),
       AccountService.instance.getAccountsBalance(
         filters: filters.copyWith(
-          transactionTypes: [TransactionType.expense],
+          transactionTypes: [TransactionType.E],
         ),
       ),
     ]).map((res) {
