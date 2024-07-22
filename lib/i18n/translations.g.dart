@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 4
-/// Strings: 2105 (526 per locale)
+/// Strings: 2113 (528 per locale)
 ///
-/// Built on 2024-07-14 at 11:34 UTC
+/// Built on 2024-07-22 at 16:23 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -810,6 +810,7 @@ class _TranslationsTransactionFormEn {
 	// Translations
 	late final _TranslationsTransactionFormValidatorsEn validators = _TranslationsTransactionFormValidatorsEn._(_root);
 	String get title => 'Transaction title';
+	String get title_short => 'Title';
 	String get value => 'Value of the transaction';
 	String get tap_to_see_more => 'Tap to see more details';
 	String get description => 'Description';
@@ -829,8 +830,10 @@ class _TranslationsTransactionStatusEn {
 		one: 'Status',
 		other: 'Statuses',
 	);
+	String get display_long => 'Transaction status';
 	String tr_status({required Object status}) => '${status} transaction';
 	String get none => 'Stateless';
+	String get none_descr => 'Transaction without a specific state';
 	String get reconciled => 'Reconciled';
 	String get reconciled_descr => 'This transaction has already been validated and corresponds to a real transaction from your bank';
 	String get unreconciled => 'Unreconciled';
@@ -1294,7 +1297,6 @@ class _TranslationsTransactionFormValidatorsEn {
 	String get zero => 'The value of a transaction cannot be equal to zero';
 	String get date_max => 'The selected date is after the current one. The transaction will be added as pending';
 	String get date_after_account_creation => 'You cannot create a transaction whose date is before the creation date of the account it belongs to';
-	String get negative_transaction => 'Do not use negative amounts for your transaction. We will apply the sign depending on whether the selected category is expense/income';
 	String get negative_transfer => 'The monetary value of a transfer cannot be negative';
 }
 
@@ -2058,6 +2060,7 @@ class _TranslationsTransactionFormEs implements _TranslationsTransactionFormEn {
 	// Translations
 	@override late final _TranslationsTransactionFormValidatorsEs validators = _TranslationsTransactionFormValidatorsEs._(_root);
 	@override String get title => 'Título de la transacción';
+	@override String get title_short => 'Título';
 	@override String get value => 'Valor de la transacción';
 	@override String get tap_to_see_more => 'Toca para ver más detalles';
 	@override String get description => 'Descripción';
@@ -2077,8 +2080,10 @@ class _TranslationsTransactionStatusEs implements _TranslationsTransactionStatus
 		one: 'Estado',
 		other: 'Estados',
 	);
+	@override String get display_long => 'Estado de la transacción';
 	@override String tr_status({required Object status}) => 'Transacción ${status}';
 	@override String get none => 'Sin estado';
+	@override String get none_descr => 'Transacción sin un estado concreto';
 	@override String get reconciled => 'Reconciliada';
 	@override String get reconciled_descr => 'Esta transacción ha sido validada ya y se corresponde con una transacción real de su banco';
 	@override String get unreconciled => 'No reconciliada';
@@ -2543,7 +2548,6 @@ class _TranslationsTransactionFormValidatorsEs implements _TranslationsTransacti
 	@override String get zero => 'El valor de una transacción no puede ser igual a cero';
 	@override String get date_max => 'La fecha seleccionada es posterior a la actual. Se añadirá la transacción como pendiente';
 	@override String get date_after_account_creation => 'No puedes crear una transacción cuya fecha es anterior a la fecha de creación de la cuenta a la que pertenece';
-	@override String get negative_transaction => 'No uses cantidades negativas para tu transaccion. Aplicaremos el signo en función de si la categoría seleccionada es de tipo gasto/ingreso';
 	@override String get negative_transfer => 'El valor monetario de una transferencia no puede ser negativo';
 }
 
@@ -3307,6 +3311,7 @@ class _TranslationsTransactionFormUk implements _TranslationsTransactionFormEn {
 	// Translations
 	@override late final _TranslationsTransactionFormValidatorsUk validators = _TranslationsTransactionFormValidatorsUk._(_root);
 	@override String get title => 'Назва транзакції';
+	@override String get title_short => 'Назва';
 	@override String get value => 'Сума транзакції';
 	@override String get tap_to_see_more => 'Натисніть, щоб побачити більше деталей';
 	@override String get description => 'Опис';
@@ -3326,8 +3331,10 @@ class _TranslationsTransactionStatusUk implements _TranslationsTransactionStatus
 		one: 'Статус',
 		other: 'Статуси',
 	);
+	@override String get display_long => 'Статус транзакції';
 	@override String tr_status({required Object status}) => '${status} транзакція';
 	@override String get none => 'Без статусу';
+	@override String get none_descr => 'Транзакція без певного стану';
 	@override String get reconciled => 'Узгоджений';
 	@override String get reconciled_descr => 'Ця транзакція вже підтверджена і відповідає реальній транзакції з вашого банку';
 	@override String get unreconciled => 'Не узгоджений';
@@ -3791,7 +3798,6 @@ class _TranslationsTransactionFormValidatorsUk implements _TranslationsTransacti
 	@override String get zero => 'Значення транзакції не може бути рівним нулю';
 	@override String get date_max => 'Обрана дата після поточної. Транзакція буде додана як очікувана';
 	@override String get date_after_account_creation => 'Ви не можете створити транзакцію з датою до створення рахунку, до якого вона належить';
-	@override String get negative_transaction => 'Не використовуйте від\'ємні суми для вашої транзакції. Ми застосуємо знак в залежності від того, чи є обрана категорія витратою/доходом';
 	@override String get negative_transfer => 'Монетарна вартість переказу не може бути від\'ємною';
 }
 
@@ -4555,6 +4561,7 @@ class _TranslationsTransactionFormZhTw implements _TranslationsTransactionFormEn
 	// Translations
 	@override late final _TranslationsTransactionFormValidatorsZhTw validators = _TranslationsTransactionFormValidatorsZhTw._(_root);
 	@override String get title => '交易標題';
+	@override String get title_short => '資質';
 	@override String get value => '交易價值';
 	@override String get tap_to_see_more => '點擊查看更多詳細資訊';
 	@override String get description => '描述';
@@ -4574,8 +4581,10 @@ class _TranslationsTransactionStatusZhTw implements _TranslationsTransactionStat
 		one: '地位',
 		other: '狀態',
 	);
+	@override String get display_long => '交易狀態';
 	@override String tr_status({required Object status}) => '${status}交易';
 	@override String get none => '無國籍';
+	@override String get none_descr => '沒有特定狀態的交易';
 	@override String get reconciled => '和好了';
 	@override String get reconciled_descr => '此交易已經過驗證，並且與您銀行的真實交易相對應';
 	@override String get unreconciled => '不甘心';
@@ -5039,7 +5048,6 @@ class _TranslationsTransactionFormValidatorsZhTw implements _TranslationsTransac
 	@override String get zero => '一筆交易的價值不能等於零';
 	@override String get date_max => '所選日期晚於當前日期。交易將新增為待處理';
 	@override String get date_after_account_creation => '您無法建立日期早於所屬帳戶建立日期的交易';
-	@override String get negative_transaction => '請勿在您的交易中使用負金額。我們將根據所選類別是否為費用/收入來應用符號';
 	@override String get negative_transfer => '轉帳的貨幣價值不能為負數';
 }
 
@@ -5429,9 +5437,9 @@ extension on Translations {
 			case 'transaction.form.validators.zero': return 'The value of a transaction cannot be equal to zero';
 			case 'transaction.form.validators.date_max': return 'The selected date is after the current one. The transaction will be added as pending';
 			case 'transaction.form.validators.date_after_account_creation': return 'You cannot create a transaction whose date is before the creation date of the account it belongs to';
-			case 'transaction.form.validators.negative_transaction': return 'Do not use negative amounts for your transaction. We will apply the sign depending on whether the selected category is expense/income';
 			case 'transaction.form.validators.negative_transfer': return 'The monetary value of a transfer cannot be negative';
 			case 'transaction.form.title': return 'Transaction title';
+			case 'transaction.form.title_short': return 'Title';
 			case 'transaction.form.value': return 'Value of the transaction';
 			case 'transaction.form.tap_to_see_more': return 'Tap to see more details';
 			case 'transaction.form.description': return 'Description';
@@ -5442,8 +5450,10 @@ extension on Translations {
 				one: 'Status',
 				other: 'Statuses',
 			);
+			case 'transaction.status.display_long': return 'Transaction status';
 			case 'transaction.status.tr_status': return ({required Object status}) => '${status} transaction';
 			case 'transaction.status.none': return 'Stateless';
+			case 'transaction.status.none_descr': return 'Transaction without a specific state';
 			case 'transaction.status.reconciled': return 'Reconciled';
 			case 'transaction.status.reconciled_descr': return 'This transaction has already been validated and corresponds to a real transaction from your bank';
 			case 'transaction.status.unreconciled': return 'Unreconciled';
@@ -6036,9 +6046,9 @@ extension on _TranslationsEs {
 			case 'transaction.form.validators.zero': return 'El valor de una transacción no puede ser igual a cero';
 			case 'transaction.form.validators.date_max': return 'La fecha seleccionada es posterior a la actual. Se añadirá la transacción como pendiente';
 			case 'transaction.form.validators.date_after_account_creation': return 'No puedes crear una transacción cuya fecha es anterior a la fecha de creación de la cuenta a la que pertenece';
-			case 'transaction.form.validators.negative_transaction': return 'No uses cantidades negativas para tu transaccion. Aplicaremos el signo en función de si la categoría seleccionada es de tipo gasto/ingreso';
 			case 'transaction.form.validators.negative_transfer': return 'El valor monetario de una transferencia no puede ser negativo';
 			case 'transaction.form.title': return 'Título de la transacción';
+			case 'transaction.form.title_short': return 'Título';
 			case 'transaction.form.value': return 'Valor de la transacción';
 			case 'transaction.form.tap_to_see_more': return 'Toca para ver más detalles';
 			case 'transaction.form.description': return 'Descripción';
@@ -6049,8 +6059,10 @@ extension on _TranslationsEs {
 				one: 'Estado',
 				other: 'Estados',
 			);
+			case 'transaction.status.display_long': return 'Estado de la transacción';
 			case 'transaction.status.tr_status': return ({required Object status}) => 'Transacción ${status}';
 			case 'transaction.status.none': return 'Sin estado';
+			case 'transaction.status.none_descr': return 'Transacción sin un estado concreto';
 			case 'transaction.status.reconciled': return 'Reconciliada';
 			case 'transaction.status.reconciled_descr': return 'Esta transacción ha sido validada ya y se corresponde con una transacción real de su banco';
 			case 'transaction.status.unreconciled': return 'No reconciliada';
@@ -6642,9 +6654,9 @@ extension on _TranslationsUk {
 			case 'transaction.form.validators.zero': return 'Значення транзакції не може бути рівним нулю';
 			case 'transaction.form.validators.date_max': return 'Обрана дата після поточної. Транзакція буде додана як очікувана';
 			case 'transaction.form.validators.date_after_account_creation': return 'Ви не можете створити транзакцію з датою до створення рахунку, до якого вона належить';
-			case 'transaction.form.validators.negative_transaction': return 'Не використовуйте від\'ємні суми для вашої транзакції. Ми застосуємо знак в залежності від того, чи є обрана категорія витратою/доходом';
 			case 'transaction.form.validators.negative_transfer': return 'Монетарна вартість переказу не може бути від\'ємною';
 			case 'transaction.form.title': return 'Назва транзакції';
+			case 'transaction.form.title_short': return 'Назва';
 			case 'transaction.form.value': return 'Сума транзакції';
 			case 'transaction.form.tap_to_see_more': return 'Натисніть, щоб побачити більше деталей';
 			case 'transaction.form.description': return 'Опис';
@@ -6655,8 +6667,10 @@ extension on _TranslationsUk {
 				one: 'Статус',
 				other: 'Статуси',
 			);
+			case 'transaction.status.display_long': return 'Статус транзакції';
 			case 'transaction.status.tr_status': return ({required Object status}) => '${status} транзакція';
 			case 'transaction.status.none': return 'Без статусу';
+			case 'transaction.status.none_descr': return 'Транзакція без певного стану';
 			case 'transaction.status.reconciled': return 'Узгоджений';
 			case 'transaction.status.reconciled_descr': return 'Ця транзакція вже підтверджена і відповідає реальній транзакції з вашого банку';
 			case 'transaction.status.unreconciled': return 'Не узгоджений';
@@ -7248,9 +7262,9 @@ extension on _TranslationsZhTw {
 			case 'transaction.form.validators.zero': return '一筆交易的價值不能等於零';
 			case 'transaction.form.validators.date_max': return '所選日期晚於當前日期。交易將新增為待處理';
 			case 'transaction.form.validators.date_after_account_creation': return '您無法建立日期早於所屬帳戶建立日期的交易';
-			case 'transaction.form.validators.negative_transaction': return '請勿在您的交易中使用負金額。我們將根據所選類別是否為費用/收入來應用符號';
 			case 'transaction.form.validators.negative_transfer': return '轉帳的貨幣價值不能為負數';
 			case 'transaction.form.title': return '交易標題';
+			case 'transaction.form.title_short': return '資質';
 			case 'transaction.form.value': return '交易價值';
 			case 'transaction.form.tap_to_see_more': return '點擊查看更多詳細資訊';
 			case 'transaction.form.description': return '描述';
@@ -7261,8 +7275,10 @@ extension on _TranslationsZhTw {
 				one: '地位',
 				other: '狀態',
 			);
+			case 'transaction.status.display_long': return '交易狀態';
 			case 'transaction.status.tr_status': return ({required Object status}) => '${status}交易';
 			case 'transaction.status.none': return '無國籍';
+			case 'transaction.status.none_descr': return '沒有特定狀態的交易';
 			case 'transaction.status.reconciled': return '和好了';
 			case 'transaction.status.reconciled_descr': return '此交易已經過驗證，並且與您銀行的真實交易相對應';
 			case 'transaction.status.unreconciled': return '不甘心';

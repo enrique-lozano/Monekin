@@ -314,10 +314,10 @@
         "zero": "El valor de una transacción no puede ser igual a cero",
         "date-max": "La fecha seleccionada es posterior a la actual. Se añadirá la transacción como pendiente",
         "date-after-account-creation": "No puedes crear una transacción cuya fecha es anterior a la fecha de creación de la cuenta a la que pertenece",
-        "negative-transaction": "No uses cantidades negativas para tu transaccion. Aplicaremos el signo en función de si la categoría seleccionada es de tipo gasto/ingreso",
         "negative-transfer": "El valor monetario de una transferencia no puede ser negativo"
       },
       "title": "Título de la transacción",
+      "title.short": "Título",
       "value": "Valor de la transacción",
       "tap-to-see-more": "Toca para ver más detalles",
       "description": "Descripción",
@@ -330,8 +330,10 @@
         "one": "Estado",
         "other": "Estados"
       },
+      "display_long": "Estado de la transacción",
       "tr_status": "Transacción {{ status }}",
       "none": "Sin estado",
+      "none.descr": "Transacción sin un estado concreto",
       "reconciled": "Reconciliada",
       "reconciled.descr": "Esta transacción ha sido validada ya y se corresponde con una transacción real de su banco",
       "unreconciled": "No reconciliada",

@@ -8,6 +8,23 @@ enum TransactionType {
   expense,
   transfer;
 
+  /// Wheter the type is `income` or `expense`.
+  bool get isIncomeOrExpense {
+    if (this == transfer) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /// Wheter the type is of type `transfer`.
+  ///
+  /// This is an alias, so instead of doing `myType == TransactionType.transfer`, we can do
+  /// `myType.isTransfer`, which is equivalent
+  bool get isTransfer {
+    return !isIncomeOrExpense;
+  }
+
   String displayName(BuildContext context, {bool plural = false}) {
     if (this == income) {
       return t.transaction.types.income(n: plural ? 10 : 1);

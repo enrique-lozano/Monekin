@@ -307,10 +307,10 @@
         "zero": "The value of a transaction cannot be equal to zero",
         "date-max": "The selected date is after the current one. The transaction will be added as pending",
         "date-after-account-creation": "You cannot create a transaction whose date is before the creation date of the account it belongs to",
-        "negative-transaction": "Do not use negative amounts for your transaction. We will apply the sign depending on whether the selected category is expense/income",
         "negative-transfer": "The monetary value of a transfer cannot be negative"
       },
       "title": "Transaction title",
+      "title.short": "Title",
       "value": "Value of the transaction",
       "tap-to-see-more": "Tap to see more details",
       "description": "Description",
@@ -323,8 +323,10 @@
         "one": "Status",
         "other": "Statuses"
       },
+      "display_long": "Transaction status",
       "tr_status": "{{ status }} transaction",
       "none": "Stateless",
+      "none.descr": "Transaction without a specific state",
       "reconciled": "Reconciled",
       "reconciled.descr": "This transaction has already been validated and corresponds to a real transaction from your bank",
       "unreconciled": "Unreconciled",

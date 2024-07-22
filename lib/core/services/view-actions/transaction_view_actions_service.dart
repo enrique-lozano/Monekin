@@ -30,9 +30,7 @@ class TransactionViewActionService {
             context,
             TransactionFormPage(
               transactionToEdit: transaction,
-              mode: transaction.isIncomeOrExpense
-                  ? TransactionFormMode.incomeOrExpense
-                  : TransactionFormMode.transfer,
+              mode: transaction.type,
             )),
       ),
       if (transaction.recurrentInfo.isNoRecurrent)

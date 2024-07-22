@@ -307,10 +307,10 @@
         "zero": "一筆交易的價值不能等於零",
         "date-max": "所選日期晚於當前日期。交易將新增為待處理",
         "date-after-account-creation": "您無法建立日期早於所屬帳戶建立日期的交易",
-        "negative-transaction": "請勿在您的交易中使用負金額。我們將根據所選類別是否為費用/收入來應用符號",
         "negative-transfer": "轉帳的貨幣價值不能為負數"
       },
       "title": "交易標題",
+      "title.short": "資質",
       "value": "交易價值",
       "tap-to-see-more": "點擊查看更多詳細資訊",
       "description": "描述",
@@ -323,8 +323,10 @@
         "one": "地位",
         "other": "狀態"
       },
+      "display_long": "交易狀態",
       "tr_status": "{{status}}交易",
       "none": "無國籍",
+      "none.descr": "沒有特定狀態的交易",
       "reconciled": "和好了",
       "reconciled.descr": "此交易已經過驗證，並且與您銀行的真實交易相對應",
       "unreconciled": "不甘心",

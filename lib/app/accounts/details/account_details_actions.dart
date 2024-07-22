@@ -45,7 +45,7 @@ abstract class AccountDetailsActions {
                         context,
                         TransactionFormPage(
                           fromAccount: account,
-                          mode: TransactionFormMode.transfer,
+                          mode: TransactionType.transfer,
                         ),
                       );
 
