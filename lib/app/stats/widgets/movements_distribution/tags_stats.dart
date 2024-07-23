@@ -15,7 +15,9 @@ class TagStats extends StatelessWidget {
   final TransactionFilters filters;
 
   TrDistributionChartItem<Tag> getTagInfo(
-      Tag tag, List<MoneyTransaction> transactions) {
+    Tag tag,
+    List<MoneyTransaction> transactions,
+  ) {
     transactions = transactions
         .where((element) => element.tags.any((elTag) => elTag.id == tag.id))
         .toList();

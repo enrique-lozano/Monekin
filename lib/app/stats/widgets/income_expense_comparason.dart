@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
@@ -61,14 +64,18 @@ class IncomeExpenseComparason extends StatelessWidget {
           stream: Rx.combineLatest2(
               AccountService.instance.getAccountsBalance(
                 filters: filters.copyWith(
-                  transactionTypes: [TransactionType.I],
+                  transactionTypes: [TransactionType.I]
+                      .intersectionWithNullable(filters.transactionTypes)
+                      .toList(),
                   minDate: startDate,
                   maxDate: endDate,
                 ),
               ),
               AccountService.instance.getAccountsBalance(
                 filters: filters.copyWith(
-                  transactionTypes: [TransactionType.E],
+                  transactionTypes: [TransactionType.E]
+                      .intersectionWithNullable(filters.transactionTypes)
+                      .toList(),
                   minDate: startDate,
                   maxDate: endDate,
                 ),
@@ -80,7 +87,7 @@ class IncomeExpenseComparason extends StatelessWidget {
             }
 
             final income = snapshot.data![0];
-            final expense = snapshot.data![1].abs();
+            final expense = snapshot.data![1] * -1;
 
             return Column(children: [
               IncomeExpenseTile(
@@ -141,7 +148,7 @@ class IncomeExpenseTile extends StatelessWidget {
         ),
       ]),
       subtitle: AnimatedProgressBar(
-        value: total > 0 ? (value / total) : 0,
+        value: total > 0 ? max(value / total, 0) : 0,
         color: type.color(context),
       ),
     );
