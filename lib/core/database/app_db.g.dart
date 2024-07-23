@@ -1321,7 +1321,7 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
               type: DriftSqlType.string,
               requiredDuringInsert: true,
               $customConstraints:
-                  'NOT NULL CHECK (status IN (\'E\', \'I\', \'T\'))')
+                  'NOT NULL CHECK (type IN (\'E\', \'I\', \'T\'))')
           .withConverter<TransactionType>(Transactions.$convertertype);
   static const VerificationMeta _statusMeta = const VerificationMeta('status');
   late final GeneratedColumnWithTypeConverter<TransactionStatus?,
