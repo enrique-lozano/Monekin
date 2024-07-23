@@ -109,30 +109,14 @@ class TransactionFilters {
                 '(ABS(t.value * COALESCE(excRate.exchangeRate,1)) >= $minValue)'),
 
           // Transaction types:
-          if (transactionTypes != null &&
-              transactionTypes!
-                  .map((e) => e.index)
-                  .contains(TransactionType.T.index))
-            transaction.receivingAccountID.isNotNull(),
-          if (transactionTypes != null &&
-              !transactionTypes!
-                  .map((e) => e.index)
-                  .contains(TransactionType.T.index))
-            transaction.receivingAccountID.isNull(),
-          if (transactionTypes != null &&
-              transactionTypes!.length == 1 &&
-              transactionTypes![0].index == TransactionType.I.index)
-            transaction.value.isBiggerThanValue(0) &
-                transaction.receivingAccountID.isNull(),
-          if (transactionTypes != null &&
-              transactionTypes!.length == 1 &&
-              transactionTypes![0].index == TransactionType.E.index)
-            transaction.value.isSmallerThanValue(0) &
-                transaction.receivingAccountID.isNull(),
+          if (transactionTypes != null)
+            transaction.type.isInValues(transactionTypes!),
 
           // Is recurrent:
           if (isRecurrent == false) transaction.intervalPeriod.isNull(),
           if (isRecurrent == true) transaction.intervalPeriod.isNotNull(),
+
+          // Other filters:
 
           if (searchValue != null && searchValue!.isNotEmpty)
             (transaction.notes.contains(searchValue!) |

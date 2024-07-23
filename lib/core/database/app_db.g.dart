@@ -1315,6 +1315,14 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: '');
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  late final GeneratedColumnWithTypeConverter<TransactionType, String> type =
+      GeneratedColumn<String>('type', aliasedName, false,
+              type: DriftSqlType.string,
+              requiredDuringInsert: true,
+              $customConstraints:
+                  'NOT NULL CHECK (status IN (\'E\', \'I\', \'T\'))')
+          .withConverter<TransactionType>(Transactions.$convertertype);
   static const VerificationMeta _statusMeta = const VerificationMeta('status');
   late final GeneratedColumnWithTypeConverter<TransactionStatus?,
       String> status = GeneratedColumn<String>('status', aliasedName, true,
@@ -1393,6 +1401,7 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
         value,
         title,
         notes,
+        type,
         status,
         categoryID,
         valueInDestiny,
@@ -1444,6 +1453,7 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
       context.handle(
           _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
     }
+    context.handle(_typeMeta, const VerificationResult.success());
     context.handle(_statusMeta, const VerificationResult.success());
     if (data.containsKey('categoryID')) {
       context.handle(
@@ -1505,6 +1515,8 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
           .read(DriftSqlType.string, data['${effectivePrefix}title']),
       notes: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}notes']),
+      type: Transactions.$convertertype.fromSql(attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!),
       status: Transactions.$converterstatusn.fromSql(attachedDatabase
           .typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}status'])),
@@ -1533,6 +1545,8 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
     return Transactions(attachedDatabase, alias);
   }
 
+  static JsonTypeConverter2<TransactionType, String, String> $convertertype =
+      const EnumNameConverter<TransactionType>(TransactionType.values);
   static JsonTypeConverter2<TransactionStatus, String, String>
       $converterstatus =
       const EnumNameConverter<TransactionStatus>(TransactionStatus.values);
@@ -1571,6 +1585,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
 
   /// Some description, notes or extra info about the transaction.
   final String? notes;
+
+  /// Whether the transacton is an income, an expense or a transfer
+  final TransactionType type;
   final TransactionStatus? status;
   final String? categoryID;
   final double? valueInDestiny;
@@ -1596,6 +1613,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       required this.value,
       this.title,
       this.notes,
+      required this.type,
       this.status,
       this.categoryID,
       this.valueInDestiny,
@@ -1617,6 +1635,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
     }
     if (!nullToAbsent || notes != null) {
       map['notes'] = Variable<String>(notes);
+    }
+    {
+      map['type'] = Variable<String>(Transactions.$convertertype.toSql(type));
     }
     if (!nullToAbsent || status != null) {
       map['status'] =
@@ -1658,6 +1679,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           title == null && nullToAbsent ? const Value.absent() : Value(title),
       notes:
           notes == null && nullToAbsent ? const Value.absent() : Value(notes),
+      type: Value(type),
       status:
           status == null && nullToAbsent ? const Value.absent() : Value(status),
       categoryID: categoryID == null && nullToAbsent
@@ -1695,6 +1717,8 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       value: serializer.fromJson<double>(json['value']),
       title: serializer.fromJson<String?>(json['title']),
       notes: serializer.fromJson<String?>(json['notes']),
+      type: Transactions.$convertertype
+          .fromJson(serializer.fromJson<String>(json['type'])),
       status: Transactions.$converterstatusn
           .fromJson(serializer.fromJson<String?>(json['status'])),
       categoryID: serializer.fromJson<String?>(json['categoryID']),
@@ -1720,6 +1744,8 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       'value': serializer.toJson<double>(value),
       'title': serializer.toJson<String?>(title),
       'notes': serializer.toJson<String?>(notes),
+      'type':
+          serializer.toJson<String>(Transactions.$convertertype.toJson(type)),
       'status': serializer
           .toJson<String?>(Transactions.$converterstatusn.toJson(status)),
       'categoryID': serializer.toJson<String?>(categoryID),
@@ -1741,6 +1767,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           double? value,
           Value<String?> title = const Value.absent(),
           Value<String?> notes = const Value.absent(),
+          TransactionType? type,
           Value<TransactionStatus?> status = const Value.absent(),
           Value<String?> categoryID = const Value.absent(),
           Value<double?> valueInDestiny = const Value.absent(),
@@ -1757,6 +1784,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
         value: value ?? this.value,
         title: title.present ? title.value : this.title,
         notes: notes.present ? notes.value : this.notes,
+        type: type ?? this.type,
         status: status.present ? status.value : this.status,
         categoryID: categoryID.present ? categoryID.value : this.categoryID,
         valueInDestiny:
@@ -1783,6 +1811,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           ..write('value: $value, ')
           ..write('title: $title, ')
           ..write('notes: $notes, ')
+          ..write('type: $type, ')
           ..write('status: $status, ')
           ..write('categoryID: $categoryID, ')
           ..write('valueInDestiny: $valueInDestiny, ')
@@ -1804,6 +1833,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       value,
       title,
       notes,
+      type,
       status,
       categoryID,
       valueInDestiny,
@@ -1823,6 +1853,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           other.value == this.value &&
           other.title == this.title &&
           other.notes == this.notes &&
+          other.type == this.type &&
           other.status == this.status &&
           other.categoryID == this.categoryID &&
           other.valueInDestiny == this.valueInDestiny &&
@@ -1841,6 +1872,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
   final Value<double> value;
   final Value<String?> title;
   final Value<String?> notes;
+  final Value<TransactionType> type;
   final Value<TransactionStatus?> status;
   final Value<String?> categoryID;
   final Value<double?> valueInDestiny;
@@ -1858,6 +1890,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     this.value = const Value.absent(),
     this.title = const Value.absent(),
     this.notes = const Value.absent(),
+    this.type = const Value.absent(),
     this.status = const Value.absent(),
     this.categoryID = const Value.absent(),
     this.valueInDestiny = const Value.absent(),
@@ -1876,6 +1909,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     required double value,
     this.title = const Value.absent(),
     this.notes = const Value.absent(),
+    required TransactionType type,
     this.status = const Value.absent(),
     this.categoryID = const Value.absent(),
     this.valueInDestiny = const Value.absent(),
@@ -1889,7 +1923,8 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
   })  : id = Value(id),
         date = Value(date),
         accountID = Value(accountID),
-        value = Value(value);
+        value = Value(value),
+        type = Value(type);
   static Insertable<TransactionInDB> custom({
     Expression<String>? id,
     Expression<DateTime>? date,
@@ -1897,6 +1932,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     Expression<double>? value,
     Expression<String>? title,
     Expression<String>? notes,
+    Expression<String>? type,
     Expression<String>? status,
     Expression<String>? categoryID,
     Expression<double>? valueInDestiny,
@@ -1915,6 +1951,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
       if (value != null) 'value': value,
       if (title != null) 'title': title,
       if (notes != null) 'notes': notes,
+      if (type != null) 'type': type,
       if (status != null) 'status': status,
       if (categoryID != null) 'categoryID': categoryID,
       if (valueInDestiny != null) 'valueInDestiny': valueInDestiny,
@@ -1936,6 +1973,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
       Value<double>? value,
       Value<String?>? title,
       Value<String?>? notes,
+      Value<TransactionType>? type,
       Value<TransactionStatus?>? status,
       Value<String?>? categoryID,
       Value<double?>? valueInDestiny,
@@ -1953,6 +1991,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
       value: value ?? this.value,
       title: title ?? this.title,
       notes: notes ?? this.notes,
+      type: type ?? this.type,
       status: status ?? this.status,
       categoryID: categoryID ?? this.categoryID,
       valueInDestiny: valueInDestiny ?? this.valueInDestiny,
@@ -1987,6 +2026,10 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     }
     if (notes.present) {
       map['notes'] = Variable<String>(notes.value);
+    }
+    if (type.present) {
+      map['type'] =
+          Variable<String>(Transactions.$convertertype.toSql(type.value));
     }
     if (status.present) {
       map['status'] =
@@ -2032,6 +2075,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
           ..write('value: $value, ')
           ..write('title: $title, ')
           ..write('notes: $notes, ')
+          ..write('type: $type, ')
           ..write('status: $status, ')
           ..write('categoryID: $categoryID, ')
           ..write('valueInDestiny: $valueInDestiny, ')
@@ -4137,6 +4181,7 @@ abstract class _$AppDB extends GeneratedDatabase {
           date: row.read<DateTime>('date'),
           value: row.read<double>('value'),
           isHidden: row.read<bool>('isHidden'),
+          type: Transactions.$convertertype.fromSql(row.read<String>('type')),
           notes: row.readNullable<String>('notes'),
           title: row.readNullable<String>('title'),
           status: NullAwareTypeConverter.wrapFromSql(
@@ -5167,6 +5212,7 @@ typedef $TransactionsInsertCompanionBuilder = TransactionsCompanion Function({
   required double value,
   Value<String?> title,
   Value<String?> notes,
+  required TransactionType type,
   Value<TransactionStatus?> status,
   Value<String?> categoryID,
   Value<double?> valueInDestiny,
@@ -5185,6 +5231,7 @@ typedef $TransactionsUpdateCompanionBuilder = TransactionsCompanion Function({
   Value<double> value,
   Value<String?> title,
   Value<String?> notes,
+  Value<TransactionType> type,
   Value<TransactionStatus?> status,
   Value<String?> categoryID,
   Value<double?> valueInDestiny,
@@ -5222,6 +5269,7 @@ class $TransactionsTableManager extends RootTableManager<
             Value<double> value = const Value.absent(),
             Value<String?> title = const Value.absent(),
             Value<String?> notes = const Value.absent(),
+            Value<TransactionType> type = const Value.absent(),
             Value<TransactionStatus?> status = const Value.absent(),
             Value<String?> categoryID = const Value.absent(),
             Value<double?> valueInDestiny = const Value.absent(),
@@ -5240,6 +5288,7 @@ class $TransactionsTableManager extends RootTableManager<
             value: value,
             title: title,
             notes: notes,
+            type: type,
             status: status,
             categoryID: categoryID,
             valueInDestiny: valueInDestiny,
@@ -5258,6 +5307,7 @@ class $TransactionsTableManager extends RootTableManager<
             required double value,
             Value<String?> title = const Value.absent(),
             Value<String?> notes = const Value.absent(),
+            required TransactionType type,
             Value<TransactionStatus?> status = const Value.absent(),
             Value<String?> categoryID = const Value.absent(),
             Value<double?> valueInDestiny = const Value.absent(),
@@ -5276,6 +5326,7 @@ class $TransactionsTableManager extends RootTableManager<
             value: value,
             title: title,
             notes: notes,
+            type: type,
             status: status,
             categoryID: categoryID,
             valueInDestiny: valueInDestiny,
@@ -5329,6 +5380,13 @@ class $TransactionsFilterComposer
       column: $state.table.notes,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnWithTypeConverterFilters<TransactionType, TransactionType, String>
+      get type => $state.composableBuilder(
+          column: $state.table.type,
+          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
+              column,
+              joinBuilders: joinBuilders));
 
   ColumnWithTypeConverterFilters<TransactionStatus?, TransactionStatus, String>
       get status => $state.composableBuilder(
@@ -5444,6 +5502,11 @@ class $TransactionsOrderingComposer
 
   ColumnOrderings<String> get notes => $state.composableBuilder(
       column: $state.table.notes,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get type => $state.composableBuilder(
+      column: $state.table.type,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 

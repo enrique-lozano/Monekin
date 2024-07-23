@@ -6,7 +6,7 @@ import 'package:monekin/app/categories/categories_list.dart';
 import 'package:monekin/app/transactions/form/dialogs/transaction_more_info.modal.dart';
 import 'package:monekin/app/transactions/form/dialogs/transaction_status_selector.dart';
 import 'package:monekin/app/transactions/form/dialogs/transaction_title_modal.dart';
-import 'package:monekin/app/transactions/form/transaction_form_calculator.dart';
+import 'package:monekin/app/transactions/form/widgets/transaction_form_calculator.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
@@ -165,6 +165,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         accountID: fromAccount!.id,
         value: transactionAmount,
         isHidden: false,
+        type: transactionType,
         status: date.compareTo(DateTime.now()) > 0
             ? TransactionStatus.pending
             : status,

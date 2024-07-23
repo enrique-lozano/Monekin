@@ -124,6 +124,7 @@ class TransactionViewActionService {
           accountID: transaction.accountID,
           date: transaction.date,
           value: transaction.value,
+          type: transaction.type,
           isHidden: transaction.isHidden,
           categoryID: transaction.categoryID,
           notes: transaction.notes,

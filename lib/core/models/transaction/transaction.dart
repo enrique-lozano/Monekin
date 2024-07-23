@@ -30,6 +30,7 @@ class MoneyTransaction extends TransactionInDB {
       required super.date,
       required super.value,
       required super.isHidden,
+      required super.type,
       super.notes,
       super.title,
       super.status,
@@ -88,13 +89,6 @@ class MoneyTransaction extends TransactionInDB {
   Color color(BuildContext context) => isIncomeOrExpense
       ? ColorHex.get(category!.color)
       : TransactionType.T.color(context);
-
-  /// The type of the transaction (expense, income or transfer)
-  TransactionType get type => isTransfer
-      ? TransactionType.T
-      : value < 0
-          ? TransactionType.E
-          : TransactionType.I;
 
   /// Get the balance (positive or negative) that this transaction cause to the user accounts
   double getCurrentBalanceInPreferredCurrency() {
