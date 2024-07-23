@@ -101,6 +101,11 @@ class MoneyTransaction extends TransactionInDB {
     return currentValueInPreferredCurrency;
   }
 
+  bool get isReversed {
+    return type == TransactionType.E && value > 0 ||
+        type == TransactionType.I && value < 0;
+  }
+
   IconDisplayer getDisplayIcon(
     BuildContext context, {
     double size = 22,
