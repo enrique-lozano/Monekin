@@ -8,9 +8,15 @@ const _removeButtonID = '⌫';
 
 class TransactionFormCalculator extends StatefulWidget {
   const TransactionFormCalculator(
-      {super.key, required this.amountToConvert, this.onChange, this.onSubmit});
+      {super.key,
+      required this.amountToConvert,
+      this.onChange,
+      this.onSubmit,
+      this.showNegativeToggleButton = true});
 
   final double amountToConvert;
+
+  final bool showNegativeToggleButton;
 
   /// If the calculator will start with a negative value
 //final bool initiallyNegative;
@@ -286,12 +292,13 @@ class _TransactionFormCalculatorState extends State<TransactionFormCalculator> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               buildCalculatorButton(context, text: 'AC'),
-              buildCalculatorButton(context, text: '-'),
+              if (widget.showNegativeToggleButton)
+                buildCalculatorButton(context, text: '-'),
               buildCalculatorButton(context,
                   bgColor: AppColors.of(context).primary,
                   text: 'DONE',
                   textColor: AppColors.of(context).onPrimary,
-                  flex: 2),
+                  flex: widget.showNegativeToggleButton ? 2 : 3),
             ],
           ),
         ),

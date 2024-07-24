@@ -490,6 +490,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
             ),
             child: TransactionFormCalculator(
               amountToConvert: transactionAmount,
+              showNegativeToggleButton: transactionType.isIncomeOrExpense,
               onSubmit: () => submitForm(),
               onChange: (amount) {
                 setState(() {
