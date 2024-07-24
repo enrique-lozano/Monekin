@@ -114,6 +114,19 @@ class _TransactionFormCalculatorState extends State<TransactionFormCalculator> {
   }
 
   @override
+  void didUpdateWidget(oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.amountToConvert != widget.amountToConvert ||
+        oldWidget.amountToConvert.isNegative !=
+            widget.amountToConvert.isNegative) {
+      setState(() {
+        isNegative = widget.amountToConvert.isNegative;
+      });
+    }
+  }
+
+  @override
   void dispose() {
     _focusNode.dispose();
     super.dispose();

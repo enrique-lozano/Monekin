@@ -387,17 +387,18 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
               .toList(),
           selected: {transactionType},
           onSelectionChanged: (newMode) {
-            setState(() {
-              transactionType = newMode.first;
+            transactionType = newMode.first;
 
-              if (transactionType == TransactionType.E &&
-                  !transactionAmount.isNegative) {
-                transactionAmount = transactionAmount * -1;
-              } else if (transactionAmount.isNegative) {
-                // Transfers and incomes -> Convert to positive
-                transactionAmount = transactionAmount * -1;
-              }
-            });
+            if (transactionType == TransactionType.E &&
+                !transactionAmount.isNegative) {
+              transactionAmount = transactionAmount * -1;
+            } else if (transactionType != TransactionType.E &&
+                transactionAmount.isNegative) {
+              // Transfers and incomes -> Convert to positive
+              transactionAmount = transactionAmount * -1;
+            }
+
+            setState(() {});
           },
         ),
         actions: [
