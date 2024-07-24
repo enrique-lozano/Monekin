@@ -458,6 +458,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                             currencyStyle: bigTextStyle.copyWith(
                                 fontWeight: FontWeight.w400),
                             integerStyle: bigTextStyle,
+                            currency: fromAccount?.currency,
                           );
                         }),
                       ],
