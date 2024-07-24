@@ -45,13 +45,14 @@ class TransactionStatusSelector extends StatelessWidget {
     return DraggableScrollableSheet(
       expand: false,
       maxChildSize: 0.85,
-      minChildSize: 0.85,
+      minChildSize: 0.65,
       initialChildSize: 0.85,
       builder: (context, sc) => ModalContainer(
         title: t.transaction.status.display_long,
         responseToKeyboard: false,
         body: SingleChildScrollView(
           controller: sc,
+          physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           child: Column(
             children: [
