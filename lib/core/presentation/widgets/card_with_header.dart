@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../app_colors.dart';
 
+/// The radius of the `CardWithHeader` widget, a very useful widget through the app
+const cardWithHeaderRadius = 12.0;
+
 class CardWithHeader extends StatelessWidget {
   const CardWithHeader({
     super.key,
@@ -30,17 +33,18 @@ class CardWithHeader extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         color: AppColors.of(context).background,
+        borderRadius: BorderRadius.circular(cardWithHeaderRadius),
         boxShadow: [
           BoxShadow(
             color: AppColors.of(context).shadowColorLight,
-            blurRadius: 12,
+            blurRadius: cardWithHeaderRadius,
             offset: const Offset(0, 0),
             spreadRadius: 4,
           ),
         ],
       ),
       foregroundDecoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(cardWithHeaderRadius),
         border: Border.all(
           width: 1,
           color: Theme.of(context).dividerColor,
