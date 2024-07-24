@@ -29,12 +29,7 @@ class CardWithHeader extends StatelessWidget {
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
         color: AppColors.of(context).background,
-        border: Border.all(
-          width: 1,
-          color: Theme.of(context).dividerColor,
-        ),
         boxShadow: [
           BoxShadow(
             color: AppColors.of(context).shadowColorLight,
@@ -43,6 +38,13 @@ class CardWithHeader extends StatelessWidget {
             spreadRadius: 4,
           ),
         ],
+      ),
+      foregroundDecoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          width: 1,
+          color: Theme.of(context).dividerColor,
+        ),
       ),
       margin: const EdgeInsets.all(0),
       child: Column(
@@ -79,9 +81,13 @@ class CardWithHeader extends StatelessWidget {
             ),
           ),
           const Divider(),
-          Padding(
-            padding: bodyPadding,
-            child: body,
+          Material(
+            type: MaterialType.transparency,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: Padding(
+              padding: bodyPadding,
+              child: body,
+            ),
           )
         ],
       ),
