@@ -307,7 +307,8 @@
         "zero": "The value of a transaction cannot be equal to zero",
         "date-max": "The selected date is after the current one. The transaction will be added as pending",
         "date-after-account-creation": "You cannot create a transaction whose date is before the creation date of the account it belongs to",
-        "negative-transfer": "The monetary value of a transfer cannot be negative"
+        "negative-transfer": "The monetary value of a transfer cannot be negative",
+        "transfer-between-same-accounts": "The origin and the destination account cannot be the same"
       },
       "title": "Transaction title",
       "title.short": "Title",

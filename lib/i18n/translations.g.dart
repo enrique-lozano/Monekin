@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 4
-/// Strings: 2113 (528 per locale)
+/// Strings: 2117 (529 per locale)
 ///
-/// Built on 2024-07-22 at 21:24 UTC
+/// Built on 2024-07-24 at 17:41 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -1298,6 +1298,7 @@ class _TranslationsTransactionFormValidatorsEn {
 	String get date_max => 'The selected date is after the current one. The transaction will be added as pending';
 	String get date_after_account_creation => 'You cannot create a transaction whose date is before the creation date of the account it belongs to';
 	String get negative_transfer => 'The monetary value of a transfer cannot be negative';
+	String get transfer_between_same_accounts => 'The origin and the destination account cannot be the same';
 }
 
 // Path: transfer.form.currency_exchange_selector
@@ -2549,6 +2550,7 @@ class _TranslationsTransactionFormValidatorsEs implements _TranslationsTransacti
 	@override String get date_max => 'La fecha seleccionada es posterior a la actual. Se añadirá la transacción como pendiente';
 	@override String get date_after_account_creation => 'No puedes crear una transacción cuya fecha es anterior a la fecha de creación de la cuenta a la que pertenece';
 	@override String get negative_transfer => 'El valor monetario de una transferencia no puede ser negativo';
+	@override String get transfer_between_same_accounts => 'Las cuentas de origen y destino no pueden coincidir';
 }
 
 // Path: transfer.form.currency_exchange_selector
@@ -3799,6 +3801,7 @@ class _TranslationsTransactionFormValidatorsUk implements _TranslationsTransacti
 	@override String get date_max => 'Обрана дата після поточної. Транзакція буде додана як очікувана';
 	@override String get date_after_account_creation => 'Ви не можете створити транзакцію з датою до створення рахунку, до якого вона належить';
 	@override String get negative_transfer => 'Монетарна вартість переказу не може бути від\'ємною';
+	@override String get transfer_between_same_accounts => 'Облікові записи джерела та призначення не збігаються';
 }
 
 // Path: transfer.form.currency_exchange_selector
@@ -5049,6 +5052,7 @@ class _TranslationsTransactionFormValidatorsZhTw implements _TranslationsTransac
 	@override String get date_max => '所選日期晚於當前日期。交易將新增為待處理';
 	@override String get date_after_account_creation => '您無法建立日期早於所屬帳戶建立日期的交易';
 	@override String get negative_transfer => '轉帳的貨幣價值不能為負數';
+	@override String get transfer_between_same_accounts => '來源帳號與目標帳號不能符合';
 }
 
 // Path: transfer.form.currency_exchange_selector
@@ -5438,6 +5442,7 @@ extension on Translations {
 			case 'transaction.form.validators.date_max': return 'The selected date is after the current one. The transaction will be added as pending';
 			case 'transaction.form.validators.date_after_account_creation': return 'You cannot create a transaction whose date is before the creation date of the account it belongs to';
 			case 'transaction.form.validators.negative_transfer': return 'The monetary value of a transfer cannot be negative';
+			case 'transaction.form.validators.transfer_between_same_accounts': return 'The origin and the destination account cannot be the same';
 			case 'transaction.form.title': return 'Transaction title';
 			case 'transaction.form.title_short': return 'Title';
 			case 'transaction.form.value': return 'Value of the transaction';
@@ -6047,6 +6052,7 @@ extension on _TranslationsEs {
 			case 'transaction.form.validators.date_max': return 'La fecha seleccionada es posterior a la actual. Se añadirá la transacción como pendiente';
 			case 'transaction.form.validators.date_after_account_creation': return 'No puedes crear una transacción cuya fecha es anterior a la fecha de creación de la cuenta a la que pertenece';
 			case 'transaction.form.validators.negative_transfer': return 'El valor monetario de una transferencia no puede ser negativo';
+			case 'transaction.form.validators.transfer_between_same_accounts': return 'Las cuentas de origen y destino no pueden coincidir';
 			case 'transaction.form.title': return 'Título de la transacción';
 			case 'transaction.form.title_short': return 'Título';
 			case 'transaction.form.value': return 'Valor de la transacción';
@@ -6655,6 +6661,7 @@ extension on _TranslationsUk {
 			case 'transaction.form.validators.date_max': return 'Обрана дата після поточної. Транзакція буде додана як очікувана';
 			case 'transaction.form.validators.date_after_account_creation': return 'Ви не можете створити транзакцію з датою до створення рахунку, до якого вона належить';
 			case 'transaction.form.validators.negative_transfer': return 'Монетарна вартість переказу не може бути від\'ємною';
+			case 'transaction.form.validators.transfer_between_same_accounts': return 'Облікові записи джерела та призначення не збігаються';
 			case 'transaction.form.title': return 'Назва транзакції';
 			case 'transaction.form.title_short': return 'Назва';
 			case 'transaction.form.value': return 'Сума транзакції';
@@ -7263,6 +7270,7 @@ extension on _TranslationsZhTw {
 			case 'transaction.form.validators.date_max': return '所選日期晚於當前日期。交易將新增為待處理';
 			case 'transaction.form.validators.date_after_account_creation': return '您無法建立日期早於所屬帳戶建立日期的交易';
 			case 'transaction.form.validators.negative_transfer': return '轉帳的貨幣價值不能為負數';
+			case 'transaction.form.validators.transfer_between_same_accounts': return '來源帳號與目標帳號不能符合';
 			case 'transaction.form.title': return '交易標題';
 			case 'transaction.form.title_short': return '資質';
 			case 'transaction.form.value': return '交易價值';

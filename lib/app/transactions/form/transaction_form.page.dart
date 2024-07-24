@@ -34,14 +34,12 @@ class TransactionFormPage extends StatefulWidget {
       {super.key,
       this.mode = TransactionType.E,
       this.fromAccount,
-      this.toAccount,
       this.transactionToEdit});
   final TransactionType mode;
 
   final MoneyTransaction? transactionToEdit;
 
   final Account? fromAccount;
-  final Account? toAccount;
 
   @override
   State<TransactionFormPage> createState() => _TransactionFormPageState();
@@ -96,14 +94,13 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                     acc.type.equalsValue(AccountType.saving).not(),
                     acc.closingDate.isNull()
                   ]),
-              limit: widget.mode == TransactionType.T ? 2 : 1)
+              limit: transactionType.isTransfer ? 2 : 1)
           .first
           .then((acc) {
         fromAccount = widget.fromAccount ?? acc[0];
 
-        if (widget.mode == TransactionType.T) {
-          toAccount = widget.toAccount ??
-              (acc[1].id != fromAccount!.id ? acc[1] : acc[0]);
+        if (transactionType.isTransfer) {
+          toAccount = acc[1].id != fromAccount!.id ? acc[1] : acc[0];
         }
 
         setState(() {});
@@ -112,7 +109,8 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   }
 
   submitForm() {
-    if (widget.mode.isIncomeOrExpense && selectedCategory == null) {
+    if (transactionType.isIncomeOrExpense && selectedCategory == null ||
+        transactionType.isTransfer && toAccount == null) {
       _shakeKey.currentState?.shake();
       return;
     }
@@ -146,6 +144,18 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
       return;
     }
 
+    if (transactionType.isTransfer && fromAccount!.id == toAccount!.id) {
+      scMessenger.showSnackBar(
+        SnackBar(
+            content: Text(
+                t.transaction.form.validators.transfer_between_same_accounts)),
+      );
+
+      return;
+    }
+
+    // VALIDATIONS ENDED -- PROCEED:
+
     onSuccess() {
       Navigator.pop(context);
 
@@ -176,9 +186,11 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         endDate: recurrentRule.ruleRecurrentLimit?.endDate,
         remainingTransactions:
             recurrentRule.ruleRecurrentLimit?.remainingIterations,
-        valueInDestiny: widget.mode.isTransfer ? valueInDestinyToNumber : null,
-        categoryID: widget.mode.isIncomeOrExpense ? selectedCategory?.id : null,
-        receivingAccountID: widget.mode.isTransfer ? toAccount?.id : null,
+        valueInDestiny:
+            transactionType.isTransfer ? valueInDestinyToNumber : null,
+        categoryID:
+            transactionType.isIncomeOrExpense ? selectedCategory?.id : null,
+        receivingAccountID: transactionType.isTransfer ? toAccount?.id : null,
       ),
     )
         .then((value) {
@@ -283,27 +295,33 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
             ),
             if (transactionType == TransactionType.T)
               Flexible(
-                child: ConstrainedBox(
-                  constraints:
-                      BoxConstraints(maxWidth: constraints.maxWidth * 0.5),
-                  child: AccountOrCategorySelector(
-                      title: t.transfer.form.to,
-                      inputValue: toAccount?.name,
-                      icon: toAccount?.displayIcon(context) ??
-                          IconDisplayer(
-                            displayMode: IconDisplayMode.polygon,
-                            icon: Icons.question_mark_rounded,
-                            mainColor: AppColors.of(context).primary,
-                          ),
-                      onClick: () async {
-                        final modalRes = await showAccountSelector(toAccount!);
+                child: ShakeWidget(
+                  duration: const Duration(milliseconds: 200),
+                  shakeCount: 1,
+                  shakeOffset: 10,
+                  key: _shakeKey,
+                  child: ConstrainedBox(
+                    constraints:
+                        BoxConstraints(maxWidth: constraints.maxWidth * 0.5),
+                    child: AccountOrCategorySelector(
+                        title: t.transfer.form.to,
+                        inputValue: toAccount?.name,
+                        icon: toAccount?.displayIcon(context) ??
+                            IconDisplayer(
+                              displayMode: IconDisplayMode.polygon,
+                              icon: Icons.question_mark_rounded,
+                              mainColor: AppColors.of(context).primary,
+                            ),
+                        onClick: () async {
+                          final modalRes = await showAccountSelector(toAccount);
 
-                        if (modalRes != null && modalRes.isNotEmpty) {
-                          setState(() {
-                            toAccount = modalRes.first;
-                          });
-                        }
-                      }),
+                          if (modalRes != null && modalRes.isNotEmpty) {
+                            setState(() {
+                              toAccount = modalRes.first;
+                            });
+                          }
+                        }),
+                  ),
                 ),
               ),
             if (transactionType != TransactionType.T)
@@ -335,14 +353,14 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     );
   }
 
-  Future<List<Account>?> showAccountSelector(Account account) {
+  Future<List<Account>?> showAccountSelector(Account? account) {
     return showAccountSelectorBottomSheet(
         context,
         AccountSelectorModal(
           allowMultiSelection: false,
-          filterSavingAccounts: widget.mode.isIncomeOrExpense,
+          filterSavingAccounts: transactionType.isIncomeOrExpense,
           includeArchivedAccounts: false,
-          selectedAccounts: [account],
+          selectedAccounts: [if (account != null) account],
         ));
   }
 
@@ -437,7 +455,8 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
 
                           return CurrencyDisplayer(
                             amountToConvert: transactionAmount,
-                            currencyStyle: bigTextStyle.copyWith(fontSize: 32),
+                            currencyStyle: bigTextStyle.copyWith(
+                                fontWeight: FontWeight.w400),
                             integerStyle: bigTextStyle,
                           );
                         }),

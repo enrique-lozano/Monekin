@@ -314,7 +314,8 @@
         "zero": "El valor de una transacción no puede ser igual a cero",
         "date-max": "La fecha seleccionada es posterior a la actual. Se añadirá la transacción como pendiente",
         "date-after-account-creation": "No puedes crear una transacción cuya fecha es anterior a la fecha de creación de la cuenta a la que pertenece",
-        "negative-transfer": "El valor monetario de una transferencia no puede ser negativo"
+        "negative-transfer": "El valor monetario de una transferencia no puede ser negativo",
+        "transfer-between-same-accounts": "Las cuentas de origen y destino no pueden coincidir"
       },
       "title": "Título de la transacción",
       "title.short": "Título",
