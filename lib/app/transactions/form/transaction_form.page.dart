@@ -487,23 +487,32 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   Row buildExtraInfoButtons(BuildContext context) {
     return Row(
       children: [
-        IconButton.outlined(
-          icon: Icon(
-            status.icon,
-            color: status?.color ?? AppColors.of(context).primary,
-          ),
-          tooltip: t.transaction.status.display_long,
-          onPressed: () => showTransactioStatusModal(
-            context,
-            initialStatus: status,
-          ).then((modalRes) {
-            if (modalRes == null) return;
+        Builder(builder: (context) {
+          final selectedStatus = date.compareTo(DateTime.now()) > 0
+              ? TransactionStatus.pending
+              : status;
 
-            setState(() {
-              status = modalRes.result;
-            });
-          }),
-        ),
+          return IconButton.outlined(
+            icon: Icon(
+              selectedStatus.icon,
+              color: (selectedStatus?.color ?? AppColors.of(context).primary)
+                  .withOpacity(date.compareTo(DateTime.now()) > 0 ? 0.3 : 1),
+            ),
+            tooltip: t.transaction.status.display_long,
+            onPressed: date.compareTo(DateTime.now()) > 0
+                ? null
+                : () => showTransactioStatusModal(
+                      context,
+                      initialStatus: selectedStatus,
+                    ).then((modalRes) {
+                      if (modalRes == null) return;
+
+                      setState(() {
+                        status = modalRes.result;
+                      });
+                    }),
+          );
+        }),
         const SizedBox(width: 6),
         IconButton.outlined(
           onPressed: () => showTransactionMoreInfoModal(
