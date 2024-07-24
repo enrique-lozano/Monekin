@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/app/transactions/label_value_info_table.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
@@ -251,7 +252,6 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
             width: 1,
             color: transaction.nextPayStatus!
                 .color(context)
-                .darken(0.6)
                 .withOpacity(isNext ? 1 : 0.3),
           )),
       child: ListTile(
@@ -265,18 +265,17 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
           isNext ? transaction.nextPayStatus!.icon : Icons.access_time,
           color: transaction.nextPayStatus!
               .color(context)
-              .darken(0.6)
               .withOpacity(isNext ? 1 : 0.3),
         ),
-        title: Text(
-          DateFormat.yMMMd().format(date),
-          style: TextStyle(color: Colors.black.withOpacity(isNext ? 1 : 0.3)),
-        ),
+        title: Text(DateFormat.yMMMd().format(date)),
         subtitle: !isNext
             ? null
             : Text(
                 transaction.nextPayStatus!
                     .displayDaysToPay(context, transaction.daysToPay()),
+                style: TextStyle(
+                  color: AppColors.of(context).onBackground,
+                ),
               ),
         trailing: Row(mainAxisSize: MainAxisSize.min, children: [
           IconButton(
@@ -367,22 +366,43 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
 
     final color = showRecurrencyStatus
         ? isDarkTheme
-            ? AppColors.of(context).primaryContainer
+            ? AppColors.of(context).primary
             : AppColors.of(context).primary.lighten(0.2)
         : transaction.status!.color;
 
-    return Card(
-      elevation: 1,
-      color: color.lighten(0.625),
+    return Container(
       clipBehavior: Clip.hardEdge,
       margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: color.withOpacity(0.15),
+        border: Border.all(
+          width: 1,
+          color: color,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.of(context).shadowColorLight,
+            blurRadius: 12,
+            offset: const Offset(0, 0),
+            spreadRadius: 4,
+          ),
+        ],
+      ),
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Icon(
+                  showRecurrencyStatus
+                      ? Icons.repeat_rounded
+                      : transaction.status?.icon,
+                  size: 26,
+                  color: color,
+                ),
+                const SizedBox(width: 8),
                 Text(
                     showRecurrencyStatus
                         ? t.recurrent_transactions.details.title
@@ -394,20 +414,10 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color:
-                          isDarkTheme ? AppColors.of(context).background : null,
                     )),
-                Icon(
-                  showRecurrencyStatus
-                      ? Icons.repeat_rounded
-                      : transaction.status?.icon,
-                  size: 26,
-                  color: color.darken(0.2),
-                )
               ],
             ),
           ),
-          Divider(color: color.lighten(0.25)),
           Padding(
             padding: EdgeInsets.all(showRecurrencyStatus ? 0 : 12),
             child: Column(
@@ -418,10 +428,6 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                     showRecurrencyStatus
                         ? t.recurrent_transactions.details.descr
                         : transaction.status!.description(context),
-                    style: TextStyle(
-                      color:
-                          isDarkTheme ? AppColors.of(context).background : null,
-                    ),
                   ),
                 ),
                 if (transaction.recurrentInfo.isRecurrent) ...[
@@ -513,60 +519,63 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                               statusDisplayer(transaction),
                             CardWithHeader(
                               title: 'Info',
-                              bodyPadding:
-                                  const EdgeInsets.symmetric(vertical: 4),
-                              body: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  buildInfoTileWithIconAndColor(
-                                    icon: transaction.account.icon,
-                                    color: transaction.account
-                                        .getComputedColor(context)
-                                        .lighten(isAppInDarkBrightness(context)
-                                            ? 0.5
-                                            : 0),
-                                    data: transaction.account.name,
-                                    title: transaction.isTransfer
-                                        ? t.transfer.form.from
-                                        : t.general.account,
-                                  ),
-                                  if (transaction.isIncomeOrExpense)
-                                    buildInfoTileWithIconAndColor(
-                                      icon: transaction.category!.icon,
-                                      color: ColorHex.get(
-                                              transaction.category!.color)
+                              body: LabelValueInfoTable(
+                                items: [
+                                  LabelValueInfoItem(
+                                    value: buildInfoTileWithIconAndColor(
+                                      icon: transaction.account.icon,
+                                      color: transaction.account
+                                          .getComputedColor(context)
                                           .lighten(
                                               isAppInDarkBrightness(context)
                                                   ? 0.5
                                                   : 0),
-                                      data: transaction.category!.name,
-                                      title: t.general.category,
+                                      data: transaction.account.name,
+                                    ),
+                                    label: transaction.isTransfer
+                                        ? t.transfer.form.from
+                                        : t.general.account,
+                                  ),
+                                  if (transaction.isIncomeOrExpense)
+                                    LabelValueInfoItem(
+                                      value: buildInfoTileWithIconAndColor(
+                                        icon: transaction.category!.icon,
+                                        color: ColorHex.get(
+                                                transaction.category!.color)
+                                            .lighten(
+                                                isAppInDarkBrightness(context)
+                                                    ? 0.5
+                                                    : 0),
+                                        data: transaction.category!.name,
+                                      ),
+                                      label: t.general.category,
                                     ),
                                   if (transaction.isTransfer)
-                                    buildInfoTileWithIconAndColor(
-                                      icon: transaction.receivingAccount!.icon,
-                                      color: AppColors.of(context).primary,
-                                      data: transaction.receivingAccount!.name,
-                                      title: t.transfer.form.to,
-                                    ),
-                                  buildInfoListTile(
-                                    trailing: Text(
+                                    LabelValueInfoItem(
+                                        value: buildInfoTileWithIconAndColor(
+                                          icon: transaction
+                                              .receivingAccount!.icon,
+                                          color: AppColors.of(context).primary,
+                                          data: transaction
+                                              .receivingAccount!.name,
+                                        ),
+                                        label: t.transfer.form.to),
+                                  LabelValueInfoItem(
+                                    value: Text(
                                       DateFormat.yMMMMd()
                                           .format(transaction.date),
                                       softWrap: false,
                                       overflow: TextOverflow.fade,
-                                      textAlign: TextAlign.end,
                                     ),
-                                    title: t.general.time.date,
+                                    label: t.general.time.date,
                                   ),
-                                  buildInfoListTile(
-                                    trailing: Text(
+                                  LabelValueInfoItem(
+                                    value: Text(
                                       DateFormat.Hm().format(transaction.date),
                                       softWrap: false,
                                       overflow: TextOverflow.fade,
-                                      textAlign: TextAlign.end,
                                     ),
-                                    title: t.general.time.time,
+                                    label: t.general.time.time,
                                   ),
                                 ],
                               ),
@@ -760,30 +769,26 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
     );
   }
 
-  ListTile buildInfoTileWithIconAndColor({
+  Row buildInfoTileWithIconAndColor({
     required SupportedIcon icon,
-    required String title,
     required String data,
     required Color color,
   }) {
-    return buildInfoListTile(
-      title: title,
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          icon.display(
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        icon.display(
+          color: color,
+        ),
+        const SizedBox(width: 8),
+        Text(
+          data,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
             color: color,
           ),
-          const SizedBox(width: 8),
-          Text(
-            data,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
-          )
-        ],
-      ),
+        )
+      ],
     );
   }
 }
