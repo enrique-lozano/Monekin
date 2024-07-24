@@ -6,7 +6,7 @@
 /// Locales: 4
 /// Strings: 2117 (529 per locale)
 ///
-/// Built on 2024-07-24 at 17:41 UTC
+/// Built on 2024-07-24 at 18:23 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -814,7 +814,7 @@ class _TranslationsTransactionFormEn {
 	String get value => 'Value of the transaction';
 	String get tap_to_see_more => 'Tap to see more details';
 	String get description => 'Description';
-	String get description_info => 'Adding a note will help you find this transaction faster in the future';
+	String get description_info => 'Tap here to enter a more detailed description about this transaction';
 	String exchange_to_preferred_title({required Object currency}) => 'Exchnage rate to ${currency}';
 	String get exchange_to_preferred_in_date => 'On transaction date';
 }
@@ -2065,7 +2065,7 @@ class _TranslationsTransactionFormEs implements _TranslationsTransactionFormEn {
 	@override String get value => 'Valor de la transacción';
 	@override String get tap_to_see_more => 'Toca para ver más detalles';
 	@override String get description => 'Descripción';
-	@override String get description_info => 'Añadir una nota te ayudará a encontrar más rapidamente esta transacción en un futuro';
+	@override String get description_info => 'Toca aquí para escribir una descripción mas detallada sobre esta transacción';
 	@override String exchange_to_preferred_title({required Object currency}) => 'Cambio a ${currency}';
 	@override String get exchange_to_preferred_in_date => 'El día de la transacción';
 }
@@ -3317,7 +3317,7 @@ class _TranslationsTransactionFormUk implements _TranslationsTransactionFormEn {
 	@override String get value => 'Сума транзакції';
 	@override String get tap_to_see_more => 'Натисніть, щоб побачити більше деталей';
 	@override String get description => 'Опис';
-	@override String get description_info => 'Додавання примітки допоможе вам швидше знайти цю транзакцію у майбутньому';
+	@override String get description_info => 'Натисніть тут, щоб ввести детальніший опис цієї транзакції';
 	@override String exchange_to_preferred_title({required Object currency}) => 'Обмінний курс на ${currency}';
 	@override String get exchange_to_preferred_in_date => 'На дату транзакції';
 }
@@ -4568,7 +4568,7 @@ class _TranslationsTransactionFormZhTw implements _TranslationsTransactionFormEn
 	@override String get value => '交易價值';
 	@override String get tap_to_see_more => '點擊查看更多詳細資訊';
 	@override String get description => '描述';
-	@override String get description_info => '添加註釋將幫助您將來更快地找到這筆交易';
+	@override String get description_info => '點擊此處輸入有關此交易的更詳細描述';
 	@override String exchange_to_preferred_title({required Object currency}) => '匯率為${currency}';
 	@override String get exchange_to_preferred_in_date => '交易日';
 }
@@ -5448,7 +5448,7 @@ extension on Translations {
 			case 'transaction.form.value': return 'Value of the transaction';
 			case 'transaction.form.tap_to_see_more': return 'Tap to see more details';
 			case 'transaction.form.description': return 'Description';
-			case 'transaction.form.description_info': return 'Adding a note will help you find this transaction faster in the future';
+			case 'transaction.form.description_info': return 'Tap here to enter a more detailed description about this transaction';
 			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => 'Exchnage rate to ${currency}';
 			case 'transaction.form.exchange_to_preferred_in_date': return 'On transaction date';
 			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
@@ -6058,7 +6058,7 @@ extension on _TranslationsEs {
 			case 'transaction.form.value': return 'Valor de la transacción';
 			case 'transaction.form.tap_to_see_more': return 'Toca para ver más detalles';
 			case 'transaction.form.description': return 'Descripción';
-			case 'transaction.form.description_info': return 'Añadir una nota te ayudará a encontrar más rapidamente esta transacción en un futuro';
+			case 'transaction.form.description_info': return 'Toca aquí para escribir una descripción mas detallada sobre esta transacción';
 			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => 'Cambio a ${currency}';
 			case 'transaction.form.exchange_to_preferred_in_date': return 'El día de la transacción';
 			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
@@ -6667,7 +6667,7 @@ extension on _TranslationsUk {
 			case 'transaction.form.value': return 'Сума транзакції';
 			case 'transaction.form.tap_to_see_more': return 'Натисніть, щоб побачити більше деталей';
 			case 'transaction.form.description': return 'Опис';
-			case 'transaction.form.description_info': return 'Додавання примітки допоможе вам швидше знайти цю транзакцію у майбутньому';
+			case 'transaction.form.description_info': return 'Натисніть тут, щоб ввести детальніший опис цієї транзакції';
 			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => 'Обмінний курс на ${currency}';
 			case 'transaction.form.exchange_to_preferred_in_date': return 'На дату транзакції';
 			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
@@ -7276,7 +7276,7 @@ extension on _TranslationsZhTw {
 			case 'transaction.form.value': return '交易價值';
 			case 'transaction.form.tap_to_see_more': return '點擊查看更多詳細資訊';
 			case 'transaction.form.description': return '描述';
-			case 'transaction.form.description_info': return '添加註釋將幫助您將來更快地找到這筆交易';
+			case 'transaction.form.description_info': return '點擊此處輸入有關此交易的更詳細描述';
 			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => '匯率為${currency}';
 			case 'transaction.form.exchange_to_preferred_in_date': return '交易日';
 			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,

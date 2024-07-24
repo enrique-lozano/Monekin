@@ -322,7 +322,7 @@
       "value": "Valor de la transacción",
       "tap-to-see-more": "Toca para ver más detalles",
       "description": "Descripción",
-      "description-info": "Añadir una nota te ayudará a encontrar más rapidamente esta transacción en un futuro",
+      "description-info": "Toca aquí para escribir una descripción mas detallada sobre esta transacción",
       "exchange-to-preferred-title": "Cambio a {{ currency }}",
       "exchange-to-preferred-in-date": "El día de la transacción"
     },

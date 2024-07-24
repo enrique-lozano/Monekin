@@ -315,7 +315,7 @@
       "value": "Value of the transaction",
       "tap-to-see-more": "Tap to see more details",
       "description": "Description",
-      "description-info": "Adding a note will help you find this transaction faster in the future",
+      "description-info": "Tap here to enter a more detailed description about this transaction",
       "exchange-to-preferred-title": "Exchnage rate to {{ currency }}",
       "exchange-to-preferred-in-date": "On transaction date"
     },

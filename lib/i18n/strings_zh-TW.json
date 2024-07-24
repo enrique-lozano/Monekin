@@ -315,7 +315,7 @@
       "value": "交易價值",
       "tap-to-see-more": "點擊查看更多詳細資訊",
       "description": "描述",
-      "description-info": "添加註釋將幫助您將來更快地找到這筆交易",
+      "description-info": "點擊此處輸入有關此交易的更詳細描述",
       "exchange-to-preferred-title": "匯率為{{currency}}",
       "exchange-to-preferred-in-date": "交易日"
     },
