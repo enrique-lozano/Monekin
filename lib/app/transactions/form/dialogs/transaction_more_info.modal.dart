@@ -2,7 +2,6 @@ import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/tags/tag_list.page.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
@@ -51,15 +50,11 @@ class _TransactionMoreInfoModal extends StatefulWidget {
 class _TransactionMoreInfoModalState extends State<_TransactionMoreInfoModal> {
   late TransactionMoreInfo moreInfoData;
 
-  TextEditingController notesController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
 
     moreInfoData = widget.initialData.copyWith();
-
-    notesController.text = widget.initialData.note.notEmptyString ?? '';
   }
 
   @override
@@ -82,7 +77,6 @@ class _TransactionMoreInfoModalState extends State<_TransactionMoreInfoModal> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       TextFormField(
-                        //   controller: notesController,
                         initialValue: widget.initialData.note,
                         onChanged: (value) {
                           setState(() {
@@ -92,9 +86,9 @@ class _TransactionMoreInfoModalState extends State<_TransactionMoreInfoModal> {
                         maxLines: 3,
                         decoration: InputDecoration(
                           border: InputBorder.none,
-                          fillColor: AppColors.of(context).surface,
-                          hoverColor: AppColors.of(context).surface,
-                          focusColor: AppColors.of(context).surface,
+                          fillColor: AppColors.of(context).modalBackground,
+                          hoverColor: AppColors.of(context).modalBackground,
+                          focusColor: AppColors.of(context).modalBackground,
                           hintText: t.transaction.form.description_info,
                         ),
                       ),
