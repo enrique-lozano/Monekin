@@ -27,13 +27,29 @@ ThemeData getThemeData(
   if (lightDynamic != null && darkDynamic != null && accentColor == 'auto') {
     // On Android S+ devices, use the provided dynamic color scheme.
     // (Recommended) Harmonize the dynamic color scheme' built-in semantic colors.
-    lightColorScheme = lightDynamic.harmonized();
+    lightColorScheme = ColorScheme.fromSeed(
+      seedColor: lightDynamic.primary,
+      brightness: Brightness.light,
+    ).harmonized();
 
     // Repeat for the dark color scheme.
-    darkColorScheme = darkDynamic.harmonized();
+    darkColorScheme = ColorScheme.fromSeed(
+      seedColor: darkDynamic.primary,
+      brightness: Brightness.dark,
+      surface: amoledMode ? Colors.black : null,
+    );
+
+    // TODO: We can directly use the dynamic palette here, in the following way
+
+    // lightColorScheme = lightDynamic.harmonized();
+    // darkColorScheme = darkDynamic.harmonized();
+
+    // However, the colorSchemes provided by the `dynamic_color` package do not generate the
+    // new surface colors of Flutter 3.22. See https://github.com/material-foundation/flutter-packages/issues/582#issuecomment-2209591668
+    // for more info
 
     if (amoledMode) {
-      darkColorScheme = darkColorScheme.copyWith(background: Colors.black);
+      // darkColorScheme = darkColorScheme.copyWith(surface: Colors.black);
     }
 
     isAppUsingDynamicColors = true; // ignore, only for demo purposes
@@ -42,23 +58,24 @@ ThemeData getThemeData(
 
     /// Fallback scheme for a not-dynamic mode in dark or light mode:
     ColorScheme fallbackScheme = ColorScheme.fromSeed(
-        seedColor:
-            accentColor == 'auto' ? brandBlue : ColorHex.get(accentColor),
-        brightness: isDark ? Brightness.dark : Brightness.light,
-        background: isDark && amoledMode ? Colors.black : null);
+      seedColor: accentColor == 'auto' ? brandBlue : ColorHex.get(accentColor),
+      brightness: isDark ? Brightness.dark : Brightness.light,
+      surface: isDark && amoledMode ? Colors.black : null,
+    );
 
     lightColorScheme = fallbackScheme;
     darkColorScheme = fallbackScheme;
   }
+
+  AppColors customAppColors =
+      AppColors.fromColorScheme(isDark ? darkColorScheme : lightColorScheme);
 
   theme = ThemeData(
       colorScheme: isDark ? darkColorScheme : lightColorScheme,
       brightness: isDark ? Brightness.dark : Brightness.light,
       useMaterial3: true,
       fontFamily: 'Nunito',
-      extensions: [
-        AppColors.fromColorScheme(isDark ? darkColorScheme : lightColorScheme)
-      ]);
+      extensions: [customAppColors]);
 
   final listTileSmallText = TextStyle(
       color: theme.textTheme.bodyMedium?.color,
@@ -68,21 +85,19 @@ ThemeData getThemeData(
       fontFamily: 'Nunito');
 
   return theme.copyWith(
+    scaffoldBackgroundColor: theme.colorScheme.surface,
     dividerTheme: const DividerThemeData(space: 0),
     cardColor: theme.colorScheme.surface,
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: theme.colorScheme.surfaceVariant,
+      fillColor: theme.colorScheme.surfaceContainerHighest,
       isDense: true,
       floatingLabelStyle: TextStyle(
-        backgroundColor: theme.colorScheme.background.withOpacity(0.5),
+        backgroundColor: theme.colorScheme.surface.withOpacity(0.5),
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10.0),
-        borderSide: BorderSide(
-          width: 0,
-          style: BorderStyle.none,
-        ),
+        borderSide: const BorderSide(width: 0, style: BorderStyle.none),
       ),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
@@ -92,7 +107,7 @@ ThemeData getThemeData(
     bottomSheetTheme: theme.bottomSheetTheme.copyWith(
       elevation: 0,
       dragHandleSize: const Size(25, 4),
-      surfaceTintColor: theme.colorScheme.background,
+      modalBackgroundColor: customAppColors.modalBackground,
       dragHandleColor: Colors.grey[300],
       clipBehavior: Clip.hardEdge,
     ),

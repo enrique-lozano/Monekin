@@ -136,6 +136,14 @@ class CurrencyInDB extends DataClass implements Insertable<CurrencyInDB> {
         symbol: symbol ?? this.symbol,
         name: name ?? this.name,
       );
+  CurrencyInDB copyWithCompanion(CurrenciesCompanion data) {
+    return CurrencyInDB(
+      code: data.code.present ? data.code.value : this.code,
+      symbol: data.symbol.present ? data.symbol.value : this.symbol,
+      name: data.name.present ? data.name.value : this.name,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('CurrencyInDB(')
@@ -633,6 +641,29 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
         iban: iban.present ? iban.value : this.iban,
         swift: swift.present ? swift.value : this.swift,
       );
+  AccountInDB copyWithCompanion(AccountsCompanion data) {
+    return AccountInDB(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      iniValue: data.iniValue.present ? data.iniValue.value : this.iniValue,
+      date: data.date.present ? data.date.value : this.date,
+      description:
+          data.description.present ? data.description.value : this.description,
+      type: data.type.present ? data.type.value : this.type,
+      iconId: data.iconId.present ? data.iconId.value : this.iconId,
+      displayOrder: data.displayOrder.present
+          ? data.displayOrder.value
+          : this.displayOrder,
+      color: data.color.present ? data.color.value : this.color,
+      closingDate:
+          data.closingDate.present ? data.closingDate.value : this.closingDate,
+      currencyId:
+          data.currencyId.present ? data.currencyId.value : this.currencyId,
+      iban: data.iban.present ? data.iban.value : this.iban,
+      swift: data.swift.present ? data.swift.value : this.swift,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('AccountInDB(')
@@ -1120,6 +1151,22 @@ class CategoryInDB extends DataClass implements Insertable<CategoryInDB> {
             ? parentCategoryID.value
             : this.parentCategoryID,
       );
+  CategoryInDB copyWithCompanion(CategoriesCompanion data) {
+    return CategoryInDB(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      iconId: data.iconId.present ? data.iconId.value : this.iconId,
+      color: data.color.present ? data.color.value : this.color,
+      displayOrder: data.displayOrder.present
+          ? data.displayOrder.value
+          : this.displayOrder,
+      type: data.type.present ? data.type.value : this.type,
+      parentCategoryID: data.parentCategoryID.present
+          ? data.parentCategoryID.value
+          : this.parentCategoryID,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('CategoryInDB(')
@@ -1774,6 +1821,37 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
             ? remainingTransactions.value
             : this.remainingTransactions,
       );
+  TransactionInDB copyWithCompanion(TransactionsCompanion data) {
+    return TransactionInDB(
+      id: data.id.present ? data.id.value : this.id,
+      date: data.date.present ? data.date.value : this.date,
+      accountID: data.accountID.present ? data.accountID.value : this.accountID,
+      value: data.value.present ? data.value.value : this.value,
+      title: data.title.present ? data.title.value : this.title,
+      notes: data.notes.present ? data.notes.value : this.notes,
+      status: data.status.present ? data.status.value : this.status,
+      categoryID:
+          data.categoryID.present ? data.categoryID.value : this.categoryID,
+      valueInDestiny: data.valueInDestiny.present
+          ? data.valueInDestiny.value
+          : this.valueInDestiny,
+      receivingAccountID: data.receivingAccountID.present
+          ? data.receivingAccountID.value
+          : this.receivingAccountID,
+      isHidden: data.isHidden.present ? data.isHidden.value : this.isHidden,
+      intervalPeriod: data.intervalPeriod.present
+          ? data.intervalPeriod.value
+          : this.intervalPeriod,
+      intervalEach: data.intervalEach.present
+          ? data.intervalEach.value
+          : this.intervalEach,
+      endDate: data.endDate.present ? data.endDate.value : this.endDate,
+      remainingTransactions: data.remainingTransactions.present
+          ? data.remainingTransactions.value
+          : this.remainingTransactions,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('TransactionInDB(')
@@ -2210,6 +2288,19 @@ class ExchangeRateInDB extends DataClass
         currencyCode: currencyCode ?? this.currencyCode,
         exchangeRate: exchangeRate ?? this.exchangeRate,
       );
+  ExchangeRateInDB copyWithCompanion(ExchangeRatesCompanion data) {
+    return ExchangeRateInDB(
+      id: data.id.present ? data.id.value : this.id,
+      date: data.date.present ? data.date.value : this.date,
+      currencyCode: data.currencyCode.present
+          ? data.currencyCode.value
+          : this.currencyCode,
+      exchangeRate: data.exchangeRate.present
+          ? data.exchangeRate.value
+          : this.exchangeRate,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('ExchangeRateInDB(')
@@ -2514,6 +2605,19 @@ class TagInDB extends DataClass implements Insertable<TagInDB> {
         displayOrder: displayOrder ?? this.displayOrder,
         description: description.present ? description.value : this.description,
       );
+  TagInDB copyWithCompanion(TagsCompanion data) {
+    return TagInDB(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      color: data.color.present ? data.color.value : this.color,
+      displayOrder: data.displayOrder.present
+          ? data.displayOrder.value
+          : this.displayOrder,
+      description:
+          data.description.present ? data.description.value : this.description,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('TagInDB(')
@@ -2751,6 +2855,15 @@ class TransactionTag extends DataClass implements Insertable<TransactionTag> {
         transactionID: transactionID ?? this.transactionID,
         tagID: tagID ?? this.tagID,
       );
+  TransactionTag copyWithCompanion(TransactionTagsCompanion data) {
+    return TransactionTag(
+      transactionID: data.transactionID.present
+          ? data.transactionID.value
+          : this.transactionID,
+      tagID: data.tagID.present ? data.tagID.value : this.tagID,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('TransactionTag(')
@@ -3068,6 +3181,20 @@ class BudgetInDB extends DataClass implements Insertable<BudgetInDB> {
         startDate: startDate.present ? startDate.value : this.startDate,
         endDate: endDate.present ? endDate.value : this.endDate,
       );
+  BudgetInDB copyWithCompanion(BudgetsCompanion data) {
+    return BudgetInDB(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      limitAmount:
+          data.limitAmount.present ? data.limitAmount.value : this.limitAmount,
+      intervalPeriod: data.intervalPeriod.present
+          ? data.intervalPeriod.value
+          : this.intervalPeriod,
+      startDate: data.startDate.present ? data.startDate.value : this.startDate,
+      endDate: data.endDate.present ? data.endDate.value : this.endDate,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('BudgetInDB(')
@@ -3321,6 +3448,14 @@ class BudgetCategoryData extends DataClass
         budgetID: budgetID ?? this.budgetID,
         categoryID: categoryID ?? this.categoryID,
       );
+  BudgetCategoryData copyWithCompanion(BudgetCategoryCompanion data) {
+    return BudgetCategoryData(
+      budgetID: data.budgetID.present ? data.budgetID.value : this.budgetID,
+      categoryID:
+          data.categoryID.present ? data.categoryID.value : this.categoryID,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('BudgetCategoryData(')
@@ -3515,6 +3650,13 @@ class BudgetAccountData extends DataClass
         budgetID: budgetID ?? this.budgetID,
         accountID: accountID ?? this.accountID,
       );
+  BudgetAccountData copyWithCompanion(BudgetAccountCompanion data) {
+    return BudgetAccountData(
+      budgetID: data.budgetID.present ? data.budgetID.value : this.budgetID,
+      accountID: data.accountID.present ? data.accountID.value : this.accountID,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('BudgetAccountData(')
@@ -3716,6 +3858,16 @@ class UserSetting extends DataClass implements Insertable<UserSetting> {
         settingValue:
             settingValue.present ? settingValue.value : this.settingValue,
       );
+  UserSetting copyWithCompanion(UserSettingsCompanion data) {
+    return UserSetting(
+      settingKey:
+          data.settingKey.present ? data.settingKey.value : this.settingKey,
+      settingValue: data.settingValue.present
+          ? data.settingValue.value
+          : this.settingValue,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('UserSetting(')
@@ -3919,6 +4071,16 @@ class AppDataData extends DataClass implements Insertable<AppDataData> {
         appDataValue:
             appDataValue.present ? appDataValue.value : this.appDataValue,
       );
+  AppDataData copyWithCompanion(AppDataCompanion data) {
+    return AppDataData(
+      appDataKey:
+          data.appDataKey.present ? data.appDataKey.value : this.appDataKey,
+      appDataValue: data.appDataValue.present
+          ? data.appDataValue.value
+          : this.appDataValue,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('AppDataData(')
@@ -4004,7 +4166,7 @@ class AppDataCompanion extends UpdateCompanion<AppDataData> {
 
 abstract class _$AppDB extends GeneratedDatabase {
   _$AppDB(QueryExecutor e) : super(e);
-  _$AppDBManager get managers => _$AppDBManager(this);
+  $AppDBManager get managers => $AppDBManager(this);
   late final Currencies currencies = Currencies(this);
   late final Accounts accounts = Accounts(this);
   late final Categories categories = Categories(this);
@@ -4535,7 +4697,7 @@ abstract class _$AppDB extends GeneratedDatabase {
       const DriftDatabaseOptions(storeDateTimeAsText: true);
 }
 
-typedef $CurrenciesInsertCompanionBuilder = CurrenciesCompanion Function({
+typedef $CurrenciesCreateCompanionBuilder = CurrenciesCompanion Function({
   required String code,
   required String symbol,
   required String name,
@@ -4554,8 +4716,7 @@ class $CurrenciesTableManager extends RootTableManager<
     CurrencyInDB,
     $CurrenciesFilterComposer,
     $CurrenciesOrderingComposer,
-    $CurrenciesProcessedTableManager,
-    $CurrenciesInsertCompanionBuilder,
+    $CurrenciesCreateCompanionBuilder,
     $CurrenciesUpdateCompanionBuilder> {
   $CurrenciesTableManager(_$AppDB db, Currencies table)
       : super(TableManagerState(
@@ -4565,8 +4726,7 @@ class $CurrenciesTableManager extends RootTableManager<
               $CurrenciesFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $CurrenciesOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) => $CurrenciesProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<String> code = const Value.absent(),
             Value<String> symbol = const Value.absent(),
             Value<String> name = const Value.absent(),
@@ -4578,7 +4738,7 @@ class $CurrenciesTableManager extends RootTableManager<
             name: name,
             rowid: rowid,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             required String code,
             required String symbol,
             required String name,
@@ -4591,18 +4751,6 @@ class $CurrenciesTableManager extends RootTableManager<
             rowid: rowid,
           ),
         ));
-}
-
-class $CurrenciesProcessedTableManager extends ProcessedTableManager<
-    _$AppDB,
-    Currencies,
-    CurrencyInDB,
-    $CurrenciesFilterComposer,
-    $CurrenciesOrderingComposer,
-    $CurrenciesProcessedTableManager,
-    $CurrenciesInsertCompanionBuilder,
-    $CurrenciesUpdateCompanionBuilder> {
-  $CurrenciesProcessedTableManager(super.$state);
 }
 
 class $CurrenciesFilterComposer extends FilterComposer<_$AppDB, Currencies> {
@@ -4668,7 +4816,7 @@ class $CurrenciesOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-typedef $AccountsInsertCompanionBuilder = AccountsCompanion Function({
+typedef $AccountsCreateCompanionBuilder = AccountsCompanion Function({
   required String id,
   required String name,
   required double iniValue,
@@ -4707,8 +4855,7 @@ class $AccountsTableManager extends RootTableManager<
     AccountInDB,
     $AccountsFilterComposer,
     $AccountsOrderingComposer,
-    $AccountsProcessedTableManager,
-    $AccountsInsertCompanionBuilder,
+    $AccountsCreateCompanionBuilder,
     $AccountsUpdateCompanionBuilder> {
   $AccountsTableManager(_$AppDB db, Accounts table)
       : super(TableManagerState(
@@ -4716,8 +4863,7 @@ class $AccountsTableManager extends RootTableManager<
           table: table,
           filteringComposer: $AccountsFilterComposer(ComposerState(db, table)),
           orderingComposer: $AccountsOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) => $AccountsProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<String> name = const Value.absent(),
             Value<double> iniValue = const Value.absent(),
@@ -4749,7 +4895,7 @@ class $AccountsTableManager extends RootTableManager<
             swift: swift,
             rowid: rowid,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             required String id,
             required String name,
             required double iniValue,
@@ -4782,18 +4928,6 @@ class $AccountsTableManager extends RootTableManager<
             rowid: rowid,
           ),
         ));
-}
-
-class $AccountsProcessedTableManager extends ProcessedTableManager<
-    _$AppDB,
-    Accounts,
-    AccountInDB,
-    $AccountsFilterComposer,
-    $AccountsOrderingComposer,
-    $AccountsProcessedTableManager,
-    $AccountsInsertCompanionBuilder,
-    $AccountsUpdateCompanionBuilder> {
-  $AccountsProcessedTableManager(super.$state);
 }
 
 class $AccountsFilterComposer extends FilterComposer<_$AppDB, Accounts> {
@@ -4961,7 +5095,7 @@ class $AccountsOrderingComposer extends OrderingComposer<_$AppDB, Accounts> {
   }
 }
 
-typedef $CategoriesInsertCompanionBuilder = CategoriesCompanion Function({
+typedef $CategoriesCreateCompanionBuilder = CategoriesCompanion Function({
   required String id,
   required String name,
   required String iconId,
@@ -4988,8 +5122,7 @@ class $CategoriesTableManager extends RootTableManager<
     CategoryInDB,
     $CategoriesFilterComposer,
     $CategoriesOrderingComposer,
-    $CategoriesProcessedTableManager,
-    $CategoriesInsertCompanionBuilder,
+    $CategoriesCreateCompanionBuilder,
     $CategoriesUpdateCompanionBuilder> {
   $CategoriesTableManager(_$AppDB db, Categories table)
       : super(TableManagerState(
@@ -4999,8 +5132,7 @@ class $CategoriesTableManager extends RootTableManager<
               $CategoriesFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $CategoriesOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) => $CategoriesProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<String> name = const Value.absent(),
             Value<String> iconId = const Value.absent(),
@@ -5020,7 +5152,7 @@ class $CategoriesTableManager extends RootTableManager<
             parentCategoryID: parentCategoryID,
             rowid: rowid,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             required String id,
             required String name,
             required String iconId,
@@ -5041,18 +5173,6 @@ class $CategoriesTableManager extends RootTableManager<
             rowid: rowid,
           ),
         ));
-}
-
-class $CategoriesProcessedTableManager extends ProcessedTableManager<
-    _$AppDB,
-    Categories,
-    CategoryInDB,
-    $CategoriesFilterComposer,
-    $CategoriesOrderingComposer,
-    $CategoriesProcessedTableManager,
-    $CategoriesInsertCompanionBuilder,
-    $CategoriesUpdateCompanionBuilder> {
-  $CategoriesProcessedTableManager(super.$state);
 }
 
 class $CategoriesFilterComposer extends FilterComposer<_$AppDB, Categories> {
@@ -5160,7 +5280,7 @@ class $CategoriesOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-typedef $TransactionsInsertCompanionBuilder = TransactionsCompanion Function({
+typedef $TransactionsCreateCompanionBuilder = TransactionsCompanion Function({
   required String id,
   required DateTime date,
   required String accountID,
@@ -5203,8 +5323,7 @@ class $TransactionsTableManager extends RootTableManager<
     TransactionInDB,
     $TransactionsFilterComposer,
     $TransactionsOrderingComposer,
-    $TransactionsProcessedTableManager,
-    $TransactionsInsertCompanionBuilder,
+    $TransactionsCreateCompanionBuilder,
     $TransactionsUpdateCompanionBuilder> {
   $TransactionsTableManager(_$AppDB db, Transactions table)
       : super(TableManagerState(
@@ -5214,8 +5333,7 @@ class $TransactionsTableManager extends RootTableManager<
               $TransactionsFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $TransactionsOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) => $TransactionsProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<DateTime> date = const Value.absent(),
             Value<String> accountID = const Value.absent(),
@@ -5251,7 +5369,7 @@ class $TransactionsTableManager extends RootTableManager<
             remainingTransactions: remainingTransactions,
             rowid: rowid,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             required String id,
             required DateTime date,
             required String accountID,
@@ -5288,18 +5406,6 @@ class $TransactionsTableManager extends RootTableManager<
             rowid: rowid,
           ),
         ));
-}
-
-class $TransactionsProcessedTableManager extends ProcessedTableManager<
-    _$AppDB,
-    Transactions,
-    TransactionInDB,
-    $TransactionsFilterComposer,
-    $TransactionsOrderingComposer,
-    $TransactionsProcessedTableManager,
-    $TransactionsInsertCompanionBuilder,
-    $TransactionsUpdateCompanionBuilder> {
-  $TransactionsProcessedTableManager(super.$state);
 }
 
 class $TransactionsFilterComposer
@@ -5519,7 +5625,7 @@ class $TransactionsOrderingComposer
   }
 }
 
-typedef $ExchangeRatesInsertCompanionBuilder = ExchangeRatesCompanion Function({
+typedef $ExchangeRatesCreateCompanionBuilder = ExchangeRatesCompanion Function({
   required String id,
   required DateTime date,
   required String currencyCode,
@@ -5540,8 +5646,7 @@ class $ExchangeRatesTableManager extends RootTableManager<
     ExchangeRateInDB,
     $ExchangeRatesFilterComposer,
     $ExchangeRatesOrderingComposer,
-    $ExchangeRatesProcessedTableManager,
-    $ExchangeRatesInsertCompanionBuilder,
+    $ExchangeRatesCreateCompanionBuilder,
     $ExchangeRatesUpdateCompanionBuilder> {
   $ExchangeRatesTableManager(_$AppDB db, ExchangeRates table)
       : super(TableManagerState(
@@ -5551,8 +5656,7 @@ class $ExchangeRatesTableManager extends RootTableManager<
               $ExchangeRatesFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $ExchangeRatesOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) => $ExchangeRatesProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<DateTime> date = const Value.absent(),
             Value<String> currencyCode = const Value.absent(),
@@ -5566,7 +5670,7 @@ class $ExchangeRatesTableManager extends RootTableManager<
             exchangeRate: exchangeRate,
             rowid: rowid,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             required String id,
             required DateTime date,
             required String currencyCode,
@@ -5581,18 +5685,6 @@ class $ExchangeRatesTableManager extends RootTableManager<
             rowid: rowid,
           ),
         ));
-}
-
-class $ExchangeRatesProcessedTableManager extends ProcessedTableManager<
-    _$AppDB,
-    ExchangeRates,
-    ExchangeRateInDB,
-    $ExchangeRatesFilterComposer,
-    $ExchangeRatesOrderingComposer,
-    $ExchangeRatesProcessedTableManager,
-    $ExchangeRatesInsertCompanionBuilder,
-    $ExchangeRatesUpdateCompanionBuilder> {
-  $ExchangeRatesProcessedTableManager(super.$state);
 }
 
 class $ExchangeRatesFilterComposer
@@ -5657,7 +5749,7 @@ class $ExchangeRatesOrderingComposer
   }
 }
 
-typedef $TagsInsertCompanionBuilder = TagsCompanion Function({
+typedef $TagsCreateCompanionBuilder = TagsCompanion Function({
   required String id,
   required String name,
   required String color,
@@ -5680,8 +5772,7 @@ class $TagsTableManager extends RootTableManager<
     TagInDB,
     $TagsFilterComposer,
     $TagsOrderingComposer,
-    $TagsProcessedTableManager,
-    $TagsInsertCompanionBuilder,
+    $TagsCreateCompanionBuilder,
     $TagsUpdateCompanionBuilder> {
   $TagsTableManager(_$AppDB db, Tags table)
       : super(TableManagerState(
@@ -5689,8 +5780,7 @@ class $TagsTableManager extends RootTableManager<
           table: table,
           filteringComposer: $TagsFilterComposer(ComposerState(db, table)),
           orderingComposer: $TagsOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) => $TagsProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<String> name = const Value.absent(),
             Value<String> color = const Value.absent(),
@@ -5706,7 +5796,7 @@ class $TagsTableManager extends RootTableManager<
             description: description,
             rowid: rowid,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             required String id,
             required String name,
             required String color,
@@ -5723,18 +5813,6 @@ class $TagsTableManager extends RootTableManager<
             rowid: rowid,
           ),
         ));
-}
-
-class $TagsProcessedTableManager extends ProcessedTableManager<
-    _$AppDB,
-    Tags,
-    TagInDB,
-    $TagsFilterComposer,
-    $TagsOrderingComposer,
-    $TagsProcessedTableManager,
-    $TagsInsertCompanionBuilder,
-    $TagsUpdateCompanionBuilder> {
-  $TagsProcessedTableManager(super.$state);
 }
 
 class $TagsFilterComposer extends FilterComposer<_$AppDB, Tags> {
@@ -5806,7 +5884,7 @@ class $TagsOrderingComposer extends OrderingComposer<_$AppDB, Tags> {
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-typedef $TransactionTagsInsertCompanionBuilder = TransactionTagsCompanion
+typedef $TransactionTagsCreateCompanionBuilder = TransactionTagsCompanion
     Function({
   required String transactionID,
   required String tagID,
@@ -5825,8 +5903,7 @@ class $TransactionTagsTableManager extends RootTableManager<
     TransactionTag,
     $TransactionTagsFilterComposer,
     $TransactionTagsOrderingComposer,
-    $TransactionTagsProcessedTableManager,
-    $TransactionTagsInsertCompanionBuilder,
+    $TransactionTagsCreateCompanionBuilder,
     $TransactionTagsUpdateCompanionBuilder> {
   $TransactionTagsTableManager(_$AppDB db, TransactionTags table)
       : super(TableManagerState(
@@ -5836,9 +5913,7 @@ class $TransactionTagsTableManager extends RootTableManager<
               $TransactionTagsFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $TransactionTagsOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $TransactionTagsProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<String> transactionID = const Value.absent(),
             Value<String> tagID = const Value.absent(),
             Value<int> rowid = const Value.absent(),
@@ -5848,7 +5923,7 @@ class $TransactionTagsTableManager extends RootTableManager<
             tagID: tagID,
             rowid: rowid,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             required String transactionID,
             required String tagID,
             Value<int> rowid = const Value.absent(),
@@ -5859,18 +5934,6 @@ class $TransactionTagsTableManager extends RootTableManager<
             rowid: rowid,
           ),
         ));
-}
-
-class $TransactionTagsProcessedTableManager extends ProcessedTableManager<
-    _$AppDB,
-    TransactionTags,
-    TransactionTag,
-    $TransactionTagsFilterComposer,
-    $TransactionTagsOrderingComposer,
-    $TransactionTagsProcessedTableManager,
-    $TransactionTagsInsertCompanionBuilder,
-    $TransactionTagsUpdateCompanionBuilder> {
-  $TransactionTagsProcessedTableManager(super.$state);
 }
 
 class $TransactionTagsFilterComposer
@@ -5929,7 +5992,7 @@ class $TransactionTagsOrderingComposer
   }
 }
 
-typedef $BudgetsInsertCompanionBuilder = BudgetsCompanion Function({
+typedef $BudgetsCreateCompanionBuilder = BudgetsCompanion Function({
   required String id,
   required String name,
   required double limitAmount,
@@ -5954,8 +6017,7 @@ class $BudgetsTableManager extends RootTableManager<
     BudgetInDB,
     $BudgetsFilterComposer,
     $BudgetsOrderingComposer,
-    $BudgetsProcessedTableManager,
-    $BudgetsInsertCompanionBuilder,
+    $BudgetsCreateCompanionBuilder,
     $BudgetsUpdateCompanionBuilder> {
   $BudgetsTableManager(_$AppDB db, Budgets table)
       : super(TableManagerState(
@@ -5963,8 +6025,7 @@ class $BudgetsTableManager extends RootTableManager<
           table: table,
           filteringComposer: $BudgetsFilterComposer(ComposerState(db, table)),
           orderingComposer: $BudgetsOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) => $BudgetsProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<String> id = const Value.absent(),
             Value<String> name = const Value.absent(),
             Value<double> limitAmount = const Value.absent(),
@@ -5982,7 +6043,7 @@ class $BudgetsTableManager extends RootTableManager<
             endDate: endDate,
             rowid: rowid,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             required String id,
             required String name,
             required double limitAmount,
@@ -6001,18 +6062,6 @@ class $BudgetsTableManager extends RootTableManager<
             rowid: rowid,
           ),
         ));
-}
-
-class $BudgetsProcessedTableManager extends ProcessedTableManager<
-    _$AppDB,
-    Budgets,
-    BudgetInDB,
-    $BudgetsFilterComposer,
-    $BudgetsOrderingComposer,
-    $BudgetsProcessedTableManager,
-    $BudgetsInsertCompanionBuilder,
-    $BudgetsUpdateCompanionBuilder> {
-  $BudgetsProcessedTableManager(super.$state);
 }
 
 class $BudgetsFilterComposer extends FilterComposer<_$AppDB, Budgets> {
@@ -6109,7 +6158,7 @@ class $BudgetsOrderingComposer extends OrderingComposer<_$AppDB, Budgets> {
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-typedef $BudgetCategoryInsertCompanionBuilder = BudgetCategoryCompanion
+typedef $BudgetCategoryCreateCompanionBuilder = BudgetCategoryCompanion
     Function({
   required String budgetID,
   required String categoryID,
@@ -6128,8 +6177,7 @@ class $BudgetCategoryTableManager extends RootTableManager<
     BudgetCategoryData,
     $BudgetCategoryFilterComposer,
     $BudgetCategoryOrderingComposer,
-    $BudgetCategoryProcessedTableManager,
-    $BudgetCategoryInsertCompanionBuilder,
+    $BudgetCategoryCreateCompanionBuilder,
     $BudgetCategoryUpdateCompanionBuilder> {
   $BudgetCategoryTableManager(_$AppDB db, BudgetCategory table)
       : super(TableManagerState(
@@ -6139,9 +6187,7 @@ class $BudgetCategoryTableManager extends RootTableManager<
               $BudgetCategoryFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $BudgetCategoryOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $BudgetCategoryProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<String> budgetID = const Value.absent(),
             Value<String> categoryID = const Value.absent(),
             Value<int> rowid = const Value.absent(),
@@ -6151,7 +6197,7 @@ class $BudgetCategoryTableManager extends RootTableManager<
             categoryID: categoryID,
             rowid: rowid,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             required String budgetID,
             required String categoryID,
             Value<int> rowid = const Value.absent(),
@@ -6162,18 +6208,6 @@ class $BudgetCategoryTableManager extends RootTableManager<
             rowid: rowid,
           ),
         ));
-}
-
-class $BudgetCategoryProcessedTableManager extends ProcessedTableManager<
-    _$AppDB,
-    BudgetCategory,
-    BudgetCategoryData,
-    $BudgetCategoryFilterComposer,
-    $BudgetCategoryOrderingComposer,
-    $BudgetCategoryProcessedTableManager,
-    $BudgetCategoryInsertCompanionBuilder,
-    $BudgetCategoryUpdateCompanionBuilder> {
-  $BudgetCategoryProcessedTableManager(super.$state);
 }
 
 class $BudgetCategoryFilterComposer
@@ -6232,7 +6266,7 @@ class $BudgetCategoryOrderingComposer
   }
 }
 
-typedef $BudgetAccountInsertCompanionBuilder = BudgetAccountCompanion Function({
+typedef $BudgetAccountCreateCompanionBuilder = BudgetAccountCompanion Function({
   required String budgetID,
   required String accountID,
   Value<int> rowid,
@@ -6249,8 +6283,7 @@ class $BudgetAccountTableManager extends RootTableManager<
     BudgetAccountData,
     $BudgetAccountFilterComposer,
     $BudgetAccountOrderingComposer,
-    $BudgetAccountProcessedTableManager,
-    $BudgetAccountInsertCompanionBuilder,
+    $BudgetAccountCreateCompanionBuilder,
     $BudgetAccountUpdateCompanionBuilder> {
   $BudgetAccountTableManager(_$AppDB db, BudgetAccount table)
       : super(TableManagerState(
@@ -6260,8 +6293,7 @@ class $BudgetAccountTableManager extends RootTableManager<
               $BudgetAccountFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $BudgetAccountOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) => $BudgetAccountProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<String> budgetID = const Value.absent(),
             Value<String> accountID = const Value.absent(),
             Value<int> rowid = const Value.absent(),
@@ -6271,7 +6303,7 @@ class $BudgetAccountTableManager extends RootTableManager<
             accountID: accountID,
             rowid: rowid,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             required String budgetID,
             required String accountID,
             Value<int> rowid = const Value.absent(),
@@ -6282,18 +6314,6 @@ class $BudgetAccountTableManager extends RootTableManager<
             rowid: rowid,
           ),
         ));
-}
-
-class $BudgetAccountProcessedTableManager extends ProcessedTableManager<
-    _$AppDB,
-    BudgetAccount,
-    BudgetAccountData,
-    $BudgetAccountFilterComposer,
-    $BudgetAccountOrderingComposer,
-    $BudgetAccountProcessedTableManager,
-    $BudgetAccountInsertCompanionBuilder,
-    $BudgetAccountUpdateCompanionBuilder> {
-  $BudgetAccountProcessedTableManager(super.$state);
 }
 
 class $BudgetAccountFilterComposer
@@ -6352,7 +6372,7 @@ class $BudgetAccountOrderingComposer
   }
 }
 
-typedef $UserSettingsInsertCompanionBuilder = UserSettingsCompanion Function({
+typedef $UserSettingsCreateCompanionBuilder = UserSettingsCompanion Function({
   required SettingKey settingKey,
   Value<String?> settingValue,
   Value<int> rowid,
@@ -6369,8 +6389,7 @@ class $UserSettingsTableManager extends RootTableManager<
     UserSetting,
     $UserSettingsFilterComposer,
     $UserSettingsOrderingComposer,
-    $UserSettingsProcessedTableManager,
-    $UserSettingsInsertCompanionBuilder,
+    $UserSettingsCreateCompanionBuilder,
     $UserSettingsUpdateCompanionBuilder> {
   $UserSettingsTableManager(_$AppDB db, UserSettings table)
       : super(TableManagerState(
@@ -6380,8 +6399,7 @@ class $UserSettingsTableManager extends RootTableManager<
               $UserSettingsFilterComposer(ComposerState(db, table)),
           orderingComposer:
               $UserSettingsOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) => $UserSettingsProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<SettingKey> settingKey = const Value.absent(),
             Value<String?> settingValue = const Value.absent(),
             Value<int> rowid = const Value.absent(),
@@ -6391,7 +6409,7 @@ class $UserSettingsTableManager extends RootTableManager<
             settingValue: settingValue,
             rowid: rowid,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             required SettingKey settingKey,
             Value<String?> settingValue = const Value.absent(),
             Value<int> rowid = const Value.absent(),
@@ -6402,18 +6420,6 @@ class $UserSettingsTableManager extends RootTableManager<
             rowid: rowid,
           ),
         ));
-}
-
-class $UserSettingsProcessedTableManager extends ProcessedTableManager<
-    _$AppDB,
-    UserSettings,
-    UserSetting,
-    $UserSettingsFilterComposer,
-    $UserSettingsOrderingComposer,
-    $UserSettingsProcessedTableManager,
-    $UserSettingsInsertCompanionBuilder,
-    $UserSettingsUpdateCompanionBuilder> {
-  $UserSettingsProcessedTableManager(super.$state);
 }
 
 class $UserSettingsFilterComposer
@@ -6446,7 +6452,7 @@ class $UserSettingsOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-typedef $AppDataInsertCompanionBuilder = AppDataCompanion Function({
+typedef $AppDataCreateCompanionBuilder = AppDataCompanion Function({
   required AppDataKey appDataKey,
   Value<String?> appDataValue,
   Value<int> rowid,
@@ -6463,8 +6469,7 @@ class $AppDataTableManager extends RootTableManager<
     AppDataData,
     $AppDataFilterComposer,
     $AppDataOrderingComposer,
-    $AppDataProcessedTableManager,
-    $AppDataInsertCompanionBuilder,
+    $AppDataCreateCompanionBuilder,
     $AppDataUpdateCompanionBuilder> {
   $AppDataTableManager(_$AppDB db, AppData table)
       : super(TableManagerState(
@@ -6472,8 +6477,7 @@ class $AppDataTableManager extends RootTableManager<
           table: table,
           filteringComposer: $AppDataFilterComposer(ComposerState(db, table)),
           orderingComposer: $AppDataOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) => $AppDataProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          updateCompanionCallback: ({
             Value<AppDataKey> appDataKey = const Value.absent(),
             Value<String?> appDataValue = const Value.absent(),
             Value<int> rowid = const Value.absent(),
@@ -6483,7 +6487,7 @@ class $AppDataTableManager extends RootTableManager<
             appDataValue: appDataValue,
             rowid: rowid,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             required AppDataKey appDataKey,
             Value<String?> appDataValue = const Value.absent(),
             Value<int> rowid = const Value.absent(),
@@ -6494,18 +6498,6 @@ class $AppDataTableManager extends RootTableManager<
             rowid: rowid,
           ),
         ));
-}
-
-class $AppDataProcessedTableManager extends ProcessedTableManager<
-    _$AppDB,
-    AppData,
-    AppDataData,
-    $AppDataFilterComposer,
-    $AppDataOrderingComposer,
-    $AppDataProcessedTableManager,
-    $AppDataInsertCompanionBuilder,
-    $AppDataUpdateCompanionBuilder> {
-  $AppDataProcessedTableManager(super.$state);
 }
 
 class $AppDataFilterComposer extends FilterComposer<_$AppDB, AppData> {
@@ -6536,9 +6528,9 @@ class $AppDataOrderingComposer extends OrderingComposer<_$AppDB, AppData> {
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-class _$AppDBManager {
+class $AppDBManager {
   final _$AppDB _db;
-  _$AppDBManager(this._db);
+  $AppDBManager(this._db);
   $CurrenciesTableManager get currencies =>
       $CurrenciesTableManager(_db, _db.currencies);
   $AccountsTableManager get accounts =>

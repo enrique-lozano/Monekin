@@ -28,9 +28,9 @@ class LabelValueInfoList extends StatelessWidget {
           title: Text(element.label),
           subtitle: element.value,
           trailing: element.trailing,
-          tileColor: index % 2 == 0
-              ? AppColors.of(context).background
-              : AppColors.of(context).light.withOpacity(0.025),
+          tileColor: index % 2 != 0
+              ? AppColors.of(context).surface
+              : Theme.of(context).colorScheme.surfaceContainerLowest,
         );
       }).toList(),
     );

@@ -237,7 +237,7 @@ class _CategoriesListState extends State<CategoriesList> {
                             : null,
                     unselectedLabelColor:
                         isAppInLightBrightness(context) && widget.mode.isModal
-                            ? AppColors.of(context).onBackground.lighten(0.3)
+                            ? AppColors.of(context).onSurface.lighten(0.3)
                             : null,
                     indicatorColor:
                         isAppInLightBrightness(context) && widget.mode.isModal
