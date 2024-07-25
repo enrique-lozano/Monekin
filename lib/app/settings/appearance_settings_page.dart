@@ -5,7 +5,6 @@ import 'package:monekin/core/database/services/user-setting/user_setting_service
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker_modal.dart';
-import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/presentation/app_colors.dart';
@@ -220,7 +219,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     color = ColorHex.get(snapshot.data!);
                   }
 
-                  return Tappable(
+                  return ListTile(
                     onTap: snapshot.data! == 'auto'
                         ? null
                         : () => showColorPickerModal(
@@ -240,23 +239,21 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                                     SettingKey.accentColor, value.toHex());
                               });
                             }),
-                    child: ListTile(
-                      title: Text(t.settings.accent_color),
-                      subtitle: Text(t.settings.accent_color_descr),
-                      enabled: snapshot.data! != 'auto',
-                      trailing: SizedBox(
+                    title: Text(t.settings.accent_color),
+                    subtitle: Text(t.settings.accent_color_descr),
+                    enabled: snapshot.data! != 'auto',
+                    trailing: SizedBox(
+                      height: 46,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        clipBehavior: Clip.hardEdge,
+                        width: 46,
                         height: 46,
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          clipBehavior: Clip.hardEdge,
-                          width: 46,
-                          height: 46,
-                          decoration: BoxDecoration(
-                            color: color.withOpacity(
-                              snapshot.data! != 'auto' ? 1 : 0.4,
-                            ),
-                            borderRadius: BorderRadius.circular(100),
+                        decoration: BoxDecoration(
+                          color: color.withOpacity(
+                            snapshot.data! != 'auto' ? 1 : 0.4,
                           ),
+                          borderRadius: BorderRadius.circular(100),
                         ),
                       ),
                     ),

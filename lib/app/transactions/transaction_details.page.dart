@@ -274,7 +274,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                 transaction.nextPayStatus!
                     .displayDaysToPay(context, transaction.daysToPay()),
                 style: TextStyle(
-                  color: AppColors.of(context).onBackground,
+                  color: AppColors.of(context).onSurface,
                 ),
               ),
         trailing: Row(mainAxisSize: MainAxisSize.min, children: [
@@ -764,7 +764,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
         style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w500,
-            color: AppColors.of(context).onBackground.withOpacity(0.85)),
+            color: AppColors.of(context).onSurface.withOpacity(0.85)),
       ),
     );
   }
@@ -807,7 +807,7 @@ class _TransactionDetailHeader extends SliverPersistentHeaderDelegate {
     final shrinkPercent = shrinkOffset / maxExtent;
 
     return Container(
-      color: AppColors.of(context).background,
+      color: AppColors.of(context).surface,
       padding: const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

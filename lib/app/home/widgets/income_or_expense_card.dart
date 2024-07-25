@@ -35,7 +35,7 @@ class IncomeOrExpenseCard extends StatelessWidget {
             ),
             child: Icon(
               type.icon,
-              color: AppColors.of(context).background,
+              color: AppColors.of(context).surface,
               size: 22,
             ),
           ),

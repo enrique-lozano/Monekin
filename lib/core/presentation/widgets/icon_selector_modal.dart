@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
@@ -46,7 +47,7 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colors = Theme.of(context).colorScheme;
+    final AppColors colors = AppColors.of(context);
 
     final t = Translations.of(context);
 
@@ -59,6 +60,7 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
           final iconsByScope = SupportedIconService.instance.getIconsByScope();
 
           return Scaffold(
+            backgroundColor: AppColors.of(context).modalBackground,
             body: Column(children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
@@ -80,13 +82,14 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
                       side: BorderSide(color: colors.primary, width: 2),
                       //  backgroundColor: AppColors.of(context).primaryLight,
                       label: _selectedIcon!
-                          .display(size: 34, color: colors.onBackground),
+                          .display(size: 34, color: colors.onSurface),
                     )
                   ],
                 ),
               ),
               Expanded(
                 child: ScrollableWithBottomGradient(
+                  gradientColor: AppColors.of(context).modalBackground,
                   controller: scrollController,
                   child: Column(
                       children: iconsByScope.keys.toList().map((scope) {
@@ -100,7 +103,7 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
                             Container(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 0, horizontal: 16),
-                              color: colors.background,
+                              color: colors.modalBackground,
                               child: Text(t[
                                   'icon_selector.scopes.${scope.replaceAll("/", "_")}']),
                             ),
@@ -133,7 +136,7 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
                                           isOutline: _selectedIcon?.id == e.id,
                                           mainColor: _selectedIcon?.id == e.id
                                               ? colors.onPrimary
-                                              : colors.onBackground),
+                                              : colors.onSurface),
                                     ))
                                 .toList(),
                           ),
