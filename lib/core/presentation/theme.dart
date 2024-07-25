@@ -44,13 +44,13 @@ ThemeData getThemeData(
     // lightColorScheme = lightDynamic.harmonized();
     // darkColorScheme = darkDynamic.harmonized();
 
+    // if (amoledMode) {
+    //   darkColorScheme = darkColorScheme.copyWith(surface: Colors.black);
+    // }
+
     // However, the colorSchemes provided by the `dynamic_color` package do not generate the
     // new surface colors of Flutter 3.22. See https://github.com/material-foundation/flutter-packages/issues/582#issuecomment-2209591668
     // for more info
-
-    if (amoledMode) {
-      // darkColorScheme = darkColorScheme.copyWith(surface: Colors.black);
-    }
 
     isAppUsingDynamicColors = true; // ignore, only for demo purposes
   } else {
