@@ -186,8 +186,8 @@ class _AmountSelectorState extends State<AmountSelector> {
     Color? bgColor,
     Color? textColor,
   }) {
-    textColor ??= AppColors.of(context).onBackground;
-    bgColor ??= AppColors.of(context).background;
+    textColor ??= AppColors.of(context).onSurface;
+    bgColor ??= AppColors.of(context).surface;
 
     return Expanded(
       flex: flex,
@@ -263,7 +263,7 @@ class _AmountSelectorState extends State<AmountSelector> {
                               color: selectedAmount.contains('.')
                                   ? null
                                   : AppColors.of(context)
-                                      .onBackground
+                                      .onSurface
                                       .withOpacity(0.3)),
                           integerStyle: bigSizeStyle,
                           currencyStyle: bigSizeStyle,

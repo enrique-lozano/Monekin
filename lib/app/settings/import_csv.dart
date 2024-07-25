@@ -398,8 +398,8 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: DataTable(
-                    headingRowColor: MaterialStateProperty.resolveWith<Color?>(
-                      (Set<MaterialState> states) => Theme.of(context)
+                    headingRowColor: WidgetStateProperty.resolveWith<Color?>(
+                      (states) => Theme.of(context)
                           .colorScheme
                           .primary
                           .withOpacity(0.18),

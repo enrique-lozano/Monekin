@@ -215,7 +215,7 @@ class _AccountDetailHeader extends SliverPersistentHeaderDelegate {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.of(context).background,
+        color: AppColors.of(context).surface,
         border: Border(
           bottom: BorderSide(
             width: 2,

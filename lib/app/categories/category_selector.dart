@@ -94,10 +94,10 @@ class _CategorySelectorState extends State<CategorySelector> {
         padding: widget.params.iconPadding,
         borderRadius: 99999,
         isOutline: selectedCategories == null,
-        secondaryColor: AppColors.of(context).background.darken(
+        secondaryColor: AppColors.of(context).surface.darken(
               isAppInDarkBrightness(context) ? 0.6 : 0.1,
             ),
-        mainColor: AppColors.of(context).onBackground,
+        mainColor: AppColors.of(context).onSurface,
         onTap: () {
           if (selectedCategories == null) {
             selectedCategories = [];

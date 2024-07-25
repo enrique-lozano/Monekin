@@ -84,7 +84,7 @@ class BudgetEvolutionChart extends StatelessWidget {
               ]),
               lineTouchData: LineTouchData(
                   touchTooltipData: LineTouchTooltipData(
-                getTooltipColor: (spot) => AppColors.of(context).background,
+                getTooltipColor: (spot) => AppColors.of(context).surface,
                 tooltipHorizontalAlignment: FLHorizontalAlignment.right,
                 tooltipMargin: -10,
                 getTooltipItems: (touchedSpots) {
