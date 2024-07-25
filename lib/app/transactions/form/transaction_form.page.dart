@@ -259,7 +259,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
       ),
       margin: const EdgeInsets.all(0),
       elevation: 0,
-      // color: AppColors.of(context).primary,
+      color: AppColors.of(context).surface,
       clipBehavior: Clip.hardEdge,
       child: LayoutBuilder(builder: (context, constraints) {
         return Row(

@@ -16,7 +16,8 @@ publish_to: 'none'
 version: 6.1.0+601000
 
 environment:
-  sdk: '>=3.2.0 <4.0.0'
+  flutter: 3.22.3
+  sdk: '>=3.4.1 <4.0.0'
 
 dependencies:
   flutter:
@@ -34,9 +35,9 @@ dependencies:
   rxdart: ^0.27.7
 
   # i18n
-  intl: ^0.18.0
+  intl: ^0.19.0
   slang: ^3.30.1
-  slang_flutter: ^3.18.0
+  slang_flutter: ^3.30.1
 
   # Drift
   drift: ^2.8.1
@@ -53,12 +54,12 @@ dependencies:
   file_picker: ^8.0.3
   share_plus: ^9.0.0
   url_launcher: ^6.1.11
-  uuid: ^4.4.0
+  uuid: ^4.4.2
   csv: ^6.0.0
   dotted_border: ^2.0.0+3
   package_info_plus: ^8.0.0
   introduction_screen: ^3.1.11
-  dynamic_color: ^1.6.7
+  dynamic_color: ^1.7.0
   copy_with_extension: ^5.0.4
   freezed_annotation: ^2.4.1
   in_app_purchase: ^3.1.11

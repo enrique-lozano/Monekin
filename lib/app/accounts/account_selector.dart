@@ -237,10 +237,10 @@ class _AccountSelectorState extends State<AccountSelector> {
         size: widget.params.iconSize,
         padding: widget.params.iconPadding,
         isOutline: selectedAccounts == null,
-        secondaryColor: AppColors.of(context).background.darken(
+        secondaryColor: AppColors.of(context).surface.darken(
               isAppInDarkBrightness(context) ? 0.6 : 0.1,
             ),
-        mainColor: AppColors.of(context).onBackground,
+        mainColor: AppColors.of(context).onSurface,
         onTap: () {
           if (selectedAccounts == null) {
             selectedAccounts = [];

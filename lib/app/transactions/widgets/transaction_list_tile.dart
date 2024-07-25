@@ -249,7 +249,7 @@ class TransactionListTile extends StatelessWidget {
                   Icon(
                     Icons.check,
                     size: 24,
-                    color: AppColors.of(context).background,
+                    color: AppColors.of(context).surface,
                   ),
                 ],
               )

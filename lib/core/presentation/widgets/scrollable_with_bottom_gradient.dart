@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 
+/// A Stack widget formed by a `SingleChildScrollView` and a gradient at the bottom of it
 class ScrollableWithBottomGradient extends StatelessWidget {
-  const ScrollableWithBottomGradient(
-      {super.key, required this.child, this.controller, this.padding});
+  const ScrollableWithBottomGradient({
+    super.key,
+    required this.child,
+    required this.gradientColor,
+    this.controller,
+    this.padding,
+  });
 
   final Widget child;
   final ScrollController? controller;
   final EdgeInsetsGeometry? padding;
+
+  final Color gradientColor;
 
   /// Build the gradient to display at the end of the stack
   static Positioned buildPositionedGradient(Color color) {
@@ -29,8 +37,6 @@ class ScrollableWithBottomGradient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colors = Theme.of(context).colorScheme;
-
     return Stack(
       children: [
         SingleChildScrollView(
@@ -39,7 +45,7 @@ class ScrollableWithBottomGradient extends StatelessWidget {
           scrollDirection: Axis.vertical,
           child: child,
         ),
-        ScrollableWithBottomGradient.buildPositionedGradient(colors.background),
+        ScrollableWithBottomGradient.buildPositionedGradient(gradientColor),
       ],
     );
   }

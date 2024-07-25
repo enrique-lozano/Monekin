@@ -171,7 +171,7 @@ class _TagListPageState extends State<TagListPage> {
           children: [
             buildList(),
             ScrollableWithBottomGradient.buildPositionedGradient(
-                Theme.of(context).dialogBackgroundColor)
+                AppColors.of(context).modalBackground)
           ],
         ),
       );

@@ -30,9 +30,9 @@ class LabelValueInfoTable extends StatelessWidget {
           .mapIndexed(
             (i, e) => TableRow(
               decoration: BoxDecoration(
-                color: i % 2 == 0
-                    ? AppColors.of(context).background
-                    : AppColors.of(context).light.withOpacity(0.025),
+                color: i % 2 != 0
+                    ? AppColors.of(context).surface
+                    : Theme.of(context).colorScheme.surfaceContainerLowest,
               ),
               children: [
                 TableCell(

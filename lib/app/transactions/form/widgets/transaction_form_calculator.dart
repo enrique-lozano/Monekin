@@ -206,7 +206,7 @@ class _TransactionFormCalculatorState extends State<TransactionFormCalculator> {
     Color? bgColor,
     Color? textColor,
   }) {
-    textColor ??= AppColors.of(context).onBackground;
+    textColor ??= AppColors.of(context).onSurface;
     bgColor ??= Colors.transparent;
 
     return Expanded(

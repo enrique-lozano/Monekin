@@ -39,8 +39,9 @@ class FundEvolutionLineChart extends StatelessWidget {
   final TransactionFilters filters;
 
   Stream<LineChartDataItem?> getEvolutionData() {
-    if (dateRange.startDate == null || dateRange.endDate == null)
+    if (dateRange.startDate == null || dateRange.endDate == null) {
       return Stream.value(null);
+    }
 
     List<Stream<double>> balance = [];
     List<String> labels = [];
@@ -214,7 +215,7 @@ class FundEvolutionLineChart extends StatelessWidget {
                               touchTooltipData: LineTouchTooltipData(
                                 tooltipMargin: -10,
                                 getTooltipColor: (spot) =>
-                                    AppColors.of(context).background,
+                                    AppColors.of(context).surface,
                                 getTooltipItems: (touchedSpots) {
                                   return touchedSpots.map((barSpot) {
                                     final flSpot = barSpot;

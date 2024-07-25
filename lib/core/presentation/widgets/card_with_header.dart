@@ -32,7 +32,7 @@ class CardWithHeader extends StatelessWidget {
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        color: AppColors.of(context).background,
+        color: AppColors.of(context).surface,
         borderRadius: BorderRadius.circular(cardWithHeaderRadius),
         boxShadow: [
           BoxShadow(
