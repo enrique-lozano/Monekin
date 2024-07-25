@@ -25,7 +25,7 @@ class _MonekinReorderableListState extends State<MonekinReorderableList> {
   Widget build(BuildContext context) {
     return ReorderableListView.builder(
       shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       itemBuilder: (context, index) => Opacity(
         key: Key(index.toString()),
         opacity: isOrderingItem == null || isOrderingItem == index ? 1 : 0.4,
