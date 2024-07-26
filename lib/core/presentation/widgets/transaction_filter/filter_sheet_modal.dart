@@ -567,51 +567,6 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
   }
 }
 
-class ExpansionTileInput extends StatelessWidget {
-  const ExpansionTileInput({
-    super.key,
-    required this.title,
-    required this.children,
-    this.hasError,
-    this.subtitle,
-    this.trailing,
-    this.leading,
-    this.childrenPadding,
-  });
-
-  final Widget title;
-  final List<Widget> children;
-
-  final Widget? subtitle;
-  final Widget? trailing;
-  final Widget? leading;
-
-  final EdgeInsetsGeometry? childrenPadding;
-
-  final bool? hasError;
-
-  @override
-  Widget build(BuildContext context) {
-    return ExpansionTile(
-      title: title,
-      trailing: trailing,
-      leading: leading,
-      subtitle: subtitle,
-      collapsedIconColor:
-          hasError != null && hasError == true ? Colors.red : null,
-      iconColor: hasError != null && hasError == true ? Colors.red : null,
-      childrenPadding: childrenPadding,
-      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-      collapsedBackgroundColor:
-          Theme.of(context).colorScheme.surfaceContainerHighest,
-      collapsedShape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      children: children,
-    );
-  }
-}
-
 class ListTileField extends StatelessWidget {
   const ListTileField(
       {super.key,
