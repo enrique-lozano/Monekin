@@ -7,6 +7,8 @@ import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
+import 'package:monekin/core/extensions/lists.extensions.dart';
+import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
@@ -95,15 +97,17 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
         });
   }
 
+  bool _customTileExpanded = false;
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
     return DraggableScrollableSheet(
       expand: false,
-      initialChildSize: 0.6,
-      maxChildSize: 0.86,
-      snapSizes: const [0.33, 0.6, 0.86],
+      initialChildSize: 0.85,
+      maxChildSize: 0.85,
+      minChildSize: 0.65,
       builder: (context, scrollController) {
         return ModalContainer(
           title: t.general.filters,
@@ -126,37 +130,90 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  /*   TextFormField(
+                    controller: TextEditingController(
+                        text: 'BBVA, Openbank, Revolut - EUR, Revolut - USD'),
+                    readOnly: true,
+                    mouseCursor: SystemMouseCursors.click,
+                    decoration: InputDecoration(
+                      isDense: false,
+                      labelText: t.general.accounts,
+                      suffixIcon: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            if (filtersToReturn.accountsIDs != null &&
+                                filtersToReturn.accountsIDs!.isNotEmpty)
+                              Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: AppColors.of(context).primary,
+                                  borderRadius: BorderRadius.circular(10200202),
+                                ),
+                                child: Text(
+                                  filtersToReturn.accountsIDs!.length
+                                      .toString(),
+                                  style: TextStyle(
+                                      color: AppColors.of(context).onPrimary),
+                                ),
+                              ),
+                            Icon(Icons.arrow_forward_ios_rounded)
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+ */
                   /* ---------------------------------- */
                   /* -------- ACCOUNT SELECTOR -------- */
                   /* ---------------------------------- */
 
-                  Text('${t.general.accounts}:'),
-                  const SizedBox(height: 6),
                   StreamBuilder(
-                    stream: AccountService.instance.getAccounts(),
-                    builder: (context, snapshot) {
-                      return AccountSelector(IconDisplayerSelectorData(
-                        availableItems: snapshot.data,
-                        iconPadding: 12,
-                        iconSize: 40,
-                        selectedItems: filtersToReturn.accountsIDs == null
-                            ? null
-                            : (snapshot.data ?? [])
-                                .where(
-                                  (element) => filtersToReturn.accountsIDs!
-                                      .contains(element.id),
-                                )
-                                .toList(),
-                        onChange: (selection) {
-                          filtersToReturn = filtersToReturn.copyWith(
-                            accountsIDs: selection?.map((e) => e.id).toList(),
-                          );
+                      stream: AccountService.instance.getAccounts(),
+                      builder: (context, snapshot) {
+                        List<Account>? selectedAccounts =
+                            filtersToReturn.accountsIDs == null
+                                ? snapshot.data
+                                : (snapshot.data ?? [])
+                                    .where(
+                                      (element) => filtersToReturn.accountsIDs!
+                                          .contains(element.id),
+                                    )
+                                    .toList();
 
-                          setState(() {});
-                        },
-                      ));
-                    },
-                  ),
+                        return ListTileField(
+                          title: t.general.accounts,
+                          leading: const Icon(Icons.account_balance_rounded),
+                          trailing: CountIndicatorWithExpandArrow(
+                            countToDisplay: filtersToReturn.accountsIDs?.length,
+                          ),
+                          subtitle: filtersToReturn.accountsIDs != null
+                              ? selectedAccounts!
+                                  .map((e) => e.name)
+                                  .printFormatted()
+                              : t.account.select.all,
+                          onTap: () => showAccountSelectorBottomSheet(
+                              context,
+                              AccountSelectorModal(
+                                allowMultiSelection: true,
+                                filterSavingAccounts: false,
+                                selectedAccounts: selectedAccounts ?? [],
+                              )).then((selection) {
+                            if (selection == null) return;
+
+                            filtersToReturn = filtersToReturn.copyWith(
+                              accountsIDs:
+                                  selection.length == snapshot.data!.length
+                                      ? null
+                                      : selection.map((e) => e.id).toList(),
+                            );
+
+                            setState(() {});
+                          }),
+                        );
+                      }),
 
                   /* ---------------------------------- */
                   /* -------- CATEGORY SELECTOR ------- */
@@ -506,6 +563,143 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
           ),
         );
       },
+    );
+  }
+}
+
+class ExpansionTileInput extends StatelessWidget {
+  const ExpansionTileInput({
+    super.key,
+    required this.title,
+    required this.children,
+    this.hasError,
+    this.subtitle,
+    this.trailing,
+    this.leading,
+    this.childrenPadding,
+  });
+
+  final Widget title;
+  final List<Widget> children;
+
+  final Widget? subtitle;
+  final Widget? trailing;
+  final Widget? leading;
+
+  final EdgeInsetsGeometry? childrenPadding;
+
+  final bool? hasError;
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpansionTile(
+      title: title,
+      trailing: trailing,
+      leading: leading,
+      subtitle: subtitle,
+      collapsedIconColor:
+          hasError != null && hasError == true ? Colors.red : null,
+      iconColor: hasError != null && hasError == true ? Colors.red : null,
+      childrenPadding: childrenPadding,
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+      collapsedBackgroundColor:
+          Theme.of(context).colorScheme.surfaceContainerHighest,
+      collapsedShape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      children: children,
+    );
+  }
+}
+
+class ListTileField extends StatelessWidget {
+  const ListTileField(
+      {super.key,
+      required this.title,
+      required this.subtitle,
+      this.leading,
+      this.trailing,
+      this.onTap});
+
+  final String title;
+  final String subtitle;
+
+  final Widget? leading;
+  final Widget? trailing;
+  final void Function()? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(title),
+      subtitle: Text(
+        subtitle,
+        softWrap: false,
+        overflow: TextOverflow.ellipsis,
+      ),
+      leading: leading,
+      trailing: trailing,
+      tileColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      onTap: onTap,
+    );
+  }
+}
+
+class CountIndicatorWithExpandArrow extends StatelessWidget {
+  const CountIndicatorWithExpandArrow({
+    super.key,
+    required this.countToDisplay,
+  });
+
+  final int? countToDisplay;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (countToDisplay != null && countToDisplay! > 0) ...[
+          CountIndicator(countToDisplay!),
+          const SizedBox(width: 8)
+        ],
+        const Icon(
+          Icons.arrow_forward_ios_rounded,
+          size: 16,
+        )
+      ],
+    );
+  }
+}
+
+class CountIndicator extends StatelessWidget {
+  const CountIndicator(
+    this.countToDisplay, {
+    super.key,
+    this.fontWeight = FontWeight.w700,
+  });
+
+  final int countToDisplay;
+
+  final FontWeight fontWeight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 24,
+      width: 24,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        color: AppColors.of(context).primary,
+      ),
+      child: Text(
+        countToDisplay.toString(),
+        style: Theme.of(context).textTheme.labelSmall!.copyWith(
+              fontWeight: fontWeight,
+              color: AppColors.of(context).onPrimary,
+            ),
+      ),
     );
   }
 }

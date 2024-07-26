@@ -6,12 +6,14 @@ import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
+import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/icon_displayer_widgets.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/filter_sheet_modal.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -283,24 +285,47 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                 ),
               ],
               const SizedBox(height: 16),
-              Text('${t.general.accounts}:'),
-              const SizedBox(height: 6),
               StreamBuilder(
-                stream: AccountService.instance.getAccounts(),
-                builder: (context, snapshot) {
-                  return AccountSelector(IconDisplayerSelectorData(
-                    iconPadding: 12,
-                    iconSize: 40,
-                    availableItems: snapshot.data,
-                    selectedItems: accounts,
-                    onChange: (selection) {
-                      setState(() {
-                        accounts = selection;
-                      });
-                    },
-                  ));
-                },
-              ),
+                  stream: AccountService.instance.getAccounts(),
+                  builder: (context, snapshot) {
+                    List<Account>? selectedAccounts = accounts == null
+                        ? snapshot.data
+                        : (snapshot.data ?? [])
+                            .where(
+                              (element) => accounts!
+                                  .map((e) => e.id)
+                                  .contains(element.id),
+                            )
+                            .toList();
+
+                    return ListTileField(
+                      title: t.general.accounts,
+                      leading: const Icon(Icons.account_balance_rounded),
+                      trailing: CountIndicatorWithExpandArrow(
+                        countToDisplay: accounts?.length,
+                      ),
+                      subtitle: accounts != null
+                          ? selectedAccounts!
+                              .map((e) => e.name)
+                              .printFormatted()
+                          : t.account.select.all,
+                      onTap: () => showAccountSelectorBottomSheet(
+                          context,
+                          AccountSelectorModal(
+                            allowMultiSelection: true,
+                            filterSavingAccounts: false,
+                            selectedAccounts: selectedAccounts ?? [],
+                          )).then((selection) {
+                        if (selection == null) return;
+
+                        setState(() {
+                          accounts = selection.length == snapshot.data!.length
+                              ? null
+                              : selection;
+                        });
+                      }),
+                    );
+                  }),
               Text('${t.general.categories}:'),
               const SizedBox(height: 6),
               StreamBuilder(

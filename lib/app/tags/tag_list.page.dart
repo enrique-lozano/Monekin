@@ -164,15 +164,15 @@ class _TagListPageState extends State<TagListPage> {
     if (widget.isModal) {
       return ModalContainer(
         title: t.tags.select,
-        footer: BottomSheetFooter(
-          onSaved: () => Navigator.of(context).pop(selectedTags),
-        ),
         body: Stack(
           children: [
             buildList(),
             ScrollableWithBottomGradient.buildPositionedGradient(
                 AppColors.of(context).modalBackground)
           ],
+        ),
+        footer: BottomSheetFooter(
+          onSaved: () => Navigator.of(context).pop(selectedTags),
         ),
       );
     }
