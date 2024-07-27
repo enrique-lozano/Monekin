@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/categories_list.dart';
-import 'package:monekin/app/tags/tag_list.page.dart';
 import 'package:monekin/app/transactions/form/amount_selector.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
@@ -34,6 +33,7 @@ import 'package:monekin/i18n/translations.g.dart';
 
 import '../../../core/models/transaction/transaction_type.enum.dart';
 import '../../../core/presentation/app_colors.dart';
+import '../../tags/tags_selector.modal.dart';
 
 enum TransactionFormMode { transfer, incomeOrExpense }
 
@@ -470,14 +470,20 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                 ActionChip(
                   label: Text(t.tags.add),
                   avatar: const Icon(Icons.add),
-                  onPressed: () =>
-                      showTagListModal(context, selectedTags: tags).then(
+                  onPressed: () => showTagListModal(context,
+                      modal: TagSelector(
+                        selectedTags: tags,
+                        allowEmptySubmit: true,
+                        includeNullTag: false,
+                      )).then(
                     (value) {
-                      if (value != null) {
-                        setState(() {
-                          tags = value;
-                        });
+                      if (value == null) {
+                        return;
                       }
+
+                      setState(() {
+                        tags = value.nonNulls.toList();
+                      });
                     },
                   ),
                 ),

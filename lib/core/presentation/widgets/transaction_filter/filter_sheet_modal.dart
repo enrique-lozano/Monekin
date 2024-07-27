@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/category_selector.dart';
+import 'package:monekin/app/tags/tags_selector.modal.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
@@ -208,6 +210,60 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                                   selection.length == snapshot.data!.length
                                       ? null
                                       : selection.map((e) => e.id).toList(),
+                            );
+
+                            setState(() {});
+                          }),
+                        );
+                      }),
+
+                  /* ---------------------------------- */
+                  /* ---------- TAGS SELECTOR -------- */
+                  /* ---------------------------------- */
+
+                  const SizedBox(height: 8),
+                  StreamBuilder(
+                      stream: TagService.instance.getTags(),
+                      builder: (context, snapshot) {
+                        List<Tag?> selectedTags =
+                            filtersToReturn.tagsIDs == null
+                                ? [null, ...(snapshot.data ?? [])]
+                                : [
+                                    if (filtersToReturn.tagsIDs!.contains(null))
+                                      null,
+                                    ...(snapshot.data ?? []).where(
+                                      (element) => filtersToReturn.tagsIDs!
+                                          .contains(element.id),
+                                    )
+                                  ];
+
+                        return ListTileField(
+                          title: t.tags.display(n: 2),
+                          leading: Icon(Tag.icon),
+                          trailing: CountIndicatorWithExpandArrow(
+                            countToDisplay: filtersToReturn.tagsIDs?.length,
+                          ),
+                          subtitle: filtersToReturn.tagsIDs != null
+                              ? selectedTags
+                                  .map((e) =>
+                                      e == null ? t.tags.without_tags : e.name)
+                                  .printFormatted()
+                              : t.account.select.all,
+                          onTap: () => showTagListModal(
+                            context,
+                            modal: TagSelector(
+                              selectedTags: selectedTags ?? [],
+                              allowEmptySubmit: false,
+                              includeNullTag: true,
+                            ),
+                          ).then((selection) {
+                            if (selection == null) return;
+
+                            filtersToReturn = filtersToReturn.copyWith(
+                              tagsIDs:
+                                  selection.length == snapshot.data!.length + 1
+                                      ? null
+                                      : selection.map((e) => e?.id).toList(),
                             );
 
                             setState(() {});
@@ -527,7 +583,6 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                                             .whereNot((element) =>
                                                 element.id == tag.id)
                                             .map((e) => e.id)
-                                            .toList()
                                       ];
                                     } else if (value) {
                                       newListToAssign.add(tag.id);

@@ -91,7 +91,6 @@ class _AccountSelectorModalState extends State<AccountSelectorModal> {
               builder: (context, snapshot) {
                 return Column(
                   children: [
-                    const SizedBox(height: 4),
                     TextField(
                       decoration: InputDecoration(
                         filled: false,
@@ -109,121 +108,8 @@ class _AccountSelectorModalState extends State<AccountSelectorModal> {
                       },
                     ),
                     if (widget.allowMultiSelection)
-                      Builder(builder: (context) {
-                        final filteredSelectedAccounts = snapshot.data == null
-                            ? <Account>[]
-                            : selectedAccounts
-                                .where((selAcc) => snapshot.data!
-                                    .map((e) => e.id)
-                                    .contains(selAcc.id))
-                                .toList();
-
-                        return CheckboxListTile(
-                          value: snapshot.data == null ||
-                                  snapshot.data!.isEmpty ||
-                                  filteredSelectedAccounts.isEmpty
-                              ? false
-                              : filteredSelectedAccounts.length ==
-                                      snapshot.data!.length
-                                  ? true
-                                  : null,
-                          tristate: true,
-                          title: Text(
-                            t.general.select_all,
-                            style: const TextStyle(fontWeight: FontWeight.w700),
-                          ),
-                          enabled: snapshot.hasData,
-                          onChanged: (value) {
-                            if (value == true && snapshot.data != null) {
-                              selectedAccounts.addAll(snapshot.data!.whereNot(
-                                  (e) => selectedAccounts
-                                      .map((selAcc) => selAcc.id)
-                                      .contains(e.id)));
-                            } else {
-                              selectedAccounts.removeWhere((selAcc) => snapshot
-                                  .data!
-                                  .map((e) => e.id)
-                                  .contains(selAcc.id));
-                            }
-
-                            setState(() {});
-                          },
-                        );
-                      }),
-                    Builder(builder: (context) {
-                      if (!snapshot.hasData) {
-                        return const LinearProgressIndicator();
-                      }
-
-                      final allAccounts = snapshot.data!;
-
-                      if (allAccounts.isEmpty) {
-                        return Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Text(
-                            t.account.no_accounts,
-                            textAlign: TextAlign.center,
-                          ),
-                        );
-                      }
-
-                      return Expanded(
-                        child: Stack(children: [
-                          ListView.separated(
-                            controller: scrollController,
-                            keyboardDismissBehavior:
-                                ScrollViewKeyboardDismissBehavior.onDrag,
-                            itemCount: allAccounts.length,
-                            padding: const EdgeInsets.only(bottom: 16, top: 4),
-                            separatorBuilder: (context, i) {
-                              return const Divider(height: 0);
-                            },
-                            itemBuilder: (context, index) {
-                              final account = allAccounts[index];
-
-                              if (!widget.allowMultiSelection) {
-                                return RadioListTile(
-                                  value: account.id,
-                                  title: Text(account.name),
-                                  secondary: account.displayIcon(context),
-                                  groupValue: selectedAccounts.firstOrNull?.id,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedAccounts = [account];
-
-                                      Navigator.of(context)
-                                          .pop(selectedAccounts);
-                                    });
-                                  },
-                                );
-                              } else {
-                                return CheckboxListTile(
-                                  value: selectedAccounts
-                                      .map((e) => e.id)
-                                      .contains(account.id),
-                                  title: Text(account.name),
-                                  secondary: account.displayIcon(context),
-                                  onChanged: (value) {
-                                    if (value == true) {
-                                      selectedAccounts.add(account);
-                                    } else {
-                                      selectedAccounts.removeWhere((element) =>
-                                          element.id == account.id);
-                                    }
-
-                                    setState(() {});
-                                  },
-                                );
-                              }
-                            },
-                          ),
-                          if (widget.allowMultiSelection)
-                            ScrollableWithBottomGradient
-                                .buildPositionedGradient(
-                                    AppColors.of(context).modalBackground),
-                        ]),
-                      );
-                    }),
+                      buildSelectAllButton(snapshot),
+                    buildAccountList(snapshot, scrollController),
                   ],
                 );
               }),
@@ -236,6 +122,115 @@ class _AccountSelectorModalState extends State<AccountSelectorModal> {
                 ),
         );
       },
+    );
+  }
+
+  Widget buildSelectAllButton(AsyncSnapshot<List<Account>> snapshot) {
+    final filteredSelectedAccounts = snapshot.data == null
+        ? <Account>[]
+        : selectedAccounts
+            .where(
+                (selAcc) => snapshot.data!.map((e) => e.id).contains(selAcc.id))
+            .toList();
+
+    return CheckboxListTile(
+      value: snapshot.data == null ||
+              snapshot.data!.isEmpty ||
+              filteredSelectedAccounts.isEmpty
+          ? false
+          : filteredSelectedAccounts.length == snapshot.data!.length
+              ? true
+              : null,
+      tristate: true,
+      title: Text(
+        t.general.select_all,
+        style: const TextStyle(fontWeight: FontWeight.w700),
+      ),
+      enabled: snapshot.hasData && snapshot.data!.isNotEmpty,
+      onChanged: (value) {
+        if (value == true && snapshot.data != null) {
+          selectedAccounts.addAll(snapshot.data!.whereNot((e) =>
+              selectedAccounts.map((selAcc) => selAcc.id).contains(e.id)));
+        } else {
+          selectedAccounts.removeWhere(
+              (selAcc) => snapshot.data!.map((e) => e.id).contains(selAcc.id));
+        }
+
+        setState(() {});
+      },
+    );
+  }
+
+  Widget buildAccountList(
+    AsyncSnapshot<List<Account>> snapshot,
+    ScrollController scrollController,
+  ) {
+    if (!snapshot.hasData) {
+      return const LinearProgressIndicator();
+    }
+
+    final allAccounts = snapshot.data!;
+
+    if (allAccounts.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          t.account.no_accounts,
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+
+    return Expanded(
+      child: Stack(children: [
+        ListView.separated(
+          controller: scrollController,
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          itemCount: allAccounts.length,
+          padding: const EdgeInsets.only(bottom: 16, top: 4),
+          separatorBuilder: (context, i) {
+            return const Divider(height: 0);
+          },
+          itemBuilder: (context, index) {
+            final account = allAccounts[index];
+
+            if (!widget.allowMultiSelection) {
+              return RadioListTile(
+                value: account.id,
+                title: Text(account.name),
+                secondary: account.displayIcon(context),
+                groupValue: selectedAccounts.firstOrNull?.id,
+                onChanged: (value) {
+                  setState(() {
+                    selectedAccounts = [account];
+
+                    Navigator.of(context).pop(selectedAccounts);
+                  });
+                },
+              );
+            } else {
+              return CheckboxListTile(
+                value: selectedAccounts.map((e) => e.id).contains(account.id),
+                title: Text(account.name),
+                secondary: account.displayIcon(context),
+                onChanged: (value) {
+                  if (value == true) {
+                    selectedAccounts.add(account);
+                  } else {
+                    selectedAccounts
+                        .removeWhere((element) => element.id == account.id);
+                  }
+
+                  setState(() {});
+                },
+              );
+            }
+          },
+        ),
+        if (widget.allowMultiSelection)
+          ScrollableWithBottomGradient.buildPositionedGradient(
+              AppColors.of(context).modalBackground),
+      ]),
     );
   }
 }
