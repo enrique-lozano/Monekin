@@ -48,6 +48,9 @@ class _TagSelectorState extends State<TagSelector> {
 
   String searchValue = '';
 
+  final DraggableScrollableController controller =
+      DraggableScrollableController();
+
   @override
   void initState() {
     super.initState();
@@ -56,14 +59,37 @@ class _TagSelectorState extends State<TagSelector> {
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+
+    super.dispose();
+  }
+
+  _moveSheetTo(double position) {
+    if (controller.isAttached && mounted) {
+      controller.jumpTo(position);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
+    final bottomInsets = MediaQuery.of(context).viewInsets.bottom;
+
+    if (bottomInsets > 0) {
+      _moveSheetTo(1);
+    } else {
+      _moveSheetTo(0.65);
+    }
+
     return DraggableScrollableSheet(
+        controller: controller,
         expand: false,
-        maxChildSize: 0.75,
-        minChildSize: 0.65,
-        initialChildSize: 0.66,
+        minChildSize: 0.64,
+        initialChildSize: 0.65,
+        snap: true,
+        snapSizes: const [0.65],
         builder: (context, scrollController) {
           return ModalContainer(
             title: t.tags.select,

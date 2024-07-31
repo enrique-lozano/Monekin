@@ -2,7 +2,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
-import 'package:monekin/app/categories/categories_list.dart';
+import 'package:monekin/app/categories/category_picker.dart';
 import 'package:monekin/app/transactions/form/amount_selector.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
@@ -288,20 +288,19 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   }
 
   Future<void> selectCategory() async {
-    final modalRes = await showCategoryListModal(
+    final modalRes = await showCategoryPickerModal(
       context,
-      CategoriesList(
-        mode: CategoriesListMode.modalSelectSubcategory,
-        selectedCategories: [
-          if (selectedCategory != null)
-            selectedCategory!.parentCategory ?? selectedCategory!
-        ],
+      modal: CategoryPicker(
+        selectedCategory: selectedCategory,
+        categoryType: currentTransactionTypeToAdd == TransactionType.expense
+            ? CategoryType.E
+            : CategoryType.I,
       ),
     );
 
-    if (modalRes != null && modalRes.isNotEmpty) {
+    if (modalRes != null) {
       setState(() {
-        selectedCategory = modalRes.first;
+        selectedCategory = modalRes;
       });
     }
   }
