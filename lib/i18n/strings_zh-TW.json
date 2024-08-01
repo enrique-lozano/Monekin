@@ -27,6 +27,7 @@
     "insufficient-data": "數據不足",
     "show-more-fields": "顯示更多欄位",
     "show-less-fields": "顯示較少的欄位",
+    "tap-to-search": "點擊即可搜尋",
     "CLIPBOARD": {
       "success": "{{x}} 已複製到剪貼簿",
       "error": "複製錯誤"
@@ -462,8 +463,7 @@
     "exchange-rates": "匯率",
     "empty": "在此處添加匯率，以便如果您的帳戶使用基礎貨幣以外的貨幣，我們的圖表會更加準確",
     "select-a-currency": "選擇貨幣",
-    "search-title": "點擊即可搜尋",
-    "search-placeholder": "按名稱或貨幣代碼搜尋"
+    "search": "按名稱或貨幣代碼搜尋"
   },
   "TAGS": {
     "display": {

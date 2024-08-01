@@ -4,6 +4,7 @@ class ModalContainer extends StatelessWidget {
   const ModalContainer({
     super.key,
     required this.title,
+    this.titleBuilder,
     this.subtitle,
     this.endWidget,
     required this.body,
@@ -13,6 +14,11 @@ class ModalContainer extends StatelessWidget {
   });
 
   final String title;
+
+  /// In case you want something more complex that a simple text as a title, or in case
+  /// you want specific styles for the title
+  final Widget Function(String title)? titleBuilder;
+
   final String? subtitle;
 
   final Widget? endWidget;
@@ -36,6 +42,12 @@ class ModalContainer extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // ----- HEADER CONTENT ------
+          //
+          // Title, subtitle and end widget will be drawn
+          // here with ther respective paddings and styles
+          // ---------------
+
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 22),
             child: Row(
@@ -45,12 +57,14 @@ class ModalContainer extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
+                    DefaultTextStyle(
                       style: Theme.of(context)
                           .textTheme
                           .headlineSmall!
                           .copyWith(fontWeight: FontWeight.w800),
+                      child: titleBuilder != null
+                          ? titleBuilder!(title)
+                          : Text(title),
                     ),
                     if (subtitle != null) ...[
                       const SizedBox(height: 2),
@@ -62,6 +76,9 @@ class ModalContainer extends StatelessWidget {
               ],
             ),
           ),
+
+          // --- Header end ---
+
           Flexible(
             child: Padding(
               padding: bodyPadding,

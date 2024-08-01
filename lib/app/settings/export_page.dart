@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/accounts/account_selector.dart';
-import 'package:monekin/app/categories/category_selector.dart';
-import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/presentation/widgets/dates/outlinedButtonStacked.dart';
-import 'package:monekin/core/presentation/widgets/icon_displayer_widgets.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -116,86 +111,14 @@ class _ExportDataPageState extends State<ExportDataPage> {
                 title: t.backup.export.transactions,
                 descr: t.backup.export.transactions_descr,
               ),
-              const SizedBox(height: 8),
-              IgnorePointer(
-                ignoring: selectedExportFormat == _ExportFormats.db,
-                child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 400),
-                  opacity: selectedExportFormat == _ExportFormats.db ? 0.3 : 1,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 18),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        /* ---------------------------------- */
-                        /* -------- ACCOUNT SELECTOR -------- */
-                        /* ---------------------------------- */
 
-                        Text('${t.general.accounts}:'),
-                        const SizedBox(height: 6),
-                        StreamBuilder(
-                          stream: AccountService.instance.getAccounts(),
-                          builder: (context, snapshot) {
-                            return AccountSelector(IconDisplayerSelectorData(
-                              availableItems: snapshot.data,
-                              iconPadding: 12,
-                              iconSize: 40,
-                              selectedItems: filters.accountsIDs == null
-                                  ? null
-                                  : (snapshot.data ?? [])
-                                      .where(
-                                        (element) => filters.accountsIDs!
-                                            .contains(element.id),
-                                      )
-                                      .toList(),
-                              onChange: (selection) {
-                                filters = filters.copyWith(
-                                  accountsIDs:
-                                      selection?.map((e) => e.id).toList(),
-                                );
-
-                                setState(() {});
-                              },
-                            ));
-                          },
-                        ),
-
-                        /* ---------------------------------- */
-                        /* -------- CATEGORY SELECTOR ------- */
-                        /* ---------------------------------- */
-
-                        const SizedBox(height: 2),
-                        Text('${t.general.categories}:'),
-                        const SizedBox(height: 6),
-                        StreamBuilder(
-                            stream:
-                                CategoryService.instance.getMainCategories(),
-                            builder: (context, snapshot) {
-                              return CategorySelector(IconDisplayerSelectorData(
-                                availableItems: snapshot.data,
-                                selectedItems: filters.categories == null
-                                    ? null
-                                    : (snapshot.data ?? [])
-                                        .where(
-                                          (element) => filters.categories!
-                                              .contains(element.id),
-                                        )
-                                        .toList(),
-                                onChange: (selection) {
-                                  setState(() {
-                                    filters = filters.copyWith(
-                                      categories:
-                                          selection?.map((e) => e.id).toList(),
-                                    );
-                                  });
-                                },
-                              ));
-                            }),
-                      ],
-                    ),
-                  ),
-                ),
-              )
+              // * -----------------------------------
+              // * -----------------------------------
+              // * -----------------------------------
+              // TODO: --------- ADD FILTERS ---------
+              // * -----------------------------------
+              // * -----------------------------------
+              // * -----------------------------------
             ],
           ),
         ));

@@ -27,15 +27,20 @@ class CategoryService {
         .go();
   }
 
-  Stream<List<Category>> getCategories(
-      {Expression<bool> Function(
-              Categories catTable, Categories parentCatTable)?
-          predicate,
-      double? limit}) {
+  Stream<List<Category>> getCategories({
+    Expression<bool> Function(Categories catTable, Categories parentCatTable)?
+        predicate,
+    OrderBy Function(Categories catTable, Categories parentCatTable)? orderBy,
+    double? limit,
+  }) {
     limit ??= -1;
 
     return db
-        .getCategoriesWithFullData(predicate: predicate, limit: limit)
+        .getCategoriesWithFullData(
+            predicate: predicate,
+            orderBy: orderBy ??
+                (c, pc) => OrderBy([OrderingTerm.asc(c.displayOrder)]),
+            limit: limit)
         .watch();
   }
 
