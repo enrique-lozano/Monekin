@@ -586,12 +586,11 @@ class _HorizontalScrollableAccountList extends StatelessWidget {
                                       initialData: 0.0,
                                       stream: AccountService.instance
                                           .getAccountsMoneyVariation(
-                                              accounts: [account],
-                                              startDate:
-                                                  dateRangeService.startDate,
-                                              endDate: dateRangeService.endDate,
-                                              convertToPreferredCurrency:
-                                                  false),
+                                        accounts: [account],
+                                        startDate: dateRangeService.startDate,
+                                        endDate: dateRangeService.endDate,
+                                        convertToPreferredCurrency: false,
+                                      ),
                                       builder: (context, snapshot) {
                                         return TrendingValue(
                                           percentage: snapshot.data!,

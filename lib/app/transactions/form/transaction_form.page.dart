@@ -2,7 +2,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
-import 'package:monekin/app/categories/categories_list.dart';
+import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/transactions/form/dialogs/transaction_more_info.modal.dart';
 import 'package:monekin/app/transactions/form/dialogs/transaction_status_selector.dart';
 import 'package:monekin/app/transactions/form/dialogs/transaction_title_modal.dart';
@@ -28,6 +28,8 @@ import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import 'widgets/account_or_category_selector.dart';
+
+enum TransactionFormMode { transfer, incomeOrExpense }
 
 class TransactionFormPage extends StatefulWidget {
   const TransactionFormPage(
@@ -365,20 +367,14 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   }
 
   Future<void> selectCategory() async {
-    final modalRes = await showCategoryListModal(
+    final modalRes = await showCategoryPickerModal(
       context,
-      CategoriesList(
-        mode: CategoriesListMode.modalSelectSubcategory,
-        selectedCategories: [
-          if (selectedCategory != null)
-            selectedCategory!.parentCategory ?? selectedCategory!
-        ],
-      ),
+      modal: CategoryPicker(selectedCategory: selectedCategory),
     );
 
-    if (modalRes != null && modalRes.isNotEmpty) {
+    if (modalRes != null) {
       setState(() {
-        selectedCategory = modalRes.first;
+        selectedCategory = modalRes;
       });
     }
   }

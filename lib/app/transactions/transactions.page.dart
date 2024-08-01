@@ -138,8 +138,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
 
                         if (modalRes != null) {
                           setState(() {
-                            filters = modalRes.copyWith(
-                                includeParentCategoriesInSearch: true);
+                            filters = modalRes;
                           });
                         }
                       },

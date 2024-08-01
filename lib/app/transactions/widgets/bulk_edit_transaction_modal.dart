@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
-import 'package:monekin/app/categories/categories_list.dart';
+import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/dates/outlinedButtonStacked.dart';
@@ -59,23 +59,22 @@ class BulkEditTransactionModal extends StatelessWidget {
             OutlinedButtonStacked(
               text: t.transaction.list.bulk_edit.categories,
               onTap: () {
-                showCategoryListModal(
-                  context,
-                  const CategoriesList(
-                    mode: CategoriesListMode.modalSelectSubcategory,
-                  ),
-                ).then(
+                showCategoryPickerModal(context,
+                        modal: const CategoryPicker(selectedCategory: null))
+                    .then(
                   (modalRes) {
-                    if (modalRes != null && modalRes.isNotEmpty) {
-                      performUpdates(
-                        context,
-                        futures: transactionsToEdit.map(
-                          (e) => TransactionService.instance
-                              .insertOrUpdateTransaction(e.copyWith(
-                                  categoryID: Value(modalRes.first.id))),
-                        ),
-                      );
+                    if (modalRes == null) {
+                      return;
                     }
+
+                    performUpdates(
+                      context,
+                      futures: transactionsToEdit.map(
+                        (e) => TransactionService.instance
+                            .insertOrUpdateTransaction(
+                                e.copyWith(categoryID: Value(modalRes.id))),
+                      ),
+                    );
                   },
                 );
               },

@@ -75,7 +75,6 @@ class Budget extends BudgetInDB {
         transactionTypes: [TransactionType.E],
         minDate: currentDateRange.start,
         maxDate: currentDateRange.end,
-        includeParentCategoriesInSearch: true,
         categories: categories,
         accountsIDs: accounts,
       );
@@ -89,7 +88,6 @@ class Budget extends BudgetInDB {
       filters: TransactionFilters(
         transactionTypes: [TransactionType.E],
         accountsIDs: accounts,
-        includeParentCategoriesInSearch: true,
         categories: categories,
         minDate: currentDateRange.start,
         maxDate: date,

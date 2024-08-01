@@ -1,6 +1,6 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/tags/tag_list.page.dart';
+import 'package:monekin/app/tags/tags_selector.modal.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
@@ -141,13 +141,17 @@ class _TransactionMoreInfoModalState extends State<_TransactionMoreInfoModal> {
                                   label: Text(t.tags.add),
                                   avatar: const Icon(Icons.add),
                                   onPressed: () => showTagListModal(context,
-                                          selectedTags: moreInfoData.tags)
-                                      .then(
+                                      modal: TagSelector(
+                                        allowEmptySubmit: true,
+                                        includeNullTag: false,
+                                        selectedTags: moreInfoData.tags,
+                                      )).then(
                                     (value) {
                                       if (value != null) {
                                         setState(() {
                                           moreInfoData = moreInfoData.copyWith(
-                                              tags: value);
+                                            tags: value.nonNulls.toList(),
+                                          );
                                         });
                                       }
                                     },

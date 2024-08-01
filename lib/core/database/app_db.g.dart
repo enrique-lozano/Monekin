@@ -4425,7 +4425,9 @@ abstract class _$AppDB extends GeneratedDatabase {
   }
 
   Selectable<Category> getCategoriesWithFullData(
-      {GetCategoriesWithFullData$predicate? predicate, required double limit}) {
+      {GetCategoriesWithFullData$predicate? predicate,
+      GetCategoriesWithFullData$orderBy? orderBy,
+      required double limit}) {
     var $arrayStartIndex = 2;
     final generatedpredicate = $write(
         predicate?.call(alias(this.categories, 'a'),
@@ -4434,15 +4436,24 @@ abstract class _$AppDB extends GeneratedDatabase {
         hasMultipleTables: true,
         startIndex: $arrayStartIndex);
     $arrayStartIndex += generatedpredicate.amountOfVariables;
+    final generatedorderBy = $write(
+        orderBy?.call(alias(this.categories, 'a'),
+                alias(this.categories, 'parentCategory')) ??
+            const OrderBy.nothing(),
+        hasMultipleTables: true,
+        startIndex: $arrayStartIndex);
+    $arrayStartIndex += generatedorderBy.amountOfVariables;
     return customSelect(
-        'SELECT a.*,"parentCategory"."id" AS "nested_0.id", "parentCategory"."name" AS "nested_0.name", "parentCategory"."iconId" AS "nested_0.iconId", "parentCategory"."color" AS "nested_0.color", "parentCategory"."displayOrder" AS "nested_0.displayOrder", "parentCategory"."type" AS "nested_0.type", "parentCategory"."parentCategoryID" AS "nested_0.parentCategoryID" FROM categories AS a LEFT JOIN categories AS parentCategory ON a.parentCategoryID = parentCategory.id WHERE ${generatedpredicate.sql} LIMIT ?1',
+        'SELECT a.*,"parentCategory"."id" AS "nested_0.id", "parentCategory"."name" AS "nested_0.name", "parentCategory"."iconId" AS "nested_0.iconId", "parentCategory"."color" AS "nested_0.color", "parentCategory"."displayOrder" AS "nested_0.displayOrder", "parentCategory"."type" AS "nested_0.type", "parentCategory"."parentCategoryID" AS "nested_0.parentCategoryID" FROM categories AS a LEFT JOIN categories AS parentCategory ON a.parentCategoryID = parentCategory.id WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} LIMIT ?1',
         variables: [
           Variable<double>(limit),
-          ...generatedpredicate.introducedVariables
+          ...generatedpredicate.introducedVariables,
+          ...generatedorderBy.introducedVariables
         ],
         readsFrom: {
           categories,
           ...generatedpredicate.watchedTables,
+          ...generatedorderBy.watchedTables,
         }).asyncMap((QueryRow row) async => Category(
           id: row.read<String>('id'),
           name: row.read<String>('name'),
@@ -6673,6 +6684,8 @@ typedef CountTransactions$predicate = Expression<bool> Function(
     Categories c,
     Categories pc);
 typedef GetCategoriesWithFullData$predicate = Expression<bool> Function(
+    Categories a, Categories parentCategory);
+typedef GetCategoriesWithFullData$orderBy = OrderBy Function(
     Categories a, Categories parentCategory);
 typedef GetExchangeRates$predicate = Expression<bool> Function(
     ExchangeRates e, Currencies currency);

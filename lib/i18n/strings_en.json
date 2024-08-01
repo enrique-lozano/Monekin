@@ -27,6 +27,7 @@
     "insufficient-data": "Insufficient data",
     "show-more-fields": "Show more fields",
     "show-less-fields": "Show less fields",
+    "tap-to-search": "Tap to search",
     "CLIPBOARD": {
       "success": "{{x}} copied to the clipboard",
       "error": "Error copying"
@@ -465,8 +466,7 @@
     "exchange-rates": "Exchange rates",
     "empty": "Add exchange rates here so that if you have accounts in currencies other than your base currency our charts are more accurate",
     "select-a-currency": "Select a currency",
-    "search-title": "Tap to search",
-    "search-placeholder": "Search by name or by currency code"
+    "search": "Search by name or by currency code"
   },
   "TAGS": {
     "display": {

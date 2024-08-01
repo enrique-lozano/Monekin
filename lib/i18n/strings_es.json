@@ -27,6 +27,7 @@
     "insufficient-data": "Datos insuficientes",
     "show-more-fields": "Show more fields",
     "show-less-fields": "Show less fields",
+    "tap-to-search": "Toca para buscar",
     "CLIPBOARD": {
       "success": "{{x}} copiado al portapapeles",
       "error": "Error al copiar"
@@ -472,8 +473,7 @@
     "exchange-rates": "Tipos de cambio",
     "empty": "Añade tipos de cambio aqui para que en caso de tener cuentas en otras divisas distintas a tu divisa base nuestros gráficos sean mas exactos",
     "select-a-currency": "Selecciona una divisa",
-    "search-title": "Toca para buscar",
-    "search-placeholder": "Busca por nombre o por código de la divisa"
+    "search": "Busca por nombre o por código de la divisa"
   },
   "TAGS": {
     "display": {

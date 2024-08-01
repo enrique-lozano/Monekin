@@ -4,7 +4,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
-import 'package:monekin/app/categories/categories_list.dart';
+import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/layout/tabs.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
@@ -523,15 +523,12 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                         ? ColorHex.get(defaultCategory!.color)
                         : null,
                     onClick: () async {
-                      final modalRes = await showCategoryListModal(
-                          context,
-                          const CategoriesList(
-                            mode: CategoriesListMode.modalSelectSubcategory,
-                          ));
+                      final modalRes = await showCategoryPickerModal(context,
+                          modal: const CategoryPicker(selectedCategory: null));
 
-                      if (modalRes != null && modalRes.isNotEmpty) {
+                      if (modalRes != null) {
                         setState(() {
-                          defaultCategory = modalRes.first;
+                          defaultCategory = modalRes;
                         });
                       }
                     }),

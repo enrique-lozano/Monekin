@@ -38,3 +38,9 @@ extension IntersectionExtension<T> on List<T> {
     return intersectionWith(other);
   }
 }
+
+extension PrintListItem on Iterable<String> {
+  String printFormatted() {
+    return join(', ');
+  }
+}

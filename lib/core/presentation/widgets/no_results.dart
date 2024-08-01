@@ -29,9 +29,9 @@ class NoResults extends StatelessWidget {
           child: Padding(
             padding: padding ??
                 EdgeInsets.only(
-                  top: MediaQuery.sizeOf(context).height * 0.4 > 400 ? 100 : 35,
-                  right: 30,
-                  left: 30,
+                  top: MediaQuery.sizeOf(context).height * 0.4 > 400 ? 100 : 45,
+                  right: 40,
+                  left: 40,
                 ),
             child: Column(
               children: [

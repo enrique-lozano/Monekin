@@ -136,6 +136,7 @@ getCategoriesWithFullData($predicate = TRUE, :limit AS NUMBER) WITH Category:
         LEFT JOIN categories parentCategory 
         ON a.parentCategoryID = parentCategory.id 
     WHERE $predicate 
+    ORDER BY $orderBy
     LIMIT :limit;
 
 getExchangeRates($predicate = TRUE, :limit AS NUMBER) WITH ExchangeRate:
