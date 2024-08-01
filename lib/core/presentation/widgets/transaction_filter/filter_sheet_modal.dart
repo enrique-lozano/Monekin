@@ -1,27 +1,31 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
-import 'package:monekin/app/categories/category_selector.dart';
+import 'package:monekin/app/categories/selectors/category_multi_selector.dart';
+import 'package:monekin/app/tags/tags_selector.modal.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
+import 'package:monekin/core/extensions/lists.extensions.dart';
+import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
-import 'package:monekin/core/presentation/widgets/icon_displayer_widgets.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/status_filter/transaction_status_filter.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/tags_filter/tags_filter_container.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../../models/transaction/transaction_type.enum.dart';
 import '../../app_colors.dart';
+import '../count_indicator.dart';
+import '../form_fields/list_tile_field.dart';
 
 Future<TransactionFilters?> openFilterSheetModal(
     BuildContext context, FilterSheetModal modalData) {
@@ -95,15 +99,17 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
         });
   }
 
+  bool _customTileExpanded = false;
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
     return DraggableScrollableSheet(
       expand: false,
-      initialChildSize: 0.6,
-      maxChildSize: 0.86,
-      snapSizes: const [0.33, 0.6, 0.86],
+      initialChildSize: 0.85,
+      maxChildSize: 0.85,
+      minChildSize: 0.65,
       builder: (context, scrollController) {
         return ModalContainer(
           title: t.general.filters,
@@ -130,64 +136,155 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                   /* -------- ACCOUNT SELECTOR -------- */
                   /* ---------------------------------- */
 
-                  Text('${t.general.accounts}:'),
-                  const SizedBox(height: 6),
                   StreamBuilder(
-                    stream: AccountService.instance.getAccounts(),
-                    builder: (context, snapshot) {
-                      return AccountSelector(IconDisplayerSelectorData(
-                        availableItems: snapshot.data,
-                        iconPadding: 12,
-                        iconSize: 40,
-                        selectedItems: filtersToReturn.accountsIDs == null
-                            ? null
-                            : (snapshot.data ?? [])
-                                .where(
-                                  (element) => filtersToReturn.accountsIDs!
-                                      .contains(element.id),
-                                )
-                                .toList(),
-                        onChange: (selection) {
-                          filtersToReturn = filtersToReturn.copyWith(
-                            accountsIDs: selection?.map((e) => e.id).toList(),
-                          );
+                      stream: AccountService.instance.getAccounts(),
+                      builder: (context, snapshot) {
+                        List<Account>? selectedAccounts =
+                            filtersToReturn.accountsIDs == null
+                                ? snapshot.data
+                                : (snapshot.data ?? [])
+                                    .where(
+                                      (element) => filtersToReturn.accountsIDs!
+                                          .contains(element.id),
+                                    )
+                                    .toList();
 
-                          setState(() {});
-                        },
-                      ));
-                    },
-                  ),
+                        return ListTileField(
+                          title: t.general.accounts,
+                          leading: const Icon(Icons.account_balance_rounded),
+                          trailing: CountIndicatorWithExpandArrow(
+                            countToDisplay: filtersToReturn.accountsIDs?.length,
+                          ),
+                          subtitle: filtersToReturn.accountsIDs != null
+                              ? selectedAccounts!
+                                  .map((e) => e.name)
+                                  .printFormatted()
+                              : t.account.select.all,
+                          onTap: () => showAccountSelectorBottomSheet(
+                              context,
+                              AccountSelectorModal(
+                                allowMultiSelection: true,
+                                filterSavingAccounts: false,
+                                selectedAccounts: selectedAccounts ?? [],
+                              )).then((selection) {
+                            if (selection == null) return;
+
+                            filtersToReturn = filtersToReturn.copyWith(
+                              accountsIDs:
+                                  selection.length == snapshot.data!.length
+                                      ? null
+                                      : selection.map((e) => e.id).toList(),
+                            );
+
+                            setState(() {});
+                          }),
+                        );
+                      }),
+
+                  /* ---------------------------------- */
+                  /* ---------- TAGS SELECTOR -------- */
+                  /* ---------------------------------- */
+
+                  const SizedBox(height: 8),
+                  StreamBuilder(
+                      stream: TagService.instance.getTags(),
+                      builder: (context, snapshot) {
+                        List<Tag?> selectedTags =
+                            filtersToReturn.tagsIDs == null
+                                ? [null, ...(snapshot.data ?? [])]
+                                : [
+                                    if (filtersToReturn.tagsIDs!.contains(null))
+                                      null,
+                                    ...(snapshot.data ?? []).where(
+                                      (element) => filtersToReturn.tagsIDs!
+                                          .contains(element.id),
+                                    )
+                                  ];
+
+                        return ListTileField(
+                          title: t.tags.display(n: 2),
+                          leading: Icon(Tag.icon),
+                          trailing: CountIndicatorWithExpandArrow(
+                            countToDisplay: filtersToReturn.tagsIDs?.length,
+                          ),
+                          subtitle: filtersToReturn.tagsIDs != null
+                              ? selectedTags
+                                  .map((e) =>
+                                      e == null ? t.tags.without_tags : e.name)
+                                  .printFormatted()
+                              : t.account.select.all,
+                          onTap: () => showTagListModal(
+                            context,
+                            modal: TagSelector(
+                              selectedTags: selectedTags,
+                              allowEmptySubmit: false,
+                              includeNullTag: true,
+                            ),
+                          ).then((selection) {
+                            if (selection == null) return;
+
+                            filtersToReturn = filtersToReturn.copyWith(
+                              tagsIDs:
+                                  selection.length == snapshot.data!.length + 1
+                                      ? null
+                                      : selection.map((e) => e?.id).toList(),
+                            );
+
+                            setState(() {});
+                          }),
+                        );
+                      }),
 
                   /* ---------------------------------- */
                   /* -------- CATEGORY SELECTOR ------- */
                   /* ---------------------------------- */
 
-                  const SizedBox(height: 6),
-                  Text('${t.general.categories}:'),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 8),
                   StreamBuilder(
-                    stream: CategoryService.instance.getMainCategories(),
-                    builder: (context, snapshot) {
-                      return CategorySelector(IconDisplayerSelectorData(
-                        availableItems: snapshot.data,
-                        selectedItems: filtersToReturn.categories == null
-                            ? null
-                            : (snapshot.data ?? [])
-                                .where(
-                                  (element) => filtersToReturn.categories!
-                                      .contains(element.id),
-                                )
-                                .toList(),
-                        onChange: (selection) {
-                          filtersToReturn = filtersToReturn.copyWith(
-                            categories: selection?.map((e) => e.id).toList(),
-                          );
+                      stream: CategoryService.instance.getCategories(),
+                      builder: (context, snapshot) {
+                        List<Category>? selectedCategories =
+                            filtersToReturn.categories == null
+                                ? snapshot.data
+                                : (snapshot.data ?? [])
+                                    .where(
+                                      (element) => filtersToReturn.categories!
+                                          .contains(element.id),
+                                    )
+                                    .toList();
 
-                          setState(() {});
-                        },
-                      ));
-                    },
-                  ),
+                        return ListTileField(
+                          title: t.general.categories,
+                          leading: const Icon(Icons.category_rounded),
+                          trailing: CountIndicatorWithExpandArrow(
+                            countToDisplay: filtersToReturn.categories?.length,
+                          ),
+                          subtitle: filtersToReturn.categories != null
+                              ? selectedCategories!
+                                  .map((e) => e.name)
+                                  .printFormatted()
+                              : t.categories.select.all,
+                          onTap: () {
+                            showMultiCategoryListModal(
+                              context,
+                              CategoryMultiSelectorModal(
+                                selectedCategories: selectedCategories ?? [],
+                              ),
+                            ).then((selection) {
+                              if (selection == null) return;
+
+                              filtersToReturn = filtersToReturn.copyWith(
+                                categories:
+                                    selection.length == snapshot.data!.length
+                                        ? null
+                                        : selection.map((e) => e.id),
+                              );
+
+                              setState(() {});
+                            });
+                          },
+                        );
+                      }),
                   const SizedBox(height: 24),
 
                   /* ---------------------------------- */
@@ -406,100 +503,6 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                       });
                     },
                   ),
-
-                  /* ---------------------------------- */
-                  /* -------------- TAGS -------------- */
-                  /* ---------------------------------- */
-
-                  const SizedBox(height: 16),
-                  TagsFilterContainer(
-                    child: StreamBuilder(
-                      stream: TagService.instance.getTags(),
-                      builder: (context, snapshot) {
-                        return Wrap(
-                          spacing: 6,
-                          runSpacing: 0,
-                          children: [
-                            FilterChip(
-                              label: Text(t.tags.without_tags),
-                              selected: isTagSelected(null),
-                              onSelected: (value) => setState(() {
-                                var newListToAssign =
-                                    filtersToReturn.tagsIDs?.toList();
-
-                                if (newListToAssign == null) {
-                                  newListToAssign =
-                                      snapshot.data!.map((e) => e.id).toList();
-                                } else if (value) {
-                                  newListToAssign = [...newListToAssign, null];
-                                } else {
-                                  newListToAssign.removeWhere(
-                                      (element) => element == null);
-                                }
-
-                                if (newListToAssign.length ==
-                                    snapshot.data!.length + 1) {
-                                  newListToAssign = null;
-                                }
-
-                                setState(() {
-                                  filtersToReturn = filtersToReturn.copyWith(
-                                    tagsIDs: newListToAssign,
-                                  );
-                                });
-                              }),
-                              showCheckmark: false,
-                              avatar: Icon(Icons.label_off_rounded,
-                                  color: AppColors.of(context).primary),
-                            ),
-                            if (snapshot.data != null)
-                              ...List.generate(snapshot.data!.length, (index) {
-                                final tag = snapshot.data![index];
-
-                                return FilterChip(
-                                  label: Text(tag.name),
-                                  selected: isTagSelected(tag.id),
-                                  onSelected: (value) {
-                                    var newListToAssign =
-                                        filtersToReturn.tagsIDs?.toList();
-
-                                    if (newListToAssign == null) {
-                                      newListToAssign = [
-                                        null,
-                                        ...snapshot.data!
-                                            .whereNot((element) =>
-                                                element.id == tag.id)
-                                            .map((e) => e.id)
-                                            .toList()
-                                      ];
-                                    } else if (value) {
-                                      newListToAssign.add(tag.id);
-                                    } else {
-                                      newListToAssign.removeWhere(
-                                          (element) => element == tag.id);
-                                    }
-
-                                    if (newListToAssign.length ==
-                                        snapshot.data!.length + 1) {
-                                      newListToAssign = null;
-                                    }
-
-                                    setState(() {
-                                      filtersToReturn =
-                                          filtersToReturn.copyWith(
-                                        tagsIDs: newListToAssign,
-                                      );
-                                    });
-                                  },
-                                  showCheckmark: false,
-                                  avatar: tag.displayIcon(),
-                                );
-                              }),
-                          ],
-                        );
-                      },
-                    ),
-                  )
                 ],
               ),
             ),

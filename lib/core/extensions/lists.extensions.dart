@@ -5,3 +5,9 @@ extension RandomListItem<T> on List<T> {
     return this[Random().nextInt(length)];
   }
 }
+
+extension PrintListItem on Iterable<String> {
+  String printFormatted() {
+    return join(', ');
+  }
+}

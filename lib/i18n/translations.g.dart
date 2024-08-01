@@ -6,7 +6,7 @@
 /// Locales: 4
 /// Strings: 2105 (526 per locale)
 ///
-/// Built on 2024-07-24 at 21:46 UTC
+/// Built on 2024-08-01 at 19:28 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -210,6 +210,7 @@ class _TranslationsGeneralEn {
 	String get insufficient_data => 'Insufficient data';
 	String get show_more_fields => 'Show more fields';
 	String get show_less_fields => 'Show less fields';
+	String get tap_to_search => 'Tap to search';
 	late final _TranslationsGeneralClipboardEn clipboard = _TranslationsGeneralClipboardEn._(_root);
 	late final _TranslationsGeneralTimeEn time = _TranslationsGeneralTimeEn._(_root);
 	late final _TranslationsGeneralTransactionOrderEn transaction_order = _TranslationsGeneralTransactionOrderEn._(_root);
@@ -432,8 +433,7 @@ class _TranslationsCurrenciesEn {
 	String get exchange_rates => 'Exchange rates';
 	String get empty => 'Add exchange rates here so that if you have accounts in currencies other than your base currency our charts are more accurate';
 	String get select_a_currency => 'Select a currency';
-	String get search_title => 'Tap to search';
-	String get search_placeholder => 'Search by name or by currency code';
+	String get search => 'Search by name or by currency code';
 }
 
 // Path: tags
@@ -1458,6 +1458,7 @@ class _TranslationsGeneralEs implements _TranslationsGeneralEn {
 	@override String get insufficient_data => 'Datos insuficientes';
 	@override String get show_more_fields => 'Show more fields';
 	@override String get show_less_fields => 'Show less fields';
+	@override String get tap_to_search => 'Toca para buscar';
 	@override late final _TranslationsGeneralClipboardEs clipboard = _TranslationsGeneralClipboardEs._(_root);
 	@override late final _TranslationsGeneralTimeEs time = _TranslationsGeneralTimeEs._(_root);
 	@override late final _TranslationsGeneralTransactionOrderEs transaction_order = _TranslationsGeneralTransactionOrderEs._(_root);
@@ -1680,8 +1681,7 @@ class _TranslationsCurrenciesEs implements _TranslationsCurrenciesEn {
 	@override String get exchange_rates => 'Tipos de cambio';
 	@override String get empty => 'Añade tipos de cambio aqui para que en caso de tener cuentas en otras divisas distintas a tu divisa base nuestros gráficos sean mas exactos';
 	@override String get select_a_currency => 'Selecciona una divisa';
-	@override String get search_title => 'Toca para buscar';
-	@override String get search_placeholder => 'Busca por nombre o por código de la divisa';
+	@override String get search => 'Busca por nombre o por código de la divisa';
 }
 
 // Path: tags
@@ -2707,6 +2707,7 @@ class _TranslationsGeneralUk implements _TranslationsGeneralEn {
 	@override String get insufficient_data => 'Недостатньо даних';
 	@override String get show_more_fields => 'Показати більше полів';
 	@override String get show_less_fields => 'Показати менше полів';
+	@override String get tap_to_search => 'Натисніть для пошуку';
 	@override late final _TranslationsGeneralClipboardUk clipboard = _TranslationsGeneralClipboardUk._(_root);
 	@override late final _TranslationsGeneralTimeUk time = _TranslationsGeneralTimeUk._(_root);
 	@override late final _TranslationsGeneralTransactionOrderUk transaction_order = _TranslationsGeneralTransactionOrderUk._(_root);
@@ -2929,8 +2930,7 @@ class _TranslationsCurrenciesUk implements _TranslationsCurrenciesEn {
 	@override String get exchange_rates => 'Обмінні курси';
 	@override String get empty => 'Додайте тут обмінні курси, щоб, якщо у вас є рахунки в інших валютах, наші графіки були б точнішими';
 	@override String get select_a_currency => 'Виберіть валюту';
-	@override String get search_title => 'Натисніть для пошуку';
-	@override String get search_placeholder => 'Пошук за назвою або кодом валюти';
+	@override String get search => 'Пошук за назвою або кодом валюти';
 }
 
 // Path: tags
@@ -3955,6 +3955,7 @@ class _TranslationsGeneralZhTw implements _TranslationsGeneralEn {
 	@override String get insufficient_data => '數據不足';
 	@override String get show_more_fields => '顯示更多欄位';
 	@override String get show_less_fields => '顯示較少的欄位';
+	@override String get tap_to_search => '點擊即可搜尋';
 	@override late final _TranslationsGeneralClipboardZhTw clipboard = _TranslationsGeneralClipboardZhTw._(_root);
 	@override late final _TranslationsGeneralTimeZhTw time = _TranslationsGeneralTimeZhTw._(_root);
 	@override late final _TranslationsGeneralTransactionOrderZhTw transaction_order = _TranslationsGeneralTransactionOrderZhTw._(_root);
@@ -4177,8 +4178,7 @@ class _TranslationsCurrenciesZhTw implements _TranslationsCurrenciesEn {
 	@override String get exchange_rates => '匯率';
 	@override String get empty => '在此處添加匯率，以便如果您的帳戶使用基礎貨幣以外的貨幣，我們的圖表會更加準確';
 	@override String get select_a_currency => '選擇貨幣';
-	@override String get search_title => '點擊即可搜尋';
-	@override String get search_placeholder => '按名稱或貨幣代碼搜尋';
+	@override String get search => '按名稱或貨幣代碼搜尋';
 }
 
 // Path: tags
@@ -5159,6 +5159,7 @@ extension on Translations {
 			case 'general.insufficient_data': return 'Insufficient data';
 			case 'general.show_more_fields': return 'Show more fields';
 			case 'general.show_less_fields': return 'Show less fields';
+			case 'general.tap_to_search': return 'Tap to search';
 			case 'general.clipboard.success': return ({required Object x}) => '${x} copied to the clipboard';
 			case 'general.clipboard.error': return 'Error copying';
 			case 'general.time.start_date': return 'Start date';
@@ -5552,8 +5553,7 @@ extension on Translations {
 			case 'currencies.exchange_rates': return 'Exchange rates';
 			case 'currencies.empty': return 'Add exchange rates here so that if you have accounts in currencies other than your base currency our charts are more accurate';
 			case 'currencies.select_a_currency': return 'Select a currency';
-			case 'currencies.search_title': return 'Tap to search';
-			case 'currencies.search_placeholder': return 'Search by name or by currency code';
+			case 'currencies.search': return 'Search by name or by currency code';
 			case 'tags.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 				one: 'Label',
 				other: 'Tags',
@@ -5765,6 +5765,7 @@ extension on _TranslationsEs {
 			case 'general.insufficient_data': return 'Datos insuficientes';
 			case 'general.show_more_fields': return 'Show more fields';
 			case 'general.show_less_fields': return 'Show less fields';
+			case 'general.tap_to_search': return 'Toca para buscar';
 			case 'general.clipboard.success': return ({required Object x}) => '${x} copiado al portapapeles';
 			case 'general.clipboard.error': return 'Error al copiar';
 			case 'general.time.start_date': return 'Fecha de inicio';
@@ -6159,8 +6160,7 @@ extension on _TranslationsEs {
 			case 'currencies.exchange_rates': return 'Tipos de cambio';
 			case 'currencies.empty': return 'Añade tipos de cambio aqui para que en caso de tener cuentas en otras divisas distintas a tu divisa base nuestros gráficos sean mas exactos';
 			case 'currencies.select_a_currency': return 'Selecciona una divisa';
-			case 'currencies.search_title': return 'Toca para buscar';
-			case 'currencies.search_placeholder': return 'Busca por nombre o por código de la divisa';
+			case 'currencies.search': return 'Busca por nombre o por código de la divisa';
 			case 'tags.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
 				one: 'Etiqueta',
 				other: 'Etiquetas',
@@ -6372,6 +6372,7 @@ extension on _TranslationsUk {
 			case 'general.insufficient_data': return 'Недостатньо даних';
 			case 'general.show_more_fields': return 'Показати більше полів';
 			case 'general.show_less_fields': return 'Показати менше полів';
+			case 'general.tap_to_search': return 'Натисніть для пошуку';
 			case 'general.clipboard.success': return ({required Object x}) => '${x} скопійовано в буфер обміну';
 			case 'general.clipboard.error': return 'Помилка копіювання';
 			case 'general.time.start_date': return 'Початкова дата';
@@ -6765,8 +6766,7 @@ extension on _TranslationsUk {
 			case 'currencies.exchange_rates': return 'Обмінні курси';
 			case 'currencies.empty': return 'Додайте тут обмінні курси, щоб, якщо у вас є рахунки в інших валютах, наші графіки були б точнішими';
 			case 'currencies.select_a_currency': return 'Виберіть валюту';
-			case 'currencies.search_title': return 'Натисніть для пошуку';
-			case 'currencies.search_placeholder': return 'Пошук за назвою або кодом валюти';
+			case 'currencies.search': return 'Пошук за назвою або кодом валюти';
 			case 'tags.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
 				one: 'Мітка',
 				other: 'Теги',
@@ -6978,6 +6978,7 @@ extension on _TranslationsZhTw {
 			case 'general.insufficient_data': return '數據不足';
 			case 'general.show_more_fields': return '顯示更多欄位';
 			case 'general.show_less_fields': return '顯示較少的欄位';
+			case 'general.tap_to_search': return '點擊即可搜尋';
 			case 'general.clipboard.success': return ({required Object x}) => '${x} 已複製到剪貼簿';
 			case 'general.clipboard.error': return '複製錯誤';
 			case 'general.time.start_date': return '開始日期';
@@ -7371,8 +7372,7 @@ extension on _TranslationsZhTw {
 			case 'currencies.exchange_rates': return '匯率';
 			case 'currencies.empty': return '在此處添加匯率，以便如果您的帳戶使用基礎貨幣以外的貨幣，我們的圖表會更加準確';
 			case 'currencies.select_a_currency': return '選擇貨幣';
-			case 'currencies.search_title': return '點擊即可搜尋';
-			case 'currencies.search_placeholder': return '按名稱或貨幣代碼搜尋';
+			case 'currencies.search': return '按名稱或貨幣代碼搜尋';
 			case 'tags.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
 				one: 'one',
 				other: 'other',
