@@ -7,7 +7,7 @@ class AnimatedExpanded extends StatefulWidget {
   final Curve sizeCurve;
   final Axis axis;
 
-  AnimatedExpanded({
+  const AnimatedExpanded({
     this.expand = false,
     required this.child,
     this.duration = const Duration(milliseconds: 425),

@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
+import 'package:monekin/app/categories/category_multi_selector.dart';
 import 'package:monekin/app/categories/category_selector.dart';
 import 'package:monekin/app/tags/tags_selector.modal.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
@@ -10,6 +11,7 @@ import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
@@ -252,7 +254,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                           onTap: () => showTagListModal(
                             context,
                             modal: TagSelector(
-                              selectedTags: selectedTags ?? [],
+                              selectedTags: selectedTags,
                               allowEmptySubmit: false,
                               includeNullTag: true,
                             ),
@@ -275,6 +277,52 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                   /* -------- CATEGORY SELECTOR ------- */
                   /* ---------------------------------- */
 
+                  const SizedBox(height: 8),
+                  StreamBuilder(
+                      stream: CategoryService.instance.getCategories(),
+                      builder: (context, snapshot) {
+                        List<Category>? selectedCategories =
+                            filtersToReturn.categories == null
+                                ? snapshot.data
+                                : (snapshot.data ?? [])
+                                    .where(
+                                      (element) => filtersToReturn.categories!
+                                          .contains(element.id),
+                                    )
+                                    .toList();
+
+                        return ListTileField(
+                          title: t.general.categories,
+                          leading: const Icon(Icons.category_rounded),
+                          trailing: CountIndicatorWithExpandArrow(
+                            countToDisplay: filtersToReturn.categories?.length,
+                          ),
+                          subtitle: filtersToReturn.categories != null
+                              ? selectedCategories!
+                                  .map((e) => e.name)
+                                  .printFormatted()
+                              : t.categories.select.all,
+                          onTap: () {
+                            showMultiCategoryListModal(
+                              context,
+                              CategoryMultiSelectorModal(
+                                selectedCategories: selectedCategories ?? [],
+                              ),
+                            ).then((selection) {
+                              if (selection == null) return;
+
+                              filtersToReturn = filtersToReturn.copyWith(
+                                categories:
+                                    selection.length == snapshot.data!.length
+                                        ? null
+                                        : selection.map((e) => e.id),
+                              );
+
+                              setState(() {});
+                            });
+                          },
+                        );
+                      }),
                   const SizedBox(height: 6),
                   Text('${t.general.categories}:'),
                   const SizedBox(height: 6),

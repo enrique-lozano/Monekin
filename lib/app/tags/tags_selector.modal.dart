@@ -165,6 +165,7 @@ class _TagSelectorState extends State<TagSelector> {
     return Expanded(
       child: Stack(
         children: [
+          // TODO : Shrink list??
           ListView.separated(
             controller: scrollController,
             itemCount: snapshot.data!.length + (widget.includeNullTag ? 1 : 0),
