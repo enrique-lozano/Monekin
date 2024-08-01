@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
@@ -19,7 +18,6 @@ import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.da
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/status_filter/transaction_status_filter.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/tags_filter/tags_filter_container.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -505,99 +503,6 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                       });
                     },
                   ),
-
-                  /* ---------------------------------- */
-                  /* -------------- TAGS -------------- */
-                  /* ---------------------------------- */
-
-                  const SizedBox(height: 16),
-                  TagsFilterContainer(
-                    child: StreamBuilder(
-                      stream: TagService.instance.getTags(),
-                      builder: (context, snapshot) {
-                        return Wrap(
-                          spacing: 6,
-                          runSpacing: 0,
-                          children: [
-                            FilterChip(
-                              label: Text(t.tags.without_tags),
-                              selected: isTagSelected(null),
-                              onSelected: (value) => setState(() {
-                                var newListToAssign =
-                                    filtersToReturn.tagsIDs?.toList();
-
-                                if (newListToAssign == null) {
-                                  newListToAssign =
-                                      snapshot.data!.map((e) => e.id).toList();
-                                } else if (value) {
-                                  newListToAssign = [...newListToAssign, null];
-                                } else {
-                                  newListToAssign.removeWhere(
-                                      (element) => element == null);
-                                }
-
-                                if (newListToAssign.length ==
-                                    snapshot.data!.length + 1) {
-                                  newListToAssign = null;
-                                }
-
-                                setState(() {
-                                  filtersToReturn = filtersToReturn.copyWith(
-                                    tagsIDs: newListToAssign,
-                                  );
-                                });
-                              }),
-                              showCheckmark: false,
-                              avatar: Icon(Icons.label_off_rounded,
-                                  color: AppColors.of(context).primary),
-                            ),
-                            if (snapshot.data != null)
-                              ...List.generate(snapshot.data!.length, (index) {
-                                final tag = snapshot.data![index];
-
-                                return FilterChip(
-                                  label: Text(tag.name),
-                                  selected: isTagSelected(tag.id),
-                                  onSelected: (value) {
-                                    var newListToAssign =
-                                        filtersToReturn.tagsIDs?.toList();
-
-                                    if (newListToAssign == null) {
-                                      newListToAssign = [
-                                        null,
-                                        ...snapshot.data!
-                                            .whereNot((element) =>
-                                                element.id == tag.id)
-                                            .map((e) => e.id)
-                                      ];
-                                    } else if (value) {
-                                      newListToAssign.add(tag.id);
-                                    } else {
-                                      newListToAssign.removeWhere(
-                                          (element) => element == tag.id);
-                                    }
-
-                                    if (newListToAssign.length ==
-                                        snapshot.data!.length + 1) {
-                                      newListToAssign = null;
-                                    }
-
-                                    setState(() {
-                                      filtersToReturn =
-                                          filtersToReturn.copyWith(
-                                        tagsIDs: newListToAssign,
-                                      );
-                                    });
-                                  },
-                                  showCheckmark: false,
-                                  avatar: tag.displayIcon(),
-                                );
-                              }),
-                          ],
-                        );
-                      },
-                    ),
-                  )
                 ],
               ),
             ),
