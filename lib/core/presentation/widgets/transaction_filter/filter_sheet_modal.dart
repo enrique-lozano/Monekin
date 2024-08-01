@@ -2,8 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
-import 'package:monekin/app/categories/category_multi_selector.dart';
-import 'package:monekin/app/categories/category_selector.dart';
+import 'package:monekin/app/categories/selectors/category_multi_selector.dart';
 import 'package:monekin/app/tags/tags_selector.modal.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
@@ -17,7 +16,6 @@ import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
-import 'package:monekin/core/presentation/widgets/icon_displayer_widgets.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/status_filter/transaction_status_filter.dart';
@@ -28,6 +26,8 @@ import 'package:monekin/i18n/translations.g.dart';
 
 import '../../../models/transaction/transaction_type.enum.dart';
 import '../../app_colors.dart';
+import '../count_indicator.dart';
+import '../form_fields/list_tile_field.dart';
 
 Future<TransactionFilters?> openFilterSheetModal(
     BuildContext context, FilterSheetModal modalData) {
@@ -134,42 +134,6 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  /*   TextFormField(
-                    controller: TextEditingController(
-                        text: 'BBVA, Openbank, Revolut - EUR, Revolut - USD'),
-                    readOnly: true,
-                    mouseCursor: SystemMouseCursors.click,
-                    decoration: InputDecoration(
-                      isDense: false,
-                      labelText: t.general.accounts,
-                      suffixIcon: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            if (filtersToReturn.accountsIDs != null &&
-                                filtersToReturn.accountsIDs!.isNotEmpty)
-                              Container(
-                                padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                  color: AppColors.of(context).primary,
-                                  borderRadius: BorderRadius.circular(10200202),
-                                ),
-                                child: Text(
-                                  filtersToReturn.accountsIDs!.length
-                                      .toString(),
-                                  style: TextStyle(
-                                      color: AppColors.of(context).onPrimary),
-                                ),
-                              ),
-                            Icon(Icons.arrow_forward_ios_rounded)
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
- */
                   /* ---------------------------------- */
                   /* -------- ACCOUNT SELECTOR -------- */
                   /* ---------------------------------- */
@@ -323,32 +287,6 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                           },
                         );
                       }),
-                  const SizedBox(height: 6),
-                  Text('${t.general.categories}:'),
-                  const SizedBox(height: 6),
-                  StreamBuilder(
-                    stream: CategoryService.instance.getMainCategories(),
-                    builder: (context, snapshot) {
-                      return CategorySelector(IconDisplayerSelectorData(
-                        availableItems: snapshot.data,
-                        selectedItems: filtersToReturn.categories == null
-                            ? null
-                            : (snapshot.data ?? [])
-                                .where(
-                                  (element) => filtersToReturn.categories!
-                                      .contains(element.id),
-                                )
-                                .toList(),
-                        onChange: (selection) {
-                          filtersToReturn = filtersToReturn.copyWith(
-                            categories: selection?.map((e) => e.id).toList(),
-                          );
-
-                          setState(() {});
-                        },
-                      ));
-                    },
-                  ),
                   const SizedBox(height: 24),
 
                   /* ---------------------------------- */
@@ -666,98 +604,6 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
           ),
         );
       },
-    );
-  }
-}
-
-class ListTileField extends StatelessWidget {
-  const ListTileField(
-      {super.key,
-      required this.title,
-      required this.subtitle,
-      this.leading,
-      this.trailing,
-      this.onTap});
-
-  final String title;
-  final String subtitle;
-
-  final Widget? leading;
-  final Widget? trailing;
-  final void Function()? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(title),
-      subtitle: Text(
-        subtitle,
-        softWrap: false,
-        overflow: TextOverflow.ellipsis,
-      ),
-      leading: leading,
-      trailing: trailing,
-      tileColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      onTap: onTap,
-    );
-  }
-}
-
-class CountIndicatorWithExpandArrow extends StatelessWidget {
-  const CountIndicatorWithExpandArrow({
-    super.key,
-    required this.countToDisplay,
-  });
-
-  final int? countToDisplay;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (countToDisplay != null && countToDisplay! > 0) ...[
-          CountIndicator(countToDisplay!),
-          const SizedBox(width: 8)
-        ],
-        const Icon(
-          Icons.arrow_forward_ios_rounded,
-          size: 16,
-        )
-      ],
-    );
-  }
-}
-
-class CountIndicator extends StatelessWidget {
-  const CountIndicator(
-    this.countToDisplay, {
-    super.key,
-    this.fontWeight = FontWeight.w700,
-  });
-
-  final int countToDisplay;
-
-  final FontWeight fontWeight;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 24,
-      width: 24,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-        color: AppColors.of(context).primary,
-      ),
-      child: Text(
-        countToDisplay.toString(),
-        style: Theme.of(context).textTheme.labelSmall!.copyWith(
-              fontWeight: fontWeight,
-              color: AppColors.of(context).onPrimary,
-            ),
-      ),
     );
   }
 }

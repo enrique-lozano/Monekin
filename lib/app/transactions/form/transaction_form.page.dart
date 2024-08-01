@@ -2,7 +2,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
-import 'package:monekin/app/categories/category_picker.dart';
+import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/transactions/form/amount_selector.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
