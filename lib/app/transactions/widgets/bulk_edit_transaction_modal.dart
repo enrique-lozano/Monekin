@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/dates/outlinedButtonStacked.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
@@ -60,8 +61,10 @@ class BulkEditTransactionModal extends StatelessWidget {
               text: t.transaction.list.bulk_edit.categories,
               onTap: () {
                 showCategoryPickerModal(context,
-                        modal: const CategoryPicker(selectedCategory: null))
-                    .then(
+                    modal: CategoryPicker(
+                      selectedCategory: null,
+                      categoryType: CategoryType.values,
+                    )).then(
                   (modalRes) {
                     if (modalRes == null) {
                       return;

@@ -369,7 +369,14 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   Future<void> selectCategory() async {
     final modalRes = await showCategoryPickerModal(
       context,
-      modal: CategoryPicker(selectedCategory: selectedCategory),
+      modal: CategoryPicker(
+        selectedCategory: selectedCategory,
+        categoryType: [
+          CategoryType.B,
+          if (transactionType == TransactionType.E) CategoryType.E,
+          if (transactionType == TransactionType.I) CategoryType.I
+        ],
+      ),
     );
 
     if (modalRes != null) {

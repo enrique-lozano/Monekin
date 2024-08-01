@@ -524,7 +524,10 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                         : null,
                     onClick: () async {
                       final modalRes = await showCategoryPickerModal(context,
-                          modal: const CategoryPicker(selectedCategory: null));
+                          modal: CategoryPicker(
+                            selectedCategory: null,
+                            categoryType: const [CategoryType.B],
+                          ));
 
                       if (modalRes != null) {
                         setState(() {
