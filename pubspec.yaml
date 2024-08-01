@@ -57,7 +57,7 @@ dependencies:
   uuid: ^4.4.2
   csv: ^6.0.0
   dotted_border: ^2.0.0+3
-  package_info_plus: ^8.0.0
+  package_info_plus: ^8.0.1
   introduction_screen: ^3.1.11
   dynamic_color: ^1.7.0
   copy_with_extension: ^5.0.4
