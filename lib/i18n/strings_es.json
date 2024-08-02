@@ -328,6 +328,12 @@
       "exchange-to-preferred-title": "Cambio a {{ currency }}",
       "exchange-to-preferred-in-date": "El día de la transacción"
     },
+    "REVERSED": {
+      "title": "Transacción invertida",
+      "title.short": "Tr. invertida",
+      "description-for-expenses": "A pesar de ser una transacción de tipo gasto, esta transacción tiene un monto positivo. Este tipo de transacciones pueden usarse para representar la devolución de un gasto previamente registrado, como un reembolso o que te realicen el pago de una deuda.",
+      "description-for-incomes": "A pesar de ser una transacción de tipo ingreso, esta transacción tiene un monto negativo. Este tipo de transacciones pueden usarse para anular o corregir un ingreso que fue registrado incorrectamente, para reflejar una devolución o reembolso de dinero o para registrar el pago de deudas."
+    },
     "STATUS": {
       "display": {
         "one": "Estado",

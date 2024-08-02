@@ -9,7 +9,10 @@ import 'package:monekin/app/transactions/form/dialogs/transaction_title_modal.da
 import 'package:monekin/app/transactions/form/widgets/transaction_form_calculator.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/currency/currency_service.dart';
+import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
@@ -21,6 +24,7 @@ import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/animations/shake/shake_widget.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
+import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
@@ -438,35 +442,111 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        buildDatePickerButtons(context),
-                        const SizedBox(height: 8),
-                        Builder(builder: (context) {
-                          final bigTextStyle = Theme.of(context)
-                              .textTheme
-                              .headlineLarge!
-                              .copyWith(
-                                fontWeight: FontWeight.w800,
-                                color: transactionType.color(context),
-                                fontSize: transactionAmount.abs() >= 1000
-                                    ? transactionAmount >= 1000000
-                                        ? 32
-                                        : 38
-                                    : 48,
-                              );
-
-                          return CurrencyDisplayer(
-                            amountToConvert: transactionAmount,
-                            currencyStyle: bigTextStyle.copyWith(
-                                fontWeight: FontWeight.w400),
-                            integerStyle: bigTextStyle,
-                            currency: fromAccount?.currency,
-                          );
-                        }),
-                      ],
+                    child: StreamBuilder(
+                      stream:
+                          CurrencyService.instance.getUserPreferredCurrency(),
+                      builder: (context, snapshot) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            buildDatePickerButtons(context),
+                            const SizedBox(height: 8),
+                            AnimatedDefaultTextStyle(
+                              duration: const Duration(milliseconds: 250),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineLarge!
+                                  .copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    color: transactionType.color(context),
+                                    fontSize: transactionAmount.abs() >= 1000
+                                        ? transactionAmount.abs() >= 1000000
+                                            ? 32
+                                            : 42
+                                        : 56,
+                                  ),
+                              child: CurrencyDisplayer(
+                                amountToConvert: transactionAmount,
+                                currency: fromAccount?.currency,
+                              ),
+                            ),
+                            if (fromAccount != null &&
+                                snapshot.hasData &&
+                                snapshot.data!.code !=
+                                    fromAccount!.currency.code)
+                              // Display exchange rate to preferred currency if needed
+                              buildTrAmountInPrefCurrency()
+                          ],
+                        );
+                      },
                     ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4, bottom: 8),
+                    child: Builder(builder: (context) {
+                      final buttonStyle = TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          side: BorderSide(
+                            width: 2,
+                            color: AppColors.of(context).brand,
+                          ),
+                        ),
+                        iconColor: AppColors.of(context).brand,
+                        foregroundColor: AppColors.of(context).brand,
+                        backgroundColor:
+                            AppColors.of(context).brand.lighten(0.675),
+                      );
+
+                      return Row(
+                        children: [
+                          if (transactionType == TransactionType.E &&
+                                  !transactionAmount.isNegative ||
+                              transactionType == TransactionType.I &&
+                                  transactionAmount.isNegative)
+                            TextButton.icon(
+                              style: buttonStyle,
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  showDragHandle: true,
+                                  builder: (context) {
+                                    return ModalContainer(
+                                      title: t.transaction.reversed.title,
+                                      titleBuilder: (title) {
+                                        return Row(
+                                          children: [
+                                            Icon(
+                                              MoneyTransaction.reversedIcon,
+                                              size: 28,
+                                            ),
+                                            const SizedBox(width: 12),
+                                            Text(title)
+                                          ],
+                                        );
+                                      },
+                                      bodyPadding: const EdgeInsets.only(
+                                        left: 16,
+                                        bottom: 8,
+                                        right: 8,
+                                      ),
+                                      body: Text(
+                                          transactionType == TransactionType.I
+                                              ? t.transaction.reversed
+                                                  .description_for_incomes
+                                              : t.transaction.reversed
+                                                  .description_for_expenses),
+                                    );
+                                  },
+                                );
+                              },
+                              label: Text(t.transaction.reversed.title_short),
+                              icon: Icon(MoneyTransaction.reversedIcon),
+                            ),
+                        ],
+                      );
+                    }),
                   ),
                   Column(
                     children: [
@@ -509,7 +589,37 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     );
   }
 
+  /// Build an indicator with the transaction value in the currency of the user
+  StreamBuilder<double> buildTrAmountInPrefCurrency() {
+    return StreamBuilder(
+      stream:
+          ExchangeRateService.instance.calculateExchangeRateToPreferredCurrency(
+        fromCurrency: fromAccount!.currency.code,
+        amount: transactionAmount,
+      ),
+      builder: (context, exchangeRateSnapshot) {
+        if (!exchangeRateSnapshot.hasData ||
+            exchangeRateSnapshot.data! == transactionAmount) {
+          return const SizedBox.shrink();
+        }
+
+        return Column(
+          children: [
+            const SizedBox(height: 8),
+            CurrencyDisplayer(
+              amountToConvert: exchangeRateSnapshot.data!,
+              integerStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  color: AppColors.of(context).onSurface.withAlpha(200)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Row buildExtraInfoButtons(BuildContext context) {
+    final t = Translations.of(context);
+
     return Row(
       children: [
         Builder(builder: (context) {

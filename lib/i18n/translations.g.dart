@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 4
-/// Strings: 2121 (530 per locale)
+/// Strings: 2137 (534 per locale)
 ///
-/// Built on 2024-08-02 at 17:13 UTC
+/// Built on 2024-08-02 at 21:43 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -352,6 +352,7 @@ class _TranslationsTransactionEn {
 	late final _TranslationsTransactionListEn list = _TranslationsTransactionListEn._(_root);
 	late final _TranslationsTransactionFiltersEn filters = _TranslationsTransactionFiltersEn._(_root);
 	late final _TranslationsTransactionFormEn form = _TranslationsTransactionFormEn._(_root);
+	late final _TranslationsTransactionReversedEn reversed = _TranslationsTransactionReversedEn._(_root);
 	late final _TranslationsTransactionStatusEn status = _TranslationsTransactionStatusEn._(_root);
 	late final _TranslationsTransactionTypesEn types = _TranslationsTransactionTypesEn._(_root);
 }
@@ -818,6 +819,19 @@ class _TranslationsTransactionFormEn {
 	String get description_info => 'Tap here to enter a more detailed description about this transaction';
 	String exchange_to_preferred_title({required Object currency}) => 'Exchnage rate to ${currency}';
 	String get exchange_to_preferred_in_date => 'On transaction date';
+}
+
+// Path: transaction.reversed
+class _TranslationsTransactionReversedEn {
+	_TranslationsTransactionReversedEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get title => 'Inverse transaction';
+	String get title_short => 'Inverse tr.';
+	String get description_for_expenses => 'Despite being an expense transaction, it has a positive amount. These types of transactions can be used to represent the return of a previously recorded expense, such as a refund or having the payment of a debt.';
+	String get description_for_incomes => 'Despite being an income transaction, it has a negative amount. These types of transactions can be used to void or correct an income that was incorrectly recorded, to reflect a return or refund of money or to record payment of debts.';
 }
 
 // Path: transaction.status
@@ -1604,6 +1618,7 @@ class _TranslationsTransactionEs implements _TranslationsTransactionEn {
 	@override late final _TranslationsTransactionListEs list = _TranslationsTransactionListEs._(_root);
 	@override late final _TranslationsTransactionFiltersEs filters = _TranslationsTransactionFiltersEs._(_root);
 	@override late final _TranslationsTransactionFormEs form = _TranslationsTransactionFormEs._(_root);
+	@override late final _TranslationsTransactionReversedEs reversed = _TranslationsTransactionReversedEs._(_root);
 	@override late final _TranslationsTransactionStatusEs status = _TranslationsTransactionStatusEs._(_root);
 	@override late final _TranslationsTransactionTypesEs types = _TranslationsTransactionTypesEs._(_root);
 }
@@ -2070,6 +2085,19 @@ class _TranslationsTransactionFormEs implements _TranslationsTransactionFormEn {
 	@override String get description_info => 'Toca aquí para escribir una descripción mas detallada sobre esta transacción';
 	@override String exchange_to_preferred_title({required Object currency}) => 'Cambio a ${currency}';
 	@override String get exchange_to_preferred_in_date => 'El día de la transacción';
+}
+
+// Path: transaction.reversed
+class _TranslationsTransactionReversedEs implements _TranslationsTransactionReversedEn {
+	_TranslationsTransactionReversedEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Transacción invertida';
+	@override String get title_short => 'Tr. invertida';
+	@override String get description_for_expenses => 'A pesar de ser una transacción de tipo gasto, esta transacción tiene un monto positivo. Este tipo de transacciones pueden usarse para representar la devolución de un gasto previamente registrado, como un reembolso o que te realicen el pago de una deuda.';
+	@override String get description_for_incomes => 'A pesar de ser una transacción de tipo ingreso, esta transacción tiene un monto negativo. Este tipo de transacciones pueden usarse para anular o corregir un ingreso que fue registrado incorrectamente, para reflejar una devolución o reembolso de dinero o para registrar el pago de deudas.';
 }
 
 // Path: transaction.status
@@ -2857,6 +2885,7 @@ class _TranslationsTransactionUk implements _TranslationsTransactionEn {
 	@override late final _TranslationsTransactionListUk list = _TranslationsTransactionListUk._(_root);
 	@override late final _TranslationsTransactionFiltersUk filters = _TranslationsTransactionFiltersUk._(_root);
 	@override late final _TranslationsTransactionFormUk form = _TranslationsTransactionFormUk._(_root);
+	@override late final _TranslationsTransactionReversedUk reversed = _TranslationsTransactionReversedUk._(_root);
 	@override late final _TranslationsTransactionStatusUk status = _TranslationsTransactionStatusUk._(_root);
 	@override late final _TranslationsTransactionTypesUk types = _TranslationsTransactionTypesUk._(_root);
 }
@@ -3323,6 +3352,19 @@ class _TranslationsTransactionFormUk implements _TranslationsTransactionFormEn {
 	@override String get description_info => 'Натисніть тут, щоб ввести детальніший опис цієї транзакції';
 	@override String exchange_to_preferred_title({required Object currency}) => 'Обмінний курс на ${currency}';
 	@override String get exchange_to_preferred_in_date => 'На дату транзакції';
+}
+
+// Path: transaction.reversed
+class _TranslationsTransactionReversedUk implements _TranslationsTransactionReversedEn {
+	_TranslationsTransactionReversedUk._(this._root);
+
+	@override final _TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Скасована транзакція';
+	@override String get title_short => 'Перевернутий тр.';
+	@override String get description_for_expenses => 'Незважаючи на те, що транзакція типу витрат, ця транзакція має додатну суму. Ці типи транзакцій можна використовувати для представлення повернення раніше зареєстрованих витрат, таких як відшкодування або оплата борг.';
+	@override String get description_for_incomes => 'Незважаючи на те, що транзакція є дохідною, ця транзакція має від’ємну суму. Ці типи транзакцій можна використовувати ля анулювання або виправлення неправильно зареєстрованого доходу, для відображення повернення або відшкодування грошей або для обліку сплати боргів».';
 }
 
 // Path: transaction.status
@@ -4109,6 +4151,7 @@ class _TranslationsTransactionZhTw implements _TranslationsTransactionEn {
 	@override late final _TranslationsTransactionListZhTw list = _TranslationsTransactionListZhTw._(_root);
 	@override late final _TranslationsTransactionFiltersZhTw filters = _TranslationsTransactionFiltersZhTw._(_root);
 	@override late final _TranslationsTransactionFormZhTw form = _TranslationsTransactionFormZhTw._(_root);
+	@override late final _TranslationsTransactionReversedZhTw reversed = _TranslationsTransactionReversedZhTw._(_root);
 	@override late final _TranslationsTransactionStatusZhTw status = _TranslationsTransactionStatusZhTw._(_root);
 	@override late final _TranslationsTransactionTypesZhTw types = _TranslationsTransactionTypesZhTw._(_root);
 }
@@ -4575,6 +4618,19 @@ class _TranslationsTransactionFormZhTw implements _TranslationsTransactionFormEn
 	@override String get description_info => '點擊此處輸入有關此交易的更詳細描述';
 	@override String exchange_to_preferred_title({required Object currency}) => '匯率為${currency}';
 	@override String get exchange_to_preferred_in_date => '交易日';
+}
+
+// Path: transaction.reversed
+class _TranslationsTransactionReversedZhTw implements _TranslationsTransactionReversedEn {
+	_TranslationsTransactionReversedZhTw._(this._root);
+
+	@override final _TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '撤销交易';
+	@override String get title_short => '倒置的 tr.';
+	@override String get description_for_expenses => '尽管是费用类型交易，但此交易具有正金额。这些类型的交易可用于表示先前记录的费用的返还，例如退款或支付债务。';
+	@override String get description_for_incomes => '尽管是收入类型交易，但此交易的金额为负数。这些类型的交易可用于作废或更正错误记录的收入，以反映退款或退款或记录债务的支付。';
 }
 
 // Path: transaction.status
@@ -5457,6 +5513,10 @@ extension on Translations {
 			case 'transaction.form.description_info': return 'Tap here to enter a more detailed description about this transaction';
 			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => 'Exchnage rate to ${currency}';
 			case 'transaction.form.exchange_to_preferred_in_date': return 'On transaction date';
+			case 'transaction.reversed.title': return 'Inverse transaction';
+			case 'transaction.reversed.title_short': return 'Inverse tr.';
+			case 'transaction.reversed.description_for_expenses': return 'Despite being an expense transaction, it has a positive amount. These types of transactions can be used to represent the return of a previously recorded expense, such as a refund or having the payment of a debt.';
+			case 'transaction.reversed.description_for_incomes': return 'Despite being an income transaction, it has a negative amount. These types of transactions can be used to void or correct an income that was incorrectly recorded, to reflect a return or refund of money or to record payment of debts.';
 			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 				one: 'Status',
 				other: 'Statuses',
@@ -6068,6 +6128,10 @@ extension on _TranslationsEs {
 			case 'transaction.form.description_info': return 'Toca aquí para escribir una descripción mas detallada sobre esta transacción';
 			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => 'Cambio a ${currency}';
 			case 'transaction.form.exchange_to_preferred_in_date': return 'El día de la transacción';
+			case 'transaction.reversed.title': return 'Transacción invertida';
+			case 'transaction.reversed.title_short': return 'Tr. invertida';
+			case 'transaction.reversed.description_for_expenses': return 'A pesar de ser una transacción de tipo gasto, esta transacción tiene un monto positivo. Este tipo de transacciones pueden usarse para representar la devolución de un gasto previamente registrado, como un reembolso o que te realicen el pago de una deuda.';
+			case 'transaction.reversed.description_for_incomes': return 'A pesar de ser una transacción de tipo ingreso, esta transacción tiene un monto negativo. Este tipo de transacciones pueden usarse para anular o corregir un ingreso que fue registrado incorrectamente, para reflejar una devolución o reembolso de dinero o para registrar el pago de deudas.';
 			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
 				one: 'Estado',
 				other: 'Estados',
@@ -6678,6 +6742,10 @@ extension on _TranslationsUk {
 			case 'transaction.form.description_info': return 'Натисніть тут, щоб ввести детальніший опис цієї транзакції';
 			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => 'Обмінний курс на ${currency}';
 			case 'transaction.form.exchange_to_preferred_in_date': return 'На дату транзакції';
+			case 'transaction.reversed.title': return 'Скасована транзакція';
+			case 'transaction.reversed.title_short': return 'Перевернутий тр.';
+			case 'transaction.reversed.description_for_expenses': return 'Незважаючи на те, що транзакція типу витрат, ця транзакція має додатну суму. Ці типи транзакцій можна використовувати для представлення повернення раніше зареєстрованих витрат, таких як відшкодування або оплата борг.';
+			case 'transaction.reversed.description_for_incomes': return 'Незважаючи на те, що транзакція є дохідною, ця транзакція має від’ємну суму. Ці типи транзакцій можна використовувати ля анулювання або виправлення неправильно зареєстрованого доходу, для відображення повернення або відшкодування грошей або для обліку сплати боргів».';
 			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
 				one: 'Статус',
 				other: 'Статуси',
@@ -7288,6 +7356,10 @@ extension on _TranslationsZhTw {
 			case 'transaction.form.description_info': return '點擊此處輸入有關此交易的更詳細描述';
 			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => '匯率為${currency}';
 			case 'transaction.form.exchange_to_preferred_in_date': return '交易日';
+			case 'transaction.reversed.title': return '撤销交易';
+			case 'transaction.reversed.title_short': return '倒置的 tr.';
+			case 'transaction.reversed.description_for_expenses': return '尽管是费用类型交易，但此交易具有正金额。这些类型的交易可用于表示先前记录的费用的返还，例如退款或支付债务。';
+			case 'transaction.reversed.description_for_incomes': return '尽管是收入类型交易，但此交易的金额为负数。这些类型的交易可用于作废或更正错误记录的收入，以反映退款或退款或记录债务的支付。';
 			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
 				one: '地位',
 				other: '狀態',

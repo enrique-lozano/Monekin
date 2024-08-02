@@ -321,6 +321,12 @@
       "exchange-to-preferred-title": "匯率為{{currency}}",
       "exchange-to-preferred-in-date": "交易日"
     },
+    "REVERSED": {
+      "title": "撤销交易",
+      "title.short": "倒置的 tr.",
+      "description-for-expenses": "尽管是费用类型交易，但此交易具有正金额。这些类型的交易可用于表示先前记录的费用的返还，例如退款或支付债务。",
+      "description-for-incomes": "尽管是收入类型交易，但此交易的金额为负数。这些类型的交易可用于作废或更正错误记录的收入，以反映退款或退款或记录债务的支付。"
+    },
     "STATUS": {
       "display": {
         "one": "地位",

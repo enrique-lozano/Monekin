@@ -72,8 +72,8 @@ class MoneyTransaction extends TransactionInDB {
           receivingAccountID: receivingAccount?.id,
         );
 
-  bool get isTransfer => receivingAccountID != null;
-  bool get isIncomeOrExpense => categoryID != null;
+  bool get isTransfer => type.isTransfer;
+  bool get isIncomeOrExpense => type.isIncomeOrExpense;
 
   /// Display the title of the transaction, or the category in case the title is not specified for this transaction
   String displayName(BuildContext context) {
@@ -104,6 +104,10 @@ class MoneyTransaction extends TransactionInDB {
   bool get isReversed {
     return type == TransactionType.E && value > 0 ||
         type == TransactionType.I && value < 0;
+  }
+
+  static IconData get reversedIcon {
+    return Icons.shuffle_on_rounded;
   }
 
   IconDisplayer getDisplayIcon(

@@ -321,6 +321,12 @@
       "exchange-to-preferred-title": "Exchnage rate to {{ currency }}",
       "exchange-to-preferred-in-date": "On transaction date"
     },
+    "REVERSED": {
+      "title": "Inverse transaction",
+      "title.short": "Inverse tr.",
+      "description-for-expenses": "Despite being an expense transaction, it has a positive amount. These types of transactions can be used to represent the return of a previously recorded expense, such as a refund or having the payment of a debt.",
+      "description-for-incomes": "Despite being an income transaction, it has a negative amount. These types of transactions can be used to void or correct an income that was incorrectly recorded, to reflect a return or refund of money or to record payment of debts."
+    },
     "STATUS": {
       "display": {
         "one": "Status",

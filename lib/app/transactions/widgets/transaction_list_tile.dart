@@ -100,20 +100,11 @@ class TransactionListTile extends StatelessWidget {
                 ],
                 if (transaction.isReversed) ...[
                   const SizedBox(width: 6),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    decoration: BoxDecoration(
-                        color: AppColors.of(context).primary.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(2)),
-                    child: Text(
-                      "R",
-                      style: TextStyle(
-                        color: AppColors.of(context).primary,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
+                  Icon(
+                    MoneyTransaction.reversedIcon,
+                    size: 12,
+                    color: AppColors.of(context).brand,
+                  )
                 ]
               ],
             ),
