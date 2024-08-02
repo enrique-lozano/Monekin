@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
@@ -60,9 +61,23 @@ class _CategoryMultiSelectorModalState
     super.dispose();
   }
 
+  _moveSheetTo(double position) {
+    if (controller.isAttached && mounted) {
+      controller.jumpTo(position);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+
+    final bottomInsets = MediaQuery.of(context).viewInsets.bottom;
+
+    if (bottomInsets > 0) {
+      _moveSheetTo(1);
+    } else {
+      _moveSheetTo(0.65);
+    }
 
     return DraggableScrollableSheet(
       controller: controller,
@@ -86,7 +101,10 @@ class _CategoryMultiSelectorModalState
                   );
                 },
           body: StreamBuilder(
-            stream: CategoryService.instance.getCategories(),
+            stream: CategoryService.instance.getCategories(
+                predicate: (c, pc) =>
+                    c.name.contains(searchValue) |
+                    pc.name.contains(searchValue)),
             builder: (context, snapshot) {
               return Column(
                 children: [
