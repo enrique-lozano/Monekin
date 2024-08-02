@@ -1,12 +1,11 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/tags/tags_selector.modal.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/tags_filter/tags_filter_container.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 part 'transaction_more_info.modal.g.dart';
@@ -97,71 +96,50 @@ class _TransactionMoreInfoModalState extends State<_TransactionMoreInfoModal> {
                         leading: const Icon(Icons.location_on_outlined),
                         trailing: const Icon(
                           Icons.arrow_forward_ios_rounded,
-                          size: 14,
+                          size: 16,
                         ),
                         title: const Text('Location'),
                         subtitle: const Text('-22.7832933, 2.8992929'),
                         onTap: () {},
                       ),
                       const Divider(),
-                      const SizedBox(height: 16),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: StatefulBuilder(builder: (context, setState) {
-                          return TagsFilterContainer(
-                            headerLabelStyle: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
-                                .copyWith(fontWeight: FontWeight.w700),
-                            headerSpacing: 8,
-                            child: Wrap(
-                              spacing: 6,
-                              runSpacing: 0,
-                              children: [
-                                ...List.generate(moreInfoData.tags.length,
-                                    (index) {
-                                  final tag = moreInfoData.tags[index];
-
-                                  return FilterChip(
-                                    label: Text(
-                                      tag.name,
-                                      style: TextStyle(color: tag.colorData),
-                                    ),
-                                    selected: true,
-                                    onSelected: (value) => setState(() {
-                                      moreInfoData.tags.removeWhere(
-                                          (element) => element.id == tag.id);
-                                    }),
-                                    showCheckmark: false,
-                                    selectedColor: tag.colorData.lighten(0.8),
-                                    avatar: tag.displayIcon(),
-                                  );
-                                }),
-                                ActionChip(
-                                  label: Text(t.tags.add),
-                                  avatar: const Icon(Icons.add),
-                                  onPressed: () => showTagListModal(context,
-                                      modal: TagSelector(
-                                        allowEmptySubmit: true,
-                                        includeNullTag: false,
-                                        selectedTags: moreInfoData.tags,
-                                      )).then(
-                                    (value) {
-                                      if (value != null) {
-                                        setState(() {
-                                          moreInfoData = moreInfoData.copyWith(
-                                            tags: value.nonNulls.toList(),
-                                          );
-                                        });
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }),
+                      ListTile(
+                        leading: Icon(Tag.icon),
+                        trailing: const Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          size: 16,
+                        ),
+                        title: Text(t.tags.display(n: 2)),
+                        subtitle: Text(
+                          moreInfoData.tags.isEmpty
+                              ? t.transaction.form.no_tags
+                              : moreInfoData.tags
+                                  .map((t) => t.name)
+                                  .printFormatted(),
+                          style: TextStyle(
+                            fontStyle: moreInfoData.tags.isEmpty
+                                ? FontStyle.italic
+                                : FontStyle.normal,
+                          ),
+                        ),
+                        onTap: () {
+                          showTagListModal(context,
+                              modal: TagSelector(
+                                allowEmptySubmit: true,
+                                includeNullTag: false,
+                                selectedTags: moreInfoData.tags,
+                              )).then((value) {
+                            if (value != null) {
+                              setState(() {
+                                moreInfoData = moreInfoData.copyWith(
+                                  tags: value.nonNulls.toList(),
+                                );
+                              });
+                            }
+                          });
+                        },
                       ),
+                      const Divider(),
                     ],
                   ),
                 ),

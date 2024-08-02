@@ -315,6 +315,7 @@
       "title.short": "資質",
       "value": "交易價值",
       "tap-to-see-more": "點擊查看更多詳細資訊",
+      "no-tags": "-- 无标签 --",
       "description": "描述",
       "description-info": "點擊此處輸入有關此交易的更詳細描述",
       "exchange-to-preferred-title": "匯率為{{currency}}",

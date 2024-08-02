@@ -317,6 +317,7 @@
       "title.short": "Назва",
       "value": "Сума транзакції",
       "tap-to-see-more": "Натисніть, щоб побачити більше деталей",
+      "no-tags": "-- Немає тегів --",
       "description": "Опис",
       "description-info": "Натисніть тут, щоб ввести детальніший опис цієї транзакції",
       "exchange-to-preferred-title": "Обмінний курс на {{ currency }}",

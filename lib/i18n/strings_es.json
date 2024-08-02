@@ -320,6 +320,7 @@
       },
       "title": "Título de la transacción",
       "title.short": "Título",
+      "no-tags": "-- Sin etiquetas --",
       "value": "Valor de la transacción",
       "tap-to-see-more": "Toca para ver más detalles",
       "description": "Descripción",

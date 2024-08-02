@@ -315,6 +315,7 @@
       "title.short": "Title",
       "value": "Value of the transaction",
       "tap-to-see-more": "Tap to see more details",
+      "no-tags": "-- No tags --",
       "description": "Description",
       "description-info": "Tap here to enter a more detailed description about this transaction",
       "exchange-to-preferred-title": "Exchnage rate to {{ currency }}",

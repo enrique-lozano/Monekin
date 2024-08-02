@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 4
-/// Strings: 2117 (529 per locale)
+/// Strings: 2121 (530 per locale)
 ///
-/// Built on 2024-08-01 at 22:10 UTC
+/// Built on 2024-08-02 at 17:13 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -813,6 +813,7 @@ class _TranslationsTransactionFormEn {
 	String get title_short => 'Title';
 	String get value => 'Value of the transaction';
 	String get tap_to_see_more => 'Tap to see more details';
+	String get no_tags => '-- No tags --';
 	String get description => 'Description';
 	String get description_info => 'Tap here to enter a more detailed description about this transaction';
 	String exchange_to_preferred_title({required Object currency}) => 'Exchnage rate to ${currency}';
@@ -2062,6 +2063,7 @@ class _TranslationsTransactionFormEs implements _TranslationsTransactionFormEn {
 	@override late final _TranslationsTransactionFormValidatorsEs validators = _TranslationsTransactionFormValidatorsEs._(_root);
 	@override String get title => 'Título de la transacción';
 	@override String get title_short => 'Título';
+	@override String get no_tags => '-- Sin etiquetas --';
 	@override String get value => 'Valor de la transacción';
 	@override String get tap_to_see_more => 'Toca para ver más detalles';
 	@override String get description => 'Descripción';
@@ -3316,6 +3318,7 @@ class _TranslationsTransactionFormUk implements _TranslationsTransactionFormEn {
 	@override String get title_short => 'Назва';
 	@override String get value => 'Сума транзакції';
 	@override String get tap_to_see_more => 'Натисніть, щоб побачити більше деталей';
+	@override String get no_tags => '-- Немає тегів --';
 	@override String get description => 'Опис';
 	@override String get description_info => 'Натисніть тут, щоб ввести детальніший опис цієї транзакції';
 	@override String exchange_to_preferred_title({required Object currency}) => 'Обмінний курс на ${currency}';
@@ -4567,6 +4570,7 @@ class _TranslationsTransactionFormZhTw implements _TranslationsTransactionFormEn
 	@override String get title_short => '資質';
 	@override String get value => '交易價值';
 	@override String get tap_to_see_more => '點擊查看更多詳細資訊';
+	@override String get no_tags => '-- 无标签 --';
 	@override String get description => '描述';
 	@override String get description_info => '點擊此處輸入有關此交易的更詳細描述';
 	@override String exchange_to_preferred_title({required Object currency}) => '匯率為${currency}';
@@ -5448,6 +5452,7 @@ extension on Translations {
 			case 'transaction.form.title_short': return 'Title';
 			case 'transaction.form.value': return 'Value of the transaction';
 			case 'transaction.form.tap_to_see_more': return 'Tap to see more details';
+			case 'transaction.form.no_tags': return '-- No tags --';
 			case 'transaction.form.description': return 'Description';
 			case 'transaction.form.description_info': return 'Tap here to enter a more detailed description about this transaction';
 			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => 'Exchnage rate to ${currency}';
@@ -6056,6 +6061,7 @@ extension on _TranslationsEs {
 			case 'transaction.form.validators.transfer_between_same_accounts': return 'Las cuentas de origen y destino no pueden coincidir';
 			case 'transaction.form.title': return 'Título de la transacción';
 			case 'transaction.form.title_short': return 'Título';
+			case 'transaction.form.no_tags': return '-- Sin etiquetas --';
 			case 'transaction.form.value': return 'Valor de la transacción';
 			case 'transaction.form.tap_to_see_more': return 'Toca para ver más detalles';
 			case 'transaction.form.description': return 'Descripción';
@@ -6667,6 +6673,7 @@ extension on _TranslationsUk {
 			case 'transaction.form.title_short': return 'Назва';
 			case 'transaction.form.value': return 'Сума транзакції';
 			case 'transaction.form.tap_to_see_more': return 'Натисніть, щоб побачити більше деталей';
+			case 'transaction.form.no_tags': return '-- Немає тегів --';
 			case 'transaction.form.description': return 'Опис';
 			case 'transaction.form.description_info': return 'Натисніть тут, щоб ввести детальніший опис цієї транзакції';
 			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => 'Обмінний курс на ${currency}';
@@ -7276,6 +7283,7 @@ extension on _TranslationsZhTw {
 			case 'transaction.form.title_short': return '資質';
 			case 'transaction.form.value': return '交易價值';
 			case 'transaction.form.tap_to_see_more': return '點擊查看更多詳細資訊';
+			case 'transaction.form.no_tags': return '-- 无标签 --';
 			case 'transaction.form.description': return '描述';
 			case 'transaction.form.description_info': return '點擊此處輸入有關此交易的更詳細描述';
 			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => '匯率為${currency}';
