@@ -37,44 +37,60 @@ enum TransactionStatus {
           {TransactionStatus.pending, TransactionStatus.voided});
     }
   }
+}
 
+extension TransactionStatusExtension on TransactionStatus? {
   IconData get icon {
-    if (this == voided) return Icons.block_rounded;
-    if (this == pending) return Icons.hourglass_full_rounded;
-    if (this == unreconciled) return Icons.cloud_off_rounded;
-    if (this == reconciled) return Icons.check_circle_rounded;
+    if (this == null) return Icons.do_not_disturb_on_rounded;
+
+    if (this == TransactionStatus.voided) return Icons.cancel_rounded;
+    if (this == TransactionStatus.pending) return Icons.hourglass_full_rounded;
+    if (this == TransactionStatus.unreconciled) return Icons.cloud_off_rounded;
+    if (this == TransactionStatus.reconciled) return Icons.check_circle_rounded;
 
     return Icons.question_mark;
-  }
-
-  Color get color {
-    if (this == voided) return Colors.red;
-    if (this == pending) return Colors.amber;
-    if (this == unreconciled) return Colors.orange;
-    if (this == reconciled) return Colors.green;
-
-    return Colors.grey;
   }
 
   String displayName(BuildContext context) {
     final t = Translations.of(context);
 
-    if (this == voided) return t.transaction.status.voided;
-    if (this == pending) return t.transaction.status.pending;
-    if (this == unreconciled) return t.transaction.status.unreconciled;
-    if (this == reconciled) return t.transaction.status.reconciled;
+    if (this == TransactionStatus.voided) return t.transaction.status.voided;
+    if (this == TransactionStatus.pending) return t.transaction.status.pending;
+    if (this == TransactionStatus.unreconciled) {
+      return t.transaction.status.unreconciled;
+    }
+    if (this == TransactionStatus.reconciled) {
+      return t.transaction.status.reconciled;
+    }
 
-    return '';
+    return t.transaction.status.none;
   }
 
   String description(BuildContext context) {
     final t = Translations.of(context);
 
-    if (this == voided) return t.transaction.status.voided_descr;
-    if (this == pending) return t.transaction.status.pending_descr;
-    if (this == unreconciled) return t.transaction.status.unreconciled_descr;
-    if (this == reconciled) return t.transaction.status.reconciled_descr;
+    if (this == TransactionStatus.voided) {
+      return t.transaction.status.voided_descr;
+    }
+    if (this == TransactionStatus.pending) {
+      return t.transaction.status.pending_descr;
+    }
+    if (this == TransactionStatus.unreconciled) {
+      return t.transaction.status.unreconciled_descr;
+    }
+    if (this == TransactionStatus.reconciled) {
+      return t.transaction.status.reconciled_descr;
+    }
 
-    return '';
+    return t.transaction.status.none_descr;
+  }
+
+  Color get color {
+    if (this == TransactionStatus.voided) return Colors.red;
+    if (this == TransactionStatus.pending) return Colors.amber;
+    if (this == TransactionStatus.unreconciled) return Colors.orange;
+    if (this == TransactionStatus.reconciled) return Colors.green;
+
+    return Colors.grey;
   }
 }

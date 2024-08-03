@@ -308,24 +308,34 @@
         "zero": "一筆交易的價值不能等於零",
         "date-max": "所選日期晚於當前日期。交易將新增為待處理",
         "date-after-account-creation": "您無法建立日期早於所屬帳戶建立日期的交易",
-        "negative-transaction": "請勿在您的交易中使用負金額。我們將根據所選類別是否為費用/收入來應用符號",
-        "negative-transfer": "轉帳的貨幣價值不能為負數"
+        "negative-transfer": "轉帳的貨幣價值不能為負數",
+        "transfer-between-same-accounts": "來源帳號與目標帳號不能符合"
       },
       "title": "交易標題",
+      "title.short": "資質",
       "value": "交易價值",
       "tap-to-see-more": "點擊查看更多詳細資訊",
+      "no-tags": "-- 无标签 --",
       "description": "描述",
-      "description-info": "添加註釋將幫助您將來更快地找到這筆交易",
+      "description-info": "點擊此處輸入有關此交易的更詳細描述",
       "exchange-to-preferred-title": "匯率為{{currency}}",
       "exchange-to-preferred-in-date": "交易日"
+    },
+    "REVERSED": {
+      "title": "撤销交易",
+      "title.short": "倒置的 tr.",
+      "description-for-expenses": "尽管是费用类型交易，但此交易具有正金额。这些类型的交易可用于表示先前记录的费用的返还，例如退款或支付债务。",
+      "description-for-incomes": "尽管是收入类型交易，但此交易的金额为负数。这些类型的交易可用于作废或更正错误记录的收入，以反映退款或退款或记录债务的支付。"
     },
     "STATUS": {
       "display": {
         "one": "地位",
         "other": "狀態"
       },
+      "display_long": "交易狀態",
       "tr_status": "{{status}}交易",
       "none": "無國籍",
+      "none.descr": "沒有特定狀態的交易",
       "reconciled": "和好了",
       "reconciled.descr": "此交易已經過驗證，並且與您銀行的真實交易相對應",
       "unreconciled": "不甘心",
@@ -364,11 +374,9 @@
     "FORM": {
       "from": "原始帳戶",
       "to": "目的地帳戶",
-      "currency-info-add": "{{x}}將轉入目標帳戶",
-      "currency-info-edit": "{{x}}已轉入目標帳戶",
-      "currency-exchange-selector": {
-        "title": "編輯貨幣之間的兌換",
-        "value-in-destiny": "目的地轉帳金額"
+      "VALUE-IN-DESTINY": {
+        "title": "目的地转账金额",
+        "amount-short": "{{amount}} 至目标账户"
       }
     }
   },

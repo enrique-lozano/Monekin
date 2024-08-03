@@ -44,7 +44,7 @@ getTransactionsWithFullData($predicate = TRUE) WITH MoneyTransaction:
         LEFT JOIN accounts ra 
         ON t.receivingAccountID = ra.id 
         INNER JOIN currencies receivingAccountCurrency 
-        ON a.currencyId = receivingAccountCurrency.code
+        ON ra.currencyId = receivingAccountCurrency.code
         LEFT JOIN categories c 
         ON t.categoryID = c.id
         LEFT JOIN categories pc
@@ -95,7 +95,7 @@ countTransactions($predicate = TRUE, :date AS DATETIME):
         LEFT JOIN accounts ra 
         ON t.receivingAccountID = ra.id 
         INNER JOIN currencies receivingAccountCurrency 
-        ON a.currencyId = receivingAccountCurrency.code
+        ON ra.currencyId = receivingAccountCurrency.code
         LEFT JOIN categories c 
         ON t.categoryID = c.id
         LEFT JOIN categories pc

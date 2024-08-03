@@ -47,7 +47,7 @@ class AppColors extends ThemeExtension<AppColors> {
       danger: isDark ? Colors.redAccent : Colors.red,
       success:
           isDark ? Colors.lightGreen : const Color.fromARGB(255, 55, 161, 59),
-      brand: brandBlue,
+      brand: isDark ? const Color.fromARGB(255, 128, 134, 177) : brandBlue,
 
       light: colorScheme.surfaceContainerLow,
 

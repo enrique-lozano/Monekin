@@ -156,6 +156,8 @@ class BackupDatabaseService {
         await File(dbPath).writeAsBytes(currentDBContent, mode: FileMode.write);
         db.markTablesUpdated(db.allTables);
 
+        print('Error\n: $e');
+
         throw Exception('The database is invalid or could not be readed');
       }
 

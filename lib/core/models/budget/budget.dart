@@ -72,7 +72,7 @@ class Budget extends BudgetInDB {
   TransactionFilters get trFilters => TransactionFilters(
         status: TransactionStatus.notIn(
             {TransactionStatus.pending, TransactionStatus.voided}),
-        transactionTypes: [TransactionType.expense],
+        transactionTypes: [TransactionType.E],
         minDate: currentDateRange.start,
         maxDate: currentDateRange.end,
         categories: categories,
@@ -86,7 +86,7 @@ class Budget extends BudgetInDB {
     return AccountService.instance
         .getAccountsBalance(
       filters: TransactionFilters(
-        transactionTypes: [TransactionType.expense],
+        transactionTypes: [TransactionType.E],
         accountsIDs: accounts,
         categories: categories,
         minDate: currentDateRange.start,

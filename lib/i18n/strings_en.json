@@ -308,24 +308,34 @@
         "zero": "The value of a transaction cannot be equal to zero",
         "date-max": "The selected date is after the current one. The transaction will be added as pending",
         "date-after-account-creation": "You cannot create a transaction whose date is before the creation date of the account it belongs to",
-        "negative-transaction": "Do not use negative amounts for your transaction. We will apply the sign depending on whether the selected category is expense/income",
-        "negative-transfer": "The monetary value of a transfer cannot be negative"
+        "negative-transfer": "The monetary value of a transfer cannot be negative",
+        "transfer-between-same-accounts": "The origin and the destination account cannot be the same"
       },
       "title": "Transaction title",
+      "title.short": "Title",
       "value": "Value of the transaction",
       "tap-to-see-more": "Tap to see more details",
+      "no-tags": "-- No tags --",
       "description": "Description",
-      "description-info": "Adding a note will help you find this transaction faster in the future",
+      "description-info": "Tap here to enter a more detailed description about this transaction",
       "exchange-to-preferred-title": "Exchnage rate to {{ currency }}",
       "exchange-to-preferred-in-date": "On transaction date"
+    },
+    "REVERSED": {
+      "title": "Inverse transaction",
+      "title.short": "Inverse tr.",
+      "description-for-expenses": "Despite being an expense transaction, it has a positive amount. These types of transactions can be used to represent the return of a previously recorded expense, such as a refund or having the payment of a debt.",
+      "description-for-incomes": "Despite being an income transaction, it has a negative amount. These types of transactions can be used to void or correct an income that was incorrectly recorded, to reflect a return or refund of money or to record payment of debts."
     },
     "STATUS": {
       "display": {
         "one": "Status",
         "other": "Statuses"
       },
+      "display_long": "Transaction status",
       "tr_status": "{{ status }} transaction",
       "none": "Stateless",
+      "none.descr": "Transaction without a specific state",
       "reconciled": "Reconciled",
       "reconciled.descr": "This transaction has already been validated and corresponds to a real transaction from your bank",
       "unreconciled": "Unreconciled",
@@ -364,11 +374,9 @@
     "FORM": {
       "from": "Origin account",
       "to": "Destination account",
-      "currency-info-add": "{{x}} will be transferred to the destination account",
-      "currency-info-edit": "{{x}} have been transferred to the destination account",
-      "currency-exchange-selector": {
-        "title": "Edit exchange between currencies",
-        "value-in-destiny": "Amount transferred in destination"
+      "VALUE-IN-DESTINY": {
+        "title": "Amount transferred at destination",
+        "amount-short": "{{amount}} to target account"
       }
     }
   },

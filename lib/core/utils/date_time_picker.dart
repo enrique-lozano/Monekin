@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 final DateTime kDefaultFirstSelectableDate = DateTime(1700);
 final DateTime kDefaultLastSelectableDate = DateTime(2199);
 
-Future<DateTime?> openDateTimePicker(BuildContext context,
-    {required bool showTimePickerAfterDate,
-    DateTime? initialDate,
-    DateTime? firstDate,
-    DateTime? lastDate,
-    DatePickerMode initialDatePickerMode = DatePickerMode.day,
-    TimePickerEntryMode initialTimeEntryMode = TimePickerEntryMode.dial,
-    DatePickerEntryMode initialEntryMode =
-        DatePickerEntryMode.calendar}) async {
+Future<DateTime?> openDateTimePicker(
+  BuildContext context, {
+  required bool showTimePickerAfterDate,
+  DateTime? initialDate,
+  DateTime? firstDate,
+  DateTime? lastDate,
+  DatePickerMode initialDatePickerMode = DatePickerMode.day,
+  TimePickerEntryMode initialTimeEntryMode = TimePickerEntryMode.dial,
+  DatePickerEntryMode initialEntryMode = DatePickerEntryMode.calendar,
+}) async {
   initialDate ??= DateTime.now();
   firstDate ??= kDefaultFirstSelectableDate;
   lastDate ??= kDefaultLastSelectableDate;

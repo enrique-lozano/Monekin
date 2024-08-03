@@ -455,12 +455,11 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        transactionTypeFilter(context, TransactionType.income),
+                        transactionTypeFilter(context, TransactionType.I),
                         const SizedBox(width: 6),
-                        transactionTypeFilter(context, TransactionType.expense),
+                        transactionTypeFilter(context, TransactionType.E),
                         const SizedBox(width: 6),
-                        transactionTypeFilter(
-                            context, TransactionType.transfer),
+                        transactionTypeFilter(context, TransactionType.T),
                       ],
                     ),
                   ),

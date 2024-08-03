@@ -17,6 +17,7 @@ import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
+import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/widgets/loading_overlay.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
@@ -241,14 +242,17 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                     ?.id ??
                 defaultCategory!.id;
 
+        final trValue = double.parse(row[amountColumn!].toString());
+
         await TransactionService.instance.insertTransaction(TransactionInDB(
           id: generateUUID(),
           date: dateColumn == null
               ? DateTime.now()
               : DateFormat(_dateFormatController.text, 'en_US')
                   .parse(row[dateColumn!].toString()),
+          type: trValue < 0 ? TransactionType.E : TransactionType.I,
           accountID: accountID,
-          value: double.parse(row[amountColumn!].toString()),
+          value: trValue,
           isHidden: false,
           categoryID: categoryID,
           notes: notesColumn == null || row[notesColumn!].toString().isEmpty
@@ -520,7 +524,10 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                         : null,
                     onClick: () async {
                       final modalRes = await showCategoryPickerModal(context,
-                          modal: const CategoryPicker(selectedCategory: null));
+                          modal: CategoryPicker(
+                            selectedCategory: null,
+                            categoryType: const [CategoryType.B],
+                          ));
 
                       if (modalRes != null) {
                         setState(() {

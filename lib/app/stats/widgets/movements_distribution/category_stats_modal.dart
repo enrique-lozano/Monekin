@@ -1,12 +1,14 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/chart_by_categories.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
-import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
+import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
@@ -52,11 +54,8 @@ class CategoryStatsModal extends StatelessWidget {
       final categoryToEdit = subcategories
           .firstWhereOrNull((x) => x.id == transaction.category!.id);
 
-      final trValue = await ExchangeRateService.instance
-          .calculateExchangeRateToPreferredCurrency(
-              fromCurrency: transaction.account.currencyId,
-              amount: transaction.value.abs())
-          .first;
+      final trValue = transaction.currentValueInPreferredCurrency *
+          (transaction.type == TransactionType.E ? -1 : 1);
 
       if (categoryToEdit != null) {
         categoryToEdit.value += trValue;
@@ -145,43 +144,47 @@ class CategoryStatsModal extends StatelessWidget {
         ),
         const Divider(),
         FutureBuilder(
-            future: getSubcategoriesData(context),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return const LinearProgressIndicator();
-              }
+          future: getSubcategoriesData(context),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const LinearProgressIndicator();
+            }
 
-              final subcategories = snapshot.data!;
+            final subcategories = snapshot.data!;
 
-              return Column(
-                children: List.generate(subcategories.length, (index) {
-                  final subcategoryData = subcategories[index];
+            // Filter subcategories with negative values to correctly display the bars:
+            final totalSum =
+                subcategories.where((e) => e.value > 0).map((e) => e.value).sum;
 
-                  return ListTile(
-                    leading: IconDisplayer.fromCategory(
-                      context,
-                      category: Category.fromDB(
-                        categoryData.category
-                            .copyWith(iconId: subcategoryData.icon.id),
-                        categoryData.category,
-                      ),
+            return Column(
+              children: List.generate(subcategories.length, (index) {
+                final subcategoryData = subcategories[index];
+
+                return ListTile(
+                  leading: IconDisplayer.fromCategory(
+                    context,
+                    category: Category.fromDB(
+                      categoryData.category
+                          .copyWith(iconId: subcategoryData.icon.id),
+                      categoryData.category,
                     ),
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(subcategoryData.name),
-                        CurrencyDisplayer(
-                            amountToConvert: subcategoryData.value)
-                      ],
-                    ),
-                    subtitle: AnimatedProgressBar(
-                      value: subcategoryData.value / categoryData.value,
-                      color: ColorHex.get(categoryData.category.color),
-                    ),
-                  );
-                }),
-              );
-            })
+                  ),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(subcategoryData.name),
+                      CurrencyDisplayer(amountToConvert: subcategoryData.value)
+                    ],
+                  ),
+                  subtitle: AnimatedProgressBar(
+                    value: max(subcategoryData.value / totalSum, 0),
+                    color: ColorHex.get(categoryData.category.color),
+                  ),
+                );
+              }),
+            );
+          },
+        )
       ],
     );
   }
