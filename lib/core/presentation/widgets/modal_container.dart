@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+/// Useful class if you want to differentiate the dismissal of the modal from a return of a result with a null value
+class ModalResult<T> {
+  final T? result;
+
+  const ModalResult(this.result);
+}
+
 class ModalContainer extends StatelessWidget {
   const ModalContainer({
     super.key,

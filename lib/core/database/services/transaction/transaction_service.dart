@@ -112,7 +112,7 @@ class TransactionService {
     if (predicate.transactionTypes == null ||
         predicate.transactionTypes!
             .map((e) => e.index)
-            .contains(TransactionType.transfer.index)) {
+            .contains(TransactionType.T.index)) {
       // If we should take into account transfers:
       return Rx.combineLatest([
         // INCOME AND EXPENSES
@@ -122,9 +122,9 @@ class TransactionService {
                   .copyWith(
                     transactionTypes: predicate.transactionTypes
                             ?.whereNot((element) =>
-                                element.index == TransactionType.transfer.index)
+                                element.index == TransactionType.T.index)
                             .toList() ??
-                        [TransactionType.income, TransactionType.expense],
+                        [TransactionType.I, TransactionType.E],
                   )
                   .toTransactionExpression(),
               date: (exchDate ?? DateTime.now()),
@@ -135,7 +135,7 @@ class TransactionService {
         db
             .countTransactions(
               predicate: predicate.copyWith(
-                transactionTypes: [TransactionType.transfer],
+                transactionTypes: [TransactionType.T],
                 includeReceivingAccountsInAccountFilters: false,
               ).toTransactionExpression(),
               date: (exchDate ?? DateTime.now()),
@@ -146,7 +146,7 @@ class TransactionService {
         db
             .countTransactions(
               predicate: predicate.copyWith(
-                transactionTypes: [TransactionType.transfer],
+                transactionTypes: [TransactionType.T],
                 accountsIDs: null,
               ).toTransactionExpression(
                 extraFilters: (transaction, account, accountCurrency,

@@ -60,7 +60,7 @@ class CategoryFormFunctions {
 
     showCategoryPickerModal(context,
         modal: CategoryPicker(
-          categoryType: category.type,
+          categoryType: [category.type, CategoryType.B],
           selectedCategory: null,
         )).then((selCategory) {
       if (selCategory == null) {
@@ -143,7 +143,7 @@ class CategoryFormFunctions {
     showCategoryPickerModal(
       context,
       modal: CategoryPicker(
-        categoryType: category.type,
+        categoryType: [category.type, CategoryType.B],
         selectedCategory: null,
         showSubcategories: false,
       ),

@@ -173,7 +173,6 @@ class _AccountFormPageState extends State<AccountFormPage> {
         .then((value) {
       _balanceController.text = value.toString();
 
-      print(_accountToEdit!.color);
       _color = _accountToEdit!.getComputedColor(context);
     });
 
@@ -348,8 +347,8 @@ class _AccountFormPageState extends State<AccountFormPage> {
                           .countTransactions(
                             predicate: TransactionFilters(
                               transactionTypes: [
-                                TransactionType.expense,
-                                TransactionType.income
+                                TransactionType.E,
+                                TransactionType.I
                               ],
                               accountsIDs: [_accountToEdit!.id],
                             ),

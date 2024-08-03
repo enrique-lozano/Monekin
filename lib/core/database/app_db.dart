@@ -14,6 +14,7 @@ import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
+import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 

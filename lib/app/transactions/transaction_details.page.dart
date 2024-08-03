@@ -356,26 +356,18 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
         });
   }
 
-  Widget statusDisplayer(MoneyTransaction transaction) {
-    if (transaction.status == null && transaction.recurrentInfo.isNoRecurrent) {
-      throw Exception('Error');
-    }
-
-    final bool showRecurrencyStatus = (transaction.recurrentInfo.isRecurrent);
-    final bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
-
-    final color = showRecurrencyStatus
-        ? isDarkTheme
-            ? AppColors.of(context).primary
-            : AppColors.of(context).primary.lighten(0.2)
-        : transaction.status!.color;
-
+  Widget translucentCard({
+    required Color color,
+    required Widget body,
+    required IconData? icon,
+    required String title,
+  }) {
     return Container(
       clipBehavior: Clip.hardEdge,
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: color.withOpacity(0.15),
+        color: color.withOpacity(0.125),
         border: Border.all(
           width: 1,
           color: color,
@@ -396,79 +388,99 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
             child: Row(
               children: [
                 Icon(
-                  showRecurrencyStatus
-                      ? Icons.repeat_rounded
-                      : transaction.status?.icon,
+                  icon,
                   size: 26,
                   color: color,
                 ),
                 const SizedBox(width: 8),
                 Text(
-                    showRecurrencyStatus
-                        ? t.recurrent_transactions.details.title
-                        : t.transaction.status
-                            .tr_status(
-                                status:
-                                    transaction.status!.displayName(context))
-                            .capitalize(),
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    )),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(showRecurrencyStatus ? 0 : 12),
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(showRecurrencyStatus ? 12 : 0),
-                  child: Text(
-                    showRecurrencyStatus
-                        ? t.recurrent_transactions.details.descr
-                        : transaction.status!.description(context),
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-                if (transaction.recurrentInfo.isRecurrent) ...[
-                  //const SizedBox(height: 12),
-                  Column(
-                    children: transaction
-                        .getNextDatesOfRecurrency(limit: 3)
-                        .mapIndexed((index, e) => Column(
-                              children: [
-                                cardPay(
-                                  date: e,
-                                  transaction: transaction,
-                                  isNext: index == 0,
-                                ),
-                                if (index == 2) const SizedBox(height: 8),
-                              ],
-                            ))
-                        .toList(),
-                  )
-                ],
-                if (transaction.status == TransactionStatus.pending) ...[
-                  const SizedBox(height: 12),
-                  SizedBox(
-                    width: double.infinity,
-                    child: FilledButton(
-                      style: FilledButton.styleFrom(
-                        backgroundColor: color.darken(0.2),
-                        foregroundColor: Colors.white,
-                      ),
-                      onPressed: () => showPayModal(context, transaction),
-                      child:
-                          Text(t.transaction.next_payments.accept_dialog_title),
-                    ),
-                  )
-                ]
               ],
             ),
           ),
+          body
         ],
       ),
     );
+  }
+
+  Widget statusDisplayer(MoneyTransaction transaction) {
+    if (transaction.status == null && transaction.recurrentInfo.isNoRecurrent) {
+      throw Exception('Error');
+    }
+
+    final bool showRecurrencyStatus = (transaction.recurrentInfo.isRecurrent);
+    final bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
+    final color = showRecurrencyStatus
+        ? isDarkTheme
+            ? AppColors.of(context).primary
+            : AppColors.of(context).primary.lighten(0.2)
+        : transaction.status!.color;
+
+    return translucentCard(
+        color: color,
+        body: Padding(
+          padding: EdgeInsets.all(showRecurrencyStatus ? 0 : 12),
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(showRecurrencyStatus ? 12 : 0),
+                child: Text(
+                  showRecurrencyStatus
+                      ? t.recurrent_transactions.details.descr
+                      : transaction.status!.description(context),
+                ),
+              ),
+              if (transaction.recurrentInfo.isRecurrent) ...[
+                //const SizedBox(height: 12),
+                Column(
+                  children: transaction
+                      .getNextDatesOfRecurrency(limit: 3)
+                      .mapIndexed((index, e) => Column(
+                            children: [
+                              cardPay(
+                                date: e,
+                                transaction: transaction,
+                                isNext: index == 0,
+                              ),
+                              if (index == 2) const SizedBox(height: 8),
+                            ],
+                          ))
+                      .toList(),
+                )
+              ],
+              if (transaction.status == TransactionStatus.pending) ...[
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: color.darken(0.2),
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: () => showPayModal(context, transaction),
+                    child:
+                        Text(t.transaction.next_payments.accept_dialog_title),
+                  ),
+                )
+              ]
+            ],
+          ),
+        ),
+        icon: showRecurrencyStatus
+            ? Icons.repeat_rounded
+            : transaction.status?.icon,
+        title: showRecurrencyStatus
+            ? t.recurrent_transactions.details.title
+            : t.transaction.status
+                .tr_status(status: transaction.status!.displayName(context))
+                .capitalize());
   }
 
   @override
@@ -517,6 +529,20 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                             if (transaction.status != null ||
                                 transaction.recurrentInfo.isRecurrent)
                               statusDisplayer(transaction),
+                            if (transaction.isReversed)
+                              translucentCard(
+                                  color: AppColors.of(context).brand,
+                                  body: Padding(
+                                    padding: const EdgeInsets.all(12),
+                                    child: Text(
+                                        transaction.type == TransactionType.E
+                                            ? t.transaction.reversed
+                                                .description_for_expenses
+                                            : t.transaction.reversed
+                                                .description_for_incomes),
+                                  ),
+                                  icon: MoneyTransaction.reversedIcon,
+                                  title: t.transaction.reversed.title),
                             CardWithHeader(
                               title: 'Info',
                               body: LabelValueInfoTable(
@@ -669,7 +695,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                                       ),
                                                       const SizedBox(width: 4),
                                                       Text(
-                                                          "1 ${transaction.account.currency.code} = ${snapshot.data} ${userCurrency.code}")
+                                                          '1 ${transaction.account.currency.code} = ${snapshot.data} ${userCurrency.code}')
                                                     ],
                                                   ),
                                                   trailing: CurrencyDisplayer(
@@ -709,7 +735,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                                       ),
                                                       const SizedBox(width: 4),
                                                       Text(
-                                                          "1 ${transaction.account.currency.code} = ${snapshot.data} ${userCurrency.code}")
+                                                          '1 ${transaction.account.currency.code} = ${snapshot.data} ${userCurrency.code}')
                                                     ],
                                                   ),
                                                   trailing: CurrencyDisplayer(
@@ -825,7 +851,7 @@ class _TransactionDetailHeader extends SliverPersistentHeaderDelegate {
                         fontWeight: FontWeight.w600,
                         color: transaction.status == TransactionStatus.voided
                             ? Colors.grey.shade400
-                            : transaction.type == TransactionType.transfer
+                            : transaction.type == TransactionType.T
                                 ? null
                                 : transaction.type.color(context),
                         decoration:

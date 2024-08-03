@@ -87,16 +87,25 @@ class TransactionListTile extends StatelessWidget {
                     overflow: TextOverflow.fade,
                   ),
                 ),
-                const SizedBox(width: 4),
                 if ((transaction.status != null ||
                         transaction.recurrentInfo.isRecurrent) &&
-                    periodicityInfo == null)
+                    periodicityInfo == null) ...[
+                  const SizedBox(width: 4),
                   Icon(
                     transaction.status?.icon ?? Icons.repeat,
                     color: transaction.status?.color.darken(0.1) ??
                         AppColors.of(context).primary,
                     size: 12,
                   )
+                ],
+                if (transaction.isReversed) ...[
+                  const SizedBox(width: 6),
+                  Icon(
+                    MoneyTransaction.reversedIcon,
+                    size: 12,
+                    color: AppColors.of(context).brand,
+                  )
+                ]
               ],
             ),
           ),

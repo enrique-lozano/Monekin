@@ -30,14 +30,15 @@ Future<Category?> showCategoryPickerModal(
 }
 
 class CategoryPicker extends StatefulWidget {
-  const CategoryPicker(
+  CategoryPicker(
       {super.key,
       required this.selectedCategory,
-      this.categoryType = CategoryType.B,
-      this.showSubcategories = true});
+      required this.categoryType,
+      this.showSubcategories = true})
+      : assert(categoryType.isNotEmpty);
 
   final Category? selectedCategory;
-  final CategoryType categoryType;
+  final List<CategoryType> categoryType;
 
   final bool showSubcategories;
 
@@ -112,10 +113,7 @@ class _CategoryPickerState extends State<CategoryPicker> {
                 stream: CategoryService.instance.getCategories(
                   predicate: (c, p) => AppDB.instance.buildExpr([
                     c.parentCategoryID.isNull(),
-                    drift.Expression.or([
-                      c.type.isValue('B'),
-                      c.type.isValue(widget.categoryType.name),
-                    ]),
+                    c.type.isInValues(widget.categoryType),
                     drift.Expression.or([
                       c.name.contains(searchContoller.text),
                       if (selectedCategory != null)

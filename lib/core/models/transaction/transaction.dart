@@ -30,6 +30,7 @@ class MoneyTransaction extends TransactionInDB {
       required super.date,
       required super.value,
       required super.isHidden,
+      required super.type,
       super.notes,
       super.title,
       super.status,
@@ -71,8 +72,8 @@ class MoneyTransaction extends TransactionInDB {
           receivingAccountID: receivingAccount?.id,
         );
 
-  bool get isTransfer => receivingAccountID != null;
-  bool get isIncomeOrExpense => categoryID != null;
+  bool get isTransfer => type.isTransfer;
+  bool get isIncomeOrExpense => type.isIncomeOrExpense;
 
   /// Display the title of the transaction, or the category in case the title is not specified for this transaction
   String displayName(BuildContext context) {
@@ -87,24 +88,26 @@ class MoneyTransaction extends TransactionInDB {
   /// Get the color that represent this category. Will be the category color when the transaction is an income or an expense, and the primary color of the app otherwise
   Color color(BuildContext context) => isIncomeOrExpense
       ? ColorHex.get(category!.color)
-      : TransactionType.transfer.color(context);
-
-  /// The type of the transaction (expense, income or transfer)
-  TransactionType get type => isTransfer
-      ? TransactionType.transfer
-      : value < 0
-          ? TransactionType.expense
-          : TransactionType.income;
+      : TransactionType.T.color(context);
 
   /// Get the balance (positive or negative) that this transaction cause to the user accounts
   double getCurrentBalanceInPreferredCurrency() {
-    if (type == TransactionType.transfer) {
+    if (type == TransactionType.T) {
       return (currentValueInDestinyInPreferredCurrency ??
               currentValueInPreferredCurrency) -
           currentValueInPreferredCurrency;
     }
 
     return currentValueInPreferredCurrency;
+  }
+
+  bool get isReversed {
+    return type == TransactionType.E && value > 0 ||
+        type == TransactionType.I && value < 0;
+  }
+
+  static IconData get reversedIcon {
+    return Icons.shuffle_on_rounded;
   }
 
   IconDisplayer getDisplayIcon(
@@ -122,7 +125,7 @@ class MoneyTransaction extends TransactionInDB {
             )
           : IconDisplayer(
               mainColor: color(context),
-              icon: TransactionType.transfer.icon,
+              icon: TransactionType.T.icon,
               size: size,
               padding: padding,
               borderRadius: 999999,

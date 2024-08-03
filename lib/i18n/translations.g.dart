@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 4
-/// Strings: 2105 (526 per locale)
+/// Strings: 2129 (532 per locale)
 ///
-/// Built on 2024-08-01 at 19:28 UTC
+/// Built on 2024-08-03 at 21:35 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -352,6 +352,7 @@ class _TranslationsTransactionEn {
 	late final _TranslationsTransactionListEn list = _TranslationsTransactionListEn._(_root);
 	late final _TranslationsTransactionFiltersEn filters = _TranslationsTransactionFiltersEn._(_root);
 	late final _TranslationsTransactionFormEn form = _TranslationsTransactionFormEn._(_root);
+	late final _TranslationsTransactionReversedEn reversed = _TranslationsTransactionReversedEn._(_root);
 	late final _TranslationsTransactionStatusEn status = _TranslationsTransactionStatusEn._(_root);
 	late final _TranslationsTransactionTypesEn types = _TranslationsTransactionTypesEn._(_root);
 }
@@ -810,12 +811,27 @@ class _TranslationsTransactionFormEn {
 	// Translations
 	late final _TranslationsTransactionFormValidatorsEn validators = _TranslationsTransactionFormValidatorsEn._(_root);
 	String get title => 'Transaction title';
+	String get title_short => 'Title';
 	String get value => 'Value of the transaction';
 	String get tap_to_see_more => 'Tap to see more details';
+	String get no_tags => '-- No tags --';
 	String get description => 'Description';
-	String get description_info => 'Adding a note will help you find this transaction faster in the future';
+	String get description_info => 'Tap here to enter a more detailed description about this transaction';
 	String exchange_to_preferred_title({required Object currency}) => 'Exchnage rate to ${currency}';
 	String get exchange_to_preferred_in_date => 'On transaction date';
+}
+
+// Path: transaction.reversed
+class _TranslationsTransactionReversedEn {
+	_TranslationsTransactionReversedEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get title => 'Inverse transaction';
+	String get title_short => 'Inverse tr.';
+	String get description_for_expenses => 'Despite being an expense transaction, it has a positive amount. These types of transactions can be used to represent the return of a previously recorded expense, such as a refund or having the payment of a debt.';
+	String get description_for_incomes => 'Despite being an income transaction, it has a negative amount. These types of transactions can be used to void or correct an income that was incorrectly recorded, to reflect a return or refund of money or to record payment of debts.';
 }
 
 // Path: transaction.status
@@ -829,8 +845,10 @@ class _TranslationsTransactionStatusEn {
 		one: 'Status',
 		other: 'Statuses',
 	);
+	String get display_long => 'Transaction status';
 	String tr_status({required Object status}) => '${status} transaction';
 	String get none => 'Stateless';
+	String get none_descr => 'Transaction without a specific state';
 	String get reconciled => 'Reconciled';
 	String get reconciled_descr => 'This transaction has already been validated and corresponds to a real transaction from your bank';
 	String get unreconciled => 'Unreconciled';
@@ -875,9 +893,7 @@ class _TranslationsTransferFormEn {
 	// Translations
 	String get from => 'Origin account';
 	String get to => 'Destination account';
-	String currency_info_add({required Object x}) => '${x} will be transferred to the destination account';
-	String currency_info_edit({required Object x}) => '${x} have been transferred to the destination account';
-	late final _TranslationsTransferFormCurrencyExchangeSelectorEn currency_exchange_selector = _TranslationsTransferFormCurrencyExchangeSelectorEn._(_root);
+	late final _TranslationsTransferFormValueInDestinyEn value_in_destiny = _TranslationsTransferFormValueInDestinyEn._(_root);
 }
 
 // Path: recurrent_transactions.details
@@ -1294,19 +1310,19 @@ class _TranslationsTransactionFormValidatorsEn {
 	String get zero => 'The value of a transaction cannot be equal to zero';
 	String get date_max => 'The selected date is after the current one. The transaction will be added as pending';
 	String get date_after_account_creation => 'You cannot create a transaction whose date is before the creation date of the account it belongs to';
-	String get negative_transaction => 'Do not use negative amounts for your transaction. We will apply the sign depending on whether the selected category is expense/income';
 	String get negative_transfer => 'The monetary value of a transfer cannot be negative';
+	String get transfer_between_same_accounts => 'The origin and the destination account cannot be the same';
 }
 
-// Path: transfer.form.currency_exchange_selector
-class _TranslationsTransferFormCurrencyExchangeSelectorEn {
-	_TranslationsTransferFormCurrencyExchangeSelectorEn._(this._root);
+// Path: transfer.form.value_in_destiny
+class _TranslationsTransferFormValueInDestinyEn {
+	_TranslationsTransferFormValueInDestinyEn._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get title => 'Edit exchange between currencies';
-	String get value_in_destiny => 'Amount transferred in destination';
+	String get title => 'Amount transferred at destination';
+	String amount_short({required Object amount}) => '${amount} to target account';
 }
 
 // Path: backup.import.manual_import
@@ -1600,6 +1616,7 @@ class _TranslationsTransactionEs implements _TranslationsTransactionEn {
 	@override late final _TranslationsTransactionListEs list = _TranslationsTransactionListEs._(_root);
 	@override late final _TranslationsTransactionFiltersEs filters = _TranslationsTransactionFiltersEs._(_root);
 	@override late final _TranslationsTransactionFormEs form = _TranslationsTransactionFormEs._(_root);
+	@override late final _TranslationsTransactionReversedEs reversed = _TranslationsTransactionReversedEs._(_root);
 	@override late final _TranslationsTransactionStatusEs status = _TranslationsTransactionStatusEs._(_root);
 	@override late final _TranslationsTransactionTypesEs types = _TranslationsTransactionTypesEs._(_root);
 }
@@ -2058,12 +2075,27 @@ class _TranslationsTransactionFormEs implements _TranslationsTransactionFormEn {
 	// Translations
 	@override late final _TranslationsTransactionFormValidatorsEs validators = _TranslationsTransactionFormValidatorsEs._(_root);
 	@override String get title => 'Título de la transacción';
+	@override String get title_short => 'Título';
+	@override String get no_tags => '-- Sin etiquetas --';
 	@override String get value => 'Valor de la transacción';
 	@override String get tap_to_see_more => 'Toca para ver más detalles';
 	@override String get description => 'Descripción';
-	@override String get description_info => 'Añadir una nota te ayudará a encontrar más rapidamente esta transacción en un futuro';
+	@override String get description_info => 'Toca aquí para escribir una descripción mas detallada sobre esta transacción';
 	@override String exchange_to_preferred_title({required Object currency}) => 'Cambio a ${currency}';
 	@override String get exchange_to_preferred_in_date => 'El día de la transacción';
+}
+
+// Path: transaction.reversed
+class _TranslationsTransactionReversedEs implements _TranslationsTransactionReversedEn {
+	_TranslationsTransactionReversedEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Transacción invertida';
+	@override String get title_short => 'Tr. invertida';
+	@override String get description_for_expenses => 'A pesar de ser una transacción de tipo gasto, esta transacción tiene un monto positivo. Este tipo de transacciones pueden usarse para representar la devolución de un gasto previamente registrado, como un reembolso o que te realicen el pago de una deuda.';
+	@override String get description_for_incomes => 'A pesar de ser una transacción de tipo ingreso, esta transacción tiene un monto negativo. Este tipo de transacciones pueden usarse para anular o corregir un ingreso que fue registrado incorrectamente, para reflejar una devolución o reembolso de dinero o para registrar el pago de deudas.';
 }
 
 // Path: transaction.status
@@ -2077,8 +2109,10 @@ class _TranslationsTransactionStatusEs implements _TranslationsTransactionStatus
 		one: 'Estado',
 		other: 'Estados',
 	);
+	@override String get display_long => 'Estado de la transacción';
 	@override String tr_status({required Object status}) => 'Transacción ${status}';
 	@override String get none => 'Sin estado';
+	@override String get none_descr => 'Transacción sin un estado concreto';
 	@override String get reconciled => 'Reconciliada';
 	@override String get reconciled_descr => 'Esta transacción ha sido validada ya y se corresponde con una transacción real de su banco';
 	@override String get unreconciled => 'No reconciliada';
@@ -2123,9 +2157,7 @@ class _TranslationsTransferFormEs implements _TranslationsTransferFormEn {
 	// Translations
 	@override String get from => 'Cuenta origen';
 	@override String get to => 'Cuenta destino';
-	@override String currency_info_add({required Object x}) => 'Se transpasarán ${x} a la cuenta de destino';
-	@override String currency_info_edit({required Object x}) => 'Se han transpasado ${x} a la cuenta de destino';
-	@override late final _TranslationsTransferFormCurrencyExchangeSelectorEs currency_exchange_selector = _TranslationsTransferFormCurrencyExchangeSelectorEs._(_root);
+	@override late final _TranslationsTransferFormValueInDestinyEs value_in_destiny = _TranslationsTransferFormValueInDestinyEs._(_root);
 }
 
 // Path: recurrent_transactions.details
@@ -2543,19 +2575,19 @@ class _TranslationsTransactionFormValidatorsEs implements _TranslationsTransacti
 	@override String get zero => 'El valor de una transacción no puede ser igual a cero';
 	@override String get date_max => 'La fecha seleccionada es posterior a la actual. Se añadirá la transacción como pendiente';
 	@override String get date_after_account_creation => 'No puedes crear una transacción cuya fecha es anterior a la fecha de creación de la cuenta a la que pertenece';
-	@override String get negative_transaction => 'No uses cantidades negativas para tu transaccion. Aplicaremos el signo en función de si la categoría seleccionada es de tipo gasto/ingreso';
 	@override String get negative_transfer => 'El valor monetario de una transferencia no puede ser negativo';
+	@override String get transfer_between_same_accounts => 'Las cuentas de origen y destino no pueden coincidir';
 }
 
-// Path: transfer.form.currency_exchange_selector
-class _TranslationsTransferFormCurrencyExchangeSelectorEs implements _TranslationsTransferFormCurrencyExchangeSelectorEn {
-	_TranslationsTransferFormCurrencyExchangeSelectorEs._(this._root);
+// Path: transfer.form.value_in_destiny
+class _TranslationsTransferFormValueInDestinyEs implements _TranslationsTransferFormValueInDestinyEn {
+	_TranslationsTransferFormValueInDestinyEs._(this._root);
 
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Editar cambio entre divisas';
-	@override String get value_in_destiny => 'Cantidad transferida en destino';
+	@override String get title => 'Cantidad transferida en destino';
+	@override String amount_short({required Object amount}) => '${amount} a cuenta de destino';
 }
 
 // Path: backup.import.manual_import
@@ -2849,6 +2881,7 @@ class _TranslationsTransactionUk implements _TranslationsTransactionEn {
 	@override late final _TranslationsTransactionListUk list = _TranslationsTransactionListUk._(_root);
 	@override late final _TranslationsTransactionFiltersUk filters = _TranslationsTransactionFiltersUk._(_root);
 	@override late final _TranslationsTransactionFormUk form = _TranslationsTransactionFormUk._(_root);
+	@override late final _TranslationsTransactionReversedUk reversed = _TranslationsTransactionReversedUk._(_root);
 	@override late final _TranslationsTransactionStatusUk status = _TranslationsTransactionStatusUk._(_root);
 	@override late final _TranslationsTransactionTypesUk types = _TranslationsTransactionTypesUk._(_root);
 }
@@ -3307,12 +3340,27 @@ class _TranslationsTransactionFormUk implements _TranslationsTransactionFormEn {
 	// Translations
 	@override late final _TranslationsTransactionFormValidatorsUk validators = _TranslationsTransactionFormValidatorsUk._(_root);
 	@override String get title => 'Назва транзакції';
+	@override String get title_short => 'Назва';
 	@override String get value => 'Сума транзакції';
 	@override String get tap_to_see_more => 'Натисніть, щоб побачити більше деталей';
+	@override String get no_tags => '-- Немає тегів --';
 	@override String get description => 'Опис';
-	@override String get description_info => 'Додавання примітки допоможе вам швидше знайти цю транзакцію у майбутньому';
+	@override String get description_info => 'Натисніть тут, щоб ввести детальніший опис цієї транзакції';
 	@override String exchange_to_preferred_title({required Object currency}) => 'Обмінний курс на ${currency}';
 	@override String get exchange_to_preferred_in_date => 'На дату транзакції';
+}
+
+// Path: transaction.reversed
+class _TranslationsTransactionReversedUk implements _TranslationsTransactionReversedEn {
+	_TranslationsTransactionReversedUk._(this._root);
+
+	@override final _TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Скасована транзакція';
+	@override String get title_short => 'Перевернутий тр.';
+	@override String get description_for_expenses => 'Незважаючи на те, що транзакція типу витрат, ця транзакція має додатну суму. Ці типи транзакцій можна використовувати для представлення повернення раніше зареєстрованих витрат, таких як відшкодування або оплата борг.';
+	@override String get description_for_incomes => 'Незважаючи на те, що транзакція є дохідною, ця транзакція має від’ємну суму. Ці типи транзакцій можна використовувати ля анулювання або виправлення неправильно зареєстрованого доходу, для відображення повернення або відшкодування грошей або для обліку сплати боргів».';
 }
 
 // Path: transaction.status
@@ -3326,8 +3374,10 @@ class _TranslationsTransactionStatusUk implements _TranslationsTransactionStatus
 		one: 'Статус',
 		other: 'Статуси',
 	);
+	@override String get display_long => 'Статус транзакції';
 	@override String tr_status({required Object status}) => '${status} транзакція';
 	@override String get none => 'Без статусу';
+	@override String get none_descr => 'Транзакція без певного стану';
 	@override String get reconciled => 'Узгоджений';
 	@override String get reconciled_descr => 'Ця транзакція вже підтверджена і відповідає реальній транзакції з вашого банку';
 	@override String get unreconciled => 'Не узгоджений';
@@ -3372,9 +3422,7 @@ class _TranslationsTransferFormUk implements _TranslationsTransferFormEn {
 	// Translations
 	@override String get from => 'Початковий рахунок';
 	@override String get to => 'Цільовий рахунок';
-	@override String currency_info_add({required Object x}) => '${x} буде перекладено на цільовий рахунок';
-	@override String currency_info_edit({required Object x}) => '${x} було перекладено на цільовий рахунок';
-	@override late final _TranslationsTransferFormCurrencyExchangeSelectorUk currency_exchange_selector = _TranslationsTransferFormCurrencyExchangeSelectorUk._(_root);
+	@override late final _TranslationsTransferFormValueInDestinyUk value_in_destiny = _TranslationsTransferFormValueInDestinyUk._(_root);
 }
 
 // Path: recurrent_transactions.details
@@ -3791,19 +3839,19 @@ class _TranslationsTransactionFormValidatorsUk implements _TranslationsTransacti
 	@override String get zero => 'Значення транзакції не може бути рівним нулю';
 	@override String get date_max => 'Обрана дата після поточної. Транзакція буде додана як очікувана';
 	@override String get date_after_account_creation => 'Ви не можете створити транзакцію з датою до створення рахунку, до якого вона належить';
-	@override String get negative_transaction => 'Не використовуйте від\'ємні суми для вашої транзакції. Ми застосуємо знак в залежності від того, чи є обрана категорія витратою/доходом';
 	@override String get negative_transfer => 'Монетарна вартість переказу не може бути від\'ємною';
+	@override String get transfer_between_same_accounts => 'Облікові записи джерела та призначення не збігаються';
 }
 
-// Path: transfer.form.currency_exchange_selector
-class _TranslationsTransferFormCurrencyExchangeSelectorUk implements _TranslationsTransferFormCurrencyExchangeSelectorEn {
-	_TranslationsTransferFormCurrencyExchangeSelectorUk._(this._root);
+// Path: transfer.form.value_in_destiny
+class _TranslationsTransferFormValueInDestinyUk implements _TranslationsTransferFormValueInDestinyEn {
+	_TranslationsTransferFormValueInDestinyUk._(this._root);
 
 	@override final _TranslationsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Редагувати обмін між валютами';
-	@override String get value_in_destiny => 'Сума, перекладена на цільовий рахунок';
+	@override String get title => 'Сума переказу в пункті призначення';
+	@override String amount_short({required Object amount}) => '${amount} на цільовий рахунок';
 }
 
 // Path: backup.import.manual_import
@@ -4097,6 +4145,7 @@ class _TranslationsTransactionZhTw implements _TranslationsTransactionEn {
 	@override late final _TranslationsTransactionListZhTw list = _TranslationsTransactionListZhTw._(_root);
 	@override late final _TranslationsTransactionFiltersZhTw filters = _TranslationsTransactionFiltersZhTw._(_root);
 	@override late final _TranslationsTransactionFormZhTw form = _TranslationsTransactionFormZhTw._(_root);
+	@override late final _TranslationsTransactionReversedZhTw reversed = _TranslationsTransactionReversedZhTw._(_root);
 	@override late final _TranslationsTransactionStatusZhTw status = _TranslationsTransactionStatusZhTw._(_root);
 	@override late final _TranslationsTransactionTypesZhTw types = _TranslationsTransactionTypesZhTw._(_root);
 }
@@ -4555,12 +4604,27 @@ class _TranslationsTransactionFormZhTw implements _TranslationsTransactionFormEn
 	// Translations
 	@override late final _TranslationsTransactionFormValidatorsZhTw validators = _TranslationsTransactionFormValidatorsZhTw._(_root);
 	@override String get title => '交易標題';
+	@override String get title_short => '資質';
 	@override String get value => '交易價值';
 	@override String get tap_to_see_more => '點擊查看更多詳細資訊';
+	@override String get no_tags => '-- 无标签 --';
 	@override String get description => '描述';
-	@override String get description_info => '添加註釋將幫助您將來更快地找到這筆交易';
+	@override String get description_info => '點擊此處輸入有關此交易的更詳細描述';
 	@override String exchange_to_preferred_title({required Object currency}) => '匯率為${currency}';
 	@override String get exchange_to_preferred_in_date => '交易日';
+}
+
+// Path: transaction.reversed
+class _TranslationsTransactionReversedZhTw implements _TranslationsTransactionReversedEn {
+	_TranslationsTransactionReversedZhTw._(this._root);
+
+	@override final _TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '撤销交易';
+	@override String get title_short => '倒置的 tr.';
+	@override String get description_for_expenses => '尽管是费用类型交易，但此交易具有正金额。这些类型的交易可用于表示先前记录的费用的返还，例如退款或支付债务。';
+	@override String get description_for_incomes => '尽管是收入类型交易，但此交易的金额为负数。这些类型的交易可用于作废或更正错误记录的收入，以反映退款或退款或记录债务的支付。';
 }
 
 // Path: transaction.status
@@ -4574,8 +4638,10 @@ class _TranslationsTransactionStatusZhTw implements _TranslationsTransactionStat
 		one: '地位',
 		other: '狀態',
 	);
+	@override String get display_long => '交易狀態';
 	@override String tr_status({required Object status}) => '${status}交易';
 	@override String get none => '無國籍';
+	@override String get none_descr => '沒有特定狀態的交易';
 	@override String get reconciled => '和好了';
 	@override String get reconciled_descr => '此交易已經過驗證，並且與您銀行的真實交易相對應';
 	@override String get unreconciled => '不甘心';
@@ -4620,9 +4686,7 @@ class _TranslationsTransferFormZhTw implements _TranslationsTransferFormEn {
 	// Translations
 	@override String get from => '原始帳戶';
 	@override String get to => '目的地帳戶';
-	@override String currency_info_add({required Object x}) => '${x}將轉入目標帳戶';
-	@override String currency_info_edit({required Object x}) => '${x}已轉入目標帳戶';
-	@override late final _TranslationsTransferFormCurrencyExchangeSelectorZhTw currency_exchange_selector = _TranslationsTransferFormCurrencyExchangeSelectorZhTw._(_root);
+	@override late final _TranslationsTransferFormValueInDestinyZhTw value_in_destiny = _TranslationsTransferFormValueInDestinyZhTw._(_root);
 }
 
 // Path: recurrent_transactions.details
@@ -5039,19 +5103,19 @@ class _TranslationsTransactionFormValidatorsZhTw implements _TranslationsTransac
 	@override String get zero => '一筆交易的價值不能等於零';
 	@override String get date_max => '所選日期晚於當前日期。交易將新增為待處理';
 	@override String get date_after_account_creation => '您無法建立日期早於所屬帳戶建立日期的交易';
-	@override String get negative_transaction => '請勿在您的交易中使用負金額。我們將根據所選類別是否為費用/收入來應用符號';
 	@override String get negative_transfer => '轉帳的貨幣價值不能為負數';
+	@override String get transfer_between_same_accounts => '來源帳號與目標帳號不能符合';
 }
 
-// Path: transfer.form.currency_exchange_selector
-class _TranslationsTransferFormCurrencyExchangeSelectorZhTw implements _TranslationsTransferFormCurrencyExchangeSelectorEn {
-	_TranslationsTransferFormCurrencyExchangeSelectorZhTw._(this._root);
+// Path: transfer.form.value_in_destiny
+class _TranslationsTransferFormValueInDestinyZhTw implements _TranslationsTransferFormValueInDestinyEn {
+	_TranslationsTransferFormValueInDestinyZhTw._(this._root);
 
 	@override final _TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '編輯貨幣之間的兌換';
-	@override String get value_in_destiny => '目的地轉帳金額';
+	@override String get title => '目的地转账金额';
+	@override String amount_short({required Object amount}) => '${amount} 至目标账户';
 }
 
 // Path: backup.import.manual_import
@@ -5430,21 +5494,29 @@ extension on Translations {
 			case 'transaction.form.validators.zero': return 'The value of a transaction cannot be equal to zero';
 			case 'transaction.form.validators.date_max': return 'The selected date is after the current one. The transaction will be added as pending';
 			case 'transaction.form.validators.date_after_account_creation': return 'You cannot create a transaction whose date is before the creation date of the account it belongs to';
-			case 'transaction.form.validators.negative_transaction': return 'Do not use negative amounts for your transaction. We will apply the sign depending on whether the selected category is expense/income';
 			case 'transaction.form.validators.negative_transfer': return 'The monetary value of a transfer cannot be negative';
+			case 'transaction.form.validators.transfer_between_same_accounts': return 'The origin and the destination account cannot be the same';
 			case 'transaction.form.title': return 'Transaction title';
+			case 'transaction.form.title_short': return 'Title';
 			case 'transaction.form.value': return 'Value of the transaction';
 			case 'transaction.form.tap_to_see_more': return 'Tap to see more details';
+			case 'transaction.form.no_tags': return '-- No tags --';
 			case 'transaction.form.description': return 'Description';
-			case 'transaction.form.description_info': return 'Adding a note will help you find this transaction faster in the future';
+			case 'transaction.form.description_info': return 'Tap here to enter a more detailed description about this transaction';
 			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => 'Exchnage rate to ${currency}';
 			case 'transaction.form.exchange_to_preferred_in_date': return 'On transaction date';
+			case 'transaction.reversed.title': return 'Inverse transaction';
+			case 'transaction.reversed.title_short': return 'Inverse tr.';
+			case 'transaction.reversed.description_for_expenses': return 'Despite being an expense transaction, it has a positive amount. These types of transactions can be used to represent the return of a previously recorded expense, such as a refund or having the payment of a debt.';
+			case 'transaction.reversed.description_for_incomes': return 'Despite being an income transaction, it has a negative amount. These types of transactions can be used to void or correct an income that was incorrectly recorded, to reflect a return or refund of money or to record payment of debts.';
 			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 				one: 'Status',
 				other: 'Statuses',
 			);
+			case 'transaction.status.display_long': return 'Transaction status';
 			case 'transaction.status.tr_status': return ({required Object status}) => '${status} transaction';
 			case 'transaction.status.none': return 'Stateless';
+			case 'transaction.status.none_descr': return 'Transaction without a specific state';
 			case 'transaction.status.reconciled': return 'Reconciled';
 			case 'transaction.status.reconciled_descr': return 'This transaction has already been validated and corresponds to a real transaction from your bank';
 			case 'transaction.status.unreconciled': return 'Unreconciled';
@@ -5477,10 +5549,8 @@ extension on Translations {
 			case 'transfer.need_two_accounts_warning_message': return 'At least two accounts are needed to perform this action. If you need to adjust or edit the current balance of this account, click the edit button';
 			case 'transfer.form.from': return 'Origin account';
 			case 'transfer.form.to': return 'Destination account';
-			case 'transfer.form.currency_info_add': return ({required Object x}) => '${x} will be transferred to the destination account';
-			case 'transfer.form.currency_info_edit': return ({required Object x}) => '${x} have been transferred to the destination account';
-			case 'transfer.form.currency_exchange_selector.title': return 'Edit exchange between currencies';
-			case 'transfer.form.currency_exchange_selector.value_in_destiny': return 'Amount transferred in destination';
+			case 'transfer.form.value_in_destiny.title': return 'Amount transferred at destination';
+			case 'transfer.form.value_in_destiny.amount_short': return ({required Object amount}) => '${amount} to target account';
 			case 'recurrent_transactions.title': return 'Recurrent transactions';
 			case 'recurrent_transactions.title_short': return 'Rec. transactions';
 			case 'recurrent_transactions.empty': return 'It looks like you don\'t have any recurring transactions. Create a monthly, yearly, or weekly recurring transaction and it will appear here';
@@ -6037,21 +6107,29 @@ extension on _TranslationsEs {
 			case 'transaction.form.validators.zero': return 'El valor de una transacción no puede ser igual a cero';
 			case 'transaction.form.validators.date_max': return 'La fecha seleccionada es posterior a la actual. Se añadirá la transacción como pendiente';
 			case 'transaction.form.validators.date_after_account_creation': return 'No puedes crear una transacción cuya fecha es anterior a la fecha de creación de la cuenta a la que pertenece';
-			case 'transaction.form.validators.negative_transaction': return 'No uses cantidades negativas para tu transaccion. Aplicaremos el signo en función de si la categoría seleccionada es de tipo gasto/ingreso';
 			case 'transaction.form.validators.negative_transfer': return 'El valor monetario de una transferencia no puede ser negativo';
+			case 'transaction.form.validators.transfer_between_same_accounts': return 'Las cuentas de origen y destino no pueden coincidir';
 			case 'transaction.form.title': return 'Título de la transacción';
+			case 'transaction.form.title_short': return 'Título';
+			case 'transaction.form.no_tags': return '-- Sin etiquetas --';
 			case 'transaction.form.value': return 'Valor de la transacción';
 			case 'transaction.form.tap_to_see_more': return 'Toca para ver más detalles';
 			case 'transaction.form.description': return 'Descripción';
-			case 'transaction.form.description_info': return 'Añadir una nota te ayudará a encontrar más rapidamente esta transacción en un futuro';
+			case 'transaction.form.description_info': return 'Toca aquí para escribir una descripción mas detallada sobre esta transacción';
 			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => 'Cambio a ${currency}';
 			case 'transaction.form.exchange_to_preferred_in_date': return 'El día de la transacción';
+			case 'transaction.reversed.title': return 'Transacción invertida';
+			case 'transaction.reversed.title_short': return 'Tr. invertida';
+			case 'transaction.reversed.description_for_expenses': return 'A pesar de ser una transacción de tipo gasto, esta transacción tiene un monto positivo. Este tipo de transacciones pueden usarse para representar la devolución de un gasto previamente registrado, como un reembolso o que te realicen el pago de una deuda.';
+			case 'transaction.reversed.description_for_incomes': return 'A pesar de ser una transacción de tipo ingreso, esta transacción tiene un monto negativo. Este tipo de transacciones pueden usarse para anular o corregir un ingreso que fue registrado incorrectamente, para reflejar una devolución o reembolso de dinero o para registrar el pago de deudas.';
 			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
 				one: 'Estado',
 				other: 'Estados',
 			);
+			case 'transaction.status.display_long': return 'Estado de la transacción';
 			case 'transaction.status.tr_status': return ({required Object status}) => 'Transacción ${status}';
 			case 'transaction.status.none': return 'Sin estado';
+			case 'transaction.status.none_descr': return 'Transacción sin un estado concreto';
 			case 'transaction.status.reconciled': return 'Reconciliada';
 			case 'transaction.status.reconciled_descr': return 'Esta transacción ha sido validada ya y se corresponde con una transacción real de su banco';
 			case 'transaction.status.unreconciled': return 'No reconciliada';
@@ -6084,10 +6162,8 @@ extension on _TranslationsEs {
 			case 'transfer.need_two_accounts_warning_message': return 'Se necesitan al menos dos cuentas para realizar esta acción. Si lo que necesitas es ajustar o editar el balance actual de esta cuenta pulsa el botón de editar';
 			case 'transfer.form.from': return 'Cuenta origen';
 			case 'transfer.form.to': return 'Cuenta destino';
-			case 'transfer.form.currency_info_add': return ({required Object x}) => 'Se transpasarán ${x} a la cuenta de destino';
-			case 'transfer.form.currency_info_edit': return ({required Object x}) => 'Se han transpasado ${x} a la cuenta de destino';
-			case 'transfer.form.currency_exchange_selector.title': return 'Editar cambio entre divisas';
-			case 'transfer.form.currency_exchange_selector.value_in_destiny': return 'Cantidad transferida en destino';
+			case 'transfer.form.value_in_destiny.title': return 'Cantidad transferida en destino';
+			case 'transfer.form.value_in_destiny.amount_short': return ({required Object amount}) => '${amount} a cuenta de destino';
 			case 'recurrent_transactions.title': return 'Movimientos recurrentes';
 			case 'recurrent_transactions.title_short': return 'Mov. recurrentes';
 			case 'recurrent_transactions.empty': return 'Parece que no posees ninguna transacción recurrente. Crea una transacción que se repita mensual, anual o semanalmente y aparecerá aquí';
@@ -6643,21 +6719,29 @@ extension on _TranslationsUk {
 			case 'transaction.form.validators.zero': return 'Значення транзакції не може бути рівним нулю';
 			case 'transaction.form.validators.date_max': return 'Обрана дата після поточної. Транзакція буде додана як очікувана';
 			case 'transaction.form.validators.date_after_account_creation': return 'Ви не можете створити транзакцію з датою до створення рахунку, до якого вона належить';
-			case 'transaction.form.validators.negative_transaction': return 'Не використовуйте від\'ємні суми для вашої транзакції. Ми застосуємо знак в залежності від того, чи є обрана категорія витратою/доходом';
 			case 'transaction.form.validators.negative_transfer': return 'Монетарна вартість переказу не може бути від\'ємною';
+			case 'transaction.form.validators.transfer_between_same_accounts': return 'Облікові записи джерела та призначення не збігаються';
 			case 'transaction.form.title': return 'Назва транзакції';
+			case 'transaction.form.title_short': return 'Назва';
 			case 'transaction.form.value': return 'Сума транзакції';
 			case 'transaction.form.tap_to_see_more': return 'Натисніть, щоб побачити більше деталей';
+			case 'transaction.form.no_tags': return '-- Немає тегів --';
 			case 'transaction.form.description': return 'Опис';
-			case 'transaction.form.description_info': return 'Додавання примітки допоможе вам швидше знайти цю транзакцію у майбутньому';
+			case 'transaction.form.description_info': return 'Натисніть тут, щоб ввести детальніший опис цієї транзакції';
 			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => 'Обмінний курс на ${currency}';
 			case 'transaction.form.exchange_to_preferred_in_date': return 'На дату транзакції';
+			case 'transaction.reversed.title': return 'Скасована транзакція';
+			case 'transaction.reversed.title_short': return 'Перевернутий тр.';
+			case 'transaction.reversed.description_for_expenses': return 'Незважаючи на те, що транзакція типу витрат, ця транзакція має додатну суму. Ці типи транзакцій можна використовувати для представлення повернення раніше зареєстрованих витрат, таких як відшкодування або оплата борг.';
+			case 'transaction.reversed.description_for_incomes': return 'Незважаючи на те, що транзакція є дохідною, ця транзакція має від’ємну суму. Ці типи транзакцій можна використовувати ля анулювання або виправлення неправильно зареєстрованого доходу, для відображення повернення або відшкодування грошей або для обліку сплати боргів».';
 			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
 				one: 'Статус',
 				other: 'Статуси',
 			);
+			case 'transaction.status.display_long': return 'Статус транзакції';
 			case 'transaction.status.tr_status': return ({required Object status}) => '${status} транзакція';
 			case 'transaction.status.none': return 'Без статусу';
+			case 'transaction.status.none_descr': return 'Транзакція без певного стану';
 			case 'transaction.status.reconciled': return 'Узгоджений';
 			case 'transaction.status.reconciled_descr': return 'Ця транзакція вже підтверджена і відповідає реальній транзакції з вашого банку';
 			case 'transaction.status.unreconciled': return 'Не узгоджений';
@@ -6690,10 +6774,8 @@ extension on _TranslationsUk {
 			case 'transfer.need_two_accounts_warning_message': return 'Для виконання цієї дії потрібно щонайменше два рахунки. Якщо вам потрібно відредагувати поточний баланс цього рахунку, натисніть кнопку редагування';
 			case 'transfer.form.from': return 'Початковий рахунок';
 			case 'transfer.form.to': return 'Цільовий рахунок';
-			case 'transfer.form.currency_info_add': return ({required Object x}) => '${x} буде перекладено на цільовий рахунок';
-			case 'transfer.form.currency_info_edit': return ({required Object x}) => '${x} було перекладено на цільовий рахунок';
-			case 'transfer.form.currency_exchange_selector.title': return 'Редагувати обмін між валютами';
-			case 'transfer.form.currency_exchange_selector.value_in_destiny': return 'Сума, перекладена на цільовий рахунок';
+			case 'transfer.form.value_in_destiny.title': return 'Сума переказу в пункті призначення';
+			case 'transfer.form.value_in_destiny.amount_short': return ({required Object amount}) => '${amount} на цільовий рахунок';
 			case 'recurrent_transactions.title': return 'Повторювані транзакції';
 			case 'recurrent_transactions.title_short': return 'Повт. транзакції';
 			case 'recurrent_transactions.empty': return 'Схоже, у вас немає жодних повторюваних транзакцій. Створіть щомісячну, щорічну або щотижневу повторювану транзакцію, і вона з\'явиться тут';
@@ -7249,21 +7331,29 @@ extension on _TranslationsZhTw {
 			case 'transaction.form.validators.zero': return '一筆交易的價值不能等於零';
 			case 'transaction.form.validators.date_max': return '所選日期晚於當前日期。交易將新增為待處理';
 			case 'transaction.form.validators.date_after_account_creation': return '您無法建立日期早於所屬帳戶建立日期的交易';
-			case 'transaction.form.validators.negative_transaction': return '請勿在您的交易中使用負金額。我們將根據所選類別是否為費用/收入來應用符號';
 			case 'transaction.form.validators.negative_transfer': return '轉帳的貨幣價值不能為負數';
+			case 'transaction.form.validators.transfer_between_same_accounts': return '來源帳號與目標帳號不能符合';
 			case 'transaction.form.title': return '交易標題';
+			case 'transaction.form.title_short': return '資質';
 			case 'transaction.form.value': return '交易價值';
 			case 'transaction.form.tap_to_see_more': return '點擊查看更多詳細資訊';
+			case 'transaction.form.no_tags': return '-- 无标签 --';
 			case 'transaction.form.description': return '描述';
-			case 'transaction.form.description_info': return '添加註釋將幫助您將來更快地找到這筆交易';
+			case 'transaction.form.description_info': return '點擊此處輸入有關此交易的更詳細描述';
 			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => '匯率為${currency}';
 			case 'transaction.form.exchange_to_preferred_in_date': return '交易日';
+			case 'transaction.reversed.title': return '撤销交易';
+			case 'transaction.reversed.title_short': return '倒置的 tr.';
+			case 'transaction.reversed.description_for_expenses': return '尽管是费用类型交易，但此交易具有正金额。这些类型的交易可用于表示先前记录的费用的返还，例如退款或支付债务。';
+			case 'transaction.reversed.description_for_incomes': return '尽管是收入类型交易，但此交易的金额为负数。这些类型的交易可用于作废或更正错误记录的收入，以反映退款或退款或记录债务的支付。';
 			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
 				one: '地位',
 				other: '狀態',
 			);
+			case 'transaction.status.display_long': return '交易狀態';
 			case 'transaction.status.tr_status': return ({required Object status}) => '${status}交易';
 			case 'transaction.status.none': return '無國籍';
+			case 'transaction.status.none_descr': return '沒有特定狀態的交易';
 			case 'transaction.status.reconciled': return '和好了';
 			case 'transaction.status.reconciled_descr': return '此交易已經過驗證，並且與您銀行的真實交易相對應';
 			case 'transaction.status.unreconciled': return '不甘心';
@@ -7296,10 +7386,8 @@ extension on _TranslationsZhTw {
 			case 'transfer.need_two_accounts_warning_message': return '至少需要兩個帳戶才能執行此操作。如果您需要調整或編輯該帳戶的當前餘額，請點擊編輯按鈕';
 			case 'transfer.form.from': return '原始帳戶';
 			case 'transfer.form.to': return '目的地帳戶';
-			case 'transfer.form.currency_info_add': return ({required Object x}) => '${x}將轉入目標帳戶';
-			case 'transfer.form.currency_info_edit': return ({required Object x}) => '${x}已轉入目標帳戶';
-			case 'transfer.form.currency_exchange_selector.title': return '編輯貨幣之間的兌換';
-			case 'transfer.form.currency_exchange_selector.value_in_destiny': return '目的地轉帳金額';
+			case 'transfer.form.value_in_destiny.title': return '目的地转账金额';
+			case 'transfer.form.value_in_destiny.amount_short': return ({required Object amount}) => '${amount} 至目标账户';
 			case 'recurrent_transactions.title': return '經常性交易';
 			case 'recurrent_transactions.title_short': return '記錄交易';
 			case 'recurrent_transactions.empty': return '您似乎沒有任何經常性交易。創建每月、每年或每週的經常性交易，它將顯示在此處';
