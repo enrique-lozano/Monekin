@@ -12,7 +12,6 @@ import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
@@ -495,7 +494,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                         iconColor: AppColors.of(context).brand,
                         foregroundColor: AppColors.of(context).brand,
                         backgroundColor:
-                            AppColors.of(context).brand.lighten(0.675),
+                            AppColors.of(context).brand.withOpacity(0.2),
                       );
 
                       return Row(

@@ -367,7 +367,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: color.withOpacity(0.15),
+        color: color.withOpacity(0.125),
         border: Border.all(
           width: 1,
           color: color,
