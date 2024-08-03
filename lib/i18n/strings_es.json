@@ -381,11 +381,9 @@
     "FORM": {
       "from": "Cuenta origen",
       "to": "Cuenta destino",
-      "currency-info-add": "Se transpasarán {{x}} a la cuenta de destino",
-      "currency-info-edit": "Se han transpasado {{x}} a la cuenta de destino",
-      "currency-exchange-selector": {
-        "title": "Editar cambio entre divisas",
-        "value-in-destiny": "Cantidad transferida en destino"
+      "VALUE-IN-DESTINY": {
+        "title": "Cantidad transferida en destino",
+        "amount-short": "{{amount}} a cuenta de destino"
       }
     }
   },

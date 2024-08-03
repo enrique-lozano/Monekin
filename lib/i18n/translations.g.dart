@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 4
-/// Strings: 2137 (534 per locale)
+/// Strings: 2129 (532 per locale)
 ///
-/// Built on 2024-08-02 at 21:43 UTC
+/// Built on 2024-08-03 at 21:35 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -893,9 +893,7 @@ class _TranslationsTransferFormEn {
 	// Translations
 	String get from => 'Origin account';
 	String get to => 'Destination account';
-	String currency_info_add({required Object x}) => '${x} will be transferred to the destination account';
-	String currency_info_edit({required Object x}) => '${x} have been transferred to the destination account';
-	late final _TranslationsTransferFormCurrencyExchangeSelectorEn currency_exchange_selector = _TranslationsTransferFormCurrencyExchangeSelectorEn._(_root);
+	late final _TranslationsTransferFormValueInDestinyEn value_in_destiny = _TranslationsTransferFormValueInDestinyEn._(_root);
 }
 
 // Path: recurrent_transactions.details
@@ -1316,15 +1314,15 @@ class _TranslationsTransactionFormValidatorsEn {
 	String get transfer_between_same_accounts => 'The origin and the destination account cannot be the same';
 }
 
-// Path: transfer.form.currency_exchange_selector
-class _TranslationsTransferFormCurrencyExchangeSelectorEn {
-	_TranslationsTransferFormCurrencyExchangeSelectorEn._(this._root);
+// Path: transfer.form.value_in_destiny
+class _TranslationsTransferFormValueInDestinyEn {
+	_TranslationsTransferFormValueInDestinyEn._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get title => 'Edit exchange between currencies';
-	String get value_in_destiny => 'Amount transferred in destination';
+	String get title => 'Amount transferred at destination';
+	String amount_short({required Object amount}) => '${amount} to target account';
 }
 
 // Path: backup.import.manual_import
@@ -2159,9 +2157,7 @@ class _TranslationsTransferFormEs implements _TranslationsTransferFormEn {
 	// Translations
 	@override String get from => 'Cuenta origen';
 	@override String get to => 'Cuenta destino';
-	@override String currency_info_add({required Object x}) => 'Se transpasarán ${x} a la cuenta de destino';
-	@override String currency_info_edit({required Object x}) => 'Se han transpasado ${x} a la cuenta de destino';
-	@override late final _TranslationsTransferFormCurrencyExchangeSelectorEs currency_exchange_selector = _TranslationsTransferFormCurrencyExchangeSelectorEs._(_root);
+	@override late final _TranslationsTransferFormValueInDestinyEs value_in_destiny = _TranslationsTransferFormValueInDestinyEs._(_root);
 }
 
 // Path: recurrent_transactions.details
@@ -2583,15 +2579,15 @@ class _TranslationsTransactionFormValidatorsEs implements _TranslationsTransacti
 	@override String get transfer_between_same_accounts => 'Las cuentas de origen y destino no pueden coincidir';
 }
 
-// Path: transfer.form.currency_exchange_selector
-class _TranslationsTransferFormCurrencyExchangeSelectorEs implements _TranslationsTransferFormCurrencyExchangeSelectorEn {
-	_TranslationsTransferFormCurrencyExchangeSelectorEs._(this._root);
+// Path: transfer.form.value_in_destiny
+class _TranslationsTransferFormValueInDestinyEs implements _TranslationsTransferFormValueInDestinyEn {
+	_TranslationsTransferFormValueInDestinyEs._(this._root);
 
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Editar cambio entre divisas';
-	@override String get value_in_destiny => 'Cantidad transferida en destino';
+	@override String get title => 'Cantidad transferida en destino';
+	@override String amount_short({required Object amount}) => '${amount} a cuenta de destino';
 }
 
 // Path: backup.import.manual_import
@@ -3426,9 +3422,7 @@ class _TranslationsTransferFormUk implements _TranslationsTransferFormEn {
 	// Translations
 	@override String get from => 'Початковий рахунок';
 	@override String get to => 'Цільовий рахунок';
-	@override String currency_info_add({required Object x}) => '${x} буде перекладено на цільовий рахунок';
-	@override String currency_info_edit({required Object x}) => '${x} було перекладено на цільовий рахунок';
-	@override late final _TranslationsTransferFormCurrencyExchangeSelectorUk currency_exchange_selector = _TranslationsTransferFormCurrencyExchangeSelectorUk._(_root);
+	@override late final _TranslationsTransferFormValueInDestinyUk value_in_destiny = _TranslationsTransferFormValueInDestinyUk._(_root);
 }
 
 // Path: recurrent_transactions.details
@@ -3849,15 +3843,15 @@ class _TranslationsTransactionFormValidatorsUk implements _TranslationsTransacti
 	@override String get transfer_between_same_accounts => 'Облікові записи джерела та призначення не збігаються';
 }
 
-// Path: transfer.form.currency_exchange_selector
-class _TranslationsTransferFormCurrencyExchangeSelectorUk implements _TranslationsTransferFormCurrencyExchangeSelectorEn {
-	_TranslationsTransferFormCurrencyExchangeSelectorUk._(this._root);
+// Path: transfer.form.value_in_destiny
+class _TranslationsTransferFormValueInDestinyUk implements _TranslationsTransferFormValueInDestinyEn {
+	_TranslationsTransferFormValueInDestinyUk._(this._root);
 
 	@override final _TranslationsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Редагувати обмін між валютами';
-	@override String get value_in_destiny => 'Сума, перекладена на цільовий рахунок';
+	@override String get title => 'Сума переказу в пункті призначення';
+	@override String amount_short({required Object amount}) => '${amount} на цільовий рахунок';
 }
 
 // Path: backup.import.manual_import
@@ -4692,9 +4686,7 @@ class _TranslationsTransferFormZhTw implements _TranslationsTransferFormEn {
 	// Translations
 	@override String get from => '原始帳戶';
 	@override String get to => '目的地帳戶';
-	@override String currency_info_add({required Object x}) => '${x}將轉入目標帳戶';
-	@override String currency_info_edit({required Object x}) => '${x}已轉入目標帳戶';
-	@override late final _TranslationsTransferFormCurrencyExchangeSelectorZhTw currency_exchange_selector = _TranslationsTransferFormCurrencyExchangeSelectorZhTw._(_root);
+	@override late final _TranslationsTransferFormValueInDestinyZhTw value_in_destiny = _TranslationsTransferFormValueInDestinyZhTw._(_root);
 }
 
 // Path: recurrent_transactions.details
@@ -5115,15 +5107,15 @@ class _TranslationsTransactionFormValidatorsZhTw implements _TranslationsTransac
 	@override String get transfer_between_same_accounts => '來源帳號與目標帳號不能符合';
 }
 
-// Path: transfer.form.currency_exchange_selector
-class _TranslationsTransferFormCurrencyExchangeSelectorZhTw implements _TranslationsTransferFormCurrencyExchangeSelectorEn {
-	_TranslationsTransferFormCurrencyExchangeSelectorZhTw._(this._root);
+// Path: transfer.form.value_in_destiny
+class _TranslationsTransferFormValueInDestinyZhTw implements _TranslationsTransferFormValueInDestinyEn {
+	_TranslationsTransferFormValueInDestinyZhTw._(this._root);
 
 	@override final _TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '編輯貨幣之間的兌換';
-	@override String get value_in_destiny => '目的地轉帳金額';
+	@override String get title => '目的地转账金额';
+	@override String amount_short({required Object amount}) => '${amount} 至目标账户';
 }
 
 // Path: backup.import.manual_import
@@ -5557,10 +5549,8 @@ extension on Translations {
 			case 'transfer.need_two_accounts_warning_message': return 'At least two accounts are needed to perform this action. If you need to adjust or edit the current balance of this account, click the edit button';
 			case 'transfer.form.from': return 'Origin account';
 			case 'transfer.form.to': return 'Destination account';
-			case 'transfer.form.currency_info_add': return ({required Object x}) => '${x} will be transferred to the destination account';
-			case 'transfer.form.currency_info_edit': return ({required Object x}) => '${x} have been transferred to the destination account';
-			case 'transfer.form.currency_exchange_selector.title': return 'Edit exchange between currencies';
-			case 'transfer.form.currency_exchange_selector.value_in_destiny': return 'Amount transferred in destination';
+			case 'transfer.form.value_in_destiny.title': return 'Amount transferred at destination';
+			case 'transfer.form.value_in_destiny.amount_short': return ({required Object amount}) => '${amount} to target account';
 			case 'recurrent_transactions.title': return 'Recurrent transactions';
 			case 'recurrent_transactions.title_short': return 'Rec. transactions';
 			case 'recurrent_transactions.empty': return 'It looks like you don\'t have any recurring transactions. Create a monthly, yearly, or weekly recurring transaction and it will appear here';
@@ -6172,10 +6162,8 @@ extension on _TranslationsEs {
 			case 'transfer.need_two_accounts_warning_message': return 'Se necesitan al menos dos cuentas para realizar esta acción. Si lo que necesitas es ajustar o editar el balance actual de esta cuenta pulsa el botón de editar';
 			case 'transfer.form.from': return 'Cuenta origen';
 			case 'transfer.form.to': return 'Cuenta destino';
-			case 'transfer.form.currency_info_add': return ({required Object x}) => 'Se transpasarán ${x} a la cuenta de destino';
-			case 'transfer.form.currency_info_edit': return ({required Object x}) => 'Se han transpasado ${x} a la cuenta de destino';
-			case 'transfer.form.currency_exchange_selector.title': return 'Editar cambio entre divisas';
-			case 'transfer.form.currency_exchange_selector.value_in_destiny': return 'Cantidad transferida en destino';
+			case 'transfer.form.value_in_destiny.title': return 'Cantidad transferida en destino';
+			case 'transfer.form.value_in_destiny.amount_short': return ({required Object amount}) => '${amount} a cuenta de destino';
 			case 'recurrent_transactions.title': return 'Movimientos recurrentes';
 			case 'recurrent_transactions.title_short': return 'Mov. recurrentes';
 			case 'recurrent_transactions.empty': return 'Parece que no posees ninguna transacción recurrente. Crea una transacción que se repita mensual, anual o semanalmente y aparecerá aquí';
@@ -6786,10 +6774,8 @@ extension on _TranslationsUk {
 			case 'transfer.need_two_accounts_warning_message': return 'Для виконання цієї дії потрібно щонайменше два рахунки. Якщо вам потрібно відредагувати поточний баланс цього рахунку, натисніть кнопку редагування';
 			case 'transfer.form.from': return 'Початковий рахунок';
 			case 'transfer.form.to': return 'Цільовий рахунок';
-			case 'transfer.form.currency_info_add': return ({required Object x}) => '${x} буде перекладено на цільовий рахунок';
-			case 'transfer.form.currency_info_edit': return ({required Object x}) => '${x} було перекладено на цільовий рахунок';
-			case 'transfer.form.currency_exchange_selector.title': return 'Редагувати обмін між валютами';
-			case 'transfer.form.currency_exchange_selector.value_in_destiny': return 'Сума, перекладена на цільовий рахунок';
+			case 'transfer.form.value_in_destiny.title': return 'Сума переказу в пункті призначення';
+			case 'transfer.form.value_in_destiny.amount_short': return ({required Object amount}) => '${amount} на цільовий рахунок';
 			case 'recurrent_transactions.title': return 'Повторювані транзакції';
 			case 'recurrent_transactions.title_short': return 'Повт. транзакції';
 			case 'recurrent_transactions.empty': return 'Схоже, у вас немає жодних повторюваних транзакцій. Створіть щомісячну, щорічну або щотижневу повторювану транзакцію, і вона з\'явиться тут';
@@ -7400,10 +7386,8 @@ extension on _TranslationsZhTw {
 			case 'transfer.need_two_accounts_warning_message': return '至少需要兩個帳戶才能執行此操作。如果您需要調整或編輯該帳戶的當前餘額，請點擊編輯按鈕';
 			case 'transfer.form.from': return '原始帳戶';
 			case 'transfer.form.to': return '目的地帳戶';
-			case 'transfer.form.currency_info_add': return ({required Object x}) => '${x}將轉入目標帳戶';
-			case 'transfer.form.currency_info_edit': return ({required Object x}) => '${x}已轉入目標帳戶';
-			case 'transfer.form.currency_exchange_selector.title': return '編輯貨幣之間的兌換';
-			case 'transfer.form.currency_exchange_selector.value_in_destiny': return '目的地轉帳金額';
+			case 'transfer.form.value_in_destiny.title': return '目的地转账金额';
+			case 'transfer.form.value_in_destiny.amount_short': return ({required Object amount}) => '${amount} 至目标账户';
 			case 'recurrent_transactions.title': return '經常性交易';
 			case 'recurrent_transactions.title_short': return '記錄交易';
 			case 'recurrent_transactions.empty': return '您似乎沒有任何經常性交易。創建每月、每年或每週的經常性交易，它將顯示在此處';

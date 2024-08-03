@@ -173,7 +173,6 @@ class _AccountFormPageState extends State<AccountFormPage> {
         .then((value) {
       _balanceController.text = value.toString();
 
-      print(_accountToEdit!.color);
       _color = _accountToEdit!.getComputedColor(context);
     });
 

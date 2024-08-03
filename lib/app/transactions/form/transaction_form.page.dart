@@ -6,6 +6,7 @@ import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/transactions/form/dialogs/transaction_more_info.modal.dart';
 import 'package:monekin/app/transactions/form/dialogs/transaction_status_selector.dart';
 import 'package:monekin/app/transactions/form/dialogs/transaction_title_modal.dart';
+import 'package:monekin/app/transactions/form/dialogs/transaction_value_in_destiny_modal.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_form_calculator.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
@@ -55,7 +56,6 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   final _shakeKey = GlobalKey<ShakeWidgetState>();
 
   Account? fromAccount;
-  Account? toAccount;
 
   Category? selectedCategory;
 
@@ -74,11 +74,6 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   List<Tag> get tags => moreInfo.tags;
 
   TransactionMoreInfo moreInfo = const TransactionMoreInfo();
-
-  //TODO: Maybe a controller not neccessary here
-  TextEditingController valueInDestinyController = TextEditingController();
-  double? get valueInDestinyToNumber =>
-      double.tryParse(valueInDestinyController.text);
 
   @override
   void initState() {
@@ -105,7 +100,9 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         fromAccount = widget.fromAccount ?? acc[0];
 
         if (transactionType.isTransfer) {
-          toAccount = acc[1].id != fromAccount!.id ? acc[1] : acc[0];
+          moreInfo = moreInfo.copyWith(
+            transferAccount: acc[1].id != fromAccount!.id ? acc[1] : acc[0],
+          );
         }
 
         setState(() {});
@@ -115,7 +112,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
 
   submitForm() {
     if (transactionType.isIncomeOrExpense && selectedCategory == null ||
-        transactionType.isTransfer && toAccount == null) {
+        transactionType.isTransfer && moreInfo.transferAccount == null) {
       _shakeKey.currentState?.shake();
       return;
     }
@@ -139,21 +136,26 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
       return;
     }
 
+    // Transactions after account creation:
     if (fromAccount != null && fromAccount!.date.compareTo(date) > 0) {
       scMessenger.showSnackBar(
         SnackBar(
-            content: Text(
-                t.transaction.form.validators.date_after_account_creation)),
+          content:
+              Text(t.transaction.form.validators.date_after_account_creation),
+        ),
       );
 
       return;
     }
 
-    if (transactionType.isTransfer && fromAccount!.id == toAccount!.id) {
+    // In transfers, we can not have the same source and destination account:
+    if (transactionType.isTransfer &&
+        fromAccount!.id == moreInfo.transferAccount!.id) {
       scMessenger.showSnackBar(
         SnackBar(
-            content: Text(
-                t.transaction.form.validators.transfer_between_same_accounts)),
+          content: Text(
+              t.transaction.form.validators.transfer_between_same_accounts),
+        ),
       );
 
       return;
@@ -191,11 +193,14 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         endDate: recurrentRule.ruleRecurrentLimit?.endDate,
         remainingTransactions:
             recurrentRule.ruleRecurrentLimit?.remainingIterations,
-        valueInDestiny:
-            transactionType.isTransfer ? valueInDestinyToNumber : null,
+        valueInDestiny: transactionType.isTransfer &&
+                moreInfo.valueInDestiny != transactionAmount
+            ? moreInfo.valueInDestiny?.toDouble()
+            : null,
         categoryID:
             transactionType.isIncomeOrExpense ? selectedCategory?.id : null,
-        receivingAccountID: transactionType.isTransfer ? toAccount?.id : null,
+        receivingAccountID:
+            transactionType.isTransfer ? moreInfo.transferAccount?.id : null,
       ),
     )
         .then((value) {
@@ -226,34 +231,36 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   }
 
   fillForm(MoneyTransaction transaction) async {
-    setState(() {
-      fromAccount = transaction.account;
-      toAccount = transaction.receivingAccount;
-      date = transaction.date;
-      status = transaction.status;
-      selectedCategory = transaction.category;
-      recurrentRule = transaction.recurrentInfo;
+    setState(
+      () {
+        fromAccount = transaction.account;
+        date = transaction.date;
+        status = transaction.status;
+        selectedCategory = transaction.category;
+        recurrentRule = transaction.recurrentInfo;
 
-      if (selectedCategory != null &&
-          selectedCategory!.type == CategoryType.B) {
-        if (transaction.value < 0) {
-          selectedCategory!.type = CategoryType.E;
-        } else {
-          selectedCategory!.type = CategoryType.I;
+        if (selectedCategory != null &&
+            selectedCategory!.type == CategoryType.B) {
+          if (transaction.value < 0) {
+            selectedCategory!.type = CategoryType.E;
+          } else {
+            selectedCategory!.type = CategoryType.I;
+          }
         }
-      }
 
-      moreInfo = TransactionMoreInfo(
-        tags: transaction.tags,
-        note: transaction.notes,
-      );
-    });
+        moreInfo = TransactionMoreInfo(
+          tags: transaction.tags,
+          note: transaction.notes,
+          valueInDestiny: transaction.isTransfer
+              ? transaction.valueInDestiny ?? transaction.value
+              : null,
+          transferAccount: transaction.receivingAccount,
+        );
+      },
+    );
 
     title = transaction.title;
     transactionAmount = transaction.value;
-
-    valueInDestinyController.text =
-        transaction.valueInDestiny?.abs().toString() ?? '';
   }
 
   Card buildAccoutAndCategorySelectorRow(BuildContext context) {
@@ -310,20 +317,21 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                         BoxConstraints(maxWidth: constraints.maxWidth * 0.5),
                     child: AccountOrCategorySelector(
                         title: t.transfer.form.to,
-                        inputValue: toAccount?.name,
-                        icon: toAccount?.displayIcon(context) ??
+                        inputValue: moreInfo.transferAccount?.name,
+                        icon: moreInfo.transferAccount?.displayIcon(context) ??
                             IconDisplayer(
                               displayMode: IconDisplayMode.polygon,
                               icon: Icons.question_mark_rounded,
                               mainColor: AppColors.of(context).primary,
                             ),
                         onClick: () async {
-                          final modalRes = await showAccountSelector(toAccount);
+                          final modalRes = await showAccountSelector(
+                              moreInfo.transferAccount);
 
                           if (modalRes != null && modalRes.isNotEmpty) {
-                            setState(() {
-                              toAccount = modalRes.first;
-                            });
+                            moreInfo = moreInfo.copyWith(
+                                transferAccount: modalRes.first);
+                            setState(() {});
                           }
                         }),
                   ),
@@ -497,8 +505,44 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                             AppColors.of(context).brand.withOpacity(0.2),
                       );
 
+                      final _valueInDestinyOrDefault =
+                          moreInfo.valueInDestiny ?? transactionAmount;
+
                       return Row(
+                        // mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          if (transactionType.isTransfer &&
+                              moreInfo.transferAccount != null &&
+                              (moreInfo.valueInDestiny != transactionAmount &&
+                                      transactionAmount > 0 &&
+                                      moreInfo.valueInDestiny != null ||
+                                  moreInfo.transferAccount!.currencyId !=
+                                      fromAccount?.currencyId))
+                            TextButton.icon(
+                                style: buttonStyle,
+                                onPressed: () {
+                                  showTransactionValueInDestinyModal(
+                                    context,
+                                    initialValue: _valueInDestinyOrDefault,
+                                    currency:
+                                        moreInfo.transferAccount!.currency,
+                                  ).then((value) {
+                                    if (value != null) {
+                                      setState(() {
+                                        moreInfo = moreInfo.copyWith(
+                                          valueInDestiny: value,
+                                        );
+                                      });
+                                    }
+                                  });
+                                },
+                                icon: const Icon(Icons.start_rounded),
+                                label: Text('${NumberFormat.currency(
+                                  symbol:
+                                      moreInfo.transferAccount!.currency.symbol,
+                                  decimalDigits:
+                                      _valueInDestinyOrDefault % 1 == 0 ? 0 : 2,
+                                ).format(_valueInDestinyOrDefault)} a cuenta de destino')),
                           if (transactionType == TransactionType.E &&
                                   !transactionAmount.isNegative ||
                               transactionType == TransactionType.I &&
@@ -651,7 +695,11 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         IconButton.outlined(
           onPressed: () => showTransactionMoreInfoModal(
             context,
-            data: moreInfo,
+            data: moreInfo.copyWith(
+              valueInDestiny: transactionType.isTransfer
+                  ? moreInfo.valueInDestiny ?? transactionAmount
+                  : null,
+            ),
           ).then((modalRes) {
             if (modalRes == null) return;
 

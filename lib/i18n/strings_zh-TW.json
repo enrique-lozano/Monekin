@@ -374,11 +374,9 @@
     "FORM": {
       "from": "原始帳戶",
       "to": "目的地帳戶",
-      "currency-info-add": "{{x}}將轉入目標帳戶",
-      "currency-info-edit": "{{x}}已轉入目標帳戶",
-      "currency-exchange-selector": {
-        "title": "編輯貨幣之間的兌換",
-        "value-in-destiny": "目的地轉帳金額"
+      "VALUE-IN-DESTINY": {
+        "title": "目的地转账金额",
+        "amount-short": "{{amount}} 至目标账户"
       }
     }
   },

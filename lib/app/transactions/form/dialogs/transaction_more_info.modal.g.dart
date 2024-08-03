@@ -11,6 +11,10 @@ abstract class _$TransactionMoreInfoCWProxy {
 
   TransactionMoreInfo tags(List<Tag> tags);
 
+  TransactionMoreInfo valueInDestiny(num? valueInDestiny);
+
+  TransactionMoreInfo transferAccount(Account? transferAccount);
+
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `TransactionMoreInfo(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
@@ -20,6 +24,8 @@ abstract class _$TransactionMoreInfoCWProxy {
   TransactionMoreInfo call({
     String? note,
     List<Tag>? tags,
+    num? valueInDestiny,
+    Account? transferAccount,
   });
 }
 
@@ -36,6 +42,14 @@ class _$TransactionMoreInfoCWProxyImpl implements _$TransactionMoreInfoCWProxy {
   TransactionMoreInfo tags(List<Tag> tags) => this(tags: tags);
 
   @override
+  TransactionMoreInfo valueInDestiny(num? valueInDestiny) =>
+      this(valueInDestiny: valueInDestiny);
+
+  @override
+  TransactionMoreInfo transferAccount(Account? transferAccount) =>
+      this(transferAccount: transferAccount);
+
+  @override
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `TransactionMoreInfo(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -46,6 +60,8 @@ class _$TransactionMoreInfoCWProxyImpl implements _$TransactionMoreInfoCWProxy {
   TransactionMoreInfo call({
     Object? note = const $CopyWithPlaceholder(),
     Object? tags = const $CopyWithPlaceholder(),
+    Object? valueInDestiny = const $CopyWithPlaceholder(),
+    Object? transferAccount = const $CopyWithPlaceholder(),
   }) {
     return TransactionMoreInfo(
       note: note == const $CopyWithPlaceholder()
@@ -56,6 +72,14 @@ class _$TransactionMoreInfoCWProxyImpl implements _$TransactionMoreInfoCWProxy {
           ? _value.tags
           // ignore: cast_nullable_to_non_nullable
           : tags as List<Tag>,
+      valueInDestiny: valueInDestiny == const $CopyWithPlaceholder()
+          ? _value.valueInDestiny
+          // ignore: cast_nullable_to_non_nullable
+          : valueInDestiny as num?,
+      transferAccount: transferAccount == const $CopyWithPlaceholder()
+          ? _value.transferAccount
+          // ignore: cast_nullable_to_non_nullable
+          : transferAccount as Account?,
     );
   }
 }
@@ -74,10 +98,14 @@ extension $TransactionMoreInfoCopyWith on TransactionMoreInfo {
   /// ````
   TransactionMoreInfo copyWithNull({
     bool note = false,
+    bool valueInDestiny = false,
+    bool transferAccount = false,
   }) {
     return TransactionMoreInfo(
       note: note == true ? null : this.note,
       tags: tags,
+      valueInDestiny: valueInDestiny == true ? null : this.valueInDestiny,
+      transferAccount: transferAccount == true ? null : this.transferAccount,
     );
   }
 }
