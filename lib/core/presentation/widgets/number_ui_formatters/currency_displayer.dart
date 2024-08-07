@@ -23,9 +23,14 @@ class CurrencyDisplayer extends StatelessWidget {
     this.integerStyle = const TextStyle(inherit: true),
     this.decimalsStyle,
     this.currencyStyle,
+    this.followPrivateMode = true,
   });
 
   final double amountToConvert;
+
+  /// If `true` (the default value), the widget will display the amount with a
+  /// blurred effect if the user has the private mode activated
+  final bool followPrivateMode;
 
   /// The currency of the amount, used to display the symbol.
   /// If not specified, will be the user preferred currency
@@ -46,6 +51,20 @@ class CurrencyDisplayer extends StatelessWidget {
 
   final bool showDecimals;
 
+  Widget _amountDisplayer(
+    BuildContext context, {
+    required CurrencyInDB currency,
+  }) {
+    return UINumberFormatter.currency(
+      amountToConvert: amountToConvert,
+      currency: currency,
+      showDecimals: showDecimals,
+      integerStyle: integerStyle,
+      decimalsStyle: decimalsStyle,
+      currencyStyle: currencyStyle,
+    ).getTextWidget(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final valueFontSize = (integerStyle.fontSize ??
@@ -53,35 +72,30 @@ class CurrencyDisplayer extends StatelessWidget {
         16;
 
     if (currency != null) {
-      return BlurBasedOnPrivateMode(
-        child: UINumberFormatter.currency(
-          amountToConvert: amountToConvert,
-          currency: currency,
-          showDecimals: showDecimals,
-          integerStyle: integerStyle,
-          decimalsStyle: decimalsStyle,
-          currencyStyle: currencyStyle,
-        ).getTextWidget(context),
-      );
+      final displayer = _amountDisplayer(context, currency: currency!);
+
+      if (followPrivateMode) {
+        return BlurBasedOnPrivateMode(child: displayer);
+      } else {
+        return displayer;
+      }
     }
 
-    return BlurBasedOnPrivateMode(
-      child: StreamBuilder(
-          stream: CurrencyService.instance.getUserPreferredCurrency(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Skeleton(width: 50, height: valueFontSize);
-            }
+    return StreamBuilder(
+      stream: CurrencyService.instance.getUserPreferredCurrency(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Skeleton(width: 50, height: valueFontSize);
+        }
 
-            return UINumberFormatter.currency(
-              amountToConvert: amountToConvert,
-              currency: snapshot.data!,
-              showDecimals: showDecimals,
-              integerStyle: integerStyle,
-              decimalsStyle: decimalsStyle,
-              currencyStyle: currencyStyle,
-            ).getTextWidget(context);
-          }),
+        final displayer = _amountDisplayer(context, currency: snapshot.data!);
+
+        if (followPrivateMode) {
+          return BlurBasedOnPrivateMode(child: displayer);
+        } else {
+          return displayer;
+        }
+      },
     );
   }
 }
