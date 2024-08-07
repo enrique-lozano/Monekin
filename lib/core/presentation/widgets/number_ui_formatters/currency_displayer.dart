@@ -97,6 +97,7 @@ class BlurBasedOnPrivateMode extends StatelessWidget {
       future: PrivateModeService.instance.isInPrivateMode(),
       initialData: false,
       builder: (context, snapshot) {
+        print(snapshot.data);
         final isInPrivateMode = snapshot.data ?? false;
 
         final double sigma = isInPrivateMode ? 7.5 : 0;
