@@ -474,6 +474,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                                   ),
                               child: CurrencyDisplayer(
                                 amountToConvert: transactionAmount,
+                                followPrivateMode: false,
                                 currency: fromAccount?.currency,
                               ),
                             ),
@@ -651,6 +652,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
             const SizedBox(height: 8),
             CurrencyDisplayer(
               amountToConvert: exchangeRateSnapshot.data!,
+              followPrivateMode: false,
               integerStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
                   color: AppColors.of(context).onSurface.withAlpha(200)),
             ),
