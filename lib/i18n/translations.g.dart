@@ -8,6 +8,7 @@
 ///
 /// Built on 2024-08-07 at 15:39 UTC
 
+
 // coverage:ignore-file
 // ignore_for_file: type=lint
 
@@ -565,6 +566,7 @@ class _TranslationsSettingsEn {
 	String get dynamic_colors_descr => 'Use your system accent color whenever possible';
 	String get accent_color => 'Accent color';
 	String get accent_color_descr => 'Choose the color the app will use to emphasize certain parts of the interface';
+	late final _TranslationsSettingsSecurityEn security = _TranslationsSettingsSecurityEn._(_root);
 }
 
 // Path: more
@@ -1110,6 +1112,22 @@ class _TranslationsBackupAboutEn {
 	String get modify_date => 'Last modified';
 	String get last_backup => 'Last backup';
 	String get size => 'Size';
+}
+
+// Path: settings.security
+class _TranslationsSettingsSecurityEn {
+	_TranslationsSettingsSecurityEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get title => 'Seguridad';
+	String get private_mode_at_launch => 'Private mode at launch';
+	String get private_mode_at_launch_descr => 'Launch the app in private mode by default';
+	String get private_mode => 'Private mode';
+	String get private_mode_descr => 'Hide all monetary values';
+	String get private_mode_activated => 'Private mode activated';
+	String get private_mode_deactivated => 'Private mode disabled';
 }
 
 // Path: more.data
@@ -1830,6 +1848,7 @@ class _TranslationsSettingsEs implements _TranslationsSettingsEn {
 	@override String get dynamic_colors_descr => 'Usar el color de acento de su sistema siempre que sea posible';
 	@override String get accent_color => 'Color de acento';
 	@override String get accent_color_descr => 'Elegir el color que la aplicación usará para enfatizar ciertas partes de la interfaz';
+	@override late final _TranslationsSettingsSecurityEs security = _TranslationsSettingsSecurityEs._(_root);
 }
 
 // Path: more
@@ -2375,6 +2394,22 @@ class _TranslationsBackupAboutEs implements _TranslationsBackupAboutEn {
 	@override String get modify_date => 'Última modificación';
 	@override String get last_backup => 'Última copia de seguridad';
 	@override String get size => 'Tamaño';
+}
+
+// Path: settings.security
+class _TranslationsSettingsSecurityEs implements _TranslationsSettingsSecurityEn {
+	_TranslationsSettingsSecurityEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Seguridad';
+	@override String get private_mode_at_launch => 'Modo privado al arrancar';
+	@override String get private_mode_at_launch_descr => 'Arranca la app en modo privado por defecto';
+	@override String get private_mode => 'Modo privado';
+	@override String get private_mode_descr => 'Oculta todos los valores monetarios';
+	@override String get private_mode_activated => 'Modo privado activado';
+	@override String get private_mode_deactivated => 'Modo privado desactivado';
 }
 
 // Path: more.data
@@ -3096,6 +3131,7 @@ class _TranslationsSettingsUk implements _TranslationsSettingsEn {
 	@override String get dynamic_colors_descr => 'Використовуйте колір акценту вашої системи, коли це можливо';
 	@override String get accent_color => 'Колір акценту';
 	@override String get accent_color_descr => 'Виберіть колір, який додаток буде використовувати для виділення певних частин інтерфейсу';
+	@override late final _TranslationsSettingsSecurityUk security = _TranslationsSettingsSecurityUk._(_root);
 }
 
 // Path: more
@@ -3641,6 +3677,22 @@ class _TranslationsBackupAboutUk implements _TranslationsBackupAboutEn {
 	@override String get modify_date => 'Останнє змінено';
 	@override String get last_backup => 'Остання резервна копія';
 	@override String get size => 'Розмір';
+}
+
+// Path: settings.security
+class _TranslationsSettingsSecurityUk implements _TranslationsSettingsSecurityEn {
+	_TranslationsSettingsSecurityUk._(this._root);
+
+	@override final _TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Безпека';
+	@override String get private_mode_at_launch => 'Приватний режим під час запуску';
+	@override String get private_mode_at_launch_descr => 'За замовчуванням запускати програму в приватному режимі';
+	@override String get private_mode => 'Приватний режим';
+	@override String get private_mode_descr => 'Приховати всі грошові значення';
+	@override String get private_mode_activated => 'Приватний режим активовано';
+	@override String get private_mode_deactivated => 'Приватний режим вимкнено';
 }
 
 // Path: more.data
@@ -4361,6 +4413,7 @@ class _TranslationsSettingsZhTw implements _TranslationsSettingsEn {
 	@override String get dynamic_colors_descr => '盡可能使用系統強調色';
 	@override String get accent_color => '強調色';
 	@override String get accent_color_descr => '選擇應用程式用來強調介面某些部分的顏色';
+	@override late final _TranslationsSettingsSecurityZhTw security = _TranslationsSettingsSecurityZhTw._(_root);
 }
 
 // Path: more
@@ -4906,6 +4959,22 @@ class _TranslationsBackupAboutZhTw implements _TranslationsBackupAboutEn {
 	@override String get modify_date => '上一次更改';
 	@override String get last_backup => '上次備份';
 	@override String get size => '尺寸';
+}
+
+// Path: settings.security
+class _TranslationsSettingsSecurityZhTw implements _TranslationsSettingsSecurityEn {
+	_TranslationsSettingsSecurityZhTw._(this._root);
+
+	@override final _TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '安全';
+	@override String get private_mode_at_launch => '启动时的私密模式';
+	@override String get private_mode_at_launch_descr => '默认以私有模式启动应用程序';
+	@override String get private_mode => '私人模式';
+	@override String get private_mode_descr => '隐藏所有货币值';
+	@override String get private_mode_activated => '隐私模式已激活';
+	@override String get private_mode_deactivated => '私人模式已禁用';
 }
 
 // Path: more.data
@@ -5772,6 +5841,13 @@ extension on Translations {
 			case 'settings.dynamic_colors_descr': return 'Use your system accent color whenever possible';
 			case 'settings.accent_color': return 'Accent color';
 			case 'settings.accent_color_descr': return 'Choose the color the app will use to emphasize certain parts of the interface';
+			case 'settings.security.title': return 'Seguridad';
+			case 'settings.security.private_mode_at_launch': return 'Private mode at launch';
+			case 'settings.security.private_mode_at_launch_descr': return 'Launch the app in private mode by default';
+			case 'settings.security.private_mode': return 'Private mode';
+			case 'settings.security.private_mode_descr': return 'Hide all monetary values';
+			case 'settings.security.private_mode_activated': return 'Private mode activated';
+			case 'settings.security.private_mode_deactivated': return 'Private mode disabled';
 			case 'more.title': return 'More';
 			case 'more.title_long': return 'More actions';
 			case 'more.data.display': return 'Data';
@@ -6386,6 +6462,13 @@ extension on _TranslationsEs {
 			case 'settings.dynamic_colors_descr': return 'Usar el color de acento de su sistema siempre que sea posible';
 			case 'settings.accent_color': return 'Color de acento';
 			case 'settings.accent_color_descr': return 'Elegir el color que la aplicación usará para enfatizar ciertas partes de la interfaz';
+			case 'settings.security.title': return 'Seguridad';
+			case 'settings.security.private_mode_at_launch': return 'Modo privado al arrancar';
+			case 'settings.security.private_mode_at_launch_descr': return 'Arranca la app en modo privado por defecto';
+			case 'settings.security.private_mode': return 'Modo privado';
+			case 'settings.security.private_mode_descr': return 'Oculta todos los valores monetarios';
+			case 'settings.security.private_mode_activated': return 'Modo privado activado';
+			case 'settings.security.private_mode_deactivated': return 'Modo privado desactivado';
 			case 'more.title': return 'Más';
 			case 'more.title_long': return 'Más acciones';
 			case 'more.data.display': return 'Datos';
@@ -6999,6 +7082,13 @@ extension on _TranslationsUk {
 			case 'settings.dynamic_colors_descr': return 'Використовуйте колір акценту вашої системи, коли це можливо';
 			case 'settings.accent_color': return 'Колір акценту';
 			case 'settings.accent_color_descr': return 'Виберіть колір, який додаток буде використовувати для виділення певних частин інтерфейсу';
+			case 'settings.security.title': return 'Безпека';
+			case 'settings.security.private_mode_at_launch': return 'Приватний режим під час запуску';
+			case 'settings.security.private_mode_at_launch_descr': return 'За замовчуванням запускати програму в приватному режимі';
+			case 'settings.security.private_mode': return 'Приватний режим';
+			case 'settings.security.private_mode_descr': return 'Приховати всі грошові значення';
+			case 'settings.security.private_mode_activated': return 'Приватний режим активовано';
+			case 'settings.security.private_mode_deactivated': return 'Приватний режим вимкнено';
 			case 'more.title': return 'Більше';
 			case 'more.title_long': return 'Більше дій';
 			case 'more.data.display': return 'Дані';
@@ -7612,6 +7702,13 @@ extension on _TranslationsZhTw {
 			case 'settings.dynamic_colors_descr': return '盡可能使用系統強調色';
 			case 'settings.accent_color': return '強調色';
 			case 'settings.accent_color_descr': return '選擇應用程式用來強調介面某些部分的顏色';
+			case 'settings.security.title': return '安全';
+			case 'settings.security.private_mode_at_launch': return '启动时的私密模式';
+			case 'settings.security.private_mode_at_launch_descr': return '默认以私有模式启动应用程序';
+			case 'settings.security.private_mode': return '私人模式';
+			case 'settings.security.private_mode_descr': return '隐藏所有货币值';
+			case 'settings.security.private_mode_activated': return '隐私模式已激活';
+			case 'settings.security.private_mode_deactivated': return '私人模式已禁用';
 			case 'more.title': return '更多的';
 			case 'more.title_long': return '更多操作';
 			case 'more.data.display': return '數據';

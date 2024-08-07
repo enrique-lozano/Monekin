@@ -645,7 +645,16 @@
     "dynamic-colors": "Dynamic colors",
     "dynamic-colors.descr": "Use your system accent color whenever possible",
     "accent-color": "Accent color",
-    "accent-color.descr": "Choose the color the app will use to emphasize certain parts of the interface"
+    "accent-color.descr": "Choose the color the app will use to emphasize certain parts of the interface",
+    "SECURITY": {
+      "title": "Seguridad",
+      "private-mode-at-launch": "Private mode at launch",
+      "private-mode-at-launch.descr": "Launch the app in private mode by default",
+      "private-mode": "Private mode",
+      "private-mode.descr": "Hide all monetary values",
+      "private-mode.activated": "Private mode activated",
+      "private-mode.deactivated": "Private mode disabled"
+    }
   },
   "MORE": {
     "title": "More",

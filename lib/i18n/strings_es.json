@@ -652,7 +652,16 @@
     "dynamic-colors": "Colores dinámicos",
     "dynamic-colors.descr": "Usar el color de acento de su sistema siempre que sea posible",
     "accent-color": "Color de acento",
-    "accent-color.descr": "Elegir el color que la aplicación usará para enfatizar ciertas partes de la interfaz"
+    "accent-color.descr": "Elegir el color que la aplicación usará para enfatizar ciertas partes de la interfaz",
+    "SECURITY": {
+      "title": "Seguridad",
+      "private-mode-at-launch": "Modo privado al arrancar",
+      "private-mode-at-launch.descr": "Arranca la app en modo privado por defecto",
+      "private-mode": "Modo privado",
+      "private-mode.descr": "Oculta todos los valores monetarios",
+      "private-mode.activated": "Modo privado activado",
+      "private-mode.deactivated": "Modo privado desactivado"
+    }
   },
   "MORE": {
     "title": "Más",

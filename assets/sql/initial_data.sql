@@ -4,6 +4,7 @@ INSERT INTO userSettings VALUES
 ('avatar', 'man'), 
 ('userName', 'User'), 
 ('appLanguage', null), 
+('privateModeAtLaunch', '0'), 
 ('accentColor', 'auto'), 
 ('amoledMode', '0'), 
 ('themeMode', 'system');
