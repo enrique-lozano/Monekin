@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/settings/widgets/language_selector.dart';
 import 'package:monekin/app/settings/widgets/supported_locales.dart';
+import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
@@ -44,6 +45,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
     return ListTile(
         title: Text(title),
         subtitle: Text(selectedItem.label),
+        leading: Icon(Icons.light_mode),
         onTap: () {
           showDialog(
             context: context,
@@ -103,12 +105,14 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
         title: Text(t.settings.title_short),
       ),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.only(bottom: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             createListSeparator(context, t.settings.lang_section),
             ListTile(
               title: Text(t.settings.lang_title),
+              leading: const Icon(Icons.language),
               subtitle: Text(
                 appSupportedLocales
                     .firstWhere((element) =>
@@ -259,6 +263,37 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     ),
                   );
                 }),
+            createListSeparator(context, t.settings.security.title),
+            StreamBuilder(
+              stream: PrivateModeService.instance.getPrivateModeAtLaunch(),
+              builder: (context, snapshot) {
+                return SwitchListTile(
+                  title: Text(t.settings.security.private_mode_at_launch),
+                  subtitle:
+                      Text(t.settings.security.private_mode_at_launch_descr),
+                  secondary: const Icon(Icons.phonelink_lock_outlined),
+                  value: snapshot.data ?? false,
+                  onChanged: (bool value) {
+                    PrivateModeService.instance
+                        .setPrivateModeAtLaunch(value)
+                        .then((i) {
+                      setState(() {});
+                    });
+                  },
+                );
+              },
+            ),
+            SwitchListTile(
+              title: Text(t.settings.security.private_mode),
+              subtitle: Text(t.settings.security.private_mode_descr),
+              secondary: const Icon(Icons.lock),
+              value: PrivateModeService.instance.inPrivateMode ?? false,
+              onChanged: (bool value) {
+                setState(() {
+                  PrivateModeService.instance.inPrivateMode = value;
+                });
+              },
+            ),
           ],
         ),
       ),

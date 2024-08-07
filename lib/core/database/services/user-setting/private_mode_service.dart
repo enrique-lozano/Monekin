@@ -15,15 +15,18 @@ class PrivateModeService {
       return inPrivateMode!;
     }
 
-    final privateModeAtLaunch = await userSettingsService
-        .getSetting(SettingKey.privateModeAtLaunch)
-        .first;
-
-    return privateModeAtLaunch == '1';
+    final privateModeAtLaunch = await getPrivateModeAtLaunch().first;
+    return privateModeAtLaunch;
   }
 
   Future<int> setPrivateModeAtLaunch(bool value) {
     return userSettingsService.setSetting(
         SettingKey.privateModeAtLaunch, value ? '1' : '0');
+  }
+
+  Stream<bool> getPrivateModeAtLaunch() {
+    return userSettingsService
+        .getSetting(SettingKey.privateModeAtLaunch)
+        .map((x) => x == '1');
   }
 }
