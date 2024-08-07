@@ -292,7 +292,8 @@
       },
       "BULK_EDIT": {
         "dates": "Edit dates",
-        "categories": "Edit categories"
+        "categories": "Edit categories",
+        "status": "Edit statuses"
       }
     },
     "FILTERS": {
