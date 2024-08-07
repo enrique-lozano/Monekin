@@ -4,9 +4,10 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 4
-/// Strings: 2157 (539 per locale)
+/// Strings: 2133 (533 per locale)
 ///
-/// Built on 2024-08-07 at 10:25 UTC
+/// Built on 2024-08-07 at 15:39 UTC
+
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -1315,6 +1316,7 @@ class _TranslationsTransactionListBulkEditEn {
 	// Translations
 	String get dates => 'Edit dates';
 	String get categories => 'Edit categories';
+	String get status => 'Edit statuses';
 }
 
 // Path: transaction.form.validators
@@ -2597,6 +2599,7 @@ class _TranslationsTransactionListBulkEditEs implements _TranslationsTransaction
 	// Translations
 	@override String get dates => 'Editar fechas';
 	@override String get categories => 'Editar categorías';
+	@override String get status => 'Editar estados';
 }
 
 // Path: transaction.form.validators
@@ -3878,6 +3881,7 @@ class _TranslationsTransactionListBulkEditUk implements _TranslationsTransaction
 	// Translations
 	@override String get dates => 'Редагувати дати';
 	@override String get categories => 'Редагувати категорії';
+	@override String get status => 'Редагувати статуси';
 }
 
 // Path: transaction.form.validators
@@ -5159,6 +5163,7 @@ class _TranslationsTransactionListBulkEditZhTw implements _TranslationsTransacti
 	// Translations
 	@override String get dates => '編輯日期';
 	@override String get categories => '編輯類別';
+	@override String get status => '编辑状态';
 }
 
 // Path: transaction.form.validators
@@ -5553,6 +5558,7 @@ extension on Translations {
 			);
 			case 'transaction.list.bulk_edit.dates': return 'Edit dates';
 			case 'transaction.list.bulk_edit.categories': return 'Edit categories';
+			case 'transaction.list.bulk_edit.status': return 'Edit statuses';
 			case 'transaction.filters.from_value': return 'From amount';
 			case 'transaction.filters.to_value': return 'Up to amount';
 			case 'transaction.filters.from_value_def': return ({required Object x}) => 'From ${x}';
@@ -6173,6 +6179,7 @@ extension on _TranslationsEs {
 			);
 			case 'transaction.list.bulk_edit.dates': return 'Editar fechas';
 			case 'transaction.list.bulk_edit.categories': return 'Editar categorías';
+			case 'transaction.list.bulk_edit.status': return 'Editar estados';
 			case 'transaction.filters.from_value': return 'Desde monto';
 			case 'transaction.filters.to_value': return 'Hasta monto';
 			case 'transaction.filters.from_value_def': return ({required Object x}) => 'Desde ${x}';
@@ -6792,6 +6799,7 @@ extension on _TranslationsUk {
 			);
 			case 'transaction.list.bulk_edit.dates': return 'Редагувати дати';
 			case 'transaction.list.bulk_edit.categories': return 'Редагувати категорії';
+			case 'transaction.list.bulk_edit.status': return 'Редагувати статуси';
 			case 'transaction.filters.from_value': return 'Від суми';
 			case 'transaction.filters.to_value': return 'До суми';
 			case 'transaction.filters.from_value_def': return ({required Object x}) => 'Від ${x}';
@@ -7411,6 +7419,7 @@ extension on _TranslationsZhTw {
 			);
 			case 'transaction.list.bulk_edit.dates': return '編輯日期';
 			case 'transaction.list.bulk_edit.categories': return '編輯類別';
+			case 'transaction.list.bulk_edit.status': return '编辑状态';
 			case 'transaction.filters.from_value': return '從金額';
 			case 'transaction.filters.to_value': return '最多金額';
 			case 'transaction.filters.from_value_def': return ({required Object x}) => '來自 ${x}';

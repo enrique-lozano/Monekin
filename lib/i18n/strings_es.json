@@ -299,7 +299,8 @@
       },
       "BULK_EDIT": {
         "dates": "Editar fechas",
-        "categories": "Editar categorías"
+        "categories": "Editar categorías",
+        "status": "Editar estados"
       }
     },
     "FILTERS": {
