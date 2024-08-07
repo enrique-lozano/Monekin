@@ -277,11 +277,13 @@ class FundEvolutionLineChart extends StatelessWidget {
                                             color: ultraLightBorderColor,
                                           ),
                                           const SizedBox(width: 4),
-                                          Text(
-                                            meta.formattedValue,
-                                            style: const TextStyle(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w300,
+                                          BlurBasedOnPrivateMode(
+                                            child: Text(
+                                              meta.formattedValue,
+                                              style: const TextStyle(
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w300,
+                                              ),
                                             ),
                                           ),
                                         ],
