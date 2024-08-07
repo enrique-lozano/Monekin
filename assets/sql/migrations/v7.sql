@@ -146,3 +146,7 @@ PRAGMA foreign_keys = 1;
 
 -- Drop the table with the uneeded translations
 DROP TABLE currencyNames;
+
+-- ----------- NEW USER SETTINGS ------------
+
+INSERT INTO userSettings VALUES ('privateModeAtLaunch', '0');
