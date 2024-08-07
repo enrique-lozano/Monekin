@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/details/account_details.dart';
 import 'package:monekin/app/home/widgets/click_tracker.dart';
@@ -354,6 +355,8 @@ class _DashboardPageState extends State<DashboardPage> {
             await PrivateModeService.instance.privateModeStream.first;
 
         PrivateModeService.instance.setPrivateMode(!privateMode);
+
+        await HapticFeedback.lightImpact();
 
         sc.showSnackBar(
           SnackBar(
