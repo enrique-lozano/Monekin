@@ -283,17 +283,21 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                 );
               },
             ),
-            SwitchListTile(
-              title: Text(t.settings.security.private_mode),
-              subtitle: Text(t.settings.security.private_mode_descr),
-              secondary: const Icon(Icons.lock),
-              value: PrivateModeService.instance.inPrivateMode ?? false,
-              onChanged: (bool value) {
-                setState(() {
-                  PrivateModeService.instance.inPrivateMode = value;
-                });
-              },
-            ),
+            StreamBuilder(
+                stream: PrivateModeService.instance.privateModeStream,
+                builder: (context, snapshot) {
+                  return SwitchListTile(
+                    title: Text(t.settings.security.private_mode),
+                    subtitle: Text(t.settings.security.private_mode_descr),
+                    secondary: const Icon(Icons.lock),
+                    value: snapshot.data ?? false,
+                    onChanged: (bool value) {
+                      setState(() {
+                        PrivateModeService.instance.setPrivateMode(value);
+                      });
+                    },
+                  );
+                }),
           ],
         ),
       ),
