@@ -7,6 +7,7 @@ import 'package:monekin/app/layout/navigation_sidebar.dart';
 import 'package:monekin/app/layout/tabs.dart';
 import 'package:monekin/app/onboarding/intro.page.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
+import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/theme.dart';
@@ -14,8 +15,10 @@ import 'package:monekin/core/routes/root_navigator_observer.dart';
 import 'package:monekin/core/utils/scroll_behavior_override.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await PrivateModeService.instance.initializePrivateMode();
 
   runApp(const MonekinAppEntryPoint());
 }
