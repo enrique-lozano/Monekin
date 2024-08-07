@@ -13,6 +13,7 @@ import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/date-utils/period_type.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/presentation/theme.dart';
+import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 
@@ -401,11 +402,13 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
                                     color: ultraLightBorderColor,
                                   ),
                                   const SizedBox(width: 4),
-                                  Text(
-                                    meta.formattedValue,
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w300,
+                                  BlurBasedOnPrivateMode(
+                                    child: Text(
+                                      meta.formattedValue,
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w300,
+                                      ),
                                     ),
                                   ),
                                 ],
