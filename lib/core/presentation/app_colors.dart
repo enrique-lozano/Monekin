@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
 
 /// Monekin brand color.
 const brandBlue = Color(0xFF0F3375);
@@ -18,8 +17,9 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.onPrimary,
     required this.primaryContainer,
     required this.onPrimaryContainer,
-    required this.background,
-    required this.onBackground,
+    required this.surface,
+    required this.onSurface,
+    required this.modalBackground,
   });
 
   final Color danger;
@@ -36,8 +36,9 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color onPrimary;
   final Color primaryContainer;
   final Color onPrimaryContainer;
-  final Color background;
-  final Color onBackground;
+  final Color surface;
+  final Color onSurface;
+  final Color modalBackground;
 
   static AppColors fromColorScheme(ColorScheme colorScheme) {
     final isDark = colorScheme.brightness == Brightness.dark;
@@ -46,15 +47,11 @@ class AppColors extends ThemeExtension<AppColors> {
       danger: isDark ? Colors.redAccent : Colors.red,
       success:
           isDark ? Colors.lightGreen : const Color.fromARGB(255, 55, 161, 59),
-      brand: brandBlue,
+      brand: isDark ? const Color.fromARGB(255, 128, 134, 177) : brandBlue,
 
-      light: isDark
-          ? colorScheme.surfaceTint.withAlpha(10)
-          : colorScheme.surfaceTint.withAlpha(20),
+      light: colorScheme.surfaceContainerLow,
 
-      dark: isDark
-          ? colorScheme.onSurfaceVariant.darken()
-          : colorScheme.onSurfaceVariant.lighten(),
+      dark: colorScheme.inverseSurface,
 
       shadowColor: isDark
           ? const Color.fromARGB(105, 189, 189, 189)
@@ -64,15 +61,17 @@ class AppColors extends ThemeExtension<AppColors> {
           ? const Color.fromARGB(40, 116, 116, 116)
           : const Color.fromARGB(44, 90, 90, 90),
 
-      inputFill: colorScheme.surfaceVariant,
+      inputFill: colorScheme.surfaceContainerHighest,
 
       // Colors from the material color scheme:
       primary: colorScheme.primary,
       onPrimary: colorScheme.onPrimary,
       primaryContainer: colorScheme.primaryContainer,
       onPrimaryContainer: colorScheme.onPrimaryContainer,
-      background: colorScheme.background,
-      onBackground: colorScheme.onBackground,
+      surface: colorScheme.surface,
+      onSurface: colorScheme.onSurface,
+
+      modalBackground: colorScheme.surfaceContainer,
     );
   }
 
@@ -81,21 +80,23 @@ class AppColors extends ThemeExtension<AppColors> {
   }
 
   @override
-  AppColors copyWith(
-      {Color? danger,
-      Color? success,
-      Color? brand,
-      Color? primary,
-      Color? inputFill,
-      Color? dark,
-      Color? light,
-      Color? shadowColor,
-      Color? shadowColorLight,
-      Color? onPrimary,
-      Color? primaryContainer,
-      Color? onPrimaryContainer,
-      Color? background,
-      Color? onBackground}) {
+  AppColors copyWith({
+    Color? danger,
+    Color? success,
+    Color? brand,
+    Color? primary,
+    Color? inputFill,
+    Color? dark,
+    Color? light,
+    Color? shadowColor,
+    Color? shadowColorLight,
+    Color? onPrimary,
+    Color? primaryContainer,
+    Color? onPrimaryContainer,
+    Color? surface,
+    Color? onSurface,
+    Color? modalBackground,
+  }) {
     return AppColors(
       danger: danger ?? this.danger,
       success: success ?? this.success,
@@ -109,8 +110,9 @@ class AppColors extends ThemeExtension<AppColors> {
       onPrimary: onPrimary ?? this.onPrimary,
       primaryContainer: primaryContainer ?? this.primaryContainer,
       onPrimaryContainer: onPrimaryContainer ?? this.onPrimaryContainer,
-      background: background ?? this.background,
-      onBackground: onBackground ?? this.onBackground,
+      surface: surface ?? this.surface,
+      onSurface: onSurface ?? this.onSurface,
+      modalBackground: modalBackground ?? this.modalBackground,
     );
   }
 
@@ -138,9 +140,10 @@ class AppColors extends ThemeExtension<AppColors> {
       onPrimaryContainer:
           Color.lerp(onPrimaryContainer, other.onPrimaryContainer, t) ??
               onPrimaryContainer,
-      background: Color.lerp(background, other.background, t) ?? background,
-      onBackground:
-          Color.lerp(onBackground, other.onBackground, t) ?? onBackground,
+      surface: Color.lerp(surface, other.surface, t) ?? surface,
+      onSurface: Color.lerp(onSurface, other.onSurface, t) ?? onSurface,
+      modalBackground: Color.lerp(modalBackground, other.modalBackground, t) ??
+          modalBackground,
     );
   }
 }

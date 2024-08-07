@@ -7,11 +7,13 @@ import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/date-utils/date_period.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/date-utils/period_type.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/presentation/theme.dart';
+import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 
@@ -77,7 +79,9 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
         await accountService
             .getAccountsBalance(
               filters: widget.filters.copyWith(
-                transactionTypes: [TransactionType.income],
+                transactionTypes: [TransactionType.I]
+                    .intersectionWithNullable(widget.filters.transactionTypes)
+                    .toList(),
                 minDate: startDate,
                 maxDate: endDate,
               ),
@@ -88,7 +92,9 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
         await accountService
             .getAccountsBalance(
               filters: widget.filters.copyWith(
-                transactionTypes: [TransactionType.expense],
+                transactionTypes: [TransactionType.E]
+                    .intersectionWithNullable(widget.filters.transactionTypes)
+                    .toList(),
                 minDate: startDate,
                 maxDate: endDate,
               ),
@@ -220,6 +226,16 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
     );
   }
 
+  BorderRadius getBarRadius({required double radius, bool isNegative = false}) {
+    Radius circularRadius = Radius.circular(radius);
+
+    return BorderRadius.only(
+        topLeft: isNegative ? Radius.zero : circularRadius,
+        topRight: isNegative ? Radius.zero : circularRadius,
+        bottomLeft: isNegative ? circularRadius : Radius.zero,
+        bottomRight: isNegative ? circularRadius : Radius.zero);
+  }
+
   BarChartGroupData makeGroupData(
     int x,
     double income,
@@ -228,8 +244,6 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
     List<int> showTooltips = const [],
   }) {
     bool isTouched = touchedBarGroupIndex == x;
-
-    Radius radius = Radius.circular(width / 6);
 
     return BarChartGroupData(
       x: x,
@@ -240,10 +254,8 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
               ? AppColors.of(context).success.lighten(0.2)
               : AppColors.of(context).success,
           width: width * (isTouched ? 1.2 : 1),
-          borderRadius: BorderRadius.only(
-            topLeft: radius,
-            topRight: radius,
-          ),
+          borderRadius:
+              getBarRadius(radius: width / 6, isNegative: income.isNegative),
         ),
         BarChartRodData(
           toY: -expense,
@@ -251,10 +263,8 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
               ? AppColors.of(context).danger.lighten(0.2)
               : AppColors.of(context).danger,
           width: width * (isTouched ? 1.2 : 1),
-          borderRadius: BorderRadius.only(
-            topLeft: radius,
-            topRight: radius,
-          ),
+          borderRadius: getBarRadius(
+              radius: width / 6, isNegative: (-expense).isNegative),
         )
       ],
       showingTooltipIndicators: showTooltips,
@@ -300,7 +310,7 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
                       touchTooltipData: BarTouchTooltipData(
                         tooltipMargin: -10,
                         getTooltipColor: (spot) =>
-                            AppColors.of(context).background,
+                            AppColors.of(context).surface,
                         getTooltipItem: (group, groupIndex, rod, rodIndex) {
                           final barRodsToY = group.barRods.map((e) => e.toY);
 
@@ -392,11 +402,13 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
                                     color: ultraLightBorderColor,
                                   ),
                                   const SizedBox(width: 4),
-                                  Text(
-                                    meta.formattedValue,
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w300,
+                                  BlurBasedOnPrivateMode(
+                                    child: Text(
+                                      meta.formattedValue,
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w300,
+                                      ),
                                     ),
                                   ),
                                 ],

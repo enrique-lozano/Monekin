@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/details/account_details_actions.dart';
+import 'package:monekin/app/transactions/label_value_info_list.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
@@ -38,13 +39,16 @@ class AccountDetailsPage extends StatefulWidget {
 }
 
 class _AccountDetailsPageState extends State<AccountDetailsPage> {
-  ListTile buildCopyableTile(String title, String value) {
+  LabelValueInfoListItem buildCopyableTile(String title, String value) {
     final snackbarDisplayer = ScaffoldMessenger.of(context).showSnackBar;
 
-    return ListTile(
-      title: Text(title),
-      subtitle: Text(value),
-      contentPadding: const EdgeInsets.only(left: 16, right: 12),
+    return LabelValueInfoListItem(
+      label: title,
+      value: Text(
+        value,
+        softWrap: false,
+        overflow: TextOverflow.ellipsis,
+      ),
       trailing: IconButton(
           onPressed: () {
             Clipboard.setData(ClipboardData(text: value)).then((_) {
@@ -101,47 +105,46 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                       child: Column(
                         children: [
                           CardWithHeader(
-                              title: 'Info',
-                              body: Column(
-                                children: [
-                                  ListTile(
-                                    title: Text(t.account.date),
-                                    subtitle: Text(
-                                      DateFormat.yMMMMEEEEd()
-                                          .add_Hm()
-                                          .format(account.date),
-                                    ),
+                            title: 'Info',
+                            body: LabelValueInfoList(items: [
+                              LabelValueInfoListItem(
+                                value: Text(
+                                  DateFormat.yMMMMEEEEd()
+                                      .add_Hm()
+                                      .format(account.date),
+                                ),
+                                label: t.account.date,
+                              ),
+                              if (account.isClosed) ...[
+                                LabelValueInfoListItem(
+                                  label: t.account.close_date,
+                                  value: Text(
+                                    DateFormat.yMMMMEEEEd()
+                                        .add_Hm()
+                                        .format(account.closingDate!),
                                   ),
-                                  if (account.isClosed) ...[
-                                    ListTile(
-                                      title: Text(t.account.close_date),
-                                      subtitle: Text(
-                                        DateFormat.yMMMMEEEEd()
-                                            .add_Hm()
-                                            .format(account.closingDate!),
-                                      ),
-                                    ),
-                                  ],
-                                  ListTile(
-                                    title: Text(t.account.types.title),
-                                    subtitle: Text(account.type.title(context)),
-                                  ),
-                                  if (account.description != null) ...[
-                                    ListTile(
-                                      title: Text(t.account.form.notes),
-                                      subtitle: Text(account.description!),
-                                    ),
-                                  ],
-                                  if (account.iban != null) ...[
-                                    buildCopyableTile(
-                                        t.account.form.iban, account.iban!)
-                                  ],
-                                  if (account.swift != null) ...[
-                                    buildCopyableTile(
-                                        t.account.form.swift, account.swift!)
-                                  ]
-                                ],
-                              )),
+                                ),
+                              ],
+                              LabelValueInfoListItem(
+                                label: t.account.types.title,
+                                value: Text(account.type.title(context)),
+                              ),
+                              if (account.iban != null) ...[
+                                buildCopyableTile(
+                                    t.account.form.iban, account.iban!)
+                              ],
+                              if (account.swift != null) ...[
+                                buildCopyableTile(
+                                    t.account.form.swift, account.swift!)
+                              ],
+                              if (account.description != null) ...[
+                                LabelValueInfoListItem(
+                                  label: t.account.form.notes,
+                                  value: Text(account.description!),
+                                ),
+                              ],
+                            ]),
+                          ),
                           const SizedBox(height: 16),
                           CardWithHeader(
                             title: t.home.last_transactions,
@@ -212,7 +215,7 @@ class _AccountDetailHeader extends SliverPersistentHeaderDelegate {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.of(context).background,
+        color: AppColors.of(context).surface,
         border: Border(
           bottom: BorderSide(
             width: 2,

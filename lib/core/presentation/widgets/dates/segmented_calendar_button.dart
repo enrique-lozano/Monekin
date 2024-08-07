@@ -60,18 +60,12 @@ class _SegmentedCalendarButtonState extends State<SegmentedCalendarButton> {
           iconSize: widget.buttonHeight - padding * 2,
           disabledColor: AppColors.of(context).primary,
           color: AppColors.of(context).primary,
-          style: ButtonStyle(
-            side: MaterialStateProperty.all(
-              BorderSide(color: AppColors.of(context).primary, width: 2),
-            ),
-            fixedSize: MaterialStateProperty.all(
-              Size.fromHeight(widget.buttonHeight),
-            ),
-            padding: MaterialStateProperty.all(EdgeInsets.all(padding)),
-            minimumSize: MaterialStateProperty.all(const Size.fromHeight(0)),
-            shape: MaterialStateProperty.all(
-              RoundedRectangleBorder(borderRadius: borderRadius),
-            ),
+          style: IconButton.styleFrom(
+            side: BorderSide(color: AppColors.of(context).primary, width: 2),
+            fixedSize: Size.fromHeight(widget.buttonHeight),
+            padding: EdgeInsets.all(padding),
+            minimumSize: const Size.fromHeight(0),
+            shape: RoundedRectangleBorder(borderRadius: borderRadius),
           ),
         ),
       ),

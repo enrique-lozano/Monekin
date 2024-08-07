@@ -43,12 +43,12 @@ class BottomSheetFooter extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   style: IconButton.styleFrom(
-                          side: BorderSide(color: colors.outline),
-                          backgroundColor: colors.background)
-                      .copyWith(
-                    foregroundColor: MaterialStateProperty.resolveWith(
-                        (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed)) {
+                    side: BorderSide(color: colors.outline),
+                    backgroundColor: colors.surface,
+                  ).copyWith(
+                    foregroundColor: WidgetStateProperty.resolveWith(
+                        (Set<WidgetState> states) {
+                      if (states.contains(WidgetState.pressed)) {
                         return colors.onSurface;
                       }
                       return null;

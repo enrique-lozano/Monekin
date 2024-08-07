@@ -1,15 +1,15 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:monekin/app/categories/categories_list.dart';
+import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/categories/subcategory_form.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/html_text.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../../core/services/supported_icon/supported_icon_service.dart';
@@ -58,16 +58,14 @@ class CategoryFormFunctions {
   static mergeCategory(BuildContext context, Category category) {
     final t = Translations.of(context);
 
-    showCategoryListModal(
-            context,
-            const CategoriesList(
-                mode: CategoriesListMode.modalSelectSubcategory))
-        .then((value) {
-      if (value == null || value.isEmpty) {
+    showCategoryPickerModal(context,
+        modal: CategoryPicker(
+          categoryType: [category.type, CategoryType.B],
+          selectedCategory: null,
+        )).then((selCategory) {
+      if (selCategory == null) {
         return;
       }
-
-      final selCategory = value.first;
 
       confirmDialog(
         context,
@@ -142,14 +140,17 @@ class CategoryFormFunctions {
   static makeSubcategory(BuildContext context, Category category) {
     if (category.isChildCategory) return;
 
-    showCategoryListModal(context,
-            const CategoriesList(mode: CategoriesListMode.modalSelectCategory))
-        .then((value) {
-      if (value == null || value.isEmpty) {
+    showCategoryPickerModal(
+      context,
+      modal: CategoryPicker(
+        categoryType: [category.type, CategoryType.B],
+        selectedCategory: null,
+        showSubcategories: false,
+      ),
+    ).then((selCategory) {
+      if (selCategory == null) {
         return;
       }
-
-      final selCategory = value.first;
 
       confirmDialog(
         context,

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/app/settings/widgets/language_selector.dart';
+import 'package:monekin/app/settings/widgets/supported_locales.dart';
+import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker_modal.dart';
-import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/presentation/app_colors.dart';
@@ -43,6 +45,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
     return ListTile(
         title: Text(title),
         subtitle: Text(selectedItem.label),
+        leading: Icon(Icons.light_mode),
         onTap: () {
           showDialog(
             context: context,
@@ -102,24 +105,48 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
         title: Text(t.settings.title_short),
       ),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.only(bottom: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             createListSeparator(context, t.settings.lang_section),
-            buildSelector(
-              title: t.settings.lang_title,
-              dialogDescr: t.settings.lang_descr,
-              items: [
-                SelectItem(value: 'es', label: t.lang.es),
-                SelectItem(value: 'en', label: t.lang.en)
-              ],
-              selected: LocaleSettings.currentLocale.languageTag,
-              onChanged: (value) {
-                LocaleSettings.setLocaleRaw(value, listenToDeviceLocale: true);
+            ListTile(
+              title: Text(t.settings.lang_title),
+              leading: const Icon(Icons.language),
+              subtitle: Text(
+                appSupportedLocales
+                    .firstWhere((element) =>
+                        element.locale.languageTag ==
+                        LocaleSettings.currentLocale.languageTag)
+                    .label,
+              ),
+              onTap: () async {
+                final snackbarDisplayer =
+                    ScaffoldMessenger.of(context).showSnackBar;
 
-                UserSettingService.instance
-                    .setSetting(SettingKey.appLanguage, value)
-                    .then((value) => null);
+                final newLang = await showLanguageSelectorBottomSheet(
+                  context,
+                  LanguageSelector(
+                      selectedLangTag:
+                          LocaleSettings.currentLocale.languageTag),
+                );
+
+                if (newLang == null) {
+                  return;
+                }
+
+                LocaleSettings.setLocaleRaw(newLang,
+                    listenToDeviceLocale: true);
+
+                try {
+                  await UserSettingService.instance
+                      .setSetting(SettingKey.appLanguage, newLang);
+                } catch (e) {
+                  snackbarDisplayer(const SnackBar(
+                    content: Text(
+                        'There was an error persisting this setting on your device. Contact the developers for more information'),
+                  ));
+                }
               },
             ),
             createListSeparator(context, t.settings.theme_and_colors),
@@ -196,7 +223,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     color = ColorHex.get(snapshot.data!);
                   }
 
-                  return Tappable(
+                  return ListTile(
                     onTap: snapshot.data! == 'auto'
                         ? null
                         : () => showColorPickerModal(
@@ -216,26 +243,59 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                                     SettingKey.accentColor, value.toHex());
                               });
                             }),
-                    child: ListTile(
-                      title: Text(t.settings.accent_color),
-                      subtitle: Text(t.settings.accent_color_descr),
-                      enabled: snapshot.data! != 'auto',
-                      trailing: SizedBox(
+                    title: Text(t.settings.accent_color),
+                    subtitle: Text(t.settings.accent_color_descr),
+                    enabled: snapshot.data! != 'auto',
+                    trailing: SizedBox(
+                      height: 46,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        clipBehavior: Clip.hardEdge,
+                        width: 46,
                         height: 46,
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          clipBehavior: Clip.hardEdge,
-                          width: 46,
-                          height: 46,
-                          decoration: BoxDecoration(
-                            color: color.withOpacity(
-                              snapshot.data! != 'auto' ? 1 : 0.4,
-                            ),
-                            borderRadius: BorderRadius.circular(100),
+                        decoration: BoxDecoration(
+                          color: color.withOpacity(
+                            snapshot.data! != 'auto' ? 1 : 0.4,
                           ),
+                          borderRadius: BorderRadius.circular(100),
                         ),
                       ),
                     ),
+                  );
+                }),
+            createListSeparator(context, t.settings.security.title),
+            StreamBuilder(
+              stream: PrivateModeService.instance.getPrivateModeAtLaunch(),
+              builder: (context, snapshot) {
+                return SwitchListTile(
+                  title: Text(t.settings.security.private_mode_at_launch),
+                  subtitle:
+                      Text(t.settings.security.private_mode_at_launch_descr),
+                  secondary: const Icon(Icons.phonelink_lock_outlined),
+                  value: snapshot.data ?? false,
+                  onChanged: (bool value) {
+                    PrivateModeService.instance
+                        .setPrivateModeAtLaunch(value)
+                        .then((i) {
+                      setState(() {});
+                    });
+                  },
+                );
+              },
+            ),
+            StreamBuilder(
+                stream: PrivateModeService.instance.privateModeStream,
+                builder: (context, snapshot) {
+                  return SwitchListTile(
+                    title: Text(t.settings.security.private_mode),
+                    subtitle: Text(t.settings.security.private_mode_descr),
+                    secondary: const Icon(Icons.lock),
+                    value: snapshot.data ?? false,
+                    onChanged: (bool value) {
+                      setState(() {
+                        PrivateModeService.instance.setPrivateMode(value);
+                      });
+                    },
                   );
                 }),
           ],

@@ -6,6 +6,7 @@ import 'package:monekin/app/stats/widgets/movements_distribution/category_stats_
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
@@ -19,7 +20,7 @@ import 'package:monekin/i18n/translations.g.dart';
 import '../../../../core/models/transaction/transaction_type.enum.dart';
 
 class TrDistributionChartItem<T> {
-  T category;
+  final T category;
   List<MoneyTransaction> transactions;
   double value;
 
@@ -35,7 +36,7 @@ class ChartByCategories extends StatefulWidget {
       {super.key,
       required this.datePeriodState,
       this.showList = false,
-      this.initialSelectedType = TransactionType.expense,
+      this.initialSelectedType = TransactionType.E,
       this.filters = const TransactionFilters()});
 
   final DatePeriodState datePeriodState;
@@ -58,11 +59,9 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
     return widget.filters.copyWith(
       status:
           TransactionStatus.getStatusThatCountsForStats(widget.filters.status),
-      transactionTypes: [
-        if (transactionsType == TransactionType.expense)
-          TransactionType.expense,
-        if (transactionsType == TransactionType.income) TransactionType.income
-      ],
+      transactionTypes: [transactionsType]
+          .intersectionWithNullable(widget.filters.transactionTypes)
+          .toList(),
       minDate: widget.datePeriodState.startDate,
       maxDate: widget.datePeriodState.endDate,
     );
@@ -80,7 +79,8 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
         .first;
 
     for (final transaction in transactions) {
-      final trValue = transaction.currentValueInPreferredCurrency.abs();
+      final trValue = transaction.currentValueInPreferredCurrency *
+          (transactionsType == TransactionType.E ? -1 : 1);
 
       final categoryToEdit = data.firstWhereOrNull((cat) =>
           cat.category.id == transaction.category?.id ||
@@ -92,22 +92,24 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
       } else {
         data.add(
           TrDistributionChartItem(
-              category: transaction.category!.parentCategoryID == null
-                  ? Category.fromDB(transaction.category!, null)
-                  : (await CategoryService.instance
-                      .getCategoryById(transaction.category!.parentCategoryID!)
-                      .first)!,
-              transactions: [transaction],
-              value: trValue),
+            category: transaction.category!.parentCategoryID == null
+                ? Category.fromDB(transaction.category!, null)
+                : (await CategoryService.instance
+                    .getCategoryById(transaction.category!.parentCategoryID!)
+                    .first)!,
+            transactions: [transaction],
+            value: trValue,
+          ),
         );
       }
     }
 
-    data.sort((a, b) => b.value.compareTo(a.value));
-    return data;
+    return data
+        .where((element) => element.value > 0)
+        .sorted((a, b) => b.value.compareTo(a.value));
   }
 
-  /// Returns a value between 0 and 100
+  /// Returns a value between 0 and 1
   double getElementPercentageInTotal(
       double elementValue, List<TrDistributionChartItem> items) {
     return (elementValue / items.map((e) => e.value).sum);
@@ -209,6 +211,10 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
     super.initState();
 
     transactionsType = widget.initialSelectedType;
+
+    if (transactionsType.isTransfer) {
+      throw 'Can not draw the categories pie chart of transfers';
+    }
   }
 
   @override
@@ -231,11 +237,11 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
               child: SegmentedButton(
                 segments: [
                   ButtonSegment(
-                    value: TransactionType.expense,
+                    value: TransactionType.E,
                     label: Text(t.transaction.types.expense(n: 1)),
                   ),
                   ButtonSegment(
-                    value: TransactionType.income,
+                    value: TransactionType.I,
                     label: Text(t.transaction.types.income(n: 1)),
                   ),
                 ],

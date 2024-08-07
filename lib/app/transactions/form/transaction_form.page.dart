@@ -2,13 +2,18 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
-import 'package:monekin/app/categories/categories_list.dart';
-import 'package:monekin/app/tags/tag_list.page.dart';
-import 'package:monekin/app/transactions/form/amount_selector.dart';
+import 'package:monekin/app/categories/selectors/category_picker.dart';
+import 'package:monekin/app/transactions/form/dialogs/transaction_more_info.modal.dart';
+import 'package:monekin/app/transactions/form/dialogs/transaction_status_selector.dart';
+import 'package:monekin/app/transactions/form/dialogs/transaction_title_modal.dart';
+import 'package:monekin/app/transactions/form/dialogs/transaction_value_in_destiny_modal.dart';
+import 'package:monekin/app/transactions/form/widgets/transaction_form_calculator.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/currency/currency_service.dart';
+import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
@@ -16,129 +21,98 @@ import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
+import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/animations/shake/shake_widget.dart';
-import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
-import 'package:monekin/core/presentation/widgets/expansion_panel/single_expansion_panel.dart';
-import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
-import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_field.dart';
-import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
+import 'package:monekin/core/presentation/widgets/modal_container.dart';
+import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/presentation/widgets/tappable.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/status_filter/transaction_status_filter.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/tags_filter/tags_filter_container.dart';
-import 'package:monekin/core/utils/constants.dart';
-import 'package:monekin/core/utils/text_field_utils.dart';
+import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-import '../../../core/models/transaction/transaction_type.enum.dart';
-import '../../../core/presentation/app_colors.dart';
+import 'widgets/account_or_category_selector.dart';
 
 enum TransactionFormMode { transfer, incomeOrExpense }
 
 class TransactionFormPage extends StatefulWidget {
-  const TransactionFormPage({
-    super.key,
-    this.transactionToEdit,
-    this.mode = TransactionFormMode.incomeOrExpense,
-    this.fromAccount,
-    this.toAccount,
-  });
+  const TransactionFormPage(
+      {super.key,
+      this.mode = TransactionType.E,
+      this.fromAccount,
+      this.transactionToEdit});
+  final TransactionType mode;
 
   final MoneyTransaction? transactionToEdit;
-  final TransactionFormMode mode;
 
   final Account? fromAccount;
-  final Account? toAccount;
 
   @override
   State<TransactionFormPage> createState() => _TransactionFormPageState();
 }
 
 class _TransactionFormPageState extends State<TransactionFormPage> {
-  final _formKey = GlobalKey<FormState>();
+  late TransactionType transactionType;
+  final _shakeKey = GlobalKey<ShakeWidgetState>();
 
-  TextEditingController valueController = TextEditingController();
-  double? get valueToNumber => double.tryParse(valueController.text);
-
-  TextEditingController valueInDestinyController = TextEditingController();
-  double? get valueInDestinyToNumber =>
-      double.tryParse(valueInDestinyController.text);
+  Account? fromAccount;
 
   Category? selectedCategory;
 
-  Account? fromAccount;
-  Account? toAccount;
-
   DateTime date = DateTime.now();
+
+  double transactionAmount = 0;
 
   TransactionStatus? status;
 
-  TextEditingController notesController = TextEditingController();
-  TextEditingController titleController = TextEditingController();
+  String? title;
 
   bool get isEditMode => widget.transactionToEdit != null;
 
   RecurrencyData recurrentRule = const RecurrencyData.noRepeat();
 
-  List<Tag> tags = [];
+  List<Tag> get tags => moreInfo.tags;
 
-  TransactionType currentTransactionTypeToAdd = TransactionType.expense;
+  TransactionMoreInfo moreInfo = const TransactionMoreInfo();
 
-  final _shakeKey = GlobalKey<ShakeWidgetState>();
+  @override
+  void initState() {
+    super.initState();
 
-  Widget selector({
-    required String title,
-    required String? inputValue,
-    required Widget icon,
-    required Function onClick,
-  }) {
-    final t = Translations.of(context);
+    transactionType = widget.mode;
 
-    return InkWell(
-      onTap: () => onClick(),
-      borderRadius: BorderRadius.circular(8),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            icon,
-            const SizedBox(width: 8),
-            Flexible(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    softWrap: false,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                          fontWeight: FontWeight.w300,
-                        ),
-                  ),
-                  Text(
-                    inputValue ?? t.general.unspecified,
-                    softWrap: false,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+    if (transactionType == TransactionType.E) {
+      transactionAmount = transactionAmount * -1;
+    }
+
+    if (widget.transactionToEdit != null) {
+      fillForm(widget.transactionToEdit!);
+    } else {
+      AccountService.instance
+          .getAccounts(
+              predicate: (acc, curr) => AppDB.instance.buildExpr([
+                    acc.type.equalsValue(AccountType.saving).not(),
+                    acc.closingDate.isNull()
+                  ]),
+              limit: transactionType.isTransfer ? 2 : 1)
+          .first
+          .then((acc) {
+        fromAccount = widget.fromAccount ?? acc[0];
+
+        if (transactionType.isTransfer) {
+          moreInfo = moreInfo.copyWith(
+            transferAccount: acc[1].id != fromAccount!.id ? acc[1] : acc[0],
+          );
+        }
+
+        setState(() {});
+      });
+    }
   }
 
   submitForm() {
-    if (widget.mode == TransactionFormMode.incomeOrExpense &&
-        selectedCategory == null) {
+    if (transactionType.isIncomeOrExpense && selectedCategory == null ||
+        transactionType.isTransfer && moreInfo.transferAccount == null) {
       _shakeKey.currentState?.shake();
       return;
     }
@@ -146,7 +120,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     final t = Translations.of(context);
     final scMessenger = ScaffoldMessenger.of(context);
 
-    if (valueToNumber == null || valueToNumber == 0) {
+    if (transactionAmount == 0) {
       scMessenger.showSnackBar(
         SnackBar(content: Text(t.transaction.form.validators.zero)),
       );
@@ -154,25 +128,40 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
       return;
     }
 
-    if (valueToNumber! < 0) {
+    if (transactionAmount < 0 && transactionType.isTransfer) {
       scMessenger.showSnackBar(SnackBar(
-        content: Text(widget.mode == TransactionFormMode.incomeOrExpense
-            ? t.transaction.form.validators.negative_transaction
-            : t.transaction.form.validators.negative_transfer),
+        content: Text(t.transaction.form.validators.negative_transfer),
       ));
 
       return;
     }
 
+    // Transactions after account creation:
     if (fromAccount != null && fromAccount!.date.compareTo(date) > 0) {
       scMessenger.showSnackBar(
         SnackBar(
-            content: Text(
-                t.transaction.form.validators.date_after_account_creation)),
+          content:
+              Text(t.transaction.form.validators.date_after_account_creation),
+        ),
       );
 
       return;
     }
+
+    // In transfers, we can not have the same source and destination account:
+    if (transactionType.isTransfer &&
+        fromAccount!.id == moreInfo.transferAccount!.id) {
+      scMessenger.showSnackBar(
+        SnackBar(
+          content: Text(
+              t.transaction.form.validators.transfer_between_same_accounts),
+        ),
+      );
+
+      return;
+    }
+
+    // VALIDATIONS ENDED -- PROCEED:
 
     onSuccess() {
       Navigator.pop(context);
@@ -191,29 +180,27 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         id: newTrID,
         date: date,
         accountID: fromAccount!.id,
-        value: widget.mode == TransactionFormMode.incomeOrExpense &&
-                selectedCategory!.type.isExpense
-            ? valueToNumber! * -1
-            : valueToNumber!,
+        value: transactionAmount,
         isHidden: false,
+        type: transactionType,
         status: date.compareTo(DateTime.now()) > 0
             ? TransactionStatus.pending
             : status,
-        notes: notesController.text.isEmpty ? null : notesController.text,
-        title: titleController.text.isEmpty ? null : titleController.text,
+        notes: moreInfo.note.notEmptyString,
+        title: title.notEmptyString,
         intervalEach: recurrentRule.intervalEach,
         intervalPeriod: recurrentRule.intervalPeriod,
         endDate: recurrentRule.ruleRecurrentLimit?.endDate,
         remainingTransactions:
             recurrentRule.ruleRecurrentLimit?.remainingIterations,
-        valueInDestiny: widget.mode == TransactionFormMode.transfer
-            ? valueInDestinyToNumber
+        valueInDestiny: transactionType.isTransfer &&
+                moreInfo.valueInDestiny != transactionAmount
+            ? moreInfo.valueInDestiny?.toDouble()
             : null,
-        categoryID: widget.mode == TransactionFormMode.incomeOrExpense
-            ? selectedCategory?.id
-            : null,
+        categoryID:
+            transactionType.isIncomeOrExpense ? selectedCategory?.id : null,
         receivingAccountID:
-            widget.mode == TransactionFormMode.transfer ? toAccount?.id : null,
+            transactionType.isTransfer ? moreInfo.transferAccount?.id : null,
       ),
     )
         .then((value) {
@@ -243,500 +230,48 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-    if (widget.transactionToEdit != null) {
-      fillForm(widget.transactionToEdit!);
-    } else {
-      AccountService.instance
-          .getAccounts(
-              predicate: (acc, curr) => AppDB.instance.buildExpr([
-                    acc.type.equalsValue(AccountType.saving).not(),
-                    acc.closingDate.isNull()
-                  ]),
-              limit: widget.mode == TransactionFormMode.incomeOrExpense ? 1 : 2)
-          .first
-          .then((acc) {
-        fromAccount = widget.fromAccount ?? acc[0];
-
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          displayAmountModal(context);
-        });
-
-        if (widget.mode == TransactionFormMode.transfer) {
-          toAccount = widget.toAccount ??
-              (acc[1].id != fromAccount!.id ? acc[1] : acc[0]);
-        }
-
-        setState(() {});
-      });
-    }
-  }
-
-  Future<List<Account>?> showAccountSelector(Account account) {
-    return showAccountSelectorBottomSheet(
-        context,
-        AccountSelectorModal(
-          allowMultiSelection: false,
-          filterSavingAccounts:
-              widget.mode == TransactionFormMode.incomeOrExpense,
-          includeArchivedAccounts: false,
-          selectedAccounts: [account],
-        ));
-  }
-
-  Future<void> selectCategory() async {
-    final modalRes = await showCategoryListModal(
-      context,
-      CategoriesList(
-        mode: CategoriesListMode.modalSelectSubcategory,
-        selectedCategories: [
-          if (selectedCategory != null)
-            selectedCategory!.parentCategory ?? selectedCategory!
-        ],
-      ),
-    );
-
-    if (modalRes != null && modalRes.isNotEmpty) {
-      setState(() {
-        selectedCategory = modalRes.first;
-      });
-    }
-  }
-
   fillForm(MoneyTransaction transaction) async {
-    setState(() {
-      fromAccount = transaction.account;
-      toAccount = transaction.receivingAccount;
-      date = transaction.date;
-      status = transaction.status;
-      selectedCategory = transaction.category;
-      recurrentRule = transaction.recurrentInfo;
+    setState(
+      () {
+        fromAccount = transaction.account;
+        date = transaction.date;
+        status = transaction.status;
+        selectedCategory = transaction.category;
+        recurrentRule = transaction.recurrentInfo;
 
-      if (selectedCategory != null &&
-          selectedCategory!.type == CategoryType.B) {
-        if (transaction.value < 0) {
-          selectedCategory!.type = CategoryType.E;
-        } else {
-          selectedCategory!.type = CategoryType.I;
+        if (selectedCategory != null &&
+            selectedCategory!.type == CategoryType.B) {
+          if (transaction.value < 0) {
+            selectedCategory!.type = CategoryType.E;
+          } else {
+            selectedCategory!.type = CategoryType.I;
+          }
         }
-      }
 
-      tags = [...transaction.tags];
-    });
-
-    notesController.text = transaction.notes ?? '';
-    titleController.text = transaction.title ?? '';
-    valueController.text = transaction.value.abs().toString();
-
-    valueInDestinyController.text =
-        transaction.valueInDestiny?.abs().toString() ?? '';
-  }
-
-  List<Widget> buildExtraFields() {
-    return [
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-        child: ReadOnlyTextFormField(
-          displayValue: recurrentRule.formText(context),
-          onTap: () {
-            showIntervalSelectoHelpDialog(context,
-                selectedRecurrentRule: recurrentRule,
-                onRecurrentRuleSelected: (res) {
-              setState(() {
-                recurrentRule = res;
-              });
-            });
-          },
-          decoration: InputDecoration(
-            labelText: t.general.time.periodicity.display,
-            suffixIcon: const Icon(Icons.arrow_drop_down),
-          ),
-        ),
-      ),
-      const SizedBox(height: 16),
-      if (widget.mode == TransactionFormMode.transfer) ...[
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-          child: TextFormField(
-            controller: valueInDestinyController,
-            decoration: InputDecoration(
-                labelText:
-                    t.transfer.form.currency_exchange_selector.value_in_destiny,
-                hintText: 'Ex.: 200',
-                suffixText: toAccount?.currency.symbol),
-            keyboardType: TextInputType.number,
-            inputFormatters: decimalDigitFormatter,
-            validator: (value) {
-              final defaultNumberValidatorResult = fieldValidator(value,
-                  isRequired: false, validator: ValidatorType.double);
-
-              if (defaultNumberValidatorResult != null) {
-                return defaultNumberValidatorResult;
-              }
-
-              if (valueToNumber == null) {
-                return null;
-              } else if (valueToNumber! == 0) {
-                return t.transaction.form.validators.zero;
-              }
-
-              return null;
-            },
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            textInputAction: TextInputAction.next,
-            onChanged: (value) {
-              setState(() {});
-            },
-          ),
-        ),
-        if (widget.mode == TransactionFormMode.transfer &&
-            valueToNumber != null &&
-            valueInDestinyToNumber == null)
-          InlineInfoCard(
-            text: '${t.transfer.form.currency_info_add(
-              x: NumberFormat.currency(symbol: toAccount!.currency.symbol)
-                  .format(valueToNumber),
-            )} ',
-            mode: InlineInfoCardMode.info,
-            margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-          ),
-        const SizedBox(height: 12),
-      ],
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-        child: TextFormField(
-          minLines: 2,
-          maxLines: 10,
-          controller: notesController,
-          decoration: InputDecoration(
-            labelText: t.transaction.form.description,
-            alignLabelWithHint: true,
-            hintText: t.transaction.form.description_info,
-          ),
-        ),
-      ),
-      if (recurrentRule.isNoRecurrent) ...[
-        const SizedBox(height: 16),
-        StatefulBuilder(builder: (context, setState) {
-          return Padding(
-            padding: const EdgeInsets.only(left: 16.0),
-            child: TransactionStatusFilter(
-              selectedStatuses: [
-                date.compareTo(DateTime.now()) > 0
-                    ? TransactionStatus.pending
-                    : status
-              ],
-              allowMultipleSelection: false,
-              onSelected: date.compareTo(DateTime.now()) > 0
-                  ? null
-                  : (statusSelected, value) {
-                      setState(() {
-                        status = statusSelected;
-                      });
-                    },
-            ),
-          );
-        }),
-      ],
-      const SizedBox(height: 16),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: StatefulBuilder(builder: (context, setState) {
-          return TagsFilterContainer(
-            child: Wrap(
-              spacing: 6,
-              runSpacing: 0,
-              children: [
-                ...List.generate(tags.length, (index) {
-                  final tag = tags[index];
-
-                  return FilterChip(
-                    label: Text(
-                      tag.name,
-                      style: TextStyle(color: tag.colorData),
-                    ),
-                    selected: true,
-                    onSelected: (value) => setState(() {
-                      tags.removeWhere((element) => element.id == tag.id);
-                    }),
-                    showCheckmark: false,
-                    selectedColor: tag.colorData.lighten(0.8),
-                    avatar: tag.displayIcon(),
-                  );
-                }),
-                ActionChip(
-                  label: Text(t.tags.add),
-                  avatar: const Icon(Icons.add),
-                  onPressed: () =>
-                      showTagListModal(context, selectedTags: tags).then(
-                    (value) {
-                      if (value != null) {
-                        setState(() {
-                          tags = value;
-                        });
-                      }
-                    },
-                  ),
-                ),
-              ],
-            ),
-          );
-        }),
-      )
-    ];
-  }
-
-  Widget buildTitleField() {
-    return TextFormField(
-      controller: titleController,
-      maxLength: maxLabelLenghtForDisplayNames,
-      decoration: InputDecoration(
-        suffixIcon: const Icon(Icons.title_rounded),
-        labelText: t.transaction.form.title,
-      ),
+        moreInfo = TransactionMoreInfo(
+          tags: transaction.tags,
+          note: transaction.notes,
+          valueInDestiny: transaction.isTransfer
+              ? transaction.valueInDestiny ?? transaction.value
+              : null,
+          transferAccount: transaction.receivingAccount,
+        );
+      },
     );
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    final t = Translations.of(context);
-
-    if (widget.mode == TransactionFormMode.transfer) {
-      currentTransactionTypeToAdd = TransactionType.transfer;
-    } else if (selectedCategory != null) {
-      if (selectedCategory!.type.isIncome) {
-        currentTransactionTypeToAdd = TransactionType.income;
-      } else {
-        currentTransactionTypeToAdd = TransactionType.expense;
-      }
-    } else {
-      currentTransactionTypeToAdd = TransactionType.expense;
-    }
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          isEditMode
-              ? t.transaction.edit
-              : currentTransactionTypeToAdd == TransactionType.transfer
-                  ? t.transfer.create
-                  : currentTransactionTypeToAdd == TransactionType.expense
-                      ? t.transaction.new_expense
-                      : t.transaction.new_income,
-        ),
-      ),
-      persistentFooterButtons: [
-        PersistentFooterButton(
-          child: FilledButton.icon(
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                _formKey.currentState!.save();
-
-                submitForm();
-              }
-            },
-            icon: const Icon(Icons.save),
-            label: Text(isEditMode ? t.transaction.edit : t.transaction.create),
-          ),
-        )
-      ],
-      body: Form(
-        key: _formKey,
-        child: BreakpointContainer(
-          lgChild: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      buildAmountContainer(context),
-                      const SizedBox(height: 18),
-                      buildAccoutAndCategorySelectorRow(context),
-                      const SizedBox(height: 16),
-                      buildTransactionDateSelector(),
-                      const SizedBox(height: 16),
-                      buildTitleField(),
-                    ],
-                  ),
-                ),
-              ),
-              const VerticalDivider(),
-              Expanded(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 0, vertical: 16),
-                  child: Column(
-                    children: [...buildExtraFields()],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    buildAmountContainer(context),
-                    const SizedBox(height: 18),
-                    buildAccoutAndCategorySelectorRow(context),
-                  ],
-                ),
-              ),
-              //   const Divider(),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      // const Divider(thickness: 2.2),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 4),
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 4),
-                            buildTransactionDateSelector(),
-                            const SizedBox(height: 16),
-                            buildTitleField(),
-                          ],
-                        ),
-                      ),
-                      //       ...buildExtraFields()
-                      SingleExpansionPanel(
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 6),
-                            ...buildExtraFields(),
-                            const SizedBox(height: 16),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  void displayAmountModal(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (context) => AmountSelector(
-        title: t.transaction.form.value,
-        amountToConvert: valueToNumber ?? 0,
-        currency: fromAccount?.currency,
-        onSubmit: (amount) {
-          setState(() {
-            valueController.text = amount.toString();
-            Navigator.pop(context);
-          });
-        },
-      ),
-    );
-  }
-
-  Widget buildAmountContainer(BuildContext context) {
-    return Tappable(
-      borderRadius: 12,
-      bgColor: currentTransactionTypeToAdd.color(context).withOpacity(0.85),
-      onTap: () => displayAmountModal(context),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconDisplayer(
-              mainColor: currentTransactionTypeToAdd.color(context),
-              secondaryColor: Colors.white,
-              padding: 2,
-              borderRadius: 4,
-              icon: currentTransactionTypeToAdd.mathIcon,
-            ),
-            Builder(builder: (context) {
-              final bigTextStyle =
-                  Theme.of(context).textTheme.headlineLarge!.copyWith(
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white,
-                      fontSize: (valueToNumber ?? 0) >= 1000
-                          ? (valueToNumber ?? 0) >= 1000000
-                              ? 28
-                              : 34
-                          : 38);
-
-              return CurrencyDisplayer(
-                amountToConvert: valueToNumber ?? 0,
-                currency: fromAccount?.currency,
-                currencyStyle: bigTextStyle,
-                integerStyle: bigTextStyle,
-              );
-            }),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildTransactionDateSelector() {
-    return Column(
-      children: [
-        DateTimeFormField(
-          decoration: InputDecoration(
-            suffixIcon: const Icon(Icons.event),
-            labelText: recurrentRule.isNoRecurrent
-                ? null
-                : '${t.general.time.start_date} *',
-          ),
-          initialDate: date,
-          dateFormat: date.year == currentYear
-              ? DateFormat.MMMMd().add_jm()
-              : DateFormat.yMMMd().add_jm(),
-          validator: (e) => e == null ? t.general.validations.required : null,
-          onDateSelected: (DateTime value) {
-            setState(() {
-              date = value;
-            });
-          },
-        ),
-        if (date.compareTo(DateTime.now()) > 0)
-          InlineInfoCard(
-            margin: const EdgeInsets.fromLTRB(0, 8, 0, 4),
-            text: t.transaction.form.validators.date_max,
-            mode: InlineInfoCardMode.info,
-          ),
-        if (fromAccount != null &&
-            fromAccount!.date.compareTo(date) > 0 &&
-            !(date.compareTo(DateTime.now()) > 0))
-          InlineInfoCard(
-            margin: const EdgeInsets.fromLTRB(0, 8, 0, 4),
-            text: t.transaction.form.validators.date_after_account_creation,
-            mode: InlineInfoCardMode.warn,
-          ),
-      ],
-    );
+    title = transaction.title;
+    transactionAmount = transaction.value;
   }
 
   Card buildAccoutAndCategorySelectorRow(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: Theme.of(context).dividerColor, width: 2),
+        //  side: BorderSide(color: Theme.of(context).dividerColor, width: 2),
         borderRadius: BorderRadius.circular(12),
       ),
       margin: const EdgeInsets.all(0),
       elevation: 0,
-      // color: AppColors.of(context).primary,
+      color: AppColors.of(context).surface,
       clipBehavior: Clip.hardEdge,
       child: LayoutBuilder(builder: (context, constraints) {
         return Row(
@@ -746,7 +281,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
               child: ConstrainedBox(
                 constraints:
                     BoxConstraints(maxWidth: constraints.maxWidth * 0.5),
-                child: selector(
+                child: AccountOrCategorySelector(
                     title: t.general.account,
                     inputValue: fromAccount?.name,
                     icon: fromAccount?.displayIcon(context) ??
@@ -770,32 +305,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 4),
               child: Icon(Icons.arrow_forward, size: 16),
             ),
-            if (widget.mode == TransactionFormMode.transfer)
-              Flexible(
-                child: ConstrainedBox(
-                  constraints:
-                      BoxConstraints(maxWidth: constraints.maxWidth * 0.5),
-                  child: selector(
-                      title: t.transfer.form.to,
-                      inputValue: toAccount?.name,
-                      icon: toAccount?.displayIcon(context) ??
-                          IconDisplayer(
-                            displayMode: IconDisplayMode.polygon,
-                            icon: Icons.question_mark_rounded,
-                            mainColor: AppColors.of(context).primary,
-                          ),
-                      onClick: () async {
-                        final modalRes = await showAccountSelector(toAccount!);
-
-                        if (modalRes != null && modalRes.isNotEmpty) {
-                          setState(() {
-                            toAccount = modalRes.first;
-                          });
-                        }
-                      }),
-                ),
-              ),
-            if (widget.mode == TransactionFormMode.incomeOrExpense)
+            if (transactionType == TransactionType.T)
               Flexible(
                 child: ShakeWidget(
                   duration: const Duration(milliseconds: 200),
@@ -805,23 +315,512 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
                   child: ConstrainedBox(
                     constraints:
                         BoxConstraints(maxWidth: constraints.maxWidth * 0.5),
-                    child: selector(
-                      title: t.general.category,
-                      inputValue: selectedCategory?.name,
-                      icon: IconDisplayer.fromCategory(
-                        context,
-                        category: selectedCategory ??
-                            Category.fromDB(Category.unkown(), null),
-                        size: 24,
-                      ),
-                      onClick: () => selectCategory(),
-                    ),
+                    child: AccountOrCategorySelector(
+                        title: t.transfer.form.to,
+                        inputValue: moreInfo.transferAccount?.name,
+                        icon: moreInfo.transferAccount?.displayIcon(context) ??
+                            IconDisplayer(
+                              displayMode: IconDisplayMode.polygon,
+                              icon: Icons.question_mark_rounded,
+                              mainColor: AppColors.of(context).primary,
+                            ),
+                        onClick: () async {
+                          final modalRes = await showAccountSelector(
+                              moreInfo.transferAccount);
+
+                          if (modalRes != null && modalRes.isNotEmpty) {
+                            moreInfo = moreInfo.copyWith(
+                                transferAccount: modalRes.first);
+                            setState(() {});
+                          }
+                        }),
+                  ),
+                ),
+              ),
+            if (transactionType != TransactionType.T)
+              Flexible(
+                child: ShakeWidget(
+                  duration: const Duration(milliseconds: 200),
+                  shakeCount: 1,
+                  shakeOffset: 10,
+                  key: _shakeKey,
+                  child: ConstrainedBox(
+                    constraints:
+                        BoxConstraints(maxWidth: constraints.maxWidth * 0.5),
+                    child: AccountOrCategorySelector(
+                        title: t.general.category,
+                        inputValue: selectedCategory?.name,
+                        icon: IconDisplayer.fromCategory(
+                          context,
+                          category: selectedCategory ??
+                              Category.fromDB(Category.unkown(), null),
+                          size: 24,
+                        ),
+                        onClick: () => selectCategory()),
                   ),
                 ),
               ),
           ],
         );
       }),
+    );
+  }
+
+  Future<List<Account>?> showAccountSelector(Account? account) {
+    return showAccountSelectorBottomSheet(
+        context,
+        AccountSelectorModal(
+          allowMultiSelection: false,
+          filterSavingAccounts: transactionType.isIncomeOrExpense,
+          includeArchivedAccounts: false,
+          selectedAccounts: [if (account != null) account],
+        ));
+  }
+
+  Future<void> selectCategory() async {
+    final modalRes = await showCategoryPickerModal(
+      context,
+      modal: CategoryPicker(
+        selectedCategory: selectedCategory,
+        categoryType: [
+          CategoryType.B,
+          if (transactionType == TransactionType.E) CategoryType.E,
+          if (transactionType == TransactionType.I) CategoryType.I
+        ],
+      ),
+    );
+
+    if (modalRes != null) {
+      setState(() {
+        selectedCategory = modalRes;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        centerTitle: true,
+        title: SegmentedButton(
+          style: SegmentedButton.styleFrom(
+            selectedBackgroundColor: transactionType.color(context),
+            selectedForegroundColor: Colors.white,
+          ),
+          showSelectedIcon: false,
+          segments: TransactionType.values
+              .map(
+                (e) => ButtonSegment(
+                  value: e,
+                  icon: Icon(e.mathIcon),
+                  tooltip: e.displayName(context),
+                ),
+              )
+              .toList(),
+          selected: {transactionType},
+          onSelectionChanged: (newMode) {
+            transactionType = newMode.first;
+
+            if (transactionType == TransactionType.E &&
+                !transactionAmount.isNegative) {
+              transactionAmount = transactionAmount * -1;
+            } else if (transactionType != TransactionType.E &&
+                transactionAmount.isNegative) {
+              // Transfers and incomes -> Convert to positive
+              transactionAmount = transactionAmount * -1;
+            }
+
+            setState(() {});
+          },
+        ),
+        actions: [
+          MonekinPopupMenuButton(actionItems: [
+            //TODO
+          ])
+        ],
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: StreamBuilder(
+                      stream:
+                          CurrencyService.instance.getUserPreferredCurrency(),
+                      builder: (context, snapshot) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            buildDatePickerButtons(context),
+                            const SizedBox(height: 8),
+                            AnimatedDefaultTextStyle(
+                              duration: const Duration(milliseconds: 250),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineLarge!
+                                  .copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    color: transactionType.color(context),
+                                    fontSize: transactionAmount.abs() >= 1000
+                                        ? transactionAmount.abs() >= 1000000
+                                            ? 32
+                                            : 42
+                                        : 56,
+                                  ),
+                              child: CurrencyDisplayer(
+                                amountToConvert: transactionAmount,
+                                followPrivateMode: false,
+                                currency: fromAccount?.currency,
+                              ),
+                            ),
+                            if (fromAccount != null &&
+                                snapshot.hasData &&
+                                snapshot.data!.code !=
+                                    fromAccount!.currency.code)
+                              // Display exchange rate to preferred currency if needed
+                              buildTrAmountInPrefCurrency()
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4, bottom: 8),
+                    child: Builder(builder: (context) {
+                      final buttonStyle = TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          side: BorderSide(
+                            width: 2,
+                            color: AppColors.of(context).brand,
+                          ),
+                        ),
+                        iconColor: AppColors.of(context).brand,
+                        foregroundColor: AppColors.of(context).brand,
+                        backgroundColor:
+                            AppColors.of(context).brand.withOpacity(0.2),
+                      );
+
+                      final _valueInDestinyOrDefault =
+                          moreInfo.valueInDestiny ?? transactionAmount;
+
+                      return Row(
+                        // mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (transactionType.isTransfer &&
+                              moreInfo.transferAccount != null &&
+                              (moreInfo.valueInDestiny != transactionAmount &&
+                                      transactionAmount > 0 &&
+                                      moreInfo.valueInDestiny != null ||
+                                  moreInfo.transferAccount!.currencyId !=
+                                      fromAccount?.currencyId))
+                            TextButton.icon(
+                                style: buttonStyle,
+                                onPressed: () {
+                                  showTransactionValueInDestinyModal(
+                                    context,
+                                    initialValue: _valueInDestinyOrDefault,
+                                    currency:
+                                        moreInfo.transferAccount!.currency,
+                                  ).then((value) {
+                                    if (value != null) {
+                                      setState(() {
+                                        moreInfo = moreInfo.copyWith(
+                                          valueInDestiny: value,
+                                        );
+                                      });
+                                    }
+                                  });
+                                },
+                                icon: const Icon(Icons.start_rounded),
+                                label: Text('${NumberFormat.currency(
+                                  symbol:
+                                      moreInfo.transferAccount!.currency.symbol,
+                                  decimalDigits:
+                                      _valueInDestinyOrDefault % 1 == 0 ? 0 : 2,
+                                ).format(_valueInDestinyOrDefault)} a cuenta de destino')),
+                          if (transactionType == TransactionType.E &&
+                                  !transactionAmount.isNegative ||
+                              transactionType == TransactionType.I &&
+                                  transactionAmount.isNegative)
+                            TextButton.icon(
+                              style: buttonStyle,
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  showDragHandle: true,
+                                  builder: (context) {
+                                    return ModalContainer(
+                                      title: t.transaction.reversed.title,
+                                      titleBuilder: (title) {
+                                        return Row(
+                                          children: [
+                                            Icon(
+                                              MoneyTransaction.reversedIcon,
+                                              size: 28,
+                                            ),
+                                            const SizedBox(width: 12),
+                                            Text(title)
+                                          ],
+                                        );
+                                      },
+                                      bodyPadding: const EdgeInsets.only(
+                                        left: 16,
+                                        bottom: 8,
+                                        right: 8,
+                                      ),
+                                      body: Text(
+                                          transactionType == TransactionType.I
+                                              ? t.transaction.reversed
+                                                  .description_for_incomes
+                                              : t.transaction.reversed
+                                                  .description_for_expenses),
+                                    );
+                                  },
+                                );
+                              },
+                              label: Text(t.transaction.reversed.title_short),
+                              icon: Icon(MoneyTransaction.reversedIcon),
+                            ),
+                        ],
+                      );
+                    }),
+                  ),
+                  Column(
+                    children: [
+                      buildAccoutAndCategorySelectorRow(context),
+                      const Divider(height: 4),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(child: buildTitleButton(context)),
+                          const SizedBox(width: 12),
+                          buildExtraInfoButtons(context)
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+          Container(
+            height: 275,
+            padding: const EdgeInsets.all(0),
+            decoration: BoxDecoration(
+              color: AppColors.of(context).light,
+            ),
+            child: TransactionFormCalculator(
+              amountToConvert: transactionAmount,
+              showNegativeToggleButton: transactionType.isIncomeOrExpense,
+              onSubmit: () => submitForm(),
+              onChange: (amount) {
+                setState(() {
+                  transactionAmount = amount;
+                });
+              },
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  /// Build an indicator with the transaction value in the currency of the user
+  StreamBuilder<double> buildTrAmountInPrefCurrency() {
+    return StreamBuilder(
+      stream:
+          ExchangeRateService.instance.calculateExchangeRateToPreferredCurrency(
+        fromCurrency: fromAccount!.currency.code,
+        amount: transactionAmount,
+      ),
+      builder: (context, exchangeRateSnapshot) {
+        if (!exchangeRateSnapshot.hasData ||
+            exchangeRateSnapshot.data! == transactionAmount) {
+          return const SizedBox.shrink();
+        }
+
+        return Column(
+          children: [
+            const SizedBox(height: 8),
+            CurrencyDisplayer(
+              amountToConvert: exchangeRateSnapshot.data!,
+              followPrivateMode: false,
+              integerStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  color: AppColors.of(context).onSurface.withAlpha(200)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Row buildExtraInfoButtons(BuildContext context) {
+    final t = Translations.of(context);
+
+    return Row(
+      children: [
+        Builder(builder: (context) {
+          final selectedStatus = date.compareTo(DateTime.now()) > 0
+              ? TransactionStatus.pending
+              : status;
+
+          return IconButton.outlined(
+            icon: Icon(
+              selectedStatus.icon,
+              color: (selectedStatus?.color ?? AppColors.of(context).primary)
+                  .withOpacity(date.compareTo(DateTime.now()) > 0 ? 0.3 : 1),
+            ),
+            tooltip: t.transaction.status.display_long,
+            onPressed: date.compareTo(DateTime.now()) > 0
+                ? null
+                : () => showTransactioStatusModal(
+                      context,
+                      initialStatus: selectedStatus,
+                    ).then((modalRes) {
+                      if (modalRes == null) return;
+
+                      setState(() {
+                        status = modalRes.result;
+                      });
+                    }),
+          );
+        }),
+        const SizedBox(width: 6),
+        IconButton.outlined(
+          onPressed: () => showTransactionMoreInfoModal(
+            context,
+            data: moreInfo.copyWith(
+              valueInDestiny: transactionType.isTransfer
+                  ? moreInfo.valueInDestiny ?? transactionAmount
+                  : null,
+            ),
+          ).then((modalRes) {
+            if (modalRes == null) return;
+
+            setState(() {
+              moreInfo = modalRes;
+            });
+          }),
+          icon: const Icon(Icons.notes_rounded),
+        ),
+      ],
+    );
+  }
+
+  Widget buildDatePickerButtons(BuildContext context) {
+    final buttonStyle = TextButton.styleFrom(
+      backgroundColor: AppColors.of(context).light,
+    );
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        TextButton(
+          style: buttonStyle,
+          onPressed: () {
+            openDateTimePicker(
+              context,
+              showTimePickerAfterDate: false,
+              initialDate: date,
+            ).then((res) {
+              if (res == null) return;
+
+              setState(() {
+                date = date.copyWith(
+                  day: res.day,
+                  year: res.year,
+                  month: res.month,
+                  isUtc: res.isUtc,
+                );
+              });
+            });
+          },
+          child: Text(
+            DateFormat.yMMMd().format(date),
+          ),
+        ),
+        const SizedBox(width: 4),
+        TextButton(
+          style: buttonStyle,
+          onPressed: () {
+            showTimePicker(
+              context: context,
+              initialTime: TimeOfDay.fromDateTime(date),
+            ).then((res) {
+              if (res == null) return;
+
+              setState(() {
+                date = date.copyWith(
+                  hour: res.hour,
+                  minute: res.minute,
+                );
+              });
+            });
+          },
+          child: Text(
+            DateFormat.Hm().format(date),
+          ),
+        ),
+        const SizedBox(width: 4),
+        TextButton(
+          style: buttonStyle,
+          onPressed: () {
+            showIntervalSelectoHelpDialog(context,
+                selectedRecurrentRule: recurrentRule,
+                onRecurrentRuleSelected: (res) {
+              setState(() {
+                recurrentRule = res;
+              });
+            });
+          },
+          child:
+              Icon(recurrentRule.isRecurrent ? Icons.repeat : Icons.repeat_one),
+        )
+      ],
+    );
+  }
+
+  TextButton buildTitleButton(BuildContext context) {
+    return TextButton(
+      onPressed: () => showTransactionTitleModal(
+        context,
+        initialTitle: title,
+      ).then((modalRes) {
+        if (modalRes == null) return;
+
+        setState(() {
+          title = modalRes;
+        });
+      }),
+      style: TextButton.styleFrom(
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+        ),
+        padding: const EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 8,
+        ),
+        alignment: Alignment.centerLeft,
+      ),
+      child: Text(
+        title.notEmptyString ?? t.transaction.form.title,
+        softWrap: false,
+        overflow: TextOverflow.fade,
+        style: Theme.of(context).textTheme.titleMedium!.copyWith(
+              fontWeight:
+                  title.isNotNullNorEmpty ? FontWeight.w400 : FontWeight.w300,
+            ),
+      ),
     );
   }
 }

@@ -1,54 +1,25 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:monekin/app/accounts/all_accounts_page.dart';
 import 'package:monekin/app/tags/tag_form_page.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
-import 'package:monekin/core/models/tags/tag.dart';
+import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
-import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/monekin_reorderable_list.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
-import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-Future<List<Tag>?> showTagListModal(
-  BuildContext context, {
-  List<Tag> selectedTags = const <Tag>[],
-}) {
-  return showModalBottomSheet<List<Tag>>(
-    context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
-    builder: (context) {
-      return DraggableScrollableSheet(
-          expand: false,
-          maxChildSize: 0.85,
-          minChildSize: 0.65,
-          initialChildSize: 0.65,
-          builder: (context, scrollController) {
-            return TagListPage(
-              isModal: true,
-              scrollController: scrollController,
-              selected: selectedTags,
-            );
-          });
-    },
-  );
-}
+import '../../core/presentation/widgets/reorderable_drag_icon.dart';
 
 class TagListPage extends StatefulWidget {
   const TagListPage({
     super.key,
-    this.isModal = false,
-    this.selected = const <Tag>[],
     this.scrollController,
   });
-
-  final bool isModal;
-  final List<Tag> selected;
 
   final ScrollController? scrollController;
 
@@ -57,18 +28,29 @@ class TagListPage extends StatefulWidget {
 }
 
 class _TagListPageState extends State<TagListPage> {
-  late List<Tag> selectedTags;
+  Timer? _debounce;
+
+  String searchQuery = '';
+
+  _onSearchChanged(String query) {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 225), () {
+      setState(() {
+        searchQuery = query;
+      });
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-
-    selectedTags = [...widget.selected];
   }
 
   Widget buildList() {
     return StreamBuilder(
-      stream: TagService.instance.getTags(),
+      stream: TagService.instance.getTags(
+        filter: (p0) => p0.name.contains(searchQuery),
+      ),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const LinearProgressIndicator();
@@ -83,75 +65,49 @@ class _TagListPageState extends State<TagListPage> {
 
         final tags = snapshot.data!;
 
-        if (!widget.isModal) {
-          return MonekinReorderableList(
-            totalItemCount: tags.length,
-            itemBuilder: (context, index) {
-              final tag = tags.elementAt(index);
+        final isOrderEnabled = tags.length > 1 && searchQuery.isNullOrEmpty;
 
-              return Tappable(
-                onTap: () =>
-                    RouteUtils.pushRoute(context, TagFormPage(tag: tag)),
-                bgColor: AppColors.of(context).light,
-                margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                borderRadius: 12,
-                child: ListTile(
-                  trailing: tags.length > 1
-                      ? ReorderableDragIcon(index: index)
-                      : null,
-                  leading: tag.displayIcon(),
-                  title: Text(tag.name),
-                  subtitle:
-                      tag.description != null && tag.description!.isNotEmpty
-                          ? Text(tag.description!)
-                          : null,
-                ),
-              );
-            },
-            onReorder: (from, to) async {
-              if (to > from) to--;
-
-              final item = tags.removeAt(from);
-              tags.insert(to, item);
-
-              Future.wait(
-                tags.mapIndexed(
-                  (index, element) => TagService.instance.updateTag(
-                    element.copyWith(displayOrder: index),
-                  ),
-                ),
-              );
-            },
-          );
-        }
-
-        return ListView.separated(
-          controller: widget.scrollController,
+        return MonekinReorderableList(
+          totalItemCount: tags.length,
+          padding: const EdgeInsets.fromLTRB(16, 6, 16, 16),
+          isOrderEnabled: isOrderEnabled,
           itemBuilder: (context, index) {
-            final tag = snapshot.data!.elementAt(index);
+            final tag = tags.elementAt(index);
 
-            return CheckboxListTile.adaptive(
-              value: selectedTags.any((element) => element.id == tag.id),
-              secondary: tag.displayIcon(),
-              title: Text(tag.name),
-              subtitle: tag.description != null && tag.description!.isNotEmpty
-                  ? Text(tag.description!)
-                  : null,
-              onChanged: (newValue) {
-                if (newValue == null) return;
-
-                if (!newValue) {
-                  selectedTags.removeWhere((element) => element.id == tag.id);
-                } else {
-                  selectedTags.add(tag);
-                }
-
-                setState(() {});
-              },
+            return Tappable(
+              onTap: () => RouteUtils.pushRoute(context, TagFormPage(tag: tag)),
+              bgColor: AppColors.of(context).light,
+              margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
+              borderRadius: 12,
+              child: ListTile(
+                trailing: tags.length > 1
+                    ? ReorderableDragIcon(
+                        index: index,
+                        enabled: isOrderEnabled,
+                      )
+                    : null,
+                leading: tag.displayIcon(),
+                title: Text(tag.name),
+                subtitle: tag.description != null && tag.description!.isNotEmpty
+                    ? Text(tag.description!)
+                    : null,
+              ),
             );
           },
-          separatorBuilder: (context, index) => const Divider(),
-          itemCount: snapshot.data!.length,
+          onReorder: (from, to) async {
+            if (to > from) to--;
+
+            final item = tags.removeAt(from);
+            tags.insert(to, item);
+
+            await Future.wait(
+              tags.mapIndexed(
+                (index, element) => TagService.instance.updateTag(
+                  element.copyWith(displayOrder: index),
+                ),
+              ),
+            );
+          },
         );
       },
     );
@@ -161,22 +117,6 @@ class _TagListPageState extends State<TagListPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    if (widget.isModal) {
-      return ModalContainer(
-        title: t.tags.select,
-        footer: BottomSheetFooter(
-          onSaved: () => Navigator.of(context).pop(selectedTags),
-        ),
-        body: Stack(
-          children: [
-            buildList(),
-            ScrollableWithBottomGradient.buildPositionedGradient(
-                Theme.of(context).dialogBackgroundColor)
-          ],
-        ),
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(title: Text(t.tags.display(n: 10))),
       floatingActionButton: FloatingActionButton.extended(
@@ -184,7 +124,21 @@ class _TagListPageState extends State<TagListPage> {
         label: Text(t.tags.add),
         onPressed: () => RouteUtils.pushRoute(context, const TagFormPage()),
       ),
-      body: buildList(),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: t.general.tap_to_search,
+                prefixIcon: const Icon(Icons.search_rounded),
+              ),
+              onChanged: (q) => _onSearchChanged(q),
+            ),
+          ),
+          Expanded(child: buildList()),
+        ],
+      ),
     );
   }
 }

@@ -4,7 +4,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
-import 'package:monekin/app/categories/categories_list.dart';
+import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/layout/tabs.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
@@ -17,6 +17,7 @@ import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
+import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/widgets/loading_overlay.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
@@ -241,14 +242,17 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                     ?.id ??
                 defaultCategory!.id;
 
+        final trValue = double.parse(row[amountColumn!].toString());
+
         await TransactionService.instance.insertTransaction(TransactionInDB(
           id: generateUUID(),
           date: dateColumn == null
               ? DateTime.now()
               : DateFormat(_dateFormatController.text, 'en_US')
                   .parse(row[dateColumn!].toString()),
+          type: trValue < 0 ? TransactionType.E : TransactionType.I,
           accountID: accountID,
-          value: double.parse(row[amountColumn!].toString()),
+          value: trValue,
           isHidden: false,
           categoryID: categoryID,
           notes: notesColumn == null || row[notesColumn!].toString().isEmpty
@@ -398,8 +402,8 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: DataTable(
-                    headingRowColor: MaterialStateProperty.resolveWith<Color?>(
-                      (Set<MaterialState> states) => Theme.of(context)
+                    headingRowColor: WidgetStateProperty.resolveWith<Color?>(
+                      (states) => Theme.of(context)
                           .colorScheme
                           .primary
                           .withOpacity(0.18),
@@ -519,15 +523,15 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                         ? ColorHex.get(defaultCategory!.color)
                         : null,
                     onClick: () async {
-                      final modalRes = await showCategoryListModal(
-                          context,
-                          const CategoriesList(
-                            mode: CategoriesListMode.modalSelectSubcategory,
+                      final modalRes = await showCategoryPickerModal(context,
+                          modal: CategoryPicker(
+                            selectedCategory: null,
+                            categoryType: const [CategoryType.B],
                           ));
 
-                      if (modalRes != null && modalRes.isNotEmpty) {
+                      if (modalRes != null) {
                         setState(() {
-                          defaultCategory = modalRes.first;
+                          defaultCategory = modalRes;
                         });
                       }
                     }),
