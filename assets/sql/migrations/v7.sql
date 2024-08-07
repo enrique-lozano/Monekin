@@ -18,6 +18,11 @@ CREATE TABLE transactions_temp (
   receivingAccountID TEXT REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE,
   isHidden BOOLEAN NOT NULL DEFAULT 0,
 
+  -- NEW LOCATION DATA --
+  locLatitude REAL,
+  locLongitude REAL,
+  locAddress TEXT,
+
   intervalPeriod TEXT CHECK(intervalPeriod IN ('day','week','month','year')),
   intervalEach INTEGER,
   endDate DATETIME,
@@ -27,7 +32,11 @@ CREATE TABLE transactions_temp (
   CHECK ((intervalPeriod IS NULL) == (intervalEach IS NULL)),
   CHECK ((intervalPeriod IS NOT NULL) OR (endDate IS NULL)),
   CHECK ((intervalPeriod IS NOT NULL) OR (remainingTransactions IS NULL)),
-  CHECK (categoryID IS NULL OR valueInDestiny IS NULL)
+  CHECK (categoryID IS NULL OR valueInDestiny IS NULL),
+
+  -- Location data checks:
+  CHECK ((locLongitude IS NULL AND locLatitude IS NULL) OR (locLongitude IS NOT NULL AND locLatitude IS NOT NULL)),
+  CHECK ((locAddress IS NULL) OR (locLatitude IS NOT NULL AND locLongitude IS NOT NULL))
 );
 
 

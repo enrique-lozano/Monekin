@@ -115,7 +115,18 @@ CREATE TABLE IF NOT EXISTS transactions (
   receivingAccountID TEXT REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE,
   isHidden BOOLEAN NOT NULL DEFAULT 0,
 
-  /* --- Recurrency data --- */
+  ----------- Location data --------------
+
+  -- Latitude of the location where the transaction occurred
+  locLatitude REAL,
+
+  -- Longitude of the location where the transaction occurred
+  locLongitude REAL,
+
+  -- Address, name or description of the location where the transaction occurred
+  locAddress TEXT,
+
+  ------------- Recurrency data ---------------
 
   -- The time range with which new transactions to be paid will appear (weekly, monthly...)
   intervalPeriod ENUMNAME(Periodicity) CHECK(intervalPeriod IN ('day','week','month','year')),
@@ -137,6 +148,10 @@ CREATE TABLE IF NOT EXISTS transactions (
 
   CHECK ((intervalPeriod IS NOT NULL) OR (endDate IS NULL)),
   CHECK ((intervalPeriod IS NOT NULL) OR (remainingTransactions IS NULL)),
+
+  -- Location data checks:
+  CHECK ((locLongitude IS NULL AND locLatitude IS NULL) OR (locLongitude IS NOT NULL AND locLatitude IS NOT NULL)),
+  CHECK ((locAddress IS NULL) OR (locLatitude IS NOT NULL AND locLongitude IS NOT NULL)),
 
   -- valueInDestiny can not be defined for non-transfer transactions:
   CHECK (categoryID IS NULL OR valueInDestiny IS NULL)

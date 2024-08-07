@@ -1409,6 +1409,27 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
       requiredDuringInsert: false,
       $customConstraints: 'NOT NULL DEFAULT 0',
       defaultValue: const CustomExpression('0'));
+  static const VerificationMeta _locLatitudeMeta =
+      const VerificationMeta('locLatitude');
+  late final GeneratedColumn<double> locLatitude = GeneratedColumn<double>(
+      'locLatitude', aliasedName, true,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  static const VerificationMeta _locLongitudeMeta =
+      const VerificationMeta('locLongitude');
+  late final GeneratedColumn<double> locLongitude = GeneratedColumn<double>(
+      'locLongitude', aliasedName, true,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  static const VerificationMeta _locAddressMeta =
+      const VerificationMeta('locAddress');
+  late final GeneratedColumn<String> locAddress = GeneratedColumn<String>(
+      'locAddress', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: '');
   static const VerificationMeta _intervalPeriodMeta =
       const VerificationMeta('intervalPeriod');
   late final GeneratedColumnWithTypeConverter<Periodicity?,
@@ -1454,6 +1475,9 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
         valueInDestiny,
         receivingAccountID,
         isHidden,
+        locLatitude,
+        locLongitude,
+        locAddress,
         intervalPeriod,
         intervalEach,
         endDate,
@@ -1524,6 +1548,24 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
       context.handle(_isHiddenMeta,
           isHidden.isAcceptableOrUnknown(data['isHidden']!, _isHiddenMeta));
     }
+    if (data.containsKey('locLatitude')) {
+      context.handle(
+          _locLatitudeMeta,
+          locLatitude.isAcceptableOrUnknown(
+              data['locLatitude']!, _locLatitudeMeta));
+    }
+    if (data.containsKey('locLongitude')) {
+      context.handle(
+          _locLongitudeMeta,
+          locLongitude.isAcceptableOrUnknown(
+              data['locLongitude']!, _locLongitudeMeta));
+    }
+    if (data.containsKey('locAddress')) {
+      context.handle(
+          _locAddressMeta,
+          locAddress.isAcceptableOrUnknown(
+              data['locAddress']!, _locAddressMeta));
+    }
     context.handle(_intervalPeriodMeta, const VerificationResult.success());
     if (data.containsKey('intervalEach')) {
       context.handle(
@@ -1575,6 +1617,12 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
           DriftSqlType.string, data['${effectivePrefix}receivingAccountID']),
       isHidden: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}isHidden'])!,
+      locLatitude: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}locLatitude']),
+      locLongitude: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}locLongitude']),
+      locAddress: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}locAddress']),
       intervalPeriod: Transactions.$converterintervalPeriodn.fromSql(
           attachedDatabase.typeMapping.read(
               DriftSqlType.string, data['${effectivePrefix}intervalPeriod'])),
@@ -1611,6 +1659,8 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
         'CHECK((intervalPeriod IS NULL)==(intervalEach IS NULL))',
         'CHECK((intervalPeriod IS NOT NULL)OR(endDate IS NULL))',
         'CHECK((intervalPeriod IS NOT NULL)OR(remainingTransactions IS NULL))',
+        'CHECK((locLongitude IS NULL AND locLatitude IS NULL)OR(locLongitude IS NOT NULL AND locLatitude IS NOT NULL))',
+        'CHECK((locAddress IS NULL)OR(locLatitude IS NOT NULL AND locLongitude IS NOT NULL))',
         'CHECK(categoryID IS NULL OR valueInDestiny IS NULL)'
       ];
   @override
@@ -1641,8 +1691,18 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
   final String? receivingAccountID;
   final bool isHidden;
 
+  /// Latitude of the location where the transaction occurred
+  ///--------- Location data --------------
+  final double? locLatitude;
+
+  /// Longitude of the location where the transaction occurred
+  final double? locLongitude;
+
+  /// Address, name or description of the location where the transaction occurred
+  final String? locAddress;
+
   /// The time range with which new transactions to be paid will appear (weekly, monthly...)
-  /// --- Recurrency data ---
+  ///----------- Recurrency data ---------------
   final Periodicity? intervalPeriod;
 
   /// Within the time range chosen in the `intervalPeriod` attribute, every few times new transactions will appear to be paid. For example, putting a 2 here and having monthly as `intervalPeriod`, new payments will appear every two months
@@ -1666,6 +1726,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       this.valueInDestiny,
       this.receivingAccountID,
       required this.isHidden,
+      this.locLatitude,
+      this.locLongitude,
+      this.locAddress,
       this.intervalPeriod,
       this.intervalEach,
       this.endDate,
@@ -1700,6 +1763,15 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       map['receivingAccountID'] = Variable<String>(receivingAccountID);
     }
     map['isHidden'] = Variable<bool>(isHidden);
+    if (!nullToAbsent || locLatitude != null) {
+      map['locLatitude'] = Variable<double>(locLatitude);
+    }
+    if (!nullToAbsent || locLongitude != null) {
+      map['locLongitude'] = Variable<double>(locLongitude);
+    }
+    if (!nullToAbsent || locAddress != null) {
+      map['locAddress'] = Variable<String>(locAddress);
+    }
     if (!nullToAbsent || intervalPeriod != null) {
       map['intervalPeriod'] = Variable<String>(
           Transactions.$converterintervalPeriodn.toSql(intervalPeriod));
@@ -1739,6 +1811,15 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           ? const Value.absent()
           : Value(receivingAccountID),
       isHidden: Value(isHidden),
+      locLatitude: locLatitude == null && nullToAbsent
+          ? const Value.absent()
+          : Value(locLatitude),
+      locLongitude: locLongitude == null && nullToAbsent
+          ? const Value.absent()
+          : Value(locLongitude),
+      locAddress: locAddress == null && nullToAbsent
+          ? const Value.absent()
+          : Value(locAddress),
       intervalPeriod: intervalPeriod == null && nullToAbsent
           ? const Value.absent()
           : Value(intervalPeriod),
@@ -1773,6 +1854,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       receivingAccountID:
           serializer.fromJson<String?>(json['receivingAccountID']),
       isHidden: serializer.fromJson<bool>(json['isHidden']),
+      locLatitude: serializer.fromJson<double?>(json['locLatitude']),
+      locLongitude: serializer.fromJson<double?>(json['locLongitude']),
+      locAddress: serializer.fromJson<String?>(json['locAddress']),
       intervalPeriod: Transactions.$converterintervalPeriodn
           .fromJson(serializer.fromJson<String?>(json['intervalPeriod'])),
       intervalEach: serializer.fromJson<int?>(json['intervalEach']),
@@ -1799,6 +1883,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       'valueInDestiny': serializer.toJson<double?>(valueInDestiny),
       'receivingAccountID': serializer.toJson<String?>(receivingAccountID),
       'isHidden': serializer.toJson<bool>(isHidden),
+      'locLatitude': serializer.toJson<double?>(locLatitude),
+      'locLongitude': serializer.toJson<double?>(locLongitude),
+      'locAddress': serializer.toJson<String?>(locAddress),
       'intervalPeriod': serializer.toJson<String?>(
           Transactions.$converterintervalPeriodn.toJson(intervalPeriod)),
       'intervalEach': serializer.toJson<int?>(intervalEach),
@@ -1820,6 +1907,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           Value<double?> valueInDestiny = const Value.absent(),
           Value<String?> receivingAccountID = const Value.absent(),
           bool? isHidden,
+          Value<double?> locLatitude = const Value.absent(),
+          Value<double?> locLongitude = const Value.absent(),
+          Value<String?> locAddress = const Value.absent(),
           Value<Periodicity?> intervalPeriod = const Value.absent(),
           Value<int?> intervalEach = const Value.absent(),
           Value<DateTime?> endDate = const Value.absent(),
@@ -1840,6 +1930,10 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
             ? receivingAccountID.value
             : this.receivingAccountID,
         isHidden: isHidden ?? this.isHidden,
+        locLatitude: locLatitude.present ? locLatitude.value : this.locLatitude,
+        locLongitude:
+            locLongitude.present ? locLongitude.value : this.locLongitude,
+        locAddress: locAddress.present ? locAddress.value : this.locAddress,
         intervalPeriod:
             intervalPeriod.present ? intervalPeriod.value : this.intervalPeriod,
         intervalEach:
@@ -1868,6 +1962,13 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           ? data.receivingAccountID.value
           : this.receivingAccountID,
       isHidden: data.isHidden.present ? data.isHidden.value : this.isHidden,
+      locLatitude:
+          data.locLatitude.present ? data.locLatitude.value : this.locLatitude,
+      locLongitude: data.locLongitude.present
+          ? data.locLongitude.value
+          : this.locLongitude,
+      locAddress:
+          data.locAddress.present ? data.locAddress.value : this.locAddress,
       intervalPeriod: data.intervalPeriod.present
           ? data.intervalPeriod.value
           : this.intervalPeriod,
@@ -1896,6 +1997,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           ..write('valueInDestiny: $valueInDestiny, ')
           ..write('receivingAccountID: $receivingAccountID, ')
           ..write('isHidden: $isHidden, ')
+          ..write('locLatitude: $locLatitude, ')
+          ..write('locLongitude: $locLongitude, ')
+          ..write('locAddress: $locAddress, ')
           ..write('intervalPeriod: $intervalPeriod, ')
           ..write('intervalEach: $intervalEach, ')
           ..write('endDate: $endDate, ')
@@ -1918,6 +2022,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       valueInDestiny,
       receivingAccountID,
       isHidden,
+      locLatitude,
+      locLongitude,
+      locAddress,
       intervalPeriod,
       intervalEach,
       endDate,
@@ -1938,6 +2045,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           other.valueInDestiny == this.valueInDestiny &&
           other.receivingAccountID == this.receivingAccountID &&
           other.isHidden == this.isHidden &&
+          other.locLatitude == this.locLatitude &&
+          other.locLongitude == this.locLongitude &&
+          other.locAddress == this.locAddress &&
           other.intervalPeriod == this.intervalPeriod &&
           other.intervalEach == this.intervalEach &&
           other.endDate == this.endDate &&
@@ -1957,6 +2067,9 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
   final Value<double?> valueInDestiny;
   final Value<String?> receivingAccountID;
   final Value<bool> isHidden;
+  final Value<double?> locLatitude;
+  final Value<double?> locLongitude;
+  final Value<String?> locAddress;
   final Value<Periodicity?> intervalPeriod;
   final Value<int?> intervalEach;
   final Value<DateTime?> endDate;
@@ -1975,6 +2088,9 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     this.valueInDestiny = const Value.absent(),
     this.receivingAccountID = const Value.absent(),
     this.isHidden = const Value.absent(),
+    this.locLatitude = const Value.absent(),
+    this.locLongitude = const Value.absent(),
+    this.locAddress = const Value.absent(),
     this.intervalPeriod = const Value.absent(),
     this.intervalEach = const Value.absent(),
     this.endDate = const Value.absent(),
@@ -1994,6 +2110,9 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     this.valueInDestiny = const Value.absent(),
     this.receivingAccountID = const Value.absent(),
     this.isHidden = const Value.absent(),
+    this.locLatitude = const Value.absent(),
+    this.locLongitude = const Value.absent(),
+    this.locAddress = const Value.absent(),
     this.intervalPeriod = const Value.absent(),
     this.intervalEach = const Value.absent(),
     this.endDate = const Value.absent(),
@@ -2017,6 +2136,9 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     Expression<double>? valueInDestiny,
     Expression<String>? receivingAccountID,
     Expression<bool>? isHidden,
+    Expression<double>? locLatitude,
+    Expression<double>? locLongitude,
+    Expression<String>? locAddress,
     Expression<String>? intervalPeriod,
     Expression<int>? intervalEach,
     Expression<DateTime>? endDate,
@@ -2036,6 +2158,9 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
       if (valueInDestiny != null) 'valueInDestiny': valueInDestiny,
       if (receivingAccountID != null) 'receivingAccountID': receivingAccountID,
       if (isHidden != null) 'isHidden': isHidden,
+      if (locLatitude != null) 'locLatitude': locLatitude,
+      if (locLongitude != null) 'locLongitude': locLongitude,
+      if (locAddress != null) 'locAddress': locAddress,
       if (intervalPeriod != null) 'intervalPeriod': intervalPeriod,
       if (intervalEach != null) 'intervalEach': intervalEach,
       if (endDate != null) 'endDate': endDate,
@@ -2058,6 +2183,9 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
       Value<double?>? valueInDestiny,
       Value<String?>? receivingAccountID,
       Value<bool>? isHidden,
+      Value<double?>? locLatitude,
+      Value<double?>? locLongitude,
+      Value<String?>? locAddress,
       Value<Periodicity?>? intervalPeriod,
       Value<int?>? intervalEach,
       Value<DateTime?>? endDate,
@@ -2076,6 +2204,9 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
       valueInDestiny: valueInDestiny ?? this.valueInDestiny,
       receivingAccountID: receivingAccountID ?? this.receivingAccountID,
       isHidden: isHidden ?? this.isHidden,
+      locLatitude: locLatitude ?? this.locLatitude,
+      locLongitude: locLongitude ?? this.locLongitude,
+      locAddress: locAddress ?? this.locAddress,
       intervalPeriod: intervalPeriod ?? this.intervalPeriod,
       intervalEach: intervalEach ?? this.intervalEach,
       endDate: endDate ?? this.endDate,
@@ -2126,6 +2257,15 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     if (isHidden.present) {
       map['isHidden'] = Variable<bool>(isHidden.value);
     }
+    if (locLatitude.present) {
+      map['locLatitude'] = Variable<double>(locLatitude.value);
+    }
+    if (locLongitude.present) {
+      map['locLongitude'] = Variable<double>(locLongitude.value);
+    }
+    if (locAddress.present) {
+      map['locAddress'] = Variable<String>(locAddress.value);
+    }
     if (intervalPeriod.present) {
       map['intervalPeriod'] = Variable<String>(
           Transactions.$converterintervalPeriodn.toSql(intervalPeriod.value));
@@ -2160,6 +2300,9 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
           ..write('valueInDestiny: $valueInDestiny, ')
           ..write('receivingAccountID: $receivingAccountID, ')
           ..write('isHidden: $isHidden, ')
+          ..write('locLatitude: $locLatitude, ')
+          ..write('locLongitude: $locLongitude, ')
+          ..write('locAddress: $locAddress, ')
           ..write('intervalPeriod: $intervalPeriod, ')
           ..write('intervalEach: $intervalEach, ')
           ..write('endDate: $endDate, ')
@@ -4351,6 +4494,9 @@ abstract class _$AppDB extends GeneratedDatabase {
               Transactions.$converterstatus,
               row.readNullable<String>('status')),
           valueInDestiny: row.readNullable<double>('valueInDestiny'),
+          locAddress: row.readNullable<String>('locAddress'),
+          locLatitude: row.readNullable<double>('locLatitude'),
+          locLongitude: row.readNullable<double>('locLongitude'),
           account: await accounts.mapFromRow(row, tablePrefix: 'nested_0'),
           receivingAccount:
               await accounts.mapFromRowOrNull(row, tablePrefix: 'nested_3'),
@@ -5350,6 +5496,9 @@ typedef $TransactionsCreateCompanionBuilder = TransactionsCompanion Function({
   Value<double?> valueInDestiny,
   Value<String?> receivingAccountID,
   Value<bool> isHidden,
+  Value<double?> locLatitude,
+  Value<double?> locLongitude,
+  Value<String?> locAddress,
   Value<Periodicity?> intervalPeriod,
   Value<int?> intervalEach,
   Value<DateTime?> endDate,
@@ -5369,6 +5518,9 @@ typedef $TransactionsUpdateCompanionBuilder = TransactionsCompanion Function({
   Value<double?> valueInDestiny,
   Value<String?> receivingAccountID,
   Value<bool> isHidden,
+  Value<double?> locLatitude,
+  Value<double?> locLongitude,
+  Value<String?> locAddress,
   Value<Periodicity?> intervalPeriod,
   Value<int?> intervalEach,
   Value<DateTime?> endDate,
@@ -5405,6 +5557,9 @@ class $TransactionsTableManager extends RootTableManager<
             Value<double?> valueInDestiny = const Value.absent(),
             Value<String?> receivingAccountID = const Value.absent(),
             Value<bool> isHidden = const Value.absent(),
+            Value<double?> locLatitude = const Value.absent(),
+            Value<double?> locLongitude = const Value.absent(),
+            Value<String?> locAddress = const Value.absent(),
             Value<Periodicity?> intervalPeriod = const Value.absent(),
             Value<int?> intervalEach = const Value.absent(),
             Value<DateTime?> endDate = const Value.absent(),
@@ -5424,6 +5579,9 @@ class $TransactionsTableManager extends RootTableManager<
             valueInDestiny: valueInDestiny,
             receivingAccountID: receivingAccountID,
             isHidden: isHidden,
+            locLatitude: locLatitude,
+            locLongitude: locLongitude,
+            locAddress: locAddress,
             intervalPeriod: intervalPeriod,
             intervalEach: intervalEach,
             endDate: endDate,
@@ -5443,6 +5601,9 @@ class $TransactionsTableManager extends RootTableManager<
             Value<double?> valueInDestiny = const Value.absent(),
             Value<String?> receivingAccountID = const Value.absent(),
             Value<bool> isHidden = const Value.absent(),
+            Value<double?> locLatitude = const Value.absent(),
+            Value<double?> locLongitude = const Value.absent(),
+            Value<String?> locAddress = const Value.absent(),
             Value<Periodicity?> intervalPeriod = const Value.absent(),
             Value<int?> intervalEach = const Value.absent(),
             Value<DateTime?> endDate = const Value.absent(),
@@ -5462,6 +5623,9 @@ class $TransactionsTableManager extends RootTableManager<
             valueInDestiny: valueInDestiny,
             receivingAccountID: receivingAccountID,
             isHidden: isHidden,
+            locLatitude: locLatitude,
+            locLongitude: locLongitude,
+            locAddress: locAddress,
             intervalPeriod: intervalPeriod,
             intervalEach: intervalEach,
             endDate: endDate,
@@ -5520,6 +5684,21 @@ class $TransactionsFilterComposer
 
   ColumnFilters<bool> get isHidden => $state.composableBuilder(
       column: $state.table.isHidden,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get locLatitude => $state.composableBuilder(
+      column: $state.table.locLatitude,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get locLongitude => $state.composableBuilder(
+      column: $state.table.locLongitude,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get locAddress => $state.composableBuilder(
+      column: $state.table.locAddress,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -5640,6 +5819,21 @@ class $TransactionsOrderingComposer
 
   ColumnOrderings<bool> get isHidden => $state.composableBuilder(
       column: $state.table.isHidden,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get locLatitude => $state.composableBuilder(
+      column: $state.table.locLatitude,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get locLongitude => $state.composableBuilder(
+      column: $state.table.locLongitude,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get locAddress => $state.composableBuilder(
+      column: $state.table.locAddress,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
