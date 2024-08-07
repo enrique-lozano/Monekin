@@ -644,7 +644,16 @@
     "dynamic-colors": "動態色彩",
     "dynamic-colors.descr": "盡可能使用系統強調色",
     "accent-color": "強調色",
-    "accent-color.descr": "選擇應用程式用來強調介面某些部分的顏色"
+    "accent-color.descr": "選擇應用程式用來強調介面某些部分的顏色",
+    "SECURITY": {
+      "title": "安全",
+      "private-mode-at-launch": "启动时的私密模式",
+      "private-mode-at-launch.descr": "默认以私有模式启动应用程序",
+      "private-mode": "私人模式",
+      "private-mode.descr": "隐藏所有货币值",
+      "private-mode.activated": "隐私模式已激活",
+      "private-mode.deactivated": "私人模式已禁用"
+    }
   },
   "MORE": {
     "title": "更多的",
