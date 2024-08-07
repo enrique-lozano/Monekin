@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/details/account_details.dart';
+import 'package:monekin/app/home/widgets/click_tracker.dart';
 import 'package:monekin/app/home/widgets/home_drawer.dart';
 import 'package:monekin/app/home/widgets/income_or_expense_card.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
@@ -11,6 +12,7 @@ import 'package:monekin/app/stats/widgets/finance_health/finance_health_main_inf
 import 'package:monekin/app/stats/widgets/fund_evolution_line_chart.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/chart_by_categories.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
@@ -203,64 +205,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  t.home.total_balance,
-                                  style:
-                                      Theme.of(context).textTheme.labelSmall!,
-                                ),
-                                if (!accounts.hasData) ...[
-                                  const Skeleton(width: 70, height: 40),
-                                  const Skeleton(width: 30, height: 14),
-                                ],
-                                if (accounts.hasData) ...[
-                                  StreamBuilder(
-                                      stream: accountService.getAccountsMoney(
-                                          accountIds:
-                                              accounts.data!.map((e) => e.id)),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return CurrencyDisplayer(
-                                            amountToConvert: snapshot.data!,
-                                            integerStyle: const TextStyle(
-                                              fontSize: 32,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          );
-                                        }
-
-                                        return const Skeleton(
-                                            width: 90, height: 40);
-                                      }),
-                                  if (dateRangeService.startDate != null &&
-                                      dateRangeService.endDate != null)
-                                    StreamBuilder(
-                                      stream: accountService
-                                          .getAccountsMoneyVariation(
-                                              accounts: accounts.data!,
-                                              startDate:
-                                                  dateRangeService.startDate,
-                                              endDate: dateRangeService.endDate,
-                                              convertToPreferredCurrency: true),
-                                      builder: (context, snapshot) {
-                                        if (!snapshot.hasData) {
-                                          return const Skeleton(
-                                              width: 52, height: 22);
-                                        }
-
-                                        return TrendingValue(
-                                          percentage: snapshot.data!,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                        );
-                                      },
-                                    ),
-                                ]
-                              ],
-                            ),
+                            totalBalanceIndicator(
+                                context, accounts, accountService),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -391,6 +337,86 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
           ),
         ])));
+  }
+
+  Widget totalBalanceIndicator(
+    BuildContext context,
+    AsyncSnapshot<List<Account>> accounts,
+    AccountService accountService,
+  ) {
+    final t = Translations.of(context);
+
+    return SuccessiveTapDetector(
+      delayTrackingAfterGoal: 4000,
+      onClickGoalReached: () async {
+        final sc = ScaffoldMessenger.of(context);
+        final privateMode =
+            await PrivateModeService.instance.privateModeStream.first;
+
+        PrivateModeService.instance.setPrivateMode(!privateMode);
+
+        sc.showSnackBar(
+          SnackBar(
+            content: Text(!privateMode
+                ? t.settings.security.private_mode_activated
+                : t.settings.security.private_mode_deactivated),
+          ),
+        );
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            t.home.total_balance,
+            style: Theme.of(context).textTheme.labelSmall!,
+          ),
+          if (!accounts.hasData) ...[
+            const Skeleton(width: 70, height: 40),
+            const Skeleton(width: 30, height: 14),
+          ],
+          if (accounts.hasData) ...[
+            StreamBuilder(
+              stream: accountService.getAccountsMoney(
+                  accountIds: accounts.data!.map((e) => e.id)),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return CurrencyDisplayer(
+                    amountToConvert: snapshot.data!,
+                    integerStyle: const TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  );
+                }
+
+                return const Skeleton(width: 90, height: 40);
+              },
+            ),
+            if (dateRangeService.startDate != null &&
+                dateRangeService.endDate != null)
+              StreamBuilder(
+                stream: accountService.getAccountsMoneyVariation(
+                    accounts: accounts.data!,
+                    startDate: dateRangeService.startDate,
+                    endDate: dateRangeService.endDate,
+                    convertToPreferredCurrency: true),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Skeleton(width: 52, height: 22);
+                  }
+
+                  return TrendingValue(
+                    percentage: snapshot.data!,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  );
+                },
+              ),
+          ]
+        ],
+      ),
+    );
   }
 
   Widget buildAccountList(List<Account> accounts) {
