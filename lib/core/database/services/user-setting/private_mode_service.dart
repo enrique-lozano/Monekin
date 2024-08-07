@@ -10,9 +10,6 @@ class PrivateModeService {
   static final PrivateModeService instance =
       PrivateModeService._(UserSettingService.instance);
 
-  /// Variable that track if the user is currently in the private mode.
-  bool? inPrivateMode;
-
   final _privateModeController = BehaviorSubject<bool>();
   Stream<bool> get privateModeStream => _privateModeController.stream;
 
@@ -25,7 +22,6 @@ class PrivateModeService {
   }
 
   void setPrivateMode(bool value) {
-    inPrivateMode = value;
     _privateModeController.add(value);
   }
 
