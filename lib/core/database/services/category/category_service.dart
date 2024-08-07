@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/utils/uuid.dart';
@@ -24,15 +27,20 @@ class CategoryService {
         .go();
   }
 
-  Stream<List<Category>> getCategories(
-      {Expression<bool> Function(
-              Categories catTable, Categories parentCatTable)?
-          predicate,
-      double? limit}) {
+  Stream<List<Category>> getCategories({
+    Expression<bool> Function(Categories catTable, Categories parentCatTable)?
+        predicate,
+    OrderBy Function(Categories catTable, Categories parentCatTable)? orderBy,
+    double? limit,
+  }) {
     limit ??= -1;
 
     return db
-        .getCategoriesWithFullData(predicate: predicate, limit: limit)
+        .getCategoriesWithFullData(
+            predicate: predicate,
+            orderBy: orderBy ??
+                (c, pc) => OrderBy([OrderingTerm.asc(c.displayOrder)]),
+            limit: limit)
         .watch();
   }
 
@@ -57,8 +65,17 @@ class CategoryService {
         .map((res) => res.firstOrNull);
   }
 
-  Future<void> initializeCategories(dynamic json) async {
-    // The category initialization is done before the app language is set, so we need to trigger
+  /// Get the `assets/sql/initial_categories.json` file and seed the user categories with its info, based
+  /// on the current language of the device.
+  ///
+  /// This function is called only when the user database is created.
+  Future<void> initializeCategories() async {
+    String defaultCategories =
+        await rootBundle.loadString('assets/sql/initial_categories.json');
+
+    dynamic json = jsonDecode(defaultCategories);
+
+    // The category initialization is done before the app language is set, so we need to trigger this:
     String systemLang = AppLocaleUtils.findDeviceLocale().languageCode;
 
     if (!AppLocaleUtils.supportedLocalesRaw.any((lang) => lang == systemLang)) {
@@ -74,8 +91,16 @@ class CategoryService {
           color: category['color'],
           type: CategoryType.values.byName(category['type']));
 
-      await db.customStatement(
-          "INSERT INTO categories(id, name, iconId, color, type, displayOrder) VALUES ('${categoryToPush.id}', '${categoryToPush.name}', '${categoryToPush.iconId}', '${categoryToPush.color}', '${categoryToPush.type?.name}', ${categoryToPush.displayOrder})");
+      await db.customStatement("""
+          INSERT INTO categories(id, name, iconId, color, type, displayOrder) VALUES (
+            '${categoryToPush.id}', 
+            '${categoryToPush.name.replaceAll("'", "''")}', 
+            '${categoryToPush.iconId}', 
+            '${categoryToPush.color}', 
+            '${categoryToPush.type?.name}', 
+            ${categoryToPush.displayOrder}
+          )
+          """);
 
       if (category['subcategories'] != null) {
         for (final subcategory in category['subcategories']) {
@@ -87,8 +112,15 @@ class CategoryService {
               iconId: subcategory['icon'],
               parentCategoryID: categoryToPush.id);
 
-          await db.customStatement(
-              "INSERT INTO categories(id, name, iconId, parentCategoryID, displayOrder) VALUES ('${subcategoryToPush.id}', '${subcategoryToPush.name}', '${subcategoryToPush.iconId}', '${subcategoryToPush.parentCategoryID}', ${subcategoryToPush.displayOrder})");
+          await db.customStatement("""
+              INSERT INTO categories(id, name, iconId, parentCategoryID, displayOrder) VALUES (
+                '${subcategoryToPush.id}', 
+                '${subcategoryToPush.name.replaceAll("'", "''")}', 
+                '${subcategoryToPush.iconId}', 
+                '${subcategoryToPush.parentCategoryID}', 
+                ${subcategoryToPush.displayOrder}
+              )
+            """);
         }
       }
     }

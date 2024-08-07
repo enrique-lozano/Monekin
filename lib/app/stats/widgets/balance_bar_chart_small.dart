@@ -167,25 +167,25 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
                 stream: StreamZip([
                   AccountService.instance.getAccountsBalance(
                       filters: TransactionFilters(
-                    transactionTypes: [TransactionType.expense],
+                    transactionTypes: [TransactionType.E],
                     minDate: widget.dateRangeService.getPrevDates().$1,
                     maxDate: widget.dateRangeService.getPrevDates().$2,
                   )),
                   AccountService.instance.getAccountsBalance(
                       filters: TransactionFilters(
-                    transactionTypes: [TransactionType.income],
+                    transactionTypes: [TransactionType.I],
                     minDate: widget.dateRangeService.getPrevDates().$1,
                     maxDate: widget.dateRangeService.getPrevDates().$2,
                   )),
                   AccountService.instance.getAccountsBalance(
                       filters: TransactionFilters(
-                    transactionTypes: [TransactionType.expense],
+                    transactionTypes: [TransactionType.E],
                     minDate: widget.dateRangeService.startDate,
                     maxDate: widget.dateRangeService.endDate,
                   )),
                   AccountService.instance.getAccountsBalance(
                       filters: TransactionFilters(
-                    transactionTypes: [TransactionType.income],
+                    transactionTypes: [TransactionType.I],
                     minDate: widget.dateRangeService.startDate,
                     maxDate: widget.dateRangeService.endDate,
                   )),
@@ -200,7 +200,7 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
                       barTouchData: BarTouchData(
                         touchTooltipData: BarTouchTooltipData(
                           getTooltipColor: (group) =>
-                              AppColors.of(context).background,
+                              AppColors.of(context).surface,
                           getTooltipItem: (a, b, c, d) => null,
                         ),
                       ),

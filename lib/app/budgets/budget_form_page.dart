@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
-import 'package:monekin/app/categories/category_selector.dart';
+import 'package:monekin/app/categories/selectors/category_multi_selector.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
+import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
-import 'package:monekin/core/presentation/widgets/icon_displayer_widgets.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/models/account/account.dart';
+import '../../core/presentation/widgets/count_indicator.dart';
+import '../../core/presentation/widgets/form_fields/list_tile_field.dart';
 import '../../core/presentation/widgets/persistent_footer_button.dart';
 
 class BudgetFormPage extends StatefulWidget {
@@ -283,42 +285,87 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                 ),
               ],
               const SizedBox(height: 16),
-              Text('${t.general.accounts}:'),
-              const SizedBox(height: 6),
               StreamBuilder(
                 stream: AccountService.instance.getAccounts(),
                 builder: (context, snapshot) {
-                  return AccountSelector(IconDisplayerSelectorData(
-                    iconPadding: 12,
-                    iconSize: 40,
-                    availableItems: snapshot.data,
-                    selectedItems: accounts,
-                    onChange: (selection) {
+                  List<Account>? selectedAccounts = accounts == null
+                      ? snapshot.data
+                      : (snapshot.data ?? [])
+                          .where(
+                            (element) =>
+                                accounts!.map((e) => e.id).contains(element.id),
+                          )
+                          .toList();
+
+                  return ListTileField(
+                    title: t.general.accounts,
+                    leading: const Icon(Icons.account_balance_rounded),
+                    trailing: CountIndicatorWithExpandArrow(
+                      countToDisplay: accounts?.length,
+                    ),
+                    subtitle: accounts != null
+                        ? selectedAccounts!.map((e) => e.name).printFormatted()
+                        : t.account.select.all,
+                    onTap: () => showAccountSelectorBottomSheet(
+                        context,
+                        AccountSelectorModal(
+                          allowMultiSelection: true,
+                          filterSavingAccounts: false,
+                          selectedAccounts: selectedAccounts ?? [],
+                        )).then((selection) {
+                      if (selection == null) return;
+
                       setState(() {
-                        accounts = selection;
+                        accounts = selection.length == snapshot.data!.length
+                            ? null
+                            : selection;
                       });
-                    },
-                  ));
+                    }),
+                  );
                 },
               ),
-              Text('${t.general.categories}:'),
-              const SizedBox(height: 6),
+              const SizedBox(height: 16),
               StreamBuilder(
-                  stream: CategoryService.instance.getMainCategories(),
+                  stream: CategoryService.instance.getCategories(),
                   builder: (context, snapshot) {
-                    return StreamBuilder(
-                        stream: CategoryService.instance.getMainCategories(),
-                        builder: (context, snapshot) {
-                          return CategorySelector(IconDisplayerSelectorData(
-                            availableItems: snapshot.data,
-                            selectedItems: categories,
-                            onChange: (selection) {
-                              setState(() {
-                                categories = selection;
-                              });
-                            },
-                          ));
+                    List<Category>? selectedCategories = categories == null
+                        ? snapshot.data
+                        : (snapshot.data ?? [])
+                            .where(
+                              (element) => categories!
+                                  .map((e) => e.id)
+                                  .contains(element.id),
+                            )
+                            .toList();
+
+                    return ListTileField(
+                      title: t.general.categories,
+                      leading: const Icon(Icons.category_rounded),
+                      trailing: CountIndicatorWithExpandArrow(
+                        countToDisplay: categories?.length,
+                      ),
+                      subtitle: categories != null
+                          ? selectedCategories!
+                              .map((e) => e.name)
+                              .printFormatted()
+                          : t.categories.select.all,
+                      onTap: () {
+                        showMultiCategoryListModal(
+                          context,
+                          CategoryMultiSelectorModal(
+                            selectedCategories: selectedCategories ?? [],
+                          ),
+                        ).then((selection) {
+                          if (selection == null) return;
+
+                          categories = selection.length == snapshot.data!.length
+                              ? null
+                              : selection;
+
+                          setState(() {});
                         });
+                      },
+                    );
                   }),
               const SizedBox(height: 24),
             ],

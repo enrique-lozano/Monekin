@@ -8,6 +8,9 @@ enum SettingKey {
   avatar,
   appLanguage,
 
+  /// Key to storage if the user will enter in the "private mode" when the app launches.
+  privateModeAtLaunch,
+
   /// Key to storage the app theme. Could be 'system', 'light' or 'dark'
   themeMode,
 

@@ -17,7 +17,10 @@ CREATE TABLE IF NOT EXISTS currencies (
     code TEXT NOT NULL PRIMARY KEY,
 
     -- Symbol to represent the currency
-    symbol TEXT NOT NULL
+    symbol TEXT NOT NULL,
+
+    -- Name of the currency (in the user language at database creation)
+    name TEXT NOT NULL
 ) AS CurrencyInDB;
 
 CREATE TABLE IF NOT EXISTS exchangeRates (
@@ -26,12 +29,6 @@ CREATE TABLE IF NOT EXISTS exchangeRates (
     currencyCode TEXT NOT NULL REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
     exchangeRate REAL NOT NULL
 ) AS ExchangeRateInDB;
-
-CREATE TABLE IF NOT EXISTS currencyNames (
-    currencyCode TEXT NOT NULL PRIMARY KEY REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
-    en TEXT NOT NULL,
-    es TEXT NOT NULL
-);
 
 CREATE TABLE IF NOT EXISTS accounts (
     id TEXT NOT NULL PRIMARY KEY,
@@ -109,13 +106,27 @@ CREATE TABLE IF NOT EXISTS transactions (
   -- Some description, notes or extra info about the transaction.
   notes TEXT,
 
+  -- Whether the transacton is an income, an expense or a transfer
+  type ENUMNAME(TransactionType) NOT NULL CHECK(type IN ('E', 'I', 'T')),
+  
   status ENUMNAME(TransactionStatus) CHECK(status IN ('voided', 'pending', 'reconciled', 'unreconciled')),
   categoryID TEXT REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE,
   valueInDestiny REAL,
   receivingAccountID TEXT REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE,
   isHidden BOOLEAN NOT NULL DEFAULT 0,
 
-  /* --- Recurrency data --- */
+  ----------- Location data --------------
+
+  -- Latitude of the location where the transaction occurred
+  locLatitude REAL,
+
+  -- Longitude of the location where the transaction occurred
+  locLongitude REAL,
+
+  -- Address, name or description of the location where the transaction occurred
+  locAddress TEXT,
+
+  ------------- Recurrency data ---------------
 
   -- The time range with which new transactions to be paid will appear (weekly, monthly...)
   intervalPeriod ENUMNAME(Periodicity) CHECK(intervalPeriod IN ('day','week','month','year')),
@@ -137,6 +148,10 @@ CREATE TABLE IF NOT EXISTS transactions (
 
   CHECK ((intervalPeriod IS NOT NULL) OR (endDate IS NULL)),
   CHECK ((intervalPeriod IS NOT NULL) OR (remainingTransactions IS NULL)),
+
+  -- Location data checks:
+  CHECK ((locLongitude IS NULL AND locLatitude IS NULL) OR (locLongitude IS NOT NULL AND locLatitude IS NOT NULL)),
+  CHECK ((locAddress IS NULL) OR (locLatitude IS NOT NULL AND locLongitude IS NOT NULL)),
 
   -- valueInDestiny can not be defined for non-transfer transactions:
   CHECK (categoryID IS NULL OR valueInDestiny IS NULL)

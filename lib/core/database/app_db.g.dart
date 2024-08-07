@@ -20,8 +20,14 @@ class Currencies extends Table with TableInfo<Currencies, CurrencyInDB> {
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       $customConstraints: 'NOT NULL');
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      $customConstraints: 'NOT NULL');
   @override
-  List<GeneratedColumn> get $columns => [code, symbol];
+  List<GeneratedColumn> get $columns => [code, symbol, name];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -44,6 +50,12 @@ class Currencies extends Table with TableInfo<Currencies, CurrencyInDB> {
     } else if (isInserting) {
       context.missing(_symbolMeta);
     }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
     return context;
   }
 
@@ -57,6 +69,8 @@ class Currencies extends Table with TableInfo<Currencies, CurrencyInDB> {
           .read(DriftSqlType.string, data['${effectivePrefix}code'])!,
       symbol: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}symbol'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
     );
   }
 
@@ -75,12 +89,17 @@ class CurrencyInDB extends DataClass implements Insertable<CurrencyInDB> {
 
   /// Symbol to represent the currency
   final String symbol;
-  const CurrencyInDB({required this.code, required this.symbol});
+
+  /// Name of the currency (in the user language at database creation)
+  final String name;
+  const CurrencyInDB(
+      {required this.code, required this.symbol, required this.name});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['code'] = Variable<String>(code);
     map['symbol'] = Variable<String>(symbol);
+    map['name'] = Variable<String>(name);
     return map;
   }
 
@@ -88,6 +107,7 @@ class CurrencyInDB extends DataClass implements Insertable<CurrencyInDB> {
     return CurrenciesCompanion(
       code: Value(code),
       symbol: Value(symbol),
+      name: Value(name),
     );
   }
 
@@ -97,6 +117,7 @@ class CurrencyInDB extends DataClass implements Insertable<CurrencyInDB> {
     return CurrencyInDB(
       code: serializer.fromJson<String>(json['code']),
       symbol: serializer.fromJson<String>(json['symbol']),
+      name: serializer.fromJson<String>(json['name']),
     );
   }
   @override
@@ -105,64 +126,87 @@ class CurrencyInDB extends DataClass implements Insertable<CurrencyInDB> {
     return <String, dynamic>{
       'code': serializer.toJson<String>(code),
       'symbol': serializer.toJson<String>(symbol),
+      'name': serializer.toJson<String>(name),
     };
   }
 
-  CurrencyInDB copyWith({String? code, String? symbol}) => CurrencyInDB(
+  CurrencyInDB copyWith({String? code, String? symbol, String? name}) =>
+      CurrencyInDB(
         code: code ?? this.code,
         symbol: symbol ?? this.symbol,
+        name: name ?? this.name,
       );
+  CurrencyInDB copyWithCompanion(CurrenciesCompanion data) {
+    return CurrencyInDB(
+      code: data.code.present ? data.code.value : this.code,
+      symbol: data.symbol.present ? data.symbol.value : this.symbol,
+      name: data.name.present ? data.name.value : this.name,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('CurrencyInDB(')
           ..write('code: $code, ')
-          ..write('symbol: $symbol')
+          ..write('symbol: $symbol, ')
+          ..write('name: $name')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(code, symbol);
+  int get hashCode => Object.hash(code, symbol, name);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is CurrencyInDB &&
           other.code == this.code &&
-          other.symbol == this.symbol);
+          other.symbol == this.symbol &&
+          other.name == this.name);
 }
 
 class CurrenciesCompanion extends UpdateCompanion<CurrencyInDB> {
   final Value<String> code;
   final Value<String> symbol;
+  final Value<String> name;
   final Value<int> rowid;
   const CurrenciesCompanion({
     this.code = const Value.absent(),
     this.symbol = const Value.absent(),
+    this.name = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   CurrenciesCompanion.insert({
     required String code,
     required String symbol,
+    required String name,
     this.rowid = const Value.absent(),
   })  : code = Value(code),
-        symbol = Value(symbol);
+        symbol = Value(symbol),
+        name = Value(name);
   static Insertable<CurrencyInDB> custom({
     Expression<String>? code,
     Expression<String>? symbol,
+    Expression<String>? name,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (code != null) 'code': code,
       if (symbol != null) 'symbol': symbol,
+      if (name != null) 'name': name,
       if (rowid != null) 'rowid': rowid,
     });
   }
 
   CurrenciesCompanion copyWith(
-      {Value<String>? code, Value<String>? symbol, Value<int>? rowid}) {
+      {Value<String>? code,
+      Value<String>? symbol,
+      Value<String>? name,
+      Value<int>? rowid}) {
     return CurrenciesCompanion(
       code: code ?? this.code,
       symbol: symbol ?? this.symbol,
+      name: name ?? this.name,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -176,6 +220,9 @@ class CurrenciesCompanion extends UpdateCompanion<CurrencyInDB> {
     if (symbol.present) {
       map['symbol'] = Variable<String>(symbol.value);
     }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -187,6 +234,7 @@ class CurrenciesCompanion extends UpdateCompanion<CurrencyInDB> {
     return (StringBuffer('CurrenciesCompanion(')
           ..write('code: $code, ')
           ..write('symbol: $symbol, ')
+          ..write('name: $name, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -593,6 +641,29 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
         iban: iban.present ? iban.value : this.iban,
         swift: swift.present ? swift.value : this.swift,
       );
+  AccountInDB copyWithCompanion(AccountsCompanion data) {
+    return AccountInDB(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      iniValue: data.iniValue.present ? data.iniValue.value : this.iniValue,
+      date: data.date.present ? data.date.value : this.date,
+      description:
+          data.description.present ? data.description.value : this.description,
+      type: data.type.present ? data.type.value : this.type,
+      iconId: data.iconId.present ? data.iconId.value : this.iconId,
+      displayOrder: data.displayOrder.present
+          ? data.displayOrder.value
+          : this.displayOrder,
+      color: data.color.present ? data.color.value : this.color,
+      closingDate:
+          data.closingDate.present ? data.closingDate.value : this.closingDate,
+      currencyId:
+          data.currencyId.present ? data.currencyId.value : this.currencyId,
+      iban: data.iban.present ? data.iban.value : this.iban,
+      swift: data.swift.present ? data.swift.value : this.swift,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('AccountInDB(')
@@ -1080,6 +1151,22 @@ class CategoryInDB extends DataClass implements Insertable<CategoryInDB> {
             ? parentCategoryID.value
             : this.parentCategoryID,
       );
+  CategoryInDB copyWithCompanion(CategoriesCompanion data) {
+    return CategoryInDB(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      iconId: data.iconId.present ? data.iconId.value : this.iconId,
+      color: data.color.present ? data.color.value : this.color,
+      displayOrder: data.displayOrder.present
+          ? data.displayOrder.value
+          : this.displayOrder,
+      type: data.type.present ? data.type.value : this.type,
+      parentCategoryID: data.parentCategoryID.present
+          ? data.parentCategoryID.value
+          : this.parentCategoryID,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('CategoryInDB(')
@@ -1275,6 +1362,14 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       $customConstraints: '');
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  late final GeneratedColumnWithTypeConverter<TransactionType, String> type =
+      GeneratedColumn<String>('type', aliasedName, false,
+              type: DriftSqlType.string,
+              requiredDuringInsert: true,
+              $customConstraints:
+                  'NOT NULL CHECK (type IN (\'E\', \'I\', \'T\'))')
+          .withConverter<TransactionType>(Transactions.$convertertype);
   static const VerificationMeta _statusMeta = const VerificationMeta('status');
   late final GeneratedColumnWithTypeConverter<TransactionStatus?,
       String> status = GeneratedColumn<String>('status', aliasedName, true,
@@ -1314,6 +1409,27 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
       requiredDuringInsert: false,
       $customConstraints: 'NOT NULL DEFAULT 0',
       defaultValue: const CustomExpression('0'));
+  static const VerificationMeta _locLatitudeMeta =
+      const VerificationMeta('locLatitude');
+  late final GeneratedColumn<double> locLatitude = GeneratedColumn<double>(
+      'locLatitude', aliasedName, true,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  static const VerificationMeta _locLongitudeMeta =
+      const VerificationMeta('locLongitude');
+  late final GeneratedColumn<double> locLongitude = GeneratedColumn<double>(
+      'locLongitude', aliasedName, true,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      $customConstraints: '');
+  static const VerificationMeta _locAddressMeta =
+      const VerificationMeta('locAddress');
+  late final GeneratedColumn<String> locAddress = GeneratedColumn<String>(
+      'locAddress', aliasedName, true,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      $customConstraints: '');
   static const VerificationMeta _intervalPeriodMeta =
       const VerificationMeta('intervalPeriod');
   late final GeneratedColumnWithTypeConverter<Periodicity?,
@@ -1353,11 +1469,15 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
         value,
         title,
         notes,
+        type,
         status,
         categoryID,
         valueInDestiny,
         receivingAccountID,
         isHidden,
+        locLatitude,
+        locLongitude,
+        locAddress,
         intervalPeriod,
         intervalEach,
         endDate,
@@ -1404,6 +1524,7 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
       context.handle(
           _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
     }
+    context.handle(_typeMeta, const VerificationResult.success());
     context.handle(_statusMeta, const VerificationResult.success());
     if (data.containsKey('categoryID')) {
       context.handle(
@@ -1426,6 +1547,24 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
     if (data.containsKey('isHidden')) {
       context.handle(_isHiddenMeta,
           isHidden.isAcceptableOrUnknown(data['isHidden']!, _isHiddenMeta));
+    }
+    if (data.containsKey('locLatitude')) {
+      context.handle(
+          _locLatitudeMeta,
+          locLatitude.isAcceptableOrUnknown(
+              data['locLatitude']!, _locLatitudeMeta));
+    }
+    if (data.containsKey('locLongitude')) {
+      context.handle(
+          _locLongitudeMeta,
+          locLongitude.isAcceptableOrUnknown(
+              data['locLongitude']!, _locLongitudeMeta));
+    }
+    if (data.containsKey('locAddress')) {
+      context.handle(
+          _locAddressMeta,
+          locAddress.isAcceptableOrUnknown(
+              data['locAddress']!, _locAddressMeta));
     }
     context.handle(_intervalPeriodMeta, const VerificationResult.success());
     if (data.containsKey('intervalEach')) {
@@ -1465,6 +1604,8 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
           .read(DriftSqlType.string, data['${effectivePrefix}title']),
       notes: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}notes']),
+      type: Transactions.$convertertype.fromSql(attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!),
       status: Transactions.$converterstatusn.fromSql(attachedDatabase
           .typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}status'])),
@@ -1476,6 +1617,12 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
           DriftSqlType.string, data['${effectivePrefix}receivingAccountID']),
       isHidden: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}isHidden'])!,
+      locLatitude: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}locLatitude']),
+      locLongitude: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}locLongitude']),
+      locAddress: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}locAddress']),
       intervalPeriod: Transactions.$converterintervalPeriodn.fromSql(
           attachedDatabase.typeMapping.read(
               DriftSqlType.string, data['${effectivePrefix}intervalPeriod'])),
@@ -1493,6 +1640,8 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
     return Transactions(attachedDatabase, alias);
   }
 
+  static JsonTypeConverter2<TransactionType, String, String> $convertertype =
+      const EnumNameConverter<TransactionType>(TransactionType.values);
   static JsonTypeConverter2<TransactionStatus, String, String>
       $converterstatus =
       const EnumNameConverter<TransactionStatus>(TransactionStatus.values);
@@ -1510,6 +1659,8 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
         'CHECK((intervalPeriod IS NULL)==(intervalEach IS NULL))',
         'CHECK((intervalPeriod IS NOT NULL)OR(endDate IS NULL))',
         'CHECK((intervalPeriod IS NOT NULL)OR(remainingTransactions IS NULL))',
+        'CHECK((locLongitude IS NULL AND locLatitude IS NULL)OR(locLongitude IS NOT NULL AND locLatitude IS NOT NULL))',
+        'CHECK((locAddress IS NULL)OR(locLatitude IS NOT NULL AND locLongitude IS NOT NULL))',
         'CHECK(categoryID IS NULL OR valueInDestiny IS NULL)'
       ];
   @override
@@ -1531,14 +1682,27 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
 
   /// Some description, notes or extra info about the transaction.
   final String? notes;
+
+  /// Whether the transacton is an income, an expense or a transfer
+  final TransactionType type;
   final TransactionStatus? status;
   final String? categoryID;
   final double? valueInDestiny;
   final String? receivingAccountID;
   final bool isHidden;
 
+  /// Latitude of the location where the transaction occurred
+  ///--------- Location data --------------
+  final double? locLatitude;
+
+  /// Longitude of the location where the transaction occurred
+  final double? locLongitude;
+
+  /// Address, name or description of the location where the transaction occurred
+  final String? locAddress;
+
   /// The time range with which new transactions to be paid will appear (weekly, monthly...)
-  /// --- Recurrency data ---
+  ///----------- Recurrency data ---------------
   final Periodicity? intervalPeriod;
 
   /// Within the time range chosen in the `intervalPeriod` attribute, every few times new transactions will appear to be paid. For example, putting a 2 here and having monthly as `intervalPeriod`, new payments will appear every two months
@@ -1556,11 +1720,15 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       required this.value,
       this.title,
       this.notes,
+      required this.type,
       this.status,
       this.categoryID,
       this.valueInDestiny,
       this.receivingAccountID,
       required this.isHidden,
+      this.locLatitude,
+      this.locLongitude,
+      this.locAddress,
       this.intervalPeriod,
       this.intervalEach,
       this.endDate,
@@ -1578,6 +1746,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
     if (!nullToAbsent || notes != null) {
       map['notes'] = Variable<String>(notes);
     }
+    {
+      map['type'] = Variable<String>(Transactions.$convertertype.toSql(type));
+    }
     if (!nullToAbsent || status != null) {
       map['status'] =
           Variable<String>(Transactions.$converterstatusn.toSql(status));
@@ -1592,6 +1763,15 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       map['receivingAccountID'] = Variable<String>(receivingAccountID);
     }
     map['isHidden'] = Variable<bool>(isHidden);
+    if (!nullToAbsent || locLatitude != null) {
+      map['locLatitude'] = Variable<double>(locLatitude);
+    }
+    if (!nullToAbsent || locLongitude != null) {
+      map['locLongitude'] = Variable<double>(locLongitude);
+    }
+    if (!nullToAbsent || locAddress != null) {
+      map['locAddress'] = Variable<String>(locAddress);
+    }
     if (!nullToAbsent || intervalPeriod != null) {
       map['intervalPeriod'] = Variable<String>(
           Transactions.$converterintervalPeriodn.toSql(intervalPeriod));
@@ -1618,6 +1798,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           title == null && nullToAbsent ? const Value.absent() : Value(title),
       notes:
           notes == null && nullToAbsent ? const Value.absent() : Value(notes),
+      type: Value(type),
       status:
           status == null && nullToAbsent ? const Value.absent() : Value(status),
       categoryID: categoryID == null && nullToAbsent
@@ -1630,6 +1811,15 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           ? const Value.absent()
           : Value(receivingAccountID),
       isHidden: Value(isHidden),
+      locLatitude: locLatitude == null && nullToAbsent
+          ? const Value.absent()
+          : Value(locLatitude),
+      locLongitude: locLongitude == null && nullToAbsent
+          ? const Value.absent()
+          : Value(locLongitude),
+      locAddress: locAddress == null && nullToAbsent
+          ? const Value.absent()
+          : Value(locAddress),
       intervalPeriod: intervalPeriod == null && nullToAbsent
           ? const Value.absent()
           : Value(intervalPeriod),
@@ -1655,6 +1845,8 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       value: serializer.fromJson<double>(json['value']),
       title: serializer.fromJson<String?>(json['title']),
       notes: serializer.fromJson<String?>(json['notes']),
+      type: Transactions.$convertertype
+          .fromJson(serializer.fromJson<String>(json['type'])),
       status: Transactions.$converterstatusn
           .fromJson(serializer.fromJson<String?>(json['status'])),
       categoryID: serializer.fromJson<String?>(json['categoryID']),
@@ -1662,6 +1854,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       receivingAccountID:
           serializer.fromJson<String?>(json['receivingAccountID']),
       isHidden: serializer.fromJson<bool>(json['isHidden']),
+      locLatitude: serializer.fromJson<double?>(json['locLatitude']),
+      locLongitude: serializer.fromJson<double?>(json['locLongitude']),
+      locAddress: serializer.fromJson<String?>(json['locAddress']),
       intervalPeriod: Transactions.$converterintervalPeriodn
           .fromJson(serializer.fromJson<String?>(json['intervalPeriod'])),
       intervalEach: serializer.fromJson<int?>(json['intervalEach']),
@@ -1680,12 +1875,17 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       'value': serializer.toJson<double>(value),
       'title': serializer.toJson<String?>(title),
       'notes': serializer.toJson<String?>(notes),
+      'type':
+          serializer.toJson<String>(Transactions.$convertertype.toJson(type)),
       'status': serializer
           .toJson<String?>(Transactions.$converterstatusn.toJson(status)),
       'categoryID': serializer.toJson<String?>(categoryID),
       'valueInDestiny': serializer.toJson<double?>(valueInDestiny),
       'receivingAccountID': serializer.toJson<String?>(receivingAccountID),
       'isHidden': serializer.toJson<bool>(isHidden),
+      'locLatitude': serializer.toJson<double?>(locLatitude),
+      'locLongitude': serializer.toJson<double?>(locLongitude),
+      'locAddress': serializer.toJson<String?>(locAddress),
       'intervalPeriod': serializer.toJson<String?>(
           Transactions.$converterintervalPeriodn.toJson(intervalPeriod)),
       'intervalEach': serializer.toJson<int?>(intervalEach),
@@ -1701,11 +1901,15 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           double? value,
           Value<String?> title = const Value.absent(),
           Value<String?> notes = const Value.absent(),
+          TransactionType? type,
           Value<TransactionStatus?> status = const Value.absent(),
           Value<String?> categoryID = const Value.absent(),
           Value<double?> valueInDestiny = const Value.absent(),
           Value<String?> receivingAccountID = const Value.absent(),
           bool? isHidden,
+          Value<double?> locLatitude = const Value.absent(),
+          Value<double?> locLongitude = const Value.absent(),
+          Value<String?> locAddress = const Value.absent(),
           Value<Periodicity?> intervalPeriod = const Value.absent(),
           Value<int?> intervalEach = const Value.absent(),
           Value<DateTime?> endDate = const Value.absent(),
@@ -1717,6 +1921,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
         value: value ?? this.value,
         title: title.present ? title.value : this.title,
         notes: notes.present ? notes.value : this.notes,
+        type: type ?? this.type,
         status: status.present ? status.value : this.status,
         categoryID: categoryID.present ? categoryID.value : this.categoryID,
         valueInDestiny:
@@ -1725,6 +1930,10 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
             ? receivingAccountID.value
             : this.receivingAccountID,
         isHidden: isHidden ?? this.isHidden,
+        locLatitude: locLatitude.present ? locLatitude.value : this.locLatitude,
+        locLongitude:
+            locLongitude.present ? locLongitude.value : this.locLongitude,
+        locAddress: locAddress.present ? locAddress.value : this.locAddress,
         intervalPeriod:
             intervalPeriod.present ? intervalPeriod.value : this.intervalPeriod,
         intervalEach:
@@ -1734,6 +1943,45 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
             ? remainingTransactions.value
             : this.remainingTransactions,
       );
+  TransactionInDB copyWithCompanion(TransactionsCompanion data) {
+    return TransactionInDB(
+      id: data.id.present ? data.id.value : this.id,
+      date: data.date.present ? data.date.value : this.date,
+      accountID: data.accountID.present ? data.accountID.value : this.accountID,
+      value: data.value.present ? data.value.value : this.value,
+      title: data.title.present ? data.title.value : this.title,
+      notes: data.notes.present ? data.notes.value : this.notes,
+      type: data.type.present ? data.type.value : this.type,
+      status: data.status.present ? data.status.value : this.status,
+      categoryID:
+          data.categoryID.present ? data.categoryID.value : this.categoryID,
+      valueInDestiny: data.valueInDestiny.present
+          ? data.valueInDestiny.value
+          : this.valueInDestiny,
+      receivingAccountID: data.receivingAccountID.present
+          ? data.receivingAccountID.value
+          : this.receivingAccountID,
+      isHidden: data.isHidden.present ? data.isHidden.value : this.isHidden,
+      locLatitude:
+          data.locLatitude.present ? data.locLatitude.value : this.locLatitude,
+      locLongitude: data.locLongitude.present
+          ? data.locLongitude.value
+          : this.locLongitude,
+      locAddress:
+          data.locAddress.present ? data.locAddress.value : this.locAddress,
+      intervalPeriod: data.intervalPeriod.present
+          ? data.intervalPeriod.value
+          : this.intervalPeriod,
+      intervalEach: data.intervalEach.present
+          ? data.intervalEach.value
+          : this.intervalEach,
+      endDate: data.endDate.present ? data.endDate.value : this.endDate,
+      remainingTransactions: data.remainingTransactions.present
+          ? data.remainingTransactions.value
+          : this.remainingTransactions,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('TransactionInDB(')
@@ -1743,11 +1991,15 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           ..write('value: $value, ')
           ..write('title: $title, ')
           ..write('notes: $notes, ')
+          ..write('type: $type, ')
           ..write('status: $status, ')
           ..write('categoryID: $categoryID, ')
           ..write('valueInDestiny: $valueInDestiny, ')
           ..write('receivingAccountID: $receivingAccountID, ')
           ..write('isHidden: $isHidden, ')
+          ..write('locLatitude: $locLatitude, ')
+          ..write('locLongitude: $locLongitude, ')
+          ..write('locAddress: $locAddress, ')
           ..write('intervalPeriod: $intervalPeriod, ')
           ..write('intervalEach: $intervalEach, ')
           ..write('endDate: $endDate, ')
@@ -1764,11 +2016,15 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       value,
       title,
       notes,
+      type,
       status,
       categoryID,
       valueInDestiny,
       receivingAccountID,
       isHidden,
+      locLatitude,
+      locLongitude,
+      locAddress,
       intervalPeriod,
       intervalEach,
       endDate,
@@ -1783,11 +2039,15 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           other.value == this.value &&
           other.title == this.title &&
           other.notes == this.notes &&
+          other.type == this.type &&
           other.status == this.status &&
           other.categoryID == this.categoryID &&
           other.valueInDestiny == this.valueInDestiny &&
           other.receivingAccountID == this.receivingAccountID &&
           other.isHidden == this.isHidden &&
+          other.locLatitude == this.locLatitude &&
+          other.locLongitude == this.locLongitude &&
+          other.locAddress == this.locAddress &&
           other.intervalPeriod == this.intervalPeriod &&
           other.intervalEach == this.intervalEach &&
           other.endDate == this.endDate &&
@@ -1801,11 +2061,15 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
   final Value<double> value;
   final Value<String?> title;
   final Value<String?> notes;
+  final Value<TransactionType> type;
   final Value<TransactionStatus?> status;
   final Value<String?> categoryID;
   final Value<double?> valueInDestiny;
   final Value<String?> receivingAccountID;
   final Value<bool> isHidden;
+  final Value<double?> locLatitude;
+  final Value<double?> locLongitude;
+  final Value<String?> locAddress;
   final Value<Periodicity?> intervalPeriod;
   final Value<int?> intervalEach;
   final Value<DateTime?> endDate;
@@ -1818,11 +2082,15 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     this.value = const Value.absent(),
     this.title = const Value.absent(),
     this.notes = const Value.absent(),
+    this.type = const Value.absent(),
     this.status = const Value.absent(),
     this.categoryID = const Value.absent(),
     this.valueInDestiny = const Value.absent(),
     this.receivingAccountID = const Value.absent(),
     this.isHidden = const Value.absent(),
+    this.locLatitude = const Value.absent(),
+    this.locLongitude = const Value.absent(),
+    this.locAddress = const Value.absent(),
     this.intervalPeriod = const Value.absent(),
     this.intervalEach = const Value.absent(),
     this.endDate = const Value.absent(),
@@ -1836,11 +2104,15 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     required double value,
     this.title = const Value.absent(),
     this.notes = const Value.absent(),
+    required TransactionType type,
     this.status = const Value.absent(),
     this.categoryID = const Value.absent(),
     this.valueInDestiny = const Value.absent(),
     this.receivingAccountID = const Value.absent(),
     this.isHidden = const Value.absent(),
+    this.locLatitude = const Value.absent(),
+    this.locLongitude = const Value.absent(),
+    this.locAddress = const Value.absent(),
     this.intervalPeriod = const Value.absent(),
     this.intervalEach = const Value.absent(),
     this.endDate = const Value.absent(),
@@ -1849,7 +2121,8 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
   })  : id = Value(id),
         date = Value(date),
         accountID = Value(accountID),
-        value = Value(value);
+        value = Value(value),
+        type = Value(type);
   static Insertable<TransactionInDB> custom({
     Expression<String>? id,
     Expression<DateTime>? date,
@@ -1857,11 +2130,15 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     Expression<double>? value,
     Expression<String>? title,
     Expression<String>? notes,
+    Expression<String>? type,
     Expression<String>? status,
     Expression<String>? categoryID,
     Expression<double>? valueInDestiny,
     Expression<String>? receivingAccountID,
     Expression<bool>? isHidden,
+    Expression<double>? locLatitude,
+    Expression<double>? locLongitude,
+    Expression<String>? locAddress,
     Expression<String>? intervalPeriod,
     Expression<int>? intervalEach,
     Expression<DateTime>? endDate,
@@ -1875,11 +2152,15 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
       if (value != null) 'value': value,
       if (title != null) 'title': title,
       if (notes != null) 'notes': notes,
+      if (type != null) 'type': type,
       if (status != null) 'status': status,
       if (categoryID != null) 'categoryID': categoryID,
       if (valueInDestiny != null) 'valueInDestiny': valueInDestiny,
       if (receivingAccountID != null) 'receivingAccountID': receivingAccountID,
       if (isHidden != null) 'isHidden': isHidden,
+      if (locLatitude != null) 'locLatitude': locLatitude,
+      if (locLongitude != null) 'locLongitude': locLongitude,
+      if (locAddress != null) 'locAddress': locAddress,
       if (intervalPeriod != null) 'intervalPeriod': intervalPeriod,
       if (intervalEach != null) 'intervalEach': intervalEach,
       if (endDate != null) 'endDate': endDate,
@@ -1896,11 +2177,15 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
       Value<double>? value,
       Value<String?>? title,
       Value<String?>? notes,
+      Value<TransactionType>? type,
       Value<TransactionStatus?>? status,
       Value<String?>? categoryID,
       Value<double?>? valueInDestiny,
       Value<String?>? receivingAccountID,
       Value<bool>? isHidden,
+      Value<double?>? locLatitude,
+      Value<double?>? locLongitude,
+      Value<String?>? locAddress,
       Value<Periodicity?>? intervalPeriod,
       Value<int?>? intervalEach,
       Value<DateTime?>? endDate,
@@ -1913,11 +2198,15 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
       value: value ?? this.value,
       title: title ?? this.title,
       notes: notes ?? this.notes,
+      type: type ?? this.type,
       status: status ?? this.status,
       categoryID: categoryID ?? this.categoryID,
       valueInDestiny: valueInDestiny ?? this.valueInDestiny,
       receivingAccountID: receivingAccountID ?? this.receivingAccountID,
       isHidden: isHidden ?? this.isHidden,
+      locLatitude: locLatitude ?? this.locLatitude,
+      locLongitude: locLongitude ?? this.locLongitude,
+      locAddress: locAddress ?? this.locAddress,
       intervalPeriod: intervalPeriod ?? this.intervalPeriod,
       intervalEach: intervalEach ?? this.intervalEach,
       endDate: endDate ?? this.endDate,
@@ -1948,6 +2237,10 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     if (notes.present) {
       map['notes'] = Variable<String>(notes.value);
     }
+    if (type.present) {
+      map['type'] =
+          Variable<String>(Transactions.$convertertype.toSql(type.value));
+    }
     if (status.present) {
       map['status'] =
           Variable<String>(Transactions.$converterstatusn.toSql(status.value));
@@ -1963,6 +2256,15 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     }
     if (isHidden.present) {
       map['isHidden'] = Variable<bool>(isHidden.value);
+    }
+    if (locLatitude.present) {
+      map['locLatitude'] = Variable<double>(locLatitude.value);
+    }
+    if (locLongitude.present) {
+      map['locLongitude'] = Variable<double>(locLongitude.value);
+    }
+    if (locAddress.present) {
+      map['locAddress'] = Variable<String>(locAddress.value);
     }
     if (intervalPeriod.present) {
       map['intervalPeriod'] = Variable<String>(
@@ -1992,11 +2294,15 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
           ..write('value: $value, ')
           ..write('title: $title, ')
           ..write('notes: $notes, ')
+          ..write('type: $type, ')
           ..write('status: $status, ')
           ..write('categoryID: $categoryID, ')
           ..write('valueInDestiny: $valueInDestiny, ')
           ..write('receivingAccountID: $receivingAccountID, ')
           ..write('isHidden: $isHidden, ')
+          ..write('locLatitude: $locLatitude, ')
+          ..write('locLongitude: $locLongitude, ')
+          ..write('locAddress: $locAddress, ')
           ..write('intervalPeriod: $intervalPeriod, ')
           ..write('intervalEach: $intervalEach, ')
           ..write('endDate: $endDate, ')
@@ -2170,6 +2476,19 @@ class ExchangeRateInDB extends DataClass
         currencyCode: currencyCode ?? this.currencyCode,
         exchangeRate: exchangeRate ?? this.exchangeRate,
       );
+  ExchangeRateInDB copyWithCompanion(ExchangeRatesCompanion data) {
+    return ExchangeRateInDB(
+      id: data.id.present ? data.id.value : this.id,
+      date: data.date.present ? data.date.value : this.date,
+      currencyCode: data.currencyCode.present
+          ? data.currencyCode.value
+          : this.currencyCode,
+      exchangeRate: data.exchangeRate.present
+          ? data.exchangeRate.value
+          : this.exchangeRate,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('ExchangeRateInDB(')
@@ -2474,6 +2793,19 @@ class TagInDB extends DataClass implements Insertable<TagInDB> {
         displayOrder: displayOrder ?? this.displayOrder,
         description: description.present ? description.value : this.description,
       );
+  TagInDB copyWithCompanion(TagsCompanion data) {
+    return TagInDB(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      color: data.color.present ? data.color.value : this.color,
+      displayOrder: data.displayOrder.present
+          ? data.displayOrder.value
+          : this.displayOrder,
+      description:
+          data.description.present ? data.description.value : this.description,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('TagInDB(')
@@ -2711,6 +3043,15 @@ class TransactionTag extends DataClass implements Insertable<TransactionTag> {
         transactionID: transactionID ?? this.transactionID,
         tagID: tagID ?? this.tagID,
       );
+  TransactionTag copyWithCompanion(TransactionTagsCompanion data) {
+    return TransactionTag(
+      transactionID: data.transactionID.present
+          ? data.transactionID.value
+          : this.transactionID,
+      tagID: data.tagID.present ? data.tagID.value : this.tagID,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('TransactionTag(')
@@ -3028,6 +3369,20 @@ class BudgetInDB extends DataClass implements Insertable<BudgetInDB> {
         startDate: startDate.present ? startDate.value : this.startDate,
         endDate: endDate.present ? endDate.value : this.endDate,
       );
+  BudgetInDB copyWithCompanion(BudgetsCompanion data) {
+    return BudgetInDB(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      limitAmount:
+          data.limitAmount.present ? data.limitAmount.value : this.limitAmount,
+      intervalPeriod: data.intervalPeriod.present
+          ? data.intervalPeriod.value
+          : this.intervalPeriod,
+      startDate: data.startDate.present ? data.startDate.value : this.startDate,
+      endDate: data.endDate.present ? data.endDate.value : this.endDate,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('BudgetInDB(')
@@ -3281,6 +3636,14 @@ class BudgetCategoryData extends DataClass
         budgetID: budgetID ?? this.budgetID,
         categoryID: categoryID ?? this.categoryID,
       );
+  BudgetCategoryData copyWithCompanion(BudgetCategoryCompanion data) {
+    return BudgetCategoryData(
+      budgetID: data.budgetID.present ? data.budgetID.value : this.budgetID,
+      categoryID:
+          data.categoryID.present ? data.categoryID.value : this.categoryID,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('BudgetCategoryData(')
@@ -3475,6 +3838,13 @@ class BudgetAccountData extends DataClass
         budgetID: budgetID ?? this.budgetID,
         accountID: accountID ?? this.accountID,
       );
+  BudgetAccountData copyWithCompanion(BudgetAccountCompanion data) {
+    return BudgetAccountData(
+      budgetID: data.budgetID.present ? data.budgetID.value : this.budgetID,
+      accountID: data.accountID.present ? data.accountID.value : this.accountID,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('BudgetAccountData(')
@@ -3550,233 +3920,6 @@ class BudgetAccountCompanion extends UpdateCompanion<BudgetAccountData> {
     return (StringBuffer('BudgetAccountCompanion(')
           ..write('budgetID: $budgetID, ')
           ..write('accountID: $accountID, ')
-          ..write('rowid: $rowid')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class CurrencyNames extends Table with TableInfo<CurrencyNames, CurrencyName> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  CurrencyNames(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _currencyCodeMeta =
-      const VerificationMeta('currencyCode');
-  late final GeneratedColumn<String> currencyCode = GeneratedColumn<String>(
-      'currencyCode', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints:
-          'NOT NULL PRIMARY KEY REFERENCES currencies(code)ON UPDATE CASCADE ON DELETE CASCADE');
-  static const VerificationMeta _enMeta = const VerificationMeta('en');
-  late final GeneratedColumn<String> en = GeneratedColumn<String>(
-      'en', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
-  static const VerificationMeta _esMeta = const VerificationMeta('es');
-  late final GeneratedColumn<String> es = GeneratedColumn<String>(
-      'es', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      $customConstraints: 'NOT NULL');
-  @override
-  List<GeneratedColumn> get $columns => [currencyCode, en, es];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'currencyNames';
-  @override
-  VerificationContext validateIntegrity(Insertable<CurrencyName> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('currencyCode')) {
-      context.handle(
-          _currencyCodeMeta,
-          currencyCode.isAcceptableOrUnknown(
-              data['currencyCode']!, _currencyCodeMeta));
-    } else if (isInserting) {
-      context.missing(_currencyCodeMeta);
-    }
-    if (data.containsKey('en')) {
-      context.handle(_enMeta, en.isAcceptableOrUnknown(data['en']!, _enMeta));
-    } else if (isInserting) {
-      context.missing(_enMeta);
-    }
-    if (data.containsKey('es')) {
-      context.handle(_esMeta, es.isAcceptableOrUnknown(data['es']!, _esMeta));
-    } else if (isInserting) {
-      context.missing(_esMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {currencyCode};
-  @override
-  CurrencyName map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return CurrencyName(
-      currencyCode: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}currencyCode'])!,
-      en: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}en'])!,
-      es: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}es'])!,
-    );
-  }
-
-  @override
-  CurrencyNames createAlias(String alias) {
-    return CurrencyNames(attachedDatabase, alias);
-  }
-
-  @override
-  bool get dontWriteConstraints => true;
-}
-
-class CurrencyName extends DataClass implements Insertable<CurrencyName> {
-  final String currencyCode;
-  final String en;
-  final String es;
-  const CurrencyName(
-      {required this.currencyCode, required this.en, required this.es});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['currencyCode'] = Variable<String>(currencyCode);
-    map['en'] = Variable<String>(en);
-    map['es'] = Variable<String>(es);
-    return map;
-  }
-
-  CurrencyNamesCompanion toCompanion(bool nullToAbsent) {
-    return CurrencyNamesCompanion(
-      currencyCode: Value(currencyCode),
-      en: Value(en),
-      es: Value(es),
-    );
-  }
-
-  factory CurrencyName.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return CurrencyName(
-      currencyCode: serializer.fromJson<String>(json['currencyCode']),
-      en: serializer.fromJson<String>(json['en']),
-      es: serializer.fromJson<String>(json['es']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'currencyCode': serializer.toJson<String>(currencyCode),
-      'en': serializer.toJson<String>(en),
-      'es': serializer.toJson<String>(es),
-    };
-  }
-
-  CurrencyName copyWith({String? currencyCode, String? en, String? es}) =>
-      CurrencyName(
-        currencyCode: currencyCode ?? this.currencyCode,
-        en: en ?? this.en,
-        es: es ?? this.es,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('CurrencyName(')
-          ..write('currencyCode: $currencyCode, ')
-          ..write('en: $en, ')
-          ..write('es: $es')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(currencyCode, en, es);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is CurrencyName &&
-          other.currencyCode == this.currencyCode &&
-          other.en == this.en &&
-          other.es == this.es);
-}
-
-class CurrencyNamesCompanion extends UpdateCompanion<CurrencyName> {
-  final Value<String> currencyCode;
-  final Value<String> en;
-  final Value<String> es;
-  final Value<int> rowid;
-  const CurrencyNamesCompanion({
-    this.currencyCode = const Value.absent(),
-    this.en = const Value.absent(),
-    this.es = const Value.absent(),
-    this.rowid = const Value.absent(),
-  });
-  CurrencyNamesCompanion.insert({
-    required String currencyCode,
-    required String en,
-    required String es,
-    this.rowid = const Value.absent(),
-  })  : currencyCode = Value(currencyCode),
-        en = Value(en),
-        es = Value(es);
-  static Insertable<CurrencyName> custom({
-    Expression<String>? currencyCode,
-    Expression<String>? en,
-    Expression<String>? es,
-    Expression<int>? rowid,
-  }) {
-    return RawValuesInsertable({
-      if (currencyCode != null) 'currencyCode': currencyCode,
-      if (en != null) 'en': en,
-      if (es != null) 'es': es,
-      if (rowid != null) 'rowid': rowid,
-    });
-  }
-
-  CurrencyNamesCompanion copyWith(
-      {Value<String>? currencyCode,
-      Value<String>? en,
-      Value<String>? es,
-      Value<int>? rowid}) {
-    return CurrencyNamesCompanion(
-      currencyCode: currencyCode ?? this.currencyCode,
-      en: en ?? this.en,
-      es: es ?? this.es,
-      rowid: rowid ?? this.rowid,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (currencyCode.present) {
-      map['currencyCode'] = Variable<String>(currencyCode.value);
-    }
-    if (en.present) {
-      map['en'] = Variable<String>(en.value);
-    }
-    if (es.present) {
-      map['es'] = Variable<String>(es.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('CurrencyNamesCompanion(')
-          ..write('currencyCode: $currencyCode, ')
-          ..write('en: $en, ')
-          ..write('es: $es, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -3903,6 +4046,16 @@ class UserSetting extends DataClass implements Insertable<UserSetting> {
         settingValue:
             settingValue.present ? settingValue.value : this.settingValue,
       );
+  UserSetting copyWithCompanion(UserSettingsCompanion data) {
+    return UserSetting(
+      settingKey:
+          data.settingKey.present ? data.settingKey.value : this.settingKey,
+      settingValue: data.settingValue.present
+          ? data.settingValue.value
+          : this.settingValue,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('UserSetting(')
@@ -4106,6 +4259,16 @@ class AppDataData extends DataClass implements Insertable<AppDataData> {
         appDataValue:
             appDataValue.present ? appDataValue.value : this.appDataValue,
       );
+  AppDataData copyWithCompanion(AppDataCompanion data) {
+    return AppDataData(
+      appDataKey:
+          data.appDataKey.present ? data.appDataKey.value : this.appDataKey,
+      appDataValue: data.appDataValue.present
+          ? data.appDataValue.value
+          : this.appDataValue,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('AppDataData(')
@@ -4191,6 +4354,7 @@ class AppDataCompanion extends UpdateCompanion<AppDataData> {
 
 abstract class _$AppDB extends GeneratedDatabase {
   _$AppDB(QueryExecutor e) : super(e);
+  $AppDBManager get managers => $AppDBManager(this);
   late final Currencies currencies = Currencies(this);
   late final Accounts accounts = Accounts(this);
   late final Categories categories = Categories(this);
@@ -4201,7 +4365,6 @@ abstract class _$AppDB extends GeneratedDatabase {
   late final Budgets budgets = Budgets(this);
   late final BudgetCategory budgetCategory = BudgetCategory(this);
   late final BudgetAccount budgetAccount = BudgetAccount(this);
-  late final CurrencyNames currencyNames = CurrencyNames(this);
   late final UserSettings userSettings = UserSettings(this);
   late final AppData appData = AppData(this);
   Selectable<Account> getAccountsWithFullData(
@@ -4229,7 +4392,7 @@ abstract class _$AppDB extends GeneratedDatabase {
         startIndex: $arrayStartIndex);
     $arrayStartIndex += generatedlimit.amountOfVariables;
     return customSelect(
-        'SELECT a.*,"currency"."code" AS "nested_0.code", "currency"."symbol" AS "nested_0.symbol" FROM accounts AS a INNER JOIN currencies AS currency ON a.currencyId = currency.code WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
+        'SELECT a.*,"currency"."code" AS "nested_0.code", "currency"."symbol" AS "nested_0.symbol", "currency"."name" AS "nested_0.name" FROM accounts AS a INNER JOIN currencies AS currency ON a.currencyId = currency.code WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
         variables: [
           ...generatedpredicate.introducedVariables,
           ...generatedorderBy.introducedVariables,
@@ -4302,7 +4465,7 @@ abstract class _$AppDB extends GeneratedDatabase {
         startIndex: $arrayStartIndex);
     $arrayStartIndex += generatedlimit.amountOfVariables;
     return customSelect(
-        'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."iconId" AS "nested_0.iconId", "a"."displayOrder" AS "nested_0.displayOrder", "a"."color" AS "nested_0.color", "a"."closingDate" AS "nested_0.closingDate", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."iconId" AS "nested_3.iconId", "ra"."displayOrder" AS "nested_3.displayOrder", "ra"."color" AS "nested_3.color", "ra"."closingDate" AS "nested_3.closingDate", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."displayOrder" AS "nested_4.displayOrder", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."displayOrder" AS "nested_5.displayOrder", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRate.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id INNER JOIN currencies AS receivingAccountCurrency ON a.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
+        'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."iconId" AS "nested_0.iconId", "a"."displayOrder" AS "nested_0.displayOrder", "a"."color" AS "nested_0.color", "a"."closingDate" AS "nested_0.closingDate", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol", "accountCurrency"."name" AS "nested_1.name","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol", "receivingAccountCurrency"."name" AS "nested_2.name","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."iconId" AS "nested_3.iconId", "ra"."displayOrder" AS "nested_3.displayOrder", "ra"."color" AS "nested_3.color", "ra"."closingDate" AS "nested_3.closingDate", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."displayOrder" AS "nested_4.displayOrder", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."displayOrder" AS "nested_5.displayOrder", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRate.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
         variables: [
           ...generatedpredicate.introducedVariables,
           ...generatedorderBy.introducedVariables,
@@ -4324,19 +4487,23 @@ abstract class _$AppDB extends GeneratedDatabase {
           date: row.read<DateTime>('date'),
           value: row.read<double>('value'),
           isHidden: row.read<bool>('isHidden'),
+          type: Transactions.$convertertype.fromSql(row.read<String>('type')),
           notes: row.readNullable<String>('notes'),
           title: row.readNullable<String>('title'),
           status: NullAwareTypeConverter.wrapFromSql(
               Transactions.$converterstatus,
               row.readNullable<String>('status')),
           valueInDestiny: row.readNullable<double>('valueInDestiny'),
+          locAddress: row.readNullable<String>('locAddress'),
+          locLatitude: row.readNullable<double>('locLatitude'),
+          locLongitude: row.readNullable<double>('locLongitude'),
           account: await accounts.mapFromRow(row, tablePrefix: 'nested_0'),
           receivingAccount:
               await accounts.mapFromRowOrNull(row, tablePrefix: 'nested_3'),
           accountCurrency:
               await currencies.mapFromRow(row, tablePrefix: 'nested_1'),
           receivingAccountCurrency:
-              await currencies.mapFromRow(row, tablePrefix: 'nested_2'),
+              await currencies.mapFromRowOrNull(row, tablePrefix: 'nested_2'),
           category:
               await categories.mapFromRowOrNull(row, tablePrefix: 'nested_4'),
           parentCategory:
@@ -4381,7 +4548,7 @@ abstract class _$AppDB extends GeneratedDatabase {
         startIndex: $arrayStartIndex);
     $arrayStartIndex += generatedpredicate.amountOfVariables;
     return customSelect(
-        'SELECT COUNT(*) AS transactionsNumber, COALESCE(SUM(t.value), 0) AS sum, COALESCE(SUM(COALESCE(t.valueInDestiny, t.value)), 0) AS sumInDestiny, COALESCE(SUM(t.value * COALESCE(excRate.exchangeRate, 1)), 0) AS sumInPrefCurrency, COALESCE(SUM(COALESCE(t.valueInDestiny, t.value) * COALESCE(excRateOfDestiny.exchangeRate, 1)), 0) AS sumInDestinyInPrefCurrency FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id INNER JOIN currencies AS receivingAccountCurrency ON a.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= ?1) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= ?1) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql}',
+        'SELECT COUNT(*) AS transactionsNumber, COALESCE(SUM(t.value), 0) AS sum, COALESCE(SUM(COALESCE(t.valueInDestiny, t.value)), 0) AS sumInDestiny, COALESCE(SUM(t.value * COALESCE(excRate.exchangeRate, 1)), 0) AS sumInPrefCurrency, COALESCE(SUM(COALESCE(t.valueInDestiny, t.value) * COALESCE(excRateOfDestiny.exchangeRate, 1)), 0) AS sumInDestinyInPrefCurrency FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= ?1) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= ?1) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql}',
         variables: [
           Variable<DateTime>(date),
           ...generatedpredicate.introducedVariables
@@ -4404,7 +4571,9 @@ abstract class _$AppDB extends GeneratedDatabase {
   }
 
   Selectable<Category> getCategoriesWithFullData(
-      {GetCategoriesWithFullData$predicate? predicate, required double limit}) {
+      {GetCategoriesWithFullData$predicate? predicate,
+      GetCategoriesWithFullData$orderBy? orderBy,
+      required double limit}) {
     var $arrayStartIndex = 2;
     final generatedpredicate = $write(
         predicate?.call(alias(this.categories, 'a'),
@@ -4413,15 +4582,24 @@ abstract class _$AppDB extends GeneratedDatabase {
         hasMultipleTables: true,
         startIndex: $arrayStartIndex);
     $arrayStartIndex += generatedpredicate.amountOfVariables;
+    final generatedorderBy = $write(
+        orderBy?.call(alias(this.categories, 'a'),
+                alias(this.categories, 'parentCategory')) ??
+            const OrderBy.nothing(),
+        hasMultipleTables: true,
+        startIndex: $arrayStartIndex);
+    $arrayStartIndex += generatedorderBy.amountOfVariables;
     return customSelect(
-        'SELECT a.*,"parentCategory"."id" AS "nested_0.id", "parentCategory"."name" AS "nested_0.name", "parentCategory"."iconId" AS "nested_0.iconId", "parentCategory"."color" AS "nested_0.color", "parentCategory"."displayOrder" AS "nested_0.displayOrder", "parentCategory"."type" AS "nested_0.type", "parentCategory"."parentCategoryID" AS "nested_0.parentCategoryID" FROM categories AS a LEFT JOIN categories AS parentCategory ON a.parentCategoryID = parentCategory.id WHERE ${generatedpredicate.sql} LIMIT ?1',
+        'SELECT a.*,"parentCategory"."id" AS "nested_0.id", "parentCategory"."name" AS "nested_0.name", "parentCategory"."iconId" AS "nested_0.iconId", "parentCategory"."color" AS "nested_0.color", "parentCategory"."displayOrder" AS "nested_0.displayOrder", "parentCategory"."type" AS "nested_0.type", "parentCategory"."parentCategoryID" AS "nested_0.parentCategoryID" FROM categories AS a LEFT JOIN categories AS parentCategory ON a.parentCategoryID = parentCategory.id WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} LIMIT ?1',
         variables: [
           Variable<double>(limit),
-          ...generatedpredicate.introducedVariables
+          ...generatedpredicate.introducedVariables,
+          ...generatedorderBy.introducedVariables
         ],
         readsFrom: {
           categories,
           ...generatedpredicate.watchedTables,
+          ...generatedorderBy.watchedTables,
         }).asyncMap((QueryRow row) async => Category(
           id: row.read<String>('id'),
           name: row.read<String>('name'),
@@ -4446,7 +4624,7 @@ abstract class _$AppDB extends GeneratedDatabase {
         startIndex: $arrayStartIndex);
     $arrayStartIndex += generatedpredicate.amountOfVariables;
     return customSelect(
-        'SELECT e.*,"currency"."code" AS "nested_0.code", "currency"."symbol" AS "nested_0.symbol" FROM exchangeRates AS e INNER JOIN currencies AS currency ON e.currencyCode = currency.code WHERE ${generatedpredicate.sql} ORDER BY date DESC LIMIT ?1',
+        'SELECT e.*,"currency"."code" AS "nested_0.code", "currency"."symbol" AS "nested_0.symbol", "currency"."name" AS "nested_0.name" FROM exchangeRates AS e INNER JOIN currencies AS currency ON e.currencyCode = currency.code WHERE ${generatedpredicate.sql} ORDER BY date DESC LIMIT ?1',
         variables: [
           Variable<double>(limit),
           ...generatedpredicate.introducedVariables
@@ -4465,7 +4643,7 @@ abstract class _$AppDB extends GeneratedDatabase {
 
   Selectable<ExchangeRate> getLastExchangeRates({required double limit}) {
     return customSelect(
-        'SELECT er.*,"currency"."code" AS "nested_0.code", "currency"."symbol" AS "nested_0.symbol" FROM exchangeRates AS er INNER JOIN currencies AS currency ON er.currencyCode = currency.code WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode) ORDER BY currency.code LIMIT ?1',
+        'SELECT er.*,"currency"."code" AS "nested_0.code", "currency"."symbol" AS "nested_0.symbol", "currency"."name" AS "nested_0.name" FROM exchangeRates AS er INNER JOIN currencies AS currency ON er.currencyCode = currency.code WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode) ORDER BY currency.code LIMIT ?1',
         variables: [
           Variable<double>(limit)
         ],
@@ -4555,7 +4733,6 @@ abstract class _$AppDB extends GeneratedDatabase {
         budgets,
         budgetCategory,
         budgetAccount,
-        currencyNames,
         userSettings,
         appData
       ];
@@ -4716,25 +4893,1934 @@ abstract class _$AppDB extends GeneratedDatabase {
               TableUpdate('budgetAccount', kind: UpdateKind.update),
             ],
           ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('currencies',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('currencyNames', kind: UpdateKind.delete),
-            ],
-          ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('currencies',
-                limitUpdateKind: UpdateKind.update),
-            result: [
-              TableUpdate('currencyNames', kind: UpdateKind.update),
-            ],
-          ),
         ],
       );
   @override
   DriftDatabaseOptions get options =>
       const DriftDatabaseOptions(storeDateTimeAsText: true);
+}
+
+typedef $CurrenciesCreateCompanionBuilder = CurrenciesCompanion Function({
+  required String code,
+  required String symbol,
+  required String name,
+  Value<int> rowid,
+});
+typedef $CurrenciesUpdateCompanionBuilder = CurrenciesCompanion Function({
+  Value<String> code,
+  Value<String> symbol,
+  Value<String> name,
+  Value<int> rowid,
+});
+
+class $CurrenciesTableManager extends RootTableManager<
+    _$AppDB,
+    Currencies,
+    CurrencyInDB,
+    $CurrenciesFilterComposer,
+    $CurrenciesOrderingComposer,
+    $CurrenciesCreateCompanionBuilder,
+    $CurrenciesUpdateCompanionBuilder> {
+  $CurrenciesTableManager(_$AppDB db, Currencies table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $CurrenciesFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $CurrenciesOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> code = const Value.absent(),
+            Value<String> symbol = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              CurrenciesCompanion(
+            code: code,
+            symbol: symbol,
+            name: name,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String code,
+            required String symbol,
+            required String name,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              CurrenciesCompanion.insert(
+            code: code,
+            symbol: symbol,
+            name: name,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $CurrenciesFilterComposer extends FilterComposer<_$AppDB, Currencies> {
+  $CurrenciesFilterComposer(super.$state);
+  ColumnFilters<String> get code => $state.composableBuilder(
+      column: $state.table.code,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get symbol => $state.composableBuilder(
+      column: $state.table.symbol,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get name => $state.composableBuilder(
+      column: $state.table.name,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ComposableFilter accountsRefs(
+      ComposableFilter Function($AccountsFilterComposer f) f) {
+    final $AccountsFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.code,
+        referencedTable: $state.db.accounts,
+        getReferencedColumn: (t) => t.currencyId,
+        builder: (joinBuilder, parentComposers) => $AccountsFilterComposer(
+            ComposerState(
+                $state.db, $state.db.accounts, joinBuilder, parentComposers)));
+    return f(composer);
+  }
+
+  ComposableFilter exchangeRatesRefs(
+      ComposableFilter Function($ExchangeRatesFilterComposer f) f) {
+    final $ExchangeRatesFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.code,
+        referencedTable: $state.db.exchangeRates,
+        getReferencedColumn: (t) => t.currencyCode,
+        builder: (joinBuilder, parentComposers) => $ExchangeRatesFilterComposer(
+            ComposerState($state.db, $state.db.exchangeRates, joinBuilder,
+                parentComposers)));
+    return f(composer);
+  }
+}
+
+class $CurrenciesOrderingComposer
+    extends OrderingComposer<_$AppDB, Currencies> {
+  $CurrenciesOrderingComposer(super.$state);
+  ColumnOrderings<String> get code => $state.composableBuilder(
+      column: $state.table.code,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get symbol => $state.composableBuilder(
+      column: $state.table.symbol,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get name => $state.composableBuilder(
+      column: $state.table.name,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
+typedef $AccountsCreateCompanionBuilder = AccountsCompanion Function({
+  required String id,
+  required String name,
+  required double iniValue,
+  required DateTime date,
+  Value<String?> description,
+  required AccountType type,
+  required String iconId,
+  required int displayOrder,
+  Value<String?> color,
+  Value<DateTime?> closingDate,
+  required String currencyId,
+  Value<String?> iban,
+  Value<String?> swift,
+  Value<int> rowid,
+});
+typedef $AccountsUpdateCompanionBuilder = AccountsCompanion Function({
+  Value<String> id,
+  Value<String> name,
+  Value<double> iniValue,
+  Value<DateTime> date,
+  Value<String?> description,
+  Value<AccountType> type,
+  Value<String> iconId,
+  Value<int> displayOrder,
+  Value<String?> color,
+  Value<DateTime?> closingDate,
+  Value<String> currencyId,
+  Value<String?> iban,
+  Value<String?> swift,
+  Value<int> rowid,
+});
+
+class $AccountsTableManager extends RootTableManager<
+    _$AppDB,
+    Accounts,
+    AccountInDB,
+    $AccountsFilterComposer,
+    $AccountsOrderingComposer,
+    $AccountsCreateCompanionBuilder,
+    $AccountsUpdateCompanionBuilder> {
+  $AccountsTableManager(_$AppDB db, Accounts table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $AccountsFilterComposer(ComposerState(db, table)),
+          orderingComposer: $AccountsOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<double> iniValue = const Value.absent(),
+            Value<DateTime> date = const Value.absent(),
+            Value<String?> description = const Value.absent(),
+            Value<AccountType> type = const Value.absent(),
+            Value<String> iconId = const Value.absent(),
+            Value<int> displayOrder = const Value.absent(),
+            Value<String?> color = const Value.absent(),
+            Value<DateTime?> closingDate = const Value.absent(),
+            Value<String> currencyId = const Value.absent(),
+            Value<String?> iban = const Value.absent(),
+            Value<String?> swift = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              AccountsCompanion(
+            id: id,
+            name: name,
+            iniValue: iniValue,
+            date: date,
+            description: description,
+            type: type,
+            iconId: iconId,
+            displayOrder: displayOrder,
+            color: color,
+            closingDate: closingDate,
+            currencyId: currencyId,
+            iban: iban,
+            swift: swift,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String name,
+            required double iniValue,
+            required DateTime date,
+            Value<String?> description = const Value.absent(),
+            required AccountType type,
+            required String iconId,
+            required int displayOrder,
+            Value<String?> color = const Value.absent(),
+            Value<DateTime?> closingDate = const Value.absent(),
+            required String currencyId,
+            Value<String?> iban = const Value.absent(),
+            Value<String?> swift = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              AccountsCompanion.insert(
+            id: id,
+            name: name,
+            iniValue: iniValue,
+            date: date,
+            description: description,
+            type: type,
+            iconId: iconId,
+            displayOrder: displayOrder,
+            color: color,
+            closingDate: closingDate,
+            currencyId: currencyId,
+            iban: iban,
+            swift: swift,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $AccountsFilterComposer extends FilterComposer<_$AppDB, Accounts> {
+  $AccountsFilterComposer(super.$state);
+  ColumnFilters<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get name => $state.composableBuilder(
+      column: $state.table.name,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get iniValue => $state.composableBuilder(
+      column: $state.table.iniValue,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get date => $state.composableBuilder(
+      column: $state.table.date,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get description => $state.composableBuilder(
+      column: $state.table.description,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnWithTypeConverterFilters<AccountType, AccountType, String> get type =>
+      $state.composableBuilder(
+          column: $state.table.type,
+          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
+              column,
+              joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get iconId => $state.composableBuilder(
+      column: $state.table.iconId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get displayOrder => $state.composableBuilder(
+      column: $state.table.displayOrder,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get color => $state.composableBuilder(
+      column: $state.table.color,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get closingDate => $state.composableBuilder(
+      column: $state.table.closingDate,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get iban => $state.composableBuilder(
+      column: $state.table.iban,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get swift => $state.composableBuilder(
+      column: $state.table.swift,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  $CurrenciesFilterComposer get currencyId {
+    final $CurrenciesFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.currencyId,
+        referencedTable: $state.db.currencies,
+        getReferencedColumn: (t) => t.code,
+        builder: (joinBuilder, parentComposers) => $CurrenciesFilterComposer(
+            ComposerState($state.db, $state.db.currencies, joinBuilder,
+                parentComposers)));
+    return composer;
+  }
+
+  ComposableFilter budgetAccountRefs(
+      ComposableFilter Function($BudgetAccountFilterComposer f) f) {
+    final $BudgetAccountFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $state.db.budgetAccount,
+        getReferencedColumn: (t) => t.accountID,
+        builder: (joinBuilder, parentComposers) => $BudgetAccountFilterComposer(
+            ComposerState($state.db, $state.db.budgetAccount, joinBuilder,
+                parentComposers)));
+    return f(composer);
+  }
+}
+
+class $AccountsOrderingComposer extends OrderingComposer<_$AppDB, Accounts> {
+  $AccountsOrderingComposer(super.$state);
+  ColumnOrderings<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get name => $state.composableBuilder(
+      column: $state.table.name,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get iniValue => $state.composableBuilder(
+      column: $state.table.iniValue,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get date => $state.composableBuilder(
+      column: $state.table.date,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get description => $state.composableBuilder(
+      column: $state.table.description,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get type => $state.composableBuilder(
+      column: $state.table.type,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get iconId => $state.composableBuilder(
+      column: $state.table.iconId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get displayOrder => $state.composableBuilder(
+      column: $state.table.displayOrder,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get color => $state.composableBuilder(
+      column: $state.table.color,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get closingDate => $state.composableBuilder(
+      column: $state.table.closingDate,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get iban => $state.composableBuilder(
+      column: $state.table.iban,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get swift => $state.composableBuilder(
+      column: $state.table.swift,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  $CurrenciesOrderingComposer get currencyId {
+    final $CurrenciesOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.currencyId,
+        referencedTable: $state.db.currencies,
+        getReferencedColumn: (t) => t.code,
+        builder: (joinBuilder, parentComposers) => $CurrenciesOrderingComposer(
+            ComposerState($state.db, $state.db.currencies, joinBuilder,
+                parentComposers)));
+    return composer;
+  }
+}
+
+typedef $CategoriesCreateCompanionBuilder = CategoriesCompanion Function({
+  required String id,
+  required String name,
+  required String iconId,
+  Value<String?> color,
+  required int displayOrder,
+  Value<CategoryType?> type,
+  Value<String?> parentCategoryID,
+  Value<int> rowid,
+});
+typedef $CategoriesUpdateCompanionBuilder = CategoriesCompanion Function({
+  Value<String> id,
+  Value<String> name,
+  Value<String> iconId,
+  Value<String?> color,
+  Value<int> displayOrder,
+  Value<CategoryType?> type,
+  Value<String?> parentCategoryID,
+  Value<int> rowid,
+});
+
+class $CategoriesTableManager extends RootTableManager<
+    _$AppDB,
+    Categories,
+    CategoryInDB,
+    $CategoriesFilterComposer,
+    $CategoriesOrderingComposer,
+    $CategoriesCreateCompanionBuilder,
+    $CategoriesUpdateCompanionBuilder> {
+  $CategoriesTableManager(_$AppDB db, Categories table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $CategoriesFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $CategoriesOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<String> iconId = const Value.absent(),
+            Value<String?> color = const Value.absent(),
+            Value<int> displayOrder = const Value.absent(),
+            Value<CategoryType?> type = const Value.absent(),
+            Value<String?> parentCategoryID = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              CategoriesCompanion(
+            id: id,
+            name: name,
+            iconId: iconId,
+            color: color,
+            displayOrder: displayOrder,
+            type: type,
+            parentCategoryID: parentCategoryID,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String name,
+            required String iconId,
+            Value<String?> color = const Value.absent(),
+            required int displayOrder,
+            Value<CategoryType?> type = const Value.absent(),
+            Value<String?> parentCategoryID = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              CategoriesCompanion.insert(
+            id: id,
+            name: name,
+            iconId: iconId,
+            color: color,
+            displayOrder: displayOrder,
+            type: type,
+            parentCategoryID: parentCategoryID,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $CategoriesFilterComposer extends FilterComposer<_$AppDB, Categories> {
+  $CategoriesFilterComposer(super.$state);
+  ColumnFilters<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get name => $state.composableBuilder(
+      column: $state.table.name,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get iconId => $state.composableBuilder(
+      column: $state.table.iconId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get color => $state.composableBuilder(
+      column: $state.table.color,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get displayOrder => $state.composableBuilder(
+      column: $state.table.displayOrder,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnWithTypeConverterFilters<CategoryType?, CategoryType, String>
+      get type => $state.composableBuilder(
+          column: $state.table.type,
+          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
+              column,
+              joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get parentCategoryID => $state.composableBuilder(
+      column: $state.table.parentCategoryID,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ComposableFilter transactionsRefs(
+      ComposableFilter Function($TransactionsFilterComposer f) f) {
+    final $TransactionsFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $state.db.transactions,
+        getReferencedColumn: (t) => t.categoryID,
+        builder: (joinBuilder, parentComposers) => $TransactionsFilterComposer(
+            ComposerState($state.db, $state.db.transactions, joinBuilder,
+                parentComposers)));
+    return f(composer);
+  }
+
+  ComposableFilter budgetCategoryRefs(
+      ComposableFilter Function($BudgetCategoryFilterComposer f) f) {
+    final $BudgetCategoryFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $state.db.budgetCategory,
+        getReferencedColumn: (t) => t.categoryID,
+        builder: (joinBuilder, parentComposers) =>
+            $BudgetCategoryFilterComposer(ComposerState($state.db,
+                $state.db.budgetCategory, joinBuilder, parentComposers)));
+    return f(composer);
+  }
+}
+
+class $CategoriesOrderingComposer
+    extends OrderingComposer<_$AppDB, Categories> {
+  $CategoriesOrderingComposer(super.$state);
+  ColumnOrderings<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get name => $state.composableBuilder(
+      column: $state.table.name,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get iconId => $state.composableBuilder(
+      column: $state.table.iconId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get color => $state.composableBuilder(
+      column: $state.table.color,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get displayOrder => $state.composableBuilder(
+      column: $state.table.displayOrder,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get type => $state.composableBuilder(
+      column: $state.table.type,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get parentCategoryID => $state.composableBuilder(
+      column: $state.table.parentCategoryID,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
+typedef $TransactionsCreateCompanionBuilder = TransactionsCompanion Function({
+  required String id,
+  required DateTime date,
+  required String accountID,
+  required double value,
+  Value<String?> title,
+  Value<String?> notes,
+  required TransactionType type,
+  Value<TransactionStatus?> status,
+  Value<String?> categoryID,
+  Value<double?> valueInDestiny,
+  Value<String?> receivingAccountID,
+  Value<bool> isHidden,
+  Value<double?> locLatitude,
+  Value<double?> locLongitude,
+  Value<String?> locAddress,
+  Value<Periodicity?> intervalPeriod,
+  Value<int?> intervalEach,
+  Value<DateTime?> endDate,
+  Value<int?> remainingTransactions,
+  Value<int> rowid,
+});
+typedef $TransactionsUpdateCompanionBuilder = TransactionsCompanion Function({
+  Value<String> id,
+  Value<DateTime> date,
+  Value<String> accountID,
+  Value<double> value,
+  Value<String?> title,
+  Value<String?> notes,
+  Value<TransactionType> type,
+  Value<TransactionStatus?> status,
+  Value<String?> categoryID,
+  Value<double?> valueInDestiny,
+  Value<String?> receivingAccountID,
+  Value<bool> isHidden,
+  Value<double?> locLatitude,
+  Value<double?> locLongitude,
+  Value<String?> locAddress,
+  Value<Periodicity?> intervalPeriod,
+  Value<int?> intervalEach,
+  Value<DateTime?> endDate,
+  Value<int?> remainingTransactions,
+  Value<int> rowid,
+});
+
+class $TransactionsTableManager extends RootTableManager<
+    _$AppDB,
+    Transactions,
+    TransactionInDB,
+    $TransactionsFilterComposer,
+    $TransactionsOrderingComposer,
+    $TransactionsCreateCompanionBuilder,
+    $TransactionsUpdateCompanionBuilder> {
+  $TransactionsTableManager(_$AppDB db, Transactions table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $TransactionsFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $TransactionsOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<DateTime> date = const Value.absent(),
+            Value<String> accountID = const Value.absent(),
+            Value<double> value = const Value.absent(),
+            Value<String?> title = const Value.absent(),
+            Value<String?> notes = const Value.absent(),
+            Value<TransactionType> type = const Value.absent(),
+            Value<TransactionStatus?> status = const Value.absent(),
+            Value<String?> categoryID = const Value.absent(),
+            Value<double?> valueInDestiny = const Value.absent(),
+            Value<String?> receivingAccountID = const Value.absent(),
+            Value<bool> isHidden = const Value.absent(),
+            Value<double?> locLatitude = const Value.absent(),
+            Value<double?> locLongitude = const Value.absent(),
+            Value<String?> locAddress = const Value.absent(),
+            Value<Periodicity?> intervalPeriod = const Value.absent(),
+            Value<int?> intervalEach = const Value.absent(),
+            Value<DateTime?> endDate = const Value.absent(),
+            Value<int?> remainingTransactions = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              TransactionsCompanion(
+            id: id,
+            date: date,
+            accountID: accountID,
+            value: value,
+            title: title,
+            notes: notes,
+            type: type,
+            status: status,
+            categoryID: categoryID,
+            valueInDestiny: valueInDestiny,
+            receivingAccountID: receivingAccountID,
+            isHidden: isHidden,
+            locLatitude: locLatitude,
+            locLongitude: locLongitude,
+            locAddress: locAddress,
+            intervalPeriod: intervalPeriod,
+            intervalEach: intervalEach,
+            endDate: endDate,
+            remainingTransactions: remainingTransactions,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required DateTime date,
+            required String accountID,
+            required double value,
+            Value<String?> title = const Value.absent(),
+            Value<String?> notes = const Value.absent(),
+            required TransactionType type,
+            Value<TransactionStatus?> status = const Value.absent(),
+            Value<String?> categoryID = const Value.absent(),
+            Value<double?> valueInDestiny = const Value.absent(),
+            Value<String?> receivingAccountID = const Value.absent(),
+            Value<bool> isHidden = const Value.absent(),
+            Value<double?> locLatitude = const Value.absent(),
+            Value<double?> locLongitude = const Value.absent(),
+            Value<String?> locAddress = const Value.absent(),
+            Value<Periodicity?> intervalPeriod = const Value.absent(),
+            Value<int?> intervalEach = const Value.absent(),
+            Value<DateTime?> endDate = const Value.absent(),
+            Value<int?> remainingTransactions = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              TransactionsCompanion.insert(
+            id: id,
+            date: date,
+            accountID: accountID,
+            value: value,
+            title: title,
+            notes: notes,
+            type: type,
+            status: status,
+            categoryID: categoryID,
+            valueInDestiny: valueInDestiny,
+            receivingAccountID: receivingAccountID,
+            isHidden: isHidden,
+            locLatitude: locLatitude,
+            locLongitude: locLongitude,
+            locAddress: locAddress,
+            intervalPeriod: intervalPeriod,
+            intervalEach: intervalEach,
+            endDate: endDate,
+            remainingTransactions: remainingTransactions,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $TransactionsFilterComposer
+    extends FilterComposer<_$AppDB, Transactions> {
+  $TransactionsFilterComposer(super.$state);
+  ColumnFilters<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get date => $state.composableBuilder(
+      column: $state.table.date,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get value => $state.composableBuilder(
+      column: $state.table.value,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get title => $state.composableBuilder(
+      column: $state.table.title,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get notes => $state.composableBuilder(
+      column: $state.table.notes,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnWithTypeConverterFilters<TransactionType, TransactionType, String>
+      get type => $state.composableBuilder(
+          column: $state.table.type,
+          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
+              column,
+              joinBuilders: joinBuilders));
+
+  ColumnWithTypeConverterFilters<TransactionStatus?, TransactionStatus, String>
+      get status => $state.composableBuilder(
+          column: $state.table.status,
+          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
+              column,
+              joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get valueInDestiny => $state.composableBuilder(
+      column: $state.table.valueInDestiny,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get isHidden => $state.composableBuilder(
+      column: $state.table.isHidden,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get locLatitude => $state.composableBuilder(
+      column: $state.table.locLatitude,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get locLongitude => $state.composableBuilder(
+      column: $state.table.locLongitude,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get locAddress => $state.composableBuilder(
+      column: $state.table.locAddress,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnWithTypeConverterFilters<Periodicity?, Periodicity, String>
+      get intervalPeriod => $state.composableBuilder(
+          column: $state.table.intervalPeriod,
+          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
+              column,
+              joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get intervalEach => $state.composableBuilder(
+      column: $state.table.intervalEach,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get endDate => $state.composableBuilder(
+      column: $state.table.endDate,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get remainingTransactions => $state.composableBuilder(
+      column: $state.table.remainingTransactions,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  $AccountsFilterComposer get accountID {
+    final $AccountsFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.accountID,
+        referencedTable: $state.db.accounts,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) => $AccountsFilterComposer(
+            ComposerState(
+                $state.db, $state.db.accounts, joinBuilder, parentComposers)));
+    return composer;
+  }
+
+  $CategoriesFilterComposer get categoryID {
+    final $CategoriesFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.categoryID,
+        referencedTable: $state.db.categories,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) => $CategoriesFilterComposer(
+            ComposerState($state.db, $state.db.categories, joinBuilder,
+                parentComposers)));
+    return composer;
+  }
+
+  $AccountsFilterComposer get receivingAccountID {
+    final $AccountsFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.receivingAccountID,
+        referencedTable: $state.db.accounts,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) => $AccountsFilterComposer(
+            ComposerState(
+                $state.db, $state.db.accounts, joinBuilder, parentComposers)));
+    return composer;
+  }
+
+  ComposableFilter transactionTagsRefs(
+      ComposableFilter Function($TransactionTagsFilterComposer f) f) {
+    final $TransactionTagsFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $state.db.transactionTags,
+        getReferencedColumn: (t) => t.transactionID,
+        builder: (joinBuilder, parentComposers) =>
+            $TransactionTagsFilterComposer(ComposerState($state.db,
+                $state.db.transactionTags, joinBuilder, parentComposers)));
+    return f(composer);
+  }
+}
+
+class $TransactionsOrderingComposer
+    extends OrderingComposer<_$AppDB, Transactions> {
+  $TransactionsOrderingComposer(super.$state);
+  ColumnOrderings<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get date => $state.composableBuilder(
+      column: $state.table.date,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get value => $state.composableBuilder(
+      column: $state.table.value,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get title => $state.composableBuilder(
+      column: $state.table.title,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get notes => $state.composableBuilder(
+      column: $state.table.notes,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get type => $state.composableBuilder(
+      column: $state.table.type,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get status => $state.composableBuilder(
+      column: $state.table.status,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get valueInDestiny => $state.composableBuilder(
+      column: $state.table.valueInDestiny,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get isHidden => $state.composableBuilder(
+      column: $state.table.isHidden,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get locLatitude => $state.composableBuilder(
+      column: $state.table.locLatitude,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get locLongitude => $state.composableBuilder(
+      column: $state.table.locLongitude,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get locAddress => $state.composableBuilder(
+      column: $state.table.locAddress,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get intervalPeriod => $state.composableBuilder(
+      column: $state.table.intervalPeriod,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get intervalEach => $state.composableBuilder(
+      column: $state.table.intervalEach,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get endDate => $state.composableBuilder(
+      column: $state.table.endDate,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get remainingTransactions => $state.composableBuilder(
+      column: $state.table.remainingTransactions,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  $AccountsOrderingComposer get accountID {
+    final $AccountsOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.accountID,
+        referencedTable: $state.db.accounts,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) => $AccountsOrderingComposer(
+            ComposerState(
+                $state.db, $state.db.accounts, joinBuilder, parentComposers)));
+    return composer;
+  }
+
+  $CategoriesOrderingComposer get categoryID {
+    final $CategoriesOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.categoryID,
+        referencedTable: $state.db.categories,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) => $CategoriesOrderingComposer(
+            ComposerState($state.db, $state.db.categories, joinBuilder,
+                parentComposers)));
+    return composer;
+  }
+
+  $AccountsOrderingComposer get receivingAccountID {
+    final $AccountsOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.receivingAccountID,
+        referencedTable: $state.db.accounts,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) => $AccountsOrderingComposer(
+            ComposerState(
+                $state.db, $state.db.accounts, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+typedef $ExchangeRatesCreateCompanionBuilder = ExchangeRatesCompanion Function({
+  required String id,
+  required DateTime date,
+  required String currencyCode,
+  required double exchangeRate,
+  Value<int> rowid,
+});
+typedef $ExchangeRatesUpdateCompanionBuilder = ExchangeRatesCompanion Function({
+  Value<String> id,
+  Value<DateTime> date,
+  Value<String> currencyCode,
+  Value<double> exchangeRate,
+  Value<int> rowid,
+});
+
+class $ExchangeRatesTableManager extends RootTableManager<
+    _$AppDB,
+    ExchangeRates,
+    ExchangeRateInDB,
+    $ExchangeRatesFilterComposer,
+    $ExchangeRatesOrderingComposer,
+    $ExchangeRatesCreateCompanionBuilder,
+    $ExchangeRatesUpdateCompanionBuilder> {
+  $ExchangeRatesTableManager(_$AppDB db, ExchangeRates table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $ExchangeRatesFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $ExchangeRatesOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<DateTime> date = const Value.absent(),
+            Value<String> currencyCode = const Value.absent(),
+            Value<double> exchangeRate = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ExchangeRatesCompanion(
+            id: id,
+            date: date,
+            currencyCode: currencyCode,
+            exchangeRate: exchangeRate,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required DateTime date,
+            required String currencyCode,
+            required double exchangeRate,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ExchangeRatesCompanion.insert(
+            id: id,
+            date: date,
+            currencyCode: currencyCode,
+            exchangeRate: exchangeRate,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $ExchangeRatesFilterComposer
+    extends FilterComposer<_$AppDB, ExchangeRates> {
+  $ExchangeRatesFilterComposer(super.$state);
+  ColumnFilters<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get date => $state.composableBuilder(
+      column: $state.table.date,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get exchangeRate => $state.composableBuilder(
+      column: $state.table.exchangeRate,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  $CurrenciesFilterComposer get currencyCode {
+    final $CurrenciesFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.currencyCode,
+        referencedTable: $state.db.currencies,
+        getReferencedColumn: (t) => t.code,
+        builder: (joinBuilder, parentComposers) => $CurrenciesFilterComposer(
+            ComposerState($state.db, $state.db.currencies, joinBuilder,
+                parentComposers)));
+    return composer;
+  }
+}
+
+class $ExchangeRatesOrderingComposer
+    extends OrderingComposer<_$AppDB, ExchangeRates> {
+  $ExchangeRatesOrderingComposer(super.$state);
+  ColumnOrderings<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get date => $state.composableBuilder(
+      column: $state.table.date,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get exchangeRate => $state.composableBuilder(
+      column: $state.table.exchangeRate,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  $CurrenciesOrderingComposer get currencyCode {
+    final $CurrenciesOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.currencyCode,
+        referencedTable: $state.db.currencies,
+        getReferencedColumn: (t) => t.code,
+        builder: (joinBuilder, parentComposers) => $CurrenciesOrderingComposer(
+            ComposerState($state.db, $state.db.currencies, joinBuilder,
+                parentComposers)));
+    return composer;
+  }
+}
+
+typedef $TagsCreateCompanionBuilder = TagsCompanion Function({
+  required String id,
+  required String name,
+  required String color,
+  required int displayOrder,
+  Value<String?> description,
+  Value<int> rowid,
+});
+typedef $TagsUpdateCompanionBuilder = TagsCompanion Function({
+  Value<String> id,
+  Value<String> name,
+  Value<String> color,
+  Value<int> displayOrder,
+  Value<String?> description,
+  Value<int> rowid,
+});
+
+class $TagsTableManager extends RootTableManager<
+    _$AppDB,
+    Tags,
+    TagInDB,
+    $TagsFilterComposer,
+    $TagsOrderingComposer,
+    $TagsCreateCompanionBuilder,
+    $TagsUpdateCompanionBuilder> {
+  $TagsTableManager(_$AppDB db, Tags table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $TagsFilterComposer(ComposerState(db, table)),
+          orderingComposer: $TagsOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<String> color = const Value.absent(),
+            Value<int> displayOrder = const Value.absent(),
+            Value<String?> description = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              TagsCompanion(
+            id: id,
+            name: name,
+            color: color,
+            displayOrder: displayOrder,
+            description: description,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String name,
+            required String color,
+            required int displayOrder,
+            Value<String?> description = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              TagsCompanion.insert(
+            id: id,
+            name: name,
+            color: color,
+            displayOrder: displayOrder,
+            description: description,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $TagsFilterComposer extends FilterComposer<_$AppDB, Tags> {
+  $TagsFilterComposer(super.$state);
+  ColumnFilters<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get name => $state.composableBuilder(
+      column: $state.table.name,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get color => $state.composableBuilder(
+      column: $state.table.color,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get displayOrder => $state.composableBuilder(
+      column: $state.table.displayOrder,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get description => $state.composableBuilder(
+      column: $state.table.description,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ComposableFilter transactionTagsRefs(
+      ComposableFilter Function($TransactionTagsFilterComposer f) f) {
+    final $TransactionTagsFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $state.db.transactionTags,
+        getReferencedColumn: (t) => t.tagID,
+        builder: (joinBuilder, parentComposers) =>
+            $TransactionTagsFilterComposer(ComposerState($state.db,
+                $state.db.transactionTags, joinBuilder, parentComposers)));
+    return f(composer);
+  }
+}
+
+class $TagsOrderingComposer extends OrderingComposer<_$AppDB, Tags> {
+  $TagsOrderingComposer(super.$state);
+  ColumnOrderings<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get name => $state.composableBuilder(
+      column: $state.table.name,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get color => $state.composableBuilder(
+      column: $state.table.color,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get displayOrder => $state.composableBuilder(
+      column: $state.table.displayOrder,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get description => $state.composableBuilder(
+      column: $state.table.description,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
+typedef $TransactionTagsCreateCompanionBuilder = TransactionTagsCompanion
+    Function({
+  required String transactionID,
+  required String tagID,
+  Value<int> rowid,
+});
+typedef $TransactionTagsUpdateCompanionBuilder = TransactionTagsCompanion
+    Function({
+  Value<String> transactionID,
+  Value<String> tagID,
+  Value<int> rowid,
+});
+
+class $TransactionTagsTableManager extends RootTableManager<
+    _$AppDB,
+    TransactionTags,
+    TransactionTag,
+    $TransactionTagsFilterComposer,
+    $TransactionTagsOrderingComposer,
+    $TransactionTagsCreateCompanionBuilder,
+    $TransactionTagsUpdateCompanionBuilder> {
+  $TransactionTagsTableManager(_$AppDB db, TransactionTags table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $TransactionTagsFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $TransactionTagsOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> transactionID = const Value.absent(),
+            Value<String> tagID = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              TransactionTagsCompanion(
+            transactionID: transactionID,
+            tagID: tagID,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String transactionID,
+            required String tagID,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              TransactionTagsCompanion.insert(
+            transactionID: transactionID,
+            tagID: tagID,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $TransactionTagsFilterComposer
+    extends FilterComposer<_$AppDB, TransactionTags> {
+  $TransactionTagsFilterComposer(super.$state);
+  $TransactionsFilterComposer get transactionID {
+    final $TransactionsFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.transactionID,
+        referencedTable: $state.db.transactions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) => $TransactionsFilterComposer(
+            ComposerState($state.db, $state.db.transactions, joinBuilder,
+                parentComposers)));
+    return composer;
+  }
+
+  $TagsFilterComposer get tagID {
+    final $TagsFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.tagID,
+        referencedTable: $state.db.tags,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) => $TagsFilterComposer(
+            ComposerState(
+                $state.db, $state.db.tags, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+class $TransactionTagsOrderingComposer
+    extends OrderingComposer<_$AppDB, TransactionTags> {
+  $TransactionTagsOrderingComposer(super.$state);
+  $TransactionsOrderingComposer get transactionID {
+    final $TransactionsOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.transactionID,
+        referencedTable: $state.db.transactions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) =>
+            $TransactionsOrderingComposer(ComposerState($state.db,
+                $state.db.transactions, joinBuilder, parentComposers)));
+    return composer;
+  }
+
+  $TagsOrderingComposer get tagID {
+    final $TagsOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.tagID,
+        referencedTable: $state.db.tags,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) => $TagsOrderingComposer(
+            ComposerState(
+                $state.db, $state.db.tags, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+typedef $BudgetsCreateCompanionBuilder = BudgetsCompanion Function({
+  required String id,
+  required String name,
+  required double limitAmount,
+  Value<Periodicity?> intervalPeriod,
+  Value<DateTime?> startDate,
+  Value<DateTime?> endDate,
+  Value<int> rowid,
+});
+typedef $BudgetsUpdateCompanionBuilder = BudgetsCompanion Function({
+  Value<String> id,
+  Value<String> name,
+  Value<double> limitAmount,
+  Value<Periodicity?> intervalPeriod,
+  Value<DateTime?> startDate,
+  Value<DateTime?> endDate,
+  Value<int> rowid,
+});
+
+class $BudgetsTableManager extends RootTableManager<
+    _$AppDB,
+    Budgets,
+    BudgetInDB,
+    $BudgetsFilterComposer,
+    $BudgetsOrderingComposer,
+    $BudgetsCreateCompanionBuilder,
+    $BudgetsUpdateCompanionBuilder> {
+  $BudgetsTableManager(_$AppDB db, Budgets table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $BudgetsFilterComposer(ComposerState(db, table)),
+          orderingComposer: $BudgetsOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<double> limitAmount = const Value.absent(),
+            Value<Periodicity?> intervalPeriod = const Value.absent(),
+            Value<DateTime?> startDate = const Value.absent(),
+            Value<DateTime?> endDate = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              BudgetsCompanion(
+            id: id,
+            name: name,
+            limitAmount: limitAmount,
+            intervalPeriod: intervalPeriod,
+            startDate: startDate,
+            endDate: endDate,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String name,
+            required double limitAmount,
+            Value<Periodicity?> intervalPeriod = const Value.absent(),
+            Value<DateTime?> startDate = const Value.absent(),
+            Value<DateTime?> endDate = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              BudgetsCompanion.insert(
+            id: id,
+            name: name,
+            limitAmount: limitAmount,
+            intervalPeriod: intervalPeriod,
+            startDate: startDate,
+            endDate: endDate,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $BudgetsFilterComposer extends FilterComposer<_$AppDB, Budgets> {
+  $BudgetsFilterComposer(super.$state);
+  ColumnFilters<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get name => $state.composableBuilder(
+      column: $state.table.name,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get limitAmount => $state.composableBuilder(
+      column: $state.table.limitAmount,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnWithTypeConverterFilters<Periodicity?, Periodicity, String>
+      get intervalPeriod => $state.composableBuilder(
+          column: $state.table.intervalPeriod,
+          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
+              column,
+              joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get startDate => $state.composableBuilder(
+      column: $state.table.startDate,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<DateTime> get endDate => $state.composableBuilder(
+      column: $state.table.endDate,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ComposableFilter budgetCategoryRefs(
+      ComposableFilter Function($BudgetCategoryFilterComposer f) f) {
+    final $BudgetCategoryFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $state.db.budgetCategory,
+        getReferencedColumn: (t) => t.budgetID,
+        builder: (joinBuilder, parentComposers) =>
+            $BudgetCategoryFilterComposer(ComposerState($state.db,
+                $state.db.budgetCategory, joinBuilder, parentComposers)));
+    return f(composer);
+  }
+
+  ComposableFilter budgetAccountRefs(
+      ComposableFilter Function($BudgetAccountFilterComposer f) f) {
+    final $BudgetAccountFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $state.db.budgetAccount,
+        getReferencedColumn: (t) => t.budgetID,
+        builder: (joinBuilder, parentComposers) => $BudgetAccountFilterComposer(
+            ComposerState($state.db, $state.db.budgetAccount, joinBuilder,
+                parentComposers)));
+    return f(composer);
+  }
+}
+
+class $BudgetsOrderingComposer extends OrderingComposer<_$AppDB, Budgets> {
+  $BudgetsOrderingComposer(super.$state);
+  ColumnOrderings<String> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get name => $state.composableBuilder(
+      column: $state.table.name,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get limitAmount => $state.composableBuilder(
+      column: $state.table.limitAmount,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get intervalPeriod => $state.composableBuilder(
+      column: $state.table.intervalPeriod,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get startDate => $state.composableBuilder(
+      column: $state.table.startDate,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<DateTime> get endDate => $state.composableBuilder(
+      column: $state.table.endDate,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
+typedef $BudgetCategoryCreateCompanionBuilder = BudgetCategoryCompanion
+    Function({
+  required String budgetID,
+  required String categoryID,
+  Value<int> rowid,
+});
+typedef $BudgetCategoryUpdateCompanionBuilder = BudgetCategoryCompanion
+    Function({
+  Value<String> budgetID,
+  Value<String> categoryID,
+  Value<int> rowid,
+});
+
+class $BudgetCategoryTableManager extends RootTableManager<
+    _$AppDB,
+    BudgetCategory,
+    BudgetCategoryData,
+    $BudgetCategoryFilterComposer,
+    $BudgetCategoryOrderingComposer,
+    $BudgetCategoryCreateCompanionBuilder,
+    $BudgetCategoryUpdateCompanionBuilder> {
+  $BudgetCategoryTableManager(_$AppDB db, BudgetCategory table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $BudgetCategoryFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $BudgetCategoryOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> budgetID = const Value.absent(),
+            Value<String> categoryID = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              BudgetCategoryCompanion(
+            budgetID: budgetID,
+            categoryID: categoryID,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String budgetID,
+            required String categoryID,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              BudgetCategoryCompanion.insert(
+            budgetID: budgetID,
+            categoryID: categoryID,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $BudgetCategoryFilterComposer
+    extends FilterComposer<_$AppDB, BudgetCategory> {
+  $BudgetCategoryFilterComposer(super.$state);
+  $BudgetsFilterComposer get budgetID {
+    final $BudgetsFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.budgetID,
+        referencedTable: $state.db.budgets,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) => $BudgetsFilterComposer(
+            ComposerState(
+                $state.db, $state.db.budgets, joinBuilder, parentComposers)));
+    return composer;
+  }
+
+  $CategoriesFilterComposer get categoryID {
+    final $CategoriesFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.categoryID,
+        referencedTable: $state.db.categories,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) => $CategoriesFilterComposer(
+            ComposerState($state.db, $state.db.categories, joinBuilder,
+                parentComposers)));
+    return composer;
+  }
+}
+
+class $BudgetCategoryOrderingComposer
+    extends OrderingComposer<_$AppDB, BudgetCategory> {
+  $BudgetCategoryOrderingComposer(super.$state);
+  $BudgetsOrderingComposer get budgetID {
+    final $BudgetsOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.budgetID,
+        referencedTable: $state.db.budgets,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) => $BudgetsOrderingComposer(
+            ComposerState(
+                $state.db, $state.db.budgets, joinBuilder, parentComposers)));
+    return composer;
+  }
+
+  $CategoriesOrderingComposer get categoryID {
+    final $CategoriesOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.categoryID,
+        referencedTable: $state.db.categories,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) => $CategoriesOrderingComposer(
+            ComposerState($state.db, $state.db.categories, joinBuilder,
+                parentComposers)));
+    return composer;
+  }
+}
+
+typedef $BudgetAccountCreateCompanionBuilder = BudgetAccountCompanion Function({
+  required String budgetID,
+  required String accountID,
+  Value<int> rowid,
+});
+typedef $BudgetAccountUpdateCompanionBuilder = BudgetAccountCompanion Function({
+  Value<String> budgetID,
+  Value<String> accountID,
+  Value<int> rowid,
+});
+
+class $BudgetAccountTableManager extends RootTableManager<
+    _$AppDB,
+    BudgetAccount,
+    BudgetAccountData,
+    $BudgetAccountFilterComposer,
+    $BudgetAccountOrderingComposer,
+    $BudgetAccountCreateCompanionBuilder,
+    $BudgetAccountUpdateCompanionBuilder> {
+  $BudgetAccountTableManager(_$AppDB db, BudgetAccount table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $BudgetAccountFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $BudgetAccountOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<String> budgetID = const Value.absent(),
+            Value<String> accountID = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              BudgetAccountCompanion(
+            budgetID: budgetID,
+            accountID: accountID,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String budgetID,
+            required String accountID,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              BudgetAccountCompanion.insert(
+            budgetID: budgetID,
+            accountID: accountID,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $BudgetAccountFilterComposer
+    extends FilterComposer<_$AppDB, BudgetAccount> {
+  $BudgetAccountFilterComposer(super.$state);
+  $BudgetsFilterComposer get budgetID {
+    final $BudgetsFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.budgetID,
+        referencedTable: $state.db.budgets,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) => $BudgetsFilterComposer(
+            ComposerState(
+                $state.db, $state.db.budgets, joinBuilder, parentComposers)));
+    return composer;
+  }
+
+  $AccountsFilterComposer get accountID {
+    final $AccountsFilterComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.accountID,
+        referencedTable: $state.db.accounts,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) => $AccountsFilterComposer(
+            ComposerState(
+                $state.db, $state.db.accounts, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+class $BudgetAccountOrderingComposer
+    extends OrderingComposer<_$AppDB, BudgetAccount> {
+  $BudgetAccountOrderingComposer(super.$state);
+  $BudgetsOrderingComposer get budgetID {
+    final $BudgetsOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.budgetID,
+        referencedTable: $state.db.budgets,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) => $BudgetsOrderingComposer(
+            ComposerState(
+                $state.db, $state.db.budgets, joinBuilder, parentComposers)));
+    return composer;
+  }
+
+  $AccountsOrderingComposer get accountID {
+    final $AccountsOrderingComposer composer = $state.composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.accountID,
+        referencedTable: $state.db.accounts,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder, parentComposers) => $AccountsOrderingComposer(
+            ComposerState(
+                $state.db, $state.db.accounts, joinBuilder, parentComposers)));
+    return composer;
+  }
+}
+
+typedef $UserSettingsCreateCompanionBuilder = UserSettingsCompanion Function({
+  required SettingKey settingKey,
+  Value<String?> settingValue,
+  Value<int> rowid,
+});
+typedef $UserSettingsUpdateCompanionBuilder = UserSettingsCompanion Function({
+  Value<SettingKey> settingKey,
+  Value<String?> settingValue,
+  Value<int> rowid,
+});
+
+class $UserSettingsTableManager extends RootTableManager<
+    _$AppDB,
+    UserSettings,
+    UserSetting,
+    $UserSettingsFilterComposer,
+    $UserSettingsOrderingComposer,
+    $UserSettingsCreateCompanionBuilder,
+    $UserSettingsUpdateCompanionBuilder> {
+  $UserSettingsTableManager(_$AppDB db, UserSettings table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $UserSettingsFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $UserSettingsOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<SettingKey> settingKey = const Value.absent(),
+            Value<String?> settingValue = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              UserSettingsCompanion(
+            settingKey: settingKey,
+            settingValue: settingValue,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required SettingKey settingKey,
+            Value<String?> settingValue = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              UserSettingsCompanion.insert(
+            settingKey: settingKey,
+            settingValue: settingValue,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $UserSettingsFilterComposer
+    extends FilterComposer<_$AppDB, UserSettings> {
+  $UserSettingsFilterComposer(super.$state);
+  ColumnWithTypeConverterFilters<SettingKey, SettingKey, String>
+      get settingKey => $state.composableBuilder(
+          column: $state.table.settingKey,
+          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
+              column,
+              joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get settingValue => $state.composableBuilder(
+      column: $state.table.settingValue,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $UserSettingsOrderingComposer
+    extends OrderingComposer<_$AppDB, UserSettings> {
+  $UserSettingsOrderingComposer(super.$state);
+  ColumnOrderings<String> get settingKey => $state.composableBuilder(
+      column: $state.table.settingKey,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get settingValue => $state.composableBuilder(
+      column: $state.table.settingValue,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
+typedef $AppDataCreateCompanionBuilder = AppDataCompanion Function({
+  required AppDataKey appDataKey,
+  Value<String?> appDataValue,
+  Value<int> rowid,
+});
+typedef $AppDataUpdateCompanionBuilder = AppDataCompanion Function({
+  Value<AppDataKey> appDataKey,
+  Value<String?> appDataValue,
+  Value<int> rowid,
+});
+
+class $AppDataTableManager extends RootTableManager<
+    _$AppDB,
+    AppData,
+    AppDataData,
+    $AppDataFilterComposer,
+    $AppDataOrderingComposer,
+    $AppDataCreateCompanionBuilder,
+    $AppDataUpdateCompanionBuilder> {
+  $AppDataTableManager(_$AppDB db, AppData table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $AppDataFilterComposer(ComposerState(db, table)),
+          orderingComposer: $AppDataOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<AppDataKey> appDataKey = const Value.absent(),
+            Value<String?> appDataValue = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              AppDataCompanion(
+            appDataKey: appDataKey,
+            appDataValue: appDataValue,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required AppDataKey appDataKey,
+            Value<String?> appDataValue = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              AppDataCompanion.insert(
+            appDataKey: appDataKey,
+            appDataValue: appDataValue,
+            rowid: rowid,
+          ),
+        ));
+}
+
+class $AppDataFilterComposer extends FilterComposer<_$AppDB, AppData> {
+  $AppDataFilterComposer(super.$state);
+  ColumnWithTypeConverterFilters<AppDataKey, AppDataKey, String>
+      get appDataKey => $state.composableBuilder(
+          column: $state.table.appDataKey,
+          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
+              column,
+              joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get appDataValue => $state.composableBuilder(
+      column: $state.table.appDataValue,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $AppDataOrderingComposer extends OrderingComposer<_$AppDB, AppData> {
+  $AppDataOrderingComposer(super.$state);
+  ColumnOrderings<String> get appDataKey => $state.composableBuilder(
+      column: $state.table.appDataKey,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get appDataValue => $state.composableBuilder(
+      column: $state.table.appDataValue,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
+class $AppDBManager {
+  final _$AppDB _db;
+  $AppDBManager(this._db);
+  $CurrenciesTableManager get currencies =>
+      $CurrenciesTableManager(_db, _db.currencies);
+  $AccountsTableManager get accounts =>
+      $AccountsTableManager(_db, _db.accounts);
+  $CategoriesTableManager get categories =>
+      $CategoriesTableManager(_db, _db.categories);
+  $TransactionsTableManager get transactions =>
+      $TransactionsTableManager(_db, _db.transactions);
+  $ExchangeRatesTableManager get exchangeRates =>
+      $ExchangeRatesTableManager(_db, _db.exchangeRates);
+  $TagsTableManager get tags => $TagsTableManager(_db, _db.tags);
+  $TransactionTagsTableManager get transactionTags =>
+      $TransactionTagsTableManager(_db, _db.transactionTags);
+  $BudgetsTableManager get budgets => $BudgetsTableManager(_db, _db.budgets);
+  $BudgetCategoryTableManager get budgetCategory =>
+      $BudgetCategoryTableManager(_db, _db.budgetCategory);
+  $BudgetAccountTableManager get budgetAccount =>
+      $BudgetAccountTableManager(_db, _db.budgetAccount);
+  $UserSettingsTableManager get userSettings =>
+      $UserSettingsTableManager(_db, _db.userSettings);
+  $AppDataTableManager get appData => $AppDataTableManager(_db, _db.appData);
 }
 
 typedef GetAccountsWithFullData$predicate = Expression<bool> Function(
@@ -4792,6 +6878,8 @@ typedef CountTransactions$predicate = Expression<bool> Function(
     Categories c,
     Categories pc);
 typedef GetCategoriesWithFullData$predicate = Expression<bool> Function(
+    Categories a, Categories parentCategory);
+typedef GetCategoriesWithFullData$orderBy = OrderBy Function(
     Categories a, Categories parentCategory);
 typedef GetExchangeRates$predicate = Expression<bool> Function(
     ExchangeRates e, Currencies currency);

@@ -43,8 +43,8 @@ getTransactionsWithFullData($predicate = TRUE) WITH MoneyTransaction:
         ON a.currencyId = accountCurrency.code
         LEFT JOIN accounts ra 
         ON t.receivingAccountID = ra.id 
-        INNER JOIN currencies receivingAccountCurrency 
-        ON a.currencyId = receivingAccountCurrency.code
+        LEFT JOIN currencies receivingAccountCurrency 
+        ON ra.currencyId = receivingAccountCurrency.code
         LEFT JOIN categories c 
         ON t.categoryID = c.id
         LEFT JOIN categories pc
@@ -94,8 +94,8 @@ countTransactions($predicate = TRUE, :date AS DATETIME):
         ON a.currencyId = accountCurrency.code
         LEFT JOIN accounts ra 
         ON t.receivingAccountID = ra.id 
-        INNER JOIN currencies receivingAccountCurrency 
-        ON a.currencyId = receivingAccountCurrency.code
+        LEFT JOIN currencies receivingAccountCurrency 
+        ON ra.currencyId = receivingAccountCurrency.code
         LEFT JOIN categories c 
         ON t.categoryID = c.id
         LEFT JOIN categories pc
@@ -136,6 +136,7 @@ getCategoriesWithFullData($predicate = TRUE, :limit AS NUMBER) WITH Category:
         LEFT JOIN categories parentCategory 
         ON a.parentCategoryID = parentCategory.id 
     WHERE $predicate 
+    ORDER BY $orderBy
     LIMIT :limit;
 
 getExchangeRates($predicate = TRUE, :limit AS NUMBER) WITH ExchangeRate:

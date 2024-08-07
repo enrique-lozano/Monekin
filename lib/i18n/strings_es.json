@@ -27,6 +27,7 @@
     "insufficient-data": "Datos insuficientes",
     "show-more-fields": "Show more fields",
     "show-less-fields": "Show less fields",
+    "tap-to-search": "Toca para buscar",
     "CLIPBOARD": {
       "success": "{{x}} copiado al portapapeles",
       "error": "Error al copiar"
@@ -298,7 +299,8 @@
       },
       "BULK_EDIT": {
         "dates": "Editar fechas",
-        "categories": "Editar categorías"
+        "categories": "Editar categorías",
+        "status": "Editar estados"
       }
     },
     "FILTERS": {
@@ -314,24 +316,34 @@
         "zero": "El valor de una transacción no puede ser igual a cero",
         "date-max": "La fecha seleccionada es posterior a la actual. Se añadirá la transacción como pendiente",
         "date-after-account-creation": "No puedes crear una transacción cuya fecha es anterior a la fecha de creación de la cuenta a la que pertenece",
-        "negative-transaction": "No uses cantidades negativas para tu transaccion. Aplicaremos el signo en función de si la categoría seleccionada es de tipo gasto/ingreso",
-        "negative-transfer": "El valor monetario de una transferencia no puede ser negativo"
+        "negative-transfer": "El valor monetario de una transferencia no puede ser negativo",
+        "transfer-between-same-accounts": "Las cuentas de origen y destino no pueden coincidir"
       },
       "title": "Título de la transacción",
+      "title.short": "Título",
+      "no-tags": "-- Sin etiquetas --",
       "value": "Valor de la transacción",
       "tap-to-see-more": "Toca para ver más detalles",
       "description": "Descripción",
-      "description-info": "Añadir una nota te ayudará a encontrar más rapidamente esta transacción en un futuro",
+      "description-info": "Toca aquí para escribir una descripción mas detallada sobre esta transacción",
       "exchange-to-preferred-title": "Cambio a {{ currency }}",
       "exchange-to-preferred-in-date": "El día de la transacción"
+    },
+    "REVERSED": {
+      "title": "Transacción invertida",
+      "title.short": "Tr. invertida",
+      "description-for-expenses": "A pesar de ser una transacción de tipo gasto, esta transacción tiene un monto positivo. Este tipo de transacciones pueden usarse para representar la devolución de un gasto previamente registrado, como un reembolso o que te realicen el pago de una deuda.",
+      "description-for-incomes": "A pesar de ser una transacción de tipo ingreso, esta transacción tiene un monto negativo. Este tipo de transacciones pueden usarse para anular o corregir un ingreso que fue registrado incorrectamente, para reflejar una devolución o reembolso de dinero o para registrar el pago de deudas."
     },
     "STATUS": {
       "display": {
         "one": "Estado",
         "other": "Estados"
       },
+      "display_long": "Estado de la transacción",
       "tr_status": "Transacción {{ status }}",
       "none": "Sin estado",
+      "none.descr": "Transacción sin un estado concreto",
       "reconciled": "Reconciliada",
       "reconciled.descr": "Esta transacción ha sido validada ya y se corresponde con una transacción real de su banco",
       "unreconciled": "No reconciliada",
@@ -370,11 +382,9 @@
     "FORM": {
       "from": "Cuenta origen",
       "to": "Cuenta destino",
-      "currency-info-add": "Se transpasarán {{x}} a la cuenta de destino",
-      "currency-info-edit": "Se han transpasado {{x}} a la cuenta de destino",
-      "currency-exchange-selector": {
-        "title": "Editar cambio entre divisas",
-        "value-in-destiny": "Cantidad transferida en destino"
+      "VALUE-IN-DESTINY": {
+        "title": "Cantidad transferida en destino",
+        "amount-short": "{{amount}} a cuenta de destino"
       }
     }
   },
@@ -469,8 +479,7 @@
     "exchange-rates": "Tipos de cambio",
     "empty": "Añade tipos de cambio aqui para que en caso de tener cuentas en otras divisas distintas a tu divisa base nuestros gráficos sean mas exactos",
     "select-a-currency": "Selecciona una divisa",
-    "search-title": "Toca para buscar",
-    "search-placeholder": "Busca por nombre o por código de la divisa"
+    "search": "Busca por nombre o por código de la divisa"
   },
   "TAGS": {
     "display": {
@@ -643,7 +652,16 @@
     "dynamic-colors": "Colores dinámicos",
     "dynamic-colors.descr": "Usar el color de acento de su sistema siempre que sea posible",
     "accent-color": "Color de acento",
-    "accent-color.descr": "Elegir el color que la aplicación usará para enfatizar ciertas partes de la interfaz"
+    "accent-color.descr": "Elegir el color que la aplicación usará para enfatizar ciertas partes de la interfaz",
+    "SECURITY": {
+      "title": "Seguridad",
+      "private-mode-at-launch": "Modo privado al arrancar",
+      "private-mode-at-launch.descr": "Arranca la app en modo privado por defecto",
+      "private-mode": "Modo privado",
+      "private-mode.descr": "Oculta todos los valores monetarios",
+      "private-mode.activated": "Modo privado activado",
+      "private-mode.deactivated": "Modo privado desactivado"
+    }
   },
   "MORE": {
     "title": "Más",
@@ -689,9 +707,5 @@
       "donate.err": "Ups! Parece que ha habido un error a la hora de recibir tu pago",
       "report": "Reporta errores, deja sugerencias..."
     }
-  },
-  "LANG": {
-    "es": "Español",
-    "en": "Inglés"
   }
 }
