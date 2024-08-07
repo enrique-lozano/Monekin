@@ -292,7 +292,8 @@
       },
       "BULK_EDIT": {
         "dates": "編輯日期",
-        "categories": "編輯類別"
+        "categories": "編輯類別",
+        "status": "编辑状态"
       }
     },
     "FILTERS": {

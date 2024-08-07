@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
+import 'package:monekin/app/transactions/form/dialogs/transaction_status_selector.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
@@ -31,34 +32,31 @@ class BulkEditTransactionModal extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
-            OutlinedButtonStacked(
+            _buildSelectOption(
               text: t.transaction.list.bulk_edit.dates,
-              onTap: () {
-                openDateTimePicker(context, showTimePickerAfterDate: true).then(
-                  (date) {
-                    if (date == null) {
-                      return;
-                    }
-
-                    performUpdates(
-                      context,
-                      futures: transactionsToEdit.map(
-                        (e) => TransactionService.instance
-                            .insertOrUpdateTransaction(e.copyWith(date: date)),
-                      ),
-                    );
-                  },
-                );
-              },
-              alignLeft: true,
-              alignBeside: true,
-              fontSize: 18,
-              padding: const EdgeInsets.all(16),
               iconData: Icons.calendar_month,
+              onTap: () =>
+                  openDateTimePicker(context, showTimePickerAfterDate: true)
+                      .then(
+                (date) {
+                  if (date == null) {
+                    return;
+                  }
+
+                  performUpdates(
+                    context,
+                    futures: transactionsToEdit.map(
+                      (e) => TransactionService.instance
+                          .insertOrUpdateTransaction(e.copyWith(date: date)),
+                    ),
+                  );
+                },
+              ),
             ),
             const SizedBox(height: 8),
-            OutlinedButtonStacked(
+            _buildSelectOption(
               text: t.transaction.list.bulk_edit.categories,
+              iconData: Icons.category_rounded,
               onTap: () {
                 showCategoryPickerModal(context,
                     modal: CategoryPicker(
@@ -81,16 +79,51 @@ class BulkEditTransactionModal extends StatelessWidget {
                   },
                 );
               },
-              alignLeft: true,
-              alignBeside: true,
-              fontSize: 18,
-              padding: const EdgeInsets.all(16),
-              iconData: Icons.category_rounded,
             ),
             const SizedBox(height: 8),
+            _buildSelectOption(
+              text: t.transaction.list.bulk_edit.status,
+              iconData: Icons.fullscreen_rounded,
+              onTap: () {
+                showTransactioStatusModal(context, initialStatus: null).then(
+                  (modalRes) {
+                    if (modalRes == null) {
+                      return;
+                    }
+
+                    performUpdates(
+                      context,
+                      futures: transactionsToEdit.map(
+                        (e) => TransactionService.instance
+                            .insertOrUpdateTransaction(e.copyWith(
+                          status: Value(modalRes.result),
+                        )),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+            const SizedBox(height: 12),
           ],
         ),
       ),
+    );
+  }
+
+  OutlinedButtonStacked _buildSelectOption({
+    required void Function()? onTap,
+    required String text,
+    required IconData iconData,
+  }) {
+    return OutlinedButtonStacked(
+      text: text,
+      onTap: onTap,
+      alignLeft: true,
+      alignBeside: true,
+      fontSize: 18,
+      padding: const EdgeInsets.all(16),
+      iconData: iconData,
     );
   }
 
