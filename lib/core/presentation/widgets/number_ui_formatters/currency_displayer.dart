@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
+import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 
 import 'ui_number_formatter.dart';
@@ -50,31 +53,59 @@ class CurrencyDisplayer extends StatelessWidget {
         16;
 
     if (currency != null) {
-      return UINumberFormatter.currency(
-        amountToConvert: amountToConvert,
-        currency: currency,
-        showDecimals: showDecimals,
-        integerStyle: integerStyle,
-        decimalsStyle: decimalsStyle,
-        currencyStyle: currencyStyle,
-      ).getTextWidget(context);
+      return BlurBasedOnPrivateMode(
+        child: UINumberFormatter.currency(
+          amountToConvert: amountToConvert,
+          currency: currency,
+          showDecimals: showDecimals,
+          integerStyle: integerStyle,
+          decimalsStyle: decimalsStyle,
+          currencyStyle: currencyStyle,
+        ).getTextWidget(context),
+      );
     }
 
-    return StreamBuilder(
-        stream: CurrencyService.instance.getUserPreferredCurrency(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Skeleton(width: 50, height: valueFontSize);
-          }
+    return BlurBasedOnPrivateMode(
+      child: StreamBuilder(
+          stream: CurrencyService.instance.getUserPreferredCurrency(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Skeleton(width: 50, height: valueFontSize);
+            }
 
-          return UINumberFormatter.currency(
-            amountToConvert: amountToConvert,
-            currency: snapshot.data!,
-            showDecimals: showDecimals,
-            integerStyle: integerStyle,
-            decimalsStyle: decimalsStyle,
-            currencyStyle: currencyStyle,
-          ).getTextWidget(context);
-        });
+            return UINumberFormatter.currency(
+              amountToConvert: amountToConvert,
+              currency: snapshot.data!,
+              showDecimals: showDecimals,
+              integerStyle: integerStyle,
+              decimalsStyle: decimalsStyle,
+              currencyStyle: currencyStyle,
+            ).getTextWidget(context);
+          }),
+    );
+  }
+}
+
+class BlurBasedOnPrivateMode extends StatelessWidget {
+  const BlurBasedOnPrivateMode({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: PrivateModeService.instance.privateModeStream,
+      initialData: false,
+      builder: (context, snapshot) {
+        final isInPrivateMode = snapshot.data ?? false;
+
+        final double sigma = isInPrivateMode ? 7.5 : 0;
+
+        return ImageFiltered(
+          imageFilter: ImageFilter.blur(sigmaX: sigma, sigmaY: sigma),
+          child: child,
+        );
+      },
+    );
   }
 }
