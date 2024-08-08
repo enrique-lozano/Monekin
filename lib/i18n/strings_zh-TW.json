@@ -7,7 +7,7 @@
     "confirm": "確認",
     "continue_text": "繼續",
     "quick_actions": "快速行動",
-    "save": "節省",
+    "save": "保存",
     "save_changes": "儲存變更",
     "close_and_save": "儲存並關閉",
     "add": "添加",
@@ -88,7 +88,7 @@
         }
       },
       "PERIODICITY": {
-        "display": "復發",
+        "display": "週期性",
         "no-repeat": "不再重複",
         "repeat": {
           "one": "重複",
@@ -369,15 +369,15 @@
     "display": "轉移",
     "transfers": "轉帳",
     "transfer-to": "轉帳至{{ account }}",
-    "create": "新轉移",
+    "create": "轉移",
     "need-two-accounts.warning.header": "Ops!",
     "need-two-accounts.warning.message": "至少需要兩個帳戶才能執行此操作。如果您需要調整或編輯該帳戶的當前餘額，請點擊編輯按鈕",
     "FORM": {
       "from": "原始帳戶",
       "to": "目的地帳戶",
       "VALUE-IN-DESTINY": {
-        "title": "目的地转账金额",
-        "amount-short": "{{amount}} 至目标账户"
+        "title": "目的地轉帳金额",
+        "amount-short": "{{amount}} 至目標帳户"
       }
     }
   },
@@ -476,8 +476,8 @@
   },
   "TAGS": {
     "display": {
-      "one": "one",
-      "other": "other"
+      "one": "標籤",
+      "other": "標籤"
     },
     "FORM": {
       "name": "標籤名",
@@ -531,7 +531,7 @@
     }
   },
   "BUDGETS": {
-    "title": "title",
+    "title": "預算",
     "repeated": "再次發生的",
     "one-time": "一次",
     "annual": "annual",
@@ -582,7 +582,7 @@
       "title.short": "進口",
       "restore-backup": "恢復備份",
       "restore-backup-descr": "從 Monekin 匯入先前儲存的資料庫。此操作將用新資料取代任何當前應用程式資料",
-      "restore-backup-warn.description": "導入新資料庫時，您將丟失應用程式中當前保存的所有資料。建議在繼續之前進行備份。請勿在此處上傳任何來源不明的文件，僅上傳您之前從其下載的文件莫尼金",
+      "restore-backup-warn.description": "導入新資料庫時，您將丟失應用程式中當前保存的所有資料。建議在繼續之前進行備份。請勿在此處上傳任何來源不明的文件，僅上傳您之前從其下載的文件 Monekin",
       "restore-backup-warn.title": "覆蓋所有數據",
       "select-other-file": "選擇其他文件",
       "tap-to-select-file": "點選選擇檔案",
@@ -603,11 +603,11 @@
         ],
         "steps-descr": [
           "從您的裝置中選擇一個 .csv 檔案。確保它的第一行描述了每列的名稱。",
-          "選擇指定每筆交易價值的欄位。使用負值表示支出，使用正值表示收入。使用點作為小數點分隔符號。",
-          "選擇指定每筆交易所屬帳戶的列。您也可以選擇預設帳戶，以防我們找不到您想要的帳戶。如果未指定預設帳戶，我們將建立一個同名帳戶。",
-          "指定交易類別名稱所在的欄位。您必須指定一個預設類別，以便我們將此類別指派給交易，以防找不到該類別。",
-          "選擇指定每筆交易日期的欄位。如果未指定，交易將使用當前日期建立。",
-          "Specifies the columns for other optional transaction attributes"
+          "選擇每筆交易價值的欄位。使用負值表示支出，使用正值表示收入。使用點作為小數點分隔符號。",
+          "選擇每筆交易所屬帳戶的列。您也可以選擇預設帳戶，以防我們找不到您想要的帳戶。如果未指定預設帳戶，我們將建立一個同名帳戶。",
+          "選擇交易類別名稱所在的欄位。您必須指定一個預設類別，以便我們將此類別指派給交易，以防找不到該類別。",
+          "選擇每筆交易日期的欄位。如果未指定，交易將使用當前日期建立。",
+          "選擇其他交易屬性的資料列"
         ],
         "success": "已成功導入 {{x}} 筆交易"
       },
@@ -620,7 +620,7 @@
       "create-date": "創建日期",
       "modify-date": "上一次更改",
       "last-backup": "上次備份",
-      "size": "尺寸"
+      "size": "檔案大小"
     }
   },
   "SETTINGS": {
@@ -648,12 +648,12 @@
     "accent-color.descr": "選擇應用程式用來強調介面某些部分的顏色",
     "SECURITY": {
       "title": "安全",
-      "private-mode-at-launch": "启动时的私密模式",
-      "private-mode-at-launch.descr": "默认以私有模式启动应用程序",
-      "private-mode": "私人模式",
-      "private-mode.descr": "隐藏所有货币值",
-      "private-mode.activated": "隐私模式已激活",
-      "private-mode.deactivated": "私人模式已禁用"
+      "private-mode-at-launch": "啟動時啟用的私密模式",
+      "private-mode-at-launch.descr": "默認以私密模式啟動應用程序",
+      "private-mode": "私密模式",
+      "private-mode.descr": "隱藏所有貨幣值",
+      "private-mode.activated": "私密模式已啟用",
+      "private-mode.deactivated": "私密模式已禁用"
     }
   },
   "MORE": {
@@ -663,7 +663,7 @@
       "display": "數據",
       "display.descr": "匯出和匯入您的數據，這樣您就不會丟失任何東西",
       "delete-all": "刪除我的資料",
-      "delete-all-header1": "學徒就停在那裡⚠️⚠️",
+      "delete-all-header1": "Stop right there padawan ⚠️⚠️",
       "delete-all-message1": "您確定要繼續嗎？您的所有資料將永久刪除且無法恢復",
       "delete-all-header2": "最後一步⚠️⚠️",
       "delete-all-message2": "刪除帳戶後，您將刪除所有儲存的個人資料。您的帳戶、交易、預算和類別將被刪除且無法恢復。您同意嗎？"
@@ -680,16 +680,16 @@
       "PROJECT": {
         "display": "專案",
         "contributors": "合作者",
-        "contributors.descr": "所有讓莫尼金成長的開發者",
+        "contributors.descr": "所有讓 Monekin 成長的開發者",
         "contact": "聯絡我們"
       }
     },
     "HELP_US": {
       "display": "幫助我們",
-      "description": "了解如何幫助莫尼金變得越來越好",
+      "description": "了解如何幫助 Monekin 變得越來越好",
       "rate-us": "評價我們",
       "rate-us.descr": "歡迎任何價格！",
-      "share": "分享莫尼金",
+      "share": "分享 Monekin",
       "share.descr": "與朋友和家人分享我們的應用程式",
       "share.text": "Monekin！最好的個人理財應用程式。在這裡下載",
       "thanks": "謝謝你！",
