@@ -139,7 +139,7 @@
     "select-your-currency": "Selecciona tu divisa",
     "welcome.subtitle": "Tu gestor de finanzas personales",
     "welcome.subtitle2": "100% libre, 100% gratis",
-    "welcome.footer": "Al iniciar sesión aceptas la <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Política de Privacidad</a> y los <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Términos de uso</a> de la aplicación",
+    "welcome.footer": "Al iniciar sesión aceptas la <a href='https://github.com/enrique-lozano/Parsa/blob/main/docs/PRIVACY_POLICY.md'>Política de Privacidad</a> y los <a href='https://github.com/enrique-lozano/Parsa/blob/main/docs/TERMS_OF_USE.md'>Términos de uso</a> de la aplicación",
     "offline.descr.title": "CUENTA SIN CONEXIÓN:",
     "offline.descr": "Tus datos serán guardados unicamente en tu dispositivo, y estarán seguros mientras no desinstales la app o cambies de telefono. Para prevenir la perdida de datos se recomienda realizar una copia de seguridad regularmente desde los ajustes de la app.",
     "offline.start": "Iniciar sesión offline",
@@ -149,7 +149,7 @@
     "sl2Descr": "Tus datos son solo tuyos. Almacenamos la información directamente en tu dispositivo, sin pasar por servidores externos. Esto hace que puedas usar la aplicación incluso sin Internet",
     "sl2Descr2": "Además, el código fuente de la aplicación es público, cualquiera puede colaborar en el y ver como funciona",
     "lastSlideTitle": "Todo listo!",
-    "lastSlideDescr": "Con Monekin, podrás al fin lograr la independencia financiaria que tanto deseas. Podrás ver gráficas, presupuestos, consejos, estadisticas y mucho más sobre tu dinero.",
+    "lastSlideDescr": "Con Parsa, podrás al fin lograr la independencia financiaria que tanto deseas. Podrás ver gráficas, presupuestos, consejos, estadisticas y mucho más sobre tu dinero.",
     "lastSlideDescr2": "Esperemos que disfrutes de tu experiencia! No dudes en contactar con nosotros en caso de dudas, sugerencias..."
   },
   "HOME": {
@@ -161,7 +161,7 @@
     "my-accounts": "Mis cuentas",
     "active-accounts": "Cuentas activas",
     "no-accounts": "Aun no hay cuentas creadas",
-    "no-accounts.descr": "Empieza a usar toda la magia de Monekin. Crea al menos una cuenta para empezar a añadir tranacciones",
+    "no-accounts.descr": "Empieza a usar toda la magia de Parsa. Crea al menos una cuenta para empezar a añadir tranacciones",
     "last-transactions": "Últimas transacciones",
     "should-create-account.header": "Ops!",
     "should-create-account.message": "Debes tener al menos una cuenta no archivada que no sea de ahorros antes de empezar a crear transacciones"
@@ -183,7 +183,7 @@
 
       "descr": {
         "insufficient_data": "Parece que no tenemos gastos suficientes para calcular tu salud financiera. Añade unos pocos gastos e ingresos para que podamos ayudarte mas!",
-        "very_good": "Enhorabuena! Tu salud financiera es formidable. Esperamos que sigas con tu buena racha y que continues aprendiendo con Monekin",
+        "very_good": "Enhorabuena! Tu salud financiera es formidable. Esperamos que sigas con tu buena racha y que continues aprendiendo con Parsa",
         "good": "Genial! Tu salud financiera es buena. Visita la pestaña de análisis para ver como ahorrar aun mas!",
         "normal": "Tu salud financiera se encuentra mas o menos en la media del resto de la población para este periodo",
         "bad": "Parece que tu situación financiera no es la mejor aun. Explora el resto de pestañas de análisis para conocer mas sobre tus finanzas",
@@ -347,7 +347,7 @@
       "reconciled": "Reconciliada",
       "reconciled.descr": "Esta transacción ha sido validada ya y se corresponde con una transacción real de su banco",
       "unreconciled": "No reconciliada",
-      "unreconciled.descr": "Esta transacción aun no ha sido validada y por tanto aun no figura en sus cuentas bancarias reales. Sin embargo, es tenida en cuenta para el calculo de balances y estadisticas en Monekin",
+      "unreconciled.descr": "Esta transacción aun no ha sido validada y por tanto aun no figura en sus cuentas bancarias reales. Sin embargo, es tenida en cuenta para el calculo de balances y estadisticas en Parsa",
       "pending": "Pendiente",
       "pending.descr": "Esta transacción esta pendiente y por tanto no será tenida en cuenta a la hora de calcular balances y estadísticas",
       "voided": "Nula",
@@ -588,9 +588,9 @@
       "title": "Importar tus datos",
       "title.short": "Importar",
       "restore-backup": "Restaurar copia de seguridad",
-      "restore-backup-descr": "Importa una base de datos anteriormente guardada desde Monekin. Esta acción remplazará cualquier dato actual de la aplicación por los nuevos datos",
+      "restore-backup-descr": "Importa una base de datos anteriormente guardada desde Parsa. Esta acción remplazará cualquier dato actual de la aplicación por los nuevos datos",
       "restore-backup-warn.title": "Sobreescribir todos los datos",
-      "restore-backup-warn.description": "Al importar una nueva base de datos, perderas toda la información actualmente guardada en la app. Se recomienda hacer una copia de seguridad antes de continuar. No subas aquí ningún fichero cuyo origen no conozcas, sube solo ficheros que hayas descargado previamente desde Monekin",
+      "restore-backup-warn.description": "Al importar una nueva base de datos, perderas toda la información actualmente guardada en la app. Se recomienda hacer una copia de seguridad antes de continuar. No subas aquí ningún fichero cuyo origen no conozcas, sube solo ficheros que hayas descargado previamente desde Parsa",
       "tap-to-select-file": "Pulsa para seleccionar un archivo",
       "select-other-file": "Selecciona otro fichero",
       "MANUAL-IMPORT": {
@@ -677,7 +677,7 @@
     },
     "ABOUT_US": {
       "display": "Información de la app",
-      "description": "Consulta los terminos y otra información relevante sobre Monekin. Ponte en contacto con la comunidad reportando errores, dejando sugerencias...",
+      "description": "Consulta los terminos y otra información relevante sobre Parsa. Ponte en contacto con la comunidad reportando errores, dejando sugerencias...",
       "LEGAL": {
         "display": "Información legal",
         "privacy": "Política de privacidad",
@@ -687,20 +687,20 @@
       "PROJECT": {
         "display": "Proyecto",
         "contributors": "Colaboradores",
-        "contributors.descr": "Todos los desarrolladores que han hecho que Monekin crezca",
+        "contributors.descr": "Todos los desarrolladores que han hecho que Parsa crezca",
         "contact": "Contacta con nosotros"
       }
     },
     "HELP_US": {
       "display": "Ayúdanos",
-      "description": "Descubre de que formas puedes ayudar a que Monekin sea cada vez mejor",
+      "description": "Descubre de que formas puedes ayudar a que Parsa sea cada vez mejor",
       "rate-us": "Califícanos",
       "rate-us.descr": "¡Cualquier valoración es bienvenida!",
-      "share": "Comparte Monekin",
+      "share": "Comparte Parsa",
       "share.descr": "Comparte nuestra app a amigos y familiares",
-      "share.text": "Monekin! La mejor app de finanzas personales. Descargala aquí",
+      "share.text": "Parsa! La mejor app de finanzas personales. Descargala aquí",
       "thanks": "¡Gracias!",
-      "thanks.long": "Tus contribuciones a Monekin y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir.",
+      "thanks.long": "Tus contribuciones a Parsa y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir.",
       "donate": "Haz una donación",
       "donate.descr": "Con tu donación ayudaras a que la app siga recibiendo mejoras. ¿Que mejor forma que agradecer el trabajo realizado invitandome a un cafe?",
       "donate.success": "Donación realizada. Muchas gracias por tu contribución! ❤️",

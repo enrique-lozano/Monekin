@@ -132,7 +132,7 @@ class MaterialAppContainer extends StatelessWidget {
     return DynamicColorBuilder(
         builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
       return MaterialApp(
-        title: 'Monekin',
+        title: 'Parsa',
         key: ValueKey(refresh),
         debugShowCheckedModeBanner: false,
         locale: TranslationProvider.of(context).flutterLocale,

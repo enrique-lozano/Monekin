@@ -83,10 +83,6 @@ flutter_launcher_icons:
   image_path: 'assets/resources/appIcon.png'
   android: false
   ios: false
-  windows:
-    generate: true
-  macos:
-    generate: false
 
 flutter:
   uses-material-design: true
