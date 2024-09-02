@@ -85,12 +85,12 @@ List<MainMenuDestination> getAllDestinations(
       selectedIcon: Icons.calculate,
       destination: const BudgetsPage(),
     ),
-    /*   MainMenuDestination(
-      AppMenuDestinationsID.accounts,
-      label: t.general.accounts,
-      icon: Icons.account_balance_rounded,
-      destination: const AllAccountsPage(),
-    ), */
+    // MainMenuDestination(
+    //   AppMenuDestinationsID.stats,
+    //   label: t.general.accounts,
+    //   icon: Icons.account_balance_rounded,
+    //   destination: const StatsPage(),
+    // ),
     MainMenuDestination(
       AppMenuDestinationsID.transactions,
       label: t.transaction.display(n: 10),
@@ -142,6 +142,7 @@ List<MainMenuDestination> getDestinations(
         .where((element) => [
               AppMenuDestinationsID.dashboard,
               AppMenuDestinationsID.transactions,
+              AppMenuDestinationsID.stats,
               AppMenuDestinationsID.settings,
             ].contains(element.id))
         .toList();
