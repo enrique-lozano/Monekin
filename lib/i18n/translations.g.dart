@@ -6,7 +6,7 @@
 /// Locales: 3
 /// Strings: 1621 (540 per locale)
 ///
-/// Built on 2024-09-01 at 23:00 UTC
+/// Built on 2024-09-02 at 15:18 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -2794,7 +2794,7 @@ class _TranslationsIntroPtBr implements _TranslationsIntroEn {
 	@override String get select_your_currency => 'Selecione sua moeda';
 	@override String get welcome_subtitle => 'Seu gerente financeiro pessoal';
 	@override String get welcome_subtitle2 => '100% aberto, 100% grátis';
-	@override String get welcome_footer => 'Ao entrar, você concorda com a <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Política de Privacidade</a> e os <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Termos de Uso</a> do aplicativo';
+	@override String get welcome_footer => 'Ao entrar, você concorda com a <a href=\'https://github.com/enrique-lozano/Parsa/blob/main/docs/PRIVACY_POLICY.md\'>Política de Privacidade</a> e os <a href=\'https://github.com/enrique-lozano/Parsa/blob/main/docs/TERMS_OF_USE.md\'>Termos de Uso</a> do aplicativo';
 	@override String get offline_descr_title => 'CONTA OFFLINE:';
 	@override String get offline_descr => 'Seus dados serão armazenados apenas no seu dispositivo e estarão seguros enquanto você não desinstalar o aplicativo ou trocar de telefone. Para evitar a perda de dados, é recomendável fazer backup regularmente nas configurações do aplicativo.';
 	@override String get offline_start => 'Iniciar sessão offline';
@@ -2804,7 +2804,7 @@ class _TranslationsIntroPtBr implements _TranslationsIntroEn {
 	@override String get sl2_descr => 'Seus dados são apenas seus. Armazenamos as informações diretamente no seu dispositivo, sem passar por servidores externos. Isso possibilita o uso do aplicativo mesmo sem internet';
 	@override String get sl2_descr2 => 'Além disso, o código-fonte do aplicativo é público, qualquer pessoa pode colaborar e ver como ele funciona';
 	@override String get last_slide_title => 'Tudo pronto';
-	@override String get last_slide_descr => 'Com o Monekin, você finalmente pode alcançar a independência financeira que tanto deseja. Você terá gráficos, orçamentos, dicas, estatísticas e muito mais sobre seu dinheiro.';
+	@override String get last_slide_descr => 'Com o Parsa, você finalmente pode alcançar a independência financeira que tanto deseja. Você terá gráficos, orçamentos, dicas, insights e muito mais sobre seu dinheiro.';
 	@override String get last_slide_descr2 => 'Esperamos que aproveite sua experiência! Não hesite em nos contatar em caso de dúvidas, sugestões...';
 }
 
@@ -2823,7 +2823,7 @@ class _TranslationsHomePtBr implements _TranslationsHomeEn {
 	@override String get my_accounts => 'Minhas contas';
 	@override String get active_accounts => 'Contas ativas';
 	@override String get no_accounts => 'Nenhuma conta criada ainda';
-	@override String get no_accounts_descr => 'Comece a usar toda a magia do Monekin. Crie pelo menos uma conta para começar a adicionar transações';
+	@override String get no_accounts_descr => 'Comece a usar toda a magia do Parsa. Crie pelo menos uma conta para começar a adicionar transações';
 	@override String get last_transactions => 'Últimas transações';
 	@override String get should_create_account_header => 'Ops!';
 	@override String get should_create_account_message => 'Você deve ter pelo menos uma conta não arquivada antes de começar a criar transações';
@@ -2849,7 +2849,7 @@ class _TranslationsStatsPtBr implements _TranslationsStatsEn {
 	@override final _TranslationsPtBr _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Estatísticas';
+	@override String get title => 'Parsaísticas';
 	@override String get balance => 'Saldo';
 	@override String get final_balance => 'Saldo final';
 	@override String get balance_by_account => 'Saldo por contas';
@@ -2906,10 +2906,10 @@ class _TranslationsTransactionPtBr implements _TranslationsTransactionEn {
 	@override String get duplicate_warning_message => 'Uma transação idêntica a esta será criada com a mesma data, deseja continuar?';
 	@override String get duplicate_success => 'Transação clonada com sucesso';
 	@override String get delete => 'Excluir transação';
-	@override String get delete_warning_message => 'Essa ação é irreversível. O saldo atual de suas contas e todas as suas estatísticas serão recalculados';
+	@override String get delete_warning_message => 'Essa ação é irreversível. O saldo atual de suas contas e todas as suas Parsaísticas serão recalculados';
 	@override String get delete_success => 'Transação excluída corretamente';
 	@override String get delete_multiple => 'Excluir transações';
-	@override String delete_multiple_warning_message({required Object x}) => 'Essa ação é irreversível e removerá ${x} transações. O saldo atual de suas contas e todas as suas estatísticas serão recalculados';
+	@override String delete_multiple_warning_message({required Object x}) => 'Essa ação é irreversível e removerá ${x} transações. O saldo atual de suas contas e todas as suas Parsaísticas serão recalculados';
 	@override String delete_multiple_success({required Object x}) => '${x} transações excluídas corretamente';
 	@override String get details => 'Detalhes do movimento';
 	@override late final _TranslationsTransactionNextPaymentsPtBr next_payments = _TranslationsTransactionNextPaymentsPtBr._(_root);
@@ -2990,7 +2990,7 @@ class _TranslationsCurrenciesPtBr implements _TranslationsCurrenciesEn {
 	@override String get currency_manager_descr => 'Configure sua moeda e suas taxas de câmbio com outras';
 	@override String get preferred_currency => 'Moeda preferida/base';
 	@override String get change_preferred_currency_title => 'Alterar moeda preferida';
-	@override String get change_preferred_currency_msg => 'Todas as estatísticas e orçamentos serão exibidos nesta moeda a partir de agora. Contas e transações manterão a moeda que possuíam. Todas as taxas de câmbio salvas serão excluídas se você executar esta ação. Deseja continuar?';
+	@override String get change_preferred_currency_msg => 'Todas as insights e orçamentos serão exibidos nesta moeda a partir de agora. Contas e transações manterão a moeda que possuíam. Todas as taxas de câmbio salvas serão excluídas se você executar esta ação. Deseja continuar?';
 	@override late final _TranslationsCurrenciesFormPtBr form = _TranslationsCurrenciesFormPtBr._(_root);
 	@override String get delete_all_success => 'Taxas de câmbio excluídas com sucesso';
 	@override String get historical => 'Taxas históricas';
@@ -3417,11 +3417,11 @@ class _TranslationsTransactionStatusPtBr implements _TranslationsTransactionStat
 	@override String get reconciled => 'Conciliada';
 	@override String get reconciled_descr => 'Esta transação já foi validada e corresponde a uma transação real do seu banco';
 	@override String get unreconciled => 'Não conciliada';
-	@override String get unreconciled_descr => 'Esta transação ainda não foi validada e, portanto, ainda não aparece em suas contas bancárias reais. No entanto, ela conta para o cálculo de saldos e estatísticas no Monekin';
+	@override String get unreconciled_descr => 'Esta transação ainda não foi validada e, portanto, ainda não aparece em suas contas bancárias reais. No entanto, ela conta para o cálculo de saldos e insights no Parsa';
 	@override String get pending => 'Pendente';
-	@override String get pending_descr => 'Esta transação está pendente e, portanto, não será considerada no cálculo de saldos e estatísticas';
+	@override String get pending_descr => 'Esta transação está pendente e, portanto, não será considerada no cálculo de saldos e insights';
 	@override String get voided => 'Anulada';
-	@override String get voided_descr => 'Transação anulada/cancelada devido a erro de pagamento ou qualquer outro motivo. Ela não será considerada no cálculo de saldos e estatísticas';
+	@override String get voided_descr => 'Transação anulada/cancelada devido a erro de pagamento ou qualquer outro motivo. Ela não será considerada no cálculo de saldos e insights';
 }
 
 // Path: transaction.types
@@ -3616,7 +3616,7 @@ class _TranslationsBudgetsDetailsPtBr implements _TranslationsBudgetsDetailsEn {
 
 	// Translations
 	@override String get title => 'Detalhes do orçamento';
-	@override String get statistics => 'Estatísticas';
+	@override String get statistics => 'Insights';
 	@override String get budget_value => 'Orçado';
 	@override String expend_diary_left({required Object dailyAmount, required Object remainingDays}) => 'Você pode gastar ${dailyAmount}/dia pelos ${remainingDays} dias restantes';
 	@override String get expend_evolution => 'Evolução dos gastos';
@@ -3652,8 +3652,8 @@ class _TranslationsBackupImportPtBr implements _TranslationsBackupImportEn {
 	@override String get title => 'Importar seus dados';
 	@override String get title_short => 'Importar';
 	@override String get restore_backup => 'Restaurar backup';
-	@override String get restore_backup_descr => 'Importe um banco de dados salvo anteriormente do Monekin. Esta ação substituirá todos os dados atuais do aplicativo pelos novos dados';
-	@override String get restore_backup_warn_description => 'Ao importar um novo banco de dados, você perderá todos os dados atualmente salvos no aplicativo. Recomenda-se fazer um backup antes de continuar. Não carregue aqui nenhum arquivo cuja origem você não conheça, carregue apenas arquivos que você tenha baixado anteriormente do Monekin';
+	@override String get restore_backup_descr => 'Importe um banco de dados salvo anteriormente do Parsa. Esta ação substituirá todos os dados atuais do aplicativo pelos novos dados';
+	@override String get restore_backup_warn_description => 'Ao importar um novo banco de dados, você perderá todos os dados atualmente salvos no aplicativo. Recomenda-se fazer um backup antes de continuar. Não carregue aqui nenhum arquivo cuja origem você não conheça, carregue apenas arquivos que você tenha baixado anteriormente do Parsa';
 	@override String get restore_backup_warn_title => 'Sobrescrever todos os dados';
 	@override String get select_other_file => 'Selecionar outro arquivo';
 	@override String get tap_to_select_file => 'Toque para selecionar um arquivo';
@@ -3717,7 +3717,7 @@ class _TranslationsMoreAboutUsPtBr implements _TranslationsMoreAboutUsEn {
 
 	// Translations
 	@override String get display => 'Informações do aplicativo';
-	@override String get description => 'Confira os termos e outras informações relevantes sobre o Monekin. Entre em contato com a comunidade relatando bugs, deixando sugestões...';
+	@override String get description => 'Confira os termos e outras informações relevantes sobre o Parsa. Entre em contato com a comunidade relatando bugs, deixando sugestões...';
 	@override late final _TranslationsMoreAboutUsLegalPtBr legal = _TranslationsMoreAboutUsLegalPtBr._(_root);
 	@override late final _TranslationsMoreAboutUsProjectPtBr project = _TranslationsMoreAboutUsProjectPtBr._(_root);
 }
@@ -3730,14 +3730,14 @@ class _TranslationsMoreHelpUsPtBr implements _TranslationsMoreHelpUsEn {
 
 	// Translations
 	@override String get display => 'Ajude-nos';
-	@override String get description => 'Descubra como você pode ajudar o Monekin a ficar cada vez melhor';
+	@override String get description => 'Descubra como você pode ajudar o Parsa a ficar cada vez melhor';
 	@override String get rate_us => 'Nos avalie';
 	@override String get rate_us_descr => 'Qualquer avaliação é bem-vinda!';
-	@override String get share => 'Compartilhar o Monekin';
+	@override String get share => 'Compartilhar o Parsa';
 	@override String get share_descr => 'Compartilhe nosso aplicativo com amigos e familiares';
-	@override String get share_text => 'Monekin! O melhor aplicativo de finanças pessoais. Baixe aqui';
+	@override String get share_text => 'Parsa! O melhor aplicativo de finanças pessoais. Baixe aqui';
 	@override String get thanks => 'Obrigado!';
-	@override String get thanks_long => 'Suas contribuições para o Monekin e outros projetos de código aberto, grandes e pequenos, tornam possíveis grandes projetos como este. Obrigado por dedicar seu tempo para contribuir.';
+	@override String get thanks_long => 'Suas contribuições para o Parsa e outros projetos de código aberto, grandes e pequenos, tornam possíveis grandes projetos como este. Obrigado por dedicar seu tempo para contribuir.';
 	@override String get donate => 'Faça uma doação';
 	@override String get donate_descr => 'Com sua doação, você ajudará o aplicativo a continuar recebendo melhorias. Que melhor maneira de agradecer pelo trabalho feito do que me convidar para um café?';
 	@override String get donate_success => 'Doação realizada. Muito obrigado pela sua contribuição! ❤️';
@@ -3850,7 +3850,7 @@ class _TranslationsFinancialHealthReviewDescrPtBr implements _TranslationsFinanc
 
 	// Translations
 	@override String get insufficient_data => 'Parece que não temos despesas suficientes para calcular sua saúde financeira. Adicione algumas despesas/receitas neste período para que possamos ajudá-lo!';
-	@override String get very_good => 'Parabéns! Sua saúde financeira está excelente. Esperamos que continue em sua boa fase e continue aprendendo com o Monekin';
+	@override String get very_good => 'Parabéns! Sua saúde financeira está excelente. Esperamos que continue em sua boa fase e continue aprendendo com o Parsa';
 	@override String get good => 'Ótimo! Sua saúde financeira está boa. Visite a aba de análise para ver como economizar ainda mais!';
 	@override String get normal => 'Sua saúde financeira está mais ou menos na média do restante da população para este período';
 	@override String get bad => 'Parece que sua situação financeira ainda não é das melhores. Explore o restante dos gráficos para aprender mais sobre suas finanças';
@@ -3961,7 +3961,7 @@ class _TranslationsMoreAboutUsProjectPtBr implements _TranslationsMoreAboutUsPro
 	// Translations
 	@override String get display => 'Projeto';
 	@override String get contributors => 'Colaboradores';
-	@override String get contributors_descr => 'Todos os desenvolvedores que ajudaram o Monekin a crescer';
+	@override String get contributors_descr => 'Todos os desenvolvedores que ajudaram o Parsa a crescer';
 	@override String get contact => 'Entre em contato';
 }
 
@@ -5344,7 +5344,7 @@ extension on _TranslationsPtBr {
 			case 'intro.select_your_currency': return 'Selecione sua moeda';
 			case 'intro.welcome_subtitle': return 'Seu gerente financeiro pessoal';
 			case 'intro.welcome_subtitle2': return '100% aberto, 100% grátis';
-			case 'intro.welcome_footer': return 'Ao entrar, você concorda com a <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Política de Privacidade</a> e os <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Termos de Uso</a> do aplicativo';
+			case 'intro.welcome_footer': return 'Ao entrar, você concorda com a <a href=\'https://github.com/enrique-lozano/Parsa/blob/main/docs/PRIVACY_POLICY.md\'>Política de Privacidade</a> e os <a href=\'https://github.com/enrique-lozano/Parsa/blob/main/docs/TERMS_OF_USE.md\'>Termos de Uso</a> do aplicativo';
 			case 'intro.offline_descr_title': return 'CONTA OFFLINE:';
 			case 'intro.offline_descr': return 'Seus dados serão armazenados apenas no seu dispositivo e estarão seguros enquanto você não desinstalar o aplicativo ou trocar de telefone. Para evitar a perda de dados, é recomendável fazer backup regularmente nas configurações do aplicativo.';
 			case 'intro.offline_start': return 'Iniciar sessão offline';
@@ -5354,7 +5354,7 @@ extension on _TranslationsPtBr {
 			case 'intro.sl2_descr': return 'Seus dados são apenas seus. Armazenamos as informações diretamente no seu dispositivo, sem passar por servidores externos. Isso possibilita o uso do aplicativo mesmo sem internet';
 			case 'intro.sl2_descr2': return 'Além disso, o código-fonte do aplicativo é público, qualquer pessoa pode colaborar e ver como ele funciona';
 			case 'intro.last_slide_title': return 'Tudo pronto';
-			case 'intro.last_slide_descr': return 'Com o Monekin, você finalmente pode alcançar a independência financeira que tanto deseja. Você terá gráficos, orçamentos, dicas, estatísticas e muito mais sobre seu dinheiro.';
+			case 'intro.last_slide_descr': return 'Com o Parsa, você finalmente pode alcançar a independência financeira que tanto deseja. Você terá gráficos, orçamentos, dicas, insights e muito mais sobre seu dinheiro.';
 			case 'intro.last_slide_descr2': return 'Esperamos que aproveite sua experiência! Não hesite em nos contatar em caso de dúvidas, sugestões...';
 			case 'home.title': return 'Início';
 			case 'home.filter_transactions': return 'Filtrar transações';
@@ -5364,7 +5364,7 @@ extension on _TranslationsPtBr {
 			case 'home.my_accounts': return 'Minhas contas';
 			case 'home.active_accounts': return 'Contas ativas';
 			case 'home.no_accounts': return 'Nenhuma conta criada ainda';
-			case 'home.no_accounts_descr': return 'Comece a usar toda a magia do Monekin. Crie pelo menos uma conta para começar a adicionar transações';
+			case 'home.no_accounts_descr': return 'Comece a usar toda a magia do Parsa. Crie pelo menos uma conta para começar a adicionar transações';
 			case 'home.last_transactions': return 'Últimas transações';
 			case 'home.should_create_account_header': return 'Ops!';
 			case 'home.should_create_account_message': return 'Você deve ter pelo menos uma conta não arquivada antes de começar a criar transações';
@@ -5418,7 +5418,7 @@ extension on _TranslationsPtBr {
 				}
 			};
 			case 'financial_health.review.descr.insufficient_data': return 'Parece que não temos despesas suficientes para calcular sua saúde financeira. Adicione algumas despesas/receitas neste período para que possamos ajudá-lo!';
-			case 'financial_health.review.descr.very_good': return 'Parabéns! Sua saúde financeira está excelente. Esperamos que continue em sua boa fase e continue aprendendo com o Monekin';
+			case 'financial_health.review.descr.very_good': return 'Parabéns! Sua saúde financeira está excelente. Esperamos que continue em sua boa fase e continue aprendendo com o Parsa';
 			case 'financial_health.review.descr.good': return 'Ótimo! Sua saúde financeira está boa. Visite a aba de análise para ver como economizar ainda mais!';
 			case 'financial_health.review.descr.normal': return 'Sua saúde financeira está mais ou menos na média do restante da população para este período';
 			case 'financial_health.review.descr.bad': return 'Parece que sua situação financeira ainda não é das melhores. Explore o restante dos gráficos para aprender mais sobre suas finanças';
@@ -5438,7 +5438,7 @@ extension on _TranslationsPtBr {
 			case 'financial_health.savings_percentage.text.bad': return ({required Object value}) => 'Você conseguiu economizar <b>${value}%</b> da sua renda durante este período. No entanto, achamos que você ainda pode fazer muito mais!';
 			case 'financial_health.savings_percentage.text.very_bad': return 'Uau, você não conseguiu economizar nada durante este período.';
 			case 'financial_health.savings_percentage.suggestion': return 'Lembre-se de que é aconselhável economizar pelo menos 15-20% do que você ganha.';
-			case 'stats.title': return 'Estatísticas';
+			case 'stats.title': return 'Parsaísticas';
 			case 'stats.balance': return 'Saldo';
 			case 'stats.final_balance': return 'Saldo final';
 			case 'stats.balance_by_account': return 'Saldo por contas';
@@ -5484,10 +5484,10 @@ extension on _TranslationsPtBr {
 			case 'transaction.duplicate_warning_message': return 'Uma transação idêntica a esta será criada com a mesma data, deseja continuar?';
 			case 'transaction.duplicate_success': return 'Transação clonada com sucesso';
 			case 'transaction.delete': return 'Excluir transação';
-			case 'transaction.delete_warning_message': return 'Essa ação é irreversível. O saldo atual de suas contas e todas as suas estatísticas serão recalculados';
+			case 'transaction.delete_warning_message': return 'Essa ação é irreversível. O saldo atual de suas contas e todas as suas Parsaísticas serão recalculados';
 			case 'transaction.delete_success': return 'Transação excluída corretamente';
 			case 'transaction.delete_multiple': return 'Excluir transações';
-			case 'transaction.delete_multiple_warning_message': return ({required Object x}) => 'Essa ação é irreversível e removerá ${x} transações. O saldo atual de suas contas e todas as suas estatísticas serão recalculados';
+			case 'transaction.delete_multiple_warning_message': return ({required Object x}) => 'Essa ação é irreversível e removerá ${x} transações. O saldo atual de suas contas e todas as suas Parsaísticas serão recalculados';
 			case 'transaction.delete_multiple_success': return ({required Object x}) => '${x} transações excluídas corretamente';
 			case 'transaction.details': return 'Detalhes do movimento';
 			case 'transaction.next_payments.accept': return 'Aceitar';
@@ -5551,11 +5551,11 @@ extension on _TranslationsPtBr {
 			case 'transaction.status.reconciled': return 'Conciliada';
 			case 'transaction.status.reconciled_descr': return 'Esta transação já foi validada e corresponde a uma transação real do seu banco';
 			case 'transaction.status.unreconciled': return 'Não conciliada';
-			case 'transaction.status.unreconciled_descr': return 'Esta transação ainda não foi validada e, portanto, ainda não aparece em suas contas bancárias reais. No entanto, ela conta para o cálculo de saldos e estatísticas no Monekin';
+			case 'transaction.status.unreconciled_descr': return 'Esta transação ainda não foi validada e, portanto, ainda não aparece em suas contas bancárias reais. No entanto, ela conta para o cálculo de saldos e insights no Parsa';
 			case 'transaction.status.pending': return 'Pendente';
-			case 'transaction.status.pending_descr': return 'Esta transação está pendente e, portanto, não será considerada no cálculo de saldos e estatísticas';
+			case 'transaction.status.pending_descr': return 'Esta transação está pendente e, portanto, não será considerada no cálculo de saldos e insights';
 			case 'transaction.status.voided': return 'Anulada';
-			case 'transaction.status.voided_descr': return 'Transação anulada/cancelada devido a erro de pagamento ou qualquer outro motivo. Ela não será considerada no cálculo de saldos e estatísticas';
+			case 'transaction.status.voided_descr': return 'Transação anulada/cancelada devido a erro de pagamento ou qualquer outro motivo. Ela não será considerada no cálculo de saldos e insights';
 			case 'transaction.types.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(n,
 				one: 'Tipo de transação',
 				other: 'Tipos de transação',
@@ -5641,7 +5641,7 @@ extension on _TranslationsPtBr {
 			case 'currencies.currency_manager_descr': return 'Configure sua moeda e suas taxas de câmbio com outras';
 			case 'currencies.preferred_currency': return 'Moeda preferida/base';
 			case 'currencies.change_preferred_currency_title': return 'Alterar moeda preferida';
-			case 'currencies.change_preferred_currency_msg': return 'Todas as estatísticas e orçamentos serão exibidos nesta moeda a partir de agora. Contas e transações manterão a moeda que possuíam. Todas as taxas de câmbio salvas serão excluídas se você executar esta ação. Deseja continuar?';
+			case 'currencies.change_preferred_currency_msg': return 'Todas as insights e orçamentos serão exibidos nesta moeda a partir de agora. Contas e transações manterão a moeda que possuíam. Todas as taxas de câmbio salvas serão excluídas se você executar esta ação. Deseja continuar?';
 			case 'currencies.form.equal_to_preferred_warn': return 'A moeda não pode ser igual à moeda do usuário';
 			case 'currencies.form.specify_a_currency': return 'Por favor, especifique uma moeda';
 			case 'currencies.form.add': return 'Adicionar taxa de câmbio';
@@ -5726,7 +5726,7 @@ extension on _TranslationsPtBr {
 			case 'budgets.form.edit': return 'Editar orçamento';
 			case 'budgets.form.negative_warn': return 'Os orçamentos não podem ter um valor negativo';
 			case 'budgets.details.title': return 'Detalhes do orçamento';
-			case 'budgets.details.statistics': return 'Estatísticas';
+			case 'budgets.details.statistics': return 'Insights';
 			case 'budgets.details.budget_value': return 'Orçado';
 			case 'budgets.details.expend_diary_left': return ({required Object dailyAmount, required Object remainingDays}) => 'Você pode gastar ${dailyAmount}/dia pelos ${remainingDays} dias restantes';
 			case 'budgets.details.expend_evolution': return 'Evolução dos gastos';
@@ -5744,8 +5744,8 @@ extension on _TranslationsPtBr {
 			case 'backup.import.title': return 'Importar seus dados';
 			case 'backup.import.title_short': return 'Importar';
 			case 'backup.import.restore_backup': return 'Restaurar backup';
-			case 'backup.import.restore_backup_descr': return 'Importe um banco de dados salvo anteriormente do Monekin. Esta ação substituirá todos os dados atuais do aplicativo pelos novos dados';
-			case 'backup.import.restore_backup_warn_description': return 'Ao importar um novo banco de dados, você perderá todos os dados atualmente salvos no aplicativo. Recomenda-se fazer um backup antes de continuar. Não carregue aqui nenhum arquivo cuja origem você não conheça, carregue apenas arquivos que você tenha baixado anteriormente do Monekin';
+			case 'backup.import.restore_backup_descr': return 'Importe um banco de dados salvo anteriormente do Parsa. Esta ação substituirá todos os dados atuais do aplicativo pelos novos dados';
+			case 'backup.import.restore_backup_warn_description': return 'Ao importar um novo banco de dados, você perderá todos os dados atualmente salvos no aplicativo. Recomenda-se fazer um backup antes de continuar. Não carregue aqui nenhum arquivo cuja origem você não conheça, carregue apenas arquivos que você tenha baixado anteriormente do Parsa';
 			case 'backup.import.restore_backup_warn_title': return 'Sobrescrever todos os dados';
 			case 'backup.import.select_other_file': return 'Selecionar outro arquivo';
 			case 'backup.import.tap_to_select_file': return 'Toque para selecionar um arquivo';
@@ -5815,24 +5815,24 @@ extension on _TranslationsPtBr {
 			case 'more.data.delete_all_header2': return 'Último passo ⚠️⚠️';
 			case 'more.data.delete_all_message2': return 'Ao excluir uma conta, você excluirá todos os seus dados pessoais armazenados. Suas contas, transações, orçamentos e categorias serão excluídos e não poderão ser recuperados. Você concorda?';
 			case 'more.about_us.display': return 'Informações do aplicativo';
-			case 'more.about_us.description': return 'Confira os termos e outras informações relevantes sobre o Monekin. Entre em contato com a comunidade relatando bugs, deixando sugestões...';
+			case 'more.about_us.description': return 'Confira os termos e outras informações relevantes sobre o Parsa. Entre em contato com a comunidade relatando bugs, deixando sugestões...';
 			case 'more.about_us.legal.display': return 'Informações legais';
 			case 'more.about_us.legal.privacy': return 'Política de privacidade';
 			case 'more.about_us.legal.terms': return 'Termos de uso';
 			case 'more.about_us.legal.licenses': return 'Licenças';
 			case 'more.about_us.project.display': return 'Projeto';
 			case 'more.about_us.project.contributors': return 'Colaboradores';
-			case 'more.about_us.project.contributors_descr': return 'Todos os desenvolvedores que ajudaram o Monekin a crescer';
+			case 'more.about_us.project.contributors_descr': return 'Todos os desenvolvedores que ajudaram o Parsa a crescer';
 			case 'more.about_us.project.contact': return 'Entre em contato';
 			case 'more.help_us.display': return 'Ajude-nos';
-			case 'more.help_us.description': return 'Descubra como você pode ajudar o Monekin a ficar cada vez melhor';
+			case 'more.help_us.description': return 'Descubra como você pode ajudar o Parsa a ficar cada vez melhor';
 			case 'more.help_us.rate_us': return 'Nos avalie';
 			case 'more.help_us.rate_us_descr': return 'Qualquer avaliação é bem-vinda!';
-			case 'more.help_us.share': return 'Compartilhar o Monekin';
+			case 'more.help_us.share': return 'Compartilhar o Parsa';
 			case 'more.help_us.share_descr': return 'Compartilhe nosso aplicativo com amigos e familiares';
-			case 'more.help_us.share_text': return 'Monekin! O melhor aplicativo de finanças pessoais. Baixe aqui';
+			case 'more.help_us.share_text': return 'Parsa! O melhor aplicativo de finanças pessoais. Baixe aqui';
 			case 'more.help_us.thanks': return 'Obrigado!';
-			case 'more.help_us.thanks_long': return 'Suas contribuições para o Monekin e outros projetos de código aberto, grandes e pequenos, tornam possíveis grandes projetos como este. Obrigado por dedicar seu tempo para contribuir.';
+			case 'more.help_us.thanks_long': return 'Suas contribuições para o Parsa e outros projetos de código aberto, grandes e pequenos, tornam possíveis grandes projetos como este. Obrigado por dedicar seu tempo para contribuir.';
 			case 'more.help_us.donate': return 'Faça uma doação';
 			case 'more.help_us.donate_descr': return 'Com sua doação, você ajudará o aplicativo a continuar recebendo melhorias. Que melhor maneira de agradecer pelo trabalho feito do que me convidar para um café?';
 			case 'more.help_us.donate_success': return 'Doação realizada. Muito obrigado pela sua contribuição! ❤️';
