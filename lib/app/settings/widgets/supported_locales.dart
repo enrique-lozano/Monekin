@@ -10,6 +10,5 @@ class SupportedLocale {
 const appSupportedLocales = [
   SupportedLocale(locale: AppLocale.es, label: 'Español'),
   SupportedLocale(locale: AppLocale.en, label: 'English'),
-  SupportedLocale(locale: AppLocale.uk, label: 'українська'),
-  SupportedLocale(locale: AppLocale.zhTw, label: '繁體中文'),
+  SupportedLocale(locale: AppLocale.ptBr, label: 'Português Brasileiro'),
 ];
