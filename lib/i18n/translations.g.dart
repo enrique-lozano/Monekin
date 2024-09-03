@@ -6,7 +6,7 @@
 /// Locales: 3
 /// Strings: 1621 (540 per locale)
 ///
-/// Built on 2024-09-02 at 15:18 UTC
+/// Built on 2024-09-02 at 15:19 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -2849,7 +2849,7 @@ class _TranslationsStatsPtBr implements _TranslationsStatsEn {
 	@override final _TranslationsPtBr _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Parsaísticas';
+	@override String get title => 'Insights';
 	@override String get balance => 'Saldo';
 	@override String get final_balance => 'Saldo final';
 	@override String get balance_by_account => 'Saldo por contas';
@@ -5438,7 +5438,7 @@ extension on _TranslationsPtBr {
 			case 'financial_health.savings_percentage.text.bad': return ({required Object value}) => 'Você conseguiu economizar <b>${value}%</b> da sua renda durante este período. No entanto, achamos que você ainda pode fazer muito mais!';
 			case 'financial_health.savings_percentage.text.very_bad': return 'Uau, você não conseguiu economizar nada durante este período.';
 			case 'financial_health.savings_percentage.suggestion': return 'Lembre-se de que é aconselhável economizar pelo menos 15-20% do que você ganha.';
-			case 'stats.title': return 'Parsaísticas';
+			case 'stats.title': return 'Insights';
 			case 'stats.balance': return 'Saldo';
 			case 'stats.final_balance': return 'Saldo final';
 			case 'stats.balance_by_account': return 'Saldo por contas';
