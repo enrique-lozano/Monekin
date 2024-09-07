@@ -6,7 +6,7 @@
 /// Locales: 3
 /// Strings: 1621 (540 per locale)
 ///
-/// Built on 2024-09-02 at 15:19 UTC
+/// Built on 2024-09-06 at 14:14 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -27,7 +27,7 @@ const AppLocale _baseLocale = AppLocale.en;
 enum AppLocale with BaseAppLocale<AppLocale, Translations> {
 	en(languageCode: 'en', build: Translations.build),
 	es(languageCode: 'es', build: _TranslationsEs.build),
-	ptBr(languageCode: 'pt', countryCode: 'BR', build: _TranslationsPtBr.build);
+	pt(languageCode: 'pt', build: _TranslationsPt.build);
 
 	const AppLocale({required this.languageCode, this.scriptCode, this.countryCode, required this.build}); // ignore: unused_element
 
@@ -2698,13 +2698,13 @@ class _TranslationsGeneralTimeRangesTypesEs implements _TranslationsGeneralTimeR
 }
 
 // Path: <root>
-class _TranslationsPtBr implements Translations {
+class _TranslationsPt implements Translations {
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
-	_TranslationsPtBr.build({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver})
+	_TranslationsPt.build({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver})
 		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
 		  $meta = TranslationMetadata(
-		    locale: AppLocale.ptBr,
+		    locale: AppLocale.pt,
 		    overrides: overrides ?? {},
 		    cardinalResolver: cardinalResolver,
 		    ordinalResolver: ordinalResolver,
@@ -2712,39 +2712,39 @@ class _TranslationsPtBr implements Translations {
 		$meta.setFlatMapFunction(_flatMapFunction);
 	}
 
-	/// Metadata for the translations of <pt-BR>.
+	/// Metadata for the translations of <pt>.
 	@override final TranslationMetadata<AppLocale, Translations> $meta;
 
 	/// Access flat map
 	@override dynamic operator[](String key) => $meta.getTranslation(key);
 
-	@override late final _TranslationsPtBr _root = this; // ignore: unused_field
+	@override late final _TranslationsPt _root = this; // ignore: unused_field
 
 	// Translations
-	@override late final _TranslationsGeneralPtBr general = _TranslationsGeneralPtBr._(_root);
-	@override late final _TranslationsIntroPtBr intro = _TranslationsIntroPtBr._(_root);
-	@override late final _TranslationsHomePtBr home = _TranslationsHomePtBr._(_root);
-	@override late final _TranslationsFinancialHealthPtBr financial_health = _TranslationsFinancialHealthPtBr._(_root);
-	@override late final _TranslationsStatsPtBr stats = _TranslationsStatsPtBr._(_root);
-	@override late final _TranslationsIconSelectorPtBr icon_selector = _TranslationsIconSelectorPtBr._(_root);
-	@override late final _TranslationsTransactionPtBr transaction = _TranslationsTransactionPtBr._(_root);
-	@override late final _TranslationsTransferPtBr transfer = _TranslationsTransferPtBr._(_root);
-	@override late final _TranslationsRecurrentTransactionsPtBr recurrent_transactions = _TranslationsRecurrentTransactionsPtBr._(_root);
-	@override late final _TranslationsAccountPtBr account = _TranslationsAccountPtBr._(_root);
-	@override late final _TranslationsCurrenciesPtBr currencies = _TranslationsCurrenciesPtBr._(_root);
-	@override late final _TranslationsTagsPtBr tags = _TranslationsTagsPtBr._(_root);
-	@override late final _TranslationsCategoriesPtBr categories = _TranslationsCategoriesPtBr._(_root);
-	@override late final _TranslationsBudgetsPtBr budgets = _TranslationsBudgetsPtBr._(_root);
-	@override late final _TranslationsBackupPtBr backup = _TranslationsBackupPtBr._(_root);
-	@override late final _TranslationsSettingsPtBr settings = _TranslationsSettingsPtBr._(_root);
-	@override late final _TranslationsMorePtBr more = _TranslationsMorePtBr._(_root);
+	@override late final _TranslationsGeneralPt general = _TranslationsGeneralPt._(_root);
+	@override late final _TranslationsIntroPt intro = _TranslationsIntroPt._(_root);
+	@override late final _TranslationsHomePt home = _TranslationsHomePt._(_root);
+	@override late final _TranslationsFinancialHealthPt financial_health = _TranslationsFinancialHealthPt._(_root);
+	@override late final _TranslationsStatsPt stats = _TranslationsStatsPt._(_root);
+	@override late final _TranslationsIconSelectorPt icon_selector = _TranslationsIconSelectorPt._(_root);
+	@override late final _TranslationsTransactionPt transaction = _TranslationsTransactionPt._(_root);
+	@override late final _TranslationsTransferPt transfer = _TranslationsTransferPt._(_root);
+	@override late final _TranslationsRecurrentTransactionsPt recurrent_transactions = _TranslationsRecurrentTransactionsPt._(_root);
+	@override late final _TranslationsAccountPt account = _TranslationsAccountPt._(_root);
+	@override late final _TranslationsCurrenciesPt currencies = _TranslationsCurrenciesPt._(_root);
+	@override late final _TranslationsTagsPt tags = _TranslationsTagsPt._(_root);
+	@override late final _TranslationsCategoriesPt categories = _TranslationsCategoriesPt._(_root);
+	@override late final _TranslationsBudgetsPt budgets = _TranslationsBudgetsPt._(_root);
+	@override late final _TranslationsBackupPt backup = _TranslationsBackupPt._(_root);
+	@override late final _TranslationsSettingsPt settings = _TranslationsSettingsPt._(_root);
+	@override late final _TranslationsMorePt more = _TranslationsMorePt._(_root);
 }
 
 // Path: general
-class _TranslationsGeneralPtBr implements _TranslationsGeneralEn {
-	_TranslationsGeneralPtBr._(this._root);
+class _TranslationsGeneralPt implements _TranslationsGeneralEn {
+	_TranslationsGeneralPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get cancel => 'Cancelar';
@@ -2775,17 +2775,17 @@ class _TranslationsGeneralPtBr implements _TranslationsGeneralEn {
 	@override String get show_more_fields => 'Mostrar mais campos';
 	@override String get show_less_fields => 'Mostrar menos campos';
 	@override String get tap_to_search => 'Toque para pesquisar';
-	@override late final _TranslationsGeneralClipboardPtBr clipboard = _TranslationsGeneralClipboardPtBr._(_root);
-	@override late final _TranslationsGeneralTimePtBr time = _TranslationsGeneralTimePtBr._(_root);
-	@override late final _TranslationsGeneralTransactionOrderPtBr transaction_order = _TranslationsGeneralTransactionOrderPtBr._(_root);
-	@override late final _TranslationsGeneralValidationsPtBr validations = _TranslationsGeneralValidationsPtBr._(_root);
+	@override late final _TranslationsGeneralClipboardPt clipboard = _TranslationsGeneralClipboardPt._(_root);
+	@override late final _TranslationsGeneralTimePt time = _TranslationsGeneralTimePt._(_root);
+	@override late final _TranslationsGeneralTransactionOrderPt transaction_order = _TranslationsGeneralTransactionOrderPt._(_root);
+	@override late final _TranslationsGeneralValidationsPt validations = _TranslationsGeneralValidationsPt._(_root);
 }
 
 // Path: intro
-class _TranslationsIntroPtBr implements _TranslationsIntroEn {
-	_TranslationsIntroPtBr._(this._root);
+class _TranslationsIntroPt implements _TranslationsIntroEn {
+	_TranslationsIntroPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get start => 'Começar';
@@ -2809,10 +2809,10 @@ class _TranslationsIntroPtBr implements _TranslationsIntroEn {
 }
 
 // Path: home
-class _TranslationsHomePtBr implements _TranslationsHomeEn {
-	_TranslationsHomePtBr._(this._root);
+class _TranslationsHomePt implements _TranslationsHomeEn {
+	_TranslationsHomePt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Início';
@@ -2830,23 +2830,23 @@ class _TranslationsHomePtBr implements _TranslationsHomeEn {
 }
 
 // Path: financial_health
-class _TranslationsFinancialHealthPtBr implements _TranslationsFinancialHealthEn {
-	_TranslationsFinancialHealthPtBr._(this._root);
+class _TranslationsFinancialHealthPt implements _TranslationsFinancialHealthEn {
+	_TranslationsFinancialHealthPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get display => 'Saúde financeira';
-	@override late final _TranslationsFinancialHealthReviewPtBr review = _TranslationsFinancialHealthReviewPtBr._(_root);
-	@override late final _TranslationsFinancialHealthMonthsWithoutIncomePtBr months_without_income = _TranslationsFinancialHealthMonthsWithoutIncomePtBr._(_root);
-	@override late final _TranslationsFinancialHealthSavingsPercentagePtBr savings_percentage = _TranslationsFinancialHealthSavingsPercentagePtBr._(_root);
+	@override late final _TranslationsFinancialHealthReviewPt review = _TranslationsFinancialHealthReviewPt._(_root);
+	@override late final _TranslationsFinancialHealthMonthsWithoutIncomePt months_without_income = _TranslationsFinancialHealthMonthsWithoutIncomePt._(_root);
+	@override late final _TranslationsFinancialHealthSavingsPercentagePt savings_percentage = _TranslationsFinancialHealthSavingsPercentagePt._(_root);
 }
 
 // Path: stats
-class _TranslationsStatsPtBr implements _TranslationsStatsEn {
-	_TranslationsStatsPtBr._(this._root);
+class _TranslationsStatsPt implements _TranslationsStatsEn {
+	_TranslationsStatsPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Insights';
@@ -2866,10 +2866,10 @@ class _TranslationsStatsPtBr implements _TranslationsStatsEn {
 }
 
 // Path: icon_selector
-class _TranslationsIconSelectorPtBr implements _TranslationsIconSelectorEn {
-	_TranslationsIconSelectorPtBr._(this._root);
+class _TranslationsIconSelectorPt implements _TranslationsIconSelectorEn {
+	_TranslationsIconSelectorPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get name => 'Nome:';
@@ -2879,14 +2879,14 @@ class _TranslationsIconSelectorPtBr implements _TranslationsIconSelectorEn {
 	@override String get select_color => 'Selecione uma cor';
 	@override String get select_account_icon => 'Identifique sua conta';
 	@override String get select_category_icon => 'Identifique sua categoria';
-	@override late final _TranslationsIconSelectorScopesPtBr scopes = _TranslationsIconSelectorScopesPtBr._(_root);
+	@override late final _TranslationsIconSelectorScopesPt scopes = _TranslationsIconSelectorScopesPt._(_root);
 }
 
 // Path: transaction
-class _TranslationsTransactionPtBr implements _TranslationsTransactionEn {
-	_TranslationsTransactionPtBr._(this._root);
+class _TranslationsTransactionPt implements _TranslationsTransactionEn {
+	_TranslationsTransactionPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(n,
@@ -2912,20 +2912,20 @@ class _TranslationsTransactionPtBr implements _TranslationsTransactionEn {
 	@override String delete_multiple_warning_message({required Object x}) => 'Essa ação é irreversível e removerá ${x} transações. O saldo atual de suas contas e todas as suas Parsaísticas serão recalculados';
 	@override String delete_multiple_success({required Object x}) => '${x} transações excluídas corretamente';
 	@override String get details => 'Detalhes do movimento';
-	@override late final _TranslationsTransactionNextPaymentsPtBr next_payments = _TranslationsTransactionNextPaymentsPtBr._(_root);
-	@override late final _TranslationsTransactionListPtBr list = _TranslationsTransactionListPtBr._(_root);
-	@override late final _TranslationsTransactionFiltersPtBr filters = _TranslationsTransactionFiltersPtBr._(_root);
-	@override late final _TranslationsTransactionFormPtBr form = _TranslationsTransactionFormPtBr._(_root);
-	@override late final _TranslationsTransactionReversedPtBr reversed = _TranslationsTransactionReversedPtBr._(_root);
-	@override late final _TranslationsTransactionStatusPtBr status = _TranslationsTransactionStatusPtBr._(_root);
-	@override late final _TranslationsTransactionTypesPtBr types = _TranslationsTransactionTypesPtBr._(_root);
+	@override late final _TranslationsTransactionNextPaymentsPt next_payments = _TranslationsTransactionNextPaymentsPt._(_root);
+	@override late final _TranslationsTransactionListPt list = _TranslationsTransactionListPt._(_root);
+	@override late final _TranslationsTransactionFiltersPt filters = _TranslationsTransactionFiltersPt._(_root);
+	@override late final _TranslationsTransactionFormPt form = _TranslationsTransactionFormPt._(_root);
+	@override late final _TranslationsTransactionReversedPt reversed = _TranslationsTransactionReversedPt._(_root);
+	@override late final _TranslationsTransactionStatusPt status = _TranslationsTransactionStatusPt._(_root);
+	@override late final _TranslationsTransactionTypesPt types = _TranslationsTransactionTypesPt._(_root);
 }
 
 // Path: transfer
-class _TranslationsTransferPtBr implements _TranslationsTransferEn {
-	_TranslationsTransferPtBr._(this._root);
+class _TranslationsTransferPt implements _TranslationsTransferEn {
+	_TranslationsTransferPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get display => 'Transferência';
@@ -2934,14 +2934,14 @@ class _TranslationsTransferPtBr implements _TranslationsTransferEn {
 	@override String get create => 'Nova Transferência';
 	@override String get need_two_accounts_warning_header => 'Ops!';
 	@override String get need_two_accounts_warning_message => 'São necessárias pelo menos duas contas para realizar esta ação. Se precisar ajustar ou editar o saldo atual desta conta, clique no botão de edição';
-	@override late final _TranslationsTransferFormPtBr form = _TranslationsTransferFormPtBr._(_root);
+	@override late final _TranslationsTransferFormPt form = _TranslationsTransferFormPt._(_root);
 }
 
 // Path: recurrent_transactions
-class _TranslationsRecurrentTransactionsPtBr implements _TranslationsRecurrentTransactionsEn {
-	_TranslationsRecurrentTransactionsPtBr._(this._root);
+class _TranslationsRecurrentTransactionsPt implements _TranslationsRecurrentTransactionsEn {
+	_TranslationsRecurrentTransactionsPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Transações recorrentes';
@@ -2949,14 +2949,14 @@ class _TranslationsRecurrentTransactionsPtBr implements _TranslationsRecurrentTr
 	@override String get empty => 'Parece que você não tem nenhuma transação recorrente. Crie uma transação recorrente mensal, anual ou semanal e ela aparecerá aqui';
 	@override String get total_expense_title => 'Despesa total por período';
 	@override String get total_expense_descr => '* Sem considerar a data de início e término de cada recorrência';
-	@override late final _TranslationsRecurrentTransactionsDetailsPtBr details = _TranslationsRecurrentTransactionsDetailsPtBr._(_root);
+	@override late final _TranslationsRecurrentTransactionsDetailsPt details = _TranslationsRecurrentTransactionsDetailsPt._(_root);
 }
 
 // Path: account
-class _TranslationsAccountPtBr implements _TranslationsAccountEn {
-	_TranslationsAccountPtBr._(this._root);
+class _TranslationsAccountPt implements _TranslationsAccountEn {
+	_TranslationsAccountPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get details => 'Detalhes da conta';
@@ -2970,18 +2970,18 @@ class _TranslationsAccountPtBr implements _TranslationsAccountEn {
 	@override String get add_money => 'Adicionar dinheiro';
 	@override String get withdraw_money => 'Retirar dinheiro';
 	@override String get no_accounts => 'Nenhuma transação encontrada para exibir aqui. Adicione uma transação clicando no botão \'+\' na parte inferior';
-	@override late final _TranslationsAccountTypesPtBr types = _TranslationsAccountTypesPtBr._(_root);
-	@override late final _TranslationsAccountFormPtBr form = _TranslationsAccountFormPtBr._(_root);
-	@override late final _TranslationsAccountDeletePtBr delete = _TranslationsAccountDeletePtBr._(_root);
-	@override late final _TranslationsAccountClosePtBr close = _TranslationsAccountClosePtBr._(_root);
-	@override late final _TranslationsAccountSelectPtBr select = _TranslationsAccountSelectPtBr._(_root);
+	@override late final _TranslationsAccountTypesPt types = _TranslationsAccountTypesPt._(_root);
+	@override late final _TranslationsAccountFormPt form = _TranslationsAccountFormPt._(_root);
+	@override late final _TranslationsAccountDeletePt delete = _TranslationsAccountDeletePt._(_root);
+	@override late final _TranslationsAccountClosePt close = _TranslationsAccountClosePt._(_root);
+	@override late final _TranslationsAccountSelectPt select = _TranslationsAccountSelectPt._(_root);
 }
 
 // Path: currencies
-class _TranslationsCurrenciesPtBr implements _TranslationsCurrenciesEn {
-	_TranslationsCurrenciesPtBr._(this._root);
+class _TranslationsCurrenciesPt implements _TranslationsCurrenciesEn {
+	_TranslationsCurrenciesPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get currency_converter => 'Conversor de moedas';
@@ -2991,7 +2991,7 @@ class _TranslationsCurrenciesPtBr implements _TranslationsCurrenciesEn {
 	@override String get preferred_currency => 'Moeda preferida/base';
 	@override String get change_preferred_currency_title => 'Alterar moeda preferida';
 	@override String get change_preferred_currency_msg => 'Todas as insights e orçamentos serão exibidos nesta moeda a partir de agora. Contas e transações manterão a moeda que possuíam. Todas as taxas de câmbio salvas serão excluídas se você executar esta ação. Deseja continuar?';
-	@override late final _TranslationsCurrenciesFormPtBr form = _TranslationsCurrenciesFormPtBr._(_root);
+	@override late final _TranslationsCurrenciesFormPt form = _TranslationsCurrenciesFormPt._(_root);
 	@override String get delete_all_success => 'Taxas de câmbio excluídas com sucesso';
 	@override String get historical => 'Taxas históricas';
 	@override String get exchange_rate => 'Taxa de câmbio';
@@ -3002,17 +3002,17 @@ class _TranslationsCurrenciesPtBr implements _TranslationsCurrenciesEn {
 }
 
 // Path: tags
-class _TranslationsTagsPtBr implements _TranslationsTagsEn {
-	_TranslationsTagsPtBr._(this._root);
+class _TranslationsTagsPt implements _TranslationsTagsEn {
+	_TranslationsTagsPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(n,
 		one: 'Etiqueta',
 		other: 'Etiquetas',
 	);
-	@override late final _TranslationsTagsFormPtBr form = _TranslationsTagsFormPtBr._(_root);
+	@override late final _TranslationsTagsFormPt form = _TranslationsTagsFormPt._(_root);
 	@override String get empty_list => 'Você ainda não criou nenhuma etiqueta. Etiquetas e categorias são uma ótima maneira de categorizar seus movimentos';
 	@override String get without_tags => 'Sem etiquetas';
 	@override String get select => 'Selecionar etiquetas';
@@ -3028,10 +3028,10 @@ class _TranslationsTagsPtBr implements _TranslationsTagsEn {
 }
 
 // Path: categories
-class _TranslationsCategoriesPtBr implements _TranslationsCategoriesEn {
-	_TranslationsCategoriesPtBr._(this._root);
+class _TranslationsCategoriesPt implements _TranslationsCategoriesEn {
+	_TranslationsCategoriesPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get unknown => 'Categoria desconhecida';
@@ -3058,14 +3058,14 @@ class _TranslationsCategoriesPtBr implements _TranslationsCategoriesEn {
 	@override String get delete_success => 'Categoria excluída corretamente';
 	@override String get delete_warning_header => 'Excluir categoria?';
 	@override String delete_warning_message({required Object x}) => 'Essa ação excluirá de forma irreversível todas as transações <b>(${x})</b> relacionadas a esta categoria.';
-	@override late final _TranslationsCategoriesSelectPtBr select = _TranslationsCategoriesSelectPtBr._(_root);
+	@override late final _TranslationsCategoriesSelectPt select = _TranslationsCategoriesSelectPt._(_root);
 }
 
 // Path: budgets
-class _TranslationsBudgetsPtBr implements _TranslationsBudgetsEn {
-	_TranslationsBudgetsPtBr._(this._root);
+class _TranslationsBudgetsPt implements _TranslationsBudgetsEn {
+	_TranslationsBudgetsPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Orçamentos';
@@ -3084,27 +3084,27 @@ class _TranslationsBudgetsPtBr implements _TranslationsBudgetsEn {
 	@override String get no_budgets => 'Parece não haver orçamentos para exibir nesta seção. Comece criando um orçamento clicando no botão abaixo';
 	@override String get delete => 'Excluir orçamento';
 	@override String get delete_warning => 'Essa ação é irreversível. Categorias e transações referentes a esta cota não serão excluídas';
-	@override late final _TranslationsBudgetsFormPtBr form = _TranslationsBudgetsFormPtBr._(_root);
-	@override late final _TranslationsBudgetsDetailsPtBr details = _TranslationsBudgetsDetailsPtBr._(_root);
+	@override late final _TranslationsBudgetsFormPt form = _TranslationsBudgetsFormPt._(_root);
+	@override late final _TranslationsBudgetsDetailsPt details = _TranslationsBudgetsDetailsPt._(_root);
 }
 
 // Path: backup
-class _TranslationsBackupPtBr implements _TranslationsBackupEn {
-	_TranslationsBackupPtBr._(this._root);
+class _TranslationsBackupPt implements _TranslationsBackupEn {
+	_TranslationsBackupPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
-	@override late final _TranslationsBackupExportPtBr export = _TranslationsBackupExportPtBr._(_root);
-	@override late final _TranslationsBackupImportPtBr import = _TranslationsBackupImportPtBr._(_root);
-	@override late final _TranslationsBackupAboutPtBr about = _TranslationsBackupAboutPtBr._(_root);
+	@override late final _TranslationsBackupExportPt export = _TranslationsBackupExportPt._(_root);
+	@override late final _TranslationsBackupImportPt import = _TranslationsBackupImportPt._(_root);
+	@override late final _TranslationsBackupAboutPt about = _TranslationsBackupAboutPt._(_root);
 }
 
 // Path: settings
-class _TranslationsSettingsPtBr implements _TranslationsSettingsEn {
-	_TranslationsSettingsPtBr._(this._root);
+class _TranslationsSettingsPt implements _TranslationsSettingsEn {
+	_TranslationsSettingsPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get title_long => 'Configurações e aparência';
@@ -3129,28 +3129,28 @@ class _TranslationsSettingsPtBr implements _TranslationsSettingsEn {
 	@override String get dynamic_colors_descr => 'Use a cor de destaque do sistema sempre que possível';
 	@override String get accent_color => 'Cor de destaque';
 	@override String get accent_color_descr => 'Escolha a cor que o aplicativo usará para destacar certas partes da interface';
-	@override late final _TranslationsSettingsSecurityPtBr security = _TranslationsSettingsSecurityPtBr._(_root);
+	@override late final _TranslationsSettingsSecurityPt security = _TranslationsSettingsSecurityPt._(_root);
 }
 
 // Path: more
-class _TranslationsMorePtBr implements _TranslationsMoreEn {
-	_TranslationsMorePtBr._(this._root);
+class _TranslationsMorePt implements _TranslationsMoreEn {
+	_TranslationsMorePt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Mais';
 	@override String get title_long => 'Mais ações';
-	@override late final _TranslationsMoreDataPtBr data = _TranslationsMoreDataPtBr._(_root);
-	@override late final _TranslationsMoreAboutUsPtBr about_us = _TranslationsMoreAboutUsPtBr._(_root);
-	@override late final _TranslationsMoreHelpUsPtBr help_us = _TranslationsMoreHelpUsPtBr._(_root);
+	@override late final _TranslationsMoreDataPt data = _TranslationsMoreDataPt._(_root);
+	@override late final _TranslationsMoreAboutUsPt about_us = _TranslationsMoreAboutUsPt._(_root);
+	@override late final _TranslationsMoreHelpUsPt help_us = _TranslationsMoreHelpUsPt._(_root);
 }
 
 // Path: general.clipboard
-class _TranslationsGeneralClipboardPtBr implements _TranslationsGeneralClipboardEn {
-	_TranslationsGeneralClipboardPtBr._(this._root);
+class _TranslationsGeneralClipboardPt implements _TranslationsGeneralClipboardEn {
+	_TranslationsGeneralClipboardPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String success({required Object x}) => '${x} copiado para a área de transferência';
@@ -3158,10 +3158,10 @@ class _TranslationsGeneralClipboardPtBr implements _TranslationsGeneralClipboard
 }
 
 // Path: general.time
-class _TranslationsGeneralTimePtBr implements _TranslationsGeneralTimeEn {
-	_TranslationsGeneralTimePtBr._(this._root);
+class _TranslationsGeneralTimePt implements _TranslationsGeneralTimeEn {
+	_TranslationsGeneralTimePt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get start_date => 'Data de início';
@@ -3173,17 +3173,17 @@ class _TranslationsGeneralTimePtBr implements _TranslationsGeneralTimeEn {
 	@override String get time => 'Hora';
 	@override String get each => 'Cada';
 	@override String get after => 'Após';
-	@override late final _TranslationsGeneralTimeRangesPtBr ranges = _TranslationsGeneralTimeRangesPtBr._(_root);
-	@override late final _TranslationsGeneralTimePeriodicityPtBr periodicity = _TranslationsGeneralTimePeriodicityPtBr._(_root);
-	@override late final _TranslationsGeneralTimeCurrentPtBr current = _TranslationsGeneralTimeCurrentPtBr._(_root);
-	@override late final _TranslationsGeneralTimeAllPtBr all = _TranslationsGeneralTimeAllPtBr._(_root);
+	@override late final _TranslationsGeneralTimeRangesPt ranges = _TranslationsGeneralTimeRangesPt._(_root);
+	@override late final _TranslationsGeneralTimePeriodicityPt periodicity = _TranslationsGeneralTimePeriodicityPt._(_root);
+	@override late final _TranslationsGeneralTimeCurrentPt current = _TranslationsGeneralTimeCurrentPt._(_root);
+	@override late final _TranslationsGeneralTimeAllPt all = _TranslationsGeneralTimeAllPt._(_root);
 }
 
 // Path: general.transaction_order
-class _TranslationsGeneralTransactionOrderPtBr implements _TranslationsGeneralTransactionOrderEn {
-	_TranslationsGeneralTransactionOrderPtBr._(this._root);
+class _TranslationsGeneralTransactionOrderPt implements _TranslationsGeneralTransactionOrderEn {
+	_TranslationsGeneralTransactionOrderPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get display => 'Ordenar transações';
@@ -3193,10 +3193,10 @@ class _TranslationsGeneralTransactionOrderPtBr implements _TranslationsGeneralTr
 }
 
 // Path: general.validations
-class _TranslationsGeneralValidationsPtBr implements _TranslationsGeneralValidationsEn {
-	_TranslationsGeneralValidationsPtBr._(this._root);
+class _TranslationsGeneralValidationsPt implements _TranslationsGeneralValidationsEn {
+	_TranslationsGeneralValidationsPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get required => 'Campo obrigatório';
@@ -3206,10 +3206,10 @@ class _TranslationsGeneralValidationsPtBr implements _TranslationsGeneralValidat
 }
 
 // Path: financial_health.review
-class _TranslationsFinancialHealthReviewPtBr implements _TranslationsFinancialHealthReviewEn {
-	_TranslationsFinancialHealthReviewPtBr._(this._root);
+class _TranslationsFinancialHealthReviewPt implements _TranslationsFinancialHealthReviewEn {
+	_TranslationsFinancialHealthReviewPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String very_good({required GenderContext context}) {
@@ -3260,14 +3260,14 @@ class _TranslationsFinancialHealthReviewPtBr implements _TranslationsFinancialHe
 				return 'Dados insuficientes';
 		}
 	}
-	@override late final _TranslationsFinancialHealthReviewDescrPtBr descr = _TranslationsFinancialHealthReviewDescrPtBr._(_root);
+	@override late final _TranslationsFinancialHealthReviewDescrPt descr = _TranslationsFinancialHealthReviewDescrPt._(_root);
 }
 
 // Path: financial_health.months_without_income
-class _TranslationsFinancialHealthMonthsWithoutIncomePtBr implements _TranslationsFinancialHealthMonthsWithoutIncomeEn {
-	_TranslationsFinancialHealthMonthsWithoutIncomePtBr._(this._root);
+class _TranslationsFinancialHealthMonthsWithoutIncomePt implements _TranslationsFinancialHealthMonthsWithoutIncomeEn {
+	_TranslationsFinancialHealthMonthsWithoutIncomePt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Taxa de sobrevivência';
@@ -3281,23 +3281,23 @@ class _TranslationsFinancialHealthMonthsWithoutIncomePtBr implements _Translatio
 }
 
 // Path: financial_health.savings_percentage
-class _TranslationsFinancialHealthSavingsPercentagePtBr implements _TranslationsFinancialHealthSavingsPercentageEn {
-	_TranslationsFinancialHealthSavingsPercentagePtBr._(this._root);
+class _TranslationsFinancialHealthSavingsPercentagePt implements _TranslationsFinancialHealthSavingsPercentageEn {
+	_TranslationsFinancialHealthSavingsPercentagePt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Porcentagem de economia';
 	@override String get subtitle => 'Qual parte da sua renda não foi gasta neste período';
-	@override late final _TranslationsFinancialHealthSavingsPercentageTextPtBr text = _TranslationsFinancialHealthSavingsPercentageTextPtBr._(_root);
+	@override late final _TranslationsFinancialHealthSavingsPercentageTextPt text = _TranslationsFinancialHealthSavingsPercentageTextPt._(_root);
 	@override String get suggestion => 'Lembre-se de que é aconselhável economizar pelo menos 15-20% do que você ganha.';
 }
 
 // Path: icon_selector.scopes
-class _TranslationsIconSelectorScopesPtBr implements _TranslationsIconSelectorScopesEn {
-	_TranslationsIconSelectorScopesPtBr._(this._root);
+class _TranslationsIconSelectorScopesPt implements _TranslationsIconSelectorScopesEn {
+	_TranslationsIconSelectorScopesPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get transport => 'Transporte';
@@ -3311,10 +3311,10 @@ class _TranslationsIconSelectorScopesPtBr implements _TranslationsIconSelectorSc
 }
 
 // Path: transaction.next_payments
-class _TranslationsTransactionNextPaymentsPtBr implements _TranslationsTransactionNextPaymentsEn {
-	_TranslationsTransactionNextPaymentsPtBr._(this._root);
+class _TranslationsTransactionNextPaymentsPt implements _TranslationsTransactionNextPaymentsEn {
+	_TranslationsTransactionNextPaymentsPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get accept => 'Aceitar';
@@ -3331,10 +3331,10 @@ class _TranslationsTransactionNextPaymentsPtBr implements _TranslationsTransacti
 }
 
 // Path: transaction.list
-class _TranslationsTransactionListPtBr implements _TranslationsTransactionListEn {
-	_TranslationsTransactionListPtBr._(this._root);
+class _TranslationsTransactionListPt implements _TranslationsTransactionListEn {
+	_TranslationsTransactionListPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get empty => 'Nenhuma transação encontrada para exibir aqui. Adicione uma transação clicando no botão \'+\' na parte inferior';
@@ -3349,14 +3349,14 @@ class _TranslationsTransactionListPtBr implements _TranslationsTransactionListEn
 		one: '${n} transação selecionada',
 		other: '${n} transações selecionadas',
 	);
-	@override late final _TranslationsTransactionListBulkEditPtBr bulk_edit = _TranslationsTransactionListBulkEditPtBr._(_root);
+	@override late final _TranslationsTransactionListBulkEditPt bulk_edit = _TranslationsTransactionListBulkEditPt._(_root);
 }
 
 // Path: transaction.filters
-class _TranslationsTransactionFiltersPtBr implements _TranslationsTransactionFiltersEn {
-	_TranslationsTransactionFiltersPtBr._(this._root);
+class _TranslationsTransactionFiltersPt implements _TranslationsTransactionFiltersEn {
+	_TranslationsTransactionFiltersPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get from_value => 'A partir do valor';
@@ -3368,13 +3368,13 @@ class _TranslationsTransactionFiltersPtBr implements _TranslationsTransactionFil
 }
 
 // Path: transaction.form
-class _TranslationsTransactionFormPtBr implements _TranslationsTransactionFormEn {
-	_TranslationsTransactionFormPtBr._(this._root);
+class _TranslationsTransactionFormPt implements _TranslationsTransactionFormEn {
+	_TranslationsTransactionFormPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
-	@override late final _TranslationsTransactionFormValidatorsPtBr validators = _TranslationsTransactionFormValidatorsPtBr._(_root);
+	@override late final _TranslationsTransactionFormValidatorsPt validators = _TranslationsTransactionFormValidatorsPt._(_root);
 	@override String get title => 'Título da transação';
 	@override String get title_short => 'Título';
 	@override String get value => 'Valor da transação';
@@ -3387,10 +3387,10 @@ class _TranslationsTransactionFormPtBr implements _TranslationsTransactionFormEn
 }
 
 // Path: transaction.reversed
-class _TranslationsTransactionReversedPtBr implements _TranslationsTransactionReversedEn {
-	_TranslationsTransactionReversedPtBr._(this._root);
+class _TranslationsTransactionReversedPt implements _TranslationsTransactionReversedEn {
+	_TranslationsTransactionReversedPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Transação inversa';
@@ -3400,10 +3400,10 @@ class _TranslationsTransactionReversedPtBr implements _TranslationsTransactionRe
 }
 
 // Path: transaction.status
-class _TranslationsTransactionStatusPtBr implements _TranslationsTransactionStatusEn {
-	_TranslationsTransactionStatusPtBr._(this._root);
+class _TranslationsTransactionStatusPt implements _TranslationsTransactionStatusEn {
+	_TranslationsTransactionStatusPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(n,
@@ -3425,15 +3425,15 @@ class _TranslationsTransactionStatusPtBr implements _TranslationsTransactionStat
 }
 
 // Path: transaction.types
-class _TranslationsTransactionTypesPtBr implements _TranslationsTransactionTypesEn {
-	_TranslationsTransactionTypesPtBr._(this._root);
+class _TranslationsTransactionTypesPt implements _TranslationsTransactionTypesEn {
+	_TranslationsTransactionTypesPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(n,
 		one: 'Tipo de transação',
-		other: 'Tipos de transação',
+		other: 'Tipos de transações',
 	);
 	@override String income({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(n,
 		one: 'Receita',
@@ -3450,22 +3450,22 @@ class _TranslationsTransactionTypesPtBr implements _TranslationsTransactionTypes
 }
 
 // Path: transfer.form
-class _TranslationsTransferFormPtBr implements _TranslationsTransferFormEn {
-	_TranslationsTransferFormPtBr._(this._root);
+class _TranslationsTransferFormPt implements _TranslationsTransferFormEn {
+	_TranslationsTransferFormPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get from => 'Conta de origem';
 	@override String get to => 'Conta de destino';
-	@override late final _TranslationsTransferFormValueInDestinyPtBr value_in_destiny = _TranslationsTransferFormValueInDestinyPtBr._(_root);
+	@override late final _TranslationsTransferFormValueInDestinyPt value_in_destiny = _TranslationsTransferFormValueInDestinyPt._(_root);
 }
 
 // Path: recurrent_transactions.details
-class _TranslationsRecurrentTransactionsDetailsPtBr implements _TranslationsRecurrentTransactionsDetailsEn {
-	_TranslationsRecurrentTransactionsDetailsPtBr._(this._root);
+class _TranslationsRecurrentTransactionsDetailsPt implements _TranslationsRecurrentTransactionsDetailsEn {
+	_TranslationsRecurrentTransactionsDetailsPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Transação recorrente';
@@ -3476,10 +3476,10 @@ class _TranslationsRecurrentTransactionsDetailsPtBr implements _TranslationsRecu
 }
 
 // Path: account.types
-class _TranslationsAccountTypesPtBr implements _TranslationsAccountTypesEn {
-	_TranslationsAccountTypesPtBr._(this._root);
+class _TranslationsAccountTypesPt implements _TranslationsAccountTypesEn {
+	_TranslationsAccountTypesPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Tipo de conta';
@@ -3491,10 +3491,10 @@ class _TranslationsAccountTypesPtBr implements _TranslationsAccountTypesEn {
 }
 
 // Path: account.form
-class _TranslationsAccountFormPtBr implements _TranslationsAccountFormEn {
-	_TranslationsAccountFormPtBr._(this._root);
+class _TranslationsAccountFormPt implements _TranslationsAccountFormEn {
+	_TranslationsAccountFormPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get name => 'Nome da conta';
@@ -3513,10 +3513,10 @@ class _TranslationsAccountFormPtBr implements _TranslationsAccountFormEn {
 }
 
 // Path: account.delete
-class _TranslationsAccountDeletePtBr implements _TranslationsAccountDeleteEn {
-	_TranslationsAccountDeletePtBr._(this._root);
+class _TranslationsAccountDeletePt implements _TranslationsAccountDeleteEn {
+	_TranslationsAccountDeletePt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get warning_header => 'Excluir conta?';
@@ -3525,10 +3525,10 @@ class _TranslationsAccountDeletePtBr implements _TranslationsAccountDeleteEn {
 }
 
 // Path: account.close
-class _TranslationsAccountClosePtBr implements _TranslationsAccountCloseEn {
-	_TranslationsAccountClosePtBr._(this._root);
+class _TranslationsAccountClosePt implements _TranslationsAccountCloseEn {
+	_TranslationsAccountClosePt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Fechar conta';
@@ -3541,10 +3541,10 @@ class _TranslationsAccountClosePtBr implements _TranslationsAccountCloseEn {
 }
 
 // Path: account.select
-class _TranslationsAccountSelectPtBr implements _TranslationsAccountSelectEn {
-	_TranslationsAccountSelectPtBr._(this._root);
+class _TranslationsAccountSelectPt implements _TranslationsAccountSelectEn {
+	_TranslationsAccountSelectPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get one => 'Selecione uma conta';
@@ -3553,10 +3553,10 @@ class _TranslationsAccountSelectPtBr implements _TranslationsAccountSelectEn {
 }
 
 // Path: currencies.form
-class _TranslationsCurrenciesFormPtBr implements _TranslationsCurrenciesFormEn {
-	_TranslationsCurrenciesFormPtBr._(this._root);
+class _TranslationsCurrenciesFormPt implements _TranslationsCurrenciesFormEn {
+	_TranslationsCurrenciesFormPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get equal_to_preferred_warn => 'A moeda não pode ser igual à moeda do usuário';
@@ -3568,10 +3568,10 @@ class _TranslationsCurrenciesFormPtBr implements _TranslationsCurrenciesFormEn {
 }
 
 // Path: tags.form
-class _TranslationsTagsFormPtBr implements _TranslationsTagsFormEn {
-	_TranslationsTagsFormPtBr._(this._root);
+class _TranslationsTagsFormPt implements _TranslationsTagsFormEn {
+	_TranslationsTagsFormPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get name => 'Nome da etiqueta';
@@ -3579,10 +3579,10 @@ class _TranslationsTagsFormPtBr implements _TranslationsTagsFormEn {
 }
 
 // Path: categories.select
-class _TranslationsCategoriesSelectPtBr implements _TranslationsCategoriesSelectEn {
-	_TranslationsCategoriesSelectPtBr._(this._root);
+class _TranslationsCategoriesSelectPt implements _TranslationsCategoriesSelectEn {
+	_TranslationsCategoriesSelectPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Selecione categorias';
@@ -3594,10 +3594,10 @@ class _TranslationsCategoriesSelectPtBr implements _TranslationsCategoriesSelect
 }
 
 // Path: budgets.form
-class _TranslationsBudgetsFormPtBr implements _TranslationsBudgetsFormEn {
-	_TranslationsBudgetsFormPtBr._(this._root);
+class _TranslationsBudgetsFormPt implements _TranslationsBudgetsFormEn {
+	_TranslationsBudgetsFormPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Adicionar um orçamento';
@@ -3609,10 +3609,10 @@ class _TranslationsBudgetsFormPtBr implements _TranslationsBudgetsFormEn {
 }
 
 // Path: budgets.details
-class _TranslationsBudgetsDetailsPtBr implements _TranslationsBudgetsDetailsEn {
-	_TranslationsBudgetsDetailsPtBr._(this._root);
+class _TranslationsBudgetsDetailsPt implements _TranslationsBudgetsDetailsEn {
+	_TranslationsBudgetsDetailsPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Detalhes do orçamento';
@@ -3624,10 +3624,10 @@ class _TranslationsBudgetsDetailsPtBr implements _TranslationsBudgetsDetailsEn {
 }
 
 // Path: backup.export
-class _TranslationsBackupExportPtBr implements _TranslationsBackupExportEn {
-	_TranslationsBackupExportPtBr._(this._root);
+class _TranslationsBackupExportPt implements _TranslationsBackupExportEn {
+	_TranslationsBackupExportPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Exportar seus dados';
@@ -3643,10 +3643,10 @@ class _TranslationsBackupExportPtBr implements _TranslationsBackupExportEn {
 }
 
 // Path: backup.import
-class _TranslationsBackupImportPtBr implements _TranslationsBackupImportEn {
-	_TranslationsBackupImportPtBr._(this._root);
+class _TranslationsBackupImportPt implements _TranslationsBackupImportEn {
+	_TranslationsBackupImportPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Importar seus dados';
@@ -3657,17 +3657,17 @@ class _TranslationsBackupImportPtBr implements _TranslationsBackupImportEn {
 	@override String get restore_backup_warn_title => 'Sobrescrever todos os dados';
 	@override String get select_other_file => 'Selecionar outro arquivo';
 	@override String get tap_to_select_file => 'Toque para selecionar um arquivo';
-	@override late final _TranslationsBackupImportManualImportPtBr manual_import = _TranslationsBackupImportManualImportPtBr._(_root);
+	@override late final _TranslationsBackupImportManualImportPt manual_import = _TranslationsBackupImportManualImportPt._(_root);
 	@override String get success => 'Importação realizada com sucesso';
 	@override String get cancelled => 'A importação foi cancelada pelo usuário';
 	@override String get error => 'Erro ao importar arquivo. Entre em contato com o desenvolvedor via lozin.technologies@gmail.com';
 }
 
 // Path: backup.about
-class _TranslationsBackupAboutPtBr implements _TranslationsBackupAboutEn {
-	_TranslationsBackupAboutPtBr._(this._root);
+class _TranslationsBackupAboutPt implements _TranslationsBackupAboutEn {
+	_TranslationsBackupAboutPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Informações sobre seu banco de dados';
@@ -3678,10 +3678,10 @@ class _TranslationsBackupAboutPtBr implements _TranslationsBackupAboutEn {
 }
 
 // Path: settings.security
-class _TranslationsSettingsSecurityPtBr implements _TranslationsSettingsSecurityEn {
-	_TranslationsSettingsSecurityPtBr._(this._root);
+class _TranslationsSettingsSecurityPt implements _TranslationsSettingsSecurityEn {
+	_TranslationsSettingsSecurityPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Segurança';
@@ -3694,10 +3694,10 @@ class _TranslationsSettingsSecurityPtBr implements _TranslationsSettingsSecurity
 }
 
 // Path: more.data
-class _TranslationsMoreDataPtBr implements _TranslationsMoreDataEn {
-	_TranslationsMoreDataPtBr._(this._root);
+class _TranslationsMoreDataPt implements _TranslationsMoreDataEn {
+	_TranslationsMoreDataPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get display => 'Dados';
@@ -3710,23 +3710,23 @@ class _TranslationsMoreDataPtBr implements _TranslationsMoreDataEn {
 }
 
 // Path: more.about_us
-class _TranslationsMoreAboutUsPtBr implements _TranslationsMoreAboutUsEn {
-	_TranslationsMoreAboutUsPtBr._(this._root);
+class _TranslationsMoreAboutUsPt implements _TranslationsMoreAboutUsEn {
+	_TranslationsMoreAboutUsPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get display => 'Informações do aplicativo';
 	@override String get description => 'Confira os termos e outras informações relevantes sobre o Parsa. Entre em contato com a comunidade relatando bugs, deixando sugestões...';
-	@override late final _TranslationsMoreAboutUsLegalPtBr legal = _TranslationsMoreAboutUsLegalPtBr._(_root);
-	@override late final _TranslationsMoreAboutUsProjectPtBr project = _TranslationsMoreAboutUsProjectPtBr._(_root);
+	@override late final _TranslationsMoreAboutUsLegalPt legal = _TranslationsMoreAboutUsLegalPt._(_root);
+	@override late final _TranslationsMoreAboutUsProjectPt project = _TranslationsMoreAboutUsProjectPt._(_root);
 }
 
 // Path: more.help_us
-class _TranslationsMoreHelpUsPtBr implements _TranslationsMoreHelpUsEn {
-	_TranslationsMoreHelpUsPtBr._(this._root);
+class _TranslationsMoreHelpUsPt implements _TranslationsMoreHelpUsEn {
+	_TranslationsMoreHelpUsPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get display => 'Ajude-nos';
@@ -3746,17 +3746,17 @@ class _TranslationsMoreHelpUsPtBr implements _TranslationsMoreHelpUsEn {
 }
 
 // Path: general.time.ranges
-class _TranslationsGeneralTimeRangesPtBr implements _TranslationsGeneralTimeRangesEn {
-	_TranslationsGeneralTimeRangesPtBr._(this._root);
+class _TranslationsGeneralTimeRangesPt implements _TranslationsGeneralTimeRangesEn {
+	_TranslationsGeneralTimeRangesPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get display => 'Intervalo de tempo';
 	@override String get it_repeat => 'Repete';
 	@override String get it_ends => 'Termina';
 	@override String get forever => 'Para sempre';
-	@override late final _TranslationsGeneralTimeRangesTypesPtBr types = _TranslationsGeneralTimeRangesTypesPtBr._(_root);
+	@override late final _TranslationsGeneralTimeRangesTypesPt types = _TranslationsGeneralTimeRangesTypesPt._(_root);
 	@override String each_range({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(n,
 		one: 'Todo ${range}',
 		other: 'Todo ${n} ${range}',
@@ -3792,10 +3792,10 @@ class _TranslationsGeneralTimeRangesPtBr implements _TranslationsGeneralTimeRang
 }
 
 // Path: general.time.periodicity
-class _TranslationsGeneralTimePeriodicityPtBr implements _TranslationsGeneralTimePeriodicityEn {
-	_TranslationsGeneralTimePeriodicityPtBr._(this._root);
+class _TranslationsGeneralTimePeriodicityPt implements _TranslationsGeneralTimePeriodicityEn {
+	_TranslationsGeneralTimePeriodicityPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get display => 'Recorrência';
@@ -3814,10 +3814,10 @@ class _TranslationsGeneralTimePeriodicityPtBr implements _TranslationsGeneralTim
 }
 
 // Path: general.time.current
-class _TranslationsGeneralTimeCurrentPtBr implements _TranslationsGeneralTimeCurrentEn {
-	_TranslationsGeneralTimeCurrentPtBr._(this._root);
+class _TranslationsGeneralTimeCurrentPt implements _TranslationsGeneralTimeCurrentEn {
+	_TranslationsGeneralTimeCurrentPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get monthly => 'Este mês';
@@ -3829,10 +3829,10 @@ class _TranslationsGeneralTimeCurrentPtBr implements _TranslationsGeneralTimeCur
 }
 
 // Path: general.time.all
-class _TranslationsGeneralTimeAllPtBr implements _TranslationsGeneralTimeAllEn {
-	_TranslationsGeneralTimeAllPtBr._(this._root);
+class _TranslationsGeneralTimeAllPt implements _TranslationsGeneralTimeAllEn {
+	_TranslationsGeneralTimeAllPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get diary => 'Todos os dias';
@@ -3843,10 +3843,10 @@ class _TranslationsGeneralTimeAllPtBr implements _TranslationsGeneralTimeAllEn {
 }
 
 // Path: financial_health.review.descr
-class _TranslationsFinancialHealthReviewDescrPtBr implements _TranslationsFinancialHealthReviewDescrEn {
-	_TranslationsFinancialHealthReviewDescrPtBr._(this._root);
+class _TranslationsFinancialHealthReviewDescrPt implements _TranslationsFinancialHealthReviewDescrEn {
+	_TranslationsFinancialHealthReviewDescrPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get insufficient_data => 'Parece que não temos despesas suficientes para calcular sua saúde financeira. Adicione algumas despesas/receitas neste período para que possamos ajudá-lo!';
@@ -3858,10 +3858,10 @@ class _TranslationsFinancialHealthReviewDescrPtBr implements _TranslationsFinanc
 }
 
 // Path: financial_health.savings_percentage.text
-class _TranslationsFinancialHealthSavingsPercentageTextPtBr implements _TranslationsFinancialHealthSavingsPercentageTextEn {
-	_TranslationsFinancialHealthSavingsPercentageTextPtBr._(this._root);
+class _TranslationsFinancialHealthSavingsPercentageTextPt implements _TranslationsFinancialHealthSavingsPercentageTextEn {
+	_TranslationsFinancialHealthSavingsPercentageTextPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String good({required Object value}) => 'Parabéns! Você conseguiu economizar <b>${value}%</b> da sua renda durante este período. Parece que você já é um especialista, continue assim!';
@@ -3871,10 +3871,10 @@ class _TranslationsFinancialHealthSavingsPercentageTextPtBr implements _Translat
 }
 
 // Path: transaction.list.bulk_edit
-class _TranslationsTransactionListBulkEditPtBr implements _TranslationsTransactionListBulkEditEn {
-	_TranslationsTransactionListBulkEditPtBr._(this._root);
+class _TranslationsTransactionListBulkEditPt implements _TranslationsTransactionListBulkEditEn {
+	_TranslationsTransactionListBulkEditPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get dates => 'Editar datas';
@@ -3883,10 +3883,10 @@ class _TranslationsTransactionListBulkEditPtBr implements _TranslationsTransacti
 }
 
 // Path: transaction.form.validators
-class _TranslationsTransactionFormValidatorsPtBr implements _TranslationsTransactionFormValidatorsEn {
-	_TranslationsTransactionFormValidatorsPtBr._(this._root);
+class _TranslationsTransactionFormValidatorsPt implements _TranslationsTransactionFormValidatorsEn {
+	_TranslationsTransactionFormValidatorsPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get zero => 'O valor de uma transação não pode ser igual a zero';
@@ -3897,10 +3897,10 @@ class _TranslationsTransactionFormValidatorsPtBr implements _TranslationsTransac
 }
 
 // Path: transfer.form.value_in_destiny
-class _TranslationsTransferFormValueInDestinyPtBr implements _TranslationsTransferFormValueInDestinyEn {
-	_TranslationsTransferFormValueInDestinyPtBr._(this._root);
+class _TranslationsTransferFormValueInDestinyPt implements _TranslationsTransferFormValueInDestinyEn {
+	_TranslationsTransferFormValueInDestinyPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Valor transferido no destino';
@@ -3908,10 +3908,10 @@ class _TranslationsTransferFormValueInDestinyPtBr implements _TranslationsTransf
 }
 
 // Path: backup.import.manual_import
-class _TranslationsBackupImportManualImportPtBr implements _TranslationsBackupImportManualImportEn {
-	_TranslationsBackupImportManualImportPtBr._(this._root);
+class _TranslationsBackupImportManualImportPt implements _TranslationsBackupImportManualImportEn {
+	_TranslationsBackupImportManualImportPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Importação manual';
@@ -3940,10 +3940,10 @@ class _TranslationsBackupImportManualImportPtBr implements _TranslationsBackupIm
 }
 
 // Path: more.about_us.legal
-class _TranslationsMoreAboutUsLegalPtBr implements _TranslationsMoreAboutUsLegalEn {
-	_TranslationsMoreAboutUsLegalPtBr._(this._root);
+class _TranslationsMoreAboutUsLegalPt implements _TranslationsMoreAboutUsLegalEn {
+	_TranslationsMoreAboutUsLegalPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get display => 'Informações legais';
@@ -3953,10 +3953,10 @@ class _TranslationsMoreAboutUsLegalPtBr implements _TranslationsMoreAboutUsLegal
 }
 
 // Path: more.about_us.project
-class _TranslationsMoreAboutUsProjectPtBr implements _TranslationsMoreAboutUsProjectEn {
-	_TranslationsMoreAboutUsProjectPtBr._(this._root);
+class _TranslationsMoreAboutUsProjectPt implements _TranslationsMoreAboutUsProjectEn {
+	_TranslationsMoreAboutUsProjectPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get display => 'Projeto';
@@ -3966,10 +3966,10 @@ class _TranslationsMoreAboutUsProjectPtBr implements _TranslationsMoreAboutUsPro
 }
 
 // Path: general.time.ranges.types
-class _TranslationsGeneralTimeRangesTypesPtBr implements _TranslationsGeneralTimeRangesTypesEn {
-	_TranslationsGeneralTimeRangesTypesPtBr._(this._root);
+class _TranslationsGeneralTimeRangesTypesPt implements _TranslationsGeneralTimeRangesTypesEn {
+	_TranslationsGeneralTimeRangesTypesPt._(this._root);
 
-	@override final _TranslationsPtBr _root; // ignore: unused_field
+	@override final _TranslationsPt _root; // ignore: unused_field
 
 	// Translations
 	@override String get cycle => 'Ciclos';
@@ -5223,7 +5223,7 @@ extension on _TranslationsEs {
 	}
 }
 
-extension on _TranslationsPtBr {
+extension on _TranslationsPt {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
 			case 'general.cancel': return 'Cancelar';
@@ -5558,7 +5558,7 @@ extension on _TranslationsPtBr {
 			case 'transaction.status.voided_descr': return 'Transação anulada/cancelada devido a erro de pagamento ou qualquer outro motivo. Ela não será considerada no cálculo de saldos e insights';
 			case 'transaction.types.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(n,
 				one: 'Tipo de transação',
-				other: 'Tipos de transação',
+				other: 'Tipos de transações',
 			);
 			case 'transaction.types.income': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(n,
 				one: 'Receita',

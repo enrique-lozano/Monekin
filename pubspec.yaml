@@ -63,6 +63,7 @@ dependencies:
   copy_with_extension: ^5.0.4
   freezed_annotation: ^2.4.1
   in_app_purchase: ^3.1.11
+  flutter_pluggy_connect: ^1.5.0
 
 dev_dependencies:
   flutter_test:

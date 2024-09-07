@@ -20,6 +20,8 @@ void main() async {
 
   await PrivateModeService.instance.initializePrivateMode();
 
+  LocaleSettings.useDeviceLocale(); // and this
+
   runApp(const MonekinAppEntryPoint());
 }
 
