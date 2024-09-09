@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:monekin/core/presentation/widgets/skeleton.dart';
+import 'package:parsa/core/presentation/widgets/skeleton.dart';
 
 class UserAvatar extends StatelessWidget {
   const UserAvatar({super.key, this.avatar, this.size = 36, this.border});

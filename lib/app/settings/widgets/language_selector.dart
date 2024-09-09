@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/settings/widgets/supported_locales.dart';
-import 'package:monekin/core/presentation/widgets/modal_container.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/app/settings/widgets/supported_locales.dart';
+import 'package:parsa/core/presentation/widgets/modal_container.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 Future<String?> showLanguageSelectorBottomSheet(
     BuildContext context, LanguageSelector langSelector) {

@@ -1,19 +1,19 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/tags/tags_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/extensions/lists.extensions.dart';
-import 'package:monekin/core/models/tags/tag.dart';
-import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
-import 'package:monekin/core/presentation/widgets/color_picker/color_picker_modal.dart';
-import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_field.dart';
-import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/utils/constants.dart';
-import 'package:monekin/core/utils/text_field_utils.dart';
-import 'package:monekin/core/utils/uuid.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/core/database/app_db.dart';
+import 'package:parsa/core/database/services/tags/tags_service.dart';
+import 'package:parsa/core/extensions/color.extensions.dart';
+import 'package:parsa/core/extensions/lists.extensions.dart';
+import 'package:parsa/core/models/tags/tag.dart';
+import 'package:parsa/core/presentation/widgets/color_picker/color_picker.dart';
+import 'package:parsa/core/presentation/widgets/color_picker/color_picker_modal.dart';
+import 'package:parsa/core/presentation/widgets/confirm_dialog.dart';
+import 'package:parsa/core/presentation/widgets/form_fields/read_only_form_field.dart';
+import 'package:parsa/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:parsa/core/utils/constants.dart';
+import 'package:parsa/core/utils/text_field_utils.dart';
+import 'package:parsa/core/utils/uuid.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 class TagFormPage extends StatefulWidget {
   const TagFormPage({super.key, this.tag});

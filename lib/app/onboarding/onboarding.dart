@@ -2,15 +2,15 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:monekin/app/layout/tabs.dart';
-import 'package:monekin/core/database/services/app-data/app_data_service.dart';
-import 'package:monekin/core/database/services/currency/currency_service.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
-import 'package:monekin/core/presentation/widgets/skeleton.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/translations.g.dart';
-import 'package:monekin/main.dart';
+import 'package:parsa/app/layout/tabs.dart';
+import 'package:parsa/core/database/services/app-data/app_data_service.dart';
+import 'package:parsa/core/database/services/currency/currency_service.dart';
+import 'package:parsa/core/database/services/user-setting/user_setting_service.dart';
+import 'package:parsa/core/presentation/widgets/currency_selector_modal.dart';
+import 'package:parsa/core/presentation/widgets/skeleton.dart';
+import 'package:parsa/core/routes/route_utils.dart';
+import 'package:parsa/i18n/translations.g.dart';
+import 'package:parsa/main.dart';
 
 import '../../core/presentation/app_colors.dart';
 

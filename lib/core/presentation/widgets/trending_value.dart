@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:parsa/core/extensions/color.extensions.dart';
+import 'package:parsa/core/presentation/theme.dart';
+import 'package:parsa/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 
 import '../app_colors.dart';
 

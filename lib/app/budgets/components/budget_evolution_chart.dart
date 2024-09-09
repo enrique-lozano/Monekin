@@ -4,9 +4,9 @@ import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/stats/widgets/fund_evolution_line_chart.dart';
-import 'package:monekin/core/models/budget/budget.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/app/stats/widgets/fund_evolution_line_chart.dart';
+import 'package:parsa/core/models/budget/budget.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 import '../../../core/presentation/app_colors.dart';
 

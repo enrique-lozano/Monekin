@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/settings/widgets/language_selector.dart';
-import 'package:monekin/app/settings/widgets/supported_locales.dart';
-import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
-import 'package:monekin/core/presentation/widgets/color_picker/color_picker_modal.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/app/settings/widgets/language_selector.dart';
+import 'package:parsa/app/settings/widgets/supported_locales.dart';
+import 'package:parsa/core/database/services/user-setting/private_mode_service.dart';
+import 'package:parsa/core/database/services/user-setting/user_setting_service.dart';
+import 'package:parsa/core/extensions/color.extensions.dart';
+import 'package:parsa/core/presentation/widgets/color_picker/color_picker.dart';
+import 'package:parsa/core/presentation/widgets/color_picker/color_picker_modal.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 import '../../core/presentation/app_colors.dart';
 import 'widgets/settings_list_separator.dart';

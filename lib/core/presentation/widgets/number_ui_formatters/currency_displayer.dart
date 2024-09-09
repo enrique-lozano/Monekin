@@ -1,10 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/currency/currency_service.dart';
-import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
-import 'package:monekin/core/presentation/widgets/skeleton.dart';
+import 'package:parsa/core/database/app_db.dart';
+import 'package:parsa/core/database/services/currency/currency_service.dart';
+import 'package:parsa/core/database/services/user-setting/private_mode_service.dart';
+import 'package:parsa/core/presentation/widgets/skeleton.dart';
 
 import 'ui_number_formatter.dart';
 

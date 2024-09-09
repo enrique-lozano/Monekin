@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/animations/animation_controller.dart';
+import 'package:parsa/core/presentation/animations/animation_controller.dart';
 
 class ShakeWidget extends StatefulWidget {
   const ShakeWidget({

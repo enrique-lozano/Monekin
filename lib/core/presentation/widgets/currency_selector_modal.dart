@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:monekin/core/database/services/currency/currency_service.dart';
-import 'package:monekin/core/models/currency/currency.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
-import 'package:monekin/core/presentation/widgets/modal_container.dart';
-import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
-import 'package:monekin/core/presentation/widgets/skeleton.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/core/database/services/currency/currency_service.dart';
+import 'package:parsa/core/models/currency/currency.dart';
+import 'package:parsa/core/presentation/app_colors.dart';
+import 'package:parsa/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:parsa/core/presentation/widgets/modal_container.dart';
+import 'package:parsa/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
+import 'package:parsa/core/presentation/widgets/skeleton.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 showCurrencySelectorModal(
   BuildContext context,

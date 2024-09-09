@@ -1,19 +1,19 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:monekin/app/categories/selectors/category_button_selector.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/category/category_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/extensions/string.extension.dart';
-import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
-import 'package:monekin/core/presentation/animations/animated_expanded.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
-import 'package:monekin/core/presentation/widgets/modal_container.dart';
-import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/app/categories/selectors/category_button_selector.dart';
+import 'package:parsa/core/database/app_db.dart';
+import 'package:parsa/core/database/services/category/category_service.dart';
+import 'package:parsa/core/extensions/color.extensions.dart';
+import 'package:parsa/core/extensions/string.extension.dart';
+import 'package:parsa/core/models/category/category.dart';
+import 'package:parsa/core/models/supported-icon/icon_displayer.dart';
+import 'package:parsa/core/presentation/animations/animated_expanded.dart';
+import 'package:parsa/core/presentation/app_colors.dart';
+import 'package:parsa/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:parsa/core/presentation/widgets/modal_container.dart';
+import 'package:parsa/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 Future<Category?> showCategoryPickerModal(
   BuildContext context, {

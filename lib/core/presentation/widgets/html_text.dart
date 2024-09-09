@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/core/utils/open_external_url.dart';
+import 'package:parsa/core/utils/open_external_url.dart';
 
 class HTMLText extends StatelessWidget {
   /// The original text to parse

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/extensions/string.extension.dart';
-import 'package:monekin/core/presentation/widgets/skeleton.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/utils/open_external_url.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/core/extensions/string.extension.dart';
+import 'package:parsa/core/presentation/widgets/skeleton.dart';
+import 'package:parsa/core/extensions/color.extensions.dart';
+import 'package:parsa/core/utils/open_external_url.dart';
+import 'package:parsa/i18n/translations.g.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'widgets/settings_list_separator.dart';

@@ -1,14 +1,14 @@
-import 'package:monekin/core/routes/route_utils.dart';
+import 'package:parsa/core/routes/route_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/currencies/exchange_rate_form.dart';
-import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:monekin/core/models/currency/currency.dart';
-import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
-import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
-import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/utils/list_tile_action_item.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/app/currencies/exchange_rate_form.dart';
+import 'package:parsa/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:parsa/core/models/currency/currency.dart';
+import 'package:parsa/core/models/exchange-rate/exchange_rate.dart';
+import 'package:parsa/core/presentation/widgets/monekin_popup_menu_button.dart';
+import 'package:parsa/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:parsa/core/utils/list_tile_action_item.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 class ExchangeRateDetailsPage extends StatefulWidget {
   const ExchangeRateDetailsPage({super.key, required this.currency});

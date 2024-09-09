@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:monekin/core/models/date-utils/date_period_state.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/presentation/widgets/dates/date_period_modal.dart';
+import 'package:parsa/core/models/date-utils/date_period_state.dart';
+import 'package:parsa/core/presentation/app_colors.dart';
+import 'package:parsa/core/presentation/widgets/dates/date_period_modal.dart';
 
 class SegmentedCalendarButton extends StatefulWidget {
   const SegmentedCalendarButton({

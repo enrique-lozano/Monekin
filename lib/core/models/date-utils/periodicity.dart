@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 enum Periodicity {
   day,

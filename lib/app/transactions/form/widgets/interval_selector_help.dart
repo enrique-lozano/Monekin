@@ -1,11 +1,11 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/app/transactions/form/widgets/interval_selector.dart';
-import 'package:monekin/core/models/date-utils/periodicity.dart';
-import 'package:monekin/core/models/transaction/recurrency_data.dart';
-import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/core/routes/route_utils.dart';
+import 'package:parsa/app/transactions/form/widgets/interval_selector.dart';
+import 'package:parsa/core/models/date-utils/periodicity.dart';
+import 'package:parsa/core/models/transaction/recurrency_data.dart';
+import 'package:parsa/core/models/transaction/rule_recurrent_limit.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 class IntervalSelectorHelp extends StatefulWidget {
   const IntervalSelectorHelp({

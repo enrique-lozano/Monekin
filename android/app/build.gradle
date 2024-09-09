@@ -39,7 +39,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.monekin.app"
+    namespace "com.parsa.app"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 

@@ -1,16 +1,16 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/tags/tags_selector.modal.dart';
-import 'package:monekin/app/transactions/form/dialogs/transaction_value_in_destiny_modal.dart';
-import 'package:monekin/core/extensions/lists.extensions.dart';
-import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/models/tags/tag.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
-import 'package:monekin/core/presentation/widgets/count_indicator.dart';
-import 'package:monekin/core/presentation/widgets/modal_container.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/app/tags/tags_selector.modal.dart';
+import 'package:parsa/app/transactions/form/dialogs/transaction_value_in_destiny_modal.dart';
+import 'package:parsa/core/extensions/lists.extensions.dart';
+import 'package:parsa/core/models/account/account.dart';
+import 'package:parsa/core/models/tags/tag.dart';
+import 'package:parsa/core/presentation/app_colors.dart';
+import 'package:parsa/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:parsa/core/presentation/widgets/count_indicator.dart';
+import 'package:parsa/core/presentation/widgets/modal_container.dart';
+import 'package:parsa/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 part 'transaction_more_info.modal.g.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:monekin/core/presentation/animations/shake/fade_in.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/presentation/theme.dart';
+import 'package:parsa/core/presentation/animations/shake/fade_in.dart';
+import 'package:parsa/core/presentation/app_colors.dart';
+import 'package:parsa/core/presentation/theme.dart';
 
 class NoResults extends StatelessWidget {
   const NoResults({

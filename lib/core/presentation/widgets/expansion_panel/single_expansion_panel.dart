@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/widgets/expansion_panel/expansion_panel_without_icon.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/core/presentation/widgets/expansion_panel/expansion_panel_without_icon.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 class SingleExpansionPanel extends StatefulWidget {
   const SingleExpansionPanel(

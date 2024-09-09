@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:parsa/core/presentation/responsive/breakpoints.dart';
 
 class BreakpointContainer extends StatelessWidget {
   /// XS and up child widget

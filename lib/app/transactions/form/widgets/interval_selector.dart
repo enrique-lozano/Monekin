@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/core/models/date-utils/periodicity.dart';
-import 'package:monekin/core/models/transaction/recurrency_data.dart';
-import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
-import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
-import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
-import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/utils/text_field_utils.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/core/models/date-utils/periodicity.dart';
+import 'package:parsa/core/models/transaction/recurrency_data.dart';
+import 'package:parsa/core/models/transaction/rule_recurrent_limit.dart';
+import 'package:parsa/core/presentation/widgets/form_fields/date_field.dart';
+import 'package:parsa/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:parsa/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:parsa/core/utils/text_field_utils.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 class IntervalSelectorPage extends StatefulWidget {
   const IntervalSelectorPage({super.key, this.preselectedRecurrentRule});

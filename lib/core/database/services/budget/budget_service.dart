@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/models/budget/budget.dart';
+import 'package:parsa/core/database/app_db.dart';
+import 'package:parsa/core/models/budget/budget.dart';
 
 class BudgetServive {
   final AppDB db;

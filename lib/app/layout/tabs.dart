@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/layout/lazy_indexed_stack.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/routes/destinations.dart';
-import 'package:monekin/main.dart';
+import 'package:parsa/app/layout/lazy_indexed_stack.dart';
+import 'package:parsa/core/presentation/responsive/breakpoints.dart';
+import 'package:parsa/core/routes/destinations.dart';
+import 'package:parsa/main.dart';
 
 /// This page is the entry point of the app once the user has complete onboarding
 class TabsPage extends StatefulWidget {

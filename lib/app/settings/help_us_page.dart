@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/settings/about_page.dart';
-import 'package:monekin/app/settings/purchases/donate_button.dart';
-import 'package:monekin/app/settings/purchases/in_app_purchase.dart';
-import 'package:monekin/app/settings/widgets/setting_card_item.dart';
-import 'package:monekin/core/utils/open_external_url.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/app/settings/about_page.dart';
+import 'package:parsa/app/settings/purchases/donate_button.dart';
+import 'package:parsa/app/settings/purchases/in_app_purchase.dart';
+import 'package:parsa/app/settings/widgets/setting_card_item.dart';
+import 'package:parsa/core/utils/open_external_url.dart';
+import 'package:parsa/i18n/translations.g.dart';
 import 'package:share_plus/share_plus.dart';
 
 class HelpUsPage extends StatelessWidget {

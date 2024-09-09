@@ -1,6 +1,6 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
-import 'package:monekin/core/models/date-utils/period_type.dart';
-import 'package:monekin/core/models/date-utils/periodicity.dart';
+import 'package:parsa/core/models/date-utils/period_type.dart';
+import 'package:parsa/core/models/date-utils/periodicity.dart';
 
 part 'date_period.g.dart';
 

@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
+import 'package:parsa/core/presentation/app_colors.dart';
 
 class LabelValueInfoItem {
   final Widget value;

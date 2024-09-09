@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
+import 'package:parsa/core/presentation/app_colors.dart';
 
 class CountIndicatorWithExpandArrow extends StatelessWidget {
   const CountIndicatorWithExpandArrow({

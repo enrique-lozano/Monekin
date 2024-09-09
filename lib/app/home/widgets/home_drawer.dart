@@ -1,11 +1,11 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/presentation/widgets/skeleton.dart';
-import 'package:monekin/core/routes/destinations.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/app/home/widgets/new_transaction_fl_button.dart';
+import 'package:parsa/core/database/services/user-setting/user_setting_service.dart';
+import 'package:parsa/core/presentation/responsive/breakpoints.dart';
+import 'package:parsa/core/presentation/widgets/skeleton.dart';
+import 'package:parsa/core/routes/destinations.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 import '../../../core/presentation/app_colors.dart';
 import '../../../core/presentation/widgets/user_avatar.dart';

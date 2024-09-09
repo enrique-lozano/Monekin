@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/models/date-utils/periodicity.dart';
-import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
-import 'package:monekin/core/models/tags/tag.dart';
-import 'package:monekin/core/models/transaction/recurrency_data.dart';
-import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
-import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/core/database/app_db.dart';
+import 'package:parsa/core/extensions/color.extensions.dart';
+import 'package:parsa/core/models/account/account.dart';
+import 'package:parsa/core/models/category/category.dart';
+import 'package:parsa/core/models/date-utils/periodicity.dart';
+import 'package:parsa/core/models/supported-icon/icon_displayer.dart';
+import 'package:parsa/core/models/tags/tag.dart';
+import 'package:parsa/core/models/transaction/recurrency_data.dart';
+import 'package:parsa/core/models/transaction/rule_recurrent_limit.dart';
+import 'package:parsa/core/models/transaction/transaction_status.enum.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 import 'next_pay_status.enum.dart';
 import 'transaction_type.enum.dart';
