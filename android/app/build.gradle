@@ -57,11 +57,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.parsa.app"
-manifestPlaceholders += [
-            'auth0Domain': 'dev-bjeyt1zev08mha31.us.auth0.com',
-            'auth0Scheme': 'SCHEME://dev-bjeyt1zev08mha31.us.auth0.com/android/com.parsa.app/callback'
-        ]
+        applicationId "com.auth0.samples"
+
+    manifestPlaceholders += [auth0Domain: "dev-bjeyt1zev08mha31.us.auth0.com", auth0Scheme: "https"]
+
+
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 21
