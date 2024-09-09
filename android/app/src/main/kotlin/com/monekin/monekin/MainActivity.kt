@@ -1,4 +1,4 @@
-package com.monekin.monekin
+package com.parsa.app
 
 import io.flutter.embedding.android.FlutterActivity
 
