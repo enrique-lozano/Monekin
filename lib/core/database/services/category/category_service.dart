@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/utils/uuid.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/core/database/app_db.dart';
+import 'package:parsa/core/models/category/category.dart';
+import 'package:parsa/core/utils/uuid.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 class CategoryService {
   final AppDB db;

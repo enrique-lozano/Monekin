@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/widgets/tappable.dart';
+import 'package:parsa/core/presentation/widgets/tappable.dart';
 
 class OutlinedButtonStacked extends StatelessWidget {
   const OutlinedButtonStacked({

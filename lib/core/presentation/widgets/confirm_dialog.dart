@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 /// Display a dialog with a title, a description and confirm/cancel buttons.
 ///

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/currencies/exchange_rate_details.dart';
-import 'package:monekin/app/currencies/exchange_rate_form.dart';
-import 'package:monekin/core/database/services/currency/currency_service.dart';
-import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/models/currency/currency.dart';
-import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
-import 'package:monekin/core/presentation/widgets/skeleton.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/app/currencies/exchange_rate_details.dart';
+import 'package:parsa/app/currencies/exchange_rate_form.dart';
+import 'package:parsa/core/database/services/currency/currency_service.dart';
+import 'package:parsa/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:parsa/core/database/services/user-setting/user_setting_service.dart';
+import 'package:parsa/core/models/currency/currency.dart';
+import 'package:parsa/core/presentation/widgets/confirm_dialog.dart';
+import 'package:parsa/core/presentation/widgets/currency_selector_modal.dart';
+import 'package:parsa/core/presentation/widgets/skeleton.dart';
+import 'package:parsa/core/routes/route_utils.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 import '../../core/presentation/widgets/no_results.dart';
 

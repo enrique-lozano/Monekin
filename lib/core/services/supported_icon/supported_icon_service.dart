@@ -1,5 +1,5 @@
-import 'package:monekin/core/models/supported-icon/supported_icon.dart';
-import 'package:monekin/core/services/supported_icon/getter/supported_icons.dart';
+import 'package:parsa/core/models/supported-icon/supported_icon.dart';
+import 'package:parsa/core/services/supported_icon/getter/supported_icons.dart';
 import 'package:collection/collection.dart';
 
 class SupportedIconService {

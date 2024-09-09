@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/budgets/budget_form_page.dart';
-import 'package:monekin/core/database/services/budget/budget_service.dart';
-import 'package:monekin/core/presentation/widgets/no_results.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/app/budgets/budget_form_page.dart';
+import 'package:parsa/core/database/services/budget/budget_service.dart';
+import 'package:parsa/core/presentation/widgets/no_results.dart';
+import 'package:parsa/core/routes/route_utils.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 import 'components/budget_card.dart';
 

@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/number_symbols_data.dart';
-import 'package:monekin/core/database/app_db.dart';
+import 'package:parsa/core/database/app_db.dart';
 
 enum UINumberFormatterMode { currency, percentage, decimal }
 

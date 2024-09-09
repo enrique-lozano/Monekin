@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' show DateFormat, NumberFormat;
-import 'package:monekin/app/budgets/budget_details_page.dart';
-import 'package:monekin/core/database/services/currency/currency_service.dart';
-import 'package:monekin/core/models/budget/budget.dart';
-import 'package:monekin/core/models/date-utils/period_type.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/skeleton.dart';
-import 'package:monekin/core/presentation/widgets/tappable.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/app/budgets/budget_details_page.dart';
+import 'package:parsa/core/database/services/currency/currency_service.dart';
+import 'package:parsa/core/models/budget/budget.dart';
+import 'package:parsa/core/models/date-utils/period_type.dart';
+import 'package:parsa/core/presentation/app_colors.dart';
+import 'package:parsa/core/presentation/widgets/animated_progress_bar.dart';
+import 'package:parsa/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:parsa/core/presentation/widgets/skeleton.dart';
+import 'package:parsa/core/presentation/widgets/tappable.dart';
+import 'package:parsa/core/routes/route_utils.dart';
+import 'package:parsa/core/extensions/color.extensions.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 class BudgetCard extends StatelessWidget {
   const BudgetCard({

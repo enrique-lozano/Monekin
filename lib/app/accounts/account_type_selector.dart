@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/models/account/account.dart';
+import 'package:parsa/core/models/account/account.dart';
 
 import '../../core/presentation/app_colors.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/core/presentation/app_colors.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 /// All the possible types of a transaction
 enum TransactionType {

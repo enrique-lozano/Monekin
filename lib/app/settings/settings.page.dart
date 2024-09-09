@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/accounts/all_accounts_page.dart';
-import 'package:monekin/app/budgets/budgets_page.dart';
-import 'package:monekin/app/categories/categories_list_page.dart';
-import 'package:monekin/app/currencies/currency_manager.dart';
-import 'package:monekin/app/settings/about_page.dart';
-import 'package:monekin/app/settings/appearance_settings_page.dart';
-import 'package:monekin/app/settings/backup_settings_page.dart';
-import 'package:monekin/app/settings/help_us_page.dart';
-import 'package:monekin/app/settings/widgets/setting_card_item.dart';
-import 'package:monekin/app/stats/stats_page.dart';
-import 'package:monekin/app/tags/tag_list.page.dart';
-import 'package:monekin/app/transactions/recurrent_transactions_page.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/app/accounts/all_accounts_page.dart';
+import 'package:parsa/app/budgets/budgets_page.dart';
+import 'package:parsa/app/categories/categories_list_page.dart';
+import 'package:parsa/app/currencies/currency_manager.dart';
+import 'package:parsa/app/settings/about_page.dart';
+import 'package:parsa/app/settings/appearance_settings_page.dart';
+import 'package:parsa/app/settings/backup_settings_page.dart';
+import 'package:parsa/app/settings/help_us_page.dart';
+import 'package:parsa/app/settings/widgets/setting_card_item.dart';
+import 'package:parsa/app/stats/stats_page.dart';
+import 'package:parsa/app/tags/tag_list.page.dart';
+import 'package:parsa/app/transactions/recurrent_transactions_page.dart';
+import 'package:parsa/core/presentation/responsive/breakpoints.dart';
+import 'package:parsa/core/routes/route_utils.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});

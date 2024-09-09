@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:parsa/core/database/app_db.dart';
+import 'package:parsa/core/extensions/color.extensions.dart';
 
 class Tag extends TagInDB {
   Tag({

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
+import 'package:parsa/core/extensions/color.extensions.dart';
+import 'package:parsa/core/presentation/app_colors.dart';
 
 /// String that identifies the remove character button
 const _removeButtonID = '⌫';

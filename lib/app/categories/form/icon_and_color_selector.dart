@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
-import 'package:monekin/core/models/supported-icon/supported_icon.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
-import 'package:monekin/core/presentation/widgets/color_picker/color_picker_modal.dart';
-import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
-import 'package:monekin/core/presentation/widgets/tappable.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/core/extensions/color.extensions.dart';
+import 'package:parsa/core/models/supported-icon/icon_displayer.dart';
+import 'package:parsa/core/models/supported-icon/supported_icon.dart';
+import 'package:parsa/core/presentation/app_colors.dart';
+import 'package:parsa/core/presentation/widgets/color_picker/color_picker.dart';
+import 'package:parsa/core/presentation/widgets/color_picker/color_picker_modal.dart';
+import 'package:parsa/core/presentation/widgets/icon_selector_modal.dart';
+import 'package:parsa/core/presentation/widgets/tappable.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 class IconAndColorSelector extends StatelessWidget {
   const IconAndColorSelector(

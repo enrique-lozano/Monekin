@@ -1,14 +1,14 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
-import 'package:monekin/app/categories/selectors/category_picker.dart';
-import 'package:monekin/app/transactions/form/dialogs/transaction_status_selector.dart';
-import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/presentation/widgets/dates/outlinedButtonStacked.dart';
-import 'package:monekin/core/presentation/widgets/modal_container.dart';
-import 'package:monekin/core/utils/date_time_picker.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/app/categories/selectors/category_picker.dart';
+import 'package:parsa/app/transactions/form/dialogs/transaction_status_selector.dart';
+import 'package:parsa/core/database/services/transaction/transaction_service.dart';
+import 'package:parsa/core/models/category/category.dart';
+import 'package:parsa/core/models/transaction/transaction.dart';
+import 'package:parsa/core/presentation/widgets/dates/outlinedButtonStacked.dart';
+import 'package:parsa/core/presentation/widgets/modal_container.dart';
+import 'package:parsa/core/utils/date_time_picker.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 class BulkEditTransactionModal extends StatelessWidget {
   const BulkEditTransactionModal({

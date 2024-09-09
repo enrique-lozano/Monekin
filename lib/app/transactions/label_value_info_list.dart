@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/transactions/label_value_info_table.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
+import 'package:parsa/app/transactions/label_value_info_table.dart';
+import 'package:parsa/core/presentation/app_colors.dart';
 
 class LabelValueInfoListItem extends LabelValueInfoItem {
   final Widget? trailing;

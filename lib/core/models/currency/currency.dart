@@ -1,5 +1,5 @@
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:monekin/core/database/app_db.dart';
+import 'package:parsa/core/database/app_db.dart';
 
 class Currency extends CurrencyInDB {
   String get currencyIconPath =>

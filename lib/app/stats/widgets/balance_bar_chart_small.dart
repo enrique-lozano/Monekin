@@ -1,12 +1,12 @@
 import 'package:async/async.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/models/date-utils/date_period_state.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/core/database/services/account/account_service.dart';
+import 'package:parsa/core/models/date-utils/date_period_state.dart';
+import 'package:parsa/core/presentation/responsive/breakpoints.dart';
+import 'package:parsa/core/presentation/theme.dart';
+import 'package:parsa/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 import '../../../core/models/transaction/transaction_type.enum.dart';
 import '../../../core/presentation/app_colors.dart';

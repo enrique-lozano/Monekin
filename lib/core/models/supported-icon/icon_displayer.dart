@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/models/supported-icon/supported_icon.dart';
+import 'package:parsa/core/extensions/color.extensions.dart';
+import 'package:parsa/core/models/category/category.dart';
+import 'package:parsa/core/models/supported-icon/supported_icon.dart';
 
 part 'icon_displayer.g.dart';
 

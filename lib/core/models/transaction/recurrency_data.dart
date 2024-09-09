@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/transactions/form/widgets/interval_selector_help.dart';
-import 'package:monekin/core/models/date-utils/periodicity.dart';
-import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/app/transactions/form/widgets/interval_selector_help.dart';
+import 'package:parsa/core/models/date-utils/periodicity.dart';
+import 'package:parsa/core/models/transaction/rule_recurrent_limit.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 class RecurrencyData extends Equatable {
   final RecurrentRuleLimit? ruleRecurrentLimit;

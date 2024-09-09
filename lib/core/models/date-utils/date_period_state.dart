@@ -1,10 +1,10 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/core/models/date-utils/date_period.dart';
-import 'package:monekin/core/models/date-utils/period_type.dart';
-import 'package:monekin/core/models/date-utils/periodicity.dart';
-import 'package:monekin/core/utils/constants.dart';
+import 'package:parsa/core/models/date-utils/date_period.dart';
+import 'package:parsa/core/models/date-utils/period_type.dart';
+import 'package:parsa/core/models/date-utils/periodicity.dart';
+import 'package:parsa/core/utils/constants.dart';
 
 part 'date_period_state.g.dart';
 

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/budgets/budgets_page.dart';
-import 'package:monekin/app/home/dashboard.page.dart';
-import 'package:monekin/app/settings/settings.page.dart';
-import 'package:monekin/app/stats/stats_page.dart';
-import 'package:monekin/app/transactions/transactions.page.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/app/budgets/budgets_page.dart';
+import 'package:parsa/app/home/dashboard.page.dart';
+import 'package:parsa/app/settings/settings.page.dart';
+import 'package:parsa/app/stats/stats_page.dart';
+import 'package:parsa/app/transactions/transactions.page.dart';
+import 'package:parsa/core/presentation/responsive/breakpoints.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 enum AppMenuDestinationsID {
   dashboard,
@@ -85,12 +85,12 @@ List<MainMenuDestination> getAllDestinations(
       selectedIcon: Icons.calculate,
       destination: const BudgetsPage(),
     ),
-    /*   MainMenuDestination(
-      AppMenuDestinationsID.accounts,
-      label: t.general.accounts,
-      icon: Icons.account_balance_rounded,
-      destination: const AllAccountsPage(),
-    ), */
+    // MainMenuDestination(
+    //   AppMenuDestinationsID.stats,
+    //   label: t.general.accounts,
+    //   icon: Icons.account_balance_rounded,
+    //   destination: const StatsPage(),
+    // ),
     MainMenuDestination(
       AppMenuDestinationsID.transactions,
       label: t.transaction.display(n: 10),
@@ -142,6 +142,7 @@ List<MainMenuDestination> getDestinations(
         .where((element) => [
               AppMenuDestinationsID.dashboard,
               AppMenuDestinationsID.transactions,
+              AppMenuDestinationsID.stats,
               AppMenuDestinationsID.settings,
             ].contains(element.id))
         .toList();

@@ -2,18 +2,18 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/stats/widgets/movements_distribution/chart_by_categories.dart';
-import 'package:monekin/app/transactions/transactions.page.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
-import 'package:monekin/core/models/supported-icon/supported_icon.dart';
-import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
-import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/app/stats/widgets/movements_distribution/chart_by_categories.dart';
+import 'package:parsa/app/transactions/transactions.page.dart';
+import 'package:parsa/core/extensions/color.extensions.dart';
+import 'package:parsa/core/models/category/category.dart';
+import 'package:parsa/core/models/supported-icon/icon_displayer.dart';
+import 'package:parsa/core/models/supported-icon/supported_icon.dart';
+import 'package:parsa/core/models/transaction/transaction_type.enum.dart';
+import 'package:parsa/core/presentation/widgets/animated_progress_bar.dart';
+import 'package:parsa/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:parsa/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:parsa/core/routes/route_utils.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 class SubcategoryModalItem {
   String id;
