@@ -21,7 +21,7 @@ class BackupDatabaseService {
     String downloadPath = await getDownloadPath();
     downloadPath = path.join(
       downloadPath,
-      "monekin-${DateFormat('yyyyMMdd-Hms').format(DateTime.now())}.db",
+      "parsa-${DateFormat('yyyyMMdd-Hms').format(DateTime.now())}.db",
     );
 
     File downloadFile = File(downloadPath);

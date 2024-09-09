@@ -6,7 +6,7 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:monekin/main.dart';
+import 'package:parsa/main.dart';
 
 void main() {
   testWidgets('MonekinAppEntryPoint builds correctly',
