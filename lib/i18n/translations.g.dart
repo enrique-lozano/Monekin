@@ -6,7 +6,7 @@
 /// Locales: 3
 /// Strings: 1621 (540 per locale)
 ///
-/// Built on 2024-09-09 at 19:06 UTC
+/// Built on 2024-09-09 at 20:30 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -2890,7 +2890,7 @@ class _TranslationsTransactionPt implements _TranslationsTransactionEn {
 
 	// Translations
 	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(n,
-		one: 'Transação',
+		one: 'Transações',
 		other: 'Transações',
 	);
 	@override String get create => 'Nova transação';
@@ -3436,11 +3436,11 @@ class _TranslationsTransactionTypesPt implements _TranslationsTransactionTypesEn
 		other: 'Tipos de transações',
 	);
 	@override String income({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(n,
-		one: 'Receita',
+		one: 'Receitas',
 		other: 'Receitas',
 	);
 	@override String expense({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(n,
-		one: 'Despesa',
+		one: 'Despesas',
 		other: 'Despesas',
 	);
 	@override String transfer({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(n,
@@ -5468,7 +5468,7 @@ extension on _TranslationsPt {
 			case 'icon_selector.scopes.other': return 'Outros';
 			case 'icon_selector.scopes.logos_financial_institutions': return 'Instituições financeiras';
 			case 'transaction.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(n,
-				one: 'Transação',
+				one: 'Transações',
 				other: 'Transações',
 			);
 			case 'transaction.create': return 'Nova transação';
@@ -5561,11 +5561,11 @@ extension on _TranslationsPt {
 				other: 'Tipos de transações',
 			);
 			case 'transaction.types.income': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(n,
-				one: 'Receita',
+				one: 'Receitas',
 				other: 'Receitas',
 			);
 			case 'transaction.types.expense': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(n,
-				one: 'Despesa',
+				one: 'Despesas',
 				other: 'Despesas',
 			);
 			case 'transaction.types.transfer': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('pt'))(n,

@@ -14,9 +14,13 @@ import 'package:parsa/core/presentation/theme.dart';
 import 'package:parsa/core/routes/root_navigator_observer.dart';
 import 'package:parsa/core/utils/scroll_behavior_override.dart';
 import 'package:parsa/i18n/translations.g.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:auth0_flutter/auth0_flutter.dart';
+import 'package:parsa/core/services/auth/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
 
   await PrivateModeService.instance.initializePrivateMode();
 
@@ -121,12 +125,15 @@ class MaterialAppContainer extends StatelessWidget {
   final ThemeMode themeMode;
   final String accentColor;
   final bool amoledMode;
-
   final bool introSeen;
 
   @override
   Widget build(BuildContext context) {
-    // Get the language of the Intl in each rebuild of the TranslationProvider:
+    final auth0 = Auth0(
+      dotenv.env['AUTH0_DOMAIN']!,
+      dotenv.env['AUTH0_CLIENT_ID']!,
+    );
+
     Intl.defaultLocale = LocaleSettings.currentLocale.languageTag;
 
     return DynamicColorBuilder(
@@ -183,7 +190,7 @@ class MaterialAppContainer extends StatelessWidget {
             ),
           ]);
         },
-        home: introSeen ? TabsPage(key: tabsPageKey) : const IntroPage(),
+        home: introSeen ? Auth0LoginPage(auth0: auth0) : const IntroPage(),
       );
     });
   }
