@@ -1,32 +1,40 @@
-// import 'package:auth0_flutter/auth0_flutter.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter/material.dart';
+import 'package:auth0_flutter/auth0_flutter.dart';
+import 'package:parsa/app/layout/tabs.dart';
+import 'package:parsa/main.dart';
 
-// class AuthService {
-//   static final AuthService _instance = AuthService._internal();
-//   factory AuthService() => _instance;
-//   AuthService._internal();
+class Auth0LoginPage extends StatelessWidget {
+  final Auth0 auth0;
 
-//   final Auth0 auth0 = Auth0(
-//     dotenv.env['AUTH0_DOMAIN']!,
-//     dotenv.env['AUTH0_CLIENT_ID']!,
-//   );
+  const Auth0LoginPage({Key? key, required this.auth0}) : super(key: key);
 
-//   Future<void> login() async {
-//     print('Logging in...');
-//     try {
-//       final result = await auth0.webAuthentication().login();
-//       // Save the result for future use
-//     } catch (e) {
-//       print('Login failed: $e');
-//     }
-//   }
-
-//   Future<void> logout() async {
-//     print('Logging out...');
-//     try {
-//       await auth0.webAuthentication().logout();
-//     } catch (e) {
-//       print('Logout failed: $e');
-//     }
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Login'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () async {
+            print('Login attempt started');
+            try {
+              final result = await auth0.webAuthentication().login();
+              print('Login successful: ${result.accessToken}');
+              // Navigate to the main app page
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => TabsPage(key: tabsPageKey)),
+              );
+              print('Navigated to TabsPage');
+            } catch (e) {
+              print('Login failed: $e');
+            }
+          },
+          child: Text('Login with Auth0'),
+        ),
+      ),
+    );
+  }
+}

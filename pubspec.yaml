@@ -108,6 +108,7 @@ flutter:
     - assets/icons/supported_selectable_icons/logos/financial_institutions/
     - assets/sql/
     - assets/sql/migrations/
+    - .env
 
   fonts:
     - family: Nunito
