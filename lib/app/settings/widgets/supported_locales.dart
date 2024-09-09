@@ -1,4 +1,4 @@
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 class SupportedLocale {
   final AppLocale locale;

@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 enum TransactionStatus {
   voided,

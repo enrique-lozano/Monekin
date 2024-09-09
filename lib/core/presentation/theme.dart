@@ -1,6 +1,6 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:parsa/core/extensions/color.extensions.dart';
 
 import 'app_colors.dart';
 

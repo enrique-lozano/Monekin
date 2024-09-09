@@ -1,4 +1,4 @@
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:parsa/core/presentation/responsive/breakpoints.dart';
 
 final Set<BreakPoint> appBreakPoints = {
   const BreakPoint(BreakpointID.xs, width: double.infinity),

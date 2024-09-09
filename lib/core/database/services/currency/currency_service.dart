@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/models/currency/currency.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/core/database/app_db.dart';
+import 'package:parsa/core/database/services/user-setting/user_setting_service.dart';
+import 'package:parsa/core/models/currency/currency.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 class CurrencyService {
   final AppDB db;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
+import 'package:parsa/core/models/supported-icon/icon_displayer.dart';
 
 class CategoryButtonSelector extends StatelessWidget {
   const CategoryButtonSelector(

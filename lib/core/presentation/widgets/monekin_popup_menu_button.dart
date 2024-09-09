@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/utils/list_tile_action_item.dart';
+import 'package:parsa/core/utils/list_tile_action_item.dart';
 
 class MonekinPopupMenuButton extends StatelessWidget {
   const MonekinPopupMenuButton({super.key, required this.actionItems});

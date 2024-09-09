@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/responsive/app_breakpoints.dart';
+import 'package:parsa/core/presentation/responsive/app_breakpoints.dart';
 
 enum BreakpointID { xs, sm, md, lg, xl, xxl }
 

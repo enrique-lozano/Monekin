@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/transactions/transaction_details.page.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/models/date-utils/periodicity.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/services/view-actions/transaction_view_actions_service.dart';
+import 'package:parsa/app/transactions/transaction_details.page.dart';
+import 'package:parsa/core/extensions/color.extensions.dart';
+import 'package:parsa/core/models/date-utils/periodicity.dart';
+import 'package:parsa/core/models/transaction/transaction.dart';
+import 'package:parsa/core/models/transaction/transaction_status.enum.dart';
+import 'package:parsa/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:parsa/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:parsa/core/routes/route_utils.dart';
+import 'package:parsa/core/services/view-actions/transaction_view_actions_service.dart';
 
 import '../../../core/presentation/app_colors.dart';
 

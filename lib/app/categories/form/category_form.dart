@@ -1,20 +1,20 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:monekin/app/categories/form/category_form_functions.dart';
-import 'package:monekin/app/categories/form/icon_and_color_selector.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/category/category_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/extensions/lists.extensions.dart';
-import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
-import 'package:monekin/core/models/supported-icon/supported_icon.dart';
-import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
-import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/utils/constants.dart';
-import 'package:monekin/core/utils/text_field_utils.dart';
-import 'package:monekin/core/utils/uuid.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/app/categories/form/category_form_functions.dart';
+import 'package:parsa/app/categories/form/icon_and_color_selector.dart';
+import 'package:parsa/core/database/app_db.dart';
+import 'package:parsa/core/database/services/category/category_service.dart';
+import 'package:parsa/core/extensions/color.extensions.dart';
+import 'package:parsa/core/extensions/lists.extensions.dart';
+import 'package:parsa/core/models/category/category.dart';
+import 'package:parsa/core/models/supported-icon/icon_displayer.dart';
+import 'package:parsa/core/models/supported-icon/supported_icon.dart';
+import 'package:parsa/core/presentation/widgets/color_picker/color_picker.dart';
+import 'package:parsa/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:parsa/core/utils/constants.dart';
+import 'package:parsa/core/utils/text_field_utils.dart';
+import 'package:parsa/core/utils/uuid.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 class CategoryFormPage extends StatefulWidget {
   const CategoryFormPage({super.key, this.categoryUUID});

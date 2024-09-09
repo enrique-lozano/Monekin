@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
-import 'package:monekin/core/presentation/widgets/dates/outlinedButtonStacked.dart';
-import 'package:monekin/core/presentation/widgets/modal_container.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/core/models/transaction/transaction_status.enum.dart';
+import 'package:parsa/core/presentation/widgets/dates/outlinedButtonStacked.dart';
+import 'package:parsa/core/presentation/widgets/modal_container.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 Future<ModalResult<TransactionStatus>?> showTransactioStatusModal(
   BuildContext context, {

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/home/widgets/home_drawer.dart';
-import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/presentation/widgets/user_avatar.dart';
-import 'package:monekin/core/routes/destinations.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/main.dart';
+import 'package:parsa/app/home/widgets/home_drawer.dart';
+import 'package:parsa/app/home/widgets/new_transaction_fl_button.dart';
+import 'package:parsa/core/database/services/user-setting/user_setting_service.dart';
+import 'package:parsa/core/presentation/responsive/breakpoint_container.dart';
+import 'package:parsa/core/presentation/responsive/breakpoints.dart';
+import 'package:parsa/core/presentation/widgets/user_avatar.dart';
+import 'package:parsa/core/routes/destinations.dart';
+import 'package:parsa/core/routes/route_utils.dart';
+import 'package:parsa/main.dart';
 
 double getNavigationSidebarWidth(BuildContext context) {
   if (BreakPoint.of(context).isSmallerThan(BreakpointID.md)) {

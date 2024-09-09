@@ -3,24 +3,22 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/layout/navigation_sidebar.dart';
-import 'package:monekin/app/layout/tabs.dart';
-import 'package:monekin/app/onboarding/intro.page.dart';
-import 'package:monekin/core/database/services/app-data/app_data_service.dart';
-import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/core/routes/root_navigator_observer.dart';
-import 'package:monekin/core/utils/scroll_behavior_override.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/app/layout/navigation_sidebar.dart';
+import 'package:parsa/app/layout/tabs.dart';
+import 'package:parsa/app/onboarding/intro.page.dart';
+import 'package:parsa/core/database/services/app-data/app_data_service.dart';
+import 'package:parsa/core/database/services/user-setting/private_mode_service.dart';
+import 'package:parsa/core/database/services/user-setting/user_setting_service.dart';
+import 'package:parsa/core/presentation/responsive/breakpoints.dart';
+import 'package:parsa/core/presentation/theme.dart';
+import 'package:parsa/core/routes/root_navigator_observer.dart';
+import 'package:parsa/core/utils/scroll_behavior_override.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await PrivateModeService.instance.initializePrivateMode();
-
-  LocaleSettings.useDeviceLocale(); // and this
 
   runApp(const MonekinAppEntryPoint());
 }

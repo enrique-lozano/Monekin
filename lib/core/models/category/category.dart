@@ -1,4 +1,4 @@
-import 'package:monekin/core/database/app_db.dart';
+import 'package:parsa/core/database/app_db.dart';
 
 import '../../services/supported_icon/supported_icon_service.dart';
 import '../supported-icon/supported_icon.dart';

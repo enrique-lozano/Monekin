@@ -2,13 +2,13 @@
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/transactions/widgets/transaction_list.dart';
-import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/models/date-utils/periodicity.dart';
-import 'package:monekin/core/presentation/widgets/no_results.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/app/transactions/widgets/transaction_list.dart';
+import 'package:parsa/core/database/services/transaction/transaction_service.dart';
+import 'package:parsa/core/models/date-utils/periodicity.dart';
+import 'package:parsa/core/presentation/widgets/no_results.dart';
+import 'package:parsa/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:parsa/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 class RecurrentTransactionPage extends StatefulWidget {
   const RecurrentTransactionPage({super.key});

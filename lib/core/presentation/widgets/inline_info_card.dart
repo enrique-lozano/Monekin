@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
+import 'package:parsa/core/presentation/responsive/responsive_row_column.dart';
 
 import '../app_colors.dart';
 

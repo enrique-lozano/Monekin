@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
-import 'package:monekin/core/services/finance_health_service.dart';
+import 'package:parsa/core/presentation/widgets/animated_progress_bar.dart';
+import 'package:parsa/core/services/finance_health_service.dart';
 
 class FinanceHealthMainInfo extends StatelessWidget {
   const FinanceHealthMainInfo({super.key, required this.financeHealthData});

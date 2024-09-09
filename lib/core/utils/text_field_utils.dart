@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 /// A text input formatter that only allow two decimal places, replacing incorrect decimal symbols
 List<FilteringTextInputFormatter> get decimalDigitFormatter => [

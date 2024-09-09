@@ -3,8 +3,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/core/utils/date_time_picker.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:parsa/core/utils/date_time_picker.dart';
+import 'package:parsa/i18n/translations.g.dart';
 
 const double kCupertinoDatePickerHeight = 216;
 

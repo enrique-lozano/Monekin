@@ -2,16 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/settings/export_page.dart';
-import 'package:monekin/app/settings/import_csv.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/backup/backup_database_service.dart';
-import 'package:monekin/core/extensions/numbers.extensions.dart';
-import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/routes/destinations.dart';
-import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/translations.g.dart';
-import 'package:monekin/main.dart';
+import 'package:parsa/app/settings/export_page.dart';
+import 'package:parsa/app/settings/import_csv.dart';
+import 'package:parsa/core/database/app_db.dart';
+import 'package:parsa/core/database/backup/backup_database_service.dart';
+import 'package:parsa/core/extensions/numbers.extensions.dart';
+import 'package:parsa/core/presentation/widgets/confirm_dialog.dart';
+import 'package:parsa/core/routes/destinations.dart';
+import 'package:parsa/core/routes/route_utils.dart';
+import 'package:parsa/i18n/translations.g.dart';
+import 'package:parsa/main.dart';
 
 import 'widgets/settings_list_separator.dart';
 
