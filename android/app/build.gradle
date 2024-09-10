@@ -41,7 +41,7 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace "com.parsa.app"
     compileSdkVersion flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
+    ndkVersion = "26.1.10909125"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -60,6 +60,7 @@ android {
         applicationId "com.auth0.samples"
 
     manifestPlaceholders += [auth0Domain: "dev-bjeyt1zev08mha31.us.auth0.com", auth0Scheme: "https"]
+        manifestPlaceholders+= [appAuthRedirectScheme: "your_scheme_here"]
 
 
         // You can update the following values to match your application needs.
@@ -82,6 +83,8 @@ android {
     buildTypes {
         release {
             // Run `flutter build appbundle --release` to build .
+            minifyEnabled true
+        
             signingConfig signingConfigs.release
         }
     }
