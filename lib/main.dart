@@ -20,7 +20,7 @@ import 'package:parsa/core/services/auth/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: '.env');
 
   await PrivateModeService.instance.initializePrivateMode();
 
@@ -38,7 +38,7 @@ class MonekinAppEntryPoint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("------------------ APP ENTRY POINT ------------------");
+    print('------------------ APP ENTRY POINT ------------------');
 
     return StreamBuilder(
         stream: UserSettingService.instance.getSettings((p0) =>
@@ -114,13 +114,14 @@ class MonekinAppEntryPoint extends StatelessWidget {
 
 int refresh = 1;
 
-class MaterialAppContainer extends StatelessWidget {
-  const MaterialAppContainer(
-      {super.key,
-      required this.themeMode,
-      required this.accentColor,
-      required this.amoledMode,
-      required this.introSeen});
+class MaterialAppContainer extends StatefulWidget {
+  const MaterialAppContainer({
+    super.key,
+    required this.themeMode,
+    required this.accentColor,
+    required this.amoledMode,
+    required this.introSeen,
+  });
 
   final ThemeMode themeMode;
   final String accentColor;
@@ -128,70 +129,125 @@ class MaterialAppContainer extends StatelessWidget {
   final bool introSeen;
 
   @override
-  Widget build(BuildContext context) {
-    final auth0 = Auth0(
+  _MaterialAppContainerState createState() => _MaterialAppContainerState();
+}
+
+class _MaterialAppContainerState extends State<MaterialAppContainer> {
+  late Auth0 auth0;
+  bool isLoggedIn = false;
+  bool isLoading = true; // Add loading state
+
+  @override
+  void initState() {
+    super.initState();
+    _initAuth0();
+    _checkLoginStatus(); // Check if user is logged in
+  }
+
+  // Initialize Auth0
+  void _initAuth0() {
+    auth0 = Auth0(
       dotenv.env['AUTH0_DOMAIN']!,
       dotenv.env['AUTH0_CLIENT_ID']!,
     );
+  }
 
+  // Check if the user is logged in
+  Future<void> _checkLoginStatus() async {
+    try {
+      final hasCredentials =
+          await auth0.credentialsManager.hasValidCredentials();
+      setState(() {
+        isLoggedIn = hasCredentials;
+        isLoading = false; // Stop loading
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false; // Stop loading on error
+      });
+      print('Error checking login status: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     Intl.defaultLocale = LocaleSettings.currentLocale.languageTag;
 
+    // Return a loading indicator while checking login status
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return DynamicColorBuilder(
-        builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
-      return MaterialApp(
-        title: 'Parsa',
-        key: ValueKey(refresh),
-        debugShowCheckedModeBanner: false,
-        locale: TranslationProvider.of(context).flutterLocale,
-        scrollBehavior: ScrollBehaviorOverride(),
-        supportedLocales: AppLocaleUtils.supportedLocales,
-        localizationsDelegates: GlobalMaterialLocalizations.delegates,
-        theme: getThemeData(context,
+      builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+        return MaterialApp(
+          title: 'Parsa',
+          key: ValueKey(refresh),
+          debugShowCheckedModeBanner: false,
+          locale: TranslationProvider.of(context).flutterLocale,
+          scrollBehavior: ScrollBehaviorOverride(),
+          supportedLocales: AppLocaleUtils.supportedLocales,
+          localizationsDelegates: GlobalMaterialLocalizations.delegates,
+          theme: getThemeData(
+            context,
             isDark: false,
-            amoledMode: amoledMode,
+            amoledMode: widget.amoledMode,
             lightDynamic: lightDynamic,
             darkDynamic: darkDynamic,
-            accentColor: accentColor),
-        darkTheme: getThemeData(context,
+            accentColor: widget.accentColor,
+          ),
+          darkTheme: getThemeData(
+            context,
             isDark: true,
-            amoledMode: amoledMode,
+            amoledMode: widget.amoledMode,
             lightDynamic: lightDynamic,
             darkDynamic: darkDynamic,
-            accentColor: accentColor),
-        themeMode: themeMode,
-        navigatorKey: navigatorKey,
-        navigatorObservers: [MainLayoutNavObserver()],
-        builder: (context, child) {
-          return Overlay(initialEntries: [
-            OverlayEntry(
-              builder: (context) => Stack(
-                children: [
-                  Row(
-                    children: [
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 1500),
-                        curve: Curves.easeInOutCubicEmphasized,
-                        width:
-                            introSeen ? getNavigationSidebarWidth(context) : 0,
-                        color: Theme.of(context).canvasColor,
-                      ),
-                      if (BreakPoint.of(context).isLargerThan(BreakpointID.sm))
-                        Container(
-                          width: 2,
-                          height: MediaQuery.of(context).size.height,
-                          color: Theme.of(context).dividerColor,
+            accentColor: widget.accentColor,
+          ),
+          themeMode: widget.themeMode,
+          navigatorKey: navigatorKey,
+          navigatorObservers: [MainLayoutNavObserver()],
+          builder: (context, child) {
+            return Overlay(initialEntries: [
+              OverlayEntry(
+                builder: (context) => Stack(
+                  children: [
+                    Row(
+                      children: [
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 1500),
+                          curve: Curves.easeInOutCubicEmphasized,
+                          width: widget.introSeen
+                              ? getNavigationSidebarWidth(context)
+                              : 0,
+                          color: Theme.of(context).canvasColor,
                         ),
-                      Expanded(child: child ?? const SizedBox.shrink()),
-                    ],
-                  ),
-                  if (introSeen) NavigationSidebar(key: navigationSidebarKey)
-                ],
+                        if (BreakPoint.of(context)
+                            .isLargerThan(BreakpointID.sm))
+                          Container(
+                            width: 2,
+                            height: MediaQuery.of(context).size.height,
+                            color: Theme.of(context).dividerColor,
+                          ),
+                        Expanded(child: child ?? const SizedBox.shrink()),
+                      ],
+                    ),
+                    if (widget.introSeen)
+                      NavigationSidebar(key: navigationSidebarKey)
+                  ],
+                ),
               ),
-            ),
-          ]);
-        },
-        home: introSeen ? Auth0LoginPage(auth0: auth0) : const IntroPage(),
-      );
-    });
+            ]);
+          },
+          home: widget.introSeen
+              ? (isLoggedIn
+                  ? TabsPage()
+                  : Auth0LoginPage(
+                      auth0:
+                          auth0)) // Show home if logged in, otherwise show login
+              : const IntroPage(),
+        );
+      },
+    );
   }
 }
