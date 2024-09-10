@@ -133,7 +133,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Bem-vindo!',
+                                      _getGreeting(),
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium!
@@ -508,6 +508,17 @@ class _DashboardPageState extends State<DashboardPage> {
             });
       },
     );
+  }
+
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) {
+      return 'Good morning!';
+    } else if (hour < 18) {
+      return 'Good afternoon!';
+    } else {
+      return 'Good evening!';
+    }
   }
 }
 

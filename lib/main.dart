@@ -17,6 +17,7 @@ import 'package:parsa/i18n/translations.g.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:parsa/core/services/auth/auth_service.dart';
+import 'dart:io';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -155,17 +156,78 @@ class _MaterialAppContainerState extends State<MaterialAppContainer> {
   // Check if the user is logged in
   Future<void> _checkLoginStatus() async {
     try {
-      final hasCredentials =
-          await auth0.credentialsManager.hasValidCredentials();
-      setState(() {
-        isLoggedIn = hasCredentials;
-        isLoading = false; // Stop loading
-      });
+      // Check if the device is online
+      final isOnline = await _checkInternetConnection();
+
+      if (isOnline) {
+        // If online, validate the token (or refresh it if necessary)
+        final credentials =
+            await auth0.credentialsManager.hasValidCredentials();
+        final isValid = await _validateToken(credentials as String);
+
+        if (isValid) {
+          setState(() {
+            isLoggedIn = true;
+            isLoading = false;
+          });
+        } else {
+          // Token invalid, need to re-login
+          await _performLogout(); // Optionally log them out
+          setState(() {
+            isLoggedIn = false;
+            isLoading = false;
+          });
+        }
+      } else {
+        // Offline: Let the user in if we have stored credentials
+        final hasStoredCredentials =
+            await auth0.credentialsManager.hasValidCredentials();
+        setState(() {
+          isLoggedIn = hasStoredCredentials;
+          isLoading = false;
+        });
+      }
     } catch (e) {
       setState(() {
         isLoading = false; // Stop loading on error
       });
       print('Error checking login status: $e');
+    }
+  }
+
+  // Check internet connectivity
+  Future<bool> _checkInternetConnection() async {
+    try {
+      final result = await InternetAddress.lookup(
+          'example.com'); // Arbitrary address to check connectivity
+      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } catch (e) {
+      return false; // No internet connection
+    }
+  }
+
+  // Validate the access token (e.g., by checking expiration)
+  Future<bool> _validateToken(String accessToken) async {
+    try {
+      // Example: You can decode the token and check expiration or make an API call to validate it.
+      // You can make a call to Auth0's token introspection or a call to your backend to validate.
+      // This is a simple token validation skeleton:
+      final response = await auth0.credentialsManager.hasValidCredentials();
+      return response != null;
+    } catch (e) {
+      print('Token validation failed: $e');
+      return false; // Assume invalid if there's an error
+    }
+  }
+
+  // Perform logout (if necessary)
+  Future<void> _performLogout() async {
+    try {
+      await auth0.credentialsManager
+          .clearCredentials(); // Clear stored credentials
+      await auth0.webAuthentication().logout(); // Perform Auth0 logout
+    } catch (e) {
+      print('Logout failed: $e');
     }
   }
 
@@ -241,7 +303,7 @@ class _MaterialAppContainerState extends State<MaterialAppContainer> {
           },
           home: widget.introSeen
               ? (isLoggedIn
-                  ? TabsPage()
+                  ? const TabsPage()
                   : Auth0LoginPage(
                       auth0:
                           auth0)) // Show home if logged in, otherwise show login
