@@ -40,7 +40,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace "com.parsa.app"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 35
     ndkVersion = "26.1.10909125"
 
     compileOptions {
@@ -57,10 +57,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.auth0.samples"
+        applicationId "com.parsa.app"
+targetSdkVersion 35
 
     manifestPlaceholders += [auth0Domain: "dev-bjeyt1zev08mha31.us.auth0.com", auth0Scheme: "https"]
-        manifestPlaceholders+= [appAuthRedirectScheme: "your_scheme_here"]
+        manifestPlaceholders+= [appAuthRedirectScheme: "SCHEME://dev-bjeyt1zev08mha31.us.auth0.com/android/com.app.parsa/callback"]
 
 
         // You can update the following values to match your application needs.
@@ -84,8 +85,8 @@ android {
         release {
             // Run `flutter build appbundle --release` to build .
             minifyEnabled true
-        
             signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
