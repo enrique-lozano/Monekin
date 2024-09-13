@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
@@ -12,11 +11,11 @@ import 'package:parsa/core/database/services/user-setting/user_setting_service.d
 import 'package:parsa/core/presentation/responsive/breakpoints.dart';
 import 'package:parsa/core/presentation/theme.dart';
 import 'package:parsa/core/routes/root_navigator_observer.dart';
+import 'package:parsa/core/services/auth/auth_service.dart';
 import 'package:parsa/core/utils/scroll_behavior_override.dart';
 import 'package:parsa/i18n/translations.g.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:auth0_flutter/auth0_flutter.dart';
-import 'package:parsa/core/services/auth/auth_service.dart';
 import 'dart:io';
 
 void main() async {
@@ -93,19 +92,10 @@ class MonekinAppEntryPoint extends StatelessWidget {
 
                   return MaterialAppContainer(
                     introSeen: snapshot.data!,
-                    amoledMode: userSettings
-                            .firstWhere((element) =>
-                                element.settingKey == SettingKey.amoledMode)
-                            .settingValue! ==
-                        '1',
                     accentColor: userSettings
                         .firstWhere((element) =>
                             element.settingKey == SettingKey.accentColor)
                         .settingValue!,
-                    themeMode: ThemeMode.values.byName(userSettings
-                        .firstWhere((element) =>
-                            element.settingKey == SettingKey.themeMode)
-                        .settingValue!),
                   );
                 }),
           );
@@ -118,15 +108,11 @@ int refresh = 1;
 class MaterialAppContainer extends StatefulWidget {
   const MaterialAppContainer({
     super.key,
-    required this.themeMode,
     required this.accentColor,
-    required this.amoledMode,
     required this.introSeen,
   });
 
-  final ThemeMode themeMode;
   final String accentColor;
-  final bool amoledMode;
   final bool introSeen;
 
   @override
@@ -240,76 +226,64 @@ class _MaterialAppContainerState extends State<MaterialAppContainer> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return DynamicColorBuilder(
-      builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
-        return MaterialApp(
-          title: 'Parsa',
-          key: ValueKey(refresh),
-          debugShowCheckedModeBanner: false,
-          locale: TranslationProvider.of(context).flutterLocale,
-          scrollBehavior: ScrollBehaviorOverride(),
-          supportedLocales: AppLocaleUtils.supportedLocales,
-          localizationsDelegates: GlobalMaterialLocalizations.delegates,
-          theme: getThemeData(
-            context,
-            isDark: false,
-            amoledMode: widget.amoledMode,
-            lightDynamic: lightDynamic,
-            darkDynamic: darkDynamic,
-            accentColor: widget.accentColor,
-          ),
-          darkTheme: getThemeData(
-            context,
-            isDark: true,
-            amoledMode: widget.amoledMode,
-            lightDynamic: lightDynamic,
-            darkDynamic: darkDynamic,
-            accentColor: widget.accentColor,
-          ),
-          themeMode: widget.themeMode,
-          navigatorKey: navigatorKey,
-          navigatorObservers: [MainLayoutNavObserver()],
-          builder: (context, child) {
-            return Overlay(initialEntries: [
-              OverlayEntry(
-                builder: (context) => Stack(
+    final ColorScheme lightColorScheme = ColorScheme.fromSeed(
+      seedColor: Colors.blue,
+      brightness: Brightness.light,
+    );
+
+    final ThemeData lightTheme = getThemeData(
+      lightColorScheme: lightColorScheme,
+      accentColor: widget.accentColor,
+    );
+
+    return MaterialApp(
+      title: 'Parsa',
+      key: ValueKey(refresh),
+      debugShowCheckedModeBanner: false,
+      locale: TranslationProvider.of(context).flutterLocale,
+      scrollBehavior: ScrollBehaviorOverride(),
+      supportedLocales: AppLocaleUtils.supportedLocales,
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      theme: lightTheme,
+      navigatorKey: navigatorKey,
+      navigatorObservers: [MainLayoutNavObserver()],
+      builder: (context, child) {
+        return Overlay(initialEntries: [
+          OverlayEntry(
+            builder: (context) => Stack(
+              children: [
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 1500),
-                          curve: Curves.easeInOutCubicEmphasized,
-                          width: widget.introSeen
-                              ? getNavigationSidebarWidth(context)
-                              : 0,
-                          color: Theme.of(context).canvasColor,
-                        ),
-                        if (BreakPoint.of(context)
-                            .isLargerThan(BreakpointID.sm))
-                          Container(
-                            width: 2,
-                            height: MediaQuery.of(context).size.height,
-                            color: Theme.of(context).dividerColor,
-                          ),
-                        Expanded(child: child ?? const SizedBox.shrink()),
-                      ],
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 1500),
+                      curve: Curves.easeInOutCubicEmphasized,
+                      width: widget.introSeen
+                          ? getNavigationSidebarWidth(context)
+                          : 0,
+                      color: Theme.of(context).canvasColor,
                     ),
-                    if (widget.introSeen)
-                      NavigationSidebar(key: navigationSidebarKey)
+                    if (BreakPoint.of(context).isLargerThan(BreakpointID.sm))
+                      Container(
+                        width: 2,
+                        height: MediaQuery.of(context).size.height,
+                        color: Theme.of(context).dividerColor,
+                      ),
+                    Expanded(child: child ?? const SizedBox.shrink()),
                   ],
                 ),
-              ),
-            ]);
-          },
-          home: widget.introSeen
-              ? (isLoggedIn
-                  ? const TabsPage()
-                  : Auth0LoginPage(
-                      auth0:
-                          auth0)) // Show home if logged in, otherwise show login
-              : const IntroPage(),
-        );
+                if (widget.introSeen)
+                  NavigationSidebar(key: navigationSidebarKey)
+              ],
+            ),
+          ),
+        ]);
       },
+      home: widget.introSeen
+          ? (isLoggedIn
+              ? const TabsPage()
+              : Auth0LoginPage(
+                  auth0: auth0)) // Show home if logged in, otherwise show login
+          : const IntroPage(),
     );
   }
 }

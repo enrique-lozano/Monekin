@@ -20,7 +20,6 @@ class Auth0LoginPage extends StatelessWidget {
             print('Login attempt started');
             try {
               final result = await auth0.webAuthentication().login();
-              print('Login successful: ${result.accessToken}');
               // Navigate to the main app page
               Navigator.pushReplacement(
                 context,

@@ -3,12 +3,8 @@ import 'package:parsa/app/settings/widgets/language_selector.dart';
 import 'package:parsa/app/settings/widgets/supported_locales.dart';
 import 'package:parsa/core/database/services/user-setting/private_mode_service.dart';
 import 'package:parsa/core/database/services/user-setting/user_setting_service.dart';
-import 'package:parsa/core/extensions/color.extensions.dart';
-import 'package:parsa/core/presentation/widgets/color_picker/color_picker.dart';
-import 'package:parsa/core/presentation/widgets/color_picker/color_picker_modal.dart';
 import 'package:parsa/i18n/translations.g.dart';
 
-import '../../core/presentation/app_colors.dart';
 import 'widgets/settings_list_separator.dart';
 
 class AdvancedSettingsPage extends StatefulWidget {
@@ -152,116 +148,40 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
             createListSeparator(context, t.settings.theme_and_colors),
             StreamBuilder(
                 stream: UserSettingService.instance
-                    .getSetting(SettingKey.themeMode),
+                    .getSetting(SettingKey.themeMode)
+                    .map((event) => 'light'),
+                initialData: 'light',
                 builder: (context, snapshot) {
-                  return buildSelector(
-                    title: t.settings.theme,
-                    items: [
-                      SelectItem(value: 'system', label: t.settings.theme_auto),
-                      SelectItem(value: 'light', label: t.settings.theme_light),
-                      SelectItem(value: 'dark', label: t.settings.theme_dark)
-                    ],
-                    selected: snapshot.data ?? 'system',
-                    onChanged: (value) {
-                      UserSettingService.instance
-                          .setSetting(SettingKey.themeMode, value)
-                          .then((value) => null);
-                    },
-                  );
+                  // Not rendering the widget, but keeping the stream active
+                  return const SizedBox.shrink();
                 }),
+            // Removed AMOLED mode, dynamic colors, and accent color widgets
             StreamBuilder(
                 stream: UserSettingService.instance
                     .getSetting(SettingKey.amoledMode)
-                    .map((event) => event == '1'),
-                initialData: true,
+                    .map((event) => 'light'),
+                initialData: 'light',
                 builder: (context, snapshot) {
-                  return SwitchListTile(
-                    title: Text(t.settings.amoled_mode),
-                    subtitle: Text(t.settings.amoled_mode_descr),
-                    value: snapshot.data!,
-                    onChanged: Theme.of(context).brightness == Brightness.light
-                        ? null
-                        : (bool value) {
-                            setState(() {
-                              UserSettingService.instance.setSetting(
-                                  SettingKey.amoledMode, value ? '1' : '0');
-                            });
-                          },
-                  );
+                  // Not rendering the widget, but keeping the stream active
+                  return const SizedBox.shrink();
                 }),
             StreamBuilder(
                 stream: UserSettingService.instance
                     .getSetting(SettingKey.accentColor)
-                    .map((event) => event == 'auto'),
-                initialData: true,
+                    .map((event) => 'true'),
+                initialData: 'true',
                 builder: (context, snapshot) {
-                  return SwitchListTile(
-                    title: Text(t.settings.dynamic_colors),
-                    subtitle: Text(t.settings.dynamic_colors_descr),
-                    value: snapshot.data!,
-                    onChanged: (bool value) {
-                      setState(() {
-                        UserSettingService.instance.setSetting(
-                            SettingKey.accentColor,
-                            value
-                                ? 'auto'
-                                : brandBlue.toHex(leadingHashSign: false));
-                      });
-                    },
-                  );
+                  // Not rendering the widget, but keeping the stream active
+                  return const SizedBox.shrink();
                 }),
             StreamBuilder(
                 stream: UserSettingService.instance
-                    .getSetting(SettingKey.accentColor),
-                initialData: 'auto',
+                    .getSetting(SettingKey.accentColor)
+                    .map((event) => 'MaterialBlue3.24'),
+                initialData: 'MaterialBlue3.24',
                 builder: (context, snapshot) {
-                  late final Color color;
-
-                  if (snapshot.data! == 'auto') {
-                    color = AppColors.of(context).primary;
-                  } else {
-                    color = ColorHex.get(snapshot.data!);
-                  }
-
-                  return ListTile(
-                    onTap: snapshot.data! == 'auto'
-                        ? null
-                        : () => showColorPickerModal(
-                              context,
-                              ColorPickerModal(
-                                colorOptions: [
-                                  brandBlue.toHex(leadingHashSign: false),
-                                  ...defaultColorPickerOptions
-                                ],
-                                selectedColor: color.toHex(),
-                              ),
-                            ).then((value) {
-                              if (value == null) return;
-
-                              setState(() {
-                                UserSettingService.instance.setSetting(
-                                    SettingKey.accentColor, value.toHex());
-                              });
-                            }),
-                    title: Text(t.settings.accent_color),
-                    subtitle: Text(t.settings.accent_color_descr),
-                    enabled: snapshot.data! != 'auto',
-                    trailing: SizedBox(
-                      height: 46,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        clipBehavior: Clip.hardEdge,
-                        width: 46,
-                        height: 46,
-                        decoration: BoxDecoration(
-                          color: color.withOpacity(
-                            snapshot.data! != 'auto' ? 1 : 0.4,
-                          ),
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                      ),
-                    ),
-                  );
+                  // Not rendering the widget, but keeping the stream active
+                  return const SizedBox.shrink();
                 }),
             createListSeparator(context, t.settings.security.title),
             StreamBuilder(

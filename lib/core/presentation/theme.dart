@@ -1,88 +1,32 @@
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
-import 'package:parsa/core/extensions/color.extensions.dart';
-
 import 'app_colors.dart';
-
-bool isAppUsingDynamicColors = false;
 
 bool isAppInDarkBrightness(BuildContext context) =>
     Theme.of(context).brightness == Brightness.dark;
 bool isAppInLightBrightness(BuildContext context) =>
     !isAppInDarkBrightness(context);
 
-ThemeData getThemeData(
-  BuildContext context, {
-  required bool isDark,
-  required bool amoledMode,
-  required ColorScheme? lightDynamic,
-  required ColorScheme? darkDynamic,
+ThemeData getThemeData({
+  required ColorScheme lightColorScheme,
   required String accentColor,
 }) {
-  ThemeData theme;
+  AppColors customAppColors = AppColors.fromColorScheme(lightColorScheme);
 
-  ColorScheme lightColorScheme;
-  ColorScheme darkColorScheme;
-
-  if (lightDynamic != null && darkDynamic != null && accentColor == 'auto') {
-    // On Android S+ devices, use the provided dynamic color scheme.
-    // (Recommended) Harmonize the dynamic color scheme' built-in semantic colors.
-    lightColorScheme = ColorScheme.fromSeed(
-      seedColor: lightDynamic.primary,
-      brightness: Brightness.light,
-    ).harmonized();
-
-    // Repeat for the dark color scheme.
-    darkColorScheme = ColorScheme.fromSeed(
-      seedColor: darkDynamic.primary,
-      brightness: Brightness.dark,
-      surface: amoledMode ? Colors.black : null,
-    );
-
-    // TODO: We can directly use the dynamic palette here, in the following way
-
-    // lightColorScheme = lightDynamic.harmonized();
-    // darkColorScheme = darkDynamic.harmonized();
-
-    // if (amoledMode) {
-    //   darkColorScheme = darkColorScheme.copyWith(surface: Colors.black);
-    // }
-
-    // However, the colorSchemes provided by the `dynamic_color` package do not generate the
-    // new surface colors of Flutter 3.22. See https://github.com/material-foundation/flutter-packages/issues/582#issuecomment-2209591668
-    // for more info
-
-    isAppUsingDynamicColors = true; // ignore, only for demo purposes
-  } else {
-    // Otherwise, use fallback schemes:
-
-    /// Fallback scheme for a not-dynamic mode in dark or light mode:
-    ColorScheme fallbackScheme = ColorScheme.fromSeed(
-      seedColor: accentColor == 'auto' ? brandBlue : ColorHex.get(accentColor),
-      brightness: isDark ? Brightness.dark : Brightness.light,
-      surface: isDark && amoledMode ? Colors.black : null,
-    );
-
-    lightColorScheme = fallbackScheme;
-    darkColorScheme = fallbackScheme;
-  }
-
-  AppColors customAppColors =
-      AppColors.fromColorScheme(isDark ? darkColorScheme : lightColorScheme);
-
-  theme = ThemeData(
-      colorScheme: isDark ? darkColorScheme : lightColorScheme,
-      brightness: isDark ? Brightness.dark : Brightness.light,
-      useMaterial3: true,
-      fontFamily: 'Nunito',
-      extensions: [customAppColors]);
+  ThemeData theme = ThemeData(
+    colorScheme: lightColorScheme,
+    brightness: Brightness.light,
+    useMaterial3: true,
+    fontFamily: 'Nunito',
+    extensions: [customAppColors],
+  );
 
   final listTileSmallText = TextStyle(
-      color: theme.textTheme.bodyMedium?.color,
-      fontSize: 14,
-      wordSpacing: 0,
-      decorationThickness: 1,
-      fontFamily: 'Nunito');
+    color: theme.textTheme.bodyMedium?.color,
+    fontSize: 14,
+    wordSpacing: 0,
+    decorationThickness: 1,
+    fontFamily: 'Nunito',
+  );
 
   return theme.copyWith(
     scaffoldBackgroundColor: theme.colorScheme.surface,

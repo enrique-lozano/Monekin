@@ -6,22 +6,20 @@ import 'package:parsa/core/presentation/widgets/number_ui_formatters/ui_number_f
 import '../app_colors.dart';
 
 class TrendingValue extends StatelessWidget {
-  const TrendingValue(
-      {super.key,
-      required this.percentage,
-      this.decimalDigits = 2,
-      this.fontSize = 14,
-      this.fontWeight = FontWeight.normal,
-      this.filled = false,
-      this.outlined = false});
+  const TrendingValue({
+    super.key,
+    required this.percentage,
+    this.decimalDigits = 2,
+    this.fontSize = 14,
+    this.fontWeight = FontWeight.normal,
+    this.filled = false,
+    this.outlined = false,
+  });
 
   final double percentage;
   final int decimalDigits;
-
   final double fontSize;
-
   final FontWeight fontWeight;
-
   final bool filled, outlined;
 
   Widget paintTrendValue(BuildContext context) {
@@ -57,16 +55,17 @@ class TrendingValue extends StatelessWidget {
             fontWeight: fontWeight,
             color: textColor,
           ),
-        ).getTextWidget(context)
+        ).getTextWidget(context),
       ],
     );
   }
 
   Color _getColorBasedOnPercentage(BuildContext context) {
+    final bool isLightMode = Theme.of(context).brightness == Brightness.light;
     return percentage == 0
         ? AppColors.of(context)
             .brand
-            .lighten(isAppInDarkBrightness(context) ? 0.45 : 0.25)
+            .lighten(isLightMode ? 0.25 : 0.45)
             .withBlue(225)
         : percentage > 0
             ? AppColors.of(context).success
@@ -79,12 +78,13 @@ class TrendingValue extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
         decoration: BoxDecoration(
-          color: !filled ? null : (_getColorBasedOnPercentage(context)),
+          color: filled ? _getColorBasedOnPercentage(context) : null,
           borderRadius: BorderRadius.circular(9999),
           border: outlined
               ? Border.all(
                   color: _getColorBasedOnPercentage(context).lighten(0.85),
-                  width: 1)
+                  width: 1,
+                )
               : null,
         ),
         child: paintTrendValue(context),

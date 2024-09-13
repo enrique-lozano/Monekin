@@ -76,11 +76,12 @@ class Account extends AccountInDB {
   bool get isClosed => closingDate != null;
 
   Color getComputedColor(BuildContext context) {
+    final bool isLightMode = Theme.of(context).brightness == Brightness.light;
     return color != null
         ? ColorHex.get(color!)
-        : Theme.of(context).brightness == Brightness.dark
-            ? AppColors.of(context).primaryContainer
-            : AppColors.of(context).primary;
+        : isLightMode
+            ? AppColors.of(context).primary
+            : AppColors.of(context).primaryContainer;
   }
 
   IconDisplayer displayIcon(
@@ -91,12 +92,12 @@ class Account extends AccountInDB {
     bool isOutline = false,
     void Function()? onTap,
   }) {
-    bool isDark = isAppInDarkBrightness(context);
+    final bool isLightMode = Theme.of(context).brightness == Brightness.light;
 
     return IconDisplayer(
       supportedIcon: icon,
-      mainColor: getComputedColor(context).lighten(isDark ? 0.82 : 0),
-      secondaryColor: getComputedColor(context).lighten(isDark ? 0 : 0.82),
+      mainColor: getComputedColor(context).lighten(isLightMode ? 0 : 0.82),
+      secondaryColor: getComputedColor(context).lighten(isLightMode ? 0.82 : 0),
       displayMode: IconDisplayMode.polygon,
       size: size,
       borderRadius: 20,

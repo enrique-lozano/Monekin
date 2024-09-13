@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:parsa/app/settings/about_page.dart';
-import 'package:parsa/app/settings/purchases/donate_button.dart';
 import 'package:parsa/app/settings/purchases/in_app_purchase.dart';
 import 'package:parsa/app/settings/widgets/setting_card_item.dart';
 import 'package:parsa/core/utils/open_external_url.dart';
@@ -78,7 +77,6 @@ class HelpUsPage extends StatelessWidget {
                 ],
               ),
             ),
-            DonateButton(iapConnection: iapConnection)
           ],
         ),
       ),

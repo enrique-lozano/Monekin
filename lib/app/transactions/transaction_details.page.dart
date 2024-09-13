@@ -552,10 +552,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                       icon: transaction.account.icon,
                                       color: transaction.account
                                           .getComputedColor(context)
-                                          .lighten(
-                                              isAppInDarkBrightness(context)
-                                                  ? 0.5
-                                                  : 0),
+                                          .lighten(0.5),
                                       data: transaction.account.name,
                                     ),
                                     label: transaction.isTransfer
@@ -568,10 +565,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                         icon: transaction.category!.icon,
                                         color: ColorHex.get(
                                                 transaction.category!.color)
-                                            .lighten(
-                                                isAppInDarkBrightness(context)
-                                                    ? 0.5
-                                                    : 0),
+                                            .lighten(0.5),
                                         data: transaction.category!.name,
                                       ),
                                       label: t.general.category,
