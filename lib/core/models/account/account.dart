@@ -95,8 +95,10 @@ class Account extends AccountInDB {
 
     return IconDisplayer(
       supportedIcon: icon,
-      mainColor: getComputedColor(context).lighten(isDark ? 0.82 : 0),
-      secondaryColor: getComputedColor(context).lighten(isDark ? 0 : 0.82),
+      mainColor: getComputedColor(context)
+          .lighten(isDark ? IconDisplayer.darkLightenFactor : 0),
+      secondaryColor: getComputedColor(context)
+          .lighten(isDark ? 0 : IconDisplayer.darkLightenFactor),
       displayMode: IconDisplayMode.polygon,
       size: size,
       borderRadius: 20,
