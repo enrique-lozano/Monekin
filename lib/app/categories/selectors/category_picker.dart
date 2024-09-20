@@ -10,6 +10,7 @@ import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
@@ -188,15 +189,11 @@ class _CategoryPickerState extends State<CategoryPicker> {
                                         .copyWith(fontWeight: FontWeight.w700),
                                   ),
                                 ),
+                                const SizedBox(height: 4),
                                 buildSubcategoryRow(context, subcategories)
                               ],
                             ),
                             const SizedBox(height: 8),
-                            const Divider(
-                              thickness: 4,
-                              endIndent: 16,
-                              indent: 16,
-                            ),
                           ],
                         ),
                       );
@@ -219,6 +216,8 @@ class _CategoryPickerState extends State<CategoryPicker> {
 
   SingleChildScrollView buildSubcategoryRow(
       BuildContext context, List<Category>? subcategories) {
+    final isDarkMode = isAppInDarkBrightness(context);
+
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       scrollDirection: Axis.horizontal,
@@ -228,6 +227,15 @@ class _CategoryPickerState extends State<CategoryPicker> {
           for (final subcat in subcategories ?? []) ...[
             ChoiceChip.elevated(
               selected: selectedCategory?.id == subcat.id,
+              shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: selectedCategory?.id == subcat.id
+                      ? ColorHex.get(selectedCategory!.color)
+                      : ColorHex.get(selectedCategory!.color).lighten(),
+                  width: 1.5,
+                ),
+                borderRadius: BorderRadius.circular(12),
+              ),
               label: Text(
                 subcat.name,
                 style: TextStyle(
@@ -244,7 +252,8 @@ class _CategoryPickerState extends State<CategoryPicker> {
                 supportedIcon: subcat.icon,
                 mainColor: selectedCategory?.id == subcat.id
                     ? Colors.white
-                    : ColorHex.get(subcat.color),
+                    : ColorHex.get(subcat.color).lighten(
+                        isDarkMode ? IconDisplayer.darkLightenFactor : 0),
                 secondaryColor: Colors.transparent,
                 padding: 0,
               ),

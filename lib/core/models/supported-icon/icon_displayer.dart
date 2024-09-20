@@ -15,6 +15,8 @@ enum IconDisplayMode {
 
 @CopyWith()
 class IconDisplayer extends StatelessWidget {
+  static const darkLightenFactor = 0.82;
+
   const IconDisplayer({
     super.key,
     required this.mainColor,
@@ -51,8 +53,10 @@ class IconDisplayer extends StatelessWidget {
     Color categoryColor = ColorHex.get(category.color);
 
     return IconDisplayer(
-      mainColor: isDark ? categoryColor.lighten(0.82) : categoryColor,
-      secondaryColor: isDark ? categoryColor : categoryColor.lighten(0.82),
+      mainColor:
+          categoryColor.lighten(isDark ? IconDisplayer.darkLightenFactor : 0),
+      secondaryColor:
+          categoryColor.lighten(isDark ? 0 : IconDisplayer.darkLightenFactor),
       supportedIcon: category.icon,
       isOutline: isOutline,
       borderRadius: borderRadius,
@@ -86,7 +90,8 @@ class IconDisplayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final calculatedPadding = padding ?? (size / (22 / 6));
-    final secondaryColorInBuild = secondaryColor ?? mainColor.lighten(0.82);
+    final secondaryColorInBuild =
+        secondaryColor ?? mainColor.lighten(IconDisplayer.darkLightenFactor);
 
     final borderSide = BorderSide(
       width: isOutline ? outlineWidth : 0,
