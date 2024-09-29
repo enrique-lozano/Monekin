@@ -96,13 +96,15 @@ class CardFooterWithSingleButton extends StatelessWidget {
           endIndent: 16,
         ),
         Container(
-            alignment: Alignment.centerRight,
-            padding: const EdgeInsets.fromLTRB(2, 4, 2, 4),
-            child: TextButton.icon(
-                onPressed: onButtonClick,
-                iconAlignment: IconAlignment.end,
-                icon: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
-                label: Text(text ?? "Ver mas")))
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.fromLTRB(2, 4, 2, 4),
+          child: TextButton.icon(
+            onPressed: onButtonClick,
+            iconAlignment: IconAlignment.end,
+            icon: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+            label: Text(text ?? t.general.see_more),
+          ),
+        )
       ],
     );
   }

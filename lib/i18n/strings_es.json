@@ -21,6 +21,7 @@
     "today": "Hoy",
     "yesterday": "Ayer",
     "filters": "Filtros",
+    "see-more": "Ver más",
     "select-all": "Seleccionar todo",
     "deselect-all": "Deseleccionar todo",
     "empty-warn": "Ops! Esto esta muy vacio",
@@ -286,7 +287,7 @@
       "recurrent-rule-finished": "La regla recurrente se ha completado, ya no hay mas pagos a realizar!"
     },
     "LIST": {
-      "empty": "No se han encontrado transacciones que mostrar aquí. Añade una transacción pulsando el botón '+' de la parte inferior",
+      "empty": "No se han encontrado transacciones que mostrar aquí. Añade unas cuantas transacciones en la app y quizas tengas más suerte la proxima vez",
       "searcher.placeholder": "Busca por categoría, descripción...",
       "searcher.no-results": "No se han encontrado transacciones que coincidan con los criterios de busqueda",
       "loading": "Cargando más transacciones...",

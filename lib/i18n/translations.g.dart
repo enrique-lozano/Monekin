@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 4
-/// Strings: 2169 (542 per locale)
+/// Strings: 2173 (543 per locale)
 ///
-/// Built on 2024-09-29 at 14:39 UTC
+/// Built on 2024-09-29 at 20:07 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -204,6 +204,7 @@ class _TranslationsGeneralEn {
 	String get today => 'Today';
 	String get yesterday => 'Yesterday';
 	String get filters => 'Filters';
+	String get see_more => 'See more';
 	String get select_all => 'Select all';
 	String get deselect_all => 'Deselect all';
 	String get empty_warn => 'Ops! This is very empty';
@@ -774,7 +775,7 @@ class _TranslationsTransactionListEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get empty => 'No transactions found to display here. Add a transaction by clicking the \'+\' button at the bottom';
+	String get empty => 'No transactions found to display here. Add a few transactions in the app and maybe you\'ll have better luck next time.';
 	String get searcher_placeholder => 'Search by category, description...';
 	String get searcher_no_results => 'No transactions found matching the search criteria';
 	String get loading => 'Loading more transactions...';
@@ -1498,6 +1499,7 @@ class _TranslationsGeneralEs implements _TranslationsGeneralEn {
 	@override String get today => 'Hoy';
 	@override String get yesterday => 'Ayer';
 	@override String get filters => 'Filtros';
+	@override String get see_more => 'Ver más';
 	@override String get select_all => 'Seleccionar todo';
 	@override String get deselect_all => 'Deseleccionar todo';
 	@override String get empty_warn => 'Ops! Esto esta muy vacio';
@@ -2068,7 +2070,7 @@ class _TranslationsTransactionListEs implements _TranslationsTransactionListEn {
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get empty => 'No se han encontrado transacciones que mostrar aquí. Añade una transacción pulsando el botón \'+\' de la parte inferior';
+	@override String get empty => 'No se han encontrado transacciones que mostrar aquí. Añade unas cuantas transacciones en la app y quizas tengas más suerte la proxima vez';
 	@override String get searcher_placeholder => 'Busca por categoría, descripción...';
 	@override String get searcher_no_results => 'No se han encontrado transacciones que coincidan con los criterios de busqueda';
 	@override String get loading => 'Cargando más transacciones...';
@@ -2793,6 +2795,7 @@ class _TranslationsGeneralUk implements _TranslationsGeneralEn {
 	@override String get today => 'Сьогодні';
 	@override String get yesterday => 'Вчора';
 	@override String get filters => 'Фільтри';
+	@override String get see_more => 'Побачити більше';
 	@override String get select_all => 'Вибрати всі';
 	@override String get deselect_all => 'Скасувати вибір усіх';
 	@override String get empty_warn => 'Ой! Тут порожньо';
@@ -3363,7 +3366,7 @@ class _TranslationsTransactionListUk implements _TranslationsTransactionListEn {
 	@override final _TranslationsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get empty => 'Тут не знайдено жодних транзакцій для відображення. Додайте транзакцію, натиснувши кнопку \'+\' внизу';
+	@override String get empty => 'Тут не знайдено жодних транзакцій для відображення. Додайте кілька транзакцій у додаток, і, можливо, наступного разу вам пощастить більше';
 	@override String get searcher_placeholder => 'Шукати за категорією, описом...';
 	@override String get searcher_no_results => 'Не знайдено транзакцій, що відповідають критеріям пошуку';
 	@override String get loading => 'Завантаження додаткових транзакцій...';
@@ -4087,6 +4090,7 @@ class _TranslationsGeneralZhTw implements _TranslationsGeneralEn {
 	@override String get today => '今天';
 	@override String get yesterday => '昨天';
 	@override String get filters => '過濾器';
+	@override String get see_more => '查看更多';
 	@override String get select_all => '全選';
 	@override String get deselect_all => '取消全選';
 	@override String get empty_warn => '哦！這裡非常空';
@@ -4657,7 +4661,7 @@ class _TranslationsTransactionListZhTw implements _TranslationsTransactionListEn
 	@override final _TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get empty => '未發現此處顯示的交易。請點選底部的 \'+\' 按鈕新增交易';
+	@override String get empty => '未發現此處顯示的交易。在應用程式中添加一些交易，也許您下次會有更好的運氣';
 	@override String get searcher_placeholder => '按類別、描述搜尋...';
 	@override String get searcher_no_results => '未找到符合搜尋條件的交易';
 	@override String get loading => '正在加載更多交易...';
@@ -5337,6 +5341,7 @@ extension on Translations {
 			case 'general.today': return 'Today';
 			case 'general.yesterday': return 'Yesterday';
 			case 'general.filters': return 'Filters';
+			case 'general.see_more': return 'See more';
 			case 'general.select_all': return 'Select all';
 			case 'general.deselect_all': return 'Deselect all';
 			case 'general.empty_warn': return 'Ops! This is very empty';
@@ -5592,7 +5597,7 @@ extension on Translations {
 			case 'transaction.next_payments.accept_dialog_msg_single': return 'The new status of the transaction will be null. You can re-edit the status of this transaction whenever you want';
 			case 'transaction.next_payments.accept_dialog_msg': return ({required Object date}) => 'This action will create a new transaction with date ${date}. You will be able to check the details of this transaction on the transaction page';
 			case 'transaction.next_payments.recurrent_rule_finished': return 'The recurring rule has been completed, there are no more payments to make!';
-			case 'transaction.list.empty': return 'No transactions found to display here. Add a transaction by clicking the \'+\' button at the bottom';
+			case 'transaction.list.empty': return 'No transactions found to display here. Add a few transactions in the app and maybe you\'ll have better luck next time.';
 			case 'transaction.list.searcher_placeholder': return 'Search by category, description...';
 			case 'transaction.list.searcher_no_results': return 'No transactions found matching the search criteria';
 			case 'transaction.list.loading': return 'Loading more transactions...';
@@ -5959,6 +5964,7 @@ extension on _TranslationsEs {
 			case 'general.today': return 'Hoy';
 			case 'general.yesterday': return 'Ayer';
 			case 'general.filters': return 'Filtros';
+			case 'general.see_more': return 'Ver más';
 			case 'general.select_all': return 'Seleccionar todo';
 			case 'general.deselect_all': return 'Deseleccionar todo';
 			case 'general.empty_warn': return 'Ops! Esto esta muy vacio';
@@ -6215,7 +6221,7 @@ extension on _TranslationsEs {
 			case 'transaction.next_payments.accept_dialog_msg_single': return 'El estado de la transacción pasará a ser nulo. Puedes volver a editar el estado de esta transacción cuando lo desees';
 			case 'transaction.next_payments.accept_dialog_msg': return ({required Object date}) => 'Esta acción creará una transacción nueva con fecha ${date}. Podrás consultar los detalles de esta transacción en la página de transacciones';
 			case 'transaction.next_payments.recurrent_rule_finished': return 'La regla recurrente se ha completado, ya no hay mas pagos a realizar!';
-			case 'transaction.list.empty': return 'No se han encontrado transacciones que mostrar aquí. Añade una transacción pulsando el botón \'+\' de la parte inferior';
+			case 'transaction.list.empty': return 'No se han encontrado transacciones que mostrar aquí. Añade unas cuantas transacciones en la app y quizas tengas más suerte la proxima vez';
 			case 'transaction.list.searcher_placeholder': return 'Busca por categoría, descripción...';
 			case 'transaction.list.searcher_no_results': return 'No se han encontrado transacciones que coincidan con los criterios de busqueda';
 			case 'transaction.list.loading': return 'Cargando más transacciones...';
@@ -6582,6 +6588,7 @@ extension on _TranslationsUk {
 			case 'general.today': return 'Сьогодні';
 			case 'general.yesterday': return 'Вчора';
 			case 'general.filters': return 'Фільтри';
+			case 'general.see_more': return 'Побачити більше';
 			case 'general.select_all': return 'Вибрати всі';
 			case 'general.deselect_all': return 'Скасувати вибір усіх';
 			case 'general.empty_warn': return 'Ой! Тут порожньо';
@@ -6837,7 +6844,7 @@ extension on _TranslationsUk {
 			case 'transaction.next_payments.accept_dialog_msg_single': return 'Новий статус транзакції буде нульовим. Ви можете знову редагувати статус цієї транзакції в будь-який момент';
 			case 'transaction.next_payments.accept_dialog_msg': return ({required Object date}) => 'Ця дія створить нову транзакцію з датою ${date}. Ви зможете переглянути деталі цієї транзакції на сторінці транзакцій';
 			case 'transaction.next_payments.recurrent_rule_finished': return 'Правило періодичності було завершено, більше немає платежів!';
-			case 'transaction.list.empty': return 'Тут не знайдено жодних транзакцій для відображення. Додайте транзакцію, натиснувши кнопку \'+\' внизу';
+			case 'transaction.list.empty': return 'Тут не знайдено жодних транзакцій для відображення. Додайте кілька транзакцій у додаток, і, можливо, наступного разу вам пощастить більше';
 			case 'transaction.list.searcher_placeholder': return 'Шукати за категорією, описом...';
 			case 'transaction.list.searcher_no_results': return 'Не знайдено транзакцій, що відповідають критеріям пошуку';
 			case 'transaction.list.loading': return 'Завантаження додаткових транзакцій...';
@@ -7204,6 +7211,7 @@ extension on _TranslationsZhTw {
 			case 'general.today': return '今天';
 			case 'general.yesterday': return '昨天';
 			case 'general.filters': return '過濾器';
+			case 'general.see_more': return '查看更多';
 			case 'general.select_all': return '全選';
 			case 'general.deselect_all': return '取消全選';
 			case 'general.empty_warn': return '哦！這裡非常空';
@@ -7459,7 +7467,7 @@ extension on _TranslationsZhTw {
 			case 'transaction.next_payments.accept_dialog_msg_single': return '該交易的新狀態將為空。您可以隨時重新編輯該交易的狀態';
 			case 'transaction.next_payments.accept_dialog_msg': return ({required Object date}) => '此操作將建立日期為${date}的新交易。您將能夠在交易頁面上查看此交易的詳細資訊';
 			case 'transaction.next_payments.recurrent_rule_finished': return '循環規則已完成，無需再支付！';
-			case 'transaction.list.empty': return '未發現此處顯示的交易。請點選底部的 \'+\' 按鈕新增交易';
+			case 'transaction.list.empty': return '未發現此處顯示的交易。在應用程式中添加一些交易，也許您下次會有更好的運氣';
 			case 'transaction.list.searcher_placeholder': return '按類別、描述搜尋...';
 			case 'transaction.list.searcher_no_results': return '未找到符合搜尋條件的交易';
 			case 'transaction.list.loading': return '正在加載更多交易...';

@@ -21,6 +21,7 @@
     "today": "今天",
     "yesterday": "昨天",
     "filters": "過濾器",
+    "see-more": "查看更多",
     "select-all": "全選",
     "deselect-all": "取消全選",
     "empty-warn": "哦！這裡非常空",
@@ -282,7 +283,7 @@
       "recurrent-rule-finished": "循環規則已完成，無需再支付！"
     },
     "LIST": {
-      "empty": "未發現此處顯示的交易。請點選底部的 '+' 按鈕新增交易",
+      "empty": "未發現此處顯示的交易。在應用程式中添加一些交易，也許您下次會有更好的運氣",
       "searcher.placeholder": "按類別、描述搜尋...",
       "searcher.no-results": "未找到符合搜尋條件的交易",
       "loading": "正在加載更多交易...",

@@ -21,6 +21,7 @@
     "today": "Today",
     "yesterday": "Yesterday",
     "filters": "Filters",
+    "see-more": "See more",
     "select-all": "Select all",
     "deselect-all": "Deselect all",
     "empty-warn": "Ops! This is very empty",
@@ -282,7 +283,7 @@
       "recurrent-rule-finished": "The recurring rule has been completed, there are no more payments to make!"
     },
     "LIST": {
-      "empty": "No transactions found to display here. Add a transaction by clicking the '+' button at the bottom",
+      "empty": "No transactions found to display here. Add a few transactions in the app and maybe you'll have better luck next time.",
       "searcher.placeholder": "Search by category, description...",
       "searcher.no-results": "No transactions found matching the search criteria",
       "loading": "Loading more transactions...",

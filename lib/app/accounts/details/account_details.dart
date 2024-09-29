@@ -156,15 +156,34 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                             title: t.home.last_transactions,
                             bodyPadding:
                                 const EdgeInsets.symmetric(vertical: 6),
-                            footer: CardFooterWithSingleButton(
-                              onButtonClick: () => RouteUtils.pushRoute(
-                                context,
-                                TransactionsPage(
-                                    filters: TransactionFilters(
-                                  accountsIDs: [widget.account.id],
-                                )),
-                              ),
-                            ),
+                            footer: StreamBuilder(
+                                stream: TransactionService.instance
+                                    .countTransactions(
+                                  predicate: TransactionFilters(
+                                    status: TransactionStatus.notIn({
+                                      TransactionStatus.pending,
+                                      TransactionStatus.voided
+                                    }),
+                                    accountsIDs: [widget.account.id],
+                                  ),
+                                ),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData ||
+                                      snapshot.data!.numberOfRes < 5) {
+                                    return const SizedBox.shrink();
+                                  }
+
+                                  return CardFooterWithSingleButton(
+                                      onButtonClick: () {
+                                    RouteUtils.pushRoute(
+                                      context,
+                                      TransactionsPage(
+                                          filters: TransactionFilters(
+                                        accountsIDs: [widget.account.id],
+                                      )),
+                                    );
+                                  });
+                                }),
                             body: TransactionListComponent(
                               heroTagBuilder: (tr) =>
                                   'account-details-page__tr-icon-${tr.id}',
