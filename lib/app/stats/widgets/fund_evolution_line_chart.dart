@@ -78,101 +78,100 @@ class FundEvolutionLineChart extends StatelessWidget {
 
     return Column(
       children: [
-        if (showBalanceHeader) ...[
+        if (showBalanceHeader)
           StreamBuilder(
-              stream: filters.accounts(),
-              builder: (context, accountsSnapshot) {
-                if (!accountsSnapshot.hasData) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            stream: filters.accounts(),
+            builder: (context, accountsSnapshot) {
+              if (!accountsSnapshot.hasData) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Final balance - ${dateRange.getText(context)}',
+                        style: const TextStyle(fontSize: 12)),
+                    const Skeleton(width: 70, height: 40),
+                    const Skeleton(width: 30, height: 14),
+                  ],
+                );
+              } else {
+                final accounts = accountsSnapshot.data!;
+
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Final balance - ${dateRange.getText(context)}',
-                          style: const TextStyle(fontSize: 12)),
-                      const Skeleton(width: 70, height: 40),
-                      const Skeleton(width: 30, height: 14),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(t.stats.final_balance,
+                              style: const TextStyle(fontSize: 12)),
+                          StreamBuilder(
+                              stream: accountService.getAccountsMoney(
+                                accountIds: accounts.map((e) => e.id),
+                                trFilters: filters,
+                                date: dateRange.endDate,
+                              ),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return const Skeleton(width: 70, height: 40);
+                                }
+
+                                return CurrencyDisplayer(
+                                    amountToConvert: snapshot.data!,
+                                    integerStyle: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall!);
+                              }),
+                        ],
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            t.stats.compared_to_previous_period,
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                          StreamBuilder(
+                              stream: accountService.getAccountsMoneyVariation(
+                                accounts: accounts,
+                                startDate: dateRange.startDate,
+                                endDate: dateRange.endDate,
+                                convertToPreferredCurrency: true,
+                              ),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return const Skeleton(width: 52, height: 22);
+                                }
+
+                                return TrendingValue(
+                                  percentage: snapshot.data!,
+                                  filled: false,
+                                  fontWeight: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall!
+                                      .fontWeight!,
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall!
+                                      .fontSize!,
+                                  outlined: false,
+                                );
+                              })
+                        ],
+                      )
                     ],
-                  );
-                } else {
-                  final accounts = accountsSnapshot.data!;
-
-                  return Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(t.stats.final_balance,
-                                style: const TextStyle(fontSize: 12)),
-                            StreamBuilder(
-                                stream: accountService.getAccountsMoney(
-                                  accountIds: accounts.map((e) => e.id),
-                                  trFilters: filters,
-                                  date: dateRange.endDate,
-                                ),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return const Skeleton(
-                                        width: 70, height: 40);
-                                  }
-
-                                  return CurrencyDisplayer(
-                                      amountToConvert: snapshot.data!,
-                                      integerStyle: Theme.of(context)
-                                          .textTheme
-                                          .headlineSmall!);
-                                }),
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              t.stats.compared_to_previous_period,
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                            StreamBuilder(
-                                stream:
-                                    accountService.getAccountsMoneyVariation(
-                                  accounts: accounts,
-                                  startDate: dateRange.startDate,
-                                  endDate: dateRange.endDate,
-                                  convertToPreferredCurrency: true,
-                                ),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return const Skeleton(
-                                        width: 52, height: 22);
-                                  }
-
-                                  return TrendingValue(
-                                    percentage: snapshot.data!,
-                                    filled: false,
-                                    fontWeight: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall!
-                                        .fontWeight!,
-                                    fontSize: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall!
-                                        .fontSize!,
-                                    outlined: false,
-                                  );
-                                })
-                          ],
-                        )
-                      ],
-                    ),
-                  );
-                }
-              }),
-          const SizedBox(height: 16),
-        ],
-        SizedBox(
+                  ),
+                );
+              }
+            },
+          ),
+        Container(
+          padding:
+              const EdgeInsets.only(top: 0, bottom: 16, left: 16, right: 16),
           height: 300,
           child: StreamBuilder(
               stream: getEvolutionData(),
@@ -250,16 +249,16 @@ class FundEvolutionLineChart extends StatelessWidget {
                                 : 5,
                             titlesData: FlTitlesData(
                               show: true,
-                              leftTitles: const AxisTitles(
+                              rightTitles: const AxisTitles(
                                   sideTitles: SideTitles(showTitles: false)),
                               topTitles: const AxisTitles(
                                   sideTitles: SideTitles(showTitles: false)),
                               bottomTitles: const AxisTitles(
                                   sideTitles: SideTitles(showTitles: false)),
-                              rightTitles: AxisTitles(
+                              leftTitles: AxisTitles(
                                 sideTitles: SideTitles(
                                   showTitles: snapshot.hasData,
-                                  reservedSize: 42,
+                                  reservedSize: 40,
                                   getTitlesWidget: (value, meta) {
                                     if (value == meta.max ||
                                         value == meta.min) {
@@ -268,25 +267,14 @@ class FundEvolutionLineChart extends StatelessWidget {
 
                                     return SideTitleWidget(
                                       axisSide: meta.axisSide,
-                                      space: 0,
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            width: 5,
-                                            height: 1,
-                                            color: ultraLightBorderColor,
+                                      child: BlurBasedOnPrivateMode(
+                                        child: Text(
+                                          meta.formattedValue,
+                                          style: const TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w300,
                                           ),
-                                          const SizedBox(width: 4),
-                                          BlurBasedOnPrivateMode(
-                                            child: Text(
-                                              meta.formattedValue,
-                                              style: const TextStyle(
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.w300,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                                        ),
                                       ),
                                     );
                                   },

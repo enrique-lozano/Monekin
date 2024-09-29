@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/details/account_details_actions.dart';
 import 'package:monekin/app/transactions/label_value_info_list.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
@@ -106,6 +107,11 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                         children: [
                           CardWithHeader(
                             title: 'Info',
+                            footer: CardFooterWithSingleButton(
+                              text: t.general.edit,
+                              onButtonClick: () => RouteUtils.pushRoute(
+                                  context, AccountFormPage(account: account)),
+                            ),
                             body: LabelValueInfoList(items: [
                               LabelValueInfoListItem(
                                 value: Text(
@@ -148,14 +154,17 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                           const SizedBox(height: 16),
                           CardWithHeader(
                             title: t.home.last_transactions,
-                            onHeaderButtonClick: () {
-                              RouteUtils.pushRoute(
+                            bodyPadding:
+                                const EdgeInsets.symmetric(vertical: 6),
+                            footer: CardFooterWithSingleButton(
+                              onButtonClick: () => RouteUtils.pushRoute(
                                 context,
                                 TransactionsPage(
                                     filters: TransactionFilters(
-                                        accountsIDs: [widget.account.id])),
-                              );
-                            },
+                                  accountsIDs: [widget.account.id],
+                                )),
+                              ),
+                            ),
                             body: TransactionListComponent(
                               heroTagBuilder: (tr) =>
                                   'account-details-page__tr-icon-${tr.id}',

@@ -255,11 +255,14 @@ class _DashboardPageState extends State<DashboardPage> {
                     children: [
                       CardWithHeader(
                         title: t.financial_health.display,
-                        onHeaderButtonClick: () => RouteUtils.pushRoute(
+                        footer: CardFooterWithSingleButton(
+                          onButtonClick: () => RouteUtils.pushRoute(
                             context,
                             StatsPage(
                                 dateRangeService: dateRangeService,
-                                initialIndex: 0)),
+                                initialIndex: 0),
+                          ),
+                        ),
                         bodyPadding: const EdgeInsets.all(16),
                         body: StreamBuilder(
                           stream: FinanceHealthService().getHealthyValue(
@@ -282,17 +285,18 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                       const SizedBox(height: 16),
                       CardWithHeader(
-                          title: t.stats.by_categories,
-                          body: ChartByCategories(
-                              datePeriodState: dateRangeService),
-                          onHeaderButtonClick: () {
-                            RouteUtils.pushRoute(
-                              context,
-                              StatsPage(
-                                  dateRangeService: dateRangeService,
-                                  initialIndex: 1),
-                            );
-                          }),
+                        title: t.stats.by_categories,
+                        body: ChartByCategories(
+                            datePeriodState: dateRangeService),
+                        footer: CardFooterWithSingleButton(
+                          onButtonClick: () => RouteUtils.pushRoute(
+                            context,
+                            StatsPage(
+                                dateRangeService: dateRangeService,
+                                initialIndex: 1),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -302,35 +306,37 @@ class _DashboardPageState extends State<DashboardPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       CardWithHeader(
-                          title: t.stats.balance_evolution,
-                          body: FundEvolutionLineChart(
-                            dateRange: dateRangeService,
-                          ),
-                          onHeaderButtonClick: () {
-                            RouteUtils.pushRoute(
-                              context,
-                              StatsPage(
-                                  dateRangeService: dateRangeService,
-                                  initialIndex: 2),
-                            );
-                          }),
+                        title: t.stats.balance_evolution,
+                        body: FundEvolutionLineChart(
+                          dateRange: dateRangeService,
+                        ),
+                        footer: CardFooterWithSingleButton(onButtonClick: () {
+                          RouteUtils.pushRoute(
+                            context,
+                            StatsPage(
+                                dateRangeService: dateRangeService,
+                                initialIndex: 2),
+                          );
+                        }),
+                      ),
                       const SizedBox(height: 16),
                       CardWithHeader(
-                          title: t.stats.cash_flow,
-                          body: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 16, left: 16, right: 16),
-                            child: BalanceChartSmall(
-                                dateRangeService: dateRangeService),
-                          ),
-                          onHeaderButtonClick: () {
-                            RouteUtils.pushRoute(
-                              context,
-                              StatsPage(
-                                  dateRangeService: dateRangeService,
-                                  initialIndex: 3),
-                            );
-                          }),
+                        title: t.stats.cash_flow,
+                        body: Padding(
+                          padding: const EdgeInsets.only(
+                              top: 16, left: 16, right: 16),
+                          child: BalanceChartSmall(
+                              dateRangeService: dateRangeService),
+                        ),
+                        footer: CardFooterWithSingleButton(onButtonClick: () {
+                          RouteUtils.pushRoute(
+                            context,
+                            StatsPage(
+                                dateRangeService: dateRangeService,
+                                initialIndex: 3),
+                          );
+                        }),
+                      ),
                     ],
                   ),
                 )
