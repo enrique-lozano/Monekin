@@ -484,9 +484,12 @@
       "name": "標籤名",
       "description": "描述"
     },
+    "SELECT": {
+      "title": "選擇標籤",
+      "all": "所有標籤"
+    },
     "empty-list": "您還沒有創建任何標籤。標籤和類別是對您的動作進行分類的好方法",
     "without-tags": "沒有標籤",
-    "select": "選擇標籤",
     "add": "添加標籤",
     "create": "建立標籤",
     "create.success": "標籤創建成功",

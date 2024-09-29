@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 4
-/// Strings: 2165 (541 per locale)
+/// Strings: 2169 (542 per locale)
 ///
-/// Built on 2024-09-29 at 13:47 UTC
+/// Built on 2024-09-29 at 14:39 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -449,9 +449,9 @@ class _TranslationsTagsEn {
 		other: 'Tags',
 	);
 	late final _TranslationsTagsFormEn form = _TranslationsTagsFormEn._(_root);
+	late final _TranslationsTagsSelectEn select = _TranslationsTagsSelectEn._(_root);
 	String get empty_list => 'You haven\'t created any tags yet. Tags and categories are a great way to categorize your movements';
 	String get without_tags => 'Without tags';
-	String get select => 'Select tags';
 	String get add => 'Add tag';
 	String get create => 'Create label';
 	String get create_success => 'Label created successfully';
@@ -1015,6 +1015,17 @@ class _TranslationsTagsFormEn {
 	String get description => 'Description';
 }
 
+// Path: tags.select
+class _TranslationsTagsSelectEn {
+	_TranslationsTagsSelectEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get title => 'Select tags';
+	String get all => 'All the tags';
+}
+
 // Path: categories.select
 class _TranslationsCategoriesSelectEn {
 	_TranslationsCategoriesSelectEn._(this._root);
@@ -1534,7 +1545,7 @@ class _TranslationsHomeEs implements _TranslationsHomeEn {
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Dashboard';
+	@override String get title => 'Inicio';
 	@override String get filter_transactions => 'Filtrar transacciones';
 	@override String get hello_day => 'Buenos días,';
 	@override String get hello_night => 'Buenas noches,';
@@ -1732,9 +1743,9 @@ class _TranslationsTagsEs implements _TranslationsTagsEn {
 		other: 'Etiquetas',
 	);
 	@override late final _TranslationsTagsFormEs form = _TranslationsTagsFormEs._(_root);
+	@override late final _TranslationsTagsSelectEs select = _TranslationsTagsSelectEs._(_root);
 	@override String get empty_list => 'No has creado ninguna etiqueta aun. Las etiquetas y las categorías son una gran forma de categorizar tus movimientos';
 	@override String get without_tags => 'Sin etiquetas';
-	@override String get select => 'Selecionar etiquetas';
 	@override String get create => 'Crear etiqueta';
 	@override String get add => 'Añadir etiqueta';
 	@override String get create_success => 'Etiqueta creada correctamente';
@@ -2296,6 +2307,17 @@ class _TranslationsTagsFormEs implements _TranslationsTagsFormEn {
 	// Translations
 	@override String get name => 'Nombre de la etiqueta';
 	@override String get description => 'Descripción';
+}
+
+// Path: tags.select
+class _TranslationsTagsSelectEs implements _TranslationsTagsSelectEn {
+	_TranslationsTagsSelectEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Selecciona etiquetas';
+	@override String get all => 'Todas las etiquetas';
 }
 
 // Path: categories.select
@@ -3016,9 +3038,9 @@ class _TranslationsTagsUk implements _TranslationsTagsEn {
 		other: 'Теги',
 	);
 	@override late final _TranslationsTagsFormUk form = _TranslationsTagsFormUk._(_root);
+	@override late final _TranslationsTagsSelectUk select = _TranslationsTagsSelectUk._(_root);
 	@override String get empty_list => 'Ви ще не створили жодних тегів. Теги та категорії - це відмінний спосіб категоризувати ваші рухи';
 	@override String get without_tags => 'Без тегів';
-	@override String get select => 'Вибрати теги';
 	@override String get add => 'Додати тег';
 	@override String get create => 'Створити мітку';
 	@override String get create_success => 'Мітка успішно створена';
@@ -3580,6 +3602,17 @@ class _TranslationsTagsFormUk implements _TranslationsTagsFormEn {
 	// Translations
 	@override String get name => 'Назва тегу';
 	@override String get description => 'Опис';
+}
+
+// Path: tags.select
+class _TranslationsTagsSelectUk implements _TranslationsTagsSelectEn {
+	_TranslationsTagsSelectUk._(this._root);
+
+	@override final _TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Вибрати теги';
+	@override String get all => 'Усі теги';
 }
 
 // Path: categories.select
@@ -4299,9 +4332,9 @@ class _TranslationsTagsZhTw implements _TranslationsTagsEn {
 		other: '標籤',
 	);
 	@override late final _TranslationsTagsFormZhTw form = _TranslationsTagsFormZhTw._(_root);
+	@override late final _TranslationsTagsSelectZhTw select = _TranslationsTagsSelectZhTw._(_root);
 	@override String get empty_list => '您還沒有創建任何標籤。標籤和類別是對您的動作進行分類的好方法';
 	@override String get without_tags => '沒有標籤';
-	@override String get select => '選擇標籤';
 	@override String get add => '添加標籤';
 	@override String get create => '建立標籤';
 	@override String get create_success => '標籤創建成功';
@@ -4863,6 +4896,17 @@ class _TranslationsTagsFormZhTw implements _TranslationsTagsFormEn {
 	// Translations
 	@override String get name => '標籤名';
 	@override String get description => '描述';
+}
+
+// Path: tags.select
+class _TranslationsTagsSelectZhTw implements _TranslationsTagsSelectEn {
+	_TranslationsTagsSelectZhTw._(this._root);
+
+	@override final _TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '選擇標籤';
+	@override String get all => '所有標籤';
 }
 
 // Path: categories.select
@@ -5708,9 +5752,10 @@ extension on Translations {
 			);
 			case 'tags.form.name': return 'Tag name';
 			case 'tags.form.description': return 'Description';
+			case 'tags.select.title': return 'Select tags';
+			case 'tags.select.all': return 'All the tags';
 			case 'tags.empty_list': return 'You haven\'t created any tags yet. Tags and categories are a great way to categorize your movements';
 			case 'tags.without_tags': return 'Without tags';
-			case 'tags.select': return 'Select tags';
 			case 'tags.add': return 'Add tag';
 			case 'tags.create': return 'Create label';
 			case 'tags.create_success': return 'Label created successfully';
@@ -6025,7 +6070,7 @@ extension on _TranslationsEs {
 			case 'intro.last_slide_title': return 'Todo listo!';
 			case 'intro.last_slide_descr': return 'Con Monekin, podrás al fin lograr la independencia financiaria que tanto deseas. Podrás ver gráficas, presupuestos, consejos, estadisticas y mucho más sobre tu dinero.';
 			case 'intro.last_slide_descr2': return 'Esperemos que disfrutes de tu experiencia! No dudes en contactar con nosotros en caso de dudas, sugerencias...';
-			case 'home.title': return 'Dashboard';
+			case 'home.title': return 'Inicio';
 			case 'home.filter_transactions': return 'Filtrar transacciones';
 			case 'home.hello_day': return 'Buenos días,';
 			case 'home.hello_night': return 'Buenas noches,';
@@ -6330,9 +6375,10 @@ extension on _TranslationsEs {
 			);
 			case 'tags.form.name': return 'Nombre de la etiqueta';
 			case 'tags.form.description': return 'Descripción';
+			case 'tags.select.title': return 'Selecciona etiquetas';
+			case 'tags.select.all': return 'Todas las etiquetas';
 			case 'tags.empty_list': return 'No has creado ninguna etiqueta aun. Las etiquetas y las categorías son una gran forma de categorizar tus movimientos';
 			case 'tags.without_tags': return 'Sin etiquetas';
-			case 'tags.select': return 'Selecionar etiquetas';
 			case 'tags.create': return 'Crear etiqueta';
 			case 'tags.add': return 'Añadir etiqueta';
 			case 'tags.create_success': return 'Etiqueta creada correctamente';
@@ -6951,9 +6997,10 @@ extension on _TranslationsUk {
 			);
 			case 'tags.form.name': return 'Назва тегу';
 			case 'tags.form.description': return 'Опис';
+			case 'tags.select.title': return 'Вибрати теги';
+			case 'tags.select.all': return 'Усі теги';
 			case 'tags.empty_list': return 'Ви ще не створили жодних тегів. Теги та категорії - це відмінний спосіб категоризувати ваші рухи';
 			case 'tags.without_tags': return 'Без тегів';
-			case 'tags.select': return 'Вибрати теги';
 			case 'tags.add': return 'Додати тег';
 			case 'tags.create': return 'Створити мітку';
 			case 'tags.create_success': return 'Мітка успішно створена';
@@ -7572,9 +7619,10 @@ extension on _TranslationsZhTw {
 			);
 			case 'tags.form.name': return '標籤名';
 			case 'tags.form.description': return '描述';
+			case 'tags.select.title': return '選擇標籤';
+			case 'tags.select.all': return '所有標籤';
 			case 'tags.empty_list': return '您還沒有創建任何標籤。標籤和類別是對您的動作進行分類的好方法';
 			case 'tags.without_tags': return '沒有標籤';
-			case 'tags.select': return '選擇標籤';
 			case 'tags.add': return '添加標籤';
 			case 'tags.create': return '建立標籤';
 			case 'tags.create_success': return '標籤創建成功';

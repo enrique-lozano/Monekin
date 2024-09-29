@@ -154,7 +154,7 @@
     "lastSlideDescr2": "Esperemos que disfrutes de tu experiencia! No dudes en contactar con nosotros en caso de dudas, sugerencias..."
   },
   "HOME": {
-    "title": "Dashboard",
+    "title": "Inicio",
     "filter-transactions": "Filtrar transacciones",
     "hello-day": "Buenos días,",
     "hello-night": "Buenas noches,",
@@ -491,9 +491,12 @@
       "name": "Nombre de la etiqueta",
       "description": "Descripción"
     },
+    "SELECT": {
+      "title": "Selecciona etiquetas",
+      "all": "Todas las etiquetas"
+    },
     "empty-list": "No has creado ninguna etiqueta aun. Las etiquetas y las categorías son una gran forma de categorizar tus movimientos",
     "without-tags": "Sin etiquetas",
-    "select": "Selecionar etiquetas",
     "create": "Crear etiqueta",
     "add": "Añadir etiqueta",
     "create.success": "Etiqueta creada correctamente",

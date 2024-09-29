@@ -484,9 +484,12 @@
       "name": "Tag name",
       "description": "Description"
     },
+    "SELECT": {
+      "title": "Select tags",
+      "all": "All the tags"
+    },
     "empty-list": "You haven't created any tags yet. Tags and categories are a great way to categorize your movements",
     "without-tags": "Without tags",
-    "select": "Select tags",
     "add": "Add tag",
     "create": "Create label",
     "create.success": "Label created successfully",
