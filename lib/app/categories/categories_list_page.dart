@@ -101,7 +101,7 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
                       bgColor: AppColors.of(context).light,
                       margin: const EdgeInsets.symmetric(
                           horizontal: 0, vertical: 4),
-                      borderRadius: 12,
+                      borderRadius: BorderRadius.circular(12),
                       child: ListTile(
                         trailing: categories.length > 1
                             ? ReorderableDragIcon(

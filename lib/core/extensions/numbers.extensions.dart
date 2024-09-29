@@ -12,4 +12,9 @@ extension FileFormatter on num {
 
     return '${NumberFormat.decimalPatternDigits(decimalDigits: 1).format(this / pow(base, digitGroups))} ${units[digitGroups]}';
   }
+
+  double roundWithDecimals(int decimalPlaces) {
+    num mod = pow(10.0, decimalPlaces);
+    return ((this * mod).round().toDouble() / mod);
+  }
 }

@@ -14,7 +14,8 @@ class Tappable extends StatelessWidget {
   });
 
   final Color? bgColor;
-  final double? borderRadius;
+  final BorderRadius? borderRadius;
+
   final ShapeBorder? shape;
 
   final EdgeInsets? margin;
@@ -31,18 +32,16 @@ class Tappable extends StatelessWidget {
       margin: margin,
       child: Material(
         color: bgColor,
-        borderRadius:
-            borderRadius == null ? null : BorderRadius.circular(borderRadius!),
+        borderRadius: borderRadius,
         shape: shape,
         child: InkWell(
-            onTap: onTap,
-            onLongPress: onLongPress,
-            onDoubleTap: onDoubleTap,
-            customBorder: shape,
-            borderRadius: borderRadius == null
-                ? null
-                : BorderRadius.circular(borderRadius!),
-            child: child),
+          onTap: onTap,
+          onLongPress: onLongPress,
+          onDoubleTap: onDoubleTap,
+          customBorder: shape,
+          borderRadius: borderRadius,
+          child: child,
+        ),
       ),
     );
   }

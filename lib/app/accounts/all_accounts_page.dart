@@ -101,7 +101,7 @@ class _AllAccountsPageState extends State<AllAccountsPage> {
                       bgColor: AppColors.of(context).light,
                       margin: const EdgeInsets.symmetric(
                           horizontal: 0, vertical: 4),
-                      borderRadius: 12,
+                      borderRadius: BorderRadius.circular(12),
                       child: ListTile(
                         trailing: accounts.length > 1
                             ? ReorderableDragIcon(

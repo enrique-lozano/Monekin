@@ -126,6 +126,7 @@
       "Date": "Por fecha"
     },
     "VALIDATIONS": {
+      "form_error": "Corrije los campos indicados en el formulario para continuar",
       "required": "Campo obligatorio",
       "positive": "Debe ser positivo",
       "min_number": "Debe ser mayor que {{x}}",
