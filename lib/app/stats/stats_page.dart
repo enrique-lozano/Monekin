@@ -186,7 +186,8 @@ class _StatsPageState extends State<StatsPage> {
                   const SizedBox(height: 16),
                   CardWithHeader(
                     title: t.stats.by_periods,
-                    bodyPadding: const EdgeInsets.only(bottom: 12, top: 16),
+                    bodyPadding:
+                        const EdgeInsets.only(bottom: 12, top: 16, right: 16),
                     body: BalanceBarChart(
                       dateRange: dateRangeService,
                       filters: filters,

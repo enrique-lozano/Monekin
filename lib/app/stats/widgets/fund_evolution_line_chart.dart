@@ -171,7 +171,7 @@ class FundEvolutionLineChart extends StatelessWidget {
           ),
         Container(
           padding:
-              const EdgeInsets.only(top: 0, bottom: 16, left: 16, right: 16),
+              const EdgeInsets.only(top: 12, bottom: 16, left: 16, right: 16),
           height: 300,
           child: StreamBuilder(
               stream: getEvolutionData(),
@@ -258,7 +258,7 @@ class FundEvolutionLineChart extends StatelessWidget {
                               leftTitles: AxisTitles(
                                 sideTitles: SideTitles(
                                   showTitles: snapshot.hasData,
-                                  reservedSize: 40,
+                                  reservedSize: 38,
                                   getTitlesWidget: (value, meta) {
                                     if (value == meta.max ||
                                         value == meta.min) {
