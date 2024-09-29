@@ -92,7 +92,7 @@ class _TagSelectorState extends State<TagSelector> {
         snapSizes: const [0.65],
         builder: (context, scrollController) {
           return ModalContainer(
-            title: t.tags.select,
+            title: t.tags.select.title,
             titleBuilder: selectedTags.isEmpty
                 ? null
                 : (title) {

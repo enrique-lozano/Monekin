@@ -212,7 +212,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                                   .map((e) =>
                                       e == null ? t.tags.without_tags : e.name)
                                   .printFormatted()
-                              : t.account.select.all,
+                              : t.tags.select.all,
                           onTap: () => showTagListModal(
                             context,
                             modal: TagSelector(

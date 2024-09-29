@@ -783,7 +783,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
         },
         title: tags.isEmpty
             ? Text(
-                t.tags.select,
+                t.tags.select.title,
                 style: TextStyle(
                   color: AppColors.of(context).onSurface.withOpacity(0.75),
                 ),
