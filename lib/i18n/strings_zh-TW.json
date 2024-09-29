@@ -125,6 +125,7 @@
       "Date": "按日期"
     },
     "VALIDATIONS": {
+      "form_error": "修正表單中指示的欄位以繼續",
       "required": "必填項目",
       "positive": "應該是積極的",
       "min_number": "應該大於{{x}}",

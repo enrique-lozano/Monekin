@@ -125,6 +125,7 @@
       "Date": "By date"
     },
     "VALIDATIONS": {
+      "form_error": "Fix the indicated fields to continue",
       "required": "Required field",
       "positive": "Should be positive",
       "min_number": "Should be greater than {{x}}",

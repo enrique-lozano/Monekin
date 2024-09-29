@@ -113,7 +113,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 });
                           },
                           bgColor: Colors.transparent,
-                          borderRadius: 12,
+                          borderRadius: BorderRadius.circular(12),
                           child: Padding(
                             padding: const EdgeInsets.all(8),
                             child: Row(
@@ -552,7 +552,7 @@ class _HorizontalScrollableAccountList extends StatelessWidget {
                         ),
                       ),
                       bgColor: AppColors.of(context).light,
-                      borderRadius: 12,
+                      borderRadius: BorderRadius.circular(12),
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: SizedBox(
