@@ -32,7 +32,7 @@ class IncomeExpenseComparason extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 12),
           child: Row(children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
