@@ -76,7 +76,7 @@ class FundEvolutionLineChart extends StatelessWidget {
 
     return Column(
       children: [
-        if (showBalanceHeader) ...[
+        if (showBalanceHeader)
           StreamBuilder(
             stream: filters.accounts(),
             builder: (context, accountsSnapshot) {
@@ -163,8 +163,7 @@ class FundEvolutionLineChart extends StatelessWidget {
               }
             },
           ),
-          const SizedBox(height: 24),
-        ],
+        const SizedBox(height: 24),
         SizedBox(
           height: 260,
           child: StreamBuilder(
