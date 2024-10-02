@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-import '../app_colors.dart';
-
 /// The radius of the `CardWithHeader` widget, a very useful widget through the app
 const cardWithHeaderRadius = 12.0;
 
@@ -29,18 +27,19 @@ class CardWithHeader extends StatelessWidget {
     return Card(
       clipBehavior: Clip.hardEdge,
       margin: const EdgeInsets.all(0),
+      elevation: 0,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             clipBehavior: Clip.hardEdge,
             padding: const EdgeInsets.fromLTRB(16, 12, 2, 4),
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(12),
                 topRight: Radius.circular(12),
               ),
-              color: AppColors.of(context).light,
+              // color: AppColors.of(context).light,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,7 +49,7 @@ class CardWithHeader extends StatelessWidget {
                   children: [
                     Text(title,
                         style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w700)),
+                            fontSize: 18, fontWeight: FontWeight.w600)),
                     if (subtitle != null)
                       Text(
                         subtitle!,

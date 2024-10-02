@@ -28,6 +28,6 @@ class ListTileActionItem {
       }
     }
 
-    return AppColors.of(context).primary;
+    return Theme.of(context).colorScheme.primary;
   }
 }

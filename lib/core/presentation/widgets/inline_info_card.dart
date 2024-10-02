@@ -24,7 +24,7 @@ class InlineInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color color = mode == InlineInfoCardMode.info
-        ? AppColors.of(context).primary
+        ? Theme.of(context).colorScheme.primary
         : Colors.amber;
 
     return Card(

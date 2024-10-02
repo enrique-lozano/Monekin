@@ -9,7 +9,6 @@ import 'package:monekin/app/transactions/widgets/bulk_edit_transaction_modal.dar
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
@@ -169,7 +168,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
 
                 return Card(
                   elevation: 2,
-                  //color: AppColors.of(context).primary,
+                  //color: Theme.of(context).colorScheme.primary,
                   margin: const EdgeInsets.all(8),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(6),
@@ -269,8 +268,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
 
   AppBar selectedTransactionsAppbar() {
     return AppBar(
-      backgroundColor: AppColors.of(context).primary,
-      foregroundColor: AppColors.of(context).onPrimary,
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      foregroundColor: Theme.of(context).colorScheme.onPrimary,
       leading: IconButton(
         onPressed: () {
           cleanSelectedTransactions();

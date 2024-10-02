@@ -120,6 +120,7 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
             children: [
               CardWithHeader(
                 title: t.stats.balance_by_account,
+                subtitle: "¿Donde esta mi dinero?",
                 bodyPadding: const EdgeInsets.only(bottom: 0, top: 8),
                 body: accounts.isEmpty
                     ? emptyAccountsIndicator()

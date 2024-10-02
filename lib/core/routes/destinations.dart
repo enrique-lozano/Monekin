@@ -34,10 +34,11 @@ class MainMenuDestination {
 
   final Widget destination;
 
-  NavigationDestination toNavigationDestinationWidget() {
+  NavigationDestination toNavigationDestinationWidget(BuildContext context) {
     return NavigationDestination(
       icon: Icon(icon),
-      selectedIcon: Icon(selectedIcon ?? icon),
+      selectedIcon: Icon(selectedIcon ?? icon,
+          color: Theme.of(context).colorScheme.onPrimary),
       label: label,
     );
   }

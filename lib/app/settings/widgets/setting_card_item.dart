@@ -27,15 +27,15 @@ class SettingCardItem extends StatelessWidget {
     return Tappable(
       bgColor: isPrimary
           ? isAppInLightBrightness(context)
-              ? AppColors.of(context).primary.lighten(0.8)
-              : AppColors.of(context).primary.darken(0.8)
+              ? Theme.of(context).colorScheme.primary.lighten(0.8)
+              : Theme.of(context).colorScheme.primary.darken(0.8)
           : null,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
         side: BorderSide(
           width: 2,
           color: isPrimary
-              ? AppColors.of(context).primary
+              ? Theme.of(context).colorScheme.primary
               : Theme.of(context).dividerColor,
         ),
       ),
@@ -51,9 +51,9 @@ class SettingCardItem extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: isPrimary ? AppColors.of(context).primary : null,
+              color: isPrimary ? Theme.of(context).colorScheme.primary : null,
               size: mainAxis == Axis.horizontal ? 24 : 28,
-              // color: AppColors.of(context).primary,
+              // color: Theme.of(context).colorScheme.primary,
             ),
             if (mainAxis == Axis.horizontal) const SizedBox(width: 12),
             if (mainAxis == Axis.vertical) const SizedBox(height: 8),

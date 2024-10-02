@@ -9,13 +9,14 @@ import 'package:monekin/app/home/widgets/income_or_expense_card.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
 import 'package:monekin/app/settings/edit_profile_modal.dart';
 import 'package:monekin/app/stats/stats_page.dart';
-import 'package:monekin/app/stats/widgets/balance_bar_chart_small.dart';
+import 'package:monekin/app/stats/widgets/balance_bar_chart.dart';
 import 'package:monekin/app/stats/widgets/finance_health/finance_health_main_info.dart';
 import 'package:monekin/app/stats/widgets/fund_evolution_line_chart.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/chart_by_categories.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
@@ -61,7 +62,8 @@ class _DashboardPageState extends State<DashboardPage> {
         BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md);
 
     return Scaffold(
-        appBar: EmptyAppBar(color: AppColors.of(context).light),
+        appBar: EmptyAppBar(
+            color: Theme.of(context).colorSchemeExtended.dashboardHeader),
         floatingActionButton:
             hideDrawerAndFloatingButton ? null : const NewTransactionButton(),
         drawer: hideDrawerAndFloatingButton
@@ -84,155 +86,59 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
         body: SingleChildScrollView(
           child: Column(children: [
-            DefaultTextStyle.merge(
-              style: TextStyle(
-                  color: Theme.of(context).appBarTheme.foregroundColor),
-              child: Card(
-                margin: const EdgeInsets.only(bottom: 24),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(16),
-                    bottomRight: Radius.circular(16),
-                  ),
+            Card(
+              color: Theme.of(context).colorSchemeExtended.dashboardHeader,
+              margin: const EdgeInsets.only(bottom: 24),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(16),
+                  bottomRight: Radius.circular(16),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
-                  child: Column(
+              ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+                child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Tappable(
-                            onTap: () {
-                              showModalBottomSheet(
-                                  context: context,
-                                  isScrollControlled: true,
-                                  showDragHandle: true,
-                                  builder: (context) {
-                                    return const EditProfileModal();
-                                  });
-                            },
-                            bgColor: Colors.transparent,
-                            borderRadius: BorderRadius.circular(12),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Row(
-                                children: [
-                                  if (BreakPoint.of(context)
-                                      .isSmallerThan(BreakpointID.md)) ...[
-                                    StreamBuilder(
-                                        stream: UserSettingService.instance
-                                            .getSetting(SettingKey.avatar),
-                                        builder: (context, snapshot) {
-                                          return UserAvatar(
-                                              avatar: snapshot.data);
-                                        }),
-                                    const SizedBox(width: 8),
-                                  ],
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Welcome again!",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium!
-                                            .copyWith(
-                                              fontWeight: FontWeight.w300,
-                                            ),
-                                      ),
-                                      StreamBuilder(
-                                          stream: UserSettingService.instance
-                                              .getSetting(SettingKey.userName),
-                                          builder: (context, snapshot) {
-                                            if (!snapshot.hasData) {
-                                              return const Skeleton(
-                                                  width: 70, height: 12);
-                                            }
-
-                                            return Text(
-                                              snapshot.data!,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleSmall!
-                                                  .copyWith(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 18,
-                                                  ),
-                                            );
-                                          }),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          ActionChip(
-                            label: Text(dateRangeService.getText(context)),
-                            backgroundColor:
-                                AppColors.of(context).primaryContainer,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              side: BorderSide(
-                                style: BorderStyle.none,
-                                color: AppColors.of(context).onPrimary,
-                              ),
-                            ),
-                            onPressed: () {
-                              openDatePeriodModal(
-                                context,
-                                DatePeriodModal(
-                                  initialDatePeriod:
-                                      dateRangeService.datePeriod,
-                                ),
-                              ).then((value) {
-                                if (value == null) return;
-
-                                setState(() {
-                                  dateRangeService = dateRangeService.copyWith(
-                                    periodModifier: 0,
-                                    datePeriod: value,
-                                  );
-                                });
-                              });
-                            },
-                          ),
+                          buildWelcomeMsgAndAvatar(context),
+                          buildDatePeriodSelector(context),
                         ],
                       ),
-                      const Divider(height: 16),
+                      Divider(
+                        height: 16,
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      ),
                       const SizedBox(height: 8),
                       StreamBuilder(
-                        stream: AccountService.instance.getAccounts(),
-                        builder: (context, accounts) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              totalBalanceIndicator(
-                                  context, accounts, accountService),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  IncomeOrExpenseCard(
-                                    type: TransactionType.E,
-                                    startDate: dateRangeService.startDate,
-                                    endDate: dateRangeService.endDate,
-                                  ),
-                                  IncomeOrExpenseCard(
-                                    type: TransactionType.I,
-                                    startDate: dateRangeService.startDate,
-                                    endDate: dateRangeService.endDate,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
+                          stream: AccountService.instance.getAccounts(),
+                          builder: (context, accounts) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                totalBalanceIndicator(
+                                    context, accounts, accountService),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    IncomeOrExpenseCard(
+                                      type: TransactionType.E,
+                                      startDate: dateRangeService.startDate,
+                                      endDate: dateRangeService.endDate,
+                                    ),
+                                    IncomeOrExpenseCard(
+                                      type: TransactionType.I,
+                                      startDate: dateRangeService.startDate,
+                                      endDate: dateRangeService.endDate,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            );
+                          })
+                    ]),
               ),
             ),
 
@@ -315,9 +221,9 @@ class _DashboardPageState extends State<DashboardPage> {
                       children: [
                         CardWithHeader(
                           title: t.stats.balance_evolution,
+                          bodyPadding: const EdgeInsets.all(16),
                           body: FundEvolutionLineChart(
-                            dateRange: dateRangeService,
-                          ),
+                              dateRange: dateRangeService),
                           footer: CardFooterWithSingleButton(onButtonClick: () {
                             RouteUtils.pushRoute(
                               context,
@@ -329,12 +235,15 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                         const SizedBox(height: 16),
                         CardWithHeader(
-                          title: t.stats.cash_flow,
-                          body: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 16, left: 16, right: 16),
-                            child: BalanceChartSmall(
-                                dateRangeService: dateRangeService),
+                          title: t.stats.by_periods,
+                          bodyPadding: const EdgeInsets.only(
+                              bottom: 12, top: 24, right: 16),
+                          body: BalanceBarChart(
+                            dateRange: dateRangeService,
+                            filters: TransactionFilters(
+                              minDate: dateRangeService.startDate,
+                              maxDate: dateRangeService.endDate,
+                            ),
                           ),
                           footer: CardFooterWithSingleButton(onButtonClick: () {
                             RouteUtils.pushRoute(
@@ -344,7 +253,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                   initialIndex: 3),
                             );
                           }),
-                        ),
+                        )
                       ],
                     ),
                   )
@@ -353,6 +262,115 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
           ]),
         ));
+  }
+
+  ActionChip buildDatePeriodSelector(BuildContext context) {
+    return ActionChip(
+      label: Text(dateRangeService.getText(context),
+          style: TextStyle(
+              color: Theme.of(context).colorSchemeExtended.onDashboardHeader)),
+      backgroundColor: Theme.of(context).colorSchemeExtended.dashboardHeader,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
+        side: BorderSide(
+          //   style: BorderStyle.none,
+          color: Theme.of(context).colorSchemeExtended.onDashboardHeader,
+        ),
+      ),
+      onPressed: () {
+        openDatePeriodModal(
+          context,
+          DatePeriodModal(
+            initialDatePeriod: dateRangeService.datePeriod,
+          ),
+        ).then((value) {
+          if (value == null) return;
+
+          setState(() {
+            dateRangeService = dateRangeService.copyWith(
+              periodModifier: 0,
+              datePeriod: value,
+            );
+          });
+        });
+      },
+    );
+  }
+
+  Tappable buildWelcomeMsgAndAvatar(BuildContext context) {
+    return Tappable(
+      onTap: () {
+        showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            showDragHandle: true,
+            builder: (context) {
+              return const EditProfileModal();
+            });
+      },
+      bgColor: Colors.transparent,
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(4, 8, 24, 8),
+        child: Row(
+          children: [
+            if (BreakPoint.of(context).isSmallerThan(BreakpointID.md)) ...[
+              StreamBuilder(
+                  stream:
+                      UserSettingService.instance.getSetting(SettingKey.avatar),
+                  builder: (context, snapshot) {
+                    return UserAvatar(
+                      avatar: snapshot.data,
+                      backgroundColor: Theme.of(context)
+                          .colorSchemeExtended
+                          .onDashboardHeader
+                          .darken(0.25),
+                      border: Border.all(
+                        width: 2,
+                        color: Theme.of(context)
+                            .colorSchemeExtended
+                            .onDashboardHeader,
+                      ),
+                    );
+                  }),
+              const SizedBox(width: 12),
+            ],
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Welcome again!",
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.w300,
+                      color: Theme.of(context)
+                          .colorSchemeExtended
+                          .onDashboardHeader),
+                ),
+                StreamBuilder(
+                    stream: UserSettingService.instance
+                        .getSetting(SettingKey.userName),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Skeleton(width: 70, height: 12);
+                      }
+
+                      return Text(
+                        snapshot.data!,
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                            color: Theme.of(context)
+                                .colorSchemeExtended
+                                .onDashboardHeader),
+                      );
+                    }),
+                const SizedBox(width: 8),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Widget totalBalanceIndicator(
@@ -387,7 +405,8 @@ class _DashboardPageState extends State<DashboardPage> {
         children: [
           Text(
             t.home.total_balance,
-            style: Theme.of(context).textTheme.labelSmall!,
+            style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                color: Theme.of(context).colorSchemeExtended.onDashboardHeader),
           ),
           if (!accounts.hasData) ...[
             const Skeleton(width: 70, height: 40),
@@ -401,10 +420,12 @@ class _DashboardPageState extends State<DashboardPage> {
                 if (snapshot.hasData) {
                   return CurrencyDisplayer(
                     amountToConvert: snapshot.data!,
-                    integerStyle: const TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    integerStyle: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w600,
+                        color: Theme.of(context)
+                            .colorSchemeExtended
+                            .onDashboardHeader),
                   );
                 }
 
@@ -424,9 +445,11 @@ class _DashboardPageState extends State<DashboardPage> {
                     return const Skeleton(width: 52, height: 22);
                   }
 
-                  return TrendingValue(
-                    percentage: snapshot.data!,
+                  return const TrendingValue(
+                    percentage: 0,
                     fontWeight: FontWeight.bold,
+                    filled: true,
+                    outlined: true,
                     fontSize: 16,
                   );
                 },

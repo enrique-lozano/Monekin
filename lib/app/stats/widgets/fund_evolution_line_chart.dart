@@ -1,10 +1,10 @@
-import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -15,8 +15,6 @@ import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
-
-import '../../../core/presentation/app_colors.dart';
 
 class LineChartDataItem {
   List<double> balance;
@@ -70,7 +68,7 @@ class FundEvolutionLineChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final lineColor = AppColors.of(context).primary;
+    final lineColor = Theme.of(context).colorScheme.primary;
 
     final accountService = AccountService.instance;
 
@@ -96,83 +94,78 @@ class FundEvolutionLineChart extends StatelessWidget {
               } else {
                 final accounts = accountsSnapshot.data!;
 
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(t.stats.final_balance,
-                              style: const TextStyle(fontSize: 12)),
-                          StreamBuilder(
-                              stream: accountService.getAccountsMoney(
-                                accountIds: accounts.map((e) => e.id),
-                                trFilters: filters,
-                                date: dateRange.endDate,
-                              ),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return const Skeleton(width: 70, height: 40);
-                                }
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(t.stats.final_balance,
+                            style: const TextStyle(fontSize: 12)),
+                        StreamBuilder(
+                            stream: accountService.getAccountsMoney(
+                              accountIds: accounts.map((e) => e.id),
+                              trFilters: filters,
+                              date: dateRange.endDate,
+                            ),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return const Skeleton(width: 70, height: 40);
+                              }
 
-                                return CurrencyDisplayer(
-                                    amountToConvert: snapshot.data!,
-                                    integerStyle: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall!);
-                              }),
-                        ],
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            t.stats.compared_to_previous_period,
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                          StreamBuilder(
-                              stream: accountService.getAccountsMoneyVariation(
-                                accounts: accounts,
-                                startDate: dateRange.startDate,
-                                endDate: dateRange.endDate,
-                                convertToPreferredCurrency: true,
-                              ),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return const Skeleton(width: 52, height: 22);
-                                }
+                              return CurrencyDisplayer(
+                                  amountToConvert: snapshot.data!,
+                                  integerStyle: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall!);
+                            }),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          t.stats.compared_to_previous_period,
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                        StreamBuilder(
+                            stream: accountService.getAccountsMoneyVariation(
+                              accounts: accounts,
+                              startDate: dateRange.startDate,
+                              endDate: dateRange.endDate,
+                              convertToPreferredCurrency: true,
+                            ),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return const Skeleton(width: 52, height: 22);
+                              }
 
-                                return TrendingValue(
-                                  percentage: snapshot.data!,
-                                  filled: false,
-                                  fontWeight: Theme.of(context)
-                                      .textTheme
-                                      .headlineSmall!
-                                      .fontWeight!,
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .headlineSmall!
-                                      .fontSize!,
-                                  outlined: false,
-                                );
-                              })
-                        ],
-                      )
-                    ],
-                  ),
+                              return TrendingValue(
+                                percentage: snapshot.data!,
+                                filled: false,
+                                fontWeight: Theme.of(context)
+                                    .textTheme
+                                    .headlineSmall!
+                                    .fontWeight!,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .headlineSmall!
+                                    .fontSize!,
+                                outlined: false,
+                              );
+                            })
+                      ],
+                    )
+                  ],
                 );
               }
             },
           ),
-        Container(
-          padding:
-              const EdgeInsets.only(top: 12, bottom: 16, left: 16, right: 16),
-          height: 300,
+        const SizedBox(height: 24),
+        SizedBox(
+          height: 260,
           child: StreamBuilder(
               stream: getEvolutionData(),
               builder: (context, snapshot) {
@@ -214,7 +207,7 @@ class FundEvolutionLineChart extends StatelessWidget {
                               touchTooltipData: LineTouchTooltipData(
                                 tooltipMargin: -10,
                                 getTooltipColor: (spot) =>
-                                    AppColors.of(context).surface,
+                                    Theme.of(context).colorScheme.surface,
                                 getTooltipItems: (touchedSpots) {
                                   return touchedSpots.map((barSpot) {
                                     final flSpot = barSpot;
@@ -240,12 +233,14 @@ class FundEvolutionLineChart extends StatelessWidget {
                               ),
                             ),
                             minY: snapshot.hasData
-                                ? snapshot.data!.balance.min -
-                                    snapshot.data!.balance.min * 0.1
+                                ? (snapshot.data!.balance.allItemsEqual()
+                                    ? snapshot.data!.balance.first - 10.2
+                                    : null)
                                 : 2,
                             maxY: snapshot.hasData
-                                ? snapshot.data!.balance.max +
-                                    snapshot.data!.balance.max * 0.1
+                                ? (snapshot.data!.balance.allItemsEqual()
+                                    ? snapshot.data!.balance.first + 10.2
+                                    : null)
                                 : 5,
                             titlesData: FlTitlesData(
                               show: true,
@@ -258,7 +253,7 @@ class FundEvolutionLineChart extends StatelessWidget {
                               leftTitles: AxisTitles(
                                 sideTitles: SideTitles(
                                   showTitles: snapshot.hasData,
-                                  reservedSize: 38,
+                                  reservedSize: 28,
                                   getTitlesWidget: (value, meta) {
                                     if (value == meta.max ||
                                         value == meta.min) {
@@ -270,6 +265,10 @@ class FundEvolutionLineChart extends StatelessWidget {
                                       child: BlurBasedOnPrivateMode(
                                         child: Text(
                                           meta.formattedValue,
+                                          maxLines: 1,
+                                          textAlign: TextAlign.end,
+                                          softWrap: false,
+                                          overflow: TextOverflow.visible,
                                           style: const TextStyle(
                                             fontSize: 10,
                                             fontWeight: FontWeight.w300,

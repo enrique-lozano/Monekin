@@ -14,7 +14,7 @@ enum NextPayStatus {
 
   Color color(BuildContext context) {
     if (this == planified) {
-      return AppColors.of(context).primary;
+      return Theme.of(context).colorScheme.primary;
     } else if (this == delayed) {
       return AppColors.of(context).danger;
     }

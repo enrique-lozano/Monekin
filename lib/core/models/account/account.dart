@@ -79,8 +79,8 @@ class Account extends AccountInDB {
     return color != null
         ? ColorHex.get(color!)
         : Theme.of(context).brightness == Brightness.dark
-            ? AppColors.of(context).primaryContainer
-            : AppColors.of(context).primary;
+            ? Theme.of(context).colorScheme.primaryContainer
+            : Theme.of(context).colorScheme.primary;
   }
 
   IconDisplayer displayIcon(

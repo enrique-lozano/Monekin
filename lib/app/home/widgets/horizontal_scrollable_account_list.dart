@@ -3,7 +3,6 @@ import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/details/account_details.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
@@ -53,7 +52,7 @@ class HorizontalScrollableAccountList extends StatelessWidget {
                               'dashboard-page__account-icon-${account.id}',
                         ),
                       ),
-                      bgColor: AppColors.of(context).light,
+                      bgColor: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(9999),
                       child: Padding(
                         padding: const EdgeInsets.all(16),
@@ -133,7 +132,6 @@ class HorizontalScrollableAccountList extends StatelessWidget {
                 Opacity(
                   opacity: 0.6,
                   child: Tappable(
-                    //   bgColor: AppColors.of(context).light,
                     onTap: () {
                       RouteUtils.pushRoute(context, const AccountFormPage());
                     },

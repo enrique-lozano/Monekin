@@ -306,11 +306,16 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
                       : Colors.white24;
 
                   return BarChart(BarChartData(
+                    maxY: snapshot.data!.expense.every((ex) => ex == 0) &&
+                            snapshot.data!.income.every((inc) => inc == 0) &&
+                            snapshot.data!.balance.every((bal) => bal == 0)
+                        ? 10.2
+                        : null,
                     barTouchData: BarTouchData(
                       touchTooltipData: BarTouchTooltipData(
                         tooltipMargin: -10,
                         getTooltipColor: (spot) =>
-                            AppColors.of(context).surface,
+                            Theme.of(context).colorScheme.surface,
                         getTooltipItem: (group, groupIndex, rod, rodIndex) {
                           final barRodsToY = group.barRods.map((e) => e.toY);
 

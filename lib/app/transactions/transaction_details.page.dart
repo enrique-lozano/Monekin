@@ -259,7 +259,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
         subtitleTextStyle: Theme.of(context).textTheme.labelSmall!.copyWith(
               color: isNext
                   ? transaction.nextPayStatus!.color(context).darken(0.6)
-                  : AppColors.of(context).primaryContainer,
+                  : Theme.of(context).colorScheme.primaryContainer,
             ),
         leading: Icon(
           isNext ? transaction.nextPayStatus!.icon : Icons.access_time,
@@ -274,7 +274,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                 transaction.nextPayStatus!
                     .displayDaysToPay(context, transaction.daysToPay()),
                 style: TextStyle(
-                  color: AppColors.of(context).onSurface,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
         trailing: Row(mainAxisSize: MainAxisSize.min, children: [
@@ -419,8 +419,8 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
 
     final color = showRecurrencyStatus
         ? isDarkTheme
-            ? AppColors.of(context).primary
-            : AppColors.of(context).primary.lighten(0.2)
+            ? Theme.of(context).colorScheme.primary
+            : Theme.of(context).colorScheme.primary.lighten(0.2)
         : transaction.status!.color;
 
     return translucentCard(
@@ -581,7 +581,9 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                         value: buildInfoTileWithIconAndColor(
                                           icon: transaction
                                               .receivingAccount!.icon,
-                                          color: AppColors.of(context).primary,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                           data: transaction
                                               .receivingAccount!.name,
                                         ),
@@ -790,7 +792,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
         style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w500,
-            color: AppColors.of(context).onSurface.withOpacity(0.85)),
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.85)),
       ),
     );
   }
@@ -833,7 +835,7 @@ class _TransactionDetailHeader extends SliverPersistentHeaderDelegate {
     final shrinkPercent = shrinkOffset / maxExtent;
 
     return Container(
-      color: AppColors.of(context).surface,
+      color: Theme.of(context).colorScheme.surface,
       padding: const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -413,8 +413,9 @@ class _TransactionFormPageState extends State<TransactionFormPage>
         keyToWatch: selectedStatus.icon.toString(),
         child: Icon(
           selectedStatus.icon,
-          color: (selectedStatus?.color ?? AppColors.of(context).primary)
-              .withOpacity(isSelectorDisabled ? 0.3 : 1),
+          color:
+              (selectedStatus?.color ?? Theme.of(context).colorScheme.primary)
+                  .withOpacity(isSelectorDisabled ? 0.3 : 1),
         ),
       ),
       minTileHeight: 64,
@@ -785,7 +786,8 @@ class _TransactionFormPageState extends State<TransactionFormPage>
             ? Text(
                 t.tags.select.title,
                 style: TextStyle(
-                  color: AppColors.of(context).onSurface.withOpacity(0.75),
+                  color:
+                      Theme.of(context).colorScheme.onSurface.withOpacity(0.75),
                 ),
               )
             : tagsChips);
@@ -860,7 +862,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                           IconDisplayer(
                             displayMode: IconDisplayMode.polygon,
                             icon: Icons.question_mark_rounded,
-                            mainColor: AppColors.of(context).primary,
+                            mainColor: Theme.of(context).colorScheme.primary,
                           ),
                       onClick: () async {
                         final modalRes =
@@ -895,7 +897,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                             IconDisplayer(
                               displayMode: IconDisplayMode.polygon,
                               icon: Icons.question_mark_rounded,
-                              mainColor: AppColors.of(context).primary,
+                              mainColor: Theme.of(context).colorScheme.primary,
                             ),
                         onClick: () async {
                           final modalRes =
