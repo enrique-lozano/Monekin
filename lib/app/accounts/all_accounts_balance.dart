@@ -120,7 +120,7 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
             children: [
               CardWithHeader(
                 title: t.stats.balance_by_account,
-                subtitle: "¿Donde esta mi dinero?",
+                subtitle: t.stats.balance_by_account_subtitle,
                 bodyPadding: const EdgeInsets.only(bottom: 0, top: 8),
                 body: accounts.isEmpty
                     ? emptyAccountsIndicator()
@@ -177,6 +177,7 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
               const SizedBox(height: 16),
               CardWithHeader(
                 title: t.stats.balance_by_currency,
+                subtitle: t.stats.balance_by_currency_subtitle,
                 bodyPadding: const EdgeInsets.symmetric(vertical: 4),
                 body: Builder(builder: (context) {
                   final currenciesWithMoney = getCurrenciesWithMoney(accounts);

@@ -162,7 +162,7 @@ class _StatsPageState extends State<StatsPage> {
                 buildContainerWithPadding([
                   CardWithHeader(
                     title: t.stats.balance_evolution,
-                    subtitle: "¿Tengo mas dinero que antes?",
+                    subtitle: t.stats.balance_evolution_subtitle,
                     bodyPadding: const EdgeInsets.only(
                         bottom: 12, top: 16, right: 16, left: 16),
                     body: FundEvolutionLineChart(
@@ -180,6 +180,7 @@ class _StatsPageState extends State<StatsPage> {
                 buildContainerWithPadding([
                   CardWithHeader(
                     title: t.stats.cash_flow,
+                    subtitle: t.stats.cash_flow_subtitle,
                     body: IncomeExpenseComparason(
                       startDate: dateRangeService.startDate,
                       endDate: dateRangeService.endDate,
