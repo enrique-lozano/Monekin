@@ -177,7 +177,7 @@ class _TagSelectorState extends State<TagSelector> {
                   value: selectedTags.any((element) => element == null),
                   secondary: Icon(
                     Icons.label_off_rounded,
-                    color: AppColors.of(context).primary,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                   title: Text(t.tags.without_tags),
                   onChanged: (newValue) {
@@ -222,7 +222,7 @@ class _TagSelectorState extends State<TagSelector> {
             separatorBuilder: (context, index) => const Divider(),
           ),
           ScrollableWithBottomGradient.buildPositionedGradient(
-              AppColors.of(context).modalBackground),
+              Theme.of(context).colorSchemeExtended.modalBackground),
         ],
       ),
     );

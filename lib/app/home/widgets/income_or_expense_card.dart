@@ -35,7 +35,7 @@ class IncomeOrExpenseCard extends StatelessWidget {
             ),
             child: Icon(
               type.icon,
-              color: AppColors.of(context).surface,
+              color: Theme.of(context).colorScheme.surface,
               size: 22,
             ),
           ),
@@ -43,7 +43,13 @@ class IncomeOrExpenseCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(type.displayName(context)),
+              Text(
+                type.displayName(context),
+                style: TextStyle(
+                    color: Theme.of(context)
+                        .colorSchemeExtended
+                        .onDashboardHeader),
+              ),
               StreamBuilder(
                   stream: AccountService.instance.getAccountsBalance(
                     filters: TransactionFilters(
@@ -61,7 +67,11 @@ class IncomeOrExpenseCard extends StatelessWidget {
 
                     return CurrencyDisplayer(
                       amountToConvert: snapshot.data!.abs(),
-                      integerStyle: const TextStyle(fontSize: 18),
+                      integerStyle: TextStyle(
+                          fontSize: 18,
+                          color: Theme.of(context)
+                              .colorSchemeExtended
+                              .onDashboardHeader),
                     );
                   })
             ],

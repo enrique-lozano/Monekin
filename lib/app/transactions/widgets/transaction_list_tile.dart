@@ -94,7 +94,7 @@ class TransactionListTile extends StatelessWidget {
                   Icon(
                     transaction.status?.icon ?? Icons.repeat,
                     color: transaction.status?.color.darken(0.1) ??
-                        AppColors.of(context).primary,
+                        Theme.of(context).colorScheme.primary,
                     size: 12,
                   )
                 ],
@@ -240,14 +240,15 @@ class TransactionListTile extends StatelessWidget {
                   Icon(
                     Icons.check,
                     size: 24,
-                    color: AppColors.of(context).surface,
+                    color: Theme.of(context).colorScheme.surface,
                   ),
                 ],
               )
             : transaction.getDisplayIcon(context, size: 28, padding: 6),
       ),
       selected: isSelected,
-      selectedTileColor: AppColors.of(context).primary.withOpacity(0.15),
+      selectedTileColor:
+          Theme.of(context).colorScheme.primary.withOpacity(0.15),
       onTap: onTap ??
           () {
             RouteUtils.pushRoute(

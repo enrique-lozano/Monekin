@@ -200,7 +200,7 @@ class _BalanceChartSmallState extends State<BalanceChartSmall> {
                       barTouchData: BarTouchData(
                         touchTooltipData: BarTouchTooltipData(
                           getTooltipColor: (group) =>
-                              AppColors.of(context).surface,
+                              Theme.of(context).colorScheme.surface,
                           getTooltipItem: (a, b, c, d) => null,
                         ),
                       ),

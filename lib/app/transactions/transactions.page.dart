@@ -3,13 +3,12 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
 import 'package:monekin/app/layout/tabs.dart';
-import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/app/transactions/widgets/bulk_edit_transaction_modal.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
@@ -18,7 +17,6 @@ import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -145,14 +143,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                       icon: const Icon(Icons.filter_alt_outlined)),
                 ],
               ),
-        floatingActionButton: FloatingActionButton.extended(
-          icon: const Icon(Icons.add_rounded),
-          label: Text(t.transaction.create),
-          onPressed: () => RouteUtils.pushRoute(
-            context,
-            const TransactionFormPage(),
-          ),
-        ),
+        floatingActionButton: const NewTransactionButton(isExtended: true),
         body: Column(
           children: [
             if (filters.hasFilter) ...[
@@ -177,7 +168,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
 
                 return Card(
                   elevation: 2,
-                  //color: AppColors.of(context).primary,
+                  //color: Theme.of(context).colorScheme.primary,
                   margin: const EdgeInsets.all(8),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(6),
@@ -277,8 +268,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
 
   AppBar selectedTransactionsAppbar() {
     return AppBar(
-      backgroundColor: AppColors.of(context).primary,
-      foregroundColor: AppColors.of(context).onPrimary,
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      foregroundColor: Theme.of(context).colorScheme.onPrimary,
       leading: IconButton(
         onPressed: () {
           cleanSelectedTransactions();

@@ -6,27 +6,25 @@ import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number
 import '../app_colors.dart';
 
 class TrendingValue extends StatelessWidget {
-  const TrendingValue(
-      {super.key,
-      required this.percentage,
-      this.decimalDigits = 2,
-      this.fontSize = 14,
-      this.fontWeight = FontWeight.normal,
-      this.filled = false,
-      this.outlined = false});
+  const TrendingValue({
+    super.key,
+    required this.percentage,
+    this.decimalDigits = 2,
+    this.fontSize = 14,
+    this.fontWeight = FontWeight.normal,
+    this.filled = false,
+    this.outlined = false,
+  });
 
   final double percentage;
   final int decimalDigits;
-
   final double fontSize;
-
   final FontWeight fontWeight;
-
   final bool filled, outlined;
 
   Widget paintTrendValue(BuildContext context) {
-    final textColor =
-        _getColorBasedOnPercentage(context).lighten(filled ? 0.85 : 0);
+    final textColor = _getColorBasedOnPercentage(context)
+        .lighten(filled && !outlined ? 0.85 : 0);
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -66,7 +64,11 @@ class TrendingValue extends StatelessWidget {
     return percentage == 0
         ? AppColors.of(context)
             .brand
-            .lighten(isAppInDarkBrightness(context) ? 0.45 : 0.25)
+            .lighten(filled
+                ? 0
+                : isAppInDarkBrightness(context)
+                    ? 0.45
+                    : 0.25)
             .withBlue(225)
         : percentage > 0
             ? AppColors.of(context).success
@@ -75,22 +77,23 @@ class TrendingValue extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (filled) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-        decoration: BoxDecoration(
-          color: !filled ? null : (_getColorBasedOnPercentage(context)),
-          borderRadius: BorderRadius.circular(9999),
-          border: outlined
-              ? Border.all(
-                  color: _getColorBasedOnPercentage(context).lighten(0.85),
-                  width: 1)
-              : null,
-        ),
-        child: paintTrendValue(context),
-      );
-    } else {
-      return paintTrendValue(context);
-    }
+    final trendColor = _getColorBasedOnPercentage(context);
+    final textColor = _getColorBasedOnPercentage(context)
+        .lighten(filled && !outlined ? 0.85 : 0);
+    final backgroundColor = filled && outlined
+        ? trendColor.lighten(0.85).withOpacity(0.95)
+        : filled
+            ? trendColor
+            : null;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(9999),
+        border: outlined ? Border.all(color: textColor, width: 1) : null,
+      ),
+      child: paintTrendValue(context),
+    );
   }
 }

@@ -321,7 +321,8 @@ class _AmountSelectorState extends State<AmountSelector> {
                               fontSize: 22,
                               color: amountString.contains('.')
                                   ? null
-                                  : AppColors.of(context)
+                                  : Theme.of(context)
+                                      .colorScheme
                                       .onSurface
                                       .withOpacity(0.3)),
                           integerStyle: bigSizeStyle,
@@ -519,7 +520,7 @@ class CalculatorButton extends StatelessWidget {
         },
         child: Container(
           key: ValueKey((text ?? icon.toString()) + flex.toString()),
-          height: 50.0 * flex,
+          height: 65.0 * flex,
           width: double.infinity,
           clipBehavior: Clip.hardEdge,
           decoration: const BoxDecoration(),
@@ -535,8 +536,8 @@ class CalculatorButton extends StatelessWidget {
     Color effectiveBgColor = Theme.of(context).colorScheme.surface;
 
     if (style == CalculatorButtonStyle.submit) {
-      effectiveTextColor = AppColors.of(context).onPrimary;
-      effectiveBgColor = AppColors.of(context).primary;
+      effectiveTextColor = Theme.of(context).colorScheme.onPrimary;
+      effectiveBgColor = Theme.of(context).colorScheme.primary;
     } else if (style == CalculatorButtonStyle.secondary) {
       effectiveTextColor =
           Theme.of(context).colorScheme.onSurface.withOpacity(0.9);

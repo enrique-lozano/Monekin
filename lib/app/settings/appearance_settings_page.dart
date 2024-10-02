@@ -218,7 +218,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                   late final Color color;
 
                   if (snapshot.data! == 'auto') {
-                    color = AppColors.of(context).primary;
+                    color = Theme.of(context).colorScheme.primary;
                   } else {
                     color = ColorHex.get(snapshot.data!);
                   }
