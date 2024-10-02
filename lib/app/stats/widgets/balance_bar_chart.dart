@@ -306,6 +306,11 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
                       : Colors.white24;
 
                   return BarChart(BarChartData(
+                    maxY: snapshot.data!.expense.every((ex) => ex == 0) &&
+                            snapshot.data!.income.every((inc) => inc == 0) &&
+                            snapshot.data!.balance.every((bal) => bal == 0)
+                        ? 10.2
+                        : null,
                     barTouchData: BarTouchData(
                       touchTooltipData: BarTouchTooltipData(
                         tooltipMargin: -10,

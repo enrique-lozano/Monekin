@@ -9,7 +9,7 @@ import 'package:monekin/app/home/widgets/income_or_expense_card.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
 import 'package:monekin/app/settings/edit_profile_modal.dart';
 import 'package:monekin/app/stats/stats_page.dart';
-import 'package:monekin/app/stats/widgets/balance_bar_chart_small.dart';
+import 'package:monekin/app/stats/widgets/balance_bar_chart.dart';
 import 'package:monekin/app/stats/widgets/finance_health/finance_health_main_info.dart';
 import 'package:monekin/app/stats/widgets/fund_evolution_line_chart.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/chart_by_categories.dart';
@@ -235,12 +235,15 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                         const SizedBox(height: 16),
                         CardWithHeader(
-                          title: t.stats.cash_flow,
-                          body: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 16, left: 16, right: 16),
-                            child: BalanceChartSmall(
-                                dateRangeService: dateRangeService),
+                          title: t.stats.by_periods,
+                          bodyPadding: const EdgeInsets.only(
+                              bottom: 12, top: 24, right: 16),
+                          body: BalanceBarChart(
+                            dateRange: dateRangeService,
+                            filters: TransactionFilters(
+                              minDate: dateRangeService.startDate,
+                              maxDate: dateRangeService.endDate,
+                            ),
                           ),
                           footer: CardFooterWithSingleButton(onButtonClick: () {
                             RouteUtils.pushRoute(
@@ -250,7 +253,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                   initialIndex: 3),
                             );
                           }),
-                        ),
+                        )
                       ],
                     ),
                   )
@@ -442,7 +445,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     return const Skeleton(width: 52, height: 22);
                   }
 
-                  return TrendingValue(
+                  return const TrendingValue(
                     percentage: 0,
                     fontWeight: FontWeight.bold,
                     filled: true,
