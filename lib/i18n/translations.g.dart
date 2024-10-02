@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 4
-/// Strings: 2173 (543 per locale)
+/// Strings: 2189 (547 per locale)
 ///
-/// Built on 2024-09-29 at 20:07 UTC
+/// Built on 2024-10-02 at 22:26 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -290,10 +290,14 @@ class _TranslationsStatsEn {
 	String get balance => 'Balance';
 	String get final_balance => 'Final balance';
 	String get balance_by_account => 'Balance by accounts';
+	String get balance_by_account_subtitle => 'Where do I have most of my money?';
 	String get balance_by_currency => 'Balance by currency';
-	String get cash_flow => 'Cash flow';
-	String get balance_evolution => 'Balance evolution';
+	String get balance_by_currency_subtitle => 'How much money do I have in foreign currency?';
+	String get balance_evolution => 'Balance trend';
+	String get balance_evolution_subtitle => 'Do I have more money than before?';
 	String get compared_to_previous_period => 'Compared to the previous period';
+	String get cash_flow => 'Cash flow';
+	String get cash_flow_subtitle => 'Am I spending less than I earn?';
 	String get by_periods => 'By periods';
 	String get by_categories => 'By categories';
 	String get by_tags => 'By tags';
@@ -1585,10 +1589,14 @@ class _TranslationsStatsEs implements _TranslationsStatsEn {
 	@override String get balance => 'Saldo';
 	@override String get final_balance => 'Saldo final';
 	@override String get balance_by_account => 'Saldo por cuentas';
+	@override String get balance_by_account_subtitle => '¿Donde tengo la mayor parte de mi dinero?';
 	@override String get balance_by_currency => 'Saldo por divisas';
+	@override String get balance_by_currency_subtitle => '¿Cuanto dinero tengo en moneda extranjera?';
 	@override String get balance_evolution => 'Tendencia de saldo';
+	@override String get balance_evolution_subtitle => '¿Tengo más dinero que antes?';
 	@override String get compared_to_previous_period => 'Frente al periodo anterior';
 	@override String get cash_flow => 'Flujo de caja';
+	@override String get cash_flow_subtitle => '¿Estoy gastando menos de lo que gano?';
 	@override String get by_periods => 'Por periodos';
 	@override String get by_categories => 'Por categorías';
 	@override String get by_tags => 'Por etiquetas';
@@ -2881,10 +2889,14 @@ class _TranslationsStatsUk implements _TranslationsStatsEn {
 	@override String get balance => 'Баланс';
 	@override String get final_balance => 'Кінцевий баланс';
 	@override String get balance_by_account => 'Баланс за рахунками';
-	@override String get balance_by_currency => 'Баланс за валютами';
-	@override String get cash_flow => 'Грошовий потік';
-	@override String get balance_evolution => 'Еволюція балансу';
+	@override String get balance_by_account_subtitle => 'Де я маю більшість грошей?';
+	@override String get balance_by_currency => 'Баланс за валютою';
+	@override String get balance_by_currency_subtitle => 'Скільки я маю грошей в іноземній валюті?';
+	@override String get balance_evolution => 'Тенденція балансу';
+	@override String get balance_evolution_subtitle => 'У мене більше грошей, ніж раніше?';
 	@override String get compared_to_previous_period => 'Порівняно з попереднім періодом';
+	@override String get cash_flow => 'Грошовий потік';
+	@override String get cash_flow_subtitle => 'Я витрачаю менше, ніж заробляю?';
 	@override String get by_periods => 'За періодами';
 	@override String get by_categories => 'За категоріями';
 	@override String get by_tags => 'За тегами';
@@ -4176,10 +4188,14 @@ class _TranslationsStatsZhTw implements _TranslationsStatsEn {
 	@override String get balance => '平衡';
 	@override String get final_balance => '最終餘額';
 	@override String get balance_by_account => '帳戶餘額';
-	@override String get balance_by_currency => '按貨幣劃分的餘額';
-	@override String get cash_flow => '現金週轉';
-	@override String get balance_evolution => 'Balance evolution';
-	@override String get compared_to_previous_period => '與前期相比';
+	@override String get balance_by_account_subtitle => '我的大部分钱都在哪里？';
+	@override String get balance_by_currency => '按货币余额';
+	@override String get balance_by_currency_subtitle => '我有多少钱的外币？';
+	@override String get balance_evolution => '平衡趋势';
+	@override String get balance_evolution_subtitle => '我的钱比以前多了吗？';
+	@override String get compared_to_previous_period => '与上一时期相比';
+	@override String get cash_flow => '现金流';
+	@override String get cash_flow_subtitle => '我的支出是否少于我的收入？';
 	@override String get by_periods => '按時期';
 	@override String get by_categories => '按類別';
 	@override String get by_tags => '按標籤';
@@ -5538,10 +5554,14 @@ extension on Translations {
 			case 'stats.balance': return 'Balance';
 			case 'stats.final_balance': return 'Final balance';
 			case 'stats.balance_by_account': return 'Balance by accounts';
+			case 'stats.balance_by_account_subtitle': return 'Where do I have most of my money?';
 			case 'stats.balance_by_currency': return 'Balance by currency';
-			case 'stats.cash_flow': return 'Cash flow';
-			case 'stats.balance_evolution': return 'Balance evolution';
+			case 'stats.balance_by_currency_subtitle': return 'How much money do I have in foreign currency?';
+			case 'stats.balance_evolution': return 'Balance trend';
+			case 'stats.balance_evolution_subtitle': return 'Do I have more money than before?';
 			case 'stats.compared_to_previous_period': return 'Compared to the previous period';
+			case 'stats.cash_flow': return 'Cash flow';
+			case 'stats.cash_flow_subtitle': return 'Am I spending less than I earn?';
 			case 'stats.by_periods': return 'By periods';
 			case 'stats.by_categories': return 'By categories';
 			case 'stats.by_tags': return 'By tags';
@@ -6162,10 +6182,14 @@ extension on _TranslationsEs {
 			case 'stats.balance': return 'Saldo';
 			case 'stats.final_balance': return 'Saldo final';
 			case 'stats.balance_by_account': return 'Saldo por cuentas';
+			case 'stats.balance_by_account_subtitle': return '¿Donde tengo la mayor parte de mi dinero?';
 			case 'stats.balance_by_currency': return 'Saldo por divisas';
+			case 'stats.balance_by_currency_subtitle': return '¿Cuanto dinero tengo en moneda extranjera?';
 			case 'stats.balance_evolution': return 'Tendencia de saldo';
+			case 'stats.balance_evolution_subtitle': return '¿Tengo más dinero que antes?';
 			case 'stats.compared_to_previous_period': return 'Frente al periodo anterior';
 			case 'stats.cash_flow': return 'Flujo de caja';
+			case 'stats.cash_flow_subtitle': return '¿Estoy gastando menos de lo que gano?';
 			case 'stats.by_periods': return 'Por periodos';
 			case 'stats.by_categories': return 'Por categorías';
 			case 'stats.by_tags': return 'Por etiquetas';
@@ -6785,10 +6809,14 @@ extension on _TranslationsUk {
 			case 'stats.balance': return 'Баланс';
 			case 'stats.final_balance': return 'Кінцевий баланс';
 			case 'stats.balance_by_account': return 'Баланс за рахунками';
-			case 'stats.balance_by_currency': return 'Баланс за валютами';
-			case 'stats.cash_flow': return 'Грошовий потік';
-			case 'stats.balance_evolution': return 'Еволюція балансу';
+			case 'stats.balance_by_account_subtitle': return 'Де я маю більшість грошей?';
+			case 'stats.balance_by_currency': return 'Баланс за валютою';
+			case 'stats.balance_by_currency_subtitle': return 'Скільки я маю грошей в іноземній валюті?';
+			case 'stats.balance_evolution': return 'Тенденція балансу';
+			case 'stats.balance_evolution_subtitle': return 'У мене більше грошей, ніж раніше?';
 			case 'stats.compared_to_previous_period': return 'Порівняно з попереднім періодом';
+			case 'stats.cash_flow': return 'Грошовий потік';
+			case 'stats.cash_flow_subtitle': return 'Я витрачаю менше, ніж заробляю?';
 			case 'stats.by_periods': return 'За періодами';
 			case 'stats.by_categories': return 'За категоріями';
 			case 'stats.by_tags': return 'За тегами';
@@ -7408,10 +7436,14 @@ extension on _TranslationsZhTw {
 			case 'stats.balance': return '平衡';
 			case 'stats.final_balance': return '最終餘額';
 			case 'stats.balance_by_account': return '帳戶餘額';
-			case 'stats.balance_by_currency': return '按貨幣劃分的餘額';
-			case 'stats.cash_flow': return '現金週轉';
-			case 'stats.balance_evolution': return 'Balance evolution';
-			case 'stats.compared_to_previous_period': return '與前期相比';
+			case 'stats.balance_by_account_subtitle': return '我的大部分钱都在哪里？';
+			case 'stats.balance_by_currency': return '按货币余额';
+			case 'stats.balance_by_currency_subtitle': return '我有多少钱的外币？';
+			case 'stats.balance_evolution': return '平衡趋势';
+			case 'stats.balance_evolution_subtitle': return '我的钱比以前多了吗？';
+			case 'stats.compared_to_previous_period': return '与上一时期相比';
+			case 'stats.cash_flow': return '现金流';
+			case 'stats.cash_flow_subtitle': return '我的支出是否少于我的收入？';
 			case 'stats.by_periods': return '按時期';
 			case 'stats.by_categories': return '按類別';
 			case 'stats.by_tags': return '按標籤';
