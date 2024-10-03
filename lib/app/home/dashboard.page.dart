@@ -428,8 +428,8 @@ class _DashboardPageState extends State<DashboardPage> {
                     return const Skeleton(width: 52, height: 22);
                   }
 
-                  return const TrendingValue(
-                    percentage: 0,
+                  return TrendingValue(
+                    percentage: snapshot.data!,
                     fontWeight: FontWeight.bold,
                     filled: true,
                     outlined: true,
