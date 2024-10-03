@@ -246,7 +246,7 @@ class _CategoryMultiSelectorModalState
             },
           ),
           ScrollableWithBottomGradient.buildPositionedGradient(
-              AppColors.of(context).modalBackground),
+              Theme.of(context).colorSchemeExtended.modalBackground),
         ],
       ),
     );

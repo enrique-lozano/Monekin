@@ -21,6 +21,7 @@
     "today": "Hoy",
     "yesterday": "Ayer",
     "filters": "Filtros",
+    "see-more": "Ver más",
     "select-all": "Seleccionar todo",
     "deselect-all": "Deseleccionar todo",
     "empty-warn": "Ops! Esto esta muy vacio",
@@ -126,6 +127,7 @@
       "Date": "Por fecha"
     },
     "VALIDATIONS": {
+      "form_error": "Corrije los campos indicados en el formulario para continuar",
       "required": "Campo obligatorio",
       "positive": "Debe ser positivo",
       "min_number": "Debe ser mayor que {{x}}",
@@ -153,7 +155,7 @@
     "lastSlideDescr2": "Esperemos que disfrutes de tu experiencia! No dudes en contactar con nosotros en caso de dudas, sugerencias..."
   },
   "HOME": {
-    "title": "Dashboard",
+    "title": "Inicio",
     "filter-transactions": "Filtrar transacciones",
     "hello-day": "Buenos días,",
     "hello-night": "Buenas noches,",
@@ -217,10 +219,14 @@
     "balance": "Saldo",
     "final-balance": "Saldo final",
     "balance-by-account": "Saldo por cuentas",
+    "balance-by-account-subtitle": "¿Donde tengo la mayor parte de mi dinero?",
     "balance-by-currency": "Saldo por divisas",
+    "balance-by-currency-subtitle": "¿Cuanto dinero tengo en moneda extranjera?",
     "balance-evolution": "Tendencia de saldo",
+    "balance-evolution-subtitle": "¿Tengo más dinero que antes?",
     "compared-to-previous-period": "Frente al periodo anterior",
     "cash-flow": "Flujo de caja",
+    "cash-flow-subtitle": "¿Estoy gastando menos de lo que gano?",
     "by-periods": "Por periodos",
     "by-categories": "Por categorías",
     "by-tags": "Por etiquetas",
@@ -285,7 +291,7 @@
       "recurrent-rule-finished": "La regla recurrente se ha completado, ya no hay mas pagos a realizar!"
     },
     "LIST": {
-      "empty": "No se han encontrado transacciones que mostrar aquí. Añade una transacción pulsando el botón '+' de la parte inferior",
+      "empty": "No se han encontrado transacciones que mostrar aquí. Añade unas cuantas transacciones en la app y quizas tengas más suerte la proxima vez",
       "searcher.placeholder": "Busca por categoría, descripción...",
       "searcher.no-results": "No se han encontrado transacciones que coincidan con los criterios de busqueda",
       "loading": "Cargando más transacciones...",
@@ -490,9 +496,12 @@
       "name": "Nombre de la etiqueta",
       "description": "Descripción"
     },
+    "SELECT": {
+      "title": "Selecciona etiquetas",
+      "all": "Todas las etiquetas"
+    },
     "empty-list": "No has creado ninguna etiqueta aun. Las etiquetas y las categorías son una gran forma de categorizar tus movimientos",
     "without-tags": "Sin etiquetas",
-    "select": "Selecionar etiquetas",
     "create": "Crear etiqueta",
     "add": "Añadir etiqueta",
     "create.success": "Etiqueta creada correctamente",

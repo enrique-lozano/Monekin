@@ -144,7 +144,9 @@ class _CategoryPickerState extends State<CategoryPicker> {
                       //  buildSelectAllButton(snapshot),
                       Expanded(
                         child: ScrollableWithBottomGradient(
-                          gradientColor: AppColors.of(context).modalBackground,
+                          gradientColor: Theme.of(context)
+                              .colorSchemeExtended
+                              .modalBackground,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           controller: scrollController,
                           child: buildCategoryList(snapshot, scrollController),
@@ -241,7 +243,7 @@ class _CategoryPickerState extends State<CategoryPicker> {
                 style: TextStyle(
                   color: selectedCategory?.id == subcat.id
                       ? Colors.white
-                      : AppColors.of(context).onSurface,
+                      : Theme.of(context).colorScheme.onSurface,
                 ),
               ),
               showCheckmark: false,

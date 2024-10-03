@@ -87,10 +87,11 @@ ThemeData getThemeData(
   return theme.copyWith(
     scaffoldBackgroundColor: theme.colorScheme.surface,
     dividerTheme: const DividerThemeData(space: 0),
-    cardColor: theme.colorScheme.surface,
+    cardColor: theme.colorSchemeExtended.cardColor,
+    cardTheme: CardTheme(color: theme.colorSchemeExtended.cardColor),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: theme.colorScheme.surfaceContainerHighest,
+      fillColor: theme.colorSchemeExtended.inputFill,
       isDense: true,
       floatingLabelStyle: TextStyle(
         backgroundColor: theme.colorScheme.surface.withOpacity(0.5),
@@ -107,7 +108,7 @@ ThemeData getThemeData(
     bottomSheetTheme: theme.bottomSheetTheme.copyWith(
       elevation: 0,
       dragHandleSize: const Size(25, 4),
-      modalBackgroundColor: customAppColors.modalBackground,
+      modalBackgroundColor: theme.colorSchemeExtended.modalBackground,
       dragHandleColor: Colors.grey[300],
       clipBehavior: Clip.hardEdge,
     ),

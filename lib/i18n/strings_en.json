@@ -21,6 +21,7 @@
     "today": "Today",
     "yesterday": "Yesterday",
     "filters": "Filters",
+    "see-more": "See more",
     "select-all": "Select all",
     "deselect-all": "Deselect all",
     "empty-warn": "Ops! This is very empty",
@@ -125,6 +126,7 @@
       "Date": "By date"
     },
     "VALIDATIONS": {
+      "form_error": "Fix the indicated fields to continue",
       "required": "Required field",
       "positive": "Should be positive",
       "min_number": "Should be greater than {{x}}",
@@ -213,10 +215,14 @@
     "balance": "Balance",
     "final-balance": "Final balance",
     "balance-by-account": "Balance by accounts",
+    "balance-by-account-subtitle": "Where do I have most of my money?",
     "balance-by-currency": "Balance by currency",
-    "cash-flow": "Cash flow",
-    "balance-evolution": "Balance evolution",
+    "balance-by-currency-subtitle": "How much money do I have in foreign currency?",
+    "balance-evolution": "Balance trend",
+    "balance-evolution-subtitle": "Do I have more money than before?",
     "compared-to-previous-period": "Compared to the previous period",
+    "cash-flow": "Cash flow",
+    "cash-flow-subtitle": "Am I spending less than I earn?",
     "by-periods": "By periods",
     "by-categories": "By categories",
     "by-tags": "By tags",
@@ -281,7 +287,7 @@
       "recurrent-rule-finished": "The recurring rule has been completed, there are no more payments to make!"
     },
     "LIST": {
-      "empty": "No transactions found to display here. Add a transaction by clicking the '+' button at the bottom",
+      "empty": "No transactions found to display here. Add a few transactions in the app and maybe you'll have better luck next time.",
       "searcher.placeholder": "Search by category, description...",
       "searcher.no-results": "No transactions found matching the search criteria",
       "loading": "Loading more transactions...",
@@ -483,9 +489,12 @@
       "name": "Tag name",
       "description": "Description"
     },
+    "SELECT": {
+      "title": "Select tags",
+      "all": "All the tags"
+    },
     "empty-list": "You haven't created any tags yet. Tags and categories are a great way to categorize your movements",
     "without-tags": "Without tags",
-    "select": "Select tags",
     "add": "Add tag",
     "create": "Create label",
     "create.success": "Label created successfully",

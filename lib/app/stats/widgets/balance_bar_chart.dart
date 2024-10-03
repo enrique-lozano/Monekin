@@ -306,11 +306,16 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
                       : Colors.white24;
 
                   return BarChart(BarChartData(
+                    maxY: snapshot.data!.expense.every((ex) => ex == 0) &&
+                            snapshot.data!.income.every((inc) => inc == 0) &&
+                            snapshot.data!.balance.every((bal) => bal == 0)
+                        ? 10.2
+                        : null,
                     barTouchData: BarTouchData(
                       touchTooltipData: BarTouchTooltipData(
                         tooltipMargin: -10,
                         getTooltipColor: (spot) =>
-                            AppColors.of(context).surface,
+                            Theme.of(context).colorScheme.surface,
                         getTooltipItem: (group, groupIndex, rod, rodIndex) {
                           final barRodsToY = group.barRods.map((e) => e.toY);
 
@@ -387,50 +392,42 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
                           },
                         ),
                       ),
-                      rightTitles: AxisTitles(
+                      leftTitles: AxisTitles(
                         sideTitles: SideTitles(
                           showTitles: true,
                           getTitlesWidget: (value, meta) {
+                            if (value == meta.max) {
+                              return Container();
+                            }
+
                             return SideTitleWidget(
                               axisSide: meta.axisSide,
-                              space: 0,
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 5,
-                                    height: 1,
-                                    color: ultraLightBorderColor,
+                              child: BlurBasedOnPrivateMode(
+                                child: Text(
+                                  meta.formattedValue,
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w300,
                                   ),
-                                  const SizedBox(width: 4),
-                                  BlurBasedOnPrivateMode(
-                                    child: Text(
-                                      meta.formattedValue,
-                                      style: const TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
                             );
                           },
                           reservedSize: 42,
                         ),
                       ),
-                      leftTitles: const AxisTitles(
+                      rightTitles: const AxisTitles(
                           sideTitles: SideTitles(showTitles: false)),
                       topTitles: const AxisTitles(
                           sideTitles: SideTitles(showTitles: false)),
                     ),
                     borderData: FlBorderData(
-                        show: true,
-                        border: Border(
-                          bottom: BorderSide(
-                              width: 1, color: ultraLightBorderColor),
-                          right: BorderSide(
-                              width: 1, color: ultraLightBorderColor),
-                        )),
+                      show: true,
+                      border: Border(
+                        bottom:
+                            BorderSide(width: 1, color: ultraLightBorderColor),
+                      ),
+                    ),
                     gridData: FlGridData(
                       drawVerticalLine: false,
                       getDrawingHorizontalLine: (value) {

@@ -42,8 +42,12 @@ class TabsPageState extends State<TabsPage> {
                   selectedNavItemIndex < menuItems.length)
           ? null
           : NavigationBar(
+              backgroundColor:
+                  Theme.of(context).colorScheme.surfaceContainerHigh,
+              indicatorColor:
+                  Theme.of(context).colorScheme.primary.withOpacity(0.2),
               destinations: menuItems
-                  .map((e) => e.toNavigationDestinationWidget())
+                  .map((e) => e.toNavigationDestinationWidget(context))
                   .toList(),
               selectedIndex: selectedNavItemIndex,
               onDestinationSelected: (e) => changePage(menuItems.elementAt(e)),

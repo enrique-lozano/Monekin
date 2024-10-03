@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
-
-import '../app_colors.dart';
+import 'package:monekin/core/presentation/theme.dart';
 
 enum InlineInfoCardMode { warn, info }
 
@@ -23,14 +23,25 @@ class InlineInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color color = mode == InlineInfoCardMode.info
-        ? AppColors.of(context).primary
-        : Colors.amber;
+    final isDarkBrightness = isAppInDarkBrightness(context);
+
+    final Color bgColor = mode == InlineInfoCardMode.warn
+        ? Colors.amber.darken(isDarkBrightness ? 0.6 : -0.7)
+        : Theme.of(context).colorScheme.primaryContainer;
+    final Color iconColor = mode == InlineInfoCardMode.warn
+        ? Colors.amber.lighten(isDarkBrightness ? 0.5 : -0.4)
+        : Theme.of(context).colorScheme.onPrimaryContainer;
+
+    //   final iconColor = baseColor.lighten(isDarkBrightness ? 0.5 : -0.4);
 
     return Card(
-      // color: color.withOpacity(0.1),
-      elevation: 1,
+      color: bgColor,
+      elevation: 0,
       margin: margin,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(width: 2, color: iconColor),
+      ),
       child: ResponsiveRowColumn.withSymetricSpacing(
         spacing: 10,
         padding: const EdgeInsets.all(8),
@@ -41,7 +52,7 @@ class InlineInfoCard extends StatelessWidget {
               mode == InlineInfoCardMode.info
                   ? Icons.info_rounded
                   : Icons.warning_rounded,
-              color: color,
+              color: iconColor,
               size: 28,
             ),
           ),
@@ -52,10 +63,9 @@ class InlineInfoCard extends StatelessWidget {
               textAlign: direction == Axis.vertical
                   ? TextAlign.center
                   : TextAlign.left,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12.25,
                 fontWeight: FontWeight.w400,
-                //color: Theme.of(context).colorScheme.onPrimary,
               ),
             ),
           ),

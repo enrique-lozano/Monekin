@@ -43,7 +43,7 @@ class BudgetEvolutionChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final lineColor = AppColors.of(context).primary;
+    final lineColor = Theme.of(context).colorScheme.primary;
     final t = Translations.of(context);
 
     return SizedBox(
@@ -84,7 +84,8 @@ class BudgetEvolutionChart extends StatelessWidget {
               ]),
               lineTouchData: LineTouchData(
                   touchTooltipData: LineTouchTooltipData(
-                getTooltipColor: (spot) => AppColors.of(context).surface,
+                getTooltipColor: (spot) =>
+                    Theme.of(context).colorScheme.surface,
                 tooltipHorizontalAlignment: FLHorizontalAlignment.right,
                 tooltipMargin: -10,
                 getTooltipItems: (touchedSpots) {

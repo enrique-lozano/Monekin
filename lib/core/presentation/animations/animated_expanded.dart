@@ -1,8 +1,23 @@
 import 'package:flutter/material.dart';
 
+/// A widget that smoothly expands or collapses its child with an animation.
+///
+/// The animation can be configured to expand either vertically or horizontally
+/// and includes both size and fade transitions.
+///
+/// [AnimatedExpanded] is useful for cases where you want to dynamically show
+/// or hide content with a smooth animation, such as expanding a section of a
+/// list or a collapsible panel.
+///
+/// The widget automatically listens for changes to the [expand] property and
+/// triggers the animation accordingly.
 class AnimatedExpanded extends StatefulWidget {
+  /// The widget to display inside the animated container.
   final Widget child;
+
+  /// A boolean flag indicating whether to expand or collapse the [child]
   final bool expand;
+
   final Duration duration;
   final Curve sizeCurve;
   final Axis axis;
@@ -85,39 +100,42 @@ class _AnimatedExpandedState extends State<AnimatedExpanded>
   }
 }
 
-// Animated Switcher may be needed, if old data gets wiped immediately
-// we want to keep the old UI when a transition occurs to make it smoother
+/// A widget that switches between two children with an animated size transition.
+///
+/// [AnimatedSizeSwitcher] ensures that the old widget remains visible until the new one
+/// has fully transitioned in, making the transition smoother. It uses [AnimatedSwitcher]
+/// internally, with a custom transition that animates the size of the child widget.
 class AnimatedSizeSwitcher extends StatelessWidget {
   const AnimatedSizeSwitcher({
     required this.child,
-    this.sizeCurve = Curves.easeInOutCubicEmphasized,
-    this.sizeDuration = const Duration(milliseconds: 800),
-    this.switcherDuration = const Duration(milliseconds: 250),
-    this.sizeAlignment = AlignmentDirectional.center,
-    this.clipBehavior = Clip.hardEdge,
+    this.duration = const Duration(milliseconds: 250),
     this.enabled = true,
+    this.axis = Axis.vertical,
     super.key,
   });
+
   final Widget child;
-  final Curve sizeCurve;
-  final Duration sizeDuration;
-  final Duration switcherDuration;
-  final AlignmentDirectional sizeAlignment;
-  final Clip clipBehavior;
+  final Duration duration;
   final bool enabled;
+  final Axis axis;
 
   @override
   Widget build(BuildContext context) {
     if (enabled == false) return child;
-    return AnimatedSize(
-      clipBehavior: clipBehavior,
-      duration: sizeDuration,
-      curve: sizeCurve,
-      alignment: sizeAlignment,
-      child: AnimatedSwitcher(
-        duration: switcherDuration,
-        child: child,
-      ),
+
+    return AnimatedSwitcher(
+      switchInCurve: Curves.fastEaseInToSlowEaseOut,
+      switchOutCurve: Curves.fastOutSlowIn,
+      duration: duration,
+      transitionBuilder: (child, animation) {
+        return SizeTransition(
+          axisAlignment: 1,
+          sizeFactor: animation,
+          axis: axis,
+          child: child,
+        );
+      },
+      child: child,
     );
   }
 }

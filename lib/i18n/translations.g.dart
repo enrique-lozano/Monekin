@@ -4,10 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 4
-/// Strings: 2133 (533 per locale)
+/// Strings: 2189 (547 per locale)
 ///
-/// Built on 2024-08-07 at 15:39 UTC
-
+/// Built on 2024-10-02 at 22:26 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -205,6 +204,7 @@ class _TranslationsGeneralEn {
 	String get today => 'Today';
 	String get yesterday => 'Yesterday';
 	String get filters => 'Filters';
+	String get see_more => 'See more';
 	String get select_all => 'Select all';
 	String get deselect_all => 'Deselect all';
 	String get empty_warn => 'Ops! This is very empty';
@@ -290,10 +290,14 @@ class _TranslationsStatsEn {
 	String get balance => 'Balance';
 	String get final_balance => 'Final balance';
 	String get balance_by_account => 'Balance by accounts';
+	String get balance_by_account_subtitle => 'Where do I have most of my money?';
 	String get balance_by_currency => 'Balance by currency';
-	String get cash_flow => 'Cash flow';
-	String get balance_evolution => 'Balance evolution';
+	String get balance_by_currency_subtitle => 'How much money do I have in foreign currency?';
+	String get balance_evolution => 'Balance trend';
+	String get balance_evolution_subtitle => 'Do I have more money than before?';
 	String get compared_to_previous_period => 'Compared to the previous period';
+	String get cash_flow => 'Cash flow';
+	String get cash_flow_subtitle => 'Am I spending less than I earn?';
 	String get by_periods => 'By periods';
 	String get by_categories => 'By categories';
 	String get by_tags => 'By tags';
@@ -450,9 +454,9 @@ class _TranslationsTagsEn {
 		other: 'Tags',
 	);
 	late final _TranslationsTagsFormEn form = _TranslationsTagsFormEn._(_root);
+	late final _TranslationsTagsSelectEn select = _TranslationsTagsSelectEn._(_root);
 	String get empty_list => 'You haven\'t created any tags yet. Tags and categories are a great way to categorize your movements';
 	String get without_tags => 'Without tags';
-	String get select => 'Select tags';
 	String get add => 'Add tag';
 	String get create => 'Create label';
 	String get create_success => 'Label created successfully';
@@ -636,6 +640,7 @@ class _TranslationsGeneralValidationsEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+	String get form_error => 'Fix the indicated fields to continue';
 	String get required => 'Required field';
 	String get positive => 'Should be positive';
 	String min_number({required Object x}) => 'Should be greater than ${x}';
@@ -774,7 +779,7 @@ class _TranslationsTransactionListEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get empty => 'No transactions found to display here. Add a transaction by clicking the \'+\' button at the bottom';
+	String get empty => 'No transactions found to display here. Add a few transactions in the app and maybe you\'ll have better luck next time.';
 	String get searcher_placeholder => 'Search by category, description...';
 	String get searcher_no_results => 'No transactions found matching the search criteria';
 	String get loading => 'Loading more transactions...';
@@ -1013,6 +1018,17 @@ class _TranslationsTagsFormEn {
 	// Translations
 	String get name => 'Tag name';
 	String get description => 'Description';
+}
+
+// Path: tags.select
+class _TranslationsTagsSelectEn {
+	_TranslationsTagsSelectEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get title => 'Select tags';
+	String get all => 'All the tags';
 }
 
 // Path: categories.select
@@ -1487,6 +1503,7 @@ class _TranslationsGeneralEs implements _TranslationsGeneralEn {
 	@override String get today => 'Hoy';
 	@override String get yesterday => 'Ayer';
 	@override String get filters => 'Filtros';
+	@override String get see_more => 'Ver más';
 	@override String get select_all => 'Seleccionar todo';
 	@override String get deselect_all => 'Deseleccionar todo';
 	@override String get empty_warn => 'Ops! Esto esta muy vacio';
@@ -1534,7 +1551,7 @@ class _TranslationsHomeEs implements _TranslationsHomeEn {
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Dashboard';
+	@override String get title => 'Inicio';
 	@override String get filter_transactions => 'Filtrar transacciones';
 	@override String get hello_day => 'Buenos días,';
 	@override String get hello_night => 'Buenas noches,';
@@ -1572,10 +1589,14 @@ class _TranslationsStatsEs implements _TranslationsStatsEn {
 	@override String get balance => 'Saldo';
 	@override String get final_balance => 'Saldo final';
 	@override String get balance_by_account => 'Saldo por cuentas';
+	@override String get balance_by_account_subtitle => '¿Donde tengo la mayor parte de mi dinero?';
 	@override String get balance_by_currency => 'Saldo por divisas';
+	@override String get balance_by_currency_subtitle => '¿Cuanto dinero tengo en moneda extranjera?';
 	@override String get balance_evolution => 'Tendencia de saldo';
+	@override String get balance_evolution_subtitle => '¿Tengo más dinero que antes?';
 	@override String get compared_to_previous_period => 'Frente al periodo anterior';
 	@override String get cash_flow => 'Flujo de caja';
+	@override String get cash_flow_subtitle => '¿Estoy gastando menos de lo que gano?';
 	@override String get by_periods => 'Por periodos';
 	@override String get by_categories => 'Por categorías';
 	@override String get by_tags => 'Por etiquetas';
@@ -1732,9 +1753,9 @@ class _TranslationsTagsEs implements _TranslationsTagsEn {
 		other: 'Etiquetas',
 	);
 	@override late final _TranslationsTagsFormEs form = _TranslationsTagsFormEs._(_root);
+	@override late final _TranslationsTagsSelectEs select = _TranslationsTagsSelectEs._(_root);
 	@override String get empty_list => 'No has creado ninguna etiqueta aun. Las etiquetas y las categorías son una gran forma de categorizar tus movimientos';
 	@override String get without_tags => 'Sin etiquetas';
-	@override String get select => 'Selecionar etiquetas';
 	@override String get create => 'Crear etiqueta';
 	@override String get add => 'Añadir etiqueta';
 	@override String get create_success => 'Etiqueta creada correctamente';
@@ -1918,6 +1939,7 @@ class _TranslationsGeneralValidationsEs implements _TranslationsGeneralValidatio
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
+	@override String get form_error => 'Corrije los campos indicados en el formulario para continuar';
 	@override String get required => 'Campo obligatorio';
 	@override String get positive => 'Debe ser positivo';
 	@override String min_number({required Object x}) => 'Debe ser mayor que ${x}';
@@ -2056,7 +2078,7 @@ class _TranslationsTransactionListEs implements _TranslationsTransactionListEn {
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get empty => 'No se han encontrado transacciones que mostrar aquí. Añade una transacción pulsando el botón \'+\' de la parte inferior';
+	@override String get empty => 'No se han encontrado transacciones que mostrar aquí. Añade unas cuantas transacciones en la app y quizas tengas más suerte la proxima vez';
 	@override String get searcher_placeholder => 'Busca por categoría, descripción...';
 	@override String get searcher_no_results => 'No se han encontrado transacciones que coincidan con los criterios de busqueda';
 	@override String get loading => 'Cargando más transacciones...';
@@ -2295,6 +2317,17 @@ class _TranslationsTagsFormEs implements _TranslationsTagsFormEn {
 	// Translations
 	@override String get name => 'Nombre de la etiqueta';
 	@override String get description => 'Descripción';
+}
+
+// Path: tags.select
+class _TranslationsTagsSelectEs implements _TranslationsTagsSelectEn {
+	_TranslationsTagsSelectEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Selecciona etiquetas';
+	@override String get all => 'Todas las etiquetas';
 }
 
 // Path: categories.select
@@ -2770,6 +2803,7 @@ class _TranslationsGeneralUk implements _TranslationsGeneralEn {
 	@override String get today => 'Сьогодні';
 	@override String get yesterday => 'Вчора';
 	@override String get filters => 'Фільтри';
+	@override String get see_more => 'Побачити більше';
 	@override String get select_all => 'Вибрати всі';
 	@override String get deselect_all => 'Скасувати вибір усіх';
 	@override String get empty_warn => 'Ой! Тут порожньо';
@@ -2855,10 +2889,14 @@ class _TranslationsStatsUk implements _TranslationsStatsEn {
 	@override String get balance => 'Баланс';
 	@override String get final_balance => 'Кінцевий баланс';
 	@override String get balance_by_account => 'Баланс за рахунками';
-	@override String get balance_by_currency => 'Баланс за валютами';
-	@override String get cash_flow => 'Грошовий потік';
-	@override String get balance_evolution => 'Еволюція балансу';
+	@override String get balance_by_account_subtitle => 'Де я маю більшість грошей?';
+	@override String get balance_by_currency => 'Баланс за валютою';
+	@override String get balance_by_currency_subtitle => 'Скільки я маю грошей в іноземній валюті?';
+	@override String get balance_evolution => 'Тенденція балансу';
+	@override String get balance_evolution_subtitle => 'У мене більше грошей, ніж раніше?';
 	@override String get compared_to_previous_period => 'Порівняно з попереднім періодом';
+	@override String get cash_flow => 'Грошовий потік';
+	@override String get cash_flow_subtitle => 'Я витрачаю менше, ніж заробляю?';
 	@override String get by_periods => 'За періодами';
 	@override String get by_categories => 'За категоріями';
 	@override String get by_tags => 'За тегами';
@@ -3015,9 +3053,9 @@ class _TranslationsTagsUk implements _TranslationsTagsEn {
 		other: 'Теги',
 	);
 	@override late final _TranslationsTagsFormUk form = _TranslationsTagsFormUk._(_root);
+	@override late final _TranslationsTagsSelectUk select = _TranslationsTagsSelectUk._(_root);
 	@override String get empty_list => 'Ви ще не створили жодних тегів. Теги та категорії - це відмінний спосіб категоризувати ваші рухи';
 	@override String get without_tags => 'Без тегів';
-	@override String get select => 'Вибрати теги';
 	@override String get add => 'Додати тег';
 	@override String get create => 'Створити мітку';
 	@override String get create_success => 'Мітка успішно створена';
@@ -3201,6 +3239,7 @@ class _TranslationsGeneralValidationsUk implements _TranslationsGeneralValidatio
 	@override final _TranslationsUk _root; // ignore: unused_field
 
 	// Translations
+	@override String get form_error => 'Виправте поля, зазначені у формі, щоб продовжити';
 	@override String get required => 'Обов\'язкове поле';
 	@override String get positive => 'Повинно бути позитивним';
 	@override String min_number({required Object x}) => 'Повинно бути більшим, ніж ${x}';
@@ -3339,7 +3378,7 @@ class _TranslationsTransactionListUk implements _TranslationsTransactionListEn {
 	@override final _TranslationsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get empty => 'Тут не знайдено жодних транзакцій для відображення. Додайте транзакцію, натиснувши кнопку \'+\' внизу';
+	@override String get empty => 'Тут не знайдено жодних транзакцій для відображення. Додайте кілька транзакцій у додаток, і, можливо, наступного разу вам пощастить більше';
 	@override String get searcher_placeholder => 'Шукати за категорією, описом...';
 	@override String get searcher_no_results => 'Не знайдено транзакцій, що відповідають критеріям пошуку';
 	@override String get loading => 'Завантаження додаткових транзакцій...';
@@ -3578,6 +3617,17 @@ class _TranslationsTagsFormUk implements _TranslationsTagsFormEn {
 	// Translations
 	@override String get name => 'Назва тегу';
 	@override String get description => 'Опис';
+}
+
+// Path: tags.select
+class _TranslationsTagsSelectUk implements _TranslationsTagsSelectEn {
+	_TranslationsTagsSelectUk._(this._root);
+
+	@override final _TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Вибрати теги';
+	@override String get all => 'Усі теги';
 }
 
 // Path: categories.select
@@ -4038,7 +4088,7 @@ class _TranslationsGeneralZhTw implements _TranslationsGeneralEn {
 	@override String get confirm => '確認';
 	@override String get continue_text => '繼續';
 	@override String get quick_actions => '快速行動';
-	@override String get save => '節省';
+	@override String get save => '保存';
 	@override String get save_changes => '儲存變更';
 	@override String get close_and_save => '儲存並關閉';
 	@override String get add => '添加';
@@ -4052,6 +4102,7 @@ class _TranslationsGeneralZhTw implements _TranslationsGeneralEn {
 	@override String get today => '今天';
 	@override String get yesterday => '昨天';
 	@override String get filters => '過濾器';
+	@override String get see_more => '查看更多';
 	@override String get select_all => '全選';
 	@override String get deselect_all => '取消全選';
 	@override String get empty_warn => '哦！這裡非常空';
@@ -4137,10 +4188,14 @@ class _TranslationsStatsZhTw implements _TranslationsStatsEn {
 	@override String get balance => '平衡';
 	@override String get final_balance => '最終餘額';
 	@override String get balance_by_account => '帳戶餘額';
-	@override String get balance_by_currency => '按貨幣劃分的餘額';
-	@override String get cash_flow => '現金週轉';
-	@override String get balance_evolution => 'Balance evolution';
-	@override String get compared_to_previous_period => '與前期相比';
+	@override String get balance_by_account_subtitle => '我的大部分钱都在哪里？';
+	@override String get balance_by_currency => '按货币余额';
+	@override String get balance_by_currency_subtitle => '我有多少钱的外币？';
+	@override String get balance_evolution => '平衡趋势';
+	@override String get balance_evolution_subtitle => '我的钱比以前多了吗？';
+	@override String get compared_to_previous_period => '与上一时期相比';
+	@override String get cash_flow => '现金流';
+	@override String get cash_flow_subtitle => '我的支出是否少于我的收入？';
 	@override String get by_periods => '按時期';
 	@override String get by_categories => '按類別';
 	@override String get by_tags => '按標籤';
@@ -4184,7 +4239,7 @@ class _TranslationsTransactionZhTw implements _TranslationsTransactionEn {
 	@override String get edit => '編輯交易';
 	@override String get edit_success => '交易編輯成功';
 	@override String get edit_multiple => '編輯交易';
-	@override String edit_multiple_success({required Object x}) => '${x} 筆交易已成功編輯';
+	@override String edit_multiple_success({required Object x}) => '${x}筆交易已成功編輯';
 	@override String get duplicate => '克隆交易';
 	@override String get duplicate_short => '複製';
 	@override String get duplicate_warning_message => '將在同一日期創建與此相同的交易，您想繼續嗎？';
@@ -4193,8 +4248,8 @@ class _TranslationsTransactionZhTw implements _TranslationsTransactionEn {
 	@override String get delete_warning_message => '此操作不可逆轉。您的帳戶當前餘額和所有統計資料都將重新計算';
 	@override String get delete_success => '交易已正確刪除';
 	@override String get delete_multiple => '刪除交易';
-	@override String delete_multiple_warning_message({required Object x}) => '此操作不可逆轉，將刪除 ${x} 筆交易。您帳戶的當前餘額和所有統計資料都將重新計算';
-	@override String delete_multiple_success({required Object x}) => '正確刪除了 ${x} 筆交易';
+	@override String delete_multiple_warning_message({required Object x}) => '此操作不可逆轉，將刪除${x}筆交易。您帳戶的當前餘額和所有統計資料都將重新計算';
+	@override String delete_multiple_success({required Object x}) => '正確刪除了${x}筆交易';
 	@override String get details => '動作詳情';
 	@override late final _TranslationsTransactionNextPaymentsZhTw next_payments = _TranslationsTransactionNextPaymentsZhTw._(_root);
 	@override late final _TranslationsTransactionListZhTw list = _TranslationsTransactionListZhTw._(_root);
@@ -4213,9 +4268,9 @@ class _TranslationsTransferZhTw implements _TranslationsTransferEn {
 
 	// Translations
 	@override String get display => '轉移';
-	@override String get transfers => '轉帳';
-	@override String transfer_to({required Object account}) => '轉帳至${account}';
-	@override String get create => '新轉移';
+	@override String get transfers => '轉移';
+	@override String transfer_to({required Object account}) => '轉移至${account}';
+	@override String get create => '轉移';
 	@override String get need_two_accounts_warning_header => 'Ops!';
 	@override String get need_two_accounts_warning_message => '至少需要兩個帳戶才能執行此操作。如果您需要調整或編輯該帳戶的當前餘額，請點擊編輯按鈕';
 	@override late final _TranslationsTransferFormZhTw form = _TranslationsTransferFormZhTw._(_root);
@@ -4231,7 +4286,7 @@ class _TranslationsRecurrentTransactionsZhTw implements _TranslationsRecurrentTr
 	@override String get title => '經常性交易';
 	@override String get title_short => '記錄交易';
 	@override String get empty => '您似乎沒有任何經常性交易。創建每月、每年或每週的經常性交易，它將顯示在此處';
-	@override String get total_expense_title => '每個期間的總費用';
+	@override String get total_expense_title => '每個期間的總收入';
 	@override String get total_expense_descr => '*不考慮每次重複的開始和結束日期';
 	@override late final _TranslationsRecurrentTransactionsDetailsZhTw details = _TranslationsRecurrentTransactionsDetailsZhTw._(_root);
 }
@@ -4251,8 +4306,8 @@ class _TranslationsAccountZhTw implements _TranslationsAccountEn {
 	@override String get reopen_descr => '您確定要重新開啟此帳戶嗎？';
 	@override String get balance => '帳戶餘額';
 	@override String get n_transactions => '交易數量';
-	@override String get add_money => '加錢';
-	@override String get withdraw_money => '取錢';
+	@override String get add_money => '增加金額';
+	@override String get withdraw_money => '取出金額';
 	@override String get no_accounts => '未發現此處顯示的交易。請點選底部的 \'+\' 按鈕新增交易';
 	@override late final _TranslationsAccountTypesZhTw types = _TranslationsAccountTypesZhTw._(_root);
 	@override late final _TranslationsAccountFormZhTw form = _TranslationsAccountFormZhTw._(_root);
@@ -4270,7 +4325,7 @@ class _TranslationsCurrenciesZhTw implements _TranslationsCurrenciesEn {
 	// Translations
 	@override String get currency_converter => '貨幣換算';
 	@override String get currency => '貨幣';
-	@override String get currency_manager => '貨幣經理';
+	@override String get currency_manager => '貨幣管理';
 	@override String get currency_manager_descr => '配置您的貨幣及其與其他貨幣的匯率';
 	@override String get preferred_currency => '首選/基礎貨幣';
 	@override String get change_preferred_currency_title => '更改首選貨幣';
@@ -4293,13 +4348,13 @@ class _TranslationsTagsZhTw implements _TranslationsTagsEn {
 
 	// Translations
 	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-		one: 'one',
-		other: 'other',
+		one: '標籤',
+		other: '標籤',
 	);
 	@override late final _TranslationsTagsFormZhTw form = _TranslationsTagsFormZhTw._(_root);
+	@override late final _TranslationsTagsSelectZhTw select = _TranslationsTagsSelectZhTw._(_root);
 	@override String get empty_list => '您還沒有創建任何標籤。標籤和類別是對您的動作進行分類的好方法';
 	@override String get without_tags => '沒有標籤';
-	@override String get select => '選擇標籤';
 	@override String get add => '添加標籤';
 	@override String get create => '建立標籤';
 	@override String get create_success => '標籤創建成功';
@@ -4322,7 +4377,7 @@ class _TranslationsCategoriesZhTw implements _TranslationsCategoriesEn {
 	@override String get create => '創建類別';
 	@override String get create_success => '類別創建正確';
 	@override String get new_category => '新類別';
-	@override String get already_exists => '該類別的名稱已存在。也許您想編輯它';
+	@override String get already_exists => '該類別的名稱已存在。也許您可以編輯';
 	@override String get edit => '編輯類別';
 	@override String get edit_success => '類別編輯正確';
 	@override String get name => '分類名稱';
@@ -4336,7 +4391,7 @@ class _TranslationsCategoriesZhTw implements _TranslationsCategoriesEn {
 	@override String make_child_warning2({required Object x, required Object destiny}) => '他們的交易<b>(${x})</b>將被移至<b>${destiny}</b>類別中創建的新子類別。';
 	@override String get make_child_success => '子類別創建成功';
 	@override String get merge => '與另一個類別合併';
-	@override String merge_warning1({required Object from, required Object x, required Object destiny}) => '與類別 <b>${from}</b> 相關的所有交易 (${x}) 將移至類別 <b>${destiny}</b>';
+	@override String merge_warning1({required Object from, required Object x, required Object destiny}) => '與類別<b>${from}</b>相關的所有交易 (${x}) 將移至類別<b>${destiny}</b>';
 	@override String merge_warning2({required Object from}) => '類別<b>${from}</b>將被不可逆轉地刪除。 ';
 	@override String get merge_success => '類別合併成功';
 	@override String get delete_success => '類別已正確刪除';
@@ -4352,16 +4407,16 @@ class _TranslationsBudgetsZhTw implements _TranslationsBudgetsEn {
 	@override final _TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'title';
+	@override String get title => '預算';
 	@override String get repeated => '再次發生的';
 	@override String get one_time => '一次';
-	@override String get annual => 'annual';
+	@override String get annual => '年度';
 	@override String get week => '每週';
 	@override String get month => '每月';
 	@override String get actives => '活躍';
 	@override String get pending => '等待開始';
 	@override String get finish => '完成的';
-	@override String get from_budgeted => '的左邊 ';
+	@override String get from_budgeted => '從預算';
 	@override String get days_left => '還剩幾天';
 	@override String get days_to_start => '開始的日子';
 	@override String get since_expiration => '自到期日起的天數';
@@ -4405,8 +4460,8 @@ class _TranslationsSettingsZhTw implements _TranslationsSettingsEn {
 	@override String get theme_and_colors => '主題和顏色';
 	@override String get theme => '主題';
 	@override String get theme_auto => '由系統定義';
-	@override String get theme_light => '明亮';
-	@override String get theme_dark => '黑暗';
+	@override String get theme_light => '明亮主題';
+	@override String get theme_dark => '黑暗主題';
 	@override String get amoled_mode => 'amoled mode';
 	@override String get amoled_mode_descr => '盡可能使用純黑色壁紙。這對 AMOLED 螢幕設備的電池略有幫助';
 	@override String get dynamic_colors => '動態色彩';
@@ -4437,7 +4492,7 @@ class _TranslationsGeneralClipboardZhTw implements _TranslationsGeneralClipboard
 	@override final _TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String success({required Object x}) => '${x} 已複製到剪貼簿';
+	@override String success({required Object x}) => '${x}已複製到剪貼簿';
 	@override String get error => '複製錯誤';
 }
 
@@ -4483,10 +4538,11 @@ class _TranslationsGeneralValidationsZhTw implements _TranslationsGeneralValidat
 	@override final _TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
+	@override String get form_error => '修正表單中指示的欄位以繼續';
 	@override String get required => '必填項目';
 	@override String get positive => '應該是積極的';
 	@override String min_number({required Object x}) => '應該大於${x}';
-	@override String max_number({required Object x}) => '應小於 ${x}';
+	@override String max_number({required Object x}) => '應小於${x}';
 }
 
 // Path: financial_health.review
@@ -4557,8 +4613,8 @@ class _TranslationsFinancialHealthMonthsWithoutIncomeZhTw implements _Translatio
 	@override String get title => '存活率';
 	@override String get subtitle => '考慮到您的餘額，您可以在沒有收入的情況下度過多長時間';
 	@override String get text_zero => '按照這樣的開支，沒有收入你一個月都活不下去！';
-	@override String get text_one => '按照這樣的費用，如果沒有收入，你幾乎無法生存大約一個月！';
-	@override String text_other({required Object n}) => '以這樣的支出速度，如果沒有收入，您大約可以生存 <b>${n} 個月</b>。';
+	@override String get text_one => '按照這樣的收入，如果沒有收入，你幾乎無法生存大約一個月！';
+	@override String text_other({required Object n}) => '以這樣的支出速度，如果沒有收入，您大約可以生存 <b>${n}個月</b>。';
 	@override String get text_infinite => '以這樣的支出速度，如果沒有收入，您大約可以<b>一生</b>生存。';
 	@override String get suggestion => '請記住，建議始終將此比率保持在至少 5 個月以上。如果您發現自己沒有足夠的儲蓄緩衝，請減少不必要的開支。';
 	@override String get insufficient_data => '看來我們沒有足夠的開支來計算您在沒有收入的情況下可以生存多少個月。輸入幾筆交易，然後回到這裡檢查您的財務狀況';
@@ -4607,10 +4663,10 @@ class _TranslationsTransactionNextPaymentsZhTw implements _TranslationsTransacti
 	@override String get skip_dialog_title => '跳過交易';
 	@override String skip_dialog_msg({required Object date}) => '此操作不可逆轉。我們會將下次移動的日期移至${date}';
 	@override String get accept_today => '今天接受';
-	@override String accept_in_required_date({required Object date}) => '在要求的日期（${date}）接受';
+	@override String accept_in_required_date({required Object date}) => '在要求的日期 (${date}) 接受';
 	@override String get accept_dialog_title => '接受交易';
 	@override String get accept_dialog_msg_single => '該交易的新狀態將為空。您可以隨時重新編輯該交易的狀態';
-	@override String accept_dialog_msg({required Object date}) => '此操作將建立日期為 ${date} 的新交易。您將能夠在交易頁面上查看此交易的詳細資訊';
+	@override String accept_dialog_msg({required Object date}) => '此操作將建立日期為${date}的新交易。您將能夠在交易頁面上查看此交易的詳細資訊';
 	@override String get recurrent_rule_finished => '循環規則已完成，無需再支付！';
 }
 
@@ -4621,7 +4677,7 @@ class _TranslationsTransactionListZhTw implements _TranslationsTransactionListEn
 	@override final _TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get empty => '未發現此處顯示的交易。請點選底部的 \'+\' 按鈕新增交易';
+	@override String get empty => '未發現此處顯示的交易。在應用程式中添加一些交易，也許您下次會有更好的運氣';
 	@override String get searcher_placeholder => '按類別、描述搜尋...';
 	@override String get searcher_no_results => '未找到符合搜尋條件的交易';
 	@override String get loading => '正在加載更多交易...';
@@ -4663,7 +4719,7 @@ class _TranslationsTransactionFormZhTw implements _TranslationsTransactionFormEn
 	@override String get title_short => '資質';
 	@override String get value => '交易價值';
 	@override String get tap_to_see_more => '點擊查看更多詳細資訊';
-	@override String get no_tags => '-- 无标签 --';
+	@override String get no_tags => '-- 無標籤 --';
 	@override String get description => '描述';
 	@override String get description_info => '點擊此處輸入有關此交易的更詳細描述';
 	@override String exchange_to_preferred_title({required Object currency}) => '匯率為${currency}';
@@ -4677,10 +4733,10 @@ class _TranslationsTransactionReversedZhTw implements _TranslationsTransactionRe
 	@override final _TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '撤销交易';
-	@override String get title_short => '倒置的 tr.';
-	@override String get description_for_expenses => '尽管是费用类型交易，但此交易具有正金额。这些类型的交易可用于表示先前记录的费用的返还，例如退款或支付债务。';
-	@override String get description_for_incomes => '尽管是收入类型交易，但此交易的金额为负数。这些类型的交易可用于作废或更正错误记录的收入，以反映退款或退款或记录债务的支付。';
+	@override String get title => '撤銷交易';
+	@override String get title_short => 'Inverse tr.';
+	@override String get description_for_expenses => '儘管是收入交易，但它的金額為正數。這些類型的交易可用於表示先前記錄的收入的返還，例如退款或償還債務。';
+	@override String get description_for_incomes => '儘管是一項收入交易，但其金額為負數。這些類型的交易可用於作廢或更正錯誤記錄的收入，反映資金的返還或退款或記錄債務的支付。';
 }
 
 // Path: transaction.status
@@ -4724,12 +4780,12 @@ class _TranslationsTransactionTypesZhTw implements _TranslationsTransactionTypes
 		other: '收入',
 	);
 	@override String expense({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-		one: '費用',
-		other: '花費',
+		one: '支出',
+		other: '支出',
 	);
 	@override String transfer({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
 		one: '轉移',
-		other: '轉帳',
+		other: '轉移',
 	);
 }
 
@@ -4862,6 +4918,17 @@ class _TranslationsTagsFormZhTw implements _TranslationsTagsFormEn {
 	@override String get description => '描述';
 }
 
+// Path: tags.select
+class _TranslationsTagsSelectZhTw implements _TranslationsTagsSelectEn {
+	_TranslationsTagsSelectZhTw._(this._root);
+
+	@override final _TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '選擇標籤';
+	@override String get all => '所有標籤';
+}
+
 // Path: categories.select
 class _TranslationsCategoriesSelectZhTw implements _TranslationsCategoriesSelectEn {
 	_TranslationsCategoriesSelectZhTw._(this._root);
@@ -4902,9 +4969,9 @@ class _TranslationsBudgetsDetailsZhTw implements _TranslationsBudgetsDetailsEn {
 	@override String get title => '預算詳情';
 	@override String get statistics => '統計數據';
 	@override String get budget_value => '預算';
-	@override String expend_diary_left({required Object dailyAmount, required Object remainingDays}) => '您每天可以花費 ${dailyAmount},持續剩餘 ${remainingDays} 天';
-	@override String get expend_evolution => '支出演變';
-	@override String get no_transactions => '看來您還沒有做出與此預算相關的任何費用';
+	@override String expend_diary_left({required Object dailyAmount, required Object remainingDays}) => '您每天可以花費${dailyAmount}/天，持續${remainingDays}天';
+	@override String get expend_evolution => '支出變化';
+	@override String get no_transactions => '看來您還沒有做出與此預算相關的任何收入';
 }
 
 // Path: backup.export
@@ -4922,7 +4989,7 @@ class _TranslationsBackupExportZhTw implements _TranslationsBackupExportEn {
 	@override String get transactions_descr => '以 CSV 格式匯出您的交易，以便您可以在其他程式或應用程式中更輕鬆地分析它們。';
 	@override String get description => '以不同格式下載資料';
 	@override String get dialog_title => '儲存/傳送文件';
-	@override String success({required Object x}) => '檔案已在 ${x} 中成功儲存/下載';
+	@override String success({required Object x}) => '檔案已在${x}中成功儲存/下載';
 	@override String get error => '下載檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員';
 }
 
@@ -4934,10 +5001,10 @@ class _TranslationsBackupImportZhTw implements _TranslationsBackupImportEn {
 
 	// Translations
 	@override String get title => '匯入您的資料';
-	@override String get title_short => '進口';
+	@override String get title_short => '匯入';
 	@override String get restore_backup => '恢復備份';
 	@override String get restore_backup_descr => '從 Monekin 匯入先前儲存的資料庫。此操作將用新資料取代任何當前應用程式資料';
-	@override String get restore_backup_warn_description => '導入新資料庫時，您將丟失應用程式中當前保存的所有資料。建議在繼續之前進行備份。請勿在此處上傳任何來源不明的文件，僅上傳您之前從其下載的文件莫尼金';
+	@override String get restore_backup_warn_description => '導入新資料庫時，您將丟失應用程式中當前保存的所有資料。建議在繼續之前進行備份。請勿在此處上傳任何來源不明的文件，僅上傳您之前從其下載的文件 Monekin';
 	@override String get restore_backup_warn_title => '覆蓋所有數據';
 	@override String get select_other_file => '選擇其他文件';
 	@override String get tap_to_select_file => '點選選擇檔案';
@@ -4958,7 +5025,7 @@ class _TranslationsBackupAboutZhTw implements _TranslationsBackupAboutEn {
 	@override String get create_date => '創建日期';
 	@override String get modify_date => '上一次更改';
 	@override String get last_backup => '上次備份';
-	@override String get size => '尺寸';
+	@override String get size => '檔案大小';
 }
 
 // Path: settings.security
@@ -4969,12 +5036,12 @@ class _TranslationsSettingsSecurityZhTw implements _TranslationsSettingsSecurity
 
 	// Translations
 	@override String get title => '安全';
-	@override String get private_mode_at_launch => '启动时的私密模式';
-	@override String get private_mode_at_launch_descr => '默认以私有模式启动应用程序';
-	@override String get private_mode => '私人模式';
-	@override String get private_mode_descr => '隐藏所有货币值';
-	@override String get private_mode_activated => '隐私模式已激活';
-	@override String get private_mode_deactivated => '私人模式已禁用';
+	@override String get private_mode_at_launch => '啟動時啟用的私密模式';
+	@override String get private_mode_at_launch_descr => '默認以私密模式啟動應用程序';
+	@override String get private_mode => '私密模式';
+	@override String get private_mode_descr => '隱藏所有貨幣值';
+	@override String get private_mode_activated => '私密模式已啟用';
+	@override String get private_mode_deactivated => '私密模式已禁用';
 }
 
 // Path: more.data
@@ -4987,7 +5054,7 @@ class _TranslationsMoreDataZhTw implements _TranslationsMoreDataEn {
 	@override String get display => '數據';
 	@override String get display_descr => '匯出和匯入您的數據，這樣您就不會丟失任何東西';
 	@override String get delete_all => '刪除我的資料';
-	@override String get delete_all_header1 => '學徒就停在那裡⚠️⚠️';
+	@override String get delete_all_header1 => 'Stop right there padawan ⚠️⚠️';
 	@override String get delete_all_message1 => '您確定要繼續嗎？您的所有資料將永久刪除且無法恢復';
 	@override String get delete_all_header2 => '最後一步⚠️⚠️';
 	@override String get delete_all_message2 => '刪除帳戶後，您將刪除所有儲存的個人資料。您的帳戶、交易、預算和類別將被刪除且無法恢復。您同意嗎？';
@@ -5014,10 +5081,10 @@ class _TranslationsMoreHelpUsZhTw implements _TranslationsMoreHelpUsEn {
 
 	// Translations
 	@override String get display => '幫助我們';
-	@override String get description => '了解如何幫助莫尼金變得越來越好';
+	@override String get description => '了解如何幫助 Monekin 變得越來越好';
 	@override String get rate_us => '評價我們';
 	@override String get rate_us_descr => '歡迎任何價格！';
-	@override String get share => '分享莫尼金';
+	@override String get share => '分享 Monekin';
 	@override String get share_descr => '與朋友和家人分享我們的應用程式';
 	@override String get share_text => 'Monekin！最好的個人理財應用程式。在這裡下載';
 	@override String get thanks => '謝謝你！';
@@ -5043,19 +5110,19 @@ class _TranslationsGeneralTimeRangesZhTw implements _TranslationsGeneralTimeRang
 	@override late final _TranslationsGeneralTimeRangesTypesZhTw types = _TranslationsGeneralTimeRangesTypesZhTw._(_root);
 	@override String each_range({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
 		one: '每個${range}',
-		other: '每 ${n} ${range}',
+		other: '每${n}${range}',
 	);
 	@override String each_range_until_date({required num n, required Object range, required Object day}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-		one: '每 ${range} 直到 ${day}',
-		other: '每 ${n} ${range} 直到 ${day}',
+		one: '每${range}直到${day}',
+		other: '每 ${n}${range}直到${day}',
 	);
 	@override String each_range_until_times({required num n, required Object range, required Object limit}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-		one: '每${range} ${limit}次',
-		other: '每 ${n} ${range} ${limit} 次',
+		one: '每${range}${limit}次',
+		other: '每${n}${range}${limit}次',
 	);
 	@override String each_range_until_once({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
 		one: '每${range}一次',
-		other: '每 ${n} ${range} 一次',
+		other: '每${n}${range}一次',
 	);
 	@override String month({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
 		one: '月',
@@ -5082,7 +5149,7 @@ class _TranslationsGeneralTimePeriodicityZhTw implements _TranslationsGeneralTim
 	@override final _TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get display => '復發';
+	@override String get display => '週期性';
 	@override String get no_repeat => '不再重複';
 	@override String repeat({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
 		one: '重複',
@@ -5133,7 +5200,7 @@ class _TranslationsFinancialHealthReviewDescrZhTw implements _TranslationsFinanc
 	@override final _TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get insufficient_data => '看起來我們沒有足夠的費用來計算您的財務健康狀況。添加這段時間的一些費用/收入，以便我們能夠幫助您！';
+	@override String get insufficient_data => '看起來我們沒有足夠的收入來計算您的財務健康狀況。添加這段時間的一些收入/收入，以便我們能夠幫助您！';
 	@override String get very_good => '恭喜！您的財務狀況非常好。我們希望您繼續保持良好的勢頭，並繼續與 Monekin 一起學習';
 	@override String get good => '太棒了！您的財務狀況良好。請訪問分析選項卡，了解如何節省更多！';
 	@override String get normal => '您的財務健康狀況或多或少處於這一時期其他人口的平均水平';
@@ -5163,7 +5230,7 @@ class _TranslationsTransactionListBulkEditZhTw implements _TranslationsTransacti
 	// Translations
 	@override String get dates => '編輯日期';
 	@override String get categories => '編輯類別';
-	@override String get status => '编辑状态';
+	@override String get status => '編輯狀態';
 }
 
 // Path: transaction.form.validators
@@ -5187,8 +5254,8 @@ class _TranslationsTransferFormValueInDestinyZhTw implements _TranslationsTransf
 	@override final _TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '目的地转账金额';
-	@override String amount_short({required Object amount}) => '${amount} 至目标账户';
+	@override String get title => '目的地轉帳金额';
+	@override String amount_short({required Object amount}) => '${amount}至目標帳户';
 }
 
 // Path: backup.import.manual_import
@@ -5214,13 +5281,13 @@ class _TranslationsBackupImportManualImportZhTw implements _TranslationsBackupIm
 	];
 	@override List<String> get steps_descr => [
 		'從您的裝置中選擇一個 .csv 檔案。確保它的第一行描述了每列的名稱。',
-		'選擇指定每筆交易價值的欄位。使用負值表示支出，使用正值表示收入。使用點作為小數點分隔符號。',
-		'選擇指定每筆交易所屬帳戶的列。您也可以選擇預設帳戶，以防我們找不到您想要的帳戶。如果未指定預設帳戶，我們將建立一個同名帳戶。',
-		'指定交易類別名稱所在的欄位。您必須指定一個預設類別，以便我們將此類別指派給交易，以防找不到該類別。',
-		'選擇指定每筆交易日期的欄位。如果未指定，交易將使用當前日期建立。',
-		'Specifies the columns for other optional transaction attributes',
+		'選擇每筆交易價值的欄位。使用負值表示支出，使用正值表示收入。使用點作為小數點分隔符號。',
+		'選擇每筆交易所屬帳戶的列。您也可以選擇預設帳戶，以防我們找不到您想要的帳戶。如果未指定預設帳戶，我們將建立一個同名帳戶。',
+		'選擇交易類別名稱所在的欄位。您必須指定一個預設類別，以便我們將此類別指派給交易，以防找不到該類別。',
+		'選擇每筆交易日期的欄位。如果未指定，交易將使用當前日期建立。',
+		'選擇其他交易屬性的資料列',
 	];
-	@override String success({required Object x}) => '已成功導入 ${x} 筆交易';
+	@override String success({required Object x}) => '已成功導入${x}筆交易';
 }
 
 // Path: more.about_us.legal
@@ -5245,7 +5312,7 @@ class _TranslationsMoreAboutUsProjectZhTw implements _TranslationsMoreAboutUsPro
 	// Translations
 	@override String get display => '專案';
 	@override String get contributors => '合作者';
-	@override String get contributors_descr => '所有讓莫尼金成長的開發者';
+	@override String get contributors_descr => '所有讓 Monekin 成長的開發者';
 	@override String get contact => '聯絡我們';
 }
 
@@ -5258,7 +5325,7 @@ class _TranslationsGeneralTimeRangesTypesZhTw implements _TranslationsGeneralTim
 	// Translations
 	@override String get cycle => '循環';
 	@override String get last_days => '最後一天';
-	@override String last_days_form({required Object x}) => '前 ${x} 天';
+	@override String last_days_form({required Object x}) => '前${x}天';
 	@override String get all => '總是';
 	@override String get date_range => '自訂範圍';
 }
@@ -5290,6 +5357,7 @@ extension on Translations {
 			case 'general.today': return 'Today';
 			case 'general.yesterday': return 'Yesterday';
 			case 'general.filters': return 'Filters';
+			case 'general.see_more': return 'See more';
 			case 'general.select_all': return 'Select all';
 			case 'general.deselect_all': return 'Deselect all';
 			case 'general.empty_warn': return 'Ops! This is very empty';
@@ -5377,6 +5445,7 @@ extension on Translations {
 			case 'general.transaction_order.category': return 'By category';
 			case 'general.transaction_order.quantity': return 'By quantity';
 			case 'general.transaction_order.date': return 'By date';
+			case 'general.validations.form_error': return 'Fix the indicated fields to continue';
 			case 'general.validations.required': return 'Required field';
 			case 'general.validations.positive': return 'Should be positive';
 			case 'general.validations.min_number': return ({required Object x}) => 'Should be greater than ${x}';
@@ -5485,10 +5554,14 @@ extension on Translations {
 			case 'stats.balance': return 'Balance';
 			case 'stats.final_balance': return 'Final balance';
 			case 'stats.balance_by_account': return 'Balance by accounts';
+			case 'stats.balance_by_account_subtitle': return 'Where do I have most of my money?';
 			case 'stats.balance_by_currency': return 'Balance by currency';
-			case 'stats.cash_flow': return 'Cash flow';
-			case 'stats.balance_evolution': return 'Balance evolution';
+			case 'stats.balance_by_currency_subtitle': return 'How much money do I have in foreign currency?';
+			case 'stats.balance_evolution': return 'Balance trend';
+			case 'stats.balance_evolution_subtitle': return 'Do I have more money than before?';
 			case 'stats.compared_to_previous_period': return 'Compared to the previous period';
+			case 'stats.cash_flow': return 'Cash flow';
+			case 'stats.cash_flow_subtitle': return 'Am I spending less than I earn?';
 			case 'stats.by_periods': return 'By periods';
 			case 'stats.by_categories': return 'By categories';
 			case 'stats.by_tags': return 'By tags';
@@ -5544,7 +5617,7 @@ extension on Translations {
 			case 'transaction.next_payments.accept_dialog_msg_single': return 'The new status of the transaction will be null. You can re-edit the status of this transaction whenever you want';
 			case 'transaction.next_payments.accept_dialog_msg': return ({required Object date}) => 'This action will create a new transaction with date ${date}. You will be able to check the details of this transaction on the transaction page';
 			case 'transaction.next_payments.recurrent_rule_finished': return 'The recurring rule has been completed, there are no more payments to make!';
-			case 'transaction.list.empty': return 'No transactions found to display here. Add a transaction by clicking the \'+\' button at the bottom';
+			case 'transaction.list.empty': return 'No transactions found to display here. Add a few transactions in the app and maybe you\'ll have better luck next time.';
 			case 'transaction.list.searcher_placeholder': return 'Search by category, description...';
 			case 'transaction.list.searcher_no_results': return 'No transactions found matching the search criteria';
 			case 'transaction.list.loading': return 'Loading more transactions...';
@@ -5704,9 +5777,10 @@ extension on Translations {
 			);
 			case 'tags.form.name': return 'Tag name';
 			case 'tags.form.description': return 'Description';
+			case 'tags.select.title': return 'Select tags';
+			case 'tags.select.all': return 'All the tags';
 			case 'tags.empty_list': return 'You haven\'t created any tags yet. Tags and categories are a great way to categorize your movements';
 			case 'tags.without_tags': return 'Without tags';
-			case 'tags.select': return 'Select tags';
 			case 'tags.add': return 'Add tag';
 			case 'tags.create': return 'Create label';
 			case 'tags.create_success': return 'Label created successfully';
@@ -5910,6 +5984,7 @@ extension on _TranslationsEs {
 			case 'general.today': return 'Hoy';
 			case 'general.yesterday': return 'Ayer';
 			case 'general.filters': return 'Filtros';
+			case 'general.see_more': return 'Ver más';
 			case 'general.select_all': return 'Seleccionar todo';
 			case 'general.deselect_all': return 'Deseleccionar todo';
 			case 'general.empty_warn': return 'Ops! Esto esta muy vacio';
@@ -5998,6 +6073,7 @@ extension on _TranslationsEs {
 			case 'general.transaction_order.category': return 'Por categoría';
 			case 'general.transaction_order.quantity': return 'Por cantidad';
 			case 'general.transaction_order.date': return 'Por fecha';
+			case 'general.validations.form_error': return 'Corrije los campos indicados en el formulario para continuar';
 			case 'general.validations.required': return 'Campo obligatorio';
 			case 'general.validations.positive': return 'Debe ser positivo';
 			case 'general.validations.min_number': return ({required Object x}) => 'Debe ser mayor que ${x}';
@@ -6020,7 +6096,7 @@ extension on _TranslationsEs {
 			case 'intro.last_slide_title': return 'Todo listo!';
 			case 'intro.last_slide_descr': return 'Con Monekin, podrás al fin lograr la independencia financiaria que tanto deseas. Podrás ver gráficas, presupuestos, consejos, estadisticas y mucho más sobre tu dinero.';
 			case 'intro.last_slide_descr2': return 'Esperemos que disfrutes de tu experiencia! No dudes en contactar con nosotros en caso de dudas, sugerencias...';
-			case 'home.title': return 'Dashboard';
+			case 'home.title': return 'Inicio';
 			case 'home.filter_transactions': return 'Filtrar transacciones';
 			case 'home.hello_day': return 'Buenos días,';
 			case 'home.hello_night': return 'Buenas noches,';
@@ -6106,10 +6182,14 @@ extension on _TranslationsEs {
 			case 'stats.balance': return 'Saldo';
 			case 'stats.final_balance': return 'Saldo final';
 			case 'stats.balance_by_account': return 'Saldo por cuentas';
+			case 'stats.balance_by_account_subtitle': return '¿Donde tengo la mayor parte de mi dinero?';
 			case 'stats.balance_by_currency': return 'Saldo por divisas';
+			case 'stats.balance_by_currency_subtitle': return '¿Cuanto dinero tengo en moneda extranjera?';
 			case 'stats.balance_evolution': return 'Tendencia de saldo';
+			case 'stats.balance_evolution_subtitle': return '¿Tengo más dinero que antes?';
 			case 'stats.compared_to_previous_period': return 'Frente al periodo anterior';
 			case 'stats.cash_flow': return 'Flujo de caja';
+			case 'stats.cash_flow_subtitle': return '¿Estoy gastando menos de lo que gano?';
 			case 'stats.by_periods': return 'Por periodos';
 			case 'stats.by_categories': return 'Por categorías';
 			case 'stats.by_tags': return 'Por etiquetas';
@@ -6165,7 +6245,7 @@ extension on _TranslationsEs {
 			case 'transaction.next_payments.accept_dialog_msg_single': return 'El estado de la transacción pasará a ser nulo. Puedes volver a editar el estado de esta transacción cuando lo desees';
 			case 'transaction.next_payments.accept_dialog_msg': return ({required Object date}) => 'Esta acción creará una transacción nueva con fecha ${date}. Podrás consultar los detalles de esta transacción en la página de transacciones';
 			case 'transaction.next_payments.recurrent_rule_finished': return 'La regla recurrente se ha completado, ya no hay mas pagos a realizar!';
-			case 'transaction.list.empty': return 'No se han encontrado transacciones que mostrar aquí. Añade una transacción pulsando el botón \'+\' de la parte inferior';
+			case 'transaction.list.empty': return 'No se han encontrado transacciones que mostrar aquí. Añade unas cuantas transacciones en la app y quizas tengas más suerte la proxima vez';
 			case 'transaction.list.searcher_placeholder': return 'Busca por categoría, descripción...';
 			case 'transaction.list.searcher_no_results': return 'No se han encontrado transacciones que coincidan con los criterios de busqueda';
 			case 'transaction.list.loading': return 'Cargando más transacciones...';
@@ -6325,9 +6405,10 @@ extension on _TranslationsEs {
 			);
 			case 'tags.form.name': return 'Nombre de la etiqueta';
 			case 'tags.form.description': return 'Descripción';
+			case 'tags.select.title': return 'Selecciona etiquetas';
+			case 'tags.select.all': return 'Todas las etiquetas';
 			case 'tags.empty_list': return 'No has creado ninguna etiqueta aun. Las etiquetas y las categorías son una gran forma de categorizar tus movimientos';
 			case 'tags.without_tags': return 'Sin etiquetas';
-			case 'tags.select': return 'Selecionar etiquetas';
 			case 'tags.create': return 'Crear etiqueta';
 			case 'tags.add': return 'Añadir etiqueta';
 			case 'tags.create_success': return 'Etiqueta creada correctamente';
@@ -6531,6 +6612,7 @@ extension on _TranslationsUk {
 			case 'general.today': return 'Сьогодні';
 			case 'general.yesterday': return 'Вчора';
 			case 'general.filters': return 'Фільтри';
+			case 'general.see_more': return 'Побачити більше';
 			case 'general.select_all': return 'Вибрати всі';
 			case 'general.deselect_all': return 'Скасувати вибір усіх';
 			case 'general.empty_warn': return 'Ой! Тут порожньо';
@@ -6618,6 +6700,7 @@ extension on _TranslationsUk {
 			case 'general.transaction_order.category': return 'За категорією';
 			case 'general.transaction_order.quantity': return 'За кількістю';
 			case 'general.transaction_order.date': return 'За датою';
+			case 'general.validations.form_error': return 'Виправте поля, зазначені у формі, щоб продовжити';
 			case 'general.validations.required': return 'Обов\'язкове поле';
 			case 'general.validations.positive': return 'Повинно бути позитивним';
 			case 'general.validations.min_number': return ({required Object x}) => 'Повинно бути більшим, ніж ${x}';
@@ -6726,10 +6809,14 @@ extension on _TranslationsUk {
 			case 'stats.balance': return 'Баланс';
 			case 'stats.final_balance': return 'Кінцевий баланс';
 			case 'stats.balance_by_account': return 'Баланс за рахунками';
-			case 'stats.balance_by_currency': return 'Баланс за валютами';
-			case 'stats.cash_flow': return 'Грошовий потік';
-			case 'stats.balance_evolution': return 'Еволюція балансу';
+			case 'stats.balance_by_account_subtitle': return 'Де я маю більшість грошей?';
+			case 'stats.balance_by_currency': return 'Баланс за валютою';
+			case 'stats.balance_by_currency_subtitle': return 'Скільки я маю грошей в іноземній валюті?';
+			case 'stats.balance_evolution': return 'Тенденція балансу';
+			case 'stats.balance_evolution_subtitle': return 'У мене більше грошей, ніж раніше?';
 			case 'stats.compared_to_previous_period': return 'Порівняно з попереднім періодом';
+			case 'stats.cash_flow': return 'Грошовий потік';
+			case 'stats.cash_flow_subtitle': return 'Я витрачаю менше, ніж заробляю?';
 			case 'stats.by_periods': return 'За періодами';
 			case 'stats.by_categories': return 'За категоріями';
 			case 'stats.by_tags': return 'За тегами';
@@ -6785,7 +6872,7 @@ extension on _TranslationsUk {
 			case 'transaction.next_payments.accept_dialog_msg_single': return 'Новий статус транзакції буде нульовим. Ви можете знову редагувати статус цієї транзакції в будь-який момент';
 			case 'transaction.next_payments.accept_dialog_msg': return ({required Object date}) => 'Ця дія створить нову транзакцію з датою ${date}. Ви зможете переглянути деталі цієї транзакції на сторінці транзакцій';
 			case 'transaction.next_payments.recurrent_rule_finished': return 'Правило періодичності було завершено, більше немає платежів!';
-			case 'transaction.list.empty': return 'Тут не знайдено жодних транзакцій для відображення. Додайте транзакцію, натиснувши кнопку \'+\' внизу';
+			case 'transaction.list.empty': return 'Тут не знайдено жодних транзакцій для відображення. Додайте кілька транзакцій у додаток, і, можливо, наступного разу вам пощастить більше';
 			case 'transaction.list.searcher_placeholder': return 'Шукати за категорією, описом...';
 			case 'transaction.list.searcher_no_results': return 'Не знайдено транзакцій, що відповідають критеріям пошуку';
 			case 'transaction.list.loading': return 'Завантаження додаткових транзакцій...';
@@ -6945,9 +7032,10 @@ extension on _TranslationsUk {
 			);
 			case 'tags.form.name': return 'Назва тегу';
 			case 'tags.form.description': return 'Опис';
+			case 'tags.select.title': return 'Вибрати теги';
+			case 'tags.select.all': return 'Усі теги';
 			case 'tags.empty_list': return 'Ви ще не створили жодних тегів. Теги та категорії - це відмінний спосіб категоризувати ваші рухи';
 			case 'tags.without_tags': return 'Без тегів';
-			case 'tags.select': return 'Вибрати теги';
 			case 'tags.add': return 'Додати тег';
 			case 'tags.create': return 'Створити мітку';
 			case 'tags.create_success': return 'Мітка успішно створена';
@@ -7137,7 +7225,7 @@ extension on _TranslationsZhTw {
 			case 'general.confirm': return '確認';
 			case 'general.continue_text': return '繼續';
 			case 'general.quick_actions': return '快速行動';
-			case 'general.save': return '節省';
+			case 'general.save': return '保存';
 			case 'general.save_changes': return '儲存變更';
 			case 'general.close_and_save': return '儲存並關閉';
 			case 'general.add': return '添加';
@@ -7151,6 +7239,7 @@ extension on _TranslationsZhTw {
 			case 'general.today': return '今天';
 			case 'general.yesterday': return '昨天';
 			case 'general.filters': return '過濾器';
+			case 'general.see_more': return '查看更多';
 			case 'general.select_all': return '全選';
 			case 'general.deselect_all': return '取消全選';
 			case 'general.empty_warn': return '哦！這裡非常空';
@@ -7158,7 +7247,7 @@ extension on _TranslationsZhTw {
 			case 'general.show_more_fields': return '顯示更多欄位';
 			case 'general.show_less_fields': return '顯示較少的欄位';
 			case 'general.tap_to_search': return '點擊即可搜尋';
-			case 'general.clipboard.success': return ({required Object x}) => '${x} 已複製到剪貼簿';
+			case 'general.clipboard.success': return ({required Object x}) => '${x}已複製到剪貼簿';
 			case 'general.clipboard.error': return '複製錯誤';
 			case 'general.time.start_date': return '開始日期';
 			case 'general.time.end_date': return '結束日期';
@@ -7175,24 +7264,24 @@ extension on _TranslationsZhTw {
 			case 'general.time.ranges.forever': return '永遠';
 			case 'general.time.ranges.types.cycle': return '循環';
 			case 'general.time.ranges.types.last_days': return '最後一天';
-			case 'general.time.ranges.types.last_days_form': return ({required Object x}) => '前 ${x} 天';
+			case 'general.time.ranges.types.last_days_form': return ({required Object x}) => '前${x}天';
 			case 'general.time.ranges.types.all': return '總是';
 			case 'general.time.ranges.types.date_range': return '自訂範圍';
 			case 'general.time.ranges.each_range': return ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
 				one: '每個${range}',
-				other: '每 ${n} ${range}',
+				other: '每${n}${range}',
 			);
 			case 'general.time.ranges.each_range_until_date': return ({required num n, required Object range, required Object day}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '每 ${range} 直到 ${day}',
-				other: '每 ${n} ${range} 直到 ${day}',
+				one: '每${range}直到${day}',
+				other: '每 ${n}${range}直到${day}',
 			);
 			case 'general.time.ranges.each_range_until_times': return ({required num n, required Object range, required Object limit}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '每${range} ${limit}次',
-				other: '每 ${n} ${range} ${limit} 次',
+				one: '每${range}${limit}次',
+				other: '每${n}${range}${limit}次',
 			);
 			case 'general.time.ranges.each_range_until_once': return ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
 				one: '每${range}一次',
-				other: '每 ${n} ${range} 一次',
+				other: '每${n}${range}一次',
 			);
 			case 'general.time.ranges.month': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
 				one: '月',
@@ -7210,7 +7299,7 @@ extension on _TranslationsZhTw {
 				one: '星期',
 				other: '幾週',
 			);
-			case 'general.time.periodicity.display': return '復發';
+			case 'general.time.periodicity.display': return '週期性';
 			case 'general.time.periodicity.no_repeat': return '不再重複';
 			case 'general.time.periodicity.repeat': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
 				one: '重複',
@@ -7238,10 +7327,11 @@ extension on _TranslationsZhTw {
 			case 'general.transaction_order.category': return '按類別';
 			case 'general.transaction_order.quantity': return '按數量';
 			case 'general.transaction_order.date': return '按日期';
+			case 'general.validations.form_error': return '修正表單中指示的欄位以繼續';
 			case 'general.validations.required': return '必填項目';
 			case 'general.validations.positive': return '應該是積極的';
 			case 'general.validations.min_number': return ({required Object x}) => '應該大於${x}';
-			case 'general.validations.max_number': return ({required Object x}) => '應小於 ${x}';
+			case 'general.validations.max_number': return ({required Object x}) => '應小於${x}';
 			case 'intro.start': return '開始';
 			case 'intro.skip': return '跳過';
 			case 'intro.next': return '下一個';
@@ -7321,7 +7411,7 @@ extension on _TranslationsZhTw {
 						return '數據不足';
 				}
 			};
-			case 'financial_health.review.descr.insufficient_data': return '看起來我們沒有足夠的費用來計算您的財務健康狀況。添加這段時間的一些費用/收入，以便我們能夠幫助您！';
+			case 'financial_health.review.descr.insufficient_data': return '看起來我們沒有足夠的收入來計算您的財務健康狀況。添加這段時間的一些收入/收入，以便我們能夠幫助您！';
 			case 'financial_health.review.descr.very_good': return '恭喜！您的財務狀況非常好。我們希望您繼續保持良好的勢頭，並繼續與 Monekin 一起學習';
 			case 'financial_health.review.descr.good': return '太棒了！您的財務狀況良好。請訪問分析選項卡，了解如何節省更多！';
 			case 'financial_health.review.descr.normal': return '您的財務健康狀況或多或少處於這一時期其他人口的平均水平';
@@ -7330,8 +7420,8 @@ extension on _TranslationsZhTw {
 			case 'financial_health.months_without_income.title': return '存活率';
 			case 'financial_health.months_without_income.subtitle': return '考慮到您的餘額，您可以在沒有收入的情況下度過多長時間';
 			case 'financial_health.months_without_income.text_zero': return '按照這樣的開支，沒有收入你一個月都活不下去！';
-			case 'financial_health.months_without_income.text_one': return '按照這樣的費用，如果沒有收入，你幾乎無法生存大約一個月！';
-			case 'financial_health.months_without_income.text_other': return ({required Object n}) => '以這樣的支出速度，如果沒有收入，您大約可以生存 <b>${n} 個月</b>。';
+			case 'financial_health.months_without_income.text_one': return '按照這樣的收入，如果沒有收入，你幾乎無法生存大約一個月！';
+			case 'financial_health.months_without_income.text_other': return ({required Object n}) => '以這樣的支出速度，如果沒有收入，您大約可以生存 <b>${n}個月</b>。';
 			case 'financial_health.months_without_income.text_infinite': return '以這樣的支出速度，如果沒有收入，您大約可以<b>一生</b>生存。';
 			case 'financial_health.months_without_income.suggestion': return '請記住，建議始終將此比率保持在至少 5 個月以上。如果您發現自己沒有足夠的儲蓄緩衝，請減少不必要的開支。';
 			case 'financial_health.months_without_income.insufficient_data': return '看來我們沒有足夠的開支來計算您在沒有收入的情況下可以生存多少個月。輸入幾筆交易，然後回到這裡檢查您的財務狀況';
@@ -7346,10 +7436,14 @@ extension on _TranslationsZhTw {
 			case 'stats.balance': return '平衡';
 			case 'stats.final_balance': return '最終餘額';
 			case 'stats.balance_by_account': return '帳戶餘額';
-			case 'stats.balance_by_currency': return '按貨幣劃分的餘額';
-			case 'stats.cash_flow': return '現金週轉';
-			case 'stats.balance_evolution': return 'Balance evolution';
-			case 'stats.compared_to_previous_period': return '與前期相比';
+			case 'stats.balance_by_account_subtitle': return '我的大部分钱都在哪里？';
+			case 'stats.balance_by_currency': return '按货币余额';
+			case 'stats.balance_by_currency_subtitle': return '我有多少钱的外币？';
+			case 'stats.balance_evolution': return '平衡趋势';
+			case 'stats.balance_evolution_subtitle': return '我的钱比以前多了吗？';
+			case 'stats.compared_to_previous_period': return '与上一时期相比';
+			case 'stats.cash_flow': return '现金流';
+			case 'stats.cash_flow_subtitle': return '我的支出是否少于我的收入？';
 			case 'stats.by_periods': return '按時期';
 			case 'stats.by_categories': return '按類別';
 			case 'stats.by_tags': return '按標籤';
@@ -7382,7 +7476,7 @@ extension on _TranslationsZhTw {
 			case 'transaction.edit': return '編輯交易';
 			case 'transaction.edit_success': return '交易編輯成功';
 			case 'transaction.edit_multiple': return '編輯交易';
-			case 'transaction.edit_multiple_success': return ({required Object x}) => '${x} 筆交易已成功編輯';
+			case 'transaction.edit_multiple_success': return ({required Object x}) => '${x}筆交易已成功編輯';
 			case 'transaction.duplicate': return '克隆交易';
 			case 'transaction.duplicate_short': return '複製';
 			case 'transaction.duplicate_warning_message': return '將在同一日期創建與此相同的交易，您想繼續嗎？';
@@ -7391,8 +7485,8 @@ extension on _TranslationsZhTw {
 			case 'transaction.delete_warning_message': return '此操作不可逆轉。您的帳戶當前餘額和所有統計資料都將重新計算';
 			case 'transaction.delete_success': return '交易已正確刪除';
 			case 'transaction.delete_multiple': return '刪除交易';
-			case 'transaction.delete_multiple_warning_message': return ({required Object x}) => '此操作不可逆轉，將刪除 ${x} 筆交易。您帳戶的當前餘額和所有統計資料都將重新計算';
-			case 'transaction.delete_multiple_success': return ({required Object x}) => '正確刪除了 ${x} 筆交易';
+			case 'transaction.delete_multiple_warning_message': return ({required Object x}) => '此操作不可逆轉，將刪除${x}筆交易。您帳戶的當前餘額和所有統計資料都將重新計算';
+			case 'transaction.delete_multiple_success': return ({required Object x}) => '正確刪除了${x}筆交易';
 			case 'transaction.details': return '動作詳情';
 			case 'transaction.next_payments.accept': return '接受';
 			case 'transaction.next_payments.skip': return '跳過';
@@ -7400,12 +7494,12 @@ extension on _TranslationsZhTw {
 			case 'transaction.next_payments.skip_dialog_title': return '跳過交易';
 			case 'transaction.next_payments.skip_dialog_msg': return ({required Object date}) => '此操作不可逆轉。我們會將下次移動的日期移至${date}';
 			case 'transaction.next_payments.accept_today': return '今天接受';
-			case 'transaction.next_payments.accept_in_required_date': return ({required Object date}) => '在要求的日期（${date}）接受';
+			case 'transaction.next_payments.accept_in_required_date': return ({required Object date}) => '在要求的日期 (${date}) 接受';
 			case 'transaction.next_payments.accept_dialog_title': return '接受交易';
 			case 'transaction.next_payments.accept_dialog_msg_single': return '該交易的新狀態將為空。您可以隨時重新編輯該交易的狀態';
-			case 'transaction.next_payments.accept_dialog_msg': return ({required Object date}) => '此操作將建立日期為 ${date} 的新交易。您將能夠在交易頁面上查看此交易的詳細資訊';
+			case 'transaction.next_payments.accept_dialog_msg': return ({required Object date}) => '此操作將建立日期為${date}的新交易。您將能夠在交易頁面上查看此交易的詳細資訊';
 			case 'transaction.next_payments.recurrent_rule_finished': return '循環規則已完成，無需再支付！';
-			case 'transaction.list.empty': return '未發現此處顯示的交易。請點選底部的 \'+\' 按鈕新增交易';
+			case 'transaction.list.empty': return '未發現此處顯示的交易。在應用程式中添加一些交易，也許您下次會有更好的運氣';
 			case 'transaction.list.searcher_placeholder': return '按類別、描述搜尋...';
 			case 'transaction.list.searcher_no_results': return '未找到符合搜尋條件的交易';
 			case 'transaction.list.loading': return '正在加載更多交易...';
@@ -7419,7 +7513,7 @@ extension on _TranslationsZhTw {
 			);
 			case 'transaction.list.bulk_edit.dates': return '編輯日期';
 			case 'transaction.list.bulk_edit.categories': return '編輯類別';
-			case 'transaction.list.bulk_edit.status': return '编辑状态';
+			case 'transaction.list.bulk_edit.status': return '編輯狀態';
 			case 'transaction.filters.from_value': return '從金額';
 			case 'transaction.filters.to_value': return '最多金額';
 			case 'transaction.filters.from_value_def': return ({required Object x}) => '來自 ${x}';
@@ -7435,15 +7529,15 @@ extension on _TranslationsZhTw {
 			case 'transaction.form.title_short': return '資質';
 			case 'transaction.form.value': return '交易價值';
 			case 'transaction.form.tap_to_see_more': return '點擊查看更多詳細資訊';
-			case 'transaction.form.no_tags': return '-- 无标签 --';
+			case 'transaction.form.no_tags': return '-- 無標籤 --';
 			case 'transaction.form.description': return '描述';
 			case 'transaction.form.description_info': return '點擊此處輸入有關此交易的更詳細描述';
 			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => '匯率為${currency}';
 			case 'transaction.form.exchange_to_preferred_in_date': return '交易日';
-			case 'transaction.reversed.title': return '撤销交易';
-			case 'transaction.reversed.title_short': return '倒置的 tr.';
-			case 'transaction.reversed.description_for_expenses': return '尽管是费用类型交易，但此交易具有正金额。这些类型的交易可用于表示先前记录的费用的返还，例如退款或支付债务。';
-			case 'transaction.reversed.description_for_incomes': return '尽管是收入类型交易，但此交易的金额为负数。这些类型的交易可用于作废或更正错误记录的收入，以反映退款或退款或记录债务的支付。';
+			case 'transaction.reversed.title': return '撤銷交易';
+			case 'transaction.reversed.title_short': return 'Inverse tr.';
+			case 'transaction.reversed.description_for_expenses': return '儘管是收入交易，但它的金額為正數。這些類型的交易可用於表示先前記錄的收入的返還，例如退款或償還債務。';
+			case 'transaction.reversed.description_for_incomes': return '儘管是一項收入交易，但其金額為負數。這些類型的交易可用於作廢或更正錯誤記錄的收入，反映資金的返還或退款或記錄債務的支付。';
 			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
 				one: '地位',
 				other: '狀態',
@@ -7469,27 +7563,27 @@ extension on _TranslationsZhTw {
 				other: '收入',
 			);
 			case 'transaction.types.expense': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '費用',
-				other: '花費',
+				one: '支出',
+				other: '支出',
 			);
 			case 'transaction.types.transfer': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
 				one: '轉移',
-				other: '轉帳',
+				other: '轉移',
 			);
 			case 'transfer.display': return '轉移';
-			case 'transfer.transfers': return '轉帳';
-			case 'transfer.transfer_to': return ({required Object account}) => '轉帳至${account}';
-			case 'transfer.create': return '新轉移';
+			case 'transfer.transfers': return '轉移';
+			case 'transfer.transfer_to': return ({required Object account}) => '轉移至${account}';
+			case 'transfer.create': return '轉移';
 			case 'transfer.need_two_accounts_warning_header': return 'Ops!';
 			case 'transfer.need_two_accounts_warning_message': return '至少需要兩個帳戶才能執行此操作。如果您需要調整或編輯該帳戶的當前餘額，請點擊編輯按鈕';
 			case 'transfer.form.from': return '原始帳戶';
 			case 'transfer.form.to': return '目的地帳戶';
-			case 'transfer.form.value_in_destiny.title': return '目的地转账金额';
-			case 'transfer.form.value_in_destiny.amount_short': return ({required Object amount}) => '${amount} 至目标账户';
+			case 'transfer.form.value_in_destiny.title': return '目的地轉帳金额';
+			case 'transfer.form.value_in_destiny.amount_short': return ({required Object amount}) => '${amount}至目標帳户';
 			case 'recurrent_transactions.title': return '經常性交易';
 			case 'recurrent_transactions.title_short': return '記錄交易';
 			case 'recurrent_transactions.empty': return '您似乎沒有任何經常性交易。創建每月、每年或每週的經常性交易，它將顯示在此處';
-			case 'recurrent_transactions.total_expense_title': return '每個期間的總費用';
+			case 'recurrent_transactions.total_expense_title': return '每個期間的總收入';
 			case 'recurrent_transactions.total_expense_descr': return '*不考慮每次重複的開始和結束日期';
 			case 'recurrent_transactions.details.title': return '經常性交易';
 			case 'recurrent_transactions.details.descr': return '此交易的下一步動作如下所示。您可以接受第一步動作或跳過此動作';
@@ -7504,8 +7598,8 @@ extension on _TranslationsZhTw {
 			case 'account.reopen_descr': return '您確定要重新開啟此帳戶嗎？';
 			case 'account.balance': return '帳戶餘額';
 			case 'account.n_transactions': return '交易數量';
-			case 'account.add_money': return '加錢';
-			case 'account.withdraw_money': return '取錢';
+			case 'account.add_money': return '增加金額';
+			case 'account.withdraw_money': return '取出金額';
 			case 'account.no_accounts': return '未發現此處顯示的交易。請點選底部的 \'+\' 按鈕新增交易';
 			case 'account.types.title': return '帳戶類型';
 			case 'account.types.warning': return '帳戶類型一旦選擇，以後將無法更改';
@@ -7541,7 +7635,7 @@ extension on _TranslationsZhTw {
 			case 'account.select.multiple': return '選擇帳戶';
 			case 'currencies.currency_converter': return '貨幣換算';
 			case 'currencies.currency': return '貨幣';
-			case 'currencies.currency_manager': return '貨幣經理';
+			case 'currencies.currency_manager': return '貨幣管理';
 			case 'currencies.currency_manager_descr': return '配置您的貨幣及其與其他貨幣的匯率';
 			case 'currencies.preferred_currency': return '首選/基礎貨幣';
 			case 'currencies.change_preferred_currency_title': return '更改首選貨幣';
@@ -7560,14 +7654,15 @@ extension on _TranslationsZhTw {
 			case 'currencies.select_a_currency': return '選擇貨幣';
 			case 'currencies.search': return '按名稱或貨幣代碼搜尋';
 			case 'tags.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: 'one',
-				other: 'other',
+				one: '標籤',
+				other: '標籤',
 			);
 			case 'tags.form.name': return '標籤名';
 			case 'tags.form.description': return '描述';
+			case 'tags.select.title': return '選擇標籤';
+			case 'tags.select.all': return '所有標籤';
 			case 'tags.empty_list': return '您還沒有創建任何標籤。標籤和類別是對您的動作進行分類的好方法';
 			case 'tags.without_tags': return '沒有標籤';
-			case 'tags.select': return '選擇標籤';
 			case 'tags.add': return '添加標籤';
 			case 'tags.create': return '建立標籤';
 			case 'tags.create_success': return '標籤創建成功';
@@ -7581,7 +7676,7 @@ extension on _TranslationsZhTw {
 			case 'categories.create': return '創建類別';
 			case 'categories.create_success': return '類別創建正確';
 			case 'categories.new_category': return '新類別';
-			case 'categories.already_exists': return '該類別的名稱已存在。也許您想編輯它';
+			case 'categories.already_exists': return '該類別的名稱已存在。也許您可以編輯';
 			case 'categories.edit': return '編輯類別';
 			case 'categories.edit_success': return '類別編輯正確';
 			case 'categories.name': return '分類名稱';
@@ -7595,7 +7690,7 @@ extension on _TranslationsZhTw {
 			case 'categories.make_child_warning2': return ({required Object x, required Object destiny}) => '他們的交易<b>(${x})</b>將被移至<b>${destiny}</b>類別中創建的新子類別。';
 			case 'categories.make_child_success': return '子類別創建成功';
 			case 'categories.merge': return '與另一個類別合併';
-			case 'categories.merge_warning1': return ({required Object from, required Object x, required Object destiny}) => '與類別 <b>${from}</b> 相關的所有交易 (${x}) 將移至類別 <b>${destiny}</b>';
+			case 'categories.merge_warning1': return ({required Object from, required Object x, required Object destiny}) => '與類別<b>${from}</b>相關的所有交易 (${x}) 將移至類別<b>${destiny}</b>';
 			case 'categories.merge_warning2': return ({required Object from}) => '類別<b>${from}</b>將被不可逆轉地刪除。 ';
 			case 'categories.merge_success': return '類別合併成功';
 			case 'categories.delete_success': return '類別已正確刪除';
@@ -7607,16 +7702,16 @@ extension on _TranslationsZhTw {
 			case 'categories.select.without_subcategory': return '沒有子類別';
 			case 'categories.select.all': return '所有類別';
 			case 'categories.select.all_short': return '全部';
-			case 'budgets.title': return 'title';
+			case 'budgets.title': return '預算';
 			case 'budgets.repeated': return '再次發生的';
 			case 'budgets.one_time': return '一次';
-			case 'budgets.annual': return 'annual';
+			case 'budgets.annual': return '年度';
 			case 'budgets.week': return '每週';
 			case 'budgets.month': return '每月';
 			case 'budgets.actives': return '活躍';
 			case 'budgets.pending': return '等待開始';
 			case 'budgets.finish': return '完成的';
-			case 'budgets.from_budgeted': return '的左邊 ';
+			case 'budgets.from_budgeted': return '從預算';
 			case 'budgets.days_left': return '還剩幾天';
 			case 'budgets.days_to_start': return '開始的日子';
 			case 'budgets.since_expiration': return '自到期日起的天數';
@@ -7632,9 +7727,9 @@ extension on _TranslationsZhTw {
 			case 'budgets.details.title': return '預算詳情';
 			case 'budgets.details.statistics': return '統計數據';
 			case 'budgets.details.budget_value': return '預算';
-			case 'budgets.details.expend_diary_left': return ({required Object dailyAmount, required Object remainingDays}) => '您每天可以花費 ${dailyAmount},持續剩餘 ${remainingDays} 天';
-			case 'budgets.details.expend_evolution': return '支出演變';
-			case 'budgets.details.no_transactions': return '看來您還沒有做出與此預算相關的任何費用';
+			case 'budgets.details.expend_diary_left': return ({required Object dailyAmount, required Object remainingDays}) => '您每天可以花費${dailyAmount}/天，持續${remainingDays}天';
+			case 'budgets.details.expend_evolution': return '支出變化';
+			case 'budgets.details.no_transactions': return '看來您還沒有做出與此預算相關的任何收入';
 			case 'backup.export.title': return '匯出您的資料';
 			case 'backup.export.title_short': return '匯出';
 			case 'backup.export.all': return '完整備份';
@@ -7643,13 +7738,13 @@ extension on _TranslationsZhTw {
 			case 'backup.export.transactions_descr': return '以 CSV 格式匯出您的交易，以便您可以在其他程式或應用程式中更輕鬆地分析它們。';
 			case 'backup.export.description': return '以不同格式下載資料';
 			case 'backup.export.dialog_title': return '儲存/傳送文件';
-			case 'backup.export.success': return ({required Object x}) => '檔案已在 ${x} 中成功儲存/下載';
+			case 'backup.export.success': return ({required Object x}) => '檔案已在${x}中成功儲存/下載';
 			case 'backup.export.error': return '下載檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員';
 			case 'backup.import.title': return '匯入您的資料';
-			case 'backup.import.title_short': return '進口';
+			case 'backup.import.title_short': return '匯入';
 			case 'backup.import.restore_backup': return '恢復備份';
 			case 'backup.import.restore_backup_descr': return '從 Monekin 匯入先前儲存的資料庫。此操作將用新資料取代任何當前應用程式資料';
-			case 'backup.import.restore_backup_warn_description': return '導入新資料庫時，您將丟失應用程式中當前保存的所有資料。建議在繼續之前進行備份。請勿在此處上傳任何來源不明的文件，僅上傳您之前從其下載的文件莫尼金';
+			case 'backup.import.restore_backup_warn_description': return '導入新資料庫時，您將丟失應用程式中當前保存的所有資料。建議在繼續之前進行備份。請勿在此處上傳任何來源不明的文件，僅上傳您之前從其下載的文件 Monekin';
 			case 'backup.import.restore_backup_warn_title': return '覆蓋所有數據';
 			case 'backup.import.select_other_file': return '選擇其他文件';
 			case 'backup.import.tap_to_select_file': return '點選選擇檔案';
@@ -7666,12 +7761,12 @@ extension on _TranslationsZhTw {
 			case 'backup.import.manual_import.steps.4': return '日期欄位';
 			case 'backup.import.manual_import.steps.5': return '其他欄位';
 			case 'backup.import.manual_import.steps_descr.0': return '從您的裝置中選擇一個 .csv 檔案。確保它的第一行描述了每列的名稱。';
-			case 'backup.import.manual_import.steps_descr.1': return '選擇指定每筆交易價值的欄位。使用負值表示支出，使用正值表示收入。使用點作為小數點分隔符號。';
-			case 'backup.import.manual_import.steps_descr.2': return '選擇指定每筆交易所屬帳戶的列。您也可以選擇預設帳戶，以防我們找不到您想要的帳戶。如果未指定預設帳戶，我們將建立一個同名帳戶。';
-			case 'backup.import.manual_import.steps_descr.3': return '指定交易類別名稱所在的欄位。您必須指定一個預設類別，以便我們將此類別指派給交易，以防找不到該類別。';
-			case 'backup.import.manual_import.steps_descr.4': return '選擇指定每筆交易日期的欄位。如果未指定，交易將使用當前日期建立。';
-			case 'backup.import.manual_import.steps_descr.5': return 'Specifies the columns for other optional transaction attributes';
-			case 'backup.import.manual_import.success': return ({required Object x}) => '已成功導入 ${x} 筆交易';
+			case 'backup.import.manual_import.steps_descr.1': return '選擇每筆交易價值的欄位。使用負值表示支出，使用正值表示收入。使用點作為小數點分隔符號。';
+			case 'backup.import.manual_import.steps_descr.2': return '選擇每筆交易所屬帳戶的列。您也可以選擇預設帳戶，以防我們找不到您想要的帳戶。如果未指定預設帳戶，我們將建立一個同名帳戶。';
+			case 'backup.import.manual_import.steps_descr.3': return '選擇交易類別名稱所在的欄位。您必須指定一個預設類別，以便我們將此類別指派給交易，以防找不到該類別。';
+			case 'backup.import.manual_import.steps_descr.4': return '選擇每筆交易日期的欄位。如果未指定，交易將使用當前日期建立。';
+			case 'backup.import.manual_import.steps_descr.5': return '選擇其他交易屬性的資料列';
+			case 'backup.import.manual_import.success': return ({required Object x}) => '已成功導入${x}筆交易';
 			case 'backup.import.success': return '導入成功';
 			case 'backup.import.cancelled': return '導入已被用戶取消';
 			case 'backup.import.error': return '匯入檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員。';
@@ -7679,7 +7774,7 @@ extension on _TranslationsZhTw {
 			case 'backup.about.create_date': return '創建日期';
 			case 'backup.about.modify_date': return '上一次更改';
 			case 'backup.about.last_backup': return '上次備份';
-			case 'backup.about.size': return '尺寸';
+			case 'backup.about.size': return '檔案大小';
 			case 'settings.title_long': return '設定和外觀';
 			case 'settings.title_short': return '設定';
 			case 'settings.description': return '應用程式主題、文字和其他常規設定';
@@ -7694,8 +7789,8 @@ extension on _TranslationsZhTw {
 			case 'settings.theme_and_colors': return '主題和顏色';
 			case 'settings.theme': return '主題';
 			case 'settings.theme_auto': return '由系統定義';
-			case 'settings.theme_light': return '明亮';
-			case 'settings.theme_dark': return '黑暗';
+			case 'settings.theme_light': return '明亮主題';
+			case 'settings.theme_dark': return '黑暗主題';
 			case 'settings.amoled_mode': return 'amoled mode';
 			case 'settings.amoled_mode_descr': return '盡可能使用純黑色壁紙。這對 AMOLED 螢幕設備的電池略有幫助';
 			case 'settings.dynamic_colors': return '動態色彩';
@@ -7703,18 +7798,18 @@ extension on _TranslationsZhTw {
 			case 'settings.accent_color': return '強調色';
 			case 'settings.accent_color_descr': return '選擇應用程式用來強調介面某些部分的顏色';
 			case 'settings.security.title': return '安全';
-			case 'settings.security.private_mode_at_launch': return '启动时的私密模式';
-			case 'settings.security.private_mode_at_launch_descr': return '默认以私有模式启动应用程序';
-			case 'settings.security.private_mode': return '私人模式';
-			case 'settings.security.private_mode_descr': return '隐藏所有货币值';
-			case 'settings.security.private_mode_activated': return '隐私模式已激活';
-			case 'settings.security.private_mode_deactivated': return '私人模式已禁用';
+			case 'settings.security.private_mode_at_launch': return '啟動時啟用的私密模式';
+			case 'settings.security.private_mode_at_launch_descr': return '默認以私密模式啟動應用程序';
+			case 'settings.security.private_mode': return '私密模式';
+			case 'settings.security.private_mode_descr': return '隱藏所有貨幣值';
+			case 'settings.security.private_mode_activated': return '私密模式已啟用';
+			case 'settings.security.private_mode_deactivated': return '私密模式已禁用';
 			case 'more.title': return '更多的';
 			case 'more.title_long': return '更多操作';
 			case 'more.data.display': return '數據';
 			case 'more.data.display_descr': return '匯出和匯入您的數據，這樣您就不會丟失任何東西';
 			case 'more.data.delete_all': return '刪除我的資料';
-			case 'more.data.delete_all_header1': return '學徒就停在那裡⚠️⚠️';
+			case 'more.data.delete_all_header1': return 'Stop right there padawan ⚠️⚠️';
 			case 'more.data.delete_all_message1': return '您確定要繼續嗎？您的所有資料將永久刪除且無法恢復';
 			case 'more.data.delete_all_header2': return '最後一步⚠️⚠️';
 			case 'more.data.delete_all_message2': return '刪除帳戶後，您將刪除所有儲存的個人資料。您的帳戶、交易、預算和類別將被刪除且無法恢復。您同意嗎？';
@@ -7726,13 +7821,13 @@ extension on _TranslationsZhTw {
 			case 'more.about_us.legal.licenses': return '許可證';
 			case 'more.about_us.project.display': return '專案';
 			case 'more.about_us.project.contributors': return '合作者';
-			case 'more.about_us.project.contributors_descr': return '所有讓莫尼金成長的開發者';
+			case 'more.about_us.project.contributors_descr': return '所有讓 Monekin 成長的開發者';
 			case 'more.about_us.project.contact': return '聯絡我們';
 			case 'more.help_us.display': return '幫助我們';
-			case 'more.help_us.description': return '了解如何幫助莫尼金變得越來越好';
+			case 'more.help_us.description': return '了解如何幫助 Monekin 變得越來越好';
 			case 'more.help_us.rate_us': return '評價我們';
 			case 'more.help_us.rate_us_descr': return '歡迎任何價格！';
-			case 'more.help_us.share': return '分享莫尼金';
+			case 'more.help_us.share': return '分享 Monekin';
 			case 'more.help_us.share_descr': return '與朋友和家人分享我們的應用程式';
 			case 'more.help_us.share_text': return 'Monekin！最好的個人理財應用程式。在這裡下載';
 			case 'more.help_us.thanks': return '謝謝你！';

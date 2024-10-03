@@ -165,7 +165,10 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                           child: Icon(
                             Icons.circle,
                             size: 25,
-                            color: AppColors.of(context).inputFill.darken(0.2),
+                            color: Theme.of(context)
+                                .colorSchemeExtended
+                                .inputFill
+                                .darken(0.2),
                           ),
                         ),
                 ),

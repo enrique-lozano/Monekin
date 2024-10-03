@@ -68,15 +68,8 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
   }
 
   Future<List<TrDistributionChartItem<Category>>> getEvolutionData(
-    BuildContext context,
-  ) async {
+      BuildContext context, List<MoneyTransaction> transactions) async {
     final data = <TrDistributionChartItem<Category>>[];
-
-    final transactionService = TransactionService.instance;
-
-    final transactions = await transactionService
-        .getTransactions(filters: _getTransactionFilters())
-        .first;
 
     for (final transaction in transactions) {
       final trValue = transaction.currentValueInPreferredCurrency *
@@ -221,8 +214,10 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return FutureBuilder(
-      future: getEvolutionData(context),
+    return StreamBuilder(
+      stream: TransactionService.instance
+          .getTransactions(filters: _getTransactionFilters())
+          .asyncMap((data) => getEvolutionData(context, data)),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const LinearProgressIndicator();

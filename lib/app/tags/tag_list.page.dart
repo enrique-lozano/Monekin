@@ -78,7 +78,7 @@ class _TagListPageState extends State<TagListPage> {
               onTap: () => RouteUtils.pushRoute(context, TagFormPage(tag: tag)),
               bgColor: AppColors.of(context).light,
               margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
-              borderRadius: 12,
+              borderRadius: BorderRadius.circular(12),
               child: ListTile(
                 trailing: tags.length > 1
                     ? ReorderableDragIcon(

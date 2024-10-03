@@ -69,7 +69,7 @@ class _CurrencySelectorModalState extends State<CurrencySelectorModal> {
           title: t.currencies.select_a_currency,
           endWidget: Chip(
             side: BorderSide(color: colors.primary, width: 2),
-            // backgroundColor: AppColors.of(context).primaryLight,
+            // backgroundColor: Theme.of(context).colorScheme.primaryLight,
             label: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -171,7 +171,7 @@ class _CurrencySelectorModalState extends State<CurrencySelectorModal> {
                     },
                   ),
                   ScrollableWithBottomGradient.buildPositionedGradient(
-                      AppColors.of(context).modalBackground),
+                      Theme.of(context).colorSchemeExtended.modalBackground),
                 ]),
               ),
             ],

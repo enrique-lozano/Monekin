@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:monekin/core/presentation/animations/shake/fade_in.dart';
+import 'package:monekin/core/presentation/animations/fade_in.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/theme.dart';
 
@@ -51,7 +51,10 @@ class NoResults extends StatelessWidget {
                           : 'assets/icons/page_states/empty_folder.svg',
                       colorFilter: ColorFilter.mode(
                         tintColor == null
-                            ? AppColors.of(context).primary.withOpacity(0.7)
+                            ? Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(0.7)
                             : tintColor!.withOpacity(0.7),
                         BlendMode.srcIn,
                       ),

@@ -21,6 +21,7 @@
     "today": "今天",
     "yesterday": "昨天",
     "filters": "過濾器",
+    "see-more": "查看更多",
     "select-all": "全選",
     "deselect-all": "取消全選",
     "empty-warn": "哦！這裡非常空",
@@ -125,6 +126,7 @@
       "Date": "按日期"
     },
     "VALIDATIONS": {
+      "form_error": "修正表單中指示的欄位以繼續",
       "required": "必填項目",
       "positive": "應該是積極的",
       "min_number": "應該大於{{x}}",
@@ -213,10 +215,14 @@
     "balance": "平衡",
     "final-balance": "最終餘額",
     "balance-by-account": "帳戶餘額",
-    "balance-by-currency": "按貨幣劃分的餘額",
-    "cash-flow": "現金週轉",
-    "balance-evolution": "Balance evolution",
-    "compared-to-previous-period": "與前期相比",
+    "balance-by-account-subtitle": "我的大部分钱都在哪里？",
+    "balance-by-currency": "按货币余额",
+    "balance-by-currency-subtitle": "我有多少钱的外币？",
+    "balance-evolution": "平衡趋势",
+    "balance-evolution-subtitle": "我的钱比以前多了吗？",
+    "compared-to-previous-period": "与上一时期相比",
+    "cash-flow": "现金流",
+    "cash-flow-subtitle": "我的支出是否少于我的收入？",
     "by-periods": "按時期",
     "by-categories": "按類別",
     "by-tags": "按標籤",
@@ -281,7 +287,7 @@
       "recurrent-rule-finished": "循環規則已完成，無需再支付！"
     },
     "LIST": {
-      "empty": "未發現此處顯示的交易。請點選底部的 '+' 按鈕新增交易",
+      "empty": "未發現此處顯示的交易。在應用程式中添加一些交易，也許您下次會有更好的運氣",
       "searcher.placeholder": "按類別、描述搜尋...",
       "searcher.no-results": "未找到符合搜尋條件的交易",
       "loading": "正在加載更多交易...",
@@ -483,9 +489,12 @@
       "name": "標籤名",
       "description": "描述"
     },
+    "SELECT": {
+      "title": "選擇標籤",
+      "all": "所有標籤"
+    },
     "empty-list": "您還沒有創建任何標籤。標籤和類別是對您的動作進行分類的好方法",
     "without-tags": "沒有標籤",
-    "select": "選擇標籤",
     "add": "添加標籤",
     "create": "建立標籤",
     "create.success": "標籤創建成功",
