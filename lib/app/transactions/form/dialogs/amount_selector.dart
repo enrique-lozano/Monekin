@@ -171,6 +171,8 @@ class _AmountSelectorState extends State<AmountSelector> {
       amountString = '-$amountString';
     }
 
+    HapticFeedback.mediumImpact();
+
     setState(() {});
   }
 
@@ -276,6 +278,8 @@ class _AmountSelectorState extends State<AmountSelector> {
     if (calculatorMode == false) {
       amountString = _parseInitialAmount(valueToNumber);
     }
+
+    HapticFeedback.mediumImpact();
 
     setState(() {});
   }
@@ -453,7 +457,9 @@ class _AmountSelectorState extends State<AmountSelector> {
                                   : 1,
                             ),
                             CalculatorButton(
-                              disabled: valueToNumber == 0,
+                              disabled: valueToNumber == 0 ||
+                                  valueToNumber.isInfinite ||
+                                  valueToNumber.isNaN,
                               onClick: submitAmount,
                               icon: Icons.check_rounded,
                               style: CalculatorButtonStyle.submit,
