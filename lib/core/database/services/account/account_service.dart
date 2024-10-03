@@ -127,16 +127,25 @@ class AccountService {
     final initialBalanceQuery = db
         .customSelect(
           """
-      SELECT COALESCE(SUM(accounts.iniValue ${convertToPreferredCurrency ? ' * COALESCE(excRate.exchangeRate, 1)' : ''} ), 0) AS balance
-      FROM accounts
-          ${convertToPreferredCurrency ? _joinAccountAndRate(date) : ''}
-          ${accountIds != null ? 'WHERE accounts.id IN (${List.filled(accountIds.length, '?').join(', ')})' : ''} 
-      """,
+          SELECT COALESCE(
+            SUM(
+              CASE WHEN accounts.date > ? THEN 0
+              ELSE accounts.iniValue 
+                ${convertToPreferredCurrency ? ' * COALESCE(excRate.exchangeRate, 1)' : ''} 
+              END
+            )
+          , 0) 
+          AS balance
+          FROM accounts
+              ${convertToPreferredCurrency ? _joinAccountAndRate(date) : ''}
+              ${accountIds != null ? 'WHERE accounts.id IN (${List.filled(accountIds.length, '?').join(', ')})' : ''} 
+          """,
           readsFrom: {
             db.accounts,
             if (convertToPreferredCurrency) db.exchangeRates
           },
           variables: [
+            Variable.withDateTime(date),
             if (convertToPreferredCurrency) Variable.withDateTime(date),
             if (accountIds != null)
               for (final id in accountIds) Variable.withString(id)
