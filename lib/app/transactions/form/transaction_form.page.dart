@@ -28,12 +28,12 @@ import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart'
 import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
+import 'package:monekin/core/utils/focus.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../../core/models/transaction/transaction_type.enum.dart';
-import '../../../core/presentation/app_colors.dart';
 import '../../tags/tags_selector.modal.dart';
 
 openTransactionFormDialog(BuildContext context, TransactionFormPage widget) {
@@ -158,7 +158,10 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     final t = Translations.of(context);
 
     return InkWell(
-      onTap: () => onClick(),
+      onTap: () {
+        unfocusCurrentFocusedItem(context);
+        onClick();
+      },
       borderRadius: borderRadius,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -422,6 +425,8 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       title: Text(selectedStatus.displayName(context)),
       enabled: !isSelectorDisabled,
       onTap: () {
+        unfocusCurrentFocusedItem(context);
+
         showTransactioStatusModal(context, initialStatus: status)
             .then((modalRes) {
           if (modalRes == null) return;
@@ -805,6 +810,8 @@ class _TransactionFormPageState extends State<TransactionFormPage>
           minTileHeight: 64,
           title: Text(dateFormat.format(date)),
           onTap: () async {
+            unfocusCurrentFocusedItem(context);
+
             final datePickerRes = await openDateTimePicker(
               context,
               initialDate: date,
