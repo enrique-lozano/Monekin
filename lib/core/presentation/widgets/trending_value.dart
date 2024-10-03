@@ -14,30 +14,37 @@ class TrendingValue extends StatelessWidget {
     this.fontWeight = FontWeight.normal,
     this.filled = false,
     this.outlined = false,
+    this.markNanAsZero = true,
   });
 
   final double percentage;
   final int decimalDigits;
   final double fontSize;
   final FontWeight fontWeight;
-  final bool filled, outlined;
+  final bool filled, outlined, markNanAsZero;
 
   Widget paintTrendValue(BuildContext context) {
     final textColor = _getColorBasedOnPercentage(context)
         .lighten(filled && !outlined ? 0.85 : 0);
 
+    double toDisplay = percentage;
+
+    if (toDisplay.isNaN && markNanAsZero) {
+      toDisplay = 0;
+    }
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (percentage != 0)
+        if (toDisplay != 0)
           Icon(
-            percentage > 0
+            toDisplay > 0
                 ? Icons.trending_up_rounded
                 : Icons.trending_down_rounded,
             size: fontSize * (9 / 7),
             color: textColor,
           ),
-        if (percentage == 0)
+        if (toDisplay == 0)
           Text(
             '=',
             style: TextStyle(
@@ -49,7 +56,7 @@ class TrendingValue extends StatelessWidget {
           ),
         const SizedBox(width: 6),
         UINumberFormatter.percentage(
-          amountToConvert: percentage,
+          amountToConvert: toDisplay,
           integerStyle: TextStyle(
             fontSize: fontSize,
             fontWeight: fontWeight,
@@ -61,7 +68,7 @@ class TrendingValue extends StatelessWidget {
   }
 
   Color _getColorBasedOnPercentage(BuildContext context) {
-    return percentage == 0
+    return (percentage == 0 || percentage.isNaN)
         ? AppColors.of(context)
             .brand
             .lighten(filled
