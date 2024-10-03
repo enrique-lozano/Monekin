@@ -89,18 +89,23 @@ class AppColors extends ThemeExtension<AppColors> {
 
 extension CustomThemeDataExt on ThemeData {
   CustomColorSchemeExtended get colorSchemeExtended {
-    return CustomColorSchemeExtended(colorScheme);
+    return CustomColorSchemeExtended(colorScheme, brightness);
   }
 }
 
 class CustomColorSchemeExtended {
-  final ColorScheme colorScheme;
+  final ColorScheme _colorScheme;
+  final Brightness _brightness;
 
-  CustomColorSchemeExtended(this.colorScheme);
+  CustomColorSchemeExtended(this._colorScheme, this._brightness);
 
-  Color get modalBackground => colorScheme.surfaceContainer;
-  Color get inputFill => colorScheme.surfaceContainerHighest;
-  Color get cardColor => colorScheme.surfaceContainer;
-  Color get dashboardHeader => colorScheme.primaryContainer;
-  Color get onDashboardHeader => colorScheme.onPrimaryContainer;
+  Color get modalBackground => _colorScheme.surfaceContainer;
+  Color get inputFill => _colorScheme.surfaceContainerHighest;
+  Color get cardColor => _colorScheme.surfaceContainer;
+  Color get dashboardHeader => _brightness == Brightness.light
+      ? _colorScheme.primary
+      : _colorScheme.primaryContainer;
+  Color get onDashboardHeader => _brightness == Brightness.light
+      ? _colorScheme.onPrimary
+      : _colorScheme.onPrimaryContainer;
 }

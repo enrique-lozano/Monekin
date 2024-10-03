@@ -37,8 +37,9 @@ class MainMenuDestination {
   NavigationDestination toNavigationDestinationWidget(BuildContext context) {
     return NavigationDestination(
       icon: Icon(icon),
-      selectedIcon: Icon(selectedIcon ?? icon,
-          color: Theme.of(context).colorScheme.onPrimary),
+      selectedIcon: Icon(
+        selectedIcon ?? icon,
+      ),
       label: label,
     );
   }

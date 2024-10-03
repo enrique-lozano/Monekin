@@ -682,8 +682,10 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                             : 38),
                     duration: const Duration(milliseconds: 200),
                     child: Builder(builder: (context) {
-                      const bigTextStyle =
-                          TextStyle(fontWeight: FontWeight.w800);
+                      const bigTextStyle = TextStyle(
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                      );
 
                       return CurrencyDisplayer(
                         amountToConvert: transactionValue,
@@ -721,7 +723,9 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                               CurrencyDisplayer(
                                 amountToConvert: exchangeRateSnapshot.data ?? 0,
                                 integerStyle: const TextStyle(
-                                    fontWeight: FontWeight.w300),
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.white,
+                                ),
                                 followPrivateMode: false,
                               ),
                             ],

@@ -42,9 +42,10 @@ class TabsPageState extends State<TabsPage> {
                   selectedNavItemIndex < menuItems.length)
           ? null
           : NavigationBar(
-              backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+              backgroundColor:
+                  Theme.of(context).colorScheme.surfaceContainerHigh,
               indicatorColor:
-                  Theme.of(context).colorScheme.onSecondaryContainer,
+                  Theme.of(context).colorScheme.primary.withOpacity(0.2),
               destinations: menuItems
                   .map((e) => e.toNavigationDestinationWidget(context))
                   .toList(),
