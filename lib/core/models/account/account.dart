@@ -79,8 +79,8 @@ class Account extends AccountInDB {
     return color != null
         ? ColorHex.get(color!)
         : Theme.of(context).brightness == Brightness.dark
-            ? AppColors.of(context).primaryContainer
-            : AppColors.of(context).primary;
+            ? Theme.of(context).colorScheme.primaryContainer
+            : Theme.of(context).colorScheme.primary;
   }
 
   IconDisplayer displayIcon(
@@ -95,8 +95,10 @@ class Account extends AccountInDB {
 
     return IconDisplayer(
       supportedIcon: icon,
-      mainColor: getComputedColor(context).lighten(isDark ? 0.82 : 0),
-      secondaryColor: getComputedColor(context).lighten(isDark ? 0 : 0.82),
+      mainColor: getComputedColor(context)
+          .lighten(isDark ? IconDisplayer.darkLightenFactor : 0),
+      secondaryColor: getComputedColor(context)
+          .lighten(isDark ? 0 : IconDisplayer.darkLightenFactor),
       displayMode: IconDisplayMode.polygon,
       size: size,
       borderRadius: 20,

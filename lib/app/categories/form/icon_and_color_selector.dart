@@ -31,7 +31,7 @@ class IconAndColorSelector extends StatelessWidget {
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        color: AppColors.of(context).inputFill,
+        color: Theme.of(context).colorSchemeExtended.inputFill,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -56,7 +56,7 @@ class IconAndColorSelector extends StatelessWidget {
                       ),
                     );
                   },
-                  bgColor: AppColors.of(context).inputFill,
+                  bgColor: Theme.of(context).colorSchemeExtended.inputFill,
                   child: ListTile(
                     mouseCursor: SystemMouseCursors.click,
                     title: Text(t.icon_selector.icon),
@@ -64,7 +64,11 @@ class IconAndColorSelector extends StatelessWidget {
                         const Icon(Icons.arrow_forward_ios_rounded, size: 12),
                   ),
                 ),
-                Divider(color: AppColors.of(context).inputFill.darken()),
+                Divider(
+                    color: Theme.of(context)
+                        .colorSchemeExtended
+                        .inputFill
+                        .darken()),
                 Tappable(
                   onTap: () => showColorPickerModal(
                     context,
@@ -77,7 +81,7 @@ class IconAndColorSelector extends StatelessWidget {
 
                     onDataChange((color: selColor, icon: data.icon));
                   }),
-                  bgColor: AppColors.of(context).inputFill,
+                  bgColor: Theme.of(context).colorSchemeExtended.inputFill,
                   child: ListTile(
                     mouseCursor: SystemMouseCursors.click,
                     title: Text(t.icon_selector.color),

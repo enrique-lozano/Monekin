@@ -99,7 +99,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
     final t = Translations.of(context);
 
     icon ??= SupportedIconService.instance.defaultSupportedIcon;
-    iconColor ??= AppColors.of(context).primary;
+    iconColor ??= Theme.of(context).colorScheme.primary;
 
     return TextFormField(
         controller:

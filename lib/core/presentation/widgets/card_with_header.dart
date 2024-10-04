@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../app_colors.dart';
+import 'package:monekin/i18n/translations.g.dart';
 
 /// The radius of the `CardWithHeader` widget, a very useful widget through the app
 const cardWithHeaderRadius = 12.0;
@@ -9,82 +8,59 @@ class CardWithHeader extends StatelessWidget {
   const CardWithHeader({
     super.key,
     required this.title,
+    this.subtitle,
     required this.body,
-    this.onHeaderButtonClick,
-    this.headerButtonIcon = Icons.arrow_forward_ios_rounded,
     this.bodyPadding = const EdgeInsets.all(0),
+    this.footer,
   });
 
   final Widget body;
+  final Widget? footer;
 
   final String title;
-
-  final IconData headerButtonIcon;
+  final String? subtitle;
 
   final EdgeInsets bodyPadding;
 
-  final void Function()? onHeaderButtonClick;
-
   @override
   Widget build(BuildContext context) {
-    const double iconSize = 16;
-
-    return Container(
+    return Card(
       clipBehavior: Clip.hardEdge,
-      decoration: BoxDecoration(
-        color: AppColors.of(context).surface,
-        borderRadius: BorderRadius.circular(cardWithHeaderRadius),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.of(context).shadowColorLight,
-            blurRadius: cardWithHeaderRadius,
-            offset: const Offset(0, 0),
-            spreadRadius: 4,
-          ),
-        ],
-      ),
-      foregroundDecoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(cardWithHeaderRadius),
-        border: Border.all(
-          width: 1,
-          color: Theme.of(context).dividerColor,
-        ),
-      ),
       margin: const EdgeInsets.all(0),
+      elevation: 0,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             clipBehavior: Clip.hardEdge,
-            padding: EdgeInsets.fromLTRB(
-                16,
-                onHeaderButtonClick != null ? 2 : iconSize - 6,
-                2,
-                onHeaderButtonClick != null ? 2 : iconSize - 6),
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
+            padding: const EdgeInsets.fromLTRB(16, 12, 2, 4),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(12),
                 topRight: Radius.circular(12),
               ),
-              color: AppColors.of(context).light,
+              // color: AppColors.of(context).light,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(title,
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w700)),
-                if (onHeaderButtonClick != null)
-                  IconButton(
-                    onPressed: onHeaderButtonClick,
-                    iconSize: iconSize,
-                    color: AppColors.of(context).primary,
-                    icon: Icon(headerButtonIcon),
-                  )
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title,
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w600)),
+                    if (subtitle != null)
+                      Text(
+                        subtitle!,
+                        style: const TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w300),
+                      ),
+                  ],
+                ),
               ],
             ),
           ),
-          const Divider(),
           Material(
             type: MaterialType.transparency,
             clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -92,9 +68,43 @@ class CardWithHeader extends StatelessWidget {
               padding: bodyPadding,
               child: body,
             ),
-          )
+          ),
+          if (footer != null) footer!
         ],
       ),
+    );
+  }
+}
+
+class CardFooterWithSingleButton extends StatelessWidget {
+  const CardFooterWithSingleButton({super.key, this.text, this.onButtonClick});
+
+  final String? text;
+  final VoidCallback? onButtonClick;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Divider(
+          thickness: 2,
+          indent: 16,
+          endIndent: 16,
+        ),
+        Container(
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.fromLTRB(2, 4, 2, 4),
+          child: TextButton.icon(
+            onPressed: onButtonClick,
+            iconAlignment: IconAlignment.end,
+            icon: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+            label: Text(text ?? t.general.see_more),
+          ),
+        )
+      ],
     );
   }
 }

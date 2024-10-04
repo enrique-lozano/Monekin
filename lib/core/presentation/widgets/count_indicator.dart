@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 
 class CountIndicatorWithExpandArrow extends StatelessWidget {
   const CountIndicatorWithExpandArrow({
@@ -46,13 +45,13 @@ class CountIndicator extends StatelessWidget {
       alignment: Alignment.center,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
-        color: AppColors.of(context).primary,
+        color: Theme.of(context).colorScheme.primary,
       ),
       child: Text(
         countToDisplay.toString(),
         style: Theme.of(context).textTheme.labelSmall!.copyWith(
               fontWeight: fontWeight,
-              color: AppColors.of(context).onPrimary,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
       ),
     );

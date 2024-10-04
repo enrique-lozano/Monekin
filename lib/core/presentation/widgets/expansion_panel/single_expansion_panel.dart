@@ -3,8 +3,11 @@ import 'package:monekin/core/presentation/widgets/expansion_panel/expansion_pane
 import 'package:monekin/i18n/translations.g.dart';
 
 class SingleExpansionPanel extends StatefulWidget {
-  const SingleExpansionPanel(
-      {super.key, required this.child, this.sidePadding = 0});
+  const SingleExpansionPanel({
+    super.key,
+    required this.child,
+    this.sidePadding = 0,
+  });
 
   final Widget child;
   final double sidePadding;
@@ -29,11 +32,14 @@ class _SingleExpansionPanelState extends State<SingleExpansionPanel> {
       },
       children: [
         ExpansionPanel(
+          backgroundColor: Theme.of(context).colorScheme.surface,
           // canTapOnHeader: true,
           headerBuilder: (context, isExpanded) {
             return Padding(
               padding: EdgeInsets.symmetric(
-                  vertical: 0, horizontal: widget.sidePadding),
+                vertical: 0,
+                horizontal: widget.sidePadding,
+              ),
               child: Row(
                 children: [
                   const Expanded(child: Divider()),

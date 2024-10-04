@@ -42,7 +42,7 @@ class OutlinedButtonStacked extends StatelessWidget {
   Widget build(BuildContext context) {
     return Tappable(
       onTap: onTap,
-      borderRadius: borderRadius,
+      borderRadius: BorderRadius.circular(borderRadius),
       bgColor: Colors.transparent,
       child: _OutlinedContainer(
         filled: filled,

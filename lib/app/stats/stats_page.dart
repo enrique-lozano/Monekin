@@ -162,6 +162,9 @@ class _StatsPageState extends State<StatsPage> {
                 buildContainerWithPadding([
                   CardWithHeader(
                     title: t.stats.balance_evolution,
+                    subtitle: t.stats.balance_evolution_subtitle,
+                    bodyPadding: const EdgeInsets.only(
+                        bottom: 12, top: 16, right: 16, left: 16),
                     body: FundEvolutionLineChart(
                       showBalanceHeader: true,
                       dateRange: dateRangeService,
@@ -177,6 +180,7 @@ class _StatsPageState extends State<StatsPage> {
                 buildContainerWithPadding([
                   CardWithHeader(
                     title: t.stats.cash_flow,
+                    subtitle: t.stats.cash_flow_subtitle,
                     body: IncomeExpenseComparason(
                       startDate: dateRangeService.startDate,
                       endDate: dateRangeService.endDate,
@@ -186,7 +190,8 @@ class _StatsPageState extends State<StatsPage> {
                   const SizedBox(height: 16),
                   CardWithHeader(
                     title: t.stats.by_periods,
-                    bodyPadding: const EdgeInsets.only(bottom: 12, top: 16),
+                    bodyPadding:
+                        const EdgeInsets.only(bottom: 12, top: 24, right: 16),
                     body: BalanceBarChart(
                       dateRange: dateRangeService,
                       filters: filters,

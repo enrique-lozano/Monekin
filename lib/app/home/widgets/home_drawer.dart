@@ -71,7 +71,7 @@ class HomeDrawer extends StatelessWidget {
 
                 return UserAccountsDrawerHeader(
                   decoration: BoxDecoration(
-                    color: AppColors.of(context).surface,
+                    color: Theme.of(context).colorScheme.surface,
                   ),
                   accountName: UserGreting(userName: userName),
                   currentAccountPicture: UserAvatar(avatar: userAvatar),
@@ -107,7 +107,7 @@ class UserGreting extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.w300,
             fontSize: 12,
-            color: AppColors.of(context).onSurface,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
         if (userName == null)
@@ -116,7 +116,7 @@ class UserGreting extends StatelessWidget {
           Text(
             userName!,
             style: TextStyle(
-              color: AppColors.of(context).onSurface,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
       ],

@@ -32,7 +32,7 @@ extension ColorBrightness on Color {
     assert(amount >= -1 && amount <= 1);
 
     if (amount < 0) {
-      return lighten(amount.abs());
+      return darken(amount.abs());
     }
 
     return Color.fromARGB(

@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/details/account_details_actions.dart';
 import 'package:monekin/app/transactions/label_value_info_list.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
@@ -11,7 +12,6 @@ import 'package:monekin/core/database/services/exchange-rate/exchange_rate_servi
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
@@ -106,6 +106,11 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                         children: [
                           CardWithHeader(
                             title: 'Info',
+                            footer: CardFooterWithSingleButton(
+                              text: t.general.edit,
+                              onButtonClick: () => RouteUtils.pushRoute(
+                                  context, AccountFormPage(account: account)),
+                            ),
                             body: LabelValueInfoList(items: [
                               LabelValueInfoListItem(
                                 value: Text(
@@ -148,14 +153,36 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                           const SizedBox(height: 16),
                           CardWithHeader(
                             title: t.home.last_transactions,
-                            onHeaderButtonClick: () {
-                              RouteUtils.pushRoute(
-                                context,
-                                TransactionsPage(
-                                    filters: TransactionFilters(
-                                        accountsIDs: [widget.account.id])),
-                              );
-                            },
+                            bodyPadding:
+                                const EdgeInsets.symmetric(vertical: 6),
+                            footer: StreamBuilder(
+                                stream: TransactionService.instance
+                                    .countTransactions(
+                                  predicate: TransactionFilters(
+                                    status: TransactionStatus.notIn({
+                                      TransactionStatus.pending,
+                                      TransactionStatus.voided
+                                    }),
+                                    accountsIDs: [widget.account.id],
+                                  ),
+                                ),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData ||
+                                      snapshot.data!.numberOfRes < 5) {
+                                    return const SizedBox.shrink();
+                                  }
+
+                                  return CardFooterWithSingleButton(
+                                      onButtonClick: () {
+                                    RouteUtils.pushRoute(
+                                      context,
+                                      TransactionsPage(
+                                          filters: TransactionFilters(
+                                        accountsIDs: [widget.account.id],
+                                      )),
+                                    );
+                                  });
+                                }),
                             body: TransactionListComponent(
                               heroTagBuilder: (tr) =>
                                   'account-details-page__tr-icon-${tr.id}',
@@ -215,7 +242,7 @@ class _AccountDetailHeader extends SliverPersistentHeaderDelegate {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.of(context).surface,
+        color: Theme.of(context).colorScheme.surface,
         border: Border(
           bottom: BorderSide(
             width: 2,

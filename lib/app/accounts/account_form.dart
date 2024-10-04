@@ -248,7 +248,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                     size: 36,
                     isOutline: true,
                     outlineWidth: 1.5,
-                    mainColor: _color.lighten(0.82),
+                    mainColor: _color.lighten(IconDisplayer.darkLightenFactor),
                     secondaryColor: _color,
                     displayMode: IconDisplayMode.polygon,
                   ),

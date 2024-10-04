@@ -126,7 +126,8 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
           body: ScrollableWithBottomGradient(
             controller: scrollController,
             padding: const EdgeInsets.fromLTRB(16, 2, 16, 24),
-            gradientColor: AppColors.of(context).modalBackground,
+            gradientColor:
+                Theme.of(context).colorSchemeExtended.modalBackground,
             child: Form(
               key: _formKey,
               child: Column(
@@ -212,7 +213,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                                   .map((e) =>
                                       e == null ? t.tags.without_tags : e.name)
                                   .printFormatted()
-                              : t.account.select.all,
+                              : t.tags.select.all,
                           onTap: () => showTagListModal(
                             context,
                             modal: TagSelector(

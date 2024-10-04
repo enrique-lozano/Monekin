@@ -146,17 +146,18 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                                 body: BudgetEvolutionChart(budget: budget)),
                             const SizedBox(height: 16),
                             CardWithHeader(
-                                title: t.stats.by_categories,
-                                body: ChartByCategories(
-                                  filters: budget.trFilters,
-                                  datePeriodState: budget.periodState,
+                              title: t.stats.by_categories,
+                              body: ChartByCategories(
+                                filters: budget.trFilters,
+                                datePeriodState: budget.periodState,
+                              ),
+                              footer: CardFooterWithSingleButton(
+                                onButtonClick: () => RouteUtils.pushRoute(
+                                  context,
+                                  const StatsPage(initialIndex: 1),
                                 ),
-                                onHeaderButtonClick: () {
-                                  RouteUtils.pushRoute(
-                                    context,
-                                    const StatsPage(initialIndex: 1),
-                                  );
-                                }),
+                              ),
+                            ),
                           ],
                         ),
                       ),

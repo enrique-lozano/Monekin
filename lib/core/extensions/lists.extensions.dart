@@ -44,3 +44,15 @@ extension PrintListItem on Iterable<String> {
     return join(', ');
   }
 }
+
+extension ListEqualityCheck<T> on List<T> {
+  bool allItemsEqual() {
+    if (isEmpty) {
+      return true; // Return true for an empty list as a convention
+    }
+
+    // Compare all elements to the first one
+    final firstItem = this[0];
+    return every((item) => item == firstItem);
+  }
+}

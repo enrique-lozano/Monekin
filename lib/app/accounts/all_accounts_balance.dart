@@ -120,7 +120,8 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
             children: [
               CardWithHeader(
                 title: t.stats.balance_by_account,
-                bodyPadding: const EdgeInsets.symmetric(vertical: 4),
+                subtitle: t.stats.balance_by_account_subtitle,
+                bodyPadding: const EdgeInsets.only(bottom: 0, top: 8),
                 body: accounts.isEmpty
                     ? emptyAccountsIndicator()
                     : ListView.separated(
@@ -129,6 +130,8 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                           final accountWithMoney = accounts[index];
 
                           return ListTile(
+                            titleAlignment: ListTileTitleAlignment.bottom,
+                            minTileHeight: 56,
                             leading:
                                 accountWithMoney.account.displayIcon(context),
                             onTap: () => RouteUtils.pushRoute(
@@ -156,7 +159,6 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                                   ],
                                 ),
                                 AnimatedProgressBar(
-                                    width: 6,
                                     value: min(
                                         max(accountWithMoney.money / totalMoney,
                                             0),
@@ -175,6 +177,7 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
               const SizedBox(height: 16),
               CardWithHeader(
                 title: t.stats.balance_by_currency,
+                subtitle: t.stats.balance_by_currency_subtitle,
                 bodyPadding: const EdgeInsets.symmetric(vertical: 4),
                 body: Builder(builder: (context) {
                   final currenciesWithMoney = getCurrenciesWithMoney(accounts);
@@ -189,6 +192,8 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                       final currencyWithMoney = currenciesWithMoney[index];
 
                       return ListTile(
+                        titleAlignment: ListTileTitleAlignment.bottom,
+                        minTileHeight: 56,
                         leading: StreamBuilder(
                           stream: CurrencyService.instance.getCurrencyByCode(
                               currencyWithMoney.currency.code),
@@ -239,7 +244,6 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                               ],
                             ),
                             AnimatedProgressBar(
-                                width: 6,
                                 value: min(
                                     max(currencyWithMoney.money / totalMoney,
                                         0),

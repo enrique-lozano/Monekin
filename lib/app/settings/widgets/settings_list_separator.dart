@@ -9,7 +9,7 @@ Widget createListSeparator(BuildContext context, String title) {
       style: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w700,
-          color: AppColors.of(context).primary),
+          color: Theme.of(context).colorScheme.primary),
     ),
   );
 }

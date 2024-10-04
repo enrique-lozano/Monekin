@@ -47,8 +47,6 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
 
   @override
   Widget build(BuildContext context) {
-    final AppColors colors = AppColors.of(context);
-
     final t = Translations.of(context);
 
     return DraggableScrollableSheet(
@@ -60,7 +58,8 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
           final iconsByScope = SupportedIconService.instance.getIconsByScope();
 
           return Scaffold(
-            backgroundColor: AppColors.of(context).modalBackground,
+            backgroundColor:
+                Theme.of(context).colorSchemeExtended.modalBackground,
             body: Column(children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
@@ -79,17 +78,21 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
                       ],
                     ),
                     Chip(
-                      side: BorderSide(color: colors.primary, width: 2),
-                      //  backgroundColor: AppColors.of(context).primaryLight,
-                      label: _selectedIcon!
-                          .display(size: 34, color: colors.onSurface),
+                      side: BorderSide(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 2),
+                      //  backgroundColor: Theme.of(context).colorScheme.primaryLight,
+                      label: _selectedIcon!.display(
+                          size: 34,
+                          color: Theme.of(context).colorScheme.onSurface),
                     )
                   ],
                 ),
               ),
               Expanded(
                 child: ScrollableWithBottomGradient(
-                  gradientColor: AppColors.of(context).modalBackground,
+                  gradientColor:
+                      Theme.of(context).colorSchemeExtended.modalBackground,
                   controller: scrollController,
                   child: Column(
                       children: iconsByScope.keys.toList().map((scope) {
@@ -103,7 +106,9 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
                             Container(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 0, horizontal: 16),
-                              color: colors.modalBackground,
+                              color: Theme.of(context)
+                                  .colorSchemeExtended
+                                  .modalBackground,
                               child: Text(t[
                                   'icon_selector.scopes.${scope.replaceAll("/", "_")}']),
                             ),
@@ -122,7 +127,9 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
                                           : 1,
                                       clipBehavior: Clip.antiAlias,
                                       color: _selectedIcon?.id == e.id
-                                          ? colors.primary
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .primary
                                           : null,
                                       child: IconDisplayer(
                                           supportedIcon: e,
@@ -135,8 +142,12 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
                                           secondaryColor: Colors.transparent,
                                           isOutline: _selectedIcon?.id == e.id,
                                           mainColor: _selectedIcon?.id == e.id
-                                              ? colors.onPrimary
-                                              : colors.onSurface),
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface),
                                     ))
                                 .toList(),
                           ),
