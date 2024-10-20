@@ -31,12 +31,12 @@ Future<Category?> showCategoryPickerModal(
 }
 
 class CategoryPicker extends StatefulWidget {
-  CategoryPicker(
-      {super.key,
-      required this.selectedCategory,
-      required this.categoryType,
-      this.showSubcategories = true})
-      : assert(categoryType.isNotEmpty);
+  CategoryPicker({
+    super.key,
+    required this.selectedCategory,
+    required this.categoryType,
+    this.showSubcategories = true,
+  }) : assert(categoryType.isNotEmpty);
 
   final Category? selectedCategory;
   final List<CategoryType> categoryType;
