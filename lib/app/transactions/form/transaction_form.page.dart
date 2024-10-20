@@ -112,8 +112,18 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     _tabController.addListener(() {
       transactionType = TransactionType.values.elementAt(_tabController.index);
 
+      // Function to execute when the transaction mode change:
       if (transactionType.isTransfer && transactionValue.isNegative) {
         transactionValue = transactionValue * -1;
+      }
+
+      if (selectedCategory != null &&
+          (selectedCategory!.type == CategoryType.E &&
+                  transactionType == TransactionType.I ||
+              selectedCategory!.type == CategoryType.I &&
+                  transactionType == TransactionType.E)) {
+        // Unselect the selected category if the transactionType don't match
+        selectedCategory = null;
       }
 
       setState(() {});
@@ -202,9 +212,6 @@ class _TransactionFormPageState extends State<TransactionFormPage>
   }
 
   submitForm() {
-    print("HOLAALLALA");
-    print(transactionType.isTransfer);
-    print(transferAccount);
     if (transactionType.isIncomeOrExpense && selectedCategory == null ||
         transactionType.isTransfer && transferAccount == null) {
       _shakeKey.currentState?.shake();
@@ -325,8 +332,8 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       modal: CategoryPicker(
         selectedCategory: selectedCategory,
         categoryType: transactionType == TransactionType.E
-            ? [CategoryType.E]
-            : [CategoryType.I],
+            ? [CategoryType.E, CategoryType.B]
+            : [CategoryType.I, CategoryType.B],
       ),
     );
 
