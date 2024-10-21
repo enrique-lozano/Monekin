@@ -36,8 +36,8 @@ dependencies:
 
   # i18n
   intl: ^0.19.0
-  slang: ^3.31.2
-  slang_flutter: ^3.32.0
+  slang: ^4.0.0
+  slang_flutter: ^4.0.0
 
   # Drift
   drift: ^2.8.1
@@ -75,7 +75,7 @@ dev_dependencies:
   json_serializable: ^6.2.0
   flutter_launcher_icons: ^0.13.1 # Package to regenerate icons (config later in this file). To run, type `dart run flutter_launcher_icons`
   drift_dev: ^2.13.2
-  slang_build_runner: ^3.32.0 # To regenerate the translations run 'dart run slang'
+  slang_build_runner: ^4.0.0 # To regenerate the translations run 'dart run slang'
   copy_with_extension_gen: ^5.0.4
   freezed: ^2.4.5
 
