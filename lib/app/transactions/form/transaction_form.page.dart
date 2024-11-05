@@ -265,8 +265,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
         date: date,
         type: transactionType,
         accountID: fromAccount!.id,
-        value: transactionType.isIncomeOrExpense &&
-                selectedCategory!.type.isExpense
+        value: transactionType == TransactionType.E
             ? transactionValue * -1
             : transactionValue,
         isHidden: false,
