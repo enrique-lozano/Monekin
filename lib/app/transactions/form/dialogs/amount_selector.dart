@@ -320,6 +320,7 @@ class _AmountSelectorState extends State<AmountSelector> {
                         return CurrencyDisplayer(
                           amountToConvert: valueToNumber,
                           currency: widget.currency,
+                          followPrivateMode: false,
                           decimalsStyle: TextStyle(
                               fontWeight: FontWeight.w200,
                               fontSize: 22,
