@@ -6,7 +6,7 @@
 /// Locales: 4
 /// Strings: 2189 (547 per locale)
 ///
-/// Built on 2024-10-02 at 22:26 UTC
+/// Built on 2024-10-20 at 10:51 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -4082,7 +4082,7 @@ class _TranslationsGeneralZhTw implements _TranslationsGeneralEn {
 
 	// Translations
 	@override String get cancel => '取消';
-	@override String get or => '或者';
+	@override String get or => '或';
 	@override String get understood => '明白了';
 	@override String get unspecified => '未指定';
 	@override String get confirm => '確認';
@@ -4135,7 +4135,7 @@ class _TranslationsIntroZhTw implements _TranslationsIntroEn {
 	@override String get offline_start => '離線啟動會話';
 	@override String get sl1_title => '選擇您的貨幣';
 	@override String get sl1_descr => '您的預設貨幣將用於報告和一般圖表。您以後可以隨時在應用程式設定中更改貨幣和應用程式語言';
-	@override String get sl2_title => '安全、私密、可靠';
+	@override String get sl2_title => '安全、隱私、可靠';
 	@override String get sl2_descr => '您的資料只屬於您。我們將資訊直接儲存在您的設備上，無需通過外部伺服器。這使得即使沒有互聯網也可以使用該應用程式';
 	@override String get sl2_descr2 => '此外，該應用程式的源代碼是公開的，任何人都可以對其進行協作並查看它是如何工作的';
 	@override String get last_slide_title => '一切準備就緒';
@@ -4188,13 +4188,13 @@ class _TranslationsStatsZhTw implements _TranslationsStatsEn {
 	@override String get balance => '平衡';
 	@override String get final_balance => '最終餘額';
 	@override String get balance_by_account => '帳戶餘額';
-	@override String get balance_by_account_subtitle => '我的大部分钱都在哪里？';
-	@override String get balance_by_currency => '按货币余额';
-	@override String get balance_by_currency_subtitle => '我有多少钱的外币？';
-	@override String get balance_evolution => '平衡趋势';
-	@override String get balance_evolution_subtitle => '我的钱比以前多了吗？';
-	@override String get compared_to_previous_period => '与上一时期相比';
-	@override String get cash_flow => '现金流';
+	@override String get balance_by_account_subtitle => '我的大部分錢都在哪裡？';
+	@override String get balance_by_currency => '按貨幣餘额';
+	@override String get balance_by_currency_subtitle => '我有多少錢的外幣？';
+	@override String get balance_evolution => '平衡趨勢';
+	@override String get balance_evolution_subtitle => '我的錢比以前多了嗎？';
+	@override String get compared_to_previous_period => '與上一时期相比';
+	@override String get cash_flow => '現金流';
 	@override String get cash_flow_subtitle => '我的支出是否少于我的收入？';
 	@override String get by_periods => '按時期';
 	@override String get by_categories => '按類別';
@@ -4240,7 +4240,7 @@ class _TranslationsTransactionZhTw implements _TranslationsTransactionEn {
 	@override String get edit_success => '交易編輯成功';
 	@override String get edit_multiple => '編輯交易';
 	@override String edit_multiple_success({required Object x}) => '${x}筆交易已成功編輯';
-	@override String get duplicate => '克隆交易';
+	@override String get duplicate => '複製交易';
 	@override String get duplicate_short => '複製';
 	@override String get duplicate_warning_message => '將在同一日期創建與此相同的交易，您想繼續嗎？';
 	@override String get duplicate_success => '交易複製成功';
@@ -4283,9 +4283,9 @@ class _TranslationsRecurrentTransactionsZhTw implements _TranslationsRecurrentTr
 	@override final _TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '經常性交易';
-	@override String get title_short => '記錄交易';
-	@override String get empty => '您似乎沒有任何經常性交易。創建每月、每年或每週的經常性交易，它將顯示在此處';
+	@override String get title => '經常交易';
+	@override String get title_short => '經常交易';
+	@override String get empty => '您似乎沒有任何經常交易。創建每月、每年或每週的經常交易，它將顯示在此處';
 	@override String get total_expense_title => '每個期間的總收入';
 	@override String get total_expense_descr => '*不考慮每次重複的開始和結束日期';
 	@override late final _TranslationsRecurrentTransactionsDetailsZhTw details = _TranslationsRecurrentTransactionsDetailsZhTw._(_root);
@@ -4408,7 +4408,7 @@ class _TranslationsBudgetsZhTw implements _TranslationsBudgetsEn {
 
 	// Translations
 	@override String get title => '預算';
-	@override String get repeated => '再次發生的';
+	@override String get repeated => '重複';
 	@override String get one_time => '一次';
 	@override String get annual => '年度';
 	@override String get week => '每週';
@@ -4478,8 +4478,8 @@ class _TranslationsMoreZhTw implements _TranslationsMoreEn {
 	@override final _TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '更多的';
-	@override String get title_long => '更多操作';
+	@override String get title => '更多';
+	@override String get title_long => '更多';
 	@override late final _TranslationsMoreDataZhTw data = _TranslationsMoreDataZhTw._(_root);
 	@override late final _TranslationsMoreAboutUsZhTw about_us = _TranslationsMoreAboutUsZhTw._(_root);
 	@override late final _TranslationsMoreHelpUsZhTw help_us = _TranslationsMoreHelpUsZhTw._(_root);
@@ -4733,8 +4733,8 @@ class _TranslationsTransactionReversedZhTw implements _TranslationsTransactionRe
 	@override final _TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '撤銷交易';
-	@override String get title_short => 'Inverse tr.';
+	@override String get title => '逆向交易';
+	@override String get title_short => '逆向交易';
 	@override String get description_for_expenses => '儘管是收入交易，但它的金額為正數。這些類型的交易可用於表示先前記錄的收入的返還，例如退款或償還債務。';
 	@override String get description_for_incomes => '儘管是一項收入交易，但其金額為負數。這些類型的交易可用於作廢或更正錯誤記錄的收入，反映資金的返還或退款或記錄債務的支付。';
 }
@@ -4808,7 +4808,7 @@ class _TranslationsRecurrentTransactionsDetailsZhTw implements _TranslationsRecu
 	@override final _TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '經常性交易';
+	@override String get title => '經常交易';
 	@override String get descr => '此交易的下一步動作如下所示。您可以接受第一步動作或跳過此動作';
 	@override String get last_payment_info => '此動作是循環規則的最後一個，因此當確認此動作時，該規則將自動刪除';
 	@override String get delete_header => '刪除重複交易';
@@ -5036,12 +5036,12 @@ class _TranslationsSettingsSecurityZhTw implements _TranslationsSettingsSecurity
 
 	// Translations
 	@override String get title => '安全';
-	@override String get private_mode_at_launch => '啟動時啟用的私密模式';
-	@override String get private_mode_at_launch_descr => '默認以私密模式啟動應用程序';
-	@override String get private_mode => '私密模式';
+	@override String get private_mode_at_launch => '啟動時啟用的隱私模式';
+	@override String get private_mode_at_launch_descr => '默認以隱私模式啟動應用程序';
+	@override String get private_mode => '隱私模式';
 	@override String get private_mode_descr => '隱藏所有貨幣值';
-	@override String get private_mode_activated => '私密模式已啟用';
-	@override String get private_mode_deactivated => '私密模式已禁用';
+	@override String get private_mode_activated => '隱私模式已啟用';
+	@override String get private_mode_deactivated => '隱私模式已禁用';
 }
 
 // Path: more.data
@@ -5187,7 +5187,7 @@ class _TranslationsGeneralTimeAllZhTw implements _TranslationsGeneralTimeAllEn {
 
 	// Translations
 	@override String get diary => '每天';
-	@override String get monthly => '每個月';
+	@override String get monthly => '每月';
 	@override String get annually => '每年';
 	@override String get quaterly => '每季';
 	@override String get weekly => '每週';
@@ -7219,7 +7219,7 @@ extension on _TranslationsZhTw {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
 			case 'general.cancel': return '取消';
-			case 'general.or': return '或者';
+			case 'general.or': return '或';
 			case 'general.understood': return '明白了';
 			case 'general.unspecified': return '未指定';
 			case 'general.confirm': return '確認';
@@ -7319,7 +7319,7 @@ extension on _TranslationsZhTw {
 			case 'general.time.current.infinite': return '永遠';
 			case 'general.time.current.custom': return '自訂範圍';
 			case 'general.time.all.diary': return '每天';
-			case 'general.time.all.monthly': return '每個月';
+			case 'general.time.all.monthly': return '每月';
 			case 'general.time.all.annually': return '每年';
 			case 'general.time.all.quaterly': return '每季';
 			case 'general.time.all.weekly': return '每週';
@@ -7344,7 +7344,7 @@ extension on _TranslationsZhTw {
 			case 'intro.offline_start': return '離線啟動會話';
 			case 'intro.sl1_title': return '選擇您的貨幣';
 			case 'intro.sl1_descr': return '您的預設貨幣將用於報告和一般圖表。您以後可以隨時在應用程式設定中更改貨幣和應用程式語言';
-			case 'intro.sl2_title': return '安全、私密、可靠';
+			case 'intro.sl2_title': return '安全、隱私、可靠';
 			case 'intro.sl2_descr': return '您的資料只屬於您。我們將資訊直接儲存在您的設備上，無需通過外部伺服器。這使得即使沒有互聯網也可以使用該應用程式';
 			case 'intro.sl2_descr2': return '此外，該應用程式的源代碼是公開的，任何人都可以對其進行協作並查看它是如何工作的';
 			case 'intro.last_slide_title': return '一切準備就緒';
@@ -7436,13 +7436,13 @@ extension on _TranslationsZhTw {
 			case 'stats.balance': return '平衡';
 			case 'stats.final_balance': return '最終餘額';
 			case 'stats.balance_by_account': return '帳戶餘額';
-			case 'stats.balance_by_account_subtitle': return '我的大部分钱都在哪里？';
-			case 'stats.balance_by_currency': return '按货币余额';
-			case 'stats.balance_by_currency_subtitle': return '我有多少钱的外币？';
-			case 'stats.balance_evolution': return '平衡趋势';
-			case 'stats.balance_evolution_subtitle': return '我的钱比以前多了吗？';
-			case 'stats.compared_to_previous_period': return '与上一时期相比';
-			case 'stats.cash_flow': return '现金流';
+			case 'stats.balance_by_account_subtitle': return '我的大部分錢都在哪裡？';
+			case 'stats.balance_by_currency': return '按貨幣餘额';
+			case 'stats.balance_by_currency_subtitle': return '我有多少錢的外幣？';
+			case 'stats.balance_evolution': return '平衡趨勢';
+			case 'stats.balance_evolution_subtitle': return '我的錢比以前多了嗎？';
+			case 'stats.compared_to_previous_period': return '與上一时期相比';
+			case 'stats.cash_flow': return '現金流';
 			case 'stats.cash_flow_subtitle': return '我的支出是否少于我的收入？';
 			case 'stats.by_periods': return '按時期';
 			case 'stats.by_categories': return '按類別';
@@ -7477,7 +7477,7 @@ extension on _TranslationsZhTw {
 			case 'transaction.edit_success': return '交易編輯成功';
 			case 'transaction.edit_multiple': return '編輯交易';
 			case 'transaction.edit_multiple_success': return ({required Object x}) => '${x}筆交易已成功編輯';
-			case 'transaction.duplicate': return '克隆交易';
+			case 'transaction.duplicate': return '複製交易';
 			case 'transaction.duplicate_short': return '複製';
 			case 'transaction.duplicate_warning_message': return '將在同一日期創建與此相同的交易，您想繼續嗎？';
 			case 'transaction.duplicate_success': return '交易複製成功';
@@ -7534,8 +7534,8 @@ extension on _TranslationsZhTw {
 			case 'transaction.form.description_info': return '點擊此處輸入有關此交易的更詳細描述';
 			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => '匯率為${currency}';
 			case 'transaction.form.exchange_to_preferred_in_date': return '交易日';
-			case 'transaction.reversed.title': return '撤銷交易';
-			case 'transaction.reversed.title_short': return 'Inverse tr.';
+			case 'transaction.reversed.title': return '逆向交易';
+			case 'transaction.reversed.title_short': return '逆向交易';
 			case 'transaction.reversed.description_for_expenses': return '儘管是收入交易，但它的金額為正數。這些類型的交易可用於表示先前記錄的收入的返還，例如退款或償還債務。';
 			case 'transaction.reversed.description_for_incomes': return '儘管是一項收入交易，但其金額為負數。這些類型的交易可用於作廢或更正錯誤記錄的收入，反映資金的返還或退款或記錄債務的支付。';
 			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
@@ -7580,12 +7580,12 @@ extension on _TranslationsZhTw {
 			case 'transfer.form.to': return '目的地帳戶';
 			case 'transfer.form.value_in_destiny.title': return '目的地轉帳金额';
 			case 'transfer.form.value_in_destiny.amount_short': return ({required Object amount}) => '${amount}至目標帳户';
-			case 'recurrent_transactions.title': return '經常性交易';
-			case 'recurrent_transactions.title_short': return '記錄交易';
-			case 'recurrent_transactions.empty': return '您似乎沒有任何經常性交易。創建每月、每年或每週的經常性交易，它將顯示在此處';
+			case 'recurrent_transactions.title': return '經常交易';
+			case 'recurrent_transactions.title_short': return '經常交易';
+			case 'recurrent_transactions.empty': return '您似乎沒有任何經常交易。創建每月、每年或每週的經常交易，它將顯示在此處';
 			case 'recurrent_transactions.total_expense_title': return '每個期間的總收入';
 			case 'recurrent_transactions.total_expense_descr': return '*不考慮每次重複的開始和結束日期';
-			case 'recurrent_transactions.details.title': return '經常性交易';
+			case 'recurrent_transactions.details.title': return '經常交易';
 			case 'recurrent_transactions.details.descr': return '此交易的下一步動作如下所示。您可以接受第一步動作或跳過此動作';
 			case 'recurrent_transactions.details.last_payment_info': return '此動作是循環規則的最後一個，因此當確認此動作時，該規則將自動刪除';
 			case 'recurrent_transactions.details.delete_header': return '刪除重複交易';
@@ -7703,7 +7703,7 @@ extension on _TranslationsZhTw {
 			case 'categories.select.all': return '所有類別';
 			case 'categories.select.all_short': return '全部';
 			case 'budgets.title': return '預算';
-			case 'budgets.repeated': return '再次發生的';
+			case 'budgets.repeated': return '重複';
 			case 'budgets.one_time': return '一次';
 			case 'budgets.annual': return '年度';
 			case 'budgets.week': return '每週';
@@ -7798,14 +7798,14 @@ extension on _TranslationsZhTw {
 			case 'settings.accent_color': return '強調色';
 			case 'settings.accent_color_descr': return '選擇應用程式用來強調介面某些部分的顏色';
 			case 'settings.security.title': return '安全';
-			case 'settings.security.private_mode_at_launch': return '啟動時啟用的私密模式';
-			case 'settings.security.private_mode_at_launch_descr': return '默認以私密模式啟動應用程序';
-			case 'settings.security.private_mode': return '私密模式';
+			case 'settings.security.private_mode_at_launch': return '啟動時啟用的隱私模式';
+			case 'settings.security.private_mode_at_launch_descr': return '默認以隱私模式啟動應用程序';
+			case 'settings.security.private_mode': return '隱私模式';
 			case 'settings.security.private_mode_descr': return '隱藏所有貨幣值';
-			case 'settings.security.private_mode_activated': return '私密模式已啟用';
-			case 'settings.security.private_mode_deactivated': return '私密模式已禁用';
-			case 'more.title': return '更多的';
-			case 'more.title_long': return '更多操作';
+			case 'settings.security.private_mode_activated': return '隱私模式已啟用';
+			case 'settings.security.private_mode_deactivated': return '隱私模式已禁用';
+			case 'more.title': return '更多';
+			case 'more.title_long': return '更多';
 			case 'more.data.display': return '數據';
 			case 'more.data.display_descr': return '匯出和匯入您的數據，這樣您就不會丟失任何東西';
 			case 'more.data.delete_all': return '刪除我的資料';
