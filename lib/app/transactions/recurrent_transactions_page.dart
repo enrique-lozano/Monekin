@@ -61,6 +61,9 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
               ),
             ),
           ),
+          //
+          // --------**---------- FOOTER ----------**---------
+          //
           const Divider(endIndent: 16, indent: 16),
           Padding(
             padding: const EdgeInsets.all(16),
