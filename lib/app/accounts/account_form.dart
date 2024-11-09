@@ -284,7 +284,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                   keyboardType: TextInputType.number,
                   enabled:
                       !(widget.account != null && widget.account!.isClosed),
-                  inputFormatters: decimalDigitFormatter,
+                  inputFormatters: twoDecimalDigitFormatter,
                   validator: (value) => fieldValidator(value,
                       validator: ValidatorType.double, isRequired: true),
                   autovalidateMode: AutovalidateMode.onUserInteraction,

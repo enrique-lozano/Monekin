@@ -1,11 +1,20 @@
 import 'package:flutter/services.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-/// A text input formatter that only allow two decimal places, replacing incorrect decimal symbols
-List<FilteringTextInputFormatter> get decimalDigitFormatter => [
-      FilteringTextInputFormatter.deny(',', replacementString: '.'),
-      FilteringTextInputFormatter.allow(RegExp(r'(^\d*\.?\d{0,2})')),
-    ];
+/// A text input formatter that allows up to two decimal places,
+/// replacing or disabling any invalid symbols
+List<FilteringTextInputFormatter> get twoDecimalDigitFormatter =>
+    decimalDigitFormatter(2);
+
+/// A text input formatter that allows up to N decimal places,
+/// replacing or disabling any invalid symbols
+List<FilteringTextInputFormatter> decimalDigitFormatter(int decimalPlaces) {
+  return [
+    FilteringTextInputFormatter.deny(',', replacementString: '.'),
+    FilteringTextInputFormatter.allow(
+        RegExp(r'(^\d*\.?\d{0,' + decimalPlaces.toString() + r'})')),
+  ];
+}
 
 enum ValidatorType {
   text,

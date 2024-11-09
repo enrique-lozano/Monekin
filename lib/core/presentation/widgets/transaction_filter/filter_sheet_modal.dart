@@ -383,7 +383,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               textInputAction: TextInputAction.next,
-                              inputFormatters: decimalDigitFormatter,
+                              inputFormatters: twoDecimalDigitFormatter,
                               initialValue: (filtersToReturn.minValue ?? 0)
                                   .toStringAsFixed(2),
                               onChanged: (value) {
@@ -430,7 +430,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               textInputAction: TextInputAction.next,
-                              inputFormatters: decimalDigitFormatter,
+                              inputFormatters: twoDecimalDigitFormatter,
                               initialValue:
                                   filtersToReturn.maxValue?.toStringAsFixed(2),
                               onChanged: (value) {
