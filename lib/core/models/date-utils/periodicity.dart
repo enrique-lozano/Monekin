@@ -39,4 +39,25 @@ enum Periodicity {
 
     return '';
   }
+
+  static const Map<(Periodicity, Periodicity), double> _conversionFactors = {
+    (Periodicity.day, Periodicity.week): 7,
+    (Periodicity.day, Periodicity.month): 30,
+    (Periodicity.day, Periodicity.year): 365,
+    (Periodicity.week, Periodicity.month): 4.345,
+    (Periodicity.week, Periodicity.year): 52.143,
+    (Periodicity.month, Periodicity.year): 12,
+  };
+
+  static double getConversionFactor(Periodicity from, Periodicity to) {
+    if (from == to) return 1;
+    
+    final direct = _conversionFactors[(from, to)];
+    if (direct != null) return direct;
+    
+    final inverse = _conversionFactors[(to, from)];
+    if (inverse != null) return 1 / inverse;
+    
+    return 1; // Default case
+  }
 }

@@ -174,48 +174,11 @@ class MoneyTransaction extends TransactionInDB {
 
     baseValue = baseValue / intervalEachDivider;
 
-    if (periodicity == recurrentInfo.intervalPeriod) {
-      return baseValue;
-    } else if (recurrentInfo.intervalPeriod == Periodicity.day) {
-      if (periodicity == Periodicity.week) {
-        return baseValue * 7;
-      }
-      if (periodicity == Periodicity.month) {
-        return baseValue * 30;
-      }
-      if (periodicity == Periodicity.year) {
-        return baseValue * 365;
-      }
-    } else if (recurrentInfo.intervalPeriod == Periodicity.week) {
-      if (periodicity == Periodicity.day) {
-        return baseValue / 7;
-      }
-      if (periodicity == Periodicity.month) {
-        return baseValue * 4;
-      }
-      if (periodicity == Periodicity.year) {
-        return baseValue * 52;
-      }
-    } else if (recurrentInfo.intervalPeriod == Periodicity.month) {
-      if (periodicity == Periodicity.day) {
-        return baseValue / 30;
-      }
-      if (periodicity == Periodicity.week) {
-        return baseValue / 4;
-      }
-      if (periodicity == Periodicity.year) {
-        return baseValue * 12;
-      }
-    } else if (recurrentInfo.intervalPeriod == Periodicity.year) {
-      if (periodicity == Periodicity.day) {
-        return baseValue / 365;
-      }
-      if (periodicity == Periodicity.week) {
-        return baseValue / 52;
-      }
-      if (periodicity == Periodicity.month) {
-        return baseValue / 12;
-      }
+    if (recurrentInfo.intervalPeriod != null) {
+      return baseValue * Periodicity.getConversionFactor(
+        recurrentInfo.intervalPeriod!,
+        periodicity,
+      );
     }
 
     throw Exception('We could not calculate this value');
