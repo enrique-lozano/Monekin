@@ -391,7 +391,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
           isDense: false,
         ),
         keyboardType: TextInputType.number,
-        inputFormatters: decimalDigitFormatter,
+        inputFormatters: twoDecimalDigitFormatter,
         validator: (value) {
           final defaultNumberValidatorResult = fieldValidator(value,
               isRequired: false, validator: ValidatorType.double);

@@ -207,7 +207,7 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                     },
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     keyboardType: TextInputType.number,
-                    inputFormatters: decimalDigitFormatter,
+                    inputFormatters: decimalDigitFormatter(6),
                     decoration: InputDecoration(
                       labelText: '${t.currencies.exchange_rate} *',
                       hintText: 'Ex.: 2.14',
