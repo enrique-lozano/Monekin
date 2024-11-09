@@ -163,54 +163,58 @@ class MoneyTransaction extends TransactionInDB {
     required Periodicity periodicity,
     bool convertToPreferredCurrency = true,
   }) {
-    final baseValue =
+    double baseValue =
         convertToPreferredCurrency ? currentValueInPreferredCurrency : value;
 
     if (recurrentInfo.isNoRecurrent) {
       return baseValue;
     }
 
+    final intervalEachDivider = recurrentInfo.intervalEach ?? 1;
+
+    baseValue = baseValue / intervalEachDivider;
+
     if (periodicity == recurrentInfo.intervalPeriod) {
-      return baseValue / recurrentInfo.intervalEach!;
+      return baseValue;
     } else if (recurrentInfo.intervalPeriod == Periodicity.day) {
       if (periodicity == Periodicity.week) {
-        return baseValue / 7;
-      }
-      if (periodicity == Periodicity.month) {
-        return baseValue / 30;
-      }
-      if (periodicity == Periodicity.year) {
-        return baseValue / 365;
-      }
-    } else if (recurrentInfo.intervalPeriod == Periodicity.week) {
-      if (periodicity == Periodicity.day) {
         return baseValue * 7;
       }
       if (periodicity == Periodicity.month) {
-        return baseValue / 4;
-      }
-      if (periodicity == Periodicity.year) {
-        return baseValue / 52;
-      }
-    } else if (recurrentInfo.intervalPeriod == Periodicity.month) {
-      if (periodicity == Periodicity.day) {
         return baseValue * 30;
       }
-      if (periodicity == Periodicity.week) {
+      if (periodicity == Periodicity.year) {
+        return baseValue * 365;
+      }
+    } else if (recurrentInfo.intervalPeriod == Periodicity.week) {
+      if (periodicity == Periodicity.day) {
+        return baseValue / 7;
+      }
+      if (periodicity == Periodicity.month) {
         return baseValue * 4;
       }
       if (periodicity == Periodicity.year) {
-        return baseValue / 12;
+        return baseValue * 52;
+      }
+    } else if (recurrentInfo.intervalPeriod == Periodicity.month) {
+      if (periodicity == Periodicity.day) {
+        return baseValue / 30;
+      }
+      if (periodicity == Periodicity.week) {
+        return baseValue / 4;
+      }
+      if (periodicity == Periodicity.year) {
+        return baseValue * 12;
       }
     } else if (recurrentInfo.intervalPeriod == Periodicity.year) {
       if (periodicity == Periodicity.day) {
-        return baseValue * 365;
+        return baseValue / 365;
       }
       if (periodicity == Periodicity.week) {
-        return baseValue * 52;
+        return baseValue / 52;
       }
       if (periodicity == Periodicity.month) {
-        return baseValue * 12;
+        return baseValue / 12;
       }
     }
 
