@@ -15,6 +15,7 @@ import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
+import 'package:monekin/core/utils/logger.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -44,16 +45,16 @@ class AppDB extends _$AppDB {
       join((await getApplicationDocumentsDirectory()).path, dbName);
 
   Future<void> migrateDB(int from, int to) async {
-    print('Executing migrations from previous version...');
+    Logger.printDebug('Executing migrations from previous version...');
 
     for (var i = from + 1; i <= to; i++) {
-      print("Migrating database from v$from to v$i...");
+      Logger.printDebug("Migrating database from v$from to v$i...");
 
       String initialSQL =
           await rootBundle.loadString('assets/sql/migrations/v$i.sql');
 
       for (final sqlStatement in splitSQLStatements(initialSQL)) {
-        print("Running custom statement: $sqlStatement");
+        Logger.printDebug("Running custom statement: $sqlStatement");
         await customStatement(sqlStatement);
       }
 
@@ -61,7 +62,7 @@ class AppDB extends _$AppDB {
           .setAppDataItem(AppDataKey.dbVersion, i.toStringAsFixed(0));
     }
 
-    print('Migration completed!');
+    Logger.printDebug('Migration completed!');
   }
 
   @override
@@ -71,11 +72,11 @@ class AppDB extends _$AppDB {
   MigrationStrategy get migration {
     return MigrationStrategy(
       beforeOpen: (details) async {
-        print(
+        Logger.printDebug(
             'DB found! Version ${details.versionNow} (previous was ${details.versionBefore}). Path to DB -> ${await databasePath}');
 
         if (details.wasCreated) {
-          print('Executing seeders... Populating the database...');
+          Logger.printDebug('Executing seeders... Populating the database...');
 
           try {
             String initialSQL =
@@ -91,9 +92,9 @@ class AppDB extends _$AppDB {
             await CategoryService.instance.initializeCategories();
             await CurrencyService.instance.initializeCurrencies();
 
-            print('Initial data correctly inserted!');
+            Logger.printDebug('Initial data correctly inserted!');
           } catch (e) {
-            print('ERROR: $e');
+            Logger.printDebug('ERROR: $e');
             throw Exception(e);
           }
         }
@@ -108,15 +109,15 @@ class AppDB extends _$AppDB {
           await migrateDB(dbVersion, schemaVersion);
         }
 
-        print("DB Opened!");
+        Logger.printDebug("DB Opened!");
       },
       onCreate: (m) async {
-        print('Creating database tables...');
+        Logger.printDebug('Creating database tables...');
 
         // Create all tables from `sql/initial/tables.drift`. We have also the schema in SQLite format in the assets folder
         await m.createAll();
 
-        print('Database tables created!');
+        Logger.printDebug('Database tables created!');
       },
       onUpgrade: (m, from, to) {
         // The migration (if applied) is already done when the DB is opened. For instance, we have nothing to do here.
@@ -161,7 +162,7 @@ LazyDatabase openConnection(String dbName, {bool logStatements = false}) {
 /// ```dart
 /// String sql = "CREATE TABLE users (id INT); INSERT INTO users (id) VALUES (1);";
 /// List<String> statements = splitSQLStatements(sql);
-/// print(statements); // Output: ["CREATE TABLE users (id INT)", "INSERT INTO users (id) VALUES (1)"]
+/// Logger.printDebug(statements); // Output: ["CREATE TABLE users (id INT)", "INSERT INTO users (id) VALUES (1)"]
 /// ```
 ///
 /// [sqliteStr] - The input string containing multiple SQL statements.

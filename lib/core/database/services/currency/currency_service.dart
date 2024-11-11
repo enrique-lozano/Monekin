@@ -6,6 +6,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/models/currency/currency.dart';
+import 'package:monekin/core/utils/logger.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 class CurrencyService {
@@ -91,7 +92,7 @@ class CurrencyService {
         }
       }
     } catch (e) {
-      print('Error getting default currency: ' + e.toString());
+      Logger.printDebug('Error getting default currency: ' + e.toString());
     }
 
     return defaultCurrencyCode;
