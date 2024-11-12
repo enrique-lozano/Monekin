@@ -8,6 +8,7 @@ import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/utils/get_download_path.dart';
+import 'package:monekin/core/utils/logger.dart';
 import 'package:path/path.dart' as path;
 
 class BackupDatabaseService {
@@ -156,7 +157,7 @@ class BackupDatabaseService {
         await File(dbPath).writeAsBytes(currentDBContent, mode: FileMode.write);
         db.markTablesUpdated(db.allTables);
 
-        print('Error\n: $e');
+        Logger.printDebug('Error\n: $e');
 
         throw Exception('The database is invalid or could not be readed');
       }

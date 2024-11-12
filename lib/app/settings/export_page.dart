@@ -3,6 +3,7 @@ import 'package:monekin/core/database/services/transaction/transaction_service.d
 import 'package:monekin/core/presentation/widgets/dates/outlinedButtonStacked.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/utils/logger.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/database/backup/backup_database_service.dart';
@@ -73,9 +74,9 @@ class _ExportDataPageState extends State<ExportDataPage> {
                 await BackupDatabaseService()
                     .downloadDatabaseFile(context)
                     .then((value) {
-                  print('EEEEEEEEEEE');
+                  Logger.printDebug('EEEEEEEEEEE');
                 }).catchError((err) {
-                  print(err);
+                  Logger.printDebug(err);
                 });
               } else {
                 await BackupDatabaseService()

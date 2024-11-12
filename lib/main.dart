@@ -12,6 +12,7 @@ import 'package:monekin/core/database/services/user-setting/user_setting_service
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/routes/root_navigator_observer.dart';
+import 'package:monekin/core/utils/logger.dart';
 import 'package:monekin/core/utils/scroll_behavior_override.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -34,7 +35,7 @@ class MonekinAppEntryPoint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("------------------ APP ENTRY POINT ------------------");
+    Logger.printDebug("------------------ APP ENTRY POINT ------------------");
 
     return StreamBuilder(
         stream: UserSettingService.instance.getSettings((p0) =>
@@ -43,7 +44,7 @@ class MonekinAppEntryPoint extends StatelessWidget {
             p0.settingKey.equalsValue(SettingKey.amoledMode) |
             p0.settingKey.equalsValue(SettingKey.accentColor)),
         builder: (context, snapshot) {
-          print('Finding initial user settings...');
+          Logger.printDebug('Finding initial user settings...');
 
           if (!snapshot.hasData) {
             return Container();
@@ -57,10 +58,10 @@ class MonekinAppEntryPoint extends StatelessWidget {
               .settingValue;
 
           if (lang != null) {
-            print('App language found. Setting the locale to `$lang`...');
+            Logger.printDebug('App language found. Setting the locale to `$lang`...');
             LocaleSettings.setLocaleRaw(lang);
           } else {
-            print(
+            Logger.printDebug(
                 'App language not found. Setting the user device language...');
 
             LocaleSettings.useDeviceLocale();
