@@ -26,8 +26,6 @@ import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-import '../../core/presentation/app_colors.dart';
-
 class ImportCSVPage extends StatefulWidget {
   const ImportCSVPage({super.key});
 

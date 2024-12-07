@@ -179,9 +179,6 @@ class DateTimeField extends StatelessWidget {
     if (selectedDate != null) {
       text = dateFormat.format(selectedDate!);
     }
-    TextStyle? textStyle;
-
-    textStyle = dateTextStyle ?? dateTextStyle;
 
     return TextFormField(
       controller: TextEditingController(text: text),

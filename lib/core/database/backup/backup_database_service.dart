@@ -88,18 +88,6 @@ class BackupDatabaseService {
       csvData += '\n';
 
       if (transaction.isTransfer) {
-        final toAdd2 = [
-          transaction.id,
-          (transaction.valueInDestiny ?? transaction.value).toStringAsFixed(2),
-          dateFormatter.format(transaction.date),
-          transaction.title ?? '',
-          transaction.notes ?? '',
-          transaction.receivingAccount!.name,
-          transaction.receivingAccount!.currencyId,
-          'TRANSFER',
-          ''
-        ];
-
         csvData += toAdd.join(separator);
 
         csvData += '\n';

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../app_colors.dart';
-
 class AnimatedProgressBar extends StatefulWidget {
   const AnimatedProgressBar(
       {super.key,
