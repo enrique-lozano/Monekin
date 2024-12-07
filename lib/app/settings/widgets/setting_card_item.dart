@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
 

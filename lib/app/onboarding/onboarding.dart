@@ -12,8 +12,6 @@ import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 import 'package:monekin/main.dart';
 
-import '../../core/presentation/app_colors.dart';
-
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
 

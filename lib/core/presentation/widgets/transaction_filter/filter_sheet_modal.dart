@@ -12,6 +12,7 @@ import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
@@ -23,7 +24,6 @@ import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../../models/transaction/transaction_type.enum.dart';
-import '../../app_colors.dart';
 import '../count_indicator.dart';
 import '../form_fields/list_tile_field.dart';
 
@@ -98,8 +98,6 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
           setState(() {});
         });
   }
-
-  bool _customTileExpanded = false;
 
   @override
   Widget build(BuildContext context) {

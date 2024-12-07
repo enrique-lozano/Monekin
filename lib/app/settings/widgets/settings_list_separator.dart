@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 
 Widget createListSeparator(BuildContext context, String title) {
   return Padding(

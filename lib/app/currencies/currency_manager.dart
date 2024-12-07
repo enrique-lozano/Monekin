@@ -167,8 +167,6 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
                           }),
                       trailing: Text(item.exchangeRate.toString()),
                       onTap: () async {
-                        final onTapContext = context;
-
                         final currency = await CurrencyService.instance
                             .getCurrencyByCode(item.currencyCode)
                             .first;

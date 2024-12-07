@@ -6,8 +6,6 @@ import 'package:monekin/core/presentation/widgets/html_text.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
-import '../../core/presentation/app_colors.dart';
-
 class IntroPage extends StatelessWidget {
   const IntroPage({super.key});
 
