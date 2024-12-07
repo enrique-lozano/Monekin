@@ -7,6 +7,7 @@ import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
+import 'package:monekin/core/database/sql/initial/seed.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/category/category.dart';
@@ -48,13 +49,13 @@ class AppDB extends _$AppDB {
     Logger.printDebug('Executing migrations from previous version...');
 
     for (var i = from + 1; i <= to; i++) {
-      Logger.printDebug("Migrating database from v$from to v$i...");
+      Logger.printDebug('Migrating database from v$from to v$i...');
 
       String initialSQL =
           await rootBundle.loadString('assets/sql/migrations/v$i.sql');
 
       for (final sqlStatement in splitSQLStatements(initialSQL)) {
-        Logger.printDebug("Running custom statement: $sqlStatement");
+        Logger.printDebug('Running custom statement: $sqlStatement');
         await customStatement(sqlStatement);
       }
 
@@ -79,15 +80,14 @@ class AppDB extends _$AppDB {
           Logger.printDebug('Executing seeders... Populating the database...');
 
           try {
-            String initialSQL =
-                await rootBundle.loadString('assets/sql/initial_data.sql');
+            final initialDbSeedersStatements = [
+              settingsInitialSeedSQL,
+              appDataInitialSeedSQL(schemaVersion)
+            ];
 
-            for (final sqlStatement in splitSQLStatements(initialSQL)) {
+            for (final sqlStatement in initialDbSeedersStatements) {
               await customStatement(sqlStatement);
             }
-
-            await customStatement(
-                "INSERT INTO appData VALUES ('${AppDataKey.dbVersion.name}', '${schemaVersion.toStringAsFixed(0)}'), ('${AppDataKey.introSeen.name}', '0'), ('${AppDataKey.lastExportDate.name}', null)");
 
             await CategoryService.instance.initializeCategories();
             await CurrencyService.instance.initializeCurrencies();
@@ -109,7 +109,7 @@ class AppDB extends _$AppDB {
           await migrateDB(dbVersion, schemaVersion);
         }
 
-        Logger.printDebug("DB Opened!");
+        Logger.printDebug('DB Opened!');
       },
       onCreate: (m) async {
         Logger.printDebug('Creating database tables...');

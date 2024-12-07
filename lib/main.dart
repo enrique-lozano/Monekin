@@ -58,7 +58,8 @@ class MonekinAppEntryPoint extends StatelessWidget {
               .settingValue;
 
           if (lang != null) {
-            Logger.printDebug('App language found. Setting the locale to `$lang`...');
+            Logger.printDebug(
+                'App language found. Setting the locale to `$lang`...');
             LocaleSettings.setLocaleRaw(lang);
           } else {
             Logger.printDebug(
