@@ -17,26 +17,15 @@ class PrivateModeService {
     _privateModeController.close();
   }
 
-  Future<void> initializePrivateMode() async {
-    setPrivateMode(await getPrivateModeAtLaunch().first);
-  }
-
   void setPrivateMode(bool value) {
     _privateModeController.add(value);
   }
 
   /// Set if the app should start in private mode
-  Future<int> setPrivateModeAtLaunch(bool value) async {
+  Future<bool> setPrivateModeAtLaunch(bool value) async {
     final result = await userSettingsService.setSetting(
         SettingKey.privateModeAtLaunch, value ? '1' : '0');
 
     return result;
-  }
-
-  /// Get if the app should start in private mode:
-  Stream<bool> getPrivateModeAtLaunch() {
-    return userSettingsService
-        .getSetting(SettingKey.privateModeAtLaunch)
-        .map((x) => x == '1');
   }
 }

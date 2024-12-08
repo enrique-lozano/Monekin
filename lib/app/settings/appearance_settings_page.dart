@@ -140,8 +140,11 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     listenToDeviceLocale: true);
 
                 try {
-                  await UserSettingService.instance
-                      .setSetting(SettingKey.appLanguage, newLang);
+                  await UserSettingService.instance.setSetting(
+                    SettingKey.appLanguage,
+                    newLang,
+                    updateGlobalState: true,
+                  );
                 } catch (e) {
                   snackbarDisplayer(const SnackBar(
                     content: Text(
@@ -153,7 +156,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
             createListSeparator(context, t.settings.theme_and_colors),
             StreamBuilder(
                 stream: UserSettingService.instance
-                    .getSetting(SettingKey.themeMode),
+                    .getSettingFromDB(SettingKey.themeMode),
                 builder: (context, snapshot) {
                   return buildSelector(
                     title: t.settings.theme,
@@ -165,7 +168,11 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     selected: snapshot.data ?? 'system',
                     onChanged: (value) {
                       UserSettingService.instance
-                          .setSetting(SettingKey.themeMode, value)
+                          .setSetting(
+                            SettingKey.themeMode,
+                            value,
+                            updateGlobalState: true,
+                          )
                           .then((value) => null);
                     },
                   );
@@ -175,24 +182,31 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               subtitle: t.settings.amoled_mode_descr,
               initialValue: appStateSettings[SettingKey.amoledMode] == '1',
               disabled: Theme.of(context).brightness == Brightness.light,
-              onSwitched: (bool value) async {
-                await UserSettingService.instance
-                    .setSetting(SettingKey.amoledMode, value ? '1' : '0');
+              onSwitchDebounceMs: 200,
+              onSwitch: (bool value) async {
+                await UserSettingService.instance.setSetting(
+                  SettingKey.amoledMode,
+                  value ? '1' : '0',
+                  updateGlobalState: true,
+                );
               },
             ),
             MonekinTileSwitch(
               title: t.settings.dynamic_colors,
               subtitle: t.settings.dynamic_colors_descr,
               initialValue: appStateSettings[SettingKey.accentColor] == 'auto',
-              onSwitched: (bool value) async {
+              onSwitchDebounceMs: 200,
+              onSwitch: (bool value) async {
                 await UserSettingService.instance.setSetting(
-                    SettingKey.accentColor,
-                    value ? 'auto' : brandBlue.toHex(leadingHashSign: false));
+                  SettingKey.accentColor,
+                  value ? 'auto' : brandBlue.toHex(leadingHashSign: false),
+                  updateGlobalState: true,
+                );
               },
             ),
             StreamBuilder(
                 stream: UserSettingService.instance
-                    .getSetting(SettingKey.accentColor),
+                    .getSettingFromDB(SettingKey.accentColor),
                 initialData: 'auto',
                 builder: (context, snapshot) {
                   late final Color color;
@@ -220,7 +234,10 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
 
                               setState(() {
                                 UserSettingService.instance.setSetting(
-                                    SettingKey.accentColor, value.toHex());
+                                  SettingKey.accentColor,
+                                  value.toHex(),
+                                  updateGlobalState: true,
+                                );
                               });
                             }),
                     title: Text(t.settings.accent_color),
@@ -250,19 +267,19 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               icon: Icons.phonelink_lock_outlined,
               initialValue:
                   appStateSettings[SettingKey.privateModeAtLaunch] == '1',
-              onSwitched: (bool value) async {
+              onSwitch: (bool value) async {
                 await PrivateModeService.instance.setPrivateModeAtLaunch(value);
               },
             ),
             StreamBuilder(
                 stream: PrivateModeService.instance.privateModeStream,
                 builder: (context, snapshot) {
-                  return SwitchListTile(
-                    title: Text(t.settings.security.private_mode),
-                    subtitle: Text(t.settings.security.private_mode_descr),
-                    secondary: const Icon(Icons.lock),
-                    value: snapshot.data ?? false,
-                    onChanged: (bool value) {
+                  return MonekinTileSwitch(
+                    title: t.settings.security.private_mode,
+                    subtitle: t.settings.security.private_mode_descr,
+                    icon: Icons.lock,
+                    initialValue: snapshot.data ?? false,
+                    onSwitch: (bool value) {
                       setState(() {
                         PrivateModeService.instance.setPrivateMode(value);
                       });

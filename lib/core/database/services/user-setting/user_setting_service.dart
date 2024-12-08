@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/main.dart';
 
 /// The keys of the avalaible settings of the app
 enum SettingKey {
@@ -38,31 +39,46 @@ class UserSettingService {
     }
   }
 
-  Future<int> setSetting(SettingKey settingKey, String? settingValue) async {
+  Future<bool> setSetting(
+    SettingKey settingKey,
+    String? settingValue, {
+    bool updateGlobalState = false,
+  }) async {
     final previousValue = appStateSettings[settingKey];
+
+    if (previousValue == settingValue) {
+      return false;
+    }
+
     appStateSettings[settingKey] = settingValue;
 
     try {
-      return await db.into(db.userSettings).insert(
+      await db.into(db.userSettings).insert(
             UserSetting(settingKey: settingKey, settingValue: settingValue),
             mode: InsertMode.insertOrReplace,
           );
+
+      if (updateGlobalState == true) {
+        appStateKey.currentState?.refreshAppState();
+      }
     } catch (e) {
       // Restore the previous value if an error occurs
       appStateSettings[settingKey] = previousValue;
       // Rethrow the error to allow the caller to handle it
       rethrow;
     }
+
+    return true;
   }
 
-  Stream<String?> getSetting(SettingKey settingKey) {
+  Stream<String?> getSettingFromDB(SettingKey settingKey) {
     return (db.select(db.userSettings)
           ..where((tbl) => tbl.settingKey.equalsValue(settingKey)))
         .map((e) => e.settingValue)
         .watchSingleOrNull();
   }
 
-  Stream<List<UserSetting>> getSettings(
+  Stream<List<UserSetting>> getSettingsFromDB(
       Expression<bool> Function(UserSettings) filter) {
     return (db.select(db.userSettings)..where(filter)).watch();
   }
