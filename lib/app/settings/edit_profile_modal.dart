@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
+import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/presentation/widgets/user_avatar.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -38,22 +39,13 @@ class _EditProfileModalState extends State<EditProfileModal> {
   void initState() {
     super.initState();
 
-    final userSettingsService = UserSettingService.instance;
-
-    userSettingsService.getSetting(SettingKey.avatar).first.then((value) {
-      setState(() {
-        selectedAvatar = value;
-      });
-    });
-
-    userSettingsService.getSetting(SettingKey.userName).first.then((value) {
-      _nameController.value = TextEditingValue(text: value ?? '');
-    });
+    selectedAvatar = appStateSettings[SettingKey.avatar];
+    _nameController.value =
+        TextEditingValue(text: appStateSettings[SettingKey.userName] ?? '');
   }
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colors = Theme.of(context).colorScheme;
     final t = Translations.of(context);
 
     return ModalContainer(
@@ -100,24 +92,31 @@ class _EditProfileModalState extends State<EditProfileModal> {
               runSpacing: 12, // gap between lines
               alignment: WrapAlignment.center,
               children: allAvatars
-                  .map((e) => InkWell(
-                        onTap: () {
-                          HapticFeedback.lightImpact();
-                          setState(() {
-                            selectedAvatar = e;
-                          });
-                        },
-                        child: UserAvatar(
-                          avatar: e,
-                          size: 52,
-                          border: selectedAvatar == e
-                              ? Border.all(width: 2, color: colors.primary)
-                              : Border.all(width: 2, color: Colors.transparent),
-                        ),
-                      ))
+                  .map((avatarName) => buildTappableAvatar(context, avatarName))
                   .toList(),
             ),
           ],
         ));
+  }
+
+  Tappable buildTappableAvatar(BuildContext context, String avatarName) {
+    return Tappable(
+      borderRadius: BorderRadius.circular(888),
+      bgColor: Theme.of(context).colorScheme.primaryContainer,
+      onTap: () {
+        HapticFeedback.lightImpact();
+        setState(() {
+          selectedAvatar = avatarName;
+        });
+      },
+      child: UserAvatar(
+        avatar: avatarName,
+        size: 52,
+        backgroundColor: Colors.transparent,
+        border: selectedAvatar == avatarName
+            ? Border.all(width: 2, color: Theme.of(context).colorScheme.primary)
+            : Border.all(width: 2, color: Colors.transparent),
+      ),
+    );
   }
 }

@@ -21,6 +21,8 @@ enum SettingKey {
   amoledMode,
 }
 
+final Map<SettingKey, String?> appStateSettings = {};
+
 class UserSettingService {
   final AppDB db;
 
@@ -28,10 +30,29 @@ class UserSettingService {
   static final UserSettingService instance =
       UserSettingService._(AppDB.instance);
 
+  initializeSettings() async {
+    final savedSettings = await db.select(db.userSettings).watch().first;
+
+    for (final savedSetting in savedSettings) {
+      appStateSettings[savedSetting.settingKey] = savedSetting.settingValue;
+    }
+  }
+
   Future<int> setSetting(SettingKey settingKey, String? settingValue) async {
-    return db.into(db.userSettings).insert(
-        UserSetting(settingKey: settingKey, settingValue: settingValue),
-        mode: InsertMode.insertOrReplace);
+    final previousValue = appStateSettings[settingKey];
+    appStateSettings[settingKey] = settingValue;
+
+    try {
+      return await db.into(db.userSettings).insert(
+            UserSetting(settingKey: settingKey, settingValue: settingValue),
+            mode: InsertMode.insertOrReplace,
+          );
+    } catch (e) {
+      // Restore the previous value if an error occurs
+      appStateSettings[settingKey] = previousValue;
+      // Rethrow the error to allow the caller to handle it
+      rethrow;
+    }
   }
 
   Stream<String?> getSetting(SettingKey settingKey) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/settings/widgets/language_selector.dart';
+import 'package:monekin/app/settings/widgets/monekin_tile_switch.dart';
 import 'package:monekin/app/settings/widgets/supported_locales.dart';
 import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
@@ -169,47 +170,26 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     },
                   );
                 }),
-            StreamBuilder(
-                stream: UserSettingService.instance
-                    .getSetting(SettingKey.amoledMode)
-                    .map((event) => event == '1'),
-                initialData: true,
-                builder: (context, snapshot) {
-                  return SwitchListTile(
-                    title: Text(t.settings.amoled_mode),
-                    subtitle: Text(t.settings.amoled_mode_descr),
-                    value: snapshot.data!,
-                    onChanged: Theme.of(context).brightness == Brightness.light
-                        ? null
-                        : (bool value) {
-                            setState(() {
-                              UserSettingService.instance.setSetting(
-                                  SettingKey.amoledMode, value ? '1' : '0');
-                            });
-                          },
-                  );
-                }),
-            StreamBuilder(
-                stream: UserSettingService.instance
-                    .getSetting(SettingKey.accentColor)
-                    .map((event) => event == 'auto'),
-                initialData: true,
-                builder: (context, snapshot) {
-                  return SwitchListTile(
-                    title: Text(t.settings.dynamic_colors),
-                    subtitle: Text(t.settings.dynamic_colors_descr),
-                    value: snapshot.data!,
-                    onChanged: (bool value) {
-                      setState(() {
-                        UserSettingService.instance.setSetting(
-                            SettingKey.accentColor,
-                            value
-                                ? 'auto'
-                                : brandBlue.toHex(leadingHashSign: false));
-                      });
-                    },
-                  );
-                }),
+            MonekinTileSwitch(
+              title: t.settings.amoled_mode,
+              subtitle: t.settings.amoled_mode_descr,
+              initialValue: appStateSettings[SettingKey.amoledMode] == '1',
+              disabled: Theme.of(context).brightness == Brightness.light,
+              onSwitched: (bool value) async {
+                await UserSettingService.instance
+                    .setSetting(SettingKey.amoledMode, value ? '1' : '0');
+              },
+            ),
+            MonekinTileSwitch(
+              title: t.settings.dynamic_colors,
+              subtitle: t.settings.dynamic_colors_descr,
+              initialValue: appStateSettings[SettingKey.accentColor] == 'auto',
+              onSwitched: (bool value) async {
+                await UserSettingService.instance.setSetting(
+                    SettingKey.accentColor,
+                    value ? 'auto' : brandBlue.toHex(leadingHashSign: false));
+              },
+            ),
             StreamBuilder(
                 stream: UserSettingService.instance
                     .getSetting(SettingKey.accentColor),
@@ -264,23 +244,14 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                   );
                 }),
             createListSeparator(context, t.settings.security.title),
-            StreamBuilder(
-              stream: PrivateModeService.instance.getPrivateModeAtLaunch(),
-              builder: (context, snapshot) {
-                return SwitchListTile(
-                  title: Text(t.settings.security.private_mode_at_launch),
-                  subtitle:
-                      Text(t.settings.security.private_mode_at_launch_descr),
-                  secondary: const Icon(Icons.phonelink_lock_outlined),
-                  value: snapshot.data ?? false,
-                  onChanged: (bool value) {
-                    PrivateModeService.instance
-                        .setPrivateModeAtLaunch(value)
-                        .then((i) {
-                      setState(() {});
-                    });
-                  },
-                );
+            MonekinTileSwitch(
+              title: t.settings.security.private_mode_at_launch,
+              subtitle: t.settings.security.private_mode_at_launch_descr,
+              icon: Icons.phonelink_lock_outlined,
+              initialValue:
+                  appStateSettings[SettingKey.privateModeAtLaunch] == '1',
+              onSwitched: (bool value) async {
+                await PrivateModeService.instance.setPrivateModeAtLaunch(value);
               },
             ),
             StreamBuilder(

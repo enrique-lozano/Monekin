@@ -20,6 +20,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await PrivateModeService.instance.initializePrivateMode();
+  await UserSettingService.instance.initializeSettings();
 
   runApp(const MonekinAppEntryPoint());
 }
