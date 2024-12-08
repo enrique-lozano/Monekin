@@ -23,7 +23,7 @@ class PrivateModeService {
 
   /// Set if the app should start in private mode
   Future<bool> setPrivateModeAtLaunch(bool value) async {
-    final result = await userSettingsService.setSetting(
+    final result = await userSettingsService.setItem(
         SettingKey.privateModeAtLaunch, value ? '1' : '0');
 
     return result;

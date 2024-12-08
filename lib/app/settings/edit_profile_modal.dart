@@ -60,9 +60,9 @@ class _EditProfileModalState extends State<EditProfileModal> {
                       final userSettingsService = UserSettingService.instance;
 
                       Future.wait([
-                        userSettingsService.setSetting(
+                        userSettingsService.setItem(
                             SettingKey.userName, _nameController.text),
-                        userSettingsService.setSetting(
+                        userSettingsService.setItem(
                             SettingKey.avatar, selectedAvatar!)
                       ].map((e) => Future.value(e))).then((value) {
                         Navigator.pop(context);

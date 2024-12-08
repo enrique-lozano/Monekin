@@ -57,7 +57,7 @@ class CurrencyService {
       if (currencyCode == null) {
         currencyCode = await getDeviceDefaultCurrencyCode();
 
-        await settingService.setSetting(
+        await settingService.setItem(
             SettingKey.preferredCurrency, currencyCode);
       }
 

@@ -19,7 +19,8 @@ import 'package:monekin/i18n/translations.g.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await UserSettingService.instance.initializeSettings();
+  await UserSettingService.instance.initializeGlobalStateMap();
+  await AppDataService.instance.initializeGlobalStateMap();
 
   PrivateModeService.instance
       .setPrivateMode(appStateSettings[SettingKey.privateModeAtLaunch] == '1');
@@ -77,7 +78,7 @@ class MonekinAppEntryPoint extends StatelessWidget {
       // the user is using a non-supported language in his device
 
       UserSettingService.instance
-          .setSetting(
+          .setItem(
             SettingKey.appLanguage,
             LocaleSettings.currentLocale.languageTag,
           )

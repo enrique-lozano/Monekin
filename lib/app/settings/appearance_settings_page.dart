@@ -140,7 +140,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     listenToDeviceLocale: true);
 
                 try {
-                  await UserSettingService.instance.setSetting(
+                  await UserSettingService.instance.setItem(
                     SettingKey.appLanguage,
                     newLang,
                     updateGlobalState: true,
@@ -168,7 +168,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     selected: snapshot.data ?? 'system',
                     onChanged: (value) {
                       UserSettingService.instance
-                          .setSetting(
+                          .setItem(
                             SettingKey.themeMode,
                             value,
                             updateGlobalState: true,
@@ -184,7 +184,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               disabled: Theme.of(context).brightness == Brightness.light,
               onSwitchDebounceMs: 200,
               onSwitch: (bool value) async {
-                await UserSettingService.instance.setSetting(
+                await UserSettingService.instance.setItem(
                   SettingKey.amoledMode,
                   value ? '1' : '0',
                   updateGlobalState: true,
@@ -197,7 +197,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               initialValue: appStateSettings[SettingKey.accentColor] == 'auto',
               onSwitchDebounceMs: 200,
               onSwitch: (bool value) async {
-                await UserSettingService.instance.setSetting(
+                await UserSettingService.instance.setItem(
                   SettingKey.accentColor,
                   value ? 'auto' : brandBlue.toHex(leadingHashSign: false),
                   updateGlobalState: true,
@@ -233,7 +233,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                               if (value == null) return;
 
                               setState(() {
-                                UserSettingService.instance.setSetting(
+                                UserSettingService.instance.setItem(
                                   SettingKey.accentColor,
                                   value.toHex(),
                                   updateGlobalState: true,

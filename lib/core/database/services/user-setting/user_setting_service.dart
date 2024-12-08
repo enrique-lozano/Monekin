@@ -1,6 +1,6 @@
-import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/main.dart';
+import 'package:monekin/core/database/services/shared/key_value_pair.dart';
+import 'package:monekin/core/database/services/shared/key_value_service.dart';
 
 /// The keys of the avalaible settings of the app
 enum SettingKey {
@@ -24,62 +24,25 @@ enum SettingKey {
 
 final Map<SettingKey, String?> appStateSettings = {};
 
-class UserSettingService {
-  final AppDB db;
+class UserSettingService
+    extends KeyValueService<SettingKey, UserSettings, UserSetting> {
+  UserSettingService._(AppDB db)
+      : super(
+          db: db,
+          table: db.userSettings,
+          globalStateMap: appStateSettings,
+          rowToKeyPairInstance: (row) => KeyValuePairInDB.fromUserSetting(row),
+          toDbRow: (x) => x.toUserSetting(),
+        );
 
-  UserSettingService._(this.db);
-  static final UserSettingService instance =
+  static final UserSettingService _instance =
       UserSettingService._(AppDB.instance);
-
-  initializeSettings() async {
-    final savedSettings = await db.select(db.userSettings).watch().first;
-
-    for (final savedSetting in savedSettings) {
-      appStateSettings[savedSetting.settingKey] = savedSetting.settingValue;
-    }
-  }
-
-  Future<bool> setSetting(
-    SettingKey settingKey,
-    String? settingValue, {
-    bool updateGlobalState = false,
-  }) async {
-    final previousValue = appStateSettings[settingKey];
-
-    if (previousValue == settingValue) {
-      return false;
-    }
-
-    appStateSettings[settingKey] = settingValue;
-
-    try {
-      await db.into(db.userSettings).insert(
-            UserSetting(settingKey: settingKey, settingValue: settingValue),
-            mode: InsertMode.insertOrReplace,
-          );
-
-      if (updateGlobalState == true) {
-        appStateKey.currentState?.refreshAppState();
-      }
-    } catch (e) {
-      // Restore the previous value if an error occurs
-      appStateSettings[settingKey] = previousValue;
-      // Rethrow the error to allow the caller to handle it
-      rethrow;
-    }
-
-    return true;
-  }
+  static UserSettingService get instance => _instance;
 
   Stream<String?> getSettingFromDB(SettingKey settingKey) {
     return (db.select(db.userSettings)
           ..where((tbl) => tbl.settingKey.equalsValue(settingKey)))
         .map((e) => e.settingValue)
         .watchSingleOrNull();
-  }
-
-  Stream<List<UserSetting>> getSettingsFromDB(
-      Expression<bool> Function(UserSettings) filter) {
-    return (db.select(db.userSettings)..where(filter)).watch();
   }
 }
