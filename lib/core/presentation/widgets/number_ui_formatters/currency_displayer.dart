@@ -109,8 +109,12 @@ class BlurBasedOnPrivateMode extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: PrivateModeService.instance.privateModeStream,
-      initialData: false,
+      initialData: true,
       builder: (context, snapshot) {
+        // `isInPrivateMode` will always start as `true` to avoid showing the balance
+        // in the screen for a brief moment before the private mode is loaded.
+        // A spinner could be shown instead of the blurred text, but that would
+        // be a new feature and also a design choice.
         final isInPrivateMode = snapshot.data ?? false;
 
         final double sigma = isInPrivateMode ? 7.5 : 0;
