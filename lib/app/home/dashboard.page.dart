@@ -139,29 +139,32 @@ class _DashboardPageState extends State<DashboardPage> {
                           StreamBuilder(
                               stream: AccountService.instance.getAccounts(),
                               builder: (context, accounts) {
-                                return Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    totalBalanceIndicator(
-                                        context, accounts, accountService),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        IncomeOrExpenseCard(
-                                          type: TransactionType.E,
-                                          startDate: dateRangeService.startDate,
-                                          endDate: dateRangeService.endDate,
-                                        ),
-                                        IncomeOrExpenseCard(
-                                          type: TransactionType.I,
-                                          startDate: dateRangeService.startDate,
-                                          endDate: dateRangeService.endDate,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                return SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      totalBalanceIndicator(
+                                          context, accounts, accountService),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          IncomeOrExpenseCard(
+                                            type: TransactionType.E,
+                                            startDate: dateRangeService.startDate,
+                                            endDate: dateRangeService.endDate,
+                                          ),
+                                          IncomeOrExpenseCard(
+                                            type: TransactionType.I,
+                                            startDate: dateRangeService.startDate,
+                                            endDate: dateRangeService.endDate,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 );
                               })
                         ]),
