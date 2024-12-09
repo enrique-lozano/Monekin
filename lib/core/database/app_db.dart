@@ -60,7 +60,7 @@ class AppDB extends _$AppDB {
       }
 
       await AppDataService.instance
-          .setAppDataItem(AppDataKey.dbVersion, i.toStringAsFixed(0));
+          .setItem(AppDataKey.dbVersion, i.toStringAsFixed(0));
     }
 
     Logger.printDebug('Migration completed!');

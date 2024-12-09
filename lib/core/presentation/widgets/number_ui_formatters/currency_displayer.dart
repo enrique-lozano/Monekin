@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
+import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 
 import 'ui_number_formatter.dart';
@@ -109,7 +110,7 @@ class BlurBasedOnPrivateMode extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: PrivateModeService.instance.privateModeStream,
-      initialData: false,
+      initialData: appStateSettings[SettingKey.privateModeAtLaunch] == '1',
       builder: (context, snapshot) {
         final isInPrivateMode = snapshot.data ?? false;
 

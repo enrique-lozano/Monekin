@@ -79,7 +79,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
                     padding: const EdgeInsets.only(bottom: 16, top: 16),
                     child: StreamBuilder(
                         stream: UserSettingService.instance
-                            .getSetting(SettingKey.avatar),
+                            .getSettingFromDB(SettingKey.avatar),
                         builder: (context, snapshot) {
                           return UserAvatar(avatar: snapshot.data);
                         }),

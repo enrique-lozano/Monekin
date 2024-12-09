@@ -52,12 +52,12 @@ class CurrencyService {
     final settingService = UserSettingService.instance;
 
     return settingService
-        .getSetting(SettingKey.preferredCurrency)
+        .getSettingFromDB(SettingKey.preferredCurrency)
         .asyncMap((currencyCode) async {
       if (currencyCode == null) {
         currencyCode = await getDeviceDefaultCurrencyCode();
 
-        await settingService.setSetting(
+        await settingService.setItem(
             SettingKey.preferredCurrency, currencyCode);
       }
 

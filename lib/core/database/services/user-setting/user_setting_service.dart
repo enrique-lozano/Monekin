@@ -1,5 +1,6 @@
-import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/database/services/shared/key_value_pair.dart';
+import 'package:monekin/core/database/services/shared/key_value_service.dart';
 
 /// The keys of the avalaible settings of the app
 enum SettingKey {
@@ -21,28 +22,27 @@ enum SettingKey {
   amoledMode,
 }
 
-class UserSettingService {
-  final AppDB db;
+final Map<SettingKey, String?> appStateSettings = {};
 
-  UserSettingService._(this.db);
-  static final UserSettingService instance =
+class UserSettingService
+    extends KeyValueService<SettingKey, UserSettings, UserSetting> {
+  UserSettingService._(AppDB db)
+      : super(
+          db: db,
+          table: db.userSettings,
+          globalStateMap: appStateSettings,
+          rowToKeyPairInstance: (row) => KeyValuePairInDB.fromUserSetting(row),
+          toDbRow: (x) => x.toUserSetting(),
+        );
+
+  static final UserSettingService _instance =
       UserSettingService._(AppDB.instance);
+  static UserSettingService get instance => _instance;
 
-  Future<int> setSetting(SettingKey settingKey, String? settingValue) async {
-    return db.into(db.userSettings).insert(
-        UserSetting(settingKey: settingKey, settingValue: settingValue),
-        mode: InsertMode.insertOrReplace);
-  }
-
-  Stream<String?> getSetting(SettingKey settingKey) {
+  Stream<String?> getSettingFromDB(SettingKey settingKey) {
     return (db.select(db.userSettings)
           ..where((tbl) => tbl.settingKey.equalsValue(settingKey)))
         .map((e) => e.settingValue)
         .watchSingleOrNull();
-  }
-
-  Stream<List<UserSetting>> getSettings(
-      Expression<bool> Function(UserSettings) filter) {
-    return (db.select(db.userSettings)..where(filter)).watch();
   }
 }
