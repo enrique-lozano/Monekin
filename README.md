@@ -16,9 +16,25 @@
     <a href="https://play.google.com/store/apps/details?id=com.monekin.app">
       <img src="./docs/badges/Google Play Badge.svg"  alt="Google Play Badge" height="68">
     </a>
+    <span> &nbsp; </span>
     <a href="https://github.com/enrique-lozano/Monekin/releases/latest">
       <img src="./docs/badges/Microsoft Badge.svg"  alt="Micrososf Badge" height="68">
     </a>
+  </p>
+</div>
+
+<!-- DONATE SECTION -->
+<div align="center">
+  <h2>Support the Project 💖</h2>
+  <p>
+    If you love Monekin and want to support its development, consider making a donation. Your contributions help keep the app free, open-source, and constantly improving.
+    <br /><br />
+    <a href="https://paypal.me/lozanoelc?country.x=ES&locale.x=es_ES">
+      <img src="./docs/badges/PayPal Badge.svg" alt="Donate with PayPal" height="68">
+    </a>
+  </p>
+  <p>
+    A huge <strong>THANK YOU</strong> to all the amazing users of Monekin! Your support means the world to us and drives us to continue making personal finances simpler for everyone.
   </p>
 </div>
 
