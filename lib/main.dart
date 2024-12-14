@@ -86,28 +86,15 @@ class MonekinAppEntryPoint extends StatelessWidget {
     }
 
     return TranslationProvider(
-      child: StreamBuilder(
-          stream: AppDataService.instance
-              .getAppDataItem(AppDataKey.introSeen)
-              .map((event) => event == '1'),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Container();
-            }
-
-            return MaterialAppContainer(
-              introSeen: snapshot.data!,
-              amoledMode: appStateSettings[SettingKey.amoledMode]! == '1',
-              accentColor: appStateSettings[SettingKey.accentColor]!,
-              themeMode:
-                  getThemeFromString(appStateSettings[SettingKey.themeMode]!),
-            );
-          }),
+      child: MaterialAppContainer(
+        introSeen: appStateData[AppDataKey.introSeen] == '1',
+        amoledMode: appStateSettings[SettingKey.amoledMode]! == '1',
+        accentColor: appStateSettings[SettingKey.accentColor]!,
+        themeMode: getThemeFromString(appStateSettings[SettingKey.themeMode]!),
+      ),
     );
   }
 }
-
-int refresh = 1;
 
 class MaterialAppContainer extends StatelessWidget {
   const MaterialAppContainer(
@@ -132,7 +119,6 @@ class MaterialAppContainer extends StatelessWidget {
         builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
       return MaterialApp(
         title: 'Monekin',
-        key: ValueKey(refresh),
         debugShowCheckedModeBanner: false,
         locale: TranslationProvider.of(context).flutterLocale,
         scrollBehavior: ScrollBehaviorOverride(),
