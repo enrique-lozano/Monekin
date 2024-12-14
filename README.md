@@ -14,7 +14,10 @@
     <br />
     <br />
     <a href="https://play.google.com/store/apps/details?id=com.monekin.app">
-      <img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"  alt="Google Play Badge" height="68">
+      <img src="./docs/badges/Google Play Badge.svg"  alt="Google Play Badge" height="68">
+    </a>
+    <a href="https://github.com/enrique-lozano/Monekin/releases/latest">
+      <img src="./docs/badges/Microsoft Badge.svg"  alt="Micrososf Badge" height="68">
     </a>
   </p>
 </div>
