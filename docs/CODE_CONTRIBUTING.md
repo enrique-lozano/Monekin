@@ -14,7 +14,7 @@ We work with code generation in some files, so make sure you take this into acco
 dart run build_runner watch --delete-conflicting-outputs
 ```
 
-If you work with translation, you may want to use `dart run slang` instead, which regenerate the translations files faster.
+If you work only with translations, you may want to use `dart run slang` instead, which regenerate the translations files faster.
 
 ## 2. Configure your developer workspace
 
@@ -33,12 +33,16 @@ And that's it! You're are ready to start.
 
 You can see a list of tasks to do [here](https://github.com/enrique-lozano/Monekin/issues). Once you see one that suits you and is not assigned to anyone else, you can leave a comment on the task, so that other users and administrators know who is working on it.
 
+We especially appreciate help with [issues tagged as "help-wanted"](https://github.com/enrique-lozano/Monekin/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22), as these are tasks that we are unable to solve due to not having enough experience or knowledge to do so.
+
+New or inexperienced developers can go for [issues tagged as "good-first-issue"](https://github.com/enrique-lozano/Monekin/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22), as these are easier to tackle and are a great way to start getting familiar with the app's code.
+
 If the list of tasks is too small for you, or you can't find one that suits you, here are some tips on how to help:
 
 - You can create an issue about the thing that you consider to work on.
 - You can always make code improvements and pull requests without having an opened issue.
 - Ask questions or suggest ideas in the comments section of any issue.
-- Some recurring tasks such as adding new languages to the application, improving marketplace screenshots, or improving documentation do not usually have a related issue. These tasks are easy to perform, maybe you can start there.
+- Some recurring tasks such as [adding new languages to Monekin](https://github.com/enrique-lozano/Monekin/blob/main/docs/I18N_CONTRIBUTING.md), improving marketplace screenshots, or improving documentation do not usually have a related issue. These tasks are easy to perform, maybe you can start there.
 
 ## 3. Create a new working branch in your fork
 
