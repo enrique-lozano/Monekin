@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 4
-/// Strings: 2189 (547 per locale)
+/// Strings: 2193 (548 per locale)
 ///
-/// Built on 2024-10-20 at 10:51 UTC
+/// Built on 2024-12-14 at 13:11 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -555,6 +555,7 @@ class _TranslationsSettingsEn {
 	String get lang_section => 'Language and texts';
 	String get lang_title => 'App language';
 	String get lang_descr => 'Language in which the texts will be displayed in the app';
+	String get lang_help => 'If you want to collaborate with the translations of this app, you can consult <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>our guide</a>';
 	String get locale => 'Region';
 	String get locale_descr => 'Set the format to use for dates, numbers...';
 	String get locale_warn => 'When changing region the app will update';
@@ -1854,6 +1855,7 @@ class _TranslationsSettingsEs implements _TranslationsSettingsEn {
 	@override String get lang_section => 'Idioma y textos';
 	@override String get lang_title => 'Idioma de la aplicación';
 	@override String get lang_descr => 'Idioma en el que se mostrarán los textos en la aplicación';
+	@override String get lang_help => 'Si quieres colaborar con las traducciones de esta app puedes consultar <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>nuestra guía</a> ';
 	@override String get locale => 'Región';
 	@override String get locale_descr => 'Establecer el formato a utilizar para fechas, números...';
 	@override String get locale_warn => 'Al cambiar la región, la aplicación se actualizará';
@@ -3154,6 +3156,7 @@ class _TranslationsSettingsUk implements _TranslationsSettingsEn {
 	@override String get lang_section => 'Мова та тексти';
 	@override String get lang_title => 'Мова додатку';
 	@override String get lang_descr => 'Мова, в якій будуть відображатися тексти в додатку';
+	@override String get lang_help => 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>нашого посібник</ a>';
 	@override String get locale => 'Регіон';
 	@override String get locale_descr => 'Встановіть формат, який буде використовуватися для дат, чисел...';
 	@override String get locale_warn => 'Після зміни регіону додаток оновиться';
@@ -4453,6 +4456,7 @@ class _TranslationsSettingsZhTw implements _TranslationsSettingsEn {
 	@override String get lang_section => '語言和文本';
 	@override String get lang_title => '應用程式語言';
 	@override String get lang_descr => '應用程式中顯示文字的語言';
+	@override String get lang_help => '如果您想與此應用程式的翻譯合作，您可以參考<a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>我們的指南</a>';
 	@override String get locale => '地區';
 	@override String get locale_descr => '設定用於日期、數字的格式...';
 	@override String get locale_warn => '更改區域時應用程式將更新';
@@ -5900,6 +5904,7 @@ extension on Translations {
 			case 'settings.lang_section': return 'Language and texts';
 			case 'settings.lang_title': return 'App language';
 			case 'settings.lang_descr': return 'Language in which the texts will be displayed in the app';
+			case 'settings.lang_help': return 'If you want to collaborate with the translations of this app, you can consult <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>our guide</a>';
 			case 'settings.locale': return 'Region';
 			case 'settings.locale_descr': return 'Set the format to use for dates, numbers...';
 			case 'settings.locale_warn': return 'When changing region the app will update';
@@ -6528,6 +6533,7 @@ extension on _TranslationsEs {
 			case 'settings.lang_section': return 'Idioma y textos';
 			case 'settings.lang_title': return 'Idioma de la aplicación';
 			case 'settings.lang_descr': return 'Idioma en el que se mostrarán los textos en la aplicación';
+			case 'settings.lang_help': return 'Si quieres colaborar con las traducciones de esta app puedes consultar <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>nuestra guía</a> ';
 			case 'settings.locale': return 'Región';
 			case 'settings.locale_descr': return 'Establecer el formato a utilizar para fechas, números...';
 			case 'settings.locale_warn': return 'Al cambiar la región, la aplicación se actualizará';
@@ -7155,6 +7161,7 @@ extension on _TranslationsUk {
 			case 'settings.lang_section': return 'Мова та тексти';
 			case 'settings.lang_title': return 'Мова додатку';
 			case 'settings.lang_descr': return 'Мова, в якій будуть відображатися тексти в додатку';
+			case 'settings.lang_help': return 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>нашого посібник</ a>';
 			case 'settings.locale': return 'Регіон';
 			case 'settings.locale_descr': return 'Встановіть формат, який буде використовуватися для дат, чисел...';
 			case 'settings.locale_warn': return 'Після зміни регіону додаток оновиться';
@@ -7782,6 +7789,7 @@ extension on _TranslationsZhTw {
 			case 'settings.lang_section': return '語言和文本';
 			case 'settings.lang_title': return '應用程式語言';
 			case 'settings.lang_descr': return '應用程式中顯示文字的語言';
+			case 'settings.lang_help': return '如果您想與此應用程式的翻譯合作，您可以參考<a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>我們的指南</a>';
 			case 'settings.locale': return '地區';
 			case 'settings.locale_descr': return '設定用於日期、數字的格式...';
 			case 'settings.locale_warn': return '更改區域時應用程式將更新';

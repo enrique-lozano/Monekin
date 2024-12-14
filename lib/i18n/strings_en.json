@@ -640,6 +640,7 @@
     "lang.section": "Language and texts",
     "lang.title": "App language",
     "lang.descr": "Language in which the texts will be displayed in the app",
+    "lang.help": "If you want to collaborate with the translations of this app, you can consult <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>our guide</a>",
     "locale": "Region",
     "locale.descr": "Set the format to use for dates, numbers...",
     "locale.warn": "When changing region the app will update",
