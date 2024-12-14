@@ -27,7 +27,7 @@ class HomeDrawer extends StatelessWidget {
         onDestinationSelected: onDestinationSelected,
         children: [
           StreamBuilder(
-              stream: UserSettingService.instance.getAllItemsFromDB(
+              stream: UserSettingService.instance.getItemsFromDB(
                 (p0) =>
                     p0.settingKey.equalsValue(SettingKey.userName) |
                     p0.settingKey.equalsValue(SettingKey.avatar),

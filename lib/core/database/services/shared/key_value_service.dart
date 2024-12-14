@@ -58,7 +58,7 @@ abstract class KeyValueService<KeyType extends Enum, TableType extends Table,
     return true;
   }
 
-  Stream<List<RowType>> getAllItemsFromDB(
+  Stream<List<RowType>> getItemsFromDB(
       Expression<bool> Function(TableType) filter) {
     return (db.select(table)..where(filter)).watch();
   }
