@@ -250,8 +250,8 @@ class _DashboardPageState extends State<DashboardPage> {
           children: [
             if (BreakPoint.of(context).isSmallerThan(BreakpointID.md)) ...[
               StreamBuilder(
-                  stream:
-                      UserSettingService.instance.getSetting(SettingKey.avatar),
+                  stream: UserSettingService.instance
+                      .getSettingFromDB(SettingKey.avatar),
                   builder: (context, snapshot) {
                     return UserAvatar(
                       avatar: snapshot.data,
@@ -282,7 +282,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 StreamBuilder(
                     stream: UserSettingService.instance
-                        .getSetting(SettingKey.userName),
+                        .getSettingFromDB(SettingKey.userName),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
                         return const Skeleton(width: 70, height: 12);

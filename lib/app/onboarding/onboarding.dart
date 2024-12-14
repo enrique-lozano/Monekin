@@ -23,15 +23,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
   int currentPage = 0;
 
   introFinished() {
-    AppDataService.instance.setAppDataItem(AppDataKey.introSeen, '1').then(
+    AppDataService.instance
+        .setItem(AppDataKey.introSeen, '1', updateGlobalState: true)
+        .then(
       (value) {
         RouteUtils.pushRoute(
           context,
           TabsPage(key: tabsPageKey),
           withReplacement: true,
         );
-
-        refresh++;
       },
     );
   }
@@ -136,8 +136,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                                     preselectedCurrency: userCurrency,
                                     onCurrencySelected: (newCurrency) {
                                       UserSettingService.instance
-                                          .setSetting(
-                                              SettingKey.preferredCurrency,
+                                          .setItem(SettingKey.preferredCurrency,
                                               newCurrency.code)
                                           .then((value) => setState(() => {}));
                                     }));
