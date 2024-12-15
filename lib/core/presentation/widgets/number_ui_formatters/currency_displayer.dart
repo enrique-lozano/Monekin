@@ -25,6 +25,7 @@ class CurrencyDisplayer extends StatelessWidget {
     this.decimalsStyle,
     this.currencyStyle,
     this.followPrivateMode = true,
+    this.compactView = false,
   });
 
   final double amountToConvert;
@@ -51,6 +52,7 @@ class CurrencyDisplayer extends StatelessWidget {
   final TextStyle? currencyStyle;
 
   final bool showDecimals;
+  final bool compactView;
 
   Widget _amountDisplayer(
     BuildContext context, {
@@ -63,6 +65,7 @@ class CurrencyDisplayer extends StatelessWidget {
       integerStyle: integerStyle,
       decimalsStyle: decimalsStyle,
       currencyStyle: currencyStyle,
+      compactView: compactView,
     ).getTextWidget(context);
   }
 
