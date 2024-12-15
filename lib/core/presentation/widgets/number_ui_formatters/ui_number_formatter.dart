@@ -11,6 +11,7 @@ class UINumberFormatter {
   const UINumberFormatter.decimal({
     required this.amountToConvert,
     this.showDecimals = true,
+    this.compactView = false,
     this.integerStyle = const TextStyle(inherit: true),
     this.decimalsStyle,
   })  : mode = UINumberFormatterMode.decimal,
@@ -24,12 +25,14 @@ class UINumberFormatter {
     this.decimalsStyle,
   })  : mode = UINumberFormatterMode.percentage,
         currency = null,
-        currencyStyle = null;
+        currencyStyle = null,
+        compactView = false;
 
   const UINumberFormatter.currency({
     required this.amountToConvert,
     required this.currency,
     this.showDecimals = true,
+    this.compactView = false,
     this.integerStyle = const TextStyle(inherit: true),
     this.decimalsStyle,
     this.currencyStyle,
@@ -57,8 +60,19 @@ class UINumberFormatter {
   final TextStyle? currencyStyle;
 
   final bool showDecimals;
+  final bool compactView;
 
   final UINumberFormatterMode mode;
+
+  int get _compactLimit => 1000;
+  int get _fractionsDigits => amountToConvert >= 10000000
+      ? 3
+      : amountToConvert >= 100000
+          ? 2
+          : 1;
+
+  bool get _shouldCompact =>
+      compactView == true && amountToConvert.abs() >= _compactLimit;
 
   List<TextSpan> getTextSpanList(BuildContext context) {
     final String decimalSep =
@@ -84,9 +98,24 @@ class UINumberFormatter {
       final String symbolWithoutDecSep =
           currency!.symbol.replaceAll(decimalSep, '');
 
-      final String formattedAmount = NumberFormat.currency(
-              decimalDigits: showDecimals ? 2 : 0, symbol: symbolWithoutDecSep)
-          .format(amountToConvert);
+      String formattedAmount;
+
+      if (_shouldCompact) {
+        final formatter = NumberFormat.compactCurrency(
+          decimalDigits: 3,
+          symbol: symbolWithoutDecSep,
+        );
+
+        formatter.minimumFractionDigits = _fractionsDigits;
+        formatter.maximumFractionDigits = _fractionsDigits;
+
+        formattedAmount = formatter.format(amountToConvert);
+      } else {
+        formattedAmount = NumberFormat.currency(
+          decimalDigits: showDecimals ? 2 : 0,
+          symbol: symbolWithoutDecSep,
+        ).format(amountToConvert);
+      }
 
       // Get the decimal and the integer part, and restore the original symbol
       parts = formattedAmount
@@ -100,9 +129,20 @@ class UINumberFormatter {
 
       parts = formattedAmount.split(decimalSep).toList();
     } else if (mode == UINumberFormatterMode.decimal) {
-      final String formattedAmount =
-          NumberFormat.decimalPatternDigits(decimalDigits: showDecimals ? 2 : 0)
-              .format(amountToConvert);
+      String formattedAmount;
+
+      if (_shouldCompact) {
+        final formatter = NumberFormat.compact();
+
+        formatter.minimumFractionDigits = _fractionsDigits;
+        formatter.maximumFractionDigits = _fractionsDigits;
+
+        formattedAmount = NumberFormat.compact().format(amountToConvert);
+      } else {
+        formattedAmount = NumberFormat.decimalPatternDigits(
+                decimalDigits: showDecimals ? 2 : 0)
+            .format(amountToConvert);
+      }
 
       parts = formattedAmount.split(decimalSep).toList();
     }
@@ -122,19 +162,17 @@ class UINumberFormatter {
           style: integerStyle),
 
       // Decimal separator:
-      if (showDecimals && parts.length > 1)
-        TextSpan(text: decimalSep, style: integerStyle),
+      if (parts.length > 1) TextSpan(text: decimalSep, style: integerStyle),
 
       // Decimal part (without the symbol in currency mode):
-      if (showDecimals && parts.length > 1)
+      if (parts.length > 1)
         TextSpan(
           text: parts[1].replaceAll(currency?.symbol ?? '', ''),
-          style: computedDecimalStyles,
+          style: _shouldCompact ? integerStyle : computedDecimalStyles,
         ),
 
       // Currency symbol (if is after the amount):
-      if (showDecimals &&
-          parts.length > 1 &&
+      if (parts.length > 1 &&
           mode == UINumberFormatterMode.currency &&
           parts[1].contains(currency!.symbol))
         TextSpan(
