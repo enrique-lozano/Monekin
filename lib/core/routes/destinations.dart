@@ -96,7 +96,7 @@ List<MainMenuDestination> getAllDestinations(
     MainMenuDestination(
       AppMenuDestinationsID.transactions,
       label: t.transaction.display(n: 10),
-      icon: Icons.app_registration_rounded,
+      icon: Icons.list,
       destination: const TransactionsPage(),
     ),
     /*   MainMenuDestination(
