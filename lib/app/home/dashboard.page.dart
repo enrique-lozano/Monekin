@@ -57,7 +57,10 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _setSmallHeaderVisible() {
-    final shouldShowSmallHeader = _scrollController.position.pixels > 150;
+    final scrollLimit = _isIncomeExpenseAtSameLevel(context) ? 150 : 200;
+
+    final shouldShowSmallHeader =
+        _scrollController.position.pixels > scrollLimit;
     if (showSmallHeader != shouldShowSmallHeader) {
       setState(() {
         showSmallHeader = shouldShowSmallHeader;
