@@ -80,155 +80,153 @@ class _DashboardPageState extends State<DashboardPage> {
         BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md);
 
     return Scaffold(
-        appBar: EmptyAppBar(
-            color: Theme.of(context).colorSchemeExtended.dashboardHeader),
-        floatingActionButton:
-            hideDrawerAndFloatingButton ? null : const NewTransactionButton(),
-        drawer: hideDrawerAndFloatingButton
-            ? null
-            : Drawer(
-                child: Builder(builder: (context) {
-                  final drawerItems = getDestinations(context,
-                      showHome: false, shortLabels: false);
+      appBar: EmptyAppBar(
+          color: Theme.of(context).colorSchemeExtended.dashboardHeader),
+      floatingActionButton:
+          hideDrawerAndFloatingButton ? null : const NewTransactionButton(),
+      drawer: hideDrawerAndFloatingButton
+          ? null
+          : Drawer(
+              child: Builder(builder: (context) {
+                final drawerItems = getDestinations(context,
+                    showHome: false, shortLabels: false);
 
-                  return HomeDrawer(
-                    drawerActions: drawerItems,
-                    onDestinationSelected: (e) {
-                      Navigator.pop(context);
+                return HomeDrawer(
+                  drawerActions: drawerItems,
+                  onDestinationSelected: (e) {
+                    Navigator.pop(context);
 
 //                    context.router.push(drawerItems.elementAt(e).destination);
-                    },
-                    selectedIndex: -1,
-                  );
-                }),
-              ),
-        body: Stack(
-          children: [
-            SingleChildScrollView(
-              controller: _scrollController,
-              child: Column(children: [
-                Card(
-                  color: Theme.of(context).colorSchemeExtended.dashboardHeader,
-                  margin: const EdgeInsets.only(bottom: 24),
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(16),
-                      bottomRight: Radius.circular(16),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(
-                        _isIncomeExpenseAtSameLevel(context) ? 24 : 16,
-                        16,
-                        _isIncomeExpenseAtSameLevel(context) ? 24 : 16,
-                        _isIncomeExpenseAtSameLevel(context) ? 24 : 14),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Flexible(
-                                  child: buildWelcomeMsgAndAvatar(context)),
-                              buildDatePeriodSelector(context),
-                            ],
-                          ),
-                          Divider(
-                            height: 16,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimaryContainer,
-                          ),
-                          const SizedBox(height: 8),
-                          StreamBuilder(
-                              stream: AccountService.instance.getAccounts(),
-                              builder: (context, accounts) {
-                                if (_isIncomeExpenseAtSameLevel(context)) {
-                                  return Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      totalBalanceIndicator(
-                                          context, accounts, accountService),
-                                      const SizedBox(width: 16),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          IncomeOrExpenseCard(
-                                            type: TransactionType.E,
-                                            startDate:
-                                                dateRangeService.startDate,
-                                            endDate: dateRangeService.endDate,
-                                          ),
-                                          IncomeOrExpenseCard(
-                                            type: TransactionType.I,
-                                            startDate:
-                                                dateRangeService.startDate,
-                                            endDate: dateRangeService.endDate,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  );
-                                }
-
-                                return Column(
-                                  children: [
-                                    totalBalanceIndicator(
-                                        context, accounts, accountService),
-                                    const SizedBox(height: 24),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        IncomeOrExpenseCard(
-                                          type: TransactionType.E,
-                                          startDate: dateRangeService.startDate,
-                                          endDate: dateRangeService.endDate,
-                                        ),
-                                        IncomeOrExpenseCard(
-                                          type: TransactionType.I,
-                                          startDate: dateRangeService.startDate,
-                                          endDate: dateRangeService.endDate,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                );
-                              })
-                        ]),
-                  ),
-                ),
-
-                HorizontalScrollableAccountList(
-                  dateRangeService: dateRangeService,
-                ),
-
-                // ------------- STATS GENERAL CARDS --------------
-
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 12,
-                    right: 12,
-                    top: 20,
-                    bottom: 64,
-                  ),
-                  child: DashboardCards(dateRangeService: dateRangeService),
-                ),
-              ]),
+                  },
+                  selectedIndex: -1,
+                );
+              }),
             ),
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: AnimatedExpanded(
-                expand: showSmallHeader,
-                child: buildSmallHeader(context),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            controller: _scrollController,
+            child: Column(children: [
+              buildDashboadHeader(context, accountService),
+
+              HorizontalScrollableAccountList(
+                dateRangeService: dateRangeService,
               ),
-            )
+
+              // ------------- STATS GENERAL CARDS --------------
+
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 12,
+                  right: 12,
+                  top: 20,
+                  bottom: 64,
+                ),
+                child: DashboardCards(dateRangeService: dateRangeService),
+              ),
+            ]),
+          ),
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: AnimatedExpanded(
+              expand: showSmallHeader,
+              child: buildSmallHeader(context),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Card buildDashboadHeader(
+      BuildContext context, AccountService accountService) {
+    return Card(
+      color: Theme.of(context).colorSchemeExtended.dashboardHeader,
+      margin: const EdgeInsets.only(bottom: 24),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(16),
+          bottomRight: Radius.circular(16),
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+            _isIncomeExpenseAtSameLevel(context) ? 24 : 16,
+            16,
+            _isIncomeExpenseAtSameLevel(context) ? 24 : 16,
+            _isIncomeExpenseAtSameLevel(context) ? 24 : 14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(child: buildWelcomeMsgAndAvatar(context)),
+                buildDatePeriodSelector(context),
+              ],
+            ),
+            Divider(
+              height: 16,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+            ),
+            const SizedBox(height: 8),
+            StreamBuilder(
+                stream: AccountService.instance.getAccounts(),
+                builder: (context, accounts) {
+                  if (_isIncomeExpenseAtSameLevel(context)) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        totalBalanceIndicator(
+                            context, accounts, accountService),
+                        const SizedBox(width: 16),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            IncomeOrExpenseCard(
+                              type: TransactionType.E,
+                              startDate: dateRangeService.startDate,
+                              endDate: dateRangeService.endDate,
+                            ),
+                            IncomeOrExpenseCard(
+                              type: TransactionType.I,
+                              startDate: dateRangeService.startDate,
+                              endDate: dateRangeService.endDate,
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  }
+
+                  return Column(
+                    children: [
+                      totalBalanceIndicator(context, accounts, accountService),
+                      const SizedBox(height: 24),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IncomeOrExpenseCard(
+                            type: TransactionType.E,
+                            startDate: dateRangeService.startDate,
+                            endDate: dateRangeService.endDate,
+                          ),
+                          IncomeOrExpenseCard(
+                            type: TransactionType.I,
+                            startDate: dateRangeService.startDate,
+                            endDate: dateRangeService.endDate,
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                })
           ],
-        ));
+        ),
+      ),
+    );
   }
 
   ActionChip buildDatePeriodSelector(BuildContext context) {
@@ -280,6 +278,7 @@ class _DashboardPageState extends State<DashboardPage> {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(4, 8, 24, 8),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             if (BreakPoint.of(context).isSmallerThan(BreakpointID.md)) ...[
               StreamBuilder(
