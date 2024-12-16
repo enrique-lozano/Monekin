@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/number_symbols_data.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/presentation/widgets/number_ui_formatters/decimal_separator.dart';
 
 enum UINumberFormatterMode { currency, percentage, decimal }
 
@@ -74,112 +74,145 @@ class UINumberFormatter {
   bool get _shouldCompact =>
       compactView == true && amountToConvert.abs() >= _compactLimit;
 
-  List<TextSpan> getTextSpanList(BuildContext context) {
-    final String decimalSep =
-        numberFormatSymbols[Intl.defaultLocale?.replaceAll('-', '_') ?? 'en']
-            ?.DECIMAL_SEP;
+  String get _currencySymbolWithoutDecimalSep =>
+      currency!.symbol.replaceAll(currentDecimalSep, '');
 
-    final valueFontSize = (integerStyle.fontSize ??
-            DefaultTextStyle.of(context).style.fontSize) ??
-        16;
+  String _getFormattedAmount() {
+    String formattedAmount;
+
+    switch (mode) {
+      case UINumberFormatterMode.currency:
+        formattedAmount = _getFormattedCurrencyAmount(currentDecimalSep);
+        break;
+      case UINumberFormatterMode.percentage:
+        formattedAmount = NumberFormat.decimalPercentPattern(
+                decimalDigits: showDecimals ? 2 : 0)
+            .format(amountToConvert);
+        break;
+      case UINumberFormatterMode.decimal:
+        formattedAmount = _getFormattedDecimalAmount();
+        break;
+      default:
+        formattedAmount = '';
+    }
+
+    return formattedAmount;
+  }
+
+  String _getFormattedCurrencyAmount(String decimalSep) {
+    if (_shouldCompact) {
+      final formatter = NumberFormat.compactCurrency(
+        decimalDigits: 3,
+        symbol: _currencySymbolWithoutDecimalSep,
+      );
+      formatter.minimumFractionDigits = _fractionsDigits;
+      formatter.maximumFractionDigits = _fractionsDigits;
+
+      return formatter.format(amountToConvert);
+    } else {
+      return NumberFormat.currency(
+        decimalDigits: showDecimals ? 2 : 0,
+        symbol: _currencySymbolWithoutDecimalSep,
+      ).format(amountToConvert);
+    }
+  }
+
+  String _getFormattedDecimalAmount() {
+    if (_shouldCompact) {
+      final formatter = NumberFormat.compact();
+      formatter.minimumFractionDigits = _fractionsDigits;
+      formatter.maximumFractionDigits = _fractionsDigits;
+      return formatter.format(amountToConvert);
+    } else {
+      return NumberFormat.decimalPatternDigits(
+              decimalDigits: showDecimals ? 2 : 0)
+          .format(amountToConvert);
+    }
+  }
+
+  List<String> _splitAndKeepDelimiter(String input, String delimiter) {
+    if (delimiter.isEmpty) {
+      throw ArgumentError('Delimiter cannot be an empty string.');
+    }
+
+    final regex = RegExp('(${RegExp.escape(delimiter)})');
+
+    // Use a set of chars that do not collide with the formatted amount (and its currency)
+    const splitSep = '**';
+
+    return input
+        .splitMapJoin(
+          regex,
+          onMatch: (match) => '$splitSep${match.group(0)}$splitSep',
+          onNonMatch: (nonMatch) => nonMatch,
+        )
+        .split(splitSep)
+        .where((element) => element.isNotEmpty)
+        .toList();
+  }
+
+  List<TextSpan> _getTextSpanListForAFormattedNumber(
+    String number, {
+    required double fontSize,
+  }) {
+    final decimalSep = currentDecimalSep;
+
+    List<String> parts = number.split(decimalSep);
 
     final computedDecimalStyles = decimalsStyle ??
         integerStyle.copyWith(
           fontWeight: FontWeight.w300,
-          fontSize: valueFontSize > 12.25
-              ? max(valueFontSize * 0.75, 12.25)
-              : valueFontSize,
+          fontSize: fontSize > 12.25 ? max(fontSize * 0.75, 12.25) : fontSize,
         );
-
-    List<String> parts = [];
-
-    if (mode == UINumberFormatterMode.currency) {
-      // Remove the decimal separator from the symbol, otherwise the parts won't be splitted correctly
-      final String symbolWithoutDecSep =
-          currency!.symbol.replaceAll(decimalSep, '');
-
-      String formattedAmount;
-
-      if (_shouldCompact) {
-        final formatter = NumberFormat.compactCurrency(
-          decimalDigits: 3,
-          symbol: symbolWithoutDecSep,
-        );
-
-        formatter.minimumFractionDigits = _fractionsDigits;
-        formatter.maximumFractionDigits = _fractionsDigits;
-
-        formattedAmount = formatter.format(amountToConvert);
-      } else {
-        formattedAmount = NumberFormat.currency(
-          decimalDigits: showDecimals ? 2 : 0,
-          symbol: symbolWithoutDecSep,
-        ).format(amountToConvert);
-      }
-
-      // Get the decimal and the integer part, and restore the original symbol
-      parts = formattedAmount
-          .split(decimalSep)
-          .map((e) => e.replaceAll(symbolWithoutDecSep, currency!.symbol))
-          .toList();
-    } else if (mode == UINumberFormatterMode.percentage) {
-      final String formattedAmount = NumberFormat.decimalPercentPattern(
-              decimalDigits: showDecimals ? 2 : 0)
-          .format(amountToConvert);
-
-      parts = formattedAmount.split(decimalSep).toList();
-    } else if (mode == UINumberFormatterMode.decimal) {
-      String formattedAmount;
-
-      if (_shouldCompact) {
-        final formatter = NumberFormat.compact();
-
-        formatter.minimumFractionDigits = _fractionsDigits;
-        formatter.maximumFractionDigits = _fractionsDigits;
-
-        formattedAmount = NumberFormat.compact().format(amountToConvert);
-      } else {
-        formattedAmount = NumberFormat.decimalPatternDigits(
-                decimalDigits: showDecimals ? 2 : 0)
-            .format(amountToConvert);
-      }
-
-      parts = formattedAmount.split(decimalSep).toList();
-    }
 
     return [
-      // Currency symbol (if is before the amount):
-      if (mode == UINumberFormatterMode.currency &&
-          parts[0].contains(currency!.symbol))
-        TextSpan(
-          text: currency!.symbol,
-          style: currencyStyle ?? integerStyle,
-        ),
-
-      // Integer part (without the symbol in currency mode):
-      TextSpan(
-          text: parts[0].replaceAll(currency?.symbol ?? '', ''),
-          style: integerStyle),
+      // Integer part
+      TextSpan(text: parts[0], style: integerStyle),
 
       // Decimal separator:
       if (parts.length > 1) TextSpan(text: decimalSep, style: integerStyle),
 
-      // Decimal part (without the symbol in currency mode):
+      // Decimal part
       if (parts.length > 1)
         TextSpan(
-          text: parts[1].replaceAll(currency?.symbol ?? '', ''),
+          text: parts[1],
           style: _shouldCompact ? integerStyle : computedDecimalStyles,
         ),
+    ];
+  }
 
-      // Currency symbol (if is after the amount):
-      if (parts.length > 1 &&
-          mode == UINumberFormatterMode.currency &&
-          parts[1].contains(currency!.symbol))
-        TextSpan(
+  List<TextSpan> getTextSpanList(BuildContext context) {
+    final valueFontSize = (integerStyle.fontSize ??
+            DefaultTextStyle.of(context).style.fontSize) ??
+        16;
+
+    final String formattedAmount = _getFormattedAmount();
+
+    if (mode != UINumberFormatterMode.currency) {
+      return _getTextSpanListForAFormattedNumber(formattedAmount,
+          fontSize: valueFontSize);
+    }
+
+    final List<TextSpan> toReturn = [];
+
+    for (final elementToDisplay in _splitAndKeepDelimiter(
+      formattedAmount,
+      _currencySymbolWithoutDecimalSep,
+    )) {
+      if (elementToDisplay == _currencySymbolWithoutDecimalSep) {
+        toReturn.add(TextSpan(
           text: currency!.symbol,
           style: currencyStyle ?? integerStyle,
-        ),
-    ];
+        ));
+      } else {
+        toReturn.addAll(_getTextSpanListForAFormattedNumber(
+          elementToDisplay,
+          fontSize: valueFontSize,
+        ));
+      }
+    }
+
+    return toReturn;
   }
 
   Text getTextWidget(BuildContext context) {
