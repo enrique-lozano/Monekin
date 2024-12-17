@@ -53,7 +53,7 @@ dependencies:
   fl_chart: ^0.69.0
   file_picker: ^8.0.7
   share_plus: ^10.1.2
-  url_launcher: ^6.1.11
+  url_launcher: ^6.3.1
   uuid: ^4.5.1
   csv: ^6.0.0
   dotted_border: ^2.0.0+3
