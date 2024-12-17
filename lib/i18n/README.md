@@ -71,11 +71,19 @@ If you are not familiar with GitHub or JSON, don’t worry! Follow these steps:
 
 If you are familiar with GitHub and JSON files, please follow the [developer contribution guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/CODE_CONTRIBUTING.md) to fork the project, add/modify your translations, and create a Pull Request (PR).
 
-If you want to view your new generated/edited translations you should run:
+If you want to view your new generated/edited translations in your local project you should run:
 
 ```
 dart run slang
 ```
+
+You can also use the following command to check for missing/unsused translations:
+
+```
+dart run slang analyze
+```
+
+This command will generate two files with the requested info. **Please do not include this generated files in git**.
 
 ---
 
