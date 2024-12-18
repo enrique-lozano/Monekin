@@ -29,7 +29,7 @@ class TransactionListComponent extends StatefulWidget {
     this.onLongPress,
     this.onTap,
     this.selectedTransactions = const [],
-    this.onTransactionsLoaded,
+    this.onTransactionsLoaded, this.onScrollChange,
   });
 
   final TransactionFilters filters;
@@ -51,6 +51,8 @@ class TransactionListComponent extends StatefulWidget {
   final Widget prevPage;
 
   final Object? Function(MoneyTransaction tr)? heroTagBuilder;
+
+  final void Function(bool isEnabled)? onScrollChange;
 
   /// Action to trigger when a transaction tile is long pressed. If `null`,
   /// the tile will display a modal with some quick actions for
@@ -75,6 +77,7 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
   ScrollController listController = ScrollController();
 
   int currentPage = 1;
+  bool isEnabled = true;
 
   @override
   void initState() {
@@ -84,8 +87,22 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
       if (listController.offset >= listController.position.maxScrollExtent &&
           !listController.position.outOfRange) {
         currentPage += 1;
-
         setState(() {});
+      }
+      if (listController.offset > 10) {
+        if (!isEnabled) {
+          setState(() {
+            isEnabled = true;
+          });
+          widget.onScrollChange?.call(isEnabled); // Notify parent
+        }
+      } else {
+        if (isEnabled) {
+          setState(() {
+            isEnabled = false;
+          });
+          widget.onScrollChange?.call(isEnabled); // Notify parent
+        }
       }
     });
   }

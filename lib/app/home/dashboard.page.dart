@@ -49,12 +49,24 @@ class _DashboardPageState extends State<DashboardPage> {
   DatePeriodState dateRangeService = const DatePeriodState();
   final ScrollController _scrollController = ScrollController();
   bool showSmallHeader = false;
+  bool isEnabled = false;
 
   @override
   void initState() {
     super.initState();
 
-    _scrollController.addListener(_setSmallHeaderVisible);
+    _scrollController.addListener(() {
+      _setSmallHeaderVisible;
+      if (_scrollController.offset > 10) {
+        setState(() {
+          isEnabled = true;
+        });
+      } else {
+        setState(() {
+          isEnabled = false;
+        });
+      }
+    });
   }
 
   @override
@@ -83,8 +95,9 @@ class _DashboardPageState extends State<DashboardPage> {
     return Scaffold(
         appBar: EmptyAppBar(
             color: Theme.of(context).colorSchemeExtended.dashboardHeader),
-        floatingActionButton:
-            hideDrawerAndFloatingButton ? null : const NewTransactionButton(),
+        floatingActionButton: hideDrawerAndFloatingButton
+            ? null
+            : NewTransactionButton(isExtended: isEnabled),
         drawer: hideDrawerAndFloatingButton
             ? null
             : Drawer(

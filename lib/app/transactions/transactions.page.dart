@@ -35,6 +35,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
   bool searchActive = false;
   FocusNode searchFocusNode = FocusNode();
   final searchController = TextEditingController();
+  bool isEnabled = false;
 
   List<MoneyTransaction> selectedTransactions = [];
 
@@ -143,7 +144,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                       icon: const Icon(Icons.filter_alt_outlined)),
                 ],
               ),
-        floatingActionButton: const NewTransactionButton(isExtended: true),
+        floatingActionButton: NewTransactionButton(isExtended: isEnabled),
         body: Column(
           children: [
             if (filters.hasFilter) ...[
@@ -248,6 +249,11 @@ class _TransactionsPageState extends State<TransactionsPage> {
 
                   setState(() {
                     selectedTransactions = [tr];
+                  });
+                },
+                onScrollChange: (newIsEnabled) {
+                  setState(() {
+                    isEnabled = newIsEnabled;
                   });
                 },
                 onTap: selectedTransactions.isEmpty ? null : toggleTransaction,
