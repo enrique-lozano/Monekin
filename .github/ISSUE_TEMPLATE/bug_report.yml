@@ -1,5 +1,5 @@
 name: 🐛 Bug Report
-description: Create a report to help us improve Monekin
+description: Report a bug/problem so we can fix it
 labels:
   - 'type: bug'
 body:
@@ -34,6 +34,11 @@ body:
       description: Please explain the steps required to duplicate this issue.
     validations:
       required: true
+  - type: input
+    attributes:
+      label: In which device / OS did you find the issue
+      description: Specify the device or OS (Windows, Android...) if you consider this information relevant
+      placeholder: 'Ex: Samsung Galaxy S21 - Android 14'
   - type: textarea
     attributes:
       label: Additional Information
