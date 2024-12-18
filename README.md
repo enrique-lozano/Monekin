@@ -14,27 +14,12 @@
     <br />
     <br />
     <a href="https://play.google.com/store/apps/details?id=com.monekin.app">
-      <img src="./docs/badges/Google Play Badge.svg"  alt="Google Play Badge" height="68">
+      <img src="./docs/badges/Google Play Badge.svg"  alt="Google Play Badge" height="64">
     </a>
     <span> &nbsp; </span>
     <a href="https://github.com/enrique-lozano/Monekin/releases/latest">
-      <img src="./docs/badges/Microsoft Badge.svg"  alt="Micrososf Badge" height="68">
+      <img src="./docs/badges/Microsoft Badge.svg"  alt="Micrososf Badge" height="64">
     </a>
-  </p>
-</div>
-
-<!-- DONATE SECTION -->
-<div align="center">
-  <h2>Support the Project 💖</h2>
-  <p>
-    If you love Monekin and want to support its development, consider making a donation. Your contributions help keep the app free, open-source, and constantly improving.
-    <br /><br />
-    <a href="https://paypal.me/lozanoelc?country.x=ES&locale.x=es_ES">
-      <img src="./docs/badges/PayPal Badge.svg" alt="Donate with PayPal" height="68">
-    </a>
-  </p>
-  <p>
-    A huge <strong>THANK YOU</strong> to all the amazing users of Monekin! Your support means the world to us and drives us to continue making personal finances simpler for everyone.
   </p>
 </div>
 
@@ -59,10 +44,11 @@
         <li>
       <a href="#contributing-">Contributing</a>
       <ul>
+        <li><a href="#how-to-get-started">How to get started</a></li>
         <li><a href="#why-to-contribute">Why to contribute?</a></li>
+        <li><a href="#support-the-project-">Support the project</a></li>
       </ul>
     </li>
-    <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
 
@@ -111,9 +97,12 @@ If everything went correctly these commands will finish executing without errors
 
 ## Contributing 🙋🏻
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make here are **greatly appreciated**.
+At Monekin, we believe that the open-source community thrives on collaboration, creativity, and shared knowledge. Whether you’re a developer, designer, translator, or just a fan of the app, **your contributions matter** and make a real difference.
 
-Read through our [contributing guidelines](https://github.com/enrique-lozano/Monekin/blob/main/CONTRIBUTING.md) to learn about how you can collaborate making Monekin better. **All Pull Requests are welcome** and will be studied without exception!
+### How to Get Started
+
+- **General Contributions**: Not sure where to begin? Start by reading our [Contributing Guidelines](https://github.com/enrique-lozano/Monekin/blob/main/CONTRIBUTING.md), designed for everyone—technical and non-technical contributors alike. Here you will learn about how you can collaborate making Monekin better.
+- **Code Contributions**: If you’re a developer looking to dive into the codebase, we’ve got a dedicated [Code Contributing Guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/CODE_CONTRIBUTING.md) to help you get started. This guide walks you through setting up your environment, following coding standards, and submitting pull requests.
 
 ### Why to contribute?
 
@@ -124,3 +113,15 @@ Read through our [contributing guidelines](https://github.com/enrique-lozano/Mon
 - You can develop the features that you miss in the app yourself, the way you want them.
 - You'll play around and learn cutting-edge technologies.
 - It's the easiest way to learn Flutter/Dart... in a production environment.
+
+### Support the project 💖
+
+If you love Monekin and want to support its development, consider making a donation. Your contributions help keep the app free, open-source, and constantly improving.
+
+<a href="https://paypal.me/lozanoelc?country.x=ES&locale.x=es_ES">
+  <img src="./docs/badges/PayPal Badge.svg" alt="Donate with PayPal" height="60">
+</a>
+
+---
+
+A huge **THANK YOU** to all the amazing users of Monekin! Your support means the world to us and drives us to continue making personal finances simpler for everyone.

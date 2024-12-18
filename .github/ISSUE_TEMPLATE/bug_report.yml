@@ -1,20 +1,20 @@
 name: 🐛 Bug Report
 description: Create a report to help us improve Monekin
 labels:
-  - "type: bug"
+  - 'type: bug'
 body:
   - type: checkboxes
     attributes:
       label: Prerequisites
       description: Please ensure you have completed all of the following.
       options:
-        - label: I have read the [Contributing Guidelines](https://github.com/enrique-lozano/Monekin/blob/main/CONTRIBUTING.md#reporting-issues).
+        - label: I have read the [Contributing Guidelines](https://github.com/enrique-lozano/Monekin/blob/main/CONTRIBUTING.md#reporting-issues-and-requesting-features).
           required: true
         - label: I agree to follow the [Code of Conduct](https://github.com/enrique-lozano/Monekin/blob/main/CODE_OF_CONDUCT.md).
           required: true
         - label: I have searched for [existing issues](https://github.com/enrique-lozano/Monekin/issues?q=is%3Aissue) that already report this problem, without success.
           required: true
-        - label: I have updated the app to the last released version.
+        - label: I have the app updated to the latest published version.
           required: true
   - type: textarea
     attributes:
