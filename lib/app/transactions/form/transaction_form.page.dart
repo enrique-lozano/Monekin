@@ -679,28 +679,32 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                       icon: transactionType.mathIcon,
                     ),
                   ),
-                  AnimatedDefaultTextStyle(
-                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                        fontSize: transactionValue >= 1000
-                            ? transactionValue >= 1000000
-                                ? 28
-                                : 34
-                            : 38),
-                    duration: const Duration(milliseconds: 200),
-                    child: Builder(builder: (context) {
-                      const bigTextStyle = TextStyle(
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white,
-                      );
+                  const SizedBox(width: 12),
+                  Flexible(
+                    child: AnimatedDefaultTextStyle(
+                      style:
+                          Theme.of(context).textTheme.headlineLarge!.copyWith(
+                              fontSize: transactionValue >= 1000
+                                  ? transactionValue >= 1000000
+                                      ? 28
+                                      : 34
+                                  : 38),
+                      duration: const Duration(milliseconds: 200),
+                      child: Builder(builder: (context) {
+                        const bigTextStyle = TextStyle(
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                        );
 
-                      return CurrencyDisplayer(
-                        amountToConvert: transactionValue,
-                        currency: fromAccount?.currency,
-                        currencyStyle: bigTextStyle,
-                        integerStyle: bigTextStyle,
-                        followPrivateMode: false,
-                      );
-                    }),
+                        return CurrencyDisplayer(
+                          amountToConvert: transactionValue,
+                          currency: fromAccount?.currency,
+                          currencyStyle: bigTextStyle,
+                          integerStyle: bigTextStyle,
+                          followPrivateMode: false,
+                        );
+                      }),
+                    ),
                   ),
                 ],
               ),

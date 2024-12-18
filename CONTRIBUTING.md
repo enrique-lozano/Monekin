@@ -10,8 +10,8 @@ Have you identified a reproducible problem in Monekin? If so, we will be very gr
 
 Before reporting an issue, please do a search in [open issues](https://github.com/enrique-lozano/Monekin/issues) to see if the issue or feature request has already been filed. If you find your issue already exists, make relevant comments and add your [reaction](https://github.com/blog/2119-add-reactions-to-pull-requests-issues-and-comments). Use a reaction in place of a "+1" comment:
 
-* 👍 - upvote
-* 👎 - downvote
+- 👍 - upvote
+- 👎 - downvote
 
 To report an issue, go to the [open issues page](https://github.com/enrique-lozano/Monekin/issues) and create a new issue clicking the green bottom at the right-top of the section. We provide a template to fill the required data that we need to solve the issue. Try to be as detailed as possible in your explanations and descriptions. Attach screenshots or videos if necessary.
 
@@ -28,6 +28,8 @@ If your suggestion has already been made by someone else, please instead of crea
 ## Create something new / Fix a bug
 
 If you are interested in writing code to fix issues or to create new features please refer to this [guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/CODE_CONTRIBUTING.md).
+
+Help translating the app is always appreciated, so if you just want to help in this area, you can directly head over to our guide on [how to help with translations](https://github.com/enrique-lozano/Monekin/blob/main/docs/I18N_CONTRIBUTING.md).
 
 # Thank you!
 

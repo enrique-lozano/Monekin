@@ -300,40 +300,63 @@ class _AmountSelectorState extends State<AmountSelector> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // -----
+                  // ----> CALCULATOR OPERATION (only displayed if any operation is active):
                   AnimatedExpanded(
-                      expand: CalculatorOperator.exprHasOperator(amountString),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(amountString),
-                        ],
-                      )),
+                    expand: CalculatorOperator.exprHasOperator(amountString),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(amountString),
+                      ],
+                    ),
+                  ),
+                  // -----
+                  // -----> CURRENT AMOUNT IN THE SELECTED CURRENCY:
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Builder(builder: (context) {
-                        const bigSizeStyle = TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w700,
-                        );
+                      Flexible(
+                        child: Builder(builder: (context) {
+                          final double fontSize = valueToNumber >= 100000000
+                              ? valueToNumber >= 100000000000000
+                                  ? 24
+                                  : 28
+                              : 32;
 
-                        return CurrencyDisplayer(
-                          amountToConvert: valueToNumber,
-                          currency: widget.currency,
-                          followPrivateMode: false,
-                          decimalsStyle: TextStyle(
-                              fontWeight: FontWeight.w200,
-                              fontSize: 22,
-                              color: amountString.contains('.')
-                                  ? null
-                                  : Theme.of(context)
-                                      .colorScheme
-                                      .onSurface
-                                      .withOpacity(0.3)),
-                          integerStyle: bigSizeStyle,
-                          currencyStyle: bigSizeStyle,
-                        );
-                      })
+                          return AnimatedDefaultTextStyle(
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineLarge!
+                                .copyWith(
+                                  fontSize: fontSize,
+                                ),
+                            duration: const Duration(milliseconds: 200),
+                            child: Builder(builder: (context) {
+                              const bigSizeStyle = TextStyle(
+                                fontWeight: FontWeight.w700,
+                              );
+
+                              return CurrencyDisplayer(
+                                amountToConvert: valueToNumber,
+                                currency: widget.currency,
+                                followPrivateMode: false,
+                                decimalsStyle: TextStyle(
+                                    fontWeight: FontWeight.w200,
+                                    fontSize: 22,
+                                    color: amountString.contains('.')
+                                        ? null
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onSurface
+                                            .withOpacity(0.3)),
+                                integerStyle: bigSizeStyle,
+                                currencyStyle: bigSizeStyle,
+                              );
+                            }),
+                          );
+                        }),
+                      )
                     ],
                   ),
                 ],
