@@ -1,27 +1,29 @@
 # Contributing to Monekin
 
-First off, thank you for considering contributing to Monekin. It's people like you that make this application such a great tool.
+First off, thank you for considering contributing to Monekin. It's people like you that make this application such a great tool. There are many ways in which you can contribute, beyond writing code. The goal of this document is to provide a high-level overview of how you can get involved. 
 
-There are many ways in which you can contribute, beyond writing code. The goal of this document is to provide a high-level overview of how you can get involved. If you are a developer and you want to get your hands dirty right now, go directly to our [code contributions guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/CODE_CONTRIBUTING.md).
+Before you continue reading, we recommend you review our [Code of Conduct](https://github.com/enrique-lozano/Monekin/blob/main/CODE_OF_CONDUCT.md). Here we introduce the rules that every contributor must follow to ensure a welcoming and productive community for everyone.
 
-## Reporting issues and requesting features
+- [Report Issues and Request Features](#report-issues-and-request-features)
+- [Use the Forum](#use-the-forum)
+- [Be the Change: Build, Fix, or Design for Monekin](#be-the-change-build-fix-or-design-for-monekin)
+- [Support the Project 💖](#support-the-project-)
+
+## Report issues and request features
 
 Have you encountered a bug or thought of a way to improve Monekin? If so, we will be very grateful to hear from you to solve it as soon as possible. Both bugs and feature ideas can be submitted through GitHub Issues, but we ask you to follow a few guidelines to ensure smooth collaboration:
 
 ### Before Submitting
 
-1. **Search First**: Check the [open issues](https://github.com/enrique-lozano/Monekin/issues) and [discussions](https://github.com/enrique-lozano/Monekin/discussions) to see if the bug or feature idea has already been reported.
+Before filing an issue or feature request, please take a moment to check if your topic has already been raised. Start by searching through the [open issues](https://github.com/enrique-lozano/Monekin/issues) and [discussions](https://github.com/enrique-lozano/Monekin/discussions) to see if the bug or feature idea has already been reported.
 
-   - If you find an existing issue or discussion, upvote it by adding a 👍 reaction to the top post. This helps us prioritize items with the most community interest.
-   - You can also subscribe to the issue or discussion to stay updated on any progress.
-
-2. **Comment Responsibly**: If you have additional relevant details or context, feel free to leave a comment. However, avoid adding comments like "+1" or "I have this issue too", use reactions instead to express your support and **keep the discussion clean**.
+If you find an existing issue or discussion that matches yours, please upvote it by adding a 👍 reaction to the top post. This helps us prioritize issues and feature requests based on community interest. If you have additional relevant details or context to add, feel free to leave a comment, but avoid comments like `"+1"` or `"I have this issue too"`. Use reactions instead to express your support and **keep the discussion clean**.
 
 We prioritize issues and feature requests based on community interest and relevance to the app’s goals. Items with more reactions, thoughtful comments, and active engagement will be considered first, so make sure to show your support for ideas you find important!
 
 ### Submitting the issue / feature request
 
-If your bug or feature idea hasn’t been reported yet:
+If your bug or feature idea hasn’t been reported yet you can go ahead and submit it by yourself:
 
 1. Go to the [issues page](https://github.com/enrique-lozano/Monekin/issues) and click the green button at the top-right of the page.
 2. Select the appropriate template (e.g., bug report or feature request).
@@ -30,19 +32,36 @@ If your bug or feature idea hasn’t been reported yet:
 > [!IMPORTANT]
 > If your feature idea isn’t fully developed or lacks clear requirements, [post your idea/request in the Monekin Forum](https://github.com/enrique-lozano/Monekin/discussions/new?category=ideas-new-features). The mantainers and the community of Monekin will help you giving shape to your idea. Once it gains clarity and support, it can be formalized into an issue to be developed.
 
+### Guidelines for Submitting Issues and Requests
+
+1. File **one issue per problem or feature request**. Do not combine multiple bugs or requests in the same issue.
+2. Avoid posting your issue as a comment on an unrelated or resolved issue. Many issues may appear similar but have different causes.
+3. **Be polite.** If your request sounds like an order, you’re doing it wrong.
+
+> **Note:** Failure to follow these guidelines may result in your issue or request being closed or deleted.
+
+
 ## Use the forum
 
-The [Monekin Forum](https://github.com/enrique-lozano/Monekin/discussions) is where the community comes together to share ideas, ask questions, and collaborate. If you have a question or need help, the Q&A section is the place to start. You can also use the forum to showcase how you’re using Monekin in your projects, share tips, or discuss new feature ideas in a more informal way. Whether you’re looking for support or want to engage with others, the forum is a great way to connect and contribute to the Monekin community.
+The [Monekin Forum](https://github.com/enrique-lozano/Monekin/discussions) is where the community comes together to share ideas, ask questions, and collaborate. Use the forum to:
 
-We’d love to hear how Monekin has helped you! If the app has made a positive impact on your projects or daily tasks, share your experience in the forum. Your feedback not only motivates the team but also inspires other users. Feel free to express your love for Monekin, cause it’s your support that helps us continue improving and growing this tool. Sharing your story is a great way to give back to the community and let others know how Monekin is making a difference for you.
+- **Ask Questions**: Seek help or clarification
+- **Help Others**: Assist fellow users by answering their questions and sharing your expertise.
+- **Share Your Ideas**: Discuss potential features or improvements in a more informal way.
+- **Showcase Your Work**: Share tips or examples of how Monekin has helped you.
+
+Your participation in the forum inspires the team and the community. Whether it’s sharing feedback, showcasing your work, or brainstorming ideas, your voice matters!
 
 ## Be the Change: Build, Fix, or Design for Monekin
 
 Ready to take an active role in improving Monekin? Whether you’re a developer, designer, translator, or just someone with a creative eye, there are plenty of ways to leave your mark. Here’s how you can get started:
 
-- If you are interested in writing code to fix issues or to create new features please refer to this [guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/CODE_CONTRIBUTING.md).
-- Help translating the app is always appreciated, so if you just want to help in this area, you can directly head over to our guide on [how to help with translations](https://github.com/enrique-lozano/Monekin/blob/main/docs/I18N_CONTRIBUTING.md).
-- If you love to design you can use our [forum](https://github.com/enrique-lozano/Monekin/discussions) to share us alternatives UIs for the app or good posters that we can use in the app stores like Google Play.
+- 🛠️ **Code Contributions**: Fix bugs, build new features, or improve existing ones. Follow our [Code Contributions Guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/CODE_CONTRIBUTING.md) to get started.
+
+  > **Note**: If you have crafted a small feature, feel free to submit it directly as a Pull Request! No need to create an issue before
+- 🌍 **Translations**: Support Monekin’s global community by contributing translations. Check out our [Translation Guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/I18N_CONTRIBUTING.md) for details.
+- 🎨 **Design Contributions**: Love design? Share your UI mockups or promotional materials in the [forum](https://github.com/enrique-lozano/Monekin/discussions). Your creativity helps make Monekin more user-friendly and appealing.
+
 
 <!-- DONATE SECTION -->
 
