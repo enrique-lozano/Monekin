@@ -29,7 +29,8 @@ class TransactionListComponent extends StatefulWidget {
     this.onLongPress,
     this.onTap,
     this.selectedTransactions = const [],
-    this.onTransactionsLoaded, this.onScrollChange,
+    this.onTransactionsLoaded,
+    this.onScrollChange,
   });
 
   final TransactionFilters filters;
@@ -52,7 +53,7 @@ class TransactionListComponent extends StatefulWidget {
 
   final Object? Function(MoneyTransaction tr)? heroTagBuilder;
 
-  final void Function(bool isEnabled)? onScrollChange;
+  final void Function(ScrollController controller)? onScrollChange;
 
   /// Action to trigger when a transaction tile is long pressed. If `null`,
   /// the tile will display a modal with some quick actions for
@@ -74,7 +75,7 @@ class TransactionListComponent extends StatefulWidget {
 }
 
 class _TransactionListComponentState extends State<TransactionListComponent> {
-  ScrollController listController = ScrollController();
+  ScrollController listScrollController = ScrollController();
 
   int currentPage = 1;
   bool isEnabled = true;
@@ -83,27 +84,15 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
   void initState() {
     super.initState();
 
-    listController.addListener(() {
-      if (listController.offset >= listController.position.maxScrollExtent &&
-          !listController.position.outOfRange) {
+    listScrollController.addListener(() {
+      if (listScrollController.offset >=
+              listScrollController.position.maxScrollExtent &&
+          !listScrollController.position.outOfRange) {
         currentPage += 1;
         setState(() {});
       }
-      if (listController.offset > 10) {
-        if (!isEnabled) {
-          setState(() {
-            isEnabled = true;
-          });
-          widget.onScrollChange?.call(isEnabled); // Notify parent
-        }
-      } else {
-        if (isEnabled) {
-          setState(() {
-            isEnabled = false;
-          });
-          widget.onScrollChange?.call(isEnabled); // Notify parent
-        }
-      }
+
+      widget.onScrollChange?.call(listScrollController);
     });
   }
 
@@ -175,7 +164,7 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
           return ListView.separated(
               physics: const BouncingScrollPhysics(),
               itemCount: transactions.length + 1,
-              controller: listController,
+              controller: listScrollController,
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 if (transactions.isEmpty) return Container();

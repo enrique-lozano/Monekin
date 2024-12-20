@@ -8,7 +8,10 @@ import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 class NewTransactionButton extends StatelessWidget {
-  const NewTransactionButton({super.key, this.isExtended = true});
+  const NewTransactionButton({
+    super.key,
+    this.isExtended = true,
+  });
 
   final bool isExtended;
 
@@ -23,7 +26,7 @@ class NewTransactionButton extends StatelessWidget {
     ).then((value) {
       if (value != true) return;
 
-      RouteUtils.pushRoute(context, AccountFormPage());
+      RouteUtils.pushRoute(context, const AccountFormPage());
     });
   }
 
@@ -45,12 +48,13 @@ class NewTransactionButton extends StatelessWidget {
     final t = Translations.of(context);
 
     return FloatingActionButton.extended(
-      heroTag: 'new-transaction-floating-button',
+      heroTag: null,
       onPressed: () => _onPressed(context),
       icon: const Icon(Icons.add_rounded),
-      extendedIconLabelSpacing: !isExtended ? 8 : 0,
+      extendedIconLabelSpacing: isExtended ? 8 : 0,
       label: AnimatedExpanded(
-        expand: !isExtended,
+        duration: const Duration(milliseconds: 250),
+        expand: isExtended,
         axis: Axis.horizontal,
         child: Text(t.transaction.create),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/details/account_details.dart';
@@ -41,7 +42,8 @@ class _DashboardPageState extends State<DashboardPage> {
   DatePeriodState dateRangeService = const DatePeriodState();
   final ScrollController _scrollController = ScrollController();
   bool showSmallHeader = false;
-  bool isEnabled = false;
+
+  bool isFloatingButtonExtended = true;
 
   @override
   void initState() {
@@ -49,13 +51,16 @@ class _DashboardPageState extends State<DashboardPage> {
 
     _scrollController.addListener(() {
       _setSmallHeaderVisible;
-      if (_scrollController.offset > 10) {
+
+      if (_scrollController.offset > 10 &&
+          _scrollController.position.userScrollDirection ==
+              ScrollDirection.reverse) {
         setState(() {
-          isEnabled = true;
+          isFloatingButtonExtended = false;
         });
       } else {
         setState(() {
-          isEnabled = false;
+          isFloatingButtonExtended = true;
         });
       }
     });
@@ -92,11 +97,11 @@ class _DashboardPageState extends State<DashboardPage> {
         BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md);
 
     return Scaffold(
-
       appBar: EmptyAppBar(
           color: Theme.of(context).colorSchemeExtended.dashboardHeader),
-      floatingActionButton:
-          hideDrawerAndFloatingButton ? null : NewTransactionButton(isExtended: isEnabled),
+      floatingActionButton: hideDrawerAndFloatingButton
+          ? null
+          : NewTransactionButton(isExtended: isFloatingButtonExtended),
       drawer: hideDrawerAndFloatingButton
           ? null
           : Drawer(
