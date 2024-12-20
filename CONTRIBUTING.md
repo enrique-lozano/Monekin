@@ -1,6 +1,6 @@
 # Contributing to Monekin
 
-First off, thank you for considering contributing to Monekin. It's people like you that make this application such a great tool. There are many ways in which you can contribute, beyond writing code. The goal of this document is to provide a high-level overview of how you can get involved. 
+First off, thank you for considering contributing to Monekin. It's people like you that make this application such a great tool. There are many ways in which you can contribute, beyond writing code. The goal of this document is to provide a high-level overview of how you can get involved.
 
 Before you continue reading, we recommend you review our [Code of Conduct](https://github.com/enrique-lozano/Monekin/blob/main/CODE_OF_CONDUCT.md). Here we introduce the rules that every contributor must follow to ensure a welcoming and productive community for everyone.
 
@@ -40,7 +40,6 @@ If your bug or feature idea hasn’t been reported yet you can go ahead and subm
 
 > **Note:** Failure to follow these guidelines may result in your issue or request being closed or deleted.
 
-
 ## Use the forum
 
 The [Monekin Forum](https://github.com/enrique-lozano/Monekin/discussions) is where the community comes together to share ideas, ask questions, and collaborate. Use the forum to:
@@ -59,9 +58,9 @@ Ready to take an active role in improving Monekin? Whether you’re a developer,
 - 🛠️ **Code Contributions**: Fix bugs, build new features, or improve existing ones. Follow our [Code Contributions Guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/CODE_CONTRIBUTING.md) to get started.
 
   > **Note**: If you have crafted a small feature, feel free to submit it directly as a Pull Request! No need to create an issue before
-- 🌍 **Translations**: Support Monekin’s global community by contributing translations. Check out our [Translation Guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/I18N_CONTRIBUTING.md) for details.
-- 🎨 **Design Contributions**: Love design? Share your UI mockups or promotional materials in the [forum](https://github.com/enrique-lozano/Monekin/discussions). Your creativity helps make Monekin more user-friendly and appealing.
 
+- 🌍 **Translations**: Support Monekin’s global community by contributing translations. Check out our [Translation Guide](https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n) for details.
+- 🎨 **Design Contributions**: Love design? Share your UI mockups or promotional materials in the [forum](https://github.com/enrique-lozano/Monekin/discussions). Your creativity helps make Monekin more user-friendly and appealing.
 
 <!-- DONATE SECTION -->
 

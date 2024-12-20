@@ -54,46 +54,49 @@
 
 ## About the project
 
+### 📸 Screenshots
+
 |                                                                                                                    |                                                                                                                    |                                                                                                                    |                                                                                                                    |
 | :----------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: |
 | ![1](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva1.PNG) | ![2](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva2.PNG) | ![3](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva3.PNG) | ![4](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva4.PNG) |
 | ![5](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva5.PNG) | ![6](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva6.PNG) |
 
-### Why Monekin?
+### 🕰 History of Monekin
 
-After a lot of research on the marketplaces I could not find any application that met all my needs. That is why I decided to start making my own app. After months of hard work, the first version was released on Google Play in October 2021. I decided to make it 100% Open Source shortly after, with the aim of increasing its user community, and that external developers could help and collaborate with me on the project. Since the day of its release, the app has been continuously improving and updating.
+Monekin was born from the frustration of not finding any app that could meet all my personal finance needs and functionality requirements. None of the existing solutions provided the balance between simplicity, features, and usability that I was looking for.
 
-### Tech Stack
+So, I decided to create one myself. After months of development and hard work, Monekin was released on Google Play in October 2021. Shortly after, it became 100% open-source, not only to involve external developers in improving the app but also to increase user confidence and transparency. Since then, the app has continued to grow and update continuously, thanks in part to this community of users and contributors.
 
-At the beggining the app was developed in Ionic and Angular. In 2023, in order to make our app better, we migrate the app to Flutter, which allow us to have a modern and scalable application for a large number of operating systems and platforms.
+### 🌟 Why Monekin? 
+
+- **Unlimited Transactions & Multi-Account Management**  
+  Track unlimited transactions across unlimited accounts. Easily switch between accounts to view relevant statistics and keep everything organized.  
+- **Powerful Analytics & Visualizations**  
+  Understand your finances with comprehensive statistics, stunning charts, and customizable insights that help you plan smarter and save better.  
+- **Recurring Transactions**  
+  Seamlessly manage your recurring bills and subscriptions (like streaming services or utilities) with built-in automation tools.  
+- **Custom Categories & Budgets**  
+  Tailor the app to your needs with customizable and unlimited categories, subcategories, and budgets. Choose from hundreds of beautiful icons to make it truly yours.  
+- **Multi-Currency Support**  
+  Support for over 50 currencies, with exchange rates that you can customize.
+- **Local Backups & Data Control**  
+  Never lose your data—create unlimited local backups and restore them when you switch devices. No external servers or subscriptions needed.
+- **Works Offline**  
+  Enjoy complete functionality without the need for an internet connection. Manage your finances anytime, anywhere.  
+- **Open Source**  
+  Monekin is fully open-source, fostering trust and allowing the community to contribute, improve, and shape the app's future.  
+- **Free, Forever**  
+  No ads. No hidden fees. Just focus on what matters most: your finances. 
+
+### 🛠 Tech Stack
+
+At the beggining the app was developed in Ionic and Angular. In 2023, in order to make our app better, we migrate the app to Flutter, which allow us to have a much more modern and faster application while maintaining compatibility with a large number of operating systems and platforms.
 
 To store and persist your data in the app we store a SQLite database directly in your device, thanks to an opensource package called [drift](https://github.com/simolus3/drift)
 
 ## Run the code locally 🚀🧑‍💻
 
-The following explains how to run the project code locally. This way you will be able to investigate on your own how it is done, create new features, fix bugs, etc.
-
-### Prerequisites
-
-As with any Flutter project, you need to install the framework in your machine. Visit the [official docs](https://docs.flutter.dev/get-started/install) for more info. You should also have git installed in your machine.
-
-### Installation
-
-Open a terminal on your computer and go to the folder where you want to place the project. Then clone the project and install the dependencies by typing the following commands:
-
-```
-git clone https://github.com/enrique-lozano/Monekin.git
-```
-
-```
-cd Monekin
-```
-
-```
-flutter pub get
-```
-
-If everything went correctly these commands will finish executing without errors. Now you can run <code>flutter run</code> on your terminal to open the app locally in your device. The app will be refreshed when changes in the code appear. Before making any changes into the code is recommended to read the [code contribution guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/CODE_CONTRIBUTING.md)
+Interested in exploring the code? Whether you're looking to review it for security and privacy, curious about how the app works, or considering contributing, we’ve got you covered! Check out our [this guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/RUN_THE_CODE_LOCALLY.md) for detailed, step-by-step instructions.
 
 ## Contributing 🙋🏻
 
@@ -103,16 +106,6 @@ At Monekin, we believe that the open-source community thrives on collaboration, 
 
 - **General Contributions**: Not sure where to begin? Start by reading our [Contributing Guidelines](https://github.com/enrique-lozano/Monekin/blob/main/CONTRIBUTING.md), designed for technical and non-technical contributors alike. Here you will learn about how you can collaborate making Monekin better.
 - **Code Contributions**: If you’re a developer looking to dive into the codebase, we’ve got a dedicated [Code Contributing Guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/CODE_CONTRIBUTING.md). This guide walks you through setting up your environment, following coding standards, and submitting pull requests.
-
-### Why to contribute?
-
-- We can learn for you and you can learn from us.
-- You'll appear in our contributors wall.
-- You can **include it in your CV/LinkedIn** and show recruiters that you contribute to open-source projects.
-- You'll make Monekin better.
-- You can develop the features that you miss in the app yourself, the way you want them.
-- You'll play around and learn cutting-edge technologies.
-- It's the easiest way to learn Flutter/Dart... in a production environment.
 
 ### Support the project 💖
 

@@ -102,3 +102,12 @@ This command will generate two files with the requested info. **Please do not in
 - **What is JSON?** [Learn JSON Basics](https://www.w3schools.com/js/js_json_intro.asp)
 - **Translation Tips**: [Tips for Translators](https://www.tomedes.com/translator-hub/tips-for-new-translators)
 - **Validate your JSON**: Use [this resoruce](https://jsonlint.com/) to check if there are any error with your JSON file
+
+## Questions?
+
+If you have any doubts or need further guidance, feel free to ask! You can:
+
+- **Post on the Forum**: Join discussions or raise your queries in our [community forum](https://github.com/enrique-lozano/Monekin/discussions).
+- **Contact Directly**: Reach out to me via email at [lozin.technologies@gmail.com].
+
+We’re here to help and excited to see your contributions to Monekin!
