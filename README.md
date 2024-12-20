@@ -101,8 +101,8 @@ At Monekin, we believe that the open-source community thrives on collaboration, 
 
 ### How to Get Started
 
-- **General Contributions**: Not sure where to begin? Start by reading our [Contributing Guidelines](https://github.com/enrique-lozano/Monekin/blob/main/CONTRIBUTING.md), designed for everyone—technical and non-technical contributors alike. Here you will learn about how you can collaborate making Monekin better.
-- **Code Contributions**: If you’re a developer looking to dive into the codebase, we’ve got a dedicated [Code Contributing Guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/CODE_CONTRIBUTING.md) to help you get started. This guide walks you through setting up your environment, following coding standards, and submitting pull requests.
+- **General Contributions**: Not sure where to begin? Start by reading our [Contributing Guidelines](https://github.com/enrique-lozano/Monekin/blob/main/CONTRIBUTING.md), designed for technical and non-technical contributors alike. Here you will learn about how you can collaborate making Monekin better.
+- **Code Contributions**: If you’re a developer looking to dive into the codebase, we’ve got a dedicated [Code Contributing Guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/CODE_CONTRIBUTING.md). This guide walks you through setting up your environment, following coding standards, and submitting pull requests.
 
 ### Why to contribute?
 

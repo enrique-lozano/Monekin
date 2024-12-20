@@ -18,7 +18,7 @@ body:
           required: true
   - type: markdown
     attributes:
-      value: If you do not meet this last requirement, do not worry. [Let us know your idea through the forum](https://github.com/enrique-lozano/Monekin/discussions/categories/ideas-new-features) in a much simpler and briefer way and the Monekin community will help you shape it.
+      value: If you do not meet this last requirement, do not worry. [Share your idea/request through the forum](https://github.com/enrique-lozano/Monekin/discussions/categories/ideas-new-features) in a much simpler and briefer way and the Monekin community will help you shape it.
   - type: textarea
     attributes:
       label: What do you want to be added or improved?
