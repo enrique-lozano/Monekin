@@ -255,15 +255,13 @@ class _TransactionsPageState extends State<TransactionsPage> {
                   });
                 },
                 onScrollChange: (controller) {
-                  if (controller.offset > 10 &&
-                      controller.position.userScrollDirection ==
-                          ScrollDirection.reverse) {
+                  bool shouldExtendButton = controller.offset <= 10 ||
+                      controller.position.userScrollDirection !=
+                          ScrollDirection.reverse;
+
+                  if (isFloatingButtonExtended != shouldExtendButton) {
                     setState(() {
-                      isFloatingButtonExtended = false;
-                    });
-                  } else {
-                    setState(() {
-                      isFloatingButtonExtended = true;
+                      isFloatingButtonExtended = shouldExtendButton;
                     });
                   }
                 },

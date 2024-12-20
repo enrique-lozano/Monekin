@@ -52,15 +52,13 @@ class _DashboardPageState extends State<DashboardPage> {
     _scrollController.addListener(() {
       _setSmallHeaderVisible();
 
-      if (_scrollController.offset > 10 &&
-          _scrollController.position.userScrollDirection ==
-              ScrollDirection.reverse) {
+      bool shouldExtendButton = _scrollController.offset <= 10 ||
+          _scrollController.position.userScrollDirection !=
+              ScrollDirection.reverse;
+
+      if (isFloatingButtonExtended != shouldExtendButton) {
         setState(() {
-          isFloatingButtonExtended = false;
-        });
-      } else {
-        setState(() {
-          isFloatingButtonExtended = true;
+          isFloatingButtonExtended = shouldExtendButton;
         });
       }
     });
