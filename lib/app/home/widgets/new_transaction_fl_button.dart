@@ -51,6 +51,7 @@ class NewTransactionButton extends StatelessWidget {
       heroTag: null,
       onPressed: () => _onPressed(context),
       icon: const Icon(Icons.add_rounded),
+      extendedPadding: const EdgeInsetsDirectional.only(start: 16, end: 16),
       extendedIconLabelSpacing: isExtended ? 8 : 0,
       label: AnimatedExpanded(
         duration: const Duration(milliseconds: 250),
