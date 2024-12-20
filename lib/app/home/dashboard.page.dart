@@ -50,7 +50,7 @@ class _DashboardPageState extends State<DashboardPage> {
     super.initState();
 
     _scrollController.addListener(() {
-      _setSmallHeaderVisible;
+      _setSmallHeaderVisible();
 
       if (_scrollController.offset > 10 &&
           _scrollController.position.userScrollDirection ==
