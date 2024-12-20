@@ -68,7 +68,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
               leading: const Column(
                 children: [
                   SizedBox(height: 16),
-                  NewTransactionButton(),
+                  NewTransactionButton(isExtended: false),
                   SizedBox(height: 16),
                 ],
               ),

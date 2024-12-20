@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/details/account_details.dart';
@@ -42,11 +43,25 @@ class _DashboardPageState extends State<DashboardPage> {
   final ScrollController _scrollController = ScrollController();
   bool showSmallHeader = false;
 
+  bool isFloatingButtonExtended = true;
+
   @override
   void initState() {
     super.initState();
 
-    _scrollController.addListener(_setSmallHeaderVisible);
+    _scrollController.addListener(() {
+      _setSmallHeaderVisible();
+
+      bool shouldExtendButton = _scrollController.offset <= 10 ||
+          _scrollController.position.userScrollDirection !=
+              ScrollDirection.reverse;
+
+      if (isFloatingButtonExtended != shouldExtendButton) {
+        setState(() {
+          isFloatingButtonExtended = shouldExtendButton;
+        });
+      }
+    });
   }
 
   @override
@@ -82,8 +97,9 @@ class _DashboardPageState extends State<DashboardPage> {
     return Scaffold(
       appBar: EmptyAppBar(
           color: Theme.of(context).colorSchemeExtended.dashboardHeader),
-      floatingActionButton:
-          hideDrawerAndFloatingButton ? null : const NewTransactionButton(),
+      floatingActionButton: hideDrawerAndFloatingButton
+          ? null
+          : NewTransactionButton(isExtended: isFloatingButtonExtended),
       drawer: hideDrawerAndFloatingButton
           ? null
           : Drawer(
