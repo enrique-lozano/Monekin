@@ -8,9 +8,7 @@ body:
       label: Prerequisites
       description: Please ensure you have completed all of the following. Your request will be closed and removed if you don't follow this requirements
       options:
-        - label: I have read the [Contributing Guidelines](https://github.com/enrique-lozano/Monekin/blob/main/CONTRIBUTING.md#reporting-issues-and-requesting-features).
-          required: true
-        - label: I agree to follow the [Code of Conduct](https://github.com/enrique-lozano/Monekin/blob/main/CODE_OF_CONDUCT.md).
+        - label: I have read the [Contributing Guidelines](https://github.com/enrique-lozano/Monekin/blob/main/CONTRIBUTING.md#report-issues-and-request-features).
           required: true
         - label: I have searched for [existing feature requests](https://github.com/enrique-lozano/Monekin/labels/type%3A%20enhancement) or [ideas discussions](https://github.com/enrique-lozano/Monekin/discussions/categories/ideas-new-features) to avoid duplicates.
           required: true
