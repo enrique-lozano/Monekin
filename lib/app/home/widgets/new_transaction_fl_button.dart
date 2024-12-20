@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -43,25 +44,15 @@ class NewTransactionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Material(
-      color: Colors.transparent,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.linear,
-        child: FloatingActionButton.extended(
-          heroTag: 'new-transaction-floating-button',
-          onPressed: () => _onPressed(context),
-          isExtended: !isExtended,
-          icon: const Icon(Icons.add_rounded),
-          extendedIconLabelSpacing: 8.0,
-          label: AnimatedSize(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.linear,
-            child: !isExtended
-                ? Text(t.transaction.create)
-                : const SizedBox.shrink(),
-          ),
-        ),
+    return FloatingActionButton.extended(
+      heroTag: 'new-transaction-floating-button',
+      onPressed: () => _onPressed(context),
+      icon: const Icon(Icons.add_rounded),
+      extendedIconLabelSpacing: !isExtended ? 8 : 0,
+      label: AnimatedExpanded(
+        expand: !isExtended,
+        axis: Axis.horizontal,
+        child: Text(t.transaction.create),
       ),
     );
   }
