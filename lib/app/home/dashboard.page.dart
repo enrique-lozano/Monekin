@@ -5,7 +5,6 @@ import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/details/account_details.dart';
 import 'package:monekin/app/home/widgets/click_tracker.dart';
 import 'package:monekin/app/home/widgets/dashboard_cards.dart';
-import 'package:monekin/app/home/widgets/home_drawer.dart';
 import 'package:monekin/app/home/widgets/horizontal_scrollable_account_list.dart';
 import 'package:monekin/app/home/widgets/income_or_expense_card.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
@@ -24,7 +23,6 @@ import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/presentation/widgets/user_avatar.dart';
-import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
@@ -91,33 +89,10 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     final accountService = AccountService.instance;
 
-    final hideDrawerAndFloatingButton =
-        BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md);
-
     return Scaffold(
       appBar: EmptyAppBar(
           color: Theme.of(context).colorSchemeExtended.dashboardHeader),
-      floatingActionButton: hideDrawerAndFloatingButton
-          ? null
-          : NewTransactionButton(isExtended: isFloatingButtonExtended),
-      drawer: hideDrawerAndFloatingButton
-          ? null
-          : Drawer(
-              child: Builder(builder: (context) {
-                final drawerItems = getDestinations(context,
-                    showHome: false, shortLabels: false);
-
-                return HomeDrawer(
-                  drawerActions: drawerItems,
-                  onDestinationSelected: (e) {
-                    Navigator.pop(context);
-
-//                    context.router.push(drawerItems.elementAt(e).destination);
-                  },
-                  selectedIndex: -1,
-                );
-              }),
-            ),
+      floatingActionButton: NewTransactionButton(isExtended: isFloatingButtonExtended),
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -296,27 +271,25 @@ class _DashboardPageState extends State<DashboardPage> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (BreakPoint.of(context).isSmallerThan(BreakpointID.md)) ...[
-              StreamBuilder(
-                  stream: UserSettingService.instance
-                      .getSettingFromDB(SettingKey.avatar),
-                  builder: (context, snapshot) {
-                    return UserAvatar(
-                      avatar: snapshot.data,
-                      backgroundColor: Theme.of(context)
+            StreamBuilder(
+                stream: UserSettingService.instance
+                    .getSettingFromDB(SettingKey.avatar),
+                builder: (context, snapshot) {
+                  return UserAvatar(
+                    avatar: snapshot.data,
+                    backgroundColor: Theme.of(context)
+                        .colorSchemeExtended
+                        .onDashboardHeader
+                        .darken(0.25),
+                    border: Border.all(
+                      width: 2,
+                      color: Theme.of(context)
                           .colorSchemeExtended
-                          .onDashboardHeader
-                          .darken(0.25),
-                      border: Border.all(
-                        width: 2,
-                        color: Theme.of(context)
-                            .colorSchemeExtended
-                            .onDashboardHeader,
-                      ),
-                    );
-                  }),
-              const SizedBox(width: 12),
-            ],
+                          .onDashboardHeader,
+                    ),
+                  );
+                }),
+            const SizedBox(width: 12),
             Flexible(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
