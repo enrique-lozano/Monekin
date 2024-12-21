@@ -8,6 +8,7 @@ import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/utils/get_download_path.dart';
+import 'package:monekin/core/utils/logger.dart';
 import 'package:path/path.dart' as path;
 
 class BackupDatabaseService {
@@ -87,18 +88,6 @@ class BackupDatabaseService {
       csvData += '\n';
 
       if (transaction.isTransfer) {
-        final toAdd2 = [
-          transaction.id,
-          (transaction.valueInDestiny ?? transaction.value).toStringAsFixed(2),
-          dateFormatter.format(transaction.date),
-          transaction.title ?? '',
-          transaction.notes ?? '',
-          transaction.receivingAccount!.name,
-          transaction.receivingAccount!.currencyId,
-          'TRANSFER',
-          ''
-        ];
-
         csvData += toAdd.join(separator);
 
         csvData += '\n';
@@ -156,7 +145,7 @@ class BackupDatabaseService {
         await File(dbPath).writeAsBytes(currentDBContent, mode: FileMode.write);
         db.markTablesUpdated(db.allTables);
 
-        print('Error\n: $e');
+        Logger.printDebug('Error\n: $e');
 
         throw Exception('The database is invalid or could not be readed');
       }

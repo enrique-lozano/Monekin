@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/budgets/budget_form_page.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
+import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -21,6 +22,11 @@ class BudgetsPage extends StatelessWidget {
         appBar: AppBar(
           title: Text(t.budgets.title),
           bottom: TabBar(
+            tabAlignment: BreakPoint.of(context).isSmallerThan(BreakpointID.md)
+                ? TabAlignment.fill
+                : TabAlignment.start,
+            isScrollable:
+                !BreakPoint.of(context).isSmallerThan(BreakpointID.md),
             tabs: [
               Tab(text: t.budgets.repeated),
               Tab(text: t.budgets.one_time),

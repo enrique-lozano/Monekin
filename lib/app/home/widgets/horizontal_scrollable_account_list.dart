@@ -92,6 +92,8 @@ class HorizontalScrollableAccountList extends StatelessWidget {
                                             return CurrencyDisplayer(
                                               amountToConvert: snapshot.data!,
                                               currency: account.currency,
+                                              compactView:
+                                                  snapshot.data! >= 10000000,
                                               integerStyle: Theme.of(context)
                                                   .textTheme
                                                   .titleMedium!

@@ -16,52 +16,6 @@ class FinanceHealthDetails extends StatefulWidget {
 }
 
 class _FinanceHealthDetailsState extends State<FinanceHealthDetails> {
-  Widget buildExpansionPanel({
-    required FinanceHealthAttrScore attrScore,
-    required int index,
-    required String title,
-    required String subtitle,
-    required String text,
-  }) {
-    return ExpansionTile(
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title),
-          const SizedBox(height: 2),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.circle,
-                size: 16,
-                color: FinanceHealthData.getHealthyValueColor(attrScore.score),
-              ),
-              const SizedBox(width: 4),
-              Text(
-                attrScore.getScoreReviewTitle(context),
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      color: FinanceHealthData.getHealthyValueColor(
-                          attrScore.score),
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
-        ],
-      ),
-      subtitle: Text(subtitle),
-      childrenPadding: const EdgeInsets.all(16),
-      children: [
-        HTMLText(
-          tags: const {'b': TextStyle(fontWeight: FontWeight.bold)},
-          htmlString: text,
-        )
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -108,7 +62,7 @@ class _FinanceHealthDetailsState extends State<FinanceHealthDetails> {
                   title: t.stats.finance_health_breakdown,
                   body: Column(
                     children: [
-                      buildExpansionPanel(
+                      _FinanceHealthDetailTile(
                           attrScore: financeHealthData.monthsWithoutIncomeScore,
                           title: t.financial_health.months_without_income.title,
                           subtitle:
@@ -116,7 +70,7 @@ class _FinanceHealthDetailsState extends State<FinanceHealthDetails> {
                           text:
                               '${financeHealthData.getMonthsWithoutIncomeResume(context)}\n\n${t.financial_health.months_without_income.suggestion}',
                           index: 0),
-                      buildExpansionPanel(
+                      _FinanceHealthDetailTile(
                           attrScore: financeHealthData.savingPercentageScore,
                           title: t.financial_health.savings_percentage.title,
                           subtitle:
@@ -132,5 +86,67 @@ class _FinanceHealthDetailsState extends State<FinanceHealthDetails> {
             ],
           );
         });
+  }
+}
+
+class _FinanceHealthDetailTile extends StatelessWidget {
+  const _FinanceHealthDetailTile({
+    required this.attrScore,
+    required this.index,
+    required this.title,
+    required this.subtitle,
+    required this.text,
+  });
+
+  final FinanceHealthAttrScore attrScore;
+  final int index;
+  final String title;
+  final String subtitle;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpansionTile(
+      expandedCrossAxisAlignment: CrossAxisAlignment.start,
+      expandedAlignment: Alignment.topLeft,
+
+      title: ListTile(
+          title: Text(title),
+          leading: SizedBox(
+            width: 30,
+            child: Column(
+              children: [
+                Text(
+                  attrScore.weightedValue?.toStringAsFixed(0) ?? '--',
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        color: FinanceHealthData.getHealthyValueColor(
+                            attrScore.score),
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                Text(
+                  'pts',
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: FinanceHealthData.getHealthyValueColor(
+                            attrScore.score),
+                        fontWeight: FontWeight.bold,
+                      ),
+                )
+              ],
+            ),
+          ),
+          minTileHeight: 20,
+          minVerticalPadding: 0,
+          contentPadding: const EdgeInsets.all(0),
+          subtitle: Text(subtitle)),
+      //   subtitle: Text(subtitle),
+      childrenPadding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+      children: [
+        HTMLText(
+          tags: const {'b': TextStyle(fontWeight: FontWeight.bold)},
+          htmlString: text,
+        ),
+      ],
+    );
   }
 }

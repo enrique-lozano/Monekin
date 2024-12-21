@@ -91,7 +91,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                   const nullValue = drift.Value(null);
 
                   TransactionService.instance
-                      .insertOrUpdateTransaction(transaction.copyWith(
+                      .updateTransaction(transaction.copyWith(
                     date: datetime,
                     status: nullValue,
                     id: newId,
@@ -133,7 +133,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                           .ruleRecurrentLimit!.remainingIterations;
 
                       TransactionService.instance
-                          .insertOrUpdateTransaction(
+                          .updateTransaction(
                         transaction.copyWith(
                             date: transaction.followingDateToNext,
                             remainingTransactions: remainingIterations != null
@@ -222,7 +222,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
           transaction.recurrentInfo.ruleRecurrentLimit!.remainingIterations;
 
       TransactionService.instance
-          .insertOrUpdateTransaction(transaction.copyWith(
+          .updateTransaction(transaction.copyWith(
               date: transaction.followingDateToNext,
               remainingTransactions: remainingIterations != null
                   ? drift.Value(remainingIterations - 1)

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/onboarding/onboarding.dart';
-import 'package:monekin/app/settings/about_page.dart';
+import 'package:monekin/app/settings/widgets/display_app_icon.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/widgets/html_text.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/translations.g.dart';
-
-import '../../core/presentation/app_colors.dart';
 
 class IntroPage extends StatelessWidget {
   const IntroPage({super.key});
@@ -85,7 +84,7 @@ class IntroPage extends StatelessWidget {
               const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w200),
           tags: {
             'a': TextStyle(
-                color: Colors.blue.shade200,
+                color: AppColors.of(context).link,
                 fontSize: 12.5,
                 fontWeight: FontWeight.w200)
           },

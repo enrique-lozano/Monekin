@@ -67,6 +67,8 @@ class IncomeOrExpenseCard extends StatelessWidget {
 
                     return CurrencyDisplayer(
                       amountToConvert: snapshot.data!.abs(),
+                      compactView: true,
+                      showDecimals: false,
                       integerStyle: TextStyle(
                           fontSize: 18,
                           color: Theme.of(context)

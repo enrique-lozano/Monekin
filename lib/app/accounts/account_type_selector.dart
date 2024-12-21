@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/models/account/account.dart';
 
-import '../../core/presentation/app_colors.dart';
-
 class AccountTypeSelector extends StatefulWidget {
   const AccountTypeSelector(
       {super.key,
@@ -107,8 +105,8 @@ class MonekinFilterChip extends StatelessWidget {
                 ),
                 Text(accountType.description(context),
                     softWrap: true,
-                    style:
-                        TextStyle(fontWeight: FontWeight.w300, fontSize: 14)),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w300, fontSize: 14)),
               ],
             ),
           ),

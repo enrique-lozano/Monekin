@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
+import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
@@ -61,6 +62,9 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
               ),
             ),
           ),
+          //
+          // --------**---------- FOOTER ----------**---------
+          //
           const Divider(endIndent: 16, indent: 16),
           Padding(
             padding: const EdgeInsets.all(16),
@@ -122,6 +126,12 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
                               builder: (context, snapshot) {
                                 return CurrencyDisplayer(
                                   amountToConvert: snapshot.data!,
+                                  compactView: snapshot.data! <= 10000000000 &&
+                                          BreakPoint.of(context)
+                                              .isLargerOrEqualTo(
+                                                  BreakpointID.xl)
+                                      ? false
+                                      : true,
                                   integerStyle:
                                       Theme.of(context).textTheme.titleLarge!,
                                 );

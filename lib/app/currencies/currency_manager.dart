@@ -45,7 +45,7 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
       if (isConfirmed != true) return;
 
       UserSettingService.instance
-          .setSetting(SettingKey.preferredCurrency, newCurrency.code)
+          .setItem(SettingKey.preferredCurrency, newCurrency.code)
           .then(
         (value) {
           setState(() {
@@ -167,8 +167,6 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
                           }),
                       trailing: Text(item.exchangeRate.toString()),
                       onTap: () async {
-                        final onTapContext = context;
-
                         final currency = await CurrencyService.instance
                             .getCurrencyByCode(item.currencyCode)
                             .first;

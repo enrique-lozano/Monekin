@@ -5,6 +5,7 @@ const brandBlue = Color(0xFF0F3375);
 
 class AppColors extends ThemeExtension<AppColors> {
   const AppColors({
+    required this.link,
     required this.danger,
     required this.success,
     required this.brand,
@@ -14,6 +15,7 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.shadowColorLight,
   });
 
+  final Color link;
   final Color danger;
   final Color success;
   final Color brand;
@@ -26,6 +28,7 @@ class AppColors extends ThemeExtension<AppColors> {
     final isDark = colorScheme.brightness == Brightness.dark;
 
     return AppColors(
+      link: Colors.blue.shade200,
       danger: isDark ? Colors.redAccent : Colors.red,
       success:
           isDark ? Colors.lightGreen : const Color.fromARGB(255, 55, 161, 59),
@@ -47,6 +50,7 @@ class AppColors extends ThemeExtension<AppColors> {
 
   @override
   AppColors copyWith({
+    Color? link,
     Color? danger,
     Color? success,
     Color? brand,
@@ -58,6 +62,7 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? modalBackground,
   }) {
     return AppColors(
+      link: link ?? this.link,
       danger: danger ?? this.danger,
       success: success ?? this.success,
       light: light ?? this.light,
@@ -74,6 +79,7 @@ class AppColors extends ThemeExtension<AppColors> {
       return this;
     }
     return AppColors(
+      link: Color.lerp(link, other.link, t) ?? link,
       danger: Color.lerp(danger, other.danger, t) ?? danger,
       success: Color.lerp(success, other.success, t) ?? success,
       light: Color.lerp(light, other.light, t) ?? light,

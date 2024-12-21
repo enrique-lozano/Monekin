@@ -163,55 +163,23 @@ class MoneyTransaction extends TransactionInDB {
     required Periodicity periodicity,
     bool convertToPreferredCurrency = true,
   }) {
-    final baseValue =
+    double baseValue =
         convertToPreferredCurrency ? currentValueInPreferredCurrency : value;
 
     if (recurrentInfo.isNoRecurrent) {
       return baseValue;
     }
 
-    if (periodicity == recurrentInfo.intervalPeriod) {
-      return baseValue / recurrentInfo.intervalEach!;
-    } else if (recurrentInfo.intervalPeriod == Periodicity.day) {
-      if (periodicity == Periodicity.week) {
-        return baseValue / 7;
-      }
-      if (periodicity == Periodicity.month) {
-        return baseValue / 30;
-      }
-      if (periodicity == Periodicity.year) {
-        return baseValue / 365;
-      }
-    } else if (recurrentInfo.intervalPeriod == Periodicity.week) {
-      if (periodicity == Periodicity.day) {
-        return baseValue * 7;
-      }
-      if (periodicity == Periodicity.month) {
-        return baseValue / 4;
-      }
-      if (periodicity == Periodicity.year) {
-        return baseValue / 52;
-      }
-    } else if (recurrentInfo.intervalPeriod == Periodicity.month) {
-      if (periodicity == Periodicity.day) {
-        return baseValue * 30;
-      }
-      if (periodicity == Periodicity.week) {
-        return baseValue * 4;
-      }
-      if (periodicity == Periodicity.year) {
-        return baseValue / 12;
-      }
-    } else if (recurrentInfo.intervalPeriod == Periodicity.year) {
-      if (periodicity == Periodicity.day) {
-        return baseValue * 365;
-      }
-      if (periodicity == Periodicity.week) {
-        return baseValue * 52;
-      }
-      if (periodicity == Periodicity.month) {
-        return baseValue * 12;
-      }
+    final intervalEachDivider = recurrentInfo.intervalEach ?? 1;
+
+    baseValue = baseValue / intervalEachDivider;
+
+    if (recurrentInfo.intervalPeriod != null) {
+      return baseValue *
+          Periodicity.getConversionFactor(
+            recurrentInfo.intervalPeriod!,
+            periodicity,
+          );
     }
 
     throw Exception('We could not calculate this value');
