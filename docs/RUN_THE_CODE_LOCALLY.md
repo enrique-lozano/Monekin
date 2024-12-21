@@ -2,7 +2,6 @@
 
 Monekin is fully open-source, allowing you to run it locally on your device. Whether you’re curious about how the app works, planning to contribute, or simply exploring, this guide provides all the steps to get started.
 
----
 
 ## Prerequisites 🛠️
 
@@ -10,8 +9,6 @@ Before running Monekin, ensure you have the following tools installed:
 
 1. **Flutter SDK**: Follow the [official installation guide](https://docs.flutter.dev/get-started/install) to set up Flutter on your system.
 2. **Code Editor (Optional)**: Tools like [Visual Studio Code](https://code.visualstudio.com/) or Android Studio make managing Flutter projects easier.
-
----
 
 ## Getting the Project 📂
 
@@ -49,8 +46,6 @@ flutter run
 ```
 
 If everything is set up correctly, the app will launch, and you’ll be able to test its features locally.
-
----
 
 ## Building Your Custom App 🏗️
 
