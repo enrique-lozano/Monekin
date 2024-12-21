@@ -9,7 +9,6 @@ import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/database/services/user-setting/utils/get_theme_from_string.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/routes/root_navigator_observer.dart';
 import 'package:monekin/core/utils/logger.dart';
@@ -153,12 +152,6 @@ class MaterialAppContainer extends StatelessWidget {
                             introSeen ? getNavigationSidebarWidth(context) : 0,
                         color: Theme.of(context).canvasColor,
                       ),
-                      if (BreakPoint.of(context).isLargerThan(BreakpointID.sm))
-                        Container(
-                          width: 0,
-                          height: MediaQuery.of(context).size.height,
-                          color: Theme.of(context).dividerColor,
-                        ),
                       Expanded(child: child ?? const SizedBox.shrink()),
                     ],
                   ),
