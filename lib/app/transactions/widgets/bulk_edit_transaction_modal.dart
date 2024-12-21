@@ -47,7 +47,7 @@ class BulkEditTransactionModal extends StatelessWidget {
                     context,
                     futures: transactionsToEdit.map(
                       (e) => TransactionService.instance
-                          .insertOrUpdateTransaction(e.copyWith(date: date)),
+                          .updateTransaction(e.copyWith(date: date)),
                     ),
                   );
                 },
@@ -71,9 +71,8 @@ class BulkEditTransactionModal extends StatelessWidget {
                     performUpdates(
                       context,
                       futures: transactionsToEdit.map(
-                        (e) => TransactionService.instance
-                            .insertOrUpdateTransaction(
-                                e.copyWith(categoryID: Value(modalRes.id))),
+                        (e) => TransactionService.instance.updateTransaction(
+                            e.copyWith(categoryID: Value(modalRes.id))),
                       ),
                     );
                   },
@@ -95,7 +94,7 @@ class BulkEditTransactionModal extends StatelessWidget {
                       context,
                       futures: transactionsToEdit.map(
                         (e) => TransactionService.instance
-                            .insertOrUpdateTransaction(e.copyWith(
+                            .updateTransaction(e.copyWith(
                           status: Value(modalRes.result),
                         )),
                       ),
