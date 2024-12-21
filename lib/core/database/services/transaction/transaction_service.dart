@@ -42,16 +42,14 @@ class TransactionService {
     return toReturn;
   }
 
-  Future<int> insertOrUpdateTransaction(TransactionInDB transaction) async {
-    final toReturn = await db
-        .into(db.transactions)
-        .insert(transaction, mode: InsertMode.insertOrReplace);
+  Future<int> updateTransaction(TransactionInDB transaction) async {
+    final toReturn = await db.update(db.transactions).replace(transaction);
 
     // To update the getAccountsData() function results
     // TODO: Check why we need this. The function already listen to changes in the transactions table
     db.markTablesUpdated([db.accounts]);
 
-    return toReturn;
+    return toReturn ? 1 : 0;
   }
 
   Future<int> deleteTransaction(String transactionId) {
