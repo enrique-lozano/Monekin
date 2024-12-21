@@ -2,6 +2,7 @@
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
 import 'package:monekin/app/layout/tabs.dart';
@@ -35,6 +36,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
   bool searchActive = false;
   FocusNode searchFocusNode = FocusNode();
   final searchController = TextEditingController();
+
+  bool isFloatingButtonExtended = true;
 
   List<MoneyTransaction> selectedTransactions = [];
 
@@ -143,7 +146,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
                       icon: const Icon(Icons.filter_alt_outlined)),
                 ],
               ),
-        floatingActionButton: const NewTransactionButton(isExtended: true),
+        floatingActionButton:
+            NewTransactionButton(isExtended: isFloatingButtonExtended),
         body: Column(
           children: [
             if (filters.hasFilter) ...[
@@ -249,6 +253,17 @@ class _TransactionsPageState extends State<TransactionsPage> {
                   setState(() {
                     selectedTransactions = [tr];
                   });
+                },
+                onScrollChange: (controller) {
+                  bool shouldExtendButton = controller.offset <= 10 ||
+                      controller.position.userScrollDirection !=
+                          ScrollDirection.reverse;
+
+                  if (isFloatingButtonExtended != shouldExtendButton) {
+                    setState(() {
+                      isFloatingButtonExtended = shouldExtendButton;
+                    });
+                  }
                 },
                 onTap: selectedTransactions.isEmpty ? null : toggleTransaction,
                 onEmptyList: NoResults(
