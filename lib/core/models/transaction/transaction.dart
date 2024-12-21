@@ -175,10 +175,11 @@ class MoneyTransaction extends TransactionInDB {
     baseValue = baseValue / intervalEachDivider;
 
     if (recurrentInfo.intervalPeriod != null) {
-      return baseValue * Periodicity.getConversionFactor(
-        recurrentInfo.intervalPeriod!,
-        periodicity,
-      );
+      return baseValue *
+          Periodicity.getConversionFactor(
+            recurrentInfo.intervalPeriod!,
+            periodicity,
+          );
     }
 
     throw Exception('We could not calculate this value');

@@ -114,35 +114,34 @@ class TransactionViewActionService {
       dialogTitle: t.transaction.duplicate,
       contentParagraphs: [Text(t.transaction.duplicate_warning_message)],
       confirmationText: t.general.continue_text,
-    ).then((isConfirmed) {
+    ).then((isConfirmed) async {
       if (isConfirmed != true) return;
 
-      transactionService
-          .insertTransaction(
-        TransactionInDB(
-          id: generateUUID(),
-          accountID: transaction.accountID,
-          date: transaction.date,
-          value: transaction.value,
-          type: transaction.type,
-          isHidden: transaction.isHidden,
-          categoryID: transaction.categoryID,
-          notes: transaction.notes,
-          title: transaction.title,
-          receivingAccountID: transaction.receivingAccountID,
-          status: transaction.status,
-          valueInDestiny: transaction.valueInDestiny,
-        ),
-      )
-          .then((value) {
+      final newTrId = generateUUID();
+
+      try {
+        await _duplicateTransaction(transaction, newTrId);
+
         scaffold.showSnackBar(
-          SnackBar(
-            content: Text(t.transaction.duplicate_success),
-          ),
+          SnackBar(content: Text(t.transaction.duplicate_success)),
         );
-      }).catchError((err) {
-        scaffold.showSnackBar(SnackBar(content: Text('$err')));
-      });
+      } catch (error) {
+        scaffold.showSnackBar(SnackBar(content: Text('$error')));
+      }
     });
+  }
+
+  Future<void> _duplicateTransaction(
+      MoneyTransaction transaction, String newTrId) async {
+    final db = AppDB.instance;
+
+    await transactionService
+        .insertTransaction(transaction.copyWith(id: newTrId));
+
+    for (final tag in transaction.tags) {
+      await db.into(db.transactionTags).insert(
+            TransactionTag(transactionID: newTrId, tagID: tag.id),
+          );
+    }
   }
 }
