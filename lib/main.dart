@@ -155,7 +155,7 @@ class MaterialAppContainer extends StatelessWidget {
                       ),
                       if (BreakPoint.of(context).isLargerThan(BreakpointID.sm))
                         Container(
-                          width: 2,
+                          width: 0,
                           height: MediaQuery.of(context).size.height,
                           color: Theme.of(context).dividerColor,
                         ),

@@ -10,6 +10,7 @@ import 'package:monekin/app/transactions/widgets/bulk_edit_transaction_modal.dar
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
@@ -255,9 +256,11 @@ class _TransactionsPageState extends State<TransactionsPage> {
                   });
                 },
                 onScrollChange: (controller) {
-                  bool shouldExtendButton = controller.offset <= 10 ||
-                      controller.position.userScrollDirection !=
-                          ScrollDirection.reverse;
+                  bool shouldExtendButton =
+                      BreakPoint.of(context).isLargerThan(BreakpointID.md) ||
+                          controller.offset <= 10 ||
+                          controller.position.userScrollDirection !=
+                              ScrollDirection.reverse;
 
                   if (isFloatingButtonExtended != shouldExtendButton) {
                     setState(() {

@@ -50,9 +50,11 @@ class _DashboardPageState extends State<DashboardPage> {
     _scrollController.addListener(() {
       _setSmallHeaderVisible();
 
-      bool shouldExtendButton = _scrollController.offset <= 10 ||
-          _scrollController.position.userScrollDirection !=
-              ScrollDirection.reverse;
+      bool shouldExtendButton =
+          BreakPoint.of(context).isLargerThan(BreakpointID.md) ||
+              _scrollController.offset <= 10 ||
+              _scrollController.position.userScrollDirection !=
+                  ScrollDirection.reverse;
 
       if (isFloatingButtonExtended != shouldExtendButton) {
         setState(() {
@@ -92,7 +94,8 @@ class _DashboardPageState extends State<DashboardPage> {
     return Scaffold(
       appBar: EmptyAppBar(
           color: Theme.of(context).colorSchemeExtended.dashboardHeader),
-      floatingActionButton: NewTransactionButton(isExtended: isFloatingButtonExtended),
+      floatingActionButton:
+          NewTransactionButton(isExtended: isFloatingButtonExtended),
       body: Stack(
         children: [
           SingleChildScrollView(
