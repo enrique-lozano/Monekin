@@ -98,9 +98,9 @@
         "diary": "日常的",
         "monthly": "每月",
         "annually": "每年",
-        "quaterly": "季刊",
+        "quaterly": "每季",
         "weekly": "每週",
-        "custom": "風俗",
+        "custom": "自訂範圍",
         "infinite": "總是"
       },
       "CURRENT": {
@@ -108,7 +108,7 @@
         "Annually": "今年",
         "Quaterly": "本季",
         "Weekly": "本星期",
-        "Infinite": "永遠",
+        "Infinite": "總是",
         "Custom": "自訂範圍"
       },
       "ALL": {
@@ -341,13 +341,13 @@
       },
       "display_long": "交易狀態",
       "tr_status": "{{status}}交易",
-      "none": "無國籍",
+      "none": "無狀態",
       "none.descr": "沒有特定狀態的交易",
-      "reconciled": "和好了",
+      "reconciled": "已驗證",
       "reconciled.descr": "此交易已經過驗證，並且與您銀行的真實交易相對應",
-      "unreconciled": "不甘心",
+      "unreconciled": "未驗證",
       "unreconciled.descr": "此交易尚未經過驗證，因此尚未出現在您的真實銀行帳戶中。但是，它將計算 Monekin 中的餘額和統計數據",
-      "pending": "待辦的",
+      "pending": "待辦",
       "pending.descr": "此交易正在等待處理，因此在計算餘額和統計數據時不會考慮它",
       "voided": "作廢",
       "voided.descr": "由於付款錯誤或任何其他原因導致的交易無效/取消。在計算餘額和統計時不會考慮該交易"
@@ -541,8 +541,8 @@
   },
   "BUDGETS": {
     "title": "預算",
-    "repeated": "重複",
-    "one-time": "一次",
+    "repeated": "週期性",
+    "one-time": "一次性",
     "annual": "年度",
     "week": "每週",
     "month": "每月",
