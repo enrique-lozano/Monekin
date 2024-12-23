@@ -36,14 +36,14 @@ dependencies:
 
   # i18n
   intl: ^0.19.0
-  slang: ^3.31.2
-  slang_flutter: ^3.32.0
+  slang: ^4.4.0
+  slang_flutter: ^4.4.0
 
   # Drift
-  drift: ^2.8.1
+  drift: ^2.21.0
   path_provider: ^2.0.13
   http: ^1.1.2
-  sqlite3: ^2.0.0
+  sqlite3: ^2.4.7
   sqlite3_flutter_libs: ^0.5.18
 
   # Other
@@ -71,13 +71,13 @@ dev_dependencies:
   flutter_lints: ^4.0.0
 
   # Generators:
-  build_runner: ^2.3.3
-  json_serializable: ^6.2.0
+  build_runner: ^2.4.11
+  json_serializable: ^6.8.0
   flutter_launcher_icons: ^0.14.2 # Package to regenerate icons (config later in this file). To run, type `dart run flutter_launcher_icons`
-  drift_dev: ^2.13.2
-  slang_build_runner: ^3.32.0 # To regenerate the translations run 'dart run slang'
+  drift_dev: ^2.21.2
+  slang_build_runner: ^4.4.0 # To regenerate the translations run 'dart run slang'
   copy_with_extension_gen: ^5.0.4
-  freezed: ^2.4.5
+  freezed: ^2.5.2
 
 flutter_launcher_icons:
   image_path: 'assets/resources/appIcon.png'
