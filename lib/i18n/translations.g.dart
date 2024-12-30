@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 5
-/// Strings: 2741 (548 per locale)
+/// Strings: 2751 (550 per locale)
 ///
-/// Built on 2024-12-21 at 14:22 UTC
+/// Built on 2024-12-30 at 23:39 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -392,6 +392,7 @@ class _TranslationsRecurrentTransactionsEn {
 	String get total_expense_title => 'Total expense per period';
 	String get total_expense_descr => '* Without considering the start and end date of each recurrence';
 	late final _TranslationsRecurrentTransactionsDetailsEn details = _TranslationsRecurrentTransactionsDetailsEn._(_root);
+	late final _TranslationsRecurrentTransactionsStatusEn status = _TranslationsRecurrentTransactionsStatusEn._(_root);
 }
 
 // Path: account
@@ -917,6 +918,17 @@ class _TranslationsRecurrentTransactionsDetailsEn {
 	String get last_payment_info => 'This movement is the last of the recurring rule, so this rule will be automatically deleted when confirming this action';
 	String get delete_header => 'Delete recurring transaction';
 	String get delete_message => 'This action is irreversible and will not affect transactions you have already confirmed/paid for';
+}
+
+// Path: recurrent_transactions.status
+class _TranslationsRecurrentTransactionsStatusEn {
+	_TranslationsRecurrentTransactionsStatusEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String delayed_by({required Object x}) => 'Delayed by ${x}d';
+	String coming_in({required Object x}) => 'In ${x} days';
 }
 
 // Path: account.types
@@ -1692,6 +1704,7 @@ class _TranslationsRecurrentTransactionsEs implements _TranslationsRecurrentTran
 	@override String get total_expense_title => 'Gasto total por periodo';
 	@override String get total_expense_descr => '* Sin considerar la fecha de inicio y fin de cada recurrencia';
 	@override late final _TranslationsRecurrentTransactionsDetailsEs details = _TranslationsRecurrentTransactionsDetailsEs._(_root);
+	@override late final _TranslationsRecurrentTransactionsStatusEs status = _TranslationsRecurrentTransactionsStatusEs._(_root);
 }
 
 // Path: account
@@ -2217,6 +2230,17 @@ class _TranslationsRecurrentTransactionsDetailsEs implements _TranslationsRecurr
 	@override String get last_payment_info => 'Este movimiento es el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al confirmar esta acción';
 	@override String get delete_header => 'Eliminar transacción recurrente';
 	@override String get delete_message => 'Esta acción es irreversible y no afectará a transacciones que ya hayas confirmado/pagado';
+}
+
+// Path: recurrent_transactions.status
+class _TranslationsRecurrentTransactionsStatusEs implements _TranslationsRecurrentTransactionsStatusEn {
+	_TranslationsRecurrentTransactionsStatusEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String delayed_by({required Object x}) => 'Atrasado por ${x}d';
+	@override String coming_in({required Object x}) => 'En ${x} días';
 }
 
 // Path: account.types
@@ -2993,6 +3017,7 @@ class _TranslationsRecurrentTransactionsHu implements _TranslationsRecurrentTran
 	@override String get total_expense_title => 'Összes kiadás periódusonként';
 	@override String get total_expense_descr => '* Az egyes ismétlődések kezdő és befejező időpontjának figyelembevétele nélkül';
 	@override late final _TranslationsRecurrentTransactionsDetailsHu details = _TranslationsRecurrentTransactionsDetailsHu._(_root);
+	@override late final _TranslationsRecurrentTransactionsStatusHu status = _TranslationsRecurrentTransactionsStatusHu._(_root);
 }
 
 // Path: account
@@ -3518,6 +3543,17 @@ class _TranslationsRecurrentTransactionsDetailsHu implements _TranslationsRecurr
 	@override String get last_payment_info => 'Ez a mozgatás az utolsó az ismétlődő szabályban, így ez a szabály automatikusan törlődik a művelet megerősítésekor.';
 	@override String get delete_header => 'Ismétlődő tranzakció törlése';
 	@override String get delete_message => 'Ez a művelet visszafordíthatatlan, és nem érinti a már visszaigazolt/befizetett tranzakciókat.';
+}
+
+// Path: recurrent_transactions.status
+class _TranslationsRecurrentTransactionsStatusHu implements _TranslationsRecurrentTransactionsStatusEn {
+	_TranslationsRecurrentTransactionsStatusHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String delayed_by({required Object x}) => 'Késés: ${x}d';
+	@override String coming_in({required Object x}) => '${x} napon belül';
 }
 
 // Path: account.types
@@ -4293,6 +4329,7 @@ class _TranslationsRecurrentTransactionsUk implements _TranslationsRecurrentTran
 	@override String get total_expense_title => 'Загальні витрати за період';
 	@override String get total_expense_descr => '* Без урахування початкової та кінцевої дати кожної повторюваної транзакції';
 	@override late final _TranslationsRecurrentTransactionsDetailsUk details = _TranslationsRecurrentTransactionsDetailsUk._(_root);
+	@override late final _TranslationsRecurrentTransactionsStatusUk status = _TranslationsRecurrentTransactionsStatusUk._(_root);
 }
 
 // Path: account
@@ -4818,6 +4855,17 @@ class _TranslationsRecurrentTransactionsDetailsUk implements _TranslationsRecurr
 	@override String get last_payment_info => 'Цей рух є останнім за повторюваною правилою, тому це правило буде автоматично видалено при підтвердженні цієї дії';
 	@override String get delete_header => 'Видалити повторювану транзакцію';
 	@override String get delete_message => 'Ця дія є незворотньою і не вплине на транзакції, які ви вже підтвердили/оплатили';
+}
+
+// Path: recurrent_transactions.status
+class _TranslationsRecurrentTransactionsStatusUk implements _TranslationsRecurrentTransactionsStatusEn {
+	_TranslationsRecurrentTransactionsStatusUk._(this._root);
+
+	@override final _TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String delayed_by({required Object x}) => 'Затримано на ${x}d';
+	@override String coming_in({required Object x}) => 'Через ${x} днів';
 }
 
 // Path: account.types
@@ -5593,6 +5641,7 @@ class _TranslationsRecurrentTransactionsZhTw implements _TranslationsRecurrentTr
 	@override String get total_expense_title => '每個期間的總收入';
 	@override String get total_expense_descr => '*不考慮每次重複的開始和結束日期';
 	@override late final _TranslationsRecurrentTransactionsDetailsZhTw details = _TranslationsRecurrentTransactionsDetailsZhTw._(_root);
+	@override late final _TranslationsRecurrentTransactionsStatusZhTw status = _TranslationsRecurrentTransactionsStatusZhTw._(_root);
 }
 
 // Path: account
@@ -6118,6 +6167,17 @@ class _TranslationsRecurrentTransactionsDetailsZhTw implements _TranslationsRecu
 	@override String get last_payment_info => '此動作是循環規則的最後一個，因此當確認此動作時，該規則將自動刪除';
 	@override String get delete_header => '刪除重複交易';
 	@override String get delete_message => '此操作不可逆轉，不會影響您已確認/付款的交易';
+}
+
+// Path: recurrent_transactions.status
+class _TranslationsRecurrentTransactionsStatusZhTw implements _TranslationsRecurrentTransactionsStatusEn {
+	_TranslationsRecurrentTransactionsStatusZhTw._(this._root);
+
+	@override final _TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String delayed_by({required Object x}) => '延遲了 ${x}d';
+	@override String coming_in({required Object x}) => '${x} 天後';
 }
 
 // Path: account.types
@@ -7013,6 +7073,8 @@ extension on Translations {
 			case 'recurrent_transactions.details.last_payment_info': return 'This movement is the last of the recurring rule, so this rule will be automatically deleted when confirming this action';
 			case 'recurrent_transactions.details.delete_header': return 'Delete recurring transaction';
 			case 'recurrent_transactions.details.delete_message': return 'This action is irreversible and will not affect transactions you have already confirmed/paid for';
+			case 'recurrent_transactions.status.delayed_by': return ({required Object x}) => 'Delayed by ${x}d';
+			case 'recurrent_transactions.status.coming_in': return ({required Object x}) => 'In ${x} days';
 			case 'account.details': return 'Account details';
 			case 'account.date': return 'Opening date';
 			case 'account.close_date': return 'Closing date';
@@ -7642,6 +7704,8 @@ extension on _TranslationsEs {
 			case 'recurrent_transactions.details.last_payment_info': return 'Este movimiento es el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al confirmar esta acción';
 			case 'recurrent_transactions.details.delete_header': return 'Eliminar transacción recurrente';
 			case 'recurrent_transactions.details.delete_message': return 'Esta acción es irreversible y no afectará a transacciones que ya hayas confirmado/pagado';
+			case 'recurrent_transactions.status.delayed_by': return ({required Object x}) => 'Atrasado por ${x}d';
+			case 'recurrent_transactions.status.coming_in': return ({required Object x}) => 'En ${x} días';
 			case 'account.details': return 'Detalles de la cuenta';
 			case 'account.date': return 'Fecha de apertura';
 			case 'account.close_date': return 'Fecha de cierre';
@@ -8270,6 +8334,8 @@ extension on _TranslationsHu {
 			case 'recurrent_transactions.details.last_payment_info': return 'Ez a mozgatás az utolsó az ismétlődő szabályban, így ez a szabály automatikusan törlődik a művelet megerősítésekor.';
 			case 'recurrent_transactions.details.delete_header': return 'Ismétlődő tranzakció törlése';
 			case 'recurrent_transactions.details.delete_message': return 'Ez a művelet visszafordíthatatlan, és nem érinti a már visszaigazolt/befizetett tranzakciókat.';
+			case 'recurrent_transactions.status.delayed_by': return ({required Object x}) => 'Késés: ${x}d';
+			case 'recurrent_transactions.status.coming_in': return ({required Object x}) => '${x} napon belül';
 			case 'account.details': return 'Számlaadatok';
 			case 'account.date': return 'Megnyitás dátuma';
 			case 'account.close_date': return 'Lezárás dátuma';
@@ -8898,6 +8964,8 @@ extension on _TranslationsUk {
 			case 'recurrent_transactions.details.last_payment_info': return 'Цей рух є останнім за повторюваною правилою, тому це правило буде автоматично видалено при підтвердженні цієї дії';
 			case 'recurrent_transactions.details.delete_header': return 'Видалити повторювану транзакцію';
 			case 'recurrent_transactions.details.delete_message': return 'Ця дія є незворотньою і не вплине на транзакції, які ви вже підтвердили/оплатили';
+			case 'recurrent_transactions.status.delayed_by': return ({required Object x}) => 'Затримано на ${x}d';
+			case 'recurrent_transactions.status.coming_in': return ({required Object x}) => 'Через ${x} днів';
 			case 'account.details': return 'Деталі рахунку';
 			case 'account.date': return 'Дата відкриття';
 			case 'account.close_date': return 'Дата закриття';
@@ -9526,6 +9594,8 @@ extension on _TranslationsZhTw {
 			case 'recurrent_transactions.details.last_payment_info': return '此動作是循環規則的最後一個，因此當確認此動作時，該規則將自動刪除';
 			case 'recurrent_transactions.details.delete_header': return '刪除重複交易';
 			case 'recurrent_transactions.details.delete_message': return '此操作不可逆轉，不會影響您已確認/付款的交易';
+			case 'recurrent_transactions.status.delayed_by': return ({required Object x}) => '延遲了 ${x}d';
+			case 'recurrent_transactions.status.coming_in': return ({required Object x}) => '${x} 天後';
 			case 'account.details': return '帳戶詳細資料';
 			case 'account.date': return '開業日期';
 			case 'account.close_date': return '截止日期';

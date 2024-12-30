@@ -399,6 +399,10 @@
       "last-payment-info": "This movement is the last of the recurring rule, so this rule will be automatically deleted when confirming this action",
       "delete-header": "Delete recurring transaction",
       "delete-message": "This action is irreversible and will not affect transactions you have already confirmed/paid for"
+    },
+    "STATUS": {
+      "delayed_by": "Delayed by {{x}}d",
+      "coming_in": "In {{x}} days"
     }
   },
   "ACCOUNT": {
