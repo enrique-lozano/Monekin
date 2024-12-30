@@ -3,6 +3,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/transactions/label_value_info_table.dart';
+import 'package:monekin/app/transactions/widgets/translucent_transaction_status_card.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
@@ -65,104 +66,80 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
   ) {
     final t = Translations.of(context);
 
-    payTransaction(DateTime datetime) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog.adaptive(
-            title: Text(t.transaction.next_payments.accept_dialog_title),
-            content: SingleChildScrollView(
-              child: Text(
-                transaction.recurrentInfo.isRecurrent
-                    ? t.transaction.next_payments.accept_dialog_msg(
-                        date: DateFormat.yMMMd().format(datetime),
-                      )
-                    : t.transaction.next_payments.accept_dialog_msg_single,
-              ),
+    payTransaction(DateTime datetime) async {
+      void showSnackbar(String message) {
+        ScaffoldMessenger.of(_scaffoldKey.currentContext ?? context)
+            .showSnackBar(
+          SnackBar(content: Text(message)),
+        );
+      }
+
+      final payConfirmed = await confirmDialog(context,
+          dialogTitle: t.transaction.next_payments.accept_dialog_title,
+          contentParagraphs: [
+            Text(
+              transaction.recurrentInfo.isRecurrent
+                  ? t.transaction.next_payments.accept_dialog_msg(
+                      date: DateFormat.yMMMd().format(datetime),
+                    )
+                  : t.transaction.next_payments.accept_dialog_msg_single,
             ),
-            actions: [
-              TextButton(
-                child: Text(t.general.continue_text),
-                onPressed: () {
-                  final newId = transaction.recurrentInfo.isRecurrent
-                      ? generateUUID()
-                      : transaction.id;
+          ]);
 
-                  const nullValue = drift.Value(null);
+      if (payConfirmed != true) {
+        return;
+      }
 
-                  TransactionService.instance
-                      .updateTransaction(transaction.copyWith(
-                    date: datetime,
-                    status: nullValue,
-                    id: newId,
+      const nullValue = drift.Value(null);
 
-                    // The new transaction will be no-recurrent always
-                    intervalEach: nullValue,
-                    intervalPeriod: nullValue,
-                    endDate: nullValue,
-                    remainingTransactions: nullValue,
-                  ))
-                      .then((value) {
-                    if (value <= 0) return;
+      final transactionToPost = transaction.copyWith(
+        date: datetime,
+        status: nullValue,
+        id: transaction.recurrentInfo.isRecurrent
+            ? generateUUID()
+            : transaction.id,
 
-                    // Transaction created/updated successfully with a new empty status
-
-                    if (transaction.recurrentInfo.isRecurrent) {
-                      if (transaction.isOnLastPayment) {
-                        // NO MORE PAYMENTS NEEDED
-
-                        TransactionService.instance
-                            .deleteTransaction(transaction.id)
-                            .then((value) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                  '${t.transaction.new_success}. ${t.transaction.next_payments.recurrent_rule_finished}'),
-                            ),
-                          );
-
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                        });
-
-                        return;
-                      }
-
-                      // Change the next payment date and the remaining iterations (if required)
-                      int? remainingIterations = transaction.recurrentInfo
-                          .ruleRecurrentLimit!.remainingIterations;
-
-                      TransactionService.instance
-                          .updateTransaction(
-                        transaction.copyWith(
-                            date: transaction.followingDateToNext,
-                            remainingTransactions: remainingIterations != null
-                                ? drift.Value(remainingIterations - 1)
-                                : const drift.Value(null)),
-                      )
-                          .then((inserted) {
-                        if (inserted <= 0) return;
-
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(t.transaction.new_success),
-                        ));
-
-                        Navigator.pop(context);
-                      });
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(t.transaction.edit_success),
-                      ));
-
-                      Navigator.pop(context);
-                    }
-                  });
-                },
-              ),
-            ],
-          );
-        },
+        // The new transaction will be no-recurrent always
+        intervalEach: nullValue,
+        intervalPeriod: nullValue,
+        endDate: nullValue,
+        remainingTransactions: nullValue,
       );
+
+      final transactionService = TransactionService.instance;
+
+      final transactionResult = transaction.recurrentInfo.isRecurrent
+          ? await transactionService.insertTransaction(transactionToPost)
+          : await transactionService.updateTransaction(transactionToPost);
+
+      if (transactionResult <= 0) return;
+
+      // Transaction created/updated successfully with a new empty status
+
+      if (transaction.recurrentInfo.isRecurrent) {
+        if (transaction.isOnLastPayment) {
+          // NO MORE PAYMENTS NEEDED
+
+          await transactionService.deleteTransaction(transaction.id);
+
+          showSnackbar(
+              '${t.transaction.new_success}. ${t.transaction.next_payments.recurrent_rule_finished}');
+
+          Navigator.pop(context);
+
+          return;
+        }
+
+        // Change the next payment date and the remaining iterations (if required)
+        final nextPaymentResult =
+            await transactionService.setTransactionNextPayment(transaction);
+
+        if (nextPaymentResult > 0) {
+          showSnackbar(t.transaction.new_success);
+        }
+      } else {
+        showSnackbar(t.transaction.edit_success);
+      }
     }
 
     return [
@@ -218,15 +195,8 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
       }
 
       // Change the next payment date and the remaining iterations (if required)
-      int? remainingIterations =
-          transaction.recurrentInfo.ruleRecurrentLimit!.remainingIterations;
-
       TransactionService.instance
-          .updateTransaction(transaction.copyWith(
-              date: transaction.followingDateToNext,
-              remainingTransactions: remainingIterations != null
-                  ? drift.Value(remainingIterations - 1)
-                  : const drift.Value(null)))
+          .setTransactionNextPayment(transaction)
           .then((inserted) {
         if (inserted == 0) return;
 
@@ -356,59 +326,6 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
         });
   }
 
-  Widget translucentCard({
-    required Color color,
-    required Widget body,
-    required IconData? icon,
-    required String title,
-  }) {
-    return Container(
-      clipBehavior: Clip.hardEdge,
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: color.withOpacity(0.125),
-        border: Border.all(
-          width: 1,
-          color: color,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.of(context).shadowColorLight,
-            blurRadius: 12,
-            offset: const Offset(0, 0),
-            spreadRadius: 4,
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-            child: Row(
-              children: [
-                Icon(
-                  icon,
-                  size: 26,
-                  color: color,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          body
-        ],
-      ),
-    );
-  }
-
   Widget statusDisplayer(MoneyTransaction transaction) {
     if (transaction.status == null && transaction.recurrentInfo.isNoRecurrent) {
       throw Exception('Error');
@@ -423,11 +340,12 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
             : Theme.of(context).colorScheme.primary.lighten(0.2)
         : transaction.status!.color;
 
-    return translucentCard(
+    return TranslucentTransactionStatusCard(
         color: color,
         body: Padding(
           padding: EdgeInsets.all(showRecurrencyStatus ? 0 : 12),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: EdgeInsets.all(showRecurrencyStatus ? 12 : 0),
@@ -483,6 +401,8 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                 .capitalize());
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -503,6 +423,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                   transaction: transaction, navigateBackOnDelete: true);
 
           return Scaffold(
+            key: _scaffoldKey,
             appBar: AppBar(
               elevation: 0,
               title: Text(t.transaction.details),
@@ -530,19 +451,20 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                 transaction.recurrentInfo.isRecurrent)
                               statusDisplayer(transaction),
                             if (transaction.isReversed)
-                              translucentCard(
-                                  color: AppColors.of(context).brand,
-                                  body: Padding(
-                                    padding: const EdgeInsets.all(12),
-                                    child: Text(
-                                        transaction.type == TransactionType.E
-                                            ? t.transaction.reversed
-                                                .description_for_expenses
-                                            : t.transaction.reversed
-                                                .description_for_incomes),
-                                  ),
-                                  icon: MoneyTransaction.reversedIcon,
-                                  title: t.transaction.reversed.title),
+                              TranslucentTransactionStatusCard(
+                                color: AppColors.of(context).brand,
+                                body: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Text(
+                                      transaction.type == TransactionType.E
+                                          ? t.transaction.reversed
+                                              .description_for_expenses
+                                          : t.transaction.reversed
+                                              .description_for_incomes),
+                                ),
+                                icon: MoneyTransaction.reversedIcon,
+                                title: t.transaction.reversed.title,
+                              ),
                             CardWithHeader(
                               title: 'Info',
                               body: LabelValueInfoTable(
@@ -938,6 +860,6 @@ class _TransactionDetailHeader extends SliverPersistentHeaderDelegate {
   double get minExtent => 90;
 
   @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
-      false;
+  bool shouldRebuild(covariant _TransactionDetailHeader oldDelegate) =>
+      oldDelegate.transaction != transaction || oldDelegate.heroTag != heroTag;
 }

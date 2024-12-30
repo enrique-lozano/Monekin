@@ -52,6 +52,24 @@ class TransactionService {
     return toReturn ? 1 : 0;
   }
 
+  /// Updates a recurrent transaction to its next payment iteration.
+  ///
+  /// This function updates a given recurrent transaction by advancing its date
+  /// to the next scheduled payment and decrementing the remaining iterations count,
+  /// if applicable. The updated transaction is then saved to the database.
+  Future<int> setTransactionNextPayment(MoneyTransaction transaction) {
+    int? remainingIterations =
+        transaction.recurrentInfo.ruleRecurrentLimit!.remainingIterations;
+
+    return TransactionService.instance.updateTransaction(
+      transaction.copyWith(
+          date: transaction.followingDateToNext,
+          remainingTransactions: remainingIterations != null
+              ? Value(remainingIterations - 1)
+              : const Value(null)),
+    );
+  }
+
   Future<int> deleteTransaction(String transactionId) {
     return (db.delete(db.transactions)
           ..where((tbl) => tbl.id.equals(transactionId)))
