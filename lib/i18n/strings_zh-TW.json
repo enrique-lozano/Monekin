@@ -399,6 +399,10 @@
       "last-payment-info": "此動作是循環規則的最後一個，因此當確認此動作時，該規則將自動刪除",
       "delete-header": "刪除重複交易",
       "delete-message": "此操作不可逆轉，不會影響您已確認/付款的交易"
+    },
+    "STATUS": {
+      "delayed_by": "延遲了 {{x}}d",
+      "coming_in": "{{x}} 天後"
     }
   },
   "ACCOUNT": {

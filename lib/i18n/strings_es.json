@@ -406,6 +406,10 @@
       "last-payment-info": "Este movimiento es el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al confirmar esta acción",
       "delete-header": "Eliminar transacción recurrente",
       "delete-message": "Esta acción es irreversible y no afectará a transacciones que ya hayas confirmado/pagado"
+    },
+    "STATUS": {
+      "delayed_by": "Atrasado por {{x}}d",
+      "coming_in": "En {{x}} días"
     }
   },
   "ACCOUNT": {

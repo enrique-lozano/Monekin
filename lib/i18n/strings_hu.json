@@ -402,6 +402,10 @@
       "last-payment-info": "Ez a mozgatás az utolsó az ismétlődő szabályban, így ez a szabály automatikusan törlődik a művelet megerősítésekor.",
       "delete-header": "Ismétlődő tranzakció törlése",
       "delete-message": "Ez a művelet visszafordíthatatlan, és nem érinti a már visszaigazolt/befizetett tranzakciókat."
+    },
+    "STATUS": {
+      "delayed_by": "Késés: {{x}}d",
+      "coming_in": "{{x}} napon belül"
     }
   },
   "ACCOUNT": {

@@ -40,9 +40,9 @@ enum NextPayStatus {
     }
 
     if (this == delayed) {
-      return 'Atrasado por ${days.abs()}d';
+      return t.recurrent_transactions.status.delayed_by(x: days.abs());
     }
 
-    return 'In ${days.abs()} days';
+    return t.recurrent_transactions.status.coming_in(x: days.abs());
   }
 }
