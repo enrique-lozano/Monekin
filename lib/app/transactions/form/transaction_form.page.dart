@@ -367,25 +367,13 @@ class _TransactionFormPageState extends State<TransactionFormPage>
   }
 
   fillForm(MoneyTransaction transaction) async {
-    setState(() {
-      fromAccount = transaction.account;
-      transferAccount = transaction.receivingAccount;
-      date = transaction.date;
-      status = transaction.status;
-      selectedCategory = transaction.category;
-      recurrentRule = transaction.recurrentInfo;
-
-      if (selectedCategory != null &&
-          selectedCategory!.type == CategoryType.B) {
-        if (transaction.value < 0) {
-          selectedCategory!.type = CategoryType.E;
-        } else {
-          selectedCategory!.type = CategoryType.I;
-        }
-      }
-
-      tags = [...transaction.tags];
-    });
+    fromAccount = transaction.account;
+    transferAccount = transaction.receivingAccount;
+    date = transaction.date;
+    status = transaction.status;
+    selectedCategory = transaction.category;
+    recurrentRule = transaction.recurrentInfo;
+    tags = [...transaction.tags];
 
     notesController.text = transaction.notes ?? '';
     titleController.text = transaction.title ?? '';
@@ -398,6 +386,8 @@ class _TransactionFormPageState extends State<TransactionFormPage>
 
     valueInDestinyController.text =
         transaction.valueInDestiny?.abs().toString() ?? '';
+
+    setState(() {});
   }
 
   Widget buildValueInDestinyFormField() {
