@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/custom_color_picker.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
+import 'package:monekin/i18n/translations.g.dart';
 
 Future<void> showCustomColorPickerModal(
     BuildContext context, CustomColorPickerModal component) {
@@ -43,8 +44,10 @@ class _CustomColorPickerModalState extends State<CustomColorPickerModal> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
+
     return ModalContainer(
-      title: 'Custom color',
+      title: t.icon_selector.custom_color,
       bodyPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
       body: CustomColorPicker(
           pickerColor: color,

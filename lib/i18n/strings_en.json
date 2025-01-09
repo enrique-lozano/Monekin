@@ -236,6 +236,8 @@
     "color": "Color",
     "select-icon": "Select an icon",
     "select-color": "Select a color",
+    "custom-color": "Custom color",
+    "current-color-selection": "Current selection",
     "select-account-icon": "Identify your account",
     "select-category-icon": "Identify your category",
     "SCOPES": {

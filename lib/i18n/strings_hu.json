@@ -236,6 +236,8 @@
     "color": "Szín",
     "select-icon": "Ikon kiválasztása",
     "select-color": "Szín kiválasztása",
+    "custom-color": "Egyedi szín",
+    "current-color-selection": "Jelenlegi kiválasztás",
     "select-account-icon": "Számla azonosítása",
     "select-category-icon": "Kategória azonosítása",
     "SCOPES": {

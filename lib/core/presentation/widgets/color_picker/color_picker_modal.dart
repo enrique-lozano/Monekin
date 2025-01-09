@@ -81,7 +81,7 @@ class ColorPickerModal extends StatelessWidget {
   Tooltip buildCustomColorCircleSelector(
       double circleSize, BuildContext context) {
     return Tooltip(
-      message: "Custom color",
+      message: t.icon_selector.custom_color,
       child: Container(
         width: circleSize,
         height: circleSize,

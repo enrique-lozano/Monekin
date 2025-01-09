@@ -4,6 +4,7 @@ import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
 import 'package:monekin/core/utils/logger.dart';
+import 'package:monekin/i18n/translations.g.dart';
 
 class CustomColorPicker extends StatefulWidget {
   const CustomColorPicker({
@@ -53,6 +54,7 @@ class _CustomColorPickerState extends State<CustomColorPicker> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
     final isComponenHorizontal =
         BreakPoint.of(context).isLargerThan(BreakpointID.sm);
 
@@ -105,10 +107,10 @@ class _CustomColorPickerState extends State<CustomColorPicker> {
                       rowFit: FlexFit.loose,
                       rowFlex: 1,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Current selection:",
+                            t.icon_selector.current_color_selection,
                             style: Theme.of(context).textTheme.labelMedium,
                           ),
                           const SizedBox(height: 3),
