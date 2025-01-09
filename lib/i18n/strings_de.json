@@ -245,6 +245,8 @@
     "color": "Farbe",
     "select-icon": "Wähle ein Symbol aus",
     "select-color": "Wähle eine Farbe",
+    "custom-color": "Benutzerdefinierte Farbe",
+    "current-color-selection": "Aktuelle Auswahl",
     "select-account-icon": "Identifiziere Dein Konto",
     "select-category-icon": "Identifiziere Deine Kategorie",
     "SCOPES": {

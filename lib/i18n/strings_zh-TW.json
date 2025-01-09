@@ -236,6 +236,8 @@
     "color": "顏色",
     "select-icon": "選擇一個圖示",
     "select-color": "選擇一種顏色",
+    "current-color-selection": "目前選擇",
+    "custom-color": "自訂顏色",
     "select-account-icon": "識別您的帳戶",
     "select-category-icon": "確定您的類別",
     "SCOPES": {

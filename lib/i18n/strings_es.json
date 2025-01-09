@@ -240,6 +240,8 @@
     "color": "Color",
     "select-icon": "Selecciona un icono",
     "select-color": "Selecciona un color",
+    "custom-color": "Color personalizado",
+    "current-color-selection": "Selección actual",
     "select-account-icon": "Identifica tu cuenta",
     "select-category-icon": "Identifica tu categoría",
     "SCOPES": {

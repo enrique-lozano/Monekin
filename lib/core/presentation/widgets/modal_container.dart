@@ -60,24 +60,26 @@ class ModalContainer extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    DefaultTextStyle(
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineSmall!
-                          .copyWith(fontWeight: FontWeight.w800),
-                      child: titleBuilder != null
-                          ? titleBuilder!(title)
-                          : Text(title),
-                    ),
-                    if (subtitle != null) ...[
-                      const SizedBox(height: 2),
-                      Text(subtitle!)
+                Flexible(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      DefaultTextStyle(
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineSmall!
+                            .copyWith(fontWeight: FontWeight.w800),
+                        child: titleBuilder != null
+                            ? titleBuilder!(title)
+                            : Text(title),
+                      ),
+                      if (subtitle != null) ...[
+                        const SizedBox(height: 2),
+                        Text(subtitle!)
+                      ],
                     ],
-                  ],
+                  ),
                 ),
                 if (endWidget != null) endWidget!
               ],
