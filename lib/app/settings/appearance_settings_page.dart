@@ -199,7 +199,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               onSwitch: (bool value) async {
                 await UserSettingService.instance.setItem(
                   SettingKey.accentColor,
-                  value ? 'auto' : brandBlue.toHex(leadingHashSign: false),
+                  value ? 'auto' : brandBlue.toHex(),
                   updateGlobalState: true,
                 );
               },
@@ -224,22 +224,23 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                               context,
                               ColorPickerModal(
                                 colorOptions: [
-                                  brandBlue.toHex(leadingHashSign: false),
+                                  brandBlue.toHex(),
                                   ...defaultColorPickerOptions
                                 ],
                                 selectedColor: color.toHex(),
-                              ),
-                            ).then((value) {
-                              if (value == null) return;
+                                onColorSelected: (value) {
+                                  Navigator.pop(context);
 
-                              setState(() {
-                                UserSettingService.instance.setItem(
-                                  SettingKey.accentColor,
-                                  value.toHex(),
-                                  updateGlobalState: true,
-                                );
-                              });
-                            }),
+                                  setState(() {
+                                    UserSettingService.instance.setItem(
+                                      SettingKey.accentColor,
+                                      value.toHex(),
+                                      updateGlobalState: true,
+                                    );
+                                  });
+                                },
+                              ),
+                            ),
                     title: Text(t.settings.accent_color),
                     subtitle: Text(t.settings.accent_color_descr),
                     enabled: snapshot.data! != 'auto',

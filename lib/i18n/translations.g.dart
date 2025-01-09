@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 6
-/// Strings: 3301 (550 per locale)
+/// Strings: 3313 (552 per locale)
 ///
-/// Built on 2025-01-01 at 21:33 UTC
+/// Built on 2025-01-09 at 14:29 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -320,6 +320,8 @@ class _TranslationsIconSelectorEn {
 	String get color => 'Color';
 	String get select_icon => 'Select an icon';
 	String get select_color => 'Select a color';
+	String get custom_color => 'Custom color';
+	String get current_color_selection => 'Current selection';
 	String get select_account_icon => 'Identify your account';
 	String get select_category_icon => 'Identify your category';
 	late final _TranslationsIconSelectorScopesEn scopes = _TranslationsIconSelectorScopesEn._(_root);
@@ -1632,6 +1634,8 @@ class _TranslationsIconSelectorDe implements _TranslationsIconSelectorEn {
 	@override String get color => 'Farbe';
 	@override String get select_icon => 'Wähle ein Symbol aus';
 	@override String get select_color => 'Wähle eine Farbe';
+	@override String get custom_color => 'Benutzerdefinierte Farbe';
+	@override String get current_color_selection => 'Aktuelle Auswahl';
 	@override String get select_account_icon => 'Identifiziere Dein Konto';
 	@override String get select_category_icon => 'Identifiziere Deine Kategorie';
 	@override late final _TranslationsIconSelectorScopesDe scopes = _TranslationsIconSelectorScopesDe._(_root);
@@ -2944,6 +2948,8 @@ class _TranslationsIconSelectorEs implements _TranslationsIconSelectorEn {
 	@override String get color => 'Color';
 	@override String get select_icon => 'Selecciona un icono';
 	@override String get select_color => 'Selecciona un color';
+	@override String get custom_color => 'Color personalizado';
+	@override String get current_color_selection => 'Selección actual';
 	@override String get select_account_icon => 'Identifica tu cuenta';
 	@override String get select_category_icon => 'Identifica tu categoría';
 	@override late final _TranslationsIconSelectorScopesEs scopes = _TranslationsIconSelectorScopesEs._(_root);
@@ -4257,6 +4263,8 @@ class _TranslationsIconSelectorHu implements _TranslationsIconSelectorEn {
 	@override String get color => 'Szín';
 	@override String get select_icon => 'Ikon kiválasztása';
 	@override String get select_color => 'Szín kiválasztása';
+	@override String get custom_color => 'Egyedi szín';
+	@override String get current_color_selection => 'Jelenlegi kiválasztás';
 	@override String get select_account_icon => 'Számla azonosítása';
 	@override String get select_category_icon => 'Kategória azonosítása';
 	@override late final _TranslationsIconSelectorScopesHu scopes = _TranslationsIconSelectorScopesHu._(_root);
@@ -5568,6 +5576,8 @@ class _TranslationsIconSelectorUk implements _TranslationsIconSelectorEn {
 	@override String get icon => 'Іконка';
 	@override String get color => 'Колір';
 	@override String get select_color => 'Виберіть колір';
+	@override String get custom_color => 'Користувацький колір';
+	@override String get current_color_selection => 'Поточний вибір';
 	@override String get select_icon => 'Виберіть іконку';
 	@override String get select_account_icon => 'Ідентифікуйте ваш рахунок';
 	@override String get select_category_icon => 'Ідентифікуйте вашу категорію';
@@ -6881,6 +6891,8 @@ class _TranslationsIconSelectorZhTw implements _TranslationsIconSelectorEn {
 	@override String get color => '顏色';
 	@override String get select_icon => '選擇一個圖示';
 	@override String get select_color => '選擇一種顏色';
+	@override String get current_color_selection => '目前選擇';
+	@override String get custom_color => '自訂顏色';
 	@override String get select_account_icon => '識別您的帳戶';
 	@override String get select_category_icon => '確定您的類別';
 	@override late final _TranslationsIconSelectorScopesZhTw scopes = _TranslationsIconSelectorScopesZhTw._(_root);
@@ -8251,6 +8263,8 @@ extension on Translations {
 			case 'icon_selector.color': return 'Color';
 			case 'icon_selector.select_icon': return 'Select an icon';
 			case 'icon_selector.select_color': return 'Select a color';
+			case 'icon_selector.custom_color': return 'Custom color';
+			case 'icon_selector.current_color_selection': return 'Current selection';
 			case 'icon_selector.select_account_icon': return 'Identify your account';
 			case 'icon_selector.select_category_icon': return 'Identify your category';
 			case 'icon_selector.scopes.transport': return 'Transport';
@@ -8881,6 +8895,8 @@ extension on _TranslationsDe {
 			case 'icon_selector.color': return 'Farbe';
 			case 'icon_selector.select_icon': return 'Wähle ein Symbol aus';
 			case 'icon_selector.select_color': return 'Wähle eine Farbe';
+			case 'icon_selector.custom_color': return 'Benutzerdefinierte Farbe';
+			case 'icon_selector.current_color_selection': return 'Aktuelle Auswahl';
 			case 'icon_selector.select_account_icon': return 'Identifiziere Dein Konto';
 			case 'icon_selector.select_category_icon': return 'Identifiziere Deine Kategorie';
 			case 'icon_selector.scopes.transport': return 'Transport';
@@ -9512,6 +9528,8 @@ extension on _TranslationsEs {
 			case 'icon_selector.color': return 'Color';
 			case 'icon_selector.select_icon': return 'Selecciona un icono';
 			case 'icon_selector.select_color': return 'Selecciona un color';
+			case 'icon_selector.custom_color': return 'Color personalizado';
+			case 'icon_selector.current_color_selection': return 'Selección actual';
 			case 'icon_selector.select_account_icon': return 'Identifica tu cuenta';
 			case 'icon_selector.select_category_icon': return 'Identifica tu categoría';
 			case 'icon_selector.scopes.transport': return 'Transporte';
@@ -10142,6 +10160,8 @@ extension on _TranslationsHu {
 			case 'icon_selector.color': return 'Szín';
 			case 'icon_selector.select_icon': return 'Ikon kiválasztása';
 			case 'icon_selector.select_color': return 'Szín kiválasztása';
+			case 'icon_selector.custom_color': return 'Egyedi szín';
+			case 'icon_selector.current_color_selection': return 'Jelenlegi kiválasztás';
 			case 'icon_selector.select_account_icon': return 'Számla azonosítása';
 			case 'icon_selector.select_category_icon': return 'Kategória azonosítása';
 			case 'icon_selector.scopes.transport': return 'Közlekedés';
@@ -10771,6 +10791,8 @@ extension on _TranslationsUk {
 			case 'icon_selector.icon': return 'Іконка';
 			case 'icon_selector.color': return 'Колір';
 			case 'icon_selector.select_color': return 'Виберіть колір';
+			case 'icon_selector.custom_color': return 'Користувацький колір';
+			case 'icon_selector.current_color_selection': return 'Поточний вибір';
 			case 'icon_selector.select_icon': return 'Виберіть іконку';
 			case 'icon_selector.select_account_icon': return 'Ідентифікуйте ваш рахунок';
 			case 'icon_selector.select_category_icon': return 'Ідентифікуйте вашу категорію';
@@ -11402,6 +11424,8 @@ extension on _TranslationsZhTw {
 			case 'icon_selector.color': return '顏色';
 			case 'icon_selector.select_icon': return '選擇一個圖示';
 			case 'icon_selector.select_color': return '選擇一種顏色';
+			case 'icon_selector.current_color_selection': return '目前選擇';
+			case 'icon_selector.custom_color': return '自訂顏色';
 			case 'icon_selector.select_account_icon': return '識別您的帳戶';
 			case 'icon_selector.select_category_icon': return '確定您的類別';
 			case 'icon_selector.scopes.transport': return '運輸';

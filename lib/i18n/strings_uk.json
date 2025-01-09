@@ -234,6 +234,8 @@
     "icon": "Іконка",
     "color": "Колір",
     "select-color": "Виберіть колір",
+    "custom-color": "Користувацький колір",
+    "current-color-selection": "Поточний вибір",
     "select-icon": "Виберіть іконку",
     "select-account-icon": "Ідентифікуйте ваш рахунок",
     "select-category-icon": "Ідентифікуйте вашу категорію",
