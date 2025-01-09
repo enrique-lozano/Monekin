@@ -172,26 +172,26 @@ class _TagFormPageState extends State<TagFormPage> {
                   ),
                   const SizedBox(height: 16),
                   ReadOnlyTextFormField(
-                    displayValue: null,
-                    decoration: InputDecoration(
-                      hintText: t.icon_selector.color,
-                      suffixIcon: const Icon(Icons.circle),
-                      suffixIconColor: ColorHex.get(_color),
-                    ),
-                    onTap: () => showColorPickerModal(
-                      context,
-                      ColorPickerModal(
-                        colorOptions: defaultColorPickerOptions,
-                        selectedColor: _color,
+                      displayValue: null,
+                      decoration: InputDecoration(
+                        hintText: t.icon_selector.color,
+                        suffixIcon: const Icon(Icons.circle),
+                        suffixIconColor: ColorHex.get(_color),
                       ),
-                    ).then((value) {
-                      if (value == null) return;
+                      onTap: () => showColorPickerModal(
+                            context,
+                            ColorPickerModal(
+                              colorOptions: defaultColorPickerOptions,
+                              selectedColor: _color,
+                              onColorSelected: (value) {
+                                Navigator.pop(context);
 
-                      setState(() {
-                        _color = value.toHex();
-                      });
-                    }),
-                  ),
+                                setState(() {
+                                  _color = value.toHex();
+                                });
+                              },
+                            ),
+                          )),
                   const SizedBox(height: 12),
                   TextFormField(
                     controller: _descrController,
