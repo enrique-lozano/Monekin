@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 
 class MonekinDropdownSelect<T> extends StatefulWidget {
-  const MonekinDropdownSelect(
-      {super.key,
-      required this.initial,
-      required this.items,
-      required this.onChanged,
-      this.backgroundColor,
-      this.compact = false,
-      this.checkInitialValue = false,
-      this.getLabel,
-      this.isDisabled,
-      this.enabled = true,
-      this.expanded = false,
-      this.textConstraints = const BoxConstraints()});
+  const MonekinDropdownSelect({
+    super.key,
+    required this.initial,
+    required this.items,
+    required this.onChanged,
+    this.backgroundColor,
+    this.compact = false,
+    this.checkInitialValue = false,
+    this.getLabel,
+    this.isDisabled,
+    this.enabled = true,
+    this.expanded = false,
+    this.textConstraints = const BoxConstraints(),
+  });
 
   final T initial;
   final List<T> items;
