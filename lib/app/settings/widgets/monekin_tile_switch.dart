@@ -21,7 +21,7 @@ class MonekinTileSwitch extends StatefulWidget {
   final String title;
   final String? subtitle;
   final bool initialValue;
-  final IconData? icon;
+  final Widget? icon;
 
   /// Callback triggered when the switch value changes.
   ///
@@ -98,7 +98,7 @@ class _MonekinTileSwitchState extends State<MonekinTileSwitch> {
     return SwitchListTile(
       title: Text(widget.title),
       subtitle: widget.subtitle == null ? null : Text(widget.subtitle!),
-      secondary: widget.icon == null ? null : Icon(widget.icon),
+      secondary: widget.icon,
       value: value,
       onChanged: widget.disabled
           ? null

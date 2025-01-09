@@ -6,7 +6,7 @@
 /// Locales: 6
 /// Strings: 3313 (552 per locale)
 ///
-/// Built on 2025-01-09 at 14:29 UTC
+/// Built on 2025-01-09 at 17:53 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -567,7 +567,7 @@ class _TranslationsSettingsEn {
 	String get first_day_of_week => 'First day of week';
 	String get theme_and_colors => 'Theme and colors';
 	String get theme => 'Theme';
-	String get theme_auto => 'Defined by the system';
+	String get theme_auto => 'System';
 	String get theme_light => 'Light';
 	String get theme_dark => 'Dark';
 	String get amoled_mode => 'AMOLED mode';
@@ -1881,7 +1881,7 @@ class _TranslationsSettingsDe implements _TranslationsSettingsEn {
 	@override String get first_day_of_week => 'Erster Tag der Woche';
 	@override String get theme_and_colors => 'Thema und Farben';
 	@override String get theme => 'Thema';
-	@override String get theme_auto => 'Vom System definiert';
+	@override String get theme_auto => 'System';
 	@override String get theme_light => 'Hell';
 	@override String get theme_dark => 'Dunkel';
 	@override String get amoled_mode => 'AMOLED-Modus';
@@ -3195,7 +3195,7 @@ class _TranslationsSettingsEs implements _TranslationsSettingsEn {
 	@override String get first_day_of_week => 'Primer día de la semana';
 	@override String get theme_and_colors => 'Tema y colores';
 	@override String get theme => 'Tema';
-	@override String get theme_auto => 'Definido por el sistema';
+	@override String get theme_auto => 'Sistema';
 	@override String get theme_light => 'Claro';
 	@override String get theme_dark => 'Oscuro';
 	@override String get amoled_mode => 'Modo AMOLED';
@@ -4510,7 +4510,7 @@ class _TranslationsSettingsHu implements _TranslationsSettingsEn {
 	@override String get first_day_of_week => 'A hét első napja';
 	@override String get theme_and_colors => 'Témák és színek';
 	@override String get theme => 'Téma';
-	@override String get theme_auto => 'A rendszer határozza meg';
+	@override String get theme_auto => 'Rendszer';
 	@override String get theme_light => 'Világos';
 	@override String get theme_dark => 'Sötét';
 	@override String get amoled_mode => 'AMOLED mód';
@@ -5824,7 +5824,7 @@ class _TranslationsSettingsUk implements _TranslationsSettingsEn {
 	@override String get first_day_of_week => 'Перший день тижня';
 	@override String get theme_and_colors => 'Тема та кольори';
 	@override String get theme => 'Тема';
-	@override String get theme_auto => 'Визначено системою';
+	@override String get theme_auto => 'система';
 	@override String get theme_light => 'Світла';
 	@override String get theme_dark => 'Темна';
 	@override String get amoled_mode => 'Режим AMOLED';
@@ -7138,7 +7138,7 @@ class _TranslationsSettingsZhTw implements _TranslationsSettingsEn {
 	@override String get first_day_of_week => '一週的第一天';
 	@override String get theme_and_colors => '主題和顏色';
 	@override String get theme => '主題';
-	@override String get theme_auto => '由系統定義';
+	@override String get theme_auto => '系統';
 	@override String get theme_light => '明亮主題';
 	@override String get theme_dark => '黑暗主題';
 	@override String get amoled_mode => 'amoled mode';
@@ -8601,7 +8601,7 @@ extension on Translations {
 			case 'settings.first_day_of_week': return 'First day of week';
 			case 'settings.theme_and_colors': return 'Theme and colors';
 			case 'settings.theme': return 'Theme';
-			case 'settings.theme_auto': return 'Defined by the system';
+			case 'settings.theme_auto': return 'System';
 			case 'settings.theme_light': return 'Light';
 			case 'settings.theme_dark': return 'Dark';
 			case 'settings.amoled_mode': return 'AMOLED mode';
@@ -9233,7 +9233,7 @@ extension on _TranslationsDe {
 			case 'settings.first_day_of_week': return 'Erster Tag der Woche';
 			case 'settings.theme_and_colors': return 'Thema und Farben';
 			case 'settings.theme': return 'Thema';
-			case 'settings.theme_auto': return 'Vom System definiert';
+			case 'settings.theme_auto': return 'System';
 			case 'settings.theme_light': return 'Hell';
 			case 'settings.theme_dark': return 'Dunkel';
 			case 'settings.amoled_mode': return 'AMOLED-Modus';
@@ -9866,7 +9866,7 @@ extension on _TranslationsEs {
 			case 'settings.first_day_of_week': return 'Primer día de la semana';
 			case 'settings.theme_and_colors': return 'Tema y colores';
 			case 'settings.theme': return 'Tema';
-			case 'settings.theme_auto': return 'Definido por el sistema';
+			case 'settings.theme_auto': return 'Sistema';
 			case 'settings.theme_light': return 'Claro';
 			case 'settings.theme_dark': return 'Oscuro';
 			case 'settings.amoled_mode': return 'Modo AMOLED';
@@ -10498,7 +10498,7 @@ extension on _TranslationsHu {
 			case 'settings.first_day_of_week': return 'A hét első napja';
 			case 'settings.theme_and_colors': return 'Témák és színek';
 			case 'settings.theme': return 'Téma';
-			case 'settings.theme_auto': return 'A rendszer határozza meg';
+			case 'settings.theme_auto': return 'Rendszer';
 			case 'settings.theme_light': return 'Világos';
 			case 'settings.theme_dark': return 'Sötét';
 			case 'settings.amoled_mode': return 'AMOLED mód';
@@ -11130,7 +11130,7 @@ extension on _TranslationsUk {
 			case 'settings.first_day_of_week': return 'Перший день тижня';
 			case 'settings.theme_and_colors': return 'Тема та кольори';
 			case 'settings.theme': return 'Тема';
-			case 'settings.theme_auto': return 'Визначено системою';
+			case 'settings.theme_auto': return 'система';
 			case 'settings.theme_light': return 'Світла';
 			case 'settings.theme_dark': return 'Темна';
 			case 'settings.amoled_mode': return 'Режим AMOLED';
@@ -11762,7 +11762,7 @@ extension on _TranslationsZhTw {
 			case 'settings.first_day_of_week': return '一週的第一天';
 			case 'settings.theme_and_colors': return '主題和顏色';
 			case 'settings.theme': return '主題';
-			case 'settings.theme_auto': return '由系統定義';
+			case 'settings.theme_auto': return '系統';
 			case 'settings.theme_light': return '明亮主題';
 			case 'settings.theme_dark': return '黑暗主題';
 			case 'settings.amoled_mode': return 'amoled mode';
