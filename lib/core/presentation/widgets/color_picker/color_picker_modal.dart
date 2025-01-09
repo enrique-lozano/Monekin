@@ -63,48 +63,8 @@ class ColorPickerModal extends StatelessWidget {
                     spacing: 6,
                     runSpacing: 12,
                     children: [
-                      Tooltip(
-                        message: "Custom color",
-                        child: Container(
-                          width: circleSize,
-                          height: circleSize,
-                          decoration: BoxDecoration(
-                            border: GradientBoxBorder(
-                              gradient: LinearGradient(colors: [
-                                Colors.red.withOpacity(0.8),
-                                Colors.yellow.withOpacity(0.8),
-                                Colors.green.withOpacity(0.8),
-                                Colors.blue.withOpacity(0.8),
-                                Colors.purple.withOpacity(0.8),
-                              ]),
-                              width: 3,
-                            ),
-                            borderRadius: BorderRadius.circular(999),
-                          ),
-                          child: Tappable(
-                            bgColor: Colors.transparent,
-                            onTap: () {
-                              Navigator.pop(context);
-
-                              showCustomColorPickerModal(
-                                context,
-                                CustomColorPickerModal(
-                                  initialColor: selectedColor == null
-                                      ? ColorHex.get(colorOptions.randomItem())
-                                      : ColorHex.get(selectedColor!),
-                                  onColorSelected: onColorSelected,
-                                  previewBuilder: customColorPreviewBuilder,
-                                ),
-                              );
-                            },
-                            borderRadius: BorderRadius.circular(999),
-                            child: Icon(
-                              Icons.colorize_rounded,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                          ),
-                        ),
-                      ),
+                      if (showCustomColorCircleOption)
+                        buildCustomColorCircleSelector(circleSize, context),
                       ...List.generate(colorOptions.length, (index) {
                         final colorItem = colorOptions[index];
 
@@ -116,6 +76,52 @@ class ColorPickerModal extends StatelessWidget {
             ),
           );
         });
+  }
+
+  Tooltip buildCustomColorCircleSelector(
+      double circleSize, BuildContext context) {
+    return Tooltip(
+      message: "Custom color",
+      child: Container(
+        width: circleSize,
+        height: circleSize,
+        decoration: BoxDecoration(
+          border: GradientBoxBorder(
+            gradient: LinearGradient(colors: [
+              Colors.red.withOpacity(0.8),
+              Colors.yellow.withOpacity(0.8),
+              Colors.green.withOpacity(0.8),
+              Colors.blue.withOpacity(0.8),
+              Colors.purple.withOpacity(0.8),
+            ]),
+            width: 3,
+          ),
+          borderRadius: BorderRadius.circular(999),
+        ),
+        child: Tappable(
+          bgColor: Colors.transparent,
+          onTap: () {
+            Navigator.pop(context);
+
+            showCustomColorPickerModal(
+              context,
+              CustomColorPickerModal(
+                initialColor: selectedColor == null
+                    ? ColorHex.get(colorOptions.randomItem())
+                    : ColorHex.get(selectedColor!),
+                onColorSelected: onColorSelected,
+                previewBuilder: customColorPreviewBuilder,
+              ),
+            );
+          },
+          borderRadius: BorderRadius.circular(999),
+          child: Icon(
+            Icons.colorize_rounded,
+            color: Theme.of(context).colorScheme.secondary,
+          ),
+        ),
+      ),
+    );
   }
 
   Container buildSelectableColorCircle(
