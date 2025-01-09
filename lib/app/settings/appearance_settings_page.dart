@@ -94,11 +94,10 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               },
             ),
             createListSeparator(context, t.settings.theme_and_colors),
-            StreamBuilder(
-              stream: UserSettingService.instance
-                  .getSettingFromDB(SettingKey.themeMode),
-              builder: (context, snapshot) {
-                final theme = getThemeFromString(snapshot.data);
+            Builder(
+              builder: (context) {
+                final theme =
+                    getThemeFromString(appStateSettings[SettingKey.themeMode]);
 
                 return ListTile(
                   title: Row(
@@ -240,26 +239,24 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
   }
 
   Widget _buildThemeDropdown(ThemeMode theme) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return MonekinDropdownSelect(
-          initial: theme,
-          compact: true,
-          expanded: false,
-          items: const [
-            ThemeMode.system,
-            ThemeMode.light,
-            ThemeMode.dark,
-          ],
-          getLabel: (x) => x.displayName(context),
-          onChanged: (mode) {
-            UserSettingService.instance
-                .setItem(
-                  SettingKey.themeMode,
-                  mode.name,
-                  updateGlobalState: true,
-                )
-                .then((value) => null);
-          });
-    });
+    return MonekinDropdownSelect(
+        initial: theme,
+        compact: true,
+        expanded: false,
+        items: const [
+          ThemeMode.system,
+          ThemeMode.light,
+          ThemeMode.dark,
+        ],
+        getLabel: (x) => x.displayName(context),
+        onChanged: (mode) {
+          UserSettingService.instance
+              .setItem(
+                SettingKey.themeMode,
+                mode.name,
+                updateGlobalState: true,
+              )
+              .then((value) => null);
+        });
   }
 }
