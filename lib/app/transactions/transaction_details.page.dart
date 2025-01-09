@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
@@ -771,7 +773,7 @@ class _TransactionDetailHeader extends SliverPersistentHeaderDelegate {
                 AnimatedDefaultTextStyle(
                   duration: const Duration(milliseconds: 100),
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                        fontSize: 34 - shrinkPercent * 16,
+                        fontSize: 34 - (1 - pow(1 - shrinkPercent, 4)) * 16,
                         fontWeight: FontWeight.w600,
                         color: transaction.status == TransactionStatus.voided
                             ? Colors.grey.shade400
@@ -845,7 +847,7 @@ class _TransactionDetailHeader extends SliverPersistentHeaderDelegate {
             tag: heroTag ?? UniqueKey(),
             child: transaction.getDisplayIcon(
               context,
-              size: 42 - shrinkPercent * 16,
+              size: 42 - (1 - pow(1 - shrinkPercent, 4)) * 16,
             ),
           ),
         ],
@@ -857,7 +859,7 @@ class _TransactionDetailHeader extends SliverPersistentHeaderDelegate {
   double get maxExtent => 120;
 
   @override
-  double get minExtent => 90;
+  double get minExtent => 80;
 
   @override
   bool shouldRebuild(covariant _TransactionDetailHeader oldDelegate) =>
