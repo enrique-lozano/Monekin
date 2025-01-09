@@ -28,11 +28,17 @@ class MonekinDropdownSelect<T> extends StatefulWidget {
   final BoxConstraints textConstraints;
 
   @override
-  State<MonekinDropdownSelect> createState() =>
-      _MonekinDropdownSelectState<T>();
+  State<MonekinDropdownSelect> createState() => MonekinDropdownSelectState<T>();
 }
 
-class _MonekinDropdownSelectState<T> extends State<MonekinDropdownSelect<T>> {
+/// State of the `MonekinDropdownSelect` component. Use it for creating a key and open the dropdown programatically:
+///
+///
+///```
+///     late GlobalKey<MonekinDropdownSelectState>? _dropdownKey = GlobalKey();
+///     _dropdownKey!.currentState!.openDropdown();
+///```
+class MonekinDropdownSelectState<T> extends State<MonekinDropdownSelect<T>> {
   T? currentValue;
 
   late final GlobalKey _dropdownButtonKey = GlobalKey();
