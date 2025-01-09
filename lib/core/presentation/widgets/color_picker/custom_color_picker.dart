@@ -82,15 +82,16 @@ class _CustomColorPickerState extends State<CustomColorPicker> {
                       width: 180,
                       child: TextFormField(
                         controller: hexColorText,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           prefixIcon: Icon(Icons.numbers_rounded),
-                          counterText: "",
+                          counterText: '',
                         ),
                         maxLength: 6,
                         onChanged: (newValue) {
                           try {
                             currentHsvColor =
                                 HSVColor.fromColor(ColorHex.get(newValue));
+                            widget.onColorChanged(currentColor);
 
                             setState(() {});
                           } catch (e) {
@@ -115,7 +116,7 @@ class _CustomColorPickerState extends State<CustomColorPicker> {
                             width: 180,
                             height: 38,
                             decoration: BoxDecoration(
-                              color: currentHsvColor.toColor(),
+                              color: currentColor,
                               borderRadius: BorderRadius.circular(8),
                             ),
                           )
