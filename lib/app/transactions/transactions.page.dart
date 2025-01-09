@@ -300,7 +300,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
       actions: [
         MonekinPopupMenuButton(actionItems: [
           ListTileActionItem(
-            label: t.general.edit,
+            label: t.ui_actions.edit,
             icon: Icons.edit_rounded,
             onClick: () {
               showModalBottomSheet(
@@ -319,7 +319,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
             },
           ),
           ListTileActionItem(
-            label: t.general.delete,
+            label: t.ui_actions.delete,
             icon: Icons.delete_rounded,
             onClick: () {
               confirmDialog(
@@ -327,7 +327,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                 dialogTitle: selectedTransactions.length <= 1
                     ? t.transaction.delete
                     : t.transaction.delete_multiple,
-                confirmationText: t.general.confirm,
+                confirmationText: t.ui_actions.confirm,
                 showCancelButton: true,
                 icon: Icons.delete_rounded,
                 contentParagraphs: [

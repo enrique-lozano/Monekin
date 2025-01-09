@@ -109,7 +109,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                           CardWithHeader(
                             title: 'Info',
                             footer: CardFooterWithSingleButton(
-                              text: t.general.edit,
+                              text: t.ui_actions.edit,
                               onButtonClick: () => RouteUtils.pushRoute(
                                   context, AccountFormPage(account: account)),
                             ),
@@ -378,7 +378,7 @@ class _ArchiveWarnDialogState extends State<ArchiveWarnDialog> {
           return ModalContainer(
             title: t.account.close.title,
             footer: BottomSheetFooter(
-              submitText: t.general.continue_text,
+              submitText: t.ui_actions.continue_text,
               submitIcon: Icons.check,
               onSaved: !hasNoTransactions || widget.currentBalance != 0
                   ? null

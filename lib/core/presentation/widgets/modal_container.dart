@@ -18,6 +18,7 @@ class ModalContainer extends StatelessWidget {
     this.bodyPadding = const EdgeInsets.all(0),
     this.footer,
     this.responseToKeyboard = true,
+    this.bodyFit = FlexFit.loose,
   });
 
   final String title;
@@ -34,6 +35,7 @@ class ModalContainer extends StatelessWidget {
   final Widget body;
 
   final EdgeInsets bodyPadding;
+  final FlexFit bodyFit;
 
   /// If `true` (the default value), the modal will not be behind the keyboard when opened
   final bool responseToKeyboard;
@@ -89,6 +91,7 @@ class ModalContainer extends StatelessWidget {
           // --- Header end ---
 
           Flexible(
+            fit: bodyFit,
             child: Padding(
               padding: bodyPadding,
               child: body,

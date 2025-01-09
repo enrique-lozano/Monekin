@@ -58,9 +58,12 @@ class _CustomColorPickerModalState extends State<CustomColorPickerModal> {
           }),
       endWidget:
           widget.previewBuilder == null ? null : widget.previewBuilder!(color),
-      footer: BottomSheetFooter(onSaved: () {
-        widget.onColorSelected(color);
-      }),
+      footer: BottomSheetFooter(
+          submitIcon: Icons.colorize_rounded,
+          submitText: t.ui_actions.select,
+          onSaved: () {
+            widget.onColorSelected(color);
+          }),
     );
   }
 }

@@ -103,7 +103,7 @@ class _TagFormPageState extends State<TagFormPage> {
                   context,
                   dialogTitle: t.tags.delete_warning_header,
                   contentParagraphs: [Text(t.tags.delete_warning_message)],
-                  confirmationText: t.general.continue_text,
+                  confirmationText: t.ui_actions.continue_text,
                   showCancelButton: true,
                   icon: Icons.delete,
                 ).then(
@@ -136,7 +136,7 @@ class _TagFormPageState extends State<TagFormPage> {
               }
             },
             icon: const Icon(Icons.check),
-            label: Text(t.general.save_changes),
+            label: Text(t.ui_actions.save_changes),
           ),
         )
       ],

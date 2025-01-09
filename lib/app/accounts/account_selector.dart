@@ -169,7 +169,7 @@ class _AccountSelectorModalState extends State<AccountSelectorModal> {
               : null,
       tristate: true,
       title: Text(
-        t.general.select_all,
+        t.ui_actions.select_all,
         style: const TextStyle(fontWeight: FontWeight.w700),
       ),
       enabled: snapshot.hasData && snapshot.data!.isNotEmpty,

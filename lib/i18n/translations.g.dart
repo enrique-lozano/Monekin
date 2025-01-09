@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 6
-/// Strings: 3313 (552 per locale)
+/// Strings: 3457 (576 per locale)
 ///
-/// Built on 2025-01-09 at 17:53 UTC
+/// Built on 2025-01-09 at 22:36 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -159,6 +159,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final Translations _root = this; // ignore: unused_field
 
 	// Translations
+	late final _TranslationsUiActionsEn ui_actions = _TranslationsUiActionsEn._(_root);
 	late final _TranslationsGeneralEn general = _TranslationsGeneralEn._(_root);
 	late final _TranslationsIntroEn intro = _TranslationsIntroEn._(_root);
 	late final _TranslationsHomeEn home = _TranslationsHomeEn._(_root);
@@ -178,6 +179,51 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final _TranslationsMoreEn more = _TranslationsMoreEn._(_root);
 }
 
+// Path: ui_actions
+class _TranslationsUiActionsEn {
+	_TranslationsUiActionsEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get cancel => 'Cancel';
+	String get confirm => 'Confirm';
+	String get continue_text => 'Continue';
+	String get save => 'Save';
+	String get save_changes => 'Save changes';
+	String get close_and_save => 'Save and close';
+	String get add => 'Add';
+	String get edit => 'Edit';
+	String get delete => 'Delete';
+	String get see_more => 'See more';
+	String get select_all => 'Select all';
+	String get deselect_all => 'Deselect all';
+	String get select => 'Select';
+	String get search => 'Search';
+	String get filter => 'Filter';
+	String get reset => 'Reset';
+	String get submit => 'Submit';
+	String get next => 'Next';
+	String get previous => 'Previous';
+	String get back => 'Back';
+	String get reload => 'Reload';
+	String get view => 'View';
+	String get download => 'Download';
+	String get upload => 'Upload';
+	String get retry => 'Retry';
+	String get copy => 'Copy';
+	String get paste => 'Paste';
+	String get undo => 'Undo';
+	String get redo => 'Redo';
+	String get open => 'Open';
+	String get close => 'Close';
+	String get apply => 'Apply';
+	String get discard => 'Discard';
+	String get refresh => 'Refresh';
+	String get details => 'Details';
+	String get share => 'Share';
+}
+
 // Path: general
 class _TranslationsGeneralEn {
 	_TranslationsGeneralEn._(this._root);
@@ -185,20 +231,11 @@ class _TranslationsGeneralEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get cancel => 'Cancel';
 	String get or => 'or';
 	String get understood => 'Understood';
 	String get unspecified => 'Unspecified';
-	String get confirm => 'Confirm';
-	String get continue_text => 'Continue';
 	String get quick_actions => 'Quick actions';
-	String get save => 'Save';
-	String get save_changes => 'Save changes';
-	String get close_and_save => 'Save and close';
-	String get add => 'Add';
-	String get edit => 'Edit';
 	String get balance => 'Balance';
-	String get delete => 'Delete';
 	String get account => 'Account';
 	String get accounts => 'Accounts';
 	String get categories => 'Categories';
@@ -206,9 +243,6 @@ class _TranslationsGeneralEn {
 	String get today => 'Today';
 	String get yesterday => 'Yesterday';
 	String get filters => 'Filters';
-	String get see_more => 'See more';
-	String get select_all => 'Select all';
-	String get deselect_all => 'Deselect all';
 	String get empty_warn => 'Ops! This is very empty';
 	String get insufficient_data => 'Insufficient data';
 	String get show_more_fields => 'Show more fields';
@@ -1473,6 +1507,7 @@ class _TranslationsDe implements Translations {
 	@override late final _TranslationsDe _root = this; // ignore: unused_field
 
 	// Translations
+	@override late final _TranslationsUiActionsDe ui_actions = _TranslationsUiActionsDe._(_root);
 	@override late final _TranslationsGeneralDe general = _TranslationsGeneralDe._(_root);
 	@override late final _TranslationsIntroDe intro = _TranslationsIntroDe._(_root);
 	@override late final _TranslationsHomeDe home = _TranslationsHomeDe._(_root);
@@ -1492,6 +1527,51 @@ class _TranslationsDe implements Translations {
 	@override late final _TranslationsMoreDe more = _TranslationsMoreDe._(_root);
 }
 
+// Path: ui_actions
+class _TranslationsUiActionsDe implements _TranslationsUiActionsEn {
+	_TranslationsUiActionsDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get cancel => 'Abbrechen';
+	@override String get confirm => 'Bestätigen';
+	@override String get continue_text => 'Weiter';
+	@override String get save => 'Speichern';
+	@override String get save_changes => 'Änderungen speichern';
+	@override String get close_and_save => 'Speichern und schließen';
+	@override String get add => 'Hinzufügen';
+	@override String get edit => 'Bearbeiten';
+	@override String get delete => 'Löschen';
+	@override String get see_more => 'Mehr anzeigen';
+	@override String get select_all => 'Alles auswählen';
+	@override String get deselect_all => 'Alles abwählen';
+	@override String get select => 'Auswählen';
+	@override String get search => 'Suchen';
+	@override String get filter => 'Filtern';
+	@override String get reset => 'Zurücksetzen';
+	@override String get submit => 'Absenden';
+	@override String get next => 'Weiter';
+	@override String get previous => 'Zurück';
+	@override String get back => 'Zurück';
+	@override String get reload => 'Neu laden';
+	@override String get view => 'Ansehen';
+	@override String get download => 'Herunterladen';
+	@override String get upload => 'Hochladen';
+	@override String get retry => 'Erneut versuchen';
+	@override String get copy => 'Kopieren';
+	@override String get paste => 'Einfügen';
+	@override String get undo => 'Rückgängig';
+	@override String get redo => 'Wiederholen';
+	@override String get open => 'Öffnen';
+	@override String get close => 'Schließen';
+	@override String get apply => 'Anwenden';
+	@override String get discard => 'Verwerfen';
+	@override String get refresh => 'Aktualisieren';
+	@override String get details => 'Details';
+	@override String get share => 'Teilen';
+}
+
 // Path: general
 class _TranslationsGeneralDe implements _TranslationsGeneralEn {
 	_TranslationsGeneralDe._(this._root);
@@ -1499,20 +1579,11 @@ class _TranslationsGeneralDe implements _TranslationsGeneralEn {
 	@override final _TranslationsDe _root; // ignore: unused_field
 
 	// Translations
-	@override String get cancel => 'Abbruch';
 	@override String get or => 'oder';
 	@override String get understood => 'Verstanden';
 	@override String get unspecified => 'Nicht spezifiziert';
-	@override String get confirm => 'Bestätigen';
-	@override String get continue_text => 'Weiter';
 	@override String get quick_actions => 'Schnelle Aktionen';
-	@override String get save => 'Speichern';
-	@override String get save_changes => 'Änderungen speichern';
-	@override String get close_and_save => 'Speichern und schließen';
-	@override String get add => 'Hinzufügen';
-	@override String get edit => 'Bearbeiten';
 	@override String get balance => 'Kontostand';
-	@override String get delete => 'Löschen';
 	@override String get account => 'Konto';
 	@override String get accounts => 'Konten';
 	@override String get categories => 'Kategorien';
@@ -1520,9 +1591,6 @@ class _TranslationsGeneralDe implements _TranslationsGeneralEn {
 	@override String get today => 'Heute';
 	@override String get yesterday => 'Gestern';
 	@override String get filters => 'Filter';
-	@override String get see_more => 'Mehr sehen';
-	@override String get select_all => 'Alles auswählen';
-	@override String get deselect_all => 'Alle abwählen';
 	@override String get empty_warn => 'Ops! Das ist sehr leer';
 	@override String get insufficient_data => 'Unzureichende Daten';
 	@override String get show_more_fields => 'Weitere Felder anzeigen';
@@ -2787,6 +2855,7 @@ class _TranslationsEs implements Translations {
 	@override late final _TranslationsEs _root = this; // ignore: unused_field
 
 	// Translations
+	@override late final _TranslationsUiActionsEs ui_actions = _TranslationsUiActionsEs._(_root);
 	@override late final _TranslationsGeneralEs general = _TranslationsGeneralEs._(_root);
 	@override late final _TranslationsIntroEs intro = _TranslationsIntroEs._(_root);
 	@override late final _TranslationsHomeEs home = _TranslationsHomeEs._(_root);
@@ -2806,6 +2875,51 @@ class _TranslationsEs implements Translations {
 	@override late final _TranslationsMoreEs more = _TranslationsMoreEs._(_root);
 }
 
+// Path: ui_actions
+class _TranslationsUiActionsEs implements _TranslationsUiActionsEn {
+	_TranslationsUiActionsEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get cancel => 'Cancelar';
+	@override String get confirm => 'Confirmar';
+	@override String get continue_text => 'Continuar';
+	@override String get save => 'Guardar';
+	@override String get save_changes => 'Guardar cambios';
+	@override String get close_and_save => 'Guardar y cerrar';
+	@override String get add => 'Añadir';
+	@override String get edit => 'Editar';
+	@override String get delete => 'Eliminar';
+	@override String get see_more => 'Ver más';
+	@override String get select_all => 'Seleccionar todo';
+	@override String get deselect_all => 'Deseleccionar todo';
+	@override String get select => 'Seleccionar';
+	@override String get search => 'Buscar';
+	@override String get filter => 'Filter';
+	@override String get reset => 'Restablecer';
+	@override String get submit => 'Enviar';
+	@override String get next => 'Siguiente';
+	@override String get previous => 'Anterior';
+	@override String get back => 'Atrás';
+	@override String get reload => 'Recargar';
+	@override String get view => 'Ver';
+	@override String get download => 'Descargar';
+	@override String get upload => 'Subir';
+	@override String get retry => 'Reintentar';
+	@override String get copy => 'Copiar';
+	@override String get paste => 'Pegar';
+	@override String get undo => 'Deshacer';
+	@override String get redo => 'Rehacer';
+	@override String get open => 'Abrir';
+	@override String get close => 'Cerrar';
+	@override String get apply => 'Aplicar';
+	@override String get discard => 'Descartar';
+	@override String get refresh => 'Actualizar';
+	@override String get details => 'Detalles';
+	@override String get share => 'Compartir';
+}
+
 // Path: general
 class _TranslationsGeneralEs implements _TranslationsGeneralEn {
 	_TranslationsGeneralEs._(this._root);
@@ -2813,19 +2927,10 @@ class _TranslationsGeneralEs implements _TranslationsGeneralEn {
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get cancel => 'Cancelar';
 	@override String get or => 'o';
 	@override String get understood => 'Entendido';
 	@override String get unspecified => 'Sin especificar';
-	@override String get confirm => 'Confirmar';
-	@override String get continue_text => 'Continuar';
 	@override String get quick_actions => 'Acciones rápidas';
-	@override String get save => 'Guardar';
-	@override String get save_changes => 'Guardar cambios';
-	@override String get close_and_save => 'Guardar y cerrar';
-	@override String get add => 'Añadir';
-	@override String get edit => 'Editar';
-	@override String get delete => 'Eliminar';
 	@override String get balance => 'Balance';
 	@override String get account => 'Cuenta';
 	@override String get accounts => 'Cuentas';
@@ -2834,9 +2939,6 @@ class _TranslationsGeneralEs implements _TranslationsGeneralEn {
 	@override String get today => 'Hoy';
 	@override String get yesterday => 'Ayer';
 	@override String get filters => 'Filtros';
-	@override String get see_more => 'Ver más';
-	@override String get select_all => 'Seleccionar todo';
-	@override String get deselect_all => 'Deseleccionar todo';
 	@override String get empty_warn => 'Ops! Esto esta muy vacio';
 	@override String get insufficient_data => 'Datos insuficientes';
 	@override String get show_more_fields => 'Show more fields';
@@ -4102,6 +4204,7 @@ class _TranslationsHu implements Translations {
 	@override late final _TranslationsHu _root = this; // ignore: unused_field
 
 	// Translations
+	@override late final _TranslationsUiActionsHu ui_actions = _TranslationsUiActionsHu._(_root);
 	@override late final _TranslationsGeneralHu general = _TranslationsGeneralHu._(_root);
 	@override late final _TranslationsIntroHu intro = _TranslationsIntroHu._(_root);
 	@override late final _TranslationsHomeHu home = _TranslationsHomeHu._(_root);
@@ -4121,6 +4224,51 @@ class _TranslationsHu implements Translations {
 	@override late final _TranslationsMoreHu more = _TranslationsMoreHu._(_root);
 }
 
+// Path: ui_actions
+class _TranslationsUiActionsHu implements _TranslationsUiActionsEn {
+	_TranslationsUiActionsHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get cancel => 'Mégse';
+	@override String get confirm => 'Megerősítés';
+	@override String get continue_text => 'Folytatás';
+	@override String get save => 'Mentés';
+	@override String get save_changes => 'Módosítások mentése';
+	@override String get close_and_save => 'Mentés és bezárás';
+	@override String get add => 'Hozzáad';
+	@override String get edit => 'Szerkesztés';
+	@override String get delete => 'Törlés';
+	@override String get see_more => 'Továbbiak megtekintése';
+	@override String get select_all => 'Összes kijelölése';
+	@override String get deselect_all => 'Összes kijelölésének megszüntetése';
+	@override String get select => 'Kiválasztás';
+	@override String get search => 'Keresés';
+	@override String get filter => 'Szűrés';
+	@override String get reset => 'Alaphelyzetbe állítás';
+	@override String get submit => 'Beküldés';
+	@override String get next => 'Következő';
+	@override String get previous => 'Előző';
+	@override String get back => 'Vissza';
+	@override String get reload => 'Újratöltés';
+	@override String get view => 'Megtekintés';
+	@override String get download => 'Letöltés';
+	@override String get upload => 'Feltöltés';
+	@override String get retry => 'Újrapróbálkozás';
+	@override String get copy => 'Másolás';
+	@override String get paste => 'Beillesztés';
+	@override String get undo => 'Visszavonás';
+	@override String get redo => 'Újra';
+	@override String get open => 'Megnyitás';
+	@override String get close => 'Bezárás';
+	@override String get apply => 'Alkalmaz';
+	@override String get discard => 'Elvetés';
+	@override String get refresh => 'Frissítés';
+	@override String get details => 'Részletek';
+	@override String get share => 'Megosztás';
+}
+
 // Path: general
 class _TranslationsGeneralHu implements _TranslationsGeneralEn {
 	_TranslationsGeneralHu._(this._root);
@@ -4128,20 +4276,11 @@ class _TranslationsGeneralHu implements _TranslationsGeneralEn {
 	@override final _TranslationsHu _root; // ignore: unused_field
 
 	// Translations
-	@override String get cancel => 'Magyar';
 	@override String get or => 'vagy';
 	@override String get understood => 'Megértve';
 	@override String get unspecified => 'Meghatározatlan';
-	@override String get confirm => 'Megerősítés';
-	@override String get continue_text => 'Folytatás';
 	@override String get quick_actions => 'Gyorsműveletek';
-	@override String get save => 'Mentés';
-	@override String get save_changes => 'Módosítások mentése';
-	@override String get close_and_save => 'Mentés és bezárás';
-	@override String get add => 'Hozzáad';
-	@override String get edit => 'Szerkesztés';
 	@override String get balance => 'Egyenleg';
-	@override String get delete => 'Törlés';
 	@override String get account => 'Számla';
 	@override String get accounts => 'Számlák';
 	@override String get categories => 'Kategóriák';
@@ -4149,9 +4288,6 @@ class _TranslationsGeneralHu implements _TranslationsGeneralEn {
 	@override String get today => 'Ma';
 	@override String get yesterday => 'Tegnap';
 	@override String get filters => 'Szűrők';
-	@override String get see_more => 'Továbbiak';
-	@override String get select_all => 'Összes kijelölése';
-	@override String get deselect_all => 'Egyiket sem';
 	@override String get empty_warn => 'Hoppá! Ez nagyon üres.';
 	@override String get insufficient_data => 'Hiányos adatok';
 	@override String get show_more_fields => 'Több mező mutatása';
@@ -5416,6 +5552,7 @@ class _TranslationsUk implements Translations {
 	@override late final _TranslationsUk _root = this; // ignore: unused_field
 
 	// Translations
+	@override late final _TranslationsUiActionsUk ui_actions = _TranslationsUiActionsUk._(_root);
 	@override late final _TranslationsGeneralUk general = _TranslationsGeneralUk._(_root);
 	@override late final _TranslationsIntroUk intro = _TranslationsIntroUk._(_root);
 	@override late final _TranslationsHomeUk home = _TranslationsHomeUk._(_root);
@@ -5435,6 +5572,51 @@ class _TranslationsUk implements Translations {
 	@override late final _TranslationsMoreUk more = _TranslationsMoreUk._(_root);
 }
 
+// Path: ui_actions
+class _TranslationsUiActionsUk implements _TranslationsUiActionsEn {
+	_TranslationsUiActionsUk._(this._root);
+
+	@override final _TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get cancel => 'Скасувати';
+	@override String get confirm => 'Підтвердити';
+	@override String get continue_text => 'Продовжити';
+	@override String get save => 'Зберегти';
+	@override String get save_changes => 'Зберегти зміни';
+	@override String get close_and_save => 'Закрити та зберегти';
+	@override String get add => 'Додати';
+	@override String get edit => 'Редагувати';
+	@override String get delete => 'Видалити';
+	@override String get see_more => 'Детальніше';
+	@override String get select_all => 'Вибрати все';
+	@override String get deselect_all => 'Скасувати вибір всього';
+	@override String get select => 'Вибрати';
+	@override String get search => 'Пошук';
+	@override String get filter => 'Фільтр';
+	@override String get reset => 'Скинути';
+	@override String get submit => 'Надіслати';
+	@override String get next => 'Далі';
+	@override String get previous => 'Назад';
+	@override String get back => 'Повернутися';
+	@override String get reload => 'Перезавантажити';
+	@override String get view => 'Переглянути';
+	@override String get download => 'Завантажити';
+	@override String get upload => 'Завантажити файл';
+	@override String get retry => 'Спробувати знову';
+	@override String get copy => 'Копіювати';
+	@override String get paste => 'Вставити';
+	@override String get undo => 'Скасувати дію';
+	@override String get redo => 'Повторити дію';
+	@override String get open => 'Відкрити';
+	@override String get close => 'Закрити';
+	@override String get apply => 'Застосувати';
+	@override String get discard => 'Скасувати зміни';
+	@override String get refresh => 'Оновити';
+	@override String get details => 'Деталі';
+	@override String get share => 'Поділитися';
+}
+
 // Path: general
 class _TranslationsGeneralUk implements _TranslationsGeneralEn {
 	_TranslationsGeneralUk._(this._root);
@@ -5442,20 +5624,11 @@ class _TranslationsGeneralUk implements _TranslationsGeneralEn {
 	@override final _TranslationsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get cancel => 'Скасувати';
 	@override String get or => 'або';
 	@override String get understood => 'Зрозуміло';
 	@override String get unspecified => 'Не вказано';
-	@override String get confirm => 'Підтвердити';
-	@override String get continue_text => 'Продовжити';
 	@override String get quick_actions => 'Швидкі дії';
-	@override String get save => 'Зберегти';
-	@override String get save_changes => 'Зберегти зміни';
-	@override String get close_and_save => 'Закрити та зберегти';
-	@override String get add => 'Додати';
-	@override String get edit => 'Редагувати';
 	@override String get balance => 'Баланс';
-	@override String get delete => 'Видалити';
 	@override String get account => 'Рахунок';
 	@override String get accounts => 'Рахунки';
 	@override String get categories => 'Категорії';
@@ -5463,9 +5636,6 @@ class _TranslationsGeneralUk implements _TranslationsGeneralEn {
 	@override String get today => 'Сьогодні';
 	@override String get yesterday => 'Вчора';
 	@override String get filters => 'Фільтри';
-	@override String get see_more => 'Побачити більше';
-	@override String get select_all => 'Вибрати всі';
-	@override String get deselect_all => 'Скасувати вибір усіх';
 	@override String get empty_warn => 'Ой! Тут порожньо';
 	@override String get insufficient_data => 'Недостатньо даних';
 	@override String get show_more_fields => 'Показати більше полів';
@@ -6730,6 +6900,7 @@ class _TranslationsZhTw implements Translations {
 	@override late final _TranslationsZhTw _root = this; // ignore: unused_field
 
 	// Translations
+	@override late final _TranslationsUiActionsZhTw ui_actions = _TranslationsUiActionsZhTw._(_root);
 	@override late final _TranslationsGeneralZhTw general = _TranslationsGeneralZhTw._(_root);
 	@override late final _TranslationsIntroZhTw intro = _TranslationsIntroZhTw._(_root);
 	@override late final _TranslationsHomeZhTw home = _TranslationsHomeZhTw._(_root);
@@ -6749,6 +6920,51 @@ class _TranslationsZhTw implements Translations {
 	@override late final _TranslationsMoreZhTw more = _TranslationsMoreZhTw._(_root);
 }
 
+// Path: ui_actions
+class _TranslationsUiActionsZhTw implements _TranslationsUiActionsEn {
+	_TranslationsUiActionsZhTw._(this._root);
+
+	@override final _TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get cancel => '取消';
+	@override String get confirm => '確認';
+	@override String get continue_text => '繼續';
+	@override String get save => '保存';
+	@override String get save_changes => '儲存變更';
+	@override String get close_and_save => '儲存並關閉';
+	@override String get add => '添加';
+	@override String get edit => '編輯';
+	@override String get delete => '刪除';
+	@override String get see_more => '查看更多';
+	@override String get select_all => '全選';
+	@override String get deselect_all => '取消全選';
+	@override String get select => '選擇';
+	@override String get search => '搜尋';
+	@override String get filter => '篩選';
+	@override String get reset => '重設';
+	@override String get submit => '提交';
+	@override String get next => '下一步';
+	@override String get previous => '上一步';
+	@override String get back => '返回';
+	@override String get reload => '重新載入';
+	@override String get view => '檢視';
+	@override String get download => '下載';
+	@override String get upload => '上傳';
+	@override String get retry => '重試';
+	@override String get copy => '複製';
+	@override String get paste => '貼上';
+	@override String get undo => '還原';
+	@override String get redo => '重做';
+	@override String get open => '開啟';
+	@override String get close => '關閉';
+	@override String get apply => '套用';
+	@override String get discard => '捨棄';
+	@override String get refresh => '重新整理';
+	@override String get details => '詳細資訊';
+	@override String get share => '分享';
+}
+
 // Path: general
 class _TranslationsGeneralZhTw implements _TranslationsGeneralEn {
 	_TranslationsGeneralZhTw._(this._root);
@@ -6756,20 +6972,11 @@ class _TranslationsGeneralZhTw implements _TranslationsGeneralEn {
 	@override final _TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get cancel => '取消';
 	@override String get or => '或';
 	@override String get understood => '明白了';
 	@override String get unspecified => '未指定';
-	@override String get confirm => '確認';
-	@override String get continue_text => '繼續';
 	@override String get quick_actions => '快速行動';
-	@override String get save => '保存';
-	@override String get save_changes => '儲存變更';
-	@override String get close_and_save => '儲存並關閉';
-	@override String get add => '添加';
-	@override String get edit => '編輯';
 	@override String get balance => '平衡';
-	@override String get delete => '刪除';
 	@override String get account => '帳戶';
 	@override String get accounts => '帳戶';
 	@override String get categories => '類別';
@@ -6777,9 +6984,6 @@ class _TranslationsGeneralZhTw implements _TranslationsGeneralEn {
 	@override String get today => '今天';
 	@override String get yesterday => '昨天';
 	@override String get filters => '過濾器';
-	@override String get see_more => '查看更多';
-	@override String get select_all => '全選';
-	@override String get deselect_all => '取消全選';
 	@override String get empty_warn => '哦！這裡非常空';
 	@override String get insufficient_data => '數據不足';
 	@override String get show_more_fields => '顯示更多欄位';
@@ -8026,20 +8230,47 @@ class _TranslationsGeneralTimeRangesTypesZhTw implements _TranslationsGeneralTim
 extension on Translations {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
-			case 'general.cancel': return 'Cancel';
+			case 'ui_actions.cancel': return 'Cancel';
+			case 'ui_actions.confirm': return 'Confirm';
+			case 'ui_actions.continue_text': return 'Continue';
+			case 'ui_actions.save': return 'Save';
+			case 'ui_actions.save_changes': return 'Save changes';
+			case 'ui_actions.close_and_save': return 'Save and close';
+			case 'ui_actions.add': return 'Add';
+			case 'ui_actions.edit': return 'Edit';
+			case 'ui_actions.delete': return 'Delete';
+			case 'ui_actions.see_more': return 'See more';
+			case 'ui_actions.select_all': return 'Select all';
+			case 'ui_actions.deselect_all': return 'Deselect all';
+			case 'ui_actions.select': return 'Select';
+			case 'ui_actions.search': return 'Search';
+			case 'ui_actions.filter': return 'Filter';
+			case 'ui_actions.reset': return 'Reset';
+			case 'ui_actions.submit': return 'Submit';
+			case 'ui_actions.next': return 'Next';
+			case 'ui_actions.previous': return 'Previous';
+			case 'ui_actions.back': return 'Back';
+			case 'ui_actions.reload': return 'Reload';
+			case 'ui_actions.view': return 'View';
+			case 'ui_actions.download': return 'Download';
+			case 'ui_actions.upload': return 'Upload';
+			case 'ui_actions.retry': return 'Retry';
+			case 'ui_actions.copy': return 'Copy';
+			case 'ui_actions.paste': return 'Paste';
+			case 'ui_actions.undo': return 'Undo';
+			case 'ui_actions.redo': return 'Redo';
+			case 'ui_actions.open': return 'Open';
+			case 'ui_actions.close': return 'Close';
+			case 'ui_actions.apply': return 'Apply';
+			case 'ui_actions.discard': return 'Discard';
+			case 'ui_actions.refresh': return 'Refresh';
+			case 'ui_actions.details': return 'Details';
+			case 'ui_actions.share': return 'Share';
 			case 'general.or': return 'or';
 			case 'general.understood': return 'Understood';
 			case 'general.unspecified': return 'Unspecified';
-			case 'general.confirm': return 'Confirm';
-			case 'general.continue_text': return 'Continue';
 			case 'general.quick_actions': return 'Quick actions';
-			case 'general.save': return 'Save';
-			case 'general.save_changes': return 'Save changes';
-			case 'general.close_and_save': return 'Save and close';
-			case 'general.add': return 'Add';
-			case 'general.edit': return 'Edit';
 			case 'general.balance': return 'Balance';
-			case 'general.delete': return 'Delete';
 			case 'general.account': return 'Account';
 			case 'general.accounts': return 'Accounts';
 			case 'general.categories': return 'Categories';
@@ -8047,9 +8278,6 @@ extension on Translations {
 			case 'general.today': return 'Today';
 			case 'general.yesterday': return 'Yesterday';
 			case 'general.filters': return 'Filters';
-			case 'general.see_more': return 'See more';
-			case 'general.select_all': return 'Select all';
-			case 'general.deselect_all': return 'Deselect all';
 			case 'general.empty_warn': return 'Ops! This is very empty';
 			case 'general.insufficient_data': return 'Insufficient data';
 			case 'general.show_more_fields': return 'Show more fields';
@@ -8658,20 +8886,47 @@ extension on Translations {
 extension on _TranslationsDe {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
-			case 'general.cancel': return 'Abbruch';
+			case 'ui_actions.cancel': return 'Abbrechen';
+			case 'ui_actions.confirm': return 'Bestätigen';
+			case 'ui_actions.continue_text': return 'Weiter';
+			case 'ui_actions.save': return 'Speichern';
+			case 'ui_actions.save_changes': return 'Änderungen speichern';
+			case 'ui_actions.close_and_save': return 'Speichern und schließen';
+			case 'ui_actions.add': return 'Hinzufügen';
+			case 'ui_actions.edit': return 'Bearbeiten';
+			case 'ui_actions.delete': return 'Löschen';
+			case 'ui_actions.see_more': return 'Mehr anzeigen';
+			case 'ui_actions.select_all': return 'Alles auswählen';
+			case 'ui_actions.deselect_all': return 'Alles abwählen';
+			case 'ui_actions.select': return 'Auswählen';
+			case 'ui_actions.search': return 'Suchen';
+			case 'ui_actions.filter': return 'Filtern';
+			case 'ui_actions.reset': return 'Zurücksetzen';
+			case 'ui_actions.submit': return 'Absenden';
+			case 'ui_actions.next': return 'Weiter';
+			case 'ui_actions.previous': return 'Zurück';
+			case 'ui_actions.back': return 'Zurück';
+			case 'ui_actions.reload': return 'Neu laden';
+			case 'ui_actions.view': return 'Ansehen';
+			case 'ui_actions.download': return 'Herunterladen';
+			case 'ui_actions.upload': return 'Hochladen';
+			case 'ui_actions.retry': return 'Erneut versuchen';
+			case 'ui_actions.copy': return 'Kopieren';
+			case 'ui_actions.paste': return 'Einfügen';
+			case 'ui_actions.undo': return 'Rückgängig';
+			case 'ui_actions.redo': return 'Wiederholen';
+			case 'ui_actions.open': return 'Öffnen';
+			case 'ui_actions.close': return 'Schließen';
+			case 'ui_actions.apply': return 'Anwenden';
+			case 'ui_actions.discard': return 'Verwerfen';
+			case 'ui_actions.refresh': return 'Aktualisieren';
+			case 'ui_actions.details': return 'Details';
+			case 'ui_actions.share': return 'Teilen';
 			case 'general.or': return 'oder';
 			case 'general.understood': return 'Verstanden';
 			case 'general.unspecified': return 'Nicht spezifiziert';
-			case 'general.confirm': return 'Bestätigen';
-			case 'general.continue_text': return 'Weiter';
 			case 'general.quick_actions': return 'Schnelle Aktionen';
-			case 'general.save': return 'Speichern';
-			case 'general.save_changes': return 'Änderungen speichern';
-			case 'general.close_and_save': return 'Speichern und schließen';
-			case 'general.add': return 'Hinzufügen';
-			case 'general.edit': return 'Bearbeiten';
 			case 'general.balance': return 'Kontostand';
-			case 'general.delete': return 'Löschen';
 			case 'general.account': return 'Konto';
 			case 'general.accounts': return 'Konten';
 			case 'general.categories': return 'Kategorien';
@@ -8679,9 +8934,6 @@ extension on _TranslationsDe {
 			case 'general.today': return 'Heute';
 			case 'general.yesterday': return 'Gestern';
 			case 'general.filters': return 'Filter';
-			case 'general.see_more': return 'Mehr sehen';
-			case 'general.select_all': return 'Alles auswählen';
-			case 'general.deselect_all': return 'Alle abwählen';
 			case 'general.empty_warn': return 'Ops! Das ist sehr leer';
 			case 'general.insufficient_data': return 'Unzureichende Daten';
 			case 'general.show_more_fields': return 'Weitere Felder anzeigen';
@@ -9290,19 +9542,46 @@ extension on _TranslationsDe {
 extension on _TranslationsEs {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
-			case 'general.cancel': return 'Cancelar';
+			case 'ui_actions.cancel': return 'Cancelar';
+			case 'ui_actions.confirm': return 'Confirmar';
+			case 'ui_actions.continue_text': return 'Continuar';
+			case 'ui_actions.save': return 'Guardar';
+			case 'ui_actions.save_changes': return 'Guardar cambios';
+			case 'ui_actions.close_and_save': return 'Guardar y cerrar';
+			case 'ui_actions.add': return 'Añadir';
+			case 'ui_actions.edit': return 'Editar';
+			case 'ui_actions.delete': return 'Eliminar';
+			case 'ui_actions.see_more': return 'Ver más';
+			case 'ui_actions.select_all': return 'Seleccionar todo';
+			case 'ui_actions.deselect_all': return 'Deseleccionar todo';
+			case 'ui_actions.select': return 'Seleccionar';
+			case 'ui_actions.search': return 'Buscar';
+			case 'ui_actions.filter': return 'Filter';
+			case 'ui_actions.reset': return 'Restablecer';
+			case 'ui_actions.submit': return 'Enviar';
+			case 'ui_actions.next': return 'Siguiente';
+			case 'ui_actions.previous': return 'Anterior';
+			case 'ui_actions.back': return 'Atrás';
+			case 'ui_actions.reload': return 'Recargar';
+			case 'ui_actions.view': return 'Ver';
+			case 'ui_actions.download': return 'Descargar';
+			case 'ui_actions.upload': return 'Subir';
+			case 'ui_actions.retry': return 'Reintentar';
+			case 'ui_actions.copy': return 'Copiar';
+			case 'ui_actions.paste': return 'Pegar';
+			case 'ui_actions.undo': return 'Deshacer';
+			case 'ui_actions.redo': return 'Rehacer';
+			case 'ui_actions.open': return 'Abrir';
+			case 'ui_actions.close': return 'Cerrar';
+			case 'ui_actions.apply': return 'Aplicar';
+			case 'ui_actions.discard': return 'Descartar';
+			case 'ui_actions.refresh': return 'Actualizar';
+			case 'ui_actions.details': return 'Detalles';
+			case 'ui_actions.share': return 'Compartir';
 			case 'general.or': return 'o';
 			case 'general.understood': return 'Entendido';
 			case 'general.unspecified': return 'Sin especificar';
-			case 'general.confirm': return 'Confirmar';
-			case 'general.continue_text': return 'Continuar';
 			case 'general.quick_actions': return 'Acciones rápidas';
-			case 'general.save': return 'Guardar';
-			case 'general.save_changes': return 'Guardar cambios';
-			case 'general.close_and_save': return 'Guardar y cerrar';
-			case 'general.add': return 'Añadir';
-			case 'general.edit': return 'Editar';
-			case 'general.delete': return 'Eliminar';
 			case 'general.balance': return 'Balance';
 			case 'general.account': return 'Cuenta';
 			case 'general.accounts': return 'Cuentas';
@@ -9311,9 +9590,6 @@ extension on _TranslationsEs {
 			case 'general.today': return 'Hoy';
 			case 'general.yesterday': return 'Ayer';
 			case 'general.filters': return 'Filtros';
-			case 'general.see_more': return 'Ver más';
-			case 'general.select_all': return 'Seleccionar todo';
-			case 'general.deselect_all': return 'Deseleccionar todo';
 			case 'general.empty_warn': return 'Ops! Esto esta muy vacio';
 			case 'general.insufficient_data': return 'Datos insuficientes';
 			case 'general.show_more_fields': return 'Show more fields';
@@ -9923,20 +10199,47 @@ extension on _TranslationsEs {
 extension on _TranslationsHu {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
-			case 'general.cancel': return 'Magyar';
+			case 'ui_actions.cancel': return 'Mégse';
+			case 'ui_actions.confirm': return 'Megerősítés';
+			case 'ui_actions.continue_text': return 'Folytatás';
+			case 'ui_actions.save': return 'Mentés';
+			case 'ui_actions.save_changes': return 'Módosítások mentése';
+			case 'ui_actions.close_and_save': return 'Mentés és bezárás';
+			case 'ui_actions.add': return 'Hozzáad';
+			case 'ui_actions.edit': return 'Szerkesztés';
+			case 'ui_actions.delete': return 'Törlés';
+			case 'ui_actions.see_more': return 'Továbbiak megtekintése';
+			case 'ui_actions.select_all': return 'Összes kijelölése';
+			case 'ui_actions.deselect_all': return 'Összes kijelölésének megszüntetése';
+			case 'ui_actions.select': return 'Kiválasztás';
+			case 'ui_actions.search': return 'Keresés';
+			case 'ui_actions.filter': return 'Szűrés';
+			case 'ui_actions.reset': return 'Alaphelyzetbe állítás';
+			case 'ui_actions.submit': return 'Beküldés';
+			case 'ui_actions.next': return 'Következő';
+			case 'ui_actions.previous': return 'Előző';
+			case 'ui_actions.back': return 'Vissza';
+			case 'ui_actions.reload': return 'Újratöltés';
+			case 'ui_actions.view': return 'Megtekintés';
+			case 'ui_actions.download': return 'Letöltés';
+			case 'ui_actions.upload': return 'Feltöltés';
+			case 'ui_actions.retry': return 'Újrapróbálkozás';
+			case 'ui_actions.copy': return 'Másolás';
+			case 'ui_actions.paste': return 'Beillesztés';
+			case 'ui_actions.undo': return 'Visszavonás';
+			case 'ui_actions.redo': return 'Újra';
+			case 'ui_actions.open': return 'Megnyitás';
+			case 'ui_actions.close': return 'Bezárás';
+			case 'ui_actions.apply': return 'Alkalmaz';
+			case 'ui_actions.discard': return 'Elvetés';
+			case 'ui_actions.refresh': return 'Frissítés';
+			case 'ui_actions.details': return 'Részletek';
+			case 'ui_actions.share': return 'Megosztás';
 			case 'general.or': return 'vagy';
 			case 'general.understood': return 'Megértve';
 			case 'general.unspecified': return 'Meghatározatlan';
-			case 'general.confirm': return 'Megerősítés';
-			case 'general.continue_text': return 'Folytatás';
 			case 'general.quick_actions': return 'Gyorsműveletek';
-			case 'general.save': return 'Mentés';
-			case 'general.save_changes': return 'Módosítások mentése';
-			case 'general.close_and_save': return 'Mentés és bezárás';
-			case 'general.add': return 'Hozzáad';
-			case 'general.edit': return 'Szerkesztés';
 			case 'general.balance': return 'Egyenleg';
-			case 'general.delete': return 'Törlés';
 			case 'general.account': return 'Számla';
 			case 'general.accounts': return 'Számlák';
 			case 'general.categories': return 'Kategóriák';
@@ -9944,9 +10247,6 @@ extension on _TranslationsHu {
 			case 'general.today': return 'Ma';
 			case 'general.yesterday': return 'Tegnap';
 			case 'general.filters': return 'Szűrők';
-			case 'general.see_more': return 'Továbbiak';
-			case 'general.select_all': return 'Összes kijelölése';
-			case 'general.deselect_all': return 'Egyiket sem';
 			case 'general.empty_warn': return 'Hoppá! Ez nagyon üres.';
 			case 'general.insufficient_data': return 'Hiányos adatok';
 			case 'general.show_more_fields': return 'Több mező mutatása';
@@ -10555,20 +10855,47 @@ extension on _TranslationsHu {
 extension on _TranslationsUk {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
-			case 'general.cancel': return 'Скасувати';
+			case 'ui_actions.cancel': return 'Скасувати';
+			case 'ui_actions.confirm': return 'Підтвердити';
+			case 'ui_actions.continue_text': return 'Продовжити';
+			case 'ui_actions.save': return 'Зберегти';
+			case 'ui_actions.save_changes': return 'Зберегти зміни';
+			case 'ui_actions.close_and_save': return 'Закрити та зберегти';
+			case 'ui_actions.add': return 'Додати';
+			case 'ui_actions.edit': return 'Редагувати';
+			case 'ui_actions.delete': return 'Видалити';
+			case 'ui_actions.see_more': return 'Детальніше';
+			case 'ui_actions.select_all': return 'Вибрати все';
+			case 'ui_actions.deselect_all': return 'Скасувати вибір всього';
+			case 'ui_actions.select': return 'Вибрати';
+			case 'ui_actions.search': return 'Пошук';
+			case 'ui_actions.filter': return 'Фільтр';
+			case 'ui_actions.reset': return 'Скинути';
+			case 'ui_actions.submit': return 'Надіслати';
+			case 'ui_actions.next': return 'Далі';
+			case 'ui_actions.previous': return 'Назад';
+			case 'ui_actions.back': return 'Повернутися';
+			case 'ui_actions.reload': return 'Перезавантажити';
+			case 'ui_actions.view': return 'Переглянути';
+			case 'ui_actions.download': return 'Завантажити';
+			case 'ui_actions.upload': return 'Завантажити файл';
+			case 'ui_actions.retry': return 'Спробувати знову';
+			case 'ui_actions.copy': return 'Копіювати';
+			case 'ui_actions.paste': return 'Вставити';
+			case 'ui_actions.undo': return 'Скасувати дію';
+			case 'ui_actions.redo': return 'Повторити дію';
+			case 'ui_actions.open': return 'Відкрити';
+			case 'ui_actions.close': return 'Закрити';
+			case 'ui_actions.apply': return 'Застосувати';
+			case 'ui_actions.discard': return 'Скасувати зміни';
+			case 'ui_actions.refresh': return 'Оновити';
+			case 'ui_actions.details': return 'Деталі';
+			case 'ui_actions.share': return 'Поділитися';
 			case 'general.or': return 'або';
 			case 'general.understood': return 'Зрозуміло';
 			case 'general.unspecified': return 'Не вказано';
-			case 'general.confirm': return 'Підтвердити';
-			case 'general.continue_text': return 'Продовжити';
 			case 'general.quick_actions': return 'Швидкі дії';
-			case 'general.save': return 'Зберегти';
-			case 'general.save_changes': return 'Зберегти зміни';
-			case 'general.close_and_save': return 'Закрити та зберегти';
-			case 'general.add': return 'Додати';
-			case 'general.edit': return 'Редагувати';
 			case 'general.balance': return 'Баланс';
-			case 'general.delete': return 'Видалити';
 			case 'general.account': return 'Рахунок';
 			case 'general.accounts': return 'Рахунки';
 			case 'general.categories': return 'Категорії';
@@ -10576,9 +10903,6 @@ extension on _TranslationsUk {
 			case 'general.today': return 'Сьогодні';
 			case 'general.yesterday': return 'Вчора';
 			case 'general.filters': return 'Фільтри';
-			case 'general.see_more': return 'Побачити більше';
-			case 'general.select_all': return 'Вибрати всі';
-			case 'general.deselect_all': return 'Скасувати вибір усіх';
 			case 'general.empty_warn': return 'Ой! Тут порожньо';
 			case 'general.insufficient_data': return 'Недостатньо даних';
 			case 'general.show_more_fields': return 'Показати більше полів';
@@ -11187,20 +11511,47 @@ extension on _TranslationsUk {
 extension on _TranslationsZhTw {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
-			case 'general.cancel': return '取消';
+			case 'ui_actions.cancel': return '取消';
+			case 'ui_actions.confirm': return '確認';
+			case 'ui_actions.continue_text': return '繼續';
+			case 'ui_actions.save': return '保存';
+			case 'ui_actions.save_changes': return '儲存變更';
+			case 'ui_actions.close_and_save': return '儲存並關閉';
+			case 'ui_actions.add': return '添加';
+			case 'ui_actions.edit': return '編輯';
+			case 'ui_actions.delete': return '刪除';
+			case 'ui_actions.see_more': return '查看更多';
+			case 'ui_actions.select_all': return '全選';
+			case 'ui_actions.deselect_all': return '取消全選';
+			case 'ui_actions.select': return '選擇';
+			case 'ui_actions.search': return '搜尋';
+			case 'ui_actions.filter': return '篩選';
+			case 'ui_actions.reset': return '重設';
+			case 'ui_actions.submit': return '提交';
+			case 'ui_actions.next': return '下一步';
+			case 'ui_actions.previous': return '上一步';
+			case 'ui_actions.back': return '返回';
+			case 'ui_actions.reload': return '重新載入';
+			case 'ui_actions.view': return '檢視';
+			case 'ui_actions.download': return '下載';
+			case 'ui_actions.upload': return '上傳';
+			case 'ui_actions.retry': return '重試';
+			case 'ui_actions.copy': return '複製';
+			case 'ui_actions.paste': return '貼上';
+			case 'ui_actions.undo': return '還原';
+			case 'ui_actions.redo': return '重做';
+			case 'ui_actions.open': return '開啟';
+			case 'ui_actions.close': return '關閉';
+			case 'ui_actions.apply': return '套用';
+			case 'ui_actions.discard': return '捨棄';
+			case 'ui_actions.refresh': return '重新整理';
+			case 'ui_actions.details': return '詳細資訊';
+			case 'ui_actions.share': return '分享';
 			case 'general.or': return '或';
 			case 'general.understood': return '明白了';
 			case 'general.unspecified': return '未指定';
-			case 'general.confirm': return '確認';
-			case 'general.continue_text': return '繼續';
 			case 'general.quick_actions': return '快速行動';
-			case 'general.save': return '保存';
-			case 'general.save_changes': return '儲存變更';
-			case 'general.close_and_save': return '儲存並關閉';
-			case 'general.add': return '添加';
-			case 'general.edit': return '編輯';
 			case 'general.balance': return '平衡';
-			case 'general.delete': return '刪除';
 			case 'general.account': return '帳戶';
 			case 'general.accounts': return '帳戶';
 			case 'general.categories': return '類別';
@@ -11208,9 +11559,6 @@ extension on _TranslationsZhTw {
 			case 'general.today': return '今天';
 			case 'general.yesterday': return '昨天';
 			case 'general.filters': return '過濾器';
-			case 'general.see_more': return '查看更多';
-			case 'general.select_all': return '全選';
-			case 'general.deselect_all': return '取消全選';
 			case 'general.empty_warn': return '哦！這裡非常空';
 			case 'general.insufficient_data': return '數據不足';
 			case 'general.show_more_fields': return '顯示更多欄位';
