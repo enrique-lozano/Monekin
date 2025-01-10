@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
+import 'package:monekin/app/categories/selectors/draggableScrollableKeyboardAware.mixin.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/models/category/category.dart';
@@ -35,17 +36,14 @@ class CategoryMultiSelectorModal extends StatefulWidget {
       _CategoryMultiSelectorModalState();
 }
 
-class _CategoryMultiSelectorModalState
-    extends State<CategoryMultiSelectorModal> {
+class _CategoryMultiSelectorModalState extends State<CategoryMultiSelectorModal>
+    with DraggableScrollableKeyboardAware {
   late List<Category> selectedCategories;
 
   String searchValue = '';
 
   /// IDs of the category tiles that are expanded
   Set<String> expandedCategoriesTiles = {};
-
-  final DraggableScrollableController controller =
-      DraggableScrollableController();
 
   @override
   void initState() {
@@ -55,37 +53,12 @@ class _CategoryMultiSelectorModalState
   }
 
   @override
-  void dispose() {
-    controller.dispose();
-
-    super.dispose();
-  }
-
-  _moveSheetTo(double position) {
-    if (controller.isAttached && mounted) {
-      controller.jumpTo(position);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    final bottomInsets = MediaQuery.of(context).viewInsets.bottom;
-
-    if (bottomInsets > 0) {
-      _moveSheetTo(1);
-    } else {
-      _moveSheetTo(0.65);
-    }
-
-    return DraggableScrollableSheet(
-      controller: controller,
-      expand: false,
+    return buildDraggableSheet(
+      defaultSize: 0.65,
       minChildSize: 0.64,
-      initialChildSize: 0.65,
-      snap: true,
-      snapSizes: const [0.65],
       builder: (context, sc) {
         return ModalContainer(
           title: t.categories.select.title,
@@ -119,9 +92,9 @@ class _CategoryMultiSelectorModalState
                       border: const UnderlineInputBorder(),
                     ),
                     onChanged: (value) {
-                      setState(() {
-                        searchValue = value;
-                      });
+                      searchValue = value;
+
+                      rebuild();
                     },
                   ),
                   buildSelectAllButton(snapshot),
@@ -187,7 +160,7 @@ class _CategoryMultiSelectorModalState
                         .removeWhere((e) => e == category.id);
                   }
 
-                  setState(() {});
+                  rebuild();
                 },
                 leading:
                     IconDisplayer.fromCategory(context, category: category),
@@ -209,7 +182,7 @@ class _CategoryMultiSelectorModalState
                               .contains(e.id));
                     }
 
-                    setState(() {});
+                    rebuild();
                   },
                 ),
                 title: Row(
@@ -278,7 +251,7 @@ class _CategoryMultiSelectorModalState
             selectedCategories.removeWhere((e) => e.id == category.id);
           }
 
-          setState(() {});
+          rebuild();
         },
       ),
     );
@@ -315,7 +288,7 @@ class _CategoryMultiSelectorModalState
               (selAcc) => snapshot.data!.map((e) => e.id).contains(selAcc.id));
         }
 
-        setState(() {});
+        rebuild();
       },
     );
   }
