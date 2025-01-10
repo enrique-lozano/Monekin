@@ -35,7 +35,7 @@ Future<bool?> confirmDialog(
         actions: [
           if (showCancelButton)
             TextButton(
-              child: Text(t.general.cancel),
+              child: Text(t.ui_actions.cancel),
               onPressed: () {
                 Navigator.of(context, rootNavigator: true).pop(false);
               },

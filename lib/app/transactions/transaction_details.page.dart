@@ -168,7 +168,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
     confirmDialog(
       context,
       dialogTitle: t.transaction.next_payments.skip_dialog_title,
-      confirmationText: t.general.confirm,
+      confirmationText: t.ui_actions.confirm,
       contentParagraphs: [
         Text(nextPaymentDate != null
             ? t.transaction.next_payments.skip_dialog_msg(

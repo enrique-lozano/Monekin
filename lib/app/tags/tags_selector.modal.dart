@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
+import 'package:monekin/app/categories/selectors/draggableScrollableKeyboardAware.mixin.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/models/tags/tag.dart';
@@ -43,14 +44,11 @@ class TagSelector extends StatefulWidget {
   State<TagSelector> createState() => _TagSelectorState();
 }
 
-class _TagSelectorState extends State<TagSelector> {
+class _TagSelectorState extends State<TagSelector>
+    with DraggableScrollableKeyboardAware {
   late List<Tag?> selectedTags;
 
   String searchValue = '';
-
-  final DraggableScrollableController controller =
-      DraggableScrollableController();
-
   @override
   void initState() {
     super.initState();
@@ -59,37 +57,12 @@ class _TagSelectorState extends State<TagSelector> {
   }
 
   @override
-  void dispose() {
-    controller.dispose();
-
-    super.dispose();
-  }
-
-  _moveSheetTo(double position) {
-    if (controller.isAttached && mounted) {
-      controller.jumpTo(position);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    final bottomInsets = MediaQuery.of(context).viewInsets.bottom;
-
-    if (bottomInsets > 0) {
-      _moveSheetTo(1);
-    } else {
-      _moveSheetTo(0.65);
-    }
-
-    return DraggableScrollableSheet(
-        controller: controller,
-        expand: false,
+    return buildDraggableSheet(
         minChildSize: 0.64,
-        initialChildSize: 0.65,
-        snap: true,
-        snapSizes: const [0.65],
+        defaultSize: 0.65,
         builder: (context, scrollController) {
           return ModalContainer(
             title: t.tags.select.title,
@@ -122,9 +95,9 @@ class _TagSelectorState extends State<TagSelector> {
                           border: const UnderlineInputBorder(),
                         ),
                         onChanged: (value) {
-                          setState(() {
-                            searchValue = value;
-                          });
+                          searchValue = value;
+
+                          rebuild();
                         },
                       ),
                       buildSelectAllButton(snapshot),
@@ -190,7 +163,7 @@ class _TagSelectorState extends State<TagSelector> {
                       selectedTags.add(null);
                     }
 
-                    setState(() {});
+                    rebuild();
                   },
                 );
               }
@@ -215,7 +188,7 @@ class _TagSelectorState extends State<TagSelector> {
                     selectedTags.add(tag);
                   }
 
-                  setState(() {});
+                  rebuild();
                 },
               );
             },
@@ -248,7 +221,7 @@ class _TagSelectorState extends State<TagSelector> {
               : null,
       tristate: true,
       title: Text(
-        t.general.select_all,
+        t.ui_actions.select_all,
         style: const TextStyle(fontWeight: FontWeight.w700),
       ),
       enabled: snapshot.hasData && snapshot.data!.isNotEmpty,
@@ -261,7 +234,7 @@ class _TagSelectorState extends State<TagSelector> {
               (selAcc) => filteredTags.map((e) => e?.id).contains(selAcc?.id));
         }
 
-        setState(() {});
+        rebuild();
       },
     );
   }

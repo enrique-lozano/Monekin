@@ -184,7 +184,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
           done: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(t.general.continue_text),
+              Text(t.ui_actions.continue_text),
               const SizedBox(width: 4),
               const Icon(Icons.check)
             ],
