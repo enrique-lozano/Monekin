@@ -12,6 +12,7 @@ class SimpleShadow extends StatelessWidget {
   final Offset offset;
 
   const SimpleShadow({
+    super.key,
     required this.child,
     this.opacity = 0.5,
     this.sigma = 2,
