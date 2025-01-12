@@ -22,7 +22,7 @@ class NewTransactionButton extends StatelessWidget {
       context,
       dialogTitle: t.home.should_create_account_header,
       contentParagraphs: [Text(t.home.should_create_account_message)],
-      confirmationText: t.general.continue_text,
+      confirmationText: t.ui_actions.continue_text,
     ).then((value) {
       if (value != true) return;
 

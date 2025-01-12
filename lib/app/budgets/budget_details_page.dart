@@ -106,7 +106,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                       },
                     ),
                     ListTileActionItem(
-                      label: t.general.delete,
+                      label: t.ui_actions.delete,
                       icon: Icons.delete,
                       role: ListTileActionRole.delete,
                       onClick: () {
@@ -114,7 +114,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                           context,
                           dialogTitle: t.budgets.delete,
                           contentParagraphs: [Text(t.budgets.delete_warning)],
-                          confirmationText: t.general.confirm,
+                          confirmationText: t.ui_actions.confirm,
                           icon: Icons.delete,
                         ).then((confirmed) {
                           if (confirmed != true) return;

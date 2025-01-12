@@ -62,7 +62,7 @@ class BottomSheetFooter extends StatelessWidget {
                     disabledForegroundColor: Colors.grey, //Text Color
                   ),
                   icon: Icon(submitIcon),
-                  label: Text(submitText ?? t.general.save),
+                  label: Text(submitText ?? t.ui_actions.save),
                   onPressed: onSaved != null
                       ? () {
                           onSaved!();

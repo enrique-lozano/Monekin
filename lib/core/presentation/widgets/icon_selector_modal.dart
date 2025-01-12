@@ -161,10 +161,14 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
                   }).toList()),
                 ),
               ),
-              BottomSheetFooter(onSaved: () {
-                widget.onIconSelected!(_selectedIcon!);
-                Navigator.pop(context);
-              })
+              BottomSheetFooter(
+                submitIcon: Icons.check,
+                submitText: t.ui_actions.select,
+                onSaved: () {
+                  widget.onIconSelected!(_selectedIcon!);
+                  Navigator.pop(context);
+                },
+              )
             ]),
           );
         });

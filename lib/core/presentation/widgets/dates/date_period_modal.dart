@@ -55,7 +55,7 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
     return ModalContainer(
         title: t.general.time.ranges.display,
         footer: BottomSheetFooter(
-            submitText: t.general.continue_text,
+            submitText: t.ui_actions.continue_text,
             submitIcon: Icons.arrow_forward_ios,
             onSaved: () {
               Navigator.of(context).pop(toReturn);

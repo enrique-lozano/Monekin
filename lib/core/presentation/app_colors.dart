@@ -28,7 +28,7 @@ class AppColors extends ThemeExtension<AppColors> {
     final isDark = colorScheme.brightness == Brightness.dark;
 
     return AppColors(
-      link: Colors.blue.shade200,
+      link: isDark ? Colors.blue.shade200 : Colors.blue.shade700,
       danger: isDark ? Colors.redAccent : Colors.red,
       success:
           isDark ? Colors.lightGreen : const Color.fromARGB(255, 55, 161, 59),

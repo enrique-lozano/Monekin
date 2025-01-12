@@ -4,9 +4,13 @@ import 'package:monekin/app/settings/widgets/monekin_tile_switch.dart';
 import 'package:monekin/app/settings/widgets/supported_locales.dart';
 import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
+import 'package:monekin/core/database/services/user-setting/utils/get_theme_from_string.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/presentation/animations/scaled_animated_switcher.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker_modal.dart';
+import 'package:monekin/core/presentation/widgets/monekin_dropdown_select.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/presentation/app_colors.dart';
@@ -33,70 +37,6 @@ class SelectItem<T> {
 }
 
 class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
-  Widget buildSelector<T>({
-    required String title,
-    String? dialogDescr,
-    required List<SelectItem<T>> items,
-    required T selected,
-    required void Function(T newValue) onChanged,
-  }) {
-    SelectItem<T> selectedItem =
-        items.firstWhere((element) => element.value == selected);
-
-    return ListTile(
-        title: Text(title),
-        subtitle: Text(selectedItem.label),
-        leading: Icon(Icons.light_mode),
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title),
-                  if (dialogDescr != null) ...[
-                    const SizedBox(height: 8),
-                    Text(
-                      dialogDescr,
-                      style: Theme.of(context).textTheme.labelMedium,
-                    )
-                  ]
-                ],
-              ),
-              contentPadding: const EdgeInsets.only(top: 12),
-              content: SingleChildScrollView(
-                  child: StatefulBuilder(builder: (context, alertState) {
-                return Column(
-                    children: items
-                        .map(
-                          (item) => RadioListTile(
-                            title: Text(item.label),
-                            value: item.value,
-                            groupValue: selected,
-                            onChanged: (newValue) {
-                              if (newValue != null && newValue != selected) {
-                                onChanged(newValue);
-                                selected = newValue;
-                              }
-                            },
-                          ),
-                        )
-                        .toList());
-              })),
-              actions: [
-                TextButton(
-                  child: Text(t.general.cancel),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            ),
-          );
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -154,34 +94,32 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               },
             ),
             createListSeparator(context, t.settings.theme_and_colors),
-            StreamBuilder(
-                stream: UserSettingService.instance
-                    .getSettingFromDB(SettingKey.themeMode),
-                builder: (context, snapshot) {
-                  return buildSelector(
-                    title: t.settings.theme,
-                    items: [
-                      SelectItem(value: 'system', label: t.settings.theme_auto),
-                      SelectItem(value: 'light', label: t.settings.theme_light),
-                      SelectItem(value: 'dark', label: t.settings.theme_dark)
+            Builder(
+              builder: (context) {
+                final theme =
+                    getThemeFromString(appStateSettings[SettingKey.themeMode]);
+
+                return ListTile(
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(child: Text(t.settings.theme)),
+                      const SizedBox(width: 12),
+                      Flexible(child: _buildThemeDropdown(theme))
                     ],
-                    selected: snapshot.data ?? 'system',
-                    onChanged: (value) {
-                      UserSettingService.instance
-                          .setItem(
-                            SettingKey.themeMode,
-                            value,
-                            updateGlobalState: true,
-                          )
-                          .then((value) => null);
-                    },
-                  );
-                }),
+                  ),
+                  leading: ScaledAnimatedSwitcher(
+                    keyToWatch: theme.icon(context).toString(),
+                    child: Icon(theme.icon(context)),
+                  ),
+                );
+              },
+            ),
             MonekinTileSwitch(
               title: t.settings.amoled_mode,
               subtitle: t.settings.amoled_mode_descr,
               initialValue: appStateSettings[SettingKey.amoledMode] == '1',
-              disabled: Theme.of(context).brightness == Brightness.light,
+              disabled: isAppInLightBrightness(context),
               onSwitchDebounceMs: 200,
               onSwitch: (bool value) async {
                 await UserSettingService.instance.setItem(
@@ -199,7 +137,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               onSwitch: (bool value) async {
                 await UserSettingService.instance.setItem(
                   SettingKey.accentColor,
-                  value ? 'auto' : brandBlue.toHex(leadingHashSign: false),
+                  value ? 'auto' : brandBlue.toHex(),
                   updateGlobalState: true,
                 );
               },
@@ -224,22 +162,23 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                               context,
                               ColorPickerModal(
                                 colorOptions: [
-                                  brandBlue.toHex(leadingHashSign: false),
+                                  brandBlue.toHex(),
                                   ...defaultColorPickerOptions
                                 ],
                                 selectedColor: color.toHex(),
-                              ),
-                            ).then((value) {
-                              if (value == null) return;
+                                onColorSelected: (value) {
+                                  Navigator.pop(context);
 
-                              setState(() {
-                                UserSettingService.instance.setItem(
-                                  SettingKey.accentColor,
-                                  value.toHex(),
-                                  updateGlobalState: true,
-                                );
-                              });
-                            }),
+                                  setState(() {
+                                    UserSettingService.instance.setItem(
+                                      SettingKey.accentColor,
+                                      value.toHex(),
+                                      updateGlobalState: true,
+                                    );
+                                  });
+                                },
+                              ),
+                            ),
                     title: Text(t.settings.accent_color),
                     subtitle: Text(t.settings.accent_color_descr),
                     enabled: snapshot.data! != 'auto',
@@ -264,7 +203,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
             MonekinTileSwitch(
               title: t.settings.security.private_mode_at_launch,
               subtitle: t.settings.security.private_mode_at_launch_descr,
-              icon: Icons.phonelink_lock_outlined,
+              icon: const Icon(Icons.phonelink_lock_outlined),
               initialValue:
                   appStateSettings[SettingKey.privateModeAtLaunch] == '1',
               onSwitch: (bool value) async {
@@ -274,11 +213,18 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
             StreamBuilder(
                 stream: PrivateModeService.instance.privateModeStream,
                 builder: (context, snapshot) {
+                  final initialValue = (snapshot.data ?? false);
+
                   return MonekinTileSwitch(
                     title: t.settings.security.private_mode,
                     subtitle: t.settings.security.private_mode_descr,
-                    icon: Icons.lock,
-                    initialValue: snapshot.data ?? false,
+                    icon: ScaledAnimatedSwitcher(
+                      keyToWatch: initialValue.toString(),
+                      child: Icon(initialValue
+                          ? Icons.lock_outline_rounded
+                          : Icons.lock_open_rounded),
+                    ),
+                    initialValue: initialValue,
                     onSwitch: (bool value) {
                       setState(() {
                         PrivateModeService.instance.setPrivateMode(value);
@@ -290,5 +236,27 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
         ),
       ),
     );
+  }
+
+  Widget _buildThemeDropdown(ThemeMode theme) {
+    return MonekinDropdownSelect(
+        initial: theme,
+        compact: true,
+        expanded: false,
+        items: const [
+          ThemeMode.system,
+          ThemeMode.light,
+          ThemeMode.dark,
+        ],
+        getLabel: (x) => x.displayName(context),
+        onChanged: (mode) {
+          UserSettingService.instance
+              .setItem(
+                SettingKey.themeMode,
+                mode.name,
+                updateGlobalState: true,
+              )
+              .then((value) => null);
+        });
   }
 }

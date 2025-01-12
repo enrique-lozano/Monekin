@@ -330,7 +330,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                           onPressed: nextButtonDisabled
                               ? null
                               : details.onStepContinue,
-                          child: Text(t.general.continue_text),
+                          child: Text(t.ui_actions.continue_text),
                         ),
                         if (currentStep == 0 && csvData != null) ...[
                           const SizedBox(width: 8),

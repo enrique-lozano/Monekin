@@ -103,7 +103,7 @@ class _TagFormPageState extends State<TagFormPage> {
                   context,
                   dialogTitle: t.tags.delete_warning_header,
                   contentParagraphs: [Text(t.tags.delete_warning_message)],
-                  confirmationText: t.general.continue_text,
+                  confirmationText: t.ui_actions.continue_text,
                   showCancelButton: true,
                   icon: Icons.delete,
                 ).then(
@@ -136,7 +136,7 @@ class _TagFormPageState extends State<TagFormPage> {
               }
             },
             icon: const Icon(Icons.check),
-            label: Text(t.general.save_changes),
+            label: Text(t.ui_actions.save_changes),
           ),
         )
       ],
@@ -172,26 +172,26 @@ class _TagFormPageState extends State<TagFormPage> {
                   ),
                   const SizedBox(height: 16),
                   ReadOnlyTextFormField(
-                    displayValue: null,
-                    decoration: InputDecoration(
-                      hintText: t.icon_selector.color,
-                      suffixIcon: const Icon(Icons.circle),
-                      suffixIconColor: ColorHex.get(_color),
-                    ),
-                    onTap: () => showColorPickerModal(
-                      context,
-                      ColorPickerModal(
-                        colorOptions: defaultColorPickerOptions,
-                        selectedColor: _color,
+                      displayValue: null,
+                      decoration: InputDecoration(
+                        hintText: t.icon_selector.color,
+                        suffixIcon: const Icon(Icons.circle),
+                        suffixIconColor: ColorHex.get(_color),
                       ),
-                    ).then((value) {
-                      if (value == null) return;
+                      onTap: () => showColorPickerModal(
+                            context,
+                            ColorPickerModal(
+                              colorOptions: defaultColorPickerOptions,
+                              selectedColor: _color,
+                              onColorSelected: (value) {
+                                Navigator.pop(context);
 
-                      setState(() {
-                        _color = value.toHex();
-                      });
-                    }),
-                  ),
+                                setState(() {
+                                  _color = value.toHex();
+                                });
+                              },
+                            ),
+                          )),
                   const SizedBox(height: 12),
                   TextFormField(
                     controller: _descrController,

@@ -101,7 +101,7 @@ class CardFooterWithSingleButton extends StatelessWidget {
             onPressed: onButtonClick,
             iconAlignment: IconAlignment.end,
             icon: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
-            label: Text(text ?? t.general.see_more),
+            label: Text(text ?? t.ui_actions.see_more),
           ),
         )
       ],

@@ -24,7 +24,7 @@ class TransactionViewActionService {
 
     return [
       ListTileActionItem(
-        label: t.general.edit,
+        label: t.ui_actions.edit,
         icon: Icons.edit,
         onClick: () => RouteUtils.pushRoute(
             context,
@@ -42,7 +42,7 @@ class TransactionViewActionService {
                   transaction: transaction),
         ),
       ListTileActionItem(
-          label: t.general.delete,
+          label: t.ui_actions.delete,
           icon: Icons.delete,
           role: ListTileActionRole.delete,
           onClick: () => TransactionViewActionService()
@@ -75,7 +75,7 @@ class TransactionViewActionService {
             ? t.transaction.delete_warning_message
             : t.recurrent_transactions.details.delete_message),
       ],
-      confirmationText: t.general.continue_text,
+      confirmationText: t.ui_actions.continue_text,
     ).then((isConfirmed) {
       if (isConfirmed != true) return;
 
@@ -113,7 +113,7 @@ class TransactionViewActionService {
       icon: Icons.control_point_duplicate_rounded,
       dialogTitle: t.transaction.duplicate,
       contentParagraphs: [Text(t.transaction.duplicate_warning_message)],
-      confirmationText: t.general.continue_text,
+      confirmationText: t.ui_actions.continue_text,
     ).then((isConfirmed) async {
       if (isConfirmed != true) return;
 

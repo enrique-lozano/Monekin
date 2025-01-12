@@ -108,7 +108,7 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
                       await showExchangeRateFormDialog(
                           context, const ExchangeRateFormDialog());
                     },
-                    child: Text(t.general.add))
+                    child: Text(t.ui_actions.add))
               ],
             ),
           ),

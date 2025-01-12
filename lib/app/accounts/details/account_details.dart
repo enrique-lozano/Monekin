@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -107,7 +109,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                           CardWithHeader(
                             title: 'Info',
                             footer: CardFooterWithSingleButton(
-                              text: t.general.edit,
+                              text: t.ui_actions.edit,
                               onButtonClick: () => RouteUtils.pushRoute(
                                   context, AccountFormPage(account: account)),
                             ),
@@ -252,11 +254,15 @@ class _AccountDetailHeader extends SliverPersistentHeaderDelegate {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: shrinkPercent > 0.5
+            ? CrossAxisAlignment.center
+            : CrossAxisAlignment.end,
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: shrinkPercent > 0.5
+                ? MainAxisAlignment.center
+                : MainAxisAlignment.end,
             children: [
               Text(account.name),
               StreamBuilder(
@@ -273,7 +279,8 @@ class _AccountDetailHeader extends SliverPersistentHeaderDelegate {
                               .textTheme
                               .headlineMedium!
                               .copyWith(
-                                fontSize: 32 - shrinkPercent * 16,
+                                fontSize:
+                                    32 - (1 - pow(1 - shrinkPercent, 4)) * 15,
                                 fontWeight: FontWeight.w600,
                               ),
                           child: CurrencyDisplayer(
@@ -320,7 +327,8 @@ class _AccountDetailHeader extends SliverPersistentHeaderDelegate {
           ),
           Hero(
             tag: accountIconHeroTag ?? UniqueKey(),
-            child: account.displayIcon(context, size: 48 - shrinkPercent * 20),
+            child: account.displayIcon(context,
+                size: 48 - (1 - pow(1 - shrinkPercent, 4)) * 20),
           ),
         ],
       ),
@@ -334,8 +342,8 @@ class _AccountDetailHeader extends SliverPersistentHeaderDelegate {
   double get minExtent => 80;
 
   @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
-      false;
+  bool shouldRebuild(covariant _AccountDetailHeader oldDelegate) =>
+      oldDelegate.account != account;
 }
 
 class ArchiveWarnDialog extends StatefulWidget {
@@ -370,7 +378,7 @@ class _ArchiveWarnDialogState extends State<ArchiveWarnDialog> {
           return ModalContainer(
             title: t.account.close.title,
             footer: BottomSheetFooter(
-              submitText: t.general.continue_text,
+              submitText: t.ui_actions.continue_text,
               submitIcon: Icons.check,
               onSaved: !hasNoTransactions || widget.currentBalance != 0
                   ? null

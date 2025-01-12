@@ -2,16 +2,32 @@ import 'package:flutter/material.dart';
 
 extension ColorHex on Color {
   /// Return a color instance from an hex string
-  static Color get(String hex) =>
-      Color(int.parse("0xff${hex.replaceAll('#', '')}"));
+  static Color get(String hex) {
+    hex = hex.toUpperCase().replaceAll('#', '');
 
-  String toHex({bool leadingHashSign = true}) {
-    return '${leadingHashSign ? '#' : ''}'
-        '${alpha.toRadixString(16).padLeft(2, '0')}'
-        '${red.toRadixString(16).padLeft(2, '0')}'
-        '${green.toRadixString(16).padLeft(2, '0')}'
-        '${blue.toRadixString(16).padLeft(2, '0')}';
+    if (hex.length == 6) {
+      hex = 'FF$hex';
+    }
+
+    // Parser will return errors on invalid strings, so we don't need error catching here
+    return Color(int.parse(hex, radix: 16));
   }
+
+  String toHex({
+    bool leadingHashSign = false,
+    bool enableAlpha = false,
+    bool toUpperCase = true,
+  }) {
+    final String hex = (leadingHashSign ? '#' : '') +
+        (enableAlpha ? _padRadix(alpha) : '') +
+        _padRadix(red) +
+        _padRadix(green) +
+        _padRadix(blue);
+    return toUpperCase ? hex.toUpperCase() : hex;
+  }
+
+// Shorthand for padLeft of RadixString, DRY.
+  String _padRadix(int value) => value.toRadixString(16).padLeft(2, '0');
 }
 
 extension ColorBrightness on Color {

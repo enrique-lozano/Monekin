@@ -141,7 +141,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                 }
               },
               icon: const Icon(Icons.check),
-              label: Text(t.general.save_changes),
+              label: Text(t.ui_actions.save_changes),
             ),
           )
         ],
@@ -178,7 +178,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                             contentPadding: EdgeInsets.zero,
                             leading: const Icon(Icons.delete),
                             minLeadingWidth: 26,
-                            title: Text(t.general.delete),
+                            title: Text(t.ui_actions.delete),
                           ))
                     ];
                   },
@@ -337,7 +337,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                                             contentPadding: EdgeInsets.zero,
                                             leading: const Icon(Icons.edit),
                                             minLeadingWidth: 26,
-                                            title: Text(t.general.edit),
+                                            title: Text(t.ui_actions.edit),
                                           )),
                                       const PopupMenuDivider(),
                                       PopupMenuItem(
@@ -346,7 +346,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                                             contentPadding: EdgeInsets.zero,
                                             leading: const Icon(Icons.delete),
                                             minLeadingWidth: 26,
-                                            title: Text(t.general.delete),
+                                            title: Text(t.ui_actions.delete),
                                           ))
                                     ];
                                   },
