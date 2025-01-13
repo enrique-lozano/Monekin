@@ -47,7 +47,7 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.18
 
   # Other
-  flutter_svg: ^2.0.5
+  flutter_svg: ^2.0.17
   permission_handler: ^11.3.0
   json_annotation: ^4.8.1
   fl_chart: ^0.69.0
