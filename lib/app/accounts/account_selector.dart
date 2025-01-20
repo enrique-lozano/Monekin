@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
+import 'package:monekin/app/categories/selectors/draggableScrollableKeyboardAware.mixin.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
@@ -42,13 +43,11 @@ class AccountSelectorModal extends StatefulWidget {
   State<AccountSelectorModal> createState() => _AccountSelectorModalState();
 }
 
-class _AccountSelectorModalState extends State<AccountSelectorModal> {
+class _AccountSelectorModalState extends State<AccountSelectorModal>
+    with DraggableScrollableKeyboardAware {
   late List<Account> selectedAccounts;
 
   String searchValue = '';
-
-  final DraggableScrollableController controller =
-      DraggableScrollableController();
 
   @override
   void initState() {
@@ -58,37 +57,12 @@ class _AccountSelectorModalState extends State<AccountSelectorModal> {
   }
 
   @override
-  void dispose() {
-    controller.dispose();
-
-    super.dispose();
-  }
-
-  _moveSheetTo(double position) {
-    if (controller.isAttached && mounted) {
-      controller.jumpTo(position);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    final bottomInsets = MediaQuery.of(context).viewInsets.bottom;
-
-    if (bottomInsets > 0) {
-      _moveSheetTo(1);
-    } else {
-      _moveSheetTo(0.65);
-    }
-
-    return DraggableScrollableSheet(
-      controller: controller,
-      expand: false,
+    return buildDraggableSheet(
       minChildSize: 0.64,
-      initialChildSize: 0.65,
-      snap: true,
-      snapSizes: const [0.65],
+      defaultSize: 0.65,
       builder: (context, scrollController) {
         return ModalContainer(
           title: widget.allowMultiSelection
@@ -128,9 +102,8 @@ class _AccountSelectorModalState extends State<AccountSelectorModal> {
                         border: const UnderlineInputBorder(),
                       ),
                       onChanged: (value) {
-                        setState(() {
-                          searchValue = value;
-                        });
+                        searchValue = value;
+                        rebuild();
                       },
                     ),
                     if (widget.allowMultiSelection)
@@ -169,7 +142,7 @@ class _AccountSelectorModalState extends State<AccountSelectorModal> {
               : null,
       tristate: true,
       title: Text(
-        t.general.select_all,
+        t.ui_actions.select_all,
         style: const TextStyle(fontWeight: FontWeight.w700),
       ),
       enabled: snapshot.hasData && snapshot.data!.isNotEmpty,
@@ -182,7 +155,7 @@ class _AccountSelectorModalState extends State<AccountSelectorModal> {
               (selAcc) => snapshot.data!.map((e) => e.id).contains(selAcc.id));
         }
 
-        setState(() {});
+        rebuild();
       },
     );
   }
@@ -247,7 +220,7 @@ class _AccountSelectorModalState extends State<AccountSelectorModal> {
                         .removeWhere((element) => element.id == account.id);
                   }
 
-                  setState(() {});
+                  rebuild();
                 },
               );
             }

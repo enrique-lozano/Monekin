@@ -61,7 +61,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
         actions: [
           MonekinPopupMenuButton(actionItems: [
             ListTileActionItem(
-                label: t.general.delete,
+                label: t.ui_actions.delete,
                 icon: Icons.delete,
                 onClick: () => deleteAllRates())
           ])

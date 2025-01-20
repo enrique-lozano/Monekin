@@ -17,8 +17,6 @@ class ReorderableDragIcon extends StatelessWidget {
         child: Container(
           // Padding to increase the dragabble area:
           padding: const EdgeInsets.fromLTRB(14, 4, 2, 4),
-
-          // color: Colors.red,
           child: const Icon(Icons.drag_handle_rounded),
         ),
       ),

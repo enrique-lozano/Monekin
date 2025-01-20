@@ -18,6 +18,7 @@ class ModalContainer extends StatelessWidget {
     this.bodyPadding = const EdgeInsets.all(0),
     this.footer,
     this.responseToKeyboard = true,
+    this.bodyFit = FlexFit.loose,
   });
 
   final String title;
@@ -34,6 +35,7 @@ class ModalContainer extends StatelessWidget {
   final Widget body;
 
   final EdgeInsets bodyPadding;
+  final FlexFit bodyFit;
 
   /// If `true` (the default value), the modal will not be behind the keyboard when opened
   final bool responseToKeyboard;
@@ -60,24 +62,26 @@ class ModalContainer extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    DefaultTextStyle(
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineSmall!
-                          .copyWith(fontWeight: FontWeight.w800),
-                      child: titleBuilder != null
-                          ? titleBuilder!(title)
-                          : Text(title),
-                    ),
-                    if (subtitle != null) ...[
-                      const SizedBox(height: 2),
-                      Text(subtitle!)
+                Flexible(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      DefaultTextStyle(
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineSmall!
+                            .copyWith(fontWeight: FontWeight.w800),
+                        child: titleBuilder != null
+                            ? titleBuilder!(title)
+                            : Text(title),
+                      ),
+                      if (subtitle != null) ...[
+                        const SizedBox(height: 2),
+                        Text(subtitle!)
+                      ],
                     ],
-                  ],
+                  ),
                 ),
                 if (endWidget != null) endWidget!
               ],
@@ -87,6 +91,7 @@ class ModalContainer extends StatelessWidget {
           // --- Header end ---
 
           Flexible(
+            fit: bodyFit,
             child: Padding(
               padding: bodyPadding,
               child: body,

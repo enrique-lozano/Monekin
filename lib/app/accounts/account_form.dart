@@ -15,6 +15,7 @@ import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/expansion_panel/single_expansion_panel.dart';
@@ -98,7 +99,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
       closingDate: _closeDate,
       type: _type,
       iconId: _icon.id,
-      color: _color.toHex(leadingHashSign: false),
+      color: _color.toHex(),
       currency: _currency!,
       iban: _ibanController.text.isEmpty ? null : _ibanController.text,
       description: _textController.text.isEmpty ? null : _textController.text,
@@ -233,6 +234,8 @@ class _AccountFormPageState extends State<AccountFormPage> {
           return const LinearProgressIndicator();
         }
 
+        final isDark = isAppInDarkBrightness(context);
+
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Form(
@@ -248,8 +251,10 @@ class _AccountFormPageState extends State<AccountFormPage> {
                     size: 36,
                     isOutline: true,
                     outlineWidth: 1.5,
-                    mainColor: _color.lighten(IconDisplayer.darkLightenFactor),
-                    secondaryColor: _color,
+                    mainColor: _color
+                        .lighten(isDark ? IconDisplayer.darkLightenFactor : 0),
+                    secondaryColor: _color
+                        .lighten(isDark ? 0 : IconDisplayer.darkLightenFactor),
                     displayMode: IconDisplayMode.polygon,
                   ),
                   onDataChange: ((data) {

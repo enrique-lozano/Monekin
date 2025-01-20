@@ -21,6 +21,7 @@ import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/widgets/loading_overlay.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
+import 'package:monekin/core/utils/logger.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/translations.g.dart';
@@ -265,7 +266,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
       loadingOverlay.hide();
       onSuccess();
     } catch (e) {
-      print(e);
+      Logger.printDebug(e);
       loadingOverlay.hide();
       snackbarDisplayer(SnackBar(content: Text(e.toString())));
     }
@@ -329,7 +330,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                           onPressed: nextButtonDisabled
                               ? null
                               : details.onStepContinue,
-                          child: Text(t.general.continue_text),
+                          child: Text(t.ui_actions.continue_text),
                         ),
                         if (currentStep == 0 && csvData != null) ...[
                           const SizedBox(width: 8),

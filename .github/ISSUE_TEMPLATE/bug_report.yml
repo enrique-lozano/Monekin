@@ -1,20 +1,18 @@
 name: 🐛 Bug Report
-description: Create a report to help us improve Monekin
+description: Report a bug/problem so we can fix it
 labels:
-  - "type: bug"
+  - 'type: bug'
 body:
   - type: checkboxes
     attributes:
       label: Prerequisites
       description: Please ensure you have completed all of the following.
       options:
-        - label: I have read the [Contributing Guidelines](https://github.com/enrique-lozano/Monekin/blob/main/CONTRIBUTING.md#reporting-issues).
-          required: true
-        - label: I agree to follow the [Code of Conduct](https://github.com/enrique-lozano/Monekin/blob/main/CODE_OF_CONDUCT.md).
+        - label: I have read the [Contributing Guidelines](https://github.com/enrique-lozano/Monekin/blob/main/CONTRIBUTING.md#report-issues-and-request-features).
           required: true
         - label: I have searched for [existing issues](https://github.com/enrique-lozano/Monekin/issues?q=is%3Aissue) that already report this problem, without success.
           required: true
-        - label: I have updated the app to the last released version.
+        - label: I have the app updated to the latest published version.
           required: true
   - type: textarea
     attributes:
@@ -34,6 +32,11 @@ body:
       description: Please explain the steps required to duplicate this issue.
     validations:
       required: true
+  - type: input
+    attributes:
+      label: In which device / OS did you find the issue
+      description: Specify the device or OS (Windows, Android...) if you consider this information relevant
+      placeholder: 'Ex: Samsung Galaxy S21 - Android 14'
   - type: textarea
     attributes:
       label: Additional Information

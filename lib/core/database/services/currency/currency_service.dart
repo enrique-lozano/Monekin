@@ -6,6 +6,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/models/currency/currency.dart';
+import 'package:monekin/core/utils/logger.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 class CurrencyService {
@@ -51,12 +52,12 @@ class CurrencyService {
     final settingService = UserSettingService.instance;
 
     return settingService
-        .getSetting(SettingKey.preferredCurrency)
+        .getSettingFromDB(SettingKey.preferredCurrency)
         .asyncMap((currencyCode) async {
       if (currencyCode == null) {
         currencyCode = await getDeviceDefaultCurrencyCode();
 
-        await settingService.setSetting(
+        await settingService.setItem(
             SettingKey.preferredCurrency, currencyCode);
       }
 
@@ -91,7 +92,7 @@ class CurrencyService {
         }
       }
     } catch (e) {
-      print('Error getting default currency: ' + e.toString());
+      Logger.printDebug('Error getting default currency: ' + e.toString());
     }
 
     return defaultCurrencyCode;

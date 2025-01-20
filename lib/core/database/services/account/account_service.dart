@@ -88,7 +88,7 @@ class AccountService {
   /// );
   ///
   /// moneyStream.listen((money) {
-  ///   print('Money: \$\${money.toStringAsFixed(2)}');
+  ///   Logger.printDebug('Money: \$\${money.toStringAsFixed(2)}');
   /// });
   /// ```
   Stream<double> getAccountMoney({

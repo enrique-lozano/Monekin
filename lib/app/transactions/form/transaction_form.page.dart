@@ -258,57 +258,80 @@ class _TransactionFormPageState extends State<TransactionFormPage>
 
     final newTrID = widget.transactionToEdit?.id ?? generateUUID();
 
-    TransactionService.instance
-        .insertOrUpdateTransaction(
-      TransactionInDB(
-        id: newTrID,
-        date: date,
-        type: transactionType,
-        accountID: fromAccount!.id,
-        value: transactionType == TransactionType.E
-            ? transactionValue * -1
-            : transactionValue,
-        isHidden: false,
-        status: date.compareTo(DateTime.now()) > 0
-            ? TransactionStatus.pending
-            : status,
-        notes: notesController.text.isEmpty ? null : notesController.text,
-        title: titleController.text.isEmpty ? null : titleController.text,
-        intervalEach: recurrentRule.intervalEach,
-        intervalPeriod: recurrentRule.intervalPeriod,
-        endDate: recurrentRule.ruleRecurrentLimit?.endDate,
-        remainingTransactions:
-            recurrentRule.ruleRecurrentLimit?.remainingIterations,
-        valueInDestiny:
-            transactionType.isTransfer ? valueInDestinyToNumber : null,
-        categoryID:
-            transactionType.isIncomeOrExpense ? selectedCategory?.id : null,
-        receivingAccountID:
-            transactionType.isTransfer ? transferAccount?.id : null,
-      ),
-    )
-        .then((value) {
+    final transactionToPost = TransactionInDB(
+      id: newTrID,
+      date: date,
+      type: transactionType,
+      accountID: fromAccount!.id,
+      value: transactionType == TransactionType.E
+          ? transactionValue * -1
+          : transactionValue,
+      isHidden: false,
+      status: date.compareTo(DateTime.now()) > 0
+          ? TransactionStatus.pending
+          : status,
+      notes: notesController.text.isEmpty ? null : notesController.text,
+      title: titleController.text.isEmpty ? null : titleController.text,
+      intervalEach: recurrentRule.intervalEach,
+      intervalPeriod: recurrentRule.intervalPeriod,
+      endDate: recurrentRule.ruleRecurrentLimit?.endDate,
+      remainingTransactions:
+          recurrentRule.ruleRecurrentLimit?.remainingIterations,
+      valueInDestiny:
+          transactionType.isTransfer ? valueInDestinyToNumber : null,
+      categoryID:
+          transactionType.isIncomeOrExpense ? selectedCategory?.id : null,
+      receivingAccountID:
+          transactionType.isTransfer ? transferAccount?.id : null,
+    );
+
+    Future<int> postCall =
+        TransactionService.instance.updateTransaction(transactionToPost);
+
+    if (!isEditMode) {
+      postCall =
+          TransactionService.instance.insertTransaction(transactionToPost);
+    }
+
+    postCall.then((value) async {
       final db = AppDB.instance;
 
-      Future.wait(
-        [
-          for (final tag in tags)
-            if (widget.transactionToEdit != null &&
-                widget.transactionToEdit!.tags
-                    .any((element) => element.id == tag.id))
-              (db.delete(db.transactionTags)
-                    ..where((tbl) => tbl.tagID.isValue(tag.id)))
-                  .go()
-            else
-              db
-                  .into(db.transactionTags)
-                  .insert(TransactionTag(transactionID: newTrID, tagID: tag.id))
-        ],
-      ).then((value) {
+      final existingTags = widget.transactionToEdit?.tags ?? [];
+
+      // Tags to remove: present in the current transaction but not in the new tags list
+      final tagsToRemove = existingTags
+          .where((existingTag) =>
+              !tags.any((newTag) => newTag.id == existingTag.id))
+          .toList();
+
+      // Tags to add: present in the new tags list but not in the current transaction
+      final tagsToAdd = tags
+          .where((newTag) =>
+              !existingTags.any((existingTag) => existingTag.id == newTag.id))
+          .toList();
+
+      try {
+        // Remove tags
+        for (final tag in tagsToRemove) {
+          await (db.delete(db.transactionTags)
+                ..where((tbl) =>
+                    tbl.tagID.isValue(tag.id) &
+                    tbl.transactionID.isValue(newTrID)))
+              .go();
+        }
+
+        // Add new tags
+        for (final tag in tagsToAdd) {
+          await db.into(db.transactionTags).insert(
+                TransactionTag(transactionID: newTrID, tagID: tag.id),
+              );
+        }
+
         onSuccess();
-      }).catchError((error) {
+      } catch (error) {
+        Navigator.pop(context);
         scMessenger.showSnackBar(SnackBar(content: Text(error.toString())));
-      });
+      }
     }).catchError((error) {
       scMessenger.showSnackBar(SnackBar(content: Text(error.toString())));
     });
@@ -344,25 +367,13 @@ class _TransactionFormPageState extends State<TransactionFormPage>
   }
 
   fillForm(MoneyTransaction transaction) async {
-    setState(() {
-      fromAccount = transaction.account;
-      transferAccount = transaction.receivingAccount;
-      date = transaction.date;
-      status = transaction.status;
-      selectedCategory = transaction.category;
-      recurrentRule = transaction.recurrentInfo;
-
-      if (selectedCategory != null &&
-          selectedCategory!.type == CategoryType.B) {
-        if (transaction.value < 0) {
-          selectedCategory!.type = CategoryType.E;
-        } else {
-          selectedCategory!.type = CategoryType.I;
-        }
-      }
-
-      tags = [...transaction.tags];
-    });
+    fromAccount = transaction.account;
+    transferAccount = transaction.receivingAccount;
+    date = transaction.date;
+    status = transaction.status;
+    selectedCategory = transaction.category;
+    recurrentRule = transaction.recurrentInfo;
+    tags = [...transaction.tags];
 
     notesController.text = transaction.notes ?? '';
     titleController.text = transaction.title ?? '';
@@ -375,6 +386,8 @@ class _TransactionFormPageState extends State<TransactionFormPage>
 
     valueInDestinyController.text =
         transaction.valueInDestiny?.abs().toString() ?? '';
+
+    setState(() {});
   }
 
   Widget buildValueInDestinyFormField() {
@@ -679,28 +692,32 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                       icon: transactionType.mathIcon,
                     ),
                   ),
-                  AnimatedDefaultTextStyle(
-                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                        fontSize: transactionValue >= 1000
-                            ? transactionValue >= 1000000
-                                ? 28
-                                : 34
-                            : 38),
-                    duration: const Duration(milliseconds: 200),
-                    child: Builder(builder: (context) {
-                      const bigTextStyle = TextStyle(
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white,
-                      );
+                  const SizedBox(width: 12),
+                  Flexible(
+                    child: AnimatedDefaultTextStyle(
+                      style:
+                          Theme.of(context).textTheme.headlineLarge!.copyWith(
+                              fontSize: transactionValue >= 1000
+                                  ? transactionValue >= 1000000
+                                      ? 28
+                                      : 34
+                                  : 38),
+                      duration: const Duration(milliseconds: 200),
+                      child: Builder(builder: (context) {
+                        const bigTextStyle = TextStyle(
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                        );
 
-                      return CurrencyDisplayer(
-                        amountToConvert: transactionValue,
-                        currency: fromAccount?.currency,
-                        currencyStyle: bigTextStyle,
-                        integerStyle: bigTextStyle,
-                        followPrivateMode: false,
-                      );
-                    }),
+                        return CurrencyDisplayer(
+                          amountToConvert: transactionValue,
+                          currency: fromAccount?.currency,
+                          currencyStyle: bigTextStyle,
+                          integerStyle: bigTextStyle,
+                          followPrivateMode: false,
+                        );
+                      }),
+                    ),
                   ),
                 ],
               ),

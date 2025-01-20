@@ -9,6 +9,7 @@ import 'package:monekin/app/stats/widgets/movements_distribution/chart_by_catego
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/models/budget/budget.dart';
+import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
@@ -78,10 +79,18 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
             child: Scaffold(
               appBar: AppBar(
                 title: Text(t.budgets.details.title),
-                bottom: TabBar(tabs: [
-                  Tab(text: t.budgets.details.statistics),
-                  Tab(text: t.transaction.display(n: 1)),
-                ]),
+                bottom: TabBar(
+                  tabAlignment:
+                      BreakPoint.of(context).isSmallerThan(BreakpointID.md)
+                          ? TabAlignment.fill
+                          : TabAlignment.start,
+                  isScrollable:
+                      !BreakPoint.of(context).isSmallerThan(BreakpointID.md),
+                  tabs: [
+                    Tab(text: t.budgets.details.statistics),
+                    Tab(text: t.transaction.display(n: 1)),
+                  ],
+                ),
                 actions: [
                   MonekinPopupMenuButton(actionItems: [
                     ListTileActionItem(
@@ -97,7 +106,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                       },
                     ),
                     ListTileActionItem(
-                      label: t.general.delete,
+                      label: t.ui_actions.delete,
                       icon: Icons.delete,
                       role: ListTileActionRole.delete,
                       onClick: () {
@@ -105,7 +114,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                           context,
                           dialogTitle: t.budgets.delete,
                           contentParagraphs: [Text(t.budgets.delete_warning)],
-                          confirmationText: t.general.confirm,
+                          confirmationText: t.ui_actions.confirm,
                           icon: Icons.delete,
                         ).then((confirmed) {
                           if (confirmed != true) return;

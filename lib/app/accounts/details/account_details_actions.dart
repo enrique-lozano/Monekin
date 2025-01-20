@@ -22,7 +22,7 @@ abstract class AccountDetailsActions {
 
     return [
       ListTileActionItem(
-        label: t.general.edit,
+        label: t.ui_actions.edit,
         icon: Icons.edit,
         onClick: () =>
             RouteUtils.pushRoute(context, AccountFormPage(account: account)),
@@ -84,7 +84,7 @@ abstract class AccountDetailsActions {
                 account: account, currentBalance: currentBalance);
           }),
       ListTileActionItem(
-          label: t.general.delete,
+          label: t.ui_actions.delete,
           icon: Icons.delete,
           role: ListTileActionRole.delete,
           onClick: () {
@@ -105,7 +105,7 @@ abstract class AccountDetailsActions {
       contentParagraphs: [
         Text(t.account.reopen_descr),
       ],
-      confirmationText: t.general.confirm,
+      confirmationText: t.ui_actions.confirm,
     ).then((isConfirmed) {
       AccountService.instance
           .updateAccount(
@@ -148,7 +148,7 @@ abstract class AccountDetailsActions {
       context,
       dialogTitle: t.account.delete.warning_header,
       contentParagraphs: [Text(t.account.delete.warning_text)],
-      confirmationText: t.general.continue_text,
+      confirmationText: t.ui_actions.continue_text,
       showCancelButton: true,
       icon: Icons.delete,
     ).then((isConfirmed) {

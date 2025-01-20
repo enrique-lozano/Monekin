@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/app/categories/selectors/category_button_selector.dart';
+import 'package:monekin/app/categories/selectors/draggableScrollableKeyboardAware.mixin.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
@@ -47,13 +48,11 @@ class CategoryPicker extends StatefulWidget {
   State<CategoryPicker> createState() => _CategoryPickerState();
 }
 
-class _CategoryPickerState extends State<CategoryPicker> {
+class _CategoryPickerState extends State<CategoryPicker>
+    with DraggableScrollableKeyboardAware {
   Category? selectedCategory;
 
   final searchContoller = TextEditingController();
-
-  final DraggableScrollableController controller =
-      DraggableScrollableController();
 
   @override
   void initState() {
@@ -63,37 +62,12 @@ class _CategoryPickerState extends State<CategoryPicker> {
   }
 
   @override
-  void dispose() {
-    controller.dispose();
-
-    super.dispose();
-  }
-
-  _moveSheetTo(double position) {
-    if (controller.isAttached && mounted) {
-      controller.jumpTo(position);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    final bottomInsets = MediaQuery.of(context).viewInsets.bottom;
-
-    if (bottomInsets > 0) {
-      _moveSheetTo(1);
-    } else {
-      _moveSheetTo(0.65);
-    }
-
-    return DraggableScrollableSheet(
-        controller: controller,
-        expand: false,
+    return buildDraggableSheet(
         minChildSize: 0.64,
-        initialChildSize: 0.65,
-        snap: true,
-        snapSizes: const [0.65],
+        defaultSize: 0.65,
         builder: (context, scrollController) {
           return ModalContainer(
             title: t.categories.select.select_one,
@@ -138,7 +112,7 @@ class _CategoryPickerState extends State<CategoryPicker> {
                           border: const UnderlineInputBorder(),
                         ),
                         onChanged: (value) {
-                          setState(() {});
+                          rebuild();
                         },
                       ),
                       //  buildSelectAllButton(snapshot),
@@ -266,7 +240,7 @@ class _CategoryPickerState extends State<CategoryPicker> {
                   selectedCategory = subcat.parentCategory;
                 }
 
-                setState(() {});
+                rebuild();
               },
             ),
             const SizedBox(width: 4),
@@ -308,7 +282,7 @@ class _CategoryPickerState extends State<CategoryPicker> {
                   searchContoller.text = '';
                 }
 
-                setState(() {});
+                rebuild();
               },
             ),
           );

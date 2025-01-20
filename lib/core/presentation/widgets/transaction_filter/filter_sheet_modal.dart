@@ -111,7 +111,10 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
       builder: (context, scrollController) {
         return ModalContainer(
           title: t.general.filters,
+          bodyFit: FlexFit.tight,
           footer: BottomSheetFooter(
+              submitIcon: Icons.filter_alt_outlined,
+              submitText: t.ui_actions.apply,
               onSaved: !(_formKey.currentState?.validate() ?? true) ||
                       filtersToReturn.tagsIDs != null &&
                           filtersToReturn.tagsIDs!.isEmpty ||

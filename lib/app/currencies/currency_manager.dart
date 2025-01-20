@@ -45,7 +45,7 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
       if (isConfirmed != true) return;
 
       UserSettingService.instance
-          .setSetting(SettingKey.preferredCurrency, newCurrency.code)
+          .setItem(SettingKey.preferredCurrency, newCurrency.code)
           .then(
         (value) {
           setState(() {
@@ -108,7 +108,7 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
                       await showExchangeRateFormDialog(
                           context, const ExchangeRateFormDialog());
                     },
-                    child: Text(t.general.add))
+                    child: Text(t.ui_actions.add))
               ],
             ),
           ),

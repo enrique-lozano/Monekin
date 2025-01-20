@@ -116,7 +116,7 @@ class CategoryFormFunctions {
                     includeParentCategoriesInSearch: true))
             .first) {
           futures.add(
-            TransactionService.instance.insertOrUpdateTransaction(
+            TransactionService.instance.updateTransaction(
                 tr.copyWith(categoryID: drift.Value(selCategory.id))),
           );
         }

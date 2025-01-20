@@ -3,10 +3,10 @@
 /// Original: lib/i18n
 /// To regenerate, run: `dart run slang`
 ///
-/// Locales: 4
-/// Strings: 2189 (547 per locale)
+/// Locales: 6
+/// Strings: 3457 (576 per locale)
 ///
-/// Built on 2024-10-20 at 10:51 UTC
+/// Built on 2025-01-09 at 22:36 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -26,7 +26,9 @@ const AppLocale _baseLocale = AppLocale.en;
 /// - if (LocaleSettings.currentLocale == AppLocale.en) // locale check
 enum AppLocale with BaseAppLocale<AppLocale, Translations> {
 	en(languageCode: 'en', build: Translations.build),
+	de(languageCode: 'de', build: _TranslationsDe.build),
 	es(languageCode: 'es', build: _TranslationsEs.build),
+	hu(languageCode: 'hu', build: _TranslationsHu.build),
 	uk(languageCode: 'uk', build: _TranslationsUk.build),
 	zhTw(languageCode: 'zh', countryCode: 'TW', build: _TranslationsZhTw.build);
 
@@ -157,6 +159,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final Translations _root = this; // ignore: unused_field
 
 	// Translations
+	late final _TranslationsUiActionsEn ui_actions = _TranslationsUiActionsEn._(_root);
 	late final _TranslationsGeneralEn general = _TranslationsGeneralEn._(_root);
 	late final _TranslationsIntroEn intro = _TranslationsIntroEn._(_root);
 	late final _TranslationsHomeEn home = _TranslationsHomeEn._(_root);
@@ -176,6 +179,51 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final _TranslationsMoreEn more = _TranslationsMoreEn._(_root);
 }
 
+// Path: ui_actions
+class _TranslationsUiActionsEn {
+	_TranslationsUiActionsEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String get cancel => 'Cancel';
+	String get confirm => 'Confirm';
+	String get continue_text => 'Continue';
+	String get save => 'Save';
+	String get save_changes => 'Save changes';
+	String get close_and_save => 'Save and close';
+	String get add => 'Add';
+	String get edit => 'Edit';
+	String get delete => 'Delete';
+	String get see_more => 'See more';
+	String get select_all => 'Select all';
+	String get deselect_all => 'Deselect all';
+	String get select => 'Select';
+	String get search => 'Search';
+	String get filter => 'Filter';
+	String get reset => 'Reset';
+	String get submit => 'Submit';
+	String get next => 'Next';
+	String get previous => 'Previous';
+	String get back => 'Back';
+	String get reload => 'Reload';
+	String get view => 'View';
+	String get download => 'Download';
+	String get upload => 'Upload';
+	String get retry => 'Retry';
+	String get copy => 'Copy';
+	String get paste => 'Paste';
+	String get undo => 'Undo';
+	String get redo => 'Redo';
+	String get open => 'Open';
+	String get close => 'Close';
+	String get apply => 'Apply';
+	String get discard => 'Discard';
+	String get refresh => 'Refresh';
+	String get details => 'Details';
+	String get share => 'Share';
+}
+
 // Path: general
 class _TranslationsGeneralEn {
 	_TranslationsGeneralEn._(this._root);
@@ -183,20 +231,11 @@ class _TranslationsGeneralEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	String get cancel => 'Cancel';
 	String get or => 'or';
 	String get understood => 'Understood';
 	String get unspecified => 'Unspecified';
-	String get confirm => 'Confirm';
-	String get continue_text => 'Continue';
 	String get quick_actions => 'Quick actions';
-	String get save => 'Save';
-	String get save_changes => 'Save changes';
-	String get close_and_save => 'Save and close';
-	String get add => 'Add';
-	String get edit => 'Edit';
 	String get balance => 'Balance';
-	String get delete => 'Delete';
 	String get account => 'Account';
 	String get accounts => 'Accounts';
 	String get categories => 'Categories';
@@ -204,9 +243,6 @@ class _TranslationsGeneralEn {
 	String get today => 'Today';
 	String get yesterday => 'Yesterday';
 	String get filters => 'Filters';
-	String get see_more => 'See more';
-	String get select_all => 'Select all';
-	String get deselect_all => 'Deselect all';
 	String get empty_warn => 'Ops! This is very empty';
 	String get insufficient_data => 'Insufficient data';
 	String get show_more_fields => 'Show more fields';
@@ -318,6 +354,8 @@ class _TranslationsIconSelectorEn {
 	String get color => 'Color';
 	String get select_icon => 'Select an icon';
 	String get select_color => 'Select a color';
+	String get custom_color => 'Custom color';
+	String get current_color_selection => 'Current selection';
 	String get select_account_icon => 'Identify your account';
 	String get select_category_icon => 'Identify your category';
 	late final _TranslationsIconSelectorScopesEn scopes = _TranslationsIconSelectorScopesEn._(_root);
@@ -391,6 +429,7 @@ class _TranslationsRecurrentTransactionsEn {
 	String get total_expense_title => 'Total expense per period';
 	String get total_expense_descr => '* Without considering the start and end date of each recurrence';
 	late final _TranslationsRecurrentTransactionsDetailsEn details = _TranslationsRecurrentTransactionsDetailsEn._(_root);
+	late final _TranslationsRecurrentTransactionsStatusEn status = _TranslationsRecurrentTransactionsStatusEn._(_root);
 }
 
 // Path: account
@@ -555,13 +594,14 @@ class _TranslationsSettingsEn {
 	String get lang_section => 'Language and texts';
 	String get lang_title => 'App language';
 	String get lang_descr => 'Language in which the texts will be displayed in the app';
+	String get lang_help => 'If you want to collaborate with the translations of this app, you can consult <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>our guide</a>';
 	String get locale => 'Region';
 	String get locale_descr => 'Set the format to use for dates, numbers...';
 	String get locale_warn => 'When changing region the app will update';
 	String get first_day_of_week => 'First day of week';
 	String get theme_and_colors => 'Theme and colors';
 	String get theme => 'Theme';
-	String get theme_auto => 'Defined by the system';
+	String get theme_auto => 'System';
 	String get theme_light => 'Light';
 	String get theme_dark => 'Dark';
 	String get amoled_mode => 'AMOLED mode';
@@ -915,6 +955,17 @@ class _TranslationsRecurrentTransactionsDetailsEn {
 	String get last_payment_info => 'This movement is the last of the recurring rule, so this rule will be automatically deleted when confirming this action';
 	String get delete_header => 'Delete recurring transaction';
 	String get delete_message => 'This action is irreversible and will not affect transactions you have already confirmed/paid for';
+}
+
+// Path: recurrent_transactions.status
+class _TranslationsRecurrentTransactionsStatusEn {
+	_TranslationsRecurrentTransactionsStatusEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	String delayed_by({required Object x}) => 'Delayed by ${x}d';
+	String coming_in({required Object x}) => 'In ${x} days';
 }
 
 // Path: account.types
@@ -1433,6 +1484,1354 @@ class _TranslationsGeneralTimeRangesTypesEn {
 }
 
 // Path: <root>
+class _TranslationsDe implements Translations {
+	/// You can call this constructor and build your own translation instance of this locale.
+	/// Constructing via the enum [AppLocale.build] is preferred.
+	_TranslationsDe.build({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver})
+		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
+		  $meta = TranslationMetadata(
+		    locale: AppLocale.de,
+		    overrides: overrides ?? {},
+		    cardinalResolver: cardinalResolver,
+		    ordinalResolver: ordinalResolver,
+		  ) {
+		$meta.setFlatMapFunction(_flatMapFunction);
+	}
+
+	/// Metadata for the translations of <de>.
+	@override final TranslationMetadata<AppLocale, Translations> $meta;
+
+	/// Access flat map
+	@override dynamic operator[](String key) => $meta.getTranslation(key);
+
+	@override late final _TranslationsDe _root = this; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsUiActionsDe ui_actions = _TranslationsUiActionsDe._(_root);
+	@override late final _TranslationsGeneralDe general = _TranslationsGeneralDe._(_root);
+	@override late final _TranslationsIntroDe intro = _TranslationsIntroDe._(_root);
+	@override late final _TranslationsHomeDe home = _TranslationsHomeDe._(_root);
+	@override late final _TranslationsFinancialHealthDe financial_health = _TranslationsFinancialHealthDe._(_root);
+	@override late final _TranslationsStatsDe stats = _TranslationsStatsDe._(_root);
+	@override late final _TranslationsIconSelectorDe icon_selector = _TranslationsIconSelectorDe._(_root);
+	@override late final _TranslationsTransactionDe transaction = _TranslationsTransactionDe._(_root);
+	@override late final _TranslationsTransferDe transfer = _TranslationsTransferDe._(_root);
+	@override late final _TranslationsRecurrentTransactionsDe recurrent_transactions = _TranslationsRecurrentTransactionsDe._(_root);
+	@override late final _TranslationsAccountDe account = _TranslationsAccountDe._(_root);
+	@override late final _TranslationsCurrenciesDe currencies = _TranslationsCurrenciesDe._(_root);
+	@override late final _TranslationsTagsDe tags = _TranslationsTagsDe._(_root);
+	@override late final _TranslationsCategoriesDe categories = _TranslationsCategoriesDe._(_root);
+	@override late final _TranslationsBudgetsDe budgets = _TranslationsBudgetsDe._(_root);
+	@override late final _TranslationsBackupDe backup = _TranslationsBackupDe._(_root);
+	@override late final _TranslationsSettingsDe settings = _TranslationsSettingsDe._(_root);
+	@override late final _TranslationsMoreDe more = _TranslationsMoreDe._(_root);
+}
+
+// Path: ui_actions
+class _TranslationsUiActionsDe implements _TranslationsUiActionsEn {
+	_TranslationsUiActionsDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get cancel => 'Abbrechen';
+	@override String get confirm => 'Bestätigen';
+	@override String get continue_text => 'Weiter';
+	@override String get save => 'Speichern';
+	@override String get save_changes => 'Änderungen speichern';
+	@override String get close_and_save => 'Speichern und schließen';
+	@override String get add => 'Hinzufügen';
+	@override String get edit => 'Bearbeiten';
+	@override String get delete => 'Löschen';
+	@override String get see_more => 'Mehr anzeigen';
+	@override String get select_all => 'Alles auswählen';
+	@override String get deselect_all => 'Alles abwählen';
+	@override String get select => 'Auswählen';
+	@override String get search => 'Suchen';
+	@override String get filter => 'Filtern';
+	@override String get reset => 'Zurücksetzen';
+	@override String get submit => 'Absenden';
+	@override String get next => 'Weiter';
+	@override String get previous => 'Zurück';
+	@override String get back => 'Zurück';
+	@override String get reload => 'Neu laden';
+	@override String get view => 'Ansehen';
+	@override String get download => 'Herunterladen';
+	@override String get upload => 'Hochladen';
+	@override String get retry => 'Erneut versuchen';
+	@override String get copy => 'Kopieren';
+	@override String get paste => 'Einfügen';
+	@override String get undo => 'Rückgängig';
+	@override String get redo => 'Wiederholen';
+	@override String get open => 'Öffnen';
+	@override String get close => 'Schließen';
+	@override String get apply => 'Anwenden';
+	@override String get discard => 'Verwerfen';
+	@override String get refresh => 'Aktualisieren';
+	@override String get details => 'Details';
+	@override String get share => 'Teilen';
+}
+
+// Path: general
+class _TranslationsGeneralDe implements _TranslationsGeneralEn {
+	_TranslationsGeneralDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get or => 'oder';
+	@override String get understood => 'Verstanden';
+	@override String get unspecified => 'Nicht spezifiziert';
+	@override String get quick_actions => 'Schnelle Aktionen';
+	@override String get balance => 'Kontostand';
+	@override String get account => 'Konto';
+	@override String get accounts => 'Konten';
+	@override String get categories => 'Kategorien';
+	@override String get category => 'Kategorie';
+	@override String get today => 'Heute';
+	@override String get yesterday => 'Gestern';
+	@override String get filters => 'Filter';
+	@override String get empty_warn => 'Ops! Das ist sehr leer';
+	@override String get insufficient_data => 'Unzureichende Daten';
+	@override String get show_more_fields => 'Weitere Felder anzeigen';
+	@override String get show_less_fields => 'Weniger Felder anzeigen';
+	@override String get tap_to_search => 'Zum Suchen tippen';
+	@override late final _TranslationsGeneralClipboardDe clipboard = _TranslationsGeneralClipboardDe._(_root);
+	@override late final _TranslationsGeneralTimeDe time = _TranslationsGeneralTimeDe._(_root);
+	@override late final _TranslationsGeneralTransactionOrderDe transaction_order = _TranslationsGeneralTransactionOrderDe._(_root);
+	@override late final _TranslationsGeneralValidationsDe validations = _TranslationsGeneralValidationsDe._(_root);
+}
+
+// Path: intro
+class _TranslationsIntroDe implements _TranslationsIntroEn {
+	_TranslationsIntroDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get start => 'Start';
+	@override String get skip => 'Überspringen';
+	@override String get next => 'Nächste';
+	@override String get select_your_currency => 'Wähle Deine Währung aus';
+	@override String get welcome_subtitle => 'Dein persönlicher Finanzmanager';
+	@override String get welcome_subtitle2 => '100 % geöffnet, 100 % kostenlos';
+	@override String get welcome_footer => 'Mit der Anmeldung stimmst Du der <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Datenschutzrichtlinie</a> und den <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Nutzungsbedingungen</a> der App zu';
+	@override String get offline_descr_title => 'OFFLINE-KONTO:';
+	@override String get offline_descr => 'Deine Daten werden nur auf Deinem Gerät gespeichert und sind sicher, solange Du die App nicht deinstallieren oder das Telefon wechselst. ';
+	@override String get offline_start => 'Sitzung offline starten';
+	@override String get sl1_title => 'Wähle Deine Währung aus';
+	@override String get sl1_descr => 'Deine Standardwährung wird in Berichten und allgemeinen Diagrammen verwendet. ';
+	@override String get sl2_title => 'Sicher, privat und zuverlässig';
+	@override String get sl2_descr => 'Deine Daten gehören nur Dir. ';
+	@override String get sl2_descr2 => 'Außerdem ist der Quellcode der Anwendung öffentlich, jeder kann daran mitarbeiten und sehen, wie es funktioniert';
+	@override String get last_slide_title => 'Alles bereit';
+	@override String get last_slide_descr => 'Mit Monekin kannst Du endlich die finanzielle Unabhängigkeit erreichen, die Du dir so sehr wünschst. ';
+	@override String get last_slide_descr2 => 'Wir hoffen, dass Du Deine Erfahrung genießet! Zögerne nicht, uns im Falle von Fragen oder Vorschlägen zu kontaktieren...';
+}
+
+// Path: home
+class _TranslationsHomeDe implements _TranslationsHomeEn {
+	_TranslationsHomeDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Übersicht';
+	@override String get filter_transactions => 'Transaktionen filtern';
+	@override String get hello_day => 'Guten Morgen,';
+	@override String get hello_night => 'Gute Nacht,';
+	@override String get total_balance => 'Gesamtbilanz';
+	@override String get my_accounts => 'Meine Konten';
+	@override String get active_accounts => 'Aktive Konten';
+	@override String get no_accounts => 'Es wurden noch keine Konten erstellt';
+	@override String get no_accounts_descr => 'Beginne, die ganze Magie von Monekin zu nutzen. ';
+	@override String get last_transactions => 'Letzte Transaktionen';
+	@override String get should_create_account_header => 'Hoppla!';
+	@override String get should_create_account_message => 'Du musst über mindestens ein nicht archiviertes Konto verfügen, bevor Du mit der Erstellung von Transaktionen beginnen kannst';
+}
+
+// Path: financial_health
+class _TranslationsFinancialHealthDe implements _TranslationsFinancialHealthEn {
+	_TranslationsFinancialHealthDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Finanzielle Lage';
+	@override late final _TranslationsFinancialHealthReviewDe review = _TranslationsFinancialHealthReviewDe._(_root);
+	@override late final _TranslationsFinancialHealthMonthsWithoutIncomeDe months_without_income = _TranslationsFinancialHealthMonthsWithoutIncomeDe._(_root);
+	@override late final _TranslationsFinancialHealthSavingsPercentageDe savings_percentage = _TranslationsFinancialHealthSavingsPercentageDe._(_root);
+}
+
+// Path: stats
+class _TranslationsStatsDe implements _TranslationsStatsEn {
+	_TranslationsStatsDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Statistiken';
+	@override String get balance => 'Kontostand';
+	@override String get final_balance => 'Schlussstand';
+	@override String get balance_by_account => 'Saldo nach Konten';
+	@override String get balance_by_account_subtitle => 'Wo habe ich das meiste Geld?';
+	@override String get balance_by_currency => 'Saldo nach Währung';
+	@override String get balance_by_currency_subtitle => 'Wie viel Geld habe ich in Fremdwährung?';
+	@override String get balance_evolution => 'Trend';
+	@override String get balance_evolution_subtitle => 'Habe ich mehr Geld als vorher?';
+	@override String get compared_to_previous_period => 'Im Vergleich zur Vorperiode';
+	@override String get cash_flow => 'Cashflow';
+	@override String get cash_flow_subtitle => 'Gebe ich weniger aus, als ich verdiene?';
+	@override String get by_periods => 'Nach Perioden';
+	@override String get by_categories => 'Nach Kategorien';
+	@override String get by_tags => 'Nach Tags';
+	@override String get distribution => 'Verteilung';
+	@override String get finance_health_resume => 'Zusammenfassung';
+	@override String get finance_health_breakdown => 'Auflüsselung';
+}
+
+// Path: icon_selector
+class _TranslationsIconSelectorDe implements _TranslationsIconSelectorEn {
+	_TranslationsIconSelectorDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Name:';
+	@override String get icon => 'Symbol';
+	@override String get color => 'Farbe';
+	@override String get select_icon => 'Wähle ein Symbol aus';
+	@override String get select_color => 'Wähle eine Farbe';
+	@override String get custom_color => 'Benutzerdefinierte Farbe';
+	@override String get current_color_selection => 'Aktuelle Auswahl';
+	@override String get select_account_icon => 'Identifiziere Dein Konto';
+	@override String get select_category_icon => 'Identifiziere Deine Kategorie';
+	@override late final _TranslationsIconSelectorScopesDe scopes = _TranslationsIconSelectorScopesDe._(_root);
+}
+
+// Path: transaction
+class _TranslationsTransactionDe implements _TranslationsTransactionEn {
+	_TranslationsTransactionDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+		one: 'Transaktion',
+		other: 'Transaktionen',
+	);
+	@override String get create => 'Neue Transaktion';
+	@override String get new_income => 'Neues Einkommen';
+	@override String get new_expense => 'Neue Ausgabe';
+	@override String get new_success => 'Transaktion erfolgreich erstellt';
+	@override String get edit => 'Transaktion bearbeiten';
+	@override String get edit_success => 'Transaktion erfolgreich bearbeitet';
+	@override String get edit_multiple => 'Bearbeite Deine Transaktionen';
+	@override String edit_multiple_success({required Object x}) => '${x} Transaktionen erfolgreich bearbeitet';
+	@override String get duplicate => 'Transaktion klonen';
+	@override String get duplicate_short => 'Klon';
+	@override String get duplicate_warning_message => 'Eine mit dieser identische Transaktion wird mit demselben Datum erstellt. Möchtest Du fortfahren?';
+	@override String get duplicate_success => 'Transaktion erfolgreich geklont';
+	@override String get delete => 'Transaktion löschen';
+	@override String get delete_warning_message => 'Diese Aktion ist irreversibel. ';
+	@override String get delete_success => 'Transaktion korrekt gelöscht';
+	@override String get delete_multiple => 'Transaktionen löschen';
+	@override String delete_multiple_warning_message({required Object x}) => 'Diese Aktion ist irreversibel und wird entfernt ${x} Transaktionen. ';
+	@override String delete_multiple_success({required Object x}) => '${x} Transaktionen korrekt gelöscht';
+	@override String get details => 'Bewegungsdetails';
+	@override late final _TranslationsTransactionNextPaymentsDe next_payments = _TranslationsTransactionNextPaymentsDe._(_root);
+	@override late final _TranslationsTransactionListDe list = _TranslationsTransactionListDe._(_root);
+	@override late final _TranslationsTransactionFiltersDe filters = _TranslationsTransactionFiltersDe._(_root);
+	@override late final _TranslationsTransactionFormDe form = _TranslationsTransactionFormDe._(_root);
+	@override late final _TranslationsTransactionReversedDe reversed = _TranslationsTransactionReversedDe._(_root);
+	@override late final _TranslationsTransactionStatusDe status = _TranslationsTransactionStatusDe._(_root);
+	@override late final _TranslationsTransactionTypesDe types = _TranslationsTransactionTypesDe._(_root);
+}
+
+// Path: transfer
+class _TranslationsTransferDe implements _TranslationsTransferEn {
+	_TranslationsTransferDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Überweisen';
+	@override String get transfers => 'Überweisungen';
+	@override String transfer_to({required Object account}) => 'Überweisen an ${account}';
+	@override String get create => 'Neue Überweisung';
+	@override String get need_two_accounts_warning_header => 'Ops!';
+	@override String get need_two_accounts_warning_message => 'Um diese Aktion auszuführen, sind mindestens zwei Konten erforderlich. Wenn Du den aktuellen Saldo dieses Kontos anpassen oder bearbeiten möchtest, klicke auf die Schaltfläche Bearbeiten';
+	@override late final _TranslationsTransferFormDe form = _TranslationsTransferFormDe._(_root);
+}
+
+// Path: recurrent_transactions
+class _TranslationsRecurrentTransactionsDe implements _TranslationsRecurrentTransactionsEn {
+	_TranslationsRecurrentTransactionsDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Wiederkehrende Transaktionen';
+	@override String get title_short => 'Wiederk. Transakt.';
+	@override String get empty => 'Anscheinend hast Du keine wiederkehrenden Transaktionen. Erstelle eine monatliche, jährliche oder wöchentliche wiederkehrende Transaktion, die hier angezeigt wird.';
+	@override String get total_expense_title => 'Gesamtausgaben pro Periode';
+	@override String get total_expense_descr => '* Ohne Berücksichtigung des Start- und Enddatums jeder Wiederholung';
+	@override late final _TranslationsRecurrentTransactionsDetailsDe details = _TranslationsRecurrentTransactionsDetailsDe._(_root);
+	@override late final _TranslationsRecurrentTransactionsStatusDe status = _TranslationsRecurrentTransactionsStatusDe._(_root);
+}
+
+// Path: account
+class _TranslationsAccountDe implements _TranslationsAccountEn {
+	_TranslationsAccountDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get details => 'Kontodaten';
+	@override String get date => 'Eröffnungsdatum';
+	@override String get close_date => 'Einsendeschluss';
+	@override String get reopen => 'Konto erneut eröffnen';
+	@override String get reopen_short => 'Wieder öffnen';
+	@override String get reopen_descr => 'Möchtest Du dieses Konto wirklich wieder eröffnen?';
+	@override String get balance => 'Kontostand';
+	@override String get n_transactions => 'Anzahl der Transaktionen';
+	@override String get add_money => 'Geld hinzufügen';
+	@override String get withdraw_money => 'Geld abheben';
+	@override String get no_accounts => 'Es wurden keine Transaktionen gefunden, die hier angezeigt werden könnten. Füge eine Transaktion hinzu, indem Du auf die Schaltfläche „+“ am unteren Rand klickst.';
+	@override late final _TranslationsAccountTypesDe types = _TranslationsAccountTypesDe._(_root);
+	@override late final _TranslationsAccountFormDe form = _TranslationsAccountFormDe._(_root);
+	@override late final _TranslationsAccountDeleteDe delete = _TranslationsAccountDeleteDe._(_root);
+	@override late final _TranslationsAccountCloseDe close = _TranslationsAccountCloseDe._(_root);
+	@override late final _TranslationsAccountSelectDe select = _TranslationsAccountSelectDe._(_root);
+}
+
+// Path: currencies
+class _TranslationsCurrenciesDe implements _TranslationsCurrenciesEn {
+	_TranslationsCurrenciesDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get currency_converter => 'Währungsrechner';
+	@override String get currency => 'Währung';
+	@override String get currency_manager => 'Währungsmanager';
+	@override String get currency_manager_descr => 'Konfiguriere Deine Währung und deren Wechselkurse mit anderen';
+	@override String get preferred_currency => 'Bevorzugte/Basis Währung';
+	@override String get change_preferred_currency_title => 'Änder die bevorzugte Währung';
+	@override String get change_preferred_currency_msg => 'Alle Statistiken und Budgets werden ab sofort in dieser Währung angezeigt. Konten und Transaktionen behalten die Währung, die sie hatten. Alle gespeicherten Wechselkurse werden gelöscht, wenn Du diese Aktion ausführst. Möchtest Du fortfahren?';
+	@override late final _TranslationsCurrenciesFormDe form = _TranslationsCurrenciesFormDe._(_root);
+	@override String get delete_all_success => 'Wechselkurse erfolgreich gelöscht';
+	@override String get historical => 'Historische Kurse';
+	@override String get exchange_rate => 'Wechselkurs';
+	@override String get exchange_rates => 'Wechselkurse';
+	@override String get empty => 'Füge hier Wechselkurse hinzu, damit unsere Diagramme genauer sind, wenn Du Konten in anderen Währungen als Deiner Basiswährung hast';
+	@override String get select_a_currency => 'Wähle eine Währung aus';
+	@override String get search => 'Suche nach Name oder Währungscode';
+}
+
+// Path: tags
+class _TranslationsTagsDe implements _TranslationsTagsEn {
+	_TranslationsTagsDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+		one: 'Label',
+		other: 'Schlagworte',
+	);
+	@override late final _TranslationsTagsFormDe form = _TranslationsTagsFormDe._(_root);
+	@override late final _TranslationsTagsSelectDe select = _TranslationsTagsSelectDe._(_root);
+	@override String get empty_list => 'Du hast noch keine Schlagworte erstellt. Schlagworte und Kategorien sind eine gute Möglichkeit, Deine Bewegungen zu kategorisieren';
+	@override String get without_tags => 'Ohne Schlagworte';
+	@override String get add => 'Schlagwort hinzufügen';
+	@override String get create => 'Label erstellen';
+	@override String get create_success => 'Label erfolgreich erstellt';
+	@override String get already_exists => 'Dieser Schlagwort-Name existiert bereits. ';
+	@override String get edit => 'Schlagwort bearbeiten';
+	@override String get edit_success => 'Schlagwort erfolgreich bearbeitet';
+	@override String get delete_success => 'Kategorie erfolgreich gelöscht';
+	@override String get delete_warning_header => 'Schlagwort löschen?';
+	@override String get delete_warning_message => 'Durch diese Aktion werden keine Transaktionen gelöscht, die dieses Schlagwort haben.';
+}
+
+// Path: categories
+class _TranslationsCategoriesDe implements _TranslationsCategoriesEn {
+	_TranslationsCategoriesDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get unknown => 'Unbekannte Kategorie';
+	@override String get create => 'Kategorie erstellen';
+	@override String get create_success => 'Kategorie korrekt erstellt';
+	@override String get new_category => 'Neue Kategorie';
+	@override String get already_exists => 'Der Name dieser Kategorie existiert bereits. Willst du es verändern?';
+	@override String get edit => 'Kategorie bearbeiten';
+	@override String get edit_success => 'Kategorie korrekt bearbeitet';
+	@override String get name => 'Kategoriename';
+	@override String get type => 'Kategorietyp';
+	@override String get both_types => 'Beide Typen';
+	@override String get subcategories => 'Unterkategorien';
+	@override String get subcategories_add => 'Unterkategorie hinzufügen';
+	@override String get make_parent => 'Zur Kategorie hinzufügen';
+	@override String get make_child => 'Erstelle eine Unterkategorie';
+	@override String make_child_warning1({required Object destiny}) => 'Diese Kategorie und ihre Unterkategorien werden zu Unterkategorien von <b>${destiny}</b>.';
+	@override String make_child_warning2({required Object x, required Object destiny}) => 'Deine Transaktionen <b>(${x})</b> werden in die neuen Unterkategorien verschoben, die innerhalb der Kategorie <b>${destiny}</b> erstellt wurden.';
+	@override String get make_child_success => 'Unterkategorien erfolgreich erstellt';
+	@override String get merge => 'Mit einer anderen Kategorie zusammenführen';
+	@override String merge_warning1({required Object x, required Object from, required Object destiny}) => 'Alle Transaktionen (${x}), die mit der Kategorie <b>${from}</b> verknüpft sind werden in die Kategorie <b>${destiny}</b> verschoben';
+	@override String merge_warning2({required Object from}) => 'Die Kategorie <b>${from}</b> werden unwiderruflich gelöscht.';
+	@override String get merge_success => 'Die Kategorie wurde erfolgreich zusammengeführt';
+	@override String get delete_success => 'Kategorie wurde korrekt gelöscht';
+	@override String get delete_warning_header => 'Kategorie löschen?';
+	@override String delete_warning_message({required Object x}) => 'Durch diese Aktion werden alle Transaktionen unwiderruflich gelöscht <b>(${x})</b> im Zusammenhang mit dieser Kategorie.';
+	@override late final _TranslationsCategoriesSelectDe select = _TranslationsCategoriesSelectDe._(_root);
+}
+
+// Path: budgets
+class _TranslationsBudgetsDe implements _TranslationsBudgetsEn {
+	_TranslationsBudgetsDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Budgets';
+	@override String get repeated => 'Wiederkehrend';
+	@override String get one_time => 'Einmalig';
+	@override String get annual => 'Jährlich';
+	@override String get week => 'Wöchentlich';
+	@override String get month => 'Monatlich';
+	@override String get actives => 'Aktive';
+	@override String get pending => 'Ausstehender Start';
+	@override String get finish => 'Fertig';
+	@override String get from_budgeted => 'übrig von ';
+	@override String get days_left => 'Tage übrig';
+	@override String get days_to_start => 'Tage bis Start';
+	@override String get since_expiration => 'Tage seit Ablauf';
+	@override String get no_budgets => 'Es scheint, dass in diesem Abschnitt keine Budgets angezeigt werden können. Beginne mit der Erstellung eines Budgets, indem Du auf die Schaltfläche unten klickst';
+	@override String get delete => 'Budget löschen';
+	@override String get delete_warning => 'Diese Aktion ist irreversibel. ';
+	@override late final _TranslationsBudgetsFormDe form = _TranslationsBudgetsFormDe._(_root);
+	@override late final _TranslationsBudgetsDetailsDe details = _TranslationsBudgetsDetailsDe._(_root);
+}
+
+// Path: backup
+class _TranslationsBackupDe implements _TranslationsBackupEn {
+	_TranslationsBackupDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsBackupExportDe export = _TranslationsBackupExportDe._(_root);
+	@override late final _TranslationsBackupImportDe import = _TranslationsBackupImportDe._(_root);
+	@override late final _TranslationsBackupAboutDe about = _TranslationsBackupAboutDe._(_root);
+}
+
+// Path: settings
+class _TranslationsSettingsDe implements _TranslationsSettingsEn {
+	_TranslationsSettingsDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title_long => 'Einstellungen und Aussehen';
+	@override String get title_short => 'Einstellungen';
+	@override String get description => 'App-Theme, Texte und andere allgemeine Einstellungen';
+	@override String get edit_profile => 'Profil bearbeiten';
+	@override String get lang_section => 'Sprache und Texte';
+	@override String get lang_title => 'App-Sprache';
+	@override String get lang_descr => 'Sprache, in der die Texte in der App angezeigt werden';
+	@override String get lang_help => 'Wenn an den Übersetzungen dieser App mitarbeiten möchten, kannst du dich an <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>unser Beschreibung</a> wenden';
+	@override String get locale => 'Region';
+	@override String get locale_descr => 'Lege das für Datumsangaben, Zahlen usw. zu verwendende Format fest.';
+	@override String get locale_warn => 'Wenn Du die Region änderst, wird die App aktualisiert';
+	@override String get first_day_of_week => 'Erster Tag der Woche';
+	@override String get theme_and_colors => 'Thema und Farben';
+	@override String get theme => 'Thema';
+	@override String get theme_auto => 'System';
+	@override String get theme_light => 'Hell';
+	@override String get theme_dark => 'Dunkel';
+	@override String get amoled_mode => 'AMOLED-Modus';
+	@override String get amoled_mode_descr => 'Verwende nach Möglichkeit einn rein schwarzen Hintergrund. Das wird den Akku von Geräten mit AMOLED-Bildschirmen etwas schonen.';
+	@override String get dynamic_colors => 'Dynamische Farben';
+	@override String get dynamic_colors_descr => 'Verwende wann immer möglich die Akzentfarbe des Systems';
+	@override String get accent_color => 'Akzentfarbe';
+	@override String get accent_color_descr => 'Wähle die Farbe aus, mit der die App bestimmte Teile der Benutzeroberfläche hervorhebt';
+	@override late final _TranslationsSettingsSecurityDe security = _TranslationsSettingsSecurityDe._(_root);
+}
+
+// Path: more
+class _TranslationsMoreDe implements _TranslationsMoreEn {
+	_TranslationsMoreDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Mehr';
+	@override String get title_long => 'Weitere Aktionen';
+	@override late final _TranslationsMoreDataDe data = _TranslationsMoreDataDe._(_root);
+	@override late final _TranslationsMoreAboutUsDe about_us = _TranslationsMoreAboutUsDe._(_root);
+	@override late final _TranslationsMoreHelpUsDe help_us = _TranslationsMoreHelpUsDe._(_root);
+}
+
+// Path: general.clipboard
+class _TranslationsGeneralClipboardDe implements _TranslationsGeneralClipboardEn {
+	_TranslationsGeneralClipboardDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String success({required Object x}) => '${x} in die Zwischenablage kopiert';
+	@override String get error => 'Fehler beim Kopieren';
+}
+
+// Path: general.time
+class _TranslationsGeneralTimeDe implements _TranslationsGeneralTimeEn {
+	_TranslationsGeneralTimeDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get start_date => 'Startdatum';
+	@override String get end_date => 'Enddatum';
+	@override String get from_date => 'Ab Datum';
+	@override String get until_date => 'Bis heute';
+	@override String get date => 'Datum';
+	@override String get datetime => 'Datum/Uhrzeit';
+	@override String get time => 'Zeit';
+	@override String get each => 'Jede';
+	@override String get after => 'Nach';
+	@override late final _TranslationsGeneralTimeRangesDe ranges = _TranslationsGeneralTimeRangesDe._(_root);
+	@override late final _TranslationsGeneralTimePeriodicityDe periodicity = _TranslationsGeneralTimePeriodicityDe._(_root);
+	@override late final _TranslationsGeneralTimeCurrentDe current = _TranslationsGeneralTimeCurrentDe._(_root);
+	@override late final _TranslationsGeneralTimeAllDe all = _TranslationsGeneralTimeAllDe._(_root);
+}
+
+// Path: general.transaction_order
+class _TranslationsGeneralTransactionOrderDe implements _TranslationsGeneralTransactionOrderEn {
+	_TranslationsGeneralTransactionOrderDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Bestellvorgänge';
+	@override String get category => 'Nach Kategorie';
+	@override String get quantity => 'Nach Menge';
+	@override String get date => 'Nach Datum';
+}
+
+// Path: general.validations
+class _TranslationsGeneralValidationsDe implements _TranslationsGeneralValidationsEn {
+	_TranslationsGeneralValidationsDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get form_error => 'Korrigiere die angegebenen Felder, um fortzufahren';
+	@override String get required => 'Erforderliches Feld';
+	@override String get positive => 'Sollte positiv sein';
+	@override String min_number({required Object x}) => 'Sollte größer sein als ${x}';
+	@override String max_number({required Object x}) => 'Sollte kleiner sein als ${x}';
+}
+
+// Path: financial_health.review
+class _TranslationsFinancialHealthReviewDe implements _TranslationsFinancialHealthReviewEn {
+	_TranslationsFinancialHealthReviewDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String very_good({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Sehr gut!';
+			case GenderContext.female:
+				return 'Sehr gut!';
+		}
+	}
+	@override String good({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Gut';
+			case GenderContext.female:
+				return 'Gut';
+		}
+	}
+	@override String normal({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Durchschnitt';
+			case GenderContext.female:
+				return 'Durchschnitt';
+		}
+	}
+	@override String bad({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Mäßig';
+			case GenderContext.female:
+				return 'Mäßig';
+		}
+	}
+	@override String very_bad({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Sehr schlecht';
+			case GenderContext.female:
+				return 'Sehr schlecht';
+		}
+	}
+	@override String insufficient_data({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Unzureichende Daten';
+			case GenderContext.female:
+				return 'Unzureichende Daten';
+		}
+	}
+	@override late final _TranslationsFinancialHealthReviewDescrDe descr = _TranslationsFinancialHealthReviewDescrDe._(_root);
+}
+
+// Path: financial_health.months_without_income
+class _TranslationsFinancialHealthMonthsWithoutIncomeDe implements _TranslationsFinancialHealthMonthsWithoutIncomeEn {
+	_TranslationsFinancialHealthMonthsWithoutIncomeDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Überlebensrate';
+	@override String get subtitle => 'Angesichts Deines Guthabens, wie viel Zeit kannst Du ohne Einkommen auskommen?';
+	@override String get text_zero => 'Bei diesem Ausgabenniveau kannst Du keinen Monat ohne Einkommen überleben!';
+	@override String get text_one => 'Bei diesem Ausgabenniveau kannst Du kaum etwa einen Monat ohne Einkommen überleben!';
+	@override String text_other({required Object n}) => 'Du könntest ungefähr <b>${n} Monate</b> ohne Einkommen bei dieser Ausgabenrate überleben.';
+	@override String get text_infinite => 'Du könntest ungefähr <b>Dein ganzes Leben lang</b> ohne Einkommen bei dieser Ausgabenrate überleben.';
+	@override String get suggestion => 'Denke daran, dass es ratsam ist, dieses Verhältnis immer mindestens über 5 Monate zu halten. Wenn Du feststellst, dass Du nicht über ein ausreichendes Sparpolster verfügst, solltest Du unnötige Ausgaben reduzieren.';
+	@override String get insufficient_data => 'Offenbar haben wir nicht genügend Ausgaben, um zu berechnen, wie viele Monate Du ohne Einkommen überleben könntest. Gib ein paar Transaktionen ein und komme hierher zurück, um Deine Finanzen zu überprüfen.';
+}
+
+// Path: financial_health.savings_percentage
+class _TranslationsFinancialHealthSavingsPercentageDe implements _TranslationsFinancialHealthSavingsPercentageEn {
+	_TranslationsFinancialHealthSavingsPercentageDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Sparprozentsatz';
+	@override String get subtitle => 'Welcher Teil Deines Einkommens wird in diesem Zeitraum nicht ausgegeben?';
+	@override late final _TranslationsFinancialHealthSavingsPercentageTextDe text = _TranslationsFinancialHealthSavingsPercentageTextDe._(_root);
+	@override String get suggestion => 'Denk daran, dass es ratsam ist, mindestens 15-20 % Deines Einkommens zu sparen.';
+}
+
+// Path: icon_selector.scopes
+class _TranslationsIconSelectorScopesDe implements _TranslationsIconSelectorScopesEn {
+	_TranslationsIconSelectorScopesDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get transport => 'Transport';
+	@override String get money => 'Geld';
+	@override String get food => 'Essen';
+	@override String get medical => 'Gesundheit';
+	@override String get entertainment => 'Freizeit';
+	@override String get technology => 'Technologie';
+	@override String get other => 'Andere';
+	@override String get logos_financial_institutions => 'Finanzinstitute';
+}
+
+// Path: transaction.next_payments
+class _TranslationsTransactionNextPaymentsDe implements _TranslationsTransactionNextPaymentsEn {
+	_TranslationsTransactionNextPaymentsDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get accept => 'Akzeptieren';
+	@override String get skip => 'Überspringen';
+	@override String get skip_success => 'Transaktion erfolgreich übersprungen';
+	@override String get skip_dialog_title => 'Transaktion überspringen';
+	@override String skip_dialog_msg({required Object date}) => 'Diese Aktion ist irreversibel.  ${date}';
+	@override String get accept_today => 'Akzeptiere noch heute';
+	@override String accept_in_required_date({required Object date}) => 'Akzeptierst Du das gewünschte Datum (${date})';
+	@override String get accept_dialog_title => 'Akzeptierst Du die Transaktion';
+	@override String get accept_dialog_msg_single => 'Der neue Status der Transaktion ist null. ';
+	@override String accept_dialog_msg({required Object date}) => 'Diese Aktion erstellt eine neue Transaktion mit Datum ${date}. Du kannst die Details dieser Transaktion auf der Transaktionsseite überprüfen';
+	@override String get recurrent_rule_finished => 'Die wiederkehrende Regel ist abgeschlossen, es sind keine weiteren Zahlungen mehr zu leisten!';
+}
+
+// Path: transaction.list
+class _TranslationsTransactionListDe implements _TranslationsTransactionListEn {
+	_TranslationsTransactionListDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get empty => 'Es wurden keine Transaktionen gefunden, die hier angezeigt werden könnten. ';
+	@override String get searcher_placeholder => 'Suche nach Kategorie, Beschreibung...';
+	@override String get searcher_no_results => 'Es wurden keine Transaktionen gefunden, die den Suchkriterien entsprechen';
+	@override String get loading => 'Weitere Transaktionen werden geladen...';
+	@override String selected_short({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+		one: '${n} ausgewählt',
+		other: '${n} ausgewählt',
+	);
+	@override String selected_long({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+		one: '${n} Transaktion ausgewählt',
+		other: '${n} Transaktionen ausgewählt',
+	);
+	@override late final _TranslationsTransactionListBulkEditDe bulk_edit = _TranslationsTransactionListBulkEditDe._(_root);
+}
+
+// Path: transaction.filters
+class _TranslationsTransactionFiltersDe implements _TranslationsTransactionFiltersEn {
+	_TranslationsTransactionFiltersDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get from_value => 'Ab Betrag';
+	@override String get to_value => 'Bis zum Betrag';
+	@override String from_value_def({required Object x}) => 'Von ${x}';
+	@override String to_value_def({required Object x}) => 'Bis zu ${x}';
+	@override String from_date_def({required Object date}) => 'Von der ${date}';
+	@override String to_date_def({required Object date}) => 'Bis zum ${date}';
+}
+
+// Path: transaction.form
+class _TranslationsTransactionFormDe implements _TranslationsTransactionFormEn {
+	_TranslationsTransactionFormDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsTransactionFormValidatorsDe validators = _TranslationsTransactionFormValidatorsDe._(_root);
+	@override String get title => 'Transaktionstitel';
+	@override String get title_short => 'Titel';
+	@override String get value => 'Wert der Transaktion';
+	@override String get tap_to_see_more => 'Tippen, um weitere Details anzuzeigen';
+	@override String get no_tags => '– Keine Tags –';
+	@override String get description => 'Beschreibung';
+	@override String get description_info => 'Tippe hier, um eine detailliertere Beschreibung dieser Transaktion einzugeben';
+	@override String exchange_to_preferred_title({required Object currency}) => 'Wechselkurs zu ${currency}';
+	@override String get exchange_to_preferred_in_date => 'Am Transaktionsdatum';
+}
+
+// Path: transaction.reversed
+class _TranslationsTransactionReversedDe implements _TranslationsTransactionReversedEn {
+	_TranslationsTransactionReversedDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Umgekehrte Transaktion';
+	@override String get title_short => 'Umgekehrte Tr.';
+	@override String get description_for_expenses => 'Obwohl es sich um eine Spesentransaktion handelt, weist sie einen positiven Betrag auf. ';
+	@override String get description_for_incomes => 'Obwohl es sich um eine Einkommenstransaktion handelt, weist sie einen negativen Betrag auf. ';
+}
+
+// Path: transaction.status
+class _TranslationsTransactionStatusDe implements _TranslationsTransactionStatusEn {
+	_TranslationsTransactionStatusDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+		one: 'Status',
+		other: 'Status',
+	);
+	@override String get display_long => 'Transaktionsstatus';
+	@override String tr_status({required Object status}) => '${status} Transaktion';
+	@override String get none => 'Ohne Status';
+	@override String get none_descr => 'Transaktion ohne bestimmten Status';
+	@override String get reconciled => 'Ausgeglichen';
+	@override String get reconciled_descr => 'Diese Transaktion wurde bereits validiert und entspricht einer echten Transaktion Deiner Bank';
+	@override String get unreconciled => 'Unausgeglichen';
+	@override String get unreconciled_descr => 'Diese Transaktion wurde noch nicht validiert und erscheint daher noch nicht auf Deinem echten Bankkonten. ';
+	@override String get pending => 'Ausstehend';
+	@override String get pending_descr => 'Diese Transaktion steht noch aus und wird daher bei der Berechnung von Salden und Statistiken nicht berücksichtigt';
+	@override String get voided => 'Entwertet';
+	@override String get voided_descr => 'Transaktion aufgrund eines Zahlungsfehlers oder aus einem anderen Grund ungültig/storniert. ';
+}
+
+// Path: transaction.types
+class _TranslationsTransactionTypesDe implements _TranslationsTransactionTypesEn {
+	_TranslationsTransactionTypesDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+		one: 'Transaktionstyp',
+		other: 'Transaktiontypen',
+	);
+	@override String income({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+		one: 'Einkommen',
+		other: 'Einkommen',
+	);
+	@override String expense({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+		one: 'Ausgaben',
+		other: 'Ausgaben',
+	);
+	@override String transfer({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+		one: 'Überweisen',
+		other: 'Überweisungen',
+	);
+}
+
+// Path: transfer.form
+class _TranslationsTransferFormDe implements _TranslationsTransferFormEn {
+	_TranslationsTransferFormDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get from => 'Origin-Konto';
+	@override String get to => 'Zielkonto';
+	@override late final _TranslationsTransferFormValueInDestinyDe value_in_destiny = _TranslationsTransferFormValueInDestinyDe._(_root);
+}
+
+// Path: recurrent_transactions.details
+class _TranslationsRecurrentTransactionsDetailsDe implements _TranslationsRecurrentTransactionsDetailsEn {
+	_TranslationsRecurrentTransactionsDetailsDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Wiederkehrende Transaktion';
+	@override String get descr => 'Die nächsten Schritte für diese Transaktion werden unten angezeigt. Du kannst den ersten Schritt akzeptieren oder diesen Schritt auslassen';
+	@override String get last_payment_info => 'Diese Bewegung ist die letzte der wiederkehrenden Regel, daher wird diese Regel beim Bestätigen dieser Aktion automatisch gelöscht';
+	@override String get delete_header => 'Wiederkehrende Transaktion löschen';
+	@override String get delete_message => 'Diese Aktion ist unumkehrbar und hat keinen Einfluss auf Transaktionen, die Du bereits bestätigt/bezahlt habst';
+}
+
+// Path: recurrent_transactions.status
+class _TranslationsRecurrentTransactionsStatusDe implements _TranslationsRecurrentTransactionsStatusEn {
+	_TranslationsRecurrentTransactionsStatusDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String delayed_by({required Object x}) => 'Verzögert um ${x}d';
+	@override String coming_in({required Object x}) => 'In ${x} Tagen';
+}
+
+// Path: account.types
+class _TranslationsAccountTypesDe implements _TranslationsAccountTypesEn {
+	_TranslationsAccountTypesDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Kontotyp';
+	@override String get warning => 'Sobald der Kontotyp ausgewählt wurde, kann er in Zukunft nicht mehr geändert werden';
+	@override String get normal => 'Normales Konto';
+	@override String get normal_descr => 'Nützlich, um Deine täglichen Finanzen aufzuzeichnen. Es ist das gebräuchlichste Konto, das es Dir ermöglicht, Ausgaben, Einnahmen hinzuzufügen';
+	@override String get saving => 'Sparkonto';
+	@override String get saving_descr => 'Du kannst nur Geld von anderen Konten einzahlen und abheben. Perfekt geignet, um Geld zu sparen';
+}
+
+// Path: account.form
+class _TranslationsAccountFormDe implements _TranslationsAccountFormEn {
+	_TranslationsAccountFormDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Kontoname';
+	@override String get name_placeholder => 'Beispiel: Sparkonto';
+	@override String get notes => 'Notizen';
+	@override String get notes_placeholder => 'Gebe einige Notizen/Beschreibungen zu diesem Konto ein';
+	@override String get initial_balance => 'Anfangssaldo';
+	@override String get current_balance => 'Aktueller Kontostand';
+	@override String get create => 'Konto erstellen';
+	@override String get edit => 'Konto bearbeiten';
+	@override String get currency_not_found_warn => 'Du hast keine Informationen zu den Wechselkursen für diese Währung. Als Standardwechselkurs wird 1,0 verwendet. Du kannst das in den Einstellungen ändern';
+	@override String get already_exists => 'Es gibt bereits ein Konto mit demselben Namen, bitte nutze einen anderen';
+	@override String get tr_before_opening_date => 'Auf diesem Konto liegen Transaktionen vor, deren Datum vor dem Eröffnungsdatum liegt';
+	@override String get iban => 'IBAN';
+	@override String get swift => 'SWIFT';
+}
+
+// Path: account.delete
+class _TranslationsAccountDeleteDe implements _TranslationsAccountDeleteEn {
+	_TranslationsAccountDeleteDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get warning_header => 'Konto löschen?';
+	@override String get warning_text => 'Durch diese Aktion werden dieses Konto und alle seine Transaktionen gelöscht';
+	@override String get success => 'Konto erfolgreich gelöscht';
+}
+
+// Path: account.close
+class _TranslationsAccountCloseDe implements _TranslationsAccountCloseEn {
+	_TranslationsAccountCloseDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Konto schließen';
+	@override String get title_short => 'Schließen';
+	@override String get warn => 'Dieses Konto wird in bestimmten Einträgen nicht mehr angezeigt und Du kannst darin keine Transaktionen mit einem späteren als dem unten angegebenen Datum erstellen. Diese Aktion hat keine Auswirkungen auf Transaktionen oder Guthaben, und Du kannst dieses Konto auch jederzeit wieder eröffnen.';
+	@override String get should_have_zero_balance => 'Um das Konto schließen zu können, muss der aktuelle Kontostand 0 betragen.  Bitte bearbeite das Konto, bevor du fortfährst';
+	@override String get should_have_no_transactions => 'Auf diesem Konto liegen Transaktionen nach dem angegebenen Schlussdatum vor. Lösche sie oder bearbeite das Datum der Kontoschließung, bevor Du fortfährst';
+	@override String get success => 'Konto erfolgreich geschlossen';
+	@override String get unarchive_succes => 'Konto erfolgreich wiedereröffnet';
+}
+
+// Path: account.select
+class _TranslationsAccountSelectDe implements _TranslationsAccountSelectEn {
+	_TranslationsAccountSelectDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get one => 'Wähle ein Konto aus';
+	@override String get all => 'Alle Konten';
+	@override String get multiple => 'Wähle Konten aus';
+}
+
+// Path: currencies.form
+class _TranslationsCurrenciesFormDe implements _TranslationsCurrenciesFormEn {
+	_TranslationsCurrenciesFormDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get equal_to_preferred_warn => 'Die Währung darf nicht mit der Benutzerwährung übereinstimmen';
+	@override String get specify_a_currency => 'Bitte gib eine Währung an';
+	@override String get add => 'Wechselkurs hinzufügen';
+	@override String get add_success => 'Wechselkurs erfolgreich hinzugefügt';
+	@override String get edit => 'Wechselkurs bearbeiten';
+	@override String get edit_success => 'Wechselkurs erfolgreich bearbeitet';
+}
+
+// Path: tags.form
+class _TranslationsTagsFormDe implements _TranslationsTagsFormEn {
+	_TranslationsTagsFormDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Schlagworte-Name';
+	@override String get description => 'Beschreibung';
+}
+
+// Path: tags.select
+class _TranslationsTagsSelectDe implements _TranslationsTagsSelectEn {
+	_TranslationsTagsSelectDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Schlagworte auswählen';
+	@override String get all => 'Alle Schlagworte';
+}
+
+// Path: categories.select
+class _TranslationsCategoriesSelectDe implements _TranslationsCategoriesSelectEn {
+	_TranslationsCategoriesSelectDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Kategorien auswählen';
+	@override String get select_one => 'Wähle eine Kategorie aus';
+	@override String get select_subcategory => 'Wähle eine Unterkategorie';
+	@override String get without_subcategory => 'Ohne Unterkategorie';
+	@override String get all => 'Alle Kategorien';
+	@override String get all_short => 'Alle';
+}
+
+// Path: budgets.form
+class _TranslationsBudgetsFormDe implements _TranslationsBudgetsFormEn {
+	_TranslationsBudgetsFormDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Budget hinzufügen';
+	@override String get name => 'Budgetname';
+	@override String get value => 'Menge begrenzen';
+	@override String get create => 'Budget hinzufügen';
+	@override String get edit => 'Budget bearbeiten';
+	@override String get negative_warn => 'Die Budgets dürfen keinen negativen Betrag haben';
+}
+
+// Path: budgets.details
+class _TranslationsBudgetsDetailsDe implements _TranslationsBudgetsDetailsEn {
+	_TranslationsBudgetsDetailsDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Budgetdetails';
+	@override String get statistics => 'Statistiken';
+	@override String get budget_value => 'Budgetiert';
+	@override String expend_diary_left({required Object dailyAmount, required Object remainingDays}) => 'Du kannst ${dailyAmount}/Tag für ${remainingDays} verbleibende Tage ausgeben';
+	@override String get expend_evolution => 'Ausgabenentwicklung';
+	@override String get no_transactions => 'Es scheint, dass Du im Zusammenhang mit diesem Budget keine Ausgaben getätigt hast';
+}
+
+// Path: backup.export
+class _TranslationsBackupExportDe implements _TranslationsBackupExportEn {
+	_TranslationsBackupExportDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Daten exportieren';
+	@override String get title_short => 'Export';
+	@override String get all => 'Vollständige Sicherung';
+	@override String get all_descr => 'Exportiere alle Deine Daten (Konten, Transaktionen, Budgets, Einstellungen...). ';
+	@override String get transactions => 'Sicherung der Transaktionen';
+	@override String get transactions_descr => 'Exportiere Deine Transaktionen im CSV-Format, damit Du sie einfacher in anderen Programmen oder Anwendungen analysieren kannst.';
+	@override String get description => 'Lade Deine Daten in verschiedenen Formaten herunter';
+	@override String get dialog_title => 'Datei speichern/senden';
+	@override String success({required Object x}) => 'Datei erfolgreich gespeichert/heruntergeladen in ${x}';
+	@override String get error => 'Fehler beim Herunterladen der Datei. ';
+}
+
+// Path: backup.import
+class _TranslationsBackupImportDe implements _TranslationsBackupImportEn {
+	_TranslationsBackupImportDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Daten importieren';
+	@override String get title_short => 'Import';
+	@override String get restore_backup => 'Sicherung wiederherstellen';
+	@override String get restore_backup_descr => 'Importiere eine zuvor gespeicherte Datenbank von Monekin. Diese Aktion ersetzt alle aktuellen Anwendungsdaten durch die neuen Daten';
+	@override String get restore_backup_warn_description => 'Beim Importieren einer neuen Datenbank gehen alle derzeit in der App gespeicherten Daten verloren. Es wird empfohlen, eine Sicherungskopie zu erstellen, bevor Du fortfährst. Lade hier keine Dateien hoch, deren Herkunft Du nicht kennst. Lade nur Dateien hoch, die Du zuvor von Monekin heruntergeladen hast.';
+	@override String get restore_backup_warn_title => 'Alle Daten überschreiben';
+	@override String get select_other_file => 'Andere Datei auswählen';
+	@override String get tap_to_select_file => 'Tippe, um eine Datei auszuwählen';
+	@override late final _TranslationsBackupImportManualImportDe manual_import = _TranslationsBackupImportManualImportDe._(_root);
+	@override String get success => 'Der Import wurde erfolgreich durchgeführt';
+	@override String get cancelled => 'Der Import wurde vom Benutzer abgebrochen';
+	@override String get error => 'Fehler beim Importieren der Datei. Bitte kontaktiere den Entwickler lozin.technologies@gmail.com';
+}
+
+// Path: backup.about
+class _TranslationsBackupAboutDe implements _TranslationsBackupAboutEn {
+	_TranslationsBackupAboutDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Informationen zu Deiner Datenbank';
+	@override String get create_date => 'Erstellungsdatum';
+	@override String get modify_date => 'Zuletzt geändert';
+	@override String get last_backup => 'Letzte Sicherung';
+	@override String get size => 'Größe';
+}
+
+// Path: settings.security
+class _TranslationsSettingsSecurityDe implements _TranslationsSettingsSecurityEn {
+	_TranslationsSettingsSecurityDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Sicherheit';
+	@override String get private_mode_at_launch => 'Privatmodus beim Start';
+	@override String get private_mode_at_launch_descr => 'Starte die App standardmäßig im privaten Modus';
+	@override String get private_mode => 'Privatmodus';
+	@override String get private_mode_descr => 'Alle Geldwerte ausblenden';
+	@override String get private_mode_activated => 'Privatmodus aktiviert';
+	@override String get private_mode_deactivated => 'Privatmodus deaktiviert';
+}
+
+// Path: more.data
+class _TranslationsMoreDataDe implements _TranslationsMoreDataEn {
+	_TranslationsMoreDataDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Daten';
+	@override String get display_descr => 'Exportiere und importiere Deine Daten, damit Du nichts verlierst';
+	@override String get delete_all => 'Meine Daten löschen';
+	@override String get delete_all_header1 => 'Höre genau dort auf, Padawan ⚠️⚠️';
+	@override String get delete_all_message1 => 'Bist Du sicher, dass Du fortfahren möchtest? Alle Daten werden endgültig gelöscht und können nicht wiederhergestellt werden.';
+	@override String get delete_all_header2 => 'Ein letzter Schritt ⚠️⚠️';
+	@override String get delete_all_message2 => 'Durch das Löschen eines Kontos löschst Du alle Deine gespeicherten persönlichen Daten. Deine Konten, Transaktionen, Budgets und Kategorien werden gelöscht und können nicht wiederhergestellt werden. Bist Du damit einverstanden?';
+}
+
+// Path: more.about_us
+class _TranslationsMoreAboutUsDe implements _TranslationsMoreAboutUsEn {
+	_TranslationsMoreAboutUsDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'App-Informationen';
+	@override String get description => 'Schaue Dir die Bedingungen und andere relevante Informationen über Monekin an. Treten mit der Community in Kontakt, indem Du Fehler meldest, Vorschläge machst...';
+	@override late final _TranslationsMoreAboutUsLegalDe legal = _TranslationsMoreAboutUsLegalDe._(_root);
+	@override late final _TranslationsMoreAboutUsProjectDe project = _TranslationsMoreAboutUsProjectDe._(_root);
+}
+
+// Path: more.help_us
+class _TranslationsMoreHelpUsDe implements _TranslationsMoreHelpUsEn {
+	_TranslationsMoreHelpUsDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Hilf uns';
+	@override String get description => 'Finde heraus, wie Du Monekin dabei helfen kannst, immer besser zu werden';
+	@override String get rate_us => 'Bewerte uns';
+	@override String get rate_us_descr => 'Jede Hilfe ist willkommen!';
+	@override String get share => 'Teile  Monekin';
+	@override String get share_descr => 'Teile  unsere App mit Freunden und Familie';
+	@override String get share_text => 'Monekin! ';
+	@override String get thanks => 'Danke schön!';
+	@override String get thanks_long => 'Deine Beiträge zu Monekin und anderen großen und kleinen Open-Source-Projekten machen großartige Projekte wie dieses möglich. Danke, dass Du dir die Zeit nimmst teilzunehmen';
+	@override String get donate => 'Mache eine Spende';
+	@override String get donate_descr => 'Mit Deiner Spende trägst dazu bei, dass die App weiterhin verbessert wird. Was gibt es Schöneres, als sich für die geleistete Arbeit zu bedanken, indem man mich zu einem Kaffee einlädt?';
+	@override String get donate_success => 'Spende erfolgt. Herzlichen Dank für Deine Beitrag! ❤️';
+	@override String get donate_err => 'Hoppla! Es scheint ein Fehler beim Empfang Deiner Zahlung aufgetreten zu sein';
+	@override String get report => 'Melde Fehler, hinterlasse Vorschläge ...';
+}
+
+// Path: general.time.ranges
+class _TranslationsGeneralTimeRangesDe implements _TranslationsGeneralTimeRangesEn {
+	_TranslationsGeneralTimeRangesDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Zeitbereich';
+	@override String get it_repeat => 'Wiederholt';
+	@override String get it_ends => 'Endet';
+	@override String get forever => 'Für immer';
+	@override late final _TranslationsGeneralTimeRangesTypesDe types = _TranslationsGeneralTimeRangesTypesDe._(_root);
+	@override String each_range({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+		one: 'Jeder ${range}',
+		other: 'Jeder ${n} ${range}',
+	);
+	@override String each_range_until_date({required num n, required Object range, required Object day}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+		one: 'Jeder ${range} bis ${day}',
+		other: 'Jeder ${n} ${range} bis ${day}',
+	);
+	@override String each_range_until_times({required num n, required Object range, required Object limit}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+		one: 'Jeder ${range} ${limit} mal',
+		other: 'Jeder ${n} ${range} ${limit} mal',
+	);
+	@override String each_range_until_once({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+		one: 'Jeder ${range} einmal',
+		other: 'Jeder ${n} ${range} einmal',
+	);
+	@override String month({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+		one: 'Monat',
+		other: 'Monate',
+	);
+	@override String year({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+		one: 'Jahr',
+		other: 'Jahre',
+	);
+	@override String day({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+		one: 'Tag',
+		other: 'Tage',
+	);
+	@override String week({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+		one: 'Woche',
+		other: 'Wochen',
+	);
+}
+
+// Path: general.time.periodicity
+class _TranslationsGeneralTimePeriodicityDe implements _TranslationsGeneralTimePeriodicityEn {
+	_TranslationsGeneralTimePeriodicityDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Wiederholung';
+	@override String get no_repeat => 'Keine Wiederholung';
+	@override String repeat({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+		one: 'Wiederholung',
+		other: 'Wiederholungen',
+	);
+	@override String get diary => 'Täglich';
+	@override String get monthly => 'Monatlich';
+	@override String get annually => 'Jährlich';
+	@override String get quaterly => 'Vierteljährlich';
+	@override String get weekly => 'Wöchentlich';
+	@override String get custom => 'Brauch';
+	@override String get infinite => 'Stets';
+}
+
+// Path: general.time.current
+class _TranslationsGeneralTimeCurrentDe implements _TranslationsGeneralTimeCurrentEn {
+	_TranslationsGeneralTimeCurrentDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get monthly => 'Diesen Monat';
+	@override String get annually => 'Dieses Jahr';
+	@override String get quaterly => 'Dieses Quartal';
+	@override String get weekly => 'Diese Woche';
+	@override String get infinite => 'Für immer';
+	@override String get custom => 'Benutzerdefinierter Zeitraum';
+}
+
+// Path: general.time.all
+class _TranslationsGeneralTimeAllDe implements _TranslationsGeneralTimeAllEn {
+	_TranslationsGeneralTimeAllDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get diary => 'Täglich';
+	@override String get monthly => 'Jeden Monat';
+	@override String get annually => 'Jährlich';
+	@override String get quaterly => 'Vierteljährlich';
+	@override String get weekly => 'Jede Woche';
+}
+
+// Path: financial_health.review.descr
+class _TranslationsFinancialHealthReviewDescrDe implements _TranslationsFinancialHealthReviewDescrEn {
+	_TranslationsFinancialHealthReviewDescrDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get insufficient_data => 'Es sieht so aus, als hätten wir nicht genügend Ausgaben, um Deine finanzielle Lage zu berechnen. Füge in diesem Zeitraum einige Ausgaben/Einnahmen hinzu, damit wir Dir helfen können!';
+	@override String get very_good => 'Glückwunsch! ';
+	@override String get good => 'Großartig! ';
+	@override String get normal => 'Deine finanzielle Lage entspricht in diesem Zeitraum mehr oder weniger dem Durchschnitt der übrigen Bevölkerung';
+	@override String get bad => 'Es scheint, dass Deine finanzielle Situation noch nicht die beste ist. Erkunde den Rest der Diagramme, um mehr über Deine Finanzen zu erfahren';
+	@override String get very_bad => 'Hmm, Deine finanzielle Lage ist weit unter dem, was sie sein sollte. Erkunde den Rest der Diagramme, um mehr über Deine Finanzen zu erfahren';
+}
+
+// Path: financial_health.savings_percentage.text
+class _TranslationsFinancialHealthSavingsPercentageTextDe implements _TranslationsFinancialHealthSavingsPercentageTextEn {
+	_TranslationsFinancialHealthSavingsPercentageTextDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String good({required Object value}) => 'Herzlichen Glückwunsch! Du hast es geschafft, während dieses Zeitraums <b>${value}%</b> Deines Einkommens zu sparen. Es scheint, dass Du bereits ein Experte sind, mache weiter so! ';
+	@override String normal({required Object value}) => 'Herzlichen Glückwunsch! Du hast es geschafft, während dieses Zeitraums <b>${value}%</b> Deines Einkommens zu sparen';
+	@override String bad({required Object value}) => 'Du hast es geschafft <b>${value}%</b> Deines Einkommens in diesem Zeitraum zu sparen . ';
+	@override String get very_bad => 'Wow, du hast es in dieser Zeit nicht geschafft, etwas zu sparen.';
+}
+
+// Path: transaction.list.bulk_edit
+class _TranslationsTransactionListBulkEditDe implements _TranslationsTransactionListBulkEditEn {
+	_TranslationsTransactionListBulkEditDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get dates => 'Daten bearbeiten';
+	@override String get categories => 'Kategorien bearbeiten';
+	@override String get status => 'Status bearbeiten';
+}
+
+// Path: transaction.form.validators
+class _TranslationsTransactionFormValidatorsDe implements _TranslationsTransactionFormValidatorsEn {
+	_TranslationsTransactionFormValidatorsDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get zero => 'Der Wert einer Transaktion kann nicht gleich Null sein';
+	@override String get date_max => 'Das ausgewählte Datum liegt nach dem aktuellen. ';
+	@override String get date_after_account_creation => 'Du kannst keine Transaktion erstellen, deren Datum vor dem Erstellungsdatum des Kontos liegt, zu dem sie gehört';
+	@override String get negative_transfer => 'Der Geldwert einer Überweisung darf nicht negativ sein';
+	@override String get transfer_between_same_accounts => 'Das Ursprungs- und das Zielkonto dürfen nicht identisch sein';
+}
+
+// Path: transfer.form.value_in_destiny
+class _TranslationsTransferFormValueInDestinyDe implements _TranslationsTransferFormValueInDestinyEn {
+	_TranslationsTransferFormValueInDestinyDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Am Zielkonto überwiesener Betrag';
+	@override String amount_short({required Object amount}) => '${amount} zum Zielkonto';
+}
+
+// Path: backup.import.manual_import
+class _TranslationsBackupImportManualImportDe implements _TranslationsBackupImportManualImportEn {
+	_TranslationsBackupImportManualImportDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Manueller Import';
+	@override String get descr => 'Importiere Transaktionen manuell aus einer CSV-Datei';
+	@override String get default_account => 'Standardkonto';
+	@override String get remove_default_account => 'Standardkonto entfernen';
+	@override String get default_category => 'Standardkategorie';
+	@override String get select_a_column => 'Wählen eine Spalte aus der CSV-Datei aus';
+	@override List<String> get steps => [
+		'Wähle Deine Datei aus',
+		'Spalte für Menge',
+		'Spalte für Konto',
+		'Spalte für Kategorie',
+		'Spalte für Datum',
+		'andere Spalten',
+	];
+	@override List<String> get steps_descr => [
+		'Wähle eine CSV-Datei von Deinem Gerät aus. Stelle sicher, dass die erste Zeile den Namen der einzelnen Spalten enthält',
+		'Wählen die Spalte aus, in der der Wert jeder Transaktion angegeben ist. Verwende negative Werte für Ausgaben und positive Werte für Einnahmen. Verwende einen Punkt als Dezimaltrennzeichen',
+		'Wähle die Spalte aus, in der das Konto angegeben ist, zu dem jede Transaktion gehört. Du kannst auch ein Standardkonto auswählen, falls wir das von Dir gewünschte Konto nicht finden können. Wenn Du kein Standardkonto angibst, wird eines mit demselben Namen erstellt ',
+		'Gebe die Spalte an, in der sich der Name der Transaktionskategorie befindet. Du musst eine Standardkategorie angeben, damit wir diese Kategorie den Transaktionen zuordnen können, falls die Kategorie nicht gefunden werden kann.',
+		'Wähle die Spalte aus, in der das Datum jeder Transaktion angegeben ist. Wird nichts angegeben, werden die Transaktionen mit dem aktuellen Datum erstellt.',
+		'Gibt die Spalten für andere optionale Transaktionsattribute an',
+	];
+	@override String success({required Object x}) => 'Erfolgreich ${x} Transaktionen importiert';
+}
+
+// Path: more.about_us.legal
+class _TranslationsMoreAboutUsLegalDe implements _TranslationsMoreAboutUsLegalEn {
+	_TranslationsMoreAboutUsLegalDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Rechtliche Informationen';
+	@override String get privacy => 'Datenschutzrichtlinie';
+	@override String get terms => 'Nutzungsbedingungen';
+	@override String get licenses => 'Lizenzen';
+}
+
+// Path: more.about_us.project
+class _TranslationsMoreAboutUsProjectDe implements _TranslationsMoreAboutUsProjectEn {
+	_TranslationsMoreAboutUsProjectDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Projekt';
+	@override String get contributors => 'Mitarbeiter';
+	@override String get contributors_descr => 'Alle Entwickler, die Monekin wachsen lassen haben';
+	@override String get contact => 'Kontaktiere uns';
+}
+
+// Path: general.time.ranges.types
+class _TranslationsGeneralTimeRangesTypesDe implements _TranslationsGeneralTimeRangesTypesEn {
+	_TranslationsGeneralTimeRangesTypesDe._(this._root);
+
+	@override final _TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get cycle => 'Zyklen';
+	@override String get last_days => 'Letzte Tage';
+	@override String last_days_form({required Object x}) => '${x} Vortage';
+	@override String get all => 'Immer';
+	@override String get date_range => 'Benutzerdefinierter Zeitraum';
+}
+
+// Path: <root>
 class _TranslationsEs implements Translations {
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
@@ -1456,6 +2855,7 @@ class _TranslationsEs implements Translations {
 	@override late final _TranslationsEs _root = this; // ignore: unused_field
 
 	// Translations
+	@override late final _TranslationsUiActionsEs ui_actions = _TranslationsUiActionsEs._(_root);
 	@override late final _TranslationsGeneralEs general = _TranslationsGeneralEs._(_root);
 	@override late final _TranslationsIntroEs intro = _TranslationsIntroEs._(_root);
 	@override late final _TranslationsHomeEs home = _TranslationsHomeEs._(_root);
@@ -1475,6 +2875,51 @@ class _TranslationsEs implements Translations {
 	@override late final _TranslationsMoreEs more = _TranslationsMoreEs._(_root);
 }
 
+// Path: ui_actions
+class _TranslationsUiActionsEs implements _TranslationsUiActionsEn {
+	_TranslationsUiActionsEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get cancel => 'Cancelar';
+	@override String get confirm => 'Confirmar';
+	@override String get continue_text => 'Continuar';
+	@override String get save => 'Guardar';
+	@override String get save_changes => 'Guardar cambios';
+	@override String get close_and_save => 'Guardar y cerrar';
+	@override String get add => 'Añadir';
+	@override String get edit => 'Editar';
+	@override String get delete => 'Eliminar';
+	@override String get see_more => 'Ver más';
+	@override String get select_all => 'Seleccionar todo';
+	@override String get deselect_all => 'Deseleccionar todo';
+	@override String get select => 'Seleccionar';
+	@override String get search => 'Buscar';
+	@override String get filter => 'Filter';
+	@override String get reset => 'Restablecer';
+	@override String get submit => 'Enviar';
+	@override String get next => 'Siguiente';
+	@override String get previous => 'Anterior';
+	@override String get back => 'Atrás';
+	@override String get reload => 'Recargar';
+	@override String get view => 'Ver';
+	@override String get download => 'Descargar';
+	@override String get upload => 'Subir';
+	@override String get retry => 'Reintentar';
+	@override String get copy => 'Copiar';
+	@override String get paste => 'Pegar';
+	@override String get undo => 'Deshacer';
+	@override String get redo => 'Rehacer';
+	@override String get open => 'Abrir';
+	@override String get close => 'Cerrar';
+	@override String get apply => 'Aplicar';
+	@override String get discard => 'Descartar';
+	@override String get refresh => 'Actualizar';
+	@override String get details => 'Detalles';
+	@override String get share => 'Compartir';
+}
+
 // Path: general
 class _TranslationsGeneralEs implements _TranslationsGeneralEn {
 	_TranslationsGeneralEs._(this._root);
@@ -1482,19 +2927,10 @@ class _TranslationsGeneralEs implements _TranslationsGeneralEn {
 	@override final _TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get cancel => 'Cancelar';
 	@override String get or => 'o';
 	@override String get understood => 'Entendido';
 	@override String get unspecified => 'Sin especificar';
-	@override String get confirm => 'Confirmar';
-	@override String get continue_text => 'Continuar';
 	@override String get quick_actions => 'Acciones rápidas';
-	@override String get save => 'Guardar';
-	@override String get save_changes => 'Guardar cambios';
-	@override String get close_and_save => 'Guardar y cerrar';
-	@override String get add => 'Añadir';
-	@override String get edit => 'Editar';
-	@override String get delete => 'Eliminar';
 	@override String get balance => 'Balance';
 	@override String get account => 'Cuenta';
 	@override String get accounts => 'Cuentas';
@@ -1503,9 +2939,6 @@ class _TranslationsGeneralEs implements _TranslationsGeneralEn {
 	@override String get today => 'Hoy';
 	@override String get yesterday => 'Ayer';
 	@override String get filters => 'Filtros';
-	@override String get see_more => 'Ver más';
-	@override String get select_all => 'Seleccionar todo';
-	@override String get deselect_all => 'Deseleccionar todo';
 	@override String get empty_warn => 'Ops! Esto esta muy vacio';
 	@override String get insufficient_data => 'Datos insuficientes';
 	@override String get show_more_fields => 'Show more fields';
@@ -1617,6 +3050,8 @@ class _TranslationsIconSelectorEs implements _TranslationsIconSelectorEn {
 	@override String get color => 'Color';
 	@override String get select_icon => 'Selecciona un icono';
 	@override String get select_color => 'Selecciona un color';
+	@override String get custom_color => 'Color personalizado';
+	@override String get current_color_selection => 'Selección actual';
 	@override String get select_account_icon => 'Identifica tu cuenta';
 	@override String get select_category_icon => 'Identifica tu categoría';
 	@override late final _TranslationsIconSelectorScopesEs scopes = _TranslationsIconSelectorScopesEs._(_root);
@@ -1690,6 +3125,7 @@ class _TranslationsRecurrentTransactionsEs implements _TranslationsRecurrentTran
 	@override String get total_expense_title => 'Gasto total por periodo';
 	@override String get total_expense_descr => '* Sin considerar la fecha de inicio y fin de cada recurrencia';
 	@override late final _TranslationsRecurrentTransactionsDetailsEs details = _TranslationsRecurrentTransactionsDetailsEs._(_root);
+	@override late final _TranslationsRecurrentTransactionsStatusEs status = _TranslationsRecurrentTransactionsStatusEs._(_root);
 }
 
 // Path: account
@@ -1854,13 +3290,14 @@ class _TranslationsSettingsEs implements _TranslationsSettingsEn {
 	@override String get lang_section => 'Idioma y textos';
 	@override String get lang_title => 'Idioma de la aplicación';
 	@override String get lang_descr => 'Idioma en el que se mostrarán los textos en la aplicación';
+	@override String get lang_help => 'Si quieres colaborar con las traducciones de esta app puedes consultar <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>nuestra guía</a> ';
 	@override String get locale => 'Región';
 	@override String get locale_descr => 'Establecer el formato a utilizar para fechas, números...';
 	@override String get locale_warn => 'Al cambiar la región, la aplicación se actualizará';
 	@override String get first_day_of_week => 'Primer día de la semana';
 	@override String get theme_and_colors => 'Tema y colores';
 	@override String get theme => 'Tema';
-	@override String get theme_auto => 'Definido por el sistema';
+	@override String get theme_auto => 'Sistema';
 	@override String get theme_light => 'Claro';
 	@override String get theme_dark => 'Oscuro';
 	@override String get amoled_mode => 'Modo AMOLED';
@@ -2214,6 +3651,17 @@ class _TranslationsRecurrentTransactionsDetailsEs implements _TranslationsRecurr
 	@override String get last_payment_info => 'Este movimiento es el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al confirmar esta acción';
 	@override String get delete_header => 'Eliminar transacción recurrente';
 	@override String get delete_message => 'Esta acción es irreversible y no afectará a transacciones que ya hayas confirmado/pagado';
+}
+
+// Path: recurrent_transactions.status
+class _TranslationsRecurrentTransactionsStatusEs implements _TranslationsRecurrentTransactionsStatusEn {
+	_TranslationsRecurrentTransactionsStatusEs._(this._root);
+
+	@override final _TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String delayed_by({required Object x}) => 'Atrasado por ${x}d';
+	@override String coming_in({required Object x}) => 'En ${x} días';
 }
 
 // Path: account.types
@@ -2733,6 +4181,1354 @@ class _TranslationsGeneralTimeRangesTypesEs implements _TranslationsGeneralTimeR
 }
 
 // Path: <root>
+class _TranslationsHu implements Translations {
+	/// You can call this constructor and build your own translation instance of this locale.
+	/// Constructing via the enum [AppLocale.build] is preferred.
+	_TranslationsHu.build({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver})
+		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
+		  $meta = TranslationMetadata(
+		    locale: AppLocale.hu,
+		    overrides: overrides ?? {},
+		    cardinalResolver: cardinalResolver,
+		    ordinalResolver: ordinalResolver,
+		  ) {
+		$meta.setFlatMapFunction(_flatMapFunction);
+	}
+
+	/// Metadata for the translations of <hu>.
+	@override final TranslationMetadata<AppLocale, Translations> $meta;
+
+	/// Access flat map
+	@override dynamic operator[](String key) => $meta.getTranslation(key);
+
+	@override late final _TranslationsHu _root = this; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsUiActionsHu ui_actions = _TranslationsUiActionsHu._(_root);
+	@override late final _TranslationsGeneralHu general = _TranslationsGeneralHu._(_root);
+	@override late final _TranslationsIntroHu intro = _TranslationsIntroHu._(_root);
+	@override late final _TranslationsHomeHu home = _TranslationsHomeHu._(_root);
+	@override late final _TranslationsFinancialHealthHu financial_health = _TranslationsFinancialHealthHu._(_root);
+	@override late final _TranslationsStatsHu stats = _TranslationsStatsHu._(_root);
+	@override late final _TranslationsIconSelectorHu icon_selector = _TranslationsIconSelectorHu._(_root);
+	@override late final _TranslationsTransactionHu transaction = _TranslationsTransactionHu._(_root);
+	@override late final _TranslationsTransferHu transfer = _TranslationsTransferHu._(_root);
+	@override late final _TranslationsRecurrentTransactionsHu recurrent_transactions = _TranslationsRecurrentTransactionsHu._(_root);
+	@override late final _TranslationsAccountHu account = _TranslationsAccountHu._(_root);
+	@override late final _TranslationsCurrenciesHu currencies = _TranslationsCurrenciesHu._(_root);
+	@override late final _TranslationsTagsHu tags = _TranslationsTagsHu._(_root);
+	@override late final _TranslationsCategoriesHu categories = _TranslationsCategoriesHu._(_root);
+	@override late final _TranslationsBudgetsHu budgets = _TranslationsBudgetsHu._(_root);
+	@override late final _TranslationsBackupHu backup = _TranslationsBackupHu._(_root);
+	@override late final _TranslationsSettingsHu settings = _TranslationsSettingsHu._(_root);
+	@override late final _TranslationsMoreHu more = _TranslationsMoreHu._(_root);
+}
+
+// Path: ui_actions
+class _TranslationsUiActionsHu implements _TranslationsUiActionsEn {
+	_TranslationsUiActionsHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get cancel => 'Mégse';
+	@override String get confirm => 'Megerősítés';
+	@override String get continue_text => 'Folytatás';
+	@override String get save => 'Mentés';
+	@override String get save_changes => 'Módosítások mentése';
+	@override String get close_and_save => 'Mentés és bezárás';
+	@override String get add => 'Hozzáad';
+	@override String get edit => 'Szerkesztés';
+	@override String get delete => 'Törlés';
+	@override String get see_more => 'Továbbiak megtekintése';
+	@override String get select_all => 'Összes kijelölése';
+	@override String get deselect_all => 'Összes kijelölésének megszüntetése';
+	@override String get select => 'Kiválasztás';
+	@override String get search => 'Keresés';
+	@override String get filter => 'Szűrés';
+	@override String get reset => 'Alaphelyzetbe állítás';
+	@override String get submit => 'Beküldés';
+	@override String get next => 'Következő';
+	@override String get previous => 'Előző';
+	@override String get back => 'Vissza';
+	@override String get reload => 'Újratöltés';
+	@override String get view => 'Megtekintés';
+	@override String get download => 'Letöltés';
+	@override String get upload => 'Feltöltés';
+	@override String get retry => 'Újrapróbálkozás';
+	@override String get copy => 'Másolás';
+	@override String get paste => 'Beillesztés';
+	@override String get undo => 'Visszavonás';
+	@override String get redo => 'Újra';
+	@override String get open => 'Megnyitás';
+	@override String get close => 'Bezárás';
+	@override String get apply => 'Alkalmaz';
+	@override String get discard => 'Elvetés';
+	@override String get refresh => 'Frissítés';
+	@override String get details => 'Részletek';
+	@override String get share => 'Megosztás';
+}
+
+// Path: general
+class _TranslationsGeneralHu implements _TranslationsGeneralEn {
+	_TranslationsGeneralHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get or => 'vagy';
+	@override String get understood => 'Megértve';
+	@override String get unspecified => 'Meghatározatlan';
+	@override String get quick_actions => 'Gyorsműveletek';
+	@override String get balance => 'Egyenleg';
+	@override String get account => 'Számla';
+	@override String get accounts => 'Számlák';
+	@override String get categories => 'Kategóriák';
+	@override String get category => 'Kategória';
+	@override String get today => 'Ma';
+	@override String get yesterday => 'Tegnap';
+	@override String get filters => 'Szűrők';
+	@override String get empty_warn => 'Hoppá! Ez nagyon üres.';
+	@override String get insufficient_data => 'Hiányos adatok';
+	@override String get show_more_fields => 'Több mező mutatása';
+	@override String get show_less_fields => 'Kevesebb mező mutatása';
+	@override String get tap_to_search => 'Koppintson a kereséshez';
+	@override late final _TranslationsGeneralClipboardHu clipboard = _TranslationsGeneralClipboardHu._(_root);
+	@override late final _TranslationsGeneralTimeHu time = _TranslationsGeneralTimeHu._(_root);
+	@override late final _TranslationsGeneralTransactionOrderHu transaction_order = _TranslationsGeneralTransactionOrderHu._(_root);
+	@override late final _TranslationsGeneralValidationsHu validations = _TranslationsGeneralValidationsHu._(_root);
+}
+
+// Path: intro
+class _TranslationsIntroHu implements _TranslationsIntroEn {
+	_TranslationsIntroHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get start => 'Kezdés';
+	@override String get skip => 'Kihagyás';
+	@override String get next => 'Tovább';
+	@override String get select_your_currency => 'Válassza ki a pénznemet';
+	@override String get welcome_subtitle => 'Az Ön személyes pénzügyi menedzsere';
+	@override String get welcome_subtitle2 => '100% -ban nyitott, és 100% -ban ingyenes';
+	@override String get welcome_footer => 'A bejelentkezéssel elfogadja az <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Adatvédelmi irányelveket</a> és az alkalmazás <a href=\' https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Felhasználási feltételeit</a>';
+	@override String get offline_descr_title => 'OFFLINE SZÁMLA:';
+	@override String get offline_descr => 'Az Ön adatai csak az Ön készülékén tárolódnak, és biztonságban lesznek, amíg nem távolítja el az alkalmazást, vagy nem cseréli le a telefont. Az adatvesztés megelőzése érdekében ajánlott rendszeresen biztonsági mentést készíteni az alkalmazás beállításaiból.';
+	@override String get offline_start => 'Offline munkamenet indítása';
+	@override String get sl1_title => 'Válassza ki a pénznemet';
+	@override String get sl1_descr => 'Az alapértelmezett pénznemet a jelentésekben és az általános diagramokban használjuk. A pénznemet és az alkalmazás nyelvét később bármikor megváltoztathatja az alkalmazás beállításaiban.';
+	@override String get sl2_title => 'Biztonságos, privát és megbízható';
+	@override String get sl2_descr => 'Az Ön adatai csak az Önéi. Az adatokat közvetlenül az Ön eszközén tároljuk, anélkül, hogy azok külső szervereken keresztül mennének át. Ez lehetővé teszi az alkalmazás használatát internet nélkül is.';
+	@override String get sl2_descr2 => 'Az alkalmazás forráskódja is nyilvános, így bárki közreműködhet benne, és megnézheti, hogyan is működik.';
+	@override String get last_slide_title => 'Minden kész';
+	@override String get last_slide_descr => 'A Monekin segítségével végre elérheti azt az anyagi függetlenséget, amelyre annyira vágyik. Grafikonok, költségvetések, tippek, statisztikák és még sok minden más lesz megtalálható a pénzével kapcsolatban.';
+	@override String get last_slide_descr2 => 'Reméljük, hogy élvezni fogja az élményt! Ne habozzon kapcsolatba lépni velünk, ha kétségei, javaslatai vannak...';
+}
+
+// Path: home
+class _TranslationsHomeHu implements _TranslationsHomeEn {
+	_TranslationsHomeHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Kezdőlap';
+	@override String get filter_transactions => 'Tranzakciók szűrése';
+	@override String get hello_day => 'Jó reggelt,';
+	@override String get hello_night => 'Jó éjszakát,';
+	@override String get total_balance => 'Teljes egyenleg';
+	@override String get my_accounts => 'Saját számláim';
+	@override String get active_accounts => 'Aktív számlák';
+	@override String get no_accounts => 'Még nincsenek számlák létrehozva';
+	@override String get no_accounts_descr => 'Kezdje el élvezni a Monekin összes varázsát. A tranzakciók hozzáadásához legalább egy számlát hozzon létre.';
+	@override String get last_transactions => 'Legutóbbi tranzakciók';
+	@override String get should_create_account_header => 'Hoppá!';
+	@override String get should_create_account_message => 'A tranzakciók létrehozásához legalább egy nem archivált számlával kell rendelkeznie';
+}
+
+// Path: financial_health
+class _TranslationsFinancialHealthHu implements _TranslationsFinancialHealthEn {
+	_TranslationsFinancialHealthHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Pénzügyi állapot';
+	@override late final _TranslationsFinancialHealthReviewHu review = _TranslationsFinancialHealthReviewHu._(_root);
+	@override late final _TranslationsFinancialHealthMonthsWithoutIncomeHu months_without_income = _TranslationsFinancialHealthMonthsWithoutIncomeHu._(_root);
+	@override late final _TranslationsFinancialHealthSavingsPercentageHu savings_percentage = _TranslationsFinancialHealthSavingsPercentageHu._(_root);
+}
+
+// Path: stats
+class _TranslationsStatsHu implements _TranslationsStatsEn {
+	_TranslationsStatsHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Statisztika';
+	@override String get balance => 'Egyenleg';
+	@override String get final_balance => 'Végső egyenleg';
+	@override String get balance_by_account => 'Számlák szerinti egyenleg';
+	@override String get balance_by_account_subtitle => 'Hol van a legtöbb pénzem?';
+	@override String get balance_by_currency => 'Egyenleg pénznemenként';
+	@override String get balance_by_currency_subtitle => 'Mennyi pénzem van devizában?';
+	@override String get balance_evolution => 'Egyenleg alakulása';
+	@override String get balance_evolution_subtitle => 'Több pénzem van, mint korábban?';
+	@override String get compared_to_previous_period => 'Az előző időszakhoz képest';
+	@override String get cash_flow => 'Pénzforgalom';
+	@override String get cash_flow_subtitle => 'Kevesebbet költök, mint amennyit megkeresek?';
+	@override String get by_periods => 'Időszakonként';
+	@override String get by_categories => 'Kategóriánként';
+	@override String get by_tags => 'Címkék szerint';
+	@override String get distribution => 'Megoszlás';
+	@override String get finance_health_resume => 'Folytatás';
+	@override String get finance_health_breakdown => 'Csőd';
+}
+
+// Path: icon_selector
+class _TranslationsIconSelectorHu implements _TranslationsIconSelectorEn {
+	_TranslationsIconSelectorHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Név:';
+	@override String get icon => 'Ikon';
+	@override String get color => 'Szín';
+	@override String get select_icon => 'Ikon kiválasztása';
+	@override String get select_color => 'Szín kiválasztása';
+	@override String get custom_color => 'Egyedi szín';
+	@override String get current_color_selection => 'Jelenlegi kiválasztás';
+	@override String get select_account_icon => 'Számla azonosítása';
+	@override String get select_category_icon => 'Kategória azonosítása';
+	@override late final _TranslationsIconSelectorScopesHu scopes = _TranslationsIconSelectorScopesHu._(_root);
+}
+
+// Path: transaction
+class _TranslationsTransactionHu implements _TranslationsTransactionEn {
+	_TranslationsTransactionHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+		one: 'Tranzakció',
+		other: 'Tranzakciók',
+	);
+	@override String get create => 'Új tranzakció';
+	@override String get new_income => 'Új bevétel';
+	@override String get new_expense => 'Új kiadás';
+	@override String get new_success => 'A tranzakció sikeresen létrehozva';
+	@override String get edit => 'Tranzakció szerkesztése';
+	@override String get edit_success => 'A tranzakció sikeresen szerkesztve';
+	@override String get edit_multiple => 'Tranzakciók szerkesztése';
+	@override String edit_multiple_success({required Object x}) => '${x} tranzakció sikeresen szerkesztve';
+	@override String get duplicate => 'Tranzakció klónozása';
+	@override String get duplicate_short => 'Klónozás';
+	@override String get duplicate_warning_message => 'Egy ezzel megegyező tranzakció jön létre ugyanazzal a dátummal, folytatni szeretné?';
+	@override String get duplicate_success => 'A tranzakció sikeresen klónozva';
+	@override String get delete => 'Tranzakció törlése';
+	@override String get delete_warning_message => 'Ez a művelet visszafordíthatatlan. A számlák aktuális egyenlege és az összes statisztikája újraszámításra kerül.';
+	@override String get delete_success => 'A tranzakció sikeresen törölve';
+	@override String get delete_multiple => 'Tranzakciók törlése';
+	@override String delete_multiple_warning_message({required Object x}) => 'Ez a művelet visszafordíthatatlan, és eltávolít ${x} tranzakciót. A számlái aktuális egyenlege és minden statisztikája újraszámításra kerül.';
+	@override String delete_multiple_success({required Object x}) => '${x} tranzakció megfelelően törölve';
+	@override String get details => 'A mozgás részletei';
+	@override late final _TranslationsTransactionNextPaymentsHu next_payments = _TranslationsTransactionNextPaymentsHu._(_root);
+	@override late final _TranslationsTransactionListHu list = _TranslationsTransactionListHu._(_root);
+	@override late final _TranslationsTransactionFiltersHu filters = _TranslationsTransactionFiltersHu._(_root);
+	@override late final _TranslationsTransactionFormHu form = _TranslationsTransactionFormHu._(_root);
+	@override late final _TranslationsTransactionReversedHu reversed = _TranslationsTransactionReversedHu._(_root);
+	@override late final _TranslationsTransactionStatusHu status = _TranslationsTransactionStatusHu._(_root);
+	@override late final _TranslationsTransactionTypesHu types = _TranslationsTransactionTypesHu._(_root);
+}
+
+// Path: transfer
+class _TranslationsTransferHu implements _TranslationsTransferEn {
+	_TranslationsTransferHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Áthelyezés';
+	@override String get transfers => 'Áthelyezések';
+	@override String transfer_to({required Object account}) => 'Áthelyezés ide: ${account}';
+	@override String get create => 'Új átvitel';
+	@override String get need_two_accounts_warning_header => 'Hoppá!';
+	@override String get need_two_accounts_warning_message => 'A művelet végrehajtásához legalább kettő számlára van szükség. Ha módosítani vagy szerkeszteni szeretné a számla aktuális egyenlegét, kattintson a szerkesztés gombra.';
+	@override late final _TranslationsTransferFormHu form = _TranslationsTransferFormHu._(_root);
+}
+
+// Path: recurrent_transactions
+class _TranslationsRecurrentTransactionsHu implements _TranslationsRecurrentTransactionsEn {
+	_TranslationsRecurrentTransactionsHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Ismétlődő tranzakciók';
+	@override String get title_short => 'Ism. tranzakciók';
+	@override String get empty => 'Úgy tűnik, hogy nincsenek ismétlődő tranzakciói. Hozzon létre havi, éves vagy heti ismétlődő tranzakciót, és az itt fog megjelenni.';
+	@override String get total_expense_title => 'Összes kiadás periódusonként';
+	@override String get total_expense_descr => '* Az egyes ismétlődések kezdő és befejező időpontjának figyelembevétele nélkül';
+	@override late final _TranslationsRecurrentTransactionsDetailsHu details = _TranslationsRecurrentTransactionsDetailsHu._(_root);
+	@override late final _TranslationsRecurrentTransactionsStatusHu status = _TranslationsRecurrentTransactionsStatusHu._(_root);
+}
+
+// Path: account
+class _TranslationsAccountHu implements _TranslationsAccountEn {
+	_TranslationsAccountHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get details => 'Számlaadatok';
+	@override String get date => 'Megnyitás dátuma';
+	@override String get close_date => 'Lezárás dátuma';
+	@override String get reopen => 'Számla újranyitása';
+	@override String get reopen_short => 'Újranyitás';
+	@override String get reopen_descr => 'Biztos, hogy újra meg akarja nyitni ezt a számlát?';
+	@override String get balance => 'Számlaegyenleg';
+	@override String get n_transactions => 'Tranzakciók száma';
+	@override String get add_money => 'Hozzáadás';
+	@override String get withdraw_money => 'Pénzfelvétel';
+	@override String get no_accounts => 'Nem található itt megjeleníthető tranzakció. Adjon hozzá egy tranzakciót az alul található „+” gombra kattintva.';
+	@override late final _TranslationsAccountTypesHu types = _TranslationsAccountTypesHu._(_root);
+	@override late final _TranslationsAccountFormHu form = _TranslationsAccountFormHu._(_root);
+	@override late final _TranslationsAccountDeleteHu delete = _TranslationsAccountDeleteHu._(_root);
+	@override late final _TranslationsAccountCloseHu close = _TranslationsAccountCloseHu._(_root);
+	@override late final _TranslationsAccountSelectHu select = _TranslationsAccountSelectHu._(_root);
+}
+
+// Path: currencies
+class _TranslationsCurrenciesHu implements _TranslationsCurrenciesEn {
+	_TranslationsCurrenciesHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get currency_converter => 'Valutaváltó';
+	@override String get currency => 'Pénznem';
+	@override String get currency_manager => 'Valutakezelő';
+	@override String get currency_manager_descr => 'Konfigurálja a pénznemet és annak árfolyamait másokkal együtt';
+	@override String get preferred_currency => 'Kedvelt/alap pénznem';
+	@override String get change_preferred_currency_title => 'Kedvelt pénznem módosítása';
+	@override String get change_preferred_currency_msg => 'Mostantól minden statisztika és költségvetés ebben a pénznemben jelenik meg. A számlák és tranzakciók megtartják a korábbi pénznemet. Minden elmentett árfolyam törlődik, ha ezt a műveletet végrehajtja. Szeretné folytatni?';
+	@override late final _TranslationsCurrenciesFormHu form = _TranslationsCurrenciesFormHu._(_root);
+	@override String get delete_all_success => 'Az árfolyamok sikeresen törlésre kerültek';
+	@override String get historical => 'Árfolyamtörténetek';
+	@override String get exchange_rate => 'Árfolyam';
+	@override String get exchange_rates => 'Árfolyamok';
+	@override String get empty => 'Adja hozzá az árfolyamokat, hogy ha az alapvalutától eltérő valutában vezetett számlái vannak, és így a grafikonok pontosabbak legyenek.';
+	@override String get select_a_currency => 'Válasszon ki egy pénznemet';
+	@override String get search => 'Keresés név vagy pénznemkód alapján';
+}
+
+// Path: tags
+class _TranslationsTagsHu implements _TranslationsTagsEn {
+	_TranslationsTagsHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+		one: 'Felirat',
+		other: 'Címkék',
+	);
+	@override late final _TranslationsTagsFormHu form = _TranslationsTagsFormHu._(_root);
+	@override late final _TranslationsTagsSelectHu select = _TranslationsTagsSelectHu._(_root);
+	@override String get empty_list => 'Még nem hozott létre címkéket. A címkék és kategóriák nagyszerű lehetőséget kínálnak a pénzmozgások kategorizálására.';
+	@override String get without_tags => 'Címkék nélkül';
+	@override String get add => 'Hozzáadás';
+	@override String get create => 'Felirat készítése';
+	@override String get create_success => 'A felirat sikeresen létrehozva';
+	@override String get already_exists => 'Ez a címkenév már létezik. Érdemes lehet átszerkeszteni';
+	@override String get edit => 'Címke szerkesztése';
+	@override String get edit_success => 'A címke sikeresen szerkesztésre került';
+	@override String get delete_success => 'A kategória sikeresen törölve';
+	@override String get delete_warning_header => 'Törli a címkét?';
+	@override String get delete_warning_message => 'Ez a művelet nem törli az ezzel a címkével rendelkező tranzakciókat.';
+}
+
+// Path: categories
+class _TranslationsCategoriesHu implements _TranslationsCategoriesEn {
+	_TranslationsCategoriesHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get unknown => 'Ismeretlen kategória';
+	@override String get create => 'Kategória létrehozása';
+	@override String get create_success => 'A kategória sikeresen létrehozva';
+	@override String get new_category => 'Új kategória';
+	@override String get already_exists => 'Ez a kategórianév már létezik. Talán szeretné szerkeszteni?';
+	@override String get edit => 'Kategória szerkesztése';
+	@override String get edit_success => 'A kategória sikeresen szerkesztve lett';
+	@override String get name => 'Kategória neve';
+	@override String get type => 'Kategória típusa';
+	@override String get both_types => 'Mindkét típus';
+	@override String get subcategories => 'Alkategóriák';
+	@override String get subcategories_add => 'Hozzáadás';
+	@override String get make_parent => 'Kategória létrehozása';
+	@override String get make_child => 'Alkategória létrehozása';
+	@override String make_child_warning1({required Object destiny}) => 'Ez a kategória és alkategóriái a(z) <b>${destiny}</b> alkategóriái lesznek.';
+	@override String make_child_warning2({required Object x, required Object destiny}) => 'A tranzakcióik <b>(${x})</b> átkerülnek a(z) <b>${destiny}</b> kategóriában létrehozott új alkategóriákba.';
+	@override String get make_child_success => 'Az alkategóriák sikeresen létrehozva';
+	@override String get merge => 'Összevonás másik kategóriával';
+	@override String merge_warning1({required Object from, required Object x, required Object destiny}) => 'A(z) <b>${from}</b> kategóriához tartozó összes tranzakció (${x}) átkerül a(z) <b>${destiny}</b> kategóriába.';
+	@override String merge_warning2({required Object from}) => 'A(z) <b>${from}</b> kategória visszafordíthatatlanul törlésre kerül.';
+	@override String get merge_success => 'A kategória sikeresen egyesítve';
+	@override String get delete_success => 'A kategória sikeresen törölve';
+	@override String get delete_warning_header => 'Törli a kategóriát?';
+	@override String delete_warning_message({required Object x}) => 'Ez a művelet visszafordíthatatlanul törli az összes <b>(${x})</b> tranzakciót, amely ehhez a kategóriához kapcsolódik.';
+	@override late final _TranslationsCategoriesSelectHu select = _TranslationsCategoriesSelectHu._(_root);
+}
+
+// Path: budgets
+class _TranslationsBudgetsHu implements _TranslationsBudgetsEn {
+	_TranslationsBudgetsHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Költségvetések';
+	@override String get repeated => 'Ismétlődő';
+	@override String get one_time => 'Egyszer';
+	@override String get annual => 'Éves';
+	@override String get week => 'Hetente';
+	@override String get month => 'Havonta';
+	@override String get actives => 'Aktívok';
+	@override String get pending => 'Függőben lévő kezdés';
+	@override String get finish => 'Kész';
+	@override String get from_budgeted => 'maradt ';
+	@override String get days_left => 'nap van hátra';
+	@override String get days_to_start => 'nap van a kezdésig';
+	@override String get since_expiration => 'napja lejárt';
+	@override String get no_budgets => 'Úgy tűnik, hogy ebben a szakaszban nincs megjelenítendő költségvetés. Kezdje a költségvetés létrehozásával az alábbi gombra kattintva.';
+	@override String get delete => 'Költségvetés törlése';
+	@override String get delete_warning => 'Ez a művelet visszafordíthatatlan. Az erre az ajánlatra hivatkozó kategóriák és tranzakciók nem törlődnek.';
+	@override late final _TranslationsBudgetsFormHu form = _TranslationsBudgetsFormHu._(_root);
+	@override late final _TranslationsBudgetsDetailsHu details = _TranslationsBudgetsDetailsHu._(_root);
+}
+
+// Path: backup
+class _TranslationsBackupHu implements _TranslationsBackupEn {
+	_TranslationsBackupHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsBackupExportHu export = _TranslationsBackupExportHu._(_root);
+	@override late final _TranslationsBackupImportHu import = _TranslationsBackupImportHu._(_root);
+	@override late final _TranslationsBackupAboutHu about = _TranslationsBackupAboutHu._(_root);
+}
+
+// Path: settings
+class _TranslationsSettingsHu implements _TranslationsSettingsEn {
+	_TranslationsSettingsHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title_long => 'Beállítások és megjelenés';
+	@override String get title_short => 'Beállítások';
+	@override String get description => 'Alkalmazás témája, szövegek és egyéb általános beállítások';
+	@override String get edit_profile => 'Profil szerkesztése';
+	@override String get lang_section => 'Nyelv és szövegek';
+	@override String get lang_title => 'Alkalmazás nyelve';
+	@override String get lang_descr => 'Nyelv, amelyen a szövegek megjelennek az alkalmazásban';
+	@override String get lang_help => 'Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'> útmutatónk</a>';
+	@override String get locale => 'Régió';
+	@override String get locale_descr => 'Dátumok, számformátumok beállítása...';
+	@override String get locale_warn => 'Régióváltáskor az alkalmazás frissülni fog';
+	@override String get first_day_of_week => 'A hét első napja';
+	@override String get theme_and_colors => 'Témák és színek';
+	@override String get theme => 'Téma';
+	@override String get theme_auto => 'Rendszer';
+	@override String get theme_light => 'Világos';
+	@override String get theme_dark => 'Sötét';
+	@override String get amoled_mode => 'AMOLED mód';
+	@override String get amoled_mode_descr => 'Ha lehetséges, használjon tiszta fekete háttérképet. Ez némileg segíti az AMOLED képernyővel rendelkező készülékek akkumulátorát.';
+	@override String get dynamic_colors => 'Dinamikus színek';
+	@override String get dynamic_colors_descr => 'Amikor csak lehetséges, használja a rendszer kiemelő színét';
+	@override String get accent_color => 'Kiemelő szín';
+	@override String get accent_color_descr => 'Válassza ki, hogy az alkalmazás milyen színnel emelje ki a felület bizonyos részeit';
+	@override late final _TranslationsSettingsSecurityHu security = _TranslationsSettingsSecurityHu._(_root);
+}
+
+// Path: more
+class _TranslationsMoreHu implements _TranslationsMoreEn {
+	_TranslationsMoreHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Továbbiak';
+	@override String get title_long => 'További műveletek';
+	@override late final _TranslationsMoreDataHu data = _TranslationsMoreDataHu._(_root);
+	@override late final _TranslationsMoreAboutUsHu about_us = _TranslationsMoreAboutUsHu._(_root);
+	@override late final _TranslationsMoreHelpUsHu help_us = _TranslationsMoreHelpUsHu._(_root);
+}
+
+// Path: general.clipboard
+class _TranslationsGeneralClipboardHu implements _TranslationsGeneralClipboardEn {
+	_TranslationsGeneralClipboardHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String success({required Object x}) => '${x} a vágólapra másolva';
+	@override String get error => 'Másolási hiba';
+}
+
+// Path: general.time
+class _TranslationsGeneralTimeHu implements _TranslationsGeneralTimeEn {
+	_TranslationsGeneralTimeHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get start_date => 'Kezdő dátum';
+	@override String get end_date => 'Befejezés dátuma';
+	@override String get from_date => 'Ettől kezdve';
+	@override String get until_date => 'Dátumig';
+	@override String get date => 'Dátum';
+	@override String get datetime => 'Időpont';
+	@override String get time => 'Idő';
+	@override String get each => 'Minden';
+	@override String get after => 'Után';
+	@override late final _TranslationsGeneralTimeRangesHu ranges = _TranslationsGeneralTimeRangesHu._(_root);
+	@override late final _TranslationsGeneralTimePeriodicityHu periodicity = _TranslationsGeneralTimePeriodicityHu._(_root);
+	@override late final _TranslationsGeneralTimeCurrentHu current = _TranslationsGeneralTimeCurrentHu._(_root);
+	@override late final _TranslationsGeneralTimeAllHu all = _TranslationsGeneralTimeAllHu._(_root);
+}
+
+// Path: general.transaction_order
+class _TranslationsGeneralTransactionOrderHu implements _TranslationsGeneralTransactionOrderEn {
+	_TranslationsGeneralTransactionOrderHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Tranzakciók rendezése';
+	@override String get category => 'Kategóriánként';
+	@override String get quantity => 'Mennyiség szerint';
+	@override String get date => 'Dátum szerint';
+}
+
+// Path: general.validations
+class _TranslationsGeneralValidationsHu implements _TranslationsGeneralValidationsEn {
+	_TranslationsGeneralValidationsHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get form_error => 'A folytatáshoz javítsa ki a megadott mezőket';
+	@override String get required => 'Kötelező mező';
+	@override String get positive => 'Pozitívnak kell lennie';
+	@override String min_number({required Object x}) => 'Nagyobbnak kell lennie, mint ${x}';
+	@override String max_number({required Object x}) => 'Kevesebbnek kell lennie, mint ${x}';
+}
+
+// Path: financial_health.review
+class _TranslationsFinancialHealthReviewHu implements _TranslationsFinancialHealthReviewEn {
+	_TranslationsFinancialHealthReviewHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String very_good({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Nagyon jó!';
+			case GenderContext.female:
+				return 'Nagyon jó!';
+		}
+	}
+	@override String good({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Jó';
+			case GenderContext.female:
+				return 'Jó';
+		}
+	}
+	@override String normal({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Átlagos';
+			case GenderContext.female:
+				return 'Átlagos';
+		}
+	}
+	@override String bad({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Korrekt';
+			case GenderContext.female:
+				return 'Korrekt';
+		}
+	}
+	@override String very_bad({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Nagyon rossz';
+			case GenderContext.female:
+				return 'Nagyon rossz';
+		}
+	}
+	@override String insufficient_data({required GenderContext context}) {
+		switch (context) {
+			case GenderContext.male:
+				return 'Hiányos adatok';
+			case GenderContext.female:
+				return 'Hiányos adatok';
+		}
+	}
+	@override late final _TranslationsFinancialHealthReviewDescrHu descr = _TranslationsFinancialHealthReviewDescrHu._(_root);
+}
+
+// Path: financial_health.months_without_income
+class _TranslationsFinancialHealthMonthsWithoutIncomeHu implements _TranslationsFinancialHealthMonthsWithoutIncomeEn {
+	_TranslationsFinancialHealthMonthsWithoutIncomeHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Túlélési arány';
+	@override String get subtitle => 'Egyenlegét tekintve, mennyi ideig maradhat bevétel nélkül';
+	@override String get text_zero => 'Ilyen kiadás mellett egy hónapot sem bírna ki bevétel nélkül!';
+	@override String get text_one => 'Ilyen mértékű kiadások mellett aligha tudna akár egy hónapot is túlélni bevétel nélkül!';
+	@override String text_other({required Object n}) => 'Ezzel a költési aránnyal körülbelül <b>${n} hónapot</b> tudna túlélni jövedelem nélkül.';
+	@override String get text_infinite => 'Ezzel a költési aránnyal nagyjából <b>az egész életében</b> meg tudna élni jövedelem nélkül.';
+	@override String get suggestion => 'Ne feledje, hogy célszerű ezt az arányt mindig legalább 5 hónap felett tartani. Ha úgy látja, hogy nem rendelkezik elegendő megtakarítási tartalékkal, csökkentse a felesleges kiadásokat.';
+	@override String get insufficient_data => 'Úgy tűnik, nincs elég rögzített kiadásunk ahhoz, hogy kiszámolhassuk, hány hónapig tudna bevétel nélkül megélni. Adjon meg néhány tranzakciót, és térjen vissza ide, hogy ellenőrizze a pénzügyi helyzetét.';
+}
+
+// Path: financial_health.savings_percentage
+class _TranslationsFinancialHealthSavingsPercentageHu implements _TranslationsFinancialHealthSavingsPercentageEn {
+	_TranslationsFinancialHealthSavingsPercentageHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Megtakarítási százalék';
+	@override String get subtitle => 'A jövedelmének mekkora részét nem költi el ebben az időszakban';
+	@override late final _TranslationsFinancialHealthSavingsPercentageTextHu text = _TranslationsFinancialHealthSavingsPercentageTextHu._(_root);
+	@override String get suggestion => 'Ne feledje, hogy a jövedelmének legalább 15-20%-át célszerű megtakarítani.';
+}
+
+// Path: icon_selector.scopes
+class _TranslationsIconSelectorScopesHu implements _TranslationsIconSelectorScopesEn {
+	_TranslationsIconSelectorScopesHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get transport => 'Közlekedés';
+	@override String get money => 'Pénz';
+	@override String get food => 'Élelmiszer';
+	@override String get medical => 'Egészség';
+	@override String get entertainment => 'Szabadidő';
+	@override String get technology => 'Technológia';
+	@override String get other => 'Egyebek';
+	@override String get logos_financial_institutions => 'Pénzintézetek';
+}
+
+// Path: transaction.next_payments
+class _TranslationsTransactionNextPaymentsHu implements _TranslationsTransactionNextPaymentsEn {
+	_TranslationsTransactionNextPaymentsHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get accept => 'Elfogadás';
+	@override String get skip => 'Kihagyás';
+	@override String get skip_success => 'A tranzakció sikeresen kihagyásra került';
+	@override String get skip_dialog_title => 'Tranzakció kihagyása';
+	@override String skip_dialog_msg({required Object date}) => 'Ez a művelet visszafordíthatatlan. A következő átvitel dátumát módosítjuk erre: ${date}';
+	@override String get accept_today => 'Elfogadom ma';
+	@override String accept_in_required_date({required Object date}) => 'Elfogadás a szükséges időpontban: (${date})';
+	@override String get accept_dialog_title => 'Tranzakció elfogadása';
+	@override String get accept_dialog_msg_single => 'A tranzakció új állapota nulla lesz. A tranzakció státuszát bármikor újra módosíthatja, amikor csak akarja.';
+	@override String accept_dialog_msg({required Object date}) => 'Ez a művelet egy új tranzakciót hoz létre ${date} dátummal. A tranzakció részleteit a tranzakciós oldalon ellenőrizheti.';
+	@override String get recurrent_rule_finished => 'Az ismétlődő szabály teljesült, nincs több kifizetés!';
+}
+
+// Path: transaction.list
+class _TranslationsTransactionListHu implements _TranslationsTransactionListEn {
+	_TranslationsTransactionListHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get empty => 'Nem található itt megjeleníthető tranzakció. Adjon hozzá néhány tranzakciót az alkalmazásban, és talán legközelebb több szerencséje lesz.';
+	@override String get searcher_placeholder => 'Keresés kategória, leírás alapján...';
+	@override String get searcher_no_results => 'Nincs a keresési feltételeknek megfelelő tranzakció';
+	@override String get loading => 'További tranzakciók betöltése...';
+	@override String selected_short({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+		one: '${n} kiválasztva',
+		other: '${n} kiválasztva',
+	);
+	@override String selected_long({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+		one: '${n} tranzakció kiválasztva',
+		other: '${n} tranzakció kiválasztva',
+	);
+	@override late final _TranslationsTransactionListBulkEditHu bulk_edit = _TranslationsTransactionListBulkEditHu._(_root);
+}
+
+// Path: transaction.filters
+class _TranslationsTransactionFiltersHu implements _TranslationsTransactionFiltersEn {
+	_TranslationsTransactionFiltersHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get from_value => 'Ebből az összegből';
+	@override String get to_value => 'Eddig az összegig';
+	@override String from_value_def({required Object x}) => 'Innen: ${x}';
+	@override String to_value_def({required Object x}) => 'Ide: ${x}';
+	@override String from_date_def({required Object date}) => 'Ettől: ${date}';
+	@override String to_date_def({required Object date}) => 'Eddig: ${date}';
+}
+
+// Path: transaction.form
+class _TranslationsTransactionFormHu implements _TranslationsTransactionFormEn {
+	_TranslationsTransactionFormHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsTransactionFormValidatorsHu validators = _TranslationsTransactionFormValidatorsHu._(_root);
+	@override String get title => 'Tranzakció megnevezése';
+	@override String get title_short => 'Cím';
+	@override String get value => 'A tranzakció értéke';
+	@override String get tap_to_see_more => 'Koppintson a további részletek megtekintéséhez';
+	@override String get no_tags => '-- Nincsenek címkék --';
+	@override String get description => 'Leírás';
+	@override String get description_info => 'Koppintson ide a tranzakció részletesebb leírásának megadásához.';
+	@override String exchange_to_preferred_title({required Object currency}) => '${currency} átváltási árfolyam';
+	@override String get exchange_to_preferred_in_date => 'A tranzakció napján';
+}
+
+// Path: transaction.reversed
+class _TranslationsTransactionReversedHu implements _TranslationsTransactionReversedEn {
+	_TranslationsTransactionReversedHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Megfordított tranzakció';
+	@override String get title_short => 'Megfordított';
+	@override String get description_for_expenses => 'Annak ellenére, hogy költségtranzakció, pozitív összegű. Az ilyen típusú tranzakciókat egy korábban elszámolt kiadás visszatérülésének, például visszatérítésnek vagy egy tartozás kifizetésének megjelenítésére lehet használni.';
+	@override String get description_for_incomes => 'Annak ellenére, hogy bevételi tranzakció, negatív összegű. Az ilyen típusú tranzakciók felhasználhatók a helytelenül elszámolt bevétel érvénytelenítésére vagy helyesbítésére, pénzvisszatérítés vagy pénzvisszatérítés tükrözésére, illetve tartozások kifizetésének rögzítésére.';
+}
+
+// Path: transaction.status
+class _TranslationsTransactionStatusHu implements _TranslationsTransactionStatusEn {
+	_TranslationsTransactionStatusHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+		one: 'Állapot',
+		other: 'Állapotok',
+	);
+	@override String get display_long => 'Tranzakció állapota';
+	@override String tr_status({required Object status}) => '${status} tranzakció';
+	@override String get none => 'Állapot nélküli';
+	@override String get none_descr => 'Konkrét állapot nélküli tranzakció';
+	@override String get reconciled => 'Egyeztetett';
+	@override String get reconciled_descr => 'Ezt a tranzakciót már érvényesítették, és megfelel a bankja valós tranzakciójának.';
+	@override String get unreconciled => 'Nem egyeztetett';
+	@override String get unreconciled_descr => 'Ezt a tranzakciót még nem ellenőrizték, ezért még nem jelenik meg a valódi bankszámláin. Ez azonban szükséges a Monekin egyenlegeinek és statisztikáinak kiszámításához.';
+	@override String get pending => 'Függőben';
+	@override String get pending_descr => 'Ez a tranzakció függőben van, ezért az egyenlegek és statisztikák kiszámításakor nem kerül figyelembevételbe.';
+	@override String get voided => 'Érvénytelenítve';
+	@override String get voided_descr => 'Fizetési hiba vagy bármilyen más ok miatt érvénytelenített/törölt tranzakció. Ezt nem vesszük figyelembe az egyenlegek és statisztikák kiszámításakor.';
+}
+
+// Path: transaction.types
+class _TranslationsTransactionTypesHu implements _TranslationsTransactionTypesEn {
+	_TranslationsTransactionTypesHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+		one: 'Tranzakció típusa',
+		other: 'Tranzakciótípusok',
+	);
+	@override String income({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+		one: 'Bevétel',
+		other: 'Bevételek',
+	);
+	@override String expense({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+		one: 'Kiadás',
+		other: 'Kiadások',
+	);
+	@override String transfer({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+		one: 'Áthelyezés',
+		other: 'Áthelyezések',
+	);
+}
+
+// Path: transfer.form
+class _TranslationsTransferFormHu implements _TranslationsTransferFormEn {
+	_TranslationsTransferFormHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get from => 'Eredeti számla';
+	@override String get to => 'Célszámla';
+	@override late final _TranslationsTransferFormValueInDestinyHu value_in_destiny = _TranslationsTransferFormValueInDestinyHu._(_root);
+}
+
+// Path: recurrent_transactions.details
+class _TranslationsRecurrentTransactionsDetailsHu implements _TranslationsRecurrentTransactionsDetailsEn {
+	_TranslationsRecurrentTransactionsDetailsHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Ismétlődő tranzakció';
+	@override String get descr => 'A tranzakció következő lépései az alábbiakban láthatók. Elfogadhatja az első lépést, vagy kihagyhatja ezt a lépést.';
+	@override String get last_payment_info => 'Ez a mozgatás az utolsó az ismétlődő szabályban, így ez a szabály automatikusan törlődik a művelet megerősítésekor.';
+	@override String get delete_header => 'Ismétlődő tranzakció törlése';
+	@override String get delete_message => 'Ez a művelet visszafordíthatatlan, és nem érinti a már visszaigazolt/befizetett tranzakciókat.';
+}
+
+// Path: recurrent_transactions.status
+class _TranslationsRecurrentTransactionsStatusHu implements _TranslationsRecurrentTransactionsStatusEn {
+	_TranslationsRecurrentTransactionsStatusHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String delayed_by({required Object x}) => 'Késés: ${x}d';
+	@override String coming_in({required Object x}) => '${x} napon belül';
+}
+
+// Path: account.types
+class _TranslationsAccountTypesHu implements _TranslationsAccountTypesEn {
+	_TranslationsAccountTypesHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Számlatípus';
+	@override String get warning => 'A számlatípus kiválasztása után az a jövőben nem változtatható meg.';
+	@override String get normal => 'Normál számla';
+	@override String get normal_descr => 'Hasznos a napi pénzügyek rögzítéséhez. Ez a leggyakoribb számla, amely lehetővé teszi kiadások, bevételek hozzáadását...';
+	@override String get saving => 'Megtakarítási számla';
+	@override String get saving_descr => 'Csak más számlákról tud pénzt hozzáadni és kivenni belőle. Tökéletes a megtakarítás megkezdéséhez.';
+}
+
+// Path: account.form
+class _TranslationsAccountFormHu implements _TranslationsAccountFormEn {
+	_TranslationsAccountFormHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Számla neve';
+	@override String get name_placeholder => 'Pl.: Megtakarítási számla';
+	@override String get notes => 'Megjegyzések';
+	@override String get notes_placeholder => 'Írjon néhány megjegyzést/leírást erről a számláról.';
+	@override String get initial_balance => 'Kezdőegyenleg';
+	@override String get current_balance => 'Aktuális egyenleg';
+	@override String get create => 'Számla létrehozása';
+	@override String get edit => 'Számla szerkesztése';
+	@override String get currency_not_found_warn => 'Nincs információja ennek a pénznemnek az árfolyamairól. 1,0 lesz az alapértelmezett átváltási árfolyam. Ezt a beállításokban tudja majd módosítani.';
+	@override String get already_exists => 'Ugyanezzel a névvel már van egy másik is. Kérjük, adjon meg egy másikat.';
+	@override String get tr_before_opening_date => 'A számlán a nyitási dátumot megelőző dátumú tranzakciók vannak.';
+	@override String get iban => 'IBAN';
+	@override String get swift => 'SWIFT';
+}
+
+// Path: account.delete
+class _TranslationsAccountDeleteHu implements _TranslationsAccountDeleteEn {
+	_TranslationsAccountDeleteHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get warning_header => 'Törli a számlát?';
+	@override String get warning_text => 'Ez a művelet törli ezt a számlát és annak az összes tranzakcióját.';
+	@override String get success => 'A számla sikeresen törlésre került';
+}
+
+// Path: account.close
+class _TranslationsAccountCloseHu implements _TranslationsAccountCloseEn {
+	_TranslationsAccountCloseHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Számla lezárása';
+	@override String get title_short => 'Lezárás';
+	@override String get warn => 'Ez a számla többé nem jelenik meg bizonyos listákban, és nem tud benne tranzakciókat létrehozni az alább megadott dátumnál későbbi dátummal. Ez a művelet semmilyen tranzakciót vagy egyenleget nem érint, és ezt a számlát bármikor újra megnyithatja. ';
+	@override String get should_have_zero_balance => 'A számla lezárásához 0-nak kell lennie az aktuális egyenlegnek. Kérjük, a folytatás előtt szerkessze át a számlát.';
+	@override String get should_have_no_transactions => 'Ez a számla a megadott zárási dátumot követő tranzakciókat tartalmaz. Törölje őket, vagy szerkessze a számla zárási dátumát, mielőtt folytatná.';
+	@override String get success => 'A számla sikeresen lezárva';
+	@override String get unarchive_succes => 'A számla sikeresen újranyitásra került';
+}
+
+// Path: account.select
+class _TranslationsAccountSelectHu implements _TranslationsAccountSelectEn {
+	_TranslationsAccountSelectHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get one => 'Egy számla kiválasztása';
+	@override String get all => 'Összes számla';
+	@override String get multiple => 'Számlák kiválasztása';
+}
+
+// Path: currencies.form
+class _TranslationsCurrenciesFormHu implements _TranslationsCurrenciesFormEn {
+	_TranslationsCurrenciesFormHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get equal_to_preferred_warn => 'A pénznem nem lehet azonos a felhasználói pénznemmel';
+	@override String get specify_a_currency => 'Kérjük, adjon meg egy pénznemet';
+	@override String get add => 'Árfolyam hozzáadása';
+	@override String get add_success => 'Az árfolyam sikeresen hozzáadva';
+	@override String get edit => 'Árfolyam szerkesztése';
+	@override String get edit_success => 'Az árfolyam szerkesztése sikerült';
+}
+
+// Path: tags.form
+class _TranslationsTagsFormHu implements _TranslationsTagsFormEn {
+	_TranslationsTagsFormHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Címke neve';
+	@override String get description => 'Leírás';
+}
+
+// Path: tags.select
+class _TranslationsTagsSelectHu implements _TranslationsTagsSelectEn {
+	_TranslationsTagsSelectHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Címke kiválasztása';
+	@override String get all => 'Minden címke';
+}
+
+// Path: categories.select
+class _TranslationsCategoriesSelectHu implements _TranslationsCategoriesSelectEn {
+	_TranslationsCategoriesSelectHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Kategóriák kiválasztása';
+	@override String get select_one => 'Kategória kiválasztása';
+	@override String get select_subcategory => 'Alkategória kiválasztása';
+	@override String get without_subcategory => 'Alkategória nélkül';
+	@override String get all => 'Összes kategória';
+	@override String get all_short => 'Mind';
+}
+
+// Path: budgets.form
+class _TranslationsBudgetsFormHu implements _TranslationsBudgetsFormEn {
+	_TranslationsBudgetsFormHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Hozzáadás';
+	@override String get name => 'Költségvetés neve';
+	@override String get value => 'Mennyiségkorlátozás';
+	@override String get create => 'Hozzáadás';
+	@override String get edit => 'Szerkesztés';
+	@override String get negative_warn => 'A költségvetések nem lehetnek negatív összegűek.';
+}
+
+// Path: budgets.details
+class _TranslationsBudgetsDetailsHu implements _TranslationsBudgetsDetailsEn {
+	_TranslationsBudgetsDetailsHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Költségvetés részletei';
+	@override String get statistics => 'Statisztika';
+	@override String get budget_value => 'Költségvetésben';
+	@override String expend_diary_left({required Object dailyAmount, required Object remainingDays}) => 'Naponta ${dailyAmount} -ot költhet el, még ${remainingDays} napig';
+	@override String get expend_evolution => 'Költségek alakulása';
+	@override String get no_transactions => 'Úgy tűnik, hogy ezzel a költségvetéssel kapcsolatban semmilyen kiadást nem teljesített.';
+}
+
+// Path: backup.export
+class _TranslationsBackupExportHu implements _TranslationsBackupExportEn {
+	_TranslationsBackupExportHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Adatok exportálása';
+	@override String get title_short => 'Exportálás';
+	@override String get all => 'Teljes mentés';
+	@override String get all_descr => 'Exportálja az összes adatát (számlák, tranzakciók, költségvetések, beállítások...). Bármikor újra importálhatja őket, így semmit sem veszíthet el.';
+	@override String get transactions => 'Tranzakciók mentése';
+	@override String get transactions_descr => 'Exportálja tranzakcióit CSV formátumban, így könnyebben elemezheti azokat más programokban vagy alkalmazásokban.';
+	@override String get description => 'Adatok letöltése különböző formátumokban';
+	@override String get dialog_title => 'Fájl mentése/küldése';
+	@override String success({required Object x}) => 'A fájl sikeresen mentve/letöltve ide: ${x}';
+	@override String get error => 'Hiba a fájl letöltésében. Kérjük, lépjen kapcsolatba a fejlesztővel a lozin.technologies@gmail.com címen keresztül.';
+}
+
+// Path: backup.import
+class _TranslationsBackupImportHu implements _TranslationsBackupImportEn {
+	_TranslationsBackupImportHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Adatok importálása';
+	@override String get title_short => 'Importálás';
+	@override String get restore_backup => 'Mentés visszaállítása';
+	@override String get restore_backup_descr => 'Importáljon egy korábban mentett adatbázist a Monekinből. Ez a művelet minden jelenlegi alkalmazásadatot lecseréli az új adatokra.';
+	@override String get restore_backup_warn_description => 'Új adatbázis importálásakor az alkalmazásban jelenleg mentett összes adat elveszik. A folytatás előtt ajánlatos biztonsági másolatot készíteni. Ne töltsön fel ide olyan fájlt, amelynek eredetét nem ismeri, csak azokat a fájlokat töltse fel, amelyeket korábban letöltött a Monekin oldaláról.';
+	@override String get restore_backup_warn_title => 'Az összes adat felülírása';
+	@override String get select_other_file => 'Másik fájl kiválasztása';
+	@override String get tap_to_select_file => 'Koppintson a fájl kiválasztásához';
+	@override late final _TranslationsBackupImportManualImportHu manual_import = _TranslationsBackupImportManualImportHu._(_root);
+	@override String get success => 'Az importálás sikeresen végrehajtva';
+	@override String get cancelled => 'Az importálást a felhasználó megszakította';
+	@override String get error => 'Hiba történt importálásakor. Kérjük, lépjen kapcsolatba a fejlesztővel a lozin.technologies@gmail.com címen keresztül.';
+}
+
+// Path: backup.about
+class _TranslationsBackupAboutHu implements _TranslationsBackupAboutEn {
+	_TranslationsBackupAboutHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Információk az adatbázisról';
+	@override String get create_date => 'Létrehozás dátuma';
+	@override String get modify_date => 'Utolsó módosítása';
+	@override String get last_backup => 'Utolsó mentés';
+	@override String get size => 'Méret';
+}
+
+// Path: settings.security
+class _TranslationsSettingsSecurityHu implements _TranslationsSettingsSecurityEn {
+	_TranslationsSettingsSecurityHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Biztonság';
+	@override String get private_mode_at_launch => 'Privát mód indításkor';
+	@override String get private_mode_at_launch_descr => 'Az alkalmazás alapértelmezés szerinti indítása privát módban';
+	@override String get private_mode => 'Privát mód';
+	@override String get private_mode_descr => 'Minden pénzösszeg elrejtése';
+	@override String get private_mode_activated => 'Privát mód aktiválva';
+	@override String get private_mode_deactivated => 'Privát mód letiltva';
+}
+
+// Path: more.data
+class _TranslationsMoreDataHu implements _TranslationsMoreDataEn {
+	_TranslationsMoreDataHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Adatok';
+	@override String get display_descr => 'Exportálja és importálja az adatait, hogy ne veszítsen el semmit se';
+	@override String get delete_all => 'Adataim törlése';
+	@override String get delete_all_header1 => 'Álljon meg ⚠️⚠️';
+	@override String get delete_all_message1 => 'Biztosan benne, hogy folytatja? Minden adata véglegesen törlődik, és nem állítható vissza';
+	@override String get delete_all_header2 => 'Még egy utolsó lépés ⚠️⚠️';
+	@override String get delete_all_message2 => 'A fiók törlésével törli az összes tárolt személyes adatát. A számlái, tranzakciói, költségvetései és kategóriái törlődnek, és nem állíthatók helyre. Egyetért ezzel?';
+}
+
+// Path: more.about_us
+class _TranslationsMoreAboutUsHu implements _TranslationsMoreAboutUsEn {
+	_TranslationsMoreAboutUsHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Alkalmazásinformációk';
+	@override String get description => 'Nézze meg a Monekinre vonatkozó feltételeket és egyéb fontos információkat. Lépjen kapcsolatba a közösséggel a hibák bejelentésével, javaslatok megtételével...';
+	@override late final _TranslationsMoreAboutUsLegalHu legal = _TranslationsMoreAboutUsLegalHu._(_root);
+	@override late final _TranslationsMoreAboutUsProjectHu project = _TranslationsMoreAboutUsProjectHu._(_root);
+}
+
+// Path: more.help_us
+class _TranslationsMoreHelpUsHu implements _TranslationsMoreHelpUsEn {
+	_TranslationsMoreHelpUsHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Segítsen nekünk';
+	@override String get description => 'Tudja meg, hogyan segíthet a Monekinnek abban, hogy egyre jobb és jobb legyen';
+	@override String get rate_us => 'Értékeljen minket';
+	@override String get rate_us_descr => 'Bármilyen értékelést szívesen fogadunk!';
+	@override String get share => 'Monekin megosztása';
+	@override String get share_descr => 'Ossza meg alkalmazásunkat a barátaival és a családtagjaival';
+	@override String get share_text => 'Monekin! A legjobb személyes pénzügyi alkalmazás. Töltse le innen';
+	@override String get thanks => 'Köszönjük!';
+	@override String get thanks_long => 'Az Ön hozzájárulása a Monekinhez és más nyílt forráskódú projektekhez, legyen az kicsi vagy nagy, lehetővé teszi az ehhez hasonló nagyszerű projekteket. Köszönjük, hogy időt szán a közreműködésre.';
+	@override String get donate => 'Adományozás';
+	@override String get donate_descr => 'Az adományával segít az alkalmazás további fejlesztésében. Mi lehetne jobb módja, mint megköszönni az elvégzett munkát egy kávéra való meghívással?';
+	@override String get donate_success => 'Az adományozás megtörtént. Köszönöm szépen a közreműködését! ❤️';
+	@override String get donate_err => 'Hoppá! Úgy tűnik, hiba történt a fizetés fogadásakor';
+	@override String get report => 'Hibák jelentése, javaslatok...';
+}
+
+// Path: general.time.ranges
+class _TranslationsGeneralTimeRangesHu implements _TranslationsGeneralTimeRangesEn {
+	_TranslationsGeneralTimeRangesHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Időtartomány';
+	@override String get it_repeat => 'Ismétlések';
+	@override String get it_ends => 'Vége';
+	@override String get forever => 'Mindig';
+	@override late final _TranslationsGeneralTimeRangesTypesHu types = _TranslationsGeneralTimeRangesTypesHu._(_root);
+	@override String each_range({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+		one: 'Minden ${range}',
+		other: 'Minden ${n} ${range}',
+	);
+	@override String each_range_until_date({required num n, required Object range, required Object day}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+		one: 'Minden ${range} ${day} -ig',
+		other: 'Minden ${n} ${range} ${day} -ig',
+	);
+	@override String each_range_until_times({required num n, required Object range, required Object limit}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+		one: 'Minden ${range} ${limit} alkalommal',
+		other: 'Minden ${n} ${range} ${limit} alkalommal',
+	);
+	@override String each_range_until_once({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+		one: 'Minden ${range} egyszer',
+		other: 'Minden ${n} ${range} egyszer',
+	);
+	@override String month({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+		one: 'Hónap',
+		other: 'Hónap',
+	);
+	@override String year({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+		one: 'Év',
+		other: 'Év',
+	);
+	@override String day({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+		one: 'Nap',
+		other: 'Nap',
+	);
+	@override String week({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+		one: 'Hét',
+		other: 'Hét',
+	);
+}
+
+// Path: general.time.periodicity
+class _TranslationsGeneralTimePeriodicityHu implements _TranslationsGeneralTimePeriodicityEn {
+	_TranslationsGeneralTimePeriodicityHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Ismétlődés';
+	@override String get no_repeat => 'Nem ismétlődik';
+	@override String repeat({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+		one: 'Ismétlés',
+		other: 'Ismétlések',
+	);
+	@override String get diary => 'Naponta';
+	@override String get monthly => 'Havonta';
+	@override String get annually => 'Évente';
+	@override String get quaterly => 'Negyedévente';
+	@override String get weekly => 'Hetente';
+	@override String get custom => 'Egyéni';
+	@override String get infinite => 'Mindig';
+}
+
+// Path: general.time.current
+class _TranslationsGeneralTimeCurrentHu implements _TranslationsGeneralTimeCurrentEn {
+	_TranslationsGeneralTimeCurrentHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get monthly => 'Ebben a hónapban';
+	@override String get annually => 'Ebben az évben';
+	@override String get quaterly => 'Ebben a negyedévben';
+	@override String get weekly => 'Ezen a héten';
+	@override String get infinite => 'Mindig';
+	@override String get custom => 'Egyéni tartomány';
+}
+
+// Path: general.time.all
+class _TranslationsGeneralTimeAllHu implements _TranslationsGeneralTimeAllEn {
+	_TranslationsGeneralTimeAllHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get diary => 'Minden nap';
+	@override String get monthly => 'Minden hónapban';
+	@override String get annually => 'Minden évben';
+	@override String get quaterly => 'Minden negyedévben';
+	@override String get weekly => 'Minden héten';
+}
+
+// Path: financial_health.review.descr
+class _TranslationsFinancialHealthReviewDescrHu implements _TranslationsFinancialHealthReviewDescrEn {
+	_TranslationsFinancialHealthReviewDescrHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get insufficient_data => 'Úgy tűnik, nincs elég rögzített kiadásunk ahhoz, hogy kiszámítsuk a pénzügyi állapotát. Adjon hozzá néhány kiadást/bevételt ebben az időszakban, hogy tudjunk segíteni Önnek!';
+	@override String get very_good => 'Gratulálunk! Az Ön pénzügyi helyzete nagyon rendben van. Reméljük, hogy folytatódik a jó szériája, és továbbra is tanulni fog a Monekin-nel.';
+	@override String get good => 'Nagyszerű! Az Ön pénzügyi helyzete rendben van. Látogasson el az elemzés fülre, hogy megtudja, hogyan takaríthat meg még többet!';
+	@override String get normal => 'Az Ön pénzügyi állapota nagyjából a lakosság többi részének átlagában van ebben az időszakban.';
+	@override String get bad => 'Úgy tűnik, hogy az Ön pénzügyi helyzete még nem a legjobb. Tekintse át a többi diagramot, hogy többet tudjon meg a pénzügyeiről.';
+	@override String get very_bad => 'Hmm, a pénzügyi helyzete messze elmarad attól, aminek lennie kellene. Nézze át a többi diagramot, hogy többet tudjon meg a pénzügyeiről.';
+}
+
+// Path: financial_health.savings_percentage.text
+class _TranslationsFinancialHealthSavingsPercentageTextHu implements _TranslationsFinancialHealthSavingsPercentageTextEn {
+	_TranslationsFinancialHealthSavingsPercentageTextHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String good({required Object value}) => 'Gratulálunk! Ebben az időszakban a bevételének <b>${value}%</b>-át sikerült megtakarítania. Úgy tűnik, már rendelkezik hozzáértéssel, csak így tovább!';
+	@override String normal({required Object value}) => 'Gratulálunk, a bevételének <b>${value}%</b>-át sikerült megtakarítania ebben az időszakban.';
+	@override String bad({required Object value}) => 'Ebben az időszakban sikerült megtakarítania a jövedelmének <b>${value}%-át</b>. Úgy gondoljuk azonban, hogy ennél még sokkal többet is tehet!';
+	@override String get very_bad => 'Hűha, sajnos ebben az időszakban semmit sem sikerült megtakarítania.';
+}
+
+// Path: transaction.list.bulk_edit
+class _TranslationsTransactionListBulkEditHu implements _TranslationsTransactionListBulkEditEn {
+	_TranslationsTransactionListBulkEditHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get dates => 'Dátumok szerkesztése';
+	@override String get categories => 'Kategóriák szerkesztése';
+	@override String get status => 'Állapotok szerkesztése';
+}
+
+// Path: transaction.form.validators
+class _TranslationsTransactionFormValidatorsHu implements _TranslationsTransactionFormValidatorsEn {
+	_TranslationsTransactionFormValidatorsHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get zero => 'A tranzakció értéke nem lehet nulla.';
+	@override String get date_max => 'A kiválasztott dátum az aktuális dátum után van. A tranzakció függő tranzakcióként kerül hozzáadásra.';
+	@override String get date_after_account_creation => 'Nem hozhat létre olyan tranzakciót, amelynek a dátuma megelőzi a hozzá tartozó számla létrehozásának a dátumát.';
+	@override String get negative_transfer => 'Az átutalás pénzbeli értéke nem lehet negatív.';
+	@override String get transfer_between_same_accounts => 'A kiindulási és a célszámla nem lehet ugyanaz.';
+}
+
+// Path: transfer.form.value_in_destiny
+class _TranslationsTransferFormValueInDestinyHu implements _TranslationsTransferFormValueInDestinyEn {
+	_TranslationsTransferFormValueInDestinyHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'A rendeltetési helyre átutalt összeg';
+	@override String amount_short({required Object amount}) => '${amount} a célszámlához';
+}
+
+// Path: backup.import.manual_import
+class _TranslationsBackupImportManualImportHu implements _TranslationsBackupImportManualImportEn {
+	_TranslationsBackupImportManualImportHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Kézi importálás';
+	@override String get descr => 'Tranzakciók kézi importálása egy .csv fájlból';
+	@override String get default_account => 'Alapértelm. számla';
+	@override String get remove_default_account => 'Alapértelmezett számla törlése';
+	@override String get default_category => 'Alapértelm. kategória';
+	@override String get select_a_column => 'Válasszon ki egy oszlopot a .csv fájlból';
+	@override List<String> get steps => [
+		'Fájl kiválasztása',
+		'Mennyiség oszlop',
+		'Számlaoszlop',
+		'Kategória oszlop',
+		'Dátum oszlop',
+		'egyéb oszlopok',
+	];
+	@override List<String> get steps_descr => [
+		'Válasszon ki egy .csv fájlt az eszközről. Győződjön meg arról, hogy van egy első sora, amely leírja az egyes oszlopok nevét.',
+		'Válassza ki azt az oszlopot, amelyben az egyes tranzakciók dátuma meg van adva. Ha nincs megadva, a tranzakciók az aktuális dátummal jönnek létre. Válassza ki azt az oszlopot, ahol az egyes tranzakciók értéke meg van adva. Használjon negatív értékeket a kiadásokhoz és pozitív értékeket a bevételekhez. Használjon pontot tizedeselválasztóként.',
+		'Válassza ki azt az oszlopot, amelyben meg van adva az a számla, amelyhez az egyes tranzakciók tartoznak. Kiválaszthat egy alapértelmezett fiókot is arra az esetre, ha nem találnánk a kívánt fiókot. Ha nincs megadva alapértelmezett fiók, akkor létrehozunk egyet ugyanazzal a névvel. ',
+		'Adja meg azt az oszlopot, ahol a tranzakciókategória neve található. Meg kell adnia egy alapértelmezett kategóriát, hogy ezt a kategóriát rendeljük hozzá a tranzakciókhoz, ha a kategória nem található.',
+		'Válassza ki azt az oszlopot, amelyben az egyes tranzakciók dátuma meg van adva. Ha nincs megadva, a tranzakciók az aktuális dátummal jönnek létre.',
+		'Az egyéb opcionális tranzakciós attribútumok oszlopainak meghatározása',
+	];
+	@override String success({required Object x}) => '${x} tranzakció sikeresen importálva';
+}
+
+// Path: more.about_us.legal
+class _TranslationsMoreAboutUsLegalHu implements _TranslationsMoreAboutUsLegalEn {
+	_TranslationsMoreAboutUsLegalHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Jogi információk';
+	@override String get privacy => 'Adatvédelem';
+	@override String get terms => 'Használati feltételek';
+	@override String get licenses => 'Licencek';
+}
+
+// Path: more.about_us.project
+class _TranslationsMoreAboutUsProjectHu implements _TranslationsMoreAboutUsProjectEn {
+	_TranslationsMoreAboutUsProjectHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Projekt';
+	@override String get contributors => 'Közreműködők';
+	@override String get contributors_descr => 'Az összes fejlesztő, akik hozzájárultak a Monekin létrehozásához';
+	@override String get contact => 'Kapcsolatfelvétel';
+}
+
+// Path: general.time.ranges.types
+class _TranslationsGeneralTimeRangesTypesHu implements _TranslationsGeneralTimeRangesTypesEn {
+	_TranslationsGeneralTimeRangesTypesHu._(this._root);
+
+	@override final _TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get cycle => 'Ciklusok';
+	@override String get last_days => 'Utolsó nap';
+	@override String last_days_form({required Object x}) => '${x} előző nap';
+	@override String get all => 'Mindig';
+	@override String get date_range => 'Egyéni tartomány';
+}
+
+// Path: <root>
 class _TranslationsUk implements Translations {
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
@@ -2756,6 +5552,7 @@ class _TranslationsUk implements Translations {
 	@override late final _TranslationsUk _root = this; // ignore: unused_field
 
 	// Translations
+	@override late final _TranslationsUiActionsUk ui_actions = _TranslationsUiActionsUk._(_root);
 	@override late final _TranslationsGeneralUk general = _TranslationsGeneralUk._(_root);
 	@override late final _TranslationsIntroUk intro = _TranslationsIntroUk._(_root);
 	@override late final _TranslationsHomeUk home = _TranslationsHomeUk._(_root);
@@ -2775,6 +5572,51 @@ class _TranslationsUk implements Translations {
 	@override late final _TranslationsMoreUk more = _TranslationsMoreUk._(_root);
 }
 
+// Path: ui_actions
+class _TranslationsUiActionsUk implements _TranslationsUiActionsEn {
+	_TranslationsUiActionsUk._(this._root);
+
+	@override final _TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get cancel => 'Скасувати';
+	@override String get confirm => 'Підтвердити';
+	@override String get continue_text => 'Продовжити';
+	@override String get save => 'Зберегти';
+	@override String get save_changes => 'Зберегти зміни';
+	@override String get close_and_save => 'Закрити та зберегти';
+	@override String get add => 'Додати';
+	@override String get edit => 'Редагувати';
+	@override String get delete => 'Видалити';
+	@override String get see_more => 'Детальніше';
+	@override String get select_all => 'Вибрати все';
+	@override String get deselect_all => 'Скасувати вибір всього';
+	@override String get select => 'Вибрати';
+	@override String get search => 'Пошук';
+	@override String get filter => 'Фільтр';
+	@override String get reset => 'Скинути';
+	@override String get submit => 'Надіслати';
+	@override String get next => 'Далі';
+	@override String get previous => 'Назад';
+	@override String get back => 'Повернутися';
+	@override String get reload => 'Перезавантажити';
+	@override String get view => 'Переглянути';
+	@override String get download => 'Завантажити';
+	@override String get upload => 'Завантажити файл';
+	@override String get retry => 'Спробувати знову';
+	@override String get copy => 'Копіювати';
+	@override String get paste => 'Вставити';
+	@override String get undo => 'Скасувати дію';
+	@override String get redo => 'Повторити дію';
+	@override String get open => 'Відкрити';
+	@override String get close => 'Закрити';
+	@override String get apply => 'Застосувати';
+	@override String get discard => 'Скасувати зміни';
+	@override String get refresh => 'Оновити';
+	@override String get details => 'Деталі';
+	@override String get share => 'Поділитися';
+}
+
 // Path: general
 class _TranslationsGeneralUk implements _TranslationsGeneralEn {
 	_TranslationsGeneralUk._(this._root);
@@ -2782,20 +5624,11 @@ class _TranslationsGeneralUk implements _TranslationsGeneralEn {
 	@override final _TranslationsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get cancel => 'Скасувати';
 	@override String get or => 'або';
 	@override String get understood => 'Зрозуміло';
 	@override String get unspecified => 'Не вказано';
-	@override String get confirm => 'Підтвердити';
-	@override String get continue_text => 'Продовжити';
 	@override String get quick_actions => 'Швидкі дії';
-	@override String get save => 'Зберегти';
-	@override String get save_changes => 'Зберегти зміни';
-	@override String get close_and_save => 'Закрити та зберегти';
-	@override String get add => 'Додати';
-	@override String get edit => 'Редагувати';
 	@override String get balance => 'Баланс';
-	@override String get delete => 'Видалити';
 	@override String get account => 'Рахунок';
 	@override String get accounts => 'Рахунки';
 	@override String get categories => 'Категорії';
@@ -2803,9 +5636,6 @@ class _TranslationsGeneralUk implements _TranslationsGeneralEn {
 	@override String get today => 'Сьогодні';
 	@override String get yesterday => 'Вчора';
 	@override String get filters => 'Фільтри';
-	@override String get see_more => 'Побачити більше';
-	@override String get select_all => 'Вибрати всі';
-	@override String get deselect_all => 'Скасувати вибір усіх';
 	@override String get empty_warn => 'Ой! Тут порожньо';
 	@override String get insufficient_data => 'Недостатньо даних';
 	@override String get show_more_fields => 'Показати більше полів';
@@ -2916,6 +5746,8 @@ class _TranslationsIconSelectorUk implements _TranslationsIconSelectorEn {
 	@override String get icon => 'Іконка';
 	@override String get color => 'Колір';
 	@override String get select_color => 'Виберіть колір';
+	@override String get custom_color => 'Користувацький колір';
+	@override String get current_color_selection => 'Поточний вибір';
 	@override String get select_icon => 'Виберіть іконку';
 	@override String get select_account_icon => 'Ідентифікуйте ваш рахунок';
 	@override String get select_category_icon => 'Ідентифікуйте вашу категорію';
@@ -2990,6 +5822,7 @@ class _TranslationsRecurrentTransactionsUk implements _TranslationsRecurrentTran
 	@override String get total_expense_title => 'Загальні витрати за період';
 	@override String get total_expense_descr => '* Без урахування початкової та кінцевої дати кожної повторюваної транзакції';
 	@override late final _TranslationsRecurrentTransactionsDetailsUk details = _TranslationsRecurrentTransactionsDetailsUk._(_root);
+	@override late final _TranslationsRecurrentTransactionsStatusUk status = _TranslationsRecurrentTransactionsStatusUk._(_root);
 }
 
 // Path: account
@@ -3154,13 +5987,14 @@ class _TranslationsSettingsUk implements _TranslationsSettingsEn {
 	@override String get lang_section => 'Мова та тексти';
 	@override String get lang_title => 'Мова додатку';
 	@override String get lang_descr => 'Мова, в якій будуть відображатися тексти в додатку';
+	@override String get lang_help => 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>нашого посібник</ a>';
 	@override String get locale => 'Регіон';
 	@override String get locale_descr => 'Встановіть формат, який буде використовуватися для дат, чисел...';
 	@override String get locale_warn => 'Після зміни регіону додаток оновиться';
 	@override String get first_day_of_week => 'Перший день тижня';
 	@override String get theme_and_colors => 'Тема та кольори';
 	@override String get theme => 'Тема';
-	@override String get theme_auto => 'Визначено системою';
+	@override String get theme_auto => 'система';
 	@override String get theme_light => 'Світла';
 	@override String get theme_dark => 'Темна';
 	@override String get amoled_mode => 'Режим AMOLED';
@@ -3514,6 +6348,17 @@ class _TranslationsRecurrentTransactionsDetailsUk implements _TranslationsRecurr
 	@override String get last_payment_info => 'Цей рух є останнім за повторюваною правилою, тому це правило буде автоматично видалено при підтвердженні цієї дії';
 	@override String get delete_header => 'Видалити повторювану транзакцію';
 	@override String get delete_message => 'Ця дія є незворотньою і не вплине на транзакції, які ви вже підтвердили/оплатили';
+}
+
+// Path: recurrent_transactions.status
+class _TranslationsRecurrentTransactionsStatusUk implements _TranslationsRecurrentTransactionsStatusEn {
+	_TranslationsRecurrentTransactionsStatusUk._(this._root);
+
+	@override final _TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String delayed_by({required Object x}) => 'Затримано на ${x}d';
+	@override String coming_in({required Object x}) => 'Через ${x} днів';
 }
 
 // Path: account.types
@@ -4055,6 +6900,7 @@ class _TranslationsZhTw implements Translations {
 	@override late final _TranslationsZhTw _root = this; // ignore: unused_field
 
 	// Translations
+	@override late final _TranslationsUiActionsZhTw ui_actions = _TranslationsUiActionsZhTw._(_root);
 	@override late final _TranslationsGeneralZhTw general = _TranslationsGeneralZhTw._(_root);
 	@override late final _TranslationsIntroZhTw intro = _TranslationsIntroZhTw._(_root);
 	@override late final _TranslationsHomeZhTw home = _TranslationsHomeZhTw._(_root);
@@ -4074,6 +6920,51 @@ class _TranslationsZhTw implements Translations {
 	@override late final _TranslationsMoreZhTw more = _TranslationsMoreZhTw._(_root);
 }
 
+// Path: ui_actions
+class _TranslationsUiActionsZhTw implements _TranslationsUiActionsEn {
+	_TranslationsUiActionsZhTw._(this._root);
+
+	@override final _TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get cancel => '取消';
+	@override String get confirm => '確認';
+	@override String get continue_text => '繼續';
+	@override String get save => '保存';
+	@override String get save_changes => '儲存變更';
+	@override String get close_and_save => '儲存並關閉';
+	@override String get add => '添加';
+	@override String get edit => '編輯';
+	@override String get delete => '刪除';
+	@override String get see_more => '查看更多';
+	@override String get select_all => '全選';
+	@override String get deselect_all => '取消全選';
+	@override String get select => '選擇';
+	@override String get search => '搜尋';
+	@override String get filter => '篩選';
+	@override String get reset => '重設';
+	@override String get submit => '提交';
+	@override String get next => '下一步';
+	@override String get previous => '上一步';
+	@override String get back => '返回';
+	@override String get reload => '重新載入';
+	@override String get view => '檢視';
+	@override String get download => '下載';
+	@override String get upload => '上傳';
+	@override String get retry => '重試';
+	@override String get copy => '複製';
+	@override String get paste => '貼上';
+	@override String get undo => '還原';
+	@override String get redo => '重做';
+	@override String get open => '開啟';
+	@override String get close => '關閉';
+	@override String get apply => '套用';
+	@override String get discard => '捨棄';
+	@override String get refresh => '重新整理';
+	@override String get details => '詳細資訊';
+	@override String get share => '分享';
+}
+
 // Path: general
 class _TranslationsGeneralZhTw implements _TranslationsGeneralEn {
 	_TranslationsGeneralZhTw._(this._root);
@@ -4081,20 +6972,11 @@ class _TranslationsGeneralZhTw implements _TranslationsGeneralEn {
 	@override final _TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get cancel => '取消';
 	@override String get or => '或';
 	@override String get understood => '明白了';
 	@override String get unspecified => '未指定';
-	@override String get confirm => '確認';
-	@override String get continue_text => '繼續';
 	@override String get quick_actions => '快速行動';
-	@override String get save => '保存';
-	@override String get save_changes => '儲存變更';
-	@override String get close_and_save => '儲存並關閉';
-	@override String get add => '添加';
-	@override String get edit => '編輯';
 	@override String get balance => '平衡';
-	@override String get delete => '刪除';
 	@override String get account => '帳戶';
 	@override String get accounts => '帳戶';
 	@override String get categories => '類別';
@@ -4102,9 +6984,6 @@ class _TranslationsGeneralZhTw implements _TranslationsGeneralEn {
 	@override String get today => '今天';
 	@override String get yesterday => '昨天';
 	@override String get filters => '過濾器';
-	@override String get see_more => '查看更多';
-	@override String get select_all => '全選';
-	@override String get deselect_all => '取消全選';
 	@override String get empty_warn => '哦！這裡非常空';
 	@override String get insufficient_data => '數據不足';
 	@override String get show_more_fields => '顯示更多欄位';
@@ -4216,6 +7095,8 @@ class _TranslationsIconSelectorZhTw implements _TranslationsIconSelectorEn {
 	@override String get color => '顏色';
 	@override String get select_icon => '選擇一個圖示';
 	@override String get select_color => '選擇一種顏色';
+	@override String get current_color_selection => '目前選擇';
+	@override String get custom_color => '自訂顏色';
 	@override String get select_account_icon => '識別您的帳戶';
 	@override String get select_category_icon => '確定您的類別';
 	@override late final _TranslationsIconSelectorScopesZhTw scopes = _TranslationsIconSelectorScopesZhTw._(_root);
@@ -4289,6 +7170,7 @@ class _TranslationsRecurrentTransactionsZhTw implements _TranslationsRecurrentTr
 	@override String get total_expense_title => '每個期間的總收入';
 	@override String get total_expense_descr => '*不考慮每次重複的開始和結束日期';
 	@override late final _TranslationsRecurrentTransactionsDetailsZhTw details = _TranslationsRecurrentTransactionsDetailsZhTw._(_root);
+	@override late final _TranslationsRecurrentTransactionsStatusZhTw status = _TranslationsRecurrentTransactionsStatusZhTw._(_root);
 }
 
 // Path: account
@@ -4453,13 +7335,14 @@ class _TranslationsSettingsZhTw implements _TranslationsSettingsEn {
 	@override String get lang_section => '語言和文本';
 	@override String get lang_title => '應用程式語言';
 	@override String get lang_descr => '應用程式中顯示文字的語言';
+	@override String get lang_help => '如果您想與此應用程式的翻譯合作，您可以參考<a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>我們的指南</a>';
 	@override String get locale => '地區';
 	@override String get locale_descr => '設定用於日期、數字的格式...';
 	@override String get locale_warn => '更改區域時應用程式將更新';
 	@override String get first_day_of_week => '一週的第一天';
 	@override String get theme_and_colors => '主題和顏色';
 	@override String get theme => '主題';
-	@override String get theme_auto => '由系統定義';
+	@override String get theme_auto => '系統';
 	@override String get theme_light => '明亮主題';
 	@override String get theme_dark => '黑暗主題';
 	@override String get amoled_mode => 'amoled mode';
@@ -4813,6 +7696,17 @@ class _TranslationsRecurrentTransactionsDetailsZhTw implements _TranslationsRecu
 	@override String get last_payment_info => '此動作是循環規則的最後一個，因此當確認此動作時，該規則將自動刪除';
 	@override String get delete_header => '刪除重複交易';
 	@override String get delete_message => '此操作不可逆轉，不會影響您已確認/付款的交易';
+}
+
+// Path: recurrent_transactions.status
+class _TranslationsRecurrentTransactionsStatusZhTw implements _TranslationsRecurrentTransactionsStatusEn {
+	_TranslationsRecurrentTransactionsStatusZhTw._(this._root);
+
+	@override final _TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String delayed_by({required Object x}) => '延遲了 ${x}d';
+	@override String coming_in({required Object x}) => '${x} 天後';
 }
 
 // Path: account.types
@@ -5336,20 +8230,47 @@ class _TranslationsGeneralTimeRangesTypesZhTw implements _TranslationsGeneralTim
 extension on Translations {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
-			case 'general.cancel': return 'Cancel';
+			case 'ui_actions.cancel': return 'Cancel';
+			case 'ui_actions.confirm': return 'Confirm';
+			case 'ui_actions.continue_text': return 'Continue';
+			case 'ui_actions.save': return 'Save';
+			case 'ui_actions.save_changes': return 'Save changes';
+			case 'ui_actions.close_and_save': return 'Save and close';
+			case 'ui_actions.add': return 'Add';
+			case 'ui_actions.edit': return 'Edit';
+			case 'ui_actions.delete': return 'Delete';
+			case 'ui_actions.see_more': return 'See more';
+			case 'ui_actions.select_all': return 'Select all';
+			case 'ui_actions.deselect_all': return 'Deselect all';
+			case 'ui_actions.select': return 'Select';
+			case 'ui_actions.search': return 'Search';
+			case 'ui_actions.filter': return 'Filter';
+			case 'ui_actions.reset': return 'Reset';
+			case 'ui_actions.submit': return 'Submit';
+			case 'ui_actions.next': return 'Next';
+			case 'ui_actions.previous': return 'Previous';
+			case 'ui_actions.back': return 'Back';
+			case 'ui_actions.reload': return 'Reload';
+			case 'ui_actions.view': return 'View';
+			case 'ui_actions.download': return 'Download';
+			case 'ui_actions.upload': return 'Upload';
+			case 'ui_actions.retry': return 'Retry';
+			case 'ui_actions.copy': return 'Copy';
+			case 'ui_actions.paste': return 'Paste';
+			case 'ui_actions.undo': return 'Undo';
+			case 'ui_actions.redo': return 'Redo';
+			case 'ui_actions.open': return 'Open';
+			case 'ui_actions.close': return 'Close';
+			case 'ui_actions.apply': return 'Apply';
+			case 'ui_actions.discard': return 'Discard';
+			case 'ui_actions.refresh': return 'Refresh';
+			case 'ui_actions.details': return 'Details';
+			case 'ui_actions.share': return 'Share';
 			case 'general.or': return 'or';
 			case 'general.understood': return 'Understood';
 			case 'general.unspecified': return 'Unspecified';
-			case 'general.confirm': return 'Confirm';
-			case 'general.continue_text': return 'Continue';
 			case 'general.quick_actions': return 'Quick actions';
-			case 'general.save': return 'Save';
-			case 'general.save_changes': return 'Save changes';
-			case 'general.close_and_save': return 'Save and close';
-			case 'general.add': return 'Add';
-			case 'general.edit': return 'Edit';
 			case 'general.balance': return 'Balance';
-			case 'general.delete': return 'Delete';
 			case 'general.account': return 'Account';
 			case 'general.accounts': return 'Accounts';
 			case 'general.categories': return 'Categories';
@@ -5357,9 +8278,6 @@ extension on Translations {
 			case 'general.today': return 'Today';
 			case 'general.yesterday': return 'Yesterday';
 			case 'general.filters': return 'Filters';
-			case 'general.see_more': return 'See more';
-			case 'general.select_all': return 'Select all';
-			case 'general.deselect_all': return 'Deselect all';
 			case 'general.empty_warn': return 'Ops! This is very empty';
 			case 'general.insufficient_data': return 'Insufficient data';
 			case 'general.show_more_fields': return 'Show more fields';
@@ -5573,6 +8491,8 @@ extension on Translations {
 			case 'icon_selector.color': return 'Color';
 			case 'icon_selector.select_icon': return 'Select an icon';
 			case 'icon_selector.select_color': return 'Select a color';
+			case 'icon_selector.custom_color': return 'Custom color';
+			case 'icon_selector.current_color_selection': return 'Current selection';
 			case 'icon_selector.select_account_icon': return 'Identify your account';
 			case 'icon_selector.select_category_icon': return 'Identify your category';
 			case 'icon_selector.scopes.transport': return 'Transport';
@@ -5708,6 +8628,8 @@ extension on Translations {
 			case 'recurrent_transactions.details.last_payment_info': return 'This movement is the last of the recurring rule, so this rule will be automatically deleted when confirming this action';
 			case 'recurrent_transactions.details.delete_header': return 'Delete recurring transaction';
 			case 'recurrent_transactions.details.delete_message': return 'This action is irreversible and will not affect transactions you have already confirmed/paid for';
+			case 'recurrent_transactions.status.delayed_by': return ({required Object x}) => 'Delayed by ${x}d';
+			case 'recurrent_transactions.status.coming_in': return ({required Object x}) => 'In ${x} days';
 			case 'account.details': return 'Account details';
 			case 'account.date': return 'Opening date';
 			case 'account.close_date': return 'Closing date';
@@ -5900,13 +8822,14 @@ extension on Translations {
 			case 'settings.lang_section': return 'Language and texts';
 			case 'settings.lang_title': return 'App language';
 			case 'settings.lang_descr': return 'Language in which the texts will be displayed in the app';
+			case 'settings.lang_help': return 'If you want to collaborate with the translations of this app, you can consult <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>our guide</a>';
 			case 'settings.locale': return 'Region';
 			case 'settings.locale_descr': return 'Set the format to use for dates, numbers...';
 			case 'settings.locale_warn': return 'When changing region the app will update';
 			case 'settings.first_day_of_week': return 'First day of week';
 			case 'settings.theme_and_colors': return 'Theme and colors';
 			case 'settings.theme': return 'Theme';
-			case 'settings.theme_auto': return 'Defined by the system';
+			case 'settings.theme_auto': return 'System';
 			case 'settings.theme_light': return 'Light';
 			case 'settings.theme_dark': return 'Dark';
 			case 'settings.amoled_mode': return 'AMOLED mode';
@@ -5960,22 +8883,705 @@ extension on Translations {
 	}
 }
 
+extension on _TranslationsDe {
+	dynamic _flatMapFunction(String path) {
+		switch (path) {
+			case 'ui_actions.cancel': return 'Abbrechen';
+			case 'ui_actions.confirm': return 'Bestätigen';
+			case 'ui_actions.continue_text': return 'Weiter';
+			case 'ui_actions.save': return 'Speichern';
+			case 'ui_actions.save_changes': return 'Änderungen speichern';
+			case 'ui_actions.close_and_save': return 'Speichern und schließen';
+			case 'ui_actions.add': return 'Hinzufügen';
+			case 'ui_actions.edit': return 'Bearbeiten';
+			case 'ui_actions.delete': return 'Löschen';
+			case 'ui_actions.see_more': return 'Mehr anzeigen';
+			case 'ui_actions.select_all': return 'Alles auswählen';
+			case 'ui_actions.deselect_all': return 'Alles abwählen';
+			case 'ui_actions.select': return 'Auswählen';
+			case 'ui_actions.search': return 'Suchen';
+			case 'ui_actions.filter': return 'Filtern';
+			case 'ui_actions.reset': return 'Zurücksetzen';
+			case 'ui_actions.submit': return 'Absenden';
+			case 'ui_actions.next': return 'Weiter';
+			case 'ui_actions.previous': return 'Zurück';
+			case 'ui_actions.back': return 'Zurück';
+			case 'ui_actions.reload': return 'Neu laden';
+			case 'ui_actions.view': return 'Ansehen';
+			case 'ui_actions.download': return 'Herunterladen';
+			case 'ui_actions.upload': return 'Hochladen';
+			case 'ui_actions.retry': return 'Erneut versuchen';
+			case 'ui_actions.copy': return 'Kopieren';
+			case 'ui_actions.paste': return 'Einfügen';
+			case 'ui_actions.undo': return 'Rückgängig';
+			case 'ui_actions.redo': return 'Wiederholen';
+			case 'ui_actions.open': return 'Öffnen';
+			case 'ui_actions.close': return 'Schließen';
+			case 'ui_actions.apply': return 'Anwenden';
+			case 'ui_actions.discard': return 'Verwerfen';
+			case 'ui_actions.refresh': return 'Aktualisieren';
+			case 'ui_actions.details': return 'Details';
+			case 'ui_actions.share': return 'Teilen';
+			case 'general.or': return 'oder';
+			case 'general.understood': return 'Verstanden';
+			case 'general.unspecified': return 'Nicht spezifiziert';
+			case 'general.quick_actions': return 'Schnelle Aktionen';
+			case 'general.balance': return 'Kontostand';
+			case 'general.account': return 'Konto';
+			case 'general.accounts': return 'Konten';
+			case 'general.categories': return 'Kategorien';
+			case 'general.category': return 'Kategorie';
+			case 'general.today': return 'Heute';
+			case 'general.yesterday': return 'Gestern';
+			case 'general.filters': return 'Filter';
+			case 'general.empty_warn': return 'Ops! Das ist sehr leer';
+			case 'general.insufficient_data': return 'Unzureichende Daten';
+			case 'general.show_more_fields': return 'Weitere Felder anzeigen';
+			case 'general.show_less_fields': return 'Weniger Felder anzeigen';
+			case 'general.tap_to_search': return 'Zum Suchen tippen';
+			case 'general.clipboard.success': return ({required Object x}) => '${x} in die Zwischenablage kopiert';
+			case 'general.clipboard.error': return 'Fehler beim Kopieren';
+			case 'general.time.start_date': return 'Startdatum';
+			case 'general.time.end_date': return 'Enddatum';
+			case 'general.time.from_date': return 'Ab Datum';
+			case 'general.time.until_date': return 'Bis heute';
+			case 'general.time.date': return 'Datum';
+			case 'general.time.datetime': return 'Datum/Uhrzeit';
+			case 'general.time.time': return 'Zeit';
+			case 'general.time.each': return 'Jede';
+			case 'general.time.after': return 'Nach';
+			case 'general.time.ranges.display': return 'Zeitbereich';
+			case 'general.time.ranges.it_repeat': return 'Wiederholt';
+			case 'general.time.ranges.it_ends': return 'Endet';
+			case 'general.time.ranges.forever': return 'Für immer';
+			case 'general.time.ranges.types.cycle': return 'Zyklen';
+			case 'general.time.ranges.types.last_days': return 'Letzte Tage';
+			case 'general.time.ranges.types.last_days_form': return ({required Object x}) => '${x} Vortage';
+			case 'general.time.ranges.types.all': return 'Immer';
+			case 'general.time.ranges.types.date_range': return 'Benutzerdefinierter Zeitraum';
+			case 'general.time.ranges.each_range': return ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+				one: 'Jeder ${range}',
+				other: 'Jeder ${n} ${range}',
+			);
+			case 'general.time.ranges.each_range_until_date': return ({required num n, required Object range, required Object day}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+				one: 'Jeder ${range} bis ${day}',
+				other: 'Jeder ${n} ${range} bis ${day}',
+			);
+			case 'general.time.ranges.each_range_until_times': return ({required num n, required Object range, required Object limit}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+				one: 'Jeder ${range} ${limit} mal',
+				other: 'Jeder ${n} ${range} ${limit} mal',
+			);
+			case 'general.time.ranges.each_range_until_once': return ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+				one: 'Jeder ${range} einmal',
+				other: 'Jeder ${n} ${range} einmal',
+			);
+			case 'general.time.ranges.month': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+				one: 'Monat',
+				other: 'Monate',
+			);
+			case 'general.time.ranges.year': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+				one: 'Jahr',
+				other: 'Jahre',
+			);
+			case 'general.time.ranges.day': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+				one: 'Tag',
+				other: 'Tage',
+			);
+			case 'general.time.ranges.week': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+				one: 'Woche',
+				other: 'Wochen',
+			);
+			case 'general.time.periodicity.display': return 'Wiederholung';
+			case 'general.time.periodicity.no_repeat': return 'Keine Wiederholung';
+			case 'general.time.periodicity.repeat': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+				one: 'Wiederholung',
+				other: 'Wiederholungen',
+			);
+			case 'general.time.periodicity.diary': return 'Täglich';
+			case 'general.time.periodicity.monthly': return 'Monatlich';
+			case 'general.time.periodicity.annually': return 'Jährlich';
+			case 'general.time.periodicity.quaterly': return 'Vierteljährlich';
+			case 'general.time.periodicity.weekly': return 'Wöchentlich';
+			case 'general.time.periodicity.custom': return 'Brauch';
+			case 'general.time.periodicity.infinite': return 'Stets';
+			case 'general.time.current.monthly': return 'Diesen Monat';
+			case 'general.time.current.annually': return 'Dieses Jahr';
+			case 'general.time.current.quaterly': return 'Dieses Quartal';
+			case 'general.time.current.weekly': return 'Diese Woche';
+			case 'general.time.current.infinite': return 'Für immer';
+			case 'general.time.current.custom': return 'Benutzerdefinierter Zeitraum';
+			case 'general.time.all.diary': return 'Täglich';
+			case 'general.time.all.monthly': return 'Jeden Monat';
+			case 'general.time.all.annually': return 'Jährlich';
+			case 'general.time.all.quaterly': return 'Vierteljährlich';
+			case 'general.time.all.weekly': return 'Jede Woche';
+			case 'general.transaction_order.display': return 'Bestellvorgänge';
+			case 'general.transaction_order.category': return 'Nach Kategorie';
+			case 'general.transaction_order.quantity': return 'Nach Menge';
+			case 'general.transaction_order.date': return 'Nach Datum';
+			case 'general.validations.form_error': return 'Korrigiere die angegebenen Felder, um fortzufahren';
+			case 'general.validations.required': return 'Erforderliches Feld';
+			case 'general.validations.positive': return 'Sollte positiv sein';
+			case 'general.validations.min_number': return ({required Object x}) => 'Sollte größer sein als ${x}';
+			case 'general.validations.max_number': return ({required Object x}) => 'Sollte kleiner sein als ${x}';
+			case 'intro.start': return 'Start';
+			case 'intro.skip': return 'Überspringen';
+			case 'intro.next': return 'Nächste';
+			case 'intro.select_your_currency': return 'Wähle Deine Währung aus';
+			case 'intro.welcome_subtitle': return 'Dein persönlicher Finanzmanager';
+			case 'intro.welcome_subtitle2': return '100 % geöffnet, 100 % kostenlos';
+			case 'intro.welcome_footer': return 'Mit der Anmeldung stimmst Du der <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Datenschutzrichtlinie</a> und den <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Nutzungsbedingungen</a> der App zu';
+			case 'intro.offline_descr_title': return 'OFFLINE-KONTO:';
+			case 'intro.offline_descr': return 'Deine Daten werden nur auf Deinem Gerät gespeichert und sind sicher, solange Du die App nicht deinstallieren oder das Telefon wechselst. ';
+			case 'intro.offline_start': return 'Sitzung offline starten';
+			case 'intro.sl1_title': return 'Wähle Deine Währung aus';
+			case 'intro.sl1_descr': return 'Deine Standardwährung wird in Berichten und allgemeinen Diagrammen verwendet. ';
+			case 'intro.sl2_title': return 'Sicher, privat und zuverlässig';
+			case 'intro.sl2_descr': return 'Deine Daten gehören nur Dir. ';
+			case 'intro.sl2_descr2': return 'Außerdem ist der Quellcode der Anwendung öffentlich, jeder kann daran mitarbeiten und sehen, wie es funktioniert';
+			case 'intro.last_slide_title': return 'Alles bereit';
+			case 'intro.last_slide_descr': return 'Mit Monekin kannst Du endlich die finanzielle Unabhängigkeit erreichen, die Du dir so sehr wünschst. ';
+			case 'intro.last_slide_descr2': return 'Wir hoffen, dass Du Deine Erfahrung genießet! Zögerne nicht, uns im Falle von Fragen oder Vorschlägen zu kontaktieren...';
+			case 'home.title': return 'Übersicht';
+			case 'home.filter_transactions': return 'Transaktionen filtern';
+			case 'home.hello_day': return 'Guten Morgen,';
+			case 'home.hello_night': return 'Gute Nacht,';
+			case 'home.total_balance': return 'Gesamtbilanz';
+			case 'home.my_accounts': return 'Meine Konten';
+			case 'home.active_accounts': return 'Aktive Konten';
+			case 'home.no_accounts': return 'Es wurden noch keine Konten erstellt';
+			case 'home.no_accounts_descr': return 'Beginne, die ganze Magie von Monekin zu nutzen. ';
+			case 'home.last_transactions': return 'Letzte Transaktionen';
+			case 'home.should_create_account_header': return 'Hoppla!';
+			case 'home.should_create_account_message': return 'Du musst über mindestens ein nicht archiviertes Konto verfügen, bevor Du mit der Erstellung von Transaktionen beginnen kannst';
+			case 'financial_health.display': return 'Finanzielle Lage';
+			case 'financial_health.review.very_good': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Sehr gut!';
+					case GenderContext.female:
+						return 'Sehr gut!';
+				}
+			};
+			case 'financial_health.review.good': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Gut';
+					case GenderContext.female:
+						return 'Gut';
+				}
+			};
+			case 'financial_health.review.normal': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Durchschnitt';
+					case GenderContext.female:
+						return 'Durchschnitt';
+				}
+			};
+			case 'financial_health.review.bad': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Mäßig';
+					case GenderContext.female:
+						return 'Mäßig';
+				}
+			};
+			case 'financial_health.review.very_bad': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Sehr schlecht';
+					case GenderContext.female:
+						return 'Sehr schlecht';
+				}
+			};
+			case 'financial_health.review.insufficient_data': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Unzureichende Daten';
+					case GenderContext.female:
+						return 'Unzureichende Daten';
+				}
+			};
+			case 'financial_health.review.descr.insufficient_data': return 'Es sieht so aus, als hätten wir nicht genügend Ausgaben, um Deine finanzielle Lage zu berechnen. Füge in diesem Zeitraum einige Ausgaben/Einnahmen hinzu, damit wir Dir helfen können!';
+			case 'financial_health.review.descr.very_good': return 'Glückwunsch! ';
+			case 'financial_health.review.descr.good': return 'Großartig! ';
+			case 'financial_health.review.descr.normal': return 'Deine finanzielle Lage entspricht in diesem Zeitraum mehr oder weniger dem Durchschnitt der übrigen Bevölkerung';
+			case 'financial_health.review.descr.bad': return 'Es scheint, dass Deine finanzielle Situation noch nicht die beste ist. Erkunde den Rest der Diagramme, um mehr über Deine Finanzen zu erfahren';
+			case 'financial_health.review.descr.very_bad': return 'Hmm, Deine finanzielle Lage ist weit unter dem, was sie sein sollte. Erkunde den Rest der Diagramme, um mehr über Deine Finanzen zu erfahren';
+			case 'financial_health.months_without_income.title': return 'Überlebensrate';
+			case 'financial_health.months_without_income.subtitle': return 'Angesichts Deines Guthabens, wie viel Zeit kannst Du ohne Einkommen auskommen?';
+			case 'financial_health.months_without_income.text_zero': return 'Bei diesem Ausgabenniveau kannst Du keinen Monat ohne Einkommen überleben!';
+			case 'financial_health.months_without_income.text_one': return 'Bei diesem Ausgabenniveau kannst Du kaum etwa einen Monat ohne Einkommen überleben!';
+			case 'financial_health.months_without_income.text_other': return ({required Object n}) => 'Du könntest ungefähr <b>${n} Monate</b> ohne Einkommen bei dieser Ausgabenrate überleben.';
+			case 'financial_health.months_without_income.text_infinite': return 'Du könntest ungefähr <b>Dein ganzes Leben lang</b> ohne Einkommen bei dieser Ausgabenrate überleben.';
+			case 'financial_health.months_without_income.suggestion': return 'Denke daran, dass es ratsam ist, dieses Verhältnis immer mindestens über 5 Monate zu halten. Wenn Du feststellst, dass Du nicht über ein ausreichendes Sparpolster verfügst, solltest Du unnötige Ausgaben reduzieren.';
+			case 'financial_health.months_without_income.insufficient_data': return 'Offenbar haben wir nicht genügend Ausgaben, um zu berechnen, wie viele Monate Du ohne Einkommen überleben könntest. Gib ein paar Transaktionen ein und komme hierher zurück, um Deine Finanzen zu überprüfen.';
+			case 'financial_health.savings_percentage.title': return 'Sparprozentsatz';
+			case 'financial_health.savings_percentage.subtitle': return 'Welcher Teil Deines Einkommens wird in diesem Zeitraum nicht ausgegeben?';
+			case 'financial_health.savings_percentage.text.good': return ({required Object value}) => 'Herzlichen Glückwunsch! Du hast es geschafft, während dieses Zeitraums <b>${value}%</b> Deines Einkommens zu sparen. Es scheint, dass Du bereits ein Experte sind, mache weiter so! ';
+			case 'financial_health.savings_percentage.text.normal': return ({required Object value}) => 'Herzlichen Glückwunsch! Du hast es geschafft, während dieses Zeitraums <b>${value}%</b> Deines Einkommens zu sparen';
+			case 'financial_health.savings_percentage.text.bad': return ({required Object value}) => 'Du hast es geschafft <b>${value}%</b> Deines Einkommens in diesem Zeitraum zu sparen . ';
+			case 'financial_health.savings_percentage.text.very_bad': return 'Wow, du hast es in dieser Zeit nicht geschafft, etwas zu sparen.';
+			case 'financial_health.savings_percentage.suggestion': return 'Denk daran, dass es ratsam ist, mindestens 15-20 % Deines Einkommens zu sparen.';
+			case 'stats.title': return 'Statistiken';
+			case 'stats.balance': return 'Kontostand';
+			case 'stats.final_balance': return 'Schlussstand';
+			case 'stats.balance_by_account': return 'Saldo nach Konten';
+			case 'stats.balance_by_account_subtitle': return 'Wo habe ich das meiste Geld?';
+			case 'stats.balance_by_currency': return 'Saldo nach Währung';
+			case 'stats.balance_by_currency_subtitle': return 'Wie viel Geld habe ich in Fremdwährung?';
+			case 'stats.balance_evolution': return 'Trend';
+			case 'stats.balance_evolution_subtitle': return 'Habe ich mehr Geld als vorher?';
+			case 'stats.compared_to_previous_period': return 'Im Vergleich zur Vorperiode';
+			case 'stats.cash_flow': return 'Cashflow';
+			case 'stats.cash_flow_subtitle': return 'Gebe ich weniger aus, als ich verdiene?';
+			case 'stats.by_periods': return 'Nach Perioden';
+			case 'stats.by_categories': return 'Nach Kategorien';
+			case 'stats.by_tags': return 'Nach Tags';
+			case 'stats.distribution': return 'Verteilung';
+			case 'stats.finance_health_resume': return 'Zusammenfassung';
+			case 'stats.finance_health_breakdown': return 'Auflüsselung';
+			case 'icon_selector.name': return 'Name:';
+			case 'icon_selector.icon': return 'Symbol';
+			case 'icon_selector.color': return 'Farbe';
+			case 'icon_selector.select_icon': return 'Wähle ein Symbol aus';
+			case 'icon_selector.select_color': return 'Wähle eine Farbe';
+			case 'icon_selector.custom_color': return 'Benutzerdefinierte Farbe';
+			case 'icon_selector.current_color_selection': return 'Aktuelle Auswahl';
+			case 'icon_selector.select_account_icon': return 'Identifiziere Dein Konto';
+			case 'icon_selector.select_category_icon': return 'Identifiziere Deine Kategorie';
+			case 'icon_selector.scopes.transport': return 'Transport';
+			case 'icon_selector.scopes.money': return 'Geld';
+			case 'icon_selector.scopes.food': return 'Essen';
+			case 'icon_selector.scopes.medical': return 'Gesundheit';
+			case 'icon_selector.scopes.entertainment': return 'Freizeit';
+			case 'icon_selector.scopes.technology': return 'Technologie';
+			case 'icon_selector.scopes.other': return 'Andere';
+			case 'icon_selector.scopes.logos_financial_institutions': return 'Finanzinstitute';
+			case 'transaction.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+				one: 'Transaktion',
+				other: 'Transaktionen',
+			);
+			case 'transaction.create': return 'Neue Transaktion';
+			case 'transaction.new_income': return 'Neues Einkommen';
+			case 'transaction.new_expense': return 'Neue Ausgabe';
+			case 'transaction.new_success': return 'Transaktion erfolgreich erstellt';
+			case 'transaction.edit': return 'Transaktion bearbeiten';
+			case 'transaction.edit_success': return 'Transaktion erfolgreich bearbeitet';
+			case 'transaction.edit_multiple': return 'Bearbeite Deine Transaktionen';
+			case 'transaction.edit_multiple_success': return ({required Object x}) => '${x} Transaktionen erfolgreich bearbeitet';
+			case 'transaction.duplicate': return 'Transaktion klonen';
+			case 'transaction.duplicate_short': return 'Klon';
+			case 'transaction.duplicate_warning_message': return 'Eine mit dieser identische Transaktion wird mit demselben Datum erstellt. Möchtest Du fortfahren?';
+			case 'transaction.duplicate_success': return 'Transaktion erfolgreich geklont';
+			case 'transaction.delete': return 'Transaktion löschen';
+			case 'transaction.delete_warning_message': return 'Diese Aktion ist irreversibel. ';
+			case 'transaction.delete_success': return 'Transaktion korrekt gelöscht';
+			case 'transaction.delete_multiple': return 'Transaktionen löschen';
+			case 'transaction.delete_multiple_warning_message': return ({required Object x}) => 'Diese Aktion ist irreversibel und wird entfernt ${x} Transaktionen. ';
+			case 'transaction.delete_multiple_success': return ({required Object x}) => '${x} Transaktionen korrekt gelöscht';
+			case 'transaction.details': return 'Bewegungsdetails';
+			case 'transaction.next_payments.accept': return 'Akzeptieren';
+			case 'transaction.next_payments.skip': return 'Überspringen';
+			case 'transaction.next_payments.skip_success': return 'Transaktion erfolgreich übersprungen';
+			case 'transaction.next_payments.skip_dialog_title': return 'Transaktion überspringen';
+			case 'transaction.next_payments.skip_dialog_msg': return ({required Object date}) => 'Diese Aktion ist irreversibel.  ${date}';
+			case 'transaction.next_payments.accept_today': return 'Akzeptiere noch heute';
+			case 'transaction.next_payments.accept_in_required_date': return ({required Object date}) => 'Akzeptierst Du das gewünschte Datum (${date})';
+			case 'transaction.next_payments.accept_dialog_title': return 'Akzeptierst Du die Transaktion';
+			case 'transaction.next_payments.accept_dialog_msg_single': return 'Der neue Status der Transaktion ist null. ';
+			case 'transaction.next_payments.accept_dialog_msg': return ({required Object date}) => 'Diese Aktion erstellt eine neue Transaktion mit Datum ${date}. Du kannst die Details dieser Transaktion auf der Transaktionsseite überprüfen';
+			case 'transaction.next_payments.recurrent_rule_finished': return 'Die wiederkehrende Regel ist abgeschlossen, es sind keine weiteren Zahlungen mehr zu leisten!';
+			case 'transaction.list.empty': return 'Es wurden keine Transaktionen gefunden, die hier angezeigt werden könnten. ';
+			case 'transaction.list.searcher_placeholder': return 'Suche nach Kategorie, Beschreibung...';
+			case 'transaction.list.searcher_no_results': return 'Es wurden keine Transaktionen gefunden, die den Suchkriterien entsprechen';
+			case 'transaction.list.loading': return 'Weitere Transaktionen werden geladen...';
+			case 'transaction.list.selected_short': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+				one: '${n} ausgewählt',
+				other: '${n} ausgewählt',
+			);
+			case 'transaction.list.selected_long': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+				one: '${n} Transaktion ausgewählt',
+				other: '${n} Transaktionen ausgewählt',
+			);
+			case 'transaction.list.bulk_edit.dates': return 'Daten bearbeiten';
+			case 'transaction.list.bulk_edit.categories': return 'Kategorien bearbeiten';
+			case 'transaction.list.bulk_edit.status': return 'Status bearbeiten';
+			case 'transaction.filters.from_value': return 'Ab Betrag';
+			case 'transaction.filters.to_value': return 'Bis zum Betrag';
+			case 'transaction.filters.from_value_def': return ({required Object x}) => 'Von ${x}';
+			case 'transaction.filters.to_value_def': return ({required Object x}) => 'Bis zu ${x}';
+			case 'transaction.filters.from_date_def': return ({required Object date}) => 'Von der ${date}';
+			case 'transaction.filters.to_date_def': return ({required Object date}) => 'Bis zum ${date}';
+			case 'transaction.form.validators.zero': return 'Der Wert einer Transaktion kann nicht gleich Null sein';
+			case 'transaction.form.validators.date_max': return 'Das ausgewählte Datum liegt nach dem aktuellen. ';
+			case 'transaction.form.validators.date_after_account_creation': return 'Du kannst keine Transaktion erstellen, deren Datum vor dem Erstellungsdatum des Kontos liegt, zu dem sie gehört';
+			case 'transaction.form.validators.negative_transfer': return 'Der Geldwert einer Überweisung darf nicht negativ sein';
+			case 'transaction.form.validators.transfer_between_same_accounts': return 'Das Ursprungs- und das Zielkonto dürfen nicht identisch sein';
+			case 'transaction.form.title': return 'Transaktionstitel';
+			case 'transaction.form.title_short': return 'Titel';
+			case 'transaction.form.value': return 'Wert der Transaktion';
+			case 'transaction.form.tap_to_see_more': return 'Tippen, um weitere Details anzuzeigen';
+			case 'transaction.form.no_tags': return '– Keine Tags –';
+			case 'transaction.form.description': return 'Beschreibung';
+			case 'transaction.form.description_info': return 'Tippe hier, um eine detailliertere Beschreibung dieser Transaktion einzugeben';
+			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => 'Wechselkurs zu ${currency}';
+			case 'transaction.form.exchange_to_preferred_in_date': return 'Am Transaktionsdatum';
+			case 'transaction.reversed.title': return 'Umgekehrte Transaktion';
+			case 'transaction.reversed.title_short': return 'Umgekehrte Tr.';
+			case 'transaction.reversed.description_for_expenses': return 'Obwohl es sich um eine Spesentransaktion handelt, weist sie einen positiven Betrag auf. ';
+			case 'transaction.reversed.description_for_incomes': return 'Obwohl es sich um eine Einkommenstransaktion handelt, weist sie einen negativen Betrag auf. ';
+			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+				one: 'Status',
+				other: 'Status',
+			);
+			case 'transaction.status.display_long': return 'Transaktionsstatus';
+			case 'transaction.status.tr_status': return ({required Object status}) => '${status} Transaktion';
+			case 'transaction.status.none': return 'Ohne Status';
+			case 'transaction.status.none_descr': return 'Transaktion ohne bestimmten Status';
+			case 'transaction.status.reconciled': return 'Ausgeglichen';
+			case 'transaction.status.reconciled_descr': return 'Diese Transaktion wurde bereits validiert und entspricht einer echten Transaktion Deiner Bank';
+			case 'transaction.status.unreconciled': return 'Unausgeglichen';
+			case 'transaction.status.unreconciled_descr': return 'Diese Transaktion wurde noch nicht validiert und erscheint daher noch nicht auf Deinem echten Bankkonten. ';
+			case 'transaction.status.pending': return 'Ausstehend';
+			case 'transaction.status.pending_descr': return 'Diese Transaktion steht noch aus und wird daher bei der Berechnung von Salden und Statistiken nicht berücksichtigt';
+			case 'transaction.status.voided': return 'Entwertet';
+			case 'transaction.status.voided_descr': return 'Transaktion aufgrund eines Zahlungsfehlers oder aus einem anderen Grund ungültig/storniert. ';
+			case 'transaction.types.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+				one: 'Transaktionstyp',
+				other: 'Transaktiontypen',
+			);
+			case 'transaction.types.income': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+				one: 'Einkommen',
+				other: 'Einkommen',
+			);
+			case 'transaction.types.expense': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+				one: 'Ausgaben',
+				other: 'Ausgaben',
+			);
+			case 'transaction.types.transfer': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+				one: 'Überweisen',
+				other: 'Überweisungen',
+			);
+			case 'transfer.display': return 'Überweisen';
+			case 'transfer.transfers': return 'Überweisungen';
+			case 'transfer.transfer_to': return ({required Object account}) => 'Überweisen an ${account}';
+			case 'transfer.create': return 'Neue Überweisung';
+			case 'transfer.need_two_accounts_warning_header': return 'Ops!';
+			case 'transfer.need_two_accounts_warning_message': return 'Um diese Aktion auszuführen, sind mindestens zwei Konten erforderlich. Wenn Du den aktuellen Saldo dieses Kontos anpassen oder bearbeiten möchtest, klicke auf die Schaltfläche Bearbeiten';
+			case 'transfer.form.from': return 'Origin-Konto';
+			case 'transfer.form.to': return 'Zielkonto';
+			case 'transfer.form.value_in_destiny.title': return 'Am Zielkonto überwiesener Betrag';
+			case 'transfer.form.value_in_destiny.amount_short': return ({required Object amount}) => '${amount} zum Zielkonto';
+			case 'recurrent_transactions.title': return 'Wiederkehrende Transaktionen';
+			case 'recurrent_transactions.title_short': return 'Wiederk. Transakt.';
+			case 'recurrent_transactions.empty': return 'Anscheinend hast Du keine wiederkehrenden Transaktionen. Erstelle eine monatliche, jährliche oder wöchentliche wiederkehrende Transaktion, die hier angezeigt wird.';
+			case 'recurrent_transactions.total_expense_title': return 'Gesamtausgaben pro Periode';
+			case 'recurrent_transactions.total_expense_descr': return '* Ohne Berücksichtigung des Start- und Enddatums jeder Wiederholung';
+			case 'recurrent_transactions.details.title': return 'Wiederkehrende Transaktion';
+			case 'recurrent_transactions.details.descr': return 'Die nächsten Schritte für diese Transaktion werden unten angezeigt. Du kannst den ersten Schritt akzeptieren oder diesen Schritt auslassen';
+			case 'recurrent_transactions.details.last_payment_info': return 'Diese Bewegung ist die letzte der wiederkehrenden Regel, daher wird diese Regel beim Bestätigen dieser Aktion automatisch gelöscht';
+			case 'recurrent_transactions.details.delete_header': return 'Wiederkehrende Transaktion löschen';
+			case 'recurrent_transactions.details.delete_message': return 'Diese Aktion ist unumkehrbar und hat keinen Einfluss auf Transaktionen, die Du bereits bestätigt/bezahlt habst';
+			case 'recurrent_transactions.status.delayed_by': return ({required Object x}) => 'Verzögert um ${x}d';
+			case 'recurrent_transactions.status.coming_in': return ({required Object x}) => 'In ${x} Tagen';
+			case 'account.details': return 'Kontodaten';
+			case 'account.date': return 'Eröffnungsdatum';
+			case 'account.close_date': return 'Einsendeschluss';
+			case 'account.reopen': return 'Konto erneut eröffnen';
+			case 'account.reopen_short': return 'Wieder öffnen';
+			case 'account.reopen_descr': return 'Möchtest Du dieses Konto wirklich wieder eröffnen?';
+			case 'account.balance': return 'Kontostand';
+			case 'account.n_transactions': return 'Anzahl der Transaktionen';
+			case 'account.add_money': return 'Geld hinzufügen';
+			case 'account.withdraw_money': return 'Geld abheben';
+			case 'account.no_accounts': return 'Es wurden keine Transaktionen gefunden, die hier angezeigt werden könnten. Füge eine Transaktion hinzu, indem Du auf die Schaltfläche „+“ am unteren Rand klickst.';
+			case 'account.types.title': return 'Kontotyp';
+			case 'account.types.warning': return 'Sobald der Kontotyp ausgewählt wurde, kann er in Zukunft nicht mehr geändert werden';
+			case 'account.types.normal': return 'Normales Konto';
+			case 'account.types.normal_descr': return 'Nützlich, um Deine täglichen Finanzen aufzuzeichnen. Es ist das gebräuchlichste Konto, das es Dir ermöglicht, Ausgaben, Einnahmen hinzuzufügen';
+			case 'account.types.saving': return 'Sparkonto';
+			case 'account.types.saving_descr': return 'Du kannst nur Geld von anderen Konten einzahlen und abheben. Perfekt geignet, um Geld zu sparen';
+			case 'account.form.name': return 'Kontoname';
+			case 'account.form.name_placeholder': return 'Beispiel: Sparkonto';
+			case 'account.form.notes': return 'Notizen';
+			case 'account.form.notes_placeholder': return 'Gebe einige Notizen/Beschreibungen zu diesem Konto ein';
+			case 'account.form.initial_balance': return 'Anfangssaldo';
+			case 'account.form.current_balance': return 'Aktueller Kontostand';
+			case 'account.form.create': return 'Konto erstellen';
+			case 'account.form.edit': return 'Konto bearbeiten';
+			case 'account.form.currency_not_found_warn': return 'Du hast keine Informationen zu den Wechselkursen für diese Währung. Als Standardwechselkurs wird 1,0 verwendet. Du kannst das in den Einstellungen ändern';
+			case 'account.form.already_exists': return 'Es gibt bereits ein Konto mit demselben Namen, bitte nutze einen anderen';
+			case 'account.form.tr_before_opening_date': return 'Auf diesem Konto liegen Transaktionen vor, deren Datum vor dem Eröffnungsdatum liegt';
+			case 'account.form.iban': return 'IBAN';
+			case 'account.form.swift': return 'SWIFT';
+			case 'account.delete.warning_header': return 'Konto löschen?';
+			case 'account.delete.warning_text': return 'Durch diese Aktion werden dieses Konto und alle seine Transaktionen gelöscht';
+			case 'account.delete.success': return 'Konto erfolgreich gelöscht';
+			case 'account.close.title': return 'Konto schließen';
+			case 'account.close.title_short': return 'Schließen';
+			case 'account.close.warn': return 'Dieses Konto wird in bestimmten Einträgen nicht mehr angezeigt und Du kannst darin keine Transaktionen mit einem späteren als dem unten angegebenen Datum erstellen. Diese Aktion hat keine Auswirkungen auf Transaktionen oder Guthaben, und Du kannst dieses Konto auch jederzeit wieder eröffnen.';
+			case 'account.close.should_have_zero_balance': return 'Um das Konto schließen zu können, muss der aktuelle Kontostand 0 betragen.  Bitte bearbeite das Konto, bevor du fortfährst';
+			case 'account.close.should_have_no_transactions': return 'Auf diesem Konto liegen Transaktionen nach dem angegebenen Schlussdatum vor. Lösche sie oder bearbeite das Datum der Kontoschließung, bevor Du fortfährst';
+			case 'account.close.success': return 'Konto erfolgreich geschlossen';
+			case 'account.close.unarchive_succes': return 'Konto erfolgreich wiedereröffnet';
+			case 'account.select.one': return 'Wähle ein Konto aus';
+			case 'account.select.all': return 'Alle Konten';
+			case 'account.select.multiple': return 'Wähle Konten aus';
+			case 'currencies.currency_converter': return 'Währungsrechner';
+			case 'currencies.currency': return 'Währung';
+			case 'currencies.currency_manager': return 'Währungsmanager';
+			case 'currencies.currency_manager_descr': return 'Konfiguriere Deine Währung und deren Wechselkurse mit anderen';
+			case 'currencies.preferred_currency': return 'Bevorzugte/Basis Währung';
+			case 'currencies.change_preferred_currency_title': return 'Änder die bevorzugte Währung';
+			case 'currencies.change_preferred_currency_msg': return 'Alle Statistiken und Budgets werden ab sofort in dieser Währung angezeigt. Konten und Transaktionen behalten die Währung, die sie hatten. Alle gespeicherten Wechselkurse werden gelöscht, wenn Du diese Aktion ausführst. Möchtest Du fortfahren?';
+			case 'currencies.form.equal_to_preferred_warn': return 'Die Währung darf nicht mit der Benutzerwährung übereinstimmen';
+			case 'currencies.form.specify_a_currency': return 'Bitte gib eine Währung an';
+			case 'currencies.form.add': return 'Wechselkurs hinzufügen';
+			case 'currencies.form.add_success': return 'Wechselkurs erfolgreich hinzugefügt';
+			case 'currencies.form.edit': return 'Wechselkurs bearbeiten';
+			case 'currencies.form.edit_success': return 'Wechselkurs erfolgreich bearbeitet';
+			case 'currencies.delete_all_success': return 'Wechselkurse erfolgreich gelöscht';
+			case 'currencies.historical': return 'Historische Kurse';
+			case 'currencies.exchange_rate': return 'Wechselkurs';
+			case 'currencies.exchange_rates': return 'Wechselkurse';
+			case 'currencies.empty': return 'Füge hier Wechselkurse hinzu, damit unsere Diagramme genauer sind, wenn Du Konten in anderen Währungen als Deiner Basiswährung hast';
+			case 'currencies.select_a_currency': return 'Wähle eine Währung aus';
+			case 'currencies.search': return 'Suche nach Name oder Währungscode';
+			case 'tags.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+				one: 'Label',
+				other: 'Schlagworte',
+			);
+			case 'tags.form.name': return 'Schlagworte-Name';
+			case 'tags.form.description': return 'Beschreibung';
+			case 'tags.select.title': return 'Schlagworte auswählen';
+			case 'tags.select.all': return 'Alle Schlagworte';
+			case 'tags.empty_list': return 'Du hast noch keine Schlagworte erstellt. Schlagworte und Kategorien sind eine gute Möglichkeit, Deine Bewegungen zu kategorisieren';
+			case 'tags.without_tags': return 'Ohne Schlagworte';
+			case 'tags.add': return 'Schlagwort hinzufügen';
+			case 'tags.create': return 'Label erstellen';
+			case 'tags.create_success': return 'Label erfolgreich erstellt';
+			case 'tags.already_exists': return 'Dieser Schlagwort-Name existiert bereits. ';
+			case 'tags.edit': return 'Schlagwort bearbeiten';
+			case 'tags.edit_success': return 'Schlagwort erfolgreich bearbeitet';
+			case 'tags.delete_success': return 'Kategorie erfolgreich gelöscht';
+			case 'tags.delete_warning_header': return 'Schlagwort löschen?';
+			case 'tags.delete_warning_message': return 'Durch diese Aktion werden keine Transaktionen gelöscht, die dieses Schlagwort haben.';
+			case 'categories.unknown': return 'Unbekannte Kategorie';
+			case 'categories.create': return 'Kategorie erstellen';
+			case 'categories.create_success': return 'Kategorie korrekt erstellt';
+			case 'categories.new_category': return 'Neue Kategorie';
+			case 'categories.already_exists': return 'Der Name dieser Kategorie existiert bereits. Willst du es verändern?';
+			case 'categories.edit': return 'Kategorie bearbeiten';
+			case 'categories.edit_success': return 'Kategorie korrekt bearbeitet';
+			case 'categories.name': return 'Kategoriename';
+			case 'categories.type': return 'Kategorietyp';
+			case 'categories.both_types': return 'Beide Typen';
+			case 'categories.subcategories': return 'Unterkategorien';
+			case 'categories.subcategories_add': return 'Unterkategorie hinzufügen';
+			case 'categories.make_parent': return 'Zur Kategorie hinzufügen';
+			case 'categories.make_child': return 'Erstelle eine Unterkategorie';
+			case 'categories.make_child_warning1': return ({required Object destiny}) => 'Diese Kategorie und ihre Unterkategorien werden zu Unterkategorien von <b>${destiny}</b>.';
+			case 'categories.make_child_warning2': return ({required Object x, required Object destiny}) => 'Deine Transaktionen <b>(${x})</b> werden in die neuen Unterkategorien verschoben, die innerhalb der Kategorie <b>${destiny}</b> erstellt wurden.';
+			case 'categories.make_child_success': return 'Unterkategorien erfolgreich erstellt';
+			case 'categories.merge': return 'Mit einer anderen Kategorie zusammenführen';
+			case 'categories.merge_warning1': return ({required Object x, required Object from, required Object destiny}) => 'Alle Transaktionen (${x}), die mit der Kategorie <b>${from}</b> verknüpft sind werden in die Kategorie <b>${destiny}</b> verschoben';
+			case 'categories.merge_warning2': return ({required Object from}) => 'Die Kategorie <b>${from}</b> werden unwiderruflich gelöscht.';
+			case 'categories.merge_success': return 'Die Kategorie wurde erfolgreich zusammengeführt';
+			case 'categories.delete_success': return 'Kategorie wurde korrekt gelöscht';
+			case 'categories.delete_warning_header': return 'Kategorie löschen?';
+			case 'categories.delete_warning_message': return ({required Object x}) => 'Durch diese Aktion werden alle Transaktionen unwiderruflich gelöscht <b>(${x})</b> im Zusammenhang mit dieser Kategorie.';
+			case 'categories.select.title': return 'Kategorien auswählen';
+			case 'categories.select.select_one': return 'Wähle eine Kategorie aus';
+			case 'categories.select.select_subcategory': return 'Wähle eine Unterkategorie';
+			case 'categories.select.without_subcategory': return 'Ohne Unterkategorie';
+			case 'categories.select.all': return 'Alle Kategorien';
+			case 'categories.select.all_short': return 'Alle';
+			case 'budgets.title': return 'Budgets';
+			case 'budgets.repeated': return 'Wiederkehrend';
+			case 'budgets.one_time': return 'Einmalig';
+			case 'budgets.annual': return 'Jährlich';
+			case 'budgets.week': return 'Wöchentlich';
+			case 'budgets.month': return 'Monatlich';
+			case 'budgets.actives': return 'Aktive';
+			case 'budgets.pending': return 'Ausstehender Start';
+			case 'budgets.finish': return 'Fertig';
+			case 'budgets.from_budgeted': return 'übrig von ';
+			case 'budgets.days_left': return 'Tage übrig';
+			case 'budgets.days_to_start': return 'Tage bis Start';
+			case 'budgets.since_expiration': return 'Tage seit Ablauf';
+			case 'budgets.no_budgets': return 'Es scheint, dass in diesem Abschnitt keine Budgets angezeigt werden können. Beginne mit der Erstellung eines Budgets, indem Du auf die Schaltfläche unten klickst';
+			case 'budgets.delete': return 'Budget löschen';
+			case 'budgets.delete_warning': return 'Diese Aktion ist irreversibel. ';
+			case 'budgets.form.title': return 'Budget hinzufügen';
+			case 'budgets.form.name': return 'Budgetname';
+			case 'budgets.form.value': return 'Menge begrenzen';
+			case 'budgets.form.create': return 'Budget hinzufügen';
+			case 'budgets.form.edit': return 'Budget bearbeiten';
+			case 'budgets.form.negative_warn': return 'Die Budgets dürfen keinen negativen Betrag haben';
+			case 'budgets.details.title': return 'Budgetdetails';
+			case 'budgets.details.statistics': return 'Statistiken';
+			case 'budgets.details.budget_value': return 'Budgetiert';
+			case 'budgets.details.expend_diary_left': return ({required Object dailyAmount, required Object remainingDays}) => 'Du kannst ${dailyAmount}/Tag für ${remainingDays} verbleibende Tage ausgeben';
+			case 'budgets.details.expend_evolution': return 'Ausgabenentwicklung';
+			case 'budgets.details.no_transactions': return 'Es scheint, dass Du im Zusammenhang mit diesem Budget keine Ausgaben getätigt hast';
+			case 'backup.export.title': return 'Daten exportieren';
+			case 'backup.export.title_short': return 'Export';
+			case 'backup.export.all': return 'Vollständige Sicherung';
+			case 'backup.export.all_descr': return 'Exportiere alle Deine Daten (Konten, Transaktionen, Budgets, Einstellungen...). ';
+			case 'backup.export.transactions': return 'Sicherung der Transaktionen';
+			case 'backup.export.transactions_descr': return 'Exportiere Deine Transaktionen im CSV-Format, damit Du sie einfacher in anderen Programmen oder Anwendungen analysieren kannst.';
+			case 'backup.export.description': return 'Lade Deine Daten in verschiedenen Formaten herunter';
+			case 'backup.export.dialog_title': return 'Datei speichern/senden';
+			case 'backup.export.success': return ({required Object x}) => 'Datei erfolgreich gespeichert/heruntergeladen in ${x}';
+			case 'backup.export.error': return 'Fehler beim Herunterladen der Datei. ';
+			case 'backup.import.title': return 'Daten importieren';
+			case 'backup.import.title_short': return 'Import';
+			case 'backup.import.restore_backup': return 'Sicherung wiederherstellen';
+			case 'backup.import.restore_backup_descr': return 'Importiere eine zuvor gespeicherte Datenbank von Monekin. Diese Aktion ersetzt alle aktuellen Anwendungsdaten durch die neuen Daten';
+			case 'backup.import.restore_backup_warn_description': return 'Beim Importieren einer neuen Datenbank gehen alle derzeit in der App gespeicherten Daten verloren. Es wird empfohlen, eine Sicherungskopie zu erstellen, bevor Du fortfährst. Lade hier keine Dateien hoch, deren Herkunft Du nicht kennst. Lade nur Dateien hoch, die Du zuvor von Monekin heruntergeladen hast.';
+			case 'backup.import.restore_backup_warn_title': return 'Alle Daten überschreiben';
+			case 'backup.import.select_other_file': return 'Andere Datei auswählen';
+			case 'backup.import.tap_to_select_file': return 'Tippe, um eine Datei auszuwählen';
+			case 'backup.import.manual_import.title': return 'Manueller Import';
+			case 'backup.import.manual_import.descr': return 'Importiere Transaktionen manuell aus einer CSV-Datei';
+			case 'backup.import.manual_import.default_account': return 'Standardkonto';
+			case 'backup.import.manual_import.remove_default_account': return 'Standardkonto entfernen';
+			case 'backup.import.manual_import.default_category': return 'Standardkategorie';
+			case 'backup.import.manual_import.select_a_column': return 'Wählen eine Spalte aus der CSV-Datei aus';
+			case 'backup.import.manual_import.steps.0': return 'Wähle Deine Datei aus';
+			case 'backup.import.manual_import.steps.1': return 'Spalte für Menge';
+			case 'backup.import.manual_import.steps.2': return 'Spalte für Konto';
+			case 'backup.import.manual_import.steps.3': return 'Spalte für Kategorie';
+			case 'backup.import.manual_import.steps.4': return 'Spalte für Datum';
+			case 'backup.import.manual_import.steps.5': return 'andere Spalten';
+			case 'backup.import.manual_import.steps_descr.0': return 'Wähle eine CSV-Datei von Deinem Gerät aus. Stelle sicher, dass die erste Zeile den Namen der einzelnen Spalten enthält';
+			case 'backup.import.manual_import.steps_descr.1': return 'Wählen die Spalte aus, in der der Wert jeder Transaktion angegeben ist. Verwende negative Werte für Ausgaben und positive Werte für Einnahmen. Verwende einen Punkt als Dezimaltrennzeichen';
+			case 'backup.import.manual_import.steps_descr.2': return 'Wähle die Spalte aus, in der das Konto angegeben ist, zu dem jede Transaktion gehört. Du kannst auch ein Standardkonto auswählen, falls wir das von Dir gewünschte Konto nicht finden können. Wenn Du kein Standardkonto angibst, wird eines mit demselben Namen erstellt ';
+			case 'backup.import.manual_import.steps_descr.3': return 'Gebe die Spalte an, in der sich der Name der Transaktionskategorie befindet. Du musst eine Standardkategorie angeben, damit wir diese Kategorie den Transaktionen zuordnen können, falls die Kategorie nicht gefunden werden kann.';
+			case 'backup.import.manual_import.steps_descr.4': return 'Wähle die Spalte aus, in der das Datum jeder Transaktion angegeben ist. Wird nichts angegeben, werden die Transaktionen mit dem aktuellen Datum erstellt.';
+			case 'backup.import.manual_import.steps_descr.5': return 'Gibt die Spalten für andere optionale Transaktionsattribute an';
+			case 'backup.import.manual_import.success': return ({required Object x}) => 'Erfolgreich ${x} Transaktionen importiert';
+			case 'backup.import.success': return 'Der Import wurde erfolgreich durchgeführt';
+			case 'backup.import.cancelled': return 'Der Import wurde vom Benutzer abgebrochen';
+			case 'backup.import.error': return 'Fehler beim Importieren der Datei. Bitte kontaktiere den Entwickler lozin.technologies@gmail.com';
+			case 'backup.about.title': return 'Informationen zu Deiner Datenbank';
+			case 'backup.about.create_date': return 'Erstellungsdatum';
+			case 'backup.about.modify_date': return 'Zuletzt geändert';
+			case 'backup.about.last_backup': return 'Letzte Sicherung';
+			case 'backup.about.size': return 'Größe';
+			case 'settings.title_long': return 'Einstellungen und Aussehen';
+			case 'settings.title_short': return 'Einstellungen';
+			case 'settings.description': return 'App-Theme, Texte und andere allgemeine Einstellungen';
+			case 'settings.edit_profile': return 'Profil bearbeiten';
+			case 'settings.lang_section': return 'Sprache und Texte';
+			case 'settings.lang_title': return 'App-Sprache';
+			case 'settings.lang_descr': return 'Sprache, in der die Texte in der App angezeigt werden';
+			case 'settings.lang_help': return 'Wenn an den Übersetzungen dieser App mitarbeiten möchten, kannst du dich an <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>unser Beschreibung</a> wenden';
+			case 'settings.locale': return 'Region';
+			case 'settings.locale_descr': return 'Lege das für Datumsangaben, Zahlen usw. zu verwendende Format fest.';
+			case 'settings.locale_warn': return 'Wenn Du die Region änderst, wird die App aktualisiert';
+			case 'settings.first_day_of_week': return 'Erster Tag der Woche';
+			case 'settings.theme_and_colors': return 'Thema und Farben';
+			case 'settings.theme': return 'Thema';
+			case 'settings.theme_auto': return 'System';
+			case 'settings.theme_light': return 'Hell';
+			case 'settings.theme_dark': return 'Dunkel';
+			case 'settings.amoled_mode': return 'AMOLED-Modus';
+			case 'settings.amoled_mode_descr': return 'Verwende nach Möglichkeit einn rein schwarzen Hintergrund. Das wird den Akku von Geräten mit AMOLED-Bildschirmen etwas schonen.';
+			case 'settings.dynamic_colors': return 'Dynamische Farben';
+			case 'settings.dynamic_colors_descr': return 'Verwende wann immer möglich die Akzentfarbe des Systems';
+			case 'settings.accent_color': return 'Akzentfarbe';
+			case 'settings.accent_color_descr': return 'Wähle die Farbe aus, mit der die App bestimmte Teile der Benutzeroberfläche hervorhebt';
+			case 'settings.security.title': return 'Sicherheit';
+			case 'settings.security.private_mode_at_launch': return 'Privatmodus beim Start';
+			case 'settings.security.private_mode_at_launch_descr': return 'Starte die App standardmäßig im privaten Modus';
+			case 'settings.security.private_mode': return 'Privatmodus';
+			case 'settings.security.private_mode_descr': return 'Alle Geldwerte ausblenden';
+			case 'settings.security.private_mode_activated': return 'Privatmodus aktiviert';
+			case 'settings.security.private_mode_deactivated': return 'Privatmodus deaktiviert';
+			case 'more.title': return 'Mehr';
+			case 'more.title_long': return 'Weitere Aktionen';
+			case 'more.data.display': return 'Daten';
+			case 'more.data.display_descr': return 'Exportiere und importiere Deine Daten, damit Du nichts verlierst';
+			case 'more.data.delete_all': return 'Meine Daten löschen';
+			case 'more.data.delete_all_header1': return 'Höre genau dort auf, Padawan ⚠️⚠️';
+			case 'more.data.delete_all_message1': return 'Bist Du sicher, dass Du fortfahren möchtest? Alle Daten werden endgültig gelöscht und können nicht wiederhergestellt werden.';
+			case 'more.data.delete_all_header2': return 'Ein letzter Schritt ⚠️⚠️';
+			case 'more.data.delete_all_message2': return 'Durch das Löschen eines Kontos löschst Du alle Deine gespeicherten persönlichen Daten. Deine Konten, Transaktionen, Budgets und Kategorien werden gelöscht und können nicht wiederhergestellt werden. Bist Du damit einverstanden?';
+			case 'more.about_us.display': return 'App-Informationen';
+			case 'more.about_us.description': return 'Schaue Dir die Bedingungen und andere relevante Informationen über Monekin an. Treten mit der Community in Kontakt, indem Du Fehler meldest, Vorschläge machst...';
+			case 'more.about_us.legal.display': return 'Rechtliche Informationen';
+			case 'more.about_us.legal.privacy': return 'Datenschutzrichtlinie';
+			case 'more.about_us.legal.terms': return 'Nutzungsbedingungen';
+			case 'more.about_us.legal.licenses': return 'Lizenzen';
+			case 'more.about_us.project.display': return 'Projekt';
+			case 'more.about_us.project.contributors': return 'Mitarbeiter';
+			case 'more.about_us.project.contributors_descr': return 'Alle Entwickler, die Monekin wachsen lassen haben';
+			case 'more.about_us.project.contact': return 'Kontaktiere uns';
+			case 'more.help_us.display': return 'Hilf uns';
+			case 'more.help_us.description': return 'Finde heraus, wie Du Monekin dabei helfen kannst, immer besser zu werden';
+			case 'more.help_us.rate_us': return 'Bewerte uns';
+			case 'more.help_us.rate_us_descr': return 'Jede Hilfe ist willkommen!';
+			case 'more.help_us.share': return 'Teile  Monekin';
+			case 'more.help_us.share_descr': return 'Teile  unsere App mit Freunden und Familie';
+			case 'more.help_us.share_text': return 'Monekin! ';
+			case 'more.help_us.thanks': return 'Danke schön!';
+			case 'more.help_us.thanks_long': return 'Deine Beiträge zu Monekin und anderen großen und kleinen Open-Source-Projekten machen großartige Projekte wie dieses möglich. Danke, dass Du dir die Zeit nimmst teilzunehmen';
+			case 'more.help_us.donate': return 'Mache eine Spende';
+			case 'more.help_us.donate_descr': return 'Mit Deiner Spende trägst dazu bei, dass die App weiterhin verbessert wird. Was gibt es Schöneres, als sich für die geleistete Arbeit zu bedanken, indem man mich zu einem Kaffee einlädt?';
+			case 'more.help_us.donate_success': return 'Spende erfolgt. Herzlichen Dank für Deine Beitrag! ❤️';
+			case 'more.help_us.donate_err': return 'Hoppla! Es scheint ein Fehler beim Empfang Deiner Zahlung aufgetreten zu sein';
+			case 'more.help_us.report': return 'Melde Fehler, hinterlasse Vorschläge ...';
+			default: return null;
+		}
+	}
+}
+
 extension on _TranslationsEs {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
-			case 'general.cancel': return 'Cancelar';
+			case 'ui_actions.cancel': return 'Cancelar';
+			case 'ui_actions.confirm': return 'Confirmar';
+			case 'ui_actions.continue_text': return 'Continuar';
+			case 'ui_actions.save': return 'Guardar';
+			case 'ui_actions.save_changes': return 'Guardar cambios';
+			case 'ui_actions.close_and_save': return 'Guardar y cerrar';
+			case 'ui_actions.add': return 'Añadir';
+			case 'ui_actions.edit': return 'Editar';
+			case 'ui_actions.delete': return 'Eliminar';
+			case 'ui_actions.see_more': return 'Ver más';
+			case 'ui_actions.select_all': return 'Seleccionar todo';
+			case 'ui_actions.deselect_all': return 'Deseleccionar todo';
+			case 'ui_actions.select': return 'Seleccionar';
+			case 'ui_actions.search': return 'Buscar';
+			case 'ui_actions.filter': return 'Filter';
+			case 'ui_actions.reset': return 'Restablecer';
+			case 'ui_actions.submit': return 'Enviar';
+			case 'ui_actions.next': return 'Siguiente';
+			case 'ui_actions.previous': return 'Anterior';
+			case 'ui_actions.back': return 'Atrás';
+			case 'ui_actions.reload': return 'Recargar';
+			case 'ui_actions.view': return 'Ver';
+			case 'ui_actions.download': return 'Descargar';
+			case 'ui_actions.upload': return 'Subir';
+			case 'ui_actions.retry': return 'Reintentar';
+			case 'ui_actions.copy': return 'Copiar';
+			case 'ui_actions.paste': return 'Pegar';
+			case 'ui_actions.undo': return 'Deshacer';
+			case 'ui_actions.redo': return 'Rehacer';
+			case 'ui_actions.open': return 'Abrir';
+			case 'ui_actions.close': return 'Cerrar';
+			case 'ui_actions.apply': return 'Aplicar';
+			case 'ui_actions.discard': return 'Descartar';
+			case 'ui_actions.refresh': return 'Actualizar';
+			case 'ui_actions.details': return 'Detalles';
+			case 'ui_actions.share': return 'Compartir';
 			case 'general.or': return 'o';
 			case 'general.understood': return 'Entendido';
 			case 'general.unspecified': return 'Sin especificar';
-			case 'general.confirm': return 'Confirmar';
-			case 'general.continue_text': return 'Continuar';
 			case 'general.quick_actions': return 'Acciones rápidas';
-			case 'general.save': return 'Guardar';
-			case 'general.save_changes': return 'Guardar cambios';
-			case 'general.close_and_save': return 'Guardar y cerrar';
-			case 'general.add': return 'Añadir';
-			case 'general.edit': return 'Editar';
-			case 'general.delete': return 'Eliminar';
 			case 'general.balance': return 'Balance';
 			case 'general.account': return 'Cuenta';
 			case 'general.accounts': return 'Cuentas';
@@ -5984,9 +9590,6 @@ extension on _TranslationsEs {
 			case 'general.today': return 'Hoy';
 			case 'general.yesterday': return 'Ayer';
 			case 'general.filters': return 'Filtros';
-			case 'general.see_more': return 'Ver más';
-			case 'general.select_all': return 'Seleccionar todo';
-			case 'general.deselect_all': return 'Deseleccionar todo';
 			case 'general.empty_warn': return 'Ops! Esto esta muy vacio';
 			case 'general.insufficient_data': return 'Datos insuficientes';
 			case 'general.show_more_fields': return 'Show more fields';
@@ -6201,6 +9804,8 @@ extension on _TranslationsEs {
 			case 'icon_selector.color': return 'Color';
 			case 'icon_selector.select_icon': return 'Selecciona un icono';
 			case 'icon_selector.select_color': return 'Selecciona un color';
+			case 'icon_selector.custom_color': return 'Color personalizado';
+			case 'icon_selector.current_color_selection': return 'Selección actual';
 			case 'icon_selector.select_account_icon': return 'Identifica tu cuenta';
 			case 'icon_selector.select_category_icon': return 'Identifica tu categoría';
 			case 'icon_selector.scopes.transport': return 'Transporte';
@@ -6336,6 +9941,8 @@ extension on _TranslationsEs {
 			case 'recurrent_transactions.details.last_payment_info': return 'Este movimiento es el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al confirmar esta acción';
 			case 'recurrent_transactions.details.delete_header': return 'Eliminar transacción recurrente';
 			case 'recurrent_transactions.details.delete_message': return 'Esta acción es irreversible y no afectará a transacciones que ya hayas confirmado/pagado';
+			case 'recurrent_transactions.status.delayed_by': return ({required Object x}) => 'Atrasado por ${x}d';
+			case 'recurrent_transactions.status.coming_in': return ({required Object x}) => 'En ${x} días';
 			case 'account.details': return 'Detalles de la cuenta';
 			case 'account.date': return 'Fecha de apertura';
 			case 'account.close_date': return 'Fecha de cierre';
@@ -6528,13 +10135,14 @@ extension on _TranslationsEs {
 			case 'settings.lang_section': return 'Idioma y textos';
 			case 'settings.lang_title': return 'Idioma de la aplicación';
 			case 'settings.lang_descr': return 'Idioma en el que se mostrarán los textos en la aplicación';
+			case 'settings.lang_help': return 'Si quieres colaborar con las traducciones de esta app puedes consultar <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>nuestra guía</a> ';
 			case 'settings.locale': return 'Región';
 			case 'settings.locale_descr': return 'Establecer el formato a utilizar para fechas, números...';
 			case 'settings.locale_warn': return 'Al cambiar la región, la aplicación se actualizará';
 			case 'settings.first_day_of_week': return 'Primer día de la semana';
 			case 'settings.theme_and_colors': return 'Tema y colores';
 			case 'settings.theme': return 'Tema';
-			case 'settings.theme_auto': return 'Definido por el sistema';
+			case 'settings.theme_auto': return 'Sistema';
 			case 'settings.theme_light': return 'Claro';
 			case 'settings.theme_dark': return 'Oscuro';
 			case 'settings.amoled_mode': return 'Modo AMOLED';
@@ -6588,23 +10196,706 @@ extension on _TranslationsEs {
 	}
 }
 
+extension on _TranslationsHu {
+	dynamic _flatMapFunction(String path) {
+		switch (path) {
+			case 'ui_actions.cancel': return 'Mégse';
+			case 'ui_actions.confirm': return 'Megerősítés';
+			case 'ui_actions.continue_text': return 'Folytatás';
+			case 'ui_actions.save': return 'Mentés';
+			case 'ui_actions.save_changes': return 'Módosítások mentése';
+			case 'ui_actions.close_and_save': return 'Mentés és bezárás';
+			case 'ui_actions.add': return 'Hozzáad';
+			case 'ui_actions.edit': return 'Szerkesztés';
+			case 'ui_actions.delete': return 'Törlés';
+			case 'ui_actions.see_more': return 'Továbbiak megtekintése';
+			case 'ui_actions.select_all': return 'Összes kijelölése';
+			case 'ui_actions.deselect_all': return 'Összes kijelölésének megszüntetése';
+			case 'ui_actions.select': return 'Kiválasztás';
+			case 'ui_actions.search': return 'Keresés';
+			case 'ui_actions.filter': return 'Szűrés';
+			case 'ui_actions.reset': return 'Alaphelyzetbe állítás';
+			case 'ui_actions.submit': return 'Beküldés';
+			case 'ui_actions.next': return 'Következő';
+			case 'ui_actions.previous': return 'Előző';
+			case 'ui_actions.back': return 'Vissza';
+			case 'ui_actions.reload': return 'Újratöltés';
+			case 'ui_actions.view': return 'Megtekintés';
+			case 'ui_actions.download': return 'Letöltés';
+			case 'ui_actions.upload': return 'Feltöltés';
+			case 'ui_actions.retry': return 'Újrapróbálkozás';
+			case 'ui_actions.copy': return 'Másolás';
+			case 'ui_actions.paste': return 'Beillesztés';
+			case 'ui_actions.undo': return 'Visszavonás';
+			case 'ui_actions.redo': return 'Újra';
+			case 'ui_actions.open': return 'Megnyitás';
+			case 'ui_actions.close': return 'Bezárás';
+			case 'ui_actions.apply': return 'Alkalmaz';
+			case 'ui_actions.discard': return 'Elvetés';
+			case 'ui_actions.refresh': return 'Frissítés';
+			case 'ui_actions.details': return 'Részletek';
+			case 'ui_actions.share': return 'Megosztás';
+			case 'general.or': return 'vagy';
+			case 'general.understood': return 'Megértve';
+			case 'general.unspecified': return 'Meghatározatlan';
+			case 'general.quick_actions': return 'Gyorsműveletek';
+			case 'general.balance': return 'Egyenleg';
+			case 'general.account': return 'Számla';
+			case 'general.accounts': return 'Számlák';
+			case 'general.categories': return 'Kategóriák';
+			case 'general.category': return 'Kategória';
+			case 'general.today': return 'Ma';
+			case 'general.yesterday': return 'Tegnap';
+			case 'general.filters': return 'Szűrők';
+			case 'general.empty_warn': return 'Hoppá! Ez nagyon üres.';
+			case 'general.insufficient_data': return 'Hiányos adatok';
+			case 'general.show_more_fields': return 'Több mező mutatása';
+			case 'general.show_less_fields': return 'Kevesebb mező mutatása';
+			case 'general.tap_to_search': return 'Koppintson a kereséshez';
+			case 'general.clipboard.success': return ({required Object x}) => '${x} a vágólapra másolva';
+			case 'general.clipboard.error': return 'Másolási hiba';
+			case 'general.time.start_date': return 'Kezdő dátum';
+			case 'general.time.end_date': return 'Befejezés dátuma';
+			case 'general.time.from_date': return 'Ettől kezdve';
+			case 'general.time.until_date': return 'Dátumig';
+			case 'general.time.date': return 'Dátum';
+			case 'general.time.datetime': return 'Időpont';
+			case 'general.time.time': return 'Idő';
+			case 'general.time.each': return 'Minden';
+			case 'general.time.after': return 'Után';
+			case 'general.time.ranges.display': return 'Időtartomány';
+			case 'general.time.ranges.it_repeat': return 'Ismétlések';
+			case 'general.time.ranges.it_ends': return 'Vége';
+			case 'general.time.ranges.forever': return 'Mindig';
+			case 'general.time.ranges.types.cycle': return 'Ciklusok';
+			case 'general.time.ranges.types.last_days': return 'Utolsó nap';
+			case 'general.time.ranges.types.last_days_form': return ({required Object x}) => '${x} előző nap';
+			case 'general.time.ranges.types.all': return 'Mindig';
+			case 'general.time.ranges.types.date_range': return 'Egyéni tartomány';
+			case 'general.time.ranges.each_range': return ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+				one: 'Minden ${range}',
+				other: 'Minden ${n} ${range}',
+			);
+			case 'general.time.ranges.each_range_until_date': return ({required num n, required Object range, required Object day}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+				one: 'Minden ${range} ${day} -ig',
+				other: 'Minden ${n} ${range} ${day} -ig',
+			);
+			case 'general.time.ranges.each_range_until_times': return ({required num n, required Object range, required Object limit}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+				one: 'Minden ${range} ${limit} alkalommal',
+				other: 'Minden ${n} ${range} ${limit} alkalommal',
+			);
+			case 'general.time.ranges.each_range_until_once': return ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+				one: 'Minden ${range} egyszer',
+				other: 'Minden ${n} ${range} egyszer',
+			);
+			case 'general.time.ranges.month': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+				one: 'Hónap',
+				other: 'Hónap',
+			);
+			case 'general.time.ranges.year': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+				one: 'Év',
+				other: 'Év',
+			);
+			case 'general.time.ranges.day': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+				one: 'Nap',
+				other: 'Nap',
+			);
+			case 'general.time.ranges.week': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+				one: 'Hét',
+				other: 'Hét',
+			);
+			case 'general.time.periodicity.display': return 'Ismétlődés';
+			case 'general.time.periodicity.no_repeat': return 'Nem ismétlődik';
+			case 'general.time.periodicity.repeat': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+				one: 'Ismétlés',
+				other: 'Ismétlések',
+			);
+			case 'general.time.periodicity.diary': return 'Naponta';
+			case 'general.time.periodicity.monthly': return 'Havonta';
+			case 'general.time.periodicity.annually': return 'Évente';
+			case 'general.time.periodicity.quaterly': return 'Negyedévente';
+			case 'general.time.periodicity.weekly': return 'Hetente';
+			case 'general.time.periodicity.custom': return 'Egyéni';
+			case 'general.time.periodicity.infinite': return 'Mindig';
+			case 'general.time.current.monthly': return 'Ebben a hónapban';
+			case 'general.time.current.annually': return 'Ebben az évben';
+			case 'general.time.current.quaterly': return 'Ebben a negyedévben';
+			case 'general.time.current.weekly': return 'Ezen a héten';
+			case 'general.time.current.infinite': return 'Mindig';
+			case 'general.time.current.custom': return 'Egyéni tartomány';
+			case 'general.time.all.diary': return 'Minden nap';
+			case 'general.time.all.monthly': return 'Minden hónapban';
+			case 'general.time.all.annually': return 'Minden évben';
+			case 'general.time.all.quaterly': return 'Minden negyedévben';
+			case 'general.time.all.weekly': return 'Minden héten';
+			case 'general.transaction_order.display': return 'Tranzakciók rendezése';
+			case 'general.transaction_order.category': return 'Kategóriánként';
+			case 'general.transaction_order.quantity': return 'Mennyiség szerint';
+			case 'general.transaction_order.date': return 'Dátum szerint';
+			case 'general.validations.form_error': return 'A folytatáshoz javítsa ki a megadott mezőket';
+			case 'general.validations.required': return 'Kötelező mező';
+			case 'general.validations.positive': return 'Pozitívnak kell lennie';
+			case 'general.validations.min_number': return ({required Object x}) => 'Nagyobbnak kell lennie, mint ${x}';
+			case 'general.validations.max_number': return ({required Object x}) => 'Kevesebbnek kell lennie, mint ${x}';
+			case 'intro.start': return 'Kezdés';
+			case 'intro.skip': return 'Kihagyás';
+			case 'intro.next': return 'Tovább';
+			case 'intro.select_your_currency': return 'Válassza ki a pénznemet';
+			case 'intro.welcome_subtitle': return 'Az Ön személyes pénzügyi menedzsere';
+			case 'intro.welcome_subtitle2': return '100% -ban nyitott, és 100% -ban ingyenes';
+			case 'intro.welcome_footer': return 'A bejelentkezéssel elfogadja az <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Adatvédelmi irányelveket</a> és az alkalmazás <a href=\' https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Felhasználási feltételeit</a>';
+			case 'intro.offline_descr_title': return 'OFFLINE SZÁMLA:';
+			case 'intro.offline_descr': return 'Az Ön adatai csak az Ön készülékén tárolódnak, és biztonságban lesznek, amíg nem távolítja el az alkalmazást, vagy nem cseréli le a telefont. Az adatvesztés megelőzése érdekében ajánlott rendszeresen biztonsági mentést készíteni az alkalmazás beállításaiból.';
+			case 'intro.offline_start': return 'Offline munkamenet indítása';
+			case 'intro.sl1_title': return 'Válassza ki a pénznemet';
+			case 'intro.sl1_descr': return 'Az alapértelmezett pénznemet a jelentésekben és az általános diagramokban használjuk. A pénznemet és az alkalmazás nyelvét később bármikor megváltoztathatja az alkalmazás beállításaiban.';
+			case 'intro.sl2_title': return 'Biztonságos, privát és megbízható';
+			case 'intro.sl2_descr': return 'Az Ön adatai csak az Önéi. Az adatokat közvetlenül az Ön eszközén tároljuk, anélkül, hogy azok külső szervereken keresztül mennének át. Ez lehetővé teszi az alkalmazás használatát internet nélkül is.';
+			case 'intro.sl2_descr2': return 'Az alkalmazás forráskódja is nyilvános, így bárki közreműködhet benne, és megnézheti, hogyan is működik.';
+			case 'intro.last_slide_title': return 'Minden kész';
+			case 'intro.last_slide_descr': return 'A Monekin segítségével végre elérheti azt az anyagi függetlenséget, amelyre annyira vágyik. Grafikonok, költségvetések, tippek, statisztikák és még sok minden más lesz megtalálható a pénzével kapcsolatban.';
+			case 'intro.last_slide_descr2': return 'Reméljük, hogy élvezni fogja az élményt! Ne habozzon kapcsolatba lépni velünk, ha kétségei, javaslatai vannak...';
+			case 'home.title': return 'Kezdőlap';
+			case 'home.filter_transactions': return 'Tranzakciók szűrése';
+			case 'home.hello_day': return 'Jó reggelt,';
+			case 'home.hello_night': return 'Jó éjszakát,';
+			case 'home.total_balance': return 'Teljes egyenleg';
+			case 'home.my_accounts': return 'Saját számláim';
+			case 'home.active_accounts': return 'Aktív számlák';
+			case 'home.no_accounts': return 'Még nincsenek számlák létrehozva';
+			case 'home.no_accounts_descr': return 'Kezdje el élvezni a Monekin összes varázsát. A tranzakciók hozzáadásához legalább egy számlát hozzon létre.';
+			case 'home.last_transactions': return 'Legutóbbi tranzakciók';
+			case 'home.should_create_account_header': return 'Hoppá!';
+			case 'home.should_create_account_message': return 'A tranzakciók létrehozásához legalább egy nem archivált számlával kell rendelkeznie';
+			case 'financial_health.display': return 'Pénzügyi állapot';
+			case 'financial_health.review.very_good': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Nagyon jó!';
+					case GenderContext.female:
+						return 'Nagyon jó!';
+				}
+			};
+			case 'financial_health.review.good': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Jó';
+					case GenderContext.female:
+						return 'Jó';
+				}
+			};
+			case 'financial_health.review.normal': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Átlagos';
+					case GenderContext.female:
+						return 'Átlagos';
+				}
+			};
+			case 'financial_health.review.bad': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Korrekt';
+					case GenderContext.female:
+						return 'Korrekt';
+				}
+			};
+			case 'financial_health.review.very_bad': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Nagyon rossz';
+					case GenderContext.female:
+						return 'Nagyon rossz';
+				}
+			};
+			case 'financial_health.review.insufficient_data': return ({required GenderContext context}) {
+				switch (context) {
+					case GenderContext.male:
+						return 'Hiányos adatok';
+					case GenderContext.female:
+						return 'Hiányos adatok';
+				}
+			};
+			case 'financial_health.review.descr.insufficient_data': return 'Úgy tűnik, nincs elég rögzített kiadásunk ahhoz, hogy kiszámítsuk a pénzügyi állapotát. Adjon hozzá néhány kiadást/bevételt ebben az időszakban, hogy tudjunk segíteni Önnek!';
+			case 'financial_health.review.descr.very_good': return 'Gratulálunk! Az Ön pénzügyi helyzete nagyon rendben van. Reméljük, hogy folytatódik a jó szériája, és továbbra is tanulni fog a Monekin-nel.';
+			case 'financial_health.review.descr.good': return 'Nagyszerű! Az Ön pénzügyi helyzete rendben van. Látogasson el az elemzés fülre, hogy megtudja, hogyan takaríthat meg még többet!';
+			case 'financial_health.review.descr.normal': return 'Az Ön pénzügyi állapota nagyjából a lakosság többi részének átlagában van ebben az időszakban.';
+			case 'financial_health.review.descr.bad': return 'Úgy tűnik, hogy az Ön pénzügyi helyzete még nem a legjobb. Tekintse át a többi diagramot, hogy többet tudjon meg a pénzügyeiről.';
+			case 'financial_health.review.descr.very_bad': return 'Hmm, a pénzügyi helyzete messze elmarad attól, aminek lennie kellene. Nézze át a többi diagramot, hogy többet tudjon meg a pénzügyeiről.';
+			case 'financial_health.months_without_income.title': return 'Túlélési arány';
+			case 'financial_health.months_without_income.subtitle': return 'Egyenlegét tekintve, mennyi ideig maradhat bevétel nélkül';
+			case 'financial_health.months_without_income.text_zero': return 'Ilyen kiadás mellett egy hónapot sem bírna ki bevétel nélkül!';
+			case 'financial_health.months_without_income.text_one': return 'Ilyen mértékű kiadások mellett aligha tudna akár egy hónapot is túlélni bevétel nélkül!';
+			case 'financial_health.months_without_income.text_other': return ({required Object n}) => 'Ezzel a költési aránnyal körülbelül <b>${n} hónapot</b> tudna túlélni jövedelem nélkül.';
+			case 'financial_health.months_without_income.text_infinite': return 'Ezzel a költési aránnyal nagyjából <b>az egész életében</b> meg tudna élni jövedelem nélkül.';
+			case 'financial_health.months_without_income.suggestion': return 'Ne feledje, hogy célszerű ezt az arányt mindig legalább 5 hónap felett tartani. Ha úgy látja, hogy nem rendelkezik elegendő megtakarítási tartalékkal, csökkentse a felesleges kiadásokat.';
+			case 'financial_health.months_without_income.insufficient_data': return 'Úgy tűnik, nincs elég rögzített kiadásunk ahhoz, hogy kiszámolhassuk, hány hónapig tudna bevétel nélkül megélni. Adjon meg néhány tranzakciót, és térjen vissza ide, hogy ellenőrizze a pénzügyi helyzetét.';
+			case 'financial_health.savings_percentage.title': return 'Megtakarítási százalék';
+			case 'financial_health.savings_percentage.subtitle': return 'A jövedelmének mekkora részét nem költi el ebben az időszakban';
+			case 'financial_health.savings_percentage.text.good': return ({required Object value}) => 'Gratulálunk! Ebben az időszakban a bevételének <b>${value}%</b>-át sikerült megtakarítania. Úgy tűnik, már rendelkezik hozzáértéssel, csak így tovább!';
+			case 'financial_health.savings_percentage.text.normal': return ({required Object value}) => 'Gratulálunk, a bevételének <b>${value}%</b>-át sikerült megtakarítania ebben az időszakban.';
+			case 'financial_health.savings_percentage.text.bad': return ({required Object value}) => 'Ebben az időszakban sikerült megtakarítania a jövedelmének <b>${value}%-át</b>. Úgy gondoljuk azonban, hogy ennél még sokkal többet is tehet!';
+			case 'financial_health.savings_percentage.text.very_bad': return 'Hűha, sajnos ebben az időszakban semmit sem sikerült megtakarítania.';
+			case 'financial_health.savings_percentage.suggestion': return 'Ne feledje, hogy a jövedelmének legalább 15-20%-át célszerű megtakarítani.';
+			case 'stats.title': return 'Statisztika';
+			case 'stats.balance': return 'Egyenleg';
+			case 'stats.final_balance': return 'Végső egyenleg';
+			case 'stats.balance_by_account': return 'Számlák szerinti egyenleg';
+			case 'stats.balance_by_account_subtitle': return 'Hol van a legtöbb pénzem?';
+			case 'stats.balance_by_currency': return 'Egyenleg pénznemenként';
+			case 'stats.balance_by_currency_subtitle': return 'Mennyi pénzem van devizában?';
+			case 'stats.balance_evolution': return 'Egyenleg alakulása';
+			case 'stats.balance_evolution_subtitle': return 'Több pénzem van, mint korábban?';
+			case 'stats.compared_to_previous_period': return 'Az előző időszakhoz képest';
+			case 'stats.cash_flow': return 'Pénzforgalom';
+			case 'stats.cash_flow_subtitle': return 'Kevesebbet költök, mint amennyit megkeresek?';
+			case 'stats.by_periods': return 'Időszakonként';
+			case 'stats.by_categories': return 'Kategóriánként';
+			case 'stats.by_tags': return 'Címkék szerint';
+			case 'stats.distribution': return 'Megoszlás';
+			case 'stats.finance_health_resume': return 'Folytatás';
+			case 'stats.finance_health_breakdown': return 'Csőd';
+			case 'icon_selector.name': return 'Név:';
+			case 'icon_selector.icon': return 'Ikon';
+			case 'icon_selector.color': return 'Szín';
+			case 'icon_selector.select_icon': return 'Ikon kiválasztása';
+			case 'icon_selector.select_color': return 'Szín kiválasztása';
+			case 'icon_selector.custom_color': return 'Egyedi szín';
+			case 'icon_selector.current_color_selection': return 'Jelenlegi kiválasztás';
+			case 'icon_selector.select_account_icon': return 'Számla azonosítása';
+			case 'icon_selector.select_category_icon': return 'Kategória azonosítása';
+			case 'icon_selector.scopes.transport': return 'Közlekedés';
+			case 'icon_selector.scopes.money': return 'Pénz';
+			case 'icon_selector.scopes.food': return 'Élelmiszer';
+			case 'icon_selector.scopes.medical': return 'Egészség';
+			case 'icon_selector.scopes.entertainment': return 'Szabadidő';
+			case 'icon_selector.scopes.technology': return 'Technológia';
+			case 'icon_selector.scopes.other': return 'Egyebek';
+			case 'icon_selector.scopes.logos_financial_institutions': return 'Pénzintézetek';
+			case 'transaction.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+				one: 'Tranzakció',
+				other: 'Tranzakciók',
+			);
+			case 'transaction.create': return 'Új tranzakció';
+			case 'transaction.new_income': return 'Új bevétel';
+			case 'transaction.new_expense': return 'Új kiadás';
+			case 'transaction.new_success': return 'A tranzakció sikeresen létrehozva';
+			case 'transaction.edit': return 'Tranzakció szerkesztése';
+			case 'transaction.edit_success': return 'A tranzakció sikeresen szerkesztve';
+			case 'transaction.edit_multiple': return 'Tranzakciók szerkesztése';
+			case 'transaction.edit_multiple_success': return ({required Object x}) => '${x} tranzakció sikeresen szerkesztve';
+			case 'transaction.duplicate': return 'Tranzakció klónozása';
+			case 'transaction.duplicate_short': return 'Klónozás';
+			case 'transaction.duplicate_warning_message': return 'Egy ezzel megegyező tranzakció jön létre ugyanazzal a dátummal, folytatni szeretné?';
+			case 'transaction.duplicate_success': return 'A tranzakció sikeresen klónozva';
+			case 'transaction.delete': return 'Tranzakció törlése';
+			case 'transaction.delete_warning_message': return 'Ez a művelet visszafordíthatatlan. A számlák aktuális egyenlege és az összes statisztikája újraszámításra kerül.';
+			case 'transaction.delete_success': return 'A tranzakció sikeresen törölve';
+			case 'transaction.delete_multiple': return 'Tranzakciók törlése';
+			case 'transaction.delete_multiple_warning_message': return ({required Object x}) => 'Ez a művelet visszafordíthatatlan, és eltávolít ${x} tranzakciót. A számlái aktuális egyenlege és minden statisztikája újraszámításra kerül.';
+			case 'transaction.delete_multiple_success': return ({required Object x}) => '${x} tranzakció megfelelően törölve';
+			case 'transaction.details': return 'A mozgás részletei';
+			case 'transaction.next_payments.accept': return 'Elfogadás';
+			case 'transaction.next_payments.skip': return 'Kihagyás';
+			case 'transaction.next_payments.skip_success': return 'A tranzakció sikeresen kihagyásra került';
+			case 'transaction.next_payments.skip_dialog_title': return 'Tranzakció kihagyása';
+			case 'transaction.next_payments.skip_dialog_msg': return ({required Object date}) => 'Ez a művelet visszafordíthatatlan. A következő átvitel dátumát módosítjuk erre: ${date}';
+			case 'transaction.next_payments.accept_today': return 'Elfogadom ma';
+			case 'transaction.next_payments.accept_in_required_date': return ({required Object date}) => 'Elfogadás a szükséges időpontban: (${date})';
+			case 'transaction.next_payments.accept_dialog_title': return 'Tranzakció elfogadása';
+			case 'transaction.next_payments.accept_dialog_msg_single': return 'A tranzakció új állapota nulla lesz. A tranzakció státuszát bármikor újra módosíthatja, amikor csak akarja.';
+			case 'transaction.next_payments.accept_dialog_msg': return ({required Object date}) => 'Ez a művelet egy új tranzakciót hoz létre ${date} dátummal. A tranzakció részleteit a tranzakciós oldalon ellenőrizheti.';
+			case 'transaction.next_payments.recurrent_rule_finished': return 'Az ismétlődő szabály teljesült, nincs több kifizetés!';
+			case 'transaction.list.empty': return 'Nem található itt megjeleníthető tranzakció. Adjon hozzá néhány tranzakciót az alkalmazásban, és talán legközelebb több szerencséje lesz.';
+			case 'transaction.list.searcher_placeholder': return 'Keresés kategória, leírás alapján...';
+			case 'transaction.list.searcher_no_results': return 'Nincs a keresési feltételeknek megfelelő tranzakció';
+			case 'transaction.list.loading': return 'További tranzakciók betöltése...';
+			case 'transaction.list.selected_short': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+				one: '${n} kiválasztva',
+				other: '${n} kiválasztva',
+			);
+			case 'transaction.list.selected_long': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+				one: '${n} tranzakció kiválasztva',
+				other: '${n} tranzakció kiválasztva',
+			);
+			case 'transaction.list.bulk_edit.dates': return 'Dátumok szerkesztése';
+			case 'transaction.list.bulk_edit.categories': return 'Kategóriák szerkesztése';
+			case 'transaction.list.bulk_edit.status': return 'Állapotok szerkesztése';
+			case 'transaction.filters.from_value': return 'Ebből az összegből';
+			case 'transaction.filters.to_value': return 'Eddig az összegig';
+			case 'transaction.filters.from_value_def': return ({required Object x}) => 'Innen: ${x}';
+			case 'transaction.filters.to_value_def': return ({required Object x}) => 'Ide: ${x}';
+			case 'transaction.filters.from_date_def': return ({required Object date}) => 'Ettől: ${date}';
+			case 'transaction.filters.to_date_def': return ({required Object date}) => 'Eddig: ${date}';
+			case 'transaction.form.validators.zero': return 'A tranzakció értéke nem lehet nulla.';
+			case 'transaction.form.validators.date_max': return 'A kiválasztott dátum az aktuális dátum után van. A tranzakció függő tranzakcióként kerül hozzáadásra.';
+			case 'transaction.form.validators.date_after_account_creation': return 'Nem hozhat létre olyan tranzakciót, amelynek a dátuma megelőzi a hozzá tartozó számla létrehozásának a dátumát.';
+			case 'transaction.form.validators.negative_transfer': return 'Az átutalás pénzbeli értéke nem lehet negatív.';
+			case 'transaction.form.validators.transfer_between_same_accounts': return 'A kiindulási és a célszámla nem lehet ugyanaz.';
+			case 'transaction.form.title': return 'Tranzakció megnevezése';
+			case 'transaction.form.title_short': return 'Cím';
+			case 'transaction.form.value': return 'A tranzakció értéke';
+			case 'transaction.form.tap_to_see_more': return 'Koppintson a további részletek megtekintéséhez';
+			case 'transaction.form.no_tags': return '-- Nincsenek címkék --';
+			case 'transaction.form.description': return 'Leírás';
+			case 'transaction.form.description_info': return 'Koppintson ide a tranzakció részletesebb leírásának megadásához.';
+			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => '${currency} átváltási árfolyam';
+			case 'transaction.form.exchange_to_preferred_in_date': return 'A tranzakció napján';
+			case 'transaction.reversed.title': return 'Megfordított tranzakció';
+			case 'transaction.reversed.title_short': return 'Megfordított';
+			case 'transaction.reversed.description_for_expenses': return 'Annak ellenére, hogy költségtranzakció, pozitív összegű. Az ilyen típusú tranzakciókat egy korábban elszámolt kiadás visszatérülésének, például visszatérítésnek vagy egy tartozás kifizetésének megjelenítésére lehet használni.';
+			case 'transaction.reversed.description_for_incomes': return 'Annak ellenére, hogy bevételi tranzakció, negatív összegű. Az ilyen típusú tranzakciók felhasználhatók a helytelenül elszámolt bevétel érvénytelenítésére vagy helyesbítésére, pénzvisszatérítés vagy pénzvisszatérítés tükrözésére, illetve tartozások kifizetésének rögzítésére.';
+			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+				one: 'Állapot',
+				other: 'Állapotok',
+			);
+			case 'transaction.status.display_long': return 'Tranzakció állapota';
+			case 'transaction.status.tr_status': return ({required Object status}) => '${status} tranzakció';
+			case 'transaction.status.none': return 'Állapot nélküli';
+			case 'transaction.status.none_descr': return 'Konkrét állapot nélküli tranzakció';
+			case 'transaction.status.reconciled': return 'Egyeztetett';
+			case 'transaction.status.reconciled_descr': return 'Ezt a tranzakciót már érvényesítették, és megfelel a bankja valós tranzakciójának.';
+			case 'transaction.status.unreconciled': return 'Nem egyeztetett';
+			case 'transaction.status.unreconciled_descr': return 'Ezt a tranzakciót még nem ellenőrizték, ezért még nem jelenik meg a valódi bankszámláin. Ez azonban szükséges a Monekin egyenlegeinek és statisztikáinak kiszámításához.';
+			case 'transaction.status.pending': return 'Függőben';
+			case 'transaction.status.pending_descr': return 'Ez a tranzakció függőben van, ezért az egyenlegek és statisztikák kiszámításakor nem kerül figyelembevételbe.';
+			case 'transaction.status.voided': return 'Érvénytelenítve';
+			case 'transaction.status.voided_descr': return 'Fizetési hiba vagy bármilyen más ok miatt érvénytelenített/törölt tranzakció. Ezt nem vesszük figyelembe az egyenlegek és statisztikák kiszámításakor.';
+			case 'transaction.types.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+				one: 'Tranzakció típusa',
+				other: 'Tranzakciótípusok',
+			);
+			case 'transaction.types.income': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+				one: 'Bevétel',
+				other: 'Bevételek',
+			);
+			case 'transaction.types.expense': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+				one: 'Kiadás',
+				other: 'Kiadások',
+			);
+			case 'transaction.types.transfer': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+				one: 'Áthelyezés',
+				other: 'Áthelyezések',
+			);
+			case 'transfer.display': return 'Áthelyezés';
+			case 'transfer.transfers': return 'Áthelyezések';
+			case 'transfer.transfer_to': return ({required Object account}) => 'Áthelyezés ide: ${account}';
+			case 'transfer.create': return 'Új átvitel';
+			case 'transfer.need_two_accounts_warning_header': return 'Hoppá!';
+			case 'transfer.need_two_accounts_warning_message': return 'A művelet végrehajtásához legalább kettő számlára van szükség. Ha módosítani vagy szerkeszteni szeretné a számla aktuális egyenlegét, kattintson a szerkesztés gombra.';
+			case 'transfer.form.from': return 'Eredeti számla';
+			case 'transfer.form.to': return 'Célszámla';
+			case 'transfer.form.value_in_destiny.title': return 'A rendeltetési helyre átutalt összeg';
+			case 'transfer.form.value_in_destiny.amount_short': return ({required Object amount}) => '${amount} a célszámlához';
+			case 'recurrent_transactions.title': return 'Ismétlődő tranzakciók';
+			case 'recurrent_transactions.title_short': return 'Ism. tranzakciók';
+			case 'recurrent_transactions.empty': return 'Úgy tűnik, hogy nincsenek ismétlődő tranzakciói. Hozzon létre havi, éves vagy heti ismétlődő tranzakciót, és az itt fog megjelenni.';
+			case 'recurrent_transactions.total_expense_title': return 'Összes kiadás periódusonként';
+			case 'recurrent_transactions.total_expense_descr': return '* Az egyes ismétlődések kezdő és befejező időpontjának figyelembevétele nélkül';
+			case 'recurrent_transactions.details.title': return 'Ismétlődő tranzakció';
+			case 'recurrent_transactions.details.descr': return 'A tranzakció következő lépései az alábbiakban láthatók. Elfogadhatja az első lépést, vagy kihagyhatja ezt a lépést.';
+			case 'recurrent_transactions.details.last_payment_info': return 'Ez a mozgatás az utolsó az ismétlődő szabályban, így ez a szabály automatikusan törlődik a művelet megerősítésekor.';
+			case 'recurrent_transactions.details.delete_header': return 'Ismétlődő tranzakció törlése';
+			case 'recurrent_transactions.details.delete_message': return 'Ez a művelet visszafordíthatatlan, és nem érinti a már visszaigazolt/befizetett tranzakciókat.';
+			case 'recurrent_transactions.status.delayed_by': return ({required Object x}) => 'Késés: ${x}d';
+			case 'recurrent_transactions.status.coming_in': return ({required Object x}) => '${x} napon belül';
+			case 'account.details': return 'Számlaadatok';
+			case 'account.date': return 'Megnyitás dátuma';
+			case 'account.close_date': return 'Lezárás dátuma';
+			case 'account.reopen': return 'Számla újranyitása';
+			case 'account.reopen_short': return 'Újranyitás';
+			case 'account.reopen_descr': return 'Biztos, hogy újra meg akarja nyitni ezt a számlát?';
+			case 'account.balance': return 'Számlaegyenleg';
+			case 'account.n_transactions': return 'Tranzakciók száma';
+			case 'account.add_money': return 'Hozzáadás';
+			case 'account.withdraw_money': return 'Pénzfelvétel';
+			case 'account.no_accounts': return 'Nem található itt megjeleníthető tranzakció. Adjon hozzá egy tranzakciót az alul található „+” gombra kattintva.';
+			case 'account.types.title': return 'Számlatípus';
+			case 'account.types.warning': return 'A számlatípus kiválasztása után az a jövőben nem változtatható meg.';
+			case 'account.types.normal': return 'Normál számla';
+			case 'account.types.normal_descr': return 'Hasznos a napi pénzügyek rögzítéséhez. Ez a leggyakoribb számla, amely lehetővé teszi kiadások, bevételek hozzáadását...';
+			case 'account.types.saving': return 'Megtakarítási számla';
+			case 'account.types.saving_descr': return 'Csak más számlákról tud pénzt hozzáadni és kivenni belőle. Tökéletes a megtakarítás megkezdéséhez.';
+			case 'account.form.name': return 'Számla neve';
+			case 'account.form.name_placeholder': return 'Pl.: Megtakarítási számla';
+			case 'account.form.notes': return 'Megjegyzések';
+			case 'account.form.notes_placeholder': return 'Írjon néhány megjegyzést/leírást erről a számláról.';
+			case 'account.form.initial_balance': return 'Kezdőegyenleg';
+			case 'account.form.current_balance': return 'Aktuális egyenleg';
+			case 'account.form.create': return 'Számla létrehozása';
+			case 'account.form.edit': return 'Számla szerkesztése';
+			case 'account.form.currency_not_found_warn': return 'Nincs információja ennek a pénznemnek az árfolyamairól. 1,0 lesz az alapértelmezett átváltási árfolyam. Ezt a beállításokban tudja majd módosítani.';
+			case 'account.form.already_exists': return 'Ugyanezzel a névvel már van egy másik is. Kérjük, adjon meg egy másikat.';
+			case 'account.form.tr_before_opening_date': return 'A számlán a nyitási dátumot megelőző dátumú tranzakciók vannak.';
+			case 'account.form.iban': return 'IBAN';
+			case 'account.form.swift': return 'SWIFT';
+			case 'account.delete.warning_header': return 'Törli a számlát?';
+			case 'account.delete.warning_text': return 'Ez a művelet törli ezt a számlát és annak az összes tranzakcióját.';
+			case 'account.delete.success': return 'A számla sikeresen törlésre került';
+			case 'account.close.title': return 'Számla lezárása';
+			case 'account.close.title_short': return 'Lezárás';
+			case 'account.close.warn': return 'Ez a számla többé nem jelenik meg bizonyos listákban, és nem tud benne tranzakciókat létrehozni az alább megadott dátumnál későbbi dátummal. Ez a művelet semmilyen tranzakciót vagy egyenleget nem érint, és ezt a számlát bármikor újra megnyithatja. ';
+			case 'account.close.should_have_zero_balance': return 'A számla lezárásához 0-nak kell lennie az aktuális egyenlegnek. Kérjük, a folytatás előtt szerkessze át a számlát.';
+			case 'account.close.should_have_no_transactions': return 'Ez a számla a megadott zárási dátumot követő tranzakciókat tartalmaz. Törölje őket, vagy szerkessze a számla zárási dátumát, mielőtt folytatná.';
+			case 'account.close.success': return 'A számla sikeresen lezárva';
+			case 'account.close.unarchive_succes': return 'A számla sikeresen újranyitásra került';
+			case 'account.select.one': return 'Egy számla kiválasztása';
+			case 'account.select.all': return 'Összes számla';
+			case 'account.select.multiple': return 'Számlák kiválasztása';
+			case 'currencies.currency_converter': return 'Valutaváltó';
+			case 'currencies.currency': return 'Pénznem';
+			case 'currencies.currency_manager': return 'Valutakezelő';
+			case 'currencies.currency_manager_descr': return 'Konfigurálja a pénznemet és annak árfolyamait másokkal együtt';
+			case 'currencies.preferred_currency': return 'Kedvelt/alap pénznem';
+			case 'currencies.change_preferred_currency_title': return 'Kedvelt pénznem módosítása';
+			case 'currencies.change_preferred_currency_msg': return 'Mostantól minden statisztika és költségvetés ebben a pénznemben jelenik meg. A számlák és tranzakciók megtartják a korábbi pénznemet. Minden elmentett árfolyam törlődik, ha ezt a műveletet végrehajtja. Szeretné folytatni?';
+			case 'currencies.form.equal_to_preferred_warn': return 'A pénznem nem lehet azonos a felhasználói pénznemmel';
+			case 'currencies.form.specify_a_currency': return 'Kérjük, adjon meg egy pénznemet';
+			case 'currencies.form.add': return 'Árfolyam hozzáadása';
+			case 'currencies.form.add_success': return 'Az árfolyam sikeresen hozzáadva';
+			case 'currencies.form.edit': return 'Árfolyam szerkesztése';
+			case 'currencies.form.edit_success': return 'Az árfolyam szerkesztése sikerült';
+			case 'currencies.delete_all_success': return 'Az árfolyamok sikeresen törlésre kerültek';
+			case 'currencies.historical': return 'Árfolyamtörténetek';
+			case 'currencies.exchange_rate': return 'Árfolyam';
+			case 'currencies.exchange_rates': return 'Árfolyamok';
+			case 'currencies.empty': return 'Adja hozzá az árfolyamokat, hogy ha az alapvalutától eltérő valutában vezetett számlái vannak, és így a grafikonok pontosabbak legyenek.';
+			case 'currencies.select_a_currency': return 'Válasszon ki egy pénznemet';
+			case 'currencies.search': return 'Keresés név vagy pénznemkód alapján';
+			case 'tags.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+				one: 'Felirat',
+				other: 'Címkék',
+			);
+			case 'tags.form.name': return 'Címke neve';
+			case 'tags.form.description': return 'Leírás';
+			case 'tags.select.title': return 'Címke kiválasztása';
+			case 'tags.select.all': return 'Minden címke';
+			case 'tags.empty_list': return 'Még nem hozott létre címkéket. A címkék és kategóriák nagyszerű lehetőséget kínálnak a pénzmozgások kategorizálására.';
+			case 'tags.without_tags': return 'Címkék nélkül';
+			case 'tags.add': return 'Hozzáadás';
+			case 'tags.create': return 'Felirat készítése';
+			case 'tags.create_success': return 'A felirat sikeresen létrehozva';
+			case 'tags.already_exists': return 'Ez a címkenév már létezik. Érdemes lehet átszerkeszteni';
+			case 'tags.edit': return 'Címke szerkesztése';
+			case 'tags.edit_success': return 'A címke sikeresen szerkesztésre került';
+			case 'tags.delete_success': return 'A kategória sikeresen törölve';
+			case 'tags.delete_warning_header': return 'Törli a címkét?';
+			case 'tags.delete_warning_message': return 'Ez a művelet nem törli az ezzel a címkével rendelkező tranzakciókat.';
+			case 'categories.unknown': return 'Ismeretlen kategória';
+			case 'categories.create': return 'Kategória létrehozása';
+			case 'categories.create_success': return 'A kategória sikeresen létrehozva';
+			case 'categories.new_category': return 'Új kategória';
+			case 'categories.already_exists': return 'Ez a kategórianév már létezik. Talán szeretné szerkeszteni?';
+			case 'categories.edit': return 'Kategória szerkesztése';
+			case 'categories.edit_success': return 'A kategória sikeresen szerkesztve lett';
+			case 'categories.name': return 'Kategória neve';
+			case 'categories.type': return 'Kategória típusa';
+			case 'categories.both_types': return 'Mindkét típus';
+			case 'categories.subcategories': return 'Alkategóriák';
+			case 'categories.subcategories_add': return 'Hozzáadás';
+			case 'categories.make_parent': return 'Kategória létrehozása';
+			case 'categories.make_child': return 'Alkategória létrehozása';
+			case 'categories.make_child_warning1': return ({required Object destiny}) => 'Ez a kategória és alkategóriái a(z) <b>${destiny}</b> alkategóriái lesznek.';
+			case 'categories.make_child_warning2': return ({required Object x, required Object destiny}) => 'A tranzakcióik <b>(${x})</b> átkerülnek a(z) <b>${destiny}</b> kategóriában létrehozott új alkategóriákba.';
+			case 'categories.make_child_success': return 'Az alkategóriák sikeresen létrehozva';
+			case 'categories.merge': return 'Összevonás másik kategóriával';
+			case 'categories.merge_warning1': return ({required Object from, required Object x, required Object destiny}) => 'A(z) <b>${from}</b> kategóriához tartozó összes tranzakció (${x}) átkerül a(z) <b>${destiny}</b> kategóriába.';
+			case 'categories.merge_warning2': return ({required Object from}) => 'A(z) <b>${from}</b> kategória visszafordíthatatlanul törlésre kerül.';
+			case 'categories.merge_success': return 'A kategória sikeresen egyesítve';
+			case 'categories.delete_success': return 'A kategória sikeresen törölve';
+			case 'categories.delete_warning_header': return 'Törli a kategóriát?';
+			case 'categories.delete_warning_message': return ({required Object x}) => 'Ez a művelet visszafordíthatatlanul törli az összes <b>(${x})</b> tranzakciót, amely ehhez a kategóriához kapcsolódik.';
+			case 'categories.select.title': return 'Kategóriák kiválasztása';
+			case 'categories.select.select_one': return 'Kategória kiválasztása';
+			case 'categories.select.select_subcategory': return 'Alkategória kiválasztása';
+			case 'categories.select.without_subcategory': return 'Alkategória nélkül';
+			case 'categories.select.all': return 'Összes kategória';
+			case 'categories.select.all_short': return 'Mind';
+			case 'budgets.title': return 'Költségvetések';
+			case 'budgets.repeated': return 'Ismétlődő';
+			case 'budgets.one_time': return 'Egyszer';
+			case 'budgets.annual': return 'Éves';
+			case 'budgets.week': return 'Hetente';
+			case 'budgets.month': return 'Havonta';
+			case 'budgets.actives': return 'Aktívok';
+			case 'budgets.pending': return 'Függőben lévő kezdés';
+			case 'budgets.finish': return 'Kész';
+			case 'budgets.from_budgeted': return 'maradt ';
+			case 'budgets.days_left': return 'nap van hátra';
+			case 'budgets.days_to_start': return 'nap van a kezdésig';
+			case 'budgets.since_expiration': return 'napja lejárt';
+			case 'budgets.no_budgets': return 'Úgy tűnik, hogy ebben a szakaszban nincs megjelenítendő költségvetés. Kezdje a költségvetés létrehozásával az alábbi gombra kattintva.';
+			case 'budgets.delete': return 'Költségvetés törlése';
+			case 'budgets.delete_warning': return 'Ez a művelet visszafordíthatatlan. Az erre az ajánlatra hivatkozó kategóriák és tranzakciók nem törlődnek.';
+			case 'budgets.form.title': return 'Hozzáadás';
+			case 'budgets.form.name': return 'Költségvetés neve';
+			case 'budgets.form.value': return 'Mennyiségkorlátozás';
+			case 'budgets.form.create': return 'Hozzáadás';
+			case 'budgets.form.edit': return 'Szerkesztés';
+			case 'budgets.form.negative_warn': return 'A költségvetések nem lehetnek negatív összegűek.';
+			case 'budgets.details.title': return 'Költségvetés részletei';
+			case 'budgets.details.statistics': return 'Statisztika';
+			case 'budgets.details.budget_value': return 'Költségvetésben';
+			case 'budgets.details.expend_diary_left': return ({required Object dailyAmount, required Object remainingDays}) => 'Naponta ${dailyAmount} -ot költhet el, még ${remainingDays} napig';
+			case 'budgets.details.expend_evolution': return 'Költségek alakulása';
+			case 'budgets.details.no_transactions': return 'Úgy tűnik, hogy ezzel a költségvetéssel kapcsolatban semmilyen kiadást nem teljesített.';
+			case 'backup.export.title': return 'Adatok exportálása';
+			case 'backup.export.title_short': return 'Exportálás';
+			case 'backup.export.all': return 'Teljes mentés';
+			case 'backup.export.all_descr': return 'Exportálja az összes adatát (számlák, tranzakciók, költségvetések, beállítások...). Bármikor újra importálhatja őket, így semmit sem veszíthet el.';
+			case 'backup.export.transactions': return 'Tranzakciók mentése';
+			case 'backup.export.transactions_descr': return 'Exportálja tranzakcióit CSV formátumban, így könnyebben elemezheti azokat más programokban vagy alkalmazásokban.';
+			case 'backup.export.description': return 'Adatok letöltése különböző formátumokban';
+			case 'backup.export.dialog_title': return 'Fájl mentése/küldése';
+			case 'backup.export.success': return ({required Object x}) => 'A fájl sikeresen mentve/letöltve ide: ${x}';
+			case 'backup.export.error': return 'Hiba a fájl letöltésében. Kérjük, lépjen kapcsolatba a fejlesztővel a lozin.technologies@gmail.com címen keresztül.';
+			case 'backup.import.title': return 'Adatok importálása';
+			case 'backup.import.title_short': return 'Importálás';
+			case 'backup.import.restore_backup': return 'Mentés visszaállítása';
+			case 'backup.import.restore_backup_descr': return 'Importáljon egy korábban mentett adatbázist a Monekinből. Ez a művelet minden jelenlegi alkalmazásadatot lecseréli az új adatokra.';
+			case 'backup.import.restore_backup_warn_description': return 'Új adatbázis importálásakor az alkalmazásban jelenleg mentett összes adat elveszik. A folytatás előtt ajánlatos biztonsági másolatot készíteni. Ne töltsön fel ide olyan fájlt, amelynek eredetét nem ismeri, csak azokat a fájlokat töltse fel, amelyeket korábban letöltött a Monekin oldaláról.';
+			case 'backup.import.restore_backup_warn_title': return 'Az összes adat felülírása';
+			case 'backup.import.select_other_file': return 'Másik fájl kiválasztása';
+			case 'backup.import.tap_to_select_file': return 'Koppintson a fájl kiválasztásához';
+			case 'backup.import.manual_import.title': return 'Kézi importálás';
+			case 'backup.import.manual_import.descr': return 'Tranzakciók kézi importálása egy .csv fájlból';
+			case 'backup.import.manual_import.default_account': return 'Alapértelm. számla';
+			case 'backup.import.manual_import.remove_default_account': return 'Alapértelmezett számla törlése';
+			case 'backup.import.manual_import.default_category': return 'Alapértelm. kategória';
+			case 'backup.import.manual_import.select_a_column': return 'Válasszon ki egy oszlopot a .csv fájlból';
+			case 'backup.import.manual_import.steps.0': return 'Fájl kiválasztása';
+			case 'backup.import.manual_import.steps.1': return 'Mennyiség oszlop';
+			case 'backup.import.manual_import.steps.2': return 'Számlaoszlop';
+			case 'backup.import.manual_import.steps.3': return 'Kategória oszlop';
+			case 'backup.import.manual_import.steps.4': return 'Dátum oszlop';
+			case 'backup.import.manual_import.steps.5': return 'egyéb oszlopok';
+			case 'backup.import.manual_import.steps_descr.0': return 'Válasszon ki egy .csv fájlt az eszközről. Győződjön meg arról, hogy van egy első sora, amely leírja az egyes oszlopok nevét.';
+			case 'backup.import.manual_import.steps_descr.1': return 'Válassza ki azt az oszlopot, amelyben az egyes tranzakciók dátuma meg van adva. Ha nincs megadva, a tranzakciók az aktuális dátummal jönnek létre. Válassza ki azt az oszlopot, ahol az egyes tranzakciók értéke meg van adva. Használjon negatív értékeket a kiadásokhoz és pozitív értékeket a bevételekhez. Használjon pontot tizedeselválasztóként.';
+			case 'backup.import.manual_import.steps_descr.2': return 'Válassza ki azt az oszlopot, amelyben meg van adva az a számla, amelyhez az egyes tranzakciók tartoznak. Kiválaszthat egy alapértelmezett fiókot is arra az esetre, ha nem találnánk a kívánt fiókot. Ha nincs megadva alapértelmezett fiók, akkor létrehozunk egyet ugyanazzal a névvel. ';
+			case 'backup.import.manual_import.steps_descr.3': return 'Adja meg azt az oszlopot, ahol a tranzakciókategória neve található. Meg kell adnia egy alapértelmezett kategóriát, hogy ezt a kategóriát rendeljük hozzá a tranzakciókhoz, ha a kategória nem található.';
+			case 'backup.import.manual_import.steps_descr.4': return 'Válassza ki azt az oszlopot, amelyben az egyes tranzakciók dátuma meg van adva. Ha nincs megadva, a tranzakciók az aktuális dátummal jönnek létre.';
+			case 'backup.import.manual_import.steps_descr.5': return 'Az egyéb opcionális tranzakciós attribútumok oszlopainak meghatározása';
+			case 'backup.import.manual_import.success': return ({required Object x}) => '${x} tranzakció sikeresen importálva';
+			case 'backup.import.success': return 'Az importálás sikeresen végrehajtva';
+			case 'backup.import.cancelled': return 'Az importálást a felhasználó megszakította';
+			case 'backup.import.error': return 'Hiba történt importálásakor. Kérjük, lépjen kapcsolatba a fejlesztővel a lozin.technologies@gmail.com címen keresztül.';
+			case 'backup.about.title': return 'Információk az adatbázisról';
+			case 'backup.about.create_date': return 'Létrehozás dátuma';
+			case 'backup.about.modify_date': return 'Utolsó módosítása';
+			case 'backup.about.last_backup': return 'Utolsó mentés';
+			case 'backup.about.size': return 'Méret';
+			case 'settings.title_long': return 'Beállítások és megjelenés';
+			case 'settings.title_short': return 'Beállítások';
+			case 'settings.description': return 'Alkalmazás témája, szövegek és egyéb általános beállítások';
+			case 'settings.edit_profile': return 'Profil szerkesztése';
+			case 'settings.lang_section': return 'Nyelv és szövegek';
+			case 'settings.lang_title': return 'Alkalmazás nyelve';
+			case 'settings.lang_descr': return 'Nyelv, amelyen a szövegek megjelennek az alkalmazásban';
+			case 'settings.lang_help': return 'Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'> útmutatónk</a>';
+			case 'settings.locale': return 'Régió';
+			case 'settings.locale_descr': return 'Dátumok, számformátumok beállítása...';
+			case 'settings.locale_warn': return 'Régióváltáskor az alkalmazás frissülni fog';
+			case 'settings.first_day_of_week': return 'A hét első napja';
+			case 'settings.theme_and_colors': return 'Témák és színek';
+			case 'settings.theme': return 'Téma';
+			case 'settings.theme_auto': return 'Rendszer';
+			case 'settings.theme_light': return 'Világos';
+			case 'settings.theme_dark': return 'Sötét';
+			case 'settings.amoled_mode': return 'AMOLED mód';
+			case 'settings.amoled_mode_descr': return 'Ha lehetséges, használjon tiszta fekete háttérképet. Ez némileg segíti az AMOLED képernyővel rendelkező készülékek akkumulátorát.';
+			case 'settings.dynamic_colors': return 'Dinamikus színek';
+			case 'settings.dynamic_colors_descr': return 'Amikor csak lehetséges, használja a rendszer kiemelő színét';
+			case 'settings.accent_color': return 'Kiemelő szín';
+			case 'settings.accent_color_descr': return 'Válassza ki, hogy az alkalmazás milyen színnel emelje ki a felület bizonyos részeit';
+			case 'settings.security.title': return 'Biztonság';
+			case 'settings.security.private_mode_at_launch': return 'Privát mód indításkor';
+			case 'settings.security.private_mode_at_launch_descr': return 'Az alkalmazás alapértelmezés szerinti indítása privát módban';
+			case 'settings.security.private_mode': return 'Privát mód';
+			case 'settings.security.private_mode_descr': return 'Minden pénzösszeg elrejtése';
+			case 'settings.security.private_mode_activated': return 'Privát mód aktiválva';
+			case 'settings.security.private_mode_deactivated': return 'Privát mód letiltva';
+			case 'more.title': return 'Továbbiak';
+			case 'more.title_long': return 'További műveletek';
+			case 'more.data.display': return 'Adatok';
+			case 'more.data.display_descr': return 'Exportálja és importálja az adatait, hogy ne veszítsen el semmit se';
+			case 'more.data.delete_all': return 'Adataim törlése';
+			case 'more.data.delete_all_header1': return 'Álljon meg ⚠️⚠️';
+			case 'more.data.delete_all_message1': return 'Biztosan benne, hogy folytatja? Minden adata véglegesen törlődik, és nem állítható vissza';
+			case 'more.data.delete_all_header2': return 'Még egy utolsó lépés ⚠️⚠️';
+			case 'more.data.delete_all_message2': return 'A fiók törlésével törli az összes tárolt személyes adatát. A számlái, tranzakciói, költségvetései és kategóriái törlődnek, és nem állíthatók helyre. Egyetért ezzel?';
+			case 'more.about_us.display': return 'Alkalmazásinformációk';
+			case 'more.about_us.description': return 'Nézze meg a Monekinre vonatkozó feltételeket és egyéb fontos információkat. Lépjen kapcsolatba a közösséggel a hibák bejelentésével, javaslatok megtételével...';
+			case 'more.about_us.legal.display': return 'Jogi információk';
+			case 'more.about_us.legal.privacy': return 'Adatvédelem';
+			case 'more.about_us.legal.terms': return 'Használati feltételek';
+			case 'more.about_us.legal.licenses': return 'Licencek';
+			case 'more.about_us.project.display': return 'Projekt';
+			case 'more.about_us.project.contributors': return 'Közreműködők';
+			case 'more.about_us.project.contributors_descr': return 'Az összes fejlesztő, akik hozzájárultak a Monekin létrehozásához';
+			case 'more.about_us.project.contact': return 'Kapcsolatfelvétel';
+			case 'more.help_us.display': return 'Segítsen nekünk';
+			case 'more.help_us.description': return 'Tudja meg, hogyan segíthet a Monekinnek abban, hogy egyre jobb és jobb legyen';
+			case 'more.help_us.rate_us': return 'Értékeljen minket';
+			case 'more.help_us.rate_us_descr': return 'Bármilyen értékelést szívesen fogadunk!';
+			case 'more.help_us.share': return 'Monekin megosztása';
+			case 'more.help_us.share_descr': return 'Ossza meg alkalmazásunkat a barátaival és a családtagjaival';
+			case 'more.help_us.share_text': return 'Monekin! A legjobb személyes pénzügyi alkalmazás. Töltse le innen';
+			case 'more.help_us.thanks': return 'Köszönjük!';
+			case 'more.help_us.thanks_long': return 'Az Ön hozzájárulása a Monekinhez és más nyílt forráskódú projektekhez, legyen az kicsi vagy nagy, lehetővé teszi az ehhez hasonló nagyszerű projekteket. Köszönjük, hogy időt szán a közreműködésre.';
+			case 'more.help_us.donate': return 'Adományozás';
+			case 'more.help_us.donate_descr': return 'Az adományával segít az alkalmazás további fejlesztésében. Mi lehetne jobb módja, mint megköszönni az elvégzett munkát egy kávéra való meghívással?';
+			case 'more.help_us.donate_success': return 'Az adományozás megtörtént. Köszönöm szépen a közreműködését! ❤️';
+			case 'more.help_us.donate_err': return 'Hoppá! Úgy tűnik, hiba történt a fizetés fogadásakor';
+			case 'more.help_us.report': return 'Hibák jelentése, javaslatok...';
+			default: return null;
+		}
+	}
+}
+
 extension on _TranslationsUk {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
-			case 'general.cancel': return 'Скасувати';
+			case 'ui_actions.cancel': return 'Скасувати';
+			case 'ui_actions.confirm': return 'Підтвердити';
+			case 'ui_actions.continue_text': return 'Продовжити';
+			case 'ui_actions.save': return 'Зберегти';
+			case 'ui_actions.save_changes': return 'Зберегти зміни';
+			case 'ui_actions.close_and_save': return 'Закрити та зберегти';
+			case 'ui_actions.add': return 'Додати';
+			case 'ui_actions.edit': return 'Редагувати';
+			case 'ui_actions.delete': return 'Видалити';
+			case 'ui_actions.see_more': return 'Детальніше';
+			case 'ui_actions.select_all': return 'Вибрати все';
+			case 'ui_actions.deselect_all': return 'Скасувати вибір всього';
+			case 'ui_actions.select': return 'Вибрати';
+			case 'ui_actions.search': return 'Пошук';
+			case 'ui_actions.filter': return 'Фільтр';
+			case 'ui_actions.reset': return 'Скинути';
+			case 'ui_actions.submit': return 'Надіслати';
+			case 'ui_actions.next': return 'Далі';
+			case 'ui_actions.previous': return 'Назад';
+			case 'ui_actions.back': return 'Повернутися';
+			case 'ui_actions.reload': return 'Перезавантажити';
+			case 'ui_actions.view': return 'Переглянути';
+			case 'ui_actions.download': return 'Завантажити';
+			case 'ui_actions.upload': return 'Завантажити файл';
+			case 'ui_actions.retry': return 'Спробувати знову';
+			case 'ui_actions.copy': return 'Копіювати';
+			case 'ui_actions.paste': return 'Вставити';
+			case 'ui_actions.undo': return 'Скасувати дію';
+			case 'ui_actions.redo': return 'Повторити дію';
+			case 'ui_actions.open': return 'Відкрити';
+			case 'ui_actions.close': return 'Закрити';
+			case 'ui_actions.apply': return 'Застосувати';
+			case 'ui_actions.discard': return 'Скасувати зміни';
+			case 'ui_actions.refresh': return 'Оновити';
+			case 'ui_actions.details': return 'Деталі';
+			case 'ui_actions.share': return 'Поділитися';
 			case 'general.or': return 'або';
 			case 'general.understood': return 'Зрозуміло';
 			case 'general.unspecified': return 'Не вказано';
-			case 'general.confirm': return 'Підтвердити';
-			case 'general.continue_text': return 'Продовжити';
 			case 'general.quick_actions': return 'Швидкі дії';
-			case 'general.save': return 'Зберегти';
-			case 'general.save_changes': return 'Зберегти зміни';
-			case 'general.close_and_save': return 'Закрити та зберегти';
-			case 'general.add': return 'Додати';
-			case 'general.edit': return 'Редагувати';
 			case 'general.balance': return 'Баланс';
-			case 'general.delete': return 'Видалити';
 			case 'general.account': return 'Рахунок';
 			case 'general.accounts': return 'Рахунки';
 			case 'general.categories': return 'Категорії';
@@ -6612,9 +10903,6 @@ extension on _TranslationsUk {
 			case 'general.today': return 'Сьогодні';
 			case 'general.yesterday': return 'Вчора';
 			case 'general.filters': return 'Фільтри';
-			case 'general.see_more': return 'Побачити більше';
-			case 'general.select_all': return 'Вибрати всі';
-			case 'general.deselect_all': return 'Скасувати вибір усіх';
 			case 'general.empty_warn': return 'Ой! Тут порожньо';
 			case 'general.insufficient_data': return 'Недостатньо даних';
 			case 'general.show_more_fields': return 'Показати більше полів';
@@ -6827,6 +11115,8 @@ extension on _TranslationsUk {
 			case 'icon_selector.icon': return 'Іконка';
 			case 'icon_selector.color': return 'Колір';
 			case 'icon_selector.select_color': return 'Виберіть колір';
+			case 'icon_selector.custom_color': return 'Користувацький колір';
+			case 'icon_selector.current_color_selection': return 'Поточний вибір';
 			case 'icon_selector.select_icon': return 'Виберіть іконку';
 			case 'icon_selector.select_account_icon': return 'Ідентифікуйте ваш рахунок';
 			case 'icon_selector.select_category_icon': return 'Ідентифікуйте вашу категорію';
@@ -6963,6 +11253,8 @@ extension on _TranslationsUk {
 			case 'recurrent_transactions.details.last_payment_info': return 'Цей рух є останнім за повторюваною правилою, тому це правило буде автоматично видалено при підтвердженні цієї дії';
 			case 'recurrent_transactions.details.delete_header': return 'Видалити повторювану транзакцію';
 			case 'recurrent_transactions.details.delete_message': return 'Ця дія є незворотньою і не вплине на транзакції, які ви вже підтвердили/оплатили';
+			case 'recurrent_transactions.status.delayed_by': return ({required Object x}) => 'Затримано на ${x}d';
+			case 'recurrent_transactions.status.coming_in': return ({required Object x}) => 'Через ${x} днів';
 			case 'account.details': return 'Деталі рахунку';
 			case 'account.date': return 'Дата відкриття';
 			case 'account.close_date': return 'Дата закриття';
@@ -7155,13 +11447,14 @@ extension on _TranslationsUk {
 			case 'settings.lang_section': return 'Мова та тексти';
 			case 'settings.lang_title': return 'Мова додатку';
 			case 'settings.lang_descr': return 'Мова, в якій будуть відображатися тексти в додатку';
+			case 'settings.lang_help': return 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>нашого посібник</ a>';
 			case 'settings.locale': return 'Регіон';
 			case 'settings.locale_descr': return 'Встановіть формат, який буде використовуватися для дат, чисел...';
 			case 'settings.locale_warn': return 'Після зміни регіону додаток оновиться';
 			case 'settings.first_day_of_week': return 'Перший день тижня';
 			case 'settings.theme_and_colors': return 'Тема та кольори';
 			case 'settings.theme': return 'Тема';
-			case 'settings.theme_auto': return 'Визначено системою';
+			case 'settings.theme_auto': return 'система';
 			case 'settings.theme_light': return 'Світла';
 			case 'settings.theme_dark': return 'Темна';
 			case 'settings.amoled_mode': return 'Режим AMOLED';
@@ -7218,20 +11511,47 @@ extension on _TranslationsUk {
 extension on _TranslationsZhTw {
 	dynamic _flatMapFunction(String path) {
 		switch (path) {
-			case 'general.cancel': return '取消';
+			case 'ui_actions.cancel': return '取消';
+			case 'ui_actions.confirm': return '確認';
+			case 'ui_actions.continue_text': return '繼續';
+			case 'ui_actions.save': return '保存';
+			case 'ui_actions.save_changes': return '儲存變更';
+			case 'ui_actions.close_and_save': return '儲存並關閉';
+			case 'ui_actions.add': return '添加';
+			case 'ui_actions.edit': return '編輯';
+			case 'ui_actions.delete': return '刪除';
+			case 'ui_actions.see_more': return '查看更多';
+			case 'ui_actions.select_all': return '全選';
+			case 'ui_actions.deselect_all': return '取消全選';
+			case 'ui_actions.select': return '選擇';
+			case 'ui_actions.search': return '搜尋';
+			case 'ui_actions.filter': return '篩選';
+			case 'ui_actions.reset': return '重設';
+			case 'ui_actions.submit': return '提交';
+			case 'ui_actions.next': return '下一步';
+			case 'ui_actions.previous': return '上一步';
+			case 'ui_actions.back': return '返回';
+			case 'ui_actions.reload': return '重新載入';
+			case 'ui_actions.view': return '檢視';
+			case 'ui_actions.download': return '下載';
+			case 'ui_actions.upload': return '上傳';
+			case 'ui_actions.retry': return '重試';
+			case 'ui_actions.copy': return '複製';
+			case 'ui_actions.paste': return '貼上';
+			case 'ui_actions.undo': return '還原';
+			case 'ui_actions.redo': return '重做';
+			case 'ui_actions.open': return '開啟';
+			case 'ui_actions.close': return '關閉';
+			case 'ui_actions.apply': return '套用';
+			case 'ui_actions.discard': return '捨棄';
+			case 'ui_actions.refresh': return '重新整理';
+			case 'ui_actions.details': return '詳細資訊';
+			case 'ui_actions.share': return '分享';
 			case 'general.or': return '或';
 			case 'general.understood': return '明白了';
 			case 'general.unspecified': return '未指定';
-			case 'general.confirm': return '確認';
-			case 'general.continue_text': return '繼續';
 			case 'general.quick_actions': return '快速行動';
-			case 'general.save': return '保存';
-			case 'general.save_changes': return '儲存變更';
-			case 'general.close_and_save': return '儲存並關閉';
-			case 'general.add': return '添加';
-			case 'general.edit': return '編輯';
 			case 'general.balance': return '平衡';
-			case 'general.delete': return '刪除';
 			case 'general.account': return '帳戶';
 			case 'general.accounts': return '帳戶';
 			case 'general.categories': return '類別';
@@ -7239,9 +11559,6 @@ extension on _TranslationsZhTw {
 			case 'general.today': return '今天';
 			case 'general.yesterday': return '昨天';
 			case 'general.filters': return '過濾器';
-			case 'general.see_more': return '查看更多';
-			case 'general.select_all': return '全選';
-			case 'general.deselect_all': return '取消全選';
 			case 'general.empty_warn': return '哦！這裡非常空';
 			case 'general.insufficient_data': return '數據不足';
 			case 'general.show_more_fields': return '顯示更多欄位';
@@ -7455,6 +11772,8 @@ extension on _TranslationsZhTw {
 			case 'icon_selector.color': return '顏色';
 			case 'icon_selector.select_icon': return '選擇一個圖示';
 			case 'icon_selector.select_color': return '選擇一種顏色';
+			case 'icon_selector.current_color_selection': return '目前選擇';
+			case 'icon_selector.custom_color': return '自訂顏色';
 			case 'icon_selector.select_account_icon': return '識別您的帳戶';
 			case 'icon_selector.select_category_icon': return '確定您的類別';
 			case 'icon_selector.scopes.transport': return '運輸';
@@ -7590,6 +11909,8 @@ extension on _TranslationsZhTw {
 			case 'recurrent_transactions.details.last_payment_info': return '此動作是循環規則的最後一個，因此當確認此動作時，該規則將自動刪除';
 			case 'recurrent_transactions.details.delete_header': return '刪除重複交易';
 			case 'recurrent_transactions.details.delete_message': return '此操作不可逆轉，不會影響您已確認/付款的交易';
+			case 'recurrent_transactions.status.delayed_by': return ({required Object x}) => '延遲了 ${x}d';
+			case 'recurrent_transactions.status.coming_in': return ({required Object x}) => '${x} 天後';
 			case 'account.details': return '帳戶詳細資料';
 			case 'account.date': return '開業日期';
 			case 'account.close_date': return '截止日期';
@@ -7782,13 +12103,14 @@ extension on _TranslationsZhTw {
 			case 'settings.lang_section': return '語言和文本';
 			case 'settings.lang_title': return '應用程式語言';
 			case 'settings.lang_descr': return '應用程式中顯示文字的語言';
+			case 'settings.lang_help': return '如果您想與此應用程式的翻譯合作，您可以參考<a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>我們的指南</a>';
 			case 'settings.locale': return '地區';
 			case 'settings.locale_descr': return '設定用於日期、數字的格式...';
 			case 'settings.locale_warn': return '更改區域時應用程式將更新';
 			case 'settings.first_day_of_week': return '一週的第一天';
 			case 'settings.theme_and_colors': return '主題和顏色';
 			case 'settings.theme': return '主題';
-			case 'settings.theme_auto': return '由系統定義';
+			case 'settings.theme_auto': return '系統';
 			case 'settings.theme_light': return '明亮主題';
 			case 'settings.theme_dark': return '黑暗主題';
 			case 'settings.amoled_mode': return 'amoled mode';

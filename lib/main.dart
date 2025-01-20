@@ -1,4 +1,3 @@
-import 'package:drift/drift.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -9,23 +8,50 @@ import 'package:monekin/app/onboarding/intro.page.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/core/database/services/user-setting/utils/get_theme_from_string.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/routes/root_navigator_observer.dart';
+import 'package:monekin/core/utils/logger.dart';
 import 'package:monekin/core/utils/scroll_behavior_override.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await PrivateModeService.instance.initializePrivateMode();
+  await UserSettingService.instance.initializeGlobalStateMap();
+  await AppDataService.instance.initializeGlobalStateMap();
 
-  runApp(const MonekinAppEntryPoint());
+  PrivateModeService.instance
+      .setPrivateMode(appStateSettings[SettingKey.privateModeAtLaunch] == '1');
+
+  runApp(InitializeApp(key: appStateKey));
 }
 
 final GlobalKey<TabsPageState> tabsPageKey = GlobalKey();
 final GlobalKey<NavigationSidebarState> navigationSidebarKey = GlobalKey();
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+// ignore: library_private_types_in_public_api
+GlobalKey<_InitializeAppState> appStateKey = GlobalKey();
+
+class InitializeApp extends StatefulWidget {
+  const InitializeApp({super.key});
+
+  @override
+  State<InitializeApp> createState() => _InitializeAppState();
+}
+
+class _InitializeAppState extends State<InitializeApp> {
+  void refreshAppState() {
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // ignore: prefer_const_constructors
+    return MonekinAppEntryPoint(key: const ValueKey('App Entry Point'));
+  }
+}
 
 class MonekinAppEntryPoint extends StatelessWidget {
   const MonekinAppEntryPoint({
@@ -34,81 +60,40 @@ class MonekinAppEntryPoint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("------------------ APP ENTRY POINT ------------------");
+    Logger.printDebug('------------------ APP ENTRY POINT ------------------');
 
-    return StreamBuilder(
-        stream: UserSettingService.instance.getSettings((p0) =>
-            p0.settingKey.equalsValue(SettingKey.appLanguage) |
-            p0.settingKey.equalsValue(SettingKey.themeMode) |
-            p0.settingKey.equalsValue(SettingKey.amoledMode) |
-            p0.settingKey.equalsValue(SettingKey.accentColor)),
-        builder: (context, snapshot) {
-          print('Finding initial user settings...');
+    final lang = appStateSettings[SettingKey.appLanguage];
 
-          if (!snapshot.hasData) {
-            return Container();
-          }
+    if (lang != null) {
+      Logger.printDebug('App language found. Setting the locale to `$lang`...');
+      LocaleSettings.setLocaleRaw(lang);
+    } else {
+      Logger.printDebug(
+          'App language not found. Setting the user device language...');
 
-          final userSettings = snapshot.data!;
+      LocaleSettings.useDeviceLocale();
 
-          final lang = userSettings
-              .firstWhere(
-                  (element) => element.settingKey == SettingKey.appLanguage)
-              .settingValue;
+      // We have nothing to worry here since the useDeviceLocale() func will set the default lang (english in our case) if
+      // the user is using a non-supported language in his device
 
-          if (lang != null) {
-            print('App language found. Setting the locale to `$lang`...');
-            LocaleSettings.setLocaleRaw(lang);
-          } else {
-            print(
-                'App language not found. Setting the user device language...');
+      UserSettingService.instance
+          .setItem(
+            SettingKey.appLanguage,
+            LocaleSettings.currentLocale.languageTag,
+          )
+          .then((value) => null);
+    }
 
-            LocaleSettings.useDeviceLocale();
-
-            // We have nothing to worry here since the useDeviceLocale() func will set the default lang (english in our case) if
-            // the user is using a non-supported language in his device
-
-            UserSettingService.instance
-                .setSetting(
-                  SettingKey.appLanguage,
-                  LocaleSettings.currentLocale.languageTag,
-                )
-                .then((value) => null);
-          }
-
-          return TranslationProvider(
-            child: StreamBuilder(
-                stream: AppDataService.instance
-                    .getAppDataItem(AppDataKey.introSeen)
-                    .map((event) => event == '1'),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Container();
-                  }
-
-                  return MaterialAppContainer(
-                    introSeen: snapshot.data!,
-                    amoledMode: userSettings
-                            .firstWhere((element) =>
-                                element.settingKey == SettingKey.amoledMode)
-                            .settingValue! ==
-                        '1',
-                    accentColor: userSettings
-                        .firstWhere((element) =>
-                            element.settingKey == SettingKey.accentColor)
-                        .settingValue!,
-                    themeMode: ThemeMode.values.byName(userSettings
-                        .firstWhere((element) =>
-                            element.settingKey == SettingKey.themeMode)
-                        .settingValue!),
-                  );
-                }),
-          );
-        });
+    return TranslationProvider(
+      child: MaterialAppContainer(
+        introSeen: appStateData[AppDataKey.introSeen] == '1',
+        amoledMode: appStateSettings[SettingKey.amoledMode]! == '1',
+        accentColor: appStateSettings[SettingKey.accentColor]!,
+        themeMode: getThemeFromString(appStateSettings[SettingKey.themeMode]!),
+      ),
+    );
   }
 }
-
-int refresh = 1;
 
 class MaterialAppContainer extends StatelessWidget {
   const MaterialAppContainer(
@@ -133,7 +118,6 @@ class MaterialAppContainer extends StatelessWidget {
         builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
       return MaterialApp(
         title: 'Monekin',
-        key: ValueKey(refresh),
         debugShowCheckedModeBanner: false,
         locale: TranslationProvider.of(context).flutterLocale,
         scrollBehavior: ScrollBehaviorOverride(),
@@ -168,12 +152,6 @@ class MaterialAppContainer extends StatelessWidget {
                             introSeen ? getNavigationSidebarWidth(context) : 0,
                         color: Theme.of(context).canvasColor,
                       ),
-                      if (BreakPoint.of(context).isLargerThan(BreakpointID.sm))
-                        Container(
-                          width: 2,
-                          height: MediaQuery.of(context).size.height,
-                          color: Theme.of(context).dividerColor,
-                        ),
                       Expanded(child: child ?? const SizedBox.shrink()),
                     ],
                   ),

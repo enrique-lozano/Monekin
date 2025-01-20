@@ -13,7 +13,7 @@ publish_to: 'none'
 # The X represents the major releases, and can be up to infinity. Never start by a zero
 # The Y represents the minor releases, and can be up to 99. Always start by a zero
 # The Z represents the patch releases, and can be up to 999. Always start by a zero
-version: 7.1.2+710002
+version: 7.4.0+740000
 
 environment:
   flutter: 3.22.3
@@ -51,9 +51,9 @@ dependencies:
   permission_handler: ^11.3.0
   json_annotation: ^4.8.1
   fl_chart: ^0.69.0
-  file_picker: ^8.0.7
-  share_plus: ^9.0.0
-  url_launcher: ^6.1.11
+  file_picker: ^8.1.7
+  share_plus: ^10.1.2
+  url_launcher: ^6.3.1
   uuid: ^4.5.1
   csv: ^6.0.0
   dotted_border: ^2.0.0+3
@@ -63,6 +63,7 @@ dependencies:
   copy_with_extension: ^5.0.4
   freezed_annotation: ^2.4.1
   in_app_purchase: ^3.1.11
+  flutter_colorpicker: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -73,7 +74,7 @@ dev_dependencies:
   # Generators:
   build_runner: ^2.3.3
   json_serializable: ^6.2.0
-  flutter_launcher_icons: ^0.13.1 # Package to regenerate icons (config later in this file). To run, type `dart run flutter_launcher_icons`
+  flutter_launcher_icons: ^0.14.2 # Package to regenerate icons (config later in this file). To run, type `dart run flutter_launcher_icons`
   drift_dev: ^2.13.2
   slang_build_runner: ^3.32.0 # To regenerate the translations run 'dart run slang'
   copy_with_extension_gen: ^5.0.4

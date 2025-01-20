@@ -101,7 +101,7 @@ class _IntervalSelectorPageState extends State<IntervalSelectorPage> {
                   }
                 },
                 icon: const Icon(Icons.save_rounded),
-                label: Text(t.general.continue_text)))
+                label: Text(t.ui_actions.continue_text)))
       ],
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(top: 16),

@@ -24,7 +24,7 @@ class TransactionViewActionService {
 
     return [
       ListTileActionItem(
-        label: t.general.edit,
+        label: t.ui_actions.edit,
         icon: Icons.edit,
         onClick: () => RouteUtils.pushRoute(
             context,
@@ -42,7 +42,7 @@ class TransactionViewActionService {
                   transaction: transaction),
         ),
       ListTileActionItem(
-          label: t.general.delete,
+          label: t.ui_actions.delete,
           icon: Icons.delete,
           role: ListTileActionRole.delete,
           onClick: () => TransactionViewActionService()
@@ -75,7 +75,7 @@ class TransactionViewActionService {
             ? t.transaction.delete_warning_message
             : t.recurrent_transactions.details.delete_message),
       ],
-      confirmationText: t.general.continue_text,
+      confirmationText: t.ui_actions.continue_text,
     ).then((isConfirmed) {
       if (isConfirmed != true) return;
 
@@ -113,36 +113,35 @@ class TransactionViewActionService {
       icon: Icons.control_point_duplicate_rounded,
       dialogTitle: t.transaction.duplicate,
       contentParagraphs: [Text(t.transaction.duplicate_warning_message)],
-      confirmationText: t.general.continue_text,
-    ).then((isConfirmed) {
+      confirmationText: t.ui_actions.continue_text,
+    ).then((isConfirmed) async {
       if (isConfirmed != true) return;
 
-      transactionService
-          .insertTransaction(
-        TransactionInDB(
-          id: generateUUID(),
-          accountID: transaction.accountID,
-          date: transaction.date,
-          value: transaction.value,
-          type: transaction.type,
-          isHidden: transaction.isHidden,
-          categoryID: transaction.categoryID,
-          notes: transaction.notes,
-          title: transaction.title,
-          receivingAccountID: transaction.receivingAccountID,
-          status: transaction.status,
-          valueInDestiny: transaction.valueInDestiny,
-        ),
-      )
-          .then((value) {
+      final newTrId = generateUUID();
+
+      try {
+        await _duplicateTransaction(transaction, newTrId);
+
         scaffold.showSnackBar(
-          SnackBar(
-            content: Text(t.transaction.duplicate_success),
-          ),
+          SnackBar(content: Text(t.transaction.duplicate_success)),
         );
-      }).catchError((err) {
-        scaffold.showSnackBar(SnackBar(content: Text('$err')));
-      });
+      } catch (error) {
+        scaffold.showSnackBar(SnackBar(content: Text('$error')));
+      }
     });
+  }
+
+  Future<void> _duplicateTransaction(
+      MoneyTransaction transaction, String newTrId) async {
+    final db = AppDB.instance;
+
+    await transactionService
+        .insertTransaction(transaction.copyWith(id: newTrId));
+
+    for (final tag in transaction.tags) {
+      await db.into(db.transactionTags).insert(
+            TransactionTag(transactionID: newTrId, tagID: tag.id),
+          );
+    }
   }
 }

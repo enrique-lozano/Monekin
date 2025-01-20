@@ -7,6 +7,7 @@ import 'package:monekin/app/stats/widgets/movements_distribution/chart_by_catego
 import 'package:monekin/app/stats/widgets/movements_distribution/tags_stats.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
+import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/dates/segmented_calendar_button.dart';
 import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
@@ -74,6 +75,22 @@ class _StatsPageState extends State<StatsPage> {
         appBar: AppBar(
           title: Text(t.stats.title),
           actions: [
+            if (BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md)) ...[
+              SizedBox(
+                width: 300,
+                child: SegmentedCalendarButton(
+                  initialDatePeriodService: dateRangeService,
+                  borderRadius: 499,
+                  buttonHeight: 32,
+                  onChanged: (value) {
+                    setState(() {
+                      dateRangeService = value;
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(width: 12),
+            ],
             IconButton(
                 onPressed: () async {
                   final modalRes = await openFilterSheetModal(
@@ -93,27 +110,33 @@ class _StatsPageState extends State<StatsPage> {
                 icon: const Icon(Icons.filter_alt_outlined)),
           ],
           bottom: TabBar(
-              tabAlignment: TabAlignment.center,
-              tabs: [
-                Tab(text: t.financial_health.display),
-                Tab(text: t.stats.distribution),
-                Tab(text: t.stats.balance),
-                Tab(text: t.stats.cash_flow),
-              ],
-              isScrollable: true),
+            tabAlignment: BreakPoint.of(context).isSmallerThan(BreakpointID.md)
+                ? TabAlignment.center
+                : TabAlignment.start,
+            isScrollable: true,
+            tabs: [
+              Tab(text: t.financial_health.display),
+              Tab(text: t.stats.distribution),
+              Tab(text: t.stats.balance),
+              Tab(text: t.stats.cash_flow),
+            ],
+          ),
         ),
-        persistentFooterButtons: [
-          PersistentFooterButton(
-            child: SegmentedCalendarButton(
-              initialDatePeriodService: dateRangeService,
-              onChanged: (value) {
-                setState(() {
-                  dateRangeService = value;
-                });
-              },
-            ),
-          )
-        ],
+        persistentFooterButtons:
+            BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md)
+                ? null
+                : [
+                    PersistentFooterButton(
+                      child: SegmentedCalendarButton(
+                        initialDatePeriodService: dateRangeService,
+                        onChanged: (value) {
+                          setState(() {
+                            dateRangeService = value;
+                          });
+                        },
+                      ),
+                    )
+                  ],
         body: Column(
           children: [
             if (filters.hasFilter) ...[
