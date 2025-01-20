@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/presentation/widgets/dates/outlinedButtonStacked.dart';
@@ -54,6 +55,14 @@ class _ExportDataPageState extends State<ExportDataPage> {
     );
   }
 
+  Future<String> pickDirectory() async {
+    String? result = await FilePicker.platform.getDirectoryPath();
+    if (result != null) {
+      return '$result/';
+    }
+    return '/';
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -71,7 +80,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
 
               if (selectedExportFormat == _ExportFormats.db) {
                 await BackupDatabaseService()
-                    .downloadDatabaseFile(context)
+                    .exportDatabaseFile(context, await pickDirectory())
                     .then((value) {
                   print('EEEEEEEEEEE');
                 }).catchError((err) {
@@ -80,7 +89,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
               } else {
                 await BackupDatabaseService()
                     .exportSpreadsheet(
-                        context,
+                        context, await pickDirectory(),
                         await TransactionService.instance
                             .getTransactions(filters: filters)
                             .first)

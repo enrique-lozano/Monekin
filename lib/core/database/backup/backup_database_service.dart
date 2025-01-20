@@ -7,34 +7,33 @@ import 'package:intl/intl.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/utils/get_download_path.dart';
 import 'package:path/path.dart' as path;
 
 class BackupDatabaseService {
   AppDB db = AppDB.instance;
 
-  Future<void> downloadDatabaseFile(BuildContext context) async {
+  Future<void> exportDatabaseFile(BuildContext context, String exportPath) async {
     final messeger = ScaffoldMessenger.of(context);
 
     List<int> dbFileInBytes = await File(await db.databasePath).readAsBytes();
 
-    String downloadPath = await getDownloadPath();
-    downloadPath = path.join(
-      downloadPath,
+    exportPath = path.join(
+      exportPath,
       "monekin-${DateFormat('yyyyMMdd-Hms').format(DateTime.now())}.db",
     );
 
-    File downloadFile = File(downloadPath);
+    File downloadFile = File(exportPath);
 
     await downloadFile.writeAsBytes(dbFileInBytes);
 
     messeger.showSnackBar(SnackBar(
-      content: Text('Base de datos descargada con exito en $downloadPath'),
+      content: Text('Base de datos descargada con exito en $exportPath'),
     ));
   }
 
   Future<String> exportSpreadsheet(
     BuildContext context,
+    String exportPath,
     List<MoneyTransaction> data, {
     String format = 'csv',
     String separator = ',',
@@ -93,15 +92,14 @@ class BackupDatabaseService {
       }
     }
 
-    String downloadPath = await getDownloadPath();
-    downloadPath =
-        '${downloadPath}Transactions-${DateFormat('yyyyMMdd-Hms').format(DateTime.now())}.csv';
+    exportPath =
+        '${exportPath}Transactions-${DateFormat('yyyyMMdd-Hms').format(DateTime.now())}.csv';
 
-    File downloadFile = File(downloadPath);
+    File exportFile = File(exportPath);
 
-    await downloadFile.writeAsString(csvData);
+    await exportFile.writeAsString(csvData);
 
-    return downloadPath;
+    return exportPath;
   }
 
   Future<bool> importDatabase() async {
