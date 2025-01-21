@@ -71,36 +71,39 @@ class _ExportDataPageState extends State<ExportDataPage> {
               final messeger = ScaffoldMessenger.of(context);
               String? path = await FilePicker.platform.getDirectoryPath();
 
-              if (path != null) {
-                if (selectedExportFormat == _ExportFormats.db) {
-                  await BackupDatabaseService()
-                      .exportDatabaseFile(path)
-                      .then((value) {
-                    messeger.showSnackBar(SnackBar(
-                      content: Text(t.backup.export.success(x: path)),
-                    ));
-                  }).catchError((err) {
-                    messeger.showSnackBar(SnackBar(
-                      content: Text('$err'),
-                    ));
-                  });
-                } else {
-                  await BackupDatabaseService()
-                      .exportSpreadsheet(
-                          path,
-                          await TransactionService.instance
-                              .getTransactions(filters: filters)
-                              .first)
-                      .then((value) {
-                    messeger.showSnackBar(SnackBar(
-                      content: Text(t.backup.export.success(x: value)),
-                    ));
-                  }).catchError((err) {
-                    messeger.showSnackBar(SnackBar(
-                      content: Text('$err'),
-                    ));
-                  });
-                }
+              if (path == null) {
+                // TODO: Maybe we should also add a snackbar here
+                return;
+              }
+
+              if (selectedExportFormat == _ExportFormats.db) {
+                await BackupDatabaseService()
+                    .exportDatabaseFile(path)
+                    .then((value) {
+                  messeger.showSnackBar(SnackBar(
+                    content: Text(t.backup.export.success(x: path)),
+                  ));
+                }).catchError((err) {
+                  messeger.showSnackBar(SnackBar(
+                    content: Text('$err'),
+                  ));
+                });
+              } else {
+                await BackupDatabaseService()
+                    .exportSpreadsheet(
+                        path,
+                        await TransactionService.instance
+                            .getTransactions(filters: filters)
+                            .first)
+                    .then((value) {
+                  messeger.showSnackBar(SnackBar(
+                    content: Text(t.backup.export.success(x: value)),
+                  ));
+                }).catchError((err) {
+                  messeger.showSnackBar(SnackBar(
+                    content: Text('$err'),
+                  ));
+                });
               }
             },
           ))
