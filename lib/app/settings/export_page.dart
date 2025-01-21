@@ -4,7 +4,6 @@ import 'package:monekin/core/database/services/transaction/transaction_service.d
 import 'package:monekin/core/presentation/widgets/dates/outlinedButtonStacked.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/core/utils/logger.dart';
 import 'package:monekin/i18n/translations.g.dart';
 
 import '../../core/database/backup/backup_database_service.dart';
@@ -69,21 +68,25 @@ class _ExportDataPageState extends State<ExportDataPage> {
               child: FilledButton(
             child: Text(t.backup.export.title),
             onPressed: () async {
+              final messeger = ScaffoldMessenger.of(context);
               String? path = await FilePicker.platform.getDirectoryPath();
+
               if (path != null) {
-                final messeger = ScaffoldMessenger.of(context);
                 if (selectedExportFormat == _ExportFormats.db) {
                   await BackupDatabaseService()
-                      .exportDatabaseFile(context, path)
+                      .exportDatabaseFile(path)
                       .then((value) {
-                    print('EEEEEEEEEEE');
+                    messeger.showSnackBar(SnackBar(
+                      content: Text(t.backup.export.success(x: path)),
+                    ));
                   }).catchError((err) {
-                    print(err);
+                    messeger.showSnackBar(SnackBar(
+                      content: Text('$err'),
+                    ));
                   });
                 } else {
                   await BackupDatabaseService()
                       .exportSpreadsheet(
-                          context,
                           path,
                           await TransactionService.instance
                               .getTransactions(filters: filters)
