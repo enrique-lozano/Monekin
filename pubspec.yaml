@@ -50,7 +50,7 @@ dependencies:
   flutter_svg: ^2.0.5
   permission_handler: ^11.3.0
   json_annotation: ^4.8.1
-  fl_chart: ^0.69.0
+  fl_chart: ^0.70.2
   file_picker: ^8.1.7
   share_plus: ^10.1.2
   url_launcher: ^6.3.1
