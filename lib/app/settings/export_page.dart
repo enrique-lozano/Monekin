@@ -56,14 +56,6 @@ class _ExportDataPageState extends State<ExportDataPage> {
     );
   }
 
-  Future<String> pickDirectory() async {
-    String? result = await FilePicker.platform.getDirectoryPath();
-    if (result != null) {
-      return '$result/';
-    }
-    return '/';
-  }
-
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -77,32 +69,35 @@ class _ExportDataPageState extends State<ExportDataPage> {
               child: FilledButton(
             child: Text(t.backup.export.title),
             onPressed: () async {
-              final messeger = ScaffoldMessenger.of(context);
-
-              if (selectedExportFormat == _ExportFormats.db) {
-                await BackupDatabaseService()
-                    .exportDatabaseFile(context, await pickDirectory())
-                    .then((value) {
-                  Logger.printDebug('EEEEEEEEEEE');
-                }).catchError((err) {
-                  Logger.printDebug(err);
-                });
-              } else {
-                await BackupDatabaseService()
-                    .exportSpreadsheet(
-                        context, await pickDirectory(),
-                        await TransactionService.instance
-                            .getTransactions(filters: filters)
-                            .first)
-                    .then((value) {
-                  messeger.showSnackBar(SnackBar(
-                    content: Text(t.backup.export.success(x: value)),
-                  ));
-                }).catchError((err) {
-                  messeger.showSnackBar(SnackBar(
-                    content: Text('$err'),
-                  ));
-                });
+              String? path = await FilePicker.platform.getDirectoryPath();
+              if (path != null) {
+                final messeger = ScaffoldMessenger.of(context);
+                if (selectedExportFormat == _ExportFormats.db) {
+                  await BackupDatabaseService()
+                      .exportDatabaseFile(context, path)
+                      .then((value) {
+                    print('EEEEEEEEEEE');
+                  }).catchError((err) {
+                    print(err);
+                  });
+                } else {
+                  await BackupDatabaseService()
+                      .exportSpreadsheet(
+                          context,
+                          path,
+                          await TransactionService.instance
+                              .getTransactions(filters: filters)
+                              .first)
+                      .then((value) {
+                    messeger.showSnackBar(SnackBar(
+                      content: Text(t.backup.export.success(x: value)),
+                    ));
+                  }).catchError((err) {
+                    messeger.showSnackBar(SnackBar(
+                      content: Text('$err'),
+                    ));
+                  });
+                }
               }
             },
           ))
