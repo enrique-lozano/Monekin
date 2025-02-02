@@ -21,14 +21,17 @@ class DatePeriodState {
   DateTime? get startDate => getDates().$1;
   DateTime? get endDate => getDates().$2;
 
-  /// Returns the duration of the current period state. Will return null
-  /// if the `startDate` or the `endDate` of this period are null.
-  Duration? get periodStateDuration {
+  @override
+  String toString() {
+    return 'DatePeriodState(datePeriod: $datePeriod, modifier $periodModifier) -> [$startDate, $endDate]';
+  }
+
+  DateTimeRange? get toDateTimeRange {
     if (startDate == null || endDate == null) {
       return null;
     }
 
-    return endDate!.difference(startDate!);
+    return DateTimeRange(start: startDate!, end: endDate!);
   }
 
   /// Given the current period status, return the dates of the next period
