@@ -179,10 +179,12 @@ class _SegmentedCalendarButtonState extends State<SegmentedCalendarButton> {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 2,
                   children: [
                     Text(datePeriodService.getText(context)),
                     if (widget.canChangePeriodType)
-                      const Icon(Icons.arrow_drop_down_rounded)
+                      Icon(Icons.arrow_drop_down_rounded,
+                          color: buttonColor.withOpacity(0.925))
                   ],
                 ),
               );
