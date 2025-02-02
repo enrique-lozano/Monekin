@@ -80,24 +80,32 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
                       ? null
                       : Builder(builder: (context) {
                           if (periodType == PeriodType.cycle) {
-                            return DropdownMenu(
-                              initialSelection: toReturn.periodicity,
-                              onSelected: (value) {
-                                toReturn =
-                                    toReturn.copyWith(periodicity: value);
-                              },
-                              inputDecorationTheme: const InputDecorationTheme(
-                                  border: UnderlineInputBorder()),
-                              dropdownMenuEntries: Periodicity.values
-                                  .map(
-                                    (e) => DropdownMenuEntry(
-                                      value: e,
-                                      label:
-                                          e.periodText(context, isPlural: true),
-                                    ),
-                                  )
-                                  .toList(),
-                            );
+                            return DropdownButton(
+                                padding: const EdgeInsets.only(right: 16),
+                                focusColor: Colors.transparent,
+                                value: toReturn.periodicity,
+                                items: Periodicity.values
+                                    .map(
+                                      (e) => DropdownMenuItem(
+                                        value: e,
+                                        alignment:
+                                            AlignmentDirectional.centerStart,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 4,
+                                            right: 8,
+                                          ),
+                                          child: Text(e.periodText(context,
+                                              isPlural: true)),
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                                onChanged: (value) {
+                                  toReturn =
+                                      toReturn.copyWith(periodicity: value);
+                                  setState(() {});
+                                });
                           } else if (periodType == PeriodType.lastDays) {
                             final textToTransformArray = t
                                 .general.time.ranges.types

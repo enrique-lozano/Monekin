@@ -82,56 +82,69 @@ class MonekinDropdownSelectState<T> extends State<MonekinDropdownSelect<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return SelectorContainer(
-      backgroundColor: widget.backgroundColor,
-      padding: EdgeInsetsDirectional.only(
-          start: widget.compact ? 13 : 15,
-          end: widget.compact ? 1 : 6,
-          top: widget.compact ? 2 : 10,
-          bottom: widget.compact ? 2 : 10),
-      enabled: widget.enabled,
-      child: DropdownButton<T>(
-        key: _dropdownButtonKey,
-        underline: Container(),
-        dropdownColor: widget.backgroundColor ??
-            Theme.of(context).colorScheme.surfaceContainerHigh,
-        isDense: true,
-        isExpanded: widget.expanded,
-        value: currentValue ?? widget.initial,
-        elevation: 15,
-        iconSize: 32,
-        borderRadius: BorderRadius.circular(10),
-        icon: const Icon(Icons.arrow_drop_down_rounded),
-        onChanged: !widget.enabled
-            ? null
-            : (T? value) {
-                widget.onChanged(value ?? widget.items[0]);
-                setState(() {
-                  currentValue = value;
-                });
-              },
-        items:
-            widget.items.toSet().toList().map<DropdownMenuItem<T>>((T value) {
-          return DropdownMenuItem(
-            alignment: AlignmentDirectional.centerStart,
-            enabled: !_isItemDisabled(value),
-            value: value,
-            child: ConstrainedBox(
-              constraints: widget.textConstraints,
-              child: Text(
-                widget.getLabel != null
-                    ? widget.getLabel!(value)
-                    : value.toString(),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(
-                      _isItemDisabled(value) || !widget.enabled ? 0.3 : 1),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () {
+          openDropdown();
+        },
+        child: SelectorContainer(
+          backgroundColor: widget.backgroundColor,
+          padding: EdgeInsetsDirectional.only(
+              start: widget.compact ? 13 : 15,
+              end: widget.compact ? 1 : 6,
+              top: widget.compact ? 2 : 10,
+              bottom: widget.compact ? 2 : 10),
+          enabled: widget.enabled,
+          child: DropdownButton<T>(
+            key: _dropdownButtonKey,
+            underline: const SizedBox.shrink(),
+            dropdownColor: Theme.of(context).colorScheme.surfaceContainerHigh,
+            isDense: true,
+            isExpanded: widget.expanded,
+            value: currentValue ?? widget.initial,
+            elevation: 15,
+            iconSize: 32,
+            borderRadius: BorderRadius.circular(10),
+            icon: const Icon(Icons.arrow_drop_down_rounded),
+            onChanged: !widget.enabled
+                ? null
+                : (T? value) {
+                    widget.onChanged(value ?? widget.items[0]);
+                    setState(() {
+                      currentValue = value;
+                    });
+                  },
+            items: widget.items
+                .toSet()
+                .toList()
+                .map<DropdownMenuItem<T>>((T value) {
+              return DropdownMenuItem(
+                alignment: AlignmentDirectional.centerStart,
+                enabled: !_isItemDisabled(value),
+                value: value,
+                child: ConstrainedBox(
+                  constraints: widget.textConstraints,
+                  child: Text(
+                    widget.getLabel != null
+                        ? widget.getLabel!(value)
+                        : value.toString(),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withOpacity(_isItemDisabled(value) || !widget.enabled
+                              ? 0.3
+                              : 1),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          );
-        }).toList(),
+              );
+            }).toList(),
+          ),
+        ),
       ),
     );
   }
