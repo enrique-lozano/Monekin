@@ -24,7 +24,7 @@ void main() async {
   PrivateModeService.instance
       .setPrivateMode(appStateSettings[SettingKey.privateModeAtLaunch] == '1');
 
-  // Türkçe için plural resolver'ı ayarla
+  // Set plural resolver for Turkish
   LocaleSettings.setPluralResolver(
     language: 'tr',
     cardinalResolver: (n,
