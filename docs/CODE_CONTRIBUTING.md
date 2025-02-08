@@ -8,7 +8,7 @@ To start, fork the project. If you are new to this, don't worry! We leave you a 
 
 **[How To Fork Guide - by GitHub.com](https://docs.github.com/en/get-started/quickstart/fork-a-repo)**
 
-After that you should [run your app](https://github.com/enrique-lozano/Monekin#installation) to check that everything is correct.
+After that you should [run your app](https://github.com/enrique-lozano/Monekin/blob/main/docs/RUN_THE_CODE_LOCALLY.md) to check that everything is correct.
 
 ## 2. Configure your developer workspace
 
