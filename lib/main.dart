@@ -24,6 +24,21 @@ void main() async {
   PrivateModeService.instance
       .setPrivateMode(appStateSettings[SettingKey.privateModeAtLaunch] == '1');
 
+  // Set plural resolver for Turkish
+  LocaleSettings.setPluralResolver(
+    language: 'tr',
+    cardinalResolver: (n,
+        {String? few,
+        String? many,
+        String? one,
+        String? other,
+        String? two,
+        String? zero}) {
+      if (n == 1) return 'one';
+      return 'other';
+    },
+  );
+
   runApp(InitializeApp(key: appStateKey));
 }
 
