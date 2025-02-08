@@ -137,7 +137,7 @@ class BudgetEvolutionChart extends StatelessWidget {
                       }
 
                       return SideTitleWidget(
-                        axisSide: meta.axisSide,
+                        meta: meta,
                         child: Text(
                           meta.formattedValue,
                           style: const TextStyle(
