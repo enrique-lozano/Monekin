@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/core/extensions/date.extensions.dart';
 import 'package:monekin/core/models/date-utils/date_period.dart';
 import 'package:monekin/core/models/date-utils/period_type.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
@@ -160,7 +161,7 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
                                   onDateSelected: (value) {
                                     toReturn = toReturn.copyWith(
                                       customDateRange: (
-                                        value,
+                                        value.justDay(),
                                         toReturn.customDateRange.$2,
                                       ),
                                     );
@@ -178,7 +179,9 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
                                     toReturn = toReturn.copyWith(
                                       customDateRange: (
                                         toReturn.customDateRange.$1,
-                                        value,
+                                        value.justDay(dayOffset: 1).subtract(
+                                              const Duration(milliseconds: 1),
+                                            ),
                                       ),
                                     );
 
@@ -230,6 +233,15 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
                 hintText: '-- ${t.general.unspecified} --',
               ),
               onTap: () {
+                if (dateToSelect == null) {
+                  if (firstDate != null) {
+                    dateToSelect = firstDate.add(const Duration(days: 1));
+                  }
+                  if (lastDate != null) {
+                    dateToSelect = lastDate.subtract(const Duration(days: 1));
+                  }
+                }
+
                 openDateTimePicker(
                   context,
                   initialDate: dateToSelect,

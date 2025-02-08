@@ -129,6 +129,11 @@ class _StatsPageState extends State<StatsPage> {
                     PersistentFooterButton(
                       child: SegmentedCalendarButton(
                         initialDatePeriodService: dateRangeService,
+                        borderRadius: 8,
+                        buttonHeight: 44,
+                        border: Border.all(
+                            width: 2,
+                            color: Theme.of(context).colorScheme.primary),
                         onChanged: (value) {
                           setState(() {
                             dateRangeService = value;

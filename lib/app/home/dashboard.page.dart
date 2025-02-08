@@ -225,7 +225,11 @@ class _DashboardPageState extends State<DashboardPage> {
 
   ActionChip buildDatePeriodSelector(BuildContext context) {
     return ActionChip(
-      label: Text(dateRangeService.getText(context),
+      label: Text(
+          dateRangeService.getText(
+            context,
+            showLongMonth: MediaQuery.of(context).size.width > 360,
+          ),
           style: TextStyle(
               color: Theme.of(context).colorSchemeExtended.onDashboardHeader)),
       backgroundColor: Theme.of(context).colorSchemeExtended.dashboardHeader,
