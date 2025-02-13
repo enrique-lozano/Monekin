@@ -8,7 +8,7 @@ import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker_modal.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 class IconAndColorSelector extends StatelessWidget {
   const IconAndColorSelector(

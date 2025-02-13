@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/dates/outlinedButtonStacked.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 Future<ModalResult<TransactionStatus>?> showTransactioStatusModal(
   BuildContext context, {

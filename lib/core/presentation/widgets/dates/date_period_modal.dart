@@ -10,7 +10,7 @@ import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_fie
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 Future<DatePeriod?> openDatePeriodModal(
   BuildContext context,

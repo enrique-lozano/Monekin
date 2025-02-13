@@ -31,7 +31,7 @@ import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/core/utils/focus.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 import '../../../core/models/transaction/transaction_type.enum.dart';
 import '../../tags/tags_selector.modal.dart';
