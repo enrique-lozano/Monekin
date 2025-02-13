@@ -196,15 +196,24 @@
   "FINANCIAL-HEALTH": {
     "display": "財務健康",
     "review": {
-      "very_good(context=GenderContext)": { "male,female": "很好！" },
-      "good(context=GenderContext)": { "male,female": "好" },
-      "normal(context=GenderContext)": { "male,female": "平均" },
-      "bad(context=GenderContext)": { "male,female": "一般" },
-      "very_bad(context=GenderContext)": { "male,female": "非常糟糕" },
+      "very_good(context=GenderContext)": {
+        "male,female": "很好！"
+      },
+      "good(context=GenderContext)": {
+        "male,female": "好"
+      },
+      "normal(context=GenderContext)": {
+        "male,female": "平均"
+      },
+      "bad(context=GenderContext)": {
+        "male,female": "一般"
+      },
+      "very_bad(context=GenderContext)": {
+        "male,female": "非常糟糕"
+      },
       "insufficient_data(context=GenderContext)": {
         "male,female": "數據不足"
       },
-
       "descr": {
         "insufficient_data": "看起來我們沒有足夠的收入來計算您的財務健康狀況。添加這段時間的一些收入/收入，以便我們能夠幫助您！",
         "very_good": "恭喜！您的財務狀況非常好。我們希望您繼續保持良好的勢頭，並繼續與 Monekin 一起學習",
@@ -262,8 +271,8 @@
     "color": "顏色",
     "select-icon": "選擇一個圖示",
     "select-color": "選擇一種顏色",
-    "current-color-selection": "目前選擇",
     "custom-color": "自訂顏色",
+    "current-color-selection": "目前選擇",
     "select-account-icon": "識別您的帳戶",
     "select-category-icon": "確定您的類別",
     "SCOPES": {
@@ -319,7 +328,10 @@
       "searcher.placeholder": "按類別、描述搜尋...",
       "searcher.no-results": "未找到符合搜尋條件的交易",
       "loading": "正在加載更多交易...",
-      "selected.short": { "one": "{{n}} 已選取", "other": "{{n}} 已選取" },
+      "selected.short": {
+        "one": "{{n}} 已選取",
+        "other": "{{n}} 已選取"
+      },
       "selected.long": {
         "one": "已選擇 {{n}} 筆交易",
         "other": "選擇 {{n}} 筆交易"
