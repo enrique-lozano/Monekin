@@ -380,7 +380,7 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
                           showTitles: true,
                           getTitlesWidget: (value, meta) {
                             return SideTitleWidget(
-                              axisSide: meta.axisSide,
+                              meta: meta,
                               child: Text(
                                 snapshot.data!.shortTitles[value.toInt()],
                                 style: const TextStyle(
@@ -401,7 +401,7 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
                             }
 
                             return SideTitleWidget(
-                              axisSide: meta.axisSide,
+                              meta: meta,
                               child: BlurBasedOnPrivateMode(
                                 child: Text(
                                   meta.formattedValue,

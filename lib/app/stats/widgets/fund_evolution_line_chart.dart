@@ -261,7 +261,7 @@ class FundEvolutionLineChart extends StatelessWidget {
                                     }
 
                                     return SideTitleWidget(
-                                      axisSide: meta.axisSide,
+                                      meta: meta,
                                       child: BlurBasedOnPrivateMode(
                                         child: Text(
                                           meta.formattedValue,
