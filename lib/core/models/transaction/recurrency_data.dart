@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:monekin/app/transactions/form/widgets/interval_selector_help.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 class RecurrencyData extends Equatable {
   final RecurrentRuleLimit? ruleRecurrentLimit;

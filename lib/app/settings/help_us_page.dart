@@ -4,7 +4,7 @@ import 'package:monekin/app/settings/purchases/in_app_purchase.dart';
 import 'package:monekin/app/settings/widgets/display_app_icon.dart';
 import 'package:monekin/app/settings/widgets/setting_card_item.dart';
 import 'package:monekin/core/utils/open_external_url.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:share_plus/share_plus.dart';
 
 class HelpUsPage extends StatelessWidget {

@@ -6,13 +6,13 @@ Welcome! This guide explains how you can contribute in our app translations. We 
 
 ## Where Are the Translations Stored?
 
-Translations are stored in the **JSON files** of this directory, with one file per language.
+Translations are stored in the **JSON files** located in the `/json` directory, with one file per language.
 
 JSON files are simple text files that are normally used to organize information. Each file has the following naming format:
 
-- **`strings_en.json`**: English
-- **`strings_es.json`**: Spanish
-- **`strings_fr.json`**: French
+- **`en.json`**: English
+- **`es.json`**: Spanish
+- **`fr.json`**: French
 
 To find your language code, you can use [this resource](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes).
 
@@ -45,7 +45,7 @@ As you will see, each line inside this type of files has:
 
 If you are not familiar with GitHub or JSON, don’t worry! Follow these steps:
 
-1. **Download a JSON file**: Choose one of the already created JSON file that is in this folder, for the language you want to translate (e.g., `en.json` for English). Create a copy of this file and rename it with the corresponding language code if you want to add another language to the app.
+1. **Download a JSON file**: Choose one of the already created JSON file that is in the `/json` directory, for the language you want to translate (e.g., `en.json` for English). Create a copy of this file and rename it with the corresponding language code if you want to add another language to the app.
 
 2. **Edit the file**:
 
@@ -71,19 +71,13 @@ If you are not familiar with GitHub or JSON, don’t worry! Follow these steps:
 
 If you are familiar with GitHub and JSON files, please follow the [developer contribution guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/CODE_CONTRIBUTING.md) to fork the project, add/modify your translations, and create a Pull Request (PR).
 
-If you want to view your new generated/edited translations in your local project you should run:
+If you want to apply and view your new generated/edited translations in your local project you should run:
 
-```
+```bash
 dart run slang
 ```
 
-You can also use the following command to check for missing/unsused translations:
-
-```
-dart run slang analyze
-```
-
-This command will generate two files with the requested info. **Please do not include this generated files in git**.
+You can learn more about the slang library tools in the [docs](https://github.com/slang-i18n/slang/tree/main?tab=readme-ov-file#tools). We also provide a Python script to automatically translate missing keys. You can see more info about it in the `/scripts/translate-missing` directory.
 
 ---
 

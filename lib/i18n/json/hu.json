@@ -1,4 +1,4 @@
-﻿{
+{
   "UI-ACTIONS": {
     "cancel": "Mégse",
     "confirm": "Megerősítés",
@@ -196,15 +196,24 @@
   "FINANCIAL-HEALTH": {
     "display": "Pénzügyi állapot",
     "review": {
-      "very_good(context=GenderContext)": { "male,female": "Nagyon jó!" },
-      "good(context=GenderContext)": { "male,female": "Jó" },
-      "normal(context=GenderContext)": { "male,female": "Átlagos" },
-      "bad(context=GenderContext)": { "male,female": "Korrekt" },
-      "very_bad(context=GenderContext)": { "male,female": "Nagyon rossz" },
+      "very_good(context=GenderContext)": {
+        "male,female": "Nagyon jó!"
+      },
+      "good(context=GenderContext)": {
+        "male,female": "Jó"
+      },
+      "normal(context=GenderContext)": {
+        "male,female": "Átlagos"
+      },
+      "bad(context=GenderContext)": {
+        "male,female": "Korrekt"
+      },
+      "very_bad(context=GenderContext)": {
+        "male,female": "Nagyon rossz"
+      },
       "insufficient_data(context=GenderContext)": {
         "male,female": "Hiányos adatok"
       },
-
       "descr": {
         "insufficient_data": "Úgy tűnik, nincs elég rögzített kiadásunk ahhoz, hogy kiszámítsuk a pénzügyi állapotát. Adjon hozzá néhány kiadást/bevételt ebben az időszakban, hogy tudjunk segíteni Önnek!",
         "very_good": "Gratulálunk! Az Ön pénzügyi helyzete nagyon rendben van. Reméljük, hogy folytatódik a jó szériája, és továbbra is tanulni fog a Monekin-nel.",

@@ -24,7 +24,7 @@ import 'package:monekin/core/services/supported_icon/supported_icon_service.dart
 import 'package:monekin/core/utils/logger.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 class ImportCSVPage extends StatefulWidget {
   const ImportCSVPage({super.key});

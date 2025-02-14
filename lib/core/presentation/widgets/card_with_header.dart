@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 /// The radius of the `CardWithHeader` widget, a very useful widget through the app
 const cardWithHeaderRadius = 12.0;
