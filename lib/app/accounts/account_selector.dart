@@ -228,7 +228,7 @@ class _AccountSelectorModalState extends State<AccountSelectorModal>
         ),
         if (widget.allowMultiSelection)
           ScrollableWithBottomGradient.buildPositionedGradient(
-              Theme.of(context).colorSchemeExtended.modalBackground),
+              AppColors.of(context).modalBackground),
       ]),
     );
   }

@@ -92,8 +92,7 @@ class _DashboardPageState extends State<DashboardPage> {
     final accountService = AccountService.instance;
 
     return Scaffold(
-      appBar: EmptyAppBar(
-          color: Theme.of(context).colorSchemeExtended.dashboardHeader),
+      appBar: EmptyAppBar(color: AppColors.of(context).consistentPrimary),
       floatingActionButton:
           NewTransactionButton(isExtended: isFloatingButtonExtended),
       body: Stack(
@@ -137,7 +136,7 @@ class _DashboardPageState extends State<DashboardPage> {
   Card buildDashboadHeader(
       BuildContext context, AccountService accountService) {
     return Card(
-      color: Theme.of(context).colorSchemeExtended.dashboardHeader,
+      color: AppColors.of(context).consistentPrimary,
       margin: const EdgeInsets.only(bottom: 24),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -230,14 +229,13 @@ class _DashboardPageState extends State<DashboardPage> {
             context,
             showLongMonth: MediaQuery.of(context).size.width > 360,
           ),
-          style: TextStyle(
-              color: Theme.of(context).colorSchemeExtended.onDashboardHeader)),
-      backgroundColor: Theme.of(context).colorSchemeExtended.dashboardHeader,
+          style: TextStyle(color: AppColors.of(context).onConsistentPrimary)),
+      backgroundColor: AppColors.of(context).consistentPrimary,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
         side: BorderSide(
           //   style: BorderStyle.none,
-          color: Theme.of(context).colorSchemeExtended.onDashboardHeader,
+          color: AppColors.of(context).onConsistentPrimary,
         ),
       ),
       onPressed: () {
@@ -284,15 +282,11 @@ class _DashboardPageState extends State<DashboardPage> {
                 builder: (context, snapshot) {
                   return UserAvatar(
                     avatar: snapshot.data,
-                    backgroundColor: Theme.of(context)
-                        .colorSchemeExtended
-                        .onDashboardHeader
-                        .darken(0.25),
+                    backgroundColor:
+                        AppColors.of(context).onConsistentPrimary.darken(0.25),
                     border: Border.all(
                       width: 2,
-                      color: Theme.of(context)
-                          .colorSchemeExtended
-                          .onDashboardHeader,
+                      color: AppColors.of(context).onConsistentPrimary,
                     ),
                   );
                 }),
@@ -306,11 +300,10 @@ class _DashboardPageState extends State<DashboardPage> {
                     "Welcome again!",
                     softWrap: false,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        fontWeight: FontWeight.w300,
-                        overflow: TextOverflow.fade,
-                        color: Theme.of(context)
-                            .colorSchemeExtended
-                            .onDashboardHeader),
+                          fontWeight: FontWeight.w300,
+                          overflow: TextOverflow.fade,
+                          color: AppColors.of(context).onConsistentPrimary,
+                        ),
                   ),
                   StreamBuilder(
                     stream: UserSettingService.instance
@@ -327,9 +320,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             fontWeight: FontWeight.w600,
                             fontSize: 18,
                             overflow: TextOverflow.fade,
-                            color: Theme.of(context)
-                                .colorSchemeExtended
-                                .onDashboardHeader),
+                            color: AppColors.of(context).onConsistentPrimary),
                       );
                     },
                   ),
@@ -353,7 +344,7 @@ class _DashboardPageState extends State<DashboardPage> {
             bottomLeft: Radius.circular(16),
             bottomRight: Radius.circular(16),
           ),
-          color: Theme.of(context).colorSchemeExtended.dashboardHeader),
+          color: AppColors.of(context).consistentPrimary),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -362,10 +353,10 @@ class _DashboardPageState extends State<DashboardPage> {
             children: [
               Text(
                 t.home.total_balance,
-                style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                    color: Theme.of(context)
-                        .colorSchemeExtended
-                        .onDashboardHeader),
+                style: Theme.of(context)
+                    .textTheme
+                    .labelSmall!
+                    .copyWith(color: AppColors.of(context).onConsistentPrimary),
               ),
               StreamBuilder(
                 stream: AccountService.instance.getAccountsMoney(),
@@ -380,9 +371,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               ? 22
                               : 26,
                           fontWeight: FontWeight.w600,
-                          color: Theme.of(context)
-                              .colorSchemeExtended
-                              .onDashboardHeader),
+                          color: AppColors.of(context).onConsistentPrimary),
                     );
                   }
 
@@ -432,8 +421,10 @@ class _DashboardPageState extends State<DashboardPage> {
         children: [
           Text(
             t.home.total_balance,
-            style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                color: Theme.of(context).colorSchemeExtended.onDashboardHeader),
+            style: Theme.of(context)
+                .textTheme
+                .labelSmall!
+                .copyWith(color: AppColors.of(context).onConsistentPrimary),
           ),
           if (!accounts.hasData) ...[
             const Skeleton(width: 70, height: 40),
@@ -453,9 +444,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             ? 26
                             : 32,
                         fontWeight: FontWeight.w600,
-                        color: Theme.of(context)
-                            .colorSchemeExtended
-                            .onDashboardHeader),
+                        color: AppColors.of(context).onConsistentPrimary),
                   );
                 }
 

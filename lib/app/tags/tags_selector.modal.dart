@@ -195,7 +195,7 @@ class _TagSelectorState extends State<TagSelector>
             separatorBuilder: (context, index) => const Divider(),
           ),
           ScrollableWithBottomGradient.buildPositionedGradient(
-              Theme.of(context).colorSchemeExtended.modalBackground),
+              AppColors.of(context).modalBackground),
         ],
       ),
     );

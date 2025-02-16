@@ -171,7 +171,7 @@ class _CurrencySelectorModalState extends State<CurrencySelectorModal> {
                     },
                   ),
                   ScrollableWithBottomGradient.buildPositionedGradient(
-                      Theme.of(context).colorSchemeExtended.modalBackground),
+                      AppColors.of(context).modalBackground),
                 ]),
               ),
             ],

@@ -127,8 +127,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
           body: ScrollableWithBottomGradient(
             controller: scrollController,
             padding: const EdgeInsets.fromLTRB(16, 2, 16, 24),
-            gradientColor:
-                Theme.of(context).colorSchemeExtended.modalBackground,
+            gradientColor: AppColors.of(context).modalBackground,
             child: Form(
               key: _formKey,
               child: Column(

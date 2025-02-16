@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/settings/widgets/display_app_icon.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -25,7 +24,7 @@ class SideNavigationDrawer extends StatelessWidget {
       child: NavigationDrawer(
         selectedIndex: selectedIndex,
         onDestinationSelected: onDestinationSelected,
-        backgroundColor: Theme.of(context).colorSchemeExtended.cardColor,
+        backgroundColor: Theme.of(context).cardColor,
         children: [
           const SizedBox(height: 24),
           ...List.generate(drawerActions.length, (index) {
