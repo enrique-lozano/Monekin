@@ -20,6 +20,7 @@ Future<String?> showLanguageSelectorBottomSheet(
 class LanguageSelector extends StatelessWidget {
   const LanguageSelector({super.key, required this.selectedLangTag});
 
+  /// Lang ID of the selected locale ("en", "zh-TW"...)
   final String selectedLangTag;
 
   @override
