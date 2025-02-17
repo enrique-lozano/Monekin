@@ -110,24 +110,53 @@ class MonekinDropdownSelectState<T> extends State<MonekinDropdownSelect<T>> {
                   currentValue = value;
                 });
               },
-        items:
-            widget.items.toSet().toList().map<DropdownMenuItem<T>>((T value) {
+        selectedItemBuilder: (context) {
+          return widget.items.toSet().toList().map((value) {
+            return ConstrainedBox(
+              constraints: widget.textConstraints,
+              child: Text(
+                widget.getLabel != null
+                    ? widget.getLabel!(value)
+                    : value.toString(),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface.withOpacity(
+                      _isItemDisabled(value) || !widget.enabled ? 0.3 : 1),
+                ),
+              ),
+            );
+          }).toList();
+        },
+        items: widget.items.toSet().toList().map<DropdownMenuItem<T>>((value) {
+          final isSelected = value == currentValue;
+
           return DropdownMenuItem(
             alignment: AlignmentDirectional.centerStart,
             enabled: !_isItemDisabled(value),
             value: value,
             child: ConstrainedBox(
               constraints: widget.textConstraints,
-              child: Text(
-                widget.getLabel != null
-                    ? widget.getLabel!(value)
-                    : value.toString(),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(
-                      _isItemDisabled(value) || !widget.enabled ? 0.3 : 1),
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                spacing: 12,
+                children: [
+                  Text(
+                    widget.getLabel != null
+                        ? widget.getLabel!(value)
+                        : value.toString(),
+                    style: TextStyle(
+                      color: (Theme.of(context).colorScheme.onSurface)
+                          .withOpacity(_isItemDisabled(value) || !widget.enabled
+                              ? 0.3
+                              : 1),
+                    ),
+                  ),
+                  if (isSelected)
+                    Icon(
+                      Icons.check_rounded,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 16,
+                    )
+                ],
               ),
             ),
           );
