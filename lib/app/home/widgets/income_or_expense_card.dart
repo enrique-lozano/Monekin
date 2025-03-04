@@ -45,10 +45,8 @@ class IncomeOrExpenseCard extends StatelessWidget {
             children: [
               Text(
                 type.displayName(context),
-                style: TextStyle(
-                    color: Theme.of(context)
-                        .colorSchemeExtended
-                        .onDashboardHeader),
+                style:
+                    TextStyle(color: AppColors.of(context).onConsistentPrimary),
               ),
               StreamBuilder(
                   stream: AccountService.instance.getAccountsBalance(
@@ -71,9 +69,7 @@ class IncomeOrExpenseCard extends StatelessWidget {
                       showDecimals: false,
                       integerStyle: TextStyle(
                           fontSize: 18,
-                          color: Theme.of(context)
-                              .colorSchemeExtended
-                              .onDashboardHeader),
+                          color: AppColors.of(context).onConsistentPrimary),
                     );
                   })
             ],

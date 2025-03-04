@@ -219,7 +219,7 @@ class _CategoryMultiSelectorModalState extends State<CategoryMultiSelectorModal>
             },
           ),
           ScrollableWithBottomGradient.buildPositionedGradient(
-              Theme.of(context).colorSchemeExtended.modalBackground),
+              AppColors.of(context).modalBackground),
         ],
       ),
     );

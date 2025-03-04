@@ -85,7 +85,7 @@ class FundEvolutionLineChart extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Final balance - ${dateRange.getText(context)}',
+                    Text(t.stats.final_balance,
                         style: const TextStyle(fontSize: 12)),
                     const Skeleton(width: 70, height: 40),
                     const Skeleton(width: 30, height: 14),
