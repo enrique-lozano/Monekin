@@ -6,6 +6,7 @@ import 'package:monekin/app/stats/utils/common_axis_titles.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/extensions/date.extensions.dart';
 import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/theme.dart';
@@ -46,8 +47,7 @@ class FundEvolutionLineChart extends StatelessWidget {
     List<Stream<double>> balance = [];
     List<String> labels = [];
 
-    DateTime currentDay = DateTime(
-        timeRange.start.year, timeRange.start.month, timeRange.start.day);
+    DateTime currentDay = timeRange.start.justDay();
 
     final dayRange =
         (timeRange.end.difference(timeRange.start).inDays / 100).ceil();
