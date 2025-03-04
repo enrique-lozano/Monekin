@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/app/stats/utils/common_axis_titles.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
@@ -416,10 +417,8 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
                           reservedSize: 42,
                         ),
                       ),
-                      rightTitles: const AxisTitles(
-                          sideTitles: SideTitles(showTitles: false)),
-                      topTitles: const AxisTitles(
-                          sideTitles: SideTitles(showTitles: false)),
+                      rightTitles: noAxisTitles,
+                      topTitles: noAxisTitles,
                     ),
                     borderData: FlBorderData(
                       show: true,
