@@ -9,7 +9,7 @@ import 'package:monekin/core/database/services/user-setting/user_setting_service
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:monekin/main.dart';
 
 class OnboardingPage extends StatefulWidget {

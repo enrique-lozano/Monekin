@@ -15,7 +15,7 @@ import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradien
 import 'package:monekin/core/presentation/widgets/tappable-text-entry.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 Future<DatePeriod?> openDatePeriodModal(
   BuildContext context,

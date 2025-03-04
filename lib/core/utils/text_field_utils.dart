@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 /// A text input formatter that allows up to two decimal places,
 /// replacing or disabling any invalid symbols

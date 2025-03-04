@@ -5,7 +5,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:monekin/app/settings/purchases/in_app_purchase.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 import '../../../core/presentation/app_colors.dart';
 

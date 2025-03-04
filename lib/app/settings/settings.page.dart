@@ -13,7 +13,7 @@ import 'package:monekin/app/tags/tag_list.page.dart';
 import 'package:monekin/app/transactions/recurrent_transactions_page.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});

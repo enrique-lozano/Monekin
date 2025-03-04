@@ -11,7 +11,7 @@ import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker_modal.dart';
 import 'package:monekin/core/presentation/widgets/monekin_dropdown_select.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 import '../../core/presentation/app_colors.dart';
 import 'widgets/settings_list_separator.dart';
@@ -37,6 +37,8 @@ class SelectItem<T> {
 }
 
 class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
+  late GlobalKey<MonekinDropdownSelectState>? _themeDropdownKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -108,6 +110,9 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                       Flexible(child: _buildThemeDropdown(theme))
                     ],
                   ),
+                  onTap: () {
+                    _themeDropdownKey!.currentState!.openDropdown();
+                  },
                   leading: ScaledAnimatedSwitcher(
                     keyToWatch: theme.icon(context).toString(),
                     child: Icon(theme.icon(context)),
@@ -239,24 +244,29 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
   }
 
   Widget _buildThemeDropdown(ThemeMode theme) {
-    return MonekinDropdownSelect(
-        initial: theme,
-        compact: true,
-        expanded: false,
-        items: const [
-          ThemeMode.system,
-          ThemeMode.light,
-          ThemeMode.dark,
-        ],
-        getLabel: (x) => x.displayName(context),
-        onChanged: (mode) {
-          UserSettingService.instance
-              .setItem(
-                SettingKey.themeMode,
-                mode.name,
-                updateGlobalState: true,
-              )
-              .then((value) => null);
-        });
+    return Focus(
+      canRequestFocus: false,
+      descendantsAreFocusable: false,
+      child: MonekinDropdownSelect(
+          key: _themeDropdownKey,
+          initial: theme,
+          compact: true,
+          expanded: false,
+          items: const [
+            ThemeMode.system,
+            ThemeMode.light,
+            ThemeMode.dark,
+          ],
+          getLabel: (x) => x.displayName(context),
+          onChanged: (mode) {
+            UserSettingService.instance
+                .setItem(
+                  SettingKey.themeMode,
+                  mode.name,
+                  updateGlobalState: true,
+                )
+                .then((value) => null);
+          }),
+    );
   }
 }

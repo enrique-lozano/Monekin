@@ -11,7 +11,7 @@ import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 class BudgetCard extends StatelessWidget {
   const BudgetCard({

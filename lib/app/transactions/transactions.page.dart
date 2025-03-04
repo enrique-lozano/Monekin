@@ -20,7 +20,7 @@ import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 class TransactionsPage extends StatefulWidget {
   const TransactionsPage({super.key, this.filters});

@@ -14,7 +14,7 @@ import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 showExchangeRateFormDialog(
   BuildContext context,

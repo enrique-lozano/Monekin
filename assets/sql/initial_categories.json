@@ -3,6 +3,7 @@
     "names": {
       "en": "Aesthetics & Health",
       "es": "Salud & belleza",
+      "tr": "Estetik & Sağlık",
       "zh_TW": "醫美 & 健康"
     },
     "icon": "ecg_heart",
@@ -14,6 +15,7 @@
         "names": {
           "en": "Personal care",
           "es": "Cuidado personal",
+          "tr": "Kişisel bakım",
           "zh_TW": "個人護理"
         }
       },
@@ -22,6 +24,7 @@
         "names": {
           "en": "Medical",
           "es": "Médico",
+          "tr": "Tıbbi",
           "zh_TW": "醫療"
         }
       },
@@ -30,6 +33,7 @@
         "names": {
           "en": "Fitness",
           "es": "Fitness",
+          "tr": "Fitness",
           "zh_TW": "健康"
         }
       }
@@ -39,6 +43,7 @@
     "names": {
       "en": "Food & Dining",
       "es": "Alimentación",
+      "tr": "Yiyecek & Yemek",
       "zh_TW": "食品 & 餐飲"
     },
     "icon": "shopping_cart",
@@ -50,6 +55,7 @@
         "names": {
           "en": "Eating out",
           "es": "Comer fuera",
+          "tr": "Dışarıda yemek",
           "zh_TW": "外出用餐"
         }
       },
@@ -58,6 +64,7 @@
         "names": {
           "en": "Groceries",
           "es": "Comestibles",
+          "tr": "Market Alışverişi",
           "zh_TW": "雜貨"
         }
       }
@@ -67,6 +74,7 @@
     "names": {
       "en": "Purchases",
       "es": "Compras",
+      "tr": "Satın Alımlar",
       "zh_TW": "購買"
     },
     "icon": "shopping_bag",
@@ -78,6 +86,7 @@
         "names": {
           "en": "Stationery",
           "es": "Papelería",
+          "tr": "Kırtasiye",
           "zh_TW": "文具"
         }
       },
@@ -86,6 +95,7 @@
         "names": {
           "en": "Electronics",
           "es": "Electrónica",
+          "tr": "Elektronik",
           "zh_TW": "電子產品"
         }
       },
@@ -94,6 +104,7 @@
         "names": {
           "en": "Clothes",
           "es": "Ropa",
+          "tr": "Kıyafetler",
           "zh_TW": "服裝"
         }
       }
@@ -103,6 +114,7 @@
     "names": {
       "en": "Leisure",
       "es": "Entretenimiento",
+      "tr": "Boş Zaman",
       "zh_TW": "閒暇"
     },
     "icon": "golf_course",
@@ -114,6 +126,7 @@
         "names": {
           "en": "Party",
           "es": "Fiesta",
+          "tr": "Parti",
           "zh_TW": "派對"
         }
       },
@@ -122,6 +135,7 @@
         "names": {
           "en": "Sites of interest and events",
           "es": "Eventos y sitios de interes",
+          "tr": "İlgi çekici yerler ve etkinlikler",
           "zh_TW": "名勝古蹟 & 活動"
         }
       },
@@ -130,6 +144,7 @@
         "names": {
           "en": "Music",
           "es": "Música y conciertos",
+          "tr": "Müzik",
           "zh_TW": "音樂"
         }
       },
@@ -138,6 +153,7 @@
         "names": {
           "en": "TV-shows and movies",
           "es": "Cine y TV",
+          "tr": "TV dizileri ve filmler",
           "zh_TW": "電視節目 & 電影"
         }
       }
@@ -147,6 +163,7 @@
     "names": {
       "en": "Transportation",
       "es": "Transporte",
+      "tr": "Ulaşım",
       "zh_TW": "交通"
     },
     "icon": "tram",
@@ -158,6 +175,7 @@
         "names": {
           "en": "Public Transport",
           "es": "Transporte público",
+          "tr": "Toplu Taşıma",
           "zh_TW": "大眾運輸"
         }
       },
@@ -166,6 +184,7 @@
         "names": {
           "en": "Fuel",
           "es": "Gasolina",
+          "tr": "Yakıt",
           "zh_TW": "燃料"
         }
       },
@@ -174,6 +193,7 @@
         "names": {
           "en": "Tolls and parking",
           "es": "Multas y parkimétros",
+          "tr": "Otoyol ve park ücretleri",
           "zh_TW": "通行費 & 停車費"
         }
       },
@@ -182,6 +202,7 @@
         "names": {
           "en": "Taxes and car insurance",
           "es": "Seguro e impuestos",
+          "tr": "Vergiler ve araç sigortası",
           "zh_TW": "稅金 & 汽車保險"
         }
       },
@@ -190,6 +211,7 @@
         "names": {
           "en": "Maintenance",
           "es": "Mantenimiento",
+          "tr": "Bakım",
           "zh_TW": "維修"
         }
       }
@@ -199,6 +221,7 @@
     "names": {
       "en": "Housing",
       "es": "Hogar",
+      "tr": "Konut",
       "zh_TW": "居家"
     },
     "icon": "home",
@@ -210,6 +233,7 @@
         "names": {
           "en": "Rental",
           "es": "Alquiler",
+          "tr": "Kira",
           "zh_TW": "房租"
         }
       },
@@ -218,6 +242,7 @@
         "names": {
           "en": "Water",
           "es": "Agua",
+          "tr": "Su",
           "zh_TW": "水"
         }
       },
@@ -226,6 +251,7 @@
         "names": {
           "en": "Electricity",
           "es": "Luz",
+          "tr": "Elektrik",
           "zh_TW": "電"
         }
       },
@@ -234,6 +260,7 @@
         "names": {
           "en": "Internet",
           "es": "Internet",
+          "tr": "İnternet",
           "zh_TW": "電"
         }
       },
@@ -242,6 +269,7 @@
         "names": {
           "en": "Phone",
           "es": "Teléfono",
+          "tr": "Telefon",
           "zh_TW": "電話"
         }
       },
@@ -250,6 +278,7 @@
         "names": {
           "en": "Home supplies",
           "es": "Productos para el hogar",
+          "tr": "Ev gereçleri",
           "zh_TW": "電話"
         }
       },
@@ -258,6 +287,7 @@
         "names": {
           "en": "Furniture and appliances",
           "es": "Muebles y accesorios",
+          "tr": "Mobilya ve ev aletleri",
           "zh_TW": "電話"
         }
       }
@@ -267,6 +297,7 @@
     "names": {
       "en": "Taxes",
       "es": "Impuestos",
+      "tr": "Vergiler",
       "zh_TW": "稅款"
     },
     "icon": "receipt",
@@ -277,6 +308,7 @@
     "names": {
       "en": "Plants & Pets",
       "es": "Plantas & mascotas",
+      "tr": "Bitkiler & Evcil Hayvanlar",
       "zh_TW": "植物 & 寵物"
     },
     "icon": "pets",
@@ -288,6 +320,7 @@
     "names": {
       "en": "Holidays",
       "es": "Vacaciones",
+      "tr": "Tatiller",
       "zh_TW": "假期"
     },
     "icon": "landscape",
@@ -299,6 +332,7 @@
         "names": {
           "en": "Travel",
           "es": "Viaje",
+          "tr": "Seyahat",
           "zh_TW": "旅行"
         }
       },
@@ -307,6 +341,7 @@
         "names": {
           "en": "Accommodation",
           "es": "Alojamiento",
+          "tr": "Konaklama",
           "zh_TW": "旅行"
         }
       }
@@ -316,6 +351,7 @@
     "names": {
       "en": "Salary",
       "es": "Salario",
+      "tr": "Maaş",
       "zh_TW": "薪水"
     },
     "icon": "work",
@@ -326,6 +362,7 @@
     "names": {
       "en": "Gifts & Donations",
       "es": "Regalos & Donaciones",
+      "tr": "Hediyeler & Bağışlar",
       "zh_TW": "禮品 & 贈與"
     },
     "icon": "redeem",
@@ -336,6 +373,7 @@
     "names": {
       "en": "Sale",
       "es": "Venta",
+      "tr": "Satış",
       "zh_TW": "銷售"
     },
     "icon": "logout",
@@ -346,6 +384,7 @@
     "names": {
       "en": "Investments",
       "es": "Inversión",
+      "tr": "Yatırımlar",
       "zh_TW": "投資"
     },
     "icon": "auto_graph",
@@ -356,6 +395,7 @@
     "names": {
       "en": "Gambling",
       "es": "Juegos & apuestas",
+      "tr": "Kumar",
       "zh_TW": "賭博"
     },
     "icon": "casino",
@@ -366,6 +406,7 @@
     "names": {
       "en": "Awards & Honours",
       "es": "Premios & reconocimientos",
+      "tr": "Ödüller & Onurlar",
       "zh_TW": "獎項 & 榮譽"
     },
     "icon": "military_tech",
@@ -376,6 +417,7 @@
     "names": {
       "en": "Debts",
       "es": "Deudas & devoluciones",
+      "tr": "Borçlar",
       "zh_TW": "債務"
     },
     "icon": "redo",
@@ -386,6 +428,7 @@
     "names": {
       "en": "Loans",
       "es": "Préstamos",
+      "tr": "Krediler",
       "zh_TW": "貸款"
     },
     "icon": "undo",
@@ -396,6 +439,7 @@
     "names": {
       "en": "Others",
       "es": "Otros",
+      "tr": "Diğerleri",
       "zh_TW": "其他"
     },
     "icon": "inventory_2",

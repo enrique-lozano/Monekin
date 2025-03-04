@@ -9,7 +9,7 @@ import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 import 'next_pay_status.enum.dart';
 import 'transaction_type.enum.dart';

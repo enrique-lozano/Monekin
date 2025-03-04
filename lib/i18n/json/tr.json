@@ -1,0 +1,758 @@
+{
+  "UI-ACTIONS": {
+    "cancel": "İptal",
+    "confirm": "Onayla",
+    "continue_text": "Devam Et",
+    "save": "Kaydet",
+    "save_changes": "Değişiklikleri Kaydet",
+    "close_and_save": "Kaydet ve Kapat",
+    "add": "Ekle",
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "see-more": "Daha Fazla Gör",
+    "select-all": "Tümünü Seç",
+    "deselect-all": "Tüm Seçimi Kaldır",
+    "select": "Seç",
+    "search": "Ara",
+    "filter": "Filtrele",
+    "reset": "Sıfırla",
+    "submit": "Gönder",
+    "next": "Sonraki",
+    "previous": "Önceki",
+    "back": "Geri",
+    "reload": "Yenile",
+    "view": "Görüntüle",
+    "download": "İndir",
+    "upload": "Yükle",
+    "retry": "Tekrar Dene",
+    "copy": "Kopyala",
+    "paste": "Yapıştır",
+    "undo": "Geri Al",
+    "redo": "İleri Al",
+    "open": "Aç",
+    "close": "Kapat",
+    "apply": "Uygula",
+    "discard": "Vazgeç",
+    "refresh": "Yenile",
+    "details": "Detaylar",
+    "share": "Paylaş"
+  },
+  "GENERAL": {
+    "or": "veya",
+    "understood": "Anlaşıldı",
+    "unspecified": "Belirtilmemiş",
+    "quick_actions": "Hızlı İşlemler",
+    "balance": "Bakiye",
+    "account": "Hesap",
+    "accounts": "Hesaplar",
+    "categories": "Kategoriler",
+    "category": "Kategori",
+    "today": "Bugün",
+    "yesterday": "Dün",
+    "filters": "Filtreler",
+    "empty-warn": "Ups! Burası çok boş",
+    "insufficient-data": "Yetersiz veri",
+    "show-more-fields": "Daha fazla alan göster",
+    "show-less-fields": "Daha az alan göster",
+    "tap-to-search": "Aramak için dokunun",
+    "CLIPBOARD": {
+      "success": "{{x}} panoya kopyalandı",
+      "error": "Kopyalama hatası"
+    },
+    "TIME": {
+      "start-date": "Başlangıç tarihi",
+      "end-date": "Bitiş tarihi",
+      "from-date": "Başlangıç tarihi",
+      "until-date": "Bitiş tarihi",
+      "date": "Tarih",
+      "datetime": "Tarih ve saat",
+      "time": "Saat",
+      "each": "Her",
+      "after": "Sonra",
+      "RANGES": {
+        "display": "Zaman aralığı",
+        "it-repeat": "Tekrarlar",
+        "it-ends": "Biter",
+        "forever": "Sonsuza kadar",
+        "TYPES": {
+          "cycle": "Döngüler",
+          "last_days": "Son günler",
+          "last_days_form": "Önceki {{x}} gün",
+          "all": "Her Zaman",
+          "date_range": "Özel aralık"
+        },
+        "each-range": {
+          "one": "Her {{range}}",
+          "other": "Her {{n}} {{range}}"
+        },
+        "each-range-until-date": {
+          "one": "{{day}} tarihine kadar her {{range}}",
+          "other": "{{day}} tarihine kadar her {{n}} {{range}}"
+        },
+        "each-range-until-times": {
+          "one": "Her {{range}} {{limit}} kez",
+          "other": "Her {{n}} {{range}} {{limit}} kez"
+        },
+        "each-range-until-once": {
+          "one": "Her {{range}} bir kez",
+          "other": "Her {{n}} {{range}} bir kez"
+        },
+        "month": {
+          "one": "Ay",
+          "other": "Aylar"
+        },
+        "year": {
+          "one": "Yıl",
+          "other": "Yıllar"
+        },
+        "day": {
+          "one": "Gün",
+          "other": "Günler"
+        },
+        "week": {
+          "one": "Hafta",
+          "other": "Haftalar"
+        }
+      },
+      "PERIODICITY": {
+        "display": "Tekrarlama",
+        "no-repeat": "Tekrarlama yok",
+        "repeat": {
+          "one": "Tekrar",
+          "other": "Tekrarlar"
+        },
+        "diary": "Günlük",
+        "monthly": "Aylık",
+        "annually": "Yıllık",
+        "quaterly": "Üç Aylık",
+        "weekly": "Haftalık",
+        "custom": "Özel",
+        "infinite": "Her Zaman"
+      },
+      "CURRENT": {
+        "Monthly": "Bu ay",
+        "Annually": "Bu yıl",
+        "Quaterly": "Bu çeyrek",
+        "Weekly": "Bu hafta",
+        "Infinite": "Sonsuza dek",
+        "Custom": "Özel Aralık"
+      },
+      "ALL": {
+        "diary": "Her gün",
+        "Monthly": "Her ay",
+        "Annually": "Her yıl",
+        "Quaterly": "Her çeyrek",
+        "Weekly": "Her hafta"
+      }
+    },
+    "TRANSACTION-ORDER": {
+      "display": "İşlemleri sırala",
+      "Category": "Kategoriye göre",
+      "Quantity": "Miktara göre",
+      "Date": "Tarihe göre"
+    },
+    "VALIDATIONS": {
+      "form_error": "Devam etmek için belirtilen alanları düzeltin",
+      "required": "Gerekli alan",
+      "positive": "Pozitif olmalı",
+      "min_number": "{{x}} değerinden büyük olmalı",
+      "max_number": "{{x}} değerinden küçük olmalı"
+    }
+  },
+  "INTRO": {
+    "start": "Başla",
+    "skip": "Atla",
+    "next": "İleri",
+    "select-your-currency": "Para birimini seçin",
+    "welcome.subtitle": "Kişisel finans yöneticiniz",
+    "welcome.subtitle2": "%100 açık, %100 ücretsiz",
+    "welcome.footer": "Giriş yaparak, uygulamanın <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Gizlilik Politikası</a> ve <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Kullanım Şartları</a>'nı kabul etmiş olursunuz",
+    "offline.descr.title": "ÇEVRİMDIŞI HESAP:",
+    "offline.descr": "Verileriniz yalnızca cihazınızda saklanacak ve uygulamayı kaldırmadığınız veya telefon değiştirmediniz sürece güvende olacaktır. Veri kaybını önlemek için, uygulama ayarlarından düzenli olarak yedekleme yapılması önerilir.",
+    "offline.start": "Çevrimdışı oturum başlat",
+    "sl1Title": "Para birimini seçin",
+    "sl1Descr": "Varsayılan para biriminiz raporlarda ve genel grafiklerde kullanılacaktır. Uygulama ayarlarından daha sonra istediğiniz zaman para birimini ve uygulama dilini değiştirebileceksiniz",
+    "sl2Title": "Güvenli, gizli ve güvenilir",
+    "sl2Descr": "Verileriniz yalnızca size aittir. Bilgileri harici sunuculara gitmeden doğrudan cihazınızda saklarız. Bu, uygulamayı internet olmadan bile kullanmayı mümkün kılar",
+    "sl2Descr2": "Ayrıca, uygulamanın kaynak kodu herkese açıktır, herkes üzerinde işbirliği yapabilir ve nasıl çalıştığını görebilir",
+    "lastSlideTitle": "Her şey hazır",
+    "lastSlideDescr": "Monekin ile sonunda çok istediğiniz finansal bağımsızlığa ulaşabilirsiniz. Paranız hakkında grafiklere, bütçelere, ipuçlarına, istatistiklere ve çok daha fazlasına sahip olacaksınız.",
+    "lastSlideDescr2": "Umarız deneyiminizden keyif alırsınız! Şüpheleriniz, önerileriniz durumunda bizimle iletişime geçmekten çekinmeyin..."
+  },
+  "HOME": {
+    "title": "Gösterge Paneli",
+    "filter-transactions": "İşlemleri filtrele",
+    "hello-day": "Günaydın,",
+    "hello-night": "İyi geceler,",
+    "total-balance": "Toplam bakiye",
+    "my-accounts": "Hesaplarım",
+    "active-accounts": "Aktif hesaplar",
+    "no-accounts": "Henüz hesap oluşturulmadı",
+    "no-accounts.descr": "Monekin'in tüm sihrini kullanmaya başlayın. İşlem eklemeye başlamak için en az bir hesap oluşturun",
+    "last-transactions": "Son işlemler",
+    "should-create-account.header": "Ups!",
+    "should-create-account.message": "İşlem oluşturmaya başlamadan önce en az bir arşivlenmemiş hesabınız olmalıdır"
+  },
+  "FINANCIAL-HEALTH": {
+    "display": "Finansal sağlık",
+    "review": {
+      "very_good(context=GenderContext)": {
+        "male,female": "Çok iyi!"
+      },
+      "good(context=GenderContext)": {
+        "male,female": "İyi"
+      },
+      "normal(context=GenderContext)": {
+        "male,female": "Ortalama"
+      },
+      "bad(context=GenderContext)": {
+        "male,female": "Fena"
+      },
+      "very_bad(context=GenderContext)": {
+        "male,female": "Çok Kötü"
+      },
+      "insufficient_data(context=GenderContext)": {
+        "male,female": "Yetersiz veri"
+      },
+      "descr": {
+        "insufficient_data": "Finansal sağlığınızı hesaplamak için yeterli giderimiz yok gibi görünüyor. Size yardımcı olmamıza izin vermek için bu dönemde bazı giderler/gelirler ekleyin!",
+        "very_good": "Tebrikler! Finansal sağlığınız muazzam. İyi gidişatınızı sürdürmenizi ve Monekin ile öğrenmeye devam etmenizi umuyoruz",
+        "good": "Harika! Finansal sağlığınız iyi. Daha da fazla nasıl tasarruf edebileceğinizi görmek için analiz sekmesini ziyaret edin!",
+        "normal": "Finansal sağlığınız bu dönem için nüfusun geri kalanının ortalamasına az çok eşit",
+        "bad": "Görünüşe göre mali durumunuz henüz en iyi seviyede değil. Finanslarınız hakkında daha fazla bilgi edinmek için grafiklerin geri kalanını inceleyin",
+        "very_bad": "Hmm, finansal sağlığınız olması gerekenden çok düşük. Finanslarınız hakkında daha fazla bilgi edinmek için grafiklerin geri kalanını inceleyin"
+      }
+    },
+    "monthsWithoutIncome": {
+      "title": "Hayatta kalma oranı",
+      "subtitle": "Bakiyeniz göz önüne alındığında, gelirsiz kalabileceğiniz süre",
+      "text.zero": "Bu gider oranında gelirsiz bir ay bile dayanamazsınız!",
+      "text.one": "Bu gider oranında yaklaşık bir ay gelirsiz yaşayabilirsiniz!",
+      "text.other": "Bu harcama oranında yaklaşık <b>{{ n }} ay</b> gelir olmadan yaşayabilirsiniz.",
+      "text.infinite": "Bu harcama oranında yaklaşık <b>tüm hayatınız boyunca</b> gelir olmadan yaşayabilirsiniz.",
+      "suggestion": "Bu oranın her zaman en az 5 ayın üzerinde tutulması gerektiğini unutmayın. Yeterli birikiminiz olmadığını görürseniz, gereksiz harcamaları azaltın.",
+      "insufficient_data": "Gelirsiz kaç ay hayatta kalabileceğinizi hesaplamak için yeterli giderimiz yok gibi görünüyor. Birkaç işlem girin ve finansal sağlığınızı kontrol etmek için buraya geri gelin"
+    },
+    "savingsPercentage": {
+      "title": "Tasarruf yüzdesi",
+      "subtitle": "Gelirinizin ne kadarı bu dönemde harcanmıyor",
+      "text": {
+        "good": "Tebrikler! Bu dönemde gelirinizin <b>{{value}}%</b>'sini tasarruf etmeyi başardınız. Görünüşe göre zaten bir uzmansınız, iyi iş çıkarmaya devam edin!",
+        "normal": "Tebrikler, bu dönemde gelirinizin <b>{{value}}%</b>'sini tasarruf etmeyi başardınız.",
+        "bad": "Bu dönemde gelirinizin <b>{{value}}%</b>'sini tasarruf etmeyi başardınız. Ancak, hala çok daha fazlasını yapabileceğinizi düşünüyoruz!",
+        "very_bad": "Vay canına, bu dönemde hiçbir şey biriktirmeyi başaramadınız."
+      },
+      "suggestion": "Kazandığınızın en az %15-20'sini biriktirmenin tavsiye edildiğini unutmayın."
+    }
+  },
+  "STATS": {
+    "title": "İstatistikler",
+    "balance": "Bakiye",
+    "final-balance": "Son bakiye",
+    "balance-by-account": "Hesaplara göre bakiye",
+    "balance-by-account-subtitle": "Paramın çoğunu nerede tutuyorum?",
+    "balance-by-currency": "Para birimine göre bakiye",
+    "balance-by-currency-subtitle": "Yabancı para biriminde ne kadar param var?",
+    "balance-evolution": "Bakiye trendi",
+    "balance-evolution-subtitle": "Eskisinden daha çok param var mı?",
+    "compared-to-previous-period": "Önceki döneme göre",
+    "cash-flow": "Nakit akışı",
+    "cash-flow-subtitle": "Kazandığımdan daha az mı harcıyorum?",
+    "by-periods": "Dönemlere göre",
+    "by-categories": "Kategorilere göre",
+    "by-tags": "Etiketlere göre",
+    "distribution": "Dağıtım",
+    "finance-health-resume": "Özet",
+    "finance-health-breakdown": "Detaylı Analiz"
+  },
+  "ICON-SELECTOR": {
+    "name": "İsim:",
+    "icon": "İkon",
+    "color": "Renk",
+    "select-icon": "Bir ikon seçin",
+    "select-color": "Bir renk seçin",
+    "custom-color": "Özel renk",
+    "current-color-selection": "Mevcut seçim",
+    "select-account-icon": "Hesabınızı tanımlayın",
+    "select-category-icon": "Kategorinizi tanımlayın",
+    "SCOPES": {
+      "transport": "Ulaşım",
+      "money": "Para",
+      "food": "Gıda",
+      "medical": "Sağlık",
+      "entertainment": "Eğlence",
+      "technology": "Teknoloji",
+      "other": "Diğerleri",
+      "logos/financial_institutions": "Finans kuruluşları"
+    }
+  },
+  "TRANSACTION": {
+    "display": {
+      "one": "İşlem",
+      "other": "İşlemler"
+    },
+    "create": "Yeni işlem",
+    "new.income": "Yeni gelir",
+    "new.expense": "Yeni gider",
+    "new.success": "İşlem başarıyla oluşturuldu",
+    "edit": "İşlemi düzenle",
+    "edit.success": "İşlem başarıyla düzenlendi",
+    "edit.multiple": "İşlemleri düzenle",
+    "edit.multiple.success": "{{ x }} işlem başarıyla düzenlendi",
+    "duplicate": "İşlemi kopyala",
+    "duplicate.short": "Kopyala",
+    "duplicate.warning-message": "Aynısı olan bir işlem bu tarih ile oluşturulacaktır, devam etmek istiyor musunuz?",
+    "duplicate.success": "İşlem başarıyla kopyalandı",
+    "delete": "İşlemi sil",
+    "delete.warning-message": "Bu eylem geri alınamaz. Hesaplarınızın mevcut bakiyesi ve tüm istatistikleriniz yeniden hesaplanacaktır",
+    "delete.success": "İşlem başarıyla silindi",
+    "delete.multiple": "İşlemleri sil",
+    "delete.multiple.warning-message": "Bu eylem geri alınamaz ve {{ x }} işlem silinecektir. Hesaplarınızın mevcut bakiyesi ve tüm istatistikleriniz yeniden hesaplanacaktır",
+    "delete.multiple.success": "{{x}} işlem başarıyla silindi",
+    "details": "Hareket detayları",
+    "NEXT-PAYMENTS": {
+      "accept": "Kabul et",
+      "skip": "Atla",
+      "skip.success": "İşlem başarıyla atlandı",
+      "skip-dialog.title": "İşlemi atla",
+      "skip-dialog.msg": "Bu eylem geri alınamaz. Bir sonraki hareketin tarihini {{date}} olarak değiştireceğiz",
+      "accept-today": "Bugün kabul et",
+      "accept-in-required-date": "Gerekli tarihte kabul et ({{date}})",
+      "accept-dialog.title": "İşlemi kabul et",
+      "accept-dialog.msg-single": "İşlemin yeni durumu boş olacaktır. İstediğiniz zaman bu işlemin durumunu yeniden düzenleyebilirsiniz",
+      "accept-dialog.msg": "Bu eylem {{date}} tarihli yeni bir işlem oluşturacaktır. İşlem sayfasında bu işlemin detaylarını kontrol edebileceksiniz",
+      "recurrent-rule-finished": "Tekrarlama kuralı tamamlandı, yapılacak başka ödeme yok!"
+    },
+    "LIST": {
+      "empty": "Burada görüntülenecek işlem bulunamadı. Uygulamaya birkaç işlem ekleyin, belki bir dahaki sefere daha şanslı olursunuz.",
+      "searcher.placeholder": "Kategoriye, açıklamaya göre ara...",
+      "searcher.no-results": "Arama kriterlerine uyan işlem bulunamadı",
+      "loading": "Daha fazla işlem yükleniyor...",
+      "selected.short": {
+        "one": "{{n}} seçildi",
+        "other": "{{n}} seçildi"
+      },
+      "selected.long": {
+        "one": "{{n}} işlem seçildi",
+        "other": "{{n}} işlem seçildi"
+      },
+      "BULK_EDIT": {
+        "dates": "Tarihleri düzenle",
+        "categories": "Kategorileri düzenle",
+        "status": "Durumları düzenle"
+      }
+    },
+    "FILTERS": {
+      "from_value": "Miktardan",
+      "to_value": "Miktara kadar",
+      "from_value_def": "{{ x }} dan",
+      "to_value_def": "{{ x }} a kadar",
+      "from_date_def": "{{ date }} tarihinden",
+      "to_date_def": "{{ date }} tarihine kadar"
+    },
+    "FORM": {
+      "VALIDATORS": {
+        "zero": "Bir işlemin değeri sıfıra eşit olamaz",
+        "date-max": "Seçilen tarih, güncel tarihten sonra. İşlem askıda olarak eklenecektir",
+        "date-after-account-creation": "Bir işlemin tarihi, ait olduğu hesabın oluşturulma tarihinden önce olamaz",
+        "negative-transfer": "Bir transferin parasal değeri negatif olamaz",
+        "transfer-between-same-accounts": "Kaynak ve hedef hesap aynı olamaz"
+      },
+      "title": "İşlem başlığı",
+      "title.short": "Başlık",
+      "value": "İşlem değeri",
+      "tap-to-see-more": "Daha fazla detay görmek için dokunun",
+      "no-tags": "-- Etiket yok --",
+      "description": "Açıklama",
+      "description-info": "Bu işlem hakkında daha detaylı bir açıklama girmek için buraya dokunun",
+      "exchange-to-preferred-title": "{{ currency }} için kur",
+      "exchange-to-preferred-in-date": "İşlem tarihinde"
+    },
+    "REVERSED": {
+      "title": "Ters işlem",
+      "title.short": "Ters. iş.",
+      "description-for-expenses": "Bir gider işlemi olmasına rağmen, pozitif bir tutara sahiptir. Bu tür işlemler, bir geri ödeme veya bir borcun ödenmesi gibi daha önce kaydedilmiş bir giderin iadesini temsil etmek için kullanılabilir.",
+      "description-for-incomes": "Bir gelir işlemi olmasına rağmen, negatif bir tutara sahiptir. Bu tür işlemler, hatalı kaydedilmiş bir geliri geçersiz kılmak veya düzeltmek, para iadesini veya geri ödemesini yansıtmak veya borç ödemesini kaydetmek için kullanılabilir."
+    },
+    "STATUS": {
+      "display": {
+        "one": "Durum",
+        "other": "Durumlar"
+      },
+      "display_long": "İşlem durumu",
+      "tr_status": "{{ status }} işlemi",
+      "none": "Durumsuz",
+      "none.descr": "Belirli bir durumu olmayan işlem",
+      "reconciled": "Mutabık",
+      "reconciled.descr": "Bu işlem zaten onaylandı ve bankanızdaki gerçek bir işleme karşılık geliyor",
+      "unreconciled": "Mutabık değil",
+      "unreconciled.descr": "Bu işlem henüz doğrulanmadı ve bu nedenle henüz gerçek banka hesaplarınızda görünmüyor. Ancak, Monekin'deki bakiyelerin ve istatistiklerin hesaplanması için sayılır",
+      "pending": "Beklemede",
+      "pending.descr": "Bu işlem bekliyor ve bu nedenle bakiyeler ve istatistikler hesaplanırken dikkate alınmayacaktır",
+      "voided": "İptal Edildi",
+      "voided.descr": "Ödeme hatası veya başka herhangi bir nedenden dolayı geçersiz kılınan/iptal edilen işlem. Bakiyeler ve istatistikler hesaplanırken dikkate alınmayacaktır"
+    },
+    "TYPES": {
+      "display": {
+        "one": "İşlem türü",
+        "other": "İşlem türleri"
+      },
+      "income": {
+        "one": "Gelir",
+        "other": "Gelirler"
+      },
+      "expense": {
+        "one": "Gider",
+        "other": "Giderler"
+      },
+      "transfer": {
+        "one": "Transfer",
+        "other": "Transferler"
+      }
+    }
+  },
+  "TRANSFER": {
+    "display": "Transfer",
+    "transfers": "Transferler",
+    "transfer-to": "{{ account }} hesabına transfer",
+    "create": "Yeni Transfer",
+    "need-two-accounts.warning.header": "Ups!",
+    "need-two-accounts.warning.message": "Bu eylemi gerçekleştirmek için en az iki hesaba ihtiyaç vardır. Bu hesabın mevcut bakiyesini ayarlamanız veya düzenlemeniz gerekiyorsa, düzenle düğmesine tıklayın",
+    "FORM": {
+      "from": "Kaynak hesap",
+      "to": "Hedef hesap",
+      "VALUE-IN-DESTINY": {
+        "title": "Hedefte aktarılan miktar",
+        "amount-short": "Hedef hesaba {{amount}}"
+      }
+    }
+  },
+  "RECURRENT-TRANSACTIONS": {
+    "title": "Tekrarlayan işlemler",
+    "title.short": "Tekr. işl.",
+    "empty": "Görünüşe göre tekrarlayan herhangi bir işleminiz yok. Aylık, yıllık veya haftalık tekrarlayan bir işlem oluşturun, burada görünecektir",
+    "total-expense.title": "Dönem başına toplam gider",
+    "total-expense.descr": "* Her tekrarın başlangıç ​​ve bitiş tarihi dikkate alınmadan",
+    "DETAILS": {
+      "title": "Tekrarlayan işlem",
+      "descr": "Bu işlem için sonraki hareketler aşağıda gösterilmektedir. İlk hareketi kabul edebilir veya bu hareketi atlayabilirsiniz",
+      "last-payment-info": "Bu hareket, tekrar kuralının sonuncusudur, bu nedenle bu eylemi onaylarken bu kural otomatik olarak silinecektir",
+      "delete-header": "Tekrarlayan işlemi sil",
+      "delete-message": "Bu eylem geri alınamaz ve zaten onayladığınız/ödediğiniz işlemleri etkilemez"
+    },
+    "STATUS": {
+      "delayed_by": "{{x}}g gecikti",
+      "coming_in": "{{x}} gün içinde"
+    }
+  },
+  "ACCOUNT": {
+    "details": "Hesap detayları",
+    "date": "Açılış tarihi",
+    "close_date": "Kapanış tarihi",
+    "reopen": "Hesabı yeniden aç",
+    "reopen.short": "Yeniden aç",
+    "reopen.descr": "Bu hesabı yeniden açmak istediğinizden emin misiniz?",
+    "balance": "Hesap bakiyesi",
+    "n_transactions": "İşlem sayısı",
+    "add_money": "Para ekle",
+    "withdraw_money": "Para çek",
+    "no-accounts": "Burada görüntülenecek işlem bulunamadı. Alttaki '+' düğmesine tıklayarak bir işlem ekleyin",
+    "TYPES": {
+      "title": "Hesap türü",
+      "warning": "Hesap türü seçildikten sonra gelecekte değiştirilemez",
+      "normal": "Normal hesap",
+      "normal.descr": "Günlük mali durumunuzu kaydetmek için kullanışlıdır. En yaygın hesaptır, giderler, gelirler eklemenize olanak tanır...",
+      "saving": "Tasarruf hesabı",
+      "saving.descr": "Yalnızca diğer hesaplardan para ekleyebilecek ve çekebileceksiniz. Para biriktirmeye başlamak için mükemmel"
+    },
+    "FORM": {
+      "name": "Hesap adı",
+      "name.placeholder": "Örn: Tasarruf hesabı",
+      "notes": "Notlar",
+      "notes.placeholder": "Bu hesap hakkında bazı notlar/açıklama yazın",
+      "initial-balance": "Başlangıç ​​bakiyesi",
+      "current-balance": "Mevcut bakiye",
+      "create": "Hesap oluştur",
+      "edit": "Hesabı düzenle",
+      "currency-not-found-warn": "Bu para birimi için döviz kurları hakkında bilginiz yok. Varsayılan döviz kuru olarak 1.0 kullanılacaktır. Bunu ayarlardan değiştirebilirsiniz",
+      "already-exists": "Aynı ada sahip başka bir hesap zaten var, lütfen başka bir tane yazın",
+      "tr-before-opening-date": "Bu hesapta açılış tarihinden önce bir tarihe sahip işlemler var",
+      "iban": "IBAN",
+      "swift": "SWIFT"
+    },
+    "DELETE": {
+      "warning-header": "Hesap silinsin mi?",
+      "warning-text": "Bu eylem bu hesabı ve tüm işlemlerini silecektir",
+      "success": "Hesap başarıyla silindi"
+    },
+    "CLOSE": {
+      "title": "Hesabı kapat",
+      "title.short": "Kapat",
+      "warn": "Bu hesap artık belirli listelerde görünmeyecek ve aşağıda belirtilen tarihten sonra bu hesapta işlem oluşturamayacaksınız. Bu eylem herhangi bir işlemi veya bakiyeyi etkilemez ve ayrıca bu hesabı istediğiniz zaman yeniden açabilirsiniz.",
+      "should-have-zero-balance": "Kapatmak için bu hesabın mevcut bakiyesi 0 olmalıdır. Lütfen devam etmeden önce hesabı düzenleyin",
+      "should-have-no-transactions": "Bu hesap, belirtilen kapanış tarihinden sonra işlemlere sahip. Devam etmeden önce bunları silin veya hesabın kapanış tarihini düzenleyin",
+      "success": "Hesap başarıyla kapatıldı",
+      "unarchive-succes": "Hesap başarıyla yeniden açıldı"
+    },
+    "SELECT": {
+      "one": "Bir hesap seçin",
+      "all": "Tüm hesaplar",
+      "multiple": "Hesapları seçin"
+    }
+  },
+  "CURRENCIES": {
+    "currency-converter": "Para birimi dönüştürücü",
+    "currency": "Para birimi",
+    "currency-manager": "Para birimi yöneticisi",
+    "currency-manager.descr": "Para biriminizi ve diğerleriyle döviz kurlarını yapılandırın",
+    "preferred-currency": "Tercih edilen/temel para birimi",
+    "change-preferred-currency-title": "Tercih edilen para birimini değiştir",
+    "change-preferred-currency-msg": "Tüm istatistikler ve bütçeler bundan sonra bu para biriminde görüntülenecektir. Hesaplar ve işlemler sahip oldukları para birimini koruyacaktır. Bu eylemi gerçekleştirirseniz, kaydedilen tüm döviz kurları silinecektir. Devam etmek istiyor musunuz?",
+    "FORM": {
+      "equal-to-preferred-warn": "Para birimi, kullanıcı para birimine eşit olamaz",
+      "specify-a-currency": "Lütfen bir para birimi belirtin",
+      "add": "Döviz kuru ekle",
+      "add-success": "Döviz kuru başarıyla eklendi",
+      "edit": "Döviz kurunu düzenle",
+      "edit-success": "Döviz kuru başarıyla düzenlendi"
+    },
+    "delete-all-success": "Döviz kurları başarıyla silindi",
+    "historical": "Geçmiş oranlar",
+    "exchange-rate": "Döviz kuru",
+    "exchange-rates": "Döviz kurları",
+    "empty": "Buraya döviz kurları ekleyin, böylece temel para biriminizden farklı para birimlerinde hesaplarınız varsa grafiklerimiz daha doğru olur",
+    "select-a-currency": "Bir para birimi seçin",
+    "search": "Adına veya para birimi koduna göre arayın"
+  },
+  "TAGS": {
+    "display": {
+      "one": "Etiket",
+      "other": "Etiketler"
+    },
+    "FORM": {
+      "name": "Etiket adı",
+      "description": "Açıklama"
+    },
+    "SELECT": {
+      "title": "Etiketleri seçin",
+      "all": "Tüm etiketler"
+    },
+    "empty-list": "Henüz etiket oluşturmadınız. Etiketler ve kategoriler, hareketlerinizi kategorize etmek için harika bir yoldur",
+    "without-tags": "Etiketsiz",
+    "add": "Etiket ekle",
+    "create": "Etiket oluştur",
+    "create.success": "Etiket başarıyla oluşturuldu",
+    "already-exists": "Bu etiket adı zaten var. Düzenlemek isteyebilirsiniz",
+    "edit": "Etiketi düzenle",
+    "edit.success": "Etiket başarıyla düzenlendi",
+    "delete.success": "Kategori başarıyla silindi",
+    "delete-warning-header": "Etiket silinsin mi?",
+    "delete-warning-message": "Bu eylem bu etikete sahip işlemleri silmez."
+  },
+  "CATEGORIES": {
+    "unknown": "Bilinmeyen kategori",
+    "create": "Kategori oluştur",
+    "create.success": "Kategori başarıyla oluşturuldu",
+    "new-category": "Yeni kategori",
+    "already-exists": "Bu kategorinin adı zaten var. Belki düzenlemek istersiniz",
+    "edit": "Kategoriyi düzenle",
+    "edit.success": "Kategori başarıyla düzenlendi",
+    "name": "Kategori adı",
+    "type": "Kategori türü",
+    "both-types": "Her iki tür",
+    "subcategories": "Alt kategoriler",
+    "subcategories.add": "Alt kategori ekle",
+    "make-parent": "Kategoriye yap",
+    "make-child": "Alt kategori yap",
+    "make-child.warning1": "Bu kategori ve alt kategorileri <b>{{destiny}}</b>'nin alt kategorileri olacaktır.",
+    "make-child.warning2": "İşlemleri <b>({{x}})</b>, <b>{{destiny}}</b> kategorisi içinde oluşturulan yeni alt kategorilere taşınacaktır.",
+    "make-child.success": "Alt kategoriler başarıyla oluşturuldu",
+    "merge": "Başka bir kategoriyle birleştir",
+    "merge.warning1": "<b>{{from}}</b> kategorisiyle ilişkili tüm işlemler ({{x}}), <b>{{destiny}}</b> kategorisine taşınacaktır.",
+    "merge.warning2": "<b>{{from}}</b> kategorisi geri dönüşü olmayacak şekilde silinecektir.",
+    "merge.success": "Kategori başarıyla birleştirildi",
+    "delete.success": "Kategori başarıyla silindi",
+    "delete-warning-header": "Kategori silinsin mi?",
+    "delete-warning-message": "Bu eylem, bu kategoriyle ilgili tüm işlemleri <b>({{x}})</b> geri dönüşü olmayacak şekilde silecektir.",
+    "SELECT": {
+      "title": "Kategori seçin",
+      "select-one": "Bir kategori seçin",
+      "select-subcategory": "Bir alt kategori seçin",
+      "without-subcategory": "Alt kategori olmadan",
+      "all": "Tüm kategoriler",
+      "all.short": "Tümü"
+    }
+  },
+  "BUDGETS": {
+    "title": "Bütçeler",
+    "repeated": "Tekrarlayan",
+    "one-time": "Tek seferlik",
+    "annual": "Yıllık",
+    "week": "Haftalık",
+    "month": "Aylık",
+    "actives": "Aktifler",
+    "pending": "Başlangıcı Bekliyor",
+    "finish": "Bitti",
+    "from-budgeted": "kalan ",
+    "days-left": "gün kaldı",
+    "days-to-start": "başlangıca kalan gün",
+    "since-expiration": "son kullanma tarihinden itibaren",
+    "no-budgets": "Bu bölümde görüntülenecek bütçe yok gibi görünüyor. Aşağıdaki düğmeyi tıklayarak bir bütçe oluşturmaya başlayın",
+    "delete": "Bütçeyi sil",
+    "delete-warning": "Bu eylem geri alınamaz. Bu bütçeye atıfta bulunan kategoriler ve işlemler silinmez",
+    "FORM": {
+      "title": "Bütçe ekle",
+      "name": "Bütçe adı",
+      "value": "Limit miktarı",
+      "create": "Bütçe ekle",
+      "edit": "Bütçeyi düzenle",
+      "negative-warn": "Bütçeler negatif miktara sahip olamaz"
+    },
+    "DETAILS": {
+      "title": "Bütçe Detayları",
+      "statistics": "İstatistikler",
+      "budget-value": "Bütçelenen",
+      "expend-diary-left": "{{ remainingDays }} kalan gün için günde {{ dailyAmount }} harcayabilirsiniz",
+      "expend-evolution": "Harcama gelişimi",
+      "no-transactions": "Bu bütçeyle ilgili herhangi bir harcama yapmamışsınız gibi görünüyor"
+    }
+  },
+  "BACKUP": {
+    "EXPORT": {
+      "title": "Verilerinizi dışa aktarın",
+      "title.short": "Dışa Aktar",
+      "all": "Tam yedekleme",
+      "all.descr": "Tüm verilerinizi (hesaplar, işlemler, bütçeler, ayarlar...) dışa aktarın. Herhangi bir şeyi kaybetmemek için bunları istediğiniz zaman tekrar içe aktarın.",
+      "transactions": "İşlemlerin yedeği",
+      "transactions.descr": "İşlemlerinizi CSV olarak dışa aktarın, böylece diğer programlarda veya uygulamalarda daha kolay analiz edebilirsiniz.",
+      "description": "Verilerinizi farklı formatlarda indirin",
+      "dialog_title": "Dosyayı Kaydet/Gönder",
+      "success": "Dosya {{x}} olarak başarıyla kaydedildi/indirildi",
+      "error": "Dosya indirilirken hata oluştu. Lütfen lozin.technologies@gmail.com adresinden geliştirici ile iletişime geçin"
+    },
+    "IMPORT": {
+      "title": "Verilerinizi içe aktarın",
+      "title.short": "İçe Aktar",
+      "restore-backup": "Yedeklemeyi Geri Yükle",
+      "restore-backup-descr": "Monekin'den daha önce kaydedilmiş bir veritabanını içe aktarın. Bu eylem, mevcut uygulama verilerinin herhangi birini yeni verilerle değiştirecektir",
+      "restore-backup-warn.description": "Yeni bir veritabanı içe aktarırken, uygulamada şu anda kayıtlı olan tüm verileri kaybedeceksiniz. Devam etmeden önce bir yedekleme yapmanız önerilir. Buraya, kaynağını bilmediğiniz herhangi bir dosyayı yüklemeyin, yalnızca daha önce Monekin'den indirdiğiniz dosyaları yükleyin",
+      "restore-backup-warn.title": "Tüm verilerin üzerine yaz",
+      "select-other-file": "Başka dosya seç",
+      "tap-to-select-file": "Bir dosya seçmek için dokunun",
+      "MANUAL-IMPORT": {
+        "title": "Manuel içe aktarma",
+        "descr": "İşlemleri manuel olarak .csv dosyasından içe aktarın",
+        "defaultAccount": "Varsayılan hesap",
+        "removeDefaultAccount": "Varsayılan hesabı kaldır",
+        "defaultCategory": "Varsayılan Kategori",
+        "select-a-column": ".csv'den bir sütun seçin",
+        "steps": [
+          "Dosyanızı seçin",
+          "Miktar için sütun",
+          "Hesap için sütun",
+          "Kategori için sütun",
+          "Tarih için sütun",
+          "diğer sütunlar"
+        ],
+        "steps-descr": [
+          "Cihazınızdan bir .csv dosyası seçin. Her sütunun adını açıklayan bir ilk satıra sahip olduğundan emin olun",
+          "Her işlemin değerinin belirtildiği sütunu seçin. Giderler için negatif değerler ve gelirler için pozitif değerler kullanın. Ondalık ayırıcı olarak nokta kullanın",
+          "Her işlemin ait olduğu hesabın belirtildiği sütunu seçin. İstediğiniz hesabı bulamamamız durumunda varsayılan bir hesap da seçebilirsiniz. Varsayılan bir hesap belirtilmezse, aynı adla bir tane oluşturacağız",
+          "İşlem kategorisi adının bulunduğu sütunu belirtin. Kategoriyi bulamamamız durumunda işlemlere bu kategoriyi atayabilmemiz için varsayılan bir kategori belirtmeniz gerekir",
+          "Her işlemin tarihinin belirtildiği sütunu seçin. Belirtilmezse, işlemler mevcut tarihle oluşturulacaktır",
+          "Diğer isteğe bağlı işlem öznitelikleri için sütunları belirtir"
+        ],
+        "success": "{{x}} işlem başarıyla içe aktarıldı"
+      },
+      "success": "İçe aktarma başarıyla gerçekleştirildi",
+      "cancelled": "İçe aktarma kullanıcı tarafından iptal edildi",
+      "error": "Dosya içe aktarılırken hata oluştu. Lütfen lozin.technologies@gmail.com adresinden geliştirici ile iletişime geçin"
+    },
+    "ABOUT": {
+      "title": "Veritabanınız hakkında bilgiler",
+      "create-date": "Oluşturulma tarihi",
+      "modify-date": "Son değiştirilme",
+      "last-backup": "Son yedekleme",
+      "size": "Boyut"
+    }
+  },
+  "SETTINGS": {
+    "title_long": "Ayarlar ve görünüm",
+    "title_short": "Ayarlar",
+    "description": "Uygulama teması, metinler ve diğer genel ayarlar",
+    "edit_profile": "Profili düzenle",
+    "lang.section": "Dil ve metinler",
+    "lang.title": "Uygulama dili",
+    "lang.descr": "Metinlerin uygulamada görüntüleneceği dil",
+    "lang.help": "Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>kılavuzumuza</a> başvurabilirsiniz",
+    "locale": "Bölge",
+    "locale.descr": "Tarihler, sayılar için kullanılacak biçimi ayarlayın...",
+    "locale.warn": "Bölge değiştirildiğinde uygulama güncellenecektir",
+    "first_day_of_week": "Haftanın ilk günü",
+    "theme_and_colors": "Tema ve renkler",
+    "theme": "Tema",
+    "theme.auto": "Sistem",
+    "theme.light": "Açık",
+    "theme.dark": "Koyu",
+    "amoled-mode": "AMOLED modu",
+    "amoled-mode.descr": "Mümkün olduğunda saf siyah bir duvar kağıdı kullanın. Bu, AMOLED ekranlara sahip cihazların pili için biraz yardımcı olacaktır",
+    "dynamic-colors": "Dinamik renkler",
+    "dynamic-colors.descr": "Mümkün olduğunda sistem vurgu renginizi kullanın",
+    "accent-color": "Vurgu rengi",
+    "accent-color.descr": "Uygulamanın arayüzün belirli kısımlarını vurgulamak için kullanacağı rengi seçin",
+    "SECURITY": {
+      "title": "Güvenlik",
+      "private-mode-at-launch": "Başlangıçta özel mod",
+      "private-mode-at-launch.descr": "Uygulamayı varsayılan olarak özel modda başlatın",
+      "private-mode": "Özel mod",
+      "private-mode.descr": "Tüm parasal değerleri gizle",
+      "private-mode.activated": "Özel mod etkinleştirildi",
+      "private-mode.deactivated": "Özel mod devre dışı bırakıldı"
+    }
+  },
+  "MORE": {
+    "title": "Daha Fazla",
+    "title_long": "Daha fazla eylem",
+    "DATA": {
+      "display": "Veri",
+      "display.descr": "Hiçbir şeyi kaybetmemek için verilerinizi dışa ve içe aktarın",
+      "delete-all": "Verilerimi sil",
+      "delete-all-header1": "Orada dur padawan ⚠️⚠️",
+      "delete-all-message1": "Devam etmek istediğinizden emin misiniz? Tüm verileriniz kalıcı olarak silinecek ve kurtarılamayacaktır",
+      "delete-all-header2": "Son bir adım ⚠️⚠️",
+      "delete-all-message2": "Bir hesabı sildiğinizde, kayıtlı tüm kişisel verilerinizi silmiş olursunuz. Hesaplarınız, işlemleriniz, bütçeleriniz ve kategorileriniz silinecek ve kurtarılamayacaktır. Kabul ediyor musunuz?"
+    },
+    "ABOUT_US": {
+      "display": "Uygulama bilgileri",
+      "description": "Monekin hakkında şartları ve diğer ilgili bilgileri inceleyin. Hata bildirerek, önerilerde bulunarak toplulukla etkileşime geçin...",
+      "LEGAL": {
+        "display": "Yasal bilgiler",
+        "privacy": "Gizlilik politikası",
+        "terms": "Kullanım koşulları",
+        "licenses": "Lisanslar"
+      },
+      "PROJECT": {
+        "display": "Proje",
+        "contributors": "Katkıda bulunanlar",
+        "contributors.descr": "Monekin'in büyümesini sağlayan tüm geliştiriciler",
+        "contact": "Bize ulaşın"
+      }
+    },
+    "HELP_US": {
+      "display": "Bize yardım edin",
+      "description": "Monekin'in nasıl daha iyi olabileceğini öğrenin",
+      "rate-us": "Bize oy verin",
+      "rate-us.descr": "Herhangi bir puan memnuniyetle karşılanır!",
+      "share": "Monekin'i paylaşın",
+      "share.descr": "Uygulamamızı arkadaşlarınıza ve ailenize paylaşın",
+      "share.text": "Monekin! En iyi kişisel finans uygulaması. Buradan indirin",
+      "thanks": "Teşekkürler!",
+      "thanks_long": "Monekin'e ve diğer açık kaynaklı projelere yaptığınız katkılar, büyük ve küçük, bunun gibi harika projeleri mümkün kılıyor. Katkıda bulunmak için zaman ayırdığınız için teşekkür ederiz.",
+      "donate": "Bağış yap",
+      "donate.descr": "Bağışınızla uygulamanın iyileştirmeler almaya devam etmesine yardımcı olacaksınız. Yapılan çalışmaya kahve ısmarlayarak teşekkür etmekten daha iyi bir yol mu var?",
+      "donate.success": "Bağış yapıldı. Katkılarınız için çok teşekkür ederim! ❤️",
+      "donate.err": "Ups! Ödemenizi alırken bir hata oluştu gibi görünüyor",
+      "report": "Hataları bildirin, önerilerde bulunun..."
+    }
+  }
+}

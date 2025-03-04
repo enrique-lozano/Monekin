@@ -24,11 +24,10 @@ targets:
       slang_build_runner:
         options:
           base_locale: en
-          input_directory: lib/i18n
+          input_directory: lib/i18n/json
           input_file_pattern: .json
-          output_directory: lib/i18n
+          output_directory: lib/i18n/generated
           output_file_name: translations.g.dart
-          output_format: single_file
           namespaces: false
           translate_var: t
           enum_name: AppLocale

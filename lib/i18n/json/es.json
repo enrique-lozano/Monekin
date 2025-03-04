@@ -73,6 +73,7 @@
         "display": "Rango temporal",
         "it-repeat": "Se repite",
         "it-ends": "Termina",
+        "forever": "Para siempre",
         "TYPES": {
           "cycle": "Ciclos",
           "last_days": "Últimos días",
@@ -96,7 +97,6 @@
           "one": "Cada {{range}} una vez",
           "other": "Cada {{n}} {{range}} una vez"
         },
-        "forever": "Para siempre",
         "month": {
           "one": "Mes",
           "other": "Meses"
@@ -130,13 +130,13 @@
         "infinite": "Siempre"
       },
       "CURRENT": {
-        "diary": "Este día",
         "Monthly": "Este mes",
         "Annually": "Este año",
         "Quaterly": "Este trimestre",
         "Weekly": "Esta semana",
         "Infinite": "Desde siempre",
-        "Custom": "Rango personalizado"
+        "Custom": "Rango personalizado",
+        "diary": "Este día"
       },
       "ALL": {
         "diary": "Todos los días",
@@ -197,10 +197,19 @@
   "FINANCIAL-HEALTH": {
     "display": "Salud financiera",
     "review": {
-      "very_good(context=GenderContext)": { "male,female": "Excelente!" },
-      "good(context=GenderContext)": { "male": "Bueno", "female": "Buena" },
-      "normal(context=GenderContext)": { "male,female": "En la media" },
-      "bad(context=GenderContext)": { "male,female": "Regular" },
+      "very_good(context=GenderContext)": {
+        "male,female": "Excelente!"
+      },
+      "good(context=GenderContext)": {
+        "male": "Bueno",
+        "female": "Buena"
+      },
+      "normal(context=GenderContext)": {
+        "male,female": "En la media"
+      },
+      "bad(context=GenderContext)": {
+        "male,female": "Regular"
+      },
       "very_bad(context=GenderContext)": {
         "male": "Muy malo",
         "female": "Muy mala"
@@ -208,7 +217,6 @@
       "insufficient_data(context=GenderContext)": {
         "male,female": "Datos insuficientes"
       },
-
       "descr": {
         "insufficient_data": "Parece que no tenemos gastos suficientes para calcular tu salud financiera. Añade unos pocos gastos e ingresos para que podamos ayudarte mas!",
         "very_good": "Enhorabuena! Tu salud financiera es formidable. Esperamos que sigas con tu buena racha y que continues aprendiendo con Monekin",
@@ -306,11 +314,11 @@
     "delete.multiple.success": "{{ x }} transacciones eliminadas correctamente",
     "details": "Detalles del movimiento",
     "NEXT-PAYMENTS": {
+      "accept": "Aceptar",
       "skip": "Saltar",
       "skip.success": "Transacción saltada con exito",
       "skip-dialog.title": "Saltar transacción",
       "skip-dialog.msg": "Esta acción es irreversible. Desplazaremos la fecha del proximo movimiento al día {{date}}",
-      "accept": "Aceptar",
       "accept-today": "Aceptar hoy",
       "accept-in-required-date": "Aceptar en la fecha requerida ({{date}})",
       "accept-dialog.title": "Aceptar transacción",
@@ -355,9 +363,9 @@
       },
       "title": "Título de la transacción",
       "title.short": "Título",
-      "no-tags": "-- Sin etiquetas --",
       "value": "Valor de la transacción",
       "tap-to-see-more": "Toca para ver más detalles",
+      "no-tags": "-- Sin etiquetas --",
       "description": "Descripción",
       "description-info": "Toca aquí para escribir una descripción mas detallada sobre esta transacción",
       "exchange-to-preferred-title": "Cambio a {{ currency }}",
@@ -444,8 +452,8 @@
     "details": "Detalles de la cuenta",
     "date": "Fecha de apertura",
     "close_date": "Fecha de cierre",
-    "reopen.short": "Reabrir",
     "reopen": "Reabrir cuenta",
+    "reopen.short": "Reabrir",
     "reopen.descr": "¿Seguro que quieres volver a abrir esta cuenta?",
     "balance": "Saldo de la cuenta",
     "n_transactions": "Número de transacciones",
@@ -469,9 +477,9 @@
       "current-balance": "Balance actual",
       "create": "Crear cuenta",
       "edit": "Editar cuenta",
-      "tr-before-opening-date": "Existen transacciones en esta cuenta con fecha anterior a la fecha de apertura",
       "currency-not-found-warn": "No posees información sobre tipos de cambio para esta divisa. Se usará 1.0 como tipo de cambio por defecto. Puedes modificar esto en los ajustes",
       "already-exists": "Ya existe otra cuenta con el mismo nombre. Por favor, escriba otro",
+      "tr-before-opening-date": "Existen transacciones en esta cuenta con fecha anterior a la fecha de apertura",
       "iban": "IBAN",
       "swift": "SWIFT"
     },
@@ -491,15 +499,15 @@
     },
     "SELECT": {
       "one": "Selecciona una cuenta",
-      "multiple": "Selecciona cuentas",
-      "all": "Todas las cuentas"
+      "all": "Todas las cuentas",
+      "multiple": "Selecciona cuentas"
     }
   },
   "CURRENCIES": {
     "currency-converter": "Conversor de divisas",
+    "currency": "Divisa",
     "currency-manager": "Administrador de divisas",
     "currency-manager.descr": "Configura tu divisa y sus tipos de cambio con otras",
-    "currency": "Divisa",
     "preferred-currency": "Divisa predeterminada/base",
     "change-preferred-currency-title": "Cambiar divisa predeterminada",
     "change-preferred-currency-msg": "Todas las estadisticas y presupuestos serán mostradas en esta divisa a partir de ahora. Las cuentas y transacciones mantendrán la divisa que tenían. Todos los tipos de cambios guardados serán eliminados si ejecutas esta acción, ¿Desea continuar?",
@@ -534,8 +542,8 @@
     },
     "empty-list": "No has creado ninguna etiqueta aun. Las etiquetas y las categorías son una gran forma de categorizar tus movimientos",
     "without-tags": "Sin etiquetas",
-    "create": "Crear etiqueta",
     "add": "Añadir etiqueta",
+    "create": "Crear etiqueta",
     "create.success": "Etiqueta creada correctamente",
     "already-exists": "El nombre de esta etiqueta ya existe. Puede que quieras editarla",
     "edit": "Editar etiqueta",
@@ -605,8 +613,8 @@
     },
     "DETAILS": {
       "title": "Detalles del presupuesto",
-      "budget-value": "Presupuestado",
       "statistics": "Estadísticas",
+      "budget-value": "Presupuestado",
       "expend-diary-left": "Puedes gastar {{ dailyAmount }}/día por los {{ remainingDays }} días restantes",
       "expend-evolution": "Evolución del gasto",
       "no-transactions": "Parece que no has realizado ningún gasto relativo a este presupuesto"
@@ -630,10 +638,10 @@
       "title.short": "Importar",
       "restore-backup": "Restaurar copia de seguridad",
       "restore-backup-descr": "Importa una base de datos anteriormente guardada desde Monekin. Esta acción remplazará cualquier dato actual de la aplicación por los nuevos datos",
-      "restore-backup-warn.title": "Sobreescribir todos los datos",
       "restore-backup-warn.description": "Al importar una nueva base de datos, perderas toda la información actualmente guardada en la app. Se recomienda hacer una copia de seguridad antes de continuar. No subas aquí ningún fichero cuyo origen no conozcas, sube solo ficheros que hayas descargado previamente desde Monekin",
-      "tap-to-select-file": "Pulsa para seleccionar un archivo",
+      "restore-backup-warn.title": "Sobreescribir todos los datos",
       "select-other-file": "Selecciona otro fichero",
+      "tap-to-select-file": "Pulsa para seleccionar un archivo",
       "MANUAL-IMPORT": {
         "title": "Importación manual",
         "descr": "Importa transacciones desde un fichero .csv de forma manual",
@@ -641,7 +649,6 @@
         "removeDefaultAccount": "Eliminar cuenta por defecto",
         "defaultCategory": "Categoría por defecto",
         "select-a-column": "Selecciona una columna del .csv",
-        "success": "Se han importado correctamente {{x}} transacciones",
         "steps": [
           "Selecciona tu fichero",
           "Columna para la cantidad",
@@ -657,7 +664,8 @@
           "Especifica la columna donde se encuentra el nombre de la categoría de la transacción. Debes especificar una categoría por defecto para que asignemos esta categoría a las transacciones, en caso de que la categoría no se pueda encontrar",
           "Selecciona la columna donde se especifica la fecha de cada transacción. En caso de no especificarse, se crearan transacciones con la fecha actual",
           "Especifica las columnas para otros atributos optativos de las transacciones"
-        ]
+        ],
+        "success": "Se han importado correctamente {{x}} transacciones"
       },
       "success": "Importación realizada con exito",
       "cancelled": "La importación fue cancelada por el usuario",
@@ -742,12 +750,12 @@
       "share.descr": "Comparte nuestra app a amigos y familiares",
       "share.text": "Monekin! La mejor app de finanzas personales. Descargala aquí",
       "thanks": "¡Gracias!",
-      "thanks.long": "Tus contribuciones a Monekin y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir.",
       "donate": "Haz una donación",
       "donate.descr": "Con tu donación ayudaras a que la app siga recibiendo mejoras. ¿Que mejor forma que agradecer el trabajo realizado invitandome a un cafe?",
       "donate.success": "Donación realizada. Muchas gracias por tu contribución! ❤️",
       "donate.err": "Ups! Parece que ha habido un error a la hora de recibir tu pago",
-      "report": "Reporta errores, deja sugerencias..."
+      "report": "Reporta errores, deja sugerencias...",
+      "thanks.long": "Tus contribuciones a Monekin y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir."
     }
   }
 }

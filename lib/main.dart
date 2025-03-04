@@ -13,7 +13,7 @@ import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/routes/root_navigator_observer.dart';
 import 'package:monekin/core/utils/logger.dart';
 import 'package:monekin/core/utils/scroll_behavior_override.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +23,21 @@ void main() async {
 
   PrivateModeService.instance
       .setPrivateMode(appStateSettings[SettingKey.privateModeAtLaunch] == '1');
+
+  // Set plural resolver for Turkish
+  LocaleSettings.setPluralResolver(
+    language: 'tr',
+    cardinalResolver: (n,
+        {String? few,
+        String? many,
+        String? one,
+        String? other,
+        String? two,
+        String? zero}) {
+      if (n == 1) return 'one';
+      return 'other';
+    },
+  );
 
   runApp(InitializeApp(key: appStateKey));
 }

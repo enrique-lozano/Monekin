@@ -5,7 +5,7 @@ import 'package:monekin/app/settings/settings.page.dart';
 import 'package:monekin/app/stats/stats_page.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 enum AppMenuDestinationsID {
   dashboard,

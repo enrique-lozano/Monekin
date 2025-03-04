@@ -11,7 +11,7 @@ import 'package:monekin/core/presentation/widgets/monekin_reorderable_list.dart'
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 import '../../core/presentation/widgets/reorderable_drag_icon.dart';
 
