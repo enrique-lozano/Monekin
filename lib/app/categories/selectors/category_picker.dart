@@ -118,9 +118,7 @@ class _CategoryPickerState extends State<CategoryPicker>
                       //  buildSelectAllButton(snapshot),
                       Expanded(
                         child: ScrollableWithBottomGradient(
-                          gradientColor: Theme.of(context)
-                              .colorSchemeExtended
-                              .modalBackground,
+                          gradientColor: AppColors.of(context).modalBackground,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           controller: scrollController,
                           child: buildCategoryList(snapshot, scrollController),
