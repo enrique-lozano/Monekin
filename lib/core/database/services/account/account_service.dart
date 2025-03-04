@@ -194,6 +194,8 @@ class AccountService {
     DateTime? endDate,
     bool convertToPreferredCurrency = true,
   }) {
+    if (accounts.isEmpty) return Stream.value(0);
+
     endDate ??= DateTime.now();
     startDate ??= accounts.map((e) => e.date).min;
 
