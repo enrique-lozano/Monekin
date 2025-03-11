@@ -3,10 +3,10 @@
 /// Source: lib/i18n/json
 /// To regenerate, run: `dart run slang`
 ///
-/// Locales: 7
-/// Strings: 4033 (576 per locale)
+/// Locales: 8
+/// Strings: 4609 (576 per locale)
 ///
-/// Built on 2025-02-14 at 12:45 UTC
+/// Built on 2025-03-11 at 19:46 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint, unused_import
@@ -22,6 +22,7 @@ import 'translations_es.g.dart' deferred as l_es;
 import 'translations_hu.g.dart' deferred as l_hu;
 import 'translations_tr.g.dart' deferred as l_tr;
 import 'translations_uk.g.dart' deferred as l_uk;
+import 'translations_zh_CN.g.dart' deferred as l_zh_CN;
 import 'translations_zh_TW.g.dart' deferred as l_zh_TW;
 part 'translations_en.g.dart';
 
@@ -38,6 +39,7 @@ enum AppLocale with BaseAppLocale<AppLocale, Translations> {
 	hu(languageCode: 'hu'),
 	tr(languageCode: 'tr'),
 	uk(languageCode: 'uk'),
+	zhCn(languageCode: 'zh', countryCode: 'CN'),
 	zhTw(languageCode: 'zh', countryCode: 'TW');
 
 	const AppLocale({
@@ -98,6 +100,13 @@ enum AppLocale with BaseAppLocale<AppLocale, Translations> {
 					cardinalResolver: cardinalResolver,
 					ordinalResolver: ordinalResolver,
 				);
+			case AppLocale.zhCn:
+				await l_zh_CN.loadLibrary();
+				return l_zh_CN.TranslationsZhCn(
+					overrides: overrides,
+					cardinalResolver: cardinalResolver,
+					ordinalResolver: ordinalResolver,
+				);
 			case AppLocale.zhTw:
 				await l_zh_TW.loadLibrary();
 				return l_zh_TW.TranslationsZhTw(
@@ -147,6 +156,12 @@ enum AppLocale with BaseAppLocale<AppLocale, Translations> {
 				);
 			case AppLocale.uk:
 				return l_uk.TranslationsUk(
+					overrides: overrides,
+					cardinalResolver: cardinalResolver,
+					ordinalResolver: ordinalResolver,
+				);
+			case AppLocale.zhCn:
+				return l_zh_CN.TranslationsZhCn(
 					overrides: overrides,
 					cardinalResolver: cardinalResolver,
 					ordinalResolver: ordinalResolver,
