@@ -1,0 +1,746 @@
+{
+  "UI-ACTIONS": {
+    "cancel": "取消",
+    "confirm": "确认",
+    "continue_text": "继续",
+    "save": "保存",
+    "save_changes": "保存更改",
+    "close_and_save": "保存并关闭",
+    "add": "添加",
+    "edit": "编辑",
+    "delete": "删除",
+    "see-more": "查看更多",
+    "select-all": "全选",
+    "deselect-all": "取消全选",
+    "select": "选择",
+    "search": "搜索",
+    "filter": "筛选",
+    "reset": "重置",
+    "submit": "提交",
+    "next": "下一步",
+    "previous": "上一步",
+    "back": "返回",
+    "reload": "重新加载",
+    "view": "视图",
+    "download": "下载",
+    "upload": "上传",
+    "retry": "重试",
+    "copy": "复制",
+    "paste": "粘贴",
+    "undo": "撤销",
+    "redo": "还原",
+    "open": "打开",
+    "close": "关闭",
+    "apply": "应用",
+    "discard": "放弃",
+    "refresh": "刷新",
+    "details": "详情",
+    "share": "分享"
+  },
+  "GENERAL": {
+    "or": "或",
+    "understood": "明白",
+    "unspecified": "未指定",
+    "quick_actions": "快捷行动",
+    "balance": "余额",
+    "account": "账户",
+    "accounts": "账户",
+    "categories": "类别",
+    "category": "类别",
+    "today": "今天",
+    "yesterday": "昨天",
+    "filters": "筛选",
+    "empty-warn": "喔！空空如也",
+    "insufficient-data": "数据不足",
+    "show-more-fields": "显示更多",
+    "show-less-fields": "显示更少",
+    "tap-to-search": "点击以搜索",
+    "CLIPBOARD": {
+      "success": "已复制 {{x}}",
+      "error": "复制出错"
+    },
+    "TIME": {
+      "start-date": "开始日期",
+      "end-date": "结束日期",
+      "from-date": "从",
+      "until-date": "到",
+      "date": "日期",
+      "datetime": "日期时间",
+      "time": "时间",
+      "each": "每",
+      "after": "后",
+      "RANGES": {
+        "display": "时间范围",
+        "it-repeat": "重复",
+        "it-ends": "结束",
+        "forever": "永久",
+        "TYPES": {
+          "cycle": "循环",
+          "last_days": "Last days",
+          "last_days_form": "前{{x}}天",
+          "all": "总是",
+          "date_range": "自定义范围"
+        },
+        "each-range": {
+          "one": "每{{range}}",
+          "other": "每{{n}}{{range}}"
+        },
+        "each-range-until-date": {
+          "one": "每{{range}}直到{{day}}",
+          "other": "每 {{n}}{{range}}直到{{day}}"
+        },
+        "each-range-until-times": {
+          "one": "每{{range}}{{limit}}次",
+          "other": "每{{n}}{{range}}{{limit}}次"
+        },
+        "each-range-until-once": {
+          "one": "每{{range}}一次",
+          "other": "每{{n}}{{range}}一次"
+        },
+        "month": {
+          "one": "月",
+          "other": "月"
+        },
+        "year": {
+          "one": "年",
+          "other": "年"
+        },
+        "day": {
+          "one": "天",
+          "other": "天"
+        },
+        "week": {
+          "one": "星期",
+          "other": "星期"
+        }
+      },
+      "PERIODICITY": {
+        "display": "重复",
+        "no-repeat": "不重复",
+        "repeat": {
+          "one": "重复",
+          "other": "重复"
+        },
+        "diary": "每天",
+        "monthly": "每月",
+        "annually": "每年",
+        "quaterly": "每季度",
+        "weekly": "每周",
+        "custom": "自定义",
+        "infinite": "总是"
+      },
+      "CURRENT": {
+        "Monthly": "当月",
+        "Annually": "今年",
+        "Quaterly": "本季度",
+        "Weekly": "本星期",
+        "Infinite": "永远",
+        "Custom": "自定义范围"
+      },
+      "ALL": {
+        "diary": "每天",
+        "Monthly": "每月",
+        "Annually": "每年",
+        "Quaterly": "每季度",
+        "Weekly": "每周"
+      }
+    },
+    "TRANSACTION-ORDER": {
+      "display": "排序",
+      "Category": "按类别",
+      "Quantity": "按数额",
+      "Date": "按日期"
+    },
+    "VALIDATIONS": {
+      "form_error": "请改正指定的项目后继续",
+      "required": "必填项目",
+      "positive": "应为正值",
+      "min_number": "应大于{{x}}",
+      "max_number": "应小于{{x}}"
+    }
+  },
+  "INTRO": {
+    "start": "开始",
+    "skip": "跳过",
+    "next": "继续",
+    "select-your-currency": "选择您的货币",
+    "welcome.subtitle": "您的个人财务管家",
+    "welcome.subtitle2": "100% 开放，100% 免费",
+    "welcome.footer": "登录即表示您同意<a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>隐私策略</a>和此 app 的<a href= 'https: //github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>使用条款</a>",
+    "offline.descr.title": "本地账户：",
+    "offline.descr": "您的数据只会存储于此设备中，只要您不卸载应用或更换手机，数据就会保持安全。为避免数据丢失，建议定期从 app 设置中备份数据。",
+    "offline.start": "开始使用本地账户",
+    "sl1Title": "选择您的货币",
+    "sl1Descr": "您的默认货币会被用于报表和图表中。您之后可以随时更改默认货币和 app 语言",
+    "sl2Title": "安全、隐私、可靠",
+    "sl2Descr": "您的数据只属于您。我们直接将您的信息存储于此设备，不会连接外部服务器。因此您可以在离线时继续使用此 app",
+    "sl2Descr2": "此外，此 app 的源代码是公开的，任何人都可以查看它如何运行并贡献自己的力量",
+    "lastSlideTitle": "全部就绪",
+    "lastSlideDescr": "使用 Monekin，您最终可以实现自己想要的财务独立。您将拥有和您的钱相关的图表、预算、提示、统计信息等。",
+    "lastSlideDescr2": "祝您使用愉快！如果您有任何疑问或建议，请随时与我们联系……"
+  },
+  "HOME": {
+    "title": "面板",
+    "filter-transactions": "筛选交易",
+    "hello-day": "您好，",
+    "hello-night": "晚上好，",
+    "total-balance": "总余额",
+    "my-accounts": "我的账户",
+    "active-accounts": "活动账户",
+    "no-accounts": "尚未创建账户",
+    "no-accounts.descr": "要开始使用 Monekin，请创建至少一个账户，以便开始添加交易",
+    "last-transactions": "最近的交易",
+    "should-create-account.header": "Oops!",
+    "should-create-account.message": "在可以开始创建交易之前，您必须拥有至少一个未被归档的账户"
+  },
+  "FINANCIAL-HEALTH": {
+    "display": "财务健康",
+    "review": {
+      "very_good(context=GenderContext)": { "male,female": "很好！" },
+      "good(context=GenderContext)": { "male,female": "好" },
+      "normal(context=GenderContext)": { "male,female": "一般" },
+      "bad(context=GenderContext)": { "male,female": "不好" },
+      "very_bad(context=GenderContext)": { "male,female": "很不好" },
+      "insufficient_data(context=GenderContext)": {
+        "male,female": "数据不足"
+      },
+
+      "descr": {
+        "insufficient_data": "看起来我们没有足够的数据来计算您的财务健康情况。请添加一些支出/收入以便我们帮助您！",
+        "very_good": "恭喜！您的财务状况非常好。我们希望您能够继续保持，并继续和 Monekin 一起学习。",
+        "good": "很好！您的财务健康状况良好。请查看分析页面，了解如何省下更多！",
+        "normal": "您的财务健康状况在这一段时间里处于平均水平",
+        "bad": "看起来您的财务状况不是很理想。请查看其余的图表以便进一步了解您的财务情况。",
+        "very_bad": "嗯，您的财务健康状况远低于应有的水平。请查看其余的图表以便进一步了解您的财务情况。"
+      }
+    },
+    "monthsWithoutIncome": {
+      "title": "财富自由时长",
+      "subtitle": "根据您的余额计算出您可以在无收入的情况下生活的时长",
+      "text.zero": "按这样的开支速度，您无法支撑一个月！",
+      "text.one": "按这样的开支速度，如果没有收入，您可以大概支撑一个月！",
+      "text.other": "按这样的开支速度，如果没有收入，您可以大概支撑 <b>{{n}}个月</b>。",
+      "text.infinite": "按这样的开支速度，即使没有收入，您也可以维持 <b>一辈子</b>。",
+      "suggestion": "请记住，建议至少保持这一数字在 5 个月以上。如果您发现您没有足够的储蓄，请减少不必要的开支。",
+      "insufficient_data": "看起来我们没有足够的数据来计算您没有收入后，能够支撑几个月。请添加一些支出/收入，再来这里查看您的财务健康情况"
+    },
+    "savingsPercentage": {
+      "title": "储蓄百分比",
+      "subtitle": "这段时间内您的收入中哪一部分没有被花掉",
+      "text": {
+        "good": "恭喜！您在这段时间内成功省下了 <b>{{value}}%</b> 的收入。看来您已经是一位专家了，请继续保持！",
+        "normal": "恭喜，您在这段时间内成功省下了 <b>{{value}}%</b> 的收入。",
+        "bad": "您在这段时间内省下了 <b>{{value}}%</b> 的收入。但我们认为您可以做得更好！",
+        "very_bad": "哇，您在这段时间内并没有任何结余。"
+      },
+      "suggestion": "请记住，建议至少将您赚到的 15-20% 存下来。"
+    }
+  },
+  "STATS": {
+    "title": "统计数据",
+    "balance": "余额",
+    "final-balance": "期末余额",
+    "balance-by-account": "账户余额",
+    "balance-by-account-subtitle": "我的大部分钱都在哪里？",
+    "balance-by-currency": "货币余额",
+    "balance-by-currency-subtitle": "我有多少的外币？",
+    "balance-evolution": "余额趋势",
+    "balance-evolution-subtitle": "我是否比之前更有钱了？",
+    "compared-to-previous-period": "与上一段时间相比",
+    "cash-flow": "现金流",
+    "cash-flow-subtitle": "我的支出是否少于我的收入？",
+    "by-periods": "按时间段",
+    "by-categories": "按类别",
+    "by-tags": "按标签",
+    "distribution": "分布",
+    "finance-health-resume": "总结",
+    "finance-health-breakdown": "分解"
+  },
+  "ICON-SELECTOR": {
+    "name": "名称",
+    "icon": "图标",
+    "color": "颜色",
+    "select-icon": "选择一个图标",
+    "select-color": "选择一种颜色",
+    "current-color-selection": "当前选择",
+    "custom-color": "自定义颜色",
+    "select-account-icon": "确认您的账户",
+    "select-category-icon": "确认您的类别",
+    "SCOPES": {
+      "transport": "交通",
+      "money": "金钱",
+      "food": "食物",
+      "medical": "医疗",
+      "entertainment": "休闲",
+      "technology": "科技",
+      "other": "其它",
+      "logos/financial_institutions": "金融机构"
+    }
+  },
+  "TRANSACTION": {
+    "display": {
+      "one": "交易",
+      "other": "交易"
+    },
+    "create": "新交易",
+    "new.income": "新收入",
+    "new.expense": "新开支",
+    "new.success": "交易创建成功",
+    "edit": "编辑交易",
+    "edit.success": "交易编辑成功",
+    "edit.multiple": "批量编辑交易",
+    "edit.multiple.success": "{{x}}笔交易编辑成功",
+    "duplicate": "复制交易",
+    "duplicate.short": "复制",
+    "duplicate.warning-message": "将在同一日期创建一笔完全相同的交易，继续吗？",
+    "duplicate.success": "交易复制成功",
+    "delete": "删除交易",
+    "delete.warning-message": "此操作无法撤回。将重新计算您账户的当前余额及其它所有统计数据",
+    "delete.success": "交易删除成功",
+    "delete.multiple": "批量删除交易",
+    "delete.multiple.warning-message": "此操作无法撤回，并且将删除{{x}}笔交易。将重新计算您账户的当前余额及其它所有统计数据",
+    "delete.multiple.success": "{{x}}笔交易删除成功",
+    "details": "操作详情",
+    "NEXT-PAYMENTS": {
+      "accept": "接受",
+      "skip": "跳过",
+      "skip.success": "已成果跳过交易",
+      "skip-dialog.title": "跳过交易",
+      "skip-dialog.msg": "此操作无法撤回。我们将把下次的日期移动至{{date}}",
+      "accept-today": "今天接受",
+      "accept-in-required-date": "在要求的日期 ({{date}}) 接受",
+      "accept-dialog.title": "接受交易",
+      "accept-dialog.msg-single": "此交易的新状态将为null。您可以随时重新编辑此交易的状态",
+      "accept-dialog.msg": "此操作将建立日期为 {{date}} 的新交易。您可以在交易页面查看此交易的详情",
+      "recurrent-rule-finished": "循环规则已完成，没有更多的支付！"
+    },
+    "LIST": {
+      "empty": "未发现需要显示的交易。请先在 app 中添加一些交易，下次再来查看",
+      "searcher.placeholder": "按类别、描述等搜索",
+      "searcher.no-results": "未找到符合搜索条件的交易",
+      "loading": "正在加载更多的交易……",
+      "selected.short": { "one": "已选择 {{n}}", "other": "已选择 {{n}}" },
+      "selected.long": {
+        "one": "已选择 {{n}} 笔交易",
+        "other": "已选择 {{n}} 笔交易"
+      },
+      "BULK_EDIT": {
+        "dates": "批量编辑日期",
+        "categories": "批量编辑类别",
+        "status": "批量编辑状态"
+      }
+    },
+    "FILTERS": {
+      "from_value": "最小金额",
+      "to_value": "最大金额",
+      "from_value_def": "从 {{ x }}",
+      "to_value_def": "到 {{ x }}",
+      "from_date_def": "从 {{ date }}",
+      "to_date_def": "到 {{ date }}"
+    },
+    "FORM": {
+      "VALIDATORS": {
+        "zero": "交易数额不应为零",
+        "date-max": "所选日期晚于当前日期。交易将新增为待办",
+        "date-after-account-creation": "无法创建早于账户创建日期的交易",
+        "negative-transfer": "转账数额不应为负数",
+        "transfer-between-same-accounts": "来源于目标账户不应相同"
+      },
+      "title": "交易标题",
+      "title.short": "标题",
+      "value": "数额",
+      "tap-to-see-more": "点击查看更多详情",
+      "no-tags": "-- 无标签 --",
+      "description": "描述",
+      "description-info": "点击此处输入有关此交易的详细描述",
+      "exchange-to-preferred-title": "汇率为{{currency}}",
+      "exchange-to-preferred-in-date": "交易日"
+    },
+    "REVERSED": {
+      "title": "逆向交易",
+      "title.short": "逆向交易",
+      "description-for-expenses": "尽管是一个开支交易，但其数额为正值。此类交易可用于表示已记录开支的返还，例如退款或偿还债务。",
+      "description-for-incomes": "尽管是一个收入交易，但其数额为负值。此类交易可用于作废或更正收入记录中的错误，以反映退款或记录偿还债务。"
+    },
+    "STATUS": {
+      "display": {
+        "one": "状态",
+        "other": "状态"
+      },
+      "display_long": "交易状态",
+      "tr_status": "{{status}}交易",
+      "none": "无状态",
+      "none.descr": "没有特定的状态",
+      "reconciled": "已核对",
+      "reconciled.descr": "此交易已被核实，与您银行的一个真实交易相对应",
+      "unreconciled": "未核实",
+      "unreconciled.descr": "此交易尚未被核实，因此尚未出现在您的真实银行账户中。然而，在 Monekin 中，它将被用于计算余额和其它统计数据",
+      "pending": "待办",
+      "pending.descr": "此交易正在等待处理，因此在计算余额和其它统计数据时暂时不会被考虑",
+      "voided": "作废",
+      "voided.descr": "由于付款错误或其它原因造成的作废或取消的交易。在计算余额和其它统计数据时不会被考虑"
+    },
+    "TYPES": {
+      "display": {
+        "one": "交易类型",
+        "other": "交易类型"
+      },
+      "income": {
+        "one": "收入",
+        "other": "收入"
+      },
+      "expense": {
+        "one": "支出",
+        "other": "支出"
+      },
+      "transfer": {
+        "one": "转账",
+        "other": "转账"
+      }
+    }
+  },
+  "TRANSFER": {
+    "display": "转账",
+    "transfers": "转账",
+    "transfer-to": "转账至 {{account}}",
+    "create": "转账",
+    "need-two-accounts.warning.header": "哎呀！",
+    "need-two-accounts.warning.message": "至少需要两个账户才能执行此操作。如果您需要调整或编辑此账户的当前余额，请点击编辑按钮",
+    "FORM": {
+      "from": "转出账户",
+      "to": "转入账户",
+      "VALUE-IN-DESTINY": {
+        "title": "转账数额",
+        "amount-short": "{{amount}} 至目标账户"
+      }
+    }
+  },
+  "RECURRENT-TRANSACTIONS": {
+    "title": "循环交易",
+    "title.short": "循环交易",
+    "empty": "您似乎没有任何循环交易。创建一个每周、每月或每年的循环交易，它会在此显示",
+    "total-expense.title": "每一周期的总开支",
+    "total-expense.descr": "* 不考虑每一循环的起止日期",
+    "DETAILS": {
+      "title": "循环交易",
+      "descr": "此交易的未来的动作显示如下。您可以接受第一个动作或跳过此动作",
+      "last-payment-info": "此动作是循环规则的最后一个，因此当确认此动作后，这一循环规则将被自动删除",
+      "delete-header": "删除循环交易",
+      "delete-message": "此操作无法撤回，不会影响您已确认/付款的交易"
+    },
+    "STATUS": {
+      "delayed_by": "延迟 {{x}} 天",
+      "coming_in": "{{x}} 天内"
+    }
+  },
+  "ACCOUNT": {
+    "details": "账户详情",
+    "date": "开启日期",
+    "close_date": "关闭日期",
+    "reopen": "重新开启账户",
+    "reopen.short": "重开账户",
+    "reopen.descr": "您确定要重新开启此账户吗？",
+    "balance": "账户余额",
+    "n_transactions": "交易数量",
+    "add_money": "增加金额",
+    "withdraw_money": "减少金额",
+    "no-accounts": "未发现应当显示的交易。请点击底部的 '+' 按钮新增一个交易",
+    "TYPES": {
+      "title": "账户类型",
+      "warning": "账户类型一旦选择，以后将无法更改",
+      "normal": "普通账户",
+      "normal.descr": "用于记录日常财务。这是最普通的账户，您可以添加支出、收入……",
+      "saving": "储蓄账户",
+      "saving.descr": "您只能从此账户中向其它账户中转入/转出（而无法用于消费开支）。非常适合用于存钱"
+    },
+    "FORM": {
+      "name": "账户名称",
+      "name.placeholder": "例如：储蓄账户",
+      "notes": "备注",
+      "notes.placeholder": "输入有关此账户的一些备注/描述",
+      "initial-balance": "初始余额",
+      "current-balance": "当前余额",
+      "create": "创建账户",
+      "edit": "编辑账户",
+      "currency-not-found-warn": "您没有此货币的汇率信息。将使用默认汇率 1.0。您可以在设置中修改",
+      "already-exists": "此账户名已存在，请起一个新的账户名",
+      "tr-before-opening-date": "此账户中有早于开户日期的交易",
+      "iban": "国际银行账户号码（IBAN）",
+      "swift": "银行识别码（SWIFT）"
+    },
+    "DELETE": {
+      "warning-header": "删除账户？",
+      "warning-text": "此操作将删除此账户及其所有交易",
+      "success": "账户删除成功"
+    },
+    "CLOSE": {
+      "title": "关闭账户",
+      "title.short": "关闭",
+      "warn": "此账户将不再出现在特定列表中，并且您无法在此账户中创建晚于以下日期的交易。此操作不会影响任何交易或余额，您也可以随时重新开启此账户。",
+      "should-have-zero-balance": "此账户中的当前余额必须为 0 才可关闭。请在继续之前编辑账户",
+      "should-have-no-transactions": "此账户在指定的关闭日期之后仍有交易。请删除它们或编辑账户关闭日期，然后再继续",
+      "success": "账户关闭成功",
+      "unarchive-succes": "账户已成功重新开启"
+    },
+    "SELECT": {
+      "one": "选择一个账户",
+      "all": "所有账户",
+      "multiple": "选择多个账户"
+    }
+  },
+  "CURRENCIES": {
+    "currency-converter": "货币换算",
+    "currency": "货币",
+    "currency-manager": "货币管理",
+    "currency-manager.descr": "设置您的货币及其与其他货币的汇率",
+    "preferred-currency": "默认货币",
+    "change-preferred-currency-title": "更改默认货币",
+    "change-preferred-currency-msg": "从现在起，所有统计数据和预算都将以此货币显示。账户和交易将保留其原有货币单位。如果您执行此操作，所有保存的汇率都将被删除。您想继续吗？",
+    "FORM": {
+      "equal-to-preferred-warn": "货币不能与用户货币相同",
+      "specify-a-currency": "请指定货币",
+      "add": "添加汇率",
+      "add-success": "汇率添加成功",
+      "edit": "编辑汇率",
+      "edit-success": "汇率编辑成功"
+    },
+    "delete-all-success": "删除汇率成功",
+    "historical": "历史汇率",
+    "exchange-rate": "汇率",
+    "exchange-rates": "汇率",
+    "empty": "如果您有账户使用默认货币以外的货币，请在此处添加汇率，以获得更准确的图表",
+    "select-a-currency": "选择货币",
+    "search": "按名称或货币代码搜索"
+  },
+  "TAGS": {
+    "display": {
+      "one": "标签",
+      "other": "标签"
+    },
+    "FORM": {
+      "name": "标签名",
+      "description": "描述"
+    },
+    "SELECT": {
+      "title": "选择标签",
+      "all": "所有标签"
+    },
+    "empty-list": "您还没有创建任何标签。标签和类别是对您的动作进行分类的好方法",
+    "without-tags": "没有标签",
+    "add": "添加标签",
+    "create": "创建标签",
+    "create.success": "标签创建成功",
+    "already-exists": "此标签名已存在。请起一个新的标签名",
+    "edit": "编辑标签",
+    "edit.success": "标签编辑成功",
+    "delete.success": "类别删除成功",
+    "delete-warning-header": "删除标签？",
+    "delete-warning-message": "此操作不会删除具有此标签的交易。"
+  },
+  "CATEGORIES": {
+    "unknown": "未知类别",
+    "create": "创建类别",
+    "create.success": "类别创建成功",
+    "new-category": "新类别",
+    "already-exists": "此类别名已存在。请起一个新的类别名",
+    "edit": "编辑类别",
+    "edit.success": "类别编辑成功",
+    "name": "类别名称",
+    "type": "类别类型",
+    "both-types": "混合类型",
+    "subcategories": "子类别",
+    "subcategories.add": "新增子类别",
+    "make-parent": "移动至类别",
+    "make-child": "移动成为子类别",
+    "make-child.warning1": "此类别及其子类别将成为<b>{{destiny}}</b>的子类别。",
+    "make-child.warning2": "它们的交易<b>({{x}})</b>将被移至<b>{{destiny}}</b>类别中创建的新子类别。",
+    "make-child.success": "子类别创建成功",
+    "merge": "与另一个类别合并",
+    "merge.warning1": "与类别<b>{{from}}</b>相关的所有交易 ({{x}}) 将移至类别<b>{{destiny}}</b>",
+    "merge.warning2": "类别<b>{{from}}</b>将被无法撤回地删除。 ",
+    "merge.success": "类别合并成功",
+    "delete.success": "类别删除成功",
+    "delete-warning-header": "删除类别？",
+    "delete-warning-message": "此操作将无法撤回地删除与此类别相关的所有交易<b>({{x}})</b>。",
+    "SELECT": {
+      "title": "选择类别",
+      "select-one": "选择一个类别",
+      "select-subcategory": "选择一个子类别",
+      "without-subcategory": "没有子类别",
+      "all": "所有类别",
+      "all.short": "全部"
+    }
+  },
+  "BUDGETS": {
+    "title": "预算",
+    "repeated": "重复的",
+    "one-time": "单次的",
+    "annual": "年度",
+    "week": "每周",
+    "month": "每月",
+    "actives": "活跃",
+    "pending": "待办",
+    "finish": "完成",
+    "from-budgeted": "预算为",
+    "days-left": "天还剩",
+    "days-to-start": "天开始",
+    "since-expiration": "自到期日起的天数",
+    "no-budgets": "未发现应当显示的预算。请点击底部的 '+' 按钮新增一个预算",
+    "delete": "删除预算",
+    "delete-warning": "此操作无法撤回。此预算中的类别和交易不会被删除",
+    "FORM": {
+      "title": "创建预算",
+      "name": "预算名称",
+      "value": "预算额度",
+      "create": "创建预算",
+      "edit": "编辑预算",
+      "negative-warn": "预算额度不能为负数"
+    },
+    "DETAILS": {
+      "title": "预算详情",
+      "statistics": "统计数据",
+      "budget-value": "预算",
+      "expend-diary-left": "在未来 {{remainingDays}} 天中，您每天可以花费 {{dailyAmount}}",
+      "expend-evolution": "支出变化",
+      "no-transactions": "看来您还没有与此预算相关的任何支出"
+    }
+  },
+  "BACKUP": {
+    "EXPORT": {
+      "title": "导出您的数据",
+      "title.short": "导出",
+      "all": "完整备份",
+      "all.descr": "导出您的所有数据（账户、交易、预算、设置……）。随时再次导入它们，您就不会丟失任何內容。",
+      "transactions": "交易备份",
+      "transactions.descr": "以 CSV 格式导出您的交易，以便您可以在其它程序或 app 中更轻松地分析。",
+      "description": "以不同格式下载（导出）数据",
+      "dialog_title": "保存/发送文件",
+      "success": "文件已成功保存/下载至 {{x}}",
+      "error": "下载文件时发生错误。请通过 lozin.technologies@gmail.com 联系开发人员"
+    },
+    "IMPORT": {
+      "title": "导入您的数据",
+      "title.short": "导入",
+      "restore-backup": "恢复备份",
+      "restore-backup-descr": "导入一个从 Monekin 保存的数据库。此操作将用新数据覆盖当前 app 数据",
+      "restore-backup-warn.description": "导入新数据库时，您将丟失 app 中当前保存的所有数据。建议在继续之前进行备份。请勿在此上传任何来源不明的文件，仅上传您之前从 Monekin 下载的文件",
+      "restore-backup-warn.title": "覆盖所有数据",
+      "select-other-file": "选择其它文件",
+      "tap-to-select-file": "点击选择文件",
+      "MANUAL-IMPORT": {
+        "title": "手动导入",
+        "descr": "手动从 .csv 文件导入交易",
+        "defaultAccount": "默认账户",
+        "removeDefaultAccount": "删除默认账户",
+        "defaultCategory": "默认类别",
+        "select-a-column": "从 .csv 中选择一列",
+        "steps": [
+          "选择您的文件",
+          "数额列",
+          "账户列",
+          "类别列",
+          "日期列",
+          "其它列"
+        ],
+        "steps-descr": [
+          "从您的设备中选择一个 .csv 文件。确保它的第一行描述了每列的名称。",
+          "选择每笔交易数额的列。负值表示支出，正值表示收入。.表示小数点分隔符。",
+          "选择每笔交易所属账户的列。您也可以选择默认账户，以防我们找不到您想要的账户。如果未指定默认账户，我们将建立一个同名账户。",
+          "选择交易类别名称所在的列。您必须指定一个默认类别，以便我们在找不到此类别时，将默认类别分配给交易。",
+          "选择每笔交易日期的列。如果未指定，所有交易将使用当前日期。",
+          "选择其它交易属性的数据列"
+        ],
+        "success": "成功导入 {{x}} 笔交易"
+      },
+      "success": "导入成功",
+      "cancelled": "导入被用户取消",
+      "error": "导入文件时发生错误。请通过 lozin.technologies@gmail.com 联系开发人员。"
+    },
+    "ABOUT": {
+      "title": "有关您的数据库的信息",
+      "create-date": "创建日期",
+      "modify-date": "上一次更改",
+      "last-backup": "上次备份",
+      "size": "文件大小"
+    }
+  },
+  "SETTINGS": {
+    "title_long": "设置和外观",
+    "title_short": "设置",
+    "description": "app 主题、语言和其它常规设置",
+    "edit_profile": "编辑个人资料",
+    "lang.section": "语言和文字",
+    "lang.title": "app 语言/Language",
+    "lang.descr": "app 中显示文字的语言",
+    "lang.help": "如果您想合作翻译此 app，您可参考<a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>我们的指南</a>",
+    "locale": "地区",
+    "locale.descr": "设置用于日期、数字的格式……",
+    "locale.warn": "更改区域时 app 将更新",
+    "first_day_of_week": "一周的第一天",
+    "theme_and_colors": "主题和颜色",
+    "theme": "主题",
+    "theme.auto": "系统",
+    "theme.light": "明亮主题",
+    "theme.dark": "黑暗主题",
+    "amoled-mode": "AMOLED 模式",
+    "amoled-mode.descr": "尽可能使用纯黑色壁纸。在 AMOLED 屏幕的设备上能略微省电",
+    "dynamic-colors": "动态色彩",
+    "dynamic-colors.descr": "尽可能使用系统强调色",
+    "accent-color": "强调色",
+    "accent-color.descr": "选择 app 用来强调介面某些部分的颜色",
+    "SECURITY": {
+      "title": "安全",
+      "private-mode-at-launch": "启动隐私模式",
+      "private-mode-at-launch.descr": "默认以隐私模式启动 app ",
+      "private-mode": "隐私模式",
+      "private-mode.descr": "隐藏所有金额",
+      "private-mode.activated": "隐私模式已启用",
+      "private-mode.deactivated": "隐私模式已禁用"
+    }
+  },
+  "MORE": {
+    "title": "更多",
+    "title_long": "更多",
+    "DATA": {
+      "display": "数据",
+      "display.descr": "导出和导入您的数据，这样您不会丟失任何东西",
+      "delete-all": "删除我的数据",
+      "delete-all-header1": "停下⚠️⚠️",
+      "delete-all-message1": "您确定要继续吗？您的所有数据将永久删除且无法恢复",
+      "delete-all-header2": "最后一步⚠️⚠️",
+      "delete-all-message2": "删除账户后，您将删除所有保存的个人数据。您的账户、交易、预算和类别将被删除且无法恢复。您同意吗？"
+    },
+    "ABOUT_US": {
+      "display": "app 信息",
+      "description": "查看有关 Monekin 的条款和其它相关信息。与社区取得联系以报告错误、留下建议……",
+      "LEGAL": {
+        "display": "法律信息",
+        "privacy": "隐私权政策",
+        "terms": "使用条款",
+        "licenses": "许可证"
+      },
+      "PROJECT": {
+        "display": "项目",
+        "contributors": "合作者",
+        "contributors.descr": "所有让 Monekin 成长的开发者",
+        "contact": "联系我们"
+      }
+    },
+    "HELP_US": {
+      "display": "帮助我们",
+      "description": "了解如何帮助 Monekin 变得越来越好",
+      "rate-us": "评价我们",
+      "rate-us.descr": "欢迎所有分数和评价！",
+      "share": "分享 Monekin",
+      "share.descr": "与朋友和家人分享我们的 app ",
+      "share.text": "Monekin！最好的个人理财 app 。此处下载",
+      "thanks": "谢谢您！",
+      "thanks_long": "您对 Monekin 和其它大大小小的开源项目的贡献成就了这一伟大项目。感谢您花时间做出贡献。",
+      "donate": "捐款",
+      "donate.descr": "通过您的捐款，您将帮助此 app 持续改进完善。还有什么比请我喝一杯咖啡更好的感谢方式呢？",
+      "donate.success": "捐款已完成。非常感谢您的贡献！❤️",
+      "donate.err": "糟糕！接收您的付款时出现错误",
+      "report": "报告错误，留下建议……"
+    }
+  }
+}
