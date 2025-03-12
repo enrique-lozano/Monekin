@@ -15,4 +15,5 @@ const appSupportedLocales = [
   SupportedLocale(locale: AppLocale.tr, label: 'Türkçe'),
   SupportedLocale(locale: AppLocale.uk, label: 'українська'),
   SupportedLocale(locale: AppLocale.zhTw, label: '繁體中文'),
+  SupportedLocale(locale: AppLocale.zhCn, label: '简体中文'),
 ];
