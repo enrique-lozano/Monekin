@@ -102,7 +102,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         return ListTile(
                           tileColor: Theme.of(context)
                               .colorScheme
-                              .onBackground
+                              .onSurface
                               .withOpacity(0.04),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
@@ -111,7 +111,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             size: 14,
                             color: Theme.of(context)
                                 .colorScheme
-                                .onBackground
+                                .onSurface
                                 .withOpacity(0.45),
                           ),
                           leading: Container(
