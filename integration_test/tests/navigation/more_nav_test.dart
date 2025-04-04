@@ -65,15 +65,15 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(BackupSettingsPage), findsOneWidget);
 
-    await tester.tap(find.text(t.settings.title_short));
+    await tester.tap(find.text(t.backup.import.restore_backup));
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(Dialog, t.more.data.delete_all_header1),
-        findsOneWidget);
+    expect(
+        find.text(t.backup.import.restore_backup_warn_title), findsOneWidget);
 
     await tester.pageBack();
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text(t.more.data.display));
+    await tester.tap(find.text(t.backup.import.manual_import.title));
     await tester.pumpAndSettle();
     expect(find.byType(ImportCSVPage), findsOneWidget);
     expect(
@@ -82,7 +82,7 @@ void main() {
     await tester.tap(find.byTooltip('Back').first);
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text(t.more.data.display)); // "Export your data"
+    await tester.tap(find.text(t.backup.export.title)); // "Export your data"
     await tester.pumpAndSettle();
     expect(find.byType(ExportDataPage), findsOneWidget);
     expect(find.text(t.backup.export.all), findsOneWidget);
@@ -120,8 +120,8 @@ void main() {
     await tester.pageBack();
     await tester.pumpAndSettle();
 
-    await tester
-        .tap(find.text(t.recurrent_transactions.title)); // "Rec. transactions"
+    await tester.tap(
+        find.text(t.recurrent_transactions.title_short)); // "Rec. transactions"
     await tester.pumpAndSettle();
     expect(find.byType(RecurrentTransactionPage), findsOneWidget);
     await tester.pageBack();
@@ -143,7 +143,7 @@ void main() {
     await tester.tap(find.text(t.tags.display(n: 2))); // "Tags"
     await tester.pumpAndSettle();
     expect(find.byType(TagListPage), findsOneWidget);
-    await tester.tap(find.widgetWithText(FloatingActionButton, t.tags.create));
+    await tester.tap(find.widgetWithText(FloatingActionButton, t.tags.add));
     await tester.pumpAndSettle();
     expect(find.byType(TagFormPage), findsOneWidget);
     await tester.tap(find.byTooltip('Back').first);

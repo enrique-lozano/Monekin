@@ -24,10 +24,10 @@ Future<void> startMonekin(WidgetTester tester) async {
   expect(find.byType(OnboardingPage), findsOneWidget);
   await tester.tap(find.text(t.intro.skip));
 
+  await LocaleSettings.setLocale(AppLocale.en, listenToDeviceLocale: true);
+
   await tester.pumpAndSettle();
   expect(find.byType(DashboardPage), findsOneWidget);
-
-  await LocaleSettings.setLocale(AppLocale.en, listenToDeviceLocale: true);
 }
 
 Future<void> openMorePage(WidgetTester tester) async {
