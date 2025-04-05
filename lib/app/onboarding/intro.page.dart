@@ -27,18 +27,19 @@ class IntroPage extends StatelessWidget {
           'Monekin',
           style: Theme.of(context)
               .textTheme
-              .headlineMedium!
-              .copyWith(fontWeight: FontWeight.w700),
+              .headlineLarge!
+              .copyWith(fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 8),
-        Text(t.intro.welcome_subtitle),
+        Text(t.intro.welcome_subtitle,
+            style: Theme.of(context).textTheme.titleMedium!),
         const SizedBox(height: 4),
         Text(
           t.intro.welcome_subtitle2,
-          style: Theme.of(context)
-              .textTheme
-              .labelSmall!
-              .copyWith(color: Theme.of(context).colorScheme.primary),
+          style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.bold,
+              ),
         ),
       ],
     );
@@ -64,24 +65,36 @@ class IntroPage extends StatelessWidget {
               .copyWith(fontWeight: FontWeight.w200),
         ),
         const SizedBox(height: 12),
-        SizedBox(
-          // width: double.infinity,
-          child: FilledButton.icon(
-            onPressed: () => RouteUtils.pushRoute(
-                context, const OnboardingPage(),
-                withReplacement: true),
-            icon: const Icon(Icons.person_2_rounded),
-            label: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(t.intro.offline_start),
+        FilledButton.icon(
+          onPressed: () => RouteUtils.pushRoute(context, const OnboardingPage(),
+              withReplacement: true),
+          icon: const Icon(Icons.person_2_rounded, size: 24),
+          label: Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.only(left: 4),
+            child: Text(
+              t.intro.offline_start,
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+          ),
+          style: FilledButton.styleFrom(
+            minimumSize: const Size.fromHeight(56),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
           ),
         ),
-        const SizedBox(height: 18),
+        const Divider(height: 24),
         HTMLText(
+          textAlign: TextAlign.center,
           htmlString: t.intro.welcome_footer,
-          defaultTextStyle:
-              const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w200),
+          defaultTextStyle: const TextStyle(
+            fontSize: 12.5,
+            fontWeight: FontWeight.w200,
+          ),
           tags: {
             'a': TextStyle(
                 color: AppColors.of(context).link,
