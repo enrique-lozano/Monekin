@@ -24,7 +24,7 @@ void main() {
     });
 
     test('Simple division', () {
-      expect(evaluateExpression('22/2'), equals(11.0));
+      expect(evaluateExpression('22÷2'), equals(11.0));
     });
 
     test('Expression with leading negative number', () {
@@ -35,8 +35,12 @@ void main() {
       expect(evaluateExpression('34+'), equals(34.0));
     });
 
+    test('Trailing chars are ignored', () {
+      expect(evaluateExpression('34uie'), equals(34.0));
+    });
+
     test('Trailing operator with multiple operations', () {
-      expect(evaluateExpression('22/2*'), equals(11.0));
+      expect(evaluateExpression('22÷2X'), equals(11.0));
     });
 
     test('Complex expression with negative and positive numbers', () {
@@ -44,7 +48,7 @@ void main() {
     });
 
     test('Multiple operations without spaces', () {
-      expect(evaluateExpression('2*3+4/2'), equals(8.0));
+      expect(evaluateExpression('2X3+4÷2'), equals(8.0));
     });
 
     test('Expression with floating point numbers', () {
@@ -52,7 +56,7 @@ void main() {
     });
 
     test('Expression with multiple operators in sequence', () {
-      expect(evaluateExpression('3 * 2 / 3'), equals(2.0));
+      expect(evaluateExpression('3 X 2 ÷ 3'), equals(2.0));
     });
 
     test('Invalid expression with only operators', () {
