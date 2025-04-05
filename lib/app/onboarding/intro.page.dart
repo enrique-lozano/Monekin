@@ -3,6 +3,7 @@ import 'package:monekin/app/onboarding/onboarding.dart';
 import 'package:monekin/app/settings/widgets/display_app_icon.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
+import 'package:monekin/core/presentation/styles/big_button_style.dart';
 import 'package:monekin/core/presentation/widgets/html_text.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -74,18 +75,13 @@ class IntroPage extends StatelessWidget {
             padding: const EdgeInsets.only(left: 4),
             child: Text(
               t.intro.offline_start,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .copyWith(fontWeight: FontWeight.bold),
             ),
           ),
-          style: FilledButton.styleFrom(
-            minimumSize: const Size.fromHeight(56),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
+          style: getBigButtonStyle(context),
         ),
         const Divider(height: 24),
         HTMLText(
