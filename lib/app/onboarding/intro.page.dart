@@ -73,13 +73,7 @@ class IntroPage extends StatelessWidget {
           label: Container(
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.only(left: 4),
-            child: Text(
-              t.intro.offline_start,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium!
-                  .copyWith(fontWeight: FontWeight.bold),
-            ),
+            child: Text(t.intro.offline_start),
           ),
           style: getBigButtonStyle(context),
         ),

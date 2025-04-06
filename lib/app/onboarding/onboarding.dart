@@ -152,7 +152,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.only(
+                            top: 16, bottom: 4, right: 16, left: 16),
                         child: LayoutBuilder(builder: (context, constraints) {
                           const expansionFactor = 4;
                           const spacing = 4;
@@ -161,7 +162,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             activeIndex: currentPage,
                             count: items.length,
                             effect: ExpandingDotsEffect(
-                              dotHeight: 6,
+                              dotHeight: 12,
                               radius: 2,
                               dotColor: AppColors.of(context)
                                   .consistentPrimary
