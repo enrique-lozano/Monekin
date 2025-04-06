@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/settings/widgets/supported_locales.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/presentation/widgets/dynamic-selector-modal.dart';
+import 'package:monekin/core/presentation/widgets/dynamic_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/html_text.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
-Future<String?> showLanguageSelectorBottomSheet(
+Future<ModalResult<String>?> showLanguageSelectorBottomSheet(
     BuildContext context, LanguageSelector langSelector) {
-  return showModalBottomSheet<String>(
+  return showModalBottomSheet<ModalResult<String>>(
     context: context,
     showDragHandle: true,
     isScrollControlled: true,

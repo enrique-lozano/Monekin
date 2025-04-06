@@ -9,7 +9,7 @@ import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/dates/outlinedButtonStacked.dart';
-import 'package:monekin/core/presentation/widgets/dynamic-selector-modal.dart';
+import 'package:monekin/core/presentation/widgets/dynamic_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/presentation/widgets/tappable-text-entry.dart';
@@ -84,7 +84,8 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
                   ),
                 ).then((value) {
                   if (value == null) return;
-                  toReturn = toReturn.copyWith(periodicity: value);
+
+                  toReturn = toReturn.copyWith(periodicity: value.result);
                   setState(() {});
                 });
               },
