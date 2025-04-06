@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +17,7 @@ import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
+import 'package:monekin/core/presentation/debug_page.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/dates/date_period_modal.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -117,6 +119,13 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 child: DashboardCards(dateRangeService: dateRangeService),
               ),
+
+              if (kDebugMode)
+                TextButton(
+                    onPressed: () {
+                      RouteUtils.pushRoute(context, DebugPage());
+                    },
+                    child: Text("DEBUG PAGE"))
             ]),
           ),
           Positioned(
