@@ -7,9 +7,7 @@ import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/details/account_details.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/monekin_reorderable_list.dart';
-import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -87,22 +85,23 @@ class _AllAccountsPageState extends State<AllAccountsPage> {
                   totalItemCount: accounts.length,
                   isOrderEnabled: isOrderEnabled,
                   padding: const EdgeInsets.fromLTRB(16, 6, 16, 16),
-                  itemBuilder: (context, index) {
+                  spaceBetween: 8,
+                  itemBuilder: (context, index, isOrdering) {
                     final account = accounts.elementAt(index);
 
-                    return Tappable(
-                      onTap: () => RouteUtils.pushRoute(
-                        context,
-                        AccountDetailsPage(
-                            account: account,
-                            accountIconHeroTag:
-                                'all-accounts-page__account-icon-${account.id}'),
-                      ),
-                      bgColor: AppColors.of(context).light,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 0, vertical: 4),
-                      borderRadius: BorderRadius.circular(12),
+                    return Material(
                       child: ListTile(
+                        tileColor:
+                            Theme.of(context).colorScheme.surfaceContainer,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                        onTap: () => RouteUtils.pushRoute(
+                          context,
+                          AccountDetailsPage(
+                              account: account,
+                              accountIconHeroTag:
+                                  'all-accounts-page__account-icon-${account.id}'),
+                        ),
                         trailing: accounts.length > 1
                             ? ReorderableDragIcon(
                                 index: index,
