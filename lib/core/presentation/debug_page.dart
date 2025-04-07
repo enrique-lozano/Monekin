@@ -21,6 +21,12 @@ class DebugPage extends StatelessWidget {
         themeColors.onPrimaryContainer
       ),
       (
+        'primaryFixed',
+        themeColors.primaryFixed,
+        'onPrimaryFixed',
+        themeColors.onPrimaryFixed
+      ),
+      (
         'secondary',
         themeColors.secondary,
         'onSecondary',
@@ -232,7 +238,7 @@ class _ThemeTextStylesPreview extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.only(bottom: 8),
           child: Text(
-            '$label',
+            label,
             style: textStyle,
           ),
         );

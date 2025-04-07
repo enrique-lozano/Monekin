@@ -123,9 +123,9 @@ class _DashboardPageState extends State<DashboardPage> {
               if (kDebugMode)
                 TextButton(
                     onPressed: () {
-                      RouteUtils.pushRoute(context, DebugPage());
+                      RouteUtils.pushRoute(context, const DebugPage());
                     },
-                    child: Text("DEBUG PAGE"))
+                    child: const Text('DEBUG PAGE'))
             ]),
           ),
           Positioned(
@@ -171,7 +171,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             Divider(
               height: 16,
-              color: Theme.of(context).colorScheme.onPrimaryContainer,
+              color: AppColors.of(context).onConsistentPrimary.withOpacity(0.5),
             ),
             const SizedBox(height: 8),
             StreamBuilder(
