@@ -130,7 +130,7 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
                   filled: false,
                   counterText: '',
                   hintText: '7',
-                  hintStyle: TextStyle(color: AppColors.of(context).textLight),
+                  hintStyle: TextStyle(color: AppColors.of(context).textHint),
                 ),
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 validator: (value) => fieldValidator(

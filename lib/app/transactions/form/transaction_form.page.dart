@@ -22,6 +22,7 @@ import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/animations/scaled_animated_switcher.dart';
 import 'package:monekin/core/presentation/animations/shake_widget.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/dynamic_selector_modal.dart';
@@ -838,8 +839,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
             ? Text(
                 t.tags.select.title,
                 style: TextStyle(
-                  color:
-                      Theme.of(context).colorScheme.onSurface.withOpacity(0.75),
+                  color: AppColors.of(context).textHint,
                 ),
               )
             : tagsChips);

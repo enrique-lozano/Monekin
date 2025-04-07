@@ -15,7 +15,8 @@ class AppColors extends ThemeExtension<AppColors> {
   Color get brand => colors['brand']!;
   Color get shadowColor => colors['shadowColor']!;
   Color get shadowColorLight => colors['shadowColorLight']!;
-  Color get textLight => colors['textLight']!;
+  Color get textBody => colors['textBody']!;
+  Color get textHint => colors['textHint']!;
   Color get modalBackground => colors['modalBackground']!;
   Color get consistentPrimary => colors['consistentPrimary']!;
   Color get onConsistentPrimary => colors['onConsistentPrimary']!;
@@ -36,7 +37,12 @@ class AppColors extends ThemeExtension<AppColors> {
         'shadowColorLight': isDark
             ? const Color.fromARGB(40, 116, 116, 116)
             : const Color.fromARGB(44, 90, 90, 90),
-        'textLight': colorScheme.onSurface.withOpacity(isDark ? 0.65 : 0.4),
+        'textBody': isDark
+            ? const Color.fromARGB(245, 211, 211, 211)
+            : const Color.fromARGB(255, 67, 67, 67),
+        'textHint': isDark
+            ? const Color.fromARGB(255, 153, 153, 153)
+            : const Color.fromARGB(255, 123, 123, 123),
         'modalBackground': colorScheme.surfaceContainer,
         'consistentPrimary':
             isDark ? colorScheme.primaryContainer : colorScheme.primary,

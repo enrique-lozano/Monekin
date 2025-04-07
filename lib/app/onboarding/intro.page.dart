@@ -58,12 +58,13 @@ class IntroPage extends StatelessWidget {
               .labelSmall!
               .copyWith(fontWeight: FontWeight.w600),
         ),
+        const SizedBox(height: 2),
         Text(
           t.intro.offline_descr,
           style: Theme.of(context)
               .textTheme
-              .labelSmall!
-              .copyWith(fontWeight: FontWeight.w200),
+              .bodySmall!
+              .copyWith(fontWeight: FontWeight.w300),
         ),
         const SizedBox(height: 12),
         FilledButton.icon(

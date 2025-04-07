@@ -46,7 +46,7 @@ class TappableTextEntry extends StatelessWidget {
       return AnimatedDefaultTextStyle(
         style: textStyle.copyWith(
           color: showPlaceholder
-              ? AppColors.of(context).textLight
+              ? AppColors.of(context).textHint
               : (textStyle.color ?? Theme.of(context).colorScheme.onSurface),
         ),
         duration: const Duration(milliseconds: 200),

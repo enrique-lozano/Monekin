@@ -116,8 +116,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             icon: const Icon(Icons.arrow_back_rounded),
                             iconSize: 20,
                             style: ButtonStyle(
-                              fixedSize:
-                                  const WidgetStatePropertyAll(Size(42, 56)),
+                              fixedSize: const WidgetStatePropertyAll(
+                                  Size(42, bigButtonStyleHeight)),
                               shape:
                                   WidgetStatePropertyAll(RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
