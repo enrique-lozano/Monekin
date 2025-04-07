@@ -586,10 +586,12 @@ class CalculatorButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
+        iconColor: effectiveTextColor,
         shadowColor: effectiveBgColor.withOpacity(0.85),
         surfaceTintColor: effectiveBgColor.withOpacity(0.85),
         foregroundColor: effectiveTextColor,
         disabledForegroundColor: effectiveTextColor.withOpacity(0.3),
+        disabledIconColor: effectiveTextColor.withOpacity(0.3),
         disabledBackgroundColor: effectiveBgColor.withOpacity(0.3),
         elevation: 0,
         padding: const EdgeInsets.all(0),

@@ -161,6 +161,21 @@ class DebugPage extends StatelessWidget {
                   spacing: 8,
                   children: [
                     _ColorPreviewTile(
+                      label: 'textHint',
+                      backgroundColor: customColors.textHint,
+                      showHex: true,
+                    ),
+                    _ColorPreviewTile(
+                      label: 'textBody',
+                      backgroundColor: customColors.textBody,
+                      showHex: true,
+                    ),
+                  ],
+                ),
+                Row(
+                  spacing: 8,
+                  children: [
+                    _ColorPreviewTile(
                       label: 'success',
                       backgroundColor: customColors.success,
                       showHex: true,
@@ -292,10 +307,9 @@ class _ColorPreviewTile extends StatelessWidget {
               style: TextStyle(color: effectiveFg, fontWeight: FontWeight.bold),
             ),
             if (showHex)
-              Text(
+              SelectableText(
                 backgroundColor.toHex(leadingHashSign: true),
                 maxLines: 1,
-                overflow: TextOverflow.fade,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: effectiveFg),
               ),

@@ -19,7 +19,6 @@ class FinanceHealthMainInfo extends StatelessWidget {
               style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                     color: FinanceHealthData.getHealthyValueColor(
                         financeHealthData.healthyScore),
-                    fontWeight: FontWeight.w700,
                   ),
             ),
             TextSpan(
@@ -41,10 +40,9 @@ class FinanceHealthMainInfo extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           financeHealthData.getHealthyScoreReviewTitle(context),
-          style: Theme.of(context).textTheme.titleSmall!.copyWith(
+          style: Theme.of(context).textTheme.labelLarge!.copyWith(
                 color: FinanceHealthData.getHealthyValueColor(
                     financeHealthData.healthyScore),
-                fontWeight: FontWeight.w700,
               ),
         ),
         const SizedBox(height: 12),

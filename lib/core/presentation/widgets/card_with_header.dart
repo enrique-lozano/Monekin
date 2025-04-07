@@ -48,13 +48,14 @@ class CardWithHeader extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(title,
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w600)),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(fontSize: 18)),
                     if (subtitle != null)
                       Text(
                         subtitle!,
-                        style: const TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w300),
+                        style: Theme.of(context).textTheme.bodySmall!,
                       ),
                   ],
                 ),

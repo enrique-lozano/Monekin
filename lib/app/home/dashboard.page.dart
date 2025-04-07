@@ -446,14 +446,17 @@ class _DashboardPageState extends State<DashboardPage> {
                 if (snapshot.hasData) {
                   return CurrencyDisplayer(
                     amountToConvert: snapshot.data!,
-                    integerStyle: TextStyle(
-                        fontSize: snapshot.data! >= 100000000 &&
-                                BreakPoint.of(context)
-                                    .isSmallerOrEqualTo(BreakpointID.xs)
-                            ? 26
-                            : 32,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.of(context).onConsistentPrimary),
+                    integerStyle: Theme.of(context)
+                        .textTheme
+                        .headlineLarge!
+                        .copyWith(
+                            fontSize: snapshot.data! >= 100000000 &&
+                                    BreakPoint.of(context)
+                                        .isSmallerOrEqualTo(BreakpointID.xs)
+                                ? 26
+                                : 32,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.of(context).onConsistentPrimary),
                   );
                 }
 

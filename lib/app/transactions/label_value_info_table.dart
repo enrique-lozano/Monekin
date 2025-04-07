@@ -47,10 +47,13 @@ class LabelValueInfoTable extends StatelessWidget {
                     ),
                   ),
                   TableCell(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 2, vertical: 4),
-                      child: e.value,
+                    child: DefaultTextStyle(
+                      style: Theme.of(context).textTheme.labelLarge!,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 2, vertical: 4),
+                        child: e.value,
+                      ),
                     ),
                   ),
                 ],

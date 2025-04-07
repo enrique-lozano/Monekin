@@ -151,3 +151,48 @@ flutter:
         - asset: assets/fonts/Nunito/Nunito-ExtraLightItalic.ttf
           style: italic
           weight: 200
+    - family: Jost
+      fonts:
+        - asset: assets/fonts/Jost/Jost-Regular.ttf
+        - asset: assets/fonts/Jost/Jost-Italic.ttf
+          style: italic
+        - asset: assets/fonts/Jost/Jost-Black.ttf
+          weight: 900
+        - asset: assets/fonts/Jost/Jost-BlackItalic.ttf
+          style: italic
+          weight: 900
+        - asset: assets/fonts/Jost/Jost-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Jost/Jost-ExtraBoldItalic.ttf
+          style: italic
+          weight: 800
+        - asset: assets/fonts/Jost/Jost-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Jost/Jost-BoldItalic.ttf
+          style: italic
+          weight: 700
+        - asset: assets/fonts/Jost/Jost-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Jost/Jost-SemiBoldItalic.ttf
+          style: italic
+          weight: 600
+        - asset: assets/fonts/Jost/Jost-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Jost/Jost-MediumItalic.ttf
+          style: italic
+          weight: 500
+        - asset: assets/fonts/Jost/Jost-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Jost/Jost-LightItalic.ttf
+          style: italic
+          weight: 300
+        - asset: assets/fonts/Jost/Jost-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/Jost/Jost-ExtraLightItalic.ttf
+          style: italic
+          weight: 200
+        - asset: assets/fonts/Jost/Jost-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Jost/Jost-ThinItalic.ttf
+          style: italic
+          weight: 100
