@@ -3,6 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/category_stats_modal.dart';
+import 'package:monekin/app/stats/widgets/movements_distribution/tr_distribution_chart_item.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
@@ -19,20 +20,8 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 
 import '../../../../core/models/transaction/transaction_type.enum.dart';
 
-class TrDistributionChartItem<T> {
-  final T category;
-  List<MoneyTransaction> transactions;
-  double value;
-
-  TrDistributionChartItem({
-    required this.category,
-    required this.transactions,
-    required this.value,
-  });
-}
-
-class ChartByCategories extends StatefulWidget {
-  const ChartByCategories(
+class PieChartByCategories extends StatefulWidget {
+  const PieChartByCategories(
       {super.key,
       required this.datePeriodState,
       this.showList = false,
@@ -48,10 +37,10 @@ class ChartByCategories extends StatefulWidget {
   final TransactionFilters filters;
 
   @override
-  State<ChartByCategories> createState() => _ChartByCategoriesState();
+  State<PieChartByCategories> createState() => _PieChartByCategoriesState();
 }
 
-class _ChartByCategoriesState extends State<ChartByCategories> {
+class _PieChartByCategoriesState extends State<PieChartByCategories> {
   int touchedIndex = -1;
   late TransactionType transactionsType;
 
