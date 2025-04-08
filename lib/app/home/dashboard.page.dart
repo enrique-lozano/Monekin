@@ -427,6 +427,7 @@ class _DashboardPageState extends State<DashboardPage> {
         crossAxisAlignment: _isIncomeExpenseAtSameLevel(context)
             ? CrossAxisAlignment.start
             : CrossAxisAlignment.center,
+        spacing: 2,
         children: [
           Text(
             t.home.total_balance,
@@ -478,7 +479,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
                   return TrendingValue(
                     percentage: snapshot.data!,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     filled: true,
                     outlined: true,
                     fontSize: 16,
