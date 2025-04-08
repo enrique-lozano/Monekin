@@ -55,6 +55,8 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
   int touchedIndex = -1;
   late TransactionType transactionsType;
 
+  final centerRadius = 35;
+
   TransactionFilters _getTransactionFilters() {
     return widget.filters.copyWith(
       status:
@@ -250,13 +252,14 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
               ),
             ),
             SizedBox(
-              height: 250,
+              height: 260,
               child: Stack(
                 children: [
                   PieChart(
-                    swapAnimationCurve: Curves.easeOut,
-                    swapAnimationDuration: const Duration(milliseconds: 450),
+                    curve: Curves.easeOut,
+                    duration: const Duration(milliseconds: 250),
                     PieChartData(
+                      startDegreeOffset: -45,
                       pieTouchData: PieTouchData(
                         touchCallback: (FlTouchEvent event, pieTouchResponse) {
                           setState(() {
@@ -271,13 +274,26 @@ class _ChartByCategoriesState extends State<ChartByCategories> {
                           });
                         },
                       ),
-                      borderData: FlBorderData(
-                        show: false,
-                      ),
+                      borderData: FlBorderData(show: false),
                       sectionsSpace: 0,
-                      centerSpaceRadius: 40,
+                      centerSpaceRadius: centerRadius.toDouble(),
                       sections: showingSections(dataItems),
                     ),
+                  ),
+                  Positioned.fill(
+                    child: Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          width: centerRadius * 2.25,
+                          height: centerRadius * 2.25,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .surface
+                                .withOpacity(0.1),
+                          ),
+                        )),
                   ),
                   if (snapshot.data!.isEmpty)
                     Positioned.fill(
