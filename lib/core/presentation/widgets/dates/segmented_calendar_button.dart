@@ -10,7 +10,6 @@ class SegmentedCalendarButton extends StatefulWidget {
     this.initialDatePeriodService = const DatePeriodState(),
     this.borderRadius = 12,
     this.buttonHeight = 48,
-    this.shape = const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
     this.maxDate,
     this.minDate,
     this.canChangePeriodType = true,
@@ -41,9 +40,6 @@ class SegmentedCalendarButton extends StatefulWidget {
 
   /// The background color of the main center selector button. If [null], the app onPrimary color will be applied
   final Color? mainButtonBackgroundColor;
-
-  /// The shape of the main center selector button
-  final OutlinedBorder? shape;
 
   final DateTime? maxDate;
   final DateTime? minDate;
@@ -113,30 +109,35 @@ class _SegmentedCalendarButtonState extends State<SegmentedCalendarButton> {
       child: Row(
         //crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          buildArrowButton(
-              icon: Icons.arrow_back_ios_rounded,
-              disabled: datePeriodService.getNextDates().$2 == null ||
-                  widget.minDate != null &&
-                      datePeriodService
-                              .getPrevDates()
-                              .$2!
-                              .compareTo(widget.minDate!) <
-                          0,
-              onPressed: () {
-                HapticFeedback.lightImpact();
+          if (datePeriodService.canNavigate)
+            // --- GO TO PREV PERIOD BUTTON ---
+            buildArrowButton(
+                icon: Icons.arrow_back_ios_rounded,
+                disabled: datePeriodService.getNextDates().$2 == null ||
+                    widget.minDate != null &&
+                        datePeriodService
+                                .getPrevDates()
+                                .$2!
+                                .compareTo(widget.minDate!) <
+                            0,
+                onPressed: () {
+                  HapticFeedback.lightImpact();
 
-                setState(() {
-                  datePeriodService = datePeriodService.copyWith(
-                    periodModifier: datePeriodService.periodModifier - 1,
-                  );
-                });
+                  setState(() {
+                    datePeriodService = datePeriodService.copyWith(
+                      periodModifier: datePeriodService.periodModifier - 1,
+                    );
+                  });
 
-                widget.onChanged(datePeriodService);
-              },
-              borderRadius: BorderRadius.horizontal(
-                left: Radius.circular(widget.borderRadius),
-                right: Radius.zero,
-              )),
+                  widget.onChanged(datePeriodService);
+                },
+                borderRadius: BorderRadius.horizontal(
+                  left: Radius.circular(widget.borderRadius),
+                  right: Radius.zero,
+                )),
+
+          // --- MAIN BUTTON. PERIOD DISPLAYER AND SELECTOR ---
+
           Expanded(
             flex: 4,
             child: Builder(builder: (context) {
@@ -172,46 +173,60 @@ class _SegmentedCalendarButtonState extends State<SegmentedCalendarButton> {
                   disabledBackgroundColor: buttonBgColor,
                   disabledForegroundColor: buttonColor,
                   foregroundColor: buttonColor,
-                  shape: widget.shape,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: datePeriodService.canNavigate
+                        ? BorderRadius.zero
+                        : BorderRadius.circular(widget.borderRadius),
+                  ),
                   fixedSize: Size.fromHeight(widget.buttonHeight),
                   minimumSize: const Size.fromHeight(0),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 2,
                   children: [
-                    Text(datePeriodService.getText(context)),
+                    Text(
+                      datePeriodService.getText(
+                        context,
+                        showLongMonth: !datePeriodService.canNavigate,
+                      ),
+                    ),
                     if (widget.canChangePeriodType)
-                      const Icon(Icons.arrow_drop_down_rounded)
+                      Icon(Icons.arrow_drop_down_rounded,
+                          color: buttonColor.withOpacity(0.925))
                   ],
                 ),
               );
             }),
           ),
-          buildArrowButton(
-              icon: Icons.arrow_forward_ios_rounded,
-              disabled: datePeriodService.getNextDates().$1 == null ||
-                  widget.maxDate != null &&
-                      datePeriodService
-                              .getNextDates()
-                              .$1!
-                              .compareTo(widget.maxDate!) >
-                          0,
-              onPressed: () {
-                HapticFeedback.lightImpact();
+          if (datePeriodService.canNavigate)
+            // --- GO TO NEXT PERIOD BUTTON ---
 
-                setState(() {
-                  datePeriodService = datePeriodService.copyWith(
-                    periodModifier: datePeriodService.periodModifier + 1,
-                  );
-                });
+            buildArrowButton(
+                icon: Icons.arrow_forward_ios_rounded,
+                disabled: datePeriodService.getNextDates().$1 == null ||
+                    widget.maxDate != null &&
+                        datePeriodService
+                                .getNextDates()
+                                .$1!
+                                .compareTo(widget.maxDate!) >
+                            0,
+                onPressed: () {
+                  HapticFeedback.lightImpact();
 
-                widget.onChanged(datePeriodService);
-              },
-              borderRadius: BorderRadius.horizontal(
-                right: Radius.circular(widget.borderRadius),
-                left: Radius.zero,
-              )),
+                  setState(() {
+                    datePeriodService = datePeriodService.copyWith(
+                      periodModifier: datePeriodService.periodModifier + 1,
+                    );
+                  });
+
+                  widget.onChanged(datePeriodService);
+                },
+                borderRadius: BorderRadius.horizontal(
+                  right: Radius.circular(widget.borderRadius),
+                  left: Radius.zero,
+                )),
         ],
       ),
     );

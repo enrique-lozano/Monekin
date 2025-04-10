@@ -3,9 +3,10 @@ import 'package:monekin/app/onboarding/onboarding.dart';
 import 'package:monekin/app/settings/widgets/display_app_icon.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
+import 'package:monekin/core/presentation/styles/big_button_style.dart';
 import 'package:monekin/core/presentation/widgets/html_text.dart';
 import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 class IntroPage extends StatelessWidget {
   const IntroPage({super.key});
@@ -27,18 +28,19 @@ class IntroPage extends StatelessWidget {
           'Monekin',
           style: Theme.of(context)
               .textTheme
-              .headlineMedium!
-              .copyWith(fontWeight: FontWeight.w700),
+              .headlineLarge!
+              .copyWith(fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 8),
-        Text(t.intro.welcome_subtitle),
+        Text(t.intro.welcome_subtitle,
+            style: Theme.of(context).textTheme.titleMedium!),
         const SizedBox(height: 4),
         Text(
           t.intro.welcome_subtitle2,
-          style: Theme.of(context)
-              .textTheme
-              .labelSmall!
-              .copyWith(color: Theme.of(context).colorScheme.primary),
+          style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.bold,
+              ),
         ),
       ],
     );
@@ -56,32 +58,34 @@ class IntroPage extends StatelessWidget {
               .labelSmall!
               .copyWith(fontWeight: FontWeight.w600),
         ),
+        const SizedBox(height: 2),
         Text(
           t.intro.offline_descr,
           style: Theme.of(context)
               .textTheme
-              .labelSmall!
-              .copyWith(fontWeight: FontWeight.w200),
+              .bodySmall!
+              .copyWith(fontWeight: FontWeight.w300),
         ),
         const SizedBox(height: 12),
-        SizedBox(
-          // width: double.infinity,
-          child: FilledButton.icon(
-            onPressed: () => RouteUtils.pushRoute(
-                context, const OnboardingPage(),
-                withReplacement: true),
-            icon: const Icon(Icons.person_2_rounded),
-            label: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(t.intro.offline_start),
-            ),
+        FilledButton.icon(
+          onPressed: () => RouteUtils.pushRoute(context, const OnboardingPage(),
+              withReplacement: true),
+          icon: const Icon(Icons.person_2_rounded, size: 24),
+          label: Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.only(left: 4),
+            child: Text(t.intro.offline_start),
           ),
+          style: getBigButtonStyle(context),
         ),
-        const SizedBox(height: 18),
+        const Divider(height: 24),
         HTMLText(
+          textAlign: TextAlign.center,
           htmlString: t.intro.welcome_footer,
-          defaultTextStyle:
-              const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w200),
+          defaultTextStyle: const TextStyle(
+            fontSize: 12.5,
+            fontWeight: FontWeight.w200,
+          ),
           tags: {
             'a': TextStyle(
                 color: AppColors.of(context).link,

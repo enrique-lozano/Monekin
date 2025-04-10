@@ -21,7 +21,7 @@ import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradien
 import 'package:monekin/core/presentation/widgets/transaction_filter/status_filter/transaction_status_filter.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 import '../../../models/transaction/transaction_type.enum.dart';
 import '../count_indicator.dart';
@@ -127,8 +127,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
           body: ScrollableWithBottomGradient(
             controller: scrollController,
             padding: const EdgeInsets.fromLTRB(16, 2, 16, 24),
-            gradientColor:
-                Theme.of(context).colorSchemeExtended.modalBackground,
+            gradientColor: AppColors.of(context).modalBackground,
             child: Form(
               key: _formKey,
               child: Column(

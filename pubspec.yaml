@@ -13,7 +13,7 @@ publish_to: 'none'
 # The X represents the major releases, and can be up to infinity. Never start by a zero
 # The Y represents the minor releases, and can be up to 99. Always start by a zero
 # The Z represents the patch releases, and can be up to 999. Always start by a zero
-version: 7.4.0+740000
+version: 7.5.0+750000
 
 environment:
   flutter: 3.22.3
@@ -36,8 +36,8 @@ dependencies:
 
   # i18n
   intl: ^0.19.0
-  slang: ^3.31.2
-  slang_flutter: ^3.32.0
+  slang: ^4.4.0
+  slang_flutter: ^4.4.0
 
   # Drift
   drift: ^2.8.1
@@ -50,25 +50,26 @@ dependencies:
   flutter_svg: ^2.0.5
   permission_handler: ^11.3.0
   json_annotation: ^4.8.1
-  fl_chart: ^0.69.0
-  file_picker: ^8.1.7
+  file_picker: ^8.3.1
+  fl_chart: ^0.70.2
   share_plus: ^10.1.2
   url_launcher: ^6.3.1
   uuid: ^4.5.1
   csv: ^6.0.0
   dotted_border: ^2.0.0+3
   package_info_plus: ^8.0.2
-  introduction_screen: ^3.1.11
   dynamic_color: ^1.7.0
   copy_with_extension: ^5.0.4
   freezed_annotation: ^2.4.1
   in_app_purchase: ^3.1.11
   flutter_colorpicker: ^1.1.0
+  smooth_page_indicator: ^1.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  integration_test:
+    sdk: flutter
   flutter_lints: ^4.0.0
 
   # Generators:
@@ -76,7 +77,7 @@ dev_dependencies:
   json_serializable: ^6.2.0
   flutter_launcher_icons: ^0.14.2 # Package to regenerate icons (config later in this file). To run, type `dart run flutter_launcher_icons`
   drift_dev: ^2.13.2
-  slang_build_runner: ^3.32.0 # To regenerate the translations run 'dart run slang'
+  slang_build_runner: ^4.4.0 # To regenerate the translations run 'dart run slang'
   copy_with_extension_gen: ^5.0.4
   freezed: ^2.4.5
 
@@ -150,3 +151,48 @@ flutter:
         - asset: assets/fonts/Nunito/Nunito-ExtraLightItalic.ttf
           style: italic
           weight: 200
+    - family: Jost
+      fonts:
+        - asset: assets/fonts/Jost/Jost-Regular.ttf
+        - asset: assets/fonts/Jost/Jost-Italic.ttf
+          style: italic
+        - asset: assets/fonts/Jost/Jost-Black.ttf
+          weight: 900
+        - asset: assets/fonts/Jost/Jost-BlackItalic.ttf
+          style: italic
+          weight: 900
+        - asset: assets/fonts/Jost/Jost-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Jost/Jost-ExtraBoldItalic.ttf
+          style: italic
+          weight: 800
+        - asset: assets/fonts/Jost/Jost-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Jost/Jost-BoldItalic.ttf
+          style: italic
+          weight: 700
+        - asset: assets/fonts/Jost/Jost-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Jost/Jost-SemiBoldItalic.ttf
+          style: italic
+          weight: 600
+        - asset: assets/fonts/Jost/Jost-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Jost/Jost-MediumItalic.ttf
+          style: italic
+          weight: 500
+        - asset: assets/fonts/Jost/Jost-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Jost/Jost-LightItalic.ttf
+          style: italic
+          weight: 300
+        - asset: assets/fonts/Jost/Jost-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/Jost/Jost-ExtraLightItalic.ttf
+          style: italic
+          weight: 200
+        - asset: assets/fonts/Jost/Jost-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Jost/Jost-ThinItalic.ttf
+          style: italic
+          weight: 100

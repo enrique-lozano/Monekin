@@ -7,7 +7,7 @@ import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 showCurrencySelectorModal(
   BuildContext context,
@@ -171,7 +171,7 @@ class _CurrencySelectorModalState extends State<CurrencySelectorModal> {
                     },
                   ),
                   ScrollableWithBottomGradient.buildPositionedGradient(
-                      Theme.of(context).colorSchemeExtended.modalBackground),
+                      AppColors.of(context).modalBackground),
                 ]),
               ),
             ],

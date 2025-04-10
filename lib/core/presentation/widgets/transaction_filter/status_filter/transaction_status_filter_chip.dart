@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 class TransactionStatusFilterChip extends StatelessWidget {
   const TransactionStatusFilterChip({

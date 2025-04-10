@@ -6,7 +6,6 @@ import 'package:monekin/core/database/services/exchange-rate/exchange_rate_servi
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
@@ -15,7 +14,7 @@ import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 showExchangeRateFormDialog(
   BuildContext context,
@@ -166,8 +165,8 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                             Icons.circle,
                             size: 25,
                             color: Theme.of(context)
-                                .colorSchemeExtended
-                                .inputFill
+                                .inputDecorationTheme
+                                .fillColor!
                                 .darken(0.2),
                           ),
                         ),

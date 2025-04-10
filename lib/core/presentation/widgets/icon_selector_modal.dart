@@ -5,7 +5,7 @@ import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 showIconSelectorModal(BuildContext context, IconSelectorModal component) {
   return showModalBottomSheet(
@@ -58,8 +58,7 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
           final iconsByScope = SupportedIconService.instance.getIconsByScope();
 
           return Scaffold(
-            backgroundColor:
-                Theme.of(context).colorSchemeExtended.modalBackground,
+            backgroundColor: AppColors.of(context).modalBackground,
             body: Column(children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
@@ -91,8 +90,7 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
               ),
               Expanded(
                 child: ScrollableWithBottomGradient(
-                  gradientColor:
-                      Theme.of(context).colorSchemeExtended.modalBackground,
+                  gradientColor: AppColors.of(context).modalBackground,
                   controller: scrollController,
                   child: Column(
                       children: iconsByScope.keys.toList().map((scope) {
@@ -106,9 +104,7 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
                             Container(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 0, horizontal: 16),
-                              color: Theme.of(context)
-                                  .colorSchemeExtended
-                                  .modalBackground,
+                              color: AppColors.of(context).modalBackground,
                               child: Text(t[
                                   'icon_selector.scopes.${scope.replaceAll("/", "_")}']),
                             ),

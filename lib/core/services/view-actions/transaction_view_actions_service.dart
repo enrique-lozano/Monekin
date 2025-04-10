@@ -8,7 +8,7 @@ import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/core/utils/uuid.dart';
 
-import '../../../i18n/translations.g.dart';
+import '../../../i18n/generated/translations.g.dart';
 
 class TransactionViewActionService {
   final TransactionService transactionService = TransactionService.instance;

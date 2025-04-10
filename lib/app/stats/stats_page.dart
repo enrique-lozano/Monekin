@@ -3,7 +3,7 @@ import 'package:monekin/app/stats/widgets/balance_bar_chart.dart';
 import 'package:monekin/app/stats/widgets/finance_health_details.dart';
 import 'package:monekin/app/stats/widgets/fund_evolution_line_chart.dart';
 import 'package:monekin/app/stats/widgets/income_expense_comparason.dart';
-import 'package:monekin/app/stats/widgets/movements_distribution/chart_by_categories.dart';
+import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/tags_stats.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
@@ -14,7 +14,7 @@ import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 import '../../core/models/transaction/transaction_type.enum.dart';
 import '../accounts/all_accounts_balance.dart';
@@ -129,6 +129,11 @@ class _StatsPageState extends State<StatsPage> {
                     PersistentFooterButton(
                       child: SegmentedCalendarButton(
                         initialDatePeriodService: dateRangeService,
+                        borderRadius: 8,
+                        buttonHeight: 44,
+                        border: Border.all(
+                            width: 2,
+                            color: Theme.of(context).colorScheme.primary),
                         onChanged: (value) {
                           setState(() {
                             dateRangeService = value;
@@ -164,7 +169,7 @@ class _StatsPageState extends State<StatsPage> {
                 buildContainerWithPadding([
                   CardWithHeader(
                     title: t.stats.by_categories,
-                    body: ChartByCategories(
+                    body: PieChartByCategories(
                       datePeriodState: dateRangeService,
                       showList: true,
                       initialSelectedType: TransactionType.E,

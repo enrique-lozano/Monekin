@@ -1,10 +1,10 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/presentation/widgets/dates/outlinedButtonStacked.dart';
+import 'package:monekin/core/presentation/widgets/outlined_button_stacked.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/core/utils/logger.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 import '../../core/database/backup/backup_database_service.dart';
 
@@ -69,19 +69,29 @@ class _ExportDataPageState extends State<ExportDataPage> {
             child: Text(t.backup.export.title),
             onPressed: () async {
               final messeger = ScaffoldMessenger.of(context);
+              String? path = await FilePicker.platform.getDirectoryPath();
+
+              if (path == null) {
+                // TODO: Maybe we should also add a snackbar here
+                return;
+              }
 
               if (selectedExportFormat == _ExportFormats.db) {
                 await BackupDatabaseService()
-                    .downloadDatabaseFile(context)
+                    .exportDatabaseFile(path)
                     .then((value) {
-                  Logger.printDebug('EEEEEEEEEEE');
+                  messeger.showSnackBar(SnackBar(
+                    content: Text(t.backup.export.success(x: path)),
+                  ));
                 }).catchError((err) {
-                  Logger.printDebug(err);
+                  messeger.showSnackBar(SnackBar(
+                    content: Text('$err'),
+                  ));
                 });
               } else {
                 await BackupDatabaseService()
                     .exportSpreadsheet(
-                        context,
+                        path,
                         await TransactionService.instance
                             .getTransactions(filters: filters)
                             .first)

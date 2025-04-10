@@ -30,4 +30,9 @@ class DatePeriod {
 
   const DatePeriod.customRange(DateTime? start, DateTime? end)
       : this(periodType: PeriodType.dateRange, customDateRange: (start, end));
+
+  @override
+  String toString() {
+    return 'DatePeriod(periodType: $periodType)';
+  }
 }

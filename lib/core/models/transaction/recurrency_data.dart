@@ -1,10 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/transactions/form/widgets/interval_selector_help.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 class RecurrencyData extends Equatable {
   final RecurrentRuleLimit? ruleRecurrentLimit;
@@ -86,23 +85,4 @@ class RecurrencyData extends Equatable {
 
   @override
   List<dynamic> get props => [ruleRecurrentLimit, intervalEach, intervalPeriod];
-}
-
-Future<void> showIntervalSelectoHelpDialog(BuildContext context,
-    {required RecurrencyData selectedRecurrentRule,
-    required void Function(RecurrencyData selectedRule)
-        onRecurrentRuleSelected}) async {
-  return await showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-        clipBehavior: Clip.hardEdge,
-        content: IntervalSelectorHelp(
-          selectedRecurrentRule: selectedRecurrentRule,
-          onRecurrentRuleSelected: onRecurrentRuleSelected,
-        ),
-      );
-    },
-  );
 }

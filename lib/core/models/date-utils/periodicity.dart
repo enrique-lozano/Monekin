@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 /// Enum representing different time periods or intervals.
 enum Periodicity {

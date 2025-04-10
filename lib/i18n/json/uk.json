@@ -196,11 +196,21 @@
   "FINANCIAL-HEALTH": {
     "display": "Фінансове здоров'я",
     "review": {
-      "very_good(context=GenderContext)": { "male,female": "Дуже добре!" },
-      "good(context=GenderContext)": { "male,female": "Добре" },
-      "normal(context=GenderContext)": { "male,female": "Середнє" },
-      "bad(context=GenderContext)": { "male,female": "Прийнятно" },
-      "very_bad(context=GenderContext)": { "male,female": "Дуже погано" },
+      "very_good(context=GenderContext)": {
+        "male,female": "Дуже добре!"
+      },
+      "good(context=GenderContext)": {
+        "male,female": "Добре"
+      },
+      "normal(context=GenderContext)": {
+        "male,female": "Середнє"
+      },
+      "bad(context=GenderContext)": {
+        "male,female": "Прийнятно"
+      },
+      "very_bad(context=GenderContext)": {
+        "male,female": "Дуже погано"
+      },
       "insufficient_data(context=GenderContext)": {
         "male,female": "Недостатньо даних"
       },
@@ -259,10 +269,10 @@
     "name": "Назва:",
     "icon": "Іконка",
     "color": "Колір",
+    "select-icon": "Виберіть іконку",
     "select-color": "Виберіть колір",
     "custom-color": "Користувацький колір",
     "current-color-selection": "Поточний вибір",
-    "select-icon": "Виберіть іконку",
     "select-account-icon": "Ідентифікуйте ваш рахунок",
     "select-category-icon": "Ідентифікуйте вашу категорію",
     "SCOPES": {

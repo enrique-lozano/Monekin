@@ -2,6 +2,10 @@ extension StringExtension on String {
   String capitalize() {
     return '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
   }
+
+  String? nullIfEmpty() {
+    return isEmpty ? null : this;
+  }
 }
 
 extension NullableStringExtensions<E> on String? {

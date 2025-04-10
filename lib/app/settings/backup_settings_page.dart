@@ -10,7 +10,7 @@ import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:monekin/main.dart';
 
 import 'widgets/settings_list_separator.dart';

@@ -27,7 +27,7 @@ import 'package:monekin/core/presentation/widgets/transaction_filter/transaction
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 import '../../core/models/transaction/transaction_type.enum.dart';
 

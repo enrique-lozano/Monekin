@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 /// The radius of the `CardWithHeader` widget, a very useful widget through the app
 const cardWithHeaderRadius = 12.0;
@@ -48,13 +48,14 @@ class CardWithHeader extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(title,
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w600)),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(fontSize: 18)),
                     if (subtitle != null)
                       Text(
                         subtitle!,
-                        style: const TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w300),
+                        style: Theme.of(context).textTheme.bodySmall!,
                       ),
                   ],
                 ),

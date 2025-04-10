@@ -15,7 +15,7 @@ import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 Future<Category?> showCategoryPickerModal(
   BuildContext context, {
@@ -118,9 +118,7 @@ class _CategoryPickerState extends State<CategoryPicker>
                       //  buildSelectAllButton(snapshot),
                       Expanded(
                         child: ScrollableWithBottomGradient(
-                          gradientColor: Theme.of(context)
-                              .colorSchemeExtended
-                              .modalBackground,
+                          gradientColor: AppColors.of(context).modalBackground,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           controller: scrollController,
                           child: buildCategoryList(snapshot, scrollController),

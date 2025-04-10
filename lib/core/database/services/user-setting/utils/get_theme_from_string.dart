@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 ThemeMode getThemeFromString(String? themeString) {
   if (themeString == null) return ThemeMode.system;

@@ -44,17 +44,11 @@ class TranslucentTransactionStatusCard extends StatelessWidget {
               children: [
                 Icon(
                   icon,
-                  size: 26,
+                  size: 24,
                   color: color,
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                Text(title, style: Theme.of(context).textTheme.titleMedium),
               ],
             ),
           ),

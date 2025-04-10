@@ -5,6 +5,8 @@ import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/transactions/form/dialogs/amount_selector.dart';
 import 'package:monekin/app/transactions/form/dialogs/transaction_status_selector.dart';
+import 'package:monekin/app/transactions/form/widgets/custom_interval_selector.dart';
+import 'package:monekin/app/transactions/form/widgets/tr_form_interval_selector.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
@@ -20,18 +22,21 @@ import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/animations/scaled_animated_switcher.dart';
 import 'package:monekin/core/presentation/animations/shake_widget.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/core/presentation/widgets/dynamic_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/core/utils/focus.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 import '../../../core/models/transaction/transaction_type.enum.dart';
 import '../../tags/tags_selector.modal.dart';
@@ -466,12 +471,28 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       minTileHeight: 64,
       title: Text(recurrentRule.formText(context)),
       onTap: () {
-        showIntervalSelectoHelpDialog(context,
-            selectedRecurrentRule: recurrentRule,
-            onRecurrentRuleSelected: (res) {
-          setState(() {
-            recurrentRule = res;
-          });
+        showDynamicSelectorBottomSheet(context,
+                selectorWidget:
+                    getTransactionFormIntervalSelector(context, recurrentRule))
+            .then((res) {
+          if (res == null) return;
+
+          if (res.result != null) {
+            setState(() {
+              recurrentRule = res.result!;
+            });
+          } else {
+            RouteUtils.pushRoute(
+              context,
+              IntervalSelectorPage(preselectedRecurrentRule: recurrentRule),
+            ).then((value) {
+              if (value == null) return;
+
+              setState(() {
+                recurrentRule = value as RecurrencyData;
+              });
+            });
+          }
         });
       },
     );
@@ -818,8 +839,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
             ? Text(
                 t.tags.select.title,
                 style: TextStyle(
-                  color:
-                      Theme.of(context).colorScheme.onSurface.withOpacity(0.75),
+                  color: AppColors.of(context).textHint,
                 ),
               )
             : tagsChips);

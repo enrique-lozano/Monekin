@@ -10,8 +10,7 @@ import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/i18n/translations.g.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 class BudgetCard extends StatelessWidget {
   const BudgetCard({
@@ -33,7 +32,7 @@ class BudgetCard extends StatelessWidget {
       margin: isHeader
           ? const EdgeInsets.all(0)
           : const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-      bgColor: AppColors.of(context).light.lighten(),
+      bgColor: Theme.of(context).colorScheme.surfaceContainer,
       shape: RoundedRectangleBorder(
         borderRadius: isHeader
             ? const BorderRadius.only(

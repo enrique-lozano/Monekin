@@ -8,8 +8,6 @@ import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 
-import '../../../core/presentation/app_colors.dart';
-
 class TransactionListComponent extends StatefulWidget {
   const TransactionListComponent({
     super.key,
@@ -103,7 +101,7 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
       child: Container(
         padding: const EdgeInsets.fromLTRB(16, 4, 12, 4),
         decoration: BoxDecoration(
-          color: AppColors.of(context).light,
+          color: Theme.of(context).colorScheme.surfaceContainer,
           borderRadius: const BorderRadius.only(
             bottomRight: Radius.circular(120),
             topRight: Radius.circular(120),
