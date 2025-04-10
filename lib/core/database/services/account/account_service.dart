@@ -185,13 +185,20 @@ class AccountService {
         .map((event) => event.valueSum);
   }
 
-  /// Returns a stream of a double representing the variation in money for a list of accounts between two dates.
+  /// Returns a stream of a double, representing the variation in money for a list of accounts between two dates.
   ///
-  /// If the user does not provide a value for endDate, the function sets it to the current date. If the user does not provide a value for startDate, the function sets it to the minimum date in the list of accounts.
+  /// If the user does not provide a value for endDate, the function sets it to the
+  /// current date. If the user does not provide a value for startDate, the function
+  /// sets it to the minimum date in the list of accounts.
+  ///
+  /// You can add filters for the transactions that will be taken into account to calculate
+  /// this value, via the [trFilters] param. We will overwrite the accountsIds, the maxDate
+  /// and the minDate param of this filter, based on the other params in this func.
   Stream<double> getAccountsMoneyVariation({
     required List<Account> accounts,
     DateTime? startDate,
     DateTime? endDate,
+    TransactionFilters trFilters = const TransactionFilters(),
     bool convertToPreferredCurrency = true,
   }) {
     if (accounts.isEmpty) return Stream.value(0);
@@ -199,16 +206,24 @@ class AccountService {
     endDate ??= DateTime.now();
     startDate ??= accounts.map((e) => e.date).min;
 
+    final overwrittenFilters = trFilters.copyWith(
+      maxDate: endDate,
+      minDate: startDate,
+      accountsIDs: accounts.map((a) => a.id).toList(),
+    );
+
     final Iterable<String> accountIds = accounts.map((e) => e.id);
 
     final accountsBalanceStartPeriod = getAccountsMoney(
         accountIds: accountIds,
         date: startDate,
+        trFilters: overwrittenFilters,
         convertToPreferredCurrency: convertToPreferredCurrency);
 
     final accountsBalanceEndPeriod = getAccountsMoney(
         accountIds: accountIds,
         date: endDate,
+        trFilters: overwrittenFilters,
         convertToPreferredCurrency: convertToPreferredCurrency);
 
     return Rx.combineLatest(

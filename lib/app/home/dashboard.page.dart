@@ -2,8 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:monekin/app/accounts/account_form.dart';
-import 'package:monekin/app/accounts/details/account_details.dart';
 import 'package:monekin/app/home/widgets/click_tracker.dart';
 import 'package:monekin/app/home/widgets/dashboard_cards.dart';
 import 'package:monekin/app/home/widgets/horizontal_scrollable_account_list.dart';
@@ -489,94 +487,6 @@ class _DashboardPageState extends State<DashboardPage> {
           ]
         ],
       ),
-    );
-  }
-
-  Widget buildAccountList(List<Account> accounts) {
-    return Builder(
-      builder: (context) {
-        if (accounts.isEmpty) {
-          return Column(
-            children: [
-              Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    children: [
-                      Text(
-                        t.home.no_accounts,
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        t.home.no_accounts_descr,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 8),
-                      FilledButton(
-                          onPressed: () => RouteUtils.pushRoute(
-                              context, const AccountFormPage()),
-                          child: Text(t.account.form.create))
-                    ],
-                  ))
-            ],
-          );
-        }
-
-        return ListView.separated(
-            padding: EdgeInsets.zero,
-            itemCount: accounts.length,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            separatorBuilder: (context, index) {
-              return const Divider(indent: 56);
-            },
-            itemBuilder: (context, index) {
-              final account = accounts[index];
-
-              return ListTile(
-                onTap: () => RouteUtils.pushRoute(
-                    context,
-                    AccountDetailsPage(
-                        account: account,
-                        accountIconHeroTag:
-                            'dashboard-page__account-icon-${account.id}')),
-                leading: Hero(
-                    tag: 'dashboard-page__account-icon-${account.id}',
-                    child: account.displayIcon(context)),
-                trailing: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      StreamBuilder(
-                          initialData: 0.0,
-                          stream: AccountService.instance
-                              .getAccountMoney(account: account),
-                          builder: (context, snapshot) {
-                            return CurrencyDisplayer(
-                              amountToConvert: snapshot.data!,
-                              currency: account.currency,
-                            );
-                          }),
-                      StreamBuilder(
-                          initialData: 0.0,
-                          stream: AccountService.instance
-                              .getAccountsMoneyVariation(
-                                  accounts: [account],
-                                  startDate: dateRangeService.startDate,
-                                  endDate: dateRangeService.endDate,
-                                  convertToPreferredCurrency: false),
-                          builder: (context, snapshot) {
-                            return TrendingValue(
-                              percentage: snapshot.data!,
-                              decimalDigits: 0,
-                            );
-                          }),
-                    ]),
-                title: Text(account.name),
-              );
-            });
-      },
     );
   }
 }
