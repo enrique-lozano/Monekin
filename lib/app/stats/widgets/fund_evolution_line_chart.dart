@@ -141,6 +141,7 @@ class FundEvolutionLineChart extends StatelessWidget {
                                   accounts: accounts,
                                   startDate: dateRange.startDate,
                                   endDate: dateRange.endDate,
+                                  trFilters: filters,
                                   convertToPreferredCurrency: true,
                                 ),
                                 builder: (context, snapshot) {
