@@ -111,8 +111,20 @@ At Monekin, we believe that the open-source community thrives on collaboration, 
 
 If you love Monekin and want to support its development, consider making a donation. Your contributions help keep the app free, open-source, and constantly improving.
 
-<a href="https://paypal.me/lozanoelc?country.x=ES&locale.x=es_ES">
+<a href="https://paypal.me/lozanoelc?country.x=ES&locale.x=es_ES" target="_blank">
   <img src="./docs/badges/PayPal Badge.svg" alt="Donate with PayPal" height="60">
+</a>
+
+<span> &nbsp; </span>
+  
+<a href="https://www.buymeacoffee.com/enrique.lozano" target="_blank">
+  <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="60" >
+</a>
+
+<span> &nbsp; </span>
+
+<a href="https://liberapay.com/enrique-lozano/donate" target="_blank">
+  <img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"  height="60">
 </a>
 
 ---
