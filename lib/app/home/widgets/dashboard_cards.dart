@@ -89,7 +89,7 @@ class DashboardCards extends StatelessWidget {
               CardWithHeader(
                 title: t.stats.balance_evolution,
                 bodyPadding: const EdgeInsets.all(16),
-                body: FundEvolutionLineChart(dateRange: dateRangeService),
+                body: FundEvolutionInfo(dateRange: dateRangeService),
                 footer: CardFooterWithSingleButton(onButtonClick: () {
                   RouteUtils.pushRoute(
                     context,

@@ -193,7 +193,7 @@ class _StatsPageState extends State<StatsPage> {
                     subtitle: t.stats.balance_evolution_subtitle,
                     bodyPadding: const EdgeInsets.only(
                         bottom: 12, top: 16, right: 16, left: 16),
-                    body: FundEvolutionLineChart(
+                    body: FundEvolutionInfo(
                       showBalanceHeader: true,
                       dateRange: dateRangeService,
                       filters: filters,

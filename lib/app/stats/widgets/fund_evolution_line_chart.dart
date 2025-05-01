@@ -26,12 +26,13 @@ class LineChartDataItem {
   LineChartDataItem({required this.balance, required this.labels});
 }
 
-class FundEvolutionLineChart extends StatelessWidget {
-  const FundEvolutionLineChart(
-      {super.key,
-      this.filters = const TransactionFilters(),
-      required this.dateRange,
-      this.showBalanceHeader = false});
+class FundEvolutionInfo extends StatelessWidget {
+  const FundEvolutionInfo({
+    super.key,
+    this.filters = const TransactionFilters(),
+    required this.dateRange,
+    this.showBalanceHeader = false,
+  });
 
   final DatePeriodState dateRange;
 
@@ -39,38 +40,8 @@ class FundEvolutionLineChart extends StatelessWidget {
 
   final TransactionFilters filters;
 
-  Stream<LineChartDataItem?> getEvolutionData(DateTimeRange? timeRange) {
-    if (timeRange == null) {
-      return Stream.value(null);
-    }
-
-    List<Stream<double>> balance = [];
-    List<String> labels = [];
-
-    DateTime currentDay = timeRange.start.justDay();
-
-    final dayRange =
-        (timeRange.end.difference(timeRange.start).inDays / 100).ceil();
-
-    while (currentDay.compareTo(timeRange.end) < 0) {
-      labels.add(currentDay.year == currentYear
-          ? DateFormat.MMMMd().format(currentDay)
-          : DateFormat.yMMMd().format(currentDay));
-
-      balance.add(AccountService.instance
-          .getAccountsMoney(trFilters: filters, date: currentDay));
-
-      currentDay = currentDay.add(Duration(days: dayRange));
-    }
-
-    return Rx.combineLatest(balance,
-        (values) => LineChartDataItem(balance: values, labels: labels));
-  }
-
   @override
   Widget build(BuildContext context) {
-    final lineColor = Theme.of(context).colorScheme.primary;
-
     final accountService = AccountService.instance;
 
     final t = Translations.of(context);
@@ -202,201 +173,250 @@ class FundEvolutionLineChart extends StatelessWidget {
                           end: dateRange.endDate ?? DateTime.now(),
                         );
 
-                  return StreamBuilder(
-                      stream: getEvolutionData(chartDateRange),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return loadingWidget;
-                        }
-
-                        final ultraLightBorderColor =
-                            isAppInLightBrightness(context)
-                                ? Colors.black12
-                                : Colors.white12;
-
-                        return StreamBuilder(
-                            stream: CurrencyService.instance
-                                .getUserPreferredCurrency(),
-                            builder: (context, userCurrencySnapshot) {
-                              return Stack(
-                                children: [
-                                  LineChart(LineChartData(
-                                    gridData: FlGridData(
-                                      show: true,
-                                      drawVerticalLine: false,
-                                      getDrawingHorizontalLine: (value) =>
-                                          defaultGridLine(value).copyWith(
-                                              color: ultraLightBorderColor,
-                                              strokeWidth: 0.5),
-                                    ),
-                                    lineTouchData: LineTouchData(
-                                      enabled: snapshot.hasData,
-                                      touchTooltipData: LineTouchTooltipData(
-                                        tooltipMargin: -10,
-                                        getTooltipColor: (spot) =>
-                                            Theme.of(context)
-                                                .colorScheme
-                                                .surface,
-                                        getTooltipItems: (touchedSpots) {
-                                          return touchedSpots.map((barSpot) {
-                                            final flSpot = barSpot;
-                                            if (flSpot.x == 0 ||
-                                                flSpot.x == 6) {
-                                              return null;
-                                            }
-
-                                            return LineTooltipItem(
-                                                '${snapshot.data!.labels[flSpot.x.toInt()]} \n',
-                                                const TextStyle(fontSize: 12),
-                                                textAlign: TextAlign.start,
-                                                children:
-                                                    UINumberFormatter.currency(
-                                                  currency:
-                                                      userCurrencySnapshot.data,
-                                                  amountToConvert:
-                                                      snapshot.data!.balance[
-                                                          flSpot.x.toInt()],
-                                                  integerStyle: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                  ),
-                                                ).getTextSpanList(context));
-                                          }).toList();
-                                        },
-                                      ),
-                                    ),
-                                    minY: snapshot.hasData
-                                        ? (snapshot.data!.balance
-                                                .allItemsEqual()
-                                            ? snapshot.data!.balance.first -
-                                                10.2
-                                            : null)
-                                        : 2,
-                                    maxY: snapshot.hasData
-                                        ? (snapshot.data!.balance
-                                                .allItemsEqual()
-                                            ? snapshot.data!.balance.first +
-                                                10.2
-                                            : null)
-                                        : 5,
-                                    titlesData: FlTitlesData(
-                                      show: true,
-                                      rightTitles: noAxisTitles,
-                                      topTitles: noAxisTitles,
-                                      bottomTitles: noAxisTitles,
-                                      leftTitles: AxisTitles(
-                                        sideTitles: SideTitles(
-                                          showTitles: snapshot.hasData,
-                                          reservedSize: 28,
-                                          getTitlesWidget: (value, meta) {
-                                            if (value == meta.max ||
-                                                value == meta.min) {
-                                              return Container();
-                                            }
-
-                                            return SideTitleWidget(
-                                              meta: meta,
-                                              child: BlurBasedOnPrivateMode(
-                                                child: Text(
-                                                  meta.formattedValue,
-                                                  maxLines: 1,
-                                                  textAlign: TextAlign.end,
-                                                  softWrap: false,
-                                                  overflow:
-                                                      TextOverflow.visible,
-                                                  style: const TextStyle(
-                                                    fontSize: 10,
-                                                    fontWeight: FontWeight.w300,
-                                                  ),
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                    borderData: FlBorderData(
-                                      show: false,
-                                      border: Border(
-                                        bottom: BorderSide(
-                                            color: ultraLightBorderColor,
-                                            width: 1),
-                                        right: BorderSide(
-                                            color: ultraLightBorderColor,
-                                            width: 1),
-                                      ),
-                                    ),
-                                    lineBarsData: [
-                                      LineChartBarData(
-                                        spots: snapshot.hasData
-                                            ? List.generate(
-                                                snapshot.data!.balance.length,
-                                                (index) => FlSpot(
-                                                    index.toDouble(),
-                                                    snapshot
-                                                        .data!.balance[index]))
-                                            : [
-                                                const FlSpot(0, 3),
-                                                const FlSpot(2.6, 2.2),
-                                                const FlSpot(4.9, 4.3),
-                                                const FlSpot(6.8, 3.1),
-                                                const FlSpot(8, 4),
-                                                const FlSpot(9.5, 3),
-                                                const FlSpot(11, 4),
-                                              ],
-                                        isCurved: true,
-                                        curveSmoothness:
-                                            snapshot.hasData ? 0.025 : 0.2,
-                                        color: snapshot.hasData
-                                            ? lineColor
-                                            : Colors.grey.withOpacity(0.2),
-                                        barWidth: 3,
-                                        isStrokeCapRound: true,
-                                        dotData: const FlDotData(show: false),
-                                        belowBarData: BarAreaData(
-                                          show: true,
-                                          applyCutOffY: true,
-                                          cutOffY: 0,
-                                          gradient: LinearGradient(
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
-                                            colors: snapshot.hasData
-                                                ? [
-                                                    lineColor.withAlpha(100),
-                                                    lineColor.withAlpha(1)
-                                                  ]
-                                                : [
-                                                    Colors.grey,
-                                                    Colors.grey.lighten(0.3)
-                                                  ]
-                                                    .map((color) =>
-                                                        color.withOpacity(0.15))
-                                                    .toList(),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  )),
-                                  if (!snapshot.hasData)
-                                    Positioned.fill(
-                                      child: Align(
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            t.general.insufficient_data,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleLarge,
-                                          )),
-                                    ),
-                                ],
-                              );
-                            });
-                      });
+                  return FundEvolutionLineChart(
+                    filters: filters,
+                    loadingWidget: loadingWidget,
+                    timeRange: chartDateRange,
+                  );
                 }),
               ),
             ],
           );
+        });
+  }
+}
+
+class FundEvolutionLineChart extends StatefulWidget {
+  const FundEvolutionLineChart({
+    super.key,
+    this.timeRange,
+    required this.filters,
+    required this.loadingWidget,
+  });
+
+  final DateTimeRange? timeRange;
+  final TransactionFilters filters;
+  final Widget loadingWidget;
+
+  @override
+  State<FundEvolutionLineChart> createState() => _FundEvolutionLineChartState();
+}
+
+class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
+  late Stream<LineChartDataItem?> _dataStream;
+
+  @override
+  void initState() {
+    super.initState();
+    _dataStream = getEvolutionData();
+  }
+
+  @override
+  void didUpdateWidget(covariant FundEvolutionLineChart oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.timeRange != widget.timeRange ||
+        oldWidget.filters != widget.filters) {
+      _dataStream = getEvolutionData();
+    }
+  }
+
+  Stream<LineChartDataItem?> getEvolutionData() {
+    final timeRange = widget.timeRange;
+
+    if (timeRange == null) {
+      return Stream.value(null);
+    }
+
+    List<Stream<double>> balance = [];
+    List<String> labels = [];
+
+    DateTime currentDay = timeRange.start.justDay();
+
+    final dayRange =
+        (timeRange.end.difference(timeRange.start).inDays / 100).ceil();
+
+    while (currentDay.compareTo(timeRange.end) < 0) {
+      labels.add(currentDay.year == currentYear
+          ? DateFormat.MMMMd().format(currentDay)
+          : DateFormat.yMMMd().format(currentDay));
+
+      balance.add(AccountService.instance
+          .getAccountsMoney(trFilters: widget.filters, date: currentDay));
+
+      currentDay = currentDay.add(Duration(days: dayRange));
+    }
+
+    return Rx.combineLatest(balance,
+        (values) => LineChartDataItem(balance: values, labels: labels));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final lineColor = Theme.of(context).colorScheme.primary;
+
+    return StreamBuilder(
+        stream: _dataStream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return widget.loadingWidget;
+          }
+
+          final ultraLightBorderColor =
+              isAppInLightBrightness(context) ? Colors.black12 : Colors.white12;
+
+          return StreamBuilder(
+              stream: CurrencyService.instance.getUserPreferredCurrency(),
+              builder: (context, userCurrencySnapshot) {
+                return Stack(
+                  children: [
+                    LineChart(LineChartData(
+                      gridData: FlGridData(
+                        show: true,
+                        drawVerticalLine: false,
+                        getDrawingHorizontalLine: (value) =>
+                            defaultGridLine(value).copyWith(
+                                color: ultraLightBorderColor, strokeWidth: 0.5),
+                      ),
+                      lineTouchData: LineTouchData(
+                        enabled: snapshot.hasData,
+                        touchTooltipData: LineTouchTooltipData(
+                          tooltipMargin: -10,
+                          getTooltipColor: (spot) =>
+                              Theme.of(context).colorScheme.surface,
+                          getTooltipItems: (touchedSpots) {
+                            return touchedSpots.map((barSpot) {
+                              final flSpot = barSpot;
+                              if (flSpot.x == 0 || flSpot.x == 6) {
+                                return null;
+                              }
+
+                              return LineTooltipItem(
+                                  '${snapshot.data!.labels[flSpot.x.toInt()]} \n',
+                                  const TextStyle(fontSize: 12),
+                                  textAlign: TextAlign.start,
+                                  children: UINumberFormatter.currency(
+                                    currency: userCurrencySnapshot.data,
+                                    amountToConvert: snapshot
+                                        .data!.balance[flSpot.x.toInt()],
+                                    integerStyle: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
+                                  ).getTextSpanList(context));
+                            }).toList();
+                          },
+                        ),
+                      ),
+                      minY: snapshot.hasData
+                          ? (snapshot.data!.balance.allItemsEqual()
+                              ? snapshot.data!.balance.first - 10.2
+                              : null)
+                          : 2,
+                      maxY: snapshot.hasData
+                          ? (snapshot.data!.balance.allItemsEqual()
+                              ? snapshot.data!.balance.first + 10.2
+                              : null)
+                          : 5,
+                      titlesData: FlTitlesData(
+                        show: true,
+                        rightTitles: noAxisTitles,
+                        topTitles: noAxisTitles,
+                        bottomTitles: noAxisTitles,
+                        leftTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: snapshot.hasData,
+                            reservedSize: 28,
+                            getTitlesWidget: (value, meta) {
+                              if (value == meta.max || value == meta.min) {
+                                return Container();
+                              }
+
+                              return SideTitleWidget(
+                                meta: meta,
+                                child: BlurBasedOnPrivateMode(
+                                  child: Text(
+                                    meta.formattedValue,
+                                    maxLines: 1,
+                                    textAlign: TextAlign.end,
+                                    softWrap: false,
+                                    overflow: TextOverflow.visible,
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      borderData: FlBorderData(
+                        show: false,
+                        border: Border(
+                          bottom: BorderSide(
+                              color: ultraLightBorderColor, width: 1),
+                          right: BorderSide(
+                              color: ultraLightBorderColor, width: 1),
+                        ),
+                      ),
+                      lineBarsData: [
+                        LineChartBarData(
+                          spots: snapshot.hasData
+                              ? List.generate(
+                                  snapshot.data!.balance.length,
+                                  (index) => FlSpot(index.toDouble(),
+                                      snapshot.data!.balance[index]))
+                              : [
+                                  const FlSpot(0, 3),
+                                  const FlSpot(2.6, 2.2),
+                                  const FlSpot(4.9, 4.3),
+                                  const FlSpot(6.8, 3.1),
+                                  const FlSpot(8, 4),
+                                  const FlSpot(9.5, 3),
+                                  const FlSpot(11, 4),
+                                ],
+                          isCurved: true,
+                          curveSmoothness: snapshot.hasData ? 0.025 : 0.2,
+                          color: snapshot.hasData
+                              ? lineColor
+                              : Colors.grey.withOpacity(0.2),
+                          barWidth: 3,
+                          isStrokeCapRound: true,
+                          dotData: const FlDotData(show: false),
+                          belowBarData: BarAreaData(
+                            show: true,
+                            applyCutOffY: true,
+                            cutOffY: 0,
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: snapshot.hasData
+                                  ? [
+                                      lineColor.withAlpha(100),
+                                      lineColor.withAlpha(1)
+                                    ]
+                                  : [Colors.grey, Colors.grey.lighten(0.3)]
+                                      .map((color) => color.withOpacity(0.15))
+                                      .toList(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )),
+                    if (!snapshot.hasData)
+                      Positioned.fill(
+                        child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              t.general.insufficient_data,
+                              style: Theme.of(context).textTheme.titleLarge,
+                            )),
+                      ),
+                  ],
+                );
+              });
         });
   }
 }
