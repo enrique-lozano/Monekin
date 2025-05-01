@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/stats/widgets/balance_bar_chart.dart';
 import 'package:monekin/app/stats/widgets/finance_health_details.dart';
-import 'package:monekin/app/stats/widgets/fund_evolution_line_chart.dart';
+import 'package:monekin/app/stats/widgets/fund_evolution_info.dart';
 import 'package:monekin/app/stats/widgets/income_expense_comparason.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/tags_stats.dart';
@@ -193,7 +193,7 @@ class _StatsPageState extends State<StatsPage> {
                     subtitle: t.stats.balance_evolution_subtitle,
                     bodyPadding: const EdgeInsets.only(
                         bottom: 12, top: 16, right: 16, left: 16),
-                    body: FundEvolutionLineChart(
+                    body: FundEvolutionInfo(
                       showBalanceHeader: true,
                       dateRange: dateRangeService,
                       filters: filters,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/stats/stats_page.dart';
 import 'package:monekin/app/stats/widgets/balance_bar_chart.dart';
 import 'package:monekin/app/stats/widgets/finance_health/finance_health_main_info.dart';
-import 'package:monekin/app/stats/widgets/fund_evolution_line_chart.dart';
+import 'package:monekin/app/stats/widgets/fund_evolution_info.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
@@ -89,7 +89,7 @@ class DashboardCards extends StatelessWidget {
               CardWithHeader(
                 title: t.stats.balance_evolution,
                 bodyPadding: const EdgeInsets.all(16),
-                body: FundEvolutionLineChart(dateRange: dateRangeService),
+                body: FundEvolutionInfo(dateRange: dateRangeService),
                 footer: CardFooterWithSingleButton(onButtonClick: () {
                   RouteUtils.pushRoute(
                     context,
