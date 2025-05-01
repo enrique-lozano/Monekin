@@ -192,13 +192,13 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
           ? Periodicity.week
           : dayDiff <= 31
               ? Periodicity.month
-              : dayDiff <= 365
+              : dayDiff <= 365 && effectiveStart.year == effectiveEnd.year
                   ? Periodicity.year
                   : null;
 
       return getDataByPeriods(
-        startDate,
-        endDate,
+        effectiveStart,
+        effectiveEnd,
         DatePeriodState(
             datePeriod: periodicity != null
                 ? DatePeriod.withPeriods(periodicity)
