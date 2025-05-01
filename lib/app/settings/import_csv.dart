@@ -171,6 +171,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
     final snackbarDisplayer = ScaffoldMessenger.of(context).showSnackBar;
 
     onSuccess() {
+      RouteUtils.popAllRoutesExceptFirst();
       RouteUtils.pushRoute(context, const TabsPage());
 
       snackbarDisplayer(
