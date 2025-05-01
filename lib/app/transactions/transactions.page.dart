@@ -70,7 +70,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
 
     return PopScope(
       canPop: !searchActive && selectedTransactions.isEmpty,
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
 
         if (selectedTransactions.isNotEmpty) {
@@ -78,14 +78,14 @@ class _TransactionsPageState extends State<TransactionsPage> {
           return;
         }
 
-        if (searchFocusNode.hasFocus && searchController.text.isNotEmpty) {
-          searchFocusNode.unfocus();
-          return;
-        } else if (searchActive && !searchFocusNode.hasFocus) {
-          setState(() {
-            searchActive = false;
-            searchController.text = "";
-          });
+        if (searchActive ||
+            searchController.text.isNotEmpty ||
+            searchFocusNode.hasFocus) {
+          if (searchFocusNode.hasFocus) {
+            searchFocusNode.unfocus();
+          }
+
+          closeSearch();
 
           return;
         }
@@ -95,58 +95,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
       child: Scaffold(
         appBar: selectedTransactions.isNotEmpty
             ? selectedTransactionsAppbar()
-            : AppBar(
-                leading: searchActive
-                    ? IconButton(
-                        onPressed: () {
-                          setState(() {
-                            searchActive = false;
-                            searchController.text = "";
-                          });
-                        },
-                        icon: const Icon(Icons.close))
-                    : null,
-                title: searchActive
-                    ? TextField(
-                        controller: searchController,
-                        focusNode: searchFocusNode,
-                        decoration: InputDecoration(
-                          hintText: t.transaction.list.searcher_placeholder,
-                          border: const UnderlineInputBorder(),
-                        ),
-                        onChanged: (text) {
-                          setState(() {});
-                        },
-                      )
-                    : Text(t.transaction.display(n: 10)),
-                actions: [
-                  if (!searchActive)
-                    IconButton(
-                      icon: const Icon(Icons.search),
-                      onPressed: () {
-                        setState(() {
-                          searchActive = true;
-                        });
-
-                        searchFocusNode.requestFocus();
-                      },
-                    ),
-                  IconButton(
-                      onPressed: () async {
-                        final modalRes = await openFilterSheetModal(
-                          context,
-                          FilterSheetModal(preselectedFilter: filters),
-                        );
-
-                        if (modalRes != null) {
-                          setState(() {
-                            filters = modalRes;
-                          });
-                        }
-                      },
-                      icon: const Icon(Icons.filter_alt_outlined)),
-                ],
-              ),
+            : transactionsPageDefaultAppBar(t, context),
         floatingActionButton:
             NewTransactionButton(isExtended: isFloatingButtonExtended),
         body: Column(
@@ -281,6 +230,61 @@ class _TransactionsPageState extends State<TransactionsPage> {
           ],
         ),
       ),
+    );
+  }
+
+  void closeSearch() {
+    setState(() {
+      searchActive = false;
+      searchController.text = "";
+    });
+  }
+
+  AppBar transactionsPageDefaultAppBar(Translations t, BuildContext context) {
+    return AppBar(
+      leading: searchActive
+          ? IconButton(onPressed: closeSearch, icon: const Icon(Icons.close))
+          : null,
+      title: searchActive
+          ? TextField(
+              controller: searchController,
+              focusNode: searchFocusNode,
+              decoration: InputDecoration(
+                hintText: t.transaction.list.searcher_placeholder,
+                border: const UnderlineInputBorder(),
+              ),
+              onChanged: (text) {
+                setState(() {});
+              },
+            )
+          : Text(t.transaction.display(n: 10)),
+      actions: [
+        if (!searchActive)
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              setState(() {
+                searchActive = true;
+              });
+
+              searchFocusNode.requestFocus();
+            },
+          ),
+        IconButton(
+            onPressed: () async {
+              final modalRes = await openFilterSheetModal(
+                context,
+                FilterSheetModal(preselectedFilter: filters),
+              );
+
+              if (modalRes != null) {
+                setState(() {
+                  filters = modalRes;
+                });
+              }
+            },
+            icon: const Icon(Icons.filter_alt_outlined)),
+      ],
     );
   }
 
