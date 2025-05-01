@@ -281,7 +281,8 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
                       lineTouchData: LineTouchData(
                         enabled: snapshot.hasData,
                         touchTooltipData: LineTouchTooltipData(
-                          tooltipMargin: -10,
+                          fitInsideVertically: true,
+                          fitInsideHorizontally: true,
                           getTooltipColor: (spot) =>
                               Theme.of(context).colorScheme.surface,
                           getTooltipItems: (touchedSpots) {

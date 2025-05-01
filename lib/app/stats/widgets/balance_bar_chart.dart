@@ -60,161 +60,163 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
     DateTime? endDate,
     DatePeriodState range,
   ) async {
-    /*   if (startDate == null &&
-        range.datePeriod.periodType != PeriodType.allTime) {
-      return null;
-    } */
-
-    List<String> shortTitles = [];
-    List<String> longTitles = [];
-
-    List<double> income = [];
-    List<double> expense = [];
-    List<double> balance = [];
-
     final accountService = AccountService.instance;
-
     final accounts = await widget.filters.accounts().first;
 
-    getIncomeData(DateTime? startDate, DateTime? endDate) async =>
-        await accountService
-            .getAccountsBalance(
-              filters: widget.filters.copyWith(
-                transactionTypes: [TransactionType.I]
-                    .intersectionWithNullable(widget.filters.transactionTypes)
-                    .toList(),
-                minDate: startDate,
-                maxDate: endDate,
-              ),
-            )
-            .first;
+    final List<String> shortTitles = [];
+    final List<String> longTitles = [];
+    final List<double> income = [];
+    final List<double> expense = [];
+    final List<double> balance = [];
 
-    getExpenseData(DateTime? startDate, DateTime? endDate) async =>
-        await accountService
-            .getAccountsBalance(
-              filters: widget.filters.copyWith(
-                transactionTypes: [TransactionType.E]
-                    .intersectionWithNullable(widget.filters.transactionTypes)
-                    .toList(),
-                minDate: startDate,
-                maxDate: endDate,
-              ),
-            )
-            .first;
+    final effectiveStart = startDate ??
+        (accounts.isNotEmpty
+            ? accounts.map((e) => e.date).min
+            : DateTime(DateTime.now().year - 3));
 
-    if (range.datePeriod.periodType == PeriodType.cycle &&
-        range.datePeriod.periodicity == Periodicity.month) {
-      for (final range in [
-        [1, 6],
-        [6, 10],
-        [10, 15],
-        [15, 20],
-        [20, 25],
-        [25, null]
-      ]) {
-        shortTitles.add(
-            "${range[0].toString()}-${range[1] != null ? range[1].toString() : ''}");
+    final effectiveEnd = endDate ?? DateTime.now();
 
-        startDate = DateTime(startDate!.year, startDate.month, range[0]!);
+    Future<double> getIncomeData(DateTime start, DateTime end) {
+      return accountService
+          .getAccountsBalance(
+            filters: widget.filters.copyWith(
+              transactionTypes: [TransactionType.I]
+                  .intersectionWithNullable(widget.filters.transactionTypes)
+                  .toList(),
+              minDate: start,
+              maxDate: end,
+            ),
+          )
+          .first;
+    }
 
-        DateTime endDate = DateTime(
-            startDate.year,
-            range[1] == null ? startDate.month + 1 : startDate.month,
-            range[1] ?? 1);
+    Future<double> getExpenseData(DateTime start, DateTime end) {
+      return accountService
+          .getAccountsBalance(
+            filters: widget.filters.copyWith(
+              transactionTypes: [TransactionType.E]
+                  .intersectionWithNullable(widget.filters.transactionTypes)
+                  .toList(),
+              minDate: start,
+              maxDate: end,
+            ),
+          )
+          .first;
+    }
 
-        longTitles.add(
-            '${DateFormat.MMMd().format(startDate)} - ${DateFormat.MMMd().format(endDate)}');
+    Future<void> addPeriodData({
+      required DateTime start,
+      required DateTime end,
+      required String shortTitle,
+      required String longTitle,
+    }) async {
+      final incomeValue = await getIncomeData(start, end);
+      final expenseValue = await getExpenseData(start, end);
 
-        final incomeToAdd = await getIncomeData(startDate, endDate);
-        final expenseToAdd = await getExpenseData(startDate, endDate);
+      shortTitles.add(shortTitle);
+      longTitles.add(longTitle);
+      income.add(incomeValue);
+      expense.add(expenseValue);
+      balance.add(incomeValue + expenseValue);
+    }
 
-        income.add(incomeToAdd);
-        expense.add(expenseToAdd);
-        balance.add(incomeToAdd + expenseToAdd);
-      }
-    } else if (range.datePeriod.periodType == PeriodType.cycle &&
-        range.datePeriod.periodicity == Periodicity.year) {
-      for (var i = 1; i <= 12; i++) {
-        final selStartDate = DateTime(startDate!.year, i);
-        final endDate = DateTime(startDate.year, i + 1);
-
-        shortTitles.add(DateFormat.M().format(selStartDate));
-        longTitles.add(DateFormat.MMMM().format(selStartDate));
-
-        final incomeToAdd = await getIncomeData(selStartDate, endDate);
-        final expenseToAdd = await getExpenseData(selStartDate, endDate);
-
-        income.add(incomeToAdd);
-        expense.add(expenseToAdd);
-        balance.add(incomeToAdd + expenseToAdd);
-      }
-    } else if (range.datePeriod.periodType == PeriodType.cycle &&
-        range.datePeriod.periodicity == Periodicity.week) {
-      for (var i = 0; i < DateTime.daysPerWeek; i++) {
-        final selStartDate =
-            DateTime(startDate!.year, startDate.month, startDate.day + i);
-        final endDate =
-            DateTime(startDate.year, startDate.month, startDate.day + i + 1);
-
-        shortTitles.add(DateFormat.E().format(selStartDate));
-        longTitles.add(DateFormat.yMMMEd().format(selStartDate));
-
-        final incomeToAdd = await getIncomeData(selStartDate, endDate);
-        final expenseToAdd = await getExpenseData(selStartDate, endDate);
-
-        income.add(incomeToAdd);
-        expense.add(expenseToAdd);
-        balance.add(incomeToAdd + expenseToAdd);
-      }
-    } else if (range.datePeriod.periodType == PeriodType.dateRange) {
-      if (endDate == null) {
-        throw Exception("End date can not be null");
+    if (range.datePeriod.periodType == PeriodType.cycle) {
+      if (endDate == null || startDate == null) {
+        throw Exception('Dates cannot be null');
       }
 
-      final dateDiff = endDate.difference(startDate!).inDays;
+      switch (range.datePeriod.periodicity) {
+        case Periodicity.month:
+          final ranges = [
+            [1, 6],
+            [6, 10],
+            [10, 15],
+            [15, 20],
+            [20, 25],
+            [25, null],
+          ];
 
-      if (dateDiff <= 7) {
-        return getDataByPeriods(
-            startDate,
-            endDate,
-            const DatePeriodState(
-                datePeriod: DatePeriod.withPeriods(Periodicity.week)));
-      } else if (dateDiff <= 31) {
-        return getDataByPeriods(
-            startDate,
-            endDate,
-            const DatePeriodState(
-                datePeriod: DatePeriod.withPeriods(Periodicity.month)));
-      } else if (dateDiff <= 365) {
-        return getDataByPeriods(
-            startDate,
-            endDate,
-            const DatePeriodState(
-                datePeriod: DatePeriod.withPeriods(Periodicity.year)));
-      } else {
-        return getDataByPeriods(startDate, endDate,
-            const DatePeriodState(datePeriod: DatePeriod.allTime()));
+          for (final r in ranges) {
+            final start = DateTime(startDate.year, startDate.month, r[0]!);
+            final end = DateTime(start.year,
+                r[1] == null ? start.month + 1 : start.month, r[1] ?? 1);
+
+            await addPeriodData(
+              start: start,
+              end: end,
+              shortTitle: "${r[0]}-${r[1] ?? ''}",
+              longTitle:
+                  '${DateFormat.MMMd().format(start)} - ${DateFormat.MMMd().format(end)}',
+            );
+          }
+          break;
+
+        case Periodicity.year:
+          for (var i = startDate.month;
+              i <= endDate.subtract(const Duration(milliseconds: 1)).month;
+              i++) {
+            final start = DateTime(startDate.year, i);
+            final end = DateTime(start.year, i + 1);
+
+            await addPeriodData(
+              start: start,
+              end: end,
+              shortTitle: DateFormat.MMM().format(start),
+              longTitle: DateFormat.MMMM().format(start),
+            );
+          }
+          break;
+
+        case Periodicity.week:
+          for (var i = 0; i < DateTime.daysPerWeek; i++) {
+            final start = startDate.add(Duration(days: i));
+            final end = start.add(const Duration(days: 1));
+
+            await addPeriodData(
+              start: start,
+              end: end,
+              shortTitle: DateFormat.E().format(start),
+              longTitle: DateFormat.yMMMEd().format(start),
+            );
+          }
+          break;
+
+        default:
+          break;
       }
+    } else if (range.datePeriod.periodType == PeriodType.dateRange ||
+        range.datePeriod.periodType == PeriodType.lastDays) {
+      final dayDiff = effectiveEnd.difference(effectiveStart).inDays;
+
+      final Periodicity? periodicity = dayDiff <= 7
+          ? Periodicity.week
+          : dayDiff <= 31
+              ? Periodicity.month
+              : dayDiff <= 365
+                  ? Periodicity.year
+                  : null;
+
+      return getDataByPeriods(
+        startDate,
+        endDate,
+        DatePeriodState(
+            datePeriod: periodicity != null
+                ? DatePeriod.withPeriods(periodicity)
+                : const DatePeriod.allTime()),
+      );
     } else {
-      // INFINITE:
+      for (int year = max(effectiveStart.year, DateTime.now().year - 5);
+          year <= effectiveEnd.year;
+          year++) {
+        final start = DateTime(year);
+        final end = DateTime(year + 1);
 
-      final minDate = startDate ?? accounts.map((e) => e.date).min;
-
-      for (var i = min(minDate.year, DateTime.now().year - 3);
-          i <= DateTime.now().year;
-          i++) {
-        final selStartDate = DateTime(i);
-        final endDate = DateTime(i + 1);
-
-        shortTitles.add(DateFormat.y().format(selStartDate));
-        longTitles.add(DateFormat.y().format(selStartDate));
-
-        final incomeToAdd = await getIncomeData(selStartDate, endDate);
-        final expenseToAdd = await getExpenseData(selStartDate, endDate);
-
-        income.add(incomeToAdd);
-        expense.add(expenseToAdd);
-        balance.add(incomeToAdd + expenseToAdd);
+        await addPeriodData(
+          start: start,
+          end: end,
+          shortTitle: DateFormat.y().format(start),
+          longTitle: DateFormat.y().format(start),
+        );
       }
     }
 
@@ -314,7 +316,8 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
                         : null,
                     barTouchData: BarTouchData(
                       touchTooltipData: BarTouchTooltipData(
-                        tooltipMargin: -10,
+                        fitInsideVertically: true,
+                        fitInsideHorizontally: true,
                         getTooltipColor: (spot) =>
                             Theme.of(context).colorScheme.surface,
                         getTooltipItem: (group, groupIndex, rod, rodIndex) {
@@ -330,7 +333,7 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
                             textAlign: TextAlign.start,
                             children: [
                               TextSpan(
-                                  text: "↑ ",
+                                  text: '↑ ',
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: AppColors.of(context).success,
@@ -340,9 +343,9 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
                                     currency: userCurrencySnapshot.data,
                                     amountToConvert: barRodsToY.elementAt(0),
                                   ).getTextSpanList(context)),
-                              TextSpan(text: "\n"),
+                              const TextSpan(text: '\n'),
                               TextSpan(
-                                  text: "↓ ",
+                                  text: '↓ ',
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: AppColors.of(context).danger,
