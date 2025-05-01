@@ -13,7 +13,7 @@ publish_to: 'none'
 # The X represents the major releases, and can be up to infinity. Never start by a zero
 # The Y represents the minor releases, and can be up to 99. Always start by a zero
 # The Z represents the patch releases, and can be up to 999. Always start by a zero
-version: 7.5.0+750000
+version: 7.5.1+750001
 
 environment:
   flutter: 3.22.3
@@ -50,14 +50,14 @@ dependencies:
   flutter_svg: ^2.0.5
   permission_handler: ^11.3.0
   json_annotation: ^4.8.1
-  file_picker: ^8.3.1
+  file_picker: ^8.3.2
   fl_chart: ^0.70.2
   share_plus: ^10.1.2
   url_launcher: ^6.3.1
   uuid: ^4.5.1
   csv: ^6.0.0
   dotted_border: ^2.0.0+3
-  package_info_plus: ^8.0.2
+  package_info_plus: ^8.3.0
   dynamic_color: ^1.7.0
   copy_with_extension: ^5.0.4
   freezed_annotation: ^2.4.1
