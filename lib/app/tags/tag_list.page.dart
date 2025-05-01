@@ -6,10 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/tags/tag_form_page.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/monekin_reorderable_list.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
-import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -71,15 +69,17 @@ class _TagListPageState extends State<TagListPage> {
           totalItemCount: tags.length,
           padding: const EdgeInsets.fromLTRB(16, 6, 16, 16),
           isOrderEnabled: isOrderEnabled,
-          itemBuilder: (context, index) {
+          spaceBetween: 8,
+          itemBuilder: (context, index, isOrdering) {
             final tag = tags.elementAt(index);
 
-            return Tappable(
-              onTap: () => RouteUtils.pushRoute(context, TagFormPage(tag: tag)),
-              bgColor: AppColors.of(context).light,
-              margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
-              borderRadius: BorderRadius.circular(12),
+            return Material(
               child: ListTile(
+                tileColor: Theme.of(context).colorScheme.surfaceContainer,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                onTap: () =>
+                    RouteUtils.pushRoute(context, TagFormPage(tag: tag)),
                 trailing: tags.length > 1
                     ? ReorderableDragIcon(
                         index: index,

@@ -74,17 +74,17 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                           LocaleSettings.currentLocale.languageTag),
                 );
 
-                if (newLang == null) {
+                if (newLang?.result == null) {
                   return;
                 }
 
-                LocaleSettings.setLocaleRaw(newLang,
+                LocaleSettings.setLocaleRaw(newLang!.result!,
                     listenToDeviceLocale: true);
 
                 try {
                   await UserSettingService.instance.setItem(
                     SettingKey.appLanguage,
-                    newLang,
+                    newLang.result!,
                     updateGlobalState: true,
                   );
                 } catch (e) {

@@ -72,15 +72,10 @@ class HorizontalScrollableAccountList extends StatelessWidget {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    account.name,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
+                                  Text(account.name,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge),
                                   Row(
                                     children: [
                                       StreamBuilder(

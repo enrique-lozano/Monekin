@@ -11,6 +11,29 @@ bool isAppInDarkBrightness(BuildContext context) =>
 bool isAppInLightBrightness(BuildContext context) =>
     !isAppInDarkBrightness(context);
 
+extension TextThemeExtension on TextTheme {
+  /// Returns a new [TextTheme] where selected body and label text styles have their
+  /// color updated to the specified [color].
+  ///
+  /// The styles affected by this change are:
+  /// - [bodyLarge]
+  /// - [bodyMedium]
+  /// - [bodySmall]
+  /// - [labelMedium]
+  /// - [labelSmall]
+  TextTheme withDifferentBodyColors(Color color) {
+    TextStyle? applyColor(TextStyle? style) => style?.copyWith(color: color);
+
+    return copyWith(
+      bodyLarge: applyColor(bodyLarge),
+      bodyMedium: applyColor(bodyMedium),
+      bodySmall: applyColor(bodySmall),
+      labelMedium: applyColor(labelMedium),
+      labelSmall: applyColor(labelSmall),
+    );
+  }
+}
+
 ThemeData getThemeData(
   BuildContext context, {
   required bool isDark,
@@ -74,25 +97,30 @@ ThemeData getThemeData(
       colorScheme: isDark ? darkColorScheme : lightColorScheme,
       brightness: isDark ? Brightness.dark : Brightness.light,
       useMaterial3: true,
-      fontFamily: 'Nunito',
+      fontFamily: 'Jost',
       extensions: [customAppColors]);
 
-  final listTileSmallText = TextStyle(
-      color: theme.textTheme.bodyMedium?.color,
-      fontSize: 14,
-      wordSpacing: 0,
-      decorationThickness: 1,
-      fontFamily: 'Nunito');
+  final textTheme =
+      theme.textTheme.withDifferentBodyColors(customAppColors.textBody);
+
+  final listTileSmallText = textTheme.bodyMedium?.copyWith(
+    fontSize: 14,
+    wordSpacing: 0,
+    decorationThickness: 1,
+    fontFamily: 'Jost',
+  );
 
   return theme.copyWith(
+    textTheme: textTheme,
     scaffoldBackgroundColor: theme.colorScheme.surface,
     dividerTheme: const DividerThemeData(space: 0),
-    cardColor: theme.colorSchemeExtended.cardColor,
-    cardTheme: CardTheme(color: theme.colorSchemeExtended.cardColor),
+    cardColor: theme.colorScheme.surfaceContainer,
+    cardTheme: CardTheme(color: theme.colorScheme.surfaceContainer),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: theme.colorSchemeExtended.inputFill,
+      fillColor: theme.colorScheme.surfaceContainerHighest,
       isDense: true,
+      hintStyle: TextStyle(color: customAppColors.textHint),
       floatingLabelStyle: TextStyle(
         backgroundColor: theme.colorScheme.surface.withOpacity(0.5),
       ),
@@ -108,14 +136,14 @@ ThemeData getThemeData(
     bottomSheetTheme: theme.bottomSheetTheme.copyWith(
       elevation: 0,
       dragHandleSize: const Size(25, 4),
-      modalBackgroundColor: theme.colorSchemeExtended.modalBackground,
+      modalBackgroundColor: customAppColors.modalBackground,
       dragHandleColor: Colors.grey[300],
       clipBehavior: Clip.hardEdge,
     ),
     listTileTheme: theme.listTileTheme.copyWith(
       minVerticalPadding: 8,
       subtitleTextStyle:
-          listTileSmallText.copyWith(fontWeight: FontWeight.w300),
+          listTileSmallText?.copyWith(fontWeight: FontWeight.w300),
       leadingAndTrailingTextStyle: listTileSmallText,
     ),
   );

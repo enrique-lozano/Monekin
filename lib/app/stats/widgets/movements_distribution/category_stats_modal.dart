@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/stats/widgets/movements_distribution/chart_by_categories.dart';
+import 'package:monekin/app/stats/widgets/movements_distribution/tr_distribution_chart_item.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/category/category.dart';
