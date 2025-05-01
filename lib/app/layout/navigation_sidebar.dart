@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/home/widgets/navigation_drawer.dart';
 import 'package:monekin/app/settings/widgets/display_app_icon.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/routes/destinations.dart';
@@ -67,7 +66,7 @@ class NavigationSidebarState extends State<NavigationSidebar> {
         mdChild: SafeArea(
           child: NavigationRail(
               leading: const SizedBox(height: 8),
-              backgroundColor: Theme.of(context).colorSchemeExtended.cardColor,
+              backgroundColor: Theme.of(context).cardColor,
               trailing: Expanded(
                 child: Align(
                   alignment: Alignment.bottomCenter,

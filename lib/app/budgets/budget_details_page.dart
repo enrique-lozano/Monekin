@@ -5,7 +5,7 @@ import 'package:monekin/app/budgets/budget_form_page.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/budgets/components/budget_evolution_chart.dart';
 import 'package:monekin/app/stats/stats_page.dart';
-import 'package:monekin/app/stats/widgets/movements_distribution/chart_by_categories.dart';
+import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/models/budget/budget.dart';
@@ -156,7 +156,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                             const SizedBox(height: 16),
                             CardWithHeader(
                               title: t.stats.by_categories,
-                              body: ChartByCategories(
+                              body: PieChartByCategories(
                                 filters: budget.trFilters,
                                 datePeriodState: budget.periodState,
                               ),

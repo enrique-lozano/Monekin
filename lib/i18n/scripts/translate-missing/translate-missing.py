@@ -29,16 +29,19 @@ async def translate_lang_json(data: Dict[str, Any], lang: str) -> None:
 
     print(f"- Translating '{lang}'")
 
-    for category, items in data.items():
-        if isinstance(items, dict):
-            for key, value in items.items():
-                if isinstance(value, dict):
-                    for sub_key, sub_value in value.items():
-                        data[category][key][sub_key] = await translate_text(
-                            sub_value, lang
-                        )
-                else:
-                    data[category][key] = await translate_text(value, lang)
+    async def translate_recursive(obj: Any) -> Any:
+        if isinstance(obj, dict):
+            for key, value in obj.items():
+                obj[key] = await translate_recursive(value)
+            return obj
+        elif isinstance(obj, list):
+            return [await translate_recursive(item) for item in obj]
+        elif isinstance(obj, str):
+            return await translate_text(obj, lang)
+        else:
+            return obj
+
+    await translate_recursive(data)
 
 
 async def translate_data(data: Dict[str, Any]) -> None:

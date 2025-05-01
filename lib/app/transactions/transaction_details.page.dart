@@ -735,10 +735,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
         const SizedBox(width: 8),
         Text(
           data,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: color,
-          ),
+          style: TextStyle(color: color),
         )
       ],
     );
@@ -794,10 +791,7 @@ class _TransactionDetailHeader extends SliverPersistentHeaderDelegate {
                   transaction.displayName(context),
                   softWrap: true,
                   overflow: TextOverflow.fade,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
                 if (transaction.recurrentInfo.isNoRecurrent)
                   AnimatedSwitcher(

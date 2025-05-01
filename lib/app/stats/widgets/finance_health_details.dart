@@ -113,7 +113,7 @@ class _FinanceHealthDetailTile extends StatelessWidget {
       title: ListTile(
           title: Text(title),
           leading: SizedBox(
-            width: 30,
+            width: 32,
             child: Column(
               children: [
                 Text(

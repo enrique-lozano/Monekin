@@ -1,8 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:monekin/app/accounts/account_form.dart';
-import 'package:monekin/app/accounts/details/account_details.dart';
 import 'package:monekin/app/home/widgets/click_tracker.dart';
 import 'package:monekin/app/home/widgets/dashboard_cards.dart';
 import 'package:monekin/app/home/widgets/horizontal_scrollable_account_list.dart';
@@ -16,6 +15,7 @@ import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
+import 'package:monekin/core/presentation/debug_page.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/dates/date_period_modal.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -92,8 +92,7 @@ class _DashboardPageState extends State<DashboardPage> {
     final accountService = AccountService.instance;
 
     return Scaffold(
-      appBar: EmptyAppBar(
-          color: Theme.of(context).colorSchemeExtended.dashboardHeader),
+      appBar: EmptyAppBar(color: AppColors.of(context).consistentPrimary),
       floatingActionButton:
           NewTransactionButton(isExtended: isFloatingButtonExtended),
       body: Stack(
@@ -118,6 +117,13 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 child: DashboardCards(dateRangeService: dateRangeService),
               ),
+
+              if (kDebugMode)
+                TextButton(
+                    onPressed: () {
+                      RouteUtils.pushRoute(context, const DebugPage());
+                    },
+                    child: const Text('DEBUG PAGE'))
             ]),
           ),
           Positioned(
@@ -137,7 +143,7 @@ class _DashboardPageState extends State<DashboardPage> {
   Card buildDashboadHeader(
       BuildContext context, AccountService accountService) {
     return Card(
-      color: Theme.of(context).colorSchemeExtended.dashboardHeader,
+      color: AppColors.of(context).consistentPrimary,
       margin: const EdgeInsets.only(bottom: 24),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -163,7 +169,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             Divider(
               height: 16,
-              color: Theme.of(context).colorScheme.onPrimaryContainer,
+              color: AppColors.of(context).onConsistentPrimary.withOpacity(0.5),
             ),
             const SizedBox(height: 8),
             StreamBuilder(
@@ -225,15 +231,18 @@ class _DashboardPageState extends State<DashboardPage> {
 
   ActionChip buildDatePeriodSelector(BuildContext context) {
     return ActionChip(
-      label: Text(dateRangeService.getText(context),
-          style: TextStyle(
-              color: Theme.of(context).colorSchemeExtended.onDashboardHeader)),
-      backgroundColor: Theme.of(context).colorSchemeExtended.dashboardHeader,
+      label: Text(
+          dateRangeService.getText(
+            context,
+            showLongMonth: MediaQuery.of(context).size.width > 360,
+          ),
+          style: TextStyle(color: AppColors.of(context).onConsistentPrimary)),
+      backgroundColor: AppColors.of(context).consistentPrimary,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
         side: BorderSide(
           //   style: BorderStyle.none,
-          color: Theme.of(context).colorSchemeExtended.onDashboardHeader,
+          color: AppColors.of(context).onConsistentPrimary,
         ),
       ),
       onPressed: () {
@@ -280,15 +289,11 @@ class _DashboardPageState extends State<DashboardPage> {
                 builder: (context, snapshot) {
                   return UserAvatar(
                     avatar: snapshot.data,
-                    backgroundColor: Theme.of(context)
-                        .colorSchemeExtended
-                        .onDashboardHeader
-                        .darken(0.25),
+                    backgroundColor:
+                        AppColors.of(context).onConsistentPrimary.darken(0.25),
                     border: Border.all(
                       width: 2,
-                      color: Theme.of(context)
-                          .colorSchemeExtended
-                          .onDashboardHeader,
+                      color: AppColors.of(context).onConsistentPrimary,
                     ),
                   );
                 }),
@@ -302,11 +307,10 @@ class _DashboardPageState extends State<DashboardPage> {
                     "Welcome again!",
                     softWrap: false,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        fontWeight: FontWeight.w300,
-                        overflow: TextOverflow.fade,
-                        color: Theme.of(context)
-                            .colorSchemeExtended
-                            .onDashboardHeader),
+                          fontWeight: FontWeight.w300,
+                          overflow: TextOverflow.fade,
+                          color: AppColors.of(context).onConsistentPrimary,
+                        ),
                   ),
                   StreamBuilder(
                     stream: UserSettingService.instance
@@ -323,9 +327,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             fontWeight: FontWeight.w600,
                             fontSize: 18,
                             overflow: TextOverflow.fade,
-                            color: Theme.of(context)
-                                .colorSchemeExtended
-                                .onDashboardHeader),
+                            color: AppColors.of(context).onConsistentPrimary),
                       );
                     },
                   ),
@@ -349,7 +351,7 @@ class _DashboardPageState extends State<DashboardPage> {
             bottomLeft: Radius.circular(16),
             bottomRight: Radius.circular(16),
           ),
-          color: Theme.of(context).colorSchemeExtended.dashboardHeader),
+          color: AppColors.of(context).consistentPrimary),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -358,10 +360,10 @@ class _DashboardPageState extends State<DashboardPage> {
             children: [
               Text(
                 t.home.total_balance,
-                style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                    color: Theme.of(context)
-                        .colorSchemeExtended
-                        .onDashboardHeader),
+                style: Theme.of(context)
+                    .textTheme
+                    .labelSmall!
+                    .copyWith(color: AppColors.of(context).onConsistentPrimary),
               ),
               StreamBuilder(
                 stream: AccountService.instance.getAccountsMoney(),
@@ -376,9 +378,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               ? 22
                               : 26,
                           fontWeight: FontWeight.w600,
-                          color: Theme.of(context)
-                              .colorSchemeExtended
-                              .onDashboardHeader),
+                          color: AppColors.of(context).onConsistentPrimary),
                     );
                   }
 
@@ -425,11 +425,14 @@ class _DashboardPageState extends State<DashboardPage> {
         crossAxisAlignment: _isIncomeExpenseAtSameLevel(context)
             ? CrossAxisAlignment.start
             : CrossAxisAlignment.center,
+        spacing: 2,
         children: [
           Text(
             t.home.total_balance,
-            style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                color: Theme.of(context).colorSchemeExtended.onDashboardHeader),
+            style: Theme.of(context)
+                .textTheme
+                .labelSmall!
+                .copyWith(color: AppColors.of(context).onConsistentPrimary),
           ),
           if (!accounts.hasData) ...[
             const Skeleton(width: 70, height: 40),
@@ -442,16 +445,17 @@ class _DashboardPageState extends State<DashboardPage> {
                 if (snapshot.hasData) {
                   return CurrencyDisplayer(
                     amountToConvert: snapshot.data!,
-                    integerStyle: TextStyle(
-                        fontSize: snapshot.data! >= 100000000 &&
-                                BreakPoint.of(context)
-                                    .isSmallerOrEqualTo(BreakpointID.xs)
-                            ? 26
-                            : 32,
-                        fontWeight: FontWeight.w600,
-                        color: Theme.of(context)
-                            .colorSchemeExtended
-                            .onDashboardHeader),
+                    integerStyle: Theme.of(context)
+                        .textTheme
+                        .headlineLarge!
+                        .copyWith(
+                            fontSize: snapshot.data! >= 100000000 &&
+                                    BreakPoint.of(context)
+                                        .isSmallerOrEqualTo(BreakpointID.xs)
+                                ? 26
+                                : 32,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.of(context).onConsistentPrimary),
                   );
                 }
 
@@ -473,7 +477,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
                   return TrendingValue(
                     percentage: snapshot.data!,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     filled: true,
                     outlined: true,
                     fontSize: 16,
@@ -483,94 +487,6 @@ class _DashboardPageState extends State<DashboardPage> {
           ]
         ],
       ),
-    );
-  }
-
-  Widget buildAccountList(List<Account> accounts) {
-    return Builder(
-      builder: (context) {
-        if (accounts.isEmpty) {
-          return Column(
-            children: [
-              Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    children: [
-                      Text(
-                        t.home.no_accounts,
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        t.home.no_accounts_descr,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 8),
-                      FilledButton(
-                          onPressed: () => RouteUtils.pushRoute(
-                              context, const AccountFormPage()),
-                          child: Text(t.account.form.create))
-                    ],
-                  ))
-            ],
-          );
-        }
-
-        return ListView.separated(
-            padding: EdgeInsets.zero,
-            itemCount: accounts.length,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            separatorBuilder: (context, index) {
-              return const Divider(indent: 56);
-            },
-            itemBuilder: (context, index) {
-              final account = accounts[index];
-
-              return ListTile(
-                onTap: () => RouteUtils.pushRoute(
-                    context,
-                    AccountDetailsPage(
-                        account: account,
-                        accountIconHeroTag:
-                            'dashboard-page__account-icon-${account.id}')),
-                leading: Hero(
-                    tag: 'dashboard-page__account-icon-${account.id}',
-                    child: account.displayIcon(context)),
-                trailing: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      StreamBuilder(
-                          initialData: 0.0,
-                          stream: AccountService.instance
-                              .getAccountMoney(account: account),
-                          builder: (context, snapshot) {
-                            return CurrencyDisplayer(
-                              amountToConvert: snapshot.data!,
-                              currency: account.currency,
-                            );
-                          }),
-                      StreamBuilder(
-                          initialData: 0.0,
-                          stream: AccountService.instance
-                              .getAccountsMoneyVariation(
-                                  accounts: [account],
-                                  startDate: dateRangeService.startDate,
-                                  endDate: dateRangeService.endDate,
-                                  convertToPreferredCurrency: false),
-                          builder: (context, snapshot) {
-                            return TrendingValue(
-                              percentage: snapshot.data!,
-                              decimalDigits: 0,
-                            );
-                          }),
-                    ]),
-                title: Text(account.name),
-              );
-            });
-      },
     );
   }
 }

@@ -11,7 +11,6 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../core/models/transaction/transaction_type.enum.dart';
-import '../../../core/presentation/app_colors.dart';
 
 class IncomeExpenseComparason extends StatelessWidget {
   const IncomeExpenseComparason(
@@ -128,7 +127,7 @@ class IncomeExpenseTile extends StatelessWidget {
       leading: Container(
         padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
-          color: AppColors.of(context).light,
+          color: type.color(context).withOpacity(0.1),
           borderRadius: BorderRadius.circular(4),
         ),
         child: Icon(

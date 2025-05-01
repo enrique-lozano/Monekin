@@ -15,11 +15,15 @@ class HTMLText extends StatelessWidget {
   /// Widget to display some text that contains some HTML tags inside it
   ///
   /// * **IMPORTANT**: With the current implementation, a HTML tag could not be inside other tag
-  const HTMLText(
-      {super.key,
-      required this.htmlString,
-      required this.tags,
-      this.defaultTextStyle});
+  const HTMLText({
+    super.key,
+    required this.htmlString,
+    required this.tags,
+    this.defaultTextStyle,
+    this.textAlign,
+  });
+
+  final TextAlign? textAlign;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +31,7 @@ class HTMLText extends StatelessWidget {
 
     return Text.rich(
       TextSpan(children: textSpans),
+      textAlign: textAlign,
     );
   }
 
