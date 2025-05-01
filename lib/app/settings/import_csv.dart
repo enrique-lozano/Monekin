@@ -56,35 +56,47 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
   int? notesColumn;
   int? titleColumn;
 
-  void readFile() {
-    BackupDatabaseService().readFile().then((csv) async {
-      if (csv == null) {
+  Future<void> readFile() async {
+    final messenger = ScaffoldMessenger.of(context);
+
+    try {
+      final csvFile = await BackupDatabaseService().readFile();
+      if (csvFile == null) return;
+
+      final csvString = await csvFile.readAsString();
+      final parsedCSV = await BackupDatabaseService().processCsv(csvString);
+
+      final firstRowLength = parsedCSV.first.length;
+
+      if (parsedCSV.length >= 2 && firstRowLength == parsedCSV[1].length + 1) {
+        // Remove trailing column in header row if it has one more than the second row
+        parsedCSV[0].removeLast();
+      }
+
+      if (parsedCSV.length > 2 &&
+          parsedCSV.last.every((cell) => cell.trim().isEmpty)) {
+        // Remove last row if it's effectively empty
+        parsedCSV.removeLast();
+      }
+
+      final allRowsSameLength =
+          parsedCSV.every((row) => row.length == firstRowLength);
+
+      if (!allRowsSameLength) {
+        messenger.showSnackBar(const SnackBar(
+          content:
+              Text('All rows in the CSV must have the same number of columns.'),
+        ));
+
         return;
       }
 
-      await BackupDatabaseService()
-          .processCsv(await csv.readAsString())
-          .then((parsedCSV) {
-        final columnsLenght = parsedCSV.map((e) => e.length).toList();
-
-        if (parsedCSV.length >= 2 &&
-            columnsLenght.elementAt(0) == columnsLenght.elementAt(1) + 1) {
-          parsedCSV[0].removeLast();
-        }
-
-        if (parsedCSV.every((e) => e == parsedCSV.first)) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text(
-                  'All the rows of the csv file must have the same number of columns')));
-        }
-
-        setState(() {
-          csvData = parsedCSV;
-        });
+      setState(() {
+        csvData = parsedCSV;
       });
-    }).catchError((err) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err)));
-    });
+    } catch (err) {
+      messenger.showSnackBar(SnackBar(content: Text(err.toString())));
+    }
   }
 
   Widget selector({
@@ -158,16 +170,6 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
   Future<void> addTransactions() async {
     final snackbarDisplayer = ScaffoldMessenger.of(context).showSnackBar;
 
-    if (amountColumn == null) {
-      snackbarDisplayer(
-        const SnackBar(content: Text('Amount column can not be null')),
-      );
-
-      return;
-    }
-
-    final loadingOverlay = LoadingOverlay.of(context);
-
     onSuccess() {
       RouteUtils.pushRoute(context, const TabsPage());
 
@@ -179,71 +181,89 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
       );
     }
 
+    if (amountColumn == null) {
+      snackbarDisplayer(
+        const SnackBar(content: Text('Amount column can not be null')),
+      );
+      return;
+    }
+
+    final loadingOverlay = LoadingOverlay.of(context);
     loadingOverlay.show();
 
     try {
       final csvRows = csvData!.slice(1).toList();
       final db = AppDB.instance;
-
       const unknownAccountName = 'Account imported';
 
+      // Cache of known accounts by lowercase name
+      final existingAccounts = {
+        for (final acc in await db.select(db.accounts).get())
+          acc.name.toLowerCase(): acc
+      };
+
+      // Cache preferred currency once
+      final preferredCurrency =
+          await CurrencyService.instance.getUserPreferredCurrency().first;
+
+      final List<TransactionInDB> transactionsToInsert = [];
+
       for (final row in csvRows) {
-        final account = await (db.select(db.accounts)
-              ..where((tbl) => tbl.name.lower().isValue(accountColumn == null
-                  ? unknownAccountName.toLowerCase()
-                  : row[accountColumn!].toString().toLowerCase())))
-            .getSingleOrNull();
+        // Resolve account
+        final accountName = accountColumn == null
+            ? unknownAccountName
+            : row[accountColumn!].toString();
+        final lowerAccountName = accountName.toLowerCase();
 
-        final accountID = account != null
-            ? account.id
-            : defaultAccount != null
-                ? defaultAccount!.id
-                : generateUUID();
+        AccountInDB? account = existingAccounts[lowerAccountName];
 
-        if (account == null && defaultAccount == null) {
-          await AccountService.instance.insertAccount(AccountInDB(
-              id: accountID,
-              name: accountColumn == null
-                  ? unknownAccountName
-                  : row[accountColumn!].toString(),
-              iniValue: 0,
-              displayOrder: 10,
-              date: DateTime.now(),
-              type: AccountType.normal,
-              iconId: SupportedIconService.instance.defaultSupportedIcon.id,
-              currencyId: (await CurrencyService.instance
-                      .getUserPreferredCurrency()
-                      .first)
-                  .code));
+        // If not found, insert and add to cache (unless default is used)
+        String accountID;
+        if (account != null) {
+          accountID = account.id;
+        } else if (defaultAccount != null) {
+          accountID = defaultAccount!.id;
+        } else {
+          accountID = generateUUID();
+          account = AccountInDB(
+            id: accountID,
+            name: accountName,
+            iniValue: 0,
+            displayOrder: 10,
+            date: DateTime.now(),
+            type: AccountType.normal,
+            iconId: SupportedIconService.instance.defaultSupportedIcon.id,
+            currencyId: preferredCurrency.code,
+          );
+          await AccountService.instance.insertAccount(account);
+          existingAccounts[lowerAccountName] = account;
         }
 
+        // Resolve category
         final categoryToFind = categoryColumn == null
             ? null
             : row[categoryColumn!].toString().toLowerCase().trim();
 
-        final String categoryID = categoryToFind == null
-            ? defaultCategory!.id
-            : (await CategoryService.instance
-                        .getCategories(
-                          limit: 1,
-                          predicate: (catTable, pCatTable) =>
-                              catTable.name
-                                  .lower()
-                                  .trim()
-                                  .isValue(categoryToFind) |
-                              pCatTable.name
-                                  .lower()
-                                  .trim()
-                                  .isValue(categoryToFind),
-                        )
-                        .first)
-                    .firstOrNull
-                    ?.id ??
-                defaultCategory!.id;
+        String categoryID;
+
+        if (categoryToFind == null) {
+          categoryID = defaultCategory!.id;
+        } else {
+          final category = (await CategoryService.instance
+                  .getCategories(
+                    limit: 1,
+                    predicate: (catTable, pCatTable) =>
+                        catTable.name.lower().trim().isValue(categoryToFind) |
+                        pCatTable.name.lower().trim().isValue(categoryToFind),
+                  )
+                  .first)
+              .firstOrNull;
+          categoryID = category?.id ?? defaultCategory!.id;
+        }
 
         final trValue = double.parse(row[amountColumn!].toString());
 
-        await TransactionService.instance.insertTransaction(TransactionInDB(
+        transactionsToInsert.add(TransactionInDB(
           id: generateUUID(),
           date: dateColumn == null
               ? DateTime.now()
@@ -260,6 +280,16 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
           title: titleColumn == null || row[titleColumn!].toString().isEmpty
               ? null
               : row[titleColumn!].toString(),
+        ));
+      }
+
+      // Batch insert
+      const batchSize = 10;
+
+      for (var i = 0; i < transactionsToInsert.length; i += batchSize) {
+        final batch = transactionsToInsert.skip(i).take(batchSize);
+        await Future.wait(batch.map(
+          (e) => TransactionService.instance.insertTransaction(e),
         ));
       }
 
@@ -362,73 +392,9 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
           },
           steps: [
             buildStep(index: 0, content: [
-              if (csvData == null)
-                InkWell(
-                  onTap: () => readFile(),
-                  child: DottedBorder(
-                    color: Colors.grey.withOpacity(0.5),
-                    strokeWidth: 3,
-                    strokeCap: StrokeCap.round,
-                    borderType: BorderType.RRect,
-                    dashPattern: const [6, 8],
-                    radius: const Radius.circular(12),
-                    child: SizedBox(
-                      height: 150,
-                      width: double.infinity,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 68),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.add,
-                                size: 48,
-                                weight: 10,
-                                color: Colors.grey.withOpacity(0.95)),
-                            const SizedBox(height: 4),
-                            Text(
-                              t.backup.import.tap_to_select_file,
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+              if (csvData == null) selectCsvButton(t, context),
               if (csvData != null) ...[
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: DataTable(
-                    headingRowColor: WidgetStateProperty.resolveWith<Color?>(
-                      (states) => Theme.of(context)
-                          .colorScheme
-                          .primary
-                          .withOpacity(0.18),
-                    ),
-                    headingTextStyle:
-                        const TextStyle(fontWeight: FontWeight.w600),
-                    columns: csvHeaders!
-                        .map((item) => DataColumn(label: Text(item)))
-                        .toList(),
-                    rows: csvData!
-                        .sublist(
-                            1,
-                            _rowsToPreview > csvData!.length
-                                ? null
-                                : _rowsToPreview)
-                        .map(
-                          (csvrow) => DataRow(
-                            cells: csvrow
-                                .map((csvItem) =>
-                                    DataCell(Text(csvItem.toString())))
-                                .toList(),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                ),
+                csvPreviewTable(context),
                 if (csvData!.length - _rowsToPreview >= 1)
                   Text(
                     '+${csvData!.length - _rowsToPreview} rows',
@@ -556,6 +522,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _dateFormatController,
+                  enabled: dateColumn != null,
                   decoration: const InputDecoration(labelText: 'Date format'),
                   validator: (value) => fieldValidator(value),
                   autovalidateMode: AutovalidateMode.always,
@@ -604,5 +571,67 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
             ),
           ],
         ));
+  }
+
+  SingleChildScrollView csvPreviewTable(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: DataTable(
+        headingRowColor: WidgetStateProperty.resolveWith<Color?>(
+          (states) => Theme.of(context).colorScheme.primary.withOpacity(0.18),
+        ),
+        clipBehavior: Clip.hardEdge,
+        headingTextStyle: Theme.of(context).textTheme.labelLarge,
+        dataTextStyle: Theme.of(context).textTheme.bodySmall,
+        columns:
+            csvHeaders!.map((item) => DataColumn(label: Text(item))).toList(),
+        rows: [
+          ...csvData!
+              .sublist(
+                  1, _rowsToPreview > csvData!.length ? null : _rowsToPreview)
+              .map(
+                (csvrow) => DataRow(
+                  cells: csvrow
+                      .map((csvItem) => DataCell(Text(csvItem.toString())))
+                      .toList(),
+                ),
+              )
+        ],
+      ),
+    );
+  }
+
+  InkWell selectCsvButton(Translations t, BuildContext context) {
+    return InkWell(
+      onTap: () => readFile(),
+      child: DottedBorder(
+        color: Colors.grey.withOpacity(0.5),
+        strokeWidth: 3,
+        strokeCap: StrokeCap.round,
+        borderType: BorderType.RRect,
+        dashPattern: const [6, 8],
+        radius: const Radius.circular(12),
+        child: SizedBox(
+          height: 150,
+          width: double.infinity,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 68),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.add,
+                    size: 48, weight: 10, color: Colors.grey.withOpacity(0.95)),
+                const SizedBox(height: 4),
+                Text(
+                  t.backup.import.tap_to_select_file,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
