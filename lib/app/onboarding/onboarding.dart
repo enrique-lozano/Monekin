@@ -173,7 +173,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                               dotWidth: constraints.maxWidth /
                                       (items.length + expansionFactor - 1) -
                                   spacing / items.length,
-                              expansionFactor: 4,
+                              expansionFactor: expansionFactor.toDouble(),
                             ),
                           );
                         }),
