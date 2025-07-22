@@ -115,7 +115,7 @@ ThemeData getThemeData(
     scaffoldBackgroundColor: theme.colorScheme.surface,
     dividerTheme: const DividerThemeData(space: 0),
     cardColor: theme.colorScheme.surfaceContainer,
-    cardTheme: CardTheme(color: theme.colorScheme.surfaceContainer),
+    cardTheme: CardThemeData(color: theme.colorScheme.surfaceContainer),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: theme.colorScheme.surfaceContainerHighest,
