@@ -38,7 +38,8 @@ class SelectItem<T> {
 
 class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
   late GlobalKey<MonekinDropdownSelectState>? _themeDropdownKey = GlobalKey();
-
+  late GlobalKey<MonekinDropdownSelectState>? _swipeActionDropdownKey = GlobalKey();
+ 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -93,6 +94,31 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                         'There was an error persisting this setting on your device. Contact the developers for more information'),
                   ));
                 }
+              },
+            ),
+            createListSeparator(context, "Swipe Actions"),
+            Builder(
+              builder: (context) {
+                final theme =
+                    getThemeFromString(appStateSettings[SettingKey.themeMode]);
+
+                return ListTile(
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(child: Text("Swipe Left")),
+                      const SizedBox(width: 12),
+                      Flexible(child: _buildSwipeActionDropdown())
+                    ],
+                  ),
+                  onTap: () {
+                    _swipeActionDropdownKey!.currentState!.openDropdown();
+                  },
+                  leading: ScaledAnimatedSwitcher(
+                    keyToWatch: theme.icon(context).toString(),
+                    child: Icon(theme.icon(context)),
+                  ),
+                );
               },
             ),
             createListSeparator(context, t.settings.theme_and_colors),
@@ -269,4 +295,29 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
           }),
     );
   }
+
+  Widget _buildSwipeActionDropdown() {
+  return Focus(
+    canRequestFocus: false,
+    descendantsAreFocusable: false,
+    child: MonekinDropdownSelect<String>(
+      key: _swipeActionDropdownKey,
+      initial: "Delete", // Set the initial value to a String
+      compact: true,
+      expanded: false,
+      items: const [ // Added a comma here
+        "Stateless",
+        "Voided",
+        "Pending",
+        "Reconciled",
+        "Unreconciled",
+        "Delete",
+        "Edit"
+      ],
+      onChanged: (mode) {
+        // Handle the change
+      },
+    ),
+  );
+}
 }
