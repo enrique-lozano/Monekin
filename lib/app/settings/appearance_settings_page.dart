@@ -99,25 +99,24 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
             createListSeparator(context, "Swipe Actions"),
             Builder(
               builder: (context) {
-                final theme =
-                    getThemeFromString(appStateSettings[SettingKey.themeMode]);
-
+                final action = appStateSettings[SettingKey.leftSwipe];
+                
                 return ListTile(
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Flexible(child: Text("Swipe Left")),
                       const SizedBox(width: 12),
-                      Flexible(child: _buildSwipeActionDropdown())
+                      Flexible(child: _buildSwipeActionDropdown(action))
                     ],
                   ),
                   onTap: () {
                     _swipeActionDropdownKey!.currentState!.openDropdown();
                   },
-                  leading: ScaledAnimatedSwitcher(
-                    keyToWatch: theme.icon(context).toString(),
-                    child: Icon(theme.icon(context)),
-                  ),
+                  // leading: ScaledAnimatedSwitcher(
+                  //   keyToWatch: theme.icon(context).toString(),
+                  //   child: Icon(theme.icon(context)),
+                  // ),
                 );
               },
             ),
@@ -296,13 +295,13 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
     );
   }
 
-  Widget _buildSwipeActionDropdown() {
+  Widget _buildSwipeActionDropdown(String? action) {
   return Focus(
     canRequestFocus: false,
     descendantsAreFocusable: false,
     child: MonekinDropdownSelect<String>(
       key: _swipeActionDropdownKey,
-      initial: "Delete", // Set the initial value to a String
+      initial: action ?? "none", // Set the initial value to a String
       compact: true,
       expanded: false,
       items: const [ // Added a comma here
@@ -312,12 +311,19 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
         "Reconciled",
         "Unreconciled",
         "Delete",
-        "Edit"
+        "Edit",
+        "none"
       ],
-      onChanged: (mode) {
-        // Handle the change
-      },
-    ),
-  );
-}
+      onChanged: (action) {
+        UserSettingService.instance
+          .setItem(
+            SettingKey.leftSwipe,
+            action,
+            updateGlobalState: true,
+          )
+          .then((value) => null);
+        },
+      ),
+    );
+  }
 }
