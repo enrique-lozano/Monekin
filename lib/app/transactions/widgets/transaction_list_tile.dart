@@ -74,27 +74,33 @@ class TransactionListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dismissible(
       key: Key(transaction.id),
+      // TODO to make the UI better appealing.
       background: Container(
         color: Colors.green,
         child: Row(
           children: [
+            // TODO: Need to move this to i18n and add the translations later on.
             Text('Accepted')
           ],
         ),
       ),
+      // TODO to make the UI better appealing.
       secondaryBackground: Container(
         color: Colors.red,
         child: Row(
           children: [
+            // TODO: Need to move this to i18n and add the translations later on.
             Text('Delete')
           ],
         ),
       ),
       confirmDismiss: (direction) async {
             if (direction == DismissDirection.startToEnd) {
+              // TODO: Need to remove this
               debugPrint("Swipe Right: Action 1 (e.g., Mark as Done)");
               await TransactionViewActionService().updateTransactionStatus(transaction.id, "reconcidel");
             } else if (direction == DismissDirection.endToStart) {
+              // TODO: Need to remove this
               debugPrint("Swipe Left: Action 2 (e.g., Show Info)");
               TransactionViewActionService().deleteTransactionWithAlertAndSnackBar(context, transactionId: transaction.id, navigateBack: false);
             }

@@ -96,6 +96,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                 }
               },
             ),
+            // TODO: Need to move this to i18n and add the translations later on.
             createListSeparator(context, "Swipe Actions"),
             Builder(
               builder: (context) {
@@ -105,6 +106,8 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      // TODO: Need to implement for Swipe Right
+                      // TODO: Need to move this to i18n and add the translations later on.
                       Flexible(child: Text("Swipe Left")),
                       const SizedBox(width: 12),
                       Flexible(child: _buildSwipeActionDropdown(action))
@@ -301,10 +304,13 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
     descendantsAreFocusable: false,
     child: MonekinDropdownSelect<String>(
       key: _swipeActionDropdownKey,
+      // TODO: Need to see a better form of implementation, as for now it just checks if actions is set or not, if not it dafults to none.
+      // TODO: Need to see if they a globalconstants implemented somewhere.
       initial: action ?? "none", // Set the initial value to a String
       compact: true,
       expanded: false,
-      items: const [ // Added a comma here
+      // TODO: Need to move this to i18n and add the translations later on.
+      items: const [ 
         "Stateless",
         "Voided",
         "Pending",
