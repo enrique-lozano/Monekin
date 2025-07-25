@@ -96,6 +96,7 @@ class _TranslationsUiActionsUk implements TranslationsUiActionsEn {
 	@override String get refresh => 'Оновити';
 	@override String get details => 'Деталі';
 	@override String get share => 'Поділитися';
+  @override String get none => 'Ніхто';
 }
 
 // Path: general

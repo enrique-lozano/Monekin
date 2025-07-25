@@ -96,6 +96,7 @@ class _TranslationsUiActionsTr implements TranslationsUiActionsEn {
 	@override String get refresh => 'Yenile';
 	@override String get details => 'Detaylar';
 	@override String get share => 'Paylaş';
+  @override String get none => 'Hiç kimse';
 }
 
 // Path: general

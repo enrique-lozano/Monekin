@@ -96,6 +96,7 @@ class _TranslationsUiActionsHu implements TranslationsUiActionsEn {
 	@override String get refresh => 'Frissítés';
 	@override String get details => 'Részletek';
 	@override String get share => 'Megosztás';
+  @override String get none => 'Egyik sem';
 }
 
 // Path: general

@@ -100,6 +100,7 @@ class TranslationsUiActionsEn {
 	String get refresh => 'Refresh';
 	String get details => 'Details';
 	String get share => 'Share';
+  String get none => 'None';
 }
 
 // Path: general

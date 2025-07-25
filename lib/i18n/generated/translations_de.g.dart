@@ -96,6 +96,7 @@ class _TranslationsUiActionsDe implements TranslationsUiActionsEn {
 	@override String get refresh => 'Aktualisieren';
 	@override String get details => 'Details';
 	@override String get share => 'Teilen';
+  @override String get none => 'Nichts';
 }
 
 // Path: general

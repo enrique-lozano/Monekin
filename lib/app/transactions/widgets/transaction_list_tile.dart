@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/transactions/transaction_details.page.dart';
+import 'package:monekin/core/database/services/user-setting/utils/get_transaction_status_from_string.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
@@ -24,6 +25,8 @@ class TransactionListTile extends StatelessWidget {
     this.onLongPress,
     this.onTap,
     this.isSelected = false,
+    required this.leftSwipeString,
+    required this.rightSwipeString
   });
 
   final MoneyTransaction transaction;
@@ -34,6 +37,9 @@ class TransactionListTile extends StatelessWidget {
   final bool showTime;
 
   final Object? heroTag;
+
+  final String leftSwipeString;
+  final String rightSwipeString;
 
   /// Action to trigger when the tile is long pressed. If `null`,
   /// the tile will display a modal with some quick actions for
@@ -72,40 +78,30 @@ class TransactionListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return Dismissible(
       key: Key(transaction.id),
+      direction: getDismissDirection(leftSwipeString, rightSwipeString),
       // TODO to make the UI better appealing.
+      // TODO right now for the dissmissable to work, you have to swipe all the way.
+      // TODO Need to make a snap in between, like thunderbird implements it.
       background: Container(
         color: Colors.green,
-        child: Row(
-          children: [
-            // TODO: Need to move this to i18n and add the translations later on.
-            Text('Accepted')
-          ],
-        ),
       ),
       // TODO to make the UI better appealing.
+      // TODO right now for the dissmissable to work, you have to swipe all the way.
+      // TODO Need to make a snap in between, like thunderbird implements it.
       secondaryBackground: Container(
         color: Colors.red,
-        child: Row(
-          children: [
-            // TODO: Need to move this to i18n and add the translations later on.
-            Text('Delete')
-          ],
-        ),
       ),
       confirmDismiss: (direction) async {
-            if (direction == DismissDirection.startToEnd) {
-              // TODO: Need to remove this
-              debugPrint("Swipe Right: Action 1 (e.g., Mark as Done)");
-              await TransactionViewActionService().updateTransactionStatus(transaction.id, "reconcidel");
-            } else if (direction == DismissDirection.endToStart) {
-              // TODO: Need to remove this
-              debugPrint("Swipe Left: Action 2 (e.g., Show Info)");
-              TransactionViewActionService().deleteTransactionWithAlertAndSnackBar(context, transactionId: transaction.id, navigateBack: false);
-            }
-            return false;
-          },
+        if (direction == DismissDirection.startToEnd) {
+          await TransactionViewActionService().updateTransactionStatus(transaction.id, rightSwipeString);
+        } else if (direction == DismissDirection.endToStart) {
+            await TransactionViewActionService().updateTransactionStatus(transaction.id, leftSwipeString);
+        }
+        return false;
+      },
       child: ListTile(
             title: Row(
               mainAxisSize: MainAxisSize.max,

@@ -38,7 +38,8 @@ class SelectItem<T> {
 
 class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
   late GlobalKey<MonekinDropdownSelectState>? _themeDropdownKey = GlobalKey();
-  late GlobalKey<MonekinDropdownSelectState>? _swipeActionDropdownKey = GlobalKey();
+  late GlobalKey<MonekinDropdownSelectState>? _swipeRightActionDropdownKey = GlobalKey();
+  late GlobalKey<MonekinDropdownSelectState>? _swipeLeftActionDropdownKey = GlobalKey();
  
   @override
   Widget build(BuildContext context) {
@@ -100,7 +101,32 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
             createListSeparator(context, "Swipe Actions"),
             Builder(
               builder: (context) {
-                final action = appStateSettings[SettingKey.leftSwipe];
+                final statusCodeString = appStateSettings[SettingKey.rightSwipe];
+                
+                return ListTile(
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // TODO: Need to implement for Swipe Right
+                      // TODO: Need to move this to i18n and add the translations later on.
+                      Flexible(child: Text("Swipe Right")),
+                      const SizedBox(width: 12),
+                      Flexible(child: _buildSwipeActionDropdown(statusCodeString, SettingKey.rightSwipe, _swipeRightActionDropdownKey))
+                    ],
+                  ),
+                  onTap: () {
+                    _swipeRightActionDropdownKey!.currentState!.openDropdown();
+                  },
+                  // leading: ScaledAnimatedSwitcher(
+                  //   keyToWatch: theme.icon(context).toString(),
+                  //   child: Icon(theme.icon(context)),
+                  // ),
+                );
+              },
+            ),
+            Builder(
+              builder: (context) {
+                final statusCodeString = appStateSettings[SettingKey.leftSwipe];
                 
                 return ListTile(
                   title: Row(
@@ -110,11 +136,11 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                       // TODO: Need to move this to i18n and add the translations later on.
                       Flexible(child: Text("Swipe Left")),
                       const SizedBox(width: 12),
-                      Flexible(child: _buildSwipeActionDropdown(action))
+                      Flexible(child: _buildSwipeActionDropdown(statusCodeString, SettingKey.leftSwipe, _swipeLeftActionDropdownKey))
                     ],
                   ),
                   onTap: () {
-                    _swipeActionDropdownKey!.currentState!.openDropdown();
+                    _swipeLeftActionDropdownKey!.currentState!.openDropdown();
                   },
                   // leading: ScaledAnimatedSwitcher(
                   //   keyToWatch: theme.icon(context).toString(),
@@ -298,33 +324,30 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
     );
   }
 
-  Widget _buildSwipeActionDropdown(String? action) {
+  
+
+  Widget _buildSwipeActionDropdown(String? statusCodeString, SettingKey direction, GlobalKey<MonekinDropdownSelectState<dynamic>>? swipeActionKey) {
   return Focus(
     canRequestFocus: false,
     descendantsAreFocusable: false,
     child: MonekinDropdownSelect<String>(
-      key: _swipeActionDropdownKey,
+      key: swipeActionKey,
       // TODO: Need to see a better form of implementation, as for now it just checks if actions is set or not, if not it dafults to none.
-      // TODO: Need to see if they a globalconstants implemented somewhere.
-      initial: action ?? "none", // Set the initial value to a String
+      initial: statusCodeString ?? t.ui_actions.none,
       compact: true,
       expanded: false,
-      // TODO: Need to move this to i18n and add the translations later on.
-      items: const [ 
-        "Stateless",
-        "Voided",
-        "Pending",
-        "Reconciled",
-        "Unreconciled",
-        "Delete",
-        "Edit",
-        "none"
+      items: [ 
+        t.transaction.status.voided,
+        t.transaction.status.pending,
+        t.transaction.status.reconciled,
+        t.transaction.status.unreconciled,
+        t.ui_actions.none,
       ],
-      onChanged: (action) {
+      onChanged: (actionString) {
         UserSettingService.instance
           .setItem(
-            SettingKey.leftSwipe,
-            action,
+            direction,
+            actionString,
             updateGlobalState: true,
           )
           .then((value) => null);

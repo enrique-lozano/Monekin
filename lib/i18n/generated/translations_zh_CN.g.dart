@@ -96,6 +96,7 @@ class _TranslationsUiActionsZhCn implements TranslationsUiActionsEn {
 	@override String get refresh => '刷新';
 	@override String get details => '详情';
 	@override String get share => '分享';
+  @override String get none => '没有';
 }
 
 // Path: general

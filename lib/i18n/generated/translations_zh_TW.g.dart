@@ -96,6 +96,7 @@ class _TranslationsUiActionsZhTw implements TranslationsUiActionsEn {
 	@override String get refresh => '重新整理';
 	@override String get details => '詳細資訊';
 	@override String get share => '分享';
+  @override String get none => '没有';
 }
 
 // Path: general
