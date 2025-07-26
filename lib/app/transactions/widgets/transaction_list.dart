@@ -8,7 +8,6 @@ import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
 
 class TransactionListComponent extends StatefulWidget {
   const TransactionListComponent({
@@ -196,8 +195,8 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
                   isSelected: widget.selectedTransactions
                       .any((element) => element.id == transaction.id),
                   // TODO need to see a better implementation of passing default.
-                  leftSwipeString: appStateSettings[SettingKey.leftSwipe] ?? t.ui_actions.none,
-                  rightSwipeString: appStateSettings[SettingKey.rightSwipe] ?? t.ui_actions.none,
+                  leftSwipeStatusCodeString: appStateSettings[SettingKey.leftSwipe],
+                  rightSwipeStatusCodeString: appStateSettings[SettingKey.rightSwipe],
                 );
               },
               separatorBuilder: (context, index) {

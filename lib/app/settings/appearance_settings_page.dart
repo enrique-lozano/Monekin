@@ -337,11 +337,11 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
       compact: true,
       expanded: false,
       items: [ 
+        t.ui_actions.none,
         t.transaction.status.voided,
         t.transaction.status.pending,
         t.transaction.status.reconciled,
         t.transaction.status.unreconciled,
-        t.ui_actions.none,
       ],
       onChanged: (actionString) {
         UserSettingService.instance

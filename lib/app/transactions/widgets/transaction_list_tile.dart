@@ -25,8 +25,8 @@ class TransactionListTile extends StatelessWidget {
     this.onLongPress,
     this.onTap,
     this.isSelected = false,
-    required this.leftSwipeString,
-    required this.rightSwipeString
+    required this.leftSwipeStatusCodeString,
+    required this.rightSwipeStatusCodeString
   });
 
   final MoneyTransaction transaction;
@@ -38,8 +38,8 @@ class TransactionListTile extends StatelessWidget {
 
   final Object? heroTag;
 
-  final String leftSwipeString;
-  final String rightSwipeString;
+  final String? leftSwipeStatusCodeString;
+  final String? rightSwipeStatusCodeString;
 
   /// Action to trigger when the tile is long pressed. If `null`,
   /// the tile will display a modal with some quick actions for
@@ -76,29 +76,79 @@ class TransactionListTile extends StatelessWidget {
         });
   }
 
+  Widget showLeftSwipeActionText(BuildContext context, TransactionStatus? statusCode) {
+    if (statusCode == null) {
+      return Container();
+    }
+    
+    return Container(
+      color: statusCode.color,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Icon(
+            statusCode.icon,
+            color: Colors.white,
+          ),
+          const SizedBox(width: 5),
+          Text(
+            statusCode.displayName(context),
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget showRightSwipeActionText(BuildContext context, TransactionStatus? statusCode) {
+    if (statusCode == null) {
+      return Container();
+    }
+      
+    return Container(
+      color: statusCode.color,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(
+            statusCode.displayName(context),
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(width: 5),
+          Icon(
+            statusCode.icon,
+            color: Colors.white,
+          ),
+        ],
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    
+    TransactionStatus? leftSwipeStatusCode = getTransactionStatusFromString(leftSwipeStatusCodeString);
+    TransactionStatus? rightSwipeStatusCode = getTransactionStatusFromString(rightSwipeStatusCodeString);
+
     return Dismissible(
       key: Key(transaction.id),
-      direction: getDismissDirection(leftSwipeString, rightSwipeString),
-      // TODO to make the UI better appealing.
+      direction: getDismissDirection(leftSwipeStatusCode, rightSwipeStatusCode),
       // TODO right now for the dissmissable to work, you have to swipe all the way.
       // TODO Need to make a snap in between, like thunderbird implements it.
-      background: Container(
-        color: Colors.green,
-      ),
-      // TODO to make the UI better appealing.
+      background: showLeftSwipeActionText(context, rightSwipeStatusCode),
       // TODO right now for the dissmissable to work, you have to swipe all the way.
       // TODO Need to make a snap in between, like thunderbird implements it.
-      secondaryBackground: Container(
-        color: Colors.red,
-      ),
+      secondaryBackground: showRightSwipeActionText(context, leftSwipeStatusCode),
       confirmDismiss: (direction) async {
-        if (direction == DismissDirection.startToEnd) {
-          await TransactionViewActionService().updateTransactionStatus(transaction.id, rightSwipeString);
-        } else if (direction == DismissDirection.endToStart) {
-            await TransactionViewActionService().updateTransactionStatus(transaction.id, leftSwipeString);
+        if (direction == DismissDirection.startToEnd && rightSwipeStatusCode != null) {
+          await TransactionViewActionService().updateTransactionStatus(transaction.id, rightSwipeStatusCode);
+        } else if (direction == DismissDirection.endToStart && leftSwipeStatusCode != null) {
+          await TransactionViewActionService().updateTransactionStatus(transaction.id, leftSwipeStatusCode);
         }
         return false;
       },
