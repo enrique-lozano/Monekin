@@ -485,7 +485,10 @@ class _TranslationsSettingsUk implements TranslationsSettingsEn {
 	@override String get dynamic_colors_descr => 'Використовуйте колір акценту вашої системи, коли це можливо';
 	@override String get accent_color => 'Колір акценту';
 	@override String get accent_color_descr => 'Виберіть колір, який додаток буде використовувати для виділення певних частин інтерфейсу';
-	@override late final _TranslationsSettingsSecurityUk security = _TranslationsSettingsSecurityUk._(_root);
+	@override	String get swipe_title => 'Дії свайпа';
+  @override String get swipe_right => 'Проведіть пальцем праворуч';
+  @override String get swipe_left => 'Проведіть пальцем ліворуч';
+  @override late final _TranslationsSettingsSecurityUk security = _TranslationsSettingsSecurityUk._(_root);
 }
 
 // Path: more

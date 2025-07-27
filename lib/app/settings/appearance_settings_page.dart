@@ -37,9 +37,9 @@ class SelectItem<T> {
 }
 
 class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
-  late GlobalKey<MonekinDropdownSelectState>? _themeDropdownKey = GlobalKey();
-  late GlobalKey<MonekinDropdownSelectState>? _swipeRightActionDropdownKey = GlobalKey();
-  late GlobalKey<MonekinDropdownSelectState>? _swipeLeftActionDropdownKey = GlobalKey();
+  late final GlobalKey<MonekinDropdownSelectState> _themeDropdownKey = GlobalKey();
+  late final GlobalKey<MonekinDropdownSelectState> _swipeRightActionDropdownKey = GlobalKey();
+  late final GlobalKey<MonekinDropdownSelectState> _swipeLeftActionDropdownKey = GlobalKey();
  
   @override
   Widget build(BuildContext context) {
@@ -97,8 +97,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                 }
               },
             ),
-            // TODO: Need to move this to i18n and add the translations later on.
-            createListSeparator(context, "Swipe Actions"),
+            createListSeparator(context, t.settings.swipe_title),
             Builder(
               builder: (context) {
                 final statusCodeString = appStateSettings[SettingKey.rightSwipe];
@@ -107,20 +106,15 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // TODO: Need to implement for Swipe Right
-                      // TODO: Need to move this to i18n and add the translations later on.
-                      Flexible(child: Text("Swipe Right")),
+                      Flexible(child: Text(t.settings.swipe_right)),
                       const SizedBox(width: 12),
                       Flexible(child: _buildSwipeActionDropdown(statusCodeString, SettingKey.rightSwipe, _swipeRightActionDropdownKey))
                     ],
                   ),
                   onTap: () {
-                    _swipeRightActionDropdownKey!.currentState!.openDropdown();
+                    _swipeRightActionDropdownKey.currentState!.openDropdown();
                   },
-                  // leading: ScaledAnimatedSwitcher(
-                  //   keyToWatch: theme.icon(context).toString(),
-                  //   child: Icon(theme.icon(context)),
-                  // ),
+                  leading: const Icon(Icons.swipe_right),
                 );
               },
             ),
@@ -132,20 +126,15 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // TODO: Need to implement for Swipe Right
-                      // TODO: Need to move this to i18n and add the translations later on.
-                      Flexible(child: Text("Swipe Left")),
+                      Flexible(child: Text(t.settings.swipe_left)),
                       const SizedBox(width: 12),
                       Flexible(child: _buildSwipeActionDropdown(statusCodeString, SettingKey.leftSwipe, _swipeLeftActionDropdownKey))
                     ],
                   ),
                   onTap: () {
-                    _swipeLeftActionDropdownKey!.currentState!.openDropdown();
+                    _swipeLeftActionDropdownKey.currentState!.openDropdown();
                   },
-                  // leading: ScaledAnimatedSwitcher(
-                  //   keyToWatch: theme.icon(context).toString(),
-                  //   child: Icon(theme.icon(context)),
-                  // ),
+                  leading: const Icon(Icons.swipe_left)
                 );
               },
             ),
@@ -165,7 +154,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     ],
                   ),
                   onTap: () {
-                    _themeDropdownKey!.currentState!.openDropdown();
+                    _themeDropdownKey.currentState!.openDropdown();
                   },
                   leading: ScaledAnimatedSwitcher(
                     keyToWatch: theme.icon(context).toString(),

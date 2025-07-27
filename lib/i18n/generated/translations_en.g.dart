@@ -489,7 +489,10 @@ class TranslationsSettingsEn {
 	String get dynamic_colors_descr => 'Use your system accent color whenever possible';
 	String get accent_color => 'Accent color';
 	String get accent_color_descr => 'Choose the color the app will use to emphasize certain parts of the interface';
-	late final TranslationsSettingsSecurityEn security = TranslationsSettingsSecurityEn._(_root);
+	String get swipe_title => 'Swipe Actions';
+  String get swipe_right => 'Swipe Right';
+  String get swipe_left => 'Swipe Left';
+  late final TranslationsSettingsSecurityEn security = TranslationsSettingsSecurityEn._(_root);
 }
 
 // Path: more

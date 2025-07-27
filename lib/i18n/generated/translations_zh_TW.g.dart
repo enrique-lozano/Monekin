@@ -485,7 +485,10 @@ class _TranslationsSettingsZhTw implements TranslationsSettingsEn {
 	@override String get dynamic_colors_descr => '盡可能使用系統強調色';
 	@override String get accent_color => '強調色';
 	@override String get accent_color_descr => '選擇應用程式用來強調介面某些部分的顏色';
-	@override late final _TranslationsSettingsSecurityZhTw security = _TranslationsSettingsSecurityZhTw._(_root);
+	@override	String get swipe_title => '滑動作';
+  @override String get swipe_right => '向右滑動';
+  @override String get swipe_left => '向左滑動';
+  @override late final _TranslationsSettingsSecurityZhTw security = _TranslationsSettingsSecurityZhTw._(_root);
 }
 
 // Path: more

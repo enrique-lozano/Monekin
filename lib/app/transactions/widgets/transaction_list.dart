@@ -194,7 +194,6 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
                       : (() => widget.onLongPress!(transaction)),
                   isSelected: widget.selectedTransactions
                       .any((element) => element.id == transaction.id),
-                  // TODO need to see a better implementation of passing default.
                   leftSwipeStatusCodeString: appStateSettings[SettingKey.leftSwipe],
                   rightSwipeStatusCodeString: appStateSettings[SettingKey.rightSwipe],
                 );

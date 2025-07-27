@@ -485,7 +485,10 @@ class _TranslationsSettingsTr implements TranslationsSettingsEn {
 	@override String get dynamic_colors_descr => 'Mümkün olduğunda sistem vurgu renginizi kullanın';
 	@override String get accent_color => 'Vurgu rengi';
 	@override String get accent_color_descr => 'Uygulamanın arayüzün belirli kısımlarını vurgulamak için kullanacağı rengi seçin';
-	@override late final _TranslationsSettingsSecurityTr security = _TranslationsSettingsSecurityTr._(_root);
+	@override	String get swipe_title => 'Kaydırma Eylemleri';
+  @override String get swipe_right => 'Sağa kaydırın';
+  @override String get swipe_left => 'Sola kaydırın';
+  @override late final _TranslationsSettingsSecurityTr security = _TranslationsSettingsSecurityTr._(_root);
 }
 
 // Path: more

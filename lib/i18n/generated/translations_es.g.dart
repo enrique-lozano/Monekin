@@ -485,7 +485,10 @@ class _TranslationsSettingsEs implements TranslationsSettingsEn {
 	@override String get dynamic_colors_descr => 'Usar el color de acento de su sistema siempre que sea posible';
 	@override String get accent_color => 'Color de acento';
 	@override String get accent_color_descr => 'Elegir el color que la aplicación usará para enfatizar ciertas partes de la interfaz';
-	@override late final _TranslationsSettingsSecurityEs security = _TranslationsSettingsSecurityEs._(_root);
+	@override	String get swipe_title => 'Acciones de deslizamiento';
+  @override String get swipe_right => 'Deslizar hacia la izquierda';
+  @override String get swipe_left => 'Desliza el dedo hacia la derecha';
+  @override late final _TranslationsSettingsSecurityEs security = _TranslationsSettingsSecurityEs._(_root);
 }
 
 // Path: more

@@ -485,7 +485,10 @@ class _TranslationsSettingsHu implements TranslationsSettingsEn {
 	@override String get dynamic_colors_descr => 'Amikor csak lehetséges, használja a rendszer kiemelő színét';
 	@override String get accent_color => 'Kiemelő szín';
 	@override String get accent_color_descr => 'Válassza ki, hogy az alkalmazás milyen színnel emelje ki a felület bizonyos részeit';
-	@override late final _TranslationsSettingsSecurityHu security = _TranslationsSettingsSecurityHu._(_root);
+	@override	String get swipe_title => 'Csúsztatási műveletek';
+  @override String get swipe_right => 'Csúsztassa jobbra';
+  @override String get swipe_left => 'Csúsztassa balra';
+  @override late final _TranslationsSettingsSecurityHu security = _TranslationsSettingsSecurityHu._(_root);
 }
 
 // Path: more

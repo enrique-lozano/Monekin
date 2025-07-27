@@ -485,7 +485,10 @@ class _TranslationsSettingsDe implements TranslationsSettingsEn {
 	@override String get dynamic_colors_descr => 'Verwende wann immer möglich die Akzentfarbe des Systems';
 	@override String get accent_color => 'Akzentfarbe';
 	@override String get accent_color_descr => 'Wähle die Farbe aus, mit der die App bestimmte Teile der Benutzeroberfläche hervorhebt';
-	@override late final _TranslationsSettingsSecurityDe security = _TranslationsSettingsSecurityDe._(_root);
+	@override	String get swipe_title => 'Wischaktionen';
+  @override String get swipe_right => 'Nach rechts wischen';
+  @override String get swipe_left => 'Nach links wischen';
+  @override late final _TranslationsSettingsSecurityDe security = _TranslationsSettingsSecurityDe._(_root);
 }
 
 // Path: more
