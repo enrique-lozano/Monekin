@@ -572,6 +572,8 @@
         "removeDefaultAccount": "Remove default account",
         "defaultCategory": "Default Category",
         "select-a-column": "Select a column from the .csv",
+        "notesColumn": "Note column",
+        "titleColumn": "Title column",
         "steps": [
           "Select your file",
           "Column for quantity",

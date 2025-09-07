@@ -166,7 +166,6 @@
     "should-create-account.message": "Debes tener al menos una cuenta no archivada que no sea de ahorros antes de empezar a crear transacciones",
     "balance-bar-chart.this-period": "Este Periodo",
     "balance-bar-chart.previous-period": "Periodo anterior"
-
   },
   "FINANCIAL-HEALTH": {
     "display": "Salud financiera",
@@ -570,6 +569,8 @@
       "restore-backup-warn.description": "Al importar una nueva base de datos, perderas toda la información actualmente guardada en la app. Se recomienda hacer una copia de seguridad antes de continuar. No subas aquí ningún fichero cuyo origen no conozcas, sube solo ficheros que hayas descargado previamente desde Monekin",
       "tap-to-select-file": "Pulsa para seleccionar un archivo",
       "select-other-file": "Selecciona otro fichero",
+      "notesColumn": "Note columna",
+      "titleColumn": "Titulo columna",
       "MANUAL-IMPORT": {
         "title": "Importación manual",
         "descr": "Importa transacciones desde un fichero .csv de forma manual",

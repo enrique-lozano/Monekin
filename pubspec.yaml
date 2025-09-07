@@ -4,7 +4,7 @@ description: The best personal finance controller on the market. Learn to save a
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
-publish_to: 'none'
+publish_to: "none"
 
 # [VersionName]+[VersionNumber] -> The version number follow the below convetion:
 #
@@ -16,7 +16,7 @@ publish_to: 'none'
 version: 6.0.1+600001
 
 environment:
-  sdk: '>=3.2.0 <4.0.0'
+  sdk: ">=3.2.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -34,7 +34,7 @@ dependencies:
   rxdart: ^0.27.7
 
   # i18n
-  intl: ^0.18.0
+  intl: ^0.20.2
   slang: ^3.30.1
   slang_flutter: ^3.18.0
 
@@ -79,7 +79,7 @@ dev_dependencies:
   freezed: ^2.4.5
 
 flutter_launcher_icons:
-  image_path: 'assets/resources/appIcon.png'
+  image_path: "assets/resources/appIcon.png"
   android: false
   ios: false
   windows:

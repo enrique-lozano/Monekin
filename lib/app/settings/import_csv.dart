@@ -396,8 +396,8 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: DataTable(
-                    headingRowColor: MaterialStateProperty.resolveWith<Color?>(
-                      (Set<MaterialState> states) => Theme.of(context)
+                    headingRowColor: WidgetStateProperty.resolveWith<Color?>(
+                      (Set<WidgetState> states) => Theme.of(context)
                           .colorScheme
                           .primary
                           .withOpacity(0.18),
@@ -569,7 +569,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                       children: [
                         buildColumnSelector(
                           value: notesColumn,
-                          labelText: 'Note column',
+                          labelText: t.backup.import.manual_import.notes_column,
                           headersToSelect: headersToSelect,
                           onChanged: (value) {
                             setState(() {
@@ -580,7 +580,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                         const SizedBox(height: 16),
                         buildColumnSelector(
                           value: titleColumn,
-                          labelText: 'Title column',
+                          labelText: t.backup.import.manual_import.title_column,
                           headersToSelect: headersToSelect,
                           onChanged: (value) {
                             setState(() {

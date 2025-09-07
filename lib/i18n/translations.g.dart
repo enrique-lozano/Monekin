@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 1035 (517 per locale)
+/// Strings: 1039 (519 per locale)
 ///
-/// Built on 2024-03-20 at 15:30 UTC
+/// Built on 2025-09-07 at 15:33 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -1309,6 +1309,8 @@ class _TranslationsBackupImportManualImportEn {
 	String get remove_default_account => 'Remove default account';
 	String get default_category => 'Default Category';
 	String get select_a_column => 'Select a column from the .csv';
+	String get notes_column => 'Note column';
+	String get title_column => 'Title column';
 	List<String> get steps => [
 		'Select your file',
 		'Column for quantity',
@@ -2311,6 +2313,8 @@ class _TranslationsBackupImportEs implements _TranslationsBackupImportEn {
 	@override String get restore_backup_warn_description => 'Al importar una nueva base de datos, perderas toda la información actualmente guardada en la app. Se recomienda hacer una copia de seguridad antes de continuar. No subas aquí ningún fichero cuyo origen no conozcas, sube solo ficheros que hayas descargado previamente desde Monekin';
 	@override String get tap_to_select_file => 'Pulsa para seleccionar un archivo';
 	@override String get select_other_file => 'Selecciona otro fichero';
+	@override String get notes_column => 'Note columna';
+	@override String get title_column => 'Titulo columna';
 	@override late final _TranslationsBackupImportManualImportEs manual_import = _TranslationsBackupImportManualImportEs._(_root);
 	@override String get success => 'Importación realizada con exito';
 	@override String get cancelled => 'La importación fue cancelada por el usuario';
@@ -3121,6 +3125,8 @@ extension on Translations {
 			case 'backup.import.manual_import.remove_default_account': return 'Remove default account';
 			case 'backup.import.manual_import.default_category': return 'Default Category';
 			case 'backup.import.manual_import.select_a_column': return 'Select a column from the .csv';
+			case 'backup.import.manual_import.notes_column': return 'Note column';
+			case 'backup.import.manual_import.title_column': return 'Title column';
 			case 'backup.import.manual_import.steps.0': return 'Select your file';
 			case 'backup.import.manual_import.steps.1': return 'Column for quantity';
 			case 'backup.import.manual_import.steps.2': return 'Column for account';
@@ -3711,6 +3717,8 @@ extension on _TranslationsEs {
 			case 'backup.import.restore_backup_warn_description': return 'Al importar una nueva base de datos, perderas toda la información actualmente guardada en la app. Se recomienda hacer una copia de seguridad antes de continuar. No subas aquí ningún fichero cuyo origen no conozcas, sube solo ficheros que hayas descargado previamente desde Monekin';
 			case 'backup.import.tap_to_select_file': return 'Pulsa para seleccionar un archivo';
 			case 'backup.import.select_other_file': return 'Selecciona otro fichero';
+			case 'backup.import.notes_column': return 'Note columna';
+			case 'backup.import.title_column': return 'Titulo columna';
 			case 'backup.import.manual_import.title': return 'Importación manual';
 			case 'backup.import.manual_import.descr': return 'Importa transacciones desde un fichero .csv de forma manual';
 			case 'backup.import.manual_import.default_account': return 'Cuenta por defecto';
