@@ -470,6 +470,7 @@ class _TranslationsSettingsHu implements TranslationsSettingsEn {
 	@override String get lang_descr => 'Nyelv, amelyen a szövegek megjelennek az alkalmazásban';
 	@override String get lang_help => 'Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'> útmutatónk</a>';
 	@override String get locale => 'Régió';
+	@override String get locale_auto => 'Rendszer';
 	@override String get locale_descr => 'Dátumok, számformátumok beállítása...';
 	@override String get locale_warn => 'Régióváltáskor az alkalmazás frissülni fog';
 	@override String get first_day_of_week => 'A hét első napja';
@@ -1956,6 +1957,7 @@ extension on TranslationsHu {
 			case 'settings.lang_descr': return 'Nyelv, amelyen a szövegek megjelennek az alkalmazásban';
 			case 'settings.lang_help': return 'Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'> útmutatónk</a>';
 			case 'settings.locale': return 'Régió';
+			case 'settings.locale_auto': return 'Rendszer';
 			case 'settings.locale_descr': return 'Dátumok, számformátumok beállítása...';
 			case 'settings.locale_warn': return 'Régióváltáskor az alkalmazás frissülni fog';
 			case 'settings.first_day_of_week': return 'A hét első napja';

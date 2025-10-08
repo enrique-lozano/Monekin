@@ -6,9 +6,9 @@ import 'package:monekin/core/presentation/widgets/html_text.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
-Future<ModalResult<String>?> showLanguageSelectorBottomSheet(
+Future<ModalResult<String?>?> showLanguageSelectorBottomSheet(
     BuildContext context, LanguageSelector langSelector) {
-  return showModalBottomSheet<ModalResult<String>>(
+  return showModalBottomSheet<ModalResult<String?>>(
     context: context,
     showDragHandle: true,
     isScrollControlled: true,
@@ -21,18 +21,19 @@ Future<ModalResult<String>?> showLanguageSelectorBottomSheet(
 class LanguageSelector extends StatelessWidget {
   const LanguageSelector({super.key, required this.selectedLangTag});
 
-  /// Lang ID of the selected locale ("en", "zh-TW"...)
-  final String selectedLangTag;
+  /// Lang ID of the selected locale ("en", "zh-TW"...). If `null`, the app will use the device locale,
+  /// or the fallback locale if the device locale is not supported.
+  final String? selectedLangTag;
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return DynamicSelectorModal<SupportedLocale, String>(
-      items: appSupportedLocales,
+    return DynamicSelectorModal<SupportedLocale?, String?>(
+      items: const [null, ...appSupportedLocales],
       selectedValue: selectedLangTag,
-      displayNameGetter: (locale) => locale.label,
-      valueGetter: (locale) => locale.locale.languageTag,
+      displayNameGetter: (locale) => locale?.label ?? t.settings.locale_auto,
+      valueGetter: (locale) => locale?.locale.languageTag,
       title: t.settings.lang_title,
       subtitle: t.settings.lang_descr,
       headerWidget: SizedBox(

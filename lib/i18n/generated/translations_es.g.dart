@@ -470,6 +470,7 @@ class _TranslationsSettingsEs implements TranslationsSettingsEn {
 	@override String get lang_descr => 'Idioma en el que se mostrarán los textos en la aplicación';
 	@override String get lang_help => 'Si quieres colaborar con las traducciones de esta app puedes consultar <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>nuestra guía</a> ';
 	@override String get locale => 'Región';
+	@override String get locale_auto => 'Sistema';
 	@override String get locale_descr => 'Establecer el formato a utilizar para fechas, números...';
 	@override String get locale_warn => 'Al cambiar la región, la aplicación se actualizará';
 	@override String get first_day_of_week => 'Primer día de la semana';
@@ -1958,6 +1959,7 @@ extension on TranslationsEs {
 			case 'settings.lang_descr': return 'Idioma en el que se mostrarán los textos en la aplicación';
 			case 'settings.lang_help': return 'Si quieres colaborar con las traducciones de esta app puedes consultar <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>nuestra guía</a> ';
 			case 'settings.locale': return 'Región';
+			case 'settings.locale_auto': return 'Sistema';
 			case 'settings.locale_descr': return 'Establecer el formato a utilizar para fechas, números...';
 			case 'settings.locale_warn': return 'Al cambiar la región, la aplicación se actualizará';
 			case 'settings.first_day_of_week': return 'Primer día de la semana';
