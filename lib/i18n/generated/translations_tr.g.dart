@@ -470,6 +470,7 @@ class _TranslationsSettingsTr implements TranslationsSettingsEn {
 	@override String get lang_descr => 'Metinlerin uygulamada görüntüleneceği dil';
 	@override String get lang_help => 'Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>kılavuzumuza</a> başvurabilirsiniz';
 	@override String get locale => 'Bölge';
+	@override String get locale_auto => 'Sistem';
 	@override String get locale_descr => 'Tarihler, sayılar için kullanılacak biçimi ayarlayın...';
 	@override String get locale_warn => 'Bölge değiştirildiğinde uygulama güncellenecektir';
 	@override String get first_day_of_week => 'Haftanın ilk günü';
@@ -1956,6 +1957,7 @@ extension on TranslationsTr {
 			case 'settings.lang_descr': return 'Metinlerin uygulamada görüntüleneceği dil';
 			case 'settings.lang_help': return 'Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>kılavuzumuza</a> başvurabilirsiniz';
 			case 'settings.locale': return 'Bölge';
+			case 'settings.locale_auto': return 'Sistem';
 			case 'settings.locale_descr': return 'Tarihler, sayılar için kullanılacak biçimi ayarlayın...';
 			case 'settings.locale_warn': return 'Bölge değiştirildiğinde uygulama güncellenecektir';
 			case 'settings.first_day_of_week': return 'Haftanın ilk günü';

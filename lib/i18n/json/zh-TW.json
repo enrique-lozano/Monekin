@@ -686,6 +686,7 @@
     "lang.descr": "應用程式中顯示文字的語言",
     "lang.help": "如果您想與此應用程式的翻譯合作，您可以參考<a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>我們的指南</a>",
     "locale": "地區",
+    "locale_auto": "系統",
     "locale.descr": "設定用於日期、數字的格式...",
     "locale.warn": "更改區域時應用程式將更新",
     "first_day_of_week": "一週的第一天",

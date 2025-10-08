@@ -77,27 +77,7 @@ class MonekinAppEntryPoint extends StatelessWidget {
   Widget build(BuildContext context) {
     Logger.printDebug('------------------ APP ENTRY POINT ------------------');
 
-    final lang = appStateSettings[SettingKey.appLanguage];
-
-    if (lang != null) {
-      Logger.printDebug('App language found. Setting the locale to `$lang`...');
-      LocaleSettings.setLocaleRaw(lang);
-    } else {
-      Logger.printDebug(
-          'App language not found. Setting the user device language...');
-
-      LocaleSettings.useDeviceLocale();
-
-      // We have nothing to worry here since the useDeviceLocale() func will set the default lang (english in our case) if
-      // the user is using a non-supported language in his device
-
-      UserSettingService.instance
-          .setItem(
-            SettingKey.appLanguage,
-            LocaleSettings.currentLocale.languageTag,
-          )
-          .then((value) => null);
-    }
+    _setAppLanguage();
 
     return TranslationProvider(
       child: MaterialAppContainer(
@@ -107,6 +87,51 @@ class MonekinAppEntryPoint extends StatelessWidget {
         themeMode: getThemeFromString(appStateSettings[SettingKey.themeMode]!),
       ),
     );
+  }
+
+  void _setAppLanguage() {
+    final lang = appStateSettings[SettingKey.appLanguage];
+
+    if (lang != null && lang.isNotEmpty) {
+      Logger.printDebug(
+          'App language found in DB. Setting the locale to `$lang`...');
+      LocaleSettings.setLocaleRaw(lang).then((setLocale) {
+        if (setLocale.languageTag != lang) {
+          Logger.printDebug(
+              'Warning: The requested locale `$lang` is not available. Fallback to `${setLocale.languageTag}`.');
+
+          // Set auto as a language:
+          UserSettingService.instance
+              .setItem(SettingKey.appLanguage, null)
+              .then((value) {});
+        } else {
+          Logger.printDebug('App language set with success');
+        }
+      });
+
+      return;
+    }
+
+    Logger.printDebug(
+        'App language not found in DB. Setting the app locale...');
+
+    if (lang != null) {
+      // Set auto as a language:
+      UserSettingService.instance.setItem(SettingKey.appLanguage, null);
+    }
+
+    // Uses locale of the device, fallbacks to base locale. Returns the locale which has been set:
+    LocaleSettings.useDeviceLocale().then((setLocale) {
+      Logger.printDebug(
+          'App language set to device language: ${setLocale.languageTag}');
+    }).catchError((error) {
+      Logger.printDebug(
+          'Error setting app language to device language: $error');
+    }).whenComplete(() {
+      // The set locale should be accessible via LocaleSettings.currentLocale
+      Logger.printDebug(
+          'Current locale: ${LocaleSettings.currentLocale.languageTag}');
+    });
   }
 }
 

@@ -470,6 +470,7 @@ class _TranslationsSettingsUk implements TranslationsSettingsEn {
 	@override String get lang_descr => 'Мова, в якій будуть відображатися тексти в додатку';
 	@override String get lang_help => 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>нашого посібник</ a>';
 	@override String get locale => 'Регіон';
+	@override String get locale_auto => 'Система';
 	@override String get locale_descr => 'Встановіть формат, який буде використовуватися для дат, чисел...';
 	@override String get locale_warn => 'Після зміни регіону додаток оновиться';
 	@override String get first_day_of_week => 'Перший день тижня';
@@ -1956,6 +1957,7 @@ extension on TranslationsUk {
 			case 'settings.lang_descr': return 'Мова, в якій будуть відображатися тексти в додатку';
 			case 'settings.lang_help': return 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>нашого посібник</ a>';
 			case 'settings.locale': return 'Регіон';
+			case 'settings.locale_auto': return 'Система';
 			case 'settings.locale_descr': return 'Встановіть формат, який буде використовуватися для дат, чисел...';
 			case 'settings.locale_warn': return 'Після зміни регіону додаток оновиться';
 			case 'settings.first_day_of_week': return 'Перший день тижня';

@@ -470,6 +470,7 @@ class _TranslationsSettingsZhTw implements TranslationsSettingsEn {
 	@override String get lang_descr => '應用程式中顯示文字的語言';
 	@override String get lang_help => '如果您想與此應用程式的翻譯合作，您可以參考<a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>我們的指南</a>';
 	@override String get locale => '地區';
+	@override String get locale_auto => '系統';
 	@override String get locale_descr => '設定用於日期、數字的格式...';
 	@override String get locale_warn => '更改區域時應用程式將更新';
 	@override String get first_day_of_week => '一週的第一天';
@@ -1956,6 +1957,7 @@ extension on TranslationsZhTw {
 			case 'settings.lang_descr': return '應用程式中顯示文字的語言';
 			case 'settings.lang_help': return '如果您想與此應用程式的翻譯合作，您可以參考<a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>我們的指南</a>';
 			case 'settings.locale': return '地區';
+			case 'settings.locale_auto': return '系統';
 			case 'settings.locale_descr': return '設定用於日期、數字的格式...';
 			case 'settings.locale_warn': return '更改區域時應用程式將更新';
 			case 'settings.first_day_of_week': return '一週的第一天';

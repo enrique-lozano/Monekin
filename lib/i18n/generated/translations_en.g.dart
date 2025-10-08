@@ -474,6 +474,7 @@ class TranslationsSettingsEn {
 	String get lang_descr => 'Language in which the texts will be displayed in the app';
 	String get lang_help => 'If you want to collaborate with the translations of this app, you can consult <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>our guide</a>';
 	String get locale => 'Region';
+	String get locale_auto => 'System';
 	String get locale_descr => 'Set the format to use for dates, numbers...';
 	String get locale_warn => 'When changing region the app will update';
 	String get first_day_of_week => 'First day of week';
@@ -1960,6 +1961,7 @@ extension on Translations {
 			case 'settings.lang_descr': return 'Language in which the texts will be displayed in the app';
 			case 'settings.lang_help': return 'If you want to collaborate with the translations of this app, you can consult <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>our guide</a>';
 			case 'settings.locale': return 'Region';
+			case 'settings.locale_auto': return 'System';
 			case 'settings.locale_descr': return 'Set the format to use for dates, numbers...';
 			case 'settings.locale_warn': return 'When changing region the app will update';
 			case 'settings.first_day_of_week': return 'First day of week';

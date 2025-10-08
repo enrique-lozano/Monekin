@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/settings/widgets/language_selector.dart';
 import 'package:monekin/app/settings/widgets/monekin_tile_switch.dart';
@@ -43,6 +44,14 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
+    final currentLangTag = appStateSettings[SettingKey.appLanguage];
+    final currentSelectedLangDisplayName = appSupportedLocales
+            .firstWhereOrNull(
+              (element) => element.locale.languageTag == currentLangTag,
+            )
+            ?.label ??
+        t.settings.locale_auto;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(t.settings.title_short),
@@ -56,35 +65,31 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
             ListTile(
               title: Text(t.settings.lang_title),
               leading: const Icon(Icons.language),
-              subtitle: Text(
-                appSupportedLocales
-                    .firstWhere((element) =>
-                        element.locale.languageTag ==
-                        LocaleSettings.currentLocale.languageTag)
-                    .label,
-              ),
+              subtitle: Text(currentSelectedLangDisplayName),
               onTap: () async {
                 final snackbarDisplayer =
                     ScaffoldMessenger.of(context).showSnackBar;
 
                 final newLang = await showLanguageSelectorBottomSheet(
                   context,
-                  LanguageSelector(
-                      selectedLangTag:
-                          LocaleSettings.currentLocale.languageTag),
+                  LanguageSelector(selectedLangTag: currentLangTag),
                 );
 
-                if (newLang?.result == null) {
+                if (newLang == null) {
                   return;
                 }
 
-                LocaleSettings.setLocaleRaw(newLang!.result!,
-                    listenToDeviceLocale: true);
+                if (newLang.result != null) {
+                  await LocaleSettings.setLocaleRaw(newLang.result!,
+                      listenToDeviceLocale: true);
+                } else {
+                  await LocaleSettings.useDeviceLocale();
+                }
 
                 try {
                   await UserSettingService.instance.setItem(
                     SettingKey.appLanguage,
-                    newLang.result!,
+                    newLang.result,
                     updateGlobalState: true,
                   );
                 } catch (e) {
