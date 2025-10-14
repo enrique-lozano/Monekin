@@ -12,6 +12,7 @@ const appSupportedLocales = [
   SupportedLocale(locale: AppLocale.en, label: 'English'),
   SupportedLocale(locale: AppLocale.de, label: 'Deutsch'),
   SupportedLocale(locale: AppLocale.hu, label: 'Magyar'),
+  SupportedLocale(locale: AppLocale.it, label: 'Italiano'),
   SupportedLocale(locale: AppLocale.tr, label: 'Türkçe'),
   SupportedLocale(locale: AppLocale.uk, label: 'українська'),
   SupportedLocale(locale: AppLocale.zhTw, label: '繁體中文'),
