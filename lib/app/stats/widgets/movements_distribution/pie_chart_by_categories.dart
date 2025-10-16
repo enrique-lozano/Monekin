@@ -21,12 +21,13 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 import '../../../../core/models/transaction/transaction_type.enum.dart';
 
 class PieChartByCategories extends StatefulWidget {
-  const PieChartByCategories(
-      {super.key,
-      required this.datePeriodState,
-      this.showList = false,
-      this.initialSelectedType = TransactionType.E,
-      this.filters = const TransactionFilters()});
+  const PieChartByCategories({
+    super.key,
+    required this.datePeriodState,
+    this.showList = false,
+    this.initialSelectedType = TransactionType.E,
+    this.filters = const TransactionFilters(),
+  });
 
   final DatePeriodState datePeriodState;
 
@@ -48,27 +49,33 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
 
   TransactionFilters _getTransactionFilters() {
     return widget.filters.copyWith(
-      status:
-          TransactionStatus.getStatusThatCountsForStats(widget.filters.status),
-      transactionTypes: [transactionsType]
-          .intersectionWithNullable(widget.filters.transactionTypes)
-          .toList(),
+      status: TransactionStatus.getStatusThatCountsForStats(
+        widget.filters.status,
+      ),
+      transactionTypes: [
+        transactionsType,
+      ].intersectionWithNullable(widget.filters.transactionTypes).toList(),
       minDate: widget.datePeriodState.startDate,
       maxDate: widget.datePeriodState.endDate,
     );
   }
 
   Future<List<TrDistributionChartItem<Category>>> getEvolutionData(
-      BuildContext context, List<MoneyTransaction> transactions) async {
+    BuildContext context,
+    List<MoneyTransaction> transactions,
+  ) async {
     final data = <TrDistributionChartItem<Category>>[];
 
     for (final transaction in transactions) {
-      final trValue = transaction.currentValueInPreferredCurrency *
+      final trValue =
+          transaction.currentValueInPreferredCurrency *
           (transactionsType == TransactionType.E ? -1 : 1);
 
-      final categoryToEdit = data.firstWhereOrNull((cat) =>
-          cat.category.id == transaction.category?.id ||
-          cat.category.id == transaction.category?.parentCategoryID);
+      final categoryToEdit = data.firstWhereOrNull(
+        (cat) =>
+            cat.category.id == transaction.category?.id ||
+            cat.category.id == transaction.category?.parentCategoryID,
+      );
 
       if (categoryToEdit != null) {
         categoryToEdit.value += trValue;
@@ -79,8 +86,8 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
             category: transaction.category!.parentCategoryID == null
                 ? Category.fromDB(transaction.category!, null)
                 : (await CategoryService.instance
-                    .getCategoryById(transaction.category!.parentCategoryID!)
-                    .first)!,
+                      .getCategoryById(transaction.category!.parentCategoryID!)
+                      .first)!,
             transactions: [transaction],
             value: trValue,
           ),
@@ -95,12 +102,15 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
 
   /// Returns a value between 0 and 1
   double getElementPercentageInTotal(
-      double elementValue, List<TrDistributionChartItem> items) {
+    double elementValue,
+    List<TrDistributionChartItem> items,
+  ) {
     return (elementValue / items.map((e) => e.value).sum);
   }
 
   List<PieChartSectionData> showingSections(
-      List<TrDistributionChartItem<Category>> data) {
+    List<TrDistributionChartItem<Category>> data,
+  ) {
     if (data.isEmpty) {
       return [
         PieChartSectionData(
@@ -108,86 +118,87 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
           value: 100,
           radius: 50,
           showTitle: false,
-        )
+        ),
       ];
     }
 
     double totalPercentAccumulated = 0;
 
-    return data.mapIndexed(
-      (index, element) {
-        final isTouched = index == touchedIndex;
-        final radius = isTouched ? 60.0 : 50.0;
+    return data.mapIndexed((index, element) {
+      final isTouched = index == touchedIndex;
+      final radius = isTouched ? 60.0 : 50.0;
 
-        final percentage = getElementPercentageInTotal(element.value, data);
-        totalPercentAccumulated = totalPercentAccumulated + percentage;
+      final percentage = getElementPercentageInTotal(element.value, data);
+      totalPercentAccumulated = totalPercentAccumulated + percentage;
 
-        final showIcon = percentage > 0.05;
+      final showIcon = percentage > 0.05;
 
-        return PieChartSectionData(
-          color: ColorHex.get(element.category.color),
-          value: percentage,
-          title: '',
-          radius: radius,
-          titlePositionPercentageOffset: 1.4,
-          badgePositionPercentageOffset: .98,
-          badgeWidget: !showIcon
-              ? null
-              : Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    AnimatedOpacity(
-                      duration: const Duration(milliseconds: 200),
-                      opacity: isTouched ? 1 : 0,
-                      child: Center(
-                        child: Transform.translate(
-                          offset: Offset(
-                            0,
-                            // Prevent overlapping labels when displayed on top
-                            // Divider percent by 2, because the label is in the middle
-                            // This means any label location that is past 50% will change orientation
-                            totalPercentAccumulated - percentage / 2 < 0.5
-                                ? -34
-                                : 34,
-                          ),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 5),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(
-                                color: ColorHex.get(element.category.color),
-                                width: 1.5,
-                              ),
-                              color: Theme.of(context).canvasColor,
+      return PieChartSectionData(
+        color: ColorHex.get(element.category.color),
+        value: percentage,
+        title: '',
+        radius: radius,
+        titlePositionPercentageOffset: 1.4,
+        badgePositionPercentageOffset: .98,
+        badgeWidget: !showIcon
+            ? null
+            : Stack(
+                alignment: Alignment.center,
+                children: [
+                  AnimatedOpacity(
+                    duration: const Duration(milliseconds: 200),
+                    opacity: isTouched ? 1 : 0,
+                    child: Center(
+                      child: Transform.translate(
+                        offset: Offset(
+                          0,
+                          // Prevent overlapping labels when displayed on top
+                          // Divider percent by 2, because the label is in the middle
+                          // This means any label location that is past 50% will change orientation
+                          totalPercentAccumulated - percentage / 2 < 0.5
+                              ? -34
+                              : 34,
+                        ),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                              color: ColorHex.get(element.category.color),
+                              width: 1.5,
                             ),
-                            child: UINumberFormatter.percentage(
-                              amountToConvert: percentage,
-                              showDecimals: false,
-                              integerStyle: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
-                              ),
-                            ).getTextWidget(context),
+                            color: Theme.of(context).canvasColor,
                           ),
+                          child: UINumberFormatter.percentage(
+                            amountToConvert: percentage,
+                            showDecimals: false,
+                            integerStyle: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                          ).getTextWidget(context),
                         ),
                       ),
                     ),
-                    Container(
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Theme.of(context).canvasColor,
-                            border: Border.all(
-                              width: 2,
-                              color: ColorHex.get(element.category.color),
-                            )),
-                        padding: const EdgeInsets.all(6),
-                        child: element.category.icon.display(
-                            color: ColorHex.get(element.category.color))),
-                  ],
-                ),
-        );
-      },
-    ).toList();
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).canvasColor,
+                      border: Border.all(
+                        width: 2,
+                        color: ColorHex.get(element.category.color),
+                      ),
+                    ),
+                    padding: const EdgeInsets.all(6),
+                    child: element.category.icon.display(
+                      color: ColorHex.get(element.category.color),
+                    ),
+                  ),
+                ],
+              ),
+      );
+    }).toList();
   }
 
   @override
@@ -259,7 +270,8 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
                               return;
                             }
                             touchedIndex = pieTouchResponse
-                                .touchedSection!.touchedSectionIndex;
+                                .touchedSection!
+                                .touchedSectionIndex;
                           });
                         },
                       ),
@@ -271,27 +283,28 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
                   ),
                   Positioned.fill(
                     child: Align(
-                        alignment: Alignment.center,
-                        child: Container(
-                          width: centerRadius * 2.25,
-                          height: centerRadius * 2.25,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .surface
-                                .withOpacity(0.1),
-                          ),
-                        )),
+                      alignment: Alignment.center,
+                      child: Container(
+                        width: centerRadius * 2.25,
+                        height: centerRadius * 2.25,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.surface.withOpacity(0.1),
+                        ),
+                      ),
+                    ),
                   ),
                   if (snapshot.data!.isEmpty)
                     Positioned.fill(
                       child: Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            t.general.insufficient_data,
-                            style: Theme.of(context).textTheme.titleLarge,
-                          )),
+                        alignment: Alignment.center,
+                        child: Text(
+                          t.general.insufficient_data,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                      ),
                     ),
                 ],
               ),
@@ -300,7 +313,6 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
             /* ----------------------------- */
             /* ------ Info in a list ------- */
             /* ----------------------------- */
-
             if (widget.showList)
               ListView.builder(
                 itemCount: snapshot.data!.length,
@@ -314,7 +326,7 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(dataCategory.category.name),
-                        CurrencyDisplayer(amountToConvert: dataCategory.value)
+                        CurrencyDisplayer(amountToConvert: dataCategory.value),
                       ],
                     ),
                     subtitle: Row(
@@ -325,9 +337,15 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
                               .toLowerCase(),
                         ),
                         Text(
-                            NumberFormat.decimalPercentPattern(decimalDigits: 2)
-                                .format(getElementPercentageInTotal(
-                                    dataCategory.value, snapshot.data!)))
+                          NumberFormat.decimalPercentPattern(
+                            decimalDigits: 2,
+                          ).format(
+                            getElementPercentageInTotal(
+                              dataCategory.value,
+                              snapshot.data!,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     leading: IconDisplayer.fromCategory(
@@ -337,16 +355,18 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
                     ),
                     onTap: () {
                       showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (context) {
-                            return CategoryStatsModal(
-                              categoryData: dataCategory,
-                              dateRangeText:
-                                  widget.datePeriodState.getText(context),
-                              filters: _getTransactionFilters(),
-                            );
-                          });
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (context) {
+                          return CategoryStatsModal(
+                            categoryData: dataCategory,
+                            dateRangeText: widget.datePeriodState.getText(
+                              context,
+                            ),
+                            filters: _getTransactionFilters(),
+                          );
+                        },
+                      );
                     },
                   );
                 },

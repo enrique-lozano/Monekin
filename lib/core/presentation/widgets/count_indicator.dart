@@ -15,12 +15,9 @@ class CountIndicatorWithExpandArrow extends StatelessWidget {
       children: [
         if (countToDisplay != null && countToDisplay! > 0) ...[
           CountIndicator(countToDisplay!),
-          const SizedBox(width: 8)
+          const SizedBox(width: 8),
         ],
-        const Icon(
-          Icons.arrow_forward_ios_rounded,
-          size: 16,
-        )
+        const Icon(Icons.arrow_forward_ios_rounded, size: 16),
       ],
     );
   }
@@ -50,9 +47,9 @@ class CountIndicator extends StatelessWidget {
       child: Text(
         countToDisplay.toString(),
         style: Theme.of(context).textTheme.labelSmall!.copyWith(
-              fontWeight: fontWeight,
-              color: Theme.of(context).colorScheme.onPrimary,
-            ),
+          fontWeight: fontWeight,
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
       ),
     );
   }

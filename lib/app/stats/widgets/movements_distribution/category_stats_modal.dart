@@ -43,7 +43,8 @@ class CategoryStatsModal extends StatelessWidget {
   final String dateRangeText;
 
   Future<List<SubcategoryModalItem>> getSubcategoriesData(
-      BuildContext context) async {
+    BuildContext context,
+  ) async {
     final t = Translations.of(context);
 
     List<SubcategoryModalItem> subcategories = [];
@@ -51,22 +52,27 @@ class CategoryStatsModal extends StatelessWidget {
     for (final transaction in categoryData.transactions) {
       final notBelongToAnySubcatName = t.categories.select.without_subcategory;
 
-      final categoryToEdit = subcategories
-          .firstWhereOrNull((x) => x.id == transaction.category!.id);
+      final categoryToEdit = subcategories.firstWhereOrNull(
+        (x) => x.id == transaction.category!.id,
+      );
 
-      final trValue = transaction.currentValueInPreferredCurrency *
+      final trValue =
+          transaction.currentValueInPreferredCurrency *
           (transaction.type == TransactionType.E ? -1 : 1);
 
       if (categoryToEdit != null) {
         categoryToEdit.value += trValue;
       } else {
-        subcategories.add(SubcategoryModalItem(
+        subcategories.add(
+          SubcategoryModalItem(
             id: transaction.category!.id,
             name: transaction.category!.isMainCategory
                 ? notBelongToAnySubcatName
                 : transaction.category!.name,
             icon: transaction.category!.icon,
-            value: trValue));
+            value: trValue,
+          ),
+        );
       }
     }
 
@@ -106,9 +112,9 @@ class CategoryStatsModal extends StatelessWidget {
                           Text(
                             '${categoryData.transactions.length} ${t.transaction.display(n: categoryData.transactions.length)}'
                                 .toLowerCase(),
-                          )
+                          ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                   IconButton(
@@ -122,7 +128,7 @@ class CategoryStatsModal extends StatelessWidget {
                       ),
                     ),
                     icon: const Icon(Icons.open_in_new),
-                  )
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -136,7 +142,7 @@ class CategoryStatsModal extends StatelessWidget {
                   CurrencyDisplayer(
                     amountToConvert: categoryData.value,
                     integerStyle: Theme.of(context).textTheme.titleLarge!,
-                  )
+                  ),
                 ],
               ),
             ],
@@ -153,8 +159,10 @@ class CategoryStatsModal extends StatelessWidget {
             final subcategories = snapshot.data!;
 
             // Filter subcategories with negative values to correctly display the bars:
-            final totalSum =
-                subcategories.where((e) => e.value > 0).map((e) => e.value).sum;
+            final totalSum = subcategories
+                .where((e) => e.value > 0)
+                .map((e) => e.value)
+                .sum;
 
             return Column(
               children: List.generate(subcategories.length, (index) {
@@ -164,8 +172,9 @@ class CategoryStatsModal extends StatelessWidget {
                   leading: IconDisplayer.fromCategory(
                     context,
                     category: Category.fromDB(
-                      categoryData.category
-                          .copyWith(iconId: subcategoryData.icon.id),
+                      categoryData.category.copyWith(
+                        iconId: subcategoryData.icon.id,
+                      ),
                       categoryData.category,
                     ),
                   ),
@@ -173,7 +182,7 @@ class CategoryStatsModal extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(subcategoryData.name),
-                      CurrencyDisplayer(amountToConvert: subcategoryData.value)
+                      CurrencyDisplayer(amountToConvert: subcategoryData.value),
                     ],
                   ),
                   subtitle: AnimatedProgressBar(
@@ -184,7 +193,7 @@ class CategoryStatsModal extends StatelessWidget {
               }),
             );
           },
-        )
+        ),
       ],
     );
   }

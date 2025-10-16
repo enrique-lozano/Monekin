@@ -26,8 +26,8 @@ class SettingCardItem extends StatelessWidget {
     return Tappable(
       bgColor: isPrimary
           ? isAppInLightBrightness(context)
-              ? Theme.of(context).colorScheme.primary.lighten(0.8)
-              : Theme.of(context).colorScheme.primary.darken(0.8)
+                ? Theme.of(context).colorScheme.primary.lighten(0.8)
+                : Theme.of(context).colorScheme.primary.darken(0.8)
           : null,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
@@ -56,37 +56,39 @@ class SettingCardItem extends StatelessWidget {
             ),
             if (mainAxis == Axis.horizontal) const SizedBox(width: 12),
             if (mainAxis == Axis.vertical) const SizedBox(height: 8),
-            Builder(builder: (context) {
-              final toReturn = Column(
-                crossAxisAlignment: mainAxis == Axis.vertical
-                    ? CrossAxisAlignment.center
-                    : CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleMedium,
-                    softWrap: false,
-                    overflow: TextOverflow.fade,
-                    textAlign: mainAxis == Axis.vertical
-                        ? TextAlign.center
-                        : TextAlign.start,
-                  ),
-                  if (subtitle != null)
+            Builder(
+              builder: (context) {
+                final toReturn = Column(
+                  crossAxisAlignment: mainAxis == Axis.vertical
+                      ? CrossAxisAlignment.center
+                      : CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                     Text(
-                      subtitle!,
-                      style: Theme.of(context).textTheme.bodySmall,
+                      title,
+                      style: Theme.of(context).textTheme.titleMedium,
+                      softWrap: false,
+                      overflow: TextOverflow.fade,
                       textAlign: mainAxis == Axis.vertical
                           ? TextAlign.center
                           : TextAlign.start,
-                    )
-                ],
-              );
+                    ),
+                    if (subtitle != null)
+                      Text(
+                        subtitle!,
+                        style: Theme.of(context).textTheme.bodySmall,
+                        textAlign: mainAxis == Axis.vertical
+                            ? TextAlign.center
+                            : TextAlign.start,
+                      ),
+                  ],
+                );
 
-              return mainAxis == Axis.vertical
-                  ? toReturn
-                  : Expanded(child: toReturn);
-            })
+                return mainAxis == Axis.vertical
+                    ? toReturn
+                    : Expanded(child: toReturn);
+              },
+            ),
           ],
         ),
       ),

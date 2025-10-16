@@ -14,15 +14,19 @@ showCurrencySelectorModal(
   CurrencySelectorModal modalData,
 ) {
   showModalBottomSheet(
-      context: context,
-      showDragHandle: true,
-      isScrollControlled: true,
-      builder: (context) => modalData);
+    context: context,
+    showDragHandle: true,
+    isScrollControlled: true,
+    builder: (context) => modalData,
+  );
 }
 
 class CurrencySelectorModal extends StatefulWidget {
-  const CurrencySelectorModal(
-      {super.key, this.preselectedCurrency, this.onCurrencySelected});
+  const CurrencySelectorModal({
+    super.key,
+    this.preselectedCurrency,
+    this.onCurrencySelected,
+  });
 
   final void Function(Currency selectedCurrency)? onCurrencySelected;
 
@@ -83,7 +87,7 @@ class _CurrencySelectorModalState extends State<CurrencySelectorModal> {
                   child: _selectedCurrency != null
                       ? _selectedCurrency!.displayFlagIcon(size: 20)
                       : const Skeleton(width: 22, height: 22),
-                )
+                ),
               ],
             ),
           ),
@@ -100,10 +104,9 @@ class _CurrencySelectorModalState extends State<CurrencySelectorModal> {
                   border: const UnderlineInputBorder(),
                 ),
                 onChanged: (value) {
-                  CurrencyService.instance
-                      .searchCurrencies(value)
-                      .first
-                      .then((curr) {
+                  CurrencyService.instance.searchCurrencies(value).first.then((
+                    curr,
+                  ) {
                     setState(() {
                       _filteredCurrencies = curr;
                     });
@@ -112,67 +115,74 @@ class _CurrencySelectorModalState extends State<CurrencySelectorModal> {
                 },
               ),
               Expanded(
-                child: Stack(children: [
-                  ListView.separated(
-                    controller: scrollController,
-                    keyboardDismissBehavior:
-                        ScrollViewKeyboardDismissBehavior.onDrag,
-                    itemCount: _filteredCurrencies?.length ?? 0,
-                    separatorBuilder: (context, i) {
-                      return const Divider(height: 0);
-                    },
-                    itemBuilder: (context, index) {
-                      final currencyItem = _filteredCurrencies![index];
+                child: Stack(
+                  children: [
+                    ListView.separated(
+                      controller: scrollController,
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                      itemCount: _filteredCurrencies?.length ?? 0,
+                      separatorBuilder: (context, i) {
+                        return const Divider(height: 0);
+                      },
+                      itemBuilder: (context, index) {
+                        final currencyItem = _filteredCurrencies![index];
 
-                      return ListTile(
-                        title: Text(
-                          currencyItem.name,
-                          overflow: TextOverflow.fade,
-                          softWrap: false,
-                          maxLines: 1,
-                        ),
-                        trailing: Text(
-                          currencyItem.code,
-                          style: Theme.of(context).textTheme.labelSmall,
-                        ),
-                        selected: currencyItem.code == _selectedCurrency?.code,
-                        // selectedTileColor: colors.primaryContainer,
-                        leading: Container(
-                          clipBehavior: Clip.hardEdge,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
+                        return ListTile(
+                          title: Text(
+                            currencyItem.name,
+                            overflow: TextOverflow.fade,
+                            softWrap: false,
+                            maxLines: 1,
                           ),
-                          child: Stack(
-                            children: [
-                              SvgPicture.asset(
-                                currencyItem.currencyIconPath,
-                                height: 35,
-                                width: 35,
-                              ),
-                              if (currencyItem.code == _selectedCurrency?.code)
-                                Container(
+                          trailing: Text(
+                            currencyItem.code,
+                            style: Theme.of(context).textTheme.labelSmall,
+                          ),
+                          selected:
+                              currencyItem.code == _selectedCurrency?.code,
+                          // selectedTileColor: colors.primaryContainer,
+                          leading: Container(
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            child: Stack(
+                              children: [
+                                SvgPicture.asset(
+                                  currencyItem.currencyIconPath,
+                                  height: 35,
+                                  width: 35,
+                                ),
+                                if (currencyItem.code ==
+                                    _selectedCurrency?.code)
+                                  Container(
                                     height: 35,
                                     width: 35,
                                     color: const Color.fromARGB(92, 0, 0, 0),
                                     child: const Center(
-                                        child: Icon(
-                                      Icons.check,
-                                      color: Colors.white,
-                                    )))
-                            ],
+                                      child: Icon(
+                                        Icons.check,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
                           ),
-                        ),
-                        onTap: () {
-                          setState(() {
-                            _selectedCurrency = currencyItem;
-                          });
-                        },
-                      );
-                    },
-                  ),
-                  ScrollableWithBottomGradient.buildPositionedGradient(
-                      AppColors.of(context).modalBackground),
-                ]),
+                          onTap: () {
+                            setState(() {
+                              _selectedCurrency = currencyItem;
+                            });
+                          },
+                        );
+                      },
+                    ),
+                    ScrollableWithBottomGradient.buildPositionedGradient(
+                      AppColors.of(context).modalBackground,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

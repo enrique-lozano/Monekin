@@ -94,10 +94,12 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
 
                     return Material(
                       child: ListTile(
-                        tileColor:
-                            Theme.of(context).colorScheme.surfaceContainer,
+                        tileColor: Theme.of(
+                          context,
+                        ).colorScheme.surfaceContainer,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                         onTap: () => RouteUtils.pushRoute(
                           context,
                           CategoryFormPage(categoryUUID: category.id),
@@ -115,8 +117,10 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
                         ),
                         leading: Hero(
                           tag: 'all-accounts-page__account-icon-${category.id}',
-                          child: IconDisplayer.fromCategory(context,
-                              category: category),
+                          child: IconDisplayer.fromCategory(
+                            context,
+                            category: category,
+                          ),
                         ),
                       ),
                     );
@@ -131,8 +135,8 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
                       categories.mapIndexed(
                         (index, element) =>
                             CategoryService.instance.updateCategory(
-                          element.copyWith(displayOrder: index),
-                        ),
+                              element.copyWith(displayOrder: index),
+                            ),
                       ),
                     );
                   },

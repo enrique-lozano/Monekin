@@ -46,8 +46,9 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
   int? accountColumn;
   int? dateColumn;
 
-  final TextEditingController _dateFormatController =
-      TextEditingController(text: 'yyyy-MM-dd HH:mm:ss');
+  final TextEditingController _dateFormatController = TextEditingController(
+    text: 'yyyy-MM-dd HH:mm:ss',
+  );
 
   int? categoryColumn;
   Category? defaultCategory;
@@ -79,14 +80,18 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
         parsedCSV.removeLast();
       }
 
-      final allRowsSameLength =
-          parsedCSV.every((row) => row.length == firstRowLength);
+      final allRowsSameLength = parsedCSV.every(
+        (row) => row.length == firstRowLength,
+      );
 
       if (!allRowsSameLength) {
-        messenger.showSnackBar(const SnackBar(
-          content:
-              Text('All rows in the CSV must have the same number of columns.'),
-        ));
+        messenger.showSnackBar(
+          const SnackBar(
+            content: Text(
+              'All rows in the CSV must have the same number of columns.',
+            ),
+          ),
+        );
 
         return;
       }
@@ -113,28 +118,31 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
     iconColor ??= Theme.of(context).colorScheme.primary;
 
     return TextFormField(
-        controller:
-            TextEditingController(text: inputValue ?? t.general.unspecified),
-        readOnly: true,
-        validator: (_) => fieldValidator(inputValue, isRequired: isRequired),
-        onTap: () => onClick(),
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        decoration: InputDecoration(
-          labelText: title,
-          suffixIcon: const Icon(Icons.arrow_drop_down),
-          prefixIcon: Container(
-            margin: const EdgeInsets.fromLTRB(14, 8, 8, 8),
-            child: IconDisplayer(mainColor: iconColor, supportedIcon: icon),
-          ),
-        ));
+      controller: TextEditingController(
+        text: inputValue ?? t.general.unspecified,
+      ),
+      readOnly: true,
+      validator: (_) => fieldValidator(inputValue, isRequired: isRequired),
+      onTap: () => onClick(),
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      decoration: InputDecoration(
+        labelText: title,
+        suffixIcon: const Icon(Icons.arrow_drop_down),
+        prefixIcon: Container(
+          margin: const EdgeInsets.fromLTRB(14, 8, 8, 8),
+          child: IconDisplayer(mainColor: iconColor, supportedIcon: icon),
+        ),
+      ),
+    );
   }
 
-  DropdownButtonFormField<int> buildColumnSelector(
-      {required int? value,
-      required Iterable<String> headersToSelect,
-      String? labelText,
-      bool isNullable = true,
-      required void Function(int? value) onChanged}) {
+  DropdownButtonFormField<int> buildColumnSelector({
+    required int? value,
+    required Iterable<String> headersToSelect,
+    String? labelText,
+    bool isNullable = true,
+    required void Function(int? value) onChanged,
+  }) {
     labelText ??= t.backup.import.manual_import.select_a_column;
 
     return DropdownButtonFormField(
@@ -142,17 +150,16 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
       decoration: InputDecoration(labelText: labelText),
       items: [
         if (isNullable)
-          DropdownMenuItem(
-            value: null,
-            child: Text(t.general.unspecified),
-          ),
+          DropdownMenuItem(value: null, child: Text(t.general.unspecified)),
         ...List.generate(
-            headersToSelect.length,
-            (index) => DropdownMenuItem(
-                  value: csvHeaders!.toList().indexWhere(
-                      (element) => element == headersToSelect.toList()[index]),
-                  child: Text(headersToSelect.toList()[index]),
-                ))
+          headersToSelect.length,
+          (index) => DropdownMenuItem(
+            value: csvHeaders!.toList().indexWhere(
+              (element) => element == headersToSelect.toList()[index],
+            ),
+            child: Text(headersToSelect.toList()[index]),
+          ),
+        ),
       ],
       onChanged: (value) {
         if (dateColumn == value) dateColumn = null;
@@ -176,8 +183,9 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
 
       snackbarDisplayer(
         SnackBar(
-          content: Text(t.backup.import.manual_import
-              .success(x: csvData!.slice(1).length)),
+          content: Text(
+            t.backup.import.manual_import.success(x: csvData!.slice(1).length),
+          ),
         ),
       );
     }
@@ -200,12 +208,13 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
       // Cache of known accounts by lowercase name
       final existingAccounts = {
         for (final acc in await db.select(db.accounts).get())
-          acc.name.toLowerCase(): acc
+          acc.name.toLowerCase(): acc,
       };
 
       // Cache preferred currency once
-      final preferredCurrency =
-          await CurrencyService.instance.getUserPreferredCurrency().first;
+      final preferredCurrency = await CurrencyService.instance
+          .getUserPreferredCurrency()
+          .first;
 
       final List<TransactionInDB> transactionsToInsert = [];
 
@@ -250,38 +259,47 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
         if (categoryToFind == null) {
           categoryID = defaultCategory!.id;
         } else {
-          final category = (await CategoryService.instance
-                  .getCategories(
-                    limit: 1,
-                    predicate: (catTable, pCatTable) =>
-                        catTable.name.lower().trim().isValue(categoryToFind) |
-                        pCatTable.name.lower().trim().isValue(categoryToFind),
-                  )
-                  .first)
-              .firstOrNull;
+          final category =
+              (await CategoryService.instance
+                      .getCategories(
+                        limit: 1,
+                        predicate: (catTable, pCatTable) =>
+                            catTable.name.lower().trim().isValue(
+                              categoryToFind,
+                            ) |
+                            pCatTable.name.lower().trim().isValue(
+                              categoryToFind,
+                            ),
+                      )
+                      .first)
+                  .firstOrNull;
           categoryID = category?.id ?? defaultCategory!.id;
         }
 
         final trValue = double.parse(row[amountColumn!].toString());
 
-        transactionsToInsert.add(TransactionInDB(
-          id: generateUUID(),
-          date: dateColumn == null
-              ? DateTime.now()
-              : DateFormat(_dateFormatController.text, 'en_US')
-                  .parse(row[dateColumn!].toString()),
-          type: trValue < 0 ? TransactionType.E : TransactionType.I,
-          accountID: accountID,
-          value: trValue,
-          isHidden: false,
-          categoryID: categoryID,
-          notes: notesColumn == null || row[notesColumn!].toString().isEmpty
-              ? null
-              : row[notesColumn!].toString(),
-          title: titleColumn == null || row[titleColumn!].toString().isEmpty
-              ? null
-              : row[titleColumn!].toString(),
-        ));
+        transactionsToInsert.add(
+          TransactionInDB(
+            id: generateUUID(),
+            date: dateColumn == null
+                ? DateTime.now()
+                : DateFormat(
+                    _dateFormatController.text,
+                    'en_US',
+                  ).parse(row[dateColumn!].toString()),
+            type: trValue < 0 ? TransactionType.E : TransactionType.I,
+            accountID: accountID,
+            value: trValue,
+            isHidden: false,
+            categoryID: categoryID,
+            notes: notesColumn == null || row[notesColumn!].toString().isEmpty
+                ? null
+                : row[notesColumn!].toString(),
+            title: titleColumn == null || row[titleColumn!].toString().isEmpty
+                ? null
+                : row[titleColumn!].toString(),
+          ),
+        );
       }
 
       // Batch insert
@@ -289,9 +307,9 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
 
       for (var i = 0; i < transactionsToInsert.length; i += batchSize) {
         final batch = transactionsToInsert.skip(i).take(batchSize);
-        await Future.wait(batch.map(
-          (e) => TransactionService.instance.insertTransaction(e),
-        ));
+        await Future.wait(
+          batch.map((e) => TransactionService.instance.insertTransaction(e)),
+        );
       }
 
       loadingOverlay.hide();
@@ -310,14 +328,14 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
       state: currentStep > index
           ? StepState.complete
           : currentStep == index
-              ? StepState.editing
-              : StepState.disabled,
+          ? StepState.editing
+          : StepState.disabled,
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(t.backup.import.manual_import.steps_descr[index]),
           const SizedBox(height: 24),
-          ...content
+          ...content,
         ],
       ),
     );
@@ -328,71 +346,80 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
     final t = Translations.of(context);
 
     return Scaffold(
-        appBar: AppBar(title: Text(t.backup.import.manual_import.title)),
-        body: Stepper(
-          type: StepperType.vertical,
-          currentStep: currentStep,
-          onStepTapped: (value) {
-            setState(() {
-              currentStep = value;
-            });
-          },
-          controlsBuilder: (context, details) {
-            bool nextButtonDisabled = currentStep == 0 && csvData == null ||
-                currentStep == 3 && defaultCategory == null ||
-                currentStep == 1 && amountColumn == null ||
-                currentStep == 4 && _dateFormatController.text.isEmpty;
+      appBar: AppBar(title: Text(t.backup.import.manual_import.title)),
+      body: Stepper(
+        type: StepperType.vertical,
+        currentStep: currentStep,
+        onStepTapped: (value) {
+          setState(() {
+            currentStep = value;
+          });
+        },
+        controlsBuilder: (context, details) {
+          bool nextButtonDisabled =
+              currentStep == 0 && csvData == null ||
+              currentStep == 3 && defaultCategory == null ||
+              currentStep == 1 && amountColumn == null ||
+              currentStep == 4 && _dateFormatController.text.isEmpty;
 
-            return Padding(
-              padding: const EdgeInsets.only(top: 12),
-              child: currentStep == 5
-                  ? SizedBox(
-                      width: double.infinity,
-                      child: FilledButton.icon(
-                        onPressed:
-                            nextButtonDisabled ? null : () => addTransactions(),
-                        label: Text(t.backup.import.title),
-                        icon: const Icon(Icons.check_rounded),
-                      ),
-                    )
-                  : Row(
-                      children: [
-                        FilledButton(
-                          onPressed: nextButtonDisabled
-                              ? null
-                              : details.onStepContinue,
-                          child: Text(t.ui_actions.continue_text),
-                        ),
-                        if (currentStep == 0 && csvData != null) ...[
-                          const SizedBox(width: 8),
-                          OutlinedButton.icon(
-                            onPressed: () => readFile(),
-                            icon: const Icon(Icons.upload_file_rounded),
-                            label: Text(t.backup.import.select_other_file),
-                          ),
-                        ],
-                        if (currentStep == 2) ...[
-                          const SizedBox(width: 8),
-                          OutlinedButton.icon(
-                            onPressed: () {
-                              setState(() {
-                                defaultAccount = null;
-                              });
-                            },
-                            icon: const Icon(Icons.delete_outline_rounded),
-                            label: Text(t.backup.import.manual_import
-                                .remove_default_account),
-                          ),
-                        ]
-                      ],
+          return Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child: currentStep == 5
+                ? SizedBox(
+                    width: double.infinity,
+                    child: FilledButton.icon(
+                      onPressed: nextButtonDisabled
+                          ? null
+                          : () => addTransactions(),
+                      label: Text(t.backup.import.title),
+                      icon: const Icon(Icons.check_rounded),
                     ),
-            );
-          },
-          onStepContinue: () {
-            setState(() => currentStep++);
-          },
-          steps: [
-            buildStep(index: 0, content: [
+                  )
+                : Row(
+                    children: [
+                      FilledButton(
+                        onPressed: nextButtonDisabled
+                            ? null
+                            : details.onStepContinue,
+                        child: Text(t.ui_actions.continue_text),
+                      ),
+                      if (currentStep == 0 && csvData != null) ...[
+                        const SizedBox(width: 8),
+                        OutlinedButton.icon(
+                          onPressed: () => readFile(),
+                          icon: const Icon(Icons.upload_file_rounded),
+                          label: Text(t.backup.import.select_other_file),
+                        ),
+                      ],
+                      if (currentStep == 2) ...[
+                        const SizedBox(width: 8),
+                        OutlinedButton.icon(
+                          onPressed: () {
+                            setState(() {
+                              defaultAccount = null;
+                            });
+                          },
+                          icon: const Icon(Icons.delete_outline_rounded),
+                          label: Text(
+                            t
+                                .backup
+                                .import
+                                .manual_import
+                                .remove_default_account,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+          );
+        },
+        onStepContinue: () {
+          setState(() => currentStep++);
+        },
+        steps: [
+          buildStep(
+            index: 0,
+            content: [
               if (csvData == null) selectCsvButton(t, context),
               if (csvData != null) ...[
                 csvPreviewTable(context),
@@ -403,70 +430,76 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                     style: Theme.of(context).textTheme.labelSmall,
                   ),
                 const SizedBox(height: 12),
-              ]
-            ]),
-            buildStep(
-              index: 1,
-              content: [
-                if (csvHeaders != null)
-                  buildColumnSelector(
-                    value: amountColumn,
-                    headersToSelect: csvHeaders!,
-                    onChanged: (value) {
-                      setState(() {
-                        amountColumn = value;
-                      });
-                    },
-                  ),
               ],
-            ),
-            buildStep(
-              index: 2,
-              content: [
-                if (csvHeaders != null)
-                  buildColumnSelector(
-                    value: accountColumn,
-                    headersToSelect: csvHeaders!.whereIndexed(
-                        (index, element) => index != amountColumn),
-                    onChanged: (value) {
-                      setState(() {
-                        accountColumn = value;
-                      });
-                    },
+            ],
+          ),
+          buildStep(
+            index: 1,
+            content: [
+              if (csvHeaders != null)
+                buildColumnSelector(
+                  value: amountColumn,
+                  headersToSelect: csvHeaders!,
+                  onChanged: (value) {
+                    setState(() {
+                      amountColumn = value;
+                    });
+                  },
+                ),
+            ],
+          ),
+          buildStep(
+            index: 2,
+            content: [
+              if (csvHeaders != null)
+                buildColumnSelector(
+                  value: accountColumn,
+                  headersToSelect: csvHeaders!.whereIndexed(
+                    (index, element) => index != amountColumn,
                   ),
-                const SizedBox(height: 12),
-                selector(
-                    title: t.backup.import.manual_import.default_account,
-                    inputValue: defaultAccount?.name,
-                    icon: defaultAccount?.icon,
-                    iconColor: null,
-                    onClick: () async {
-                      final modalRes = await showAccountSelectorBottomSheet(
-                          context,
-                          AccountSelectorModal(
-                            allowMultiSelection: false,
-                            filterSavingAccounts: true,
-                            selectedAccounts: [
-                              if (defaultAccount != null) defaultAccount!
-                            ],
-                          ));
+                  onChanged: (value) {
+                    setState(() {
+                      accountColumn = value;
+                    });
+                  },
+                ),
+              const SizedBox(height: 12),
+              selector(
+                title: t.backup.import.manual_import.default_account,
+                inputValue: defaultAccount?.name,
+                icon: defaultAccount?.icon,
+                iconColor: null,
+                onClick: () async {
+                  final modalRes = await showAccountSelectorBottomSheet(
+                    context,
+                    AccountSelectorModal(
+                      allowMultiSelection: false,
+                      filterSavingAccounts: true,
+                      selectedAccounts: [
+                        if (defaultAccount != null) defaultAccount!,
+                      ],
+                    ),
+                  );
 
-                      if (modalRes != null && modalRes.isNotEmpty) {
-                        setState(() {
-                          defaultAccount = modalRes.first;
-                        });
-                      }
-                    }),
-              ],
-            ),
-            buildStep(
-              index: 3,
-              content: [
-                if (csvHeaders != null)
-                  Builder(builder: (context) {
+                  if (modalRes != null && modalRes.isNotEmpty) {
+                    setState(() {
+                      defaultAccount = modalRes.first;
+                    });
+                  }
+                },
+              ),
+            ],
+          ),
+          buildStep(
+            index: 3,
+            content: [
+              if (csvHeaders != null)
+                Builder(
+                  builder: (context) {
                     final headersToSelect = csvHeaders!.whereIndexed(
-                        (index, element) =>
-                            index != amountColumn && index != accountColumn);
+                      (index, element) =>
+                          index != amountColumn && index != accountColumn,
+                    );
 
                     return buildColumnSelector(
                       value: categoryColumn,
@@ -477,70 +510,76 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                         });
                       },
                     );
-                  }),
-                const SizedBox(height: 12),
-                selector(
-                    title:
-                        '${t.backup.import.manual_import.default_category} *',
-                    inputValue: defaultCategory?.name,
-                    icon: defaultCategory?.icon,
-                    isRequired: true,
-                    iconColor: defaultCategory != null
-                        ? ColorHex.get(defaultCategory!.color)
-                        : null,
-                    onClick: () async {
-                      final modalRes = await showCategoryPickerModal(context,
-                          modal: CategoryPicker(
-                            selectedCategory: null,
-                            categoryType: const [CategoryType.B],
-                          ));
-
-                      if (modalRes != null) {
-                        setState(() {
-                          defaultCategory = modalRes;
-                        });
-                      }
-                    }),
-              ],
-            ),
-            buildStep(
-              index: 4,
-              content: [
-                if (csvHeaders != null)
-                  buildColumnSelector(
-                    value: dateColumn,
-                    headersToSelect: csvHeaders!.whereIndexed((index,
-                            element) =>
-                        index != amountColumn &&
-                        index != accountColumn &&
-                        (categoryColumn == null || index != categoryColumn)),
-                    onChanged: (value) {
-                      setState(() {
-                        dateColumn = value;
-                      });
-                    },
-                  ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _dateFormatController,
-                  enabled: dateColumn != null,
-                  decoration: const InputDecoration(labelText: 'Date format'),
-                  validator: (value) => fieldValidator(value),
-                  autovalidateMode: AutovalidateMode.always,
+                  },
                 ),
-              ],
-            ),
-            buildStep(
-              index: 5,
-              content: [
-                if (csvHeaders != null)
-                  Builder(builder: (context) {
-                    final headersToSelect = csvHeaders!.whereIndexed((index,
-                            element) =>
+              const SizedBox(height: 12),
+              selector(
+                title: '${t.backup.import.manual_import.default_category} *',
+                inputValue: defaultCategory?.name,
+                icon: defaultCategory?.icon,
+                isRequired: true,
+                iconColor: defaultCategory != null
+                    ? ColorHex.get(defaultCategory!.color)
+                    : null,
+                onClick: () async {
+                  final modalRes = await showCategoryPickerModal(
+                    context,
+                    modal: CategoryPicker(
+                      selectedCategory: null,
+                      categoryType: const [CategoryType.B],
+                    ),
+                  );
+
+                  if (modalRes != null) {
+                    setState(() {
+                      defaultCategory = modalRes;
+                    });
+                  }
+                },
+              ),
+            ],
+          ),
+          buildStep(
+            index: 4,
+            content: [
+              if (csvHeaders != null)
+                buildColumnSelector(
+                  value: dateColumn,
+                  headersToSelect: csvHeaders!.whereIndexed(
+                    (index, element) =>
                         index != amountColumn &&
                         index != accountColumn &&
-                        index != dateColumn &&
-                        (categoryColumn == null || index != categoryColumn));
+                        (categoryColumn == null || index != categoryColumn),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      dateColumn = value;
+                    });
+                  },
+                ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _dateFormatController,
+                enabled: dateColumn != null,
+                decoration: const InputDecoration(labelText: 'Date format'),
+                validator: (value) => fieldValidator(value),
+                autovalidateMode: AutovalidateMode.always,
+              ),
+            ],
+          ),
+          buildStep(
+            index: 5,
+            content: [
+              if (csvHeaders != null)
+                Builder(
+                  builder: (context) {
+                    final headersToSelect = csvHeaders!.whereIndexed(
+                      (index, element) =>
+                          index != amountColumn &&
+                          index != accountColumn &&
+                          index != dateColumn &&
+                          (categoryColumn == null || index != categoryColumn),
+                    );
 
                     return Column(
                       children: [
@@ -567,11 +606,13 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                         ),
                       ],
                     );
-                  }),
-              ],
-            ),
-          ],
-        ));
+                  },
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   SingleChildScrollView csvPreviewTable(BuildContext context) {
@@ -584,19 +625,22 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
         clipBehavior: Clip.hardEdge,
         headingTextStyle: Theme.of(context).textTheme.labelLarge,
         dataTextStyle: Theme.of(context).textTheme.bodySmall,
-        columns:
-            csvHeaders!.map((item) => DataColumn(label: Text(item))).toList(),
+        columns: csvHeaders!
+            .map((item) => DataColumn(label: Text(item)))
+            .toList(),
         rows: [
           ...csvData!
               .sublist(
-                  1, _rowsToPreview > csvData!.length ? null : _rowsToPreview)
+                1,
+                _rowsToPreview > csvData!.length ? null : _rowsToPreview,
+              )
               .map(
                 (csvrow) => DataRow(
                   cells: csvrow
                       .map((csvItem) => DataCell(Text(csvItem.toString())))
                       .toList(),
                 ),
-              )
+              ),
         ],
       ),
     );
@@ -606,12 +650,13 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
     return InkWell(
       onTap: () => readFile(),
       child: DottedBorder(
-        color: Colors.grey.withOpacity(0.5),
-        strokeWidth: 3,
-        strokeCap: StrokeCap.round,
-        borderType: BorderType.RRect,
-        dashPattern: const [6, 8],
-        radius: const Radius.circular(12),
+        options: RoundedRectDottedBorderOptions(
+          color: Colors.grey.withOpacity(0.5),
+          strokeWidth: 3,
+          strokeCap: StrokeCap.round,
+          dashPattern: const [6, 8],
+          radius: const Radius.circular(12),
+        ),
         child: SizedBox(
           height: 150,
           width: double.infinity,
@@ -620,8 +665,12 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.add,
-                    size: 48, weight: 10, color: Colors.grey.withOpacity(0.95)),
+                Icon(
+                  Icons.add,
+                  size: 48,
+                  weight: 10,
+                  color: Colors.grey.withOpacity(0.95),
+                ),
                 const SizedBox(height: 4),
                 Text(
                   t.backup.import.tap_to_select_file,

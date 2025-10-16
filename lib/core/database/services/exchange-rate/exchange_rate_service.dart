@@ -9,13 +9,14 @@ class ExchangeRateService {
   final AppDB db;
 
   ExchangeRateService._(this.db);
-  static final ExchangeRateService instance =
-      ExchangeRateService._(AppDB.instance);
+  static final ExchangeRateService instance = ExchangeRateService._(
+    AppDB.instance,
+  );
 
   Future<int> insertOrUpdateExchangeRate(ExchangeRateInDB toInsert) async {
-    final elToCompare =
-        (await (getLastExchangeRateOf(currencyCode: toInsert.currencyCode))
-            .first);
+    final elToCompare = (await (getLastExchangeRateOf(
+      currencyCode: toInsert.currencyCode,
+    )).first);
 
     if (elToCompare != null &&
         DateUtils.isSameDay(elToCompare.date, toInsert.date)) {
@@ -28,10 +29,11 @@ class ExchangeRateService {
   }
 
   Future<int> deleteExchangeRates({String? currencyCode}) {
-    return (db.delete(db.exchangeRates)
-          ..where((e) => currencyCode != null
+    return (db.delete(db.exchangeRates)..where(
+          (e) => currencyCode != null
               ? e.currencyCode.equals(currencyCode)
-              : e.currencyCode.isNotNull()))
+              : e.currencyCode.isNotNull(),
+        ))
         .go();
   }
 
@@ -43,8 +45,10 @@ class ExchangeRateService {
   }
 
   /// Get all the exchange rates that a currency have in the app
-  Stream<List<ExchangeRate>> getExchangeRatesOf(String currencyCode,
-      {double? limit}) {
+  Stream<List<ExchangeRate>> getExchangeRatesOf(
+    String currencyCode, {
+    double? limit,
+  }) {
     limit ??= -1;
 
     return db
@@ -56,16 +60,19 @@ class ExchangeRateService {
   }
 
   /// Get the last exchange rate before a specified date, for a given currency. If the date is not provided, the current date is used
-  Stream<ExchangeRate?> getLastExchangeRateOf(
-      {required String currencyCode, DateTime? date}) {
+  Stream<ExchangeRate?> getLastExchangeRateOf({
+    required String currencyCode,
+    DateTime? date,
+  }) {
     date ??= DateTime.now();
 
     return db
         .getExchangeRates(
-            predicate: (e, currency) =>
-                e.currencyCode.equals(currencyCode) &
-                e.date.isSmallerOrEqualValue(date!),
-            limit: 1)
+          predicate: (e, currency) =>
+              e.currencyCode.equals(currencyCode) &
+              e.date.isSmallerOrEqualValue(date!),
+          limit: 1,
+        )
         .watchSingleOrNull();
   }
 
@@ -89,14 +96,19 @@ class ExchangeRateService {
   }) {
     date ??= DateTime.now();
 
-    final fromExchangeRate =
-        getLastExchangeRateOf(currencyCode: fromCurrency, date: date)
-            .map((event) => event?.exchangeRate ?? 1);
-    final toExchangeRate =
-        getLastExchangeRateOf(currencyCode: toCurrency, date: date)
-            .map((event) => event?.exchangeRate ?? 1);
+    final fromExchangeRate = getLastExchangeRateOf(
+      currencyCode: fromCurrency,
+      date: date,
+    ).map((event) => event?.exchangeRate ?? 1);
+    final toExchangeRate = getLastExchangeRateOf(
+      currencyCode: toCurrency,
+      date: date,
+    ).map((event) => event?.exchangeRate ?? 1);
 
     return Rx.combineLatest2(
-        fromExchangeRate, toExchangeRate, (a, b) => (a / b) * amount);
+      fromExchangeRate,
+      toExchangeRate,
+      (a, b) => (a / b) * amount,
+    );
   }
 }

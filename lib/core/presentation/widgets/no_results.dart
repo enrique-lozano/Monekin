@@ -26,7 +26,8 @@ class NoResults extends StatelessWidget {
         opacity: isAppInLightBrightness(context) ? 1 : 0.9,
         child: Center(
           child: Padding(
-            padding: padding ??
+            padding:
+                padding ??
                 EdgeInsets.only(
                   top: MediaQuery.sizeOf(context).height * 0.4 > 400 ? 100 : 45,
                   right: 40,
@@ -36,12 +37,14 @@ class NoResults extends StatelessWidget {
               children: [
                 Container(
                   constraints: BoxConstraints(
-                      maxWidth: MediaQuery.sizeOf(context).height <=
-                              MediaQuery.sizeOf(context).width
-                          ? MediaQuery.sizeOf(context).height * 0.4 > 400
+                    maxWidth:
+                        MediaQuery.sizeOf(context).height <=
+                            MediaQuery.sizeOf(context).width
+                        ? MediaQuery.sizeOf(context).height * 0.4 > 400
                               ? 400
                               : MediaQuery.sizeOf(context).height * 0.4
-                          : 270),
+                        : 270,
+                  ),
                   child: Opacity(
                     opacity: 1,
                     child: SvgPicture.asset(
@@ -50,10 +53,9 @@ class NoResults extends StatelessWidget {
                           : 'assets/icons/page_states/empty_folder.svg',
                       colorFilter: ColorFilter.mode(
                         tintColor == null
-                            ? Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withOpacity(0.7)
+                            ? Theme.of(
+                                context,
+                              ).colorScheme.primary.withOpacity(0.7)
                             : tintColor!.withOpacity(0.7),
                         BlendMode.srcIn,
                       ),

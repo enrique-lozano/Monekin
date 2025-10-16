@@ -39,8 +39,9 @@ class _TagFormPageState extends State<TagFormPage> {
     super.initState();
 
     _nameController.value = TextEditingValue(text: widget.tag?.name ?? '');
-    _descrController.value =
-        TextEditingValue(text: widget.tag?.description ?? '');
+    _descrController.value = TextEditingValue(
+      text: widget.tag?.description ?? '',
+    );
 
     _color = widget.tag?.color ?? defaultColorPickerOptions.randomItem();
   }
@@ -56,11 +57,14 @@ class _TagFormPageState extends State<TagFormPage> {
     );
 
     if (widget.tag != null) {
-      await TagService.instance.updateTag(tagToEdit).then((value) {
-        messager.showSnackBar(SnackBar(content: Text(t.tags.edit_success)));
-      }).catchError((error) {
-        messager.showSnackBar(SnackBar(content: Text(error.toString())));
-      });
+      await TagService.instance
+          .updateTag(tagToEdit)
+          .then((value) {
+            messager.showSnackBar(SnackBar(content: Text(t.tags.edit_success)));
+          })
+          .catchError((error) {
+            messager.showSnackBar(SnackBar(content: Text(error.toString())));
+          });
     } else {
       final db = AppDB.instance;
 
@@ -69,20 +73,23 @@ class _TagFormPageState extends State<TagFormPage> {
         ..where((tbl) => tbl.name.isValue(_nameController.text));
 
       if (await query.watchSingleOrNull().first != null) {
-        messager.showSnackBar(SnackBar(
-          content: Text(t.tags.already_exists),
-        ));
+        messager.showSnackBar(SnackBar(content: Text(t.tags.already_exists)));
 
         return;
       }
 
-      await TagService.instance.insertTag(tagToEdit).then((value) {
-        Navigator.pop(context);
+      await TagService.instance
+          .insertTag(tagToEdit)
+          .then((value) {
+            Navigator.pop(context);
 
-        messager.showSnackBar(SnackBar(content: Text(t.tags.create_success)));
-      }).catchError((error) {
-        messager.showSnackBar(SnackBar(content: Text(error.toString())));
-      });
+            messager.showSnackBar(
+              SnackBar(content: Text(t.tags.create_success)),
+            );
+          })
+          .catchError((error) {
+            messager.showSnackBar(SnackBar(content: Text(error.toString())));
+          });
     }
   }
 
@@ -106,23 +113,25 @@ class _TagFormPageState extends State<TagFormPage> {
                   confirmationText: t.ui_actions.continue_text,
                   showCancelButton: true,
                   icon: Icons.delete,
-                ).then(
-                  (isConfirmed) {
-                    if (isConfirmed != true) return;
+                ).then((isConfirmed) {
+                  if (isConfirmed != true) return;
 
-                    TagService.instance.deleteTag(widget.tag!.id).then((value) {
-                      Navigator.pop(context);
+                  TagService.instance
+                      .deleteTag(widget.tag!.id)
+                      .then((value) {
+                        Navigator.pop(context);
 
-                      scaffold.showSnackBar(
-                          SnackBar(content: Text(t.tags.delete_success)));
-                    }).catchError((err) {
-                      scaffold.showSnackBar(SnackBar(content: Text('$err')));
-                    });
-                  },
-                );
+                        scaffold.showSnackBar(
+                          SnackBar(content: Text(t.tags.delete_success)),
+                        );
+                      })
+                      .catchError((err) {
+                        scaffold.showSnackBar(SnackBar(content: Text('$err')));
+                      });
+                });
               },
               icon: const Icon(Icons.delete),
-            )
+            ),
         ],
       ),
       persistentFooterButtons: [
@@ -138,7 +147,7 @@ class _TagFormPageState extends State<TagFormPage> {
             icon: const Icon(Icons.check),
             label: Text(t.ui_actions.save_changes),
           ),
-        )
+        ),
       ],
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -167,31 +176,32 @@ class _TagFormPageState extends State<TagFormPage> {
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           textInputAction: TextInputAction.next,
                         ),
-                      )
+                      ),
                     ],
                   ),
                   const SizedBox(height: 16),
                   ReadOnlyTextFormField(
-                      displayValue: null,
-                      decoration: InputDecoration(
-                        hintText: t.icon_selector.color,
-                        suffixIcon: const Icon(Icons.circle),
-                        suffixIconColor: ColorHex.get(_color),
-                      ),
-                      onTap: () => showColorPickerModal(
-                            context,
-                            ColorPickerModal(
-                              colorOptions: defaultColorPickerOptions,
-                              selectedColor: _color,
-                              onColorSelected: (value) {
-                                Navigator.pop(context);
+                    displayValue: null,
+                    decoration: InputDecoration(
+                      hintText: t.icon_selector.color,
+                      suffixIcon: const Icon(Icons.circle),
+                      suffixIconColor: ColorHex.get(_color),
+                    ),
+                    onTap: () => showColorPickerModal(
+                      context,
+                      ColorPickerModal(
+                        colorOptions: defaultColorPickerOptions,
+                        selectedColor: _color,
+                        onColorSelected: (value) {
+                          Navigator.pop(context);
 
-                                setState(() {
-                                  _color = value.toHex();
-                                });
-                              },
-                            ),
-                          )),
+                          setState(() {
+                            _color = value.toHex();
+                          });
+                        },
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 12),
                   TextFormField(
                     controller: _descrController,

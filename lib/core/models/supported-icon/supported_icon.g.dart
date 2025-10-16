@@ -7,13 +7,7 @@ part of 'supported_icon.dart';
 // **************************************************************************
 
 SupportedIcon _$SupportedIconFromJson(Map<String, dynamic> json) =>
-    SupportedIcon(
-      id: json['id'] as String,
-      scope: json['scope'] as String,
-    );
+    SupportedIcon(id: json['id'] as String, scope: json['scope'] as String);
 
 Map<String, dynamic> _$SupportedIconToJson(SupportedIcon instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'scope': instance.scope,
-    };
+    <String, dynamic>{'id': instance.id, 'scope': instance.scope};

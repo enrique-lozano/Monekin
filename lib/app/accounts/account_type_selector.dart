@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:monekin/core/models/account/account.dart';
 
 class AccountTypeSelector extends StatefulWidget {
-  const AccountTypeSelector(
-      {super.key,
-      required this.onSelected,
-      this.selectedType = AccountType.normal});
+  const AccountTypeSelector({
+    super.key,
+    required this.onSelected,
+    this.selectedType = AccountType.normal,
+  });
 
   final AccountType selectedType;
 
@@ -29,25 +30,22 @@ class _AccountTypeSelectorState extends State<AccountTypeSelector> {
   Widget build(BuildContext context) {
     return IntrinsicHeight(
       child: Row(
-        children: List.generate(
-          AccountType.values.length,
-          (index) {
-            final AccountType item = AccountType.values[index];
+        children: List.generate(AccountType.values.length, (index) {
+          final AccountType item = AccountType.values[index];
 
-            return Flexible(
-              child: MonekinFilterChip(
-                accountType: item,
-                onPressed: () {
-                  setState(() {
-                    selectedItem = item;
-                    widget.onSelected(item);
-                  });
-                },
-                isSelected: item == selectedItem,
-              ),
-            );
-          },
-        ),
+          return Flexible(
+            child: MonekinFilterChip(
+              accountType: item,
+              onPressed: () {
+                setState(() {
+                  selectedItem = item;
+                  widget.onSelected(item);
+                });
+              },
+              isSelected: item == selectedItem,
+            ),
+          );
+        }),
       ),
     );
   }
@@ -99,14 +97,19 @@ class MonekinFilterChip extends StatelessWidget {
                 Text(
                   accountType.title(context),
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: isSelected
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.onSurfaceVariant),
+                    color: isSelected
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
-                Text(accountType.description(context),
-                    softWrap: true,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w300, fontSize: 14)),
+                Text(
+                  accountType.description(context),
+                  softWrap: true,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w300,
+                    fontSize: 14,
+                  ),
+                ),
               ],
             ),
           ),

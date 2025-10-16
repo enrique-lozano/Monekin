@@ -18,7 +18,8 @@ extension ColorHex on Color {
     bool enableAlpha = false,
     bool toUpperCase = true,
   }) {
-    final String hex = (leadingHashSign ? '#' : '') +
+    final String hex =
+        (leadingHashSign ? '#' : '') +
         (enableAlpha ? _padRadix(alpha) : '') +
         _padRadix(red) +
         _padRadix(green) +
@@ -26,7 +27,7 @@ extension ColorHex on Color {
     return toUpperCase ? hex.toUpperCase() : hex;
   }
 
-// Shorthand for padLeft of RadixString, DRY.
+  // Shorthand for padLeft of RadixString, DRY.
   String _padRadix(int value) => value.toRadixString(16).padLeft(2, '0');
 }
 
@@ -41,7 +42,11 @@ extension ColorBrightness on Color {
     var f = 1 - amount;
 
     return Color.fromARGB(
-        alpha, (red * f).round(), (green * f).round(), (blue * f).round());
+      alpha,
+      (red * f).round(),
+      (green * f).round(),
+      (blue * f).round(),
+    );
   }
 
   Color lighten([double amount = .1]) {
@@ -52,9 +57,10 @@ extension ColorBrightness on Color {
     }
 
     return Color.fromARGB(
-        alpha,
-        red + ((255 - red) * amount).round(),
-        green + ((255 - green) * amount).round(),
-        blue + ((255 - blue) * amount).round());
+      alpha,
+      red + ((255 - red) * amount).round(),
+      green + ((255 - green) * amount).round(),
+      blue + ((255 - blue) * amount).round(),
+    );
   }
 }

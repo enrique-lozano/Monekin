@@ -34,72 +34,73 @@ class TagStats extends StatelessWidget {
     final t = Translations.of(context);
 
     return StreamBuilder(
-        stream: TransactionService.instance.getTransactions(filters: filters),
-        builder: (context, trSnapshot) {
-          if (!trSnapshot.hasData) {
-            return const LinearProgressIndicator();
-          }
+      stream: TransactionService.instance.getTransactions(filters: filters),
+      builder: (context, trSnapshot) {
+        if (!trSnapshot.hasData) {
+          return const LinearProgressIndicator();
+        }
 
-          if (trSnapshot.data!.isEmpty) {
-            return Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(24),
-              child: Text(
-                t.general.insufficient_data,
-                textAlign: TextAlign.center,
-              ),
-            );
-          }
+        if (trSnapshot.data!.isEmpty) {
+          return Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.all(24),
+            child: Text(
+              t.general.insufficient_data,
+              textAlign: TextAlign.center,
+            ),
+          );
+        }
 
-          return StreamBuilder(
-              stream: TagService.instance.getTags(),
-              builder: (context, tagsSnapshot) {
-                if (!tagsSnapshot.hasData) {
-                  return const LinearProgressIndicator();
-                }
+        return StreamBuilder(
+          stream: TagService.instance.getTags(),
+          builder: (context, tagsSnapshot) {
+            if (!tagsSnapshot.hasData) {
+              return const LinearProgressIndicator();
+            }
 
-                final tags = tagsSnapshot.data!;
+            final tags = tagsSnapshot.data!;
 
-                final tagsInfo = tags
-                    .map((e) => getTagInfo(e, trSnapshot.data!))
-                    .where((element) => element.transactions.isNotEmpty)
-                    .toList();
+            final tagsInfo = tags
+                .map((e) => getTagInfo(e, trSnapshot.data!))
+                .where((element) => element.transactions.isNotEmpty)
+                .toList();
 
-                tagsInfo.sort((a, b) => a.value.compareTo(b.value));
+            tagsInfo.sort((a, b) => a.value.compareTo(b.value));
 
-                if (tags.isEmpty || tagsInfo.isEmpty) {
-                  return Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.all(24),
-                    child: Text(
-                      tags.isEmpty
-                          ? t.tags.empty_list
-                          : t.general.insufficient_data,
-                      textAlign: TextAlign.center,
-                    ),
-                  );
-                }
+            if (tags.isEmpty || tagsInfo.isEmpty) {
+              return Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(24),
+                child: Text(
+                  tags.isEmpty
+                      ? t.tags.empty_list
+                      : t.general.insufficient_data,
+                  textAlign: TextAlign.center,
+                ),
+              );
+            }
 
-                return ListView.builder(
-                  itemCount: tagsInfo.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    final dataTag = tagsInfo[index];
+            return ListView.builder(
+              itemCount: tagsInfo.length,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                final dataTag = tagsInfo[index];
 
-                    return ListTile(
-                      title: Text(dataTag.category.name),
-                      subtitle: Text(
-                        '${dataTag.transactions.length} ${t.transaction.display(n: dataTag.transactions.length)}'
-                            .toLowerCase(),
-                      ),
-                      trailing:
-                          CurrencyDisplayer(amountToConvert: dataTag.value),
-                      leading: dataTag.category.displayIcon(),
-                    );
-                  },
+                return ListTile(
+                  title: Text(dataTag.category.name),
+                  subtitle: Text(
+                    '${dataTag.transactions.length} ${t.transaction.display(n: dataTag.transactions.length)}'
+                        .toLowerCase(),
+                  ),
+                  trailing: CurrencyDisplayer(amountToConvert: dataTag.value),
+                  leading: dataTag.category.displayIcon(),
                 );
-              });
-        });
+              },
+            );
+          },
+        );
+      },
+    );
   }
 }

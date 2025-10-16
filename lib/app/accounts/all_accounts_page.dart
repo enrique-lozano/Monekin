@@ -91,16 +91,19 @@ class _AllAccountsPageState extends State<AllAccountsPage> {
 
                     return Material(
                       child: ListTile(
-                        tileColor:
-                            Theme.of(context).colorScheme.surfaceContainer,
+                        tileColor: Theme.of(
+                          context,
+                        ).colorScheme.surfaceContainer,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                         onTap: () => RouteUtils.pushRoute(
                           context,
                           AccountDetailsPage(
-                              account: account,
-                              accountIconHeroTag:
-                                  'all-accounts-page__account-icon-${account.id}'),
+                            account: account,
+                            accountIconHeroTag:
+                                'all-accounts-page__account-icon-${account.id}',
+                          ),
                         ),
                         trailing: accounts.length > 1
                             ? ReorderableDragIcon(
@@ -119,17 +122,18 @@ class _AllAccountsPageState extends State<AllAccountsPage> {
                             ),
                             const SizedBox(width: 4),
                             if (account.isClosed)
-                              const Icon(Icons.archive_outlined,
-                                  color: Colors.amber, size: 16)
+                              const Icon(
+                                Icons.archive_outlined,
+                                color: Colors.amber,
+                                size: 16,
+                              ),
                           ],
                         ),
                         leading: Hero(
                           tag: 'all-accounts-page__account-icon-${account.id}',
                           child: account.displayIcon(context),
                         ),
-                        subtitle: Text(
-                          account.type.title(context),
-                        ),
+                        subtitle: Text(account.type.title(context)),
                       ),
                     );
                   },
@@ -143,8 +147,8 @@ class _AllAccountsPageState extends State<AllAccountsPage> {
                       accounts.mapIndexed(
                         (index, element) =>
                             AccountService.instance.updateAccount(
-                          element.copyWith(displayOrder: index),
-                        ),
+                              element.copyWith(displayOrder: index),
+                            ),
                       ),
                     );
                   },

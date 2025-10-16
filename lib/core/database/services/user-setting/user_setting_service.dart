@@ -30,16 +30,17 @@ final Map<SettingKey, String?> appStateSettings = {};
 class UserSettingService
     extends KeyValueService<SettingKey, UserSettings, UserSetting> {
   UserSettingService._(AppDB db)
-      : super(
-          db: db,
-          table: db.userSettings,
-          globalStateMap: appStateSettings,
-          rowToKeyPairInstance: (row) => KeyValuePairInDB.fromUserSetting(row),
-          toDbRow: (x) => x.toUserSetting(),
-        );
+    : super(
+        db: db,
+        table: db.userSettings,
+        globalStateMap: appStateSettings,
+        rowToKeyPairInstance: (row) => KeyValuePairInDB.fromUserSetting(row),
+        toDbRow: (x) => x.toUserSetting(),
+      );
 
-  static final UserSettingService _instance =
-      UserSettingService._(AppDB.instance);
+  static final UserSettingService _instance = UserSettingService._(
+    AppDB.instance,
+  );
   static UserSettingService get instance => _instance;
 
   Stream<String?> getSettingFromDB(SettingKey settingKey) {

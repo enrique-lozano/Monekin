@@ -12,7 +12,7 @@ class TransactionStatusFilter extends StatelessWidget {
   });
 
   final void Function(TransactionStatus? statusSelected, bool value)?
-      onSelected;
+  onSelected;
 
   final List<TransactionStatus?> selectedStatuses;
   final bool allowMultipleSelection;
@@ -25,7 +25,8 @@ class TransactionStatusFilter extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-            '${t.transaction.status.display(n: allowMultipleSelection ? 10 : 1)}:'),
+          '${t.transaction.status.display(n: allowMultipleSelection ? 10 : 1)}:',
+        ),
         const SizedBox(height: 4),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -40,7 +41,7 @@ class TransactionStatusFilter extends StatelessWidget {
                       : null,
                 ),
                 const SizedBox(width: 6),
-              ]
+              ],
             ],
           ),
         ),

@@ -36,35 +36,11 @@ class BulkEditTransactionModal extends StatelessWidget {
               text: t.transaction.list.bulk_edit.dates,
               iconData: Icons.calendar_month,
               onTap: () =>
-                  openDateTimePicker(context, showTimePickerAfterDate: true)
-                      .then(
-                (date) {
-                  if (date == null) {
-                    return;
-                  }
-
-                  performUpdates(
+                  openDateTimePicker(
                     context,
-                    futures: transactionsToEdit.map(
-                      (e) => TransactionService.instance
-                          .updateTransaction(e.copyWith(date: date)),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 8),
-            _buildSelectOption(
-              text: t.transaction.list.bulk_edit.categories,
-              iconData: Icons.category_rounded,
-              onTap: () {
-                showCategoryPickerModal(context,
-                    modal: CategoryPicker(
-                      selectedCategory: null,
-                      categoryType: CategoryType.values,
-                    )).then(
-                  (modalRes) {
-                    if (modalRes == null) {
+                    showTimePickerAfterDate: true,
+                  ).then((date) {
+                    if (date == null) {
                       return;
                     }
 
@@ -72,11 +48,37 @@ class BulkEditTransactionModal extends StatelessWidget {
                       context,
                       futures: transactionsToEdit.map(
                         (e) => TransactionService.instance.updateTransaction(
-                            e.copyWith(categoryID: Value(modalRes.id))),
+                          e.copyWith(date: date),
+                        ),
                       ),
                     );
-                  },
-                );
+                  }),
+            ),
+            const SizedBox(height: 8),
+            _buildSelectOption(
+              text: t.transaction.list.bulk_edit.categories,
+              iconData: Icons.category_rounded,
+              onTap: () {
+                showCategoryPickerModal(
+                  context,
+                  modal: CategoryPicker(
+                    selectedCategory: null,
+                    categoryType: CategoryType.values,
+                  ),
+                ).then((modalRes) {
+                  if (modalRes == null) {
+                    return;
+                  }
+
+                  performUpdates(
+                    context,
+                    futures: transactionsToEdit.map(
+                      (e) => TransactionService.instance.updateTransaction(
+                        e.copyWith(categoryID: Value(modalRes.id)),
+                      ),
+                    ),
+                  );
+                });
               },
             ),
             const SizedBox(height: 8),
@@ -84,23 +86,22 @@ class BulkEditTransactionModal extends StatelessWidget {
               text: t.transaction.list.bulk_edit.status,
               iconData: Icons.fullscreen_rounded,
               onTap: () {
-                showTransactioStatusModal(context, initialStatus: null).then(
-                  (modalRes) {
-                    if (modalRes == null) {
-                      return;
-                    }
+                showTransactioStatusModal(context, initialStatus: null).then((
+                  modalRes,
+                ) {
+                  if (modalRes == null) {
+                    return;
+                  }
 
-                    performUpdates(
-                      context,
-                      futures: transactionsToEdit.map(
-                        (e) => TransactionService.instance
-                            .updateTransaction(e.copyWith(
-                          status: Value(modalRes.result),
-                        )),
+                  performUpdates(
+                    context,
+                    futures: transactionsToEdit.map(
+                      (e) => TransactionService.instance.updateTransaction(
+                        e.copyWith(status: Value(modalRes.result)),
                       ),
-                    );
-                  },
-                );
+                    ),
+                  );
+                });
               },
             ),
             const SizedBox(height: 12),
@@ -132,19 +133,26 @@ class BulkEditTransactionModal extends StatelessWidget {
   }) {
     Navigator.pop(context);
 
-    Future.wait(futures).then((value) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(transactionsToEdit.length <= 1
-            ? t.transaction.edit_success
-            : t.transaction
-                .edit_multiple_success(x: transactionsToEdit.length)),
-      ));
+    Future.wait(futures)
+        .then((value) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                transactionsToEdit.length <= 1
+                    ? t.transaction.edit_success
+                    : t.transaction.edit_multiple_success(
+                        x: transactionsToEdit.length,
+                      ),
+              ),
+            ),
+          );
 
-      onSuccess();
-    }).catchError((err) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(err.toString()),
-      ));
-    });
+          onSuccess();
+        })
+        .catchError((err) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(err.toString())));
+        });
   }
 }

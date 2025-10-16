@@ -24,8 +24,9 @@ class AccountService {
   }
 
   Future<int> deleteAccount(String accountId) {
-    return (db.delete(db.accounts)..where((tbl) => tbl.id.equals(accountId)))
-        .go();
+    return (db.delete(
+      db.accounts,
+    )..where((tbl) => tbl.id.equals(accountId))).go();
   }
 
   Stream<List<Account>> getAccounts({
@@ -37,7 +38,8 @@ class AccountService {
     return db
         .getAccountsWithFullData(
           predicate: predicate,
-          orderBy: orderBy ??
+          orderBy:
+              orderBy ??
               (acc, curr) => OrderBy([OrderingTerm.asc(acc.displayOrder)]),
           limit: (a, currency) => Limit(limit ?? -1, offset),
         )
@@ -45,8 +47,10 @@ class AccountService {
   }
 
   Stream<Account?> getAccountById(String id) {
-    return getAccounts(predicate: (a, c) => a.id.equals(id), limit: 1)
-        .map((res) => res.firstOrNull);
+    return getAccounts(
+      predicate: (a, c) => a.id.equals(id),
+      limit: 1,
+    ).map((res) => res.firstOrNull);
   }
 
   String _joinAccountAndRate(DateTime? date, {String columnName = 'excRate'}) =>
@@ -142,13 +146,13 @@ class AccountService {
           """,
           readsFrom: {
             db.accounts,
-            if (convertToPreferredCurrency) db.exchangeRates
+            if (convertToPreferredCurrency) db.exchangeRates,
           },
           variables: [
             Variable.withDateTime(date),
             if (convertToPreferredCurrency) Variable.withDateTime(date),
             if (accountIds != null)
-              for (final id in accountIds) Variable.withString(id)
+              for (final id in accountIds) Variable.withString(id),
           ],
         )
         .watchSingleOrNull()
@@ -166,7 +170,7 @@ class AccountService {
       getAccountsBalance(
         filters: trFilters.copyWith(maxDate: date, accountsIDs: accountIds),
         convertToPreferredCurrency: convertToPreferredCurrency,
-      )
+      ),
     ], (res) => res[0] + res[1]);
   }
 
@@ -175,13 +179,15 @@ class AccountService {
     bool convertToPreferredCurrency = true,
   }) {
     filters = filters.copyWith(
-        status: TransactionStatus.getStatusThatCountsForStats(filters.status));
+      status: TransactionStatus.getStatusThatCountsForStats(filters.status),
+    );
 
     return TransactionService.instance
         .countTransactions(
-            predicate: filters,
-            exchDate: filters.maxDate ?? DateTime.now(),
-            convertToPreferredCurrency: convertToPreferredCurrency)
+          predicate: filters,
+          exchDate: filters.maxDate ?? DateTime.now(),
+          convertToPreferredCurrency: convertToPreferredCurrency,
+        )
         .map((event) => event.valueSum);
   }
 
@@ -215,19 +221,22 @@ class AccountService {
     final Iterable<String> accountIds = accounts.map((e) => e.id);
 
     final accountsBalanceStartPeriod = getAccountsMoney(
-        accountIds: accountIds,
-        date: startDate,
-        trFilters: overwrittenFilters,
-        convertToPreferredCurrency: convertToPreferredCurrency);
+      accountIds: accountIds,
+      date: startDate,
+      trFilters: overwrittenFilters,
+      convertToPreferredCurrency: convertToPreferredCurrency,
+    );
 
     final accountsBalanceEndPeriod = getAccountsMoney(
-        accountIds: accountIds,
-        date: endDate,
-        trFilters: overwrittenFilters,
-        convertToPreferredCurrency: convertToPreferredCurrency);
+      accountIds: accountIds,
+      date: endDate,
+      trFilters: overwrittenFilters,
+      convertToPreferredCurrency: convertToPreferredCurrency,
+    );
 
-    return Rx.combineLatest(
-        [accountsBalanceStartPeriod, accountsBalanceEndPeriod],
-        (res) => (res[1] - res[0]) / res[0]);
+    return Rx.combineLatest([
+      accountsBalanceStartPeriod,
+      accountsBalanceEndPeriod,
+    ], (res) => (res[1] - res[0]) / res[0]);
   }
 }

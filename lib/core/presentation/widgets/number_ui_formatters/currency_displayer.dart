@@ -71,7 +71,8 @@ class CurrencyDisplayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final valueFontSize = (integerStyle.fontSize ??
+    final valueFontSize =
+        (integerStyle.fontSize ??
             DefaultTextStyle.of(context).style.fontSize) ??
         16;
 

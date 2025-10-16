@@ -57,72 +57,76 @@ class _AmountSelectorState extends State<AmountSelector> {
 
     amountString = _parseInitialAmount(widget.initialAmount);
 
-    _focusAttachment = _focusNode.attach(context, onKeyEvent: (node, event) {
-      bool keyIsPressed = event.runtimeType == KeyDownEvent ||
-          event.runtimeType == KeyRepeatEvent;
+    _focusAttachment = _focusNode.attach(
+      context,
+      onKeyEvent: (node, event) {
+        bool keyIsPressed =
+            event.runtimeType == KeyDownEvent ||
+            event.runtimeType == KeyRepeatEvent;
 
-      if (!keyIsPressed) {
+        if (!keyIsPressed) {
+          return KeyEventResult.handled;
+        }
+
+        if ((event.logicalKey == LogicalKeyboardKey.browserBack ||
+            event.logicalKey == LogicalKeyboardKey.goBack ||
+            event.logicalKey == LogicalKeyboardKey.escape)) {
+          Navigator.pop(context);
+        }
+
+        for (final (index, element) in [
+          LogicalKeyboardKey.digit0,
+          LogicalKeyboardKey.digit1,
+          LogicalKeyboardKey.digit2,
+          LogicalKeyboardKey.digit3,
+          LogicalKeyboardKey.digit4,
+          LogicalKeyboardKey.digit5,
+          LogicalKeyboardKey.digit6,
+          LogicalKeyboardKey.digit7,
+          LogicalKeyboardKey.digit8,
+          LogicalKeyboardKey.digit9,
+        ].indexed) {
+          if (event.logicalKey == element) {
+            addToAmount(index.toStringAsFixed(0));
+            break;
+          }
+        }
+
+        for (final (index, element) in [
+          LogicalKeyboardKey.numpad0,
+          LogicalKeyboardKey.numpad1,
+          LogicalKeyboardKey.numpad2,
+          LogicalKeyboardKey.numpad3,
+          LogicalKeyboardKey.numpad4,
+          LogicalKeyboardKey.numpad5,
+          LogicalKeyboardKey.numpad6,
+          LogicalKeyboardKey.numpad7,
+          LogicalKeyboardKey.numpad8,
+          LogicalKeyboardKey.numpad9,
+        ].indexed) {
+          if (event.logicalKey == element) {
+            addToAmount(index.toStringAsFixed(0));
+            break;
+          }
+        }
+
+        if (event.logicalKey == LogicalKeyboardKey.period) {
+          addToAmount('.');
+        } else if (event.logicalKey == LogicalKeyboardKey.numpadDecimal) {
+          addToAmount('.');
+        } else if (event.logicalKey == LogicalKeyboardKey.comma) {
+          addToAmount('.');
+        } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
+          removeLastCharFromAmount();
+        } else if (event.logicalKey == LogicalKeyboardKey.delete) {
+          removeLastCharFromAmount();
+        } else if (event.logicalKey == LogicalKeyboardKey.enter) {
+          submitAmount();
+        }
+
         return KeyEventResult.handled;
-      }
-
-      if ((event.logicalKey == LogicalKeyboardKey.browserBack ||
-          event.logicalKey == LogicalKeyboardKey.goBack ||
-          event.logicalKey == LogicalKeyboardKey.escape)) {
-        Navigator.pop(context);
-      }
-
-      for (final (index, element) in [
-        LogicalKeyboardKey.digit0,
-        LogicalKeyboardKey.digit1,
-        LogicalKeyboardKey.digit2,
-        LogicalKeyboardKey.digit3,
-        LogicalKeyboardKey.digit4,
-        LogicalKeyboardKey.digit5,
-        LogicalKeyboardKey.digit6,
-        LogicalKeyboardKey.digit7,
-        LogicalKeyboardKey.digit8,
-        LogicalKeyboardKey.digit9,
-      ].indexed) {
-        if (event.logicalKey == element) {
-          addToAmount(index.toStringAsFixed(0));
-          break;
-        }
-      }
-
-      for (final (index, element) in [
-        LogicalKeyboardKey.numpad0,
-        LogicalKeyboardKey.numpad1,
-        LogicalKeyboardKey.numpad2,
-        LogicalKeyboardKey.numpad3,
-        LogicalKeyboardKey.numpad4,
-        LogicalKeyboardKey.numpad5,
-        LogicalKeyboardKey.numpad6,
-        LogicalKeyboardKey.numpad7,
-        LogicalKeyboardKey.numpad8,
-        LogicalKeyboardKey.numpad9,
-      ].indexed) {
-        if (event.logicalKey == element) {
-          addToAmount(index.toStringAsFixed(0));
-          break;
-        }
-      }
-
-      if (event.logicalKey == LogicalKeyboardKey.period) {
-        addToAmount('.');
-      } else if (event.logicalKey == LogicalKeyboardKey.numpadDecimal) {
-        addToAmount('.');
-      } else if (event.logicalKey == LogicalKeyboardKey.comma) {
-        addToAmount('.');
-      } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
-        removeLastCharFromAmount();
-      } else if (event.logicalKey == LogicalKeyboardKey.delete) {
-        removeLastCharFromAmount();
-      } else if (event.logicalKey == LogicalKeyboardKey.enter) {
-        submitAmount();
-      }
-
-      return KeyEventResult.handled;
-    });
+      },
+    );
 
     _focusNode.requestFocus();
   }
@@ -201,10 +205,9 @@ class _AmountSelectorState extends State<AmountSelector> {
         double.tryParse(newText) != null &&
         _currentNumberHasDecimal() &&
         !CalculatorOperator.exprHasOperator(amountString)) {
-      final decimalPlaces = splitExprByNumbersAndOperator(amountString)
-          .last
-          .split('.')
-          .elementAtOrNull(1);
+      final decimalPlaces = splitExprByNumbersAndOperator(
+        amountString,
+      ).last.split('.').elementAtOrNull(1);
 
       if (decimalPlaces != null && decimalPlaces.length >= 2) {
         return;
@@ -236,7 +239,8 @@ class _AmountSelectorState extends State<AmountSelector> {
       } else if (newInputIsOperator) {
         // Replace last operator:
         setNewAmount(
-            amountString.substring(0, amountString.length - 1) + newText);
+          amountString.substring(0, amountString.length - 1) + newText,
+        );
       } else {
         setNewAmount(amountString + newText);
       }
@@ -292,213 +296,233 @@ class _AmountSelectorState extends State<AmountSelector> {
       title: widget.title,
       bodyPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
       body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // -----
-                  // ----> CALCULATOR OPERATION (only displayed if any operation is active):
-                  AnimatedExpanded(
-                    expand: CalculatorOperator.exprHasOperator(amountString),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(amountString),
-                      ],
-                    ),
-                  ),
-                  // -----
-                  // -----> CURRENT AMOUNT IN THE SELECTED CURRENCY:
-                  Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // -----
+                // ----> CALCULATOR OPERATION (only displayed if any operation is active):
+                AnimatedExpanded(
+                  expand: CalculatorOperator.exprHasOperator(amountString),
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Flexible(
-                        child: Builder(builder: (context) {
+                    children: [Text(amountString)],
+                  ),
+                ),
+                // -----
+                // -----> CURRENT AMOUNT IN THE SELECTED CURRENCY:
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Flexible(
+                      child: Builder(
+                        builder: (context) {
                           final double fontSize = valueToNumber >= 100000000
                               ? valueToNumber >= 100000000000000
-                                  ? 24
-                                  : 28
+                                    ? 24
+                                    : 28
                               : 32;
 
                           return AnimatedDefaultTextStyle(
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineLarge!
-                                .copyWith(
-                                  fontSize: fontSize,
-                                ),
+                            style: Theme.of(context).textTheme.headlineLarge!
+                                .copyWith(fontSize: fontSize),
                             duration: const Duration(milliseconds: 200),
-                            child: Builder(builder: (context) {
-                              const bigSizeStyle = TextStyle(
-                                fontWeight: FontWeight.w700,
-                              );
+                            child: Builder(
+                              builder: (context) {
+                                const bigSizeStyle = TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                );
 
-                              return CurrencyDisplayer(
-                                amountToConvert: valueToNumber,
-                                currency: widget.currency,
-                                followPrivateMode: false,
-                                decimalsStyle: TextStyle(
+                                return CurrencyDisplayer(
+                                  amountToConvert: valueToNumber,
+                                  currency: widget.currency,
+                                  followPrivateMode: false,
+                                  decimalsStyle: TextStyle(
                                     fontWeight: FontWeight.w200,
                                     fontSize: 22,
                                     color: amountString.contains('.')
                                         ? null
                                         : Theme.of(context)
-                                            .colorScheme
-                                            .onSurface
-                                            .withOpacity(0.3)),
-                                integerStyle: bigSizeStyle,
-                                currencyStyle: bigSizeStyle,
-                              );
-                            }),
+                                              .colorScheme
+                                              .onSurface
+                                              .withOpacity(0.3),
+                                  ),
+                                  integerStyle: bigSizeStyle,
+                                  currencyStyle: bigSizeStyle,
+                                );
+                              },
+                            ),
                           );
-                        }),
-                      )
-                    ],
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          const Divider(),
+          Flexible(
+            child: Container(
+              // height: min(MediaQuery.of(context).size.width * 0.8, 300),
+              margin: const EdgeInsets.only(top: 16),
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CalculatorButton(
+                          onClick: () =>
+                              addToAmount(CalculatorOperator.multiply.symbol),
+                          text: '×',
+                          style: CalculatorButtonStyle.secondary,
+                          flex: calculatorMode.toInt(),
+                        ),
+                        CalculatorButton(
+                          onClick: () => addToAmount('1'),
+                          text: '1',
+                        ),
+                        CalculatorButton(
+                          onClick: () => addToAmount('4'),
+                          text: '4',
+                        ),
+                        CalculatorButton(
+                          onClick: () => addToAmount('7'),
+                          text: '7',
+                        ),
+                        CalculatorButton(
+                          onClick: () => addToAmount('0'),
+                          text: '0',
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CalculatorButton(
+                          onClick: () =>
+                              addToAmount(CalculatorOperator.divide.symbol),
+                          text: '÷',
+                          style: CalculatorButtonStyle.secondary,
+                          flex: calculatorMode.toInt(),
+                        ),
+                        CalculatorButton(
+                          onClick: () => addToAmount('2'),
+                          text: '2',
+                        ),
+                        CalculatorButton(
+                          onClick: () => addToAmount('5'),
+                          text: '5',
+                        ),
+                        CalculatorButton(
+                          onClick: () => addToAmount('8'),
+                          text: '8',
+                        ),
+                        CalculatorButton(
+                          disabled: _currentNumberHasDecimal(),
+                          onClick: () => addToAmount('.'),
+                          text: '.',
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CalculatorButton(
+                          onClick: () =>
+                              addToAmount(CalculatorOperator.subtract.symbol),
+                          text: '-',
+                          style: CalculatorButtonStyle.secondary,
+                          flex: calculatorMode.toInt(),
+                        ),
+                        CalculatorButton(
+                          onClick: () => addToAmount('3'),
+                          text: '3',
+                        ),
+                        CalculatorButton(
+                          onClick: () => addToAmount('6'),
+                          text: '6',
+                        ),
+                        CalculatorButton(
+                          onClick: () => addToAmount('9'),
+                          text: '9',
+                        ),
+                        CalculatorButton(
+                          onClick: toggleCalculatorMode,
+                          style: CalculatorButtonStyle.secondary,
+                          icon: calculatorMode
+                              ? Icons.fullscreen_exit_rounded
+                              : Icons.calculate_rounded,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CalculatorButton(
+                          onClick: () =>
+                              addToAmount(CalculatorOperator.add.symbol),
+                          text: '+',
+                          style: CalculatorButtonStyle.secondary,
+                          flex: calculatorMode.toInt(),
+                        ),
+                        CalculatorButton(
+                          onClick: removeLastCharFromAmount,
+                          onLongPress: clearAmount,
+                          style: CalculatorButtonStyle.secondary,
+                          icon: Icons.backspace_outlined,
+                        ),
+                        CalculatorButton(
+                          onClick: toggleSign,
+                          style: CalculatorButtonStyle.secondary,
+                          icon: Icons.exposure_rounded,
+                          flex: calculatorMode || !widget.enableSignToggleButton
+                              ? 0
+                              : 1,
+                        ),
+                        CalculatorButton(
+                          disabled:
+                              valueToNumber == 0 ||
+                              valueToNumber.isInfinite ||
+                              valueToNumber.isNaN,
+                          onClick: submitAmount,
+                          icon: Icons.check_rounded,
+                          style: CalculatorButtonStyle.submit,
+                          flex: calculatorMode || !widget.enableSignToggleButton
+                              ? 3
+                              : 2,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 12),
-            const Divider(),
-            Flexible(
-              child: Container(
-                  // height: min(MediaQuery.of(context).size.width * 0.8, 300),
-                  margin: const EdgeInsets.only(top: 16),
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CalculatorButton(
-                              onClick: () => addToAmount(
-                                  CalculatorOperator.multiply.symbol),
-                              text: '×',
-                              style: CalculatorButtonStyle.secondary,
-                              flex: calculatorMode.toInt(),
-                            ),
-                            CalculatorButton(
-                                onClick: () => addToAmount('1'), text: '1'),
-                            CalculatorButton(
-                                onClick: () => addToAmount('4'), text: '4'),
-                            CalculatorButton(
-                                onClick: () => addToAmount('7'), text: '7'),
-                            CalculatorButton(
-                                onClick: () => addToAmount('0'), text: '0'),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CalculatorButton(
-                              onClick: () =>
-                                  addToAmount(CalculatorOperator.divide.symbol),
-                              text: '÷',
-                              style: CalculatorButtonStyle.secondary,
-                              flex: calculatorMode.toInt(),
-                            ),
-                            CalculatorButton(
-                                onClick: () => addToAmount('2'), text: '2'),
-                            CalculatorButton(
-                                onClick: () => addToAmount('5'), text: '5'),
-                            CalculatorButton(
-                                onClick: () => addToAmount('8'), text: '8'),
-                            CalculatorButton(
-                              disabled: _currentNumberHasDecimal(),
-                              onClick: () => addToAmount('.'),
-                              text: '.',
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CalculatorButton(
-                              onClick: () => addToAmount(
-                                  CalculatorOperator.subtract.symbol),
-                              text: '-',
-                              style: CalculatorButtonStyle.secondary,
-                              flex: calculatorMode.toInt(),
-                            ),
-                            CalculatorButton(
-                                onClick: () => addToAmount('3'), text: '3'),
-                            CalculatorButton(
-                                onClick: () => addToAmount('6'), text: '6'),
-                            CalculatorButton(
-                                onClick: () => addToAmount('9'), text: '9'),
-                            CalculatorButton(
-                              onClick: toggleCalculatorMode,
-                              style: CalculatorButtonStyle.secondary,
-                              icon: calculatorMode
-                                  ? Icons.fullscreen_exit_rounded
-                                  : Icons.calculate_rounded,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CalculatorButton(
-                              onClick: () =>
-                                  addToAmount(CalculatorOperator.add.symbol),
-                              text: '+',
-                              style: CalculatorButtonStyle.secondary,
-                              flex: calculatorMode.toInt(),
-                            ),
-                            CalculatorButton(
-                              onClick: removeLastCharFromAmount,
-                              onLongPress: clearAmount,
-                              style: CalculatorButtonStyle.secondary,
-                              icon: Icons.backspace_outlined,
-                            ),
-                            CalculatorButton(
-                              onClick: toggleSign,
-                              style: CalculatorButtonStyle.secondary,
-                              icon: Icons.exposure_rounded,
-                              flex: calculatorMode ||
-                                      !widget.enableSignToggleButton
-                                  ? 0
-                                  : 1,
-                            ),
-                            CalculatorButton(
-                              disabled: valueToNumber == 0 ||
-                                  valueToNumber.isInfinite ||
-                                  valueToNumber.isNaN,
-                              onClick: submitAmount,
-                              icon: Icons.check_rounded,
-                              style: CalculatorButtonStyle.submit,
-                              flex: calculatorMode ||
-                                      !widget.enableSignToggleButton
-                                  ? 3
-                                  : 2,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  )),
-            )
-          ]),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -525,13 +549,17 @@ class CalculatorButton extends StatelessWidget {
     this.flex = 1,
     this.disabled = false,
     this.style = CalculatorButtonStyle.main,
-  }) : assert((text != null && icon == null) || (text == null && icon != null),
-            'You must specify either text or icon, not both.');
+  }) : assert(
+         (text != null && icon == null) || (text == null && icon != null),
+         'You must specify either text or icon, not both.',
+       );
 
   @override
   Widget build(BuildContext context) {
-    EdgeInsets padding =
-        const EdgeInsets.symmetric(vertical: 2.5, horizontal: 2.5);
+    EdgeInsets padding = const EdgeInsets.symmetric(
+      vertical: 2.5,
+      horizontal: 2.5,
+    );
     if (MediaQuery.of(context).size.width >= 600) {
       padding = const EdgeInsets.symmetric(vertical: 4, horizontal: 5);
     } else if (MediaQuery.of(context).size.width >= 1024) {
@@ -569,8 +597,9 @@ class CalculatorButton extends StatelessWidget {
       effectiveTextColor = Theme.of(context).colorScheme.onPrimary;
       effectiveBgColor = Theme.of(context).colorScheme.primary;
     } else if (style == CalculatorButtonStyle.secondary) {
-      effectiveTextColor =
-          Theme.of(context).colorScheme.onSurface.withOpacity(0.9);
+      effectiveTextColor = Theme.of(
+        context,
+      ).colorScheme.onSurface.withOpacity(0.9);
       effectiveBgColor = Theme.of(context).colorScheme.surfaceContainerHigh;
     }
 
@@ -583,9 +612,7 @@ class CalculatorButton extends StatelessWidget {
         backgroundColor: Theme.of(context).brightness == Brightness.light
             ? effectiveBgColor.withOpacity(0.975)
             : effectiveBgColor.withOpacity(0.85),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         iconColor: effectiveTextColor,
         shadowColor: effectiveBgColor.withOpacity(0.85),
         surfaceTintColor: effectiveBgColor.withOpacity(0.85),
@@ -603,10 +630,7 @@ class CalculatorButton extends StatelessWidget {
           : Text(
               text!,
               softWrap: false,
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
             ),
     );
   }

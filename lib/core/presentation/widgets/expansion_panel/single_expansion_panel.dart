@@ -54,16 +54,19 @@ class _SingleExpansionPanelState extends State<SingleExpansionPanel> {
                       turns: expanded ? 0.5 : 0,
                       child: const Icon(Icons.arrow_drop_down),
                     ),
-                    label: Text(expanded
-                        ? t.general.show_less_fields
-                        : t.general.show_more_fields),
+                    label: Text(
+                      expanded
+                          ? t.general.show_less_fields
+                          : t.general.show_more_fields,
+                    ),
                   ),
                   const Expanded(child: Divider()),
                 ],
               ),
             );
           },
-          body: widget.child, isExpanded: expanded,
+          body: widget.child,
+          isExpanded: expanded,
         ),
       ],
     );

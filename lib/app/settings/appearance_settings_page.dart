@@ -30,11 +30,7 @@ class SelectItem<T> {
 
   IconData? icon;
 
-  SelectItem({
-    required this.value,
-    required this.label,
-    this.icon,
-  });
+  SelectItem({required this.value, required this.label, this.icon});
 }
 
 class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
@@ -45,7 +41,8 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
     final t = Translations.of(context);
 
     final currentLangTag = appStateSettings[SettingKey.appLanguage];
-    final currentSelectedLangDisplayName = appSupportedLocales
+    final currentSelectedLangDisplayName =
+        appSupportedLocales
             .firstWhereOrNull(
               (element) => element.locale.languageTag == currentLangTag,
             )
@@ -53,9 +50,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
         t.settings.locale_auto;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(t.settings.title_short),
-      ),
+      appBar: AppBar(title: Text(t.settings.title_short)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(bottom: 16),
         child: Column(
@@ -67,8 +62,9 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               leading: const Icon(Icons.language),
               subtitle: Text(currentSelectedLangDisplayName),
               onTap: () async {
-                final snackbarDisplayer =
-                    ScaffoldMessenger.of(context).showSnackBar;
+                final snackbarDisplayer = ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar;
 
                 final newLang = await showLanguageSelectorBottomSheet(
                   context,
@@ -80,8 +76,10 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                 }
 
                 if (newLang.result != null) {
-                  await LocaleSettings.setLocaleRaw(newLang.result!,
-                      listenToDeviceLocale: true);
+                  await LocaleSettings.setLocaleRaw(
+                    newLang.result!,
+                    listenToDeviceLocale: true,
+                  );
                 } else {
                   await LocaleSettings.useDeviceLocale();
                 }
@@ -93,18 +91,22 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     updateGlobalState: true,
                   );
                 } catch (e) {
-                  snackbarDisplayer(const SnackBar(
-                    content: Text(
-                        'There was an error persisting this setting on your device. Contact the developers for more information'),
-                  ));
+                  snackbarDisplayer(
+                    const SnackBar(
+                      content: Text(
+                        'There was an error persisting this setting on your device. Contact the developers for more information',
+                      ),
+                    ),
+                  );
                 }
               },
             ),
             createListSeparator(context, t.settings.theme_and_colors),
             Builder(
               builder: (context) {
-                final theme =
-                    getThemeFromString(appStateSettings[SettingKey.themeMode]);
+                final theme = getThemeFromString(
+                  appStateSettings[SettingKey.themeMode],
+                );
 
                 return ListTile(
                   title: Row(
@@ -112,7 +114,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     children: [
                       Flexible(child: Text(t.settings.theme)),
                       const SizedBox(width: 12),
-                      Flexible(child: _buildThemeDropdown(theme))
+                      Flexible(child: _buildThemeDropdown(theme)),
                     ],
                   ),
                   onTap: () {
@@ -153,62 +155,64 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               },
             ),
             StreamBuilder(
-                stream: UserSettingService.instance
-                    .getSettingFromDB(SettingKey.accentColor),
-                initialData: 'auto',
-                builder: (context, snapshot) {
-                  late final Color color;
+              stream: UserSettingService.instance.getSettingFromDB(
+                SettingKey.accentColor,
+              ),
+              initialData: 'auto',
+              builder: (context, snapshot) {
+                late final Color color;
 
-                  if (snapshot.data! == 'auto') {
-                    color = Theme.of(context).colorScheme.primary;
-                  } else {
-                    color = ColorHex.get(snapshot.data!);
-                  }
+                if (snapshot.data! == 'auto') {
+                  color = Theme.of(context).colorScheme.primary;
+                } else {
+                  color = ColorHex.get(snapshot.data!);
+                }
 
-                  return ListTile(
-                    onTap: snapshot.data! == 'auto'
-                        ? null
-                        : () => showColorPickerModal(
-                              context,
-                              ColorPickerModal(
-                                colorOptions: [
-                                  brandBlue.toHex(),
-                                  ...defaultColorPickerOptions
-                                ],
-                                selectedColor: color.toHex(),
-                                onColorSelected: (value) {
-                                  Navigator.pop(context);
+                return ListTile(
+                  onTap: snapshot.data! == 'auto'
+                      ? null
+                      : () => showColorPickerModal(
+                          context,
+                          ColorPickerModal(
+                            colorOptions: [
+                              brandBlue.toHex(),
+                              ...defaultColorPickerOptions,
+                            ],
+                            selectedColor: color.toHex(),
+                            onColorSelected: (value) {
+                              Navigator.pop(context);
 
-                                  setState(() {
-                                    UserSettingService.instance.setItem(
-                                      SettingKey.accentColor,
-                                      value.toHex(),
-                                      updateGlobalState: true,
-                                    );
-                                  });
-                                },
-                              ),
-                            ),
-                    title: Text(t.settings.accent_color),
-                    subtitle: Text(t.settings.accent_color_descr),
-                    enabled: snapshot.data! != 'auto',
-                    trailing: SizedBox(
-                      height: 46,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        clipBehavior: Clip.hardEdge,
-                        width: 46,
-                        height: 46,
-                        decoration: BoxDecoration(
-                          color: color.withOpacity(
-                            snapshot.data! != 'auto' ? 1 : 0.4,
+                              setState(() {
+                                UserSettingService.instance.setItem(
+                                  SettingKey.accentColor,
+                                  value.toHex(),
+                                  updateGlobalState: true,
+                                );
+                              });
+                            },
                           ),
-                          borderRadius: BorderRadius.circular(100),
                         ),
+                  title: Text(t.settings.accent_color),
+                  subtitle: Text(t.settings.accent_color_descr),
+                  enabled: snapshot.data! != 'auto',
+                  trailing: SizedBox(
+                    height: 46,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      clipBehavior: Clip.hardEdge,
+                      width: 46,
+                      height: 46,
+                      decoration: BoxDecoration(
+                        color: color.withOpacity(
+                          snapshot.data! != 'auto' ? 1 : 0.4,
+                        ),
+                        borderRadius: BorderRadius.circular(100),
                       ),
                     ),
-                  );
-                }),
+                  ),
+                );
+              },
+            ),
             createListSeparator(context, t.settings.security.title),
             MonekinTileSwitch(
               title: t.settings.security.private_mode_at_launch,
@@ -221,27 +225,30 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               },
             ),
             StreamBuilder(
-                stream: PrivateModeService.instance.privateModeStream,
-                builder: (context, snapshot) {
-                  final initialValue = (snapshot.data ?? false);
+              stream: PrivateModeService.instance.privateModeStream,
+              builder: (context, snapshot) {
+                final initialValue = (snapshot.data ?? false);
 
-                  return MonekinTileSwitch(
-                    title: t.settings.security.private_mode,
-                    subtitle: t.settings.security.private_mode_descr,
-                    icon: ScaledAnimatedSwitcher(
-                      keyToWatch: initialValue.toString(),
-                      child: Icon(initialValue
+                return MonekinTileSwitch(
+                  title: t.settings.security.private_mode,
+                  subtitle: t.settings.security.private_mode_descr,
+                  icon: ScaledAnimatedSwitcher(
+                    keyToWatch: initialValue.toString(),
+                    child: Icon(
+                      initialValue
                           ? Icons.lock_outline_rounded
-                          : Icons.lock_open_rounded),
+                          : Icons.lock_open_rounded,
                     ),
-                    initialValue: initialValue,
-                    onSwitch: (bool value) {
-                      setState(() {
-                        PrivateModeService.instance.setPrivateMode(value);
-                      });
-                    },
-                  );
-                }),
+                  ),
+                  initialValue: initialValue,
+                  onSwitch: (bool value) {
+                    setState(() {
+                      PrivateModeService.instance.setPrivateMode(value);
+                    });
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -253,25 +260,18 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
       canRequestFocus: false,
       descendantsAreFocusable: false,
       child: MonekinDropdownSelect(
-          key: _themeDropdownKey,
-          initial: theme,
-          compact: true,
-          expanded: false,
-          items: const [
-            ThemeMode.system,
-            ThemeMode.light,
-            ThemeMode.dark,
-          ],
-          getLabel: (x) => x.displayName(context),
-          onChanged: (mode) {
-            UserSettingService.instance
-                .setItem(
-                  SettingKey.themeMode,
-                  mode.name,
-                  updateGlobalState: true,
-                )
-                .then((value) => null);
-          }),
+        key: _themeDropdownKey,
+        initial: theme,
+        compact: true,
+        expanded: false,
+        items: const [ThemeMode.system, ThemeMode.light, ThemeMode.dark],
+        getLabel: (x) => x.displayName(context),
+        onChanged: (mode) {
+          UserSettingService.instance
+              .setItem(SettingKey.themeMode, mode.name, updateGlobalState: true)
+              .then((value) => null);
+        },
+      ),
     );
   }
 }

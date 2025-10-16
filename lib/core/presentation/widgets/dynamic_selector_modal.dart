@@ -36,10 +36,7 @@ class DynamicSelectorModal<T, V> extends StatelessWidget {
         selected: value == selectedValue,
         secondary: icon == null
             ? null
-            : Icon(
-                icon,
-                color: Colors.grey.shade600,
-              ),
+            : Icon(icon, color: Colors.grey.shade600),
         value: value,
         title: Text(displayName),
         groupValue: selectedValue,
@@ -62,7 +59,7 @@ class DynamicSelectorModal<T, V> extends StatelessWidget {
           children: [
             if (headerWidget != null) headerWidget!,
             ...items.map((item) => _radioTile(context, item)),
-            const SizedBox(height: 12)
+            const SizedBox(height: 12),
           ],
         ),
       ),

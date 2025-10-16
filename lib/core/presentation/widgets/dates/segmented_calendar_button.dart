@@ -99,11 +99,9 @@ class _SegmentedCalendarButtonState extends State<SegmentedCalendarButton> {
   Widget build(BuildContext context) {
     return Container(
       foregroundDecoration: BoxDecoration(
-        border: widget.border ??
-            Border.all(
-              color: Theme.of(context).colorScheme.primary,
-              width: 1,
-            ),
+        border:
+            widget.border ??
+            Border.all(color: Theme.of(context).colorScheme.primary, width: 1),
         borderRadius: BorderRadius.circular(widget.borderRadius),
       ),
       child: Row(
@@ -112,121 +110,128 @@ class _SegmentedCalendarButtonState extends State<SegmentedCalendarButton> {
           if (datePeriodService.canNavigate)
             // --- GO TO PREV PERIOD BUTTON ---
             buildArrowButton(
-                icon: Icons.arrow_back_ios_rounded,
-                disabled: datePeriodService.getNextDates().$2 == null ||
-                    widget.minDate != null &&
-                        datePeriodService
-                                .getPrevDates()
-                                .$2!
-                                .compareTo(widget.minDate!) <
-                            0,
-                onPressed: () {
-                  HapticFeedback.lightImpact();
+              icon: Icons.arrow_back_ios_rounded,
+              disabled:
+                  datePeriodService.getNextDates().$2 == null ||
+                  widget.minDate != null &&
+                      datePeriodService.getPrevDates().$2!.compareTo(
+                            widget.minDate!,
+                          ) <
+                          0,
+              onPressed: () {
+                HapticFeedback.lightImpact();
 
-                  setState(() {
-                    datePeriodService = datePeriodService.copyWith(
-                      periodModifier: datePeriodService.periodModifier - 1,
-                    );
-                  });
+                setState(() {
+                  datePeriodService = datePeriodService.copyWith(
+                    periodModifier: datePeriodService.periodModifier - 1,
+                  );
+                });
 
-                  widget.onChanged(datePeriodService);
-                },
-                borderRadius: BorderRadius.horizontal(
-                  left: Radius.circular(widget.borderRadius),
-                  right: Radius.zero,
-                )),
+                widget.onChanged(datePeriodService);
+              },
+              borderRadius: BorderRadius.horizontal(
+                left: Radius.circular(widget.borderRadius),
+                right: Radius.zero,
+              ),
+            ),
 
           // --- MAIN BUTTON. PERIOD DISPLAYER AND SELECTOR ---
-
           Expanded(
             flex: 4,
-            child: Builder(builder: (context) {
-              final buttonColor = widget.mainButtonColor ??
-                  Theme.of(context).colorScheme.onPrimary;
-              final buttonBgColor = widget.mainButtonBackgroundColor ??
-                  Theme.of(context).colorScheme.primary;
+            child: Builder(
+              builder: (context) {
+                final buttonColor =
+                    widget.mainButtonColor ??
+                    Theme.of(context).colorScheme.onPrimary;
+                final buttonBgColor =
+                    widget.mainButtonBackgroundColor ??
+                    Theme.of(context).colorScheme.primary;
 
-              return FilledButton(
-                onPressed: !widget.canChangePeriodType
-                    ? null
-                    : () {
-                        openDatePeriodModal(
-                          context,
-                          DatePeriodModal(
-                              initialDatePeriod: datePeriodService.datePeriod),
-                        ).then((value) {
-                          if (value == null) return;
+                return FilledButton(
+                  onPressed: !widget.canChangePeriodType
+                      ? null
+                      : () {
+                          openDatePeriodModal(
+                            context,
+                            DatePeriodModal(
+                              initialDatePeriod: datePeriodService.datePeriod,
+                            ),
+                          ).then((value) {
+                            if (value == null) return;
 
-                          setState(() {
-                            datePeriodService = datePeriodService.copyWith(
-                              periodModifier: 0,
-                              datePeriod: value,
-                            );
+                            setState(() {
+                              datePeriodService = datePeriodService.copyWith(
+                                periodModifier: 0,
+                                datePeriod: value,
+                              );
+                            });
+
+                            widget.onChanged(datePeriodService);
                           });
-
-                          widget.onChanged(datePeriodService);
-                        });
-                      },
-                style: FilledButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  backgroundColor: buttonBgColor,
-                  disabledBackgroundColor: buttonBgColor,
-                  disabledForegroundColor: buttonColor,
-                  foregroundColor: buttonColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: datePeriodService.canNavigate
-                        ? BorderRadius.zero
-                        : BorderRadius.circular(widget.borderRadius),
-                  ),
-                  fixedSize: Size.fromHeight(widget.buttonHeight),
-                  minimumSize: const Size.fromHeight(0),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 2,
-                  children: [
-                    Text(
-                      datePeriodService.getText(
-                        context,
-                        showLongMonth: !datePeriodService.canNavigate,
-                      ),
+                        },
+                  style: FilledButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    backgroundColor: buttonBgColor,
+                    disabledBackgroundColor: buttonBgColor,
+                    disabledForegroundColor: buttonColor,
+                    foregroundColor: buttonColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: datePeriodService.canNavigate
+                          ? BorderRadius.zero
+                          : BorderRadius.circular(widget.borderRadius),
                     ),
-                    if (widget.canChangePeriodType)
-                      Icon(Icons.arrow_drop_down_rounded,
-                          color: buttonColor.withOpacity(0.925))
-                  ],
-                ),
-              );
-            }),
+                    fixedSize: Size.fromHeight(widget.buttonHeight),
+                    minimumSize: const Size.fromHeight(0),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 2,
+                    children: [
+                      Text(
+                        datePeriodService.getText(
+                          context,
+                          showLongMonth: !datePeriodService.canNavigate,
+                        ),
+                      ),
+                      if (widget.canChangePeriodType)
+                        Icon(
+                          Icons.arrow_drop_down_rounded,
+                          color: buttonColor.withOpacity(0.925),
+                        ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
           if (datePeriodService.canNavigate)
             // --- GO TO NEXT PERIOD BUTTON ---
-
             buildArrowButton(
-                icon: Icons.arrow_forward_ios_rounded,
-                disabled: datePeriodService.getNextDates().$1 == null ||
-                    widget.maxDate != null &&
-                        datePeriodService
-                                .getNextDates()
-                                .$1!
-                                .compareTo(widget.maxDate!) >
-                            0,
-                onPressed: () {
-                  HapticFeedback.lightImpact();
+              icon: Icons.arrow_forward_ios_rounded,
+              disabled:
+                  datePeriodService.getNextDates().$1 == null ||
+                  widget.maxDate != null &&
+                      datePeriodService.getNextDates().$1!.compareTo(
+                            widget.maxDate!,
+                          ) >
+                          0,
+              onPressed: () {
+                HapticFeedback.lightImpact();
 
-                  setState(() {
-                    datePeriodService = datePeriodService.copyWith(
-                      periodModifier: datePeriodService.periodModifier + 1,
-                    );
-                  });
+                setState(() {
+                  datePeriodService = datePeriodService.copyWith(
+                    periodModifier: datePeriodService.periodModifier + 1,
+                  );
+                });
 
-                  widget.onChanged(datePeriodService);
-                },
-                borderRadius: BorderRadius.horizontal(
-                  right: Radius.circular(widget.borderRadius),
-                  left: Radius.zero,
-                )),
+                widget.onChanged(datePeriodService);
+              },
+              borderRadius: BorderRadius.horizontal(
+                right: Radius.circular(widget.borderRadius),
+                left: Radius.zero,
+              ),
+            ),
         ],
       ),
     );

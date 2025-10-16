@@ -74,18 +74,22 @@ class _AccountFormPageState extends State<AccountFormPage> {
       if ((await TransactionService.instance
               .getTransactions(
                 filters: TransactionFilters(
-                    accountsIDs: [_accountToEdit!.id], maxDate: _openingDate),
+                  accountsIDs: [_accountToEdit!.id],
+                  maxDate: _openingDate,
+                ),
                 limit: 2,
               )
               .first)
           .isNotEmpty) {
         snackbarDisplayer(
-            SnackBar(content: Text(t.account.form.tr_before_opening_date)));
+          SnackBar(content: Text(t.account.form.tr_before_opening_date)),
+        );
 
         return;
       }
 
-      newBalance = _accountToEdit!.iniValue +
+      newBalance =
+          _accountToEdit!.iniValue +
           newBalance -
           await accountService.getAccountMoney(account: _accountToEdit!).first;
     }
@@ -115,9 +119,9 @@ class _AccountFormPageState extends State<AccountFormPage> {
         ..where((tbl) => tbl.name.isValue(_nameController.text));
 
       if (await query.watchSingleOrNull().first != null) {
-        snackbarDisplayer(SnackBar(
-          content: Text(t.account.form.already_exists),
-        ));
+        snackbarDisplayer(
+          SnackBar(content: Text(t.account.form.already_exists)),
+        );
 
         return;
       }
@@ -168,10 +172,9 @@ class _AccountFormPageState extends State<AccountFormPage> {
 
     _type = _accountToEdit!.type;
 
-    accountService
-        .getAccountMoney(account: _accountToEdit!)
-        .first
-        .then((value) {
+    accountService.getAccountMoney(account: _accountToEdit!).first.then((
+      value,
+    ) {
       _balanceController.text = value.toString();
 
       _color = _accountToEdit!.getComputedColor(context);
@@ -183,10 +186,10 @@ class _AccountFormPageState extends State<AccountFormPage> {
         .getCurrencyByCode(_accountToEdit!.currency.code)
         .first
         .then((value) {
-      setState(() {
-        _currency = value;
-      });
-    });
+          setState(() {
+            _currency = value;
+          });
+        });
 
     setState(() {});
   }
@@ -218,85 +221,94 @@ class _AccountFormPageState extends State<AccountFormPage> {
               }
             },
             icon: const Icon(Icons.save),
-            label: Text(_accountToEdit != null
-                ? t.account.form.edit
-                : t.account.form.create),
+            label: Text(
+              _accountToEdit != null
+                  ? t.account.form.edit
+                  : t.account.form.create,
+            ),
           ),
-        )
+        ),
       ],
       appBar: AppBar(
-        title: Text(widget.account != null
-            ? t.account.form.edit
-            : t.account.form.create),
+        title: Text(
+          widget.account != null ? t.account.form.edit : t.account.form.create,
+        ),
       ),
-      body: Builder(builder: (context) {
-        if (widget.account != null && _accountToEdit == null) {
-          return const LinearProgressIndicator();
-        }
+      body: Builder(
+        builder: (context) {
+          if (widget.account != null && _accountToEdit == null) {
+            return const LinearProgressIndicator();
+          }
 
-        final isDark = isAppInDarkBrightness(context);
+          final isDark = isAppInDarkBrightness(context);
 
-        return SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                IconAndColorSelector(
-                  iconSelectorModalSubtitle:
-                      t.icon_selector.select_account_icon,
-                  iconDisplayer: IconDisplayer(
-                    supportedIcon: _icon,
-                    size: 36,
-                    isOutline: true,
-                    outlineWidth: 1.5,
-                    mainColor: _color
-                        .lighten(isDark ? IconDisplayer.darkLightenFactor : 0),
-                    secondaryColor: _color
-                        .lighten(isDark ? 0 : IconDisplayer.darkLightenFactor),
-                    displayMode: IconDisplayMode.polygon,
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  IconAndColorSelector(
+                    iconSelectorModalSubtitle:
+                        t.icon_selector.select_account_icon,
+                    iconDisplayer: IconDisplayer(
+                      supportedIcon: _icon,
+                      size: 36,
+                      isOutline: true,
+                      outlineWidth: 1.5,
+                      mainColor: _color.lighten(
+                        isDark ? IconDisplayer.darkLightenFactor : 0,
+                      ),
+                      secondaryColor: _color.lighten(
+                        isDark ? 0 : IconDisplayer.darkLightenFactor,
+                      ),
+                      displayMode: IconDisplayMode.polygon,
+                    ),
+                    onDataChange: ((data) {
+                      setState(() {
+                        _icon = data.icon;
+                        _color = data.color;
+                      });
+                    }),
+                    data: (color: _color, icon: _icon),
                   ),
-                  onDataChange: ((data) {
-                    setState(() {
-                      _icon = data.icon;
-                      _color = data.color;
-                    });
-                  }),
-                  data: (color: _color, icon: _icon),
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _nameController,
-                  decoration: InputDecoration(
-                    labelText: '${t.account.form.name} *',
-                    hintText: 'Ex.: My account',
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      labelText: '${t.account.form.name} *',
+                      hintText: 'Ex.: My account',
+                    ),
+                    validator: (value) =>
+                        fieldValidator(value, isRequired: true),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    textInputAction: TextInputAction.next,
                   ),
-                  validator: (value) => fieldValidator(value, isRequired: true),
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  textInputAction: TextInputAction.next,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _balanceController,
-                  decoration: InputDecoration(
-                    labelText: widget.account != null
-                        ? '${t.account.form.current_balance} *'
-                        : '${t.account.form.initial_balance} *',
-                    hintText: 'Ex.: 200',
-                    suffixText: _currency?.symbol,
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _balanceController,
+                    decoration: InputDecoration(
+                      labelText: widget.account != null
+                          ? '${t.account.form.current_balance} *'
+                          : '${t.account.form.initial_balance} *',
+                      hintText: 'Ex.: 200',
+                      suffixText: _currency?.symbol,
+                    ),
+                    keyboardType: TextInputType.number,
+                    enabled:
+                        !(widget.account != null && widget.account!.isClosed),
+                    inputFormatters: twoDecimalDigitFormatter,
+                    validator: (value) => fieldValidator(
+                      value,
+                      validator: ValidatorType.double,
+                      isRequired: true,
+                    ),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    textInputAction: TextInputAction.next,
                   ),
-                  keyboardType: TextInputType.number,
-                  enabled:
-                      !(widget.account != null && widget.account!.isClosed),
-                  inputFormatters: twoDecimalDigitFormatter,
-                  validator: (value) => fieldValidator(value,
-                      validator: ValidatorType.double, isRequired: true),
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  textInputAction: TextInputAction.next,
-                ),
-                const SizedBox(height: 16),
-                ReadOnlyTextFormField(
+                  const SizedBox(height: 16),
+                  ReadOnlyTextFormField(
                     displayValue: _currency != null
                         ? _currency!.name
                         : t.general.unspecified,
@@ -306,33 +318,37 @@ class _AccountFormPageState extends State<AccountFormPage> {
                       showCurrencySelectorModal(
                         context,
                         CurrencySelectorModal(
-                            preselectedCurrency: _currency!,
-                            onCurrencySelected: (newCurrency) {
-                              setState(() {
-                                _currency = newCurrency;
-                              });
-                            }),
+                          preselectedCurrency: _currency!,
+                          onCurrencySelected: (newCurrency) {
+                            setState(() {
+                              _currency = newCurrency;
+                            });
+                          },
+                        ),
                       );
                     },
                     decoration: InputDecoration(
-                        labelText: t.currencies.currency,
-                        suffixIcon: const Icon(Icons.arrow_drop_down),
-                        prefixIcon: _currency != null
-                            ? Container(
-                                margin: const EdgeInsets.all(10),
-                                clipBehavior: Clip.hardEdge,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100)),
-                                child: SvgPicture.asset(
-                                  _currency!.currencyIconPath,
-                                  height: 25,
-                                  width: 25,
-                                ),
-                              )
-                            : null)),
-                const SizedBox(height: 12),
-                if (_currency != null)
-                  StreamBuilder(
+                      labelText: t.currencies.currency,
+                      suffixIcon: const Icon(Icons.arrow_drop_down),
+                      prefixIcon: _currency != null
+                          ? Container(
+                              margin: const EdgeInsets.all(10),
+                              clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              child: SvgPicture.asset(
+                                _currency!.currencyIconPath,
+                                height: 25,
+                                width: 25,
+                              ),
+                            )
+                          : null,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  if (_currency != null)
+                    StreamBuilder(
                       stream: ExchangeRateService.instance
                           .getLastExchangeRateOf(currencyCode: _currency!.code),
                       builder: (context, snapshot) {
@@ -341,120 +357,124 @@ class _AccountFormPageState extends State<AccountFormPage> {
                           return Container();
                         } else {
                           return InlineInfoCard(
-                              text: t.account.form.currency_not_found_warn,
-                              mode: InlineInfoCardMode.warn);
+                            text: t.account.form.currency_not_found_warn,
+                            mode: InlineInfoCardMode.warn,
+                          );
                         }
-                      }),
-                StreamBuilder(
-                  stream: _accountToEdit == null
-                      ? Stream.value(true)
-                      : TransactionService.instance
-                          .countTransactions(
-                            predicate: TransactionFilters(
-                              transactionTypes: [
-                                TransactionType.E,
-                                TransactionType.I
-                              ],
-                              accountsIDs: [_accountToEdit!.id],
-                            ),
-                          )
-                          .map((event) => event.numberOfRes == 0),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData || snapshot.data! == false) {
-                      return Container();
-                    }
+                      },
+                    ),
+                  StreamBuilder(
+                    stream: _accountToEdit == null
+                        ? Stream.value(true)
+                        : TransactionService.instance
+                              .countTransactions(
+                                predicate: TransactionFilters(
+                                  transactionTypes: [
+                                    TransactionType.E,
+                                    TransactionType.I,
+                                  ],
+                                  accountsIDs: [_accountToEdit!.id],
+                                ),
+                              )
+                              .map((event) => event.numberOfRes == 0),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData || snapshot.data! == false) {
+                        return Container();
+                      }
 
-                    return Column(
-                      children: [
-                        const SizedBox(height: 12),
-                        AccountTypeSelector(
+                      return Column(
+                        children: [
+                          const SizedBox(height: 12),
+                          AccountTypeSelector(
                             selectedType: _type,
                             onSelected: (newType) {
                               setState(() {
                                 _type = newType;
                               });
-                            })
-                      ],
-                    );
-                  },
-                ),
-                const SizedBox(height: 16),
-                SingleExpansionPanel(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 12),
-                      DateTimeFormField(
-                        decoration: InputDecoration(
-                          suffixIcon: const Icon(Icons.event),
-                          labelText: '${t.account.date} *',
-                        ),
-                        initialDate: _openingDate,
-                        dateFormat: DateFormat.yMMMd().add_jm(),
-                        lastDate: _closeDate ?? DateTime.now(),
-                        validator: (e) =>
-                            e == null ? t.general.validations.required : null,
-                        onDateSelected: (DateTime value) {
-                          setState(() {
-                            _openingDate = value;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 22),
-                      if (_accountToEdit != null &&
-                          _accountToEdit!.isClosed) ...[
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  SingleExpansionPanel(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 12),
                         DateTimeFormField(
                           decoration: InputDecoration(
                             suffixIcon: const Icon(Icons.event),
-                            labelText: t.account.close_date,
+                            labelText: '${t.account.date} *',
                           ),
-                          initialDate: _closeDate,
-                          firstDate: _openingDate,
-                          lastDate: DateTime.now(),
+                          initialDate: _openingDate,
                           dateFormat: DateFormat.yMMMd().add_jm(),
+                          lastDate: _closeDate ?? DateTime.now(),
+                          validator: (e) =>
+                              e == null ? t.general.validations.required : null,
                           onDateSelected: (DateTime value) {
                             setState(() {
-                              _closeDate = value;
+                              _openingDate = value;
                             });
                           },
                         ),
                         const SizedBox(height: 22),
+                        if (_accountToEdit != null &&
+                            _accountToEdit!.isClosed) ...[
+                          DateTimeFormField(
+                            decoration: InputDecoration(
+                              suffixIcon: const Icon(Icons.event),
+                              labelText: t.account.close_date,
+                            ),
+                            initialDate: _closeDate,
+                            firstDate: _openingDate,
+                            lastDate: DateTime.now(),
+                            dateFormat: DateFormat.yMMMd().add_jm(),
+                            onDateSelected: (DateTime value) {
+                              setState(() {
+                                _closeDate = value;
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 22),
+                        ],
+                        TextFormField(
+                          controller: _ibanController,
+                          decoration: InputDecoration(
+                            labelText: t.account.form.iban,
+                          ),
+                          textInputAction: TextInputAction.next,
+                        ),
+                        const SizedBox(height: 22),
+                        TextFormField(
+                          controller: _swiftController,
+                          decoration: InputDecoration(
+                            labelText: t.account.form.swift,
+                          ),
+                          textInputAction: TextInputAction.next,
+                        ),
+                        const SizedBox(height: 22),
+                        TextFormField(
+                          minLines: 2,
+                          maxLines: 10,
+                          controller: _textController,
+                          decoration: InputDecoration(
+                            labelText: t.account.form.notes,
+                            hintText: t.account.form.notes_placeholder,
+                            alignLabelWithHint: true,
+                          ),
+                          textInputAction: TextInputAction.next,
+                        ),
+                        const SizedBox(height: 22),
                       ],
-                      TextFormField(
-                        controller: _ibanController,
-                        decoration: InputDecoration(
-                          labelText: t.account.form.iban,
-                        ),
-                        textInputAction: TextInputAction.next,
-                      ),
-                      const SizedBox(height: 22),
-                      TextFormField(
-                        controller: _swiftController,
-                        decoration: InputDecoration(
-                          labelText: t.account.form.swift,
-                        ),
-                        textInputAction: TextInputAction.next,
-                      ),
-                      const SizedBox(height: 22),
-                      TextFormField(
-                        minLines: 2,
-                        maxLines: 10,
-                        controller: _textController,
-                        decoration: InputDecoration(
-                          labelText: t.account.form.notes,
-                          hintText: t.account.form.notes_placeholder,
-                          alignLabelWithHint: true,
-                        ),
-                        textInputAction: TextInputAction.next,
-                      ),
-                      const SizedBox(height: 22),
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      }),
+          );
+        },
+      ),
     );
   }
 }

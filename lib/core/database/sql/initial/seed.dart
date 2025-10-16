@@ -11,7 +11,8 @@ String appDataInitialSeedSQL(int schemaVersion) {
 }
 
 // TODO: Pref currency missing, maybe we should initialise it too
-String settingsInitialSeedSQL = """
+String settingsInitialSeedSQL =
+    """
   INSERT INTO userSettings VALUES 
   ('${SettingKey.avatar.name}', 'man'), 
   ('${SettingKey.userName.name}', 'User'), 

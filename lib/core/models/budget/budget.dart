@@ -23,8 +23,9 @@ class Budget extends BudgetInDB {
     super.startDate,
     super.endDate,
   }) {
-    this.categories =
-        categories != null && categories.isEmpty ? null : categories;
+    this.categories = categories != null && categories.isEmpty
+        ? null
+        : categories;
 
     this.accounts = accounts != null && accounts.isEmpty ? null : accounts;
   }
@@ -40,9 +41,10 @@ class Budget extends BudgetInDB {
 
   DatePeriodState get periodState {
     return DatePeriodState(
-        datePeriod: intervalPeriod != null
-            ? DatePeriod.withPeriods(intervalPeriod!)
-            : DatePeriod.customRange(startDate, endDate));
+      datePeriod: intervalPeriod != null
+          ? DatePeriod.withPeriods(intervalPeriod!)
+          : DatePeriod.customRange(startDate, endDate),
+    );
   }
 
   int get daysToTheEnd {
@@ -53,10 +55,8 @@ class Budget extends BudgetInDB {
     return currentDateRange.start.difference(DateTime.now()).inDays;
   }
 
-  double get todayPercent => getPercentBetweenDates(
-        currentDateRange,
-        DateTime.now(),
-      );
+  double get todayPercent =>
+      getPercentBetweenDates(currentDateRange, DateTime.now());
 
   /// Whether or not the budget is relative to the current datetime.
   /// That is, if the budget has not already passed and has already started
@@ -70,14 +70,16 @@ class Budget extends BudgetInDB {
       DateTime.now().compareTo(currentDateRange.start) < 0;
 
   TransactionFilters get trFilters => TransactionFilters(
-        status: TransactionStatus.notIn(
-            {TransactionStatus.pending, TransactionStatus.voided}),
-        transactionTypes: [TransactionType.E],
-        minDate: currentDateRange.start,
-        maxDate: currentDateRange.end,
-        categories: categories,
-        accountsIDs: accounts,
-      );
+    status: TransactionStatus.notIn({
+      TransactionStatus.pending,
+      TransactionStatus.voided,
+    }),
+    transactionTypes: [TransactionType.E],
+    minDate: currentDateRange.start,
+    maxDate: currentDateRange.end,
+    categories: categories,
+    accountsIDs: accounts,
+  );
 
   /// Get the amount of money relative to this budget for a given date
   Stream<double> getValueOnDate(DateTime? date) {
@@ -85,23 +87,23 @@ class Budget extends BudgetInDB {
 
     return AccountService.instance
         .getAccountsBalance(
-      filters: TransactionFilters(
-        transactionTypes: [TransactionType.E],
-        accountsIDs: accounts,
-        categories: categories,
-        minDate: currentDateRange.start,
-        maxDate: date,
-      ),
-    )
+          filters: TransactionFilters(
+            transactionTypes: [TransactionType.E],
+            accountsIDs: accounts,
+            categories: categories,
+            minDate: currentDateRange.start,
+            maxDate: date,
+          ),
+        )
         .map((res) {
-      res = res * -1;
+          res = res * -1;
 
-      if (res <= 0) {
-        return 0.0;
-      }
+          if (res <= 0) {
+            return 0.0;
+          }
 
-      return res;
-    });
+          return res;
+        });
   }
 
   /// Get the amount of money relative to this budget for the current date-time

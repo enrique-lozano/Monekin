@@ -13,25 +13,30 @@ class TransactionQueryStatResult {
   int numberOfRes;
   double valueSum;
 
-  TransactionQueryStatResult(
-      {required this.numberOfRes, required this.valueSum});
+  TransactionQueryStatResult({
+    required this.numberOfRes,
+    required this.valueSum,
+  });
 }
 
-typedef TransactionQueryOrderBy = OrderBy Function(
-    Transactions transaction,
-    Accounts account,
-    Currencies accountCurrency,
-    Accounts receivingAccount,
-    Currencies receivingAccountCurrency,
-    Categories c,
-    Categories);
+typedef TransactionQueryOrderBy =
+    OrderBy Function(
+      Transactions transaction,
+      Accounts account,
+      Currencies accountCurrency,
+      Accounts receivingAccount,
+      Currencies receivingAccountCurrency,
+      Categories c,
+      Categories,
+    );
 
 class TransactionService {
   final AppDB db;
 
   TransactionService._(this.db);
-  static final TransactionService instance =
-      TransactionService._(AppDB.instance);
+  static final TransactionService instance = TransactionService._(
+    AppDB.instance,
+  );
 
   Future<int> insertTransaction(TransactionInDB transaction) async {
     final toReturn = await db.into(db.transactions).insert(transaction);
@@ -63,32 +68,41 @@ class TransactionService {
 
     return TransactionService.instance.updateTransaction(
       transaction.copyWith(
-          date: transaction.followingDateToNext,
-          remainingTransactions: remainingIterations != null
-              ? Value(remainingIterations - 1)
-              : const Value(null)),
+        date: transaction.followingDateToNext,
+        remainingTransactions: remainingIterations != null
+            ? Value(remainingIterations - 1)
+            : const Value(null),
+      ),
     );
   }
 
   Future<int> deleteTransaction(String transactionId) {
-    return (db.delete(db.transactions)
-          ..where((tbl) => tbl.id.equals(transactionId)))
-        .go();
+    return (db.delete(
+      db.transactions,
+    )..where((tbl) => tbl.id.equals(transactionId))).go();
   }
 
   Stream<List<MoneyTransaction>> getTransactionsFromPredicate({
-    Expression<bool> Function(Transactions, Accounts, Currencies, Accounts,
-            Currencies, Categories, Categories)?
-        predicate,
+    Expression<bool> Function(
+      Transactions,
+      Accounts,
+      Currencies,
+      Accounts,
+      Currencies,
+      Categories,
+      Categories,
+    )?
+    predicate,
     OrderBy Function(
-            Transactions transaction,
-            Accounts account,
-            Currencies accountCurrency,
-            Accounts receivingAccount,
-            Currencies receivingAccountCurrency,
-            Categories c,
-            Categories)?
-        orderBy,
+      Transactions transaction,
+      Accounts account,
+      Currencies accountCurrency,
+      Accounts receivingAccount,
+      Currencies receivingAccountCurrency,
+      Categories c,
+      Categories,
+    )?
+    orderBy,
     int? limit,
     int? offset,
   }) {
@@ -112,12 +126,15 @@ class TransactionService {
     int? offset,
   }) {
     return getTransactionsFromPredicate(
-        predicate: filters?.toTransactionExpression(),
-        orderBy: orderBy ??
-            (p0, p1, p2, p3, p4, p5, p6) => OrderBy(
-                [OrderingTerm(expression: p0.date, mode: OrderingMode.desc)]),
-        limit: limit,
-        offset: offset);
+      predicate: filters?.toTransactionExpression(),
+      orderBy:
+          orderBy ??
+          (p0, p1, p2, p3, p4, p5, p6) => OrderBy([
+            OrderingTerm(expression: p0.date, mode: OrderingMode.desc),
+          ]),
+      limit: limit,
+      offset: offset,
+    );
   }
 
   Stream<TransactionQueryStatResult> countTransactions({
@@ -130,60 +147,80 @@ class TransactionService {
             .map((e) => e.index)
             .contains(TransactionType.T.index)) {
       // If we should take into account transfers:
-      return Rx.combineLatest([
-        // INCOME AND EXPENSES
-        db
-            .countTransactions(
-              predicate: predicate
-                  .copyWith(
-                    transactionTypes: predicate.transactionTypes
-                            ?.whereNot((element) =>
-                                element.index == TransactionType.T.index)
-                            .toList() ??
-                        [TransactionType.I, TransactionType.E],
-                  )
-                  .toTransactionExpression(),
-              date: (exchDate ?? DateTime.now()),
-            )
-            .watchSingle(),
+      return Rx.combineLatest(
+        [
+          // INCOME AND EXPENSES
+          db
+              .countTransactions(
+                predicate: predicate
+                    .copyWith(
+                      transactionTypes:
+                          predicate.transactionTypes
+                              ?.whereNot(
+                                (element) =>
+                                    element.index == TransactionType.T.index,
+                              )
+                              .toList() ??
+                          [TransactionType.I, TransactionType.E],
+                    )
+                    .toTransactionExpression(),
+                date: (exchDate ?? DateTime.now()),
+              )
+              .watchSingle(),
 
-        // TRANSFERS FROM ORIGIN ACCOUNTS
-        db
-            .countTransactions(
-              predicate: predicate.copyWith(
-                transactionTypes: [TransactionType.T],
-                includeReceivingAccountsInAccountFilters: false,
-              ).toTransactionExpression(),
-              date: (exchDate ?? DateTime.now()),
-            )
-            .watchSingle(),
+          // TRANSFERS FROM ORIGIN ACCOUNTS
+          db
+              .countTransactions(
+                predicate: predicate
+                    .copyWith(
+                      transactionTypes: [TransactionType.T],
+                      includeReceivingAccountsInAccountFilters: false,
+                    )
+                    .toTransactionExpression(),
+                date: (exchDate ?? DateTime.now()),
+              )
+              .watchSingle(),
 
-        // TRANSFERS FROM DESTINY ACCOUNTS
-        db
-            .countTransactions(
-              predicate: predicate.copyWith(
-                transactionTypes: [TransactionType.T],
-                accountsIDs: null,
-              ).toTransactionExpression(
-                extraFilters: (transaction, account, accountCurrency,
-                        receivingAccount, receivingAccountCurrency, c, p6) =>
-                    [
-                  if (predicate.accountsIDs != null)
-                    transaction.receivingAccountID.isIn(predicate.accountsIDs!)
-                ],
-              ),
-              date: (exchDate ?? DateTime.now()),
-            )
-            .watchSingle()
-      ], (res) {
-        return TransactionQueryStatResult(
+          // TRANSFERS FROM DESTINY ACCOUNTS
+          db
+              .countTransactions(
+                predicate: predicate
+                    .copyWith(
+                      transactionTypes: [TransactionType.T],
+                      accountsIDs: null,
+                    )
+                    .toTransactionExpression(
+                      extraFilters:
+                          (
+                            transaction,
+                            account,
+                            accountCurrency,
+                            receivingAccount,
+                            receivingAccountCurrency,
+                            c,
+                            p6,
+                          ) => [
+                            if (predicate.accountsIDs != null)
+                              transaction.receivingAccountID.isIn(
+                                predicate.accountsIDs!,
+                              ),
+                          ],
+                    ),
+                date: (exchDate ?? DateTime.now()),
+              )
+              .watchSingle(),
+        ],
+        (res) {
+          return TransactionQueryStatResult(
             numberOfRes: res[0].transactionsNumber + res[1].transactionsNumber,
             valueSum: convertToPreferredCurrency
                 ? res[0].sumInPrefCurrency -
-                    res[1].sumInPrefCurrency +
-                    res[2].sumInDestinyInPrefCurrency
-                : res[0].sum - res[1].sum + res[2].sumInDestiny);
-      });
+                      res[1].sumInPrefCurrency +
+                      res[2].sumInDestinyInPrefCurrency
+                : res[0].sum - res[1].sum + res[2].sumInDestiny,
+          );
+        },
+      );
     }
 
     // If we should not take into account transfers, we just return the normal sum
@@ -193,19 +230,29 @@ class TransactionService {
           date: (exchDate ?? DateTime.now()),
         )
         .watchSingle()
-        .map((event) => TransactionQueryStatResult(
+        .map(
+          (event) => TransactionQueryStatResult(
             numberOfRes: event.transactionsNumber,
             valueSum: convertToPreferredCurrency
                 ? event.sumInPrefCurrency
-                : event.sum));
+                : event.sum,
+          ),
+        );
   }
 
   Stream<MoneyTransaction?> getTransactionById(String id) {
     return db
         .getTransactionsWithFullData(
-          predicate: (transaction, account, accountCurrency, receivingAccount,
-                  receivingAccountCurrency, c, p6) =>
-              transaction.id.equals(id),
+          predicate:
+              (
+                transaction,
+                account,
+                accountCurrency,
+                receivingAccount,
+                receivingAccountCurrency,
+                c,
+                p6,
+              ) => transaction.id.equals(id),
           limit: (t, a, accountCurrency, ra, receivingAccountCurrency, c, pc) =>
               Limit(1, 0),
         )
@@ -217,7 +264,7 @@ class TransactionService {
         .getAccounts(
           predicate: (acc, curr) => AppDB.instance.buildExpr([
             acc.type.equalsValue(AccountType.saving).not(),
-            acc.closingDate.isNull()
+            acc.closingDate.isNull(),
           ]),
           limit: 1,
         )

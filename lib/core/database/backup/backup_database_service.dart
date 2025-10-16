@@ -71,7 +71,7 @@ class BackupDatabaseService {
         if (transaction.isTransfer) 'TRANSFER',
         (transaction.category?.parentCategory != null
             ? transaction.category?.name
-            : '')
+            : ''),
       ];
 
       csvData += toAdd.join(separator);
@@ -117,13 +117,16 @@ class BackupDatabaseService {
       final currentDBContent = await File(dbPath).readAsBytes();
 
       // Load the new database
-      await File(dbPath)
-          .writeAsBytes(await selectedFile.readAsBytes(), mode: FileMode.write);
+      await File(
+        dbPath,
+      ).writeAsBytes(await selectedFile.readAsBytes(), mode: FileMode.write);
 
       try {
-        final dbVersion = int.parse((await AppDataService.instance
-            .getAppDataItem(AppDataKey.dbVersion)
-            .first)!);
+        final dbVersion = int.parse(
+          (await AppDataService.instance
+              .getAppDataItem(AppDataKey.dbVersion)
+              .first)!,
+        );
 
         if (dbVersion < db.schemaVersion) {
           await db.migrateDB(dbVersion, db.schemaVersion);

@@ -28,12 +28,15 @@ import '../count_indicator.dart';
 import '../form_fields/list_tile_field.dart';
 
 Future<TransactionFilters?> openFilterSheetModal(
-    BuildContext context, FilterSheetModal modalData) {
+  BuildContext context,
+  FilterSheetModal modalData,
+) {
   return showModalBottomSheet<TransactionFilters>(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (context) => modalData);
+    context: context,
+    isScrollControlled: true,
+    showDragHandle: true,
+    builder: (context) => modalData,
+  );
 }
 
 class FilterSheetModal extends StatefulWidget {
@@ -69,34 +72,33 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
   }
 
   FilterChip transactionTypeFilter(BuildContext context, TransactionType type) {
-    bool isSelected = filtersToReturn.transactionTypes == null ||
+    bool isSelected =
+        filtersToReturn.transactionTypes == null ||
         filtersToReturn.transactionTypes!
             .map((e) => e.index)
             .contains(type.index);
 
     return FilterChip(
-        label: Text(type.displayName(context, plural: true)),
-        selected: isSelected,
-        showCheckmark: false,
-        avatar: Icon(
-          type.icon,
-          color: type.color(context),
-        ),
-        onSelected: (value) {
-          filtersToReturn = filtersToReturn.copyWith(
-            transactionTypes: !isSelected
-                ? (filtersToReturn.transactionTypes?.length ==
-                        TransactionType.values.length - 1
-                    ? null
-                    : filtersToReturn.transactionTypes ?? [type]
+      label: Text(type.displayName(context, plural: true)),
+      selected: isSelected,
+      showCheckmark: false,
+      avatar: Icon(type.icon, color: type.color(context)),
+      onSelected: (value) {
+        filtersToReturn = filtersToReturn.copyWith(
+          transactionTypes: !isSelected
+              ? (filtersToReturn.transactionTypes?.length ==
+                          TransactionType.values.length - 1
+                      ? null
+                      : filtersToReturn.transactionTypes ?? [type]
                   ?..add(type))
-                : (filtersToReturn.transactionTypes ?? TransactionType.values)
+              : (filtersToReturn.transactionTypes ?? TransactionType.values)
                     .where((element) => element.index != type.index)
                     .toList(),
-          );
+        );
 
-          setState(() {});
-        });
+        setState(() {});
+      },
+    );
   }
 
   @override
@@ -113,17 +115,19 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
           title: t.general.filters,
           bodyFit: FlexFit.tight,
           footer: BottomSheetFooter(
-              submitIcon: Icons.filter_alt_outlined,
-              submitText: t.ui_actions.apply,
-              onSaved: !(_formKey.currentState?.validate() ?? true) ||
-                      filtersToReturn.tagsIDs != null &&
-                          filtersToReturn.tagsIDs!.isEmpty ||
-                      filtersToReturn.accountsIDs != null &&
-                          filtersToReturn.accountsIDs!.isEmpty ||
-                      filtersToReturn.categories != null &&
-                          filtersToReturn.categories!.isEmpty
-                  ? null
-                  : () => Navigator.of(context).pop(filtersToReturn)),
+            submitIcon: Icons.filter_alt_outlined,
+            submitText: t.ui_actions.apply,
+            onSaved:
+                !(_formKey.currentState?.validate() ?? true) ||
+                    filtersToReturn.tagsIDs != null &&
+                        filtersToReturn.tagsIDs!.isEmpty ||
+                    filtersToReturn.accountsIDs != null &&
+                        filtersToReturn.accountsIDs!.isEmpty ||
+                    filtersToReturn.categories != null &&
+                        filtersToReturn.categories!.isEmpty
+                ? null
+                : () => Navigator.of(context).pop(filtersToReturn),
+          ),
           body: ScrollableWithBottomGradient(
             controller: scrollController,
             padding: const EdgeInsets.fromLTRB(16, 2, 16, 24),
@@ -136,162 +140,167 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                   /* ---------------------------------- */
                   /* -------- ACCOUNT SELECTOR -------- */
                   /* ---------------------------------- */
-
                   StreamBuilder(
-                      stream: AccountService.instance.getAccounts(),
-                      builder: (context, snapshot) {
-                        List<Account>? selectedAccounts =
-                            filtersToReturn.accountsIDs == null
-                                ? snapshot.data
-                                : (snapshot.data ?? [])
-                                    .where(
-                                      (element) => filtersToReturn.accountsIDs!
-                                          .contains(element.id),
-                                    )
-                                    .toList();
+                    stream: AccountService.instance.getAccounts(),
+                    builder: (context, snapshot) {
+                      List<Account>? selectedAccounts =
+                          filtersToReturn.accountsIDs == null
+                          ? snapshot.data
+                          : (snapshot.data ?? [])
+                                .where(
+                                  (element) => filtersToReturn.accountsIDs!
+                                      .contains(element.id),
+                                )
+                                .toList();
 
-                        return ListTileField(
-                          title: t.general.accounts,
-                          leading: const Icon(Icons.account_balance_rounded),
-                          trailing: CountIndicatorWithExpandArrow(
-                            countToDisplay: filtersToReturn.accountsIDs?.length,
-                          ),
-                          subtitle: filtersToReturn.accountsIDs != null
-                              ? selectedAccounts!
+                      return ListTileField(
+                        title: t.general.accounts,
+                        leading: const Icon(Icons.account_balance_rounded),
+                        trailing: CountIndicatorWithExpandArrow(
+                          countToDisplay: filtersToReturn.accountsIDs?.length,
+                        ),
+                        subtitle: filtersToReturn.accountsIDs != null
+                            ? selectedAccounts!
                                   .map((e) => e.name)
                                   .printFormatted()
-                              : t.account.select.all,
-                          onTap: () => showAccountSelectorBottomSheet(
+                            : t.account.select.all,
+                        onTap: () =>
+                            showAccountSelectorBottomSheet(
                               context,
                               AccountSelectorModal(
                                 allowMultiSelection: true,
                                 filterSavingAccounts: false,
                                 selectedAccounts: selectedAccounts ?? [],
-                              )).then((selection) {
-                            if (selection == null) return;
-
-                            filtersToReturn = filtersToReturn.copyWith(
-                              accountsIDs:
-                                  selection.length == snapshot.data!.length
-                                      ? null
-                                      : selection.map((e) => e.id).toList(),
-                            );
-
-                            setState(() {});
-                          }),
-                        );
-                      }),
-
-                  /* ---------------------------------- */
-                  /* ---------- TAGS SELECTOR -------- */
-                  /* ---------------------------------- */
-
-                  const SizedBox(height: 8),
-                  StreamBuilder(
-                      stream: TagService.instance.getTags(),
-                      builder: (context, snapshot) {
-                        List<Tag?> selectedTags =
-                            filtersToReturn.tagsIDs == null
-                                ? [null, ...(snapshot.data ?? [])]
-                                : [
-                                    if (filtersToReturn.tagsIDs!.contains(null))
-                                      null,
-                                    ...(snapshot.data ?? []).where(
-                                      (element) => filtersToReturn.tagsIDs!
-                                          .contains(element.id),
-                                    )
-                                  ];
-
-                        return ListTileField(
-                          title: t.tags.display(n: 2),
-                          leading: Icon(Tag.icon),
-                          trailing: CountIndicatorWithExpandArrow(
-                            countToDisplay: filtersToReturn.tagsIDs?.length,
-                          ),
-                          subtitle: filtersToReturn.tagsIDs != null
-                              ? selectedTags
-                                  .map((e) =>
-                                      e == null ? t.tags.without_tags : e.name)
-                                  .printFormatted()
-                              : t.tags.select.all,
-                          onTap: () => showTagListModal(
-                            context,
-                            modal: TagSelector(
-                              selectedTags: selectedTags,
-                              allowEmptySubmit: false,
-                              includeNullTag: true,
-                            ),
-                          ).then((selection) {
-                            if (selection == null) return;
-
-                            filtersToReturn = filtersToReturn.copyWith(
-                              tagsIDs:
-                                  selection.length == snapshot.data!.length + 1
-                                      ? null
-                                      : selection.map((e) => e?.id).toList(),
-                            );
-
-                            setState(() {});
-                          }),
-                        );
-                      }),
-
-                  /* ---------------------------------- */
-                  /* -------- CATEGORY SELECTOR ------- */
-                  /* ---------------------------------- */
-
-                  const SizedBox(height: 8),
-                  StreamBuilder(
-                      stream: CategoryService.instance.getCategories(),
-                      builder: (context, snapshot) {
-                        List<Category>? selectedCategories =
-                            filtersToReturn.categories == null
-                                ? snapshot.data
-                                : (snapshot.data ?? [])
-                                    .where(
-                                      (element) => filtersToReturn.categories!
-                                          .contains(element.id),
-                                    )
-                                    .toList();
-
-                        return ListTileField(
-                          title: t.general.categories,
-                          leading: const Icon(Icons.category_rounded),
-                          trailing: CountIndicatorWithExpandArrow(
-                            countToDisplay: filtersToReturn.categories?.length,
-                          ),
-                          subtitle: filtersToReturn.categories != null
-                              ? selectedCategories!
-                                  .map((e) => e.name)
-                                  .printFormatted()
-                              : t.categories.select.all,
-                          onTap: () {
-                            showMultiCategoryListModal(
-                              context,
-                              CategoryMultiSelectorModal(
-                                selectedCategories: selectedCategories ?? [],
                               ),
                             ).then((selection) {
                               if (selection == null) return;
 
                               filtersToReturn = filtersToReturn.copyWith(
-                                categories:
+                                accountsIDs:
                                     selection.length == snapshot.data!.length
-                                        ? null
-                                        : selection.map((e) => e.id),
+                                    ? null
+                                    : selection.map((e) => e.id).toList(),
                               );
 
                               setState(() {});
-                            });
-                          },
-                        );
-                      }),
+                            }),
+                      );
+                    },
+                  ),
+
+                  /* ---------------------------------- */
+                  /* ---------- TAGS SELECTOR -------- */
+                  /* ---------------------------------- */
+                  const SizedBox(height: 8),
+                  StreamBuilder(
+                    stream: TagService.instance.getTags(),
+                    builder: (context, snapshot) {
+                      List<Tag?> selectedTags = filtersToReturn.tagsIDs == null
+                          ? [null, ...(snapshot.data ?? [])]
+                          : [
+                              if (filtersToReturn.tagsIDs!.contains(null)) null,
+                              ...(snapshot.data ?? []).where(
+                                (element) => filtersToReturn.tagsIDs!.contains(
+                                  element.id,
+                                ),
+                              ),
+                            ];
+
+                      return ListTileField(
+                        title: t.tags.display(n: 2),
+                        leading: Icon(Tag.icon),
+                        trailing: CountIndicatorWithExpandArrow(
+                          countToDisplay: filtersToReturn.tagsIDs?.length,
+                        ),
+                        subtitle: filtersToReturn.tagsIDs != null
+                            ? selectedTags
+                                  .map(
+                                    (e) => e == null
+                                        ? t.tags.without_tags
+                                        : e.name,
+                                  )
+                                  .printFormatted()
+                            : t.tags.select.all,
+                        onTap: () =>
+                            showTagListModal(
+                              context,
+                              modal: TagSelector(
+                                selectedTags: selectedTags,
+                                allowEmptySubmit: false,
+                                includeNullTag: true,
+                              ),
+                            ).then((selection) {
+                              if (selection == null) return;
+
+                              filtersToReturn = filtersToReturn.copyWith(
+                                tagsIDs:
+                                    selection.length ==
+                                        snapshot.data!.length + 1
+                                    ? null
+                                    : selection.map((e) => e?.id).toList(),
+                              );
+
+                              setState(() {});
+                            }),
+                      );
+                    },
+                  ),
+
+                  /* ---------------------------------- */
+                  /* -------- CATEGORY SELECTOR ------- */
+                  /* ---------------------------------- */
+                  const SizedBox(height: 8),
+                  StreamBuilder(
+                    stream: CategoryService.instance.getCategories(),
+                    builder: (context, snapshot) {
+                      List<Category>? selectedCategories =
+                          filtersToReturn.categories == null
+                          ? snapshot.data
+                          : (snapshot.data ?? [])
+                                .where(
+                                  (element) => filtersToReturn.categories!
+                                      .contains(element.id),
+                                )
+                                .toList();
+
+                      return ListTileField(
+                        title: t.general.categories,
+                        leading: const Icon(Icons.category_rounded),
+                        trailing: CountIndicatorWithExpandArrow(
+                          countToDisplay: filtersToReturn.categories?.length,
+                        ),
+                        subtitle: filtersToReturn.categories != null
+                            ? selectedCategories!
+                                  .map((e) => e.name)
+                                  .printFormatted()
+                            : t.categories.select.all,
+                        onTap: () {
+                          showMultiCategoryListModal(
+                            context,
+                            CategoryMultiSelectorModal(
+                              selectedCategories: selectedCategories ?? [],
+                            ),
+                          ).then((selection) {
+                            if (selection == null) return;
+
+                            filtersToReturn = filtersToReturn.copyWith(
+                              categories:
+                                  selection.length == snapshot.data!.length
+                                  ? null
+                                  : selection.map((e) => e.id),
+                            );
+
+                            setState(() {});
+                          });
+                        },
+                      );
+                    },
+                  ),
                   const SizedBox(height: 24),
 
                   /* ---------------------------------- */
                   /* -------- TRANSACTION DATE -------- */
                   /* ---------------------------------- */
-
                   if (widget.showDateFilter) ...[
                     Row(
                       children: [
@@ -307,8 +316,9 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                             dateFormat: DateFormat.yMMMd(),
                             onDateSelected: (DateTime value) {
                               setState(() {
-                                filtersToReturn =
-                                    filtersToReturn.copyWith(minDate: value);
+                                filtersToReturn = filtersToReturn.copyWith(
+                                  minDate: value,
+                                );
                               });
                             },
                           ),
@@ -326,8 +336,9 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                             dateFormat: DateFormat.yMMMd(),
                             onDateSelected: (DateTime value) {
                               setState(() {
-                                filtersToReturn =
-                                    filtersToReturn.copyWith(maxDate: value);
+                                filtersToReturn = filtersToReturn.copyWith(
+                                  maxDate: value,
+                                );
                               });
                             },
                           ),
@@ -336,18 +347,17 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                     ),
                     const SizedBox(height: 16),
                   ],
+
                   /* ---------------------------------- */
                   /* ------- TRANSACTION AMOUNT ------- */
                   /* ---------------------------------- */
-
                   StreamBuilder(
-                      stream:
-                          CurrencyService.instance.getUserPreferredCurrency(),
-                      builder: (context, prefCurrencySnapshot) {
-                        return Row(
-                          children: [
-                            Flexible(
-                                child: TextFormField(
+                    stream: CurrencyService.instance.getUserPreferredCurrency(),
+                    builder: (context, prefCurrencySnapshot) {
+                      return Row(
+                        children: [
+                          Flexible(
+                            child: TextFormField(
                               decoration: InputDecoration(
                                 labelText: t.transaction.filters.from_value,
                                 hintText: 'Ex.: 200',
@@ -360,9 +370,11 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                                 }
 
                                 final defaultNumberValidatorResult =
-                                    fieldValidator(value,
-                                        isRequired: false,
-                                        validator: ValidatorType.double);
+                                    fieldValidator(
+                                      value,
+                                      isRequired: false,
+                                      validator: ValidatorType.double,
+                                    );
 
                                 if (defaultNumberValidatorResult != null) {
                                   return defaultNumberValidatorResult;
@@ -374,8 +386,9 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                                   return t.general.validations.positive;
                                 } else if (filtersToReturn.maxValue != null &&
                                     valToNum > filtersToReturn.maxValue!) {
-                                  return t.general.validations
-                                      .max_number(x: filtersToReturn.maxValue!);
+                                  return t.general.validations.max_number(
+                                    x: filtersToReturn.maxValue!,
+                                  );
                                 }
 
                                 return null;
@@ -393,10 +406,11 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
 
                                 setState(() {});
                               },
-                            )),
-                            const SizedBox(width: 16),
-                            Flexible(
-                                child: TextFormField(
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Flexible(
+                            child: TextFormField(
                               decoration: InputDecoration(
                                 labelText: t.transaction.filters.to_value,
                                 hintText: 'Ex.: 200',
@@ -409,9 +423,11 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                                 }
 
                                 final defaultNumberValidatorResult =
-                                    fieldValidator(value,
-                                        isRequired: false,
-                                        validator: ValidatorType.double);
+                                    fieldValidator(
+                                      value,
+                                      isRequired: false,
+                                      validator: ValidatorType.double,
+                                    );
 
                                 if (defaultNumberValidatorResult != null) {
                                   return defaultNumberValidatorResult;
@@ -421,8 +437,9 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
 
                                 if (valToNum <
                                     (filtersToReturn.minValue ?? 0)) {
-                                  return t.general.validations
-                                      .min_number(x: filtersToReturn.minValue!);
+                                  return t.general.validations.min_number(
+                                    x: filtersToReturn.minValue!,
+                                  );
                                 }
 
                                 return null;
@@ -431,8 +448,8 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                                   AutovalidateMode.onUserInteraction,
                               textInputAction: TextInputAction.next,
                               inputFormatters: twoDecimalDigitFormatter,
-                              initialValue:
-                                  filtersToReturn.maxValue?.toStringAsFixed(2),
+                              initialValue: filtersToReturn.maxValue
+                                  ?.toStringAsFixed(2),
                               onChanged: (value) {
                                 filtersToReturn = filtersToReturn.copyWith(
                                   maxValue: double.tryParse(value),
@@ -440,16 +457,17 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
 
                                 setState(() {});
                               },
-                            )),
-                          ],
-                        );
-                      }),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                   const SizedBox(height: 16),
 
                   /* ---------------------------------- */
                   /* -------- TRANSACTION TYPE -------- */
                   /* ---------------------------------- */
-
                   Text('${t.transaction.types.display(n: 10)}:'),
                   const SizedBox(height: 4),
                   SingleChildScrollView(
@@ -468,10 +486,10 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                   /* ---------------------------------- */
                   /* ------------- STATUS ------------- */
                   /* ---------------------------------- */
-
                   const SizedBox(height: 16),
                   TransactionStatusFilter(
-                    selectedStatuses: filtersToReturn.status ??
+                    selectedStatuses:
+                        filtersToReturn.status ??
                         [null, ...TransactionStatus.values],
                     allowMultipleSelection: true,
                     onSelected: (statusSelected, value) {
@@ -479,17 +497,21 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
 
                       if (newListToAssign == null) {
                         if (statusSelected != null) {
-                          newListToAssign =
-                              TransactionStatus.notIn({statusSelected});
+                          newListToAssign = TransactionStatus.notIn({
+                            statusSelected,
+                          });
                         } else {
-                          newListToAssign = TransactionStatus.notIn({},
-                              includeNullStatus: value);
+                          newListToAssign = TransactionStatus.notIn(
+                            {},
+                            includeNullStatus: value,
+                          );
                         }
                       } else if (value) {
                         newListToAssign.add(statusSelected);
                       } else {
-                        newListToAssign.removeWhere((element) =>
-                            element?.index == statusSelected?.index);
+                        newListToAssign.removeWhere(
+                          (element) => element?.index == statusSelected?.index,
+                        );
                       }
 
                       if (newListToAssign.length ==
@@ -498,8 +520,9 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                       }
 
                       setState(() {
-                        filtersToReturn =
-                            filtersToReturn.copyWith(status: newListToAssign);
+                        filtersToReturn = filtersToReturn.copyWith(
+                          status: newListToAssign,
+                        );
                       });
                     },
                   ),

@@ -47,11 +47,12 @@ class CardWithHeader extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(fontSize: 18)),
+                    Text(
+                      title,
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleMedium!.copyWith(fontSize: 18),
+                    ),
                     if (subtitle != null)
                       Text(
                         subtitle!,
@@ -65,12 +66,9 @@ class CardWithHeader extends StatelessWidget {
           Material(
             type: MaterialType.transparency,
             clipBehavior: Clip.antiAliasWithSaveLayer,
-            child: Padding(
-              padding: bodyPadding,
-              child: body,
-            ),
+            child: Padding(padding: bodyPadding, child: body),
           ),
-          if (footer != null) footer!
+          if (footer != null) footer!,
         ],
       ),
     );
@@ -90,11 +88,7 @@ class CardFooterWithSingleButton extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Divider(
-          thickness: 2,
-          indent: 16,
-          endIndent: 16,
-        ),
+        const Divider(thickness: 2, indent: 16, endIndent: 16),
         Container(
           alignment: Alignment.centerRight,
           padding: const EdgeInsets.fromLTRB(2, 4, 2, 4),
@@ -104,7 +98,7 @@ class CardFooterWithSingleButton extends StatelessWidget {
             icon: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
             label: Text(text ?? t.ui_actions.see_more),
           ),
-        )
+        ),
       ],
     );
   }

@@ -9,12 +9,13 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 
 showIconSelectorModal(BuildContext context, IconSelectorModal component) {
   return showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (context) {
-        return component;
-      });
+    context: context,
+    isScrollControlled: true,
+    showDragHandle: true,
+    builder: (context) {
+      return component;
+    },
+  );
 }
 
 class IconSelectorModal extends StatefulWidget {
@@ -41,8 +42,9 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
   void initState() {
     super.initState();
 
-    _selectedIcon =
-        SupportedIconService.instance.getIconByID(widget.preselectedIconID);
+    _selectedIcon = SupportedIconService.instance.getIconByID(
+      widget.preselectedIconID,
+    );
   }
 
   @override
@@ -50,16 +52,17 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
     final t = Translations.of(context);
 
     return DraggableScrollableSheet(
-        expand: false,
-        maxChildSize: 0.85,
-        minChildSize: 0.625,
-        initialChildSize: 0.85,
-        builder: (context, scrollController) {
-          final iconsByScope = SupportedIconService.instance.getIconsByScope();
+      expand: false,
+      maxChildSize: 0.85,
+      minChildSize: 0.625,
+      initialChildSize: 0.85,
+      builder: (context, scrollController) {
+        final iconsByScope = SupportedIconService.instance.getIconsByScope();
 
-          return Scaffold(
-            backgroundColor: AppColors.of(context).modalBackground,
-            body: Column(children: [
+        return Scaffold(
+          backgroundColor: AppColors.of(context).modalBackground,
+          body: Column(
+            children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                 child: Row(
@@ -78,13 +81,15 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
                     ),
                     Chip(
                       side: BorderSide(
-                          color: Theme.of(context).colorScheme.primary,
-                          width: 2),
+                        color: Theme.of(context).colorScheme.primary,
+                        width: 2,
+                      ),
                       //  backgroundColor: Theme.of(context).colorScheme.primaryLight,
                       label: _selectedIcon!.display(
-                          size: 34,
-                          color: Theme.of(context).colorScheme.onSurface),
-                    )
+                        size: 34,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -93,68 +98,76 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
                   gradientColor: AppColors.of(context).modalBackground,
                   controller: scrollController,
                   child: Column(
-                      children: iconsByScope.keys.toList().map((scope) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Stack(
-                          alignment: AlignmentDirectional.center,
-                          children: [
-                            const Divider(),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 0, horizontal: 16),
-                              color: AppColors.of(context).modalBackground,
-                              child: Text(t[
-                                  'icon_selector.scopes.${scope.replaceAll("/", "_")}']),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Wrap(
-                            spacing: 8, // gap between adjacent cards
-                            runSpacing: 12, // gap between lines
-                            children: iconsByScope[scope]!
-                                .map((e) => Card(
-                                      elevation: Theme.of(context).brightness ==
+                    children: iconsByScope.keys.toList().map((scope) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Stack(
+                            alignment: AlignmentDirectional.center,
+                            children: [
+                              const Divider(),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 0,
+                                  horizontal: 16,
+                                ),
+                                color: AppColors.of(context).modalBackground,
+                                child: Text(
+                                  t['icon_selector.scopes.${scope.replaceAll("/", "_")}'],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Wrap(
+                              spacing: 8, // gap between adjacent cards
+                              runSpacing: 12, // gap between lines
+                              children: iconsByScope[scope]!
+                                  .map(
+                                    (e) => Card(
+                                      elevation:
+                                          Theme.of(context).brightness ==
                                               Brightness.dark
                                           ? 4
                                           : 1,
                                       clipBehavior: Clip.antiAlias,
                                       color: _selectedIcon?.id == e.id
-                                          ? Theme.of(context)
-                                              .colorScheme
-                                              .primary
+                                          ? Theme.of(
+                                              context,
+                                            ).colorScheme.primary
                                           : null,
                                       child: IconDisplayer(
-                                          supportedIcon: e,
-                                          onTap: () {
-                                            setState(() {
-                                              _selectedIcon = e;
-                                            });
-                                          },
-                                          size: 32,
-                                          secondaryColor: Colors.transparent,
-                                          isOutline: _selectedIcon?.id == e.id,
-                                          mainColor: _selectedIcon?.id == e.id
-                                              ? Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary
-                                              : Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurface),
-                                    ))
-                                .toList(),
+                                        supportedIcon: e,
+                                        onTap: () {
+                                          setState(() {
+                                            _selectedIcon = e;
+                                          });
+                                        },
+                                        size: 32,
+                                        secondaryColor: Colors.transparent,
+                                        isOutline: _selectedIcon?.id == e.id,
+                                        mainColor: _selectedIcon?.id == e.id
+                                            ? Theme.of(
+                                                context,
+                                              ).colorScheme.onPrimary
+                                            : Theme.of(
+                                                context,
+                                              ).colorScheme.onSurface,
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          // Margin between the icon groups
-                          height: 10,
-                        )
-                      ],
-                    );
-                  }).toList()),
+                          const SizedBox(
+                            // Margin between the icon groups
+                            height: 10,
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
               BottomSheetFooter(
@@ -164,9 +177,11 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
                   widget.onIconSelected!(_selectedIcon!);
                   Navigator.pop(context);
                 },
-              )
-            ]),
-          );
-        });
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

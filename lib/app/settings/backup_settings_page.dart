@@ -35,44 +35,54 @@ class BackupSettingsPage extends StatelessWidget {
               subtitle: Text(t.backup.import.restore_backup_descr),
               minVerticalPadding: 16,
               onTap: () {
-                confirmDialog(context,
-                    icon: Icons.warning_rounded,
-                    dialogTitle: t.backup.import.restore_backup_warn_title,
-                    contentParagraphs: [
-                      Text(t.backup.import.restore_backup_warn_description)
-                    ]).then((value) {
+                confirmDialog(
+                  context,
+                  icon: Icons.warning_rounded,
+                  dialogTitle: t.backup.import.restore_backup_warn_title,
+                  contentParagraphs: [
+                    Text(t.backup.import.restore_backup_warn_description),
+                  ],
+                ).then((value) {
                   if (value == null || !value) {
                     return;
                   }
 
-                  BackupDatabaseService().importDatabase().then((value) {
-                    if (!value) {
-                      Navigator.pop(context);
+                  BackupDatabaseService()
+                      .importDatabase()
+                      .then((value) {
+                        if (!value) {
+                          Navigator.pop(context);
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(t.backup.import.cancelled)),
-                      );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(t.backup.import.cancelled)),
+                          );
 
-                      return;
-                    }
+                          return;
+                        }
 
-                    RouteUtils.popAllRoutesExceptFirst();
+                        RouteUtils.popAllRoutesExceptFirst();
 
-                    tabsPageKey.currentState!.changePage(
-                      getAllDestinations(context, shortLabels: false)
-                          .firstWhere((element) =>
-                              element.id == AppMenuDestinationsID.dashboard),
-                    );
+                        tabsPageKey.currentState!.changePage(
+                          getAllDestinations(
+                            context,
+                            shortLabels: false,
+                          ).firstWhere(
+                            (element) =>
+                                element.id == AppMenuDestinationsID.dashboard,
+                          ),
+                        );
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(t.backup.import.success)),
-                    );
-                  }).catchError((err) {
-                    Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(t.backup.import.success)),
+                        );
+                      })
+                      .catchError((err) {
+                        Navigator.pop(context);
 
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text(err.toString())));
-                  });
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text(err.toString())));
+                      });
                 });
               },
             ),
@@ -97,35 +107,38 @@ class BackupSettingsPage extends StatelessWidget {
             ListTile(
               title: Text(t.backup.about.modify_date),
               trailing: FutureBuilder(
-                  future: AppDB.instance.databasePath,
-                  builder: (context, snapshot) {
-                    final path = snapshot.data;
+                future: AppDB.instance.databasePath,
+                builder: (context, snapshot) {
+                  final path = snapshot.data;
 
-                    if (path == null || path.isEmpty) {
-                      return const Text('----');
-                    }
+                  if (path == null || path.isEmpty) {
+                    return const Text('----');
+                  }
 
-                    return Text(
-                      DateFormat.yMMMd()
-                          .add_Hm()
-                          .format(File(path).lastModifiedSync()),
-                    );
-                  }),
+                  return Text(
+                    DateFormat.yMMMd().add_Hm().format(
+                      File(path).lastModifiedSync(),
+                    ),
+                  );
+                },
+              ),
             ),
             ListTile(
               title: Text(t.backup.about.size),
               trailing: FutureBuilder(
-                  future: AppDB.instance.databasePath
-                      .then((value) => File(value).stat()),
-                  builder: (context, snapshot) {
-                    final fileStats = snapshot.data;
+                future: AppDB.instance.databasePath.then(
+                  (value) => File(value).stat(),
+                ),
+                builder: (context, snapshot) {
+                  final fileStats = snapshot.data;
 
-                    if (fileStats == null) {
-                      return const Text('----');
-                    }
+                  if (fileStats == null) {
+                    return const Text('----');
+                  }
 
-                    return Text(fileStats.size.readableFileSize());
-                  }),
+                  return Text(fileStats.size.readableFileSize());
+                },
+              ),
             ),
           ],
         ),

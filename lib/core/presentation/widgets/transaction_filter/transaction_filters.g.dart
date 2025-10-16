@@ -14,10 +14,12 @@ abstract class _$TransactionFiltersCWProxy {
   TransactionFilters searchValue(String? searchValue);
 
   TransactionFilters includeParentCategoriesInSearch(
-      bool includeParentCategoriesInSearch);
+    bool includeParentCategoriesInSearch,
+  );
 
   TransactionFilters includeReceivingAccountsInAccountFilters(
-      bool includeReceivingAccountsInAccountFilters);
+    bool includeReceivingAccountsInAccountFilters,
+  );
 
   TransactionFilters minValue(double? minValue);
 
@@ -35,18 +37,19 @@ abstract class _$TransactionFiltersCWProxy {
 
   TransactionFilters tagsIDs(Iterable<String?>? tagsIDs);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `TransactionFilters(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `TransactionFilters(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// TransactionFilters(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   TransactionFilters call({
     DateTime? minDate,
     DateTime? maxDate,
     String? searchValue,
-    bool? includeParentCategoriesInSearch,
-    bool? includeReceivingAccountsInAccountFilters,
+    bool includeParentCategoriesInSearch,
+    bool includeReceivingAccountsInAccountFilters,
     double? minValue,
     double? maxValue,
     List<TransactionType>? transactionTypes,
@@ -58,73 +61,75 @@ abstract class _$TransactionFiltersCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfTransactionFilters.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfTransactionFilters.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfTransactionFilters.copyWith(...)` or call `instanceOfTransactionFilters.copyWith.fieldName(value)` for a single field.
 class _$TransactionFiltersCWProxyImpl implements _$TransactionFiltersCWProxy {
   const _$TransactionFiltersCWProxyImpl(this._value);
 
   final TransactionFilters _value;
 
   @override
-  TransactionFilters minDate(DateTime? minDate) => this(minDate: minDate);
+  TransactionFilters minDate(DateTime? minDate) => call(minDate: minDate);
 
   @override
-  TransactionFilters maxDate(DateTime? maxDate) => this(maxDate: maxDate);
+  TransactionFilters maxDate(DateTime? maxDate) => call(maxDate: maxDate);
 
   @override
   TransactionFilters searchValue(String? searchValue) =>
-      this(searchValue: searchValue);
+      call(searchValue: searchValue);
 
   @override
   TransactionFilters includeParentCategoriesInSearch(
-          bool includeParentCategoriesInSearch) =>
-      this(includeParentCategoriesInSearch: includeParentCategoriesInSearch);
+    bool includeParentCategoriesInSearch,
+  ) => call(includeParentCategoriesInSearch: includeParentCategoriesInSearch);
 
   @override
   TransactionFilters includeReceivingAccountsInAccountFilters(
-          bool includeReceivingAccountsInAccountFilters) =>
-      this(
-          includeReceivingAccountsInAccountFilters:
-              includeReceivingAccountsInAccountFilters);
+    bool includeReceivingAccountsInAccountFilters,
+  ) => call(
+    includeReceivingAccountsInAccountFilters:
+        includeReceivingAccountsInAccountFilters,
+  );
 
   @override
-  TransactionFilters minValue(double? minValue) => this(minValue: minValue);
+  TransactionFilters minValue(double? minValue) => call(minValue: minValue);
 
   @override
-  TransactionFilters maxValue(double? maxValue) => this(maxValue: maxValue);
+  TransactionFilters maxValue(double? maxValue) => call(maxValue: maxValue);
 
   @override
   TransactionFilters transactionTypes(
-          List<TransactionType>? transactionTypes) =>
-      this(transactionTypes: transactionTypes);
+    List<TransactionType>? transactionTypes,
+  ) => call(transactionTypes: transactionTypes);
 
   @override
   TransactionFilters isRecurrent(bool? isRecurrent) =>
-      this(isRecurrent: isRecurrent);
+      call(isRecurrent: isRecurrent);
 
   @override
   TransactionFilters accountsIDs(Iterable<String>? accountsIDs) =>
-      this(accountsIDs: accountsIDs);
+      call(accountsIDs: accountsIDs);
 
   @override
   TransactionFilters categories(Iterable<String>? categories) =>
-      this(categories: categories);
+      call(categories: categories);
 
   @override
   TransactionFilters status(List<TransactionStatus?>? status) =>
-      this(status: status);
+      call(status: status);
 
   @override
   TransactionFilters tagsIDs(Iterable<String?>? tagsIDs) =>
-      this(tagsIDs: tagsIDs);
+      call(tagsIDs: tagsIDs);
 
   @override
-
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `TransactionFilters(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `TransactionFilters(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// TransactionFilters(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   TransactionFilters call({
     Object? minDate = const $CopyWithPlaceholder(),
     Object? maxDate = const $CopyWithPlaceholder(),
@@ -156,17 +161,17 @@ class _$TransactionFiltersCWProxyImpl implements _$TransactionFiltersCWProxy {
           : searchValue as String?,
       includeParentCategoriesInSearch:
           includeParentCategoriesInSearch == const $CopyWithPlaceholder() ||
-                  includeParentCategoriesInSearch == null
-              ? _value.includeParentCategoriesInSearch
-              // ignore: cast_nullable_to_non_nullable
-              : includeParentCategoriesInSearch as bool,
+              includeParentCategoriesInSearch == null
+          ? _value.includeParentCategoriesInSearch
+          // ignore: cast_nullable_to_non_nullable
+          : includeParentCategoriesInSearch as bool,
       includeReceivingAccountsInAccountFilters:
           includeReceivingAccountsInAccountFilters ==
-                      const $CopyWithPlaceholder() ||
-                  includeReceivingAccountsInAccountFilters == null
-              ? _value.includeReceivingAccountsInAccountFilters
-              // ignore: cast_nullable_to_non_nullable
-              : includeReceivingAccountsInAccountFilters as bool,
+                  const $CopyWithPlaceholder() ||
+              includeReceivingAccountsInAccountFilters == null
+          ? _value.includeReceivingAccountsInAccountFilters
+          // ignore: cast_nullable_to_non_nullable
+          : includeReceivingAccountsInAccountFilters as bool,
       minValue: minValue == const $CopyWithPlaceholder()
           ? _value.minValue
           // ignore: cast_nullable_to_non_nullable
@@ -204,17 +209,19 @@ class _$TransactionFiltersCWProxyImpl implements _$TransactionFiltersCWProxy {
 }
 
 extension $TransactionFiltersCopyWith on TransactionFilters {
-  /// Returns a callable class that can be used as follows: `instanceOfTransactionFilters.copyWith(...)` or like so:`instanceOfTransactionFilters.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfTransactionFilters.copyWith(...)` or `instanceOfTransactionFilters.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$TransactionFiltersCWProxy get copyWith =>
       _$TransactionFiltersCWProxyImpl(this);
 
-  /// Copies the object with the specific fields set to `null`. If you pass `false` as a parameter, nothing will be done and it will be ignored. Don't do it. Prefer `copyWith(field: null)` or `TransactionFilters(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Returns a copy of the object with the selected fields set to `null`.
+  /// A flag set to `false` leaves the field unchanged. Prefer `copyWith(field: null)` or `copyWith.fieldName(null)` for single-field updates.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// TransactionFilters(...).copyWithNull(firstField: true, secondField: true)
-  /// ````
+  /// ```
   TransactionFilters copyWithNull({
     bool minDate = false,
     bool maxDate = false,

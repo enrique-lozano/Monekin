@@ -8,10 +8,7 @@ import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 
 part 'icon_displayer.g.dart';
 
-enum IconDisplayMode {
-  decoratedBox,
-  polygon,
-}
+enum IconDisplayMode { decoratedBox, polygon }
 
 @CopyWith()
 class IconDisplayer extends StatelessWidget {
@@ -33,9 +30,10 @@ class IconDisplayer extends StatelessWidget {
     this.secondaryColor,
     this.displayMode = IconDisplayMode.decoratedBox,
   }) : assert(
-            (icon == null && supportedIcon != null) ||
-                (icon != null && supportedIcon == null),
-            'Only one of icon or supportedIcon should be defined');
+         (icon == null && supportedIcon != null) ||
+             (icon != null && supportedIcon == null),
+         'Only one of icon or supportedIcon should be defined',
+       );
 
   factory IconDisplayer.fromCategory(
     BuildContext context, {
@@ -53,10 +51,12 @@ class IconDisplayer extends StatelessWidget {
     Color categoryColor = ColorHex.get(category.color);
 
     return IconDisplayer(
-      mainColor:
-          categoryColor.lighten(isDark ? IconDisplayer.darkLightenFactor : 0),
-      secondaryColor:
-          categoryColor.lighten(isDark ? 0 : IconDisplayer.darkLightenFactor),
+      mainColor: categoryColor.lighten(
+        isDark ? IconDisplayer.darkLightenFactor : 0,
+      ),
+      secondaryColor: categoryColor.lighten(
+        isDark ? 0 : IconDisplayer.darkLightenFactor,
+      ),
       supportedIcon: category.icon,
       isOutline: isOutline,
       borderRadius: borderRadius,
@@ -117,8 +117,9 @@ class IconDisplayer extends StatelessWidget {
         onTap: onTap,
         onLongPress: onLongPress,
         onDoubleTap: onDoubleTap,
-        customBorder:
-            displayMode == IconDisplayMode.polygon ? polygonBorder : null,
+        customBorder: displayMode == IconDisplayMode.polygon
+            ? polygonBorder
+            : null,
         borderRadius: displayMode == IconDisplayMode.polygon
             ? null
             : BorderRadius.circular(borderRadius),
@@ -129,9 +130,7 @@ class IconDisplayer extends StatelessWidget {
           padding: EdgeInsets.all(calculatedPadding),
           alignment: Alignment.center,
           decoration: displayMode == IconDisplayMode.polygon
-              ? ShapeDecoration(
-                  shape: polygonBorder,
-                )
+              ? ShapeDecoration(shape: polygonBorder)
               : BoxDecoration(
                   border: Border.fromBorderSide(borderSide),
                   borderRadius: BorderRadius.circular(borderRadius),
@@ -139,22 +138,16 @@ class IconDisplayer extends StatelessWidget {
           child: Builder(
             builder: (context) {
               if (supportedIcon != null) {
-                return supportedIcon!.display(
-                  size: size,
-                  color: mainColor,
-                );
+                return supportedIcon!.display(size: size, color: mainColor);
               }
 
               return FittedBox(
                 fit: BoxFit.contain,
                 child: SizedBox(
-                    height: size,
-                    width: size,
-                    child: Icon(
-                      icon,
-                      color: mainColor,
-                      size: size,
-                    )),
+                  height: size,
+                  width: size,
+                  child: Icon(icon, color: mainColor, size: size),
+                ),
               );
             },
           ),

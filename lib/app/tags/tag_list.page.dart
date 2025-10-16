@@ -14,10 +14,7 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 import '../../core/presentation/widgets/reorderable_drag_icon.dart';
 
 class TagListPage extends StatefulWidget {
-  const TagListPage({
-    super.key,
-    this.scrollController,
-  });
+  const TagListPage({super.key, this.scrollController});
 
   final ScrollController? scrollController;
 
@@ -77,14 +74,12 @@ class _TagListPageState extends State<TagListPage> {
               child: ListTile(
                 tileColor: Theme.of(context).colorScheme.surfaceContainer,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 onTap: () =>
                     RouteUtils.pushRoute(context, TagFormPage(tag: tag)),
                 trailing: tags.length > 1
-                    ? ReorderableDragIcon(
-                        index: index,
-                        enabled: isOrderEnabled,
-                      )
+                    ? ReorderableDragIcon(index: index, enabled: isOrderEnabled)
                     : null,
                 leading: tag.displayIcon(),
                 title: Text(tag.name),

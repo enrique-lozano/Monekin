@@ -32,13 +32,14 @@ class MonekinQuickActionsButton extends StatelessWidget {
                                 .withOpacity(0.15),
                             radius: 24,
                             child: IconButton(
-                                onPressed: item.onClick,
-                                color: item.getColorBasedOnRole(context),
-                                icon: Icon(
-                                  item.icon,
-                                  size: 32,
-                                  //  color: Colors.red,
-                                )),
+                              onPressed: item.onClick,
+                              color: item.getColorBasedOnRole(context),
+                              icon: Icon(
+                                item.icon,
+                                size: 32,
+                                //  color: Colors.red,
+                              ),
+                            ),
                           ),
                           const SizedBox(height: 4),
                           Text(
@@ -46,8 +47,10 @@ class MonekinQuickActionsButton extends StatelessWidget {
                             softWrap: false,
                             overflow: TextOverflow.fade,
                             style: const TextStyle(
-                                fontSize: 12, fontWeight: FontWeight.w300),
-                          )
+                              fontSize: 12,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
                         ],
                       ),
                     ),

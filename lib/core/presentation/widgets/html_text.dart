@@ -29,10 +29,7 @@ class HTMLText extends StatelessWidget {
   Widget build(BuildContext context) {
     List<InlineSpan> textSpans = parseHtmlString(context);
 
-    return Text.rich(
-      TextSpan(children: textSpans),
-      textAlign: textAlign,
-    );
+    return Text.rich(TextSpan(children: textSpans), textAlign: textAlign);
   }
 
   List<InlineSpan> parseHtmlString(BuildContext context) {
@@ -45,16 +42,20 @@ class HTMLText extends StatelessWidget {
 
       String matchKey = '$matchSpaces(${tag.key})$matchSpaces';
 
-      final RegExp tagRegExp =
-          RegExp('<(\/)?$matchKey(${matchAttributes()})*$matchSpaces>');
+      final RegExp tagRegExp = RegExp(
+        '<(\/)?$matchKey(${matchAttributes()})*$matchSpaces>',
+      );
 
       final parts = htmlString.split(tagRegExp);
 
       for (int i = 0; i < parts.length; i++) {
         final part = parts[i];
 
-        if (htmlString.contains(RegExp(
-            '<$matchKey(${matchAttributes()})*$matchSpaces>$part</$matchKey>'))) {
+        if (htmlString.contains(
+          RegExp(
+            '<$matchKey(${matchAttributes()})*$matchSpaces>$part</$matchKey>',
+          ),
+        )) {
           // -- Text inside a tag --
 
           /// The href link present in some `a` tags
@@ -62,26 +63,25 @@ class HTMLText extends StatelessWidget {
 
           if (tag.key == 'a') {
             final match = RegExp(
-                    '<$matchKey(${matchAttributes()})*$matchSpaces>$part</$matchKey>')
-                .allMatches(htmlString)
-                .first
-                .group(0)!;
+              '<$matchKey(${matchAttributes()})*$matchSpaces>$part</$matchKey>',
+            ).allMatches(htmlString).first.group(0)!;
 
-            link = RegExp(matchAttributes(attrRegex: 'href'))
-                .allMatches(match)
-                .first
-                .group(3);
+            link = RegExp(
+              matchAttributes(attrRegex: 'href'),
+            ).allMatches(match).first.group(3);
           }
 
-          result.add(TextSpan(
-            text: parts[i],
-            style: tag.value,
-            recognizer:
-                (link == null || link.isEmpty) ? null : TapGestureRecognizer()
-                  ?..onTap = () {
-                    openExternalURL(context, link!);
-                  },
-          ));
+          result.add(
+            TextSpan(
+              text: parts[i],
+              style: tag.value,
+              recognizer:
+                  (link == null || link.isEmpty) ? null : TapGestureRecognizer()
+                    ?..onTap = () {
+                      openExternalURL(context, link!);
+                    },
+            ),
+          );
         } else {
           // -- Text outside a tag --
           result.add(TextSpan(text: part, style: defaultTextStyle));

@@ -60,12 +60,10 @@ class _ExportDataPageState extends State<ExportDataPage> {
     final t = Translations.of(context);
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text(t.backup.export.title),
-        ),
-        persistentFooterButtons: [
-          PersistentFooterButton(
-              child: FilledButton(
+      appBar: AppBar(title: Text(t.backup.export.title)),
+      persistentFooterButtons: [
+        PersistentFooterButton(
+          child: FilledButton(
             child: Text(t.backup.export.title),
             onPressed: () async {
               final messeger = ScaffoldMessenger.of(context);
@@ -80,58 +78,63 @@ class _ExportDataPageState extends State<ExportDataPage> {
                 await BackupDatabaseService()
                     .exportDatabaseFile(path)
                     .then((value) {
-                  messeger.showSnackBar(SnackBar(
-                    content: Text(t.backup.export.success(x: path)),
-                  ));
-                }).catchError((err) {
-                  messeger.showSnackBar(SnackBar(
-                    content: Text('$err'),
-                  ));
-                });
+                      messeger.showSnackBar(
+                        SnackBar(
+                          content: Text(t.backup.export.success(x: path)),
+                        ),
+                      );
+                    })
+                    .catchError((err) {
+                      messeger.showSnackBar(SnackBar(content: Text('$err')));
+                    });
               } else {
                 await BackupDatabaseService()
                     .exportSpreadsheet(
-                        path,
-                        await TransactionService.instance
-                            .getTransactions(filters: filters)
-                            .first)
+                      path,
+                      await TransactionService.instance
+                          .getTransactions(filters: filters)
+                          .first,
+                    )
                     .then((value) {
-                  messeger.showSnackBar(SnackBar(
-                    content: Text(t.backup.export.success(x: value)),
-                  ));
-                }).catchError((err) {
-                  messeger.showSnackBar(SnackBar(
-                    content: Text('$err'),
-                  ));
-                });
+                      messeger.showSnackBar(
+                        SnackBar(
+                          content: Text(t.backup.export.success(x: value)),
+                        ),
+                      );
+                    })
+                    .catchError((err) {
+                      messeger.showSnackBar(SnackBar(content: Text('$err')));
+                    });
               }
             },
-          ))
-        ],
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.only(bottom: 12, top: 16),
-          child: Column(
-            children: [
-              cardSelector(
-                exportFormat: _ExportFormats.db,
-                title: t.backup.export.all,
-                descr: t.backup.export.all_descr,
-              ),
-              cardSelector(
-                exportFormat: _ExportFormats.csv,
-                title: t.backup.export.transactions,
-                descr: t.backup.export.transactions_descr,
-              ),
-
-              // * -----------------------------------
-              // * -----------------------------------
-              // * -----------------------------------
-              // TODO: --------- ADD FILTERS ---------
-              // * -----------------------------------
-              // * -----------------------------------
-              // * -----------------------------------
-            ],
           ),
-        ));
+        ),
+      ],
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.only(bottom: 12, top: 16),
+        child: Column(
+          children: [
+            cardSelector(
+              exportFormat: _ExportFormats.db,
+              title: t.backup.export.all,
+              descr: t.backup.export.all_descr,
+            ),
+            cardSelector(
+              exportFormat: _ExportFormats.csv,
+              title: t.backup.export.transactions,
+              descr: t.backup.export.transactions_descr,
+            ),
+
+            // * -----------------------------------
+            // * -----------------------------------
+            // * -----------------------------------
+            // TODO: --------- ADD FILTERS ---------
+            // * -----------------------------------
+            // * -----------------------------------
+            // * -----------------------------------
+          ],
+        ),
+      ),
+    );
   }
 }

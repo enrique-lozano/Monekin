@@ -12,12 +12,13 @@ import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 class SubcategoryFormDialog extends StatefulWidget {
-  const SubcategoryFormDialog(
-      {super.key,
-      required this.onSubmit,
-      this.name = '',
-      required this.icon,
-      this.color = Colors.black});
+  const SubcategoryFormDialog({
+    super.key,
+    required this.onSubmit,
+    this.name = '',
+    required this.icon,
+    this.color = Colors.black,
+  });
 
   final String name;
   final SupportedIcon icon;
@@ -57,13 +58,15 @@ class _SubcategoryFormDialogState extends State<SubcategoryFormDialog> {
       title: widget.name.isEmpty
           ? t.categories.subcategories_add
           : t.categories.edit,
-      footer: BottomSheetFooter(onSaved: () {
-        if (_formKey.currentState!.validate()) {
-          _formKey.currentState!.save();
-          widget.onSubmit(_nameController.text, _icon);
-          Navigator.pop(context);
-        }
-      }),
+      footer: BottomSheetFooter(
+        onSaved: () {
+          if (_formKey.currentState!.validate()) {
+            _formKey.currentState!.save();
+            widget.onSubmit(_nameController.text, _icon);
+            Navigator.pop(context);
+          }
+        },
+      ),
       bodyPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,11 +74,12 @@ class _SubcategoryFormDialogState extends State<SubcategoryFormDialog> {
           IconDisplayer.fromCategory(
             context,
             category: Category.fromDB(
-                Category.unkown().copyWith(
-                  color: Value(widget.color.toHex()),
-                  iconId: _icon.id,
-                ),
-                null),
+              Category.unkown().copyWith(
+                color: Value(widget.color.toHex()),
+                iconId: _icon.id,
+              ),
+              null,
+            ),
             size: 32,
             onTap: () => showIconSelectorModal(
               context,
@@ -109,7 +113,7 @@ class _SubcategoryFormDialogState extends State<SubcategoryFormDialog> {
                 textInputAction: TextInputAction.next,
               ),
             ),
-          )
+          ),
         ],
       ),
     );

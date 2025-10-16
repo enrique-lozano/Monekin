@@ -9,35 +9,41 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 List<RecurrencyData> recurrencyOptionsForTranslationForm = [
   const RecurrencyData.noRepeat(),
   const RecurrencyData.withLimit(
-      ruleRecurrentLimit: RecurrentRuleLimit.infinite(),
-      intervalPeriod: Periodicity.day),
+    ruleRecurrentLimit: RecurrentRuleLimit.infinite(),
+    intervalPeriod: Periodicity.day,
+  ),
   const RecurrencyData.withLimit(
-      ruleRecurrentLimit: RecurrentRuleLimit.infinite(),
-      intervalPeriod: Periodicity.week),
+    ruleRecurrentLimit: RecurrentRuleLimit.infinite(),
+    intervalPeriod: Periodicity.week,
+  ),
   const RecurrencyData.withLimit(
-      ruleRecurrentLimit: RecurrentRuleLimit.infinite(),
-      intervalPeriod: Periodicity.month),
+    ruleRecurrentLimit: RecurrentRuleLimit.infinite(),
+    intervalPeriod: Periodicity.month,
+  ),
   const RecurrencyData.withLimit(
-      ruleRecurrentLimit: RecurrentRuleLimit.infinite(),
-      intervalPeriod: Periodicity.year),
+    ruleRecurrentLimit: RecurrentRuleLimit.infinite(),
+    intervalPeriod: Periodicity.year,
+  ),
 ];
 
 DynamicSelectorModal<RecurrencyData?, RecurrencyData?>
-    getTransactionFormIntervalSelector(
+getTransactionFormIntervalSelector(
   BuildContext context,
   RecurrencyData recurrentRule,
 ) {
   final t = Translations.of(context);
 
-  final isSelectedRuleInOptions = recurrencyOptionsForTranslationForm
-          .firstWhereOrNull((element) => element == recurrentRule) !=
+  final isSelectedRuleInOptions =
+      recurrencyOptionsForTranslationForm.firstWhereOrNull(
+        (element) => element == recurrentRule,
+      ) !=
       null;
 
   return DynamicSelectorModal<RecurrencyData?, RecurrencyData?>(
     items: [
       ...recurrencyOptionsForTranslationForm,
       if (!isSelectedRuleInOptions) recurrentRule,
-      null
+      null,
     ],
     selectedValue: recurrentRule,
     displayNameGetter: (v) {

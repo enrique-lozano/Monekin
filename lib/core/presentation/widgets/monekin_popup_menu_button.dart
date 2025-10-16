@@ -29,12 +29,14 @@ class MonekinPopupMenuButton extends StatelessWidget {
                     : null,
               ),
               minLeadingWidth: 26,
-              title: Text(actionItem.label,
-                  style: TextStyle(
-                    color: actionItem.role != null
-                        ? actionItem.getColorBasedOnRole(context)
-                        : null,
-                  )),
+              title: Text(
+                actionItem.label,
+                style: TextStyle(
+                  color: actionItem.role != null
+                      ? actionItem.getColorBasedOnRole(context)
+                      : null,
+                ),
+              ),
             ),
           );
         });

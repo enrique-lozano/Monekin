@@ -55,31 +55,40 @@ class DatePeriodState {
 
     switch (datePeriod.periodType) {
       case PeriodType.cycle:
-        final (DateTime fromDate, DateTime toDate) =
-            switch (datePeriod.periodicity) {
+        final (
+          DateTime fromDate,
+          DateTime toDate,
+        ) = switch (datePeriod.periodicity) {
           Periodicity.year => (
-              DateTime(currentYear + periodModifier, 1, 1),
-              DateTime(currentYear + 1 + periodModifier, 1, 1),
-            ),
+            DateTime(currentYear + periodModifier, 1, 1),
+            DateTime(currentYear + 1 + periodModifier, 1, 1),
+          ),
           Periodicity.month => (
-              DateTime(currentYear, currentMonth + periodModifier, 1),
-              DateTime(currentYear, currentMonth + 1 + periodModifier, 1),
-            ),
+            DateTime(currentYear, currentMonth + periodModifier, 1),
+            DateTime(currentYear, currentMonth + 1 + periodModifier, 1),
+          ),
           Periodicity.week => (
-              DateTime.now()
-                  .subtract(Duration(days: DateTime.now().weekday - 1))
-                  .add(Duration(days: 7 * periodModifier)),
-              DateTime.now()
-                  .add(Duration(
-                      days: DateTime.daysPerWeek - DateTime.now().weekday))
-                  .add(Duration(days: 7 * periodModifier)),
-            ),
+            DateTime.now()
+                .subtract(Duration(days: DateTime.now().weekday - 1))
+                .add(Duration(days: 7 * periodModifier)),
+            DateTime.now()
+                .add(
+                  Duration(days: DateTime.daysPerWeek - DateTime.now().weekday),
+                )
+                .add(Duration(days: 7 * periodModifier)),
+          ),
           Periodicity.day => (
-              DateTime(currentYear, currentMonth,
-                  currentDayOfMonth + periodModifier),
-              DateTime(currentYear, currentMonth,
-                  currentDayOfMonth + 1 + periodModifier),
+            DateTime(
+              currentYear,
+              currentMonth,
+              currentDayOfMonth + periodModifier,
             ),
+            DateTime(
+              currentYear,
+              currentMonth,
+              currentDayOfMonth + 1 + periodModifier,
+            ),
+          ),
         };
 
         return (fromDate, toDate);
@@ -95,20 +104,22 @@ class DatePeriodState {
         }
 
         final durationToAdd = Duration(
-            days: dateRange.$1!.dayDifference(dateRange.$2!) * periodModifier);
+          days: dateRange.$1!.dayDifference(dateRange.$2!) * periodModifier,
+        );
 
         return (
           dateRange.$1!.add(durationToAdd),
-          dateRange.$2!.add(durationToAdd)
+          dateRange.$2!.add(durationToAdd),
         );
 
       case PeriodType.lastDays:
         final currentEndDate = DateTime.now().copyWith(
-            day: currentDayOfMonth + periodModifier * datePeriod.lastDays);
+          day: currentDayOfMonth + periodModifier * datePeriod.lastDays,
+        );
 
         return (
           currentEndDate.subtract(Duration(days: datePeriod.lastDays)),
-          currentEndDate
+          currentEndDate,
         );
 
       case PeriodType.allTime:
@@ -120,24 +131,26 @@ class DatePeriodState {
     final t = Translations.of(context);
 
     String defaultFormatting() {
-      final withoutYearDateFormat =
-          showLongMonth ? DateFormat.MMMMd() : DateFormat.MMMd();
-      final withYearDateFormat =
-          showLongMonth ? DateFormat.yMMMd() : DateFormat.yMd();
+      final withoutYearDateFormat = showLongMonth
+          ? DateFormat.MMMMd()
+          : DateFormat.MMMd();
+      final withYearDateFormat = showLongMonth
+          ? DateFormat.yMMMd()
+          : DateFormat.yMd();
 
       final startDateStr = startDate == null
           ? '---'
           : (startDate!.year == currentYear
-                  ? withoutYearDateFormat
-                  : withYearDateFormat)
-              .format(startDate!);
+                    ? withoutYearDateFormat
+                    : withYearDateFormat)
+                .format(startDate!);
 
       final endDateStr = endDate == null
           ? '---'
           : (endDate!.year == currentYear
-                  ? withoutYearDateFormat
-                  : withYearDateFormat)
-              .format(endDate!);
+                    ? withoutYearDateFormat
+                    : withYearDateFormat)
+                .format(endDate!);
 
       return '$startDateStr - $endDateStr';
     }
@@ -164,8 +177,9 @@ class DatePeriodState {
 
       case PeriodType.lastDays:
         if (periodModifier == 0) {
-          return t.general.time.ranges.types
-              .last_days_form(x: datePeriod.lastDays);
+          return t.general.time.ranges.types.last_days_form(
+            x: datePeriod.lastDays,
+          );
         }
 
         return defaultFormatting();
