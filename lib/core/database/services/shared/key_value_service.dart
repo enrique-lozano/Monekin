@@ -24,7 +24,7 @@ abstract class KeyValueService<
   });
 
   Future<void> initializeGlobalStateMap() async {
-    final savedSettings = await db.select(table).watch().first;
+    final savedSettings = await db.select(table).get();
 
     for (final savedSetting in savedSettings.map(rowToKeyPairInstance)) {
       globalStateMap[savedSetting.key] = savedSetting.value;
