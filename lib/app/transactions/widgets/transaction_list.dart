@@ -194,8 +194,10 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
                       : (() => widget.onLongPress!(transaction)),
                   isSelected: widget.selectedTransactions
                       .any((element) => element.id == transaction.id),
-                  leftSwipeStatusCodeString: appStateSettings[SettingKey.leftSwipe],
-                  rightSwipeStatusCodeString: appStateSettings[SettingKey.rightSwipe],
+                  leftSwipeStatusCodeString:
+                      appStateSettings[SettingKey.transactionSwipeLeftAction],
+                  rightSwipeStatusCodeString:
+                      appStateSettings[SettingKey.transactionSwipeRightAction],
                 );
               },
               separatorBuilder: (context, index) {

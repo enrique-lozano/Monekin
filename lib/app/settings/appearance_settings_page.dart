@@ -37,10 +37,13 @@ class SelectItem<T> {
 }
 
 class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
-  late final GlobalKey<MonekinDropdownSelectState> _themeDropdownKey = GlobalKey();
-  late final GlobalKey<MonekinDropdownSelectState> _swipeRightActionDropdownKey = GlobalKey();
-  late final GlobalKey<MonekinDropdownSelectState> _swipeLeftActionDropdownKey = GlobalKey();
- 
+  late final GlobalKey<MonekinDropdownSelectState> _themeDropdownKey =
+      GlobalKey();
+  late final GlobalKey<MonekinDropdownSelectState>
+      _swipeRightActionDropdownKey = GlobalKey();
+  late final GlobalKey<MonekinDropdownSelectState> _swipeLeftActionDropdownKey =
+      GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -100,15 +103,20 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
             createListSeparator(context, t.settings.swipe_title),
             Builder(
               builder: (context) {
-                final statusCodeString = appStateSettings[SettingKey.rightSwipe];
-                
+                final statusCodeString =
+                    appStateSettings[SettingKey.transactionSwipeRightAction];
+
                 return ListTile(
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Flexible(child: Text(t.settings.swipe_right)),
                       const SizedBox(width: 12),
-                      Flexible(child: _buildSwipeActionDropdown(statusCodeString, SettingKey.rightSwipe, _swipeRightActionDropdownKey))
+                      Flexible(
+                          child: _buildSwipeActionDropdown(
+                              statusCodeString,
+                              SettingKey.transactionSwipeRightAction,
+                              _swipeRightActionDropdownKey))
                     ],
                   ),
                   onTap: () {
@@ -120,22 +128,26 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
             ),
             Builder(
               builder: (context) {
-                final statusCodeString = appStateSettings[SettingKey.leftSwipe];
-                
+                final statusCodeString =
+                    appStateSettings[SettingKey.transactionSwipeLeftAction];
+
                 return ListTile(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(child: Text(t.settings.swipe_left)),
-                      const SizedBox(width: 12),
-                      Flexible(child: _buildSwipeActionDropdown(statusCodeString, SettingKey.leftSwipe, _swipeLeftActionDropdownKey))
-                    ],
-                  ),
-                  onTap: () {
-                    _swipeLeftActionDropdownKey.currentState!.openDropdown();
-                  },
-                  leading: const Icon(Icons.swipe_left)
-                );
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(child: Text(t.settings.swipe_left)),
+                        const SizedBox(width: 12),
+                        Flexible(
+                            child: _buildSwipeActionDropdown(
+                                statusCodeString,
+                                SettingKey.transactionSwipeLeftAction,
+                                _swipeLeftActionDropdownKey))
+                      ],
+                    ),
+                    onTap: () {
+                      _swipeLeftActionDropdownKey.currentState!.openDropdown();
+                    },
+                    leading: const Icon(Icons.swipe_left));
               },
             ),
             createListSeparator(context, t.settings.theme_and_colors),
@@ -313,33 +325,34 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
     );
   }
 
-  
-
-  Widget _buildSwipeActionDropdown(String? statusCodeString, SettingKey direction, GlobalKey<MonekinDropdownSelectState<dynamic>>? swipeActionKey) {
-  return Focus(
-    canRequestFocus: false,
-    descendantsAreFocusable: false,
-    child: MonekinDropdownSelect<String>(
-      key: swipeActionKey,
-      // TODO: Need to see a better form of implementation, as for now it just checks if actions is set or not, if not it dafults to none.
-      initial: statusCodeString ?? t.ui_actions.none,
-      compact: true,
-      expanded: false,
-      items: [ 
-        t.ui_actions.none,
-        t.transaction.status.voided,
-        t.transaction.status.pending,
-        t.transaction.status.reconciled,
-        t.transaction.status.unreconciled,
-      ],
-      onChanged: (actionString) {
-        UserSettingService.instance
-          .setItem(
-            direction,
-            actionString,
-            updateGlobalState: true,
-          )
-          .then((value) => null);
+  Widget _buildSwipeActionDropdown(
+      String? statusCodeString,
+      SettingKey direction,
+      GlobalKey<MonekinDropdownSelectState<dynamic>>? swipeActionKey) {
+    return Focus(
+      canRequestFocus: false,
+      descendantsAreFocusable: false,
+      child: MonekinDropdownSelect<String>(
+        key: swipeActionKey,
+        // TODO: Need to see a better form of implementation, as for now it just checks if actions is set or not, if not it dafults to none.
+        initial: statusCodeString ?? t.ui_actions.none,
+        compact: true,
+        expanded: false,
+        items: [
+          t.ui_actions.none,
+          t.transaction.status.voided,
+          t.transaction.status.pending,
+          t.transaction.status.reconciled,
+          t.transaction.status.unreconciled,
+        ],
+        onChanged: (actionString) {
+          UserSettingService.instance
+              .setItem(
+                direction,
+                actionString,
+                updateGlobalState: true,
+              )
+              .then((value) => null);
         },
       ),
     );
