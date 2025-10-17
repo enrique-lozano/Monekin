@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -190,10 +189,7 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
               isSelected: widget.selectedTransactions.any(
                 (element) => element.id == transaction.id,
               ),
-              leftSwipeStatusCodeString:
-                  appStateSettings[SettingKey.transactionSwipeLeftAction],
-              rightSwipeStatusCodeString:
-                  appStateSettings[SettingKey.transactionSwipeRightAction],
+              applySwipeActions: true,
             );
           },
           separatorBuilder: (context, index) {

@@ -1,8 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/app/settings/transaction_swipe_action_selector.dart';
 import 'package:monekin/app/settings/widgets/language_selector.dart';
 import 'package:monekin/app/settings/widgets/monekin_tile_switch.dart';
 import 'package:monekin/app/settings/widgets/supported_locales.dart';
+import 'package:monekin/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
 import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/database/services/user-setting/utils/get_theme_from_string.dart';
@@ -35,10 +37,6 @@ class SelectItem<T> {
 
 class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
   late final GlobalKey<MonekinDropdownSelectState> _themeDropdownKey =
-      GlobalKey();
-  late final GlobalKey<MonekinDropdownSelectState>
-  _swipeRightActionDropdownKey = GlobalKey();
-  late final GlobalKey<MonekinDropdownSelectState> _swipeLeftActionDropdownKey =
       GlobalKey();
 
   @override
@@ -107,63 +105,14 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               },
             ),
             createListSeparator(context, t.settings.swipe_actions.title),
-            Builder(
-              builder: (context) {
-                final statusCodeString =
-                    appStateSettings[SettingKey.transactionSwipeRightAction];
 
-                return ListTile(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        child: Text(t.settings.swipe_actions.swipe_right),
-                      ),
-                      const SizedBox(width: 12),
-                      Flexible(
-                        child: _buildSwipeActionDropdown(
-                          statusCodeString,
-                          SettingKey.transactionSwipeRightAction,
-                          _swipeRightActionDropdownKey,
-                        ),
-                      ),
-                    ],
-                  ),
-                  onTap: () {
-                    _swipeRightActionDropdownKey.currentState!.openDropdown();
-                  },
-                  leading: const Icon(Icons.swipe_right),
-                );
-              },
+            buildSwipeActionTileSelector(
+              context,
+              SettingKey.transactionSwipeLeftAction,
             ),
-            Builder(
-              builder: (context) {
-                final statusCodeString =
-                    appStateSettings[SettingKey.transactionSwipeLeftAction];
-
-                return ListTile(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        child: Text(t.settings.swipe_actions.swipe_right),
-                      ),
-                      const SizedBox(width: 12),
-                      Flexible(
-                        child: _buildSwipeActionDropdown(
-                          statusCodeString,
-                          SettingKey.transactionSwipeLeftAction,
-                          _swipeLeftActionDropdownKey,
-                        ),
-                      ),
-                    ],
-                  ),
-                  onTap: () {
-                    _swipeLeftActionDropdownKey.currentState!.openDropdown();
-                  },
-                  leading: const Icon(Icons.swipe_left),
-                );
-              },
+            buildSwipeActionTileSelector(
+              context,
+              SettingKey.transactionSwipeRightAction,
             ),
             createListSeparator(context, t.settings.theme_and_colors),
             Builder(
@@ -319,6 +268,57 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
     );
   }
 
+  Builder buildSwipeActionTileSelector(
+    BuildContext context,
+    SettingKey direction,
+  ) {
+    final t = Translations.of(context);
+
+    if (direction != SettingKey.transactionSwipeLeftAction &&
+        direction != SettingKey.transactionSwipeRightAction) {
+      throw Exception(
+        'The direction provided is not valid. Use either transactionSwipeLeftAction or transactionSwipeRightAction',
+      );
+    }
+
+    return Builder(
+      builder: (context) {
+        final selectedAction = TransactionSwipeAction.fromString(
+          appStateSettings[direction],
+        );
+
+        final tileTitle = direction == SettingKey.transactionSwipeLeftAction
+            ? t.settings.swipe_actions.swipe_left
+            : t.settings.swipe_actions.swipe_right;
+
+        final tileIcon = direction == SettingKey.transactionSwipeLeftAction
+            ? Icons.swipe_left
+            : Icons.swipe_right;
+
+        return ListTile(
+          title: Text(tileTitle),
+          subtitle: Text(selectedAction.displayName(context)),
+          onTap: () {
+            showTransactionSwipeActionSelector(
+              context,
+              TransactionSwipeActionSelector(
+                selectedAction: selectedAction,
+                title: tileTitle,
+              ),
+            ).then((result) {
+              if (result == null) return;
+
+              UserSettingService.instance
+                  .setItem(direction, result.result?.name)
+                  .then((value) => setState(() {}));
+            });
+          },
+          leading: Icon(tileIcon),
+        );
+      },
+    );
+  }
+
   Widget _buildThemeDropdown(ThemeMode theme) {
     return Focus(
       canRequestFocus: false,
@@ -333,36 +333,6 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
         onChanged: (mode) {
           UserSettingService.instance
               .setItem(SettingKey.themeMode, mode.name, updateGlobalState: true)
-              .then((value) => null);
-        },
-      ),
-    );
-  }
-
-  Widget _buildSwipeActionDropdown(
-    String? statusCodeString,
-    SettingKey direction,
-    GlobalKey<MonekinDropdownSelectState<dynamic>>? swipeActionKey,
-  ) {
-    return Focus(
-      canRequestFocus: false,
-      descendantsAreFocusable: false,
-      child: MonekinDropdownSelect<String>(
-        key: swipeActionKey,
-        // TODO: Need to see a better form of implementation, as for now it just checks if actions is set or not, if not it dafults to none.
-        initial: statusCodeString ?? "NONE",
-        compact: true,
-        expanded: false,
-        items: [
-          "NONE",
-          t.transaction.status.voided,
-          t.transaction.status.pending,
-          t.transaction.status.reconciled,
-          t.transaction.status.unreconciled,
-        ],
-        onChanged: (actionString) {
-          UserSettingService.instance
-              .setItem(direction, actionString, updateGlobalState: true)
               .then((value) => null);
         },
       ),

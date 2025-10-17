@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/transactions/transaction_details.page.dart';
-import 'package:monekin/core/database/services/user-setting/utils/get_transaction_status_from_string.dart';
+import 'package:monekin/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
+import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
@@ -25,8 +26,7 @@ class TransactionListTile extends StatelessWidget {
     this.onLongPress,
     this.onTap,
     this.isSelected = false,
-    required this.leftSwipeStatusCodeString,
-    required this.rightSwipeStatusCodeString,
+    this.applySwipeActions = false,
   });
 
   final MoneyTransaction transaction;
@@ -38,8 +38,7 @@ class TransactionListTile extends StatelessWidget {
 
   final Object? heroTag;
 
-  final String? leftSwipeStatusCodeString;
-  final String? rightSwipeStatusCodeString;
+  final bool applySwipeActions;
 
   /// Action to trigger when the tile is long pressed. If `null`,
   /// the tile will display a modal with some quick actions for
@@ -52,82 +51,68 @@ class TransactionListTile extends StatelessWidget {
 
   final bool isSelected;
 
-  showTransactionActions(BuildContext context, MoneyTransaction transaction) {
+  void showTransactionActions(
+    BuildContext context,
+    MoneyTransaction transaction,
+  ) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (context) {
         return Column(
           mainAxisSize: MainAxisSize.min,
-          children:
-              (TransactionViewActionService()
-                      .transactionDetailsActions(
-                        context,
-                        transaction: transaction,
-                      )
-                      .map(
-                        (e) => ListTile(
-                          leading: Icon(e.icon),
-                          title: Text(e.label),
-                          onTap: e.onClick == null
-                              ? null
-                              : () {
-                                  Navigator.pop(context);
-                                  e.onClick!();
-                                },
-                        ),
-                      ))
-                  .toList(),
+          children: TransactionViewActionService()
+              .transactionDetailsActions(context, transaction: transaction)
+              .map(
+                (e) => ListTile(
+                  leading: Icon(e.icon),
+                  title: Text(e.label),
+                  onTap: e.onClick == null
+                      ? null
+                      : () {
+                          Navigator.pop(context);
+                          e.onClick!();
+                        },
+                ),
+              )
+              .toList(),
         );
       },
     );
   }
 
-  Widget showLeftSwipeActionText(
-    BuildContext context,
-    TransactionStatus? statusCode,
-  ) {
-    if (statusCode == null) {
-      return Container();
+  Widget showSwipeActionBg(BuildContext context, SettingKey settingKey) {
+    final isLeft = settingKey == SettingKey.transactionSwipeLeftAction;
+    final isRight = settingKey == SettingKey.transactionSwipeRightAction;
+
+    if (!isLeft && !isRight) {
+      throw Exception('Invalid SettingKey for swipe action background');
     }
 
-    return Container(
-      color: statusCode.color,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Icon(statusCode.icon, color: Colors.white),
-          const SizedBox(width: 5),
-          Text(
-            statusCode.displayName(context),
-            style: const TextStyle(color: Colors.white),
-          ),
-        ],
-      ),
+    final swipeAction = TransactionSwipeAction.fromString(
+      appStateSettings[settingKey],
     );
-  }
 
-  Widget showRightSwipeActionText(
-    BuildContext context,
-    TransactionStatus? statusCode,
-  ) {
-    if (statusCode == null) {
+    if (swipeAction == null) {
       return Container();
     }
 
+    final contrastColor = Colors.white;
+
     return Container(
-      color: statusCode.color,
       padding: const EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(color: swipeAction.color(context)),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: isRight
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
         children: [
           Text(
-            statusCode.displayName(context),
-            style: const TextStyle(color: Colors.white),
+            swipeAction.displayName(context),
+            style: TextStyle(color: contrastColor),
           ),
           const SizedBox(width: 5),
-          Icon(statusCode.icon, color: Colors.white),
+          Icon(swipeAction.icon, color: contrastColor),
         ],
       ),
     );
@@ -135,39 +120,18 @@ class TransactionListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TransactionStatus? leftSwipeStatusCode = getTransactionStatusFromString(
-      leftSwipeStatusCodeString,
-    );
-    TransactionStatus? rightSwipeStatusCode = getTransactionStatusFromString(
-      rightSwipeStatusCodeString,
-    );
-
     return Dismissible(
       key: Key(transaction.id),
-      direction: getDismissDirection(leftSwipeStatusCode, rightSwipeStatusCode),
-      // TODO right now for the dissmissable to work, you have to swipe all the way.
-      // TODO Need to make a snap in between, like thunderbird implements it.
-      background: showLeftSwipeActionText(context, rightSwipeStatusCode),
-      // TODO right now for the dissmissable to work, you have to swipe all the way.
-      // TODO Need to make a snap in between, like thunderbird implements it.
-      secondaryBackground: showRightSwipeActionText(
+      direction: getDismissDirection(),
+      background: showSwipeActionBg(
         context,
-        leftSwipeStatusCode,
+        SettingKey.transactionSwipeLeftAction,
+      ),
+      secondaryBackground: showSwipeActionBg(
+        context,
+        SettingKey.transactionSwipeRightAction,
       ),
       confirmDismiss: (direction) async {
-        if (direction == DismissDirection.startToEnd &&
-            rightSwipeStatusCode != null) {
-          await TransactionViewActionService().updateTransactionStatus(
-            transaction.id,
-            rightSwipeStatusCode,
-          );
-        } else if (direction == DismissDirection.endToStart &&
-            leftSwipeStatusCode != null) {
-          await TransactionViewActionService().updateTransactionStatus(
-            transaction.id,
-            leftSwipeStatusCode,
-          );
-        }
         return false;
       },
       child: ListTile(
@@ -281,13 +245,13 @@ class TransactionListTile extends StatelessWidget {
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Row(
+                          spacing: 4,
                           children: [
                             Icon(
                               transaction.nextPayStatus!.icon,
                               size: 14,
                               color: transaction.nextPayStatus!.color(context),
                             ),
-                            const SizedBox(width: 4),
                             Text(
                               transaction.nextPayStatus!.displayDaysToPay(
                                 context,
@@ -378,4 +342,23 @@ class TransactionListTile extends StatelessWidget {
       ),
     );
   }
+}
+
+DismissDirection getDismissDirection() {
+  final leftSwipeStatusCode = TransactionSwipeAction.fromString(
+    appStateSettings[SettingKey.transactionSwipeLeftAction],
+  );
+
+  final rightSwipeStatusCode = TransactionSwipeAction.fromString(
+    appStateSettings[SettingKey.transactionSwipeRightAction],
+  );
+
+  if (leftSwipeStatusCode == null && rightSwipeStatusCode == null) {
+    return DismissDirection.none;
+  } else if (leftSwipeStatusCode == null) {
+    return DismissDirection.startToEnd;
+  } else if (rightSwipeStatusCode == null) {
+    return DismissDirection.endToStart;
+  }
+  return DismissDirection.horizontal;
 }
