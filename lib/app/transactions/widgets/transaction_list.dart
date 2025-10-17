@@ -189,6 +189,7 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
               isSelected: widget.selectedTransactions.any(
                 (element) => element.id == transaction.id,
               ),
+              applySwipeActions: true,
             );
           },
           separatorBuilder: (context, index) {

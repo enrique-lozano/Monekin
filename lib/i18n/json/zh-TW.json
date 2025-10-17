@@ -701,6 +701,11 @@
     "dynamic-colors.descr": "盡可能使用系統強調色",
     "accent-color": "強調色",
     "accent-color.descr": "選擇應用程式用來強調介面某些部分的顏色",
+    "SWIPE-ACTIONS": {
+      "title": "滑動操作",
+      "swipe-left": "向左滑動",
+      "swipe-right": "向右滑動"
+    },
     "SECURITY": {
       "title": "安全",
       "private-mode-at-launch": "啟動時啟用的隱私模式",
