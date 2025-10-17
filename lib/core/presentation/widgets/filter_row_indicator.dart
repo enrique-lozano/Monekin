@@ -7,8 +7,11 @@ import 'package:monekin/core/presentation/widgets/transaction_filter/transaction
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 class FilterRowIndicator extends StatefulWidget {
-  const FilterRowIndicator(
-      {super.key, required this.filters, required this.onChange});
+  const FilterRowIndicator({
+    super.key,
+    required this.filters,
+    required this.onChange,
+  });
 
   final TransactionFilters filters;
   final void Function(TransactionFilters newFilters) onChange;
@@ -43,17 +46,11 @@ class _FilterRowIndicatorState extends State<FilterRowIndicator> {
       child: InputChip(
         padding: const EdgeInsets.all(0),
         onDeleted: onDeleted,
-        deleteIcon: const Icon(
-          Icons.close,
-          size: 12,
-        ),
+        deleteIcon: const Icon(Icons.close, size: 12),
         showCheckmark: false,
         selected: true,
         onSelected: (value) => false,
-        label: Text(
-          label,
-          style: Theme.of(context).textTheme.labelSmall!,
-        ),
+        label: Text(label, style: Theme.of(context).textTheme.labelSmall!),
       ),
     );
   }
@@ -74,10 +71,9 @@ class _FilterRowIndicatorState extends State<FilterRowIndicator> {
               padding: const EdgeInsets.only(right: 4),
               child: Text(
                 '${t.general.filters}:',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(fontWeight: FontWeight.w700),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w700),
               ),
             ),
             Expanded(
@@ -85,120 +81,131 @@ class _FilterRowIndicatorState extends State<FilterRowIndicator> {
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
                 child: ResponsiveRowColumn.withSymetricSpacing(
-                    direction: Axis.horizontal,
-                    spacing: 12,
-                    children: [
-                      if (filters.accountsIDs != null)
+                  direction: Axis.horizontal,
+                  spacing: 12,
+                  children: [
+                    if (filters.accountsIDs != null)
+                      buildChip(
+                        context,
+                        label:
+                            '${filters.accountsIDs!.length} ${t.general.accounts}',
+                        onDeleted: () {
+                          filters = filters.copyWithNull(accountsIDs: true);
+                          widget.onChange(filters);
+                        },
+                      ),
+                    if (filters.minDate != null)
+                      buildChip(
+                        context,
+                        label: t.transaction.filters.from_date_def(
+                          date: DateFormat.yMd().format(filters.minDate!),
+                        ),
+                        onDeleted: () {
+                          filters = filters.copyWithNull(minDate: true);
+                          widget.onChange(filters);
+                        },
+                      ),
+                    if (filters.maxDate != null)
+                      buildChip(
+                        context,
+                        label: t.transaction.filters.to_date_def(
+                          date: DateFormat.yMd().format(filters.maxDate!),
+                        ),
+                        onDeleted: () {
+                          filters = filters.copyWithNull(maxDate: true);
+                          widget.onChange(filters);
+                        },
+                      ),
+                    if (filters.minValue != null)
+                      buildChip(
+                        context,
+                        label: t.transaction.filters.from_value_def(
+                          x: filters.minValue!,
+                        ),
+                        onDeleted: () {
+                          filters = filters.copyWithNull(minValue: true);
+                          widget.onChange(filters);
+                        },
+                      ),
+                    if (filters.maxValue != null)
+                      buildChip(
+                        context,
+                        label: t.transaction.filters.to_value_def(
+                          x: filters.maxValue!,
+                        ),
+                        onDeleted: () {
+                          filters = filters.copyWithNull(maxValue: true);
+                          widget.onChange(filters);
+                        },
+                      ),
+                    if (filters.status != null)
+                      buildChip(
+                        context,
+                        label:
+                            '${filters.status!.length} ${t.transaction.status.display(n: filters.status!.length)}',
+                        onDeleted: () {
+                          filters = filters.copyWithNull(status: true);
+                          widget.onChange(filters);
+                        },
+                      ),
+                    if (filters.tagsIDs != null)
+                      buildChip(
+                        context,
+                        label:
+                            filters.tagsIDs!.length == 1 &&
+                                filters.tagsIDs!.elementAt(0) == null
+                            ? t.tags.without_tags
+                            : '${filters.tagsIDs!.length} ${t.tags.display(n: filters.tagsIDs!.length)}',
+                        onDeleted: () {
+                          filters = filters.copyWithNull(tagsIDs: true);
+                          widget.onChange(filters);
+                        },
+                      ),
+                    if (filters.transactionTypes != null)
+                      for (final trType in filters.transactionTypes!) ...[
                         buildChip(
                           context,
-                          label:
-                              '${filters.accountsIDs!.length} ${t.general.accounts}',
+                          label: trType.displayName(context, plural: true),
                           onDeleted: () {
-                            filters = filters.copyWithNull(accountsIDs: true);
+                            filters = filters.copyWith(
+                              transactionTypes:
+                                  filters.transactionTypes!.length == 1
+                                        ? null
+                                        : filters.transactionTypes!
+                                    ?..removeWhere(
+                                      (element) =>
+                                          element.index == trType.index,
+                                    ),
+                            );
                             widget.onChange(filters);
                           },
                         ),
-                      if (filters.minDate != null)
-                        buildChip(
-                          context,
-                          label: t.transaction.filters.from_date_def(
-                              date: DateFormat.yMd().format(filters.minDate!)),
-                          onDeleted: () {
-                            filters = filters.copyWithNull(minDate: true);
-                            widget.onChange(filters);
-                          },
-                        ),
-                      if (filters.maxDate != null)
-                        buildChip(
-                          context,
-                          label: t.transaction.filters.to_date_def(
-                              date: DateFormat.yMd().format(filters.maxDate!)),
-                          onDeleted: () {
-                            filters = filters.copyWithNull(maxDate: true);
-                            widget.onChange(filters);
-                          },
-                        ),
-                      if (filters.minValue != null)
-                        buildChip(
-                          context,
-                          label: t.transaction.filters
-                              .from_value_def(x: filters.minValue!),
-                          onDeleted: () {
-                            filters = filters.copyWithNull(minValue: true);
-                            widget.onChange(filters);
-                          },
-                        ),
-                      if (filters.maxValue != null)
-                        buildChip(
-                          context,
-                          label: t.transaction.filters
-                              .to_value_def(x: filters.maxValue!),
-                          onDeleted: () {
-                            filters = filters.copyWithNull(maxValue: true);
-                            widget.onChange(filters);
-                          },
-                        ),
-                      if (filters.status != null)
-                        buildChip(
-                          context,
-                          label:
-                              '${filters.status!.length} ${t.transaction.status.display(n: filters.status!.length)}',
-                          onDeleted: () {
-                            filters = filters.copyWithNull(status: true);
-                            widget.onChange(filters);
-                          },
-                        ),
-                      if (filters.tagsIDs != null)
-                        buildChip(
-                          context,
-                          label: filters.tagsIDs!.length == 1 &&
-                                  filters.tagsIDs!.elementAt(0) == null
-                              ? t.tags.without_tags
-                              : '${filters.tagsIDs!.length} ${t.tags.display(n: filters.tagsIDs!.length)}',
-                          onDeleted: () {
-                            filters = filters.copyWithNull(tagsIDs: true);
-                            widget.onChange(filters);
-                          },
-                        ),
-                      if (filters.transactionTypes != null)
-                        for (final trType in filters.transactionTypes!) ...[
-                          buildChip(
-                            context,
-                            label: trType.displayName(context, plural: true),
-                            onDeleted: () {
-                              filters = filters.copyWith(
-                                  transactionTypes:
-                                      filters.transactionTypes!.length == 1
-                                          ? null
-                                          : filters.transactionTypes!
-                                        ?..removeWhere((element) =>
-                                            element.index == trType.index));
-                              widget.onChange(filters);
-                            },
+                      ],
+                    if (filters.categories != null)
+                      ResponsiveRowColumnItem(
+                        child: StreamBuilder(
+                          stream: CategoryService.instance.getCategories(
+                            predicate: (catTable, parentCatTable) =>
+                                catTable.id.isIn(filters.categories!),
                           ),
-                        ],
-                      if (filters.categories != null)
-                        ResponsiveRowColumnItem(
-                          child: StreamBuilder(
-                              stream: CategoryService.instance.getCategories(
-                                predicate: (catTable, parentCatTable) =>
-                                    catTable.id.isIn(filters.categories!),
-                              ),
-                              initialData: const <Category>[],
-                              builder: (context, snapshot) {
-                                return buildChip(
-                                  context,
-                                  label:
-                                      '${snapshot.data!.where((cat) => cat.isMainCategory).length} ${t.general.categories}',
-                                  onDeleted: () {
-                                    filters =
-                                        filters.copyWithNull(categories: true);
-                                    widget.onChange(filters);
-                                  },
+                          initialData: const <Category>[],
+                          builder: (context, snapshot) {
+                            return buildChip(
+                              context,
+                              label:
+                                  '${snapshot.data!.where((cat) => cat.isMainCategory).length} ${t.general.categories}',
+                              onDeleted: () {
+                                filters = filters.copyWithNull(
+                                  categories: true,
                                 );
-                              }),
-                        )
-                    ]),
+                                widget.onChange(filters);
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
           ],

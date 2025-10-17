@@ -29,31 +29,35 @@ class TransactionViewActionService {
         label: t.ui_actions.edit,
         icon: Icons.edit,
         onClick: () => RouteUtils.pushRoute(
-            context,
-            TransactionFormPage(
-              transactionToEdit: transaction,
-              mode: transaction.type,
-            )),
+          context,
+          TransactionFormPage(
+            transactionToEdit: transaction,
+            mode: transaction.type,
+          ),
+        ),
       ),
       if (transaction.recurrentInfo.isNoRecurrent)
         ListTileActionItem(
           label: t.transaction.duplicate_short,
           icon: Icons.control_point_duplicate_rounded,
           onClick: () => TransactionViewActionService()
-              .cloneTransactionWithAlertAndSnackBar(context,
-                  transaction: transaction),
+              .cloneTransactionWithAlertAndSnackBar(
+                context,
+                transaction: transaction,
+              ),
         ),
       ListTileActionItem(
-          label: t.ui_actions.delete,
-          icon: Icons.delete,
-          role: ListTileActionRole.delete,
-          onClick: () => TransactionViewActionService()
-                  .deleteTransactionWithAlertAndSnackBar(
-                context,
-                transactionId: transaction.id,
-                isRecurrent: isRecurrent,
-                navigateBack: navigateBackOnDelete,
-              ))
+        label: t.ui_actions.delete,
+        icon: Icons.delete,
+        role: ListTileActionRole.delete,
+        onClick: () => TransactionViewActionService()
+            .deleteTransactionWithAlertAndSnackBar(
+              context,
+              transactionId: transaction.id,
+              isRecurrent: isRecurrent,
+              navigateBack: navigateBackOnDelete,
+            ),
+      ),
     ];
   }
 
@@ -73,33 +77,38 @@ class TransactionViewActionService {
           ? t.transaction.delete
           : t.recurrent_transactions.details.delete_header,
       contentParagraphs: [
-        Text(!isRecurrent
-            ? t.transaction.delete_warning_message
-            : t.recurrent_transactions.details.delete_message),
+        Text(
+          !isRecurrent
+              ? t.transaction.delete_warning_message
+              : t.recurrent_transactions.details.delete_message,
+        ),
       ],
       confirmationText: t.ui_actions.continue_text,
     ).then((isConfirmed) {
       if (isConfirmed != true) return;
 
-      transactionService.deleteTransaction(transactionId).then((value) {
-        if (value == 0) {
-          scaffold.showSnackBar(
-            const SnackBar(content: Text('Error removing the transaction')),
-          );
+      transactionService
+          .deleteTransaction(transactionId)
+          .then((value) {
+            if (value == 0) {
+              scaffold.showSnackBar(
+                const SnackBar(content: Text('Error removing the transaction')),
+              );
 
-          return;
-        }
+              return;
+            }
 
-        if (navigateBack) {
-          Navigator.pop(context);
-        }
+            if (navigateBack) {
+              Navigator.pop(context);
+            }
 
-        scaffold.showSnackBar(SnackBar(
-          content: Text(t.transaction.delete_success),
-        ));
-      }).catchError((err) {
-        scaffold.showSnackBar(SnackBar(content: Text('$err')));
-      });
+            scaffold.showSnackBar(
+              SnackBar(content: Text(t.transaction.delete_success)),
+            );
+          })
+          .catchError((err) {
+            scaffold.showSnackBar(SnackBar(content: Text('$err')));
+          });
     });
   }
 
@@ -134,16 +143,19 @@ class TransactionViewActionService {
   }
 
   Future<void> _duplicateTransaction(
-      MoneyTransaction transaction, String newTrId) async {
+    MoneyTransaction transaction,
+    String newTrId,
+  ) async {
     final db = AppDB.instance;
 
-    await transactionService
-        .insertTransaction(transaction.copyWith(id: newTrId));
+    await transactionService.insertTransaction(
+      transaction.copyWith(id: newTrId),
+    );
 
     for (final tag in transaction.tags) {
-      await db.into(db.transactionTags).insert(
-            TransactionTag(transactionID: newTrId, tagID: tag.id),
-          );
+      await db
+          .into(db.transactionTags)
+          .insert(TransactionTag(transactionID: newTrId, tagID: tag.id));
     }
   }
 

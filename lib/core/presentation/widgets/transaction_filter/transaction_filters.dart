@@ -39,34 +39,35 @@ class TransactionFilters {
 
   final Iterable<String?>? tagsIDs;
 
-  const TransactionFilters(
-      {this.minDate,
-      this.maxDate,
-      this.searchValue,
-      this.includeParentCategoriesInSearch = false,
-      this.includeReceivingAccountsInAccountFilters = true,
-      this.minValue,
-      this.maxValue,
-      this.transactionTypes,
-      this.isRecurrent,
-      this.accountsIDs,
-      this.categories,
-      this.status,
-      this.tagsIDs});
+  const TransactionFilters({
+    this.minDate,
+    this.maxDate,
+    this.searchValue,
+    this.includeParentCategoriesInSearch = false,
+    this.includeReceivingAccountsInAccountFilters = true,
+    this.minValue,
+    this.maxValue,
+    this.transactionTypes,
+    this.isRecurrent,
+    this.accountsIDs,
+    this.categories,
+    this.status,
+    this.tagsIDs,
+  });
 
   get hasFilter => [
-        minDate,
-        maxDate,
-        searchValue,
-        minValue,
-        maxValue,
-        transactionTypes,
-        isRecurrent,
-        accountsIDs,
-        categories,
-        status,
-        tagsIDs,
-      ].any((element) => element != null);
+    minDate,
+    maxDate,
+    searchValue,
+    minValue,
+    maxValue,
+    transactionTypes,
+    isRecurrent,
+    accountsIDs,
+    categories,
+    status,
+    tagsIDs,
+  ].any((element) => element != null);
 
   Stream<List<Account>> accounts() => accountsIDs != null
       ? AccountService.instance.getAccounts(
@@ -82,69 +83,81 @@ class TransactionFilters {
     Currencies receivingAccountCurrency,
     Categories c,
     Categories,
-  )? toTransactionExpression({
+  )?
+  toTransactionExpression({
     Iterable<Expression<bool>> Function(
-            Transactions transaction,
-            Accounts account,
-            Currencies accountCurrency,
-            Accounts receivingAccount,
-            Currencies receivingAccountCurrency,
-            Categories c,
-            Categories)?
-        extraFilters,
+      Transactions transaction,
+      Accounts account,
+      Currencies accountCurrency,
+      Accounts receivingAccount,
+      Currencies receivingAccountCurrency,
+      Categories c,
+      Categories,
+    )?
+    extraFilters,
   }) {
-    return (transaction, account, accountCurrency, receivingAccount,
-            receivingAccountCurrency, c, p6) =>
-        AppDB.instance.buildExpr([
-          if (tagsIDs != null)
-            CustomExpression(
-                "t.id IN (SELECT transactionID FROM transactionTags WHERE tagID IN (${tagsIDs!.where((element) => element != null).map((s) => "'$s'").join(', ')})) ${tagsIDs!.any((element) => element == null) ? 'OR t.id NOT IN (SELECT transactionID FROM transactionTags)' : ''}"),
+    return (
+      transaction,
+      account,
+      accountCurrency,
+      receivingAccount,
+      receivingAccountCurrency,
+      c,
+      p6,
+    ) => AppDB.instance.buildExpr([
+      if (tagsIDs != null)
+        CustomExpression(
+          "t.id IN (SELECT transactionID FROM transactionTags WHERE tagID IN (${tagsIDs!.where((element) => element != null).map((s) => "'$s'").join(', ')})) ${tagsIDs!.any((element) => element == null) ? 'OR t.id NOT IN (SELECT transactionID FROM transactionTags)' : ''}",
+        ),
 
-          if (maxValue != null)
-            CustomExpression(
-                '(ABS(t.value * COALESCE(excRate.exchangeRate,1)) <= $maxValue)'),
+      if (maxValue != null)
+        CustomExpression(
+          '(ABS(t.value * COALESCE(excRate.exchangeRate,1)) <= $maxValue)',
+        ),
 
-          if (minValue != null)
-            CustomExpression(
-                '(ABS(t.value * COALESCE(excRate.exchangeRate,1)) >= $minValue)'),
+      if (minValue != null)
+        CustomExpression(
+          '(ABS(t.value * COALESCE(excRate.exchangeRate,1)) >= $minValue)',
+        ),
 
-          // Transaction types:
-          if (transactionTypes != null)
-            transaction.type.isInValues(transactionTypes!),
+      // Transaction types:
+      if (transactionTypes != null)
+        transaction.type.isInValues(transactionTypes!),
 
-          // Is recurrent:
-          if (isRecurrent == false) transaction.intervalPeriod.isNull(),
-          if (isRecurrent == true) transaction.intervalPeriod.isNotNull(),
+      // Is recurrent:
+      if (isRecurrent == false) transaction.intervalPeriod.isNull(),
+      if (isRecurrent == true) transaction.intervalPeriod.isNotNull(),
 
-          // Other filters:
-
-          if (searchValue != null && searchValue!.isNotEmpty)
-            (transaction.notes.contains(searchValue!) |
-                transaction.title.contains(searchValue!) |
-                c.name.contains(searchValue!)),
-          if (minDate != null) transaction.date.isBiggerOrEqualValue(minDate!),
-          if (maxDate != null) transaction.date.isSmallerThanValue(maxDate!),
-          if (accountsIDs != null && !includeReceivingAccountsInAccountFilters)
-            transaction.accountID.isIn(accountsIDs!),
-          if (accountsIDs != null && includeReceivingAccountsInAccountFilters)
-            transaction.accountID.isIn(accountsIDs!) |
-                transaction.receivingAccountID.isIn(accountsIDs!),
-          if (categories != null && includeParentCategoriesInSearch)
-            transaction.categoryID.isIn(categories!) |
-                c.parentCategoryID.isIn(categories!),
-          if (categories != null && !includeParentCategoriesInSearch)
-            transaction.categoryID.isIn(categories!),
-          if (status != null) transaction.status.isInValues(status!),
-          if (extraFilters != null)
-            AppDB.instance.buildExpr(extraFilters(
-                    transaction,
-                    account,
-                    accountCurrency,
-                    receivingAccount,
-                    receivingAccountCurrency,
-                    c,
-                    p6)
-                .toList()),
-        ]);
+      // Other filters:
+      if (searchValue != null && searchValue!.isNotEmpty)
+        (transaction.notes.contains(searchValue!) |
+            transaction.title.contains(searchValue!) |
+            c.name.contains(searchValue!)),
+      if (minDate != null) transaction.date.isBiggerOrEqualValue(minDate!),
+      if (maxDate != null) transaction.date.isSmallerThanValue(maxDate!),
+      if (accountsIDs != null && !includeReceivingAccountsInAccountFilters)
+        transaction.accountID.isIn(accountsIDs!),
+      if (accountsIDs != null && includeReceivingAccountsInAccountFilters)
+        transaction.accountID.isIn(accountsIDs!) |
+            transaction.receivingAccountID.isIn(accountsIDs!),
+      if (categories != null && includeParentCategoriesInSearch)
+        transaction.categoryID.isIn(categories!) |
+            c.parentCategoryID.isIn(categories!),
+      if (categories != null && !includeParentCategoriesInSearch)
+        transaction.categoryID.isIn(categories!),
+      if (status != null) transaction.status.isInValues(status!),
+      if (extraFilters != null)
+        AppDB.instance.buildExpr(
+          extraFilters(
+            transaction,
+            account,
+            accountCurrency,
+            receivingAccount,
+            receivingAccountCurrency,
+            c,
+            p6,
+          ).toList(),
+        ),
+    ]);
   }
 }

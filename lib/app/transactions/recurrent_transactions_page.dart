@@ -34,18 +34,19 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
             child: StreamBuilder(
-                stream: TransactionService.instance.countTransactions(
-                  convertToPreferredCurrency: false,
-                  predicate: const TransactionFilters(isRecurrent: true),
-                ),
-                builder: (context, snapshot) {
-                  final nOfRes = snapshot.data?.numberOfRes ?? 0;
+              stream: TransactionService.instance.countTransactions(
+                convertToPreferredCurrency: false,
+                predicate: const TransactionFilters(isRecurrent: true),
+              ),
+              builder: (context, snapshot) {
+                final nOfRes = snapshot.data?.numberOfRes ?? 0;
 
-                  return Text(
-                    '${nOfRes} ${t.transaction.display(n: nOfRes)}',
-                    style: const TextStyle(fontWeight: FontWeight.w700),
-                  );
-                }),
+                return Text(
+                  '${nOfRes} ${t.transaction.display(n: nOfRes)}',
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                );
+              },
+            ),
           ),
           Expanded(
             child: TransactionListComponent(
@@ -57,8 +58,9 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
                   'recurrent-transactions-page__tr-icon-${tr.id}',
               onEmptyList: Center(
                 child: NoResults(
-                    title: t.general.empty_warn,
-                    description: t.recurrent_transactions.empty),
+                  title: t.general.empty_warn,
+                  description: t.recurrent_transactions.empty,
+                ),
               ),
             ),
           ),
@@ -72,7 +74,8 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
               clipBehavior: Clip.hardEdge,
               child: InkWell(
                 onTap: () {
-                  periodicity = Periodicity.values.firstWhereOrNull(
+                  periodicity =
+                      Periodicity.values.firstWhereOrNull(
                         (element) => element.index == periodicity.index + 1,
                       ) ??
                       Periodicity.day;
@@ -94,11 +97,9 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
                             ),
                             Text(
                               t.recurrent_transactions.total_expense_descr,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelSmall!
+                              style: Theme.of(context).textTheme.labelSmall!
                                   .copyWith(fontWeight: FontWeight.w300),
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -107,35 +108,39 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           StreamBuilder(
-                              stream: TransactionService.instance
-                                  .getTransactions(
-                                    filters: const TransactionFilters(
-                                      isRecurrent: true,
-                                    ),
-                                  )
-                                  .map(
-                                    (event) => event
-                                        .map(
-                                          (transaction) => transaction
-                                              .getUnifiedMoneyForAPeriod(
-                                                  periodicity: periodicity),
-                                        )
-                                        .sum,
+                            stream: TransactionService.instance
+                                .getTransactions(
+                                  filters: const TransactionFilters(
+                                    isRecurrent: true,
                                   ),
-                              initialData: 0.0,
-                              builder: (context, snapshot) {
-                                return CurrencyDisplayer(
-                                  amountToConvert: snapshot.data!,
-                                  compactView: snapshot.data! <= 10000000000 &&
-                                          BreakPoint.of(context)
-                                              .isLargerOrEqualTo(
-                                                  BreakpointID.xl)
-                                      ? false
-                                      : true,
-                                  integerStyle:
-                                      Theme.of(context).textTheme.titleLarge!,
-                                );
-                              }),
+                                )
+                                .map(
+                                  (event) => event
+                                      .map(
+                                        (transaction) => transaction
+                                            .getUnifiedMoneyForAPeriod(
+                                              periodicity: periodicity,
+                                            ),
+                                      )
+                                      .sum,
+                                ),
+                            initialData: 0.0,
+                            builder: (context, snapshot) {
+                              return CurrencyDisplayer(
+                                amountToConvert: snapshot.data!,
+                                compactView:
+                                    snapshot.data! <= 10000000000 &&
+                                        BreakPoint.of(
+                                          context,
+                                        ).isLargerOrEqualTo(BreakpointID.xl)
+                                    ? false
+                                    : true,
+                                integerStyle: Theme.of(
+                                  context,
+                                ).textTheme.titleLarge!,
+                              );
+                            },
+                          ),
                           Text(
                             t.general.time.ranges.each_range(
                               n: 1,
@@ -147,13 +152,13 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
                           ),
                         ],
                       ),
-                      const Icon(Icons.swap_vert_rounded)
+                      const Icon(Icons.swap_vert_rounded),
                     ],
                   ),
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

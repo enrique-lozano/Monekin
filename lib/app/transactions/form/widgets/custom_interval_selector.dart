@@ -38,31 +38,36 @@ class _IntervalSelectorPageState extends State<IntervalSelectorPage> {
       intervalPeriod =
           widget.preselectedRecurrentRule!.intervalPeriod ?? Periodicity.month;
 
-      remainingIterations = widget.preselectedRecurrentRule!.ruleRecurrentLimit
+      remainingIterations =
+          widget
+              .preselectedRecurrentRule!
+              .ruleRecurrentLimit
               ?.remainingIterations ??
           1;
 
-      endDate = widget.preselectedRecurrentRule!.ruleRecurrentLimit?.endDate ??
+      endDate =
+          widget.preselectedRecurrentRule!.ruleRecurrentLimit?.endDate ??
           DateTime.now();
 
       ruleUntilMode =
           widget.preselectedRecurrentRule!.ruleRecurrentLimit?.untilMode ??
-              RuleUntilMode.infinity;
+          RuleUntilMode.infinity;
     }
   }
 
   Widget buildRadioButton(RuleUntilMode item, Widget title) {
     return RadioListTile(
-        value: item,
-        groupValue: ruleUntilMode,
-        title: title,
-        onChanged: (value) {
-          setState(() {
-            if (value != null) {
-              ruleUntilMode = value;
-            }
-          });
+      value: item,
+      groupValue: ruleUntilMode,
+      title: title,
+      onChanged: (value) {
+        setState(() {
+          if (value != null) {
+            ruleUntilMode = value;
+          }
         });
+      },
+    );
   }
 
   @override
@@ -76,32 +81,38 @@ class _IntervalSelectorPageState extends State<IntervalSelectorPage> {
       ),
       persistentFooterButtons: [
         PersistentFooterButton(
-            child: FilledButton.icon(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
+          child: FilledButton.icon(
+            onPressed: () {
+              if (_formKey.currentState!.validate()) {
+                _formKey.currentState!.save();
 
-                    Navigator.pop(
-                        context,
-                        ruleUntilMode == RuleUntilMode.infinity
-                            ? RecurrencyData.infinite(
-                                intervalPeriod: intervalPeriod,
-                                intervalEach: intervalEach)
-                            : RecurrencyData.withLimit(
-                                ruleRecurrentLimit: RecurrentRuleLimit(
-                                    endDate: ruleUntilMode == RuleUntilMode.date
-                                        ? endDate
-                                        : null,
-                                    remainingIterations:
-                                        ruleUntilMode == RuleUntilMode.nTimes
-                                            ? remainingIterations
-                                            : null),
-                                intervalPeriod: intervalPeriod,
-                                intervalEach: intervalEach));
-                  }
-                },
-                icon: const Icon(Icons.save_rounded),
-                label: Text(t.ui_actions.continue_text)))
+                Navigator.pop(
+                  context,
+                  ruleUntilMode == RuleUntilMode.infinity
+                      ? RecurrencyData.infinite(
+                          intervalPeriod: intervalPeriod,
+                          intervalEach: intervalEach,
+                        )
+                      : RecurrencyData.withLimit(
+                          ruleRecurrentLimit: RecurrentRuleLimit(
+                            endDate: ruleUntilMode == RuleUntilMode.date
+                                ? endDate
+                                : null,
+                            remainingIterations:
+                                ruleUntilMode == RuleUntilMode.nTimes
+                                ? remainingIterations
+                                : null,
+                          ),
+                          intervalPeriod: intervalPeriod,
+                          intervalEach: intervalEach,
+                        ),
+                );
+              }
+            },
+            icon: const Icon(Icons.save_rounded),
+            label: Text(t.ui_actions.continue_text),
+          ),
+        ),
       ],
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(top: 16),
@@ -119,31 +130,37 @@ class _IntervalSelectorPageState extends State<IntervalSelectorPage> {
                 child: Row(
                   children: [
                     Flexible(
-                        flex: 1,
-                        child: TextFormField(
-                          initialValue: intervalEach.toStringAsFixed(0),
-                          decoration: InputDecoration(
-                            labelText: '${t.general.time.each} *',
-                            helperText: '',
-                          ),
-                          onChanged: (value) {
-                            if (fieldValidator(value,
-                                    validator: ValidatorType.int,
-                                    isRequired: true) ==
-                                null) {
-                              setState(() {
-                                intervalEach = int.parse(value);
-                              });
-                            }
-                          },
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          keyboardType: TextInputType.number,
-                          validator: (value) => fieldValidator(value,
-                              validator: ValidatorType.int, isRequired: true),
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                        )),
+                      flex: 1,
+                      child: TextFormField(
+                        initialValue: intervalEach.toStringAsFixed(0),
+                        decoration: InputDecoration(
+                          labelText: '${t.general.time.each} *',
+                          helperText: '',
+                        ),
+                        onChanged: (value) {
+                          if (fieldValidator(
+                                value,
+                                validator: ValidatorType.int,
+                                isRequired: true,
+                              ) ==
+                              null) {
+                            setState(() {
+                              intervalEach = int.parse(value);
+                            });
+                          }
+                        },
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        keyboardType: TextInputType.number,
+                        validator: (value) => fieldValidator(
+                          value,
+                          validator: ValidatorType.int,
+                          isRequired: true,
+                        ),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                      ),
+                    ),
                     const SizedBox(width: 12),
                     Flexible(
                       flex: 2,
@@ -157,9 +174,12 @@ class _IntervalSelectorPageState extends State<IntervalSelectorPage> {
                           Periodicity.values.length,
                           (index) => DropdownMenuItem(
                             value: Periodicity.values[index],
-                            child: Text(Periodicity.values[index].periodText(
+                            child: Text(
+                              Periodicity.values[index].periodText(
                                 context,
-                                isPlural: intervalEach > 1)),
+                                isPlural: intervalEach > 1,
+                              ),
+                            ),
                           ),
                         ),
                         onChanged: (value) {
@@ -180,45 +200,48 @@ class _IntervalSelectorPageState extends State<IntervalSelectorPage> {
               child: Text(t.general.time.ranges.it_ends),
             ),
             buildRadioButton(
-                RuleUntilMode.infinity, Text(t.general.time.ranges.forever)),
+              RuleUntilMode.infinity,
+              Text(t.general.time.ranges.forever),
+            ),
             const Divider(height: 12, indent: 64),
             buildRadioButton(
-                RuleUntilMode.date,
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(child: Text(t.general.time.until_date)),
-                    const SizedBox(width: 8),
-                    Flexible(
-                      child: DateTimeFormField(
-                        decoration: InputDecoration(
-                          suffixIcon: const Icon(Icons.event),
-                          labelText: '${t.general.time.datetime} *',
-                          isDense: true,
-                        ),
-                        mode: DateTimeFieldPickerMode.date,
-                        initialDate: endDate,
-                        enabled: ruleUntilMode == RuleUntilMode.date,
-                        dateFormat: DateFormat.yMMMd(),
-                        onDateSelected: (DateTime value) {
-                          setState(() {
-                            endDate = value;
-                          });
-                        },
+              RuleUntilMode.date,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(child: Text(t.general.time.until_date)),
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: DateTimeFormField(
+                      decoration: InputDecoration(
+                        suffixIcon: const Icon(Icons.event),
+                        labelText: '${t.general.time.datetime} *',
+                        isDense: true,
                       ),
+                      mode: DateTimeFieldPickerMode.date,
+                      initialDate: endDate,
+                      enabled: ruleUntilMode == RuleUntilMode.date,
+                      dateFormat: DateFormat.yMMMd(),
+                      onDateSelected: (DateTime value) {
+                        setState(() {
+                          endDate = value;
+                        });
+                      },
                     ),
-                  ],
-                )),
+                  ),
+                ],
+              ),
+            ),
             const Divider(height: 12, indent: 64),
             buildRadioButton(
-                RuleUntilMode.nTimes,
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(child: Text(t.general.time.after)),
-                    const SizedBox(width: 8),
-                    Flexible(
-                        child: TextFormField(
+              RuleUntilMode.nTimes,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(child: Text(t.general.time.after)),
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: TextFormField(
                       decoration: InputDecoration(
                         isDense: true,
                         labelText:
@@ -233,13 +256,17 @@ class _IntervalSelectorPageState extends State<IntervalSelectorPage> {
                         }
                       },
                       keyboardType: TextInputType.number,
-                      validator: (value) => fieldValidator(value,
-                          validator: ValidatorType.int,
-                          isRequired: ruleUntilMode == RuleUntilMode.nTimes),
+                      validator: (value) => fieldValidator(
+                        value,
+                        validator: ValidatorType.int,
+                        isRequired: ruleUntilMode == RuleUntilMode.nTimes,
+                      ),
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                    )),
-                  ],
-                )),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

@@ -17,9 +17,9 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
-	Translations({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver})
+	Translations({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
 		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
-		  $meta = TranslationMetadata(
+		  $meta = meta ?? TranslationMetadata(
 		    locale: AppLocale.en,
 		    overrides: overrides ?? {},
 		    cardinalResolver: cardinalResolver,
@@ -35,6 +35,8 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	dynamic operator[](String key) => $meta.getTranslation(key);
 
 	late final Translations _root = this; // ignore: unused_field
+
+	Translations $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => Translations(meta: meta ?? this.$meta);
 
 	// Translations
 	late final TranslationsUiActionsEn ui_actions = TranslationsUiActionsEn._(_root);
@@ -64,43 +66,114 @@ class TranslationsUiActionsEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Cancel'
 	String get cancel => 'Cancel';
+
+	/// en: 'Confirm'
 	String get confirm => 'Confirm';
+
+	/// en: 'Continue'
 	String get continue_text => 'Continue';
+
+	/// en: 'Save'
 	String get save => 'Save';
+
+	/// en: 'Save changes'
 	String get save_changes => 'Save changes';
+
+	/// en: 'Save and close'
 	String get close_and_save => 'Save and close';
+
+	/// en: 'Add'
 	String get add => 'Add';
+
+	/// en: 'Edit'
 	String get edit => 'Edit';
+
+	/// en: 'Delete'
 	String get delete => 'Delete';
+
+	/// en: 'See more'
 	String get see_more => 'See more';
+
+	/// en: 'Select all'
 	String get select_all => 'Select all';
+
+	/// en: 'Deselect all'
 	String get deselect_all => 'Deselect all';
+
+	/// en: 'Select'
 	String get select => 'Select';
+
+	/// en: 'Search'
 	String get search => 'Search';
+
+	/// en: 'Filter'
 	String get filter => 'Filter';
+
+	/// en: 'Reset'
 	String get reset => 'Reset';
+
+	/// en: 'Submit'
 	String get submit => 'Submit';
+
+	/// en: 'Next'
 	String get next => 'Next';
+
+	/// en: 'Previous'
 	String get previous => 'Previous';
+
+	/// en: 'Back'
 	String get back => 'Back';
+
+	/// en: 'Reload'
 	String get reload => 'Reload';
+
+	/// en: 'View'
 	String get view => 'View';
+
+	/// en: 'Download'
 	String get download => 'Download';
+
+	/// en: 'Upload'
 	String get upload => 'Upload';
+
+	/// en: 'Retry'
 	String get retry => 'Retry';
+
+	/// en: 'Copy'
 	String get copy => 'Copy';
+
+	/// en: 'Paste'
 	String get paste => 'Paste';
+
+	/// en: 'Undo'
 	String get undo => 'Undo';
+
+	/// en: 'Redo'
 	String get redo => 'Redo';
+
+	/// en: 'Open'
 	String get open => 'Open';
+
+	/// en: 'Close'
 	String get close => 'Close';
+
+	/// en: 'Apply'
 	String get apply => 'Apply';
+
+	/// en: 'Discard'
 	String get discard => 'Discard';
+
+	/// en: 'Refresh'
 	String get refresh => 'Refresh';
+
+	/// en: 'Details'
 	String get details => 'Details';
+
+	/// en: 'Share'
 	String get share => 'Share';
-  String get none => 'None';
 }
 
 // Path: general
@@ -110,23 +183,58 @@ class TranslationsGeneralEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'or'
 	String get or => 'or';
+
+	/// en: 'Understood'
 	String get understood => 'Understood';
+
+	/// en: 'Unspecified'
 	String get unspecified => 'Unspecified';
+
+	/// en: 'Quick actions'
 	String get quick_actions => 'Quick actions';
+
+	/// en: 'Balance'
 	String get balance => 'Balance';
+
+	/// en: 'Account'
 	String get account => 'Account';
+
+	/// en: 'Accounts'
 	String get accounts => 'Accounts';
+
+	/// en: 'Categories'
 	String get categories => 'Categories';
+
+	/// en: 'Category'
 	String get category => 'Category';
+
+	/// en: 'Today'
 	String get today => 'Today';
+
+	/// en: 'Yesterday'
 	String get yesterday => 'Yesterday';
+
+	/// en: 'Filters'
 	String get filters => 'Filters';
+
+	/// en: 'Ops! This is very empty'
 	String get empty_warn => 'Ops! This is very empty';
+
+	/// en: 'Insufficient data'
 	String get insufficient_data => 'Insufficient data';
+
+	/// en: 'Show more fields'
 	String get show_more_fields => 'Show more fields';
+
+	/// en: 'Show less fields'
 	String get show_less_fields => 'Show less fields';
+
+	/// en: 'Tap to search'
 	String get tap_to_search => 'Tap to search';
+
 	late final TranslationsGeneralClipboardEn clipboard = TranslationsGeneralClipboardEn._(_root);
 	late final TranslationsGeneralTimeEn time = TranslationsGeneralTimeEn._(_root);
 	late final TranslationsGeneralTransactionOrderEn transaction_order = TranslationsGeneralTransactionOrderEn._(_root);
@@ -140,23 +248,59 @@ class TranslationsIntroEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Start'
 	String get start => 'Start';
+
+	/// en: 'Skip'
 	String get skip => 'Skip';
+
+	/// en: 'Next'
 	String get next => 'Next';
+
+	/// en: 'Select your currency'
 	String get select_your_currency => 'Select your currency';
+
+	/// en: 'Your personal finance manager'
 	String get welcome_subtitle => 'Your personal finance manager';
+
+	/// en: '100% open, 100% free'
 	String get welcome_subtitle2 => '100% open, 100% free';
+
+	/// en: 'By logging in you agree to the <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Privacy Policy</a> and the <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Terms of Use</a> of the application'
 	String get welcome_footer => 'By logging in you agree to the <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Privacy Policy</a> and the <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Terms of Use</a> of the application';
+
+	/// en: 'OFFLINE ACCOUNT:'
 	String get offline_descr_title => 'OFFLINE ACCOUNT:';
+
+	/// en: 'Your data will only be stored on your device, and will be safe as long as you don't uninstall the app or change phone. To prevent data loss, it is recommended to make a backup regularly from the app settings.'
 	String get offline_descr => 'Your data will only be stored on your device, and will be safe as long as you don\'t uninstall the app or change phone. To prevent data loss, it is recommended to make a backup regularly from the app settings.';
+
+	/// en: 'Start session offline'
 	String get offline_start => 'Start session offline';
+
+	/// en: 'Select your currency'
 	String get sl1_title => 'Select your currency';
+
+	/// en: 'Your default currency will be used in reports and general charts. You will be able to change the currency and the app language later at any time in the application settings'
 	String get sl1_descr => 'Your default currency will be used in reports and general charts. You will be able to change the currency and the app language later at any time in the application settings';
+
+	/// en: 'Safe, private and reliable'
 	String get sl2_title => 'Safe, private and reliable';
+
+	/// en: 'Your data is only yours. We store the information directly on your device, without going through external servers. This makes it possible to use the app even without internet'
 	String get sl2_descr => 'Your data is only yours. We store the information directly on your device, without going through external servers. This makes it possible to use the app even without internet';
+
+	/// en: 'Also, the source code of the application is public, anyone can collaborate on it and see how it works'
 	String get sl2_descr2 => 'Also, the source code of the application is public, anyone can collaborate on it and see how it works';
+
+	/// en: 'All ready'
 	String get last_slide_title => 'All ready';
+
+	/// en: 'With Monekin, you can finally achieve the financial independence you want so much. You will have graphs, budgets, tips, statistics and much more about your money.'
 	String get last_slide_descr => 'With Monekin, you can finally achieve the financial independence you want so much. You will have graphs, budgets, tips, statistics and much more about your money.';
+
+	/// en: 'We hope you enjoy your experience! Do not hesitate to contact us in case of doubts, suggestions...'
 	String get last_slide_descr2 => 'We hope you enjoy your experience! Do not hesitate to contact us in case of doubts, suggestions...';
 }
 
@@ -167,17 +311,41 @@ class TranslationsHomeEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Dashboard'
 	String get title => 'Dashboard';
+
+	/// en: 'Filter transactions'
 	String get filter_transactions => 'Filter transactions';
+
+	/// en: 'Good morning,'
 	String get hello_day => 'Good morning,';
+
+	/// en: 'Good night,'
 	String get hello_night => 'Good night,';
+
+	/// en: 'Total balance'
 	String get total_balance => 'Total balance';
+
+	/// en: 'My accounts'
 	String get my_accounts => 'My accounts';
+
+	/// en: 'Active accounts'
 	String get active_accounts => 'Active accounts';
+
+	/// en: 'No accounts created yet'
 	String get no_accounts => 'No accounts created yet';
+
+	/// en: 'Start using all the magic of Monekin. Create at least one account to start adding transactions'
 	String get no_accounts_descr => 'Start using all the magic of Monekin. Create at least one account to start adding transactions';
+
+	/// en: 'Last transactions'
 	String get last_transactions => 'Last transactions';
+
+	/// en: 'Oops!'
 	String get should_create_account_header => 'Oops!';
+
+	/// en: 'You must have at least one no-archived account before you can start creating transactions'
 	String get should_create_account_message => 'You must have at least one no-archived account before you can start creating transactions';
 }
 
@@ -188,7 +356,10 @@ class TranslationsFinancialHealthEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Financial health'
 	String get display => 'Financial health';
+
 	late final TranslationsFinancialHealthReviewEn review = TranslationsFinancialHealthReviewEn._(_root);
 	late final TranslationsFinancialHealthMonthsWithoutIncomeEn months_without_income = TranslationsFinancialHealthMonthsWithoutIncomeEn._(_root);
 	late final TranslationsFinancialHealthSavingsPercentageEn savings_percentage = TranslationsFinancialHealthSavingsPercentageEn._(_root);
@@ -201,23 +372,59 @@ class TranslationsStatsEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Statistics'
 	String get title => 'Statistics';
+
+	/// en: 'Balance'
 	String get balance => 'Balance';
+
+	/// en: 'Final balance'
 	String get final_balance => 'Final balance';
+
+	/// en: 'Balance by accounts'
 	String get balance_by_account => 'Balance by accounts';
+
+	/// en: 'Where do I have most of my money?'
 	String get balance_by_account_subtitle => 'Where do I have most of my money?';
+
+	/// en: 'Balance by currency'
 	String get balance_by_currency => 'Balance by currency';
+
+	/// en: 'How much money do I have in foreign currency?'
 	String get balance_by_currency_subtitle => 'How much money do I have in foreign currency?';
+
+	/// en: 'Balance trend'
 	String get balance_evolution => 'Balance trend';
+
+	/// en: 'Do I have more money than before?'
 	String get balance_evolution_subtitle => 'Do I have more money than before?';
+
+	/// en: 'Compared to the previous period'
 	String get compared_to_previous_period => 'Compared to the previous period';
+
+	/// en: 'Cash flow'
 	String get cash_flow => 'Cash flow';
+
+	/// en: 'Am I spending less than I earn?'
 	String get cash_flow_subtitle => 'Am I spending less than I earn?';
+
+	/// en: 'By periods'
 	String get by_periods => 'By periods';
+
+	/// en: 'By categories'
 	String get by_categories => 'By categories';
+
+	/// en: 'By tags'
 	String get by_tags => 'By tags';
+
+	/// en: 'Distribution'
 	String get distribution => 'Distribution';
+
+	/// en: 'Resume'
 	String get finance_health_resume => 'Resume';
+
+	/// en: 'Breakdown'
 	String get finance_health_breakdown => 'Breakdown';
 }
 
@@ -228,15 +435,34 @@ class TranslationsIconSelectorEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Name:'
 	String get name => 'Name:';
+
+	/// en: 'Icon'
 	String get icon => 'Icon';
+
+	/// en: 'Color'
 	String get color => 'Color';
+
+	/// en: 'Select an icon'
 	String get select_icon => 'Select an icon';
+
+	/// en: 'Select a color'
 	String get select_color => 'Select a color';
+
+	/// en: 'Custom color'
 	String get custom_color => 'Custom color';
+
+	/// en: 'Current selection'
 	String get current_color_selection => 'Current selection';
+
+	/// en: 'Identify your account'
 	String get select_account_icon => 'Identify your account';
+
+	/// en: 'Identify your category'
 	String get select_category_icon => 'Identify your category';
+
 	late final TranslationsIconSelectorScopesEn scopes = TranslationsIconSelectorScopesEn._(_root);
 }
 
@@ -247,29 +473,70 @@ class TranslationsTransactionEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: '(one) {Transaction} (other) {Transactions}'
 	String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 		one: 'Transaction',
 		other: 'Transactions',
 	);
+
+	/// en: 'New transaction'
 	String get create => 'New transaction';
+
+	/// en: 'New income'
 	String get new_income => 'New income';
+
+	/// en: 'New expense'
 	String get new_expense => 'New expense';
+
+	/// en: 'Transaction created successfully'
 	String get new_success => 'Transaction created successfully';
+
+	/// en: 'Edit transaction'
 	String get edit => 'Edit transaction';
+
+	/// en: 'Transaction edited successfully'
 	String get edit_success => 'Transaction edited successfully';
+
+	/// en: 'Edit transactions'
 	String get edit_multiple => 'Edit transactions';
+
+	/// en: '{{ x }} transactions edited successfully'
 	String edit_multiple_success({required Object x}) => '${x} transactions edited successfully';
+
+	/// en: 'Clone transaction'
 	String get duplicate => 'Clone transaction';
+
+	/// en: 'Clone'
 	String get duplicate_short => 'Clone';
+
+	/// en: 'A transaction identical to this will be created with the same date, do you want to continue?'
 	String get duplicate_warning_message => 'A transaction identical to this will be created with the same date, do you want to continue?';
+
+	/// en: 'Transaction cloned successfully'
 	String get duplicate_success => 'Transaction cloned successfully';
+
+	/// en: 'Delete transaction'
 	String get delete => 'Delete transaction';
+
+	/// en: 'This action is irreversible. The current balance of your accounts and all your statistics will be recalculated'
 	String get delete_warning_message => 'This action is irreversible. The current balance of your accounts and all your statistics will be recalculated';
+
+	/// en: 'Transaction deleted correctly'
 	String get delete_success => 'Transaction deleted correctly';
+
+	/// en: 'Delete transactions'
 	String get delete_multiple => 'Delete transactions';
+
+	/// en: 'This action is irreversible and will remove {{ x }} transactions. The current balance of your accounts and all your statistics will be recalculated'
 	String delete_multiple_warning_message({required Object x}) => 'This action is irreversible and will remove ${x} transactions. The current balance of your accounts and all your statistics will be recalculated';
+
+	/// en: '{{x}} transactions deleted correctly'
 	String delete_multiple_success({required Object x}) => '${x} transactions deleted correctly';
+
+	/// en: 'Movement details'
 	String get details => 'Movement details';
+
 	late final TranslationsTransactionNextPaymentsEn next_payments = TranslationsTransactionNextPaymentsEn._(_root);
 	late final TranslationsTransactionListEn list = TranslationsTransactionListEn._(_root);
 	late final TranslationsTransactionFiltersEn filters = TranslationsTransactionFiltersEn._(_root);
@@ -286,12 +553,25 @@ class TranslationsTransferEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Transfer'
 	String get display => 'Transfer';
+
+	/// en: 'Transfers'
 	String get transfers => 'Transfers';
+
+	/// en: 'Transfer to {{ account }}'
 	String transfer_to({required Object account}) => 'Transfer to ${account}';
+
+	/// en: 'New Transfer'
 	String get create => 'New Transfer';
+
+	/// en: 'Ops!'
 	String get need_two_accounts_warning_header => 'Ops!';
+
+	/// en: 'At least two accounts are needed to perform this action. If you need to adjust or edit the current balance of this account, click the edit button'
 	String get need_two_accounts_warning_message => 'At least two accounts are needed to perform this action. If you need to adjust or edit the current balance of this account, click the edit button';
+
 	late final TranslationsTransferFormEn form = TranslationsTransferFormEn._(_root);
 }
 
@@ -302,11 +582,22 @@ class TranslationsRecurrentTransactionsEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Recurrent transactions'
 	String get title => 'Recurrent transactions';
+
+	/// en: 'Rec. transactions'
 	String get title_short => 'Rec. transactions';
+
+	/// en: 'It looks like you don't have any recurring transactions. Create a monthly, yearly, or weekly recurring transaction and it will appear here'
 	String get empty => 'It looks like you don\'t have any recurring transactions. Create a monthly, yearly, or weekly recurring transaction and it will appear here';
+
+	/// en: 'Total expense per period'
 	String get total_expense_title => 'Total expense per period';
+
+	/// en: '* Without considering the start and end date of each recurrence'
 	String get total_expense_descr => '* Without considering the start and end date of each recurrence';
+
 	late final TranslationsRecurrentTransactionsDetailsEn details = TranslationsRecurrentTransactionsDetailsEn._(_root);
 	late final TranslationsRecurrentTransactionsStatusEn status = TranslationsRecurrentTransactionsStatusEn._(_root);
 }
@@ -318,17 +609,40 @@ class TranslationsAccountEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Account details'
 	String get details => 'Account details';
+
+	/// en: 'Opening date'
 	String get date => 'Opening date';
+
+	/// en: 'Closing date'
 	String get close_date => 'Closing date';
+
+	/// en: 'Re-open account'
 	String get reopen => 'Re-open account';
+
+	/// en: 'Re-open'
 	String get reopen_short => 'Re-open';
+
+	/// en: 'Are you sure you want to reopen this account?'
 	String get reopen_descr => 'Are you sure you want to reopen this account?';
+
+	/// en: 'Account balance'
 	String get balance => 'Account balance';
+
+	/// en: 'Number of transactions'
 	String get n_transactions => 'Number of transactions';
+
+	/// en: 'Add money'
 	String get add_money => 'Add money';
+
+	/// en: 'Withdraw money'
 	String get withdraw_money => 'Withdraw money';
+
+	/// en: 'No transactions found to display here. Add a transaction by clicking the '+' button at the bottom'
 	String get no_accounts => 'No transactions found to display here. Add a transaction by clicking the \'+\' button at the bottom';
+
 	late final TranslationsAccountTypesEn types = TranslationsAccountTypesEn._(_root);
 	late final TranslationsAccountFormEn form = TranslationsAccountFormEn._(_root);
 	late final TranslationsAccountDeleteEn delete = TranslationsAccountDeleteEn._(_root);
@@ -343,20 +657,49 @@ class TranslationsCurrenciesEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Currency converter'
 	String get currency_converter => 'Currency converter';
+
+	/// en: 'Currency'
 	String get currency => 'Currency';
+
+	/// en: 'Currency manager'
 	String get currency_manager => 'Currency manager';
+
+	/// en: 'Configure your currency and its exchange rates with others'
 	String get currency_manager_descr => 'Configure your currency and its exchange rates with others';
+
+	/// en: 'Preferred/base currency'
 	String get preferred_currency => 'Preferred/base currency';
+
+	/// en: 'Change preferred currency'
 	String get change_preferred_currency_title => 'Change preferred currency';
+
+	/// en: 'All stats and budgets will be displayed in this currency from now on. Accounts and transactions will keep the currency they had. All saved exchange rates will be deleted if you execute this action. Do you wish to continue?'
 	String get change_preferred_currency_msg => 'All stats and budgets will be displayed in this currency from now on. Accounts and transactions will keep the currency they had. All saved exchange rates will be deleted if you execute this action. Do you wish to continue?';
+
 	late final TranslationsCurrenciesFormEn form = TranslationsCurrenciesFormEn._(_root);
+
+	/// en: 'Deleted exchange rates successfully'
 	String get delete_all_success => 'Deleted exchange rates successfully';
+
+	/// en: 'Historical rates'
 	String get historical => 'Historical rates';
+
+	/// en: 'Exchange rate'
 	String get exchange_rate => 'Exchange rate';
+
+	/// en: 'Exchange rates'
 	String get exchange_rates => 'Exchange rates';
+
+	/// en: 'Add exchange rates here so that if you have accounts in currencies other than your base currency our charts are more accurate'
 	String get empty => 'Add exchange rates here so that if you have accounts in currencies other than your base currency our charts are more accurate';
+
+	/// en: 'Select a currency'
 	String get select_a_currency => 'Select a currency';
+
+	/// en: 'Search by name or by currency code'
 	String get search => 'Search by name or by currency code';
 }
 
@@ -367,22 +710,47 @@ class TranslationsTagsEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: '(one) {Label} (other) {Tags}'
 	String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 		one: 'Label',
 		other: 'Tags',
 	);
+
 	late final TranslationsTagsFormEn form = TranslationsTagsFormEn._(_root);
 	late final TranslationsTagsSelectEn select = TranslationsTagsSelectEn._(_root);
+
+	/// en: 'You haven't created any tags yet. Tags and categories are a great way to categorize your movements'
 	String get empty_list => 'You haven\'t created any tags yet. Tags and categories are a great way to categorize your movements';
+
+	/// en: 'Without tags'
 	String get without_tags => 'Without tags';
+
+	/// en: 'Add tag'
 	String get add => 'Add tag';
+
+	/// en: 'Create label'
 	String get create => 'Create label';
+
+	/// en: 'Label created successfully'
 	String get create_success => 'Label created successfully';
+
+	/// en: 'This tag name already exists. You may want to edit it'
 	String get already_exists => 'This tag name already exists. You may want to edit it';
+
+	/// en: 'Edit tag'
 	String get edit => 'Edit tag';
+
+	/// en: 'Tag edited successfully'
 	String get edit_success => 'Tag edited successfully';
+
+	/// en: 'Category deleted successfully'
 	String get delete_success => 'Category deleted successfully';
+
+	/// en: 'Delete tag?'
 	String get delete_warning_header => 'Delete tag?';
+
+	/// en: 'This action will not delete transactions that have this tag.'
 	String get delete_warning_message => 'This action will not delete transactions that have this tag.';
 }
 
@@ -393,30 +761,79 @@ class TranslationsCategoriesEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Unknown category'
 	String get unknown => 'Unknown category';
+
+	/// en: 'Create category'
 	String get create => 'Create category';
+
+	/// en: 'Category created correctly'
 	String get create_success => 'Category created correctly';
+
+	/// en: 'New category'
 	String get new_category => 'New category';
+
+	/// en: 'The name of this category already exists. Maybe you want to edit it'
 	String get already_exists => 'The name of this category already exists. Maybe you want to edit it';
+
+	/// en: 'Edit category'
 	String get edit => 'Edit category';
+
+	/// en: 'Category edited correctly'
 	String get edit_success => 'Category edited correctly';
+
+	/// en: 'Category name'
 	String get name => 'Category name';
+
+	/// en: 'Category type'
 	String get type => 'Category type';
+
+	/// en: 'Both types'
 	String get both_types => 'Both types';
+
+	/// en: 'Subcategories'
 	String get subcategories => 'Subcategories';
+
+	/// en: 'Add subcategory'
 	String get subcategories_add => 'Add subcategory';
+
+	/// en: 'Make to category'
 	String get make_parent => 'Make to category';
+
+	/// en: 'Make a subcategory'
 	String get make_child => 'Make a subcategory';
+
+	/// en: 'This category and its subcategories will become subcategories of <b>{{destiny}}</b>.'
 	String make_child_warning1({required Object destiny}) => 'This category and its subcategories will become subcategories of <b>${destiny}</b>.';
+
+	/// en: 'Their transactions <b>({{x}})</b> will be moved to the new subcategories created within the <b>{{destiny}}</b> category.'
 	String make_child_warning2({required Object x, required Object destiny}) => 'Their transactions <b>(${x})</b> will be moved to the new subcategories created within the <b>${destiny}</b> category.';
+
+	/// en: 'Subcategories created successfully'
 	String get make_child_success => 'Subcategories created successfully';
+
+	/// en: 'Merge with another category'
 	String get merge => 'Merge with another category';
+
+	/// en: 'All transactions ({{x}}) associated with the category <b>{{from}}</b> will be moved to the category <b>{{destiny}}</b>'
 	String merge_warning1({required Object x, required Object from, required Object destiny}) => 'All transactions (${x}) associated with the category <b>${from}</b> will be moved to the category <b>${destiny}</b>';
+
+	/// en: 'The category <b>{{from}}</b> will be irreversibly deleted.'
 	String merge_warning2({required Object from}) => 'The category <b>${from}</b> will be irreversibly deleted.';
+
+	/// en: 'Category merged successfully'
 	String get merge_success => 'Category merged successfully';
+
+	/// en: 'Category deleted correctly'
 	String get delete_success => 'Category deleted correctly';
+
+	/// en: 'Delete category?'
 	String get delete_warning_header => 'Delete category?';
+
+	/// en: 'This action will irreversibly delete all transactions <b>({{x}})</b> related to this category.'
 	String delete_warning_message({required Object x}) => 'This action will irreversibly delete all transactions <b>(${x})</b> related to this category.';
+
 	late final TranslationsCategoriesSelectEn select = TranslationsCategoriesSelectEn._(_root);
 }
 
@@ -427,22 +844,55 @@ class TranslationsBudgetsEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Budgets'
 	String get title => 'Budgets';
+
+	/// en: 'Recurring'
 	String get repeated => 'Recurring';
+
+	/// en: 'Once'
 	String get one_time => 'Once';
+
+	/// en: 'Annuals'
 	String get annual => 'Annuals';
+
+	/// en: 'Weekly'
 	String get week => 'Weekly';
+
+	/// en: 'Monthly'
 	String get month => 'Monthly';
+
+	/// en: 'Actives'
 	String get actives => 'Actives';
+
+	/// en: 'Pending start'
 	String get pending => 'Pending start';
+
+	/// en: 'Finished'
 	String get finish => 'Finished';
+
+	/// en: 'left of '
 	String get from_budgeted => 'left of ';
+
+	/// en: 'days left'
 	String get days_left => 'days left';
+
+	/// en: 'days to start'
 	String get days_to_start => 'days to start';
+
+	/// en: 'days since expiration'
 	String get since_expiration => 'days since expiration';
+
+	/// en: 'There seem to be no budgets to display in this section. Start by creating a budget by clicking the button below'
 	String get no_budgets => 'There seem to be no budgets to display in this section. Start by creating a budget by clicking the button below';
+
+	/// en: 'Delete budget'
 	String get delete => 'Delete budget';
+
+	/// en: 'This action is irreversible. Categories and transactions referring to this quote will not be deleted'
 	String get delete_warning => 'This action is irreversible. Categories and transactions referring to this quote will not be deleted';
+
 	late final TranslationsBudgetsFormEn form = TranslationsBudgetsFormEn._(_root);
 	late final TranslationsBudgetsDetailsEn details = TranslationsBudgetsDetailsEn._(_root);
 }
@@ -466,33 +916,81 @@ class TranslationsSettingsEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Settings and appearance'
 	String get title_long => 'Settings and appearance';
+
+	/// en: 'Settings'
 	String get title_short => 'Settings';
+
+	/// en: 'App theme, texts and other general settings'
 	String get description => 'App theme, texts and other general settings';
+
+	/// en: 'Edit profile'
 	String get edit_profile => 'Edit profile';
+
+	/// en: 'Language and texts'
 	String get lang_section => 'Language and texts';
+
+	/// en: 'App language'
 	String get lang_title => 'App language';
+
+	/// en: 'Language in which the texts will be displayed in the app'
 	String get lang_descr => 'Language in which the texts will be displayed in the app';
+
+	/// en: 'If you want to collaborate with the translations of this app, you can consult <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>our guide</a>'
 	String get lang_help => 'If you want to collaborate with the translations of this app, you can consult <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>our guide</a>';
+
+	/// en: 'Region'
 	String get locale => 'Region';
+
+	/// en: 'System'
+	String get locale_auto => 'System';
+
+	/// en: 'Set the format to use for dates, numbers...'
 	String get locale_descr => 'Set the format to use for dates, numbers...';
+
+	/// en: 'When changing region the app will update'
 	String get locale_warn => 'When changing region the app will update';
+
+	/// en: 'First day of week'
 	String get first_day_of_week => 'First day of week';
+
+	/// en: 'Theme and colors'
 	String get theme_and_colors => 'Theme and colors';
+
+	/// en: 'Theme'
 	String get theme => 'Theme';
+
+	/// en: 'System'
 	String get theme_auto => 'System';
+
+	/// en: 'Light'
 	String get theme_light => 'Light';
+
+	/// en: 'Dark'
 	String get theme_dark => 'Dark';
+
+	/// en: 'AMOLED mode'
 	String get amoled_mode => 'AMOLED mode';
+
+	/// en: 'Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens'
 	String get amoled_mode_descr => 'Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens';
+
+	/// en: 'Dynamic colors'
 	String get dynamic_colors => 'Dynamic colors';
+
+	/// en: 'Use your system accent color whenever possible'
 	String get dynamic_colors_descr => 'Use your system accent color whenever possible';
+
+	/// en: 'Accent color'
 	String get accent_color => 'Accent color';
+
+	/// en: 'Choose the color the app will use to emphasize certain parts of the interface'
 	String get accent_color_descr => 'Choose the color the app will use to emphasize certain parts of the interface';
-	String get swipe_title => 'Swipe Actions';
-  String get swipe_right => 'Swipe Right';
-  String get swipe_left => 'Swipe Left';
-  late final TranslationsSettingsSecurityEn security = TranslationsSettingsSecurityEn._(_root);
+
+	late final TranslationsSettingsSwipeActionsEn swipe_actions = TranslationsSettingsSwipeActionsEn._(_root);
+	late final TranslationsSettingsSecurityEn security = TranslationsSettingsSecurityEn._(_root);
 }
 
 // Path: more
@@ -502,8 +1000,13 @@ class TranslationsMoreEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'More'
 	String get title => 'More';
+
+	/// en: 'More actions'
 	String get title_long => 'More actions';
+
 	late final TranslationsMoreDataEn data = TranslationsMoreDataEn._(_root);
 	late final TranslationsMoreAboutUsEn about_us = TranslationsMoreAboutUsEn._(_root);
 	late final TranslationsMoreHelpUsEn help_us = TranslationsMoreHelpUsEn._(_root);
@@ -516,7 +1019,11 @@ class TranslationsGeneralClipboardEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: '{{x}} copied to the clipboard'
 	String success({required Object x}) => '${x} copied to the clipboard';
+
+	/// en: 'Error copying'
 	String get error => 'Error copying';
 }
 
@@ -527,15 +1034,34 @@ class TranslationsGeneralTimeEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Start date'
 	String get start_date => 'Start date';
+
+	/// en: 'End date'
 	String get end_date => 'End date';
+
+	/// en: 'From date'
 	String get from_date => 'From date';
+
+	/// en: 'Until date'
 	String get until_date => 'Until date';
+
+	/// en: 'Date'
 	String get date => 'Date';
+
+	/// en: 'Datetime'
 	String get datetime => 'Datetime';
+
+	/// en: 'Time'
 	String get time => 'Time';
+
+	/// en: 'Each'
 	String get each => 'Each';
+
+	/// en: 'After'
 	String get after => 'After';
+
 	late final TranslationsGeneralTimeRangesEn ranges = TranslationsGeneralTimeRangesEn._(_root);
 	late final TranslationsGeneralTimePeriodicityEn periodicity = TranslationsGeneralTimePeriodicityEn._(_root);
 	late final TranslationsGeneralTimeCurrentEn current = TranslationsGeneralTimeCurrentEn._(_root);
@@ -549,9 +1075,17 @@ class TranslationsGeneralTransactionOrderEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Order transactions'
 	String get display => 'Order transactions';
+
+	/// en: 'By category'
 	String get category => 'By category';
+
+	/// en: 'By quantity'
 	String get quantity => 'By quantity';
+
+	/// en: 'By date'
 	String get date => 'By date';
 }
 
@@ -562,10 +1096,20 @@ class TranslationsGeneralValidationsEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Fix the indicated fields to continue'
 	String get form_error => 'Fix the indicated fields to continue';
+
+	/// en: 'Required field'
 	String get required => 'Required field';
+
+	/// en: 'Should be positive'
 	String get positive => 'Should be positive';
+
+	/// en: 'Should be greater than {{x}}'
 	String min_number({required Object x}) => 'Should be greater than ${x}';
+
+	/// en: 'Should be less than {{x}}'
 	String max_number({required Object x}) => 'Should be less than ${x}';
 }
 
@@ -576,6 +1120,8 @@ class TranslationsFinancialHealthReviewEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: '(male) {Very good!} (female) {Very good!}'
 	String very_good({required GenderContext context}) {
 		switch (context) {
 			case GenderContext.male:
@@ -584,6 +1130,8 @@ class TranslationsFinancialHealthReviewEn {
 				return 'Very good!';
 		}
 	}
+
+	/// en: '(male) {Good} (female) {Good}'
 	String good({required GenderContext context}) {
 		switch (context) {
 			case GenderContext.male:
@@ -592,6 +1140,8 @@ class TranslationsFinancialHealthReviewEn {
 				return 'Good';
 		}
 	}
+
+	/// en: '(male) {Average} (female) {Average}'
 	String normal({required GenderContext context}) {
 		switch (context) {
 			case GenderContext.male:
@@ -600,6 +1150,8 @@ class TranslationsFinancialHealthReviewEn {
 				return 'Average';
 		}
 	}
+
+	/// en: '(male) {Fair} (female) {Fair}'
 	String bad({required GenderContext context}) {
 		switch (context) {
 			case GenderContext.male:
@@ -608,6 +1160,8 @@ class TranslationsFinancialHealthReviewEn {
 				return 'Fair';
 		}
 	}
+
+	/// en: '(male) {Very Bad} (female) {Very Bad}'
 	String very_bad({required GenderContext context}) {
 		switch (context) {
 			case GenderContext.male:
@@ -616,6 +1170,8 @@ class TranslationsFinancialHealthReviewEn {
 				return 'Very Bad';
 		}
 	}
+
+	/// en: '(male) {Insufficient data} (female) {Insufficient data}'
 	String insufficient_data({required GenderContext context}) {
 		switch (context) {
 			case GenderContext.male:
@@ -624,6 +1180,7 @@ class TranslationsFinancialHealthReviewEn {
 				return 'Insufficient data';
 		}
 	}
+
 	late final TranslationsFinancialHealthReviewDescrEn descr = TranslationsFinancialHealthReviewDescrEn._(_root);
 }
 
@@ -634,13 +1191,29 @@ class TranslationsFinancialHealthMonthsWithoutIncomeEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Survival rate'
 	String get title => 'Survival rate';
+
+	/// en: 'Given your balance, amount of time you could go without income'
 	String get subtitle => 'Given your balance, amount of time you could go without income';
+
+	/// en: 'You couldn't survive a month without income at this rate of expenses!'
 	String get text_zero => 'You couldn\'t survive a month without income at this rate of expenses!';
+
+	/// en: 'You could barely survive approximately a month without income at this rate of expenses!'
 	String get text_one => 'You could barely survive approximately a month without income at this rate of expenses!';
+
+	/// en: 'You could survive approximately <b>{{ n }} months</b> without income at this rate of spending.'
 	String text_other({required Object n}) => 'You could survive approximately <b>${n} months</b> without income at this rate of spending.';
+
+	/// en: 'You could survive approximately <b>all your life</b> without income at this rate of spending.'
 	String get text_infinite => 'You could survive approximately <b>all your life</b> without income at this rate of spending.';
+
+	/// en: 'Remember that it is advisable to always keep this ratio above 5 months at least. If you see that you do not have a sufficient savings cushion, reduce unnecessary expenses.'
 	String get suggestion => 'Remember that it is advisable to always keep this ratio above 5 months at least. If you see that you do not have a sufficient savings cushion, reduce unnecessary expenses.';
+
+	/// en: 'It looks like we don't have enough expenses to calculate how many months you could survive without income. Enter a few transactions and come back here to check your financial health'
 	String get insufficient_data => 'It looks like we don\'t have enough expenses to calculate how many months you could survive without income. Enter a few transactions and come back here to check your financial health';
 }
 
@@ -651,9 +1224,16 @@ class TranslationsFinancialHealthSavingsPercentageEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Savings percentage'
 	String get title => 'Savings percentage';
+
+	/// en: 'What part of your income is not spent in this period'
 	String get subtitle => 'What part of your income is not spent in this period';
+
 	late final TranslationsFinancialHealthSavingsPercentageTextEn text = TranslationsFinancialHealthSavingsPercentageTextEn._(_root);
+
+	/// en: 'Remember that it is advisable to save at least 15-20% of what you earn.'
 	String get suggestion => 'Remember that it is advisable to save at least 15-20% of what you earn.';
 }
 
@@ -664,13 +1244,29 @@ class TranslationsIconSelectorScopesEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Transport'
 	String get transport => 'Transport';
+
+	/// en: 'Money'
 	String get money => 'Money';
+
+	/// en: 'Food'
 	String get food => 'Food';
+
+	/// en: 'Health'
 	String get medical => 'Health';
+
+	/// en: 'Leisure'
 	String get entertainment => 'Leisure';
+
+	/// en: 'Technology'
 	String get technology => 'Technology';
+
+	/// en: 'Others'
 	String get other => 'Others';
+
+	/// en: 'Financial institutions'
 	String get logos_financial_institutions => 'Financial institutions';
 }
 
@@ -681,16 +1277,38 @@ class TranslationsTransactionNextPaymentsEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Accept'
 	String get accept => 'Accept';
+
+	/// en: 'Skip'
 	String get skip => 'Skip';
+
+	/// en: 'Successfully skipped transaction'
 	String get skip_success => 'Successfully skipped transaction';
+
+	/// en: 'Skip transaction'
 	String get skip_dialog_title => 'Skip transaction';
+
+	/// en: 'This action is irreversible. We will move the date of the next move to {{date}}'
 	String skip_dialog_msg({required Object date}) => 'This action is irreversible. We will move the date of the next move to ${date}';
+
+	/// en: 'Accept today'
 	String get accept_today => 'Accept today';
+
+	/// en: 'Accept in required date ({{date}})'
 	String accept_in_required_date({required Object date}) => 'Accept in required date (${date})';
+
+	/// en: 'Accept transaction'
 	String get accept_dialog_title => 'Accept transaction';
+
+	/// en: 'The new status of the transaction will be null. You can re-edit the status of this transaction whenever you want'
 	String get accept_dialog_msg_single => 'The new status of the transaction will be null. You can re-edit the status of this transaction whenever you want';
+
+	/// en: 'This action will create a new transaction with date {{date}}. You will be able to check the details of this transaction on the transaction page'
 	String accept_dialog_msg({required Object date}) => 'This action will create a new transaction with date ${date}. You will be able to check the details of this transaction on the transaction page';
+
+	/// en: 'The recurring rule has been completed, there are no more payments to make!'
 	String get recurrent_rule_finished => 'The recurring rule has been completed, there are no more payments to make!';
 }
 
@@ -701,18 +1319,31 @@ class TranslationsTransactionListEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'No transactions found to display here. Add a few transactions in the app and maybe you'll have better luck next time.'
 	String get empty => 'No transactions found to display here. Add a few transactions in the app and maybe you\'ll have better luck next time.';
+
+	/// en: 'Search by category, description...'
 	String get searcher_placeholder => 'Search by category, description...';
+
+	/// en: 'No transactions found matching the search criteria'
 	String get searcher_no_results => 'No transactions found matching the search criteria';
+
+	/// en: 'Loading more transactions...'
 	String get loading => 'Loading more transactions...';
+
+	/// en: '(one) {{{n}} selected} (other) {{{n}} selected}'
 	String selected_short({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 		one: '${n} selected',
 		other: '${n} selected',
 	);
+
+	/// en: '(one) {{{n}} transaction selected} (other) {{{n}} transactions selected}'
 	String selected_long({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 		one: '${n} transaction selected',
 		other: '${n} transactions selected',
 	);
+
 	late final TranslationsTransactionListBulkEditEn bulk_edit = TranslationsTransactionListBulkEditEn._(_root);
 }
 
@@ -723,11 +1354,23 @@ class TranslationsTransactionFiltersEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'From amount'
 	String get from_value => 'From amount';
+
+	/// en: 'Up to amount'
 	String get to_value => 'Up to amount';
+
+	/// en: 'From {{ x }}'
 	String from_value_def({required Object x}) => 'From ${x}';
+
+	/// en: 'Up to {{ x }}'
 	String to_value_def({required Object x}) => 'Up to ${x}';
+
+	/// en: 'From the {{ date }}'
 	String from_date_def({required Object date}) => 'From the ${date}';
+
+	/// en: 'Up to the {{ date }}'
 	String to_date_def({required Object date}) => 'Up to the ${date}';
 }
 
@@ -739,14 +1382,32 @@ class TranslationsTransactionFormEn {
 
 	// Translations
 	late final TranslationsTransactionFormValidatorsEn validators = TranslationsTransactionFormValidatorsEn._(_root);
+
+	/// en: 'Transaction title'
 	String get title => 'Transaction title';
+
+	/// en: 'Title'
 	String get title_short => 'Title';
+
+	/// en: 'Value of the transaction'
 	String get value => 'Value of the transaction';
+
+	/// en: 'Tap to see more details'
 	String get tap_to_see_more => 'Tap to see more details';
+
+	/// en: '-- No tags --'
 	String get no_tags => '-- No tags --';
+
+	/// en: 'Description'
 	String get description => 'Description';
+
+	/// en: 'Tap here to enter a more detailed description about this transaction'
 	String get description_info => 'Tap here to enter a more detailed description about this transaction';
+
+	/// en: 'Exchnage rate to {{ currency }}'
 	String exchange_to_preferred_title({required Object currency}) => 'Exchnage rate to ${currency}';
+
+	/// en: 'On transaction date'
 	String get exchange_to_preferred_in_date => 'On transaction date';
 }
 
@@ -757,9 +1418,17 @@ class TranslationsTransactionReversedEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Inverse transaction'
 	String get title => 'Inverse transaction';
+
+	/// en: 'Inverse tr.'
 	String get title_short => 'Inverse tr.';
+
+	/// en: 'Despite being an expense transaction, it has a positive amount. These types of transactions can be used to represent the return of a previously recorded expense, such as a refund or having the payment of a debt.'
 	String get description_for_expenses => 'Despite being an expense transaction, it has a positive amount. These types of transactions can be used to represent the return of a previously recorded expense, such as a refund or having the payment of a debt.';
+
+	/// en: 'Despite being an income transaction, it has a negative amount. These types of transactions can be used to void or correct an income that was incorrectly recorded, to reflect a return or refund of money or to record payment of debts.'
 	String get description_for_incomes => 'Despite being an income transaction, it has a negative amount. These types of transactions can be used to void or correct an income that was incorrectly recorded, to reflect a return or refund of money or to record payment of debts.';
 }
 
@@ -770,21 +1439,47 @@ class TranslationsTransactionStatusEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: '(one) {Status} (other) {Statuses}'
 	String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 		one: 'Status',
 		other: 'Statuses',
 	);
+
+	/// en: 'Transaction status'
 	String get display_long => 'Transaction status';
+
+	/// en: '{{ status }} transaction'
 	String tr_status({required Object status}) => '${status} transaction';
+
+	/// en: 'Stateless'
 	String get none => 'Stateless';
+
+	/// en: 'Transaction without a specific state'
 	String get none_descr => 'Transaction without a specific state';
+
+	/// en: 'Reconciled'
 	String get reconciled => 'Reconciled';
+
+	/// en: 'This transaction has already been validated and corresponds to a real transaction from your bank'
 	String get reconciled_descr => 'This transaction has already been validated and corresponds to a real transaction from your bank';
+
+	/// en: 'Unreconciled'
 	String get unreconciled => 'Unreconciled';
+
+	/// en: 'This transaction has not yet been validated and therefore does not yet appear in your real bank accounts. However, it counts for the calculation of balances and statistics in Monekin'
 	String get unreconciled_descr => 'This transaction has not yet been validated and therefore does not yet appear in your real bank accounts. However, it counts for the calculation of balances and statistics in Monekin';
+
+	/// en: 'Pending'
 	String get pending => 'Pending';
+
+	/// en: 'This transaction is pending and therefore it will not be taken into account when calculating balances and statistics'
 	String get pending_descr => 'This transaction is pending and therefore it will not be taken into account when calculating balances and statistics';
+
+	/// en: 'Voided'
 	String get voided => 'Voided';
+
+	/// en: 'Void/cancelled transaction due to payment error or any other reason. It will not be taken into account when calculating balances and statistics'
 	String get voided_descr => 'Void/cancelled transaction due to payment error or any other reason. It will not be taken into account when calculating balances and statistics';
 }
 
@@ -795,18 +1490,26 @@ class TranslationsTransactionTypesEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: '(one) {Transaction type} (other) {Transaction types}'
 	String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 		one: 'Transaction type',
 		other: 'Transaction types',
 	);
+
+	/// en: '(one) {Income} (other) {Incomes}'
 	String income({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 		one: 'Income',
 		other: 'Incomes',
 	);
+
+	/// en: '(one) {Expense} (other) {Expenses}'
 	String expense({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 		one: 'Expense',
 		other: 'Expenses',
 	);
+
+	/// en: '(one) {Transfer} (other) {Transfers}'
 	String transfer({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 		one: 'Transfer',
 		other: 'Transfers',
@@ -820,8 +1523,13 @@ class TranslationsTransferFormEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Origin account'
 	String get from => 'Origin account';
+
+	/// en: 'Destination account'
 	String get to => 'Destination account';
+
 	late final TranslationsTransferFormValueInDestinyEn value_in_destiny = TranslationsTransferFormValueInDestinyEn._(_root);
 }
 
@@ -832,10 +1540,20 @@ class TranslationsRecurrentTransactionsDetailsEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Recurrent transaction'
 	String get title => 'Recurrent transaction';
+
+	/// en: 'The next moves for this transaction are shown below. You can accept the first move or skip this move'
 	String get descr => 'The next moves for this transaction are shown below. You can accept the first move or skip this move';
+
+	/// en: 'This movement is the last of the recurring rule, so this rule will be automatically deleted when confirming this action'
 	String get last_payment_info => 'This movement is the last of the recurring rule, so this rule will be automatically deleted when confirming this action';
+
+	/// en: 'Delete recurring transaction'
 	String get delete_header => 'Delete recurring transaction';
+
+	/// en: 'This action is irreversible and will not affect transactions you have already confirmed/paid for'
 	String get delete_message => 'This action is irreversible and will not affect transactions you have already confirmed/paid for';
 }
 
@@ -846,7 +1564,11 @@ class TranslationsRecurrentTransactionsStatusEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Delayed by {{x}}d'
 	String delayed_by({required Object x}) => 'Delayed by ${x}d';
+
+	/// en: 'In {{x}} days'
 	String coming_in({required Object x}) => 'In ${x} days';
 }
 
@@ -857,11 +1579,23 @@ class TranslationsAccountTypesEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Account type'
 	String get title => 'Account type';
+
+	/// en: 'Once the type of account has been chosen, it cannot be changed in the future'
 	String get warning => 'Once the type of account has been chosen, it cannot be changed in the future';
+
+	/// en: 'Normal account'
 	String get normal => 'Normal account';
+
+	/// en: 'Useful to record your day-to-day finances. It is the most common account, it allows you to add expenses, income...'
 	String get normal_descr => 'Useful to record your day-to-day finances. It is the most common account, it allows you to add expenses, income...';
+
+	/// en: 'Savings account'
 	String get saving => 'Savings account';
+
+	/// en: 'You will only be able to add and withdraw money from it from other accounts. Perfect to start saving money'
 	String get saving_descr => 'You will only be able to add and withdraw money from it from other accounts. Perfect to start saving money';
 }
 
@@ -872,18 +1606,44 @@ class TranslationsAccountFormEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Account name'
 	String get name => 'Account name';
+
+	/// en: 'Ex: Savings account'
 	String get name_placeholder => 'Ex: Savings account';
+
+	/// en: 'Notes'
 	String get notes => 'Notes';
+
+	/// en: 'Type some notes/description about this account'
 	String get notes_placeholder => 'Type some notes/description about this account';
+
+	/// en: 'Initial balance'
 	String get initial_balance => 'Initial balance';
+
+	/// en: 'Current balance'
 	String get current_balance => 'Current balance';
+
+	/// en: 'Create account'
 	String get create => 'Create account';
+
+	/// en: 'Edit account'
 	String get edit => 'Edit account';
+
+	/// en: 'You do not have information on exchange rates for this currency. 1.0 will be used as the default exchange rate. You can modify this in the settings'
 	String get currency_not_found_warn => 'You do not have information on exchange rates for this currency. 1.0 will be used as the default exchange rate. You can modify this in the settings';
+
+	/// en: 'There is already another one with the same name, please write another'
 	String get already_exists => 'There is already another one with the same name, please write another';
+
+	/// en: 'There are transactions in this account with a date before the opening date'
 	String get tr_before_opening_date => 'There are transactions in this account with a date before the opening date';
+
+	/// en: 'IBAN'
 	String get iban => 'IBAN';
+
+	/// en: 'SWIFT'
 	String get swift => 'SWIFT';
 }
 
@@ -894,8 +1654,14 @@ class TranslationsAccountDeleteEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Delete account?'
 	String get warning_header => 'Delete account?';
+
+	/// en: 'This action will delete this account and all its transactions'
 	String get warning_text => 'This action will delete this account and all its transactions';
+
+	/// en: 'Account deleted successfully'
 	String get success => 'Account deleted successfully';
 }
 
@@ -906,12 +1672,26 @@ class TranslationsAccountCloseEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Close account'
 	String get title => 'Close account';
+
+	/// en: 'Close'
 	String get title_short => 'Close';
+
+	/// en: 'This account will no longer appear in certain listings and you will not be able to create transactions in it with a date later than the one specified below. This action does not affect any transactions or balance, and you can also reopen this account at any time. '
 	String get warn => 'This account will no longer appear in certain listings and you will not be able to create transactions in it with a date later than the one specified below. This action does not affect any transactions or balance, and you can also reopen this account at any time. ';
+
+	/// en: 'You must have a current balance of 0 in this account to close it. Please edit the account before continuing'
 	String get should_have_zero_balance => 'You must have a current balance of 0 in this account to close it. Please edit the account before continuing';
+
+	/// en: 'This account has transactions after the specified close date. Delete them or edit the account close date before continuing'
 	String get should_have_no_transactions => 'This account has transactions after the specified close date. Delete them or edit the account close date before continuing';
+
+	/// en: 'Account closed successfully'
 	String get success => 'Account closed successfully';
+
+	/// en: 'Account successfully re-opened'
 	String get unarchive_succes => 'Account successfully re-opened';
 }
 
@@ -922,8 +1702,14 @@ class TranslationsAccountSelectEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Select an account'
 	String get one => 'Select an account';
+
+	/// en: 'All accounts'
 	String get all => 'All accounts';
+
+	/// en: 'Select accounts'
 	String get multiple => 'Select accounts';
 }
 
@@ -934,11 +1720,23 @@ class TranslationsCurrenciesFormEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'The currency cannot be equal to the user currency'
 	String get equal_to_preferred_warn => 'The currency cannot be equal to the user currency';
+
+	/// en: 'Please specify a currency'
 	String get specify_a_currency => 'Please specify a currency';
+
+	/// en: 'Add exchange rate'
 	String get add => 'Add exchange rate';
+
+	/// en: 'Exchange rate added successfully'
 	String get add_success => 'Exchange rate added successfully';
+
+	/// en: 'Edit exchange rate'
 	String get edit => 'Edit exchange rate';
+
+	/// en: 'Exchange rate edited successfully'
 	String get edit_success => 'Exchange rate edited successfully';
 }
 
@@ -949,7 +1747,11 @@ class TranslationsTagsFormEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Tag name'
 	String get name => 'Tag name';
+
+	/// en: 'Description'
 	String get description => 'Description';
 }
 
@@ -960,7 +1762,11 @@ class TranslationsTagsSelectEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Select tags'
 	String get title => 'Select tags';
+
+	/// en: 'All the tags'
 	String get all => 'All the tags';
 }
 
@@ -971,11 +1777,23 @@ class TranslationsCategoriesSelectEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Select categories'
 	String get title => 'Select categories';
+
+	/// en: 'Select a category'
 	String get select_one => 'Select a category';
+
+	/// en: 'Choose a subcategory'
 	String get select_subcategory => 'Choose a subcategory';
+
+	/// en: 'Without subcategory'
 	String get without_subcategory => 'Without subcategory';
+
+	/// en: 'All categories'
 	String get all => 'All categories';
+
+	/// en: 'All'
 	String get all_short => 'All';
 }
 
@@ -986,11 +1804,23 @@ class TranslationsBudgetsFormEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Add a budget'
 	String get title => 'Add a budget';
+
+	/// en: 'Budget name'
 	String get name => 'Budget name';
+
+	/// en: 'Limit quantity'
 	String get value => 'Limit quantity';
+
+	/// en: 'Add budget'
 	String get create => 'Add budget';
+
+	/// en: 'Edit budget'
 	String get edit => 'Edit budget';
+
+	/// en: 'The budgets can not have a negative amount'
 	String get negative_warn => 'The budgets can not have a negative amount';
 }
 
@@ -1001,11 +1831,23 @@ class TranslationsBudgetsDetailsEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Budget Details'
 	String get title => 'Budget Details';
+
+	/// en: 'Statistics'
 	String get statistics => 'Statistics';
+
+	/// en: 'Budgeted'
 	String get budget_value => 'Budgeted';
+
+	/// en: 'You can spend {{ dailyAmount }}/day for {{ remainingDays }} remaining days'
 	String expend_diary_left({required Object dailyAmount, required Object remainingDays}) => 'You can spend ${dailyAmount}/day for ${remainingDays} remaining days';
+
+	/// en: 'Expenditure evolution'
 	String get expend_evolution => 'Expenditure evolution';
+
+	/// en: 'It seems that you have not made any expenses related to this budget'
 	String get no_transactions => 'It seems that you have not made any expenses related to this budget';
 }
 
@@ -1016,15 +1858,35 @@ class TranslationsBackupExportEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Export your data'
 	String get title => 'Export your data';
+
+	/// en: 'Export'
 	String get title_short => 'Export';
+
+	/// en: 'Full backup'
 	String get all => 'Full backup';
+
+	/// en: 'Export all your data (accounts, transactions, budgets, settings...). Import them again at any time so you don't lose anything.'
 	String get all_descr => 'Export all your data (accounts, transactions, budgets, settings...). Import them again at any time so you don\'t lose anything.';
+
+	/// en: 'Transactions backup'
 	String get transactions => 'Transactions backup';
+
+	/// en: 'Export your transactions in CSV so you can more easily analyze them in other programs or applications.'
 	String get transactions_descr => 'Export your transactions in CSV so you can more easily analyze them in other programs or applications.';
+
+	/// en: 'Download your data in different formats'
 	String get description => 'Download your data in different formats';
+
+	/// en: 'Save/Send file'
 	String get dialog_title => 'Save/Send file';
+
+	/// en: 'File saved/downloaded successfully in {{x}}'
 	String success({required Object x}) => 'File saved/downloaded successfully in ${x}';
+
+	/// en: 'Error downloading the file. Please contact the developer via lozin.technologies@gmail.com'
 	String get error => 'Error downloading the file. Please contact the developer via lozin.technologies@gmail.com';
 }
 
@@ -1035,17 +1897,40 @@ class TranslationsBackupImportEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Import your data'
 	String get title => 'Import your data';
+
+	/// en: 'Import'
 	String get title_short => 'Import';
+
+	/// en: 'Restore Backup'
 	String get restore_backup => 'Restore Backup';
+
+	/// en: 'Import a previously saved database from Monekin. This action will replace any current application data with the new data'
 	String get restore_backup_descr => 'Import a previously saved database from Monekin. This action will replace any current application data with the new data';
+
+	/// en: 'When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Monekin'
 	String get restore_backup_warn_description => 'When importing a new database, you will lose all data currently saved in the app. It is recommended to make a backup before continuing. Do not upload here any file whose origin you do not know, upload only files that you have previously downloaded from Monekin';
+
+	/// en: 'Overwrite all data'
 	String get restore_backup_warn_title => 'Overwrite all data';
+
+	/// en: 'Select other file'
 	String get select_other_file => 'Select other file';
+
+	/// en: 'Tap to select a file'
 	String get tap_to_select_file => 'Tap to select a file';
+
 	late final TranslationsBackupImportManualImportEn manual_import = TranslationsBackupImportManualImportEn._(_root);
+
+	/// en: 'Import performed successfully'
 	String get success => 'Import performed successfully';
+
+	/// en: 'Import was cancelled by the user'
 	String get cancelled => 'Import was cancelled by the user';
+
+	/// en: 'Error importing file. Please contact developer via lozin.technologies@gmail.com'
 	String get error => 'Error importing file. Please contact developer via lozin.technologies@gmail.com';
 }
 
@@ -1056,11 +1941,39 @@ class TranslationsBackupAboutEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Information about your database'
 	String get title => 'Information about your database';
+
+	/// en: 'Creation date'
 	String get create_date => 'Creation date';
+
+	/// en: 'Last modified'
 	String get modify_date => 'Last modified';
+
+	/// en: 'Last backup'
 	String get last_backup => 'Last backup';
+
+	/// en: 'Size'
 	String get size => 'Size';
+}
+
+// Path: settings.swipe_actions
+class TranslationsSettingsSwipeActionsEn {
+	TranslationsSettingsSwipeActionsEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Swipe actions'
+	String get title => 'Swipe actions';
+
+	/// en: 'Swipe left'
+	String get swipe_left => 'Swipe left';
+
+	/// en: 'Swipe right'
+	String get swipe_right => 'Swipe right';
 }
 
 // Path: settings.security
@@ -1070,12 +1983,26 @@ class TranslationsSettingsSecurityEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Seguridad'
 	String get title => 'Seguridad';
+
+	/// en: 'Private mode at launch'
 	String get private_mode_at_launch => 'Private mode at launch';
+
+	/// en: 'Launch the app in private mode by default'
 	String get private_mode_at_launch_descr => 'Launch the app in private mode by default';
+
+	/// en: 'Private mode'
 	String get private_mode => 'Private mode';
+
+	/// en: 'Hide all monetary values'
 	String get private_mode_descr => 'Hide all monetary values';
+
+	/// en: 'Private mode activated'
 	String get private_mode_activated => 'Private mode activated';
+
+	/// en: 'Private mode disabled'
 	String get private_mode_deactivated => 'Private mode disabled';
 }
 
@@ -1086,12 +2013,26 @@ class TranslationsMoreDataEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Data'
 	String get display => 'Data';
+
+	/// en: 'Export and import your data so you don't lose anything'
 	String get display_descr => 'Export and import your data so you don\'t lose anything';
+
+	/// en: 'Delete my data'
 	String get delete_all => 'Delete my data';
+
+	/// en: 'Stop right there padawan ⚠️⚠️'
 	String get delete_all_header1 => 'Stop right there padawan ⚠️⚠️';
+
+	/// en: 'Are you sure you want to continue? All your data will be permanently deleted and cannot be recovered'
 	String get delete_all_message1 => 'Are you sure you want to continue? All your data will be permanently deleted and cannot be recovered';
+
+	/// en: 'One last step ⚠️⚠️'
 	String get delete_all_header2 => 'One last step ⚠️⚠️';
+
+	/// en: 'By deleting an account you will delete all your stored personal data. Your accounts, transactions, budgets and categories will be deleted and cannot be recovered. Do you agree?'
 	String get delete_all_message2 => 'By deleting an account you will delete all your stored personal data. Your accounts, transactions, budgets and categories will be deleted and cannot be recovered. Do you agree?';
 }
 
@@ -1102,8 +2043,13 @@ class TranslationsMoreAboutUsEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'App information'
 	String get display => 'App information';
+
+	/// en: 'Check out the terms and other relevant information about Monekin. Get in touch with the community by reporting bugs, leaving suggestions...'
 	String get description => 'Check out the terms and other relevant information about Monekin. Get in touch with the community by reporting bugs, leaving suggestions...';
+
 	late final TranslationsMoreAboutUsLegalEn legal = TranslationsMoreAboutUsLegalEn._(_root);
 	late final TranslationsMoreAboutUsProjectEn project = TranslationsMoreAboutUsProjectEn._(_root);
 }
@@ -1115,19 +2061,47 @@ class TranslationsMoreHelpUsEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Help us'
 	String get display => 'Help us';
+
+	/// en: 'Find out how you can help Monekin become better and better'
 	String get description => 'Find out how you can help Monekin become better and better';
+
+	/// en: 'Rate us'
 	String get rate_us => 'Rate us';
+
+	/// en: 'Any rate is welcome!'
 	String get rate_us_descr => 'Any rate is welcome!';
+
+	/// en: 'Share Monekin'
 	String get share => 'Share Monekin';
+
+	/// en: 'Share our app to friends and family'
 	String get share_descr => 'Share our app to friends and family';
+
+	/// en: 'Monekin! The best personal finance app. Download it here'
 	String get share_text => 'Monekin! The best personal finance app. Download it here';
+
+	/// en: 'Thank you!'
 	String get thanks => 'Thank you!';
+
+	/// en: 'Your contributions to Monekin and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.'
 	String get thanks_long => 'Your contributions to Monekin and other open source projects, big and small, make great projects like this possible. Thank you for taking the time to contribute.';
+
+	/// en: 'Make a donation'
 	String get donate => 'Make a donation';
+
+	/// en: 'With your donation you will help the app continue receiving improvements. What better way than to thank the work done by inviting me to a coffee?'
 	String get donate_descr => 'With your donation you will help the app continue receiving improvements. What better way than to thank the work done by inviting me to a coffee?';
+
+	/// en: 'Donation made. Thank you very much for your contribution! ❤️'
 	String get donate_success => 'Donation made. Thank you very much for your contribution! ❤️';
+
+	/// en: 'Oops! It seems there was an error receiving your payment'
 	String get donate_err => 'Oops! It seems there was an error receiving your payment';
+
+	/// en: 'Report bugs, leave suggestions...'
 	String get report => 'Report bugs, leave suggestions...';
 }
 
@@ -1138,39 +2112,64 @@ class TranslationsGeneralTimeRangesEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Time range'
 	String get display => 'Time range';
+
+	/// en: 'Repeats'
 	String get it_repeat => 'Repeats';
+
+	/// en: 'Ends'
 	String get it_ends => 'Ends';
+
+	/// en: 'Forever'
 	String get forever => 'Forever';
+
 	late final TranslationsGeneralTimeRangesTypesEn types = TranslationsGeneralTimeRangesTypesEn._(_root);
+
+	/// en: '(one) {Every {{range}}} (other) {Every {{n}} {{range}}}'
 	String each_range({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 		one: 'Every ${range}',
 		other: 'Every ${n} ${range}',
 	);
+
+	/// en: '(one) {Every {{range}} until {{day}}} (other) {Every {{n}} {{range}} until {{day}}}'
 	String each_range_until_date({required num n, required Object range, required Object day}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 		one: 'Every ${range} until ${day}',
 		other: 'Every ${n} ${range} until ${day}',
 	);
+
+	/// en: '(one) {Every {{range}} {{limit}} times} (other) {Every {{n}} {{range}} {{limit}} times}'
 	String each_range_until_times({required num n, required Object range, required Object limit}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 		one: 'Every ${range} ${limit} times',
 		other: 'Every ${n} ${range} ${limit} times',
 	);
+
+	/// en: '(one) {Every {{range}} once} (other) {Every {{n}} {{range}} once}'
 	String each_range_until_once({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 		one: 'Every ${range} once',
 		other: 'Every ${n} ${range} once',
 	);
+
+	/// en: '(one) {Month} (other) {Months}'
 	String month({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 		one: 'Month',
 		other: 'Months',
 	);
+
+	/// en: '(one) {Year} (other) {Years}'
 	String year({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 		one: 'Year',
 		other: 'Years',
 	);
+
+	/// en: '(one) {Day} (other) {Days}'
 	String day({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 		one: 'Day',
 		other: 'Days',
 	);
+
+	/// en: '(one) {Week} (other) {Weeks}'
 	String week({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 		one: 'Week',
 		other: 'Weeks',
@@ -1184,18 +2183,38 @@ class TranslationsGeneralTimePeriodicityEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Recurrence'
 	String get display => 'Recurrence';
+
+	/// en: 'No repeat'
 	String get no_repeat => 'No repeat';
+
+	/// en: '(one) {Repetition} (other) {Repetitions}'
 	String repeat({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
 		one: 'Repetition',
 		other: 'Repetitions',
 	);
+
+	/// en: 'Daily'
 	String get diary => 'Daily';
+
+	/// en: 'Monthly'
 	String get monthly => 'Monthly';
+
+	/// en: 'Annually'
 	String get annually => 'Annually';
+
+	/// en: 'Quarterly'
 	String get quaterly => 'Quarterly';
+
+	/// en: 'Weekly'
 	String get weekly => 'Weekly';
+
+	/// en: 'Custom'
 	String get custom => 'Custom';
+
+	/// en: 'Always'
 	String get infinite => 'Always';
 }
 
@@ -1206,11 +2225,23 @@ class TranslationsGeneralTimeCurrentEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'This month'
 	String get monthly => 'This month';
+
+	/// en: 'This year'
 	String get annually => 'This year';
+
+	/// en: 'This quarter'
 	String get quaterly => 'This quarter';
+
+	/// en: 'This week'
 	String get weekly => 'This week';
+
+	/// en: 'For ever'
 	String get infinite => 'For ever';
+
+	/// en: 'Custom Range'
 	String get custom => 'Custom Range';
 }
 
@@ -1221,10 +2252,20 @@ class TranslationsGeneralTimeAllEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Every day'
 	String get diary => 'Every day';
+
+	/// en: 'Every month'
 	String get monthly => 'Every month';
+
+	/// en: 'Every year'
 	String get annually => 'Every year';
+
+	/// en: 'Every quarterly'
 	String get quaterly => 'Every quarterly';
+
+	/// en: 'Every week'
 	String get weekly => 'Every week';
 }
 
@@ -1235,11 +2276,23 @@ class TranslationsFinancialHealthReviewDescrEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'It looks like we don't have enough expenses to calculate your financial health. Add some expenses/incomes in this period to allow us to help you!'
 	String get insufficient_data => 'It looks like we don\'t have enough expenses to calculate your financial health. Add some expenses/incomes in this period to allow us to help you!';
+
+	/// en: 'Congratulations! Your financial health is tremendous. We hope you continue your good streak and continue learning with Monekin'
 	String get very_good => 'Congratulations! Your financial health is tremendous. We hope you continue your good streak and continue learning with Monekin';
+
+	/// en: 'Great! Your financial health is good. Visit the analysis tab to see how to save even more!'
 	String get good => 'Great! Your financial health is good. Visit the analysis tab to see how to save even more!';
+
+	/// en: 'Your financial health is more or less in the average of the rest of the population for this period'
 	String get normal => 'Your financial health is more or less in the average of the rest of the population for this period';
+
+	/// en: 'It seems that your financial situation is not the best yet. Explore the rest of the charts to learn more about your finances'
 	String get bad => 'It seems that your financial situation is not the best yet. Explore the rest of the charts to learn more about your finances';
+
+	/// en: 'Hmm, your financial health is far below what it should be. Explore the rest of the charts to learn more about your finances'
 	String get very_bad => 'Hmm, your financial health is far below what it should be. Explore the rest of the charts to learn more about your finances';
 }
 
@@ -1250,9 +2303,17 @@ class TranslationsFinancialHealthSavingsPercentageTextEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Congratulations! You have managed to save <b>{{value}}%</b> of your income during this period. It seems that you are already an expert, keep up the good work!'
 	String good({required Object value}) => 'Congratulations! You have managed to save <b>${value}%</b> of your income during this period. It seems that you are already an expert, keep up the good work!';
+
+	/// en: 'Congratulations, you have managed to save <b>{{value}}%</b> of your income during this period.'
 	String normal({required Object value}) => 'Congratulations, you have managed to save <b>${value}%</b> of your income during this period.';
+
+	/// en: 'You have managed to save <b>{{value}}%</b> of your income during this period. However, we think you can still do much more!'
 	String bad({required Object value}) => 'You have managed to save <b>${value}%</b> of your income during this period. However, we think you can still do much more!';
+
+	/// en: 'Wow, you haven't managed to save anything during this period.'
 	String get very_bad => 'Wow, you haven\'t managed to save anything during this period.';
 }
 
@@ -1263,8 +2324,14 @@ class TranslationsTransactionListBulkEditEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Edit dates'
 	String get dates => 'Edit dates';
+
+	/// en: 'Edit categories'
 	String get categories => 'Edit categories';
+
+	/// en: 'Edit statuses'
 	String get status => 'Edit statuses';
 }
 
@@ -1275,10 +2342,20 @@ class TranslationsTransactionFormValidatorsEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'The value of a transaction cannot be equal to zero'
 	String get zero => 'The value of a transaction cannot be equal to zero';
+
+	/// en: 'The selected date is after the current one. The transaction will be added as pending'
 	String get date_max => 'The selected date is after the current one. The transaction will be added as pending';
+
+	/// en: 'You cannot create a transaction whose date is before the creation date of the account it belongs to'
 	String get date_after_account_creation => 'You cannot create a transaction whose date is before the creation date of the account it belongs to';
+
+	/// en: 'The monetary value of a transfer cannot be negative'
 	String get negative_transfer => 'The monetary value of a transfer cannot be negative';
+
+	/// en: 'The origin and the destination account cannot be the same'
 	String get transfer_between_same_accounts => 'The origin and the destination account cannot be the same';
 }
 
@@ -1289,7 +2366,11 @@ class TranslationsTransferFormValueInDestinyEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Amount transferred at destination'
 	String get title => 'Amount transferred at destination';
+
+	/// en: '{{amount}} to target account'
 	String amount_short({required Object amount}) => '${amount} to target account';
 }
 
@@ -1300,12 +2381,25 @@ class TranslationsBackupImportManualImportEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Manual import'
 	String get title => 'Manual import';
+
+	/// en: 'Import transactions from a .csv file manually'
 	String get descr => 'Import transactions from a .csv file manually';
+
+	/// en: 'Default account'
 	String get default_account => 'Default account';
+
+	/// en: 'Remove default account'
 	String get remove_default_account => 'Remove default account';
+
+	/// en: 'Default Category'
 	String get default_category => 'Default Category';
+
+	/// en: 'Select a column from the .csv'
 	String get select_a_column => 'Select a column from the .csv';
+
 	List<String> get steps => [
 		'Select your file',
 		'Column for quantity',
@@ -1322,6 +2416,8 @@ class TranslationsBackupImportManualImportEn {
 		'Select the column where the date of each transaction is specified. If not specified, transactions will be created with the current date',
 		'Specifies the columns for other optional transaction attributes',
 	];
+
+	/// en: 'Successfully imported {{x}} transactions'
 	String success({required Object x}) => 'Successfully imported ${x} transactions';
 }
 
@@ -1332,9 +2428,17 @@ class TranslationsMoreAboutUsLegalEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Legal information'
 	String get display => 'Legal information';
+
+	/// en: 'Privacy policy'
 	String get privacy => 'Privacy policy';
+
+	/// en: 'Terms of use'
 	String get terms => 'Terms of use';
+
+	/// en: 'Licenses'
 	String get licenses => 'Licenses';
 }
 
@@ -1345,9 +2449,17 @@ class TranslationsMoreAboutUsProjectEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Project'
 	String get display => 'Project';
+
+	/// en: 'Collaborators'
 	String get contributors => 'Collaborators';
+
+	/// en: 'All the developers who have made Monekin grow'
 	String get contributors_descr => 'All the developers who have made Monekin grow';
+
+	/// en: 'Contact us'
 	String get contact => 'Contact us';
 }
 
@@ -1358,10 +2470,20 @@ class TranslationsGeneralTimeRangesTypesEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Cycles'
 	String get cycle => 'Cycles';
+
+	/// en: 'Last days'
 	String get last_days => 'Last days';
+
+	/// en: '{{x}} previous days'
 	String last_days_form({required Object x}) => '${x} previous days';
+
+	/// en: 'Always'
 	String get all => 'Always';
+
+	/// en: 'Custom range'
 	String get date_range => 'Custom range';
 }
 
@@ -1964,6 +3086,7 @@ extension on Translations {
 			case 'settings.lang_descr': return 'Language in which the texts will be displayed in the app';
 			case 'settings.lang_help': return 'If you want to collaborate with the translations of this app, you can consult <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>our guide</a>';
 			case 'settings.locale': return 'Region';
+			case 'settings.locale_auto': return 'System';
 			case 'settings.locale_descr': return 'Set the format to use for dates, numbers...';
 			case 'settings.locale_warn': return 'When changing region the app will update';
 			case 'settings.first_day_of_week': return 'First day of week';
@@ -1978,6 +3101,9 @@ extension on Translations {
 			case 'settings.dynamic_colors_descr': return 'Use your system accent color whenever possible';
 			case 'settings.accent_color': return 'Accent color';
 			case 'settings.accent_color_descr': return 'Choose the color the app will use to emphasize certain parts of the interface';
+			case 'settings.swipe_actions.title': return 'Swipe actions';
+			case 'settings.swipe_actions.swipe_left': return 'Swipe left';
+			case 'settings.swipe_actions.swipe_right': return 'Swipe right';
 			case 'settings.security.title': return 'Seguridad';
 			case 'settings.security.private_mode_at_launch': return 'Private mode at launch';
 			case 'settings.security.private_mode_at_launch_descr': return 'Launch the app in private mode by default';

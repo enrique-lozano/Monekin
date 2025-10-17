@@ -686,6 +686,7 @@
     "lang.descr": "Metinlerin uygulamada görüntüleneceği dil",
     "lang.help": "Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>kılavuzumuza</a> başvurabilirsiniz",
     "locale": "Bölge",
+    "locale_auto": "Sistem",
     "locale.descr": "Tarihler, sayılar için kullanılacak biçimi ayarlayın...",
     "locale.warn": "Bölge değiştirildiğinde uygulama güncellenecektir",
     "first_day_of_week": "Haftanın ilk günü",
@@ -700,6 +701,11 @@
     "dynamic-colors.descr": "Mümkün olduğunda sistem vurgu renginizi kullanın",
     "accent-color": "Vurgu rengi",
     "accent-color.descr": "Uygulamanın arayüzün belirli kısımlarını vurgulamak için kullanacağı rengi seçin",
+    "SWIPE-ACTIONS": {
+      "title": "Kaydırma eylemleri",
+      "swipe-left": "Sola kaydırın",
+      "swipe-right": "Sağa kaydırın"
+    },
     "SECURITY": {
       "title": "Güvenlik",
       "private-mode-at-launch": "Başlangıçta özel mod",

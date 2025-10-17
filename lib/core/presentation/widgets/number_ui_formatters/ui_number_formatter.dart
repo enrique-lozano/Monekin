@@ -14,19 +14,19 @@ class UINumberFormatter {
     this.compactView = false,
     this.integerStyle = const TextStyle(inherit: true),
     this.decimalsStyle,
-  })  : mode = UINumberFormatterMode.decimal,
-        currency = null,
-        currencyStyle = null;
+  }) : mode = UINumberFormatterMode.decimal,
+       currency = null,
+       currencyStyle = null;
 
   const UINumberFormatter.percentage({
     required this.amountToConvert,
     this.showDecimals = true,
     this.integerStyle = const TextStyle(inherit: true),
     this.decimalsStyle,
-  })  : mode = UINumberFormatterMode.percentage,
-        currency = null,
-        currencyStyle = null,
-        compactView = false;
+  }) : mode = UINumberFormatterMode.percentage,
+       currency = null,
+       currencyStyle = null,
+       compactView = false;
 
   const UINumberFormatter.currency({
     required this.amountToConvert,
@@ -68,8 +68,8 @@ class UINumberFormatter {
   int get _fractionsDigits => amountToConvert >= 10000000
       ? 3
       : amountToConvert >= 100000
-          ? 2
-          : 1;
+      ? 2
+      : 1;
 
   bool get _shouldCompact =>
       compactView == true && amountToConvert.abs() >= _compactLimit;
@@ -86,8 +86,8 @@ class UINumberFormatter {
         break;
       case UINumberFormatterMode.percentage:
         formattedAmount = NumberFormat.decimalPercentPattern(
-                decimalDigits: showDecimals ? 2 : 0)
-            .format(amountToConvert);
+          decimalDigits: showDecimals ? 2 : 0,
+        ).format(amountToConvert);
         break;
       case UINumberFormatterMode.decimal:
         formattedAmount = _getFormattedDecimalAmount();
@@ -125,8 +125,8 @@ class UINumberFormatter {
       return formatter.format(amountToConvert);
     } else {
       return NumberFormat.decimalPatternDigits(
-              decimalDigits: showDecimals ? 2 : 0)
-          .format(amountToConvert);
+        decimalDigits: showDecimals ? 2 : 0,
+      ).format(amountToConvert);
     }
   }
 
@@ -159,7 +159,8 @@ class UINumberFormatter {
 
     List<String> parts = number.split(decimalSep);
 
-    final computedDecimalStyles = decimalsStyle ??
+    final computedDecimalStyles =
+        decimalsStyle ??
         integerStyle.copyWith(
           fontWeight: FontWeight.w300,
           fontSize: fontSize > 12.25 ? max(fontSize * 0.75, 12.25) : fontSize,
@@ -182,15 +183,18 @@ class UINumberFormatter {
   }
 
   List<TextSpan> getTextSpanList(BuildContext context) {
-    final valueFontSize = (integerStyle.fontSize ??
+    final valueFontSize =
+        (integerStyle.fontSize ??
             DefaultTextStyle.of(context).style.fontSize) ??
         16;
 
     final String formattedAmount = _getFormattedAmount();
 
     if (mode != UINumberFormatterMode.currency) {
-      return _getTextSpanListForAFormattedNumber(formattedAmount,
-          fontSize: valueFontSize);
+      return _getTextSpanListForAFormattedNumber(
+        formattedAmount,
+        fontSize: valueFontSize,
+      );
     }
 
     final List<TextSpan> toReturn = [];
@@ -200,15 +204,19 @@ class UINumberFormatter {
       _currencySymbolWithoutDecimalSep,
     )) {
       if (elementToDisplay == _currencySymbolWithoutDecimalSep) {
-        toReturn.add(TextSpan(
-          text: currency!.symbol,
-          style: currencyStyle ?? integerStyle,
-        ));
+        toReturn.add(
+          TextSpan(
+            text: currency!.symbol,
+            style: currencyStyle ?? integerStyle,
+          ),
+        );
       } else {
-        toReturn.addAll(_getTextSpanListForAFormattedNumber(
-          elementToDisplay,
-          fontSize: valueFontSize,
-        ));
+        toReturn.addAll(
+          _getTextSpanListForAFormattedNumber(
+            elementToDisplay,
+            fontSize: valueFontSize,
+          ),
+        );
       }
     }
 
@@ -217,10 +225,7 @@ class UINumberFormatter {
 
   Text getTextWidget(BuildContext context) {
     return Text.rich(
-      TextSpan(
-        style: integerStyle,
-        children: getTextSpanList(context),
-      ),
+      TextSpan(style: integerStyle, children: getTextSpanList(context)),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );

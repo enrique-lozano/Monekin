@@ -12,16 +12,15 @@ class TappableTextEntry extends StatelessWidget {
     required this.placeholder,
     required this.onTap,
     this.padding = const EdgeInsetsDirectional.symmetric(vertical: 0),
-    this.internalPadding =
-        const EdgeInsetsDirectional.symmetric(vertical: 6, horizontal: 12),
+    this.internalPadding = const EdgeInsetsDirectional.symmetric(
+      vertical: 6,
+      horizontal: 12,
+    ),
     this.showPlaceHolderWhenTextEquals,
     this.disabled = false,
     this.enableAnimatedSwitcher = true,
     this.addTappableBackground = false,
-    this.textStyle = const TextStyle(
-      fontSize: 20,
-      fontWeight: FontWeight.bold,
-    ),
+    this.textStyle = const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
     this.showSelectArrow = false,
   });
 
@@ -40,7 +39,8 @@ class TappableTextEntry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget titleBuilder(String? titlePassed) {
-      final showPlaceholder = titlePassed.isNullOrEmpty ||
+      final showPlaceholder =
+          titlePassed.isNullOrEmpty ||
           titlePassed == showPlaceHolderWhenTextEquals;
 
       return AnimatedDefaultTextStyle(
@@ -64,7 +64,7 @@ class TappableTextEntry extends StatelessWidget {
                 Icons.arrow_drop_down_rounded,
                 size: (textStyle.fontSize ?? 16) * 1.25,
                 color: textStyle.color,
-              )
+              ),
           ],
         ),
       );
@@ -92,7 +92,8 @@ class TappableTextEntry extends StatelessWidget {
             onTap: disabled == true ? null : onTap,
             bgColor: Colors.transparent,
             borderRadius: BorderRadius.circular(
-                textStyle.fontSize! * (Platform.isIOS ? 0.25 : 0.5)),
+              textStyle.fontSize! * (Platform.isIOS ? 0.25 : 0.5),
+            ),
             child: Padding(
               padding: padding,
               child: AnimatedContainer(
@@ -100,9 +101,7 @@ class TappableTextEntry extends StatelessWidget {
                 duration: const Duration(milliseconds: 250),
                 padding: internalPadding,
                 decoration: BoxDecoration(
-                  border: Border(
-                    bottom: borderSide(context),
-                  ),
+                  border: Border(bottom: borderSide(context)),
                 ),
                 child: IntrinsicWidth(
                   child: Align(
@@ -113,14 +112,15 @@ class TappableTextEntry extends StatelessWidget {
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }
 
   static BorderSide borderSide(BuildContext context, {bool disabled = false}) {
     return BorderSide(
-        width: disabled ? 0 : 1.5,
-        color: disabled ? Colors.transparent : Theme.of(context).dividerColor);
+      width: disabled ? 0 : 1.5,
+      color: disabled ? Colors.transparent : Theme.of(context).dividerColor,
+    );
   }
 }

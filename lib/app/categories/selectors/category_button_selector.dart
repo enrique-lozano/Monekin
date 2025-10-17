@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 
 class CategoryButtonSelector extends StatelessWidget {
-  const CategoryButtonSelector(
-      {super.key,
-      required this.iconWidget,
-      required this.label,
-      required this.maxTextSize});
+  const CategoryButtonSelector({
+    super.key,
+    required this.iconWidget,
+    required this.label,
+    required this.maxTextSize,
+  });
 
   final IconDisplayer iconWidget;
   final String label;

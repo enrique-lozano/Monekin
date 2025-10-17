@@ -63,10 +63,7 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TappableTextEntry(
-              title: toReturn.periodicity.periodText(
-                context,
-                isPlural: true,
-              ),
+              title: toReturn.periodicity.periodText(context, isPlural: true),
               placeholder: t.general.time.periodicity.display,
               showSelectArrow: true,
               onTap: () {
@@ -75,17 +72,15 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
                   selectorWidget: DynamicSelectorModal(
                     items: Periodicity.values,
                     selectedValue: toReturn.periodicity,
-                    displayNameGetter: (e) => e.periodText(
-                      context,
-                      isPlural: true,
-                    ),
+                    displayNameGetter: (e) =>
+                        e.periodText(context, isPlural: true),
                     valueGetter: (p) => p,
                     title: t.general.time.periodicity.display,
                   ),
                 ).then((value) {
-                  if (value == null) return;
+                  if (value?.result == null) return;
 
-                  toReturn = toReturn.copyWith(periodicity: value.result);
+                  toReturn = toReturn.copyWith(periodicity: value!.result!);
                   setState(() {});
                 });
               },
@@ -94,8 +89,9 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
         );
 
       case PeriodType.lastDays:
-        final textToTransformArray =
-            t.general.time.ranges.types.last_days_form(x: '***').split('***');
+        final textToTransformArray = t.general.time.ranges.types
+            .last_days_form(x: '***')
+            .split('***');
 
         final inputBorder = UnderlineInputBorder(
           borderSide: TappableTextEntry.borderSide(context),
@@ -133,13 +129,13 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
                   hintStyle: TextStyle(color: AppColors.of(context).textHint),
                 ),
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                validator: (value) => fieldValidator(
-                  value,
-                  validator: ValidatorType.int,
-                ),
+                validator: (value) =>
+                    fieldValidator(value, validator: ValidatorType.int),
                 onChanged: (value) {
                   toReturn = toReturn.copyWith(
-                    lastDays: value.isEmpty ? null : int.parse(value),
+                    lastDays: value.isEmpty
+                        ? toReturn.lastDays
+                        : int.parse(value),
                   );
                 },
               ),
@@ -183,10 +179,7 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
                   expand: toReturn.periodType == PeriodType.dateRange,
                   child: const Padding(
                     padding: EdgeInsetsDirectional.only(top: 5, bottom: 0),
-                    child: Icon(
-                      Icons.arrow_downward_rounded,
-                      size: 25,
-                    ),
+                    child: Icon(Icons.arrow_downward_rounded, size: 25),
                   ),
                 ),
               ],
@@ -220,35 +213,38 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
     return ModalContainer(
       title: t.general.time.ranges.display,
       footer: BottomSheetFooter(
-          submitText: t.ui_actions.continue_text,
-          submitIcon: Icons.arrow_forward_ios,
-          onSaved: () {
-            Navigator.of(context).pop(toReturn);
-          }),
+        submitText: t.ui_actions.continue_text,
+        submitIcon: Icons.arrow_forward_ios,
+        onSaved: () {
+          Navigator.of(context).pop(toReturn);
+        },
+      ),
       body: Stack(
         children: [
           SingleChildScrollView(
-              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  for (final periodType in PeriodType.values)
-                    PeriodTypeEntry(
-                      onTap: () {
-                        HapticFeedback.lightImpact();
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                for (final periodType in PeriodType.values)
+                  PeriodTypeEntry(
+                    onTap: () {
+                      HapticFeedback.lightImpact();
 
-                        setState(() {
-                          toReturn = toReturn.copyWith(periodType: periodType);
-                        });
-                      },
-                      periodType: periodType,
-                      selectedCycle: toReturn.periodType,
-                      extraWidget: buildPeriodTypeCardContent(periodType),
-                    )
-                ],
-              )),
+                      setState(() {
+                        toReturn = toReturn.copyWith(periodType: periodType);
+                      });
+                    },
+                    periodType: periodType,
+                    selectedCycle: toReturn.periodType,
+                    extraWidget: buildPeriodTypeCardContent(periodType),
+                  ),
+              ],
+            ),
+          ),
           ScrollableWithBottomGradient.buildPositionedGradient(
-              AppColors.of(context).modalBackground),
+            AppColors.of(context).modalBackground,
+          ),
         ],
       ),
     );
@@ -268,34 +264,35 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
       textBaseline: TextBaseline.ideographic,
       children: [
         TappableTextEntry(
-            title: dateToSelect != null
-                ? DateFormat.yMMMMd().format(dateToSelect)
-                : '',
-            placeholder: '-- $label --',
-            onTap: () {
-              if (dateToSelect == null) {
-                if (firstDate != null) {
-                  dateToSelect = firstDate.add(const Duration(days: 1));
-                }
-                if (lastDate != null) {
-                  dateToSelect = lastDate.subtract(const Duration(days: 1));
-                }
+          title: dateToSelect != null
+              ? DateFormat.yMMMMd().format(dateToSelect)
+              : '',
+          placeholder: '-- $label --',
+          onTap: () {
+            if (dateToSelect == null) {
+              if (firstDate != null) {
+                dateToSelect = firstDate.add(const Duration(days: 1));
+              }
+              if (lastDate != null) {
+                dateToSelect = lastDate.subtract(const Duration(days: 1));
+              }
+            }
+
+            openDateTimePicker(
+              context,
+              initialDate: dateToSelect,
+              firstDate: firstDate,
+              lastDate: lastDate,
+              showTimePickerAfterDate: false,
+            ).then((value) {
+              if (value == null) {
+                return;
               }
 
-              openDateTimePicker(
-                context,
-                initialDate: dateToSelect,
-                firstDate: firstDate,
-                lastDate: lastDate,
-                showTimePickerAfterDate: false,
-              ).then((value) {
-                if (value == null) {
-                  return;
-                }
-
-                onDateSelected(value);
-              });
-            }),
+              onDateSelected(value);
+            });
+          },
+        ),
         AnimatedExpanded(
           expand: dateToSelect != null,
           axis: Axis.horizontal,
@@ -310,7 +307,7 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
               },
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -354,8 +351,10 @@ class PeriodTypeEntry extends StatelessWidget {
               : Focus(
                   canRequestFocus: isSelected,
                   descendantsAreFocusable: isSelected,
-                  child:
-                      IgnorePointer(ignoring: !isSelected, child: extraWidget),
+                  child: IgnorePointer(
+                    ignoring: !isSelected,
+                    child: extraWidget,
+                  ),
                 ),
         ),
       ),

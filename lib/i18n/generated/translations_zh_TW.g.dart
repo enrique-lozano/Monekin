@@ -13,9 +13,9 @@ import 'translations.g.dart';
 class TranslationsZhTw implements Translations {
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
-	TranslationsZhTw({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver})
+	TranslationsZhTw({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
 		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
-		  $meta = TranslationMetadata(
+		  $meta = meta ?? TranslationMetadata(
 		    locale: AppLocale.zhTw,
 		    overrides: overrides ?? {},
 		    cardinalResolver: cardinalResolver,
@@ -31,6 +31,9 @@ class TranslationsZhTw implements Translations {
 	@override dynamic operator[](String key) => $meta.getTranslation(key);
 
 	late final TranslationsZhTw _root = this; // ignore: unused_field
+
+	@override 
+	TranslationsZhTw $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsZhTw(meta: meta ?? this.$meta);
 
 	// Translations
 	@override late final _TranslationsUiActionsZhTw ui_actions = _TranslationsUiActionsZhTw._(_root);
@@ -96,7 +99,6 @@ class _TranslationsUiActionsZhTw implements TranslationsUiActionsEn {
 	@override String get refresh => '重新整理';
 	@override String get details => '詳細資訊';
 	@override String get share => '分享';
-  @override String get none => '没有';
 }
 
 // Path: general
@@ -471,6 +473,7 @@ class _TranslationsSettingsZhTw implements TranslationsSettingsEn {
 	@override String get lang_descr => '應用程式中顯示文字的語言';
 	@override String get lang_help => '如果您想與此應用程式的翻譯合作，您可以參考<a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>我們的指南</a>';
 	@override String get locale => '地區';
+	@override String get locale_auto => '系統';
 	@override String get locale_descr => '設定用於日期、數字的格式...';
 	@override String get locale_warn => '更改區域時應用程式將更新';
 	@override String get first_day_of_week => '一週的第一天';
@@ -485,10 +488,8 @@ class _TranslationsSettingsZhTw implements TranslationsSettingsEn {
 	@override String get dynamic_colors_descr => '盡可能使用系統強調色';
 	@override String get accent_color => '強調色';
 	@override String get accent_color_descr => '選擇應用程式用來強調介面某些部分的顏色';
-	@override	String get swipe_title => '滑動作';
-  @override String get swipe_right => '向右滑動';
-  @override String get swipe_left => '向左滑動';
-  @override late final _TranslationsSettingsSecurityZhTw security = _TranslationsSettingsSecurityZhTw._(_root);
+	@override late final _TranslationsSettingsSwipeActionsZhTw swipe_actions = _TranslationsSettingsSwipeActionsZhTw._(_root);
+	@override late final _TranslationsSettingsSecurityZhTw security = _TranslationsSettingsSecurityZhTw._(_root);
 }
 
 // Path: more
@@ -1057,6 +1058,18 @@ class _TranslationsBackupAboutZhTw implements TranslationsBackupAboutEn {
 	@override String get modify_date => '上一次更改';
 	@override String get last_backup => '上次備份';
 	@override String get size => '檔案大小';
+}
+
+// Path: settings.swipe_actions
+class _TranslationsSettingsSwipeActionsZhTw implements TranslationsSettingsSwipeActionsEn {
+	_TranslationsSettingsSwipeActionsZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '滑動操作';
+	@override String get swipe_left => '向左滑動';
+	@override String get swipe_right => '向右滑動';
 }
 
 // Path: settings.security
@@ -1960,6 +1973,7 @@ extension on TranslationsZhTw {
 			case 'settings.lang_descr': return '應用程式中顯示文字的語言';
 			case 'settings.lang_help': return '如果您想與此應用程式的翻譯合作，您可以參考<a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>我們的指南</a>';
 			case 'settings.locale': return '地區';
+			case 'settings.locale_auto': return '系統';
 			case 'settings.locale_descr': return '設定用於日期、數字的格式...';
 			case 'settings.locale_warn': return '更改區域時應用程式將更新';
 			case 'settings.first_day_of_week': return '一週的第一天';
@@ -1974,6 +1988,9 @@ extension on TranslationsZhTw {
 			case 'settings.dynamic_colors_descr': return '盡可能使用系統強調色';
 			case 'settings.accent_color': return '強調色';
 			case 'settings.accent_color_descr': return '選擇應用程式用來強調介面某些部分的顏色';
+			case 'settings.swipe_actions.title': return '滑動操作';
+			case 'settings.swipe_actions.swipe_left': return '向左滑動';
+			case 'settings.swipe_actions.swipe_right': return '向右滑動';
 			case 'settings.security.title': return '安全';
 			case 'settings.security.private_mode_at_launch': return '啟動時啟用的隱私模式';
 			case 'settings.security.private_mode_at_launch_descr': return '默認以隱私模式啟動應用程序';

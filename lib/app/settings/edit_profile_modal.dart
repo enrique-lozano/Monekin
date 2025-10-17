@@ -32,7 +32,7 @@ class _EditProfileModalState extends State<EditProfileModal> {
     'black_man',
     'black_woman',
     'woman_with_bangs',
-    'man_with_goatee'
+    'man_with_goatee',
   ];
 
   @override
@@ -40,8 +40,9 @@ class _EditProfileModalState extends State<EditProfileModal> {
     super.initState();
 
     selectedAvatar = appStateSettings[SettingKey.avatar];
-    _nameController.value =
-        TextEditingValue(text: appStateSettings[SettingKey.userName] ?? '');
+    _nameController.value = TextEditingValue(
+      text: appStateSettings[SettingKey.userName] ?? '',
+    );
   }
 
   @override
@@ -49,54 +50,60 @@ class _EditProfileModalState extends State<EditProfileModal> {
     final t = Translations.of(context);
 
     return ModalContainer(
-        title: t.settings.edit_profile,
-        footer: BottomSheetFooter(
-            onSaved: selectedAvatar == null
-                ? null
-                : () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
+      title: t.settings.edit_profile,
+      footer: BottomSheetFooter(
+        onSaved: selectedAvatar == null
+            ? null
+            : () {
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
 
-                      final userSettingsService = UserSettingService.instance;
+                  final userSettingsService = UserSettingService.instance;
 
-                      Future.wait([
-                        userSettingsService.setItem(
-                            SettingKey.userName, _nameController.text),
-                        userSettingsService.setItem(
-                            SettingKey.avatar, selectedAvatar!)
-                      ].map((e) => Future.value(e))).then((value) {
-                        Navigator.pop(context);
-                      });
-                    }
-                  }),
-        bodyPadding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-        body: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Form(
-              key: _formKey,
-              child: TextFormField(
-                controller: _nameController,
-                maxLength: 20,
-                decoration: const InputDecoration(
-                  labelText: 'User name *',
-                ),
-                validator: (value) => fieldValidator(value, isRequired: true),
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                textInputAction: TextInputAction.done,
-              ),
+                  Future.wait(
+                    [
+                      userSettingsService.setItem(
+                        SettingKey.userName,
+                        _nameController.text,
+                      ),
+                      userSettingsService.setItem(
+                        SettingKey.avatar,
+                        selectedAvatar!,
+                      ),
+                    ].map((e) => Future.value(e)),
+                  ).then((value) {
+                    Navigator.pop(context);
+                  });
+                }
+              },
+      ),
+      bodyPadding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Form(
+            key: _formKey,
+            child: TextFormField(
+              controller: _nameController,
+              maxLength: 20,
+              decoration: const InputDecoration(labelText: 'User name *'),
+              validator: (value) => fieldValidator(value, isRequired: true),
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              textInputAction: TextInputAction.done,
             ),
-            const SizedBox(height: 16),
-            Wrap(
-              spacing: 8, // gap between adjacent cards
-              runSpacing: 12, // gap between lines
-              alignment: WrapAlignment.center,
-              children: allAvatars
-                  .map((avatarName) => buildTappableAvatar(context, avatarName))
-                  .toList(),
-            ),
-          ],
-        ));
+          ),
+          const SizedBox(height: 16),
+          Wrap(
+            spacing: 8, // gap between adjacent cards
+            runSpacing: 12, // gap between lines
+            alignment: WrapAlignment.center,
+            children: allAvatars
+                .map((avatarName) => buildTappableAvatar(context, avatarName))
+                .toList(),
+          ),
+        ],
+      ),
+    );
   }
 
   Tappable buildTappableAvatar(BuildContext context, String avatarName) {

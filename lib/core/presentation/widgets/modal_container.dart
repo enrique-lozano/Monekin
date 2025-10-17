@@ -44,9 +44,10 @@ class ModalContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-          bottom: responseToKeyboard
-              ? MediaQuery.of(context).viewInsets.bottom
-              : 0),
+        bottom: responseToKeyboard
+            ? MediaQuery.of(context).viewInsets.bottom
+            : 0,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +57,6 @@ class ModalContainer extends StatelessWidget {
           // Title, subtitle and end widget will be drawn
           // here with ther respective paddings and styles
           // ---------------
-
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 22),
             child: Row(
@@ -68,9 +68,7 @@ class ModalContainer extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       DefaultTextStyle(
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineSmall!
+                        style: Theme.of(context).textTheme.headlineSmall!
                             .copyWith(fontWeight: FontWeight.w800),
                         child: titleBuilder != null
                             ? titleBuilder!(title)
@@ -78,27 +76,23 @@ class ModalContainer extends StatelessWidget {
                       ),
                       if (subtitle != null) ...[
                         const SizedBox(height: 2),
-                        Text(subtitle!)
+                        Text(subtitle!),
                       ],
                     ],
                   ),
                 ),
-                if (endWidget != null) endWidget!
+                if (endWidget != null) endWidget!,
               ],
             ),
           ),
 
           // --- Header end ---
-
           Flexible(
             fit: bodyFit,
-            child: Padding(
-              padding: bodyPadding,
-              child: body,
-            ),
+            child: Padding(padding: bodyPadding, child: body),
           ),
           if (footer != null) footer!,
-          const SizedBox(height: 6)
+          const SizedBox(height: 6),
         ],
       ),
     );

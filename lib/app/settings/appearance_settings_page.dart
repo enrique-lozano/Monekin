@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/settings/widgets/language_selector.dart';
 import 'package:monekin/app/settings/widgets/monekin_tile_switch.dart';
@@ -29,18 +30,14 @@ class SelectItem<T> {
 
   IconData? icon;
 
-  SelectItem({
-    required this.value,
-    required this.label,
-    this.icon,
-  });
+  SelectItem({required this.value, required this.label, this.icon});
 }
 
 class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
   late final GlobalKey<MonekinDropdownSelectState> _themeDropdownKey =
       GlobalKey();
   late final GlobalKey<MonekinDropdownSelectState>
-      _swipeRightActionDropdownKey = GlobalKey();
+  _swipeRightActionDropdownKey = GlobalKey();
   late final GlobalKey<MonekinDropdownSelectState> _swipeLeftActionDropdownKey =
       GlobalKey();
 
@@ -48,10 +45,17 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
+    final currentLangTag = appStateSettings[SettingKey.appLanguage];
+    final currentSelectedLangDisplayName =
+        appSupportedLocales
+            .firstWhereOrNull(
+              (element) => element.locale.languageTag == currentLangTag,
+            )
+            ?.label ??
+        t.settings.locale_auto;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(t.settings.title_short),
-      ),
+      appBar: AppBar(title: Text(t.settings.title_short)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(bottom: 16),
         child: Column(
@@ -61,46 +65,48 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
             ListTile(
               title: Text(t.settings.lang_title),
               leading: const Icon(Icons.language),
-              subtitle: Text(
-                appSupportedLocales
-                    .firstWhere((element) =>
-                        element.locale.languageTag ==
-                        LocaleSettings.currentLocale.languageTag)
-                    .label,
-              ),
+              subtitle: Text(currentSelectedLangDisplayName),
               onTap: () async {
-                final snackbarDisplayer =
-                    ScaffoldMessenger.of(context).showSnackBar;
+                final snackbarDisplayer = ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar;
 
                 final newLang = await showLanguageSelectorBottomSheet(
                   context,
-                  LanguageSelector(
-                      selectedLangTag:
-                          LocaleSettings.currentLocale.languageTag),
+                  LanguageSelector(selectedLangTag: currentLangTag),
                 );
 
-                if (newLang?.result == null) {
+                if (newLang == null) {
                   return;
                 }
 
-                LocaleSettings.setLocaleRaw(newLang!.result!,
-                    listenToDeviceLocale: true);
+                if (newLang.result != null) {
+                  await LocaleSettings.setLocaleRaw(
+                    newLang.result!,
+                    listenToDeviceLocale: true,
+                  );
+                } else {
+                  await LocaleSettings.useDeviceLocale();
+                }
 
                 try {
                   await UserSettingService.instance.setItem(
                     SettingKey.appLanguage,
-                    newLang.result!,
+                    newLang.result,
                     updateGlobalState: true,
                   );
                 } catch (e) {
-                  snackbarDisplayer(const SnackBar(
-                    content: Text(
-                        'There was an error persisting this setting on your device. Contact the developers for more information'),
-                  ));
+                  snackbarDisplayer(
+                    const SnackBar(
+                      content: Text(
+                        'There was an error persisting this setting on your device. Contact the developers for more information',
+                      ),
+                    ),
+                  );
                 }
               },
             ),
-            createListSeparator(context, t.settings.swipe_title),
+            createListSeparator(context, t.settings.swipe_actions.title),
             Builder(
               builder: (context) {
                 final statusCodeString =
@@ -110,13 +116,17 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Flexible(child: Text(t.settings.swipe_right)),
+                      Flexible(
+                        child: Text(t.settings.swipe_actions.swipe_right),
+                      ),
                       const SizedBox(width: 12),
                       Flexible(
-                          child: _buildSwipeActionDropdown(
-                              statusCodeString,
-                              SettingKey.transactionSwipeRightAction,
-                              _swipeRightActionDropdownKey))
+                        child: _buildSwipeActionDropdown(
+                          statusCodeString,
+                          SettingKey.transactionSwipeRightAction,
+                          _swipeRightActionDropdownKey,
+                        ),
+                      ),
                     ],
                   ),
                   onTap: () {
@@ -132,29 +142,35 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     appStateSettings[SettingKey.transactionSwipeLeftAction];
 
                 return ListTile(
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(child: Text(t.settings.swipe_left)),
-                        const SizedBox(width: 12),
-                        Flexible(
-                            child: _buildSwipeActionDropdown(
-                                statusCodeString,
-                                SettingKey.transactionSwipeLeftAction,
-                                _swipeLeftActionDropdownKey))
-                      ],
-                    ),
-                    onTap: () {
-                      _swipeLeftActionDropdownKey.currentState!.openDropdown();
-                    },
-                    leading: const Icon(Icons.swipe_left));
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: Text(t.settings.swipe_actions.swipe_right),
+                      ),
+                      const SizedBox(width: 12),
+                      Flexible(
+                        child: _buildSwipeActionDropdown(
+                          statusCodeString,
+                          SettingKey.transactionSwipeLeftAction,
+                          _swipeLeftActionDropdownKey,
+                        ),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    _swipeLeftActionDropdownKey.currentState!.openDropdown();
+                  },
+                  leading: const Icon(Icons.swipe_left),
+                );
               },
             ),
             createListSeparator(context, t.settings.theme_and_colors),
             Builder(
               builder: (context) {
-                final theme =
-                    getThemeFromString(appStateSettings[SettingKey.themeMode]);
+                final theme = getThemeFromString(
+                  appStateSettings[SettingKey.themeMode],
+                );
 
                 return ListTile(
                   title: Row(
@@ -162,7 +178,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     children: [
                       Flexible(child: Text(t.settings.theme)),
                       const SizedBox(width: 12),
-                      Flexible(child: _buildThemeDropdown(theme))
+                      Flexible(child: _buildThemeDropdown(theme)),
                     ],
                   ),
                   onTap: () {
@@ -203,62 +219,64 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               },
             ),
             StreamBuilder(
-                stream: UserSettingService.instance
-                    .getSettingFromDB(SettingKey.accentColor),
-                initialData: 'auto',
-                builder: (context, snapshot) {
-                  late final Color color;
+              stream: UserSettingService.instance.getSettingFromDB(
+                SettingKey.accentColor,
+              ),
+              initialData: 'auto',
+              builder: (context, snapshot) {
+                late final Color color;
 
-                  if (snapshot.data! == 'auto') {
-                    color = Theme.of(context).colorScheme.primary;
-                  } else {
-                    color = ColorHex.get(snapshot.data!);
-                  }
+                if (snapshot.data! == 'auto') {
+                  color = Theme.of(context).colorScheme.primary;
+                } else {
+                  color = ColorHex.get(snapshot.data!);
+                }
 
-                  return ListTile(
-                    onTap: snapshot.data! == 'auto'
-                        ? null
-                        : () => showColorPickerModal(
-                              context,
-                              ColorPickerModal(
-                                colorOptions: [
-                                  brandBlue.toHex(),
-                                  ...defaultColorPickerOptions
-                                ],
-                                selectedColor: color.toHex(),
-                                onColorSelected: (value) {
-                                  Navigator.pop(context);
+                return ListTile(
+                  onTap: snapshot.data! == 'auto'
+                      ? null
+                      : () => showColorPickerModal(
+                          context,
+                          ColorPickerModal(
+                            colorOptions: [
+                              brandBlue.toHex(),
+                              ...defaultColorPickerOptions,
+                            ],
+                            selectedColor: color.toHex(),
+                            onColorSelected: (value) {
+                              Navigator.pop(context);
 
-                                  setState(() {
-                                    UserSettingService.instance.setItem(
-                                      SettingKey.accentColor,
-                                      value.toHex(),
-                                      updateGlobalState: true,
-                                    );
-                                  });
-                                },
-                              ),
-                            ),
-                    title: Text(t.settings.accent_color),
-                    subtitle: Text(t.settings.accent_color_descr),
-                    enabled: snapshot.data! != 'auto',
-                    trailing: SizedBox(
-                      height: 46,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        clipBehavior: Clip.hardEdge,
-                        width: 46,
-                        height: 46,
-                        decoration: BoxDecoration(
-                          color: color.withOpacity(
-                            snapshot.data! != 'auto' ? 1 : 0.4,
+                              setState(() {
+                                UserSettingService.instance.setItem(
+                                  SettingKey.accentColor,
+                                  value.toHex(),
+                                  updateGlobalState: true,
+                                );
+                              });
+                            },
                           ),
-                          borderRadius: BorderRadius.circular(100),
                         ),
+                  title: Text(t.settings.accent_color),
+                  subtitle: Text(t.settings.accent_color_descr),
+                  enabled: snapshot.data! != 'auto',
+                  trailing: SizedBox(
+                    height: 46,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      clipBehavior: Clip.hardEdge,
+                      width: 46,
+                      height: 46,
+                      decoration: BoxDecoration(
+                        color: color.withOpacity(
+                          snapshot.data! != 'auto' ? 1 : 0.4,
+                        ),
+                        borderRadius: BorderRadius.circular(100),
                       ),
                     ),
-                  );
-                }),
+                  ),
+                );
+              },
+            ),
             createListSeparator(context, t.settings.security.title),
             MonekinTileSwitch(
               title: t.settings.security.private_mode_at_launch,
@@ -271,27 +289,30 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               },
             ),
             StreamBuilder(
-                stream: PrivateModeService.instance.privateModeStream,
-                builder: (context, snapshot) {
-                  final initialValue = (snapshot.data ?? false);
+              stream: PrivateModeService.instance.privateModeStream,
+              builder: (context, snapshot) {
+                final initialValue = (snapshot.data ?? false);
 
-                  return MonekinTileSwitch(
-                    title: t.settings.security.private_mode,
-                    subtitle: t.settings.security.private_mode_descr,
-                    icon: ScaledAnimatedSwitcher(
-                      keyToWatch: initialValue.toString(),
-                      child: Icon(initialValue
+                return MonekinTileSwitch(
+                  title: t.settings.security.private_mode,
+                  subtitle: t.settings.security.private_mode_descr,
+                  icon: ScaledAnimatedSwitcher(
+                    keyToWatch: initialValue.toString(),
+                    child: Icon(
+                      initialValue
                           ? Icons.lock_outline_rounded
-                          : Icons.lock_open_rounded),
+                          : Icons.lock_open_rounded,
                     ),
-                    initialValue: initialValue,
-                    onSwitch: (bool value) {
-                      setState(() {
-                        PrivateModeService.instance.setPrivateMode(value);
-                      });
-                    },
-                  );
-                }),
+                  ),
+                  initialValue: initialValue,
+                  onSwitch: (bool value) {
+                    setState(() {
+                      PrivateModeService.instance.setPrivateMode(value);
+                    });
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -303,43 +324,37 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
       canRequestFocus: false,
       descendantsAreFocusable: false,
       child: MonekinDropdownSelect(
-          key: _themeDropdownKey,
-          initial: theme,
-          compact: true,
-          expanded: false,
-          items: const [
-            ThemeMode.system,
-            ThemeMode.light,
-            ThemeMode.dark,
-          ],
-          getLabel: (x) => x.displayName(context),
-          onChanged: (mode) {
-            UserSettingService.instance
-                .setItem(
-                  SettingKey.themeMode,
-                  mode.name,
-                  updateGlobalState: true,
-                )
-                .then((value) => null);
-          }),
+        key: _themeDropdownKey,
+        initial: theme,
+        compact: true,
+        expanded: false,
+        items: const [ThemeMode.system, ThemeMode.light, ThemeMode.dark],
+        getLabel: (x) => x.displayName(context),
+        onChanged: (mode) {
+          UserSettingService.instance
+              .setItem(SettingKey.themeMode, mode.name, updateGlobalState: true)
+              .then((value) => null);
+        },
+      ),
     );
   }
 
   Widget _buildSwipeActionDropdown(
-      String? statusCodeString,
-      SettingKey direction,
-      GlobalKey<MonekinDropdownSelectState<dynamic>>? swipeActionKey) {
+    String? statusCodeString,
+    SettingKey direction,
+    GlobalKey<MonekinDropdownSelectState<dynamic>>? swipeActionKey,
+  ) {
     return Focus(
       canRequestFocus: false,
       descendantsAreFocusable: false,
       child: MonekinDropdownSelect<String>(
         key: swipeActionKey,
         // TODO: Need to see a better form of implementation, as for now it just checks if actions is set or not, if not it dafults to none.
-        initial: statusCodeString ?? t.ui_actions.none,
+        initial: statusCodeString ?? "NONE",
         compact: true,
         expanded: false,
         items: [
-          t.ui_actions.none,
+          "NONE",
           t.transaction.status.voided,
           t.transaction.status.pending,
           t.transaction.status.reconciled,
@@ -347,11 +362,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
         ],
         onChanged: (actionString) {
           UserSettingService.instance
-              .setItem(
-                direction,
-                actionString,
-                updateGlobalState: true,
-              )
+              .setItem(direction, actionString, updateGlobalState: true)
               .then((value) => null);
         },
       ),

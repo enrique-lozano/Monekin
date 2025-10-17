@@ -37,9 +37,7 @@ class MainMenuDestination {
   NavigationDestination toNavigationDestinationWidget(BuildContext context) {
     return NavigationDestination(
       icon: Icon(icon),
-      selectedIcon: Icon(
-        selectedIcon ?? icon,
-      ),
+      selectedIcon: Icon(selectedIcon ?? icon),
       label: label,
     );
   }
@@ -128,8 +126,9 @@ List<MainMenuDestination> getDestinations(
   required bool shortLabels,
   bool showHome = true,
 }) {
-  final bool isMobileMode =
-      BreakPoint.of(context).isSmallerThan(BreakpointID.md);
+  final bool isMobileMode = BreakPoint.of(
+    context,
+  ).isSmallerThan(BreakpointID.md);
 
   var toReturn = getAllDestinations(context, shortLabels: shortLabels);
 
@@ -141,11 +140,13 @@ List<MainMenuDestination> getDestinations(
 
   if (isMobileMode) {
     toReturn = toReturn
-        .where((element) => [
-              AppMenuDestinationsID.dashboard,
-              AppMenuDestinationsID.transactions,
-              AppMenuDestinationsID.settings,
-            ].contains(element.id))
+        .where(
+          (element) => [
+            AppMenuDestinationsID.dashboard,
+            AppMenuDestinationsID.transactions,
+            AppMenuDestinationsID.settings,
+          ].contains(element.id),
+        )
         .toList();
   }
 

@@ -23,13 +23,14 @@ class CategoryService {
   }
 
   Future<int> deleteCategory(String categoryId) {
-    return (db.delete(db.categories)..where((tbl) => tbl.id.equals(categoryId)))
-        .go();
+    return (db.delete(
+      db.categories,
+    )..where((tbl) => tbl.id.equals(categoryId))).go();
   }
 
   Stream<List<Category>> getCategories({
     Expression<bool> Function(Categories catTable, Categories parentCatTable)?
-        predicate,
+    predicate,
     OrderBy Function(Categories catTable, Categories parentCatTable)? orderBy,
     double? limit,
   }) {
@@ -37,32 +38,40 @@ class CategoryService {
 
     return db
         .getCategoriesWithFullData(
-            predicate: predicate,
-            orderBy: orderBy ??
-                (c, pc) => OrderBy([OrderingTerm.asc(c.displayOrder)]),
-            limit: limit)
+          predicate: predicate,
+          orderBy:
+              orderBy ?? (c, pc) => OrderBy([OrderingTerm.asc(c.displayOrder)]),
+          limit: limit,
+        )
         .watch();
   }
 
-  Stream<List<Category>> getChildCategories(
-      {required String parentId, double? limit}) {
+  Stream<List<Category>> getChildCategories({
+    required String parentId,
+    double? limit,
+  }) {
     limit ??= -1;
 
     return getCategories(
-        predicate: (p0, p1) => p0.parentCategoryID.equals(parentId),
-        limit: limit);
+      predicate: (p0, p1) => p0.parentCategoryID.equals(parentId),
+      limit: limit,
+    );
   }
 
   Stream<List<Category>> getMainCategories({double? limit}) {
     limit ??= -1;
 
     return getCategories(
-        predicate: (p0, p1) => p0.parentCategoryID.isNull(), limit: limit);
+      predicate: (p0, p1) => p0.parentCategoryID.isNull(),
+      limit: limit,
+    );
   }
 
   Stream<Category?> getCategoryById(String id) {
-    return getCategories(predicate: (a, c) => a.id.equals(id), limit: 1)
-        .map((res) => res.firstOrNull);
+    return getCategories(
+      predicate: (a, c) => a.id.equals(id),
+      limit: 1,
+    ).map((res) => res.firstOrNull);
   }
 
   /// Get the `assets/sql/initial_categories.json` file and seed the user categories with its info, based
@@ -70,8 +79,9 @@ class CategoryService {
   ///
   /// This function is called only when the user database is created.
   Future<void> initializeCategories() async {
-    String defaultCategories =
-        await rootBundle.loadString('assets/sql/initial_categories.json');
+    String defaultCategories = await rootBundle.loadString(
+      'assets/sql/initial_categories.json',
+    );
 
     dynamic json = jsonDecode(defaultCategories);
 
@@ -84,12 +94,13 @@ class CategoryService {
 
     for (final category in json) {
       final categoryToPush = CategoryInDB(
-          id: generateUUID(),
-          displayOrder: 10,
-          name: category['names'][systemLang] ?? category['names']['en'],
-          iconId: category['icon'],
-          color: category['color'],
-          type: CategoryType.values.byName(category['type']));
+        id: generateUUID(),
+        displayOrder: 10,
+        name: category['names'][systemLang] ?? category['names']['en'],
+        iconId: category['icon'],
+        color: category['color'],
+        type: CategoryType.values.byName(category['type']),
+      );
 
       await db.customStatement("""
           INSERT INTO categories(id, name, iconId, color, type, displayOrder) VALUES (
@@ -105,12 +116,13 @@ class CategoryService {
       if (category['subcategories'] != null) {
         for (final subcategory in category['subcategories']) {
           final subcategoryToPush = CategoryInDB(
-              id: generateUUID(),
-              displayOrder: 10,
-              name: subcategory['names'][systemLang] ??
-                  subcategory['names']['en'],
-              iconId: subcategory['icon'],
-              parentCategoryID: categoryToPush.id);
+            id: generateUUID(),
+            displayOrder: 10,
+            name:
+                subcategory['names'][systemLang] ?? subcategory['names']['en'],
+            iconId: subcategory['icon'],
+            parentCategoryID: categoryToPush.id,
+          );
 
           await db.customStatement("""
               INSERT INTO categories(id, name, iconId, parentCategoryID, displayOrder) VALUES (

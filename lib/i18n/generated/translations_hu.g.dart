@@ -13,9 +13,9 @@ import 'translations.g.dart';
 class TranslationsHu implements Translations {
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
-	TranslationsHu({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver})
+	TranslationsHu({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
 		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
-		  $meta = TranslationMetadata(
+		  $meta = meta ?? TranslationMetadata(
 		    locale: AppLocale.hu,
 		    overrides: overrides ?? {},
 		    cardinalResolver: cardinalResolver,
@@ -31,6 +31,9 @@ class TranslationsHu implements Translations {
 	@override dynamic operator[](String key) => $meta.getTranslation(key);
 
 	late final TranslationsHu _root = this; // ignore: unused_field
+
+	@override 
+	TranslationsHu $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsHu(meta: meta ?? this.$meta);
 
 	// Translations
 	@override late final _TranslationsUiActionsHu ui_actions = _TranslationsUiActionsHu._(_root);
@@ -96,7 +99,6 @@ class _TranslationsUiActionsHu implements TranslationsUiActionsEn {
 	@override String get refresh => 'Frissítés';
 	@override String get details => 'Részletek';
 	@override String get share => 'Megosztás';
-  @override String get none => 'Egyik sem';
 }
 
 // Path: general
@@ -471,6 +473,7 @@ class _TranslationsSettingsHu implements TranslationsSettingsEn {
 	@override String get lang_descr => 'Nyelv, amelyen a szövegek megjelennek az alkalmazásban';
 	@override String get lang_help => 'Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'> útmutatónk</a>';
 	@override String get locale => 'Régió';
+	@override String get locale_auto => 'Rendszer';
 	@override String get locale_descr => 'Dátumok, számformátumok beállítása...';
 	@override String get locale_warn => 'Régióváltáskor az alkalmazás frissülni fog';
 	@override String get first_day_of_week => 'A hét első napja';
@@ -485,10 +488,8 @@ class _TranslationsSettingsHu implements TranslationsSettingsEn {
 	@override String get dynamic_colors_descr => 'Amikor csak lehetséges, használja a rendszer kiemelő színét';
 	@override String get accent_color => 'Kiemelő szín';
 	@override String get accent_color_descr => 'Válassza ki, hogy az alkalmazás milyen színnel emelje ki a felület bizonyos részeit';
-	@override	String get swipe_title => 'Csúsztatási műveletek';
-  @override String get swipe_right => 'Csúsztassa jobbra';
-  @override String get swipe_left => 'Csúsztassa balra';
-  @override late final _TranslationsSettingsSecurityHu security = _TranslationsSettingsSecurityHu._(_root);
+	@override late final _TranslationsSettingsSwipeActionsHu swipe_actions = _TranslationsSettingsSwipeActionsHu._(_root);
+	@override late final _TranslationsSettingsSecurityHu security = _TranslationsSettingsSecurityHu._(_root);
 }
 
 // Path: more
@@ -1057,6 +1058,18 @@ class _TranslationsBackupAboutHu implements TranslationsBackupAboutEn {
 	@override String get modify_date => 'Utolsó módosítása';
 	@override String get last_backup => 'Utolsó mentés';
 	@override String get size => 'Méret';
+}
+
+// Path: settings.swipe_actions
+class _TranslationsSettingsSwipeActionsHu implements TranslationsSettingsSwipeActionsEn {
+	_TranslationsSettingsSwipeActionsHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Csúsztatási műveletek';
+	@override String get swipe_left => 'Csúsztasson balra';
+	@override String get swipe_right => 'Csúsztasson jobbra';
 }
 
 // Path: settings.security
@@ -1960,6 +1973,7 @@ extension on TranslationsHu {
 			case 'settings.lang_descr': return 'Nyelv, amelyen a szövegek megjelennek az alkalmazásban';
 			case 'settings.lang_help': return 'Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'> útmutatónk</a>';
 			case 'settings.locale': return 'Régió';
+			case 'settings.locale_auto': return 'Rendszer';
 			case 'settings.locale_descr': return 'Dátumok, számformátumok beállítása...';
 			case 'settings.locale_warn': return 'Régióváltáskor az alkalmazás frissülni fog';
 			case 'settings.first_day_of_week': return 'A hét első napja';
@@ -1974,6 +1988,9 @@ extension on TranslationsHu {
 			case 'settings.dynamic_colors_descr': return 'Amikor csak lehetséges, használja a rendszer kiemelő színét';
 			case 'settings.accent_color': return 'Kiemelő szín';
 			case 'settings.accent_color_descr': return 'Válassza ki, hogy az alkalmazás milyen színnel emelje ki a felület bizonyos részeit';
+			case 'settings.swipe_actions.title': return 'Csúsztatási műveletek';
+			case 'settings.swipe_actions.swipe_left': return 'Csúsztasson balra';
+			case 'settings.swipe_actions.swipe_right': return 'Csúsztasson jobbra';
 			case 'settings.security.title': return 'Biztonság';
 			case 'settings.security.private_mode_at_launch': return 'Privát mód indításkor';
 			case 'settings.security.private_mode_at_launch_descr': return 'Az alkalmazás alapértelmezés szerinti indítása privát módban';

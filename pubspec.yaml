@@ -16,8 +16,8 @@ publish_to: 'none'
 version: 7.5.1+750001
 
 environment:
-  flutter: 3.22.3
-  sdk: '>=3.4.1 <4.0.0'
+  flutter: 3.35.6
+  sdk: '>=3.8.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -42,25 +42,25 @@ dependencies:
   # Drift
   drift: ^2.8.1
   path_provider: ^2.0.13
-  http: ^1.1.2
+  http: ^1.5.0
   sqlite3: ^2.0.0
   sqlite3_flutter_libs: ^0.5.18
 
   # Other
   flutter_svg: ^2.0.5
-  permission_handler: ^11.3.0
+  permission_handler: ^12.0.1
   json_annotation: ^4.8.1
-  file_picker: ^8.3.2
-  fl_chart: ^0.70.2
-  share_plus: ^10.1.2
+  file_picker: ^10.3.3
+  fl_chart: ^1.1.1
+  share_plus: ^12.0.0
   url_launcher: ^6.3.1
   uuid: ^4.5.1
   csv: ^6.0.0
-  dotted_border: ^2.0.0+3
-  package_info_plus: ^8.3.0
+  dotted_border: ^3.1.0
+  package_info_plus: ^9.0.0
   dynamic_color: ^1.7.0
-  copy_with_extension: ^5.0.4
-  freezed_annotation: ^2.4.1
+  copy_with_extension: ^10.0.1
+  freezed_annotation: ^3.1.0
   in_app_purchase: ^3.1.11
   flutter_colorpicker: ^1.1.0
   smooth_page_indicator: ^1.2.1
@@ -70,16 +70,16 @@ dev_dependencies:
     sdk: flutter
   integration_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^6.0.0
 
   # Generators:
-  build_runner: ^2.3.3
+  build_runner: 2.9.0
   json_serializable: ^6.2.0
   flutter_launcher_icons: ^0.14.2 # Package to regenerate icons (config later in this file). To run, type `dart run flutter_launcher_icons`
   drift_dev: ^2.13.2
   slang_build_runner: ^4.4.0 # To regenerate the translations run 'dart run slang'
-  copy_with_extension_gen: ^5.0.4
-  freezed: ^2.4.5
+  copy_with_extension_gen: ^10.0.1
+  freezed: ^3.0.6
 
 flutter_launcher_icons:
   image_path: 'assets/resources/appIcon.png'

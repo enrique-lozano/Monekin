@@ -56,16 +56,19 @@ class _SuccessiveTapDetectorState extends State<SuccessiveTapDetector> {
     setState(() {});
 
     _clickTimer?.cancel();
-    _clickTimer =
-        Timer(Duration(milliseconds: _clickInterval), _resetClickCount);
+    _clickTimer = Timer(
+      Duration(milliseconds: _clickInterval),
+      _resetClickCount,
+    );
 
     if (_clickCount == widget.numberOfClicks) {
       widget.onClickGoalReached();
       _resetClickCount();
       _tapEnabled = false;
 
-      Future.delayed(Duration(milliseconds: widget.delayTrackingAfterGoal))
-          .then((x) {
+      Future.delayed(
+        Duration(milliseconds: widget.delayTrackingAfterGoal),
+      ).then((x) {
         _tapEnabled = true;
       });
     }
@@ -83,9 +86,6 @@ class _SuccessiveTapDetectorState extends State<SuccessiveTapDetector> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _handleTap,
-      child: widget.child,
-    );
+    return GestureDetector(onTap: _handleTap, child: widget.child);
   }
 }

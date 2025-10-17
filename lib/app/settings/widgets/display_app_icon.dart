@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 
 class DisplayAppIcon extends StatelessWidget {
-  const DisplayAppIcon({
-    super.key,
-    required this.height,
-  });
+  const DisplayAppIcon({super.key, required this.height});
 
   final double height;
 
@@ -20,16 +17,11 @@ class DisplayAppIcon extends StatelessWidget {
         color: ColorHex.get('0F3375'),
       ),
       child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
         clipBehavior: Clip.hardEdge,
         child: AspectRatio(
           aspectRatio: 1,
-          child: Image.asset(
-            'assets/resources/appIcon.png',
-            fit: BoxFit.fill,
-          ),
+          child: Image.asset('assets/resources/appIcon.png', fit: BoxFit.fill),
         ),
       ),
     );

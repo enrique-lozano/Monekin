@@ -13,9 +13,9 @@ import 'translations.g.dart';
 class TranslationsUk implements Translations {
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
-	TranslationsUk({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver})
+	TranslationsUk({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
 		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
-		  $meta = TranslationMetadata(
+		  $meta = meta ?? TranslationMetadata(
 		    locale: AppLocale.uk,
 		    overrides: overrides ?? {},
 		    cardinalResolver: cardinalResolver,
@@ -31,6 +31,9 @@ class TranslationsUk implements Translations {
 	@override dynamic operator[](String key) => $meta.getTranslation(key);
 
 	late final TranslationsUk _root = this; // ignore: unused_field
+
+	@override 
+	TranslationsUk $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsUk(meta: meta ?? this.$meta);
 
 	// Translations
 	@override late final _TranslationsUiActionsUk ui_actions = _TranslationsUiActionsUk._(_root);
@@ -96,7 +99,6 @@ class _TranslationsUiActionsUk implements TranslationsUiActionsEn {
 	@override String get refresh => 'Оновити';
 	@override String get details => 'Деталі';
 	@override String get share => 'Поділитися';
-  @override String get none => 'Ніхто';
 }
 
 // Path: general
@@ -471,6 +473,7 @@ class _TranslationsSettingsUk implements TranslationsSettingsEn {
 	@override String get lang_descr => 'Мова, в якій будуть відображатися тексти в додатку';
 	@override String get lang_help => 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>нашого посібник</ a>';
 	@override String get locale => 'Регіон';
+	@override String get locale_auto => 'Система';
 	@override String get locale_descr => 'Встановіть формат, який буде використовуватися для дат, чисел...';
 	@override String get locale_warn => 'Після зміни регіону додаток оновиться';
 	@override String get first_day_of_week => 'Перший день тижня';
@@ -485,10 +488,8 @@ class _TranslationsSettingsUk implements TranslationsSettingsEn {
 	@override String get dynamic_colors_descr => 'Використовуйте колір акценту вашої системи, коли це можливо';
 	@override String get accent_color => 'Колір акценту';
 	@override String get accent_color_descr => 'Виберіть колір, який додаток буде використовувати для виділення певних частин інтерфейсу';
-	@override	String get swipe_title => 'Дії свайпа';
-  @override String get swipe_right => 'Проведіть пальцем праворуч';
-  @override String get swipe_left => 'Проведіть пальцем ліворуч';
-  @override late final _TranslationsSettingsSecurityUk security = _TranslationsSettingsSecurityUk._(_root);
+	@override late final _TranslationsSettingsSwipeActionsUk swipe_actions = _TranslationsSettingsSwipeActionsUk._(_root);
+	@override late final _TranslationsSettingsSecurityUk security = _TranslationsSettingsSecurityUk._(_root);
 }
 
 // Path: more
@@ -1057,6 +1058,18 @@ class _TranslationsBackupAboutUk implements TranslationsBackupAboutEn {
 	@override String get modify_date => 'Останнє змінено';
 	@override String get last_backup => 'Остання резервна копія';
 	@override String get size => 'Розмір';
+}
+
+// Path: settings.swipe_actions
+class _TranslationsSettingsSwipeActionsUk implements TranslationsSettingsSwipeActionsEn {
+	_TranslationsSettingsSwipeActionsUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Дії гортання';
+	@override String get swipe_left => 'Проведіть ліворуч';
+	@override String get swipe_right => 'Проведіть праворуч';
 }
 
 // Path: settings.security
@@ -1960,6 +1973,7 @@ extension on TranslationsUk {
 			case 'settings.lang_descr': return 'Мова, в якій будуть відображатися тексти в додатку';
 			case 'settings.lang_help': return 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>нашого посібник</ a>';
 			case 'settings.locale': return 'Регіон';
+			case 'settings.locale_auto': return 'Система';
 			case 'settings.locale_descr': return 'Встановіть формат, який буде використовуватися для дат, чисел...';
 			case 'settings.locale_warn': return 'Після зміни регіону додаток оновиться';
 			case 'settings.first_day_of_week': return 'Перший день тижня';
@@ -1974,6 +1988,9 @@ extension on TranslationsUk {
 			case 'settings.dynamic_colors_descr': return 'Використовуйте колір акценту вашої системи, коли це можливо';
 			case 'settings.accent_color': return 'Колір акценту';
 			case 'settings.accent_color_descr': return 'Виберіть колір, який додаток буде використовувати для виділення певних частин інтерфейсу';
+			case 'settings.swipe_actions.title': return 'Дії гортання';
+			case 'settings.swipe_actions.swipe_left': return 'Проведіть ліворуч';
+			case 'settings.swipe_actions.swipe_right': return 'Проведіть праворуч';
 			case 'settings.security.title': return 'Безпека';
 			case 'settings.security.private_mode_at_launch': return 'Приватний режим під час запуску';
 			case 'settings.security.private_mode_at_launch_descr': return 'За замовчуванням запускати програму в приватному режимі';

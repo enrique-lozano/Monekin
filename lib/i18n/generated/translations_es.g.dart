@@ -13,9 +13,9 @@ import 'translations.g.dart';
 class TranslationsEs implements Translations {
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
-	TranslationsEs({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver})
+	TranslationsEs({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
 		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
-		  $meta = TranslationMetadata(
+		  $meta = meta ?? TranslationMetadata(
 		    locale: AppLocale.es,
 		    overrides: overrides ?? {},
 		    cardinalResolver: cardinalResolver,
@@ -31,6 +31,9 @@ class TranslationsEs implements Translations {
 	@override dynamic operator[](String key) => $meta.getTranslation(key);
 
 	late final TranslationsEs _root = this; // ignore: unused_field
+
+	@override 
+	TranslationsEs $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsEs(meta: meta ?? this.$meta);
 
 	// Translations
 	@override late final _TranslationsUiActionsEs ui_actions = _TranslationsUiActionsEs._(_root);
@@ -96,7 +99,6 @@ class _TranslationsUiActionsEs implements TranslationsUiActionsEn {
 	@override String get refresh => 'Actualizar';
 	@override String get details => 'Detalles';
 	@override String get share => 'Compartir';
-  @override String get none => 'Ninguno';
 }
 
 // Path: general
@@ -471,6 +473,7 @@ class _TranslationsSettingsEs implements TranslationsSettingsEn {
 	@override String get lang_descr => 'Idioma en el que se mostrarán los textos en la aplicación';
 	@override String get lang_help => 'Si quieres colaborar con las traducciones de esta app puedes consultar <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>nuestra guía</a> ';
 	@override String get locale => 'Región';
+	@override String get locale_auto => 'Sistema';
 	@override String get locale_descr => 'Establecer el formato a utilizar para fechas, números...';
 	@override String get locale_warn => 'Al cambiar la región, la aplicación se actualizará';
 	@override String get first_day_of_week => 'Primer día de la semana';
@@ -485,10 +488,8 @@ class _TranslationsSettingsEs implements TranslationsSettingsEn {
 	@override String get dynamic_colors_descr => 'Usar el color de acento de su sistema siempre que sea posible';
 	@override String get accent_color => 'Color de acento';
 	@override String get accent_color_descr => 'Elegir el color que la aplicación usará para enfatizar ciertas partes de la interfaz';
-	@override	String get swipe_title => 'Acciones de deslizamiento';
-  @override String get swipe_right => 'Deslizar hacia la izquierda';
-  @override String get swipe_left => 'Desliza el dedo hacia la derecha';
-  @override late final _TranslationsSettingsSecurityEs security = _TranslationsSettingsSecurityEs._(_root);
+	@override late final _TranslationsSettingsSwipeActionsEs swipe_actions = _TranslationsSettingsSwipeActionsEs._(_root);
+	@override late final _TranslationsSettingsSecurityEs security = _TranslationsSettingsSecurityEs._(_root);
 }
 
 // Path: more
@@ -1057,6 +1058,18 @@ class _TranslationsBackupAboutEs implements TranslationsBackupAboutEn {
 	@override String get modify_date => 'Última modificación';
 	@override String get last_backup => 'Última copia de seguridad';
 	@override String get size => 'Tamaño';
+}
+
+// Path: settings.swipe_actions
+class _TranslationsSettingsSwipeActionsEs implements TranslationsSettingsSwipeActionsEn {
+	_TranslationsSettingsSwipeActionsEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Acciones de deslizamiento';
+	@override String get swipe_left => 'Desliza hacia la izquierda';
+	@override String get swipe_right => 'Desliza hacia la derecha';
 }
 
 // Path: settings.security
@@ -1962,6 +1975,7 @@ extension on TranslationsEs {
 			case 'settings.lang_descr': return 'Idioma en el que se mostrarán los textos en la aplicación';
 			case 'settings.lang_help': return 'Si quieres colaborar con las traducciones de esta app puedes consultar <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>nuestra guía</a> ';
 			case 'settings.locale': return 'Región';
+			case 'settings.locale_auto': return 'Sistema';
 			case 'settings.locale_descr': return 'Establecer el formato a utilizar para fechas, números...';
 			case 'settings.locale_warn': return 'Al cambiar la región, la aplicación se actualizará';
 			case 'settings.first_day_of_week': return 'Primer día de la semana';
@@ -1976,6 +1990,9 @@ extension on TranslationsEs {
 			case 'settings.dynamic_colors_descr': return 'Usar el color de acento de su sistema siempre que sea posible';
 			case 'settings.accent_color': return 'Color de acento';
 			case 'settings.accent_color_descr': return 'Elegir el color que la aplicación usará para enfatizar ciertas partes de la interfaz';
+			case 'settings.swipe_actions.title': return 'Acciones de deslizamiento';
+			case 'settings.swipe_actions.swipe_left': return 'Desliza hacia la izquierda';
+			case 'settings.swipe_actions.swipe_right': return 'Desliza hacia la derecha';
 			case 'settings.security.title': return 'Seguridad';
 			case 'settings.security.private_mode_at_launch': return 'Modo privado al arrancar';
 			case 'settings.security.private_mode_at_launch_descr': return 'Arranca la app en modo privado por defecto';

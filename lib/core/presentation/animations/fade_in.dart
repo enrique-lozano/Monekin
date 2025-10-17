@@ -29,8 +29,10 @@ class _FadeInState extends AnimationControllerState<FadeIn> {
     //   _controller.forward();
     // }
 
-    _opacityAnimation =
-        Tween<double>(begin: 0, end: 1).animate(animationController);
+    _opacityAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(animationController);
 
     animationController.forward();
   }
@@ -49,10 +51,7 @@ class _FadeInState extends AnimationControllerState<FadeIn> {
     return AnimatedBuilder(
       animation: _opacityAnimation,
       builder: (context, child) {
-        return Opacity(
-          opacity: _opacityAnimation.value,
-          child: child,
-        );
+        return Opacity(opacity: _opacityAnimation.value, child: child);
       },
       child: widget.child,
     );

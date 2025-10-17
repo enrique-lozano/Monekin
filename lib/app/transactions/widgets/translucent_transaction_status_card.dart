@@ -23,10 +23,7 @@ class TranslucentTransactionStatusCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: color.withOpacity(0.125),
-        border: Border.all(
-          width: 1,
-          color: color,
-        ),
+        border: Border.all(width: 1, color: color),
         boxShadow: [
           BoxShadow(
             color: AppColors.of(context).shadowColorLight,
@@ -42,17 +39,13 @@ class TranslucentTransactionStatusCard extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
             child: Row(
               children: [
-                Icon(
-                  icon,
-                  size: 24,
-                  color: color,
-                ),
+                Icon(icon, size: 24, color: color),
                 const SizedBox(width: 8),
                 Text(title, style: Theme.of(context).textTheme.titleMedium),
               ],
             ),
           ),
-          body
+          body,
         ],
       ),
     );

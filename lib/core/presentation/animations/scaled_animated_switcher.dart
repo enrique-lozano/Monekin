@@ -20,17 +20,11 @@ class ScaledAnimatedSwitcher extends StatelessWidget {
       switchOutCurve: Curves.easeOut,
       transitionBuilder: (Widget child, Animation<double> animation) {
         final fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-          CurvedAnimation(
-            parent: animation,
-            curve: const Interval(0.5, 1),
-          ),
+          CurvedAnimation(parent: animation, curve: const Interval(0.5, 1)),
         );
 
         final scaleAnimation = Tween<double>(begin: 0, end: 1.0).animate(
-          CurvedAnimation(
-            parent: animation,
-            curve: const Interval(0, 1.0),
-          ),
+          CurvedAnimation(parent: animation, curve: const Interval(0, 1.0)),
         );
 
         return FadeTransition(

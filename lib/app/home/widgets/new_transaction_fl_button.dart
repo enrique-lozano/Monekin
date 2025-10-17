@@ -8,10 +8,7 @@ import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 class NewTransactionButton extends StatelessWidget {
-  const NewTransactionButton({
-    super.key,
-    this.isExtended = true,
-  });
+  const NewTransactionButton({super.key, this.isExtended = true});
 
   final bool isExtended;
 
@@ -31,16 +28,15 @@ class NewTransactionButton extends StatelessWidget {
   }
 
   _onPressed(BuildContext context) {
-    TransactionService.instance
-        .checkIfCreateTransactionIsPossible()
-        .first
-        .then((value) {
-      if (!value) {
-        _showShouldCreateAccountWarn(context);
-      } else {
-        RouteUtils.pushRoute(context, const TransactionFormPage());
-      }
-    });
+    TransactionService.instance.checkIfCreateTransactionIsPossible().first.then(
+      (value) {
+        if (!value) {
+          _showShouldCreateAccountWarn(context);
+        } else {
+          RouteUtils.pushRoute(context, const TransactionFormPage());
+        }
+      },
+    );
   }
 
   @override

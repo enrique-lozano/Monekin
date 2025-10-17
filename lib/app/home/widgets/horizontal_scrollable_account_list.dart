@@ -10,9 +10,7 @@ import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 class HorizontalScrollableAccountList extends StatelessWidget {
-  const HorizontalScrollableAccountList({
-    required this.dateRangeService,
-  });
+  const HorizontalScrollableAccountList({required this.dateRangeService});
 
   final DatePeriodState dateRangeService;
 
@@ -63,59 +61,59 @@ class HorizontalScrollableAccountList extends StatelessWidget {
                               Hero(
                                 tag:
                                     'dashboard-page__account-icon-${account.id}',
-                                child: account.displayIcon(
-                                  context,
-                                  size: 28,
-                                ),
+                                child: account.displayIcon(context, size: 28),
                               ),
                               const SizedBox(width: 16),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(account.name,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge),
+                                  Text(
+                                    account.name,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelLarge,
+                                  ),
                                   Row(
                                     children: [
                                       StreamBuilder(
-                                          initialData: 0.0,
-                                          stream: AccountService.instance
-                                              .getAccountMoney(
-                                                  account: account),
-                                          builder: (context, snapshot) {
-                                            return CurrencyDisplayer(
-                                              amountToConvert: snapshot.data!,
-                                              currency: account.currency,
-                                              compactView:
-                                                  snapshot.data! >= 10000000,
-                                              integerStyle: Theme.of(context)
-                                                  .textTheme
-                                                  .titleMedium!
-                                                  .copyWith(
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                            );
-                                          }),
+                                        initialData: 0.0,
+                                        stream: AccountService.instance
+                                            .getAccountMoney(account: account),
+                                        builder: (context, snapshot) {
+                                          return CurrencyDisplayer(
+                                            amountToConvert: snapshot.data!,
+                                            currency: account.currency,
+                                            compactView:
+                                                snapshot.data! >= 10000000,
+                                            integerStyle: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium!
+                                                .copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                          );
+                                        },
+                                      ),
                                       const SizedBox(width: 8),
                                       StreamBuilder(
-                                          initialData: 0.0,
-                                          stream: AccountService.instance
-                                              .getAccountsMoneyVariation(
-                                            accounts: [account],
-                                            startDate:
-                                                dateRangeService.startDate,
-                                            endDate: dateRangeService.endDate,
-                                            convertToPreferredCurrency: false,
-                                          ),
-                                          builder: (context, snapshot) {
-                                            return TrendingValue(
-                                              percentage: snapshot.data!,
-                                              decimalDigits: 0,
-                                            );
-                                          }),
+                                        initialData: 0.0,
+                                        stream: AccountService.instance
+                                            .getAccountsMoneyVariation(
+                                              accounts: [account],
+                                              startDate:
+                                                  dateRangeService.startDate,
+                                              endDate: dateRangeService.endDate,
+                                              convertToPreferredCurrency: false,
+                                            ),
+                                        builder: (context, snapshot) {
+                                          return TrendingValue(
+                                            percentage: snapshot.data!,
+                                            decimalDigits: 0,
+                                          );
+                                        },
+                                      ),
                                     ],
-                                  )
+                                  ),
                                 ],
                               ),
                             ],
@@ -158,7 +156,7 @@ class HorizontalScrollableAccountList extends StatelessWidget {
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             );
           },

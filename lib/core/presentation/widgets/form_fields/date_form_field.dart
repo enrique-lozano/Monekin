@@ -33,41 +33,42 @@ class DateTimeFormField extends FormField<DateTime> {
     TimePickerEntryMode initialTimePickerEntryMode = TimePickerEntryMode.dial,
     DateTimeFieldCreator fieldCreator = DateTimeField.new,
   }) : super(
-          initialValue: initialValue ?? initialDate,
-          builder: (FormFieldState<DateTime> field) {
-            // Theme defaults are applied inside the _InputDropdown widget
-            final InputDecoration _decorationWithThemeDefaults =
-                decoration ?? const InputDecoration();
+         initialValue: initialValue ?? initialDate,
+         builder: (FormFieldState<DateTime> field) {
+           // Theme defaults are applied inside the _InputDropdown widget
+           final InputDecoration _decorationWithThemeDefaults =
+               decoration ?? const InputDecoration();
 
-            final InputDecoration effectiveDecoration =
-                _decorationWithThemeDefaults.copyWith(
-                    errorText: field.errorText);
+           final InputDecoration effectiveDecoration =
+               _decorationWithThemeDefaults.copyWith(
+                 errorText: field.errorText,
+               );
 
-            void onChangedHandler(DateTime value) {
-              if (onDateSelected != null) {
-                onDateSelected(value);
-              }
-              field.didChange(value);
-            }
+           void onChangedHandler(DateTime value) {
+             if (onDateSelected != null) {
+               onDateSelected(value);
+             }
+             field.didChange(value);
+           }
 
-            return fieldCreator(
-              firstDate: firstDate,
-              initialDate: initialDate,
-              lastDate: lastDate,
-              decoration: effectiveDecoration,
-              initialDatePickerMode: initialDatePickerMode,
-              dateFormat: dateFormat,
-              onDateSelected: onChangedHandler,
-              selectedDate: field.value,
-              enabled: enabled,
-              use24hFormat: use24hFormat,
-              mode: mode,
-              initialEntryMode: initialEntryMode,
-              dateTextStyle: dateTextStyle,
-              initialTimePickerEntryMode: initialTimePickerEntryMode,
-            );
-          },
-        );
+           return fieldCreator(
+             firstDate: firstDate,
+             initialDate: initialDate,
+             lastDate: lastDate,
+             decoration: effectiveDecoration,
+             initialDatePickerMode: initialDatePickerMode,
+             dateFormat: dateFormat,
+             onDateSelected: onChangedHandler,
+             selectedDate: field.value,
+             enabled: enabled,
+             use24hFormat: use24hFormat,
+             mode: mode,
+             initialEntryMode: initialEntryMode,
+             dateTextStyle: dateTextStyle,
+             initialTimePickerEntryMode: initialTimePickerEntryMode,
+           );
+         },
+       );
 
   @override
   FormFieldState<DateTime> createState() => FormFieldState<DateTime>();

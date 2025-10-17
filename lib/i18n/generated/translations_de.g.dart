@@ -13,9 +13,9 @@ import 'translations.g.dart';
 class TranslationsDe implements Translations {
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
-	TranslationsDe({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver})
+	TranslationsDe({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
 		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
-		  $meta = TranslationMetadata(
+		  $meta = meta ?? TranslationMetadata(
 		    locale: AppLocale.de,
 		    overrides: overrides ?? {},
 		    cardinalResolver: cardinalResolver,
@@ -31,6 +31,9 @@ class TranslationsDe implements Translations {
 	@override dynamic operator[](String key) => $meta.getTranslation(key);
 
 	late final TranslationsDe _root = this; // ignore: unused_field
+
+	@override 
+	TranslationsDe $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsDe(meta: meta ?? this.$meta);
 
 	// Translations
 	@override late final _TranslationsUiActionsDe ui_actions = _TranslationsUiActionsDe._(_root);
@@ -96,7 +99,6 @@ class _TranslationsUiActionsDe implements TranslationsUiActionsEn {
 	@override String get refresh => 'Aktualisieren';
 	@override String get details => 'Details';
 	@override String get share => 'Teilen';
-  @override String get none => 'Nichts';
 }
 
 // Path: general
@@ -471,6 +473,7 @@ class _TranslationsSettingsDe implements TranslationsSettingsEn {
 	@override String get lang_descr => 'Sprache, in der die Texte in der App angezeigt werden';
 	@override String get lang_help => 'Wenn an den Übersetzungen dieser App mitarbeiten möchten, kannst du dich an <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>unser Beschreibung</a> wenden';
 	@override String get locale => 'Region';
+	@override String get locale_auto => 'System';
 	@override String get locale_descr => 'Lege das für Datumsangaben, Zahlen usw. zu verwendende Format fest.';
 	@override String get locale_warn => 'Wenn Du die Region änderst, wird die App aktualisiert';
 	@override String get first_day_of_week => 'Erster Tag der Woche';
@@ -485,10 +488,8 @@ class _TranslationsSettingsDe implements TranslationsSettingsEn {
 	@override String get dynamic_colors_descr => 'Verwende wann immer möglich die Akzentfarbe des Systems';
 	@override String get accent_color => 'Akzentfarbe';
 	@override String get accent_color_descr => 'Wähle die Farbe aus, mit der die App bestimmte Teile der Benutzeroberfläche hervorhebt';
-	@override	String get swipe_title => 'Wischaktionen';
-  @override String get swipe_right => 'Nach rechts wischen';
-  @override String get swipe_left => 'Nach links wischen';
-  @override late final _TranslationsSettingsSecurityDe security = _TranslationsSettingsSecurityDe._(_root);
+	@override late final _TranslationsSettingsSwipeActionsDe swipe_actions = _TranslationsSettingsSwipeActionsDe._(_root);
+	@override late final _TranslationsSettingsSecurityDe security = _TranslationsSettingsSecurityDe._(_root);
 }
 
 // Path: more
@@ -1057,6 +1058,18 @@ class _TranslationsBackupAboutDe implements TranslationsBackupAboutEn {
 	@override String get modify_date => 'Zuletzt geändert';
 	@override String get last_backup => 'Letzte Sicherung';
 	@override String get size => 'Größe';
+}
+
+// Path: settings.swipe_actions
+class _TranslationsSettingsSwipeActionsDe implements TranslationsSettingsSwipeActionsEn {
+	_TranslationsSettingsSwipeActionsDe._(this._root);
+
+	final TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Wischaktionen';
+	@override String get swipe_left => 'Wischen Sie nach links';
+	@override String get swipe_right => 'Wischen Sie nach rechts';
 }
 
 // Path: settings.security
@@ -1960,6 +1973,7 @@ extension on TranslationsDe {
 			case 'settings.lang_descr': return 'Sprache, in der die Texte in der App angezeigt werden';
 			case 'settings.lang_help': return 'Wenn an den Übersetzungen dieser App mitarbeiten möchten, kannst du dich an <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>unser Beschreibung</a> wenden';
 			case 'settings.locale': return 'Region';
+			case 'settings.locale_auto': return 'System';
 			case 'settings.locale_descr': return 'Lege das für Datumsangaben, Zahlen usw. zu verwendende Format fest.';
 			case 'settings.locale_warn': return 'Wenn Du die Region änderst, wird die App aktualisiert';
 			case 'settings.first_day_of_week': return 'Erster Tag der Woche';
@@ -1974,6 +1988,9 @@ extension on TranslationsDe {
 			case 'settings.dynamic_colors_descr': return 'Verwende wann immer möglich die Akzentfarbe des Systems';
 			case 'settings.accent_color': return 'Akzentfarbe';
 			case 'settings.accent_color_descr': return 'Wähle die Farbe aus, mit der die App bestimmte Teile der Benutzeroberfläche hervorhebt';
+			case 'settings.swipe_actions.title': return 'Wischaktionen';
+			case 'settings.swipe_actions.swipe_left': return 'Wischen Sie nach links';
+			case 'settings.swipe_actions.swipe_right': return 'Wischen Sie nach rechts';
 			case 'settings.security.title': return 'Sicherheit';
 			case 'settings.security.private_mode_at_launch': return 'Privatmodus beim Start';
 			case 'settings.security.private_mode_at_launch_descr': return 'Starte die App standardmäßig im privaten Modus';

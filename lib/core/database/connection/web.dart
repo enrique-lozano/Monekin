@@ -10,23 +10,26 @@ DatabaseConnection connect(
   bool logStatements = false,
   bool inMemory = false,
 }) {
-  return DatabaseConnection.delayed(Future.sync(() async {
-    final response = await http.get(Uri.parse('sqlite3.wasm'));
-    final fs = await IndexedDbFileSystem.open(dbName: '/db/');
-    final sqlite3 = await WasmSqlite3.load(response.bodyBytes);
-    if (inMemory) {
-      return DatabaseConnection(WasmDatabase.inMemory(
-        sqlite3,
-        logStatements: logStatements,
-      ));
-    } else {
-      final path = '/drift/db/$dbName';
-      return DatabaseConnection(WasmDatabase(
-        sqlite3: sqlite3,
-        path: path,
-        fileSystem: fs,
-        logStatements: logStatements,
-      ));
-    }
-  }));
+  return DatabaseConnection.delayed(
+    Future.sync(() async {
+      final response = await http.get(Uri.parse('sqlite3.wasm'));
+      final fs = await IndexedDbFileSystem.open(dbName: '/db/');
+      final sqlite3 = await WasmSqlite3.load(response.bodyBytes);
+      if (inMemory) {
+        return DatabaseConnection(
+          WasmDatabase.inMemory(sqlite3, logStatements: logStatements),
+        );
+      } else {
+        final path = '/drift/db/$dbName';
+        return DatabaseConnection(
+          WasmDatabase(
+            sqlite3: sqlite3,
+            path: path,
+            fileSystem: fs,
+            logStatements: logStatements,
+          ),
+        );
+      }
+    }),
+  );
 }

@@ -23,10 +23,7 @@ class TransactionStatusFilterChip extends StatelessWidget {
       label: Text(status?.displayName(context) ?? t.transaction.status.none),
       selected: isSelected,
       showCheckmark: false,
-      avatar: Icon(
-        status.icon,
-        color: status.color,
-      ),
+      avatar: Icon(status.icon, color: status.color),
       onSelected: onSelected,
     );
   }

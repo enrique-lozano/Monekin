@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 /// Will return a number from 0 to 100 indicating the percentage.
 /// Can be negative or greater that 100 if the date to check is outside the range
 double getPercentBetweenDates(DateTimeRange timeRange, DateTime timeToCheck) {
-  int millisecondDifference = timeRange.end.millisecondsSinceEpoch -
+  int millisecondDifference =
+      timeRange.end.millisecondsSinceEpoch -
       timeRange.start.millisecondsSinceEpoch +
       const Duration(days: 1).inMilliseconds;
 
-  double percent = (timeToCheck.millisecondsSinceEpoch -
+  double percent =
+      (timeToCheck.millisecondsSinceEpoch -
           timeRange.start.millisecondsSinceEpoch) /
       millisecondDifference;
 

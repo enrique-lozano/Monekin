@@ -52,8 +52,10 @@ class _StatsPageState extends State<StatsPage> {
 
   Widget buildContainerWithPadding(
     List<Widget> children, {
-    EdgeInsetsGeometry padding =
-        const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+    EdgeInsetsGeometry padding = const EdgeInsets.symmetric(
+      vertical: 16,
+      horizontal: 16,
+    ),
   }) {
     return SingleChildScrollView(
       padding: padding,
@@ -92,22 +94,23 @@ class _StatsPageState extends State<StatsPage> {
               const SizedBox(width: 12),
             ],
             IconButton(
-                onPressed: () async {
-                  final modalRes = await openFilterSheetModal(
-                    context,
-                    FilterSheetModal(
-                      preselectedFilter: filters,
-                      showDateFilter: false,
-                    ),
-                  );
+              onPressed: () async {
+                final modalRes = await openFilterSheetModal(
+                  context,
+                  FilterSheetModal(
+                    preselectedFilter: filters,
+                    showDateFilter: false,
+                  ),
+                );
 
-                  if (modalRes != null) {
-                    setState(() {
-                      filters = modalRes;
-                    });
-                  }
-                },
-                icon: const Icon(Icons.filter_alt_outlined)),
+                if (modalRes != null) {
+                  setState(() {
+                    filters = modalRes;
+                  });
+                }
+              },
+              icon: const Icon(Icons.filter_alt_outlined),
+            ),
           ],
           bottom: TabBar(
             tabAlignment: BreakPoint.of(context).isSmallerThan(BreakpointID.md)
@@ -124,24 +127,25 @@ class _StatsPageState extends State<StatsPage> {
         ),
         persistentFooterButtons:
             BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md)
-                ? null
-                : [
-                    PersistentFooterButton(
-                      child: SegmentedCalendarButton(
-                        initialDatePeriodService: dateRangeService,
-                        borderRadius: 8,
-                        buttonHeight: 44,
-                        border: Border.all(
-                            width: 2,
-                            color: Theme.of(context).colorScheme.primary),
-                        onChanged: (value) {
-                          setState(() {
-                            dateRangeService = value;
-                          });
-                        },
-                      ),
-                    )
-                  ],
+            ? null
+            : [
+                PersistentFooterButton(
+                  child: SegmentedCalendarButton(
+                    initialDatePeriodService: dateRangeService,
+                    borderRadius: 8,
+                    buttonHeight: 44,
+                    border: Border.all(
+                      width: 2,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        dateRangeService = value;
+                      });
+                    },
+                  ),
+                ),
+              ],
         body: Column(
           children: [
             if (filters.hasFilter) ...[
@@ -153,80 +157,88 @@ class _StatsPageState extends State<StatsPage> {
                   });
                 },
               ),
-              const Divider()
+              const Divider(),
             ],
             Expanded(
-              child: TabBarView(children: [
-                buildContainerWithPadding(
-                  [
+              child: TabBarView(
+                children: [
+                  buildContainerWithPadding([
                     FinanceHealthDetails(
-                      filters: filters.copyWith(
-                          minDate: dateRangeService.startDate,
-                          maxDate: dateRangeService.endDate),
-                    )
-                  ],
-                ),
-                buildContainerWithPadding([
-                  CardWithHeader(
-                    title: t.stats.by_categories,
-                    body: PieChartByCategories(
-                      datePeriodState: dateRangeService,
-                      showList: true,
-                      initialSelectedType: TransactionType.E,
-                      filters: filters,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  CardWithHeader(
-                    title: t.stats.by_tags,
-                    body: TagStats(
                       filters: filters.copyWith(
                         minDate: dateRangeService.startDate,
                         maxDate: dateRangeService.endDate,
                       ),
                     ),
-                  ),
-                ]),
-                buildContainerWithPadding([
-                  CardWithHeader(
-                    title: t.stats.balance_evolution,
-                    subtitle: t.stats.balance_evolution_subtitle,
-                    bodyPadding: const EdgeInsets.only(
-                        bottom: 12, top: 16, right: 16, left: 16),
-                    body: FundEvolutionInfo(
-                      showBalanceHeader: true,
-                      dateRange: dateRangeService,
+                  ]),
+                  buildContainerWithPadding([
+                    CardWithHeader(
+                      title: t.stats.by_categories,
+                      body: PieChartByCategories(
+                        datePeriodState: dateRangeService,
+                        showList: true,
+                        initialSelectedType: TransactionType.E,
+                        filters: filters,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    CardWithHeader(
+                      title: t.stats.by_tags,
+                      body: TagStats(
+                        filters: filters.copyWith(
+                          minDate: dateRangeService.startDate,
+                          maxDate: dateRangeService.endDate,
+                        ),
+                      ),
+                    ),
+                  ]),
+                  buildContainerWithPadding([
+                    CardWithHeader(
+                      title: t.stats.balance_evolution,
+                      subtitle: t.stats.balance_evolution_subtitle,
+                      bodyPadding: const EdgeInsets.only(
+                        bottom: 12,
+                        top: 16,
+                        right: 16,
+                        left: 16,
+                      ),
+                      body: FundEvolutionInfo(
+                        showBalanceHeader: true,
+                        dateRange: dateRangeService,
+                        filters: filters,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    AllAccountBalancePage(
+                      date: dateRangeService.endDate ?? DateTime.now(),
                       filters: filters,
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  AllAccountBalancePage(
-                    date: dateRangeService.endDate ?? DateTime.now(),
-                    filters: filters,
-                  ),
-                ]),
-                buildContainerWithPadding([
-                  CardWithHeader(
-                    title: t.stats.cash_flow,
-                    subtitle: t.stats.cash_flow_subtitle,
-                    body: IncomeExpenseComparason(
-                      startDate: dateRangeService.startDate,
-                      endDate: dateRangeService.endDate,
-                      filters: filters,
+                  ]),
+                  buildContainerWithPadding([
+                    CardWithHeader(
+                      title: t.stats.cash_flow,
+                      subtitle: t.stats.cash_flow_subtitle,
+                      body: IncomeExpenseComparason(
+                        startDate: dateRangeService.startDate,
+                        endDate: dateRangeService.endDate,
+                        filters: filters,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  CardWithHeader(
-                    title: t.stats.by_periods,
-                    bodyPadding:
-                        const EdgeInsets.only(bottom: 12, top: 24, right: 16),
-                    body: BalanceBarChart(
-                      dateRange: dateRangeService,
-                      filters: filters,
+                    const SizedBox(height: 16),
+                    CardWithHeader(
+                      title: t.stats.by_periods,
+                      bodyPadding: const EdgeInsets.only(
+                        bottom: 12,
+                        top: 24,
+                        right: 16,
+                      ),
+                      body: BalanceBarChart(
+                        dateRange: dateRangeService,
+                        filters: filters,
+                      ),
                     ),
-                  )
-                ]),
-              ]),
+                  ]),
+                ],
+              ),
             ),
           ],
         ),

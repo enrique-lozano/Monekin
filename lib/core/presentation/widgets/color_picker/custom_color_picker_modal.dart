@@ -5,7 +5,9 @@ import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 Future<void> showCustomColorPickerModal(
-    BuildContext context, CustomColorPickerModal component) {
+  BuildContext context,
+  CustomColorPickerModal component,
+) {
   return showModalBottomSheet<Color>(
     context: context,
     isScrollControlled: true,
@@ -50,20 +52,23 @@ class _CustomColorPickerModalState extends State<CustomColorPickerModal> {
       title: t.icon_selector.custom_color,
       bodyPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
       body: CustomColorPicker(
-          pickerColor: color,
-          onColorChanged: (newColor) {
-            setState(() {
-              color = newColor;
-            });
-          }),
-      endWidget:
-          widget.previewBuilder == null ? null : widget.previewBuilder!(color),
+        pickerColor: color,
+        onColorChanged: (newColor) {
+          setState(() {
+            color = newColor;
+          });
+        },
+      ),
+      endWidget: widget.previewBuilder == null
+          ? null
+          : widget.previewBuilder!(color),
       footer: BottomSheetFooter(
-          submitIcon: Icons.colorize_rounded,
-          submitText: t.ui_actions.select,
-          onSaved: () {
-            widget.onColorSelected(color);
-          }),
+        submitIcon: Icons.colorize_rounded,
+        submitText: t.ui_actions.select,
+        onSaved: () {
+          widget.onColorSelected(color);
+        },
+      ),
     );
   }
 }

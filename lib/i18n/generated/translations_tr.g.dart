@@ -13,9 +13,9 @@ import 'translations.g.dart';
 class TranslationsTr implements Translations {
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
-	TranslationsTr({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver})
+	TranslationsTr({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
 		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
-		  $meta = TranslationMetadata(
+		  $meta = meta ?? TranslationMetadata(
 		    locale: AppLocale.tr,
 		    overrides: overrides ?? {},
 		    cardinalResolver: cardinalResolver,
@@ -31,6 +31,9 @@ class TranslationsTr implements Translations {
 	@override dynamic operator[](String key) => $meta.getTranslation(key);
 
 	late final TranslationsTr _root = this; // ignore: unused_field
+
+	@override 
+	TranslationsTr $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsTr(meta: meta ?? this.$meta);
 
 	// Translations
 	@override late final _TranslationsUiActionsTr ui_actions = _TranslationsUiActionsTr._(_root);
@@ -96,7 +99,6 @@ class _TranslationsUiActionsTr implements TranslationsUiActionsEn {
 	@override String get refresh => 'Yenile';
 	@override String get details => 'Detaylar';
 	@override String get share => 'Paylaş';
-  @override String get none => 'Hiç kimse';
 }
 
 // Path: general
@@ -471,6 +473,7 @@ class _TranslationsSettingsTr implements TranslationsSettingsEn {
 	@override String get lang_descr => 'Metinlerin uygulamada görüntüleneceği dil';
 	@override String get lang_help => 'Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>kılavuzumuza</a> başvurabilirsiniz';
 	@override String get locale => 'Bölge';
+	@override String get locale_auto => 'Sistem';
 	@override String get locale_descr => 'Tarihler, sayılar için kullanılacak biçimi ayarlayın...';
 	@override String get locale_warn => 'Bölge değiştirildiğinde uygulama güncellenecektir';
 	@override String get first_day_of_week => 'Haftanın ilk günü';
@@ -485,10 +488,8 @@ class _TranslationsSettingsTr implements TranslationsSettingsEn {
 	@override String get dynamic_colors_descr => 'Mümkün olduğunda sistem vurgu renginizi kullanın';
 	@override String get accent_color => 'Vurgu rengi';
 	@override String get accent_color_descr => 'Uygulamanın arayüzün belirli kısımlarını vurgulamak için kullanacağı rengi seçin';
-	@override	String get swipe_title => 'Kaydırma Eylemleri';
-  @override String get swipe_right => 'Sağa kaydırın';
-  @override String get swipe_left => 'Sola kaydırın';
-  @override late final _TranslationsSettingsSecurityTr security = _TranslationsSettingsSecurityTr._(_root);
+	@override late final _TranslationsSettingsSwipeActionsTr swipe_actions = _TranslationsSettingsSwipeActionsTr._(_root);
+	@override late final _TranslationsSettingsSecurityTr security = _TranslationsSettingsSecurityTr._(_root);
 }
 
 // Path: more
@@ -1057,6 +1058,18 @@ class _TranslationsBackupAboutTr implements TranslationsBackupAboutEn {
 	@override String get modify_date => 'Son değiştirilme';
 	@override String get last_backup => 'Son yedekleme';
 	@override String get size => 'Boyut';
+}
+
+// Path: settings.swipe_actions
+class _TranslationsSettingsSwipeActionsTr implements TranslationsSettingsSwipeActionsEn {
+	_TranslationsSettingsSwipeActionsTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Kaydırma eylemleri';
+	@override String get swipe_left => 'Sola kaydırın';
+	@override String get swipe_right => 'Sağa kaydırın';
 }
 
 // Path: settings.security
@@ -1960,6 +1973,7 @@ extension on TranslationsTr {
 			case 'settings.lang_descr': return 'Metinlerin uygulamada görüntüleneceği dil';
 			case 'settings.lang_help': return 'Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>kılavuzumuza</a> başvurabilirsiniz';
 			case 'settings.locale': return 'Bölge';
+			case 'settings.locale_auto': return 'Sistem';
 			case 'settings.locale_descr': return 'Tarihler, sayılar için kullanılacak biçimi ayarlayın...';
 			case 'settings.locale_warn': return 'Bölge değiştirildiğinde uygulama güncellenecektir';
 			case 'settings.first_day_of_week': return 'Haftanın ilk günü';
@@ -1974,6 +1988,9 @@ extension on TranslationsTr {
 			case 'settings.dynamic_colors_descr': return 'Mümkün olduğunda sistem vurgu renginizi kullanın';
 			case 'settings.accent_color': return 'Vurgu rengi';
 			case 'settings.accent_color_descr': return 'Uygulamanın arayüzün belirli kısımlarını vurgulamak için kullanacağı rengi seçin';
+			case 'settings.swipe_actions.title': return 'Kaydırma eylemleri';
+			case 'settings.swipe_actions.swipe_left': return 'Sola kaydırın';
+			case 'settings.swipe_actions.swipe_right': return 'Sağa kaydırın';
 			case 'settings.security.title': return 'Güvenlik';
 			case 'settings.security.private_mode_at_launch': return 'Başlangıçta özel mod';
 			case 'settings.security.private_mode_at_launch_descr': return 'Uygulamayı varsayılan olarak özel modda başlatın';

@@ -24,45 +24,63 @@ class CategoryFormFunctions {
       icon: Icons.delete,
       contentParagraphs: [
         StreamBuilder(
-            stream: TransactionService.instance
-                .getTransactionsFromPredicate(
-                  predicate: (transaction, account, accountCurrency,
-                          receivingAccount, receivingAccountCurrency, c, p6) =>
-                      c.id.isValue(categoryId) |
-                      c.parentCategoryID.isValue(categoryId),
-                )
-                .map((event) => event.length),
-            initialData: 0,
-            builder: (context, snapshot) {
-              return HTMLText(
-                  htmlString:
-                      t.categories.delete_warning_message(x: snapshot.data!),
-                  tags: const {'b': TextStyle(fontWeight: FontWeight.bold)});
-            }),
+          stream: TransactionService.instance
+              .getTransactionsFromPredicate(
+                predicate:
+                    (
+                      transaction,
+                      account,
+                      accountCurrency,
+                      receivingAccount,
+                      receivingAccountCurrency,
+                      c,
+                      p6,
+                    ) =>
+                        c.id.isValue(categoryId) |
+                        c.parentCategoryID.isValue(categoryId),
+              )
+              .map((event) => event.length),
+          initialData: 0,
+          builder: (context, snapshot) {
+            return HTMLText(
+              htmlString: t.categories.delete_warning_message(
+                x: snapshot.data!,
+              ),
+              tags: const {'b': TextStyle(fontWeight: FontWeight.bold)},
+            );
+          },
+        ),
       ],
     ).then((isConfirmed) {
       if (isConfirmed != true) return;
 
-      CategoryService.instance.deleteCategory(categoryId).then((value) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(t.categories.delete_success)));
+      CategoryService.instance
+          .deleteCategory(categoryId)
+          .then((value) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(t.categories.delete_success)),
+            );
 
-        Navigator.of(context).pop();
-      }).catchError((error) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(error)));
-      });
+            Navigator.of(context).pop();
+          })
+          .catchError((error) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(error)));
+          });
     });
   }
 
   static mergeCategory(BuildContext context, Category category) {
     final t = Translations.of(context);
 
-    showCategoryPickerModal(context,
-        modal: CategoryPicker(
-          categoryType: [category.type, CategoryType.B],
-          selectedCategory: null,
-        )).then((selCategory) {
+    showCategoryPickerModal(
+      context,
+      modal: CategoryPicker(
+        categoryType: [category.type, CategoryType.B],
+        selectedCategory: null,
+      ),
+    ).then((selCategory) {
       if (selCategory == null) {
         return;
       }
@@ -73,25 +91,30 @@ class CategoryFormFunctions {
         icon: Icons.merge_type_rounded,
         contentParagraphs: [
           StreamBuilder(
-              stream: TransactionService.instance
-                  .getTransactions(
-                      filters: TransactionFilters(
+            stream: TransactionService.instance
+                .getTransactions(
+                  filters: TransactionFilters(
                     categories: [category.id],
                     includeParentCategoriesInSearch: true,
-                  ))
-                  .map((event) => event.length),
-              initialData: 0,
-              builder: (context, snapshot) {
-                return HTMLText(
-                    htmlString: t.categories.merge_warning1(
-                        destiny: selCategory.name,
-                        from: category.name,
-                        x: snapshot.data!),
-                    tags: const {'b': TextStyle(fontWeight: FontWeight.bold)});
-              }),
+                  ),
+                )
+                .map((event) => event.length),
+            initialData: 0,
+            builder: (context, snapshot) {
+              return HTMLText(
+                htmlString: t.categories.merge_warning1(
+                  destiny: selCategory.name,
+                  from: category.name,
+                  x: snapshot.data!,
+                ),
+                tags: const {'b': TextStyle(fontWeight: FontWeight.bold)},
+              );
+            },
+          ),
           HTMLText(
-              htmlString: t.categories.merge_warning2(from: category.name),
-              tags: const {'b': TextStyle(fontWeight: FontWeight.bold)})
+            htmlString: t.categories.merge_warning2(from: category.name),
+            tags: const {'b': TextStyle(fontWeight: FontWeight.bold)},
+          ),
         ],
       ).then((isConfirmed) async {
         if (isConfirmed != true) return;
@@ -102,22 +125,27 @@ class CategoryFormFunctions {
           Navigator.pop(context);
 
           snackbarDisplayer(
-              SnackBar(content: Text(t.categories.merge_success)));
+            SnackBar(content: Text(t.categories.merge_success)),
+          );
         }
 
         List<Future<int>> futures = [];
 
         futures.add(CategoryService.instance.deleteCategory(category.id));
 
-        for (final tr in await TransactionService.instance
-            .getTransactions(
-                filters: TransactionFilters(
+        for (final tr
+            in await TransactionService.instance
+                .getTransactions(
+                  filters: TransactionFilters(
                     categories: [category.id],
-                    includeParentCategoriesInSearch: true))
-            .first) {
+                    includeParentCategoriesInSearch: true,
+                  ),
+                )
+                .first) {
           futures.add(
             TransactionService.instance.updateTransaction(
-                tr.copyWith(categoryID: drift.Value(selCategory.id))),
+              tr.copyWith(categoryID: drift.Value(selCategory.id)),
+            ),
           );
         }
 
@@ -131,10 +159,12 @@ class CategoryFormFunctions {
     if (category.isMainCategory) return;
 
     CategoryService.instance.updateCategory(
-        category.copyWith(parentCategoryID: const drift.Value(null)));
+      category.copyWith(parentCategoryID: const drift.Value(null)),
+    );
 
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(t.categories.create_success)));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(t.categories.create_success)));
   }
 
   static makeSubcategory(BuildContext context, Category category) {
@@ -157,24 +187,31 @@ class CategoryFormFunctions {
         dialogTitle: t.categories.make_child,
         contentParagraphs: [
           HTMLText(
-              htmlString:
-                  t.categories.make_child_warning1(destiny: selCategory.name),
-              tags: const {'b': TextStyle(fontWeight: FontWeight.bold)}),
+            htmlString: t.categories.make_child_warning1(
+              destiny: selCategory.name,
+            ),
+            tags: const {'b': TextStyle(fontWeight: FontWeight.bold)},
+          ),
           StreamBuilder(
-              stream: TransactionService.instance
-                  .getTransactions(
-                      filters: TransactionFilters(
+            stream: TransactionService.instance
+                .getTransactions(
+                  filters: TransactionFilters(
                     categories: [category.id],
                     includeParentCategoriesInSearch: true,
-                  ))
-                  .map((event) => event.length),
-              initialData: 0,
-              builder: (context, snapshot) {
-                return HTMLText(
-                    htmlString: t.categories.make_child_warning2(
-                        destiny: selCategory.name, x: snapshot.data!),
-                    tags: const {'b': TextStyle(fontWeight: FontWeight.bold)});
-              })
+                  ),
+                )
+                .map((event) => event.length),
+            initialData: 0,
+            builder: (context, snapshot) {
+              return HTMLText(
+                htmlString: t.categories.make_child_warning2(
+                  destiny: selCategory.name,
+                  x: snapshot.data!,
+                ),
+                tags: const {'b': TextStyle(fontWeight: FontWeight.bold)},
+              );
+            },
+          ),
         ],
       ).then((isConfirmed) async {
         if (isConfirmed != true) return;
@@ -185,26 +222,35 @@ class CategoryFormFunctions {
           Navigator.pop(context);
 
           snackbarDisplayer(
-              SnackBar(content: Text(t.categories.make_child_success)));
+            SnackBar(content: Text(t.categories.make_child_success)),
+          );
         }
 
         List<Future<bool>> futures = [];
 
-        futures.add(CategoryService.instance.updateCategory(category.copyWith(
-          parentCategoryID: drift.Value(selCategory.id),
-          color: const drift.Value(null),
-          type: const drift.Value(null),
-        )));
+        futures.add(
+          CategoryService.instance.updateCategory(
+            category.copyWith(
+              parentCategoryID: drift.Value(selCategory.id),
+              color: const drift.Value(null),
+              type: const drift.Value(null),
+            ),
+          ),
+        );
 
-        for (final subcategory in await CategoryService.instance
-            .getChildCategories(parentId: category.id)
-            .first) {
-          futures
-              .add(CategoryService.instance.updateCategory(subcategory.copyWith(
-            parentCategoryID: drift.Value(selCategory.id),
-            color: const drift.Value(null),
-            type: const drift.Value(null),
-          )));
+        for (final subcategory
+            in await CategoryService.instance
+                .getChildCategories(parentId: category.id)
+                .first) {
+          futures.add(
+            CategoryService.instance.updateCategory(
+              subcategory.copyWith(
+                parentCategoryID: drift.Value(selCategory.id),
+                color: const drift.Value(null),
+                type: const drift.Value(null),
+              ),
+            ),
+          );
         }
 
         await Future.wait(futures);
@@ -213,22 +259,26 @@ class CategoryFormFunctions {
     });
   }
 
-  static openSubcategoryForm(BuildContext context,
-      {required void Function(String, SupportedIcon) onSubmit,
-      required String color,
-      Category? subcategory}) {
+  static openSubcategoryForm(
+    BuildContext context, {
+    required void Function(String, SupportedIcon) onSubmit,
+    required String color,
+    Category? subcategory,
+  }) {
     showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        showDragHandle: true,
-        builder: (context) {
-          return SubcategoryFormDialog(
-            name: subcategory?.name ?? '',
-            color: ColorHex.get(color),
-            icon: subcategory?.icon ??
-                SupportedIconService.instance.defaultSupportedIcon,
-            onSubmit: onSubmit,
-          );
-        });
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (context) {
+        return SubcategoryFormDialog(
+          name: subcategory?.name ?? '',
+          color: ColorHex.get(color),
+          icon:
+              subcategory?.icon ??
+              SupportedIconService.instance.defaultSupportedIcon,
+          onSubmit: onSubmit,
+        );
+      },
+    );
   }
 }

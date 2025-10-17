@@ -36,41 +36,44 @@ class SideNavigationDrawer extends StatelessWidget {
           // Solution thanks to: https://github.com/flutter/flutter/issues/127621#issuecomment-1566294032
           // TODO: Waiting for a Flutter fix to have a better way of creating a footer here
           SizedBox(
-            height: MediaQuery.of(context).size.height -
+            height:
+                MediaQuery.of(context).size.height -
                 (61 * drawerActions.length),
             child: Column(
               children: [
                 Expanded(child: Container()),
                 const Divider(thickness: 1.0),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   child: Row(
                     children: [
                       const DisplayAppIcon(height: 48),
                       const SizedBox(width: 16),
                       Expanded(
                         child: FutureBuilder(
-                            future: PackageInfo.fromPlatform(),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return const Skeleton(width: 100, height: 32);
-                              }
+                          future: PackageInfo.fromPlatform(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return const Skeleton(width: 100, height: 32);
+                            }
 
-                              return ListTile(
-                                contentPadding: const EdgeInsets.all(0),
-                                title:
-                                    Text(snapshot.data!.appName.capitalize()),
-                                subtitle: Text('v${snapshot.data!.version}'),
-                              );
-                            }),
-                      )
+                            return ListTile(
+                              contentPadding: const EdgeInsets.all(0),
+                              title: Text(snapshot.data!.appName.capitalize()),
+                              subtitle: Text('v${snapshot.data!.version}'),
+                            );
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

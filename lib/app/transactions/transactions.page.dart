@@ -96,8 +96,9 @@ class _TransactionsPageState extends State<TransactionsPage> {
         appBar: selectedTransactions.isNotEmpty
             ? selectedTransactionsAppbar()
             : transactionsPageDefaultAppBar(t, context),
-        floatingActionButton:
-            NewTransactionButton(isExtended: isFloatingButtonExtended),
+        floatingActionButton: NewTransactionButton(
+          isExtended: isFloatingButtonExtended,
+        ),
         body: Column(
           children: [
             if (filters.hasFilter) ...[
@@ -117,8 +118,10 @@ class _TransactionsPageState extends State<TransactionsPage> {
               builder: (context, snapshot) {
                 final res = snapshot.data;
 
-                const smallerTextStyle =
-                    TextStyle(fontSize: 14, fontWeight: FontWeight.w300);
+                const smallerTextStyle = TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w300,
+                );
 
                 return Card(
                   elevation: 2,
@@ -128,8 +131,10 @@ class _TransactionsPageState extends State<TransactionsPage> {
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 14,
+                    ),
                     child: DefaultTextStyle(
                       style: Theme.of(context).textTheme.titleMedium!,
                       child: Row(
@@ -138,22 +143,24 @@ class _TransactionsPageState extends State<TransactionsPage> {
                           if (res != null) ...[
                             Text.rich(
                               TextSpan(
-                                  text: selectedTransactions.isNotEmpty
-                                      ? ('${selectedTransactions.length.toStringAsFixed(0)}')
-                                      : '',
-                                  children: [
-                                    TextSpan(
-                                        text:
-                                            '${selectedTransactions.isNotEmpty ? ' / ' : ''}${res.numberOfRes} ',
-                                        style: selectedTransactions.isNotEmpty
-                                            ? smallerTextStyle
-                                            : null),
-                                    TextSpan(
-                                      text: t.transaction
-                                          .display(n: res.numberOfRes)
-                                          .toLowerCase(),
-                                    ),
-                                  ]),
+                                text: selectedTransactions.isNotEmpty
+                                    ? ('${selectedTransactions.length.toStringAsFixed(0)}')
+                                    : '',
+                                children: [
+                                  TextSpan(
+                                    text:
+                                        '${selectedTransactions.isNotEmpty ? ' / ' : ''}${res.numberOfRes} ',
+                                    style: selectedTransactions.isNotEmpty
+                                        ? smallerTextStyle
+                                        : null,
+                                  ),
+                                  TextSpan(
+                                    text: t.transaction
+                                        .display(n: res.numberOfRes)
+                                        .toLowerCase(),
+                                  ),
+                                ],
+                              ),
                             ),
                             Row(
                               mainAxisSize: MainAxisSize.min,
@@ -161,12 +168,14 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                 if (selectedTransactions.isNotEmpty) ...[
                                   CurrencyDisplayer(
                                     amountToConvert: selectedTransactions
-                                        .map((e) => e
-                                            .getCurrentBalanceInPreferredCurrency())
+                                        .map(
+                                          (e) => e
+                                              .getCurrentBalanceInPreferredCurrency(),
+                                        )
                                         .sum,
                                     showDecimals: false,
                                   ),
-                                  const Text("/ ", style: smallerTextStyle)
+                                  const Text("/ ", style: smallerTextStyle),
                                 ],
                                 CurrencyDisplayer(
                                   amountToConvert: res.valueSum,
@@ -176,12 +185,12 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                       : smallerTextStyle,
                                 ),
                               ],
-                            )
+                            ),
                           ],
                           if (res == null) ...[
                             const Skeleton(width: 38, height: 18),
                             const Skeleton(width: 28, height: 18),
-                          ]
+                          ],
                         ],
                       ),
                     ),
@@ -207,9 +216,9 @@ class _TransactionsPageState extends State<TransactionsPage> {
                 onScrollChange: (controller) {
                   bool shouldExtendButton =
                       BreakPoint.of(context).isLargerThan(BreakpointID.md) ||
-                          controller.offset <= 10 ||
-                          controller.position.userScrollDirection !=
-                              ScrollDirection.reverse;
+                      controller.offset <= 10 ||
+                      controller.position.userScrollDirection !=
+                          ScrollDirection.reverse;
 
                   if (isFloatingButtonExtended != shouldExtendButton) {
                     setState(() {
@@ -271,19 +280,20 @@ class _TransactionsPageState extends State<TransactionsPage> {
             },
           ),
         IconButton(
-            onPressed: () async {
-              final modalRes = await openFilterSheetModal(
-                context,
-                FilterSheetModal(preselectedFilter: filters),
-              );
+          onPressed: () async {
+            final modalRes = await openFilterSheetModal(
+              context,
+              FilterSheetModal(preselectedFilter: filters),
+            );
 
-              if (modalRes != null) {
-                setState(() {
-                  filters = modalRes;
-                });
-              }
-            },
-            icon: const Icon(Icons.filter_alt_outlined)),
+            if (modalRes != null) {
+              setState(() {
+                filters = modalRes;
+              });
+            }
+          },
+          icon: const Icon(Icons.filter_alt_outlined),
+        ),
       ],
     );
   }
@@ -302,73 +312,86 @@ class _TransactionsPageState extends State<TransactionsPage> {
         t.transaction.list.selected_short(n: selectedTransactions.length),
       ),
       actions: [
-        MonekinPopupMenuButton(actionItems: [
-          ListTileActionItem(
-            label: t.ui_actions.edit,
-            icon: Icons.edit_rounded,
-            onClick: () {
-              showModalBottomSheet(
-                context: context,
-                showDragHandle: true,
-                builder: (context) {
-                  return BulkEditTransactionModal(
-                    transactionsToEdit: selectedTransactions,
-                    onSuccess: () {
-                      selectedTransactions = [];
-                      setState(() {});
-                    },
+        MonekinPopupMenuButton(
+          actionItems: [
+            ListTileActionItem(
+              label: t.ui_actions.edit,
+              icon: Icons.edit_rounded,
+              onClick: () {
+                showModalBottomSheet(
+                  context: context,
+                  showDragHandle: true,
+                  builder: (context) {
+                    return BulkEditTransactionModal(
+                      transactionsToEdit: selectedTransactions,
+                      onSuccess: () {
+                        selectedTransactions = [];
+                        setState(() {});
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+            ListTileActionItem(
+              label: t.ui_actions.delete,
+              icon: Icons.delete_rounded,
+              onClick: () {
+                confirmDialog(
+                  context,
+                  dialogTitle: selectedTransactions.length <= 1
+                      ? t.transaction.delete
+                      : t.transaction.delete_multiple,
+                  confirmationText: t.ui_actions.confirm,
+                  showCancelButton: true,
+                  icon: Icons.delete_rounded,
+                  contentParagraphs: [
+                    Text(
+                      selectedTransactions.length <= 1
+                          ? t.transaction.delete_warning_message
+                          : t.transaction.delete_multiple_warning_message(
+                              x: selectedTransactions.length,
+                            ),
+                    ),
+                  ],
+                ).then((value) {
+                  if (value != true) {
+                    return;
+                  }
+
+                  final futures = selectedTransactions.map(
+                    (e) => TransactionService.instance.deleteTransaction(e.id),
                   );
-                },
-              );
-            },
-          ),
-          ListTileActionItem(
-            label: t.ui_actions.delete,
-            icon: Icons.delete_rounded,
-            onClick: () {
-              confirmDialog(
-                context,
-                dialogTitle: selectedTransactions.length <= 1
-                    ? t.transaction.delete
-                    : t.transaction.delete_multiple,
-                confirmationText: t.ui_actions.confirm,
-                showCancelButton: true,
-                icon: Icons.delete_rounded,
-                contentParagraphs: [
-                  Text(selectedTransactions.length <= 1
-                      ? t.transaction.delete_warning_message
-                      : t.transaction.delete_multiple_warning_message(
-                          x: selectedTransactions.length))
-                ],
-              ).then((value) {
-                if (value != true) {
-                  return;
-                }
 
-                final futures = selectedTransactions.map(
-                    (e) => TransactionService.instance.deleteTransaction(e.id));
+                  Future.wait(futures)
+                      .then((value) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              selectedTransactions.length <= 1
+                                  ? t.transaction.delete_success
+                                  : t.transaction.delete_multiple_success(
+                                      x: selectedTransactions.length,
+                                    ),
+                            ),
+                          ),
+                        );
 
-                Future.wait(futures).then((value) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(selectedTransactions.length <= 1
-                        ? t.transaction.delete_success
-                        : t.transaction.delete_multiple_success(
-                            x: selectedTransactions.length)),
-                  ));
-
-                  setState(() {
-                    selectedTransactions = [];
-                  });
-                }).catchError((err) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(err.toString()),
-                  ));
+                        setState(() {
+                          selectedTransactions = [];
+                        });
+                      })
+                      .catchError((err) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text(err.toString())));
+                      });
                 });
-              });
-            },
-            role: ListTileActionRole.delete,
-          )
-        ])
+              },
+              role: ListTileActionRole.delete,
+            ),
+          ],
+        ),
       ],
     );
   }

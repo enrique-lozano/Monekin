@@ -7,11 +7,11 @@ class RecurrentRuleLimit extends Equatable {
   final int? remainingIterations;
 
   const RecurrentRuleLimit({this.endDate, this.remainingIterations})
-      : assert(!(endDate != null && remainingIterations != null));
+    : assert(!(endDate != null && remainingIterations != null));
 
   const RecurrentRuleLimit.infinite()
-      : endDate = null,
-        remainingIterations = null;
+    : endDate = null,
+      remainingIterations = null;
 
   RuleUntilMode get untilMode {
     if (endDate != null) {

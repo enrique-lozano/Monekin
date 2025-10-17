@@ -8,12 +8,13 @@ import '../../../core/models/transaction/transaction_type.enum.dart';
 import '../../../core/presentation/app_colors.dart';
 
 class IncomeOrExpenseCard extends StatelessWidget {
-  const IncomeOrExpenseCard(
-      {super.key,
-      required this.type,
-      required this.startDate,
-      required this.endDate,
-      this.filters});
+  const IncomeOrExpenseCard({
+    super.key,
+    required this.type,
+    required this.startDate,
+    required this.endDate,
+    this.filters,
+  });
 
   final TransactionType type;
   final DateTime? startDate;
@@ -46,36 +47,39 @@ class IncomeOrExpenseCard extends StatelessWidget {
               Text(
                 type.displayName(context),
                 style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    color: AppColors.of(context)
-                        .onConsistentPrimary
-                        .withOpacity(0.85)),
+                  color: AppColors.of(
+                    context,
+                  ).onConsistentPrimary.withOpacity(0.85),
+                ),
               ),
               StreamBuilder(
-                  stream: AccountService.instance.getAccountsBalance(
-                    filters: TransactionFilters(
-                      accountsIDs: filters?.accountsIDs,
-                      categories: filters?.categories,
-                      minDate: startDate,
-                      maxDate: endDate,
-                      transactionTypes: [type],
-                    ),
+                stream: AccountService.instance.getAccountsBalance(
+                  filters: TransactionFilters(
+                    accountsIDs: filters?.accountsIDs,
+                    categories: filters?.categories,
+                    minDate: startDate,
+                    maxDate: endDate,
+                    transactionTypes: [type],
                   ),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Skeleton(width: 26, height: 18);
-                    }
+                ),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Skeleton(width: 26, height: 18);
+                  }
 
-                    return CurrencyDisplayer(
-                      amountToConvert: snapshot.data!.abs(),
-                      compactView: true,
-                      showDecimals: false,
-                      integerStyle: TextStyle(
-                          fontSize: 18,
-                          color: AppColors.of(context).onConsistentPrimary),
-                    );
-                  })
+                  return CurrencyDisplayer(
+                    amountToConvert: snapshot.data!.abs(),
+                    compactView: true,
+                    showDecimals: false,
+                    integerStyle: TextStyle(
+                      fontSize: 18,
+                      color: AppColors.of(context).onConsistentPrimary,
+                    ),
+                  );
+                },
+              ),
             ],
-          )
+          ),
         ],
       ),
     );

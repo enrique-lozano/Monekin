@@ -90,18 +90,21 @@ ThemeData getThemeData(
     darkColorScheme = fallbackScheme;
   }
 
-  AppColors customAppColors =
-      AppColors.fromColorScheme(isDark ? darkColorScheme : lightColorScheme);
+  AppColors customAppColors = AppColors.fromColorScheme(
+    isDark ? darkColorScheme : lightColorScheme,
+  );
 
   theme = ThemeData(
-      colorScheme: isDark ? darkColorScheme : lightColorScheme,
-      brightness: isDark ? Brightness.dark : Brightness.light,
-      useMaterial3: true,
-      fontFamily: 'Jost',
-      extensions: [customAppColors]);
+    colorScheme: isDark ? darkColorScheme : lightColorScheme,
+    brightness: isDark ? Brightness.dark : Brightness.light,
+    useMaterial3: true,
+    fontFamily: 'Jost',
+    extensions: [customAppColors],
+  );
 
-  final textTheme =
-      theme.textTheme.withDifferentBodyColors(customAppColors.textBody);
+  final textTheme = theme.textTheme.withDifferentBodyColors(
+    customAppColors.textBody,
+  );
 
   final listTileSmallText = textTheme.bodyMedium?.copyWith(
     fontSize: 14,
@@ -142,8 +145,9 @@ ThemeData getThemeData(
     ),
     listTileTheme: theme.listTileTheme.copyWith(
       minVerticalPadding: 8,
-      subtitleTextStyle:
-          listTileSmallText?.copyWith(fontWeight: FontWeight.w300),
+      subtitleTextStyle: listTileSmallText?.copyWith(
+        fontWeight: FontWeight.w300,
+      ),
       leadingAndTrailingTextStyle: listTileSmallText,
     ),
   );

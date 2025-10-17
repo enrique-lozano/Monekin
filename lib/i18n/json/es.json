@@ -689,6 +689,7 @@
     "lang.descr": "Idioma en el que se mostrarán los textos en la aplicación",
     "lang.help": "Si quieres colaborar con las traducciones de esta app puedes consultar <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>nuestra guía</a> ",
     "locale": "Región",
+    "locale_auto": "Sistema",
     "locale.descr": "Establecer el formato a utilizar para fechas, números...",
     "locale.warn": "Al cambiar la región, la aplicación se actualizará",
     "first_day_of_week": "Primer día de la semana",
@@ -703,6 +704,11 @@
     "dynamic-colors.descr": "Usar el color de acento de su sistema siempre que sea posible",
     "accent-color": "Color de acento",
     "accent-color.descr": "Elegir el color que la aplicación usará para enfatizar ciertas partes de la interfaz",
+    "SWIPE-ACTIONS": {
+      "title": "Acciones de deslizamiento",
+      "swipe-left": "Desliza hacia la izquierda",
+      "swipe-right": "Desliza hacia la derecha"
+    },
     "SECURITY": {
       "title": "Seguridad",
       "private-mode-at-launch": "Modo privado al arrancar",

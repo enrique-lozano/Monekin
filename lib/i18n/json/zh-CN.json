@@ -196,15 +196,24 @@
   "FINANCIAL-HEALTH": {
     "display": "财务健康",
     "review": {
-      "very_good(context=GenderContext)": { "male,female": "很好！" },
-      "good(context=GenderContext)": { "male,female": "好" },
-      "normal(context=GenderContext)": { "male,female": "一般" },
-      "bad(context=GenderContext)": { "male,female": "不好" },
-      "very_bad(context=GenderContext)": { "male,female": "很不好" },
+      "very_good(context=GenderContext)": {
+        "male,female": "很好！"
+      },
+      "good(context=GenderContext)": {
+        "male,female": "好"
+      },
+      "normal(context=GenderContext)": {
+        "male,female": "一般"
+      },
+      "bad(context=GenderContext)": {
+        "male,female": "不好"
+      },
+      "very_bad(context=GenderContext)": {
+        "male,female": "很不好"
+      },
       "insufficient_data(context=GenderContext)": {
         "male,female": "数据不足"
       },
-
       "descr": {
         "insufficient_data": "看起来我们没有足够的数据来计算您的财务健康情况。请添加一些支出/收入以便我们帮助您！",
         "very_good": "恭喜！您的财务状况非常好。我们希望您能够继续保持，并继续和 Monekin 一起学习。",
@@ -262,8 +271,8 @@
     "color": "颜色",
     "select-icon": "选择一个图标",
     "select-color": "选择一种颜色",
-    "current-color-selection": "当前选择",
     "custom-color": "自定义颜色",
+    "current-color-selection": "当前选择",
     "select-account-icon": "确认您的账户",
     "select-category-icon": "确认您的类别",
     "SCOPES": {
@@ -319,7 +328,10 @@
       "searcher.placeholder": "按类别、描述等搜索",
       "searcher.no-results": "未找到符合搜索条件的交易",
       "loading": "正在加载更多的交易……",
-      "selected.short": { "one": "已选择 {{n}}", "other": "已选择 {{n}}" },
+      "selected.short": {
+        "one": "已选择 {{n}}",
+        "other": "已选择 {{n}}"
+      },
       "selected.long": {
         "one": "已选择 {{n}} 笔交易",
         "other": "已选择 {{n}} 笔交易"
@@ -674,6 +686,7 @@
     "lang.descr": "应用中显示文字的语言",
     "lang.help": "如果您想合作翻译此应用，您可参考<a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>我们的指南</a>",
     "locale": "地区",
+    "locale_auto": "系统",
     "locale.descr": "设置用于日期、数字的格式……",
     "locale.warn": "更改区域时应用将更新",
     "first_day_of_week": "一周的第一天",
@@ -688,6 +701,11 @@
     "dynamic-colors.descr": "尽可能使用系统强调色",
     "accent-color": "强调色",
     "accent-color.descr": "选择应用中用来强调介面某些部分的颜色",
+    "SWIPE-ACTIONS": {
+      "title": "滑动操作",
+      "swipe-left": "向左滑动",
+      "swipe-right": "向右滑动"
+    },
     "SECURITY": {
       "title": "安全",
       "private-mode-at-launch": "启动隐私模式",

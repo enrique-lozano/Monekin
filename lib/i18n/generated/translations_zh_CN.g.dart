@@ -13,9 +13,9 @@ import 'translations.g.dart';
 class TranslationsZhCn implements Translations {
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
-	TranslationsZhCn({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver})
+	TranslationsZhCn({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
 		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
-		  $meta = TranslationMetadata(
+		  $meta = meta ?? TranslationMetadata(
 		    locale: AppLocale.zhCn,
 		    overrides: overrides ?? {},
 		    cardinalResolver: cardinalResolver,
@@ -31,6 +31,9 @@ class TranslationsZhCn implements Translations {
 	@override dynamic operator[](String key) => $meta.getTranslation(key);
 
 	late final TranslationsZhCn _root = this; // ignore: unused_field
+
+	@override 
+	TranslationsZhCn $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsZhCn(meta: meta ?? this.$meta);
 
 	// Translations
 	@override late final _TranslationsUiActionsZhCn ui_actions = _TranslationsUiActionsZhCn._(_root);
@@ -96,7 +99,6 @@ class _TranslationsUiActionsZhCn implements TranslationsUiActionsEn {
 	@override String get refresh => '刷新';
 	@override String get details => '详情';
 	@override String get share => '分享';
-  @override String get none => '没有';
 }
 
 // Path: general
@@ -118,7 +120,7 @@ class _TranslationsGeneralZhCn implements TranslationsGeneralEn {
 	@override String get today => '今天';
 	@override String get yesterday => '昨天';
 	@override String get filters => '筛选';
-	@override String get empty_warn => '喔！空空如也';
+	@override String get empty_warn => '喔！这里什么都没有';
 	@override String get insufficient_data => '数据不足';
 	@override String get show_more_fields => '显示更多';
 	@override String get show_less_fields => '显示更少';
@@ -142,15 +144,15 @@ class _TranslationsIntroZhCn implements TranslationsIntroEn {
 	@override String get select_your_currency => '选择您的货币';
 	@override String get welcome_subtitle => '您的个人财务管家';
 	@override String get welcome_subtitle2 => '100% 开放，100% 免费';
-	@override String get welcome_footer => '登录即表示您同意<a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>隐私策略</a>和此 app 的<a href= \'https: //github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>使用条款</a>';
+	@override String get welcome_footer => '登录即表示您同意<a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>隐私策略</a>和此应用的<a href= \'https: //github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>使用条款</a>';
 	@override String get offline_descr_title => '本地账户：';
-	@override String get offline_descr => '您的数据只会存储于此设备中，只要您不卸载应用或更换手机，数据就会保持安全。为避免数据丢失，建议定期从 app 设置中备份数据。';
+	@override String get offline_descr => '您的数据只会存储于此设备中，只要您不卸载应用或更换手机，数据就会保持安全。为避免数据丢失，建议定期从应用设置中备份数据。';
 	@override String get offline_start => '开始使用本地账户';
 	@override String get sl1_title => '选择您的货币';
-	@override String get sl1_descr => '您的默认货币会被用于报表和图表中。您之后可以随时更改默认货币和 app 语言';
+	@override String get sl1_descr => '您的默认货币会被用于报表和图表中。您之后可以随时更改默认货币和应用语言';
 	@override String get sl2_title => '安全、隐私、可靠';
-	@override String get sl2_descr => '您的数据只属于您。我们直接将您的信息存储于此设备，不会连接外部服务器。因此您可以在离线时继续使用此 app';
-	@override String get sl2_descr2 => '此外，此 app 的源代码是公开的，任何人都可以查看它如何运行并贡献自己的力量';
+	@override String get sl2_descr => '您的数据只属于您。我们直接将您的信息存储于此设备，不会连接外部服务器。因此您可以在离线时继续使用此应用';
+	@override String get sl2_descr2 => '此外，此应用的源代码是公开的，任何人都可以查看它如何运行并贡献自己的力量';
 	@override String get last_slide_title => '全部就绪';
 	@override String get last_slide_descr => '使用 Monekin，您最终可以实现自己想要的财务独立。您将拥有和您的钱相关的图表、预算、提示、统计信息等。';
 	@override String get last_slide_descr2 => '祝您使用愉快！如果您有任何疑问或建议，请随时与我们联系……';
@@ -173,7 +175,7 @@ class _TranslationsHomeZhCn implements TranslationsHomeEn {
 	@override String get no_accounts => '尚未创建账户';
 	@override String get no_accounts_descr => '要开始使用 Monekin，请创建至少一个账户，以便开始添加交易';
 	@override String get last_transactions => '最近的交易';
-	@override String get should_create_account_header => 'Oops!';
+	@override String get should_create_account_header => '哎呀!';
 	@override String get should_create_account_message => '在可以开始创建交易之前，您必须拥有至少一个未被归档的账户';
 }
 
@@ -229,8 +231,8 @@ class _TranslationsIconSelectorZhCn implements TranslationsIconSelectorEn {
 	@override String get color => '颜色';
 	@override String get select_icon => '选择一个图标';
 	@override String get select_color => '选择一种颜色';
-	@override String get current_color_selection => '当前选择';
 	@override String get custom_color => '自定义颜色';
+	@override String get current_color_selection => '当前选择';
 	@override String get select_account_icon => '确认您的账户';
 	@override String get select_category_icon => '确认您的类别';
 	@override late final _TranslationsIconSelectorScopesZhCn scopes = _TranslationsIconSelectorScopesZhCn._(_root);
@@ -464,15 +466,16 @@ class _TranslationsSettingsZhCn implements TranslationsSettingsEn {
 	// Translations
 	@override String get title_long => '设置和外观';
 	@override String get title_short => '设置';
-	@override String get description => 'app 主题、语言和其它常规设置';
+	@override String get description => '应用主题、语言和其它常规设置';
 	@override String get edit_profile => '编辑个人资料';
 	@override String get lang_section => '语言和文字';
-	@override String get lang_title => 'app 语言/Language';
-	@override String get lang_descr => 'app 中显示文字的语言';
-	@override String get lang_help => '如果您想合作翻译此 app，您可参考<a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>我们的指南</a>';
+	@override String get lang_title => '语言/Language';
+	@override String get lang_descr => '应用中显示文字的语言';
+	@override String get lang_help => '如果您想合作翻译此应用，您可参考<a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>我们的指南</a>';
 	@override String get locale => '地区';
+	@override String get locale_auto => '系统';
 	@override String get locale_descr => '设置用于日期、数字的格式……';
-	@override String get locale_warn => '更改区域时 app 将更新';
+	@override String get locale_warn => '更改区域时应用将更新';
 	@override String get first_day_of_week => '一周的第一天';
 	@override String get theme_and_colors => '主题和颜色';
 	@override String get theme => '主题';
@@ -484,11 +487,9 @@ class _TranslationsSettingsZhCn implements TranslationsSettingsEn {
 	@override String get dynamic_colors => '动态色彩';
 	@override String get dynamic_colors_descr => '尽可能使用系统强调色';
 	@override String get accent_color => '强调色';
-	@override String get accent_color_descr => '选择 app 用来强调介面某些部分的颜色';
-	@override	String get swipe_title => '滑动作';
-  @override String get swipe_right => '向左滑动';
-  @override String get swipe_left => '向右滑动';
-  @override late final _TranslationsSettingsSecurityZhCn security = _TranslationsSettingsSecurityZhCn._(_root);
+	@override String get accent_color_descr => '选择应用中用来强调介面某些部分的颜色';
+	@override late final _TranslationsSettingsSwipeActionsZhCn swipe_actions = _TranslationsSettingsSwipeActionsZhCn._(_root);
+	@override late final _TranslationsSettingsSecurityZhCn security = _TranslationsSettingsSecurityZhCn._(_root);
 }
 
 // Path: more
@@ -697,7 +698,7 @@ class _TranslationsTransactionListZhCn implements TranslationsTransactionListEn 
 	final TranslationsZhCn _root; // ignore: unused_field
 
 	// Translations
-	@override String get empty => '未发现需要显示的交易。请先在 app 中添加一些交易，下次再来查看';
+	@override String get empty => '未发现需要显示的交易。请先在应用中添加一些交易，下次再来查看';
 	@override String get searcher_placeholder => '按类别、描述等搜索';
 	@override String get searcher_no_results => '未找到符合搜索条件的交易';
 	@override String get loading => '正在加载更多的交易……';
@@ -1017,7 +1018,7 @@ class _TranslationsBackupExportZhCn implements TranslationsBackupExportEn {
 	@override String get all => '完整备份';
 	@override String get all_descr => '导出您的所有数据（账户、交易、预算、设置……）。随时再次导入它们，您就不会丟失任何內容。';
 	@override String get transactions => '交易备份';
-	@override String get transactions_descr => '以 CSV 格式导出您的交易，以便您可以在其它程序或 app 中更轻松地分析。';
+	@override String get transactions_descr => '以 CSV 格式导出您的交易，以便您可以在其它程序或应用中更轻松地分析。';
 	@override String get description => '以不同格式下载（导出）数据';
 	@override String get dialog_title => '保存/发送文件';
 	@override String success({required Object x}) => '文件已成功保存/下载至 ${x}';
@@ -1034,8 +1035,8 @@ class _TranslationsBackupImportZhCn implements TranslationsBackupImportEn {
 	@override String get title => '导入您的数据';
 	@override String get title_short => '导入';
 	@override String get restore_backup => '恢复备份';
-	@override String get restore_backup_descr => '导入一个从 Monekin 保存的数据库。此操作将用新数据覆盖当前 app 数据';
-	@override String get restore_backup_warn_description => '导入新数据库时，您将丟失 app 中当前保存的所有数据。建议在继续之前进行备份。请勿在此上传任何来源不明的文件，仅上传您之前从 Monekin 下载的文件';
+	@override String get restore_backup_descr => '导入一个从 Monekin 保存的数据库。此操作将用新数据覆盖当前应用数据';
+	@override String get restore_backup_warn_description => '导入新数据库时，您将丟失应用中当前保存的所有数据。建议在继续之前进行备份。请勿在此上传任何来源不明的文件，仅上传您之前从 Monekin 下载的文件';
 	@override String get restore_backup_warn_title => '覆盖所有数据';
 	@override String get select_other_file => '选择其它文件';
 	@override String get tap_to_select_file => '点击选择文件';
@@ -1059,6 +1060,18 @@ class _TranslationsBackupAboutZhCn implements TranslationsBackupAboutEn {
 	@override String get size => '文件大小';
 }
 
+// Path: settings.swipe_actions
+class _TranslationsSettingsSwipeActionsZhCn implements TranslationsSettingsSwipeActionsEn {
+	_TranslationsSettingsSwipeActionsZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '滑动操作';
+	@override String get swipe_left => '向左滑动';
+	@override String get swipe_right => '向右滑动';
+}
+
 // Path: settings.security
 class _TranslationsSettingsSecurityZhCn implements TranslationsSettingsSecurityEn {
 	_TranslationsSettingsSecurityZhCn._(this._root);
@@ -1068,7 +1081,7 @@ class _TranslationsSettingsSecurityZhCn implements TranslationsSettingsSecurityE
 	// Translations
 	@override String get title => '安全';
 	@override String get private_mode_at_launch => '启动隐私模式';
-	@override String get private_mode_at_launch_descr => '默认以隐私模式启动 app ';
+	@override String get private_mode_at_launch_descr => '默认以隐私模式启动此应用';
 	@override String get private_mode => '隐私模式';
 	@override String get private_mode_descr => '隐藏所有金额';
 	@override String get private_mode_activated => '隐私模式已启用';
@@ -1098,7 +1111,7 @@ class _TranslationsMoreAboutUsZhCn implements TranslationsMoreAboutUsEn {
 	final TranslationsZhCn _root; // ignore: unused_field
 
 	// Translations
-	@override String get display => 'app 信息';
+	@override String get display => '应用信息';
 	@override String get description => '查看有关 Monekin 的条款和其它相关信息。与社区取得联系以报告错误、留下建议……';
 	@override late final _TranslationsMoreAboutUsLegalZhCn legal = _TranslationsMoreAboutUsLegalZhCn._(_root);
 	@override late final _TranslationsMoreAboutUsProjectZhCn project = _TranslationsMoreAboutUsProjectZhCn._(_root);
@@ -1116,12 +1129,12 @@ class _TranslationsMoreHelpUsZhCn implements TranslationsMoreHelpUsEn {
 	@override String get rate_us => '评价我们';
 	@override String get rate_us_descr => '欢迎所有分数和评价！';
 	@override String get share => '分享 Monekin';
-	@override String get share_descr => '与朋友和家人分享我们的 app ';
-	@override String get share_text => 'Monekin！最好的个人理财 app 。此处下载';
+	@override String get share_descr => '与朋友和家人分享我们的应用';
+	@override String get share_text => 'Monekin！最好的个人理财应用 。此处下载';
 	@override String get thanks => '谢谢您！';
 	@override String get thanks_long => '您对 Monekin 和其它大大小小的开源项目的贡献成就了这一伟大项目。感谢您花时间做出贡献。';
 	@override String get donate => '捐款';
-	@override String get donate_descr => '通过您的捐款，您将帮助此 app 持续改进完善。还有什么比请我喝一杯咖啡更好的感谢方式呢？';
+	@override String get donate_descr => '通过您的捐款，您将帮助此应用持续改进完善。还有什么比请我喝一杯咖啡更好的感谢方式呢？';
 	@override String get donate_success => '捐款已完成。非常感谢您的贡献！❤️';
 	@override String get donate_err => '糟糕！接收您的付款时出现错误';
 	@override String get report => '报告错误，留下建议……';
@@ -1414,7 +1427,7 @@ extension on TranslationsZhCn {
 			case 'general.today': return '今天';
 			case 'general.yesterday': return '昨天';
 			case 'general.filters': return '筛选';
-			case 'general.empty_warn': return '喔！空空如也';
+			case 'general.empty_warn': return '喔！这里什么都没有';
 			case 'general.insufficient_data': return '数据不足';
 			case 'general.show_more_fields': return '显示更多';
 			case 'general.show_less_fields': return '显示更少';
@@ -1510,15 +1523,15 @@ extension on TranslationsZhCn {
 			case 'intro.select_your_currency': return '选择您的货币';
 			case 'intro.welcome_subtitle': return '您的个人财务管家';
 			case 'intro.welcome_subtitle2': return '100% 开放，100% 免费';
-			case 'intro.welcome_footer': return '登录即表示您同意<a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>隐私策略</a>和此 app 的<a href= \'https: //github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>使用条款</a>';
+			case 'intro.welcome_footer': return '登录即表示您同意<a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>隐私策略</a>和此应用的<a href= \'https: //github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>使用条款</a>';
 			case 'intro.offline_descr_title': return '本地账户：';
-			case 'intro.offline_descr': return '您的数据只会存储于此设备中，只要您不卸载应用或更换手机，数据就会保持安全。为避免数据丢失，建议定期从 app 设置中备份数据。';
+			case 'intro.offline_descr': return '您的数据只会存储于此设备中，只要您不卸载应用或更换手机，数据就会保持安全。为避免数据丢失，建议定期从应用设置中备份数据。';
 			case 'intro.offline_start': return '开始使用本地账户';
 			case 'intro.sl1_title': return '选择您的货币';
-			case 'intro.sl1_descr': return '您的默认货币会被用于报表和图表中。您之后可以随时更改默认货币和 app 语言';
+			case 'intro.sl1_descr': return '您的默认货币会被用于报表和图表中。您之后可以随时更改默认货币和应用语言';
 			case 'intro.sl2_title': return '安全、隐私、可靠';
-			case 'intro.sl2_descr': return '您的数据只属于您。我们直接将您的信息存储于此设备，不会连接外部服务器。因此您可以在离线时继续使用此 app';
-			case 'intro.sl2_descr2': return '此外，此 app 的源代码是公开的，任何人都可以查看它如何运行并贡献自己的力量';
+			case 'intro.sl2_descr': return '您的数据只属于您。我们直接将您的信息存储于此设备，不会连接外部服务器。因此您可以在离线时继续使用此应用';
+			case 'intro.sl2_descr2': return '此外，此应用的源代码是公开的，任何人都可以查看它如何运行并贡献自己的力量';
 			case 'intro.last_slide_title': return '全部就绪';
 			case 'intro.last_slide_descr': return '使用 Monekin，您最终可以实现自己想要的财务独立。您将拥有和您的钱相关的图表、预算、提示、统计信息等。';
 			case 'intro.last_slide_descr2': return '祝您使用愉快！如果您有任何疑问或建议，请随时与我们联系……';
@@ -1532,7 +1545,7 @@ extension on TranslationsZhCn {
 			case 'home.no_accounts': return '尚未创建账户';
 			case 'home.no_accounts_descr': return '要开始使用 Monekin，请创建至少一个账户，以便开始添加交易';
 			case 'home.last_transactions': return '最近的交易';
-			case 'home.should_create_account_header': return 'Oops!';
+			case 'home.should_create_account_header': return '哎呀!';
 			case 'home.should_create_account_message': return '在可以开始创建交易之前，您必须拥有至少一个未被归档的账户';
 			case 'financial_health.display': return '财务健康';
 			case 'financial_health.review.very_good': return ({required GenderContext context}) {
@@ -1627,8 +1640,8 @@ extension on TranslationsZhCn {
 			case 'icon_selector.color': return '颜色';
 			case 'icon_selector.select_icon': return '选择一个图标';
 			case 'icon_selector.select_color': return '选择一种颜色';
-			case 'icon_selector.current_color_selection': return '当前选择';
 			case 'icon_selector.custom_color': return '自定义颜色';
+			case 'icon_selector.current_color_selection': return '当前选择';
 			case 'icon_selector.select_account_icon': return '确认您的账户';
 			case 'icon_selector.select_category_icon': return '确认您的类别';
 			case 'icon_selector.scopes.transport': return '交通';
@@ -1673,7 +1686,7 @@ extension on TranslationsZhCn {
 			case 'transaction.next_payments.accept_dialog_msg_single': return '此交易的新状态将为null。您可以随时重新编辑此交易的状态';
 			case 'transaction.next_payments.accept_dialog_msg': return ({required Object date}) => '此操作将建立日期为 ${date} 的新交易。您可以在交易页面查看此交易的详情';
 			case 'transaction.next_payments.recurrent_rule_finished': return '循环规则已完成，没有更多的支付！';
-			case 'transaction.list.empty': return '未发现需要显示的交易。请先在 app 中添加一些交易，下次再来查看';
+			case 'transaction.list.empty': return '未发现需要显示的交易。请先在应用中添加一些交易，下次再来查看';
 			case 'transaction.list.searcher_placeholder': return '按类别、描述等搜索';
 			case 'transaction.list.searcher_no_results': return '未找到符合搜索条件的交易';
 			case 'transaction.list.loading': return '正在加载更多的交易……';
@@ -1911,7 +1924,7 @@ extension on TranslationsZhCn {
 			case 'backup.export.all': return '完整备份';
 			case 'backup.export.all_descr': return '导出您的所有数据（账户、交易、预算、设置……）。随时再次导入它们，您就不会丟失任何內容。';
 			case 'backup.export.transactions': return '交易备份';
-			case 'backup.export.transactions_descr': return '以 CSV 格式导出您的交易，以便您可以在其它程序或 app 中更轻松地分析。';
+			case 'backup.export.transactions_descr': return '以 CSV 格式导出您的交易，以便您可以在其它程序或应用中更轻松地分析。';
 			case 'backup.export.description': return '以不同格式下载（导出）数据';
 			case 'backup.export.dialog_title': return '保存/发送文件';
 			case 'backup.export.success': return ({required Object x}) => '文件已成功保存/下载至 ${x}';
@@ -1919,8 +1932,8 @@ extension on TranslationsZhCn {
 			case 'backup.import.title': return '导入您的数据';
 			case 'backup.import.title_short': return '导入';
 			case 'backup.import.restore_backup': return '恢复备份';
-			case 'backup.import.restore_backup_descr': return '导入一个从 Monekin 保存的数据库。此操作将用新数据覆盖当前 app 数据';
-			case 'backup.import.restore_backup_warn_description': return '导入新数据库时，您将丟失 app 中当前保存的所有数据。建议在继续之前进行备份。请勿在此上传任何来源不明的文件，仅上传您之前从 Monekin 下载的文件';
+			case 'backup.import.restore_backup_descr': return '导入一个从 Monekin 保存的数据库。此操作将用新数据覆盖当前应用数据';
+			case 'backup.import.restore_backup_warn_description': return '导入新数据库时，您将丟失应用中当前保存的所有数据。建议在继续之前进行备份。请勿在此上传任何来源不明的文件，仅上传您之前从 Monekin 下载的文件';
 			case 'backup.import.restore_backup_warn_title': return '覆盖所有数据';
 			case 'backup.import.select_other_file': return '选择其它文件';
 			case 'backup.import.tap_to_select_file': return '点击选择文件';
@@ -1953,15 +1966,16 @@ extension on TranslationsZhCn {
 			case 'backup.about.size': return '文件大小';
 			case 'settings.title_long': return '设置和外观';
 			case 'settings.title_short': return '设置';
-			case 'settings.description': return 'app 主题、语言和其它常规设置';
+			case 'settings.description': return '应用主题、语言和其它常规设置';
 			case 'settings.edit_profile': return '编辑个人资料';
 			case 'settings.lang_section': return '语言和文字';
-			case 'settings.lang_title': return 'app 语言/Language';
-			case 'settings.lang_descr': return 'app 中显示文字的语言';
-			case 'settings.lang_help': return '如果您想合作翻译此 app，您可参考<a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>我们的指南</a>';
+			case 'settings.lang_title': return '语言/Language';
+			case 'settings.lang_descr': return '应用中显示文字的语言';
+			case 'settings.lang_help': return '如果您想合作翻译此应用，您可参考<a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>我们的指南</a>';
 			case 'settings.locale': return '地区';
+			case 'settings.locale_auto': return '系统';
 			case 'settings.locale_descr': return '设置用于日期、数字的格式……';
-			case 'settings.locale_warn': return '更改区域时 app 将更新';
+			case 'settings.locale_warn': return '更改区域时应用将更新';
 			case 'settings.first_day_of_week': return '一周的第一天';
 			case 'settings.theme_and_colors': return '主题和颜色';
 			case 'settings.theme': return '主题';
@@ -1973,10 +1987,13 @@ extension on TranslationsZhCn {
 			case 'settings.dynamic_colors': return '动态色彩';
 			case 'settings.dynamic_colors_descr': return '尽可能使用系统强调色';
 			case 'settings.accent_color': return '强调色';
-			case 'settings.accent_color_descr': return '选择 app 用来强调介面某些部分的颜色';
+			case 'settings.accent_color_descr': return '选择应用中用来强调介面某些部分的颜色';
+			case 'settings.swipe_actions.title': return '滑动操作';
+			case 'settings.swipe_actions.swipe_left': return '向左滑动';
+			case 'settings.swipe_actions.swipe_right': return '向右滑动';
 			case 'settings.security.title': return '安全';
 			case 'settings.security.private_mode_at_launch': return '启动隐私模式';
-			case 'settings.security.private_mode_at_launch_descr': return '默认以隐私模式启动 app ';
+			case 'settings.security.private_mode_at_launch_descr': return '默认以隐私模式启动此应用';
 			case 'settings.security.private_mode': return '隐私模式';
 			case 'settings.security.private_mode_descr': return '隐藏所有金额';
 			case 'settings.security.private_mode_activated': return '隐私模式已启用';
@@ -1990,7 +2007,7 @@ extension on TranslationsZhCn {
 			case 'more.data.delete_all_message1': return '您确定要继续吗？您的所有数据将永久删除且无法恢复';
 			case 'more.data.delete_all_header2': return '最后一步⚠️⚠️';
 			case 'more.data.delete_all_message2': return '删除账户后，您将删除所有保存的个人数据。您的账户、交易、预算和类别将被删除且无法恢复。您同意吗？';
-			case 'more.about_us.display': return 'app 信息';
+			case 'more.about_us.display': return '应用信息';
 			case 'more.about_us.description': return '查看有关 Monekin 的条款和其它相关信息。与社区取得联系以报告错误、留下建议……';
 			case 'more.about_us.legal.display': return '法律信息';
 			case 'more.about_us.legal.privacy': return '隐私权政策';
@@ -2005,12 +2022,12 @@ extension on TranslationsZhCn {
 			case 'more.help_us.rate_us': return '评价我们';
 			case 'more.help_us.rate_us_descr': return '欢迎所有分数和评价！';
 			case 'more.help_us.share': return '分享 Monekin';
-			case 'more.help_us.share_descr': return '与朋友和家人分享我们的 app ';
-			case 'more.help_us.share_text': return 'Monekin！最好的个人理财 app 。此处下载';
+			case 'more.help_us.share_descr': return '与朋友和家人分享我们的应用';
+			case 'more.help_us.share_text': return 'Monekin！最好的个人理财应用 。此处下载';
 			case 'more.help_us.thanks': return '谢谢您！';
 			case 'more.help_us.thanks_long': return '您对 Monekin 和其它大大小小的开源项目的贡献成就了这一伟大项目。感谢您花时间做出贡献。';
 			case 'more.help_us.donate': return '捐款';
-			case 'more.help_us.donate_descr': return '通过您的捐款，您将帮助此 app 持续改进完善。还有什么比请我喝一杯咖啡更好的感谢方式呢？';
+			case 'more.help_us.donate_descr': return '通过您的捐款，您将帮助此应用持续改进完善。还有什么比请我喝一杯咖啡更好的感谢方式呢？';
 			case 'more.help_us.donate_success': return '捐款已完成。非常感谢您的贡献！❤️';
 			case 'more.help_us.donate_err': return '糟糕！接收您的付款时出现错误';
 			case 'more.help_us.report': return '报告错误，留下建议……';
