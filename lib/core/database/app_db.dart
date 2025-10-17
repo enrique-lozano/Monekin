@@ -47,13 +47,13 @@ class AppDB extends _$AppDB {
       join((await getApplicationDocumentsDirectory()).path, dbName);
 
   Future<void> migrateDB(int from, int to) async {
-    Logger.printDebug('Executing migrations from previous version...');
+    Logger.printDebug('Executing migrations from previous version [$from]...');
 
     await UserSettingService.instance.initializeGlobalStateMap();
     await AppDataService.instance.initializeGlobalStateMap();
 
     for (var i = from + 1; i <= to; i++) {
-      Logger.printDebug('Migrating database from v$from to v$i...');
+      Logger.printDebug('Migrating database to v$i...');
 
       String initialSQL = await rootBundle.loadString(
         'assets/sql/migrations/v$i.sql',
@@ -61,7 +61,8 @@ class AppDB extends _$AppDB {
 
       for (final sqlStatement in splitSQLStatements(initialSQL)) {
         Logger.printDebug(
-            'Running custom statement: ${sqlStatement.substring(0, sqlStatement.length > 30 ? 30 : sqlStatement.length)}...');
+          'Running custom statement: ${sqlStatement.substring(0, sqlStatement.length > 30 ? 30 : sqlStatement.length)}...',
+        );
         await customStatement(sqlStatement);
       }
 
