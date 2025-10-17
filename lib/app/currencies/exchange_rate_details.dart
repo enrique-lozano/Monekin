@@ -34,21 +34,22 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
         .getExchangeRatesOf(widget.currency.code)
         .first
         .then((value) {
-      setState(() {
-        exchangeRates = value;
-      });
-    });
+          setState(() {
+            exchangeRates = value;
+          });
+        });
   }
 
   deleteAllRates() {
     ExchangeRateService.instance
         .deleteExchangeRates(currencyCode: widget.currency.code)
         .then((value) {
-      Navigator.pop(context);
+          Navigator.pop(context);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(t.currencies.delete_all_success)));
-    });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(t.currencies.delete_all_success)),
+          );
+        });
   }
 
   @override
@@ -59,85 +60,95 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
       appBar: AppBar(
         title: Text(t.currencies.exchange_rate),
         actions: [
-          MonekinPopupMenuButton(actionItems: [
-            ListTileActionItem(
+          MonekinPopupMenuButton(
+            actionItems: [
+              ListTileActionItem(
                 label: t.ui_actions.delete,
                 icon: Icons.delete,
-                onClick: () => deleteAllRates())
-          ])
-        ],
-      ),
-      body: Column(children: [
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(left: 6),
-                clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                child: widget.currency.displayFlagIcon(size: 50),
+                onClick: () => deleteAllRates(),
               ),
-              const SizedBox(width: 22),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.currency.name,
-                    style: TextStyle(
-                        fontSize: Theme.of(context)
-                            .textTheme
-                            .headlineSmall!
-                            .fontSize),
-                  ),
-                  Text(widget.currency.code),
-                ],
-              )
             ],
           ),
-        ),
-        const Divider(height: 10),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Text(t.currencies.historical),
-        ),
-        if (exchangeRates != null)
-          SingleChildScrollView(
+        ],
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(left: 6),
+                  clipBehavior: Clip.hardEdge,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: widget.currency.displayFlagIcon(size: 50),
+                ),
+                const SizedBox(width: 22),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.currency.name,
+                      style: TextStyle(
+                        fontSize: Theme.of(
+                          context,
+                        ).textTheme.headlineSmall!.fontSize,
+                      ),
+                    ),
+                    Text(widget.currency.code),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const Divider(height: 10),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(t.currencies.historical),
+          ),
+          if (exchangeRates != null)
+            SingleChildScrollView(
               child: ListView.separated(
-            shrinkWrap: true,
-            itemCount: exchangeRates!.length,
-            itemBuilder: (context, index) {
-              final item = exchangeRates![index];
+                shrinkWrap: true,
+                itemCount: exchangeRates!.length,
+                itemBuilder: (context, index) {
+                  final item = exchangeRates![index];
 
-              return ListTile(
-                title: Text(DateFormat.yMMMMd().format(item.date)),
-                trailing: Text(
-                    NumberFormat.currency(symbol: '', decimalDigits: 4)
-                        .format(item.exchangeRate)),
-                onTap: () async {
-                  await showExchangeRateFormDialog(
-                      context,
-                      ExchangeRateFormDialog(
-                        preSelectedCurrency: widget.currency,
-                        preSelectedDate: item.date,
-                        preSelectedRate: item.exchangeRate,
-                        idToEdit: item.id,
-                      ));
+                  return ListTile(
+                    title: Text(DateFormat.yMMMMd().format(item.date)),
+                    trailing: Text(
+                      NumberFormat.currency(
+                        symbol: '',
+                        decimalDigits: 4,
+                      ).format(item.exchangeRate),
+                    ),
+                    onTap: () async {
+                      await showExchangeRateFormDialog(
+                        context,
+                        ExchangeRateFormDialog(
+                          preSelectedCurrency: widget.currency,
+                          preSelectedDate: item.date,
+                          preSelectedRate: item.exchangeRate,
+                          idToEdit: item.id,
+                        ),
+                      );
 
-                  getExchangeRates();
+                      getExchangeRates();
+                    },
+                  );
                 },
-              );
-            },
-            separatorBuilder: (context, index) {
-              return const Divider();
-            },
-          ))
-      ]),
+                separatorBuilder: (context, index) {
+                  return const Divider();
+                },
+              ),
+            ),
+        ],
+      ),
       persistentFooterButtons: [
         PersistentFooterButton(
           child: FilledButton.icon(
@@ -152,7 +163,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
             icon: const Icon(Icons.add),
             label: Text(t.currencies.form.add),
           ),
-        )
+        ),
       ],
     );
   }

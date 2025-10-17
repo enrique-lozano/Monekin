@@ -14,17 +14,18 @@ class BudgetEvolutionChart extends StatelessWidget {
 
   final Budget budget;
 
-  Future<LineChartDataItem?> getEvolutionData(
-    BuildContext context,
-  ) async {
+  Future<LineChartDataItem?> getEvolutionData(BuildContext context) async {
     List<Future<double>> balance = [];
     List<String> labels = [];
 
     final startDate = budget.currentDateRange.start;
     final endDate = budget.currentDateRange.end;
 
-    DateTime currentDay =
-        DateTime(startDate.year, startDate.month, startDate.day);
+    DateTime currentDay = DateTime(
+      startDate.year,
+      startDate.month,
+      startDate.day,
+    );
 
     final dayRange = (endDate.difference(startDate).inDays / 100).ceil();
 
@@ -37,7 +38,9 @@ class BudgetEvolutionChart extends StatelessWidget {
     }
 
     return LineChartDataItem(
-        balance: await Future.wait(balance), labels: labels);
+      balance: await Future.wait(balance),
+      labels: labels,
+    );
   }
 
   @override
@@ -48,27 +51,27 @@ class BudgetEvolutionChart extends StatelessWidget {
     return SizedBox(
       height: 300,
       child: FutureBuilder(
-          future: getEvolutionData(context),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(),
-                    ],
-                  ),
-                ],
-              );
-            }
+        future: getEvolutionData(context),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [CircularProgressIndicator()],
+                ),
+              ],
+            );
+          }
 
-            return LineChart(LineChartData(
+          return LineChart(
+            LineChartData(
               gridData: const FlGridData(show: true, drawVerticalLine: false),
-              extraLinesData: ExtraLinesData(horizontalLines: [
-                HorizontalLine(
+              extraLinesData: ExtraLinesData(
+                horizontalLines: [
+                  HorizontalLine(
                     y: budget.limitAmount,
                     color: Theme.of(context).colorScheme.tertiary,
                     dashArray: [12, 2],
@@ -79,35 +82,37 @@ class BudgetEvolutionChart extends StatelessWidget {
                         color: Theme.of(context).colorScheme.tertiary,
                       ),
                       labelResolver: (p0) => t.budgets.details.budget_value,
-                    ))
-              ]),
+                    ),
+                  ),
+                ],
+              ),
               lineTouchData: LineTouchData(
-                  touchTooltipData: LineTouchTooltipData(
-                getTooltipColor: (spot) =>
-                    Theme.of(context).colorScheme.surface,
-                tooltipHorizontalAlignment: FLHorizontalAlignment.right,
-                tooltipMargin: -10,
-                getTooltipItems: (touchedSpots) {
-                  return touchedSpots.map((barSpot) {
-                    final flSpot = barSpot;
-                    if (flSpot.x == 0 || flSpot.x == 6) {
-                      return null;
-                    }
+                touchTooltipData: LineTouchTooltipData(
+                  getTooltipColor: (spot) =>
+                      Theme.of(context).colorScheme.surface,
+                  tooltipHorizontalAlignment: FLHorizontalAlignment.right,
+                  tooltipMargin: -10,
+                  getTooltipItems: (touchedSpots) {
+                    return touchedSpots.map((barSpot) {
+                      final flSpot = barSpot;
+                      if (flSpot.x == 0 || flSpot.x == 6) {
+                        return null;
+                      }
 
-                    return LineTooltipItem(
+                      return LineTooltipItem(
                         '${snapshot.data!.labels[flSpot.x.toInt()]} \n',
                         const TextStyle(),
                         children: [
                           TextSpan(
-                              text:
-                                  '${snapshot.data!.balance[flSpot.x.toInt()]}',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ))
-                        ]);
-                  }).toList();
-                },
-              )),
+                            text: '${snapshot.data!.balance[flSpot.x.toInt()]}',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      );
+                    }).toList();
+                  },
+                ),
+              ),
               titlesData: FlTitlesData(
                 show: true,
                 leftTitles: noAxisTitles,
@@ -119,7 +124,9 @@ class BudgetEvolutionChart extends StatelessWidget {
                       return Text(
                         snapshot.data!.labels[int.parse(meta.formattedValue)],
                         style: const TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w200),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w200,
+                        ),
                       );
                     },
                   ),
@@ -150,22 +157,22 @@ class BudgetEvolutionChart extends StatelessWidget {
               borderData: FlBorderData(show: false),
               minY: 0,
               maxY: max(
-                  snapshot.data!.balance.max + snapshot.data!.balance.max * 0.1,
-                  budget.limitAmount * 1.1),
+                snapshot.data!.balance.max + snapshot.data!.balance.max * 0.1,
+                budget.limitAmount * 1.1,
+              ),
               lineBarsData: [
                 LineChartBarData(
                   spots: List.generate(
-                      snapshot.data!.balance.length,
-                      (index) => FlSpot(
-                          index.toDouble(), snapshot.data!.balance[index])),
+                    snapshot.data!.balance.length,
+                    (index) =>
+                        FlSpot(index.toDouble(), snapshot.data!.balance[index]),
+                  ),
                   isCurved: true,
                   curveSmoothness: 0.025,
                   color: lineColor,
                   barWidth: 3,
                   isStrokeCapRound: true,
-                  dotData: const FlDotData(
-                    show: false,
-                  ),
+                  dotData: const FlDotData(show: false),
                   belowBarData: BarAreaData(
                     show: true,
                     applyCutOffY: true,
@@ -175,14 +182,16 @@ class BudgetEvolutionChart extends StatelessWidget {
                       end: Alignment.bottomCenter,
                       colors: [
                         lineColor.withAlpha(100),
-                        lineColor.withAlpha(1)
+                        lineColor.withAlpha(1),
                       ],
                     ),
                   ),
                 ),
               ],
-            ));
-          }),
+            ),
+          );
+        },
+      ),
     );
   }
 }

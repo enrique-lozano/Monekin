@@ -32,8 +32,6 @@ class TagService {
           ..orderBy([(acc) => OrderingTerm.asc(acc.displayOrder)])
           ..limit(limit, offset: offset))
         .watch()
-        .map(
-          (event) => event.map((e) => Tag.fromTagInDB(e)).toList(),
-        );
+        .map((event) => event.map((e) => Tag.fromTagInDB(e)).toList());
   }
 }

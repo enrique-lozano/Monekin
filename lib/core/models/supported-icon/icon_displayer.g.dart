@@ -35,93 +35,95 @@ abstract class _$IconDisplayerCWProxy {
 
   IconDisplayer displayMode(IconDisplayMode displayMode);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `IconDisplayer(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `IconDisplayer(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// IconDisplayer(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   IconDisplayer call({
     Key? key,
-    Color? mainColor,
+    Color mainColor,
     IconData? icon,
     SupportedIcon? supportedIcon,
-    double? size,
+    double size,
     double? padding,
-    double? borderRadius,
-    double? outlineWidth,
-    bool? isOutline,
+    double borderRadius,
+    double outlineWidth,
+    bool isOutline,
     void Function()? onDoubleTap,
     void Function()? onTap,
     void Function()? onLongPress,
     Color? secondaryColor,
-    IconDisplayMode? displayMode,
+    IconDisplayMode displayMode,
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfIconDisplayer.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfIconDisplayer.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfIconDisplayer.copyWith(...)` or call `instanceOfIconDisplayer.copyWith.fieldName(value)` for a single field.
 class _$IconDisplayerCWProxyImpl implements _$IconDisplayerCWProxy {
   const _$IconDisplayerCWProxyImpl(this._value);
 
   final IconDisplayer _value;
 
   @override
-  IconDisplayer key(Key? key) => this(key: key);
+  IconDisplayer key(Key? key) => call(key: key);
 
   @override
-  IconDisplayer mainColor(Color mainColor) => this(mainColor: mainColor);
+  IconDisplayer mainColor(Color mainColor) => call(mainColor: mainColor);
 
   @override
-  IconDisplayer icon(IconData? icon) => this(icon: icon);
+  IconDisplayer icon(IconData? icon) => call(icon: icon);
 
   @override
   IconDisplayer supportedIcon(SupportedIcon? supportedIcon) =>
-      this(supportedIcon: supportedIcon);
+      call(supportedIcon: supportedIcon);
 
   @override
-  IconDisplayer size(double size) => this(size: size);
+  IconDisplayer size(double size) => call(size: size);
 
   @override
-  IconDisplayer padding(double? padding) => this(padding: padding);
+  IconDisplayer padding(double? padding) => call(padding: padding);
 
   @override
   IconDisplayer borderRadius(double borderRadius) =>
-      this(borderRadius: borderRadius);
+      call(borderRadius: borderRadius);
 
   @override
   IconDisplayer outlineWidth(double outlineWidth) =>
-      this(outlineWidth: outlineWidth);
+      call(outlineWidth: outlineWidth);
 
   @override
-  IconDisplayer isOutline(bool isOutline) => this(isOutline: isOutline);
+  IconDisplayer isOutline(bool isOutline) => call(isOutline: isOutline);
 
   @override
   IconDisplayer onDoubleTap(void Function()? onDoubleTap) =>
-      this(onDoubleTap: onDoubleTap);
+      call(onDoubleTap: onDoubleTap);
 
   @override
-  IconDisplayer onTap(void Function()? onTap) => this(onTap: onTap);
+  IconDisplayer onTap(void Function()? onTap) => call(onTap: onTap);
 
   @override
   IconDisplayer onLongPress(void Function()? onLongPress) =>
-      this(onLongPress: onLongPress);
+      call(onLongPress: onLongPress);
 
   @override
   IconDisplayer secondaryColor(Color? secondaryColor) =>
-      this(secondaryColor: secondaryColor);
+      call(secondaryColor: secondaryColor);
 
   @override
   IconDisplayer displayMode(IconDisplayMode displayMode) =>
-      this(displayMode: displayMode);
+      call(displayMode: displayMode);
 
   @override
-
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `IconDisplayer(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `IconDisplayer(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// IconDisplayer(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   IconDisplayer call({
     Object? key = const $CopyWithPlaceholder(),
     Object? mainColor = const $CopyWithPlaceholder(),
@@ -165,14 +167,14 @@ class _$IconDisplayerCWProxyImpl implements _$IconDisplayerCWProxy {
           : padding as double?,
       borderRadius:
           borderRadius == const $CopyWithPlaceholder() || borderRadius == null
-              ? _value.borderRadius
-              // ignore: cast_nullable_to_non_nullable
-              : borderRadius as double,
+          ? _value.borderRadius
+          // ignore: cast_nullable_to_non_nullable
+          : borderRadius as double,
       outlineWidth:
           outlineWidth == const $CopyWithPlaceholder() || outlineWidth == null
-              ? _value.outlineWidth
-              // ignore: cast_nullable_to_non_nullable
-              : outlineWidth as double,
+          ? _value.outlineWidth
+          // ignore: cast_nullable_to_non_nullable
+          : outlineWidth as double,
       isOutline: isOutline == const $CopyWithPlaceholder() || isOutline == null
           ? _value.isOutline
           // ignore: cast_nullable_to_non_nullable
@@ -195,24 +197,26 @@ class _$IconDisplayerCWProxyImpl implements _$IconDisplayerCWProxy {
           : secondaryColor as Color?,
       displayMode:
           displayMode == const $CopyWithPlaceholder() || displayMode == null
-              ? _value.displayMode
-              // ignore: cast_nullable_to_non_nullable
-              : displayMode as IconDisplayMode,
+          ? _value.displayMode
+          // ignore: cast_nullable_to_non_nullable
+          : displayMode as IconDisplayMode,
     );
   }
 }
 
 extension $IconDisplayerCopyWith on IconDisplayer {
-  /// Returns a callable class that can be used as follows: `instanceOfIconDisplayer.copyWith(...)` or like so:`instanceOfIconDisplayer.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfIconDisplayer.copyWith(...)` or `instanceOfIconDisplayer.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$IconDisplayerCWProxy get copyWith => _$IconDisplayerCWProxyImpl(this);
 
-  /// Copies the object with the specific fields set to `null`. If you pass `false` as a parameter, nothing will be done and it will be ignored. Don't do it. Prefer `copyWith(field: null)` or `IconDisplayer(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Returns a copy of the object with the selected fields set to `null`.
+  /// A flag set to `false` leaves the field unchanged. Prefer `copyWith(field: null)` or `copyWith.fieldName(null)` for single-field updates.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// IconDisplayer(...).copyWithNull(firstField: true, secondField: true)
-  /// ````
+  /// ```
   IconDisplayer copyWithNull({
     bool key = false,
     bool icon = false,

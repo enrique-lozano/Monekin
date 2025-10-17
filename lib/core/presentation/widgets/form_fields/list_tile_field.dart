@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
 
 class ListTileField extends StatelessWidget {
-  const ListTileField(
-      {super.key,
-      required this.title,
-      required this.subtitle,
-      this.leading,
-      this.trailing,
-      this.onTap});
+  const ListTileField({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    this.leading,
+    this.trailing,
+    this.onTap,
+  });
 
   final String title;
   final String subtitle;

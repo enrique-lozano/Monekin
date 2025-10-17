@@ -18,7 +18,11 @@ class Tag extends TagInDB {
 
   static Tag fromTagInDB(TagInDB e) {
     return Tag(
-        id: e.id, name: e.name, color: e.color, description: e.description);
+      id: e.id,
+      name: e.name,
+      color: e.color,
+      description: e.description,
+    );
   }
 
   Color get colorData => ColorHex.get(color);

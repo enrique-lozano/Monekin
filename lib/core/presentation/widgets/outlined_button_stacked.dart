@@ -52,7 +52,8 @@ class OutlinedButtonStacked extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: padding ??
+              padding:
+                  padding ??
                   const EdgeInsets.symmetric(horizontal: 8, vertical: 30),
               child: Column(
                 crossAxisAlignment: alignLeft
@@ -70,7 +71,8 @@ class OutlinedButtonStacked extends StatelessWidget {
                               child: Icon(
                                 iconData,
                                 size: 35,
-                                color: color ??
+                                color:
+                                    color ??
                                     Theme.of(context).colorScheme.secondary,
                               ),
                             ),
@@ -83,7 +85,7 @@ class OutlinedButtonStacked extends StatelessWidget {
                               ),
                               maxLines: 2,
                             ),
-                            infoButton ?? const SizedBox.shrink()
+                            infoButton ?? const SizedBox.shrink(),
                           ],
                         )
                       : Row(
@@ -93,7 +95,8 @@ class OutlinedButtonStacked extends StatelessWidget {
                               child: Icon(
                                 iconData,
                                 size: 28,
-                                color: color ??
+                                color:
+                                    color ??
                                     Theme.of(context).colorScheme.secondary,
                               ),
                             ),
@@ -115,7 +118,7 @@ class OutlinedButtonStacked extends StatelessWidget {
                       ? const SizedBox.shrink()
                       : const SizedBox(height: 8),
                   if (afterWidgetPadding == null)
-                    afterWidget ?? const SizedBox.shrink()
+                    afterWidget ?? const SizedBox.shrink(),
                 ],
               ),
             ),

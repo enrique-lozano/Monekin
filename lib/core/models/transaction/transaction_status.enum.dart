@@ -11,12 +11,15 @@ enum TransactionStatus {
   /// Get a list of statuses that are not in a set of statuses.
   ///
   /// Include the null status with the [includeNullStatus] param, that defaults to true.
-  static List<TransactionStatus?> notIn(Set<TransactionStatus> statuses,
-      {bool includeNullStatus = true}) {
+  static List<TransactionStatus?> notIn(
+    Set<TransactionStatus> statuses, {
+    bool includeNullStatus = true,
+  }) {
     return [
       if (includeNullStatus) null,
-      ...TransactionStatus.values
-          .whereNot((element) => statuses.contains(element))
+      ...TransactionStatus.values.whereNot(
+        (element) => statuses.contains(element),
+      ),
     ];
   }
 
@@ -24,17 +27,22 @@ enum TransactionStatus {
   ///
   /// The transaction statuses that do not count for balances and other stats are the pending and the voided transactions
   static List<TransactionStatus?> getStatusThatCountsForStats(
-      List<TransactionStatus?>? status) {
+    List<TransactionStatus?>? status,
+  ) {
     if (status != null) {
       return status
-          .whereNot((element) => [
-                TransactionStatus.pending.index,
-                TransactionStatus.voided.index
-              ].contains(element?.index))
+          .whereNot(
+            (element) => [
+              TransactionStatus.pending.index,
+              TransactionStatus.voided.index,
+            ].contains(element?.index),
+          )
           .toList();
     } else {
-      return TransactionStatus.notIn(
-          {TransactionStatus.pending, TransactionStatus.voided});
+      return TransactionStatus.notIn({
+        TransactionStatus.pending,
+        TransactionStatus.voided,
+      });
     }
   }
 }

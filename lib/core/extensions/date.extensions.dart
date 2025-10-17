@@ -1,6 +1,9 @@
 extension DateTimeExtension on DateTime {
-  DateTime justDay(
-      {int yearOffset = 0, int monthOffset = 0, int dayOffset = 0}) {
+  DateTime justDay({
+    int yearOffset = 0,
+    int monthOffset = 0,
+    int dayOffset = 0,
+  }) {
     return DateTime(year + yearOffset, month + monthOffset, day + dayOffset);
   }
 

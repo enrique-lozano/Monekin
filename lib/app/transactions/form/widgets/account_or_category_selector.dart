@@ -39,20 +39,20 @@ class AccountOrCategorySelector extends StatelessWidget {
                     softWrap: false,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                          fontWeight: FontWeight.w300,
-                        ),
+                      fontWeight: FontWeight.w300,
+                    ),
                   ),
                   Text(
                     inputValue ?? t.general.unspecified,
                     softWrap: false,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                  )
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

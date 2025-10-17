@@ -25,55 +25,56 @@ class MoneyTransaction extends TransactionInDB {
 
   List<Tag> tags;
 
-  MoneyTransaction(
-      {required super.id,
-      required super.date,
-      required super.value,
-      required super.isHidden,
-      required super.type,
-      super.notes,
-      super.title,
-      super.status,
-      super.valueInDestiny,
-      super.locAddress,
-      super.locLatitude,
-      super.locLongitude,
-      required AccountInDB account,
-      AccountInDB? receivingAccount,
-      required CurrencyInDB accountCurrency,
-      CurrencyInDB? receivingAccountCurrency,
-      CategoryInDB? category,
-      CategoryInDB? parentCategory,
-      this.currentValueInDestinyInPreferredCurrency,
-      required this.currentValueInPreferredCurrency,
-      required List<TagInDB> tags,
-      super.endDate,
-      super.intervalEach,
-      super.intervalPeriod,
-      super.remainingTransactions})
-      : category =
-            category != null ? Category.fromDB(category, parentCategory) : null,
-        account = Account.fromDB(account, accountCurrency),
-        receivingAccount =
-            receivingAccount != null && receivingAccountCurrency != null
-                ? Account.fromDB(receivingAccount, receivingAccountCurrency)
-                : null,
-        tags = tags.map((e) => Tag.fromTagInDB(e)).toList(),
-        recurrentInfo = RecurrencyData(
-          intervalEach: intervalEach,
-          intervalPeriod: intervalPeriod,
-          ruleRecurrentLimit: intervalEach != null
-              ? RecurrentRuleLimit(
-                  endDate: endDate,
-                  remainingIterations: remainingTransactions,
-                )
-              : null,
-        ),
-        super(
-          accountID: account.id,
-          categoryID: category?.id,
-          receivingAccountID: receivingAccount?.id,
-        );
+  MoneyTransaction({
+    required super.id,
+    required super.date,
+    required super.value,
+    required super.isHidden,
+    required super.type,
+    super.notes,
+    super.title,
+    super.status,
+    super.valueInDestiny,
+    super.locAddress,
+    super.locLatitude,
+    super.locLongitude,
+    required AccountInDB account,
+    AccountInDB? receivingAccount,
+    required CurrencyInDB accountCurrency,
+    CurrencyInDB? receivingAccountCurrency,
+    CategoryInDB? category,
+    CategoryInDB? parentCategory,
+    this.currentValueInDestinyInPreferredCurrency,
+    required this.currentValueInPreferredCurrency,
+    required List<TagInDB> tags,
+    super.endDate,
+    super.intervalEach,
+    super.intervalPeriod,
+    super.remainingTransactions,
+  }) : category = category != null
+           ? Category.fromDB(category, parentCategory)
+           : null,
+       account = Account.fromDB(account, accountCurrency),
+       receivingAccount =
+           receivingAccount != null && receivingAccountCurrency != null
+           ? Account.fromDB(receivingAccount, receivingAccountCurrency)
+           : null,
+       tags = tags.map((e) => Tag.fromTagInDB(e)).toList(),
+       recurrentInfo = RecurrencyData(
+         intervalEach: intervalEach,
+         intervalPeriod: intervalPeriod,
+         ruleRecurrentLimit: intervalEach != null
+             ? RecurrentRuleLimit(
+                 endDate: endDate,
+                 remainingIterations: remainingTransactions,
+               )
+             : null,
+       ),
+       super(
+         accountID: account.id,
+         categoryID: category?.id,
+         receivingAccountID: receivingAccount?.id,
+       );
 
   bool get isTransfer => type.isTransfer;
   bool get isIncomeOrExpense => type.isIncomeOrExpense;
@@ -117,22 +118,21 @@ class MoneyTransaction extends TransactionInDB {
     BuildContext context, {
     double size = 22,
     double? padding,
-  }) =>
-      isIncomeOrExpense
-          ? IconDisplayer.fromCategory(
-              context,
-              category: category!,
-              size: size,
-              padding: padding,
-              borderRadius: 999999,
-            )
-          : IconDisplayer(
-              mainColor: color(context),
-              icon: TransactionType.T.icon,
-              size: size,
-              padding: padding,
-              borderRadius: 999999,
-            );
+  }) => isIncomeOrExpense
+      ? IconDisplayer.fromCategory(
+          context,
+          category: category!,
+          size: size,
+          padding: padding,
+          borderRadius: 999999,
+        )
+      : IconDisplayer(
+          mainColor: color(context),
+          icon: TransactionType.T.icon,
+          size: size,
+          padding: padding,
+          borderRadius: 999999,
+        );
 
   NextPayStatus? get nextPayStatus {
     if (recurrentInfo.isNoRecurrent && status != TransactionStatus.pending) {
@@ -142,8 +142,8 @@ class MoneyTransaction extends TransactionInDB {
     return daysToPay() < 0
         ? NextPayStatus.delayed
         : daysToPay() <= 10
-            ? NextPayStatus.comingSoon
-            : NextPayStatus.planified;
+        ? NextPayStatus.comingSoon
+        : NextPayStatus.planified;
   }
 
   /// Get the days to the next payment. Will return an error in case of a non-recurrent transactions that is not pending
@@ -152,7 +152,8 @@ class MoneyTransaction extends TransactionInDB {
   int daysToPay() {
     if (recurrentInfo.isNoRecurrent && status != TransactionStatus.pending) {
       throw Exception(
-          'The transaction should be recurrent or pending to get this data');
+        'The transaction should be recurrent or pending to get this data',
+      );
     }
 
     return date.difference(DateTime.now()).inDays;
@@ -163,8 +164,9 @@ class MoneyTransaction extends TransactionInDB {
     required Periodicity periodicity,
     bool convertToPreferredCurrency = true,
   }) {
-    double baseValue =
-        convertToPreferredCurrency ? currentValueInPreferredCurrency : value;
+    double baseValue = convertToPreferredCurrency
+        ? currentValueInPreferredCurrency
+        : value;
 
     if (recurrentInfo.isNoRecurrent) {
       return baseValue;
@@ -196,7 +198,8 @@ class MoneyTransaction extends TransactionInDB {
   List<DateTime> getNextDatesOfRecurrency({DateTime? untilDate, int? limit}) {
     if (recurrentInfo.isNoRecurrent) {
       throw Exception(
-          'The transaction should be recurrent to get the following dates');
+        'The transaction should be recurrent to get the following dates',
+      );
     }
 
     List<DateTime> toReturn = [];
@@ -230,23 +233,28 @@ class MoneyTransaction extends TransactionInDB {
       int multiplier = toReturn.length;
 
       if (recurrentInfo.intervalPeriod == Periodicity.day) {
-        toPush =
-            date.add(Duration(days: recurrentInfo.intervalEach! * multiplier));
+        toPush = date.add(
+          Duration(days: recurrentInfo.intervalEach! * multiplier),
+        );
       } else if (recurrentInfo.intervalPeriod == Periodicity.week) {
-        toPush = date
-            .add(Duration(days: recurrentInfo.intervalEach! * 7 * multiplier));
+        toPush = date.add(
+          Duration(days: recurrentInfo.intervalEach! * 7 * multiplier),
+        );
       } else if (recurrentInfo.intervalPeriod == Periodicity.month) {
         toPush = date.copyWith(
-            month: date.month + recurrentInfo.intervalEach! * multiplier);
+          month: date.month + recurrentInfo.intervalEach! * multiplier,
+        );
 
         if (toPush.month >
             date.month + recurrentInfo.intervalEach! * multiplier) {
           toPush = date.copyWith(
-              month: date.month + recurrentInfo.intervalEach! * multiplier + 1);
+            month: date.month + recurrentInfo.intervalEach! * multiplier + 1,
+          );
         }
       } else if (recurrentInfo.intervalPeriod == Periodicity.year) {
         toPush = date.copyWith(
-            year: date.year + recurrentInfo.intervalEach! * multiplier);
+          year: date.year + recurrentInfo.intervalEach! * multiplier,
+        );
       }
 
       if (untilDate != null && toPush.compareTo(untilDate) > 0) {

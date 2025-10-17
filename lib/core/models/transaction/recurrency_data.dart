@@ -18,9 +18,9 @@ class RecurrencyData extends Equatable {
   });
 
   const RecurrencyData.noRepeat()
-      : ruleRecurrentLimit = null,
-        intervalEach = null,
-        intervalPeriod = null;
+    : ruleRecurrentLimit = null,
+      intervalEach = null,
+      intervalPeriod = null;
 
   const RecurrencyData.withLimit({
     required this.ruleRecurrentLimit,

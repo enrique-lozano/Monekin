@@ -6,10 +6,7 @@ class KeyValuePairInDB<T extends Enum> {
   final T key;
   final String? value;
 
-  KeyValuePairInDB({
-    required this.key,
-    required this.value,
-  });
+  KeyValuePairInDB({required this.key, required this.value});
 
   static KeyValuePairInDB<SettingKey> fromUserSetting(UserSetting x) {
     return KeyValuePairInDB(key: x.settingKey, value: x.settingValue);

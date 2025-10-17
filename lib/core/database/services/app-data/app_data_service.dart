@@ -9,13 +9,13 @@ final Map<AppDataKey, String?> appStateData = {};
 
 class AppDataService extends KeyValueService<AppDataKey, AppData, AppDataData> {
   AppDataService._(AppDB db)
-      : super(
-          db: db,
-          table: db.appData,
-          globalStateMap: appStateData,
-          rowToKeyPairInstance: (row) => KeyValuePairInDB.fromAppData(row),
-          toDbRow: (x) => x.toAppDataItem(),
-        );
+    : super(
+        db: db,
+        table: db.appData,
+        globalStateMap: appStateData,
+        rowToKeyPairInstance: (row) => KeyValuePairInDB.fromAppData(row),
+        toDbRow: (x) => x.toAppDataItem(),
+      );
 
   static final AppDataService _instance = AppDataService._(AppDB.instance);
   static AppDataService get instance => _instance;

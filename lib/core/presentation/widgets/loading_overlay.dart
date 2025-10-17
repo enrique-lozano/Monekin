@@ -9,9 +9,10 @@ class LoadingOverlay {
 
   void show() {
     showDialog(
-        context: _context,
-        barrierDismissible: false,
-        builder: (ctx) => _FullScreenLoader());
+      context: _context,
+      barrierDismissible: false,
+      builder: (ctx) => _FullScreenLoader(),
+    );
   }
 
   Future<T> during<T>(Future<T> future) {
@@ -30,7 +31,8 @@ class _FullScreenLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const DecoratedBox(
-        decoration: BoxDecoration(color: Color.fromRGBO(0, 0, 0, 0.5)),
-        child: Center(child: CircularProgressIndicator()));
+      decoration: BoxDecoration(color: Color.fromRGBO(0, 0, 0, 0.5)),
+      child: Center(child: CircularProgressIndicator()),
+    );
   }
 }

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class AnimatedProgressBar extends StatefulWidget {
-  const AnimatedProgressBar(
-      {super.key,
-      required this.value,
-      this.radius = 2,
-      this.color,
-      this.animationDuration = 750,
-      this.width = 8,
-      this.direction =
-          Axis.horizontal}) /* :  assert(value <= 1 && value >= 0) */;
+  const AnimatedProgressBar({
+    super.key,
+    required this.value,
+    this.radius = 2,
+    this.color,
+    this.animationDuration = 750,
+    this.width = 8,
+    this.direction = Axis.horizontal,
+  }) /* :  assert(value <= 1 && value >= 0) */;
 
   /// Percentage of the bar to occupy. Must be a value between 0 and 1
   final double value;
@@ -48,32 +48,32 @@ class _AnimatedProgressBarState extends State<AnimatedProgressBar> {
     return TweenAnimationBuilder<double>(
       duration: Duration(milliseconds: widget.animationDuration),
       curve: Curves.easeInOut,
-      tween: Tween<double>(
-        begin: 0,
-        end: widget.value,
-      ),
+      tween: Tween<double>(begin: 0, end: widget.value),
       builder: (context, value, child) {
         if (value.isNaN) value = 0;
 
         return Container(
-            height: isHorizontal ? widget.width : double.infinity,
-            width: isHorizontal ? double.infinity : widget.width,
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-                borderRadius: barRadius, color: barColor.withOpacity(0.12)),
-            child: FractionallySizedBox(
-              widthFactor: isHorizontal ? value : 1,
-              heightFactor: isHorizontal ? 1 : value,
-              alignment: isHorizontal
-                  ? FractionalOffset.centerLeft
-                  : FractionalOffset.bottomCenter,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  borderRadius: barRadius,
-                  color: barColor,
-                ),
+          height: isHorizontal ? widget.width : double.infinity,
+          width: isHorizontal ? double.infinity : widget.width,
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            borderRadius: barRadius,
+            color: barColor.withOpacity(0.12),
+          ),
+          child: FractionallySizedBox(
+            widthFactor: isHorizontal ? value : 1,
+            heightFactor: isHorizontal ? 1 : value,
+            alignment: isHorizontal
+                ? FractionalOffset.centerLeft
+                : FractionalOffset.bottomCenter,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: barRadius,
+                color: barColor,
               ),
-            ));
+            ),
+          ),
+        );
       },
     );
   }

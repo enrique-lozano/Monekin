@@ -54,8 +54,9 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
     final t = Translations.of(context);
 
     if (valueToNumber! < 0) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(t.budgets.form.negative_warn)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(t.budgets.form.negative_warn)));
 
       return;
     }
@@ -63,10 +64,13 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
     onSuccess() {
       Navigator.pop(context);
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(isEditMode
-              ? t.transaction.edit_success
-              : t.transaction.new_success)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            isEditMode ? t.transaction.edit_success : t.transaction.new_success,
+          ),
+        ),
+      );
     }
 
     final Budget toPush;
@@ -83,19 +87,27 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
     );
 
     if (isEditMode) {
-      BudgetServive.instance.updateBudget(toPush).then((value) {
-        onSuccess();
-      }).catchError((error) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(error.toString())));
-      });
+      BudgetServive.instance
+          .updateBudget(toPush)
+          .then((value) {
+            onSuccess();
+          })
+          .catchError((error) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(error.toString())));
+          });
     } else {
-      BudgetServive.instance.insertBudget(toPush).then((value) {
-        onSuccess();
-      }).catchError((error) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(error.toString())));
-      });
+      BudgetServive.instance
+          .insertBudget(toPush)
+          .then((value) {
+            onSuccess();
+          })
+          .catchError((error) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(error.toString())));
+          });
     }
   }
 
@@ -120,18 +132,16 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
     categories = budget.categories == null
         ? null
         : await CategoryService.instance
-            .getCategories(
-              predicate: (p0, p1) => p0.id.isIn(budget.categories!),
-            )
-            .first;
+              .getCategories(
+                predicate: (p0, p1) => p0.id.isIn(budget.categories!),
+              )
+              .first;
 
     accounts = budget.accounts == null
         ? null
         : await AccountService.instance
-            .getAccounts(
-              predicate: (p0, p1) => p0.id.isIn(budget.accounts!),
-            )
-            .first;
+              .getAccounts(predicate: (p0, p1) => p0.id.isIn(budget.accounts!))
+              .first;
 
     intervalPeriod = budget.intervalPeriod;
 
@@ -159,10 +169,11 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                     }
                   },
             icon: const Icon(Icons.save),
-            label:
-                Text(isEditMode ? t.budgets.form.edit : t.budgets.form.create),
+            label: Text(
+              isEditMode ? t.budgets.form.edit : t.budgets.form.create,
+            ),
           ),
-        )
+        ),
       ],
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
@@ -187,16 +198,19 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                   labelText: '${t.budgets.form.value} *',
                   hintText: 'Ex.: 200',
                   suffix: StreamBuilder(
-                      stream:
-                          CurrencyService.instance.getUserPreferredCurrency(),
-                      builder: (context, snapshot) {
-                        return Text(snapshot.data?.symbol ?? '');
-                      }),
+                    stream: CurrencyService.instance.getUserPreferredCurrency(),
+                    builder: (context, snapshot) {
+                      return Text(snapshot.data?.symbol ?? '');
+                    },
+                  ),
                 ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
-                  final defaultNumberValidatorResult = fieldValidator(value,
-                      isRequired: true, validator: ValidatorType.double);
+                  final defaultNumberValidatorResult = fieldValidator(
+                    value,
+                    isRequired: true,
+                    validator: ValidatorType.double,
+                  );
 
                   if (defaultNumberValidatorResult != null) {
                     return defaultNumberValidatorResult;
@@ -226,11 +240,14 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                     child: Text(t.general.time.periodicity.no_repeat),
                   ),
                   ...List.generate(
-                      Periodicity.values.length,
-                      (index) => DropdownMenuItem(
-                          value: Periodicity.values[index],
-                          child: Text(Periodicity.values[index]
-                              .allThePeriodsText(context))))
+                    Periodicity.values.length,
+                    (index) => DropdownMenuItem(
+                      value: Periodicity.values[index],
+                      child: Text(
+                        Periodicity.values[index].allThePeriodsText(context),
+                      ),
+                    ),
+                  ),
                 ],
                 onChanged: (value) {
                   setState(() {
@@ -291,11 +308,12 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                   List<Account>? selectedAccounts = accounts == null
                       ? snapshot.data
                       : (snapshot.data ?? [])
-                          .where(
-                            (element) =>
-                                accounts!.map((e) => e.id).contains(element.id),
-                          )
-                          .toList();
+                            .where(
+                              (element) => accounts!
+                                  .map((e) => e.id)
+                                  .contains(element.id),
+                            )
+                            .toList();
 
                   return ListTileField(
                     title: t.general.accounts,
@@ -306,31 +324,33 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                     subtitle: accounts != null
                         ? selectedAccounts!.map((e) => e.name).printFormatted()
                         : t.account.select.all,
-                    onTap: () => showAccountSelectorBottomSheet(
-                        context,
-                        AccountSelectorModal(
-                          allowMultiSelection: true,
-                          filterSavingAccounts: false,
-                          selectedAccounts: selectedAccounts ?? [],
-                        )).then((selection) {
-                      if (selection == null) return;
+                    onTap: () =>
+                        showAccountSelectorBottomSheet(
+                          context,
+                          AccountSelectorModal(
+                            allowMultiSelection: true,
+                            filterSavingAccounts: false,
+                            selectedAccounts: selectedAccounts ?? [],
+                          ),
+                        ).then((selection) {
+                          if (selection == null) return;
 
-                      setState(() {
-                        accounts = selection.length == snapshot.data!.length
-                            ? null
-                            : selection;
-                      });
-                    }),
+                          setState(() {
+                            accounts = selection.length == snapshot.data!.length
+                                ? null
+                                : selection;
+                          });
+                        }),
                   );
                 },
               ),
               const SizedBox(height: 16),
               StreamBuilder(
-                  stream: CategoryService.instance.getCategories(),
-                  builder: (context, snapshot) {
-                    List<Category>? selectedCategories = categories == null
-                        ? snapshot.data
-                        : (snapshot.data ?? [])
+                stream: CategoryService.instance.getCategories(),
+                builder: (context, snapshot) {
+                  List<Category>? selectedCategories = categories == null
+                      ? snapshot.data
+                      : (snapshot.data ?? [])
                             .where(
                               (element) => categories!
                                   .map((e) => e.id)
@@ -338,35 +358,36 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                             )
                             .toList();
 
-                    return ListTileField(
-                      title: t.general.categories,
-                      leading: const Icon(Icons.category_rounded),
-                      trailing: CountIndicatorWithExpandArrow(
-                        countToDisplay: categories?.length,
-                      ),
-                      subtitle: categories != null
-                          ? selectedCategories!
+                  return ListTileField(
+                    title: t.general.categories,
+                    leading: const Icon(Icons.category_rounded),
+                    trailing: CountIndicatorWithExpandArrow(
+                      countToDisplay: categories?.length,
+                    ),
+                    subtitle: categories != null
+                        ? selectedCategories!
                               .map((e) => e.name)
                               .printFormatted()
-                          : t.categories.select.all,
-                      onTap: () {
-                        showMultiCategoryListModal(
-                          context,
-                          CategoryMultiSelectorModal(
-                            selectedCategories: selectedCategories ?? [],
-                          ),
-                        ).then((selection) {
-                          if (selection == null) return;
+                        : t.categories.select.all,
+                    onTap: () {
+                      showMultiCategoryListModal(
+                        context,
+                        CategoryMultiSelectorModal(
+                          selectedCategories: selectedCategories ?? [],
+                        ),
+                      ).then((selection) {
+                        if (selection == null) return;
 
-                          categories = selection.length == snapshot.data!.length
-                              ? null
-                              : selection;
+                        categories = selection.length == snapshot.data!.length
+                            ? null
+                            : selection;
 
-                          setState(() {});
-                        });
-                      },
-                    );
-                  }),
+                        setState(() {});
+                      });
+                    },
+                  );
+                },
+              ),
               const SizedBox(height: 24),
             ],
           ),

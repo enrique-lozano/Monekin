@@ -48,26 +48,33 @@ class TransactionListTile extends StatelessWidget {
 
   showTransactionActions(BuildContext context, MoneyTransaction transaction) {
     showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        builder: (context) {
-          return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: (TransactionViewActionService()
-                  .transactionDetailsActions(context, transaction: transaction)
-                  .map(
-                    (e) => ListTile(
-                      leading: Icon(e.icon),
-                      title: Text(e.label),
-                      onTap: e.onClick == null
-                          ? null
-                          : () {
-                              Navigator.pop(context);
-                              e.onClick!();
-                            },
-                    ),
-                  )).toList());
-        });
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children:
+              (TransactionViewActionService()
+                      .transactionDetailsActions(
+                        context,
+                        transaction: transaction,
+                      )
+                      .map(
+                        (e) => ListTile(
+                          leading: Icon(e.icon),
+                          title: Text(e.label),
+                          onTap: e.onClick == null
+                              ? null
+                              : () {
+                                  Navigator.pop(context);
+                                  e.onClick!();
+                                },
+                        ),
+                      ))
+                  .toList(),
+        );
+      },
+    );
   }
 
   @override
@@ -93,10 +100,11 @@ class TransactionListTile extends StatelessWidget {
                   const SizedBox(width: 4),
                   Icon(
                     transaction.status?.icon ?? Icons.repeat,
-                    color: transaction.status?.color.darken(0.1) ??
+                    color:
+                        transaction.status?.color.darken(0.1) ??
                         Theme.of(context).colorScheme.primary,
                     size: 12,
-                  )
+                  ),
                 ],
                 if (transaction.isReversed) ...[
                   const SizedBox(width: 6),
@@ -104,35 +112,36 @@ class TransactionListTile extends StatelessWidget {
                     MoneyTransaction.reversedIcon,
                     size: 12,
                     color: AppColors.of(context).brand,
-                  )
-                ]
+                  ),
+                ],
               ],
             ),
           ),
           CurrencyDisplayer(
             amountToConvert: periodicityInfo != null
                 ? transaction.getUnifiedMoneyForAPeriod(
-                    periodicity: periodicityInfo!)
+                    periodicity: periodicityInfo!,
+                  )
                 : transaction.value,
             currency: transaction.account.currency,
             integerStyle: TextStyle(
-                color: transaction.status == TransactionStatus.voided
-                    ? Colors.grey.shade400
-                    : transaction.isIncomeOrExpense
-                        ? transaction.type.color(context)
-                        : null,
-                decoration: transaction.status == TransactionStatus.voided
-                    ? TextDecoration.lineThrough
-                    : null,
-                fontWeight: FontWeight.bold),
+              color: transaction.status == TransactionStatus.voided
+                  ? Colors.grey.shade400
+                  : transaction.isIncomeOrExpense
+                  ? transaction.type.color(context)
+                  : null,
+              decoration: transaction.status == TransactionStatus.voided
+                  ? TextDecoration.lineThrough
+                  : null,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),
       subtitle: DefaultTextStyle(
-        style: Theme.of(context)
-            .textTheme
-            .labelSmall!
-            .copyWith(fontWeight: FontWeight.w300),
+        style: Theme.of(
+          context,
+        ).textTheme.labelSmall!.copyWith(fontWeight: FontWeight.w300),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -142,25 +151,28 @@ class TransactionListTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Flexible(
-                    child: Builder(builder: (context) {
-                      String secondaryText = '';
+                    child: Builder(
+                      builder: (context) {
+                        String secondaryText = '';
 
-                      if (!(transaction.recurrentInfo.isRecurrent &&
-                          periodicityInfo != null)) {
-                        if (showDate) {
-                          secondaryText =
-                              DateFormat.yMMMd().format(transaction.date);
-                        } else {
-                          secondaryText = transaction.notes ?? '';
+                        if (!(transaction.recurrentInfo.isRecurrent &&
+                            periodicityInfo != null)) {
+                          if (showDate) {
+                            secondaryText = DateFormat.yMMMd().format(
+                              transaction.date,
+                            );
+                          } else {
+                            secondaryText = transaction.notes ?? '';
+                          }
                         }
-                      }
 
-                      return Text(
-                        '${transaction.account.name} ${secondaryText.isNotEmpty ? ('• $secondaryText') : ''}',
-                        softWrap: false,
-                        overflow: TextOverflow.fade,
-                      );
-                    }),
+                        return Text(
+                          '${transaction.account.name} ${secondaryText.isNotEmpty ? ('• $secondaryText') : ''}',
+                          softWrap: false,
+                          overflow: TextOverflow.fade,
+                        );
+                      },
+                    ),
                   ),
                   if (transaction.recurrentInfo.isRecurrent &&
                       periodicityInfo != null) ...[
@@ -186,19 +198,21 @@ class TransactionListTile extends StatelessWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                              transaction.nextPayStatus!.displayDaysToPay(
-                                  context, transaction.daysToPay()),
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                                color:
-                                    transaction.nextPayStatus!.color(context),
-                              ))
+                            transaction.nextPayStatus!.displayDaysToPay(
+                              context,
+                              transaction.daysToPay(),
+                            ),
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: transaction.nextPayStatus!.color(context),
+                            ),
+                          ),
                         ],
                       ),
                     ),
                     const SizedBox(height: 2),
-                  ]
+                  ],
                 ],
               ),
             ),
@@ -206,27 +220,31 @@ class TransactionListTile extends StatelessWidget {
             if (periodicityInfo != null &&
                 transaction.recurrentInfo.isRecurrent)
               Text.rich(
-                TextSpan(children: [
-                  ...UINumberFormatter.currency(
-                          amountToConvert: transaction.value,
-                          currency: transaction.account.currency)
-                      .getTextSpanList(context),
-                  if (transaction.recurrentInfo.intervalEach! != 1)
-                    TextSpan(
+                TextSpan(
+                  children: [
+                    ...UINumberFormatter.currency(
+                      amountToConvert: transaction.value,
+                      currency: transaction.account.currency,
+                    ).getTextSpanList(context),
+                    if (transaction.recurrentInfo.intervalEach! != 1)
+                      TextSpan(
                         text:
-                            ' / ${transaction.recurrentInfo.intervalEach!.toStringAsFixed(0)}'),
-                  if (transaction.recurrentInfo.intervalEach! == 1)
-                    const TextSpan(text: ' / '),
-                  TextSpan(
+                            ' / ${transaction.recurrentInfo.intervalEach!.toStringAsFixed(0)}',
+                      ),
+                    if (transaction.recurrentInfo.intervalEach! == 1)
+                      const TextSpan(text: ' / '),
+                    TextSpan(
                       text: transaction.recurrentInfo.intervalPeriod!
                           .periodText(
                             context,
                             isPlural:
                                 transaction.recurrentInfo.intervalEach! > 1,
                           )
-                          .toLowerCase())
-                ]),
-              )
+                          .toLowerCase(),
+                    ),
+                  ],
+                ),
+              ),
           ],
         ),
       ),
@@ -247,9 +265,11 @@ class TransactionListTile extends StatelessWidget {
             : transaction.getDisplayIcon(context, size: 28, padding: 6),
       ),
       selected: isSelected,
-      selectedTileColor:
-          Theme.of(context).colorScheme.primary.withOpacity(0.15),
-      onTap: onTap ??
+      selectedTileColor: Theme.of(
+        context,
+      ).colorScheme.primary.withOpacity(0.15),
+      onTap:
+          onTap ??
           () {
             RouteUtils.pushRoute(
               context,

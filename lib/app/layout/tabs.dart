@@ -27,42 +27,52 @@ class TabsPageState extends State<TabsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final menuItems = getDestinations(context,
-        shortLabels: BreakPoint.of(context).isSmallerThan(BreakpointID.xl));
+    final menuItems = getDestinations(
+      context,
+      shortLabels: BreakPoint.of(context).isSmallerThan(BreakpointID.xl),
+    );
 
     selectedDestination ??= menuItems.elementAt(0);
 
-    final selectedNavItemIndex = menuItems
-        .indexWhere((element) => element.id == selectedDestination!.id);
+    final selectedNavItemIndex = menuItems.indexWhere(
+      (element) => element.id == selectedDestination!.id,
+    );
 
     return Scaffold(
-      bottomNavigationBar: BreakPoint.of(context)
-                  .isLargerThan(BreakpointID.sm) ||
+      bottomNavigationBar:
+          BreakPoint.of(context).isLargerThan(BreakpointID.sm) ||
               !(0 <= selectedNavItemIndex &&
                   selectedNavItemIndex < menuItems.length)
           ? null
           : NavigationBar(
-              backgroundColor:
-                  Theme.of(context).colorScheme.surfaceContainerHigh,
-              indicatorColor:
-                  Theme.of(context).colorScheme.primary.withOpacity(0.2),
+              backgroundColor: Theme.of(
+                context,
+              ).colorScheme.surfaceContainerHigh,
+              indicatorColor: Theme.of(
+                context,
+              ).colorScheme.primary.withOpacity(0.2),
               destinations: menuItems
                   .map((e) => e.toNavigationDestinationWidget(context))
                   .toList(),
               selectedIndex: selectedNavItemIndex,
               onDestinationSelected: (e) => changePage(menuItems.elementAt(e)),
             ),
-      body: Builder(builder: (context) {
-        final allDestinations = getAllDestinations(context,
-            shortLabels: BreakPoint.of(context).isSmallerThan(BreakpointID.xl));
+      body: Builder(
+        builder: (context) {
+          final allDestinations = getAllDestinations(
+            context,
+            shortLabels: BreakPoint.of(context).isSmallerThan(BreakpointID.xl),
+          );
 
-        return FadeIndexedStack(
-          index: allDestinations
-              .indexWhere((element) => element.id == selectedDestination?.id),
-          duration: const Duration(milliseconds: 300),
-          children: allDestinations.map((e) => e.destination).toList(),
-        );
-      }),
+          return FadeIndexedStack(
+            index: allDestinations.indexWhere(
+              (element) => element.id == selectedDestination?.id,
+            ),
+            duration: const Duration(milliseconds: 300),
+            children: allDestinations.map((e) => e.destination).toList(),
+          );
+        },
+      ),
       // selectedDestination?.destination ?? const SizedBox.shrink(),
     );
   }
@@ -80,9 +90,7 @@ class FadeIndexedStack extends StatefulWidget {
     super.key,
     required this.index,
     required this.children,
-    this.duration = const Duration(
-      milliseconds: 250,
-    ),
+    this.duration = const Duration(milliseconds: 250),
     this.alignment = AlignmentDirectional.topStart,
     this.textDirection,
     this.sizing = StackFit.loose,
@@ -94,8 +102,10 @@ class FadeIndexedStack extends StatefulWidget {
 
 class FadeIndexedStackState extends State<FadeIndexedStack>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _controller =
-      AnimationController(vsync: this, duration: widget.duration);
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: widget.duration,
+  );
 
   @override
   void didUpdateWidget(FadeIndexedStack oldWidget) {

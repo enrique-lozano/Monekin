@@ -7,7 +7,9 @@ import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 Future<ModalResult<String?>?> showLanguageSelectorBottomSheet(
-    BuildContext context, LanguageSelector langSelector) {
+  BuildContext context,
+  LanguageSelector langSelector,
+) {
   return showModalBottomSheet<ModalResult<String?>>(
     context: context,
     showDragHandle: true,
@@ -51,9 +53,7 @@ class LanguageSelector extends StatelessWidget {
                 Flexible(
                   child: HTMLText(
                     htmlString: t.settings.lang_help,
-                    tags: {
-                      'a': TextStyle(color: AppColors.of(context).link),
-                    },
+                    tags: {'a': TextStyle(color: AppColors.of(context).link)},
                   ),
                 ),
               ],

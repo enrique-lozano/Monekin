@@ -27,9 +27,7 @@ abstract class RouteUtils {
         final tween = Tween(
           begin: const Offset(0, 0.05),
           end: Offset.zero,
-        ).chain(
-          CurveTween(curve: Curves.easeOut),
-        );
+        ).chain(CurveTween(curve: Curves.easeOut));
 
         return SlideTransition(
           position: animation.drive(tween),
@@ -46,11 +44,12 @@ abstract class RouteUtils {
   static void popAllRoutesExceptFirst() {
     // This function can be useful when we want to return to the main layout page
     navigatorKey.currentState!.pushAndRemoveUntil(
-        PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) => const SizedBox(),
-          transitionDuration: const Duration(seconds: 0),
-        ),
-        (route) => route.isFirst);
+      PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) => const SizedBox(),
+        transitionDuration: const Duration(seconds: 0),
+      ),
+      (route) => route.isFirst,
+    );
 
     navigatorKey.currentState!.pop();
   }

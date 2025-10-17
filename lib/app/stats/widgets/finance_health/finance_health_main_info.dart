@@ -13,21 +13,24 @@ class FinanceHealthMainInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text.rich(
-          TextSpan(children: [
-            TextSpan(
-              text: financeHealthData.healthyScoreString(),
-              style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                    color: FinanceHealthData.getHealthyValueColor(
-                        financeHealthData.healthyScore),
+          TextSpan(
+            children: [
+              TextSpan(
+                text: financeHealthData.healthyScoreString(),
+                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                  color: FinanceHealthData.getHealthyValueColor(
+                    financeHealthData.healthyScore,
                   ),
-            ),
-            TextSpan(
-              text: ' / 100',
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    fontWeight: FontWeight.w300,
-                  ),
-            ),
-          ]),
+                ),
+              ),
+              TextSpan(
+                text: ' / 100',
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w300),
+              ),
+            ],
+          ),
         ),
         AnimatedProgressBar(
           value: (financeHealthData.healthyScore ?? 20) / 100,
@@ -35,15 +38,17 @@ class FinanceHealthMainInfo extends StatelessWidget {
           radius: 24,
           width: 4,
           color: FinanceHealthData.getHealthyValueColor(
-              financeHealthData.healthyScore),
+            financeHealthData.healthyScore,
+          ),
         ),
         const SizedBox(height: 4),
         Text(
           financeHealthData.getHealthyScoreReviewTitle(context),
           style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                color: FinanceHealthData.getHealthyValueColor(
-                    financeHealthData.healthyScore),
-              ),
+            color: FinanceHealthData.getHealthyValueColor(
+              financeHealthData.healthyScore,
+            ),
+          ),
         ),
         const SizedBox(height: 12),
         Text(

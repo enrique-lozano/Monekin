@@ -35,11 +35,13 @@ class SineCurve extends Curve {
 class ShakeWidgetState extends AnimationControllerState<ShakeWidget> {
   ShakeWidgetState(super.duration);
 
-  late final Animation<double> _sineAnimation =
-      Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-    parent: animationController,
-    curve: SineCurve(count: widget.shakeCount.toDouble()),
-  ));
+  late final Animation<double> _sineAnimation = Tween(begin: 0.0, end: 1.0)
+      .animate(
+        CurvedAnimation(
+          parent: animationController,
+          curve: SineCurve(count: widget.shakeCount.toDouble()),
+        ),
+      );
 
   @override
   void initState() {

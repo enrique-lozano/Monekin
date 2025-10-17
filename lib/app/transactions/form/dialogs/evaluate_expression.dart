@@ -82,10 +82,9 @@ enum CalculatorOperator {
 List<String> splitExprByNumbersAndOperator(String expression) {
   final operators = CalculatorOperator.getAllSymbols().join("|\\");
   // ignore: prefer_interpolation_to_compose_strings
-  return RegExp(r'(\d+\.?\d*|\' + operators + ')')
-      .allMatches(expression)
-      .map((m) => m.group(0)!)
-      .toList();
+  return RegExp(
+    r'(\d+\.?\d*|\' + operators + ')',
+  ).allMatches(expression).map((m) => m.group(0)!).toList();
 }
 
 double evaluateExpression(String expression) {

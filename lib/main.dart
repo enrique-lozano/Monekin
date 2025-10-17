@@ -21,22 +21,26 @@ void main() async {
   await UserSettingService.instance.initializeGlobalStateMap();
   await AppDataService.instance.initializeGlobalStateMap();
 
-  PrivateModeService.instance
-      .setPrivateMode(appStateSettings[SettingKey.privateModeAtLaunch] == '1');
+  PrivateModeService.instance.setPrivateMode(
+    appStateSettings[SettingKey.privateModeAtLaunch] == '1',
+  );
 
   // Set plural resolver for Turkish
   LocaleSettings.setPluralResolver(
     language: 'tr',
-    cardinalResolver: (n,
-        {String? few,
-        String? many,
-        String? one,
-        String? other,
-        String? two,
-        String? zero}) {
-      if (n == 1) return 'one';
-      return 'other';
-    },
+    cardinalResolver:
+        (
+          n, {
+          String? few,
+          String? many,
+          String? one,
+          String? other,
+          String? two,
+          String? zero,
+        }) {
+          if (n == 1) return 'one';
+          return 'other';
+        },
   );
 
   runApp(InitializeApp(key: appStateKey));
@@ -69,9 +73,7 @@ class _InitializeAppState extends State<InitializeApp> {
 }
 
 class MonekinAppEntryPoint extends StatelessWidget {
-  const MonekinAppEntryPoint({
-    super.key,
-  });
+  const MonekinAppEntryPoint({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -94,11 +96,13 @@ class MonekinAppEntryPoint extends StatelessWidget {
 
     if (lang != null && lang.isNotEmpty) {
       Logger.printDebug(
-          'App language found in DB. Setting the locale to `$lang`...');
+        'App language found in DB. Setting the locale to `$lang`...',
+      );
       LocaleSettings.setLocaleRaw(lang).then((setLocale) {
         if (setLocale.languageTag != lang) {
           Logger.printDebug(
-              'Warning: The requested locale `$lang` is not available. Fallback to `${setLocale.languageTag}`.');
+            'Warning: The requested locale `$lang` is not available. Fallback to `${setLocale.languageTag}`.',
+          );
 
           // Set auto as a language:
           UserSettingService.instance
@@ -113,7 +117,8 @@ class MonekinAppEntryPoint extends StatelessWidget {
     }
 
     Logger.printDebug(
-        'App language not found in DB. Setting the app locale...');
+      'App language not found in DB. Setting the app locale...',
+    );
 
     if (lang != null) {
       // Set auto as a language:
@@ -121,27 +126,34 @@ class MonekinAppEntryPoint extends StatelessWidget {
     }
 
     // Uses locale of the device, fallbacks to base locale. Returns the locale which has been set:
-    LocaleSettings.useDeviceLocale().then((setLocale) {
-      Logger.printDebug(
-          'App language set to device language: ${setLocale.languageTag}');
-    }).catchError((error) {
-      Logger.printDebug(
-          'Error setting app language to device language: $error');
-    }).whenComplete(() {
-      // The set locale should be accessible via LocaleSettings.currentLocale
-      Logger.printDebug(
-          'Current locale: ${LocaleSettings.currentLocale.languageTag}');
-    });
+    LocaleSettings.useDeviceLocale()
+        .then((setLocale) {
+          Logger.printDebug(
+            'App language set to device language: ${setLocale.languageTag}',
+          );
+        })
+        .catchError((error) {
+          Logger.printDebug(
+            'Error setting app language to device language: $error',
+          );
+        })
+        .whenComplete(() {
+          // The set locale should be accessible via LocaleSettings.currentLocale
+          Logger.printDebug(
+            'Current locale: ${LocaleSettings.currentLocale.languageTag}',
+          );
+        });
   }
 }
 
 class MaterialAppContainer extends StatelessWidget {
-  const MaterialAppContainer(
-      {super.key,
-      required this.themeMode,
-      required this.accentColor,
-      required this.amoledMode,
-      required this.introSeen});
+  const MaterialAppContainer({
+    super.key,
+    required this.themeMode,
+    required this.accentColor,
+    required this.amoledMode,
+    required this.introSeen,
+  });
 
   final ThemeMode themeMode;
   final String accentColor;
@@ -155,54 +167,63 @@ class MaterialAppContainer extends StatelessWidget {
     Intl.defaultLocale = LocaleSettings.currentLocale.languageTag;
 
     return DynamicColorBuilder(
-        builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
-      return MaterialApp(
-        title: 'Monekin',
-        debugShowCheckedModeBanner: false,
-        locale: TranslationProvider.of(context).flutterLocale,
-        scrollBehavior: ScrollBehaviorOverride(),
-        supportedLocales: AppLocaleUtils.supportedLocales,
-        localizationsDelegates: GlobalMaterialLocalizations.delegates,
-        theme: getThemeData(context,
+      builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+        return MaterialApp(
+          title: 'Monekin',
+          debugShowCheckedModeBanner: false,
+          locale: TranslationProvider.of(context).flutterLocale,
+          scrollBehavior: ScrollBehaviorOverride(),
+          supportedLocales: AppLocaleUtils.supportedLocales,
+          localizationsDelegates: GlobalMaterialLocalizations.delegates,
+          theme: getThemeData(
+            context,
             isDark: false,
             amoledMode: amoledMode,
             lightDynamic: lightDynamic,
             darkDynamic: darkDynamic,
-            accentColor: accentColor),
-        darkTheme: getThemeData(context,
+            accentColor: accentColor,
+          ),
+          darkTheme: getThemeData(
+            context,
             isDark: true,
             amoledMode: amoledMode,
             lightDynamic: lightDynamic,
             darkDynamic: darkDynamic,
-            accentColor: accentColor),
-        themeMode: themeMode,
-        navigatorKey: navigatorKey,
-        navigatorObservers: [MainLayoutNavObserver()],
-        builder: (context, child) {
-          return Overlay(initialEntries: [
-            OverlayEntry(
-              builder: (context) => Stack(
-                children: [
-                  Row(
+            accentColor: accentColor,
+          ),
+          themeMode: themeMode,
+          navigatorKey: navigatorKey,
+          navigatorObservers: [MainLayoutNavObserver()],
+          builder: (context, child) {
+            return Overlay(
+              initialEntries: [
+                OverlayEntry(
+                  builder: (context) => Stack(
                     children: [
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 1500),
-                        curve: Curves.easeInOutCubicEmphasized,
-                        width:
-                            introSeen ? getNavigationSidebarWidth(context) : 0,
-                        color: Theme.of(context).canvasColor,
+                      Row(
+                        children: [
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 1500),
+                            curve: Curves.easeInOutCubicEmphasized,
+                            width: introSeen
+                                ? getNavigationSidebarWidth(context)
+                                : 0,
+                            color: Theme.of(context).canvasColor,
+                          ),
+                          Expanded(child: child ?? const SizedBox.shrink()),
+                        ],
                       ),
-                      Expanded(child: child ?? const SizedBox.shrink()),
+                      if (introSeen)
+                        NavigationSidebar(key: navigationSidebarKey),
                     ],
                   ),
-                  if (introSeen) NavigationSidebar(key: navigationSidebarKey)
-                ],
-              ),
-            ),
-          ]);
-        },
-        home: introSeen ? TabsPage(key: tabsPageKey) : const IntroPage(),
-      );
-    });
+                ),
+              ],
+            );
+          },
+          home: introSeen ? TabsPage(key: tabsPageKey) : const IntroPage(),
+        );
+      },
+    );
   }
 }

@@ -47,19 +47,20 @@ class Category extends CategoryInDB {
     }
   }
 
-  Category(
-      {required super.id,
-      required super.name,
-      required super.iconId,
-      required super.displayOrder,
-      String? color,
-      CategoryType? type,
-      CategoryInDB? parentCategory})
-      : _color = color,
-        _type = type,
-        parentCategory =
-            parentCategory != null ? fromDB(parentCategory, null) : null,
-        super(parentCategoryID: parentCategory?.id);
+  Category({
+    required super.id,
+    required super.name,
+    required super.iconId,
+    required super.displayOrder,
+    String? color,
+    CategoryType? type,
+    CategoryInDB? parentCategory,
+  }) : _color = color,
+       _type = type,
+       parentCategory = parentCategory != null
+           ? fromDB(parentCategory, null)
+           : null,
+       super(parentCategoryID: parentCategory?.id);
 
   /// Returns whether the category is a main (or root) category or not
   bool get isMainCategory => parentCategoryID == null;
@@ -81,11 +82,11 @@ class Category extends CategoryInDB {
       );
 
   static Category unkown() => Category(
-        id: 'unknown-category',
-        displayOrder: 1000,
-        iconId: SupportedIconService.instance.defaultSupportedIcon.id,
-        name: 'Unknown Category',
-        type: CategoryType.B,
-        color: '737373',
-      );
+    id: 'unknown-category',
+    displayOrder: 1000,
+    iconId: SupportedIconService.instance.defaultSupportedIcon.id,
+    name: 'Unknown Category',
+    type: CategoryType.B,
+    color: '737373',
+  );
 }

@@ -10,10 +10,7 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 import '../../../core/presentation/app_colors.dart';
 
 class DonateButton extends StatefulWidget {
-  const DonateButton({
-    super.key,
-    required this.iapConnection,
-  });
+  const DonateButton({super.key, required this.iapConnection});
 
   final InAppPurchase iapConnection;
 
@@ -41,13 +38,19 @@ class _DonateButtonState extends State<DonateButton> {
 
     final Stream purchaseUpdated = IAPConnection.instance.purchaseStream;
 
-    _subscription = purchaseUpdated.listen((purchaseDetailsList) {
-      _listenToPurchaseUpdated(purchaseDetailsList);
-    }, onDone: () {
-      _subscription?.cancel();
-    }, onError: (error) {
-      showSnackbarMessage(context, t.more.help_us.donate_err);
-    }) as StreamSubscription<List<PurchaseDetails>>;
+    _subscription =
+        purchaseUpdated.listen(
+              (purchaseDetailsList) {
+                _listenToPurchaseUpdated(purchaseDetailsList);
+              },
+              onDone: () {
+                _subscription?.cancel();
+              },
+              onError: (error) {
+                showSnackbarMessage(context, t.more.help_us.donate_err);
+              },
+            )
+            as StreamSubscription<List<PurchaseDetails>>;
   }
 
   void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
@@ -91,7 +94,8 @@ class _DonateButtonState extends State<DonateButton> {
             snackbarDisplayer(
               const SnackBar(
                 content: Text(
-                    'The current platform not supported or the store is not ready yet'),
+                  'The current platform not supported or the store is not ready yet',
+                ),
               ),
             );
 
@@ -100,24 +104,21 @@ class _DonateButtonState extends State<DonateButton> {
 
           const Set<String> productsIDs = <String>{'donate'};
 
-          final ProductDetailsResponse response =
-              await widget.iapConnection.queryProductDetails(productsIDs);
+          final ProductDetailsResponse response = await widget.iapConnection
+              .queryProductDetails(productsIDs);
 
           if (response.notFoundIDs.isNotEmpty) {
             snackbarDisplayer(
               SnackBar(
                 content: Text(
-                    "Products not found -> ${response.notFoundIDs.join(',')}"),
+                  "Products not found -> ${response.notFoundIDs.join(',')}",
+                ),
               ),
             );
 
             return;
           } else if (response.error != null) {
-            snackbarDisplayer(
-              SnackBar(
-                content: Text(response.error!.message),
-              ),
-            );
+            snackbarDisplayer(SnackBar(content: Text(response.error!.message)));
 
             return;
           }
@@ -135,9 +136,12 @@ class _DonateButtonState extends State<DonateButton> {
               ? AppColors.of(context).danger.lighten(0.8)
               : AppColors.of(context).danger.withOpacity(0.2),
           shape: RoundedRectangleBorder(
-              side: BorderSide(
-                  color: Theme.of(context).colorScheme.tertiary, width: 2),
-              borderRadius: BorderRadius.circular(8)),
+            side: BorderSide(
+              color: Theme.of(context).colorScheme.tertiary,
+              width: 2,
+            ),
+            borderRadius: BorderRadius.circular(8),
+          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(

@@ -47,8 +47,10 @@ void main() {
 
     await tester.tap(find.text(t.settings.lang_title));
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(LanguageSelector, t.settings.lang_title),
-        findsOneWidget);
+    expect(
+      find.widgetWithText(LanguageSelector, t.settings.lang_title),
+      findsOneWidget,
+    );
     await tester.pageBack();
     await tester.pumpAndSettle();
 
@@ -68,7 +70,9 @@ void main() {
     await tester.tap(find.text(t.backup.import.restore_backup));
     await tester.pumpAndSettle();
     expect(
-        find.text(t.backup.import.restore_backup_warn_title), findsOneWidget);
+      find.text(t.backup.import.restore_backup_warn_title),
+      findsOneWidget,
+    );
 
     await tester.pageBack();
     await tester.pumpAndSettle();
@@ -77,7 +81,9 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(ImportCSVPage), findsOneWidget);
     expect(
-        find.text(t.backup.import.manual_import.steps.first), findsOneWidget);
+      find.text(t.backup.import.manual_import.steps.first),
+      findsOneWidget,
+    );
 
     await tester.tap(find.byTooltip('Back').first);
     await tester.pumpAndSettle();
@@ -110,8 +116,9 @@ void main() {
     await tester.tap(find.text(t.budgets.title)); // "Budgets"
     await tester.pumpAndSettle();
     expect(find.byType(BudgetsPage), findsOneWidget);
-    await tester
-        .tap(find.widgetWithText(FloatingActionButton, t.budgets.form.create));
+    await tester.tap(
+      find.widgetWithText(FloatingActionButton, t.budgets.form.create),
+    );
     await tester.pumpAndSettle();
     expect(find.byType(BudgetFormPage), findsOneWidget);
     await tester.tap(find.byTooltip('Back').first);
@@ -121,7 +128,8 @@ void main() {
     await tester.pumpAndSettle();
 
     await tester.tap(
-        find.text(t.recurrent_transactions.title_short)); // "Rec. transactions"
+      find.text(t.recurrent_transactions.title_short),
+    ); // "Rec. transactions"
     await tester.pumpAndSettle();
     expect(find.byType(RecurrentTransactionPage), findsOneWidget);
     await tester.pageBack();
@@ -130,8 +138,9 @@ void main() {
     await tester.tap(find.text(t.general.categories)); // "Categories"
     await tester.pumpAndSettle();
     expect(find.byType(CategoriesListPage), findsOneWidget);
-    await tester
-        .tap(find.widgetWithText(FloatingActionButton, t.categories.create));
+    await tester.tap(
+      find.widgetWithText(FloatingActionButton, t.categories.create),
+    );
     await tester.pumpAndSettle();
     expect(find.byType(CategoryFormPage), findsOneWidget);
     await tester.tap(find.byTooltip('Back').first);
@@ -155,8 +164,9 @@ void main() {
     await tester.tap(find.text(t.general.accounts)); // "Accounts"
     await tester.pumpAndSettle();
     expect(find.byType(AllAccountsPage), findsOneWidget);
-    await tester
-        .tap(find.widgetWithText(FloatingActionButton, t.account.form.create));
+    await tester.tap(
+      find.widgetWithText(FloatingActionButton, t.account.form.create),
+    );
     await tester.pumpAndSettle();
     expect(find.byType(AccountFormPage), findsOneWidget);
     await tester.tap(find.byTooltip('Back').first);

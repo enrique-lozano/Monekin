@@ -10,17 +10,18 @@ DatabaseConnection connect(
   bool logStatements = false,
   bool inMemory = false,
 }) {
-  return DatabaseConnection.delayed(Future.sync(() async {
-    if (inMemory) {
+  return DatabaseConnection.delayed(
+    Future.sync(() async {
+      if (inMemory) {
+        return DatabaseConnection(
+          NativeDatabase.memory(logStatements: logStatements),
+        );
+      }
+      final dbFolder = await getApplicationDocumentsDirectory();
+      final file = File(p.join(dbFolder.path, dbName));
       return DatabaseConnection(
-        NativeDatabase.memory(logStatements: logStatements),
+        NativeDatabase.createInBackground(file, logStatements: logStatements),
       );
-    }
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, dbName));
-    return DatabaseConnection(NativeDatabase.createInBackground(
-      file,
-      logStatements: logStatements,
-    ));
-  }));
+    }),
+  );
 }

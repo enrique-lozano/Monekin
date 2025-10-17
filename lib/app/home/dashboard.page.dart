@@ -52,9 +52,9 @@ class _DashboardPageState extends State<DashboardPage> {
 
       bool shouldExtendButton =
           BreakPoint.of(context).isLargerThan(BreakpointID.md) ||
-              _scrollController.offset <= 10 ||
-              _scrollController.position.userScrollDirection !=
-                  ScrollDirection.reverse;
+          _scrollController.offset <= 10 ||
+          _scrollController.position.userScrollDirection !=
+              ScrollDirection.reverse;
 
       if (isFloatingButtonExtended != shouldExtendButton) {
         setState(() {
@@ -93,38 +93,41 @@ class _DashboardPageState extends State<DashboardPage> {
 
     return Scaffold(
       appBar: EmptyAppBar(color: AppColors.of(context).consistentPrimary),
-      floatingActionButton:
-          NewTransactionButton(isExtended: isFloatingButtonExtended),
+      floatingActionButton: NewTransactionButton(
+        isExtended: isFloatingButtonExtended,
+      ),
       body: Stack(
         children: [
           SingleChildScrollView(
             controller: _scrollController,
-            child: Column(children: [
-              buildDashboadHeader(context, accountService),
+            child: Column(
+              children: [
+                buildDashboadHeader(context, accountService),
 
-              HorizontalScrollableAccountList(
-                dateRangeService: dateRangeService,
-              ),
-
-              // ------------- STATS GENERAL CARDS --------------
-
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 12,
-                  right: 12,
-                  top: 20,
-                  bottom: 64,
+                HorizontalScrollableAccountList(
+                  dateRangeService: dateRangeService,
                 ),
-                child: DashboardCards(dateRangeService: dateRangeService),
-              ),
 
-              if (kDebugMode)
-                TextButton(
+                // ------------- STATS GENERAL CARDS --------------
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 12,
+                    right: 12,
+                    top: 20,
+                    bottom: 64,
+                  ),
+                  child: DashboardCards(dateRangeService: dateRangeService),
+                ),
+
+                if (kDebugMode)
+                  TextButton(
                     onPressed: () {
                       RouteUtils.pushRoute(context, const DebugPage());
                     },
-                    child: const Text('DEBUG PAGE'))
-            ]),
+                    child: const Text('DEBUG PAGE'),
+                  ),
+              ],
+            ),
           ),
           Positioned(
             top: 0,
@@ -134,14 +137,16 @@ class _DashboardPageState extends State<DashboardPage> {
               expand: showSmallHeader,
               child: buildSmallHeader(context),
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
   Card buildDashboadHeader(
-      BuildContext context, AccountService accountService) {
+    BuildContext context,
+    AccountService accountService,
+  ) {
     return Card(
       color: AppColors.of(context).consistentPrimary,
       margin: const EdgeInsets.only(bottom: 24),
@@ -153,10 +158,11 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
       child: Padding(
         padding: EdgeInsets.fromLTRB(
-            _isIncomeExpenseAtSameLevel(context) ? 24 : 16,
-            16,
-            _isIncomeExpenseAtSameLevel(context) ? 24 : 16,
-            _isIncomeExpenseAtSameLevel(context) ? 24 : 14),
+          _isIncomeExpenseAtSameLevel(context) ? 24 : 16,
+          16,
+          _isIncomeExpenseAtSameLevel(context) ? 24 : 16,
+          _isIncomeExpenseAtSameLevel(context) ? 24 : 14,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -173,40 +179,16 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             const SizedBox(height: 8),
             StreamBuilder(
-                stream: AccountService.instance.getAccounts(),
-                builder: (context, accounts) {
-                  if (_isIncomeExpenseAtSameLevel(context)) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        totalBalanceIndicator(
-                            context, accounts, accountService),
-                        const SizedBox(width: 16),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            IncomeOrExpenseCard(
-                              type: TransactionType.E,
-                              startDate: dateRangeService.startDate,
-                              endDate: dateRangeService.endDate,
-                            ),
-                            IncomeOrExpenseCard(
-                              type: TransactionType.I,
-                              startDate: dateRangeService.startDate,
-                              endDate: dateRangeService.endDate,
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-                  }
-
-                  return Column(
+              stream: AccountService.instance.getAccounts(),
+              builder: (context, accounts) {
+                if (_isIncomeExpenseAtSameLevel(context)) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       totalBalanceIndicator(context, accounts, accountService),
-                      const SizedBox(height: 24),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      const SizedBox(width: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           IncomeOrExpenseCard(
                             type: TransactionType.E,
@@ -222,7 +204,31 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                     ],
                   );
-                })
+                }
+
+                return Column(
+                  children: [
+                    totalBalanceIndicator(context, accounts, accountService),
+                    const SizedBox(height: 24),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IncomeOrExpenseCard(
+                          type: TransactionType.E,
+                          startDate: dateRangeService.startDate,
+                          endDate: dateRangeService.endDate,
+                        ),
+                        IncomeOrExpenseCard(
+                          type: TransactionType.I,
+                          startDate: dateRangeService.startDate,
+                          endDate: dateRangeService.endDate,
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -232,11 +238,12 @@ class _DashboardPageState extends State<DashboardPage> {
   ActionChip buildDatePeriodSelector(BuildContext context) {
     return ActionChip(
       label: Text(
-          dateRangeService.getText(
-            context,
-            showLongMonth: MediaQuery.of(context).size.width > 360,
-          ),
-          style: TextStyle(color: AppColors.of(context).onConsistentPrimary)),
+        dateRangeService.getText(
+          context,
+          showLongMonth: MediaQuery.of(context).size.width > 360,
+        ),
+        style: TextStyle(color: AppColors.of(context).onConsistentPrimary),
+      ),
       backgroundColor: AppColors.of(context).consistentPrimary,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
@@ -248,9 +255,7 @@ class _DashboardPageState extends State<DashboardPage> {
       onPressed: () {
         openDatePeriodModal(
           context,
-          DatePeriodModal(
-            initialDatePeriod: dateRangeService.datePeriod,
-          ),
+          DatePeriodModal(initialDatePeriod: dateRangeService.datePeriod),
         ).then((value) {
           if (value == null) return;
 
@@ -269,12 +274,13 @@ class _DashboardPageState extends State<DashboardPage> {
     return Tappable(
       onTap: () {
         showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            showDragHandle: true,
-            builder: (context) {
-              return const EditProfileModal();
-            });
+          context: context,
+          isScrollControlled: true,
+          showDragHandle: true,
+          builder: (context) {
+            return const EditProfileModal();
+          },
+        );
       },
       bgColor: Colors.transparent,
       borderRadius: BorderRadius.circular(12),
@@ -284,19 +290,22 @@ class _DashboardPageState extends State<DashboardPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             StreamBuilder(
-                stream: UserSettingService.instance
-                    .getSettingFromDB(SettingKey.avatar),
-                builder: (context, snapshot) {
-                  return UserAvatar(
-                    avatar: snapshot.data,
-                    backgroundColor:
-                        AppColors.of(context).onConsistentPrimary.darken(0.25),
-                    border: Border.all(
-                      width: 2,
-                      color: AppColors.of(context).onConsistentPrimary,
-                    ),
-                  );
-                }),
+              stream: UserSettingService.instance.getSettingFromDB(
+                SettingKey.avatar,
+              ),
+              builder: (context, snapshot) {
+                return UserAvatar(
+                  avatar: snapshot.data,
+                  backgroundColor: AppColors.of(
+                    context,
+                  ).onConsistentPrimary.darken(0.25),
+                  border: Border.all(
+                    width: 2,
+                    color: AppColors.of(context).onConsistentPrimary,
+                  ),
+                );
+              },
+            ),
             const SizedBox(width: 12),
             Flexible(
               child: Column(
@@ -307,14 +316,15 @@ class _DashboardPageState extends State<DashboardPage> {
                     "Welcome again!",
                     softWrap: false,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontWeight: FontWeight.w300,
-                          overflow: TextOverflow.fade,
-                          color: AppColors.of(context).onConsistentPrimary,
-                        ),
+                      fontWeight: FontWeight.w300,
+                      overflow: TextOverflow.fade,
+                      color: AppColors.of(context).onConsistentPrimary,
+                    ),
                   ),
                   StreamBuilder(
-                    stream: UserSettingService.instance
-                        .getSettingFromDB(SettingKey.userName),
+                    stream: UserSettingService.instance.getSettingFromDB(
+                      SettingKey.userName,
+                    ),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
                         return const Skeleton(width: 70, height: 12);
@@ -324,34 +334,34 @@ class _DashboardPageState extends State<DashboardPage> {
                         snapshot.data!,
                         softWrap: false,
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
-                            overflow: TextOverflow.fade,
-                            color: AppColors.of(context).onConsistentPrimary),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                          overflow: TextOverflow.fade,
+                          color: AppColors.of(context).onConsistentPrimary,
+                        ),
                       );
                     },
                   ),
                   const SizedBox(width: 8),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget buildSmallHeader(
-    BuildContext context,
-  ) {
+  Widget buildSmallHeader(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(16),
-            bottomRight: Radius.circular(16),
-          ),
-          color: AppColors.of(context).consistentPrimary),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(16),
+          bottomRight: Radius.circular(16),
+        ),
+        color: AppColors.of(context).consistentPrimary,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -360,10 +370,9 @@ class _DashboardPageState extends State<DashboardPage> {
             children: [
               Text(
                 t.home.total_balance,
-                style: Theme.of(context)
-                    .textTheme
-                    .labelSmall!
-                    .copyWith(color: AppColors.of(context).onConsistentPrimary),
+                style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                  color: AppColors.of(context).onConsistentPrimary,
+                ),
               ),
               StreamBuilder(
                 stream: AccountService.instance.getAccountsMoney(),
@@ -372,13 +381,16 @@ class _DashboardPageState extends State<DashboardPage> {
                     return CurrencyDisplayer(
                       amountToConvert: snapshot.data!,
                       integerStyle: TextStyle(
-                          fontSize: snapshot.data! >= 10000000 &&
-                                  BreakPoint.of(context)
-                                      .isSmallerOrEqualTo(BreakpointID.xs)
-                              ? 22
-                              : 26,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.of(context).onConsistentPrimary),
+                        fontSize:
+                            snapshot.data! >= 10000000 &&
+                                BreakPoint.of(
+                                  context,
+                                ).isSmallerOrEqualTo(BreakpointID.xs)
+                            ? 22
+                            : 26,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.of(context).onConsistentPrimary,
+                      ),
                     );
                   }
 
@@ -388,7 +400,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ],
           ),
           const SizedBox(width: 12),
-          Flexible(child: buildDatePeriodSelector(context))
+          Flexible(child: buildDatePeriodSelector(context)),
         ],
       ),
     );
@@ -414,9 +426,11 @@ class _DashboardPageState extends State<DashboardPage> {
 
         sc.showSnackBar(
           SnackBar(
-            content: Text(!privateMode
-                ? t.settings.security.private_mode_activated
-                : t.settings.security.private_mode_deactivated),
+            content: Text(
+              !privateMode
+                  ? t.settings.security.private_mode_activated
+                  : t.settings.security.private_mode_deactivated,
+            ),
           ),
         );
       },
@@ -429,10 +443,9 @@ class _DashboardPageState extends State<DashboardPage> {
         children: [
           Text(
             t.home.total_balance,
-            style: Theme.of(context)
-                .textTheme
-                .labelSmall!
-                .copyWith(color: AppColors.of(context).onConsistentPrimary),
+            style: Theme.of(context).textTheme.labelSmall!.copyWith(
+              color: AppColors.of(context).onConsistentPrimary,
+            ),
           ),
           if (!accounts.hasData) ...[
             const Skeleton(width: 70, height: 40),
@@ -445,17 +458,18 @@ class _DashboardPageState extends State<DashboardPage> {
                 if (snapshot.hasData) {
                   return CurrencyDisplayer(
                     amountToConvert: snapshot.data!,
-                    integerStyle: Theme.of(context)
-                        .textTheme
-                        .headlineLarge!
+                    integerStyle: Theme.of(context).textTheme.headlineLarge!
                         .copyWith(
-                            fontSize: snapshot.data! >= 100000000 &&
-                                    BreakPoint.of(context)
-                                        .isSmallerOrEqualTo(BreakpointID.xs)
-                                ? 26
-                                : 32,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.of(context).onConsistentPrimary),
+                          fontSize:
+                              snapshot.data! >= 100000000 &&
+                                  BreakPoint.of(
+                                    context,
+                                  ).isSmallerOrEqualTo(BreakpointID.xs)
+                              ? 26
+                              : 32,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.of(context).onConsistentPrimary,
+                        ),
                   );
                 }
 
@@ -466,10 +480,11 @@ class _DashboardPageState extends State<DashboardPage> {
                 dateRangeService.endDate != null)
               StreamBuilder(
                 stream: accountService.getAccountsMoneyVariation(
-                    accounts: accounts.data!,
-                    startDate: dateRangeService.startDate,
-                    endDate: dateRangeService.endDate,
-                    convertToPreferredCurrency: true),
+                  accounts: accounts.data!,
+                  startDate: dateRangeService.startDate,
+                  endDate: dateRangeService.endDate,
+                  convertToPreferredCurrency: true,
+                ),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return const Skeleton(width: 52, height: 22);
@@ -484,7 +499,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   );
                 },
               ),
-          ]
+          ],
         ],
       ),
     );
@@ -498,9 +513,7 @@ class EmptyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: color,
-    );
+    return Container(color: color);
   }
 
   @override

@@ -7,7 +7,8 @@ Future<void> openExternalURL(BuildContext context, String urlToOpen) async {
   final messager = ScaffoldMessenger.of(context);
 
   if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-    messager
-        .showSnackBar(const SnackBar(content: Text('Could not launch url')));
+    messager.showSnackBar(
+      const SnackBar(content: Text('Could not launch url')),
+    );
   }
 }

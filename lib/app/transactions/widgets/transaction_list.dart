@@ -17,11 +17,7 @@ class TransactionListComponent extends StatefulWidget {
     required this.prevPage,
     this.orderBy,
     this.limit = 40,
-    this.onLoading = const Column(
-      children: [
-        LinearProgressIndicator(),
-      ],
-    ),
+    this.onLoading = const Column(children: [LinearProgressIndicator()]),
     required this.onEmptyList,
     required this.heroTagBuilder,
     this.onLongPress,
@@ -63,7 +59,7 @@ class TransactionListComponent extends StatefulWidget {
   final void Function(MoneyTransaction tr)? onTap;
 
   final void Function({List<MoneyTransaction> allTransactions})?
-      onTransactionsLoaded;
+  onTransactionsLoaded;
 
   final List<MoneyTransaction> selectedTransactions;
 
@@ -112,24 +108,23 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
           children: [
             Text(DateFormat.yMMMMd().format(date)),
             StreamBuilder(
-                initialData: 0.0,
-                stream: AccountService.instance.getAccountsBalance(
-                  filters: widget.filters.copyWith(
-                    minDate: DateTime(date.year, date.month, date.day),
-                    maxDate: DateTime(date.year, date.month, date.day + 1),
-                  ),
+              initialData: 0.0,
+              stream: AccountService.instance.getAccountsBalance(
+                filters: widget.filters.copyWith(
+                  minDate: DateTime(date.year, date.month, date.day),
+                  maxDate: DateTime(date.year, date.month, date.day + 1),
                 ),
-                builder: (context, snapshot) {
-                  final partialBalance = snapshot.data!;
+              ),
+              builder: (context, snapshot) {
+                final partialBalance = snapshot.data!;
 
-                  return CurrencyDisplayer(
-                    amountToConvert: partialBalance,
-                    integerStyle:
-                        Theme.of(context).textTheme.labelMedium!.copyWith(
-                              fontWeight: FontWeight.w400,
-                            ),
-                  );
-                })
+                return CurrencyDisplayer(
+                  amountToConvert: partialBalance,
+                  integerStyle: Theme.of(context).textTheme.labelMedium!
+                      .copyWith(fontWeight: FontWeight.w400),
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -139,80 +134,85 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: TransactionService.instance.getTransactions(
-          filters: widget.filters,
-          limit: widget.limit * currentPage,
-          orderBy: widget.orderBy,
-        ),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return widget.onLoading;
-          }
+      stream: TransactionService.instance.getTransactions(
+        filters: widget.filters,
+        limit: widget.limit * currentPage,
+        orderBy: widget.orderBy,
+      ),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return widget.onLoading;
+        }
 
-          final transactions = snapshot.data!;
+        final transactions = snapshot.data!;
 
-          if (widget.onTransactionsLoaded != null) {
-            widget.onTransactionsLoaded!(allTransactions: transactions);
-          }
+        if (widget.onTransactionsLoaded != null) {
+          widget.onTransactionsLoaded!(allTransactions: transactions);
+        }
 
-          if (transactions.isEmpty) {
-            return widget.onEmptyList;
-          }
+        if (transactions.isEmpty) {
+          return widget.onEmptyList;
+        }
 
-          return ListView.separated(
-              physics: const BouncingScrollPhysics(),
-              itemCount: transactions.length + 1,
-              controller: listScrollController,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                if (transactions.isEmpty) return Container();
+        return ListView.separated(
+          physics: const BouncingScrollPhysics(),
+          itemCount: transactions.length + 1,
+          controller: listScrollController,
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            if (transactions.isEmpty) return Container();
 
-                if (index == 0) {
-                  if (!widget.showGroupDivider) return Container();
-                  return dateSeparator(context, transactions[0].date);
-                }
+            if (index == 0) {
+              if (!widget.showGroupDivider) return Container();
+              return dateSeparator(context, transactions[0].date);
+            }
 
-                final transaction = transactions[index - 1];
+            final transaction = transactions[index - 1];
 
-                final heroTag = widget.heroTagBuilder != null
-                    ? widget.heroTagBuilder!(transaction)
-                    : null;
+            final heroTag = widget.heroTagBuilder != null
+                ? widget.heroTagBuilder!(transaction)
+                : null;
 
-                return TransactionListTile(
-                  transaction: transaction,
-                  prevPage: widget.prevPage,
-                  periodicityInfo: widget.periodicityInfo,
-                  showDate: !widget.showGroupDivider,
-                  showTime: widget.showGroupDivider,
-                  heroTag: heroTag,
-                  onTap: widget.onTap == null
-                      ? null
-                      : (() => widget.onTap!(transaction)),
-                  onLongPress: widget.onLongPress == null
-                      ? null
-                      : (() => widget.onLongPress!(transaction)),
-                  isSelected: widget.selectedTransactions
-                      .any((element) => element.id == transaction.id),
-                );
-              },
-              separatorBuilder: (context, index) {
-                if (index == 0 ||
-                    transactions.isEmpty ||
-                    index >= transactions.length) {
-                  return Container();
-                }
+            return TransactionListTile(
+              transaction: transaction,
+              prevPage: widget.prevPage,
+              periodicityInfo: widget.periodicityInfo,
+              showDate: !widget.showGroupDivider,
+              showTime: widget.showGroupDivider,
+              heroTag: heroTag,
+              onTap: widget.onTap == null
+                  ? null
+                  : (() => widget.onTap!(transaction)),
+              onLongPress: widget.onLongPress == null
+                  ? null
+                  : (() => widget.onLongPress!(transaction)),
+              isSelected: widget.selectedTransactions.any(
+                (element) => element.id == transaction.id,
+              ),
+            );
+          },
+          separatorBuilder: (context, index) {
+            if (index == 0 ||
+                transactions.isEmpty ||
+                index >= transactions.length) {
+              return Container();
+            }
 
-                if (!widget.showGroupDivider ||
-                    index >= 1 &&
-                        DateUtils.isSameDay(transactions[index - 1].date,
-                            transactions[index].date)) {
-                  // Separator between transactions in the same group
-                  return Container();
-                }
+            if (!widget.showGroupDivider ||
+                index >= 1 &&
+                    DateUtils.isSameDay(
+                      transactions[index - 1].date,
+                      transactions[index].date,
+                    )) {
+              // Separator between transactions in the same group
+              return Container();
+            }
 
-                // Group separator
-                return dateSeparator(context, transactions[index].date);
-              });
-        });
+            // Group separator
+            return dateSeparator(context, transactions[index].date);
+          },
+        );
+      },
+    );
   }
 }
