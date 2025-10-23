@@ -703,8 +703,15 @@
     "accent-color.descr": "Válassza ki, hogy az alkalmazás milyen színnel emelje ki a felület bizonyos részeit",
     "SWIPE-ACTIONS": {
       "title": "Csúsztatási műveletek",
+      "choose-description": "Válassza ki, hogy milyen művelet induljon el, ha a listában lévő tranzakciós tételt ezzel a csúsztatási irány segítségével csúsztatja",
       "swipe-left": "Csúsztasson balra",
-      "swipe-right": "Csúsztasson jobbra"
+      "swipe-right": "Csúsztasson jobbra",
+      "none": "Nincs akció",
+      "toggle-reconciled": "Váltás egyeztetve",
+      "toggle-pending": "Váltás függőben",
+      "toggle-voided": "Váltó érvénytelenítve",
+      "toggle-unreconciled": "Váltás nem egyeztetve",
+      "remove-status": "Állapot eltávolítása"
     },
     "SECURITY": {
       "title": "Biztonság",

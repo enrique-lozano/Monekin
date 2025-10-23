@@ -1068,8 +1068,15 @@ class _TranslationsSettingsSwipeActionsDe implements TranslationsSettingsSwipeAc
 
 	// Translations
 	@override String get title => 'Wischaktionen';
+	@override String get choose_description => 'Wählen Sie aus, welche Aktion ausgelöst wird, wenn Sie mit dieser Wischrichtung über ein Transaktionselement in der Liste wischen';
 	@override String get swipe_left => 'Wischen Sie nach links';
 	@override String get swipe_right => 'Wischen Sie nach rechts';
+	@override String get none => 'Keine Aktion';
+	@override String get toggle_reconciled => 'Toggle abgeglichen';
+	@override String get toggle_pending => 'Umschalten steht aus';
+	@override String get toggle_voided => 'Umschalten ungültig';
+	@override String get toggle_unreconciled => 'Nicht abgestimmt umschalten';
+	@override String get remove_status => 'Status entfernen';
 }
 
 // Path: settings.security
@@ -1989,8 +1996,15 @@ extension on TranslationsDe {
 			case 'settings.accent_color': return 'Akzentfarbe';
 			case 'settings.accent_color_descr': return 'Wähle die Farbe aus, mit der die App bestimmte Teile der Benutzeroberfläche hervorhebt';
 			case 'settings.swipe_actions.title': return 'Wischaktionen';
+			case 'settings.swipe_actions.choose_description': return 'Wählen Sie aus, welche Aktion ausgelöst wird, wenn Sie mit dieser Wischrichtung über ein Transaktionselement in der Liste wischen';
 			case 'settings.swipe_actions.swipe_left': return 'Wischen Sie nach links';
 			case 'settings.swipe_actions.swipe_right': return 'Wischen Sie nach rechts';
+			case 'settings.swipe_actions.none': return 'Keine Aktion';
+			case 'settings.swipe_actions.toggle_reconciled': return 'Toggle abgeglichen';
+			case 'settings.swipe_actions.toggle_pending': return 'Umschalten steht aus';
+			case 'settings.swipe_actions.toggle_voided': return 'Umschalten ungültig';
+			case 'settings.swipe_actions.toggle_unreconciled': return 'Nicht abgestimmt umschalten';
+			case 'settings.swipe_actions.remove_status': return 'Status entfernen';
 			case 'settings.security.title': return 'Sicherheit';
 			case 'settings.security.private_mode_at_launch': return 'Privatmodus beim Start';
 			case 'settings.security.private_mode_at_launch_descr': return 'Starte die App standardmäßig im privaten Modus';

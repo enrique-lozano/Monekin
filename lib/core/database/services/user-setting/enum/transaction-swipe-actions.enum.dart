@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 enum TransactionSwipeAction {
@@ -30,20 +29,40 @@ enum TransactionSwipeAction {
     }
   }
 
+  TransactionStatus toTransactionStatus() {
+    switch (this) {
+      case TransactionSwipeAction.voided:
+        return TransactionStatus.voided;
+      case TransactionSwipeAction.pending:
+        return TransactionStatus.pending;
+      case TransactionSwipeAction.reconciled:
+        return TransactionStatus.reconciled;
+      case TransactionSwipeAction.unreconciled:
+        return TransactionStatus.unreconciled;
+      default:
+        throw Exception('Cannot convert $this to TransactionStatus');
+    }
+  }
+
   Color color(BuildContext context) {
     switch (this) {
       case TransactionSwipeAction.delete:
-        return AppColors.of(context).danger;
+        return Theme.of(context).colorScheme.error;
       case TransactionSwipeAction.edit:
         return Theme.of(context).colorScheme.primary;
-      case TransactionSwipeAction.voided:
-        return TransactionStatus.voided.color;
-      case TransactionSwipeAction.pending:
-        return TransactionStatus.pending.color;
-      case TransactionSwipeAction.reconciled:
-        return TransactionStatus.reconciled.color;
-      case TransactionSwipeAction.unreconciled:
-        return TransactionStatus.unreconciled.color;
+      default:
+        return toTransactionStatus().color;
+    }
+  }
+
+  Color contrastColor(BuildContext context) {
+    switch (this) {
+      case TransactionSwipeAction.delete:
+        return Theme.of(context).colorScheme.onError;
+      case TransactionSwipeAction.edit:
+        return Theme.of(context).colorScheme.onPrimary;
+      default:
+        return Colors.white;
     }
   }
 
@@ -53,14 +72,8 @@ enum TransactionSwipeAction {
         return Icons.delete_forever_rounded;
       case TransactionSwipeAction.edit:
         return Icons.edit_rounded;
-      case TransactionSwipeAction.voided:
-        return TransactionStatus.voided.icon;
-      case TransactionSwipeAction.pending:
-        return TransactionStatus.pending.icon;
-      case TransactionSwipeAction.reconciled:
-        return TransactionStatus.reconciled.icon;
-      case TransactionSwipeAction.unreconciled:
-        return TransactionStatus.unreconciled.icon;
+      default:
+        return toTransactionStatus().icon;
     }
   }
 }
@@ -75,15 +88,15 @@ extension TransactionSwipeActionExtension on TransactionSwipeAction? {
       case TransactionSwipeAction.edit:
         return t.ui_actions.edit;
       case TransactionSwipeAction.voided:
-        return 'Set as Voided';
+        return t.settings.swipe_actions.toggle_voided;
       case TransactionSwipeAction.pending:
-        return 'Set as Pending';
+        return t.settings.swipe_actions.toggle_pending;
       case TransactionSwipeAction.reconciled:
-        return 'Set as Reconciled';
+        return t.settings.swipe_actions.toggle_reconciled;
       case TransactionSwipeAction.unreconciled:
-        return 'Set as Unreconciled';
+        return t.settings.swipe_actions.toggle_unreconciled;
       default:
-        return 'No Action';
+        return t.settings.swipe_actions.none;
     }
   }
 }

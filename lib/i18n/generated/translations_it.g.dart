@@ -1068,8 +1068,15 @@ class _TranslationsSettingsSwipeActionsIt implements TranslationsSettingsSwipeAc
 
 	// Translations
 	@override String get title => 'Azioni di scorrimento';
+	@override String get choose_description => 'Scegli quale azione verrà attivata quando fai scorrere un elemento di transazione nell\'elenco utilizzando questa direzione di scorrimento';
 	@override String get swipe_left => 'Scorri verso sinistra';
 	@override String get swipe_right => 'Scorri verso destra';
+	@override String get none => 'Nessuna azione';
+	@override String get toggle_reconciled => 'Attiva/disattiva riconciliato';
+	@override String get toggle_pending => 'Attiva/disattiva in sospeso';
+	@override String get toggle_voided => 'Attivazione/disattivazione annullata';
+	@override String get toggle_unreconciled => 'Attiva/disattiva non riconciliato';
+	@override String get remove_status => 'Rimuovi lo stato';
 }
 
 // Path: settings.security
@@ -1989,8 +1996,15 @@ extension on TranslationsIt {
 			case 'settings.accent_color': return 'Colore di accento';
 			case 'settings.accent_color_descr': return 'Scegli il colore che l\'app utilizzerà per enfatizzare determinate parti dell\'interfaccia';
 			case 'settings.swipe_actions.title': return 'Azioni di scorrimento';
+			case 'settings.swipe_actions.choose_description': return 'Scegli quale azione verrà attivata quando fai scorrere un elemento di transazione nell\'elenco utilizzando questa direzione di scorrimento';
 			case 'settings.swipe_actions.swipe_left': return 'Scorri verso sinistra';
 			case 'settings.swipe_actions.swipe_right': return 'Scorri verso destra';
+			case 'settings.swipe_actions.none': return 'Nessuna azione';
+			case 'settings.swipe_actions.toggle_reconciled': return 'Attiva/disattiva riconciliato';
+			case 'settings.swipe_actions.toggle_pending': return 'Attiva/disattiva in sospeso';
+			case 'settings.swipe_actions.toggle_voided': return 'Attivazione/disattivazione annullata';
+			case 'settings.swipe_actions.toggle_unreconciled': return 'Attiva/disattiva non riconciliato';
+			case 'settings.swipe_actions.remove_status': return 'Rimuovi lo stato';
 			case 'settings.security.title': return 'Sicurezza';
 			case 'settings.security.private_mode_at_launch': return 'Modalità privata all\'avvio';
 			case 'settings.security.private_mode_at_launch_descr': return 'Avvia l\'app in modalità privata per impostazione predefinita';

@@ -159,11 +159,14 @@ class TransactionViewActionService {
     }
   }
 
-  Future<int> updateTransactionStatus(String transactionId, TransactionStatus statusCodeString) {
+  Future<int> updateTransactionStatus(
+    String transactionId,
+    TransactionStatus? statusCodeString,
+  ) {
     final db = AppDB.instance;
 
-    return(db.update(db.transactions)
-      ..where((transaction) => transaction.id.equals(transactionId)))
-        .write(TransactionsCompanion(status:  Value(statusCodeString)));
+    return (db.update(db.transactions)
+          ..where((transaction) => transaction.id.equals(transactionId)))
+        .write(TransactionsCompanion(status: Value(statusCodeString)));
   }
 }

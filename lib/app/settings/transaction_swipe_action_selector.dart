@@ -45,7 +45,7 @@ class TransactionSwipeActionSelector extends StatelessWidget {
           action?.displayName(context) ?? null.displayName(context),
       valueGetter: (action) => action,
       title: title,
-      subtitle: t.settings.lang_descr,
+      subtitle: t.settings.swipe_actions.choose_description,
     );
   }
 }

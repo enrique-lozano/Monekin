@@ -1068,8 +1068,15 @@ class _TranslationsSettingsSwipeActionsHu implements TranslationsSettingsSwipeAc
 
 	// Translations
 	@override String get title => 'Csúsztatási műveletek';
+	@override String get choose_description => 'Válassza ki, hogy milyen művelet induljon el, ha a listában lévő tranzakciós tételt ezzel a csúsztatási irány segítségével csúsztatja';
 	@override String get swipe_left => 'Csúsztasson balra';
 	@override String get swipe_right => 'Csúsztasson jobbra';
+	@override String get none => 'Nincs akció';
+	@override String get toggle_reconciled => 'Váltás egyeztetve';
+	@override String get toggle_pending => 'Váltás függőben';
+	@override String get toggle_voided => 'Váltó érvénytelenítve';
+	@override String get toggle_unreconciled => 'Váltás nem egyeztetve';
+	@override String get remove_status => 'Állapot eltávolítása';
 }
 
 // Path: settings.security
@@ -1989,8 +1996,15 @@ extension on TranslationsHu {
 			case 'settings.accent_color': return 'Kiemelő szín';
 			case 'settings.accent_color_descr': return 'Válassza ki, hogy az alkalmazás milyen színnel emelje ki a felület bizonyos részeit';
 			case 'settings.swipe_actions.title': return 'Csúsztatási műveletek';
+			case 'settings.swipe_actions.choose_description': return 'Válassza ki, hogy milyen művelet induljon el, ha a listában lévő tranzakciós tételt ezzel a csúsztatási irány segítségével csúsztatja';
 			case 'settings.swipe_actions.swipe_left': return 'Csúsztasson balra';
 			case 'settings.swipe_actions.swipe_right': return 'Csúsztasson jobbra';
+			case 'settings.swipe_actions.none': return 'Nincs akció';
+			case 'settings.swipe_actions.toggle_reconciled': return 'Váltás egyeztetve';
+			case 'settings.swipe_actions.toggle_pending': return 'Váltás függőben';
+			case 'settings.swipe_actions.toggle_voided': return 'Váltó érvénytelenítve';
+			case 'settings.swipe_actions.toggle_unreconciled': return 'Váltás nem egyeztetve';
+			case 'settings.swipe_actions.remove_status': return 'Állapot eltávolítása';
 			case 'settings.security.title': return 'Biztonság';
 			case 'settings.security.private_mode_at_launch': return 'Privát mód indításkor';
 			case 'settings.security.private_mode_at_launch_descr': return 'Az alkalmazás alapértelmezés szerinti indítása privát módban';

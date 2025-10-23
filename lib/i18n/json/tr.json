@@ -703,8 +703,15 @@
     "accent-color.descr": "Uygulamanın arayüzün belirli kısımlarını vurgulamak için kullanacağı rengi seçin",
     "SWIPE-ACTIONS": {
       "title": "Kaydırma eylemleri",
+      "choose-description": "Bu kaydırma yönünü kullanarak listedeki bir işlem öğesini kaydırdığınızda hangi eylemin tetikleneceğini seçin",
       "swipe-left": "Sola kaydırın",
-      "swipe-right": "Sağa kaydırın"
+      "swipe-right": "Sağa kaydırın",
+      "none": "Eylem yok",
+      "toggle-reconciled": "Mutabık kılınmayı aç/kapat",
+      "toggle-pending": "Beklemede'yi aç/kapat",
+      "toggle-voided": "Geçiş iptal edildi",
+      "toggle-unreconciled": "Mutabık kılınmayanları aç/kapat",
+      "remove-status": "Durumu kaldır"
     },
     "SECURITY": {
       "title": "Güvenlik",

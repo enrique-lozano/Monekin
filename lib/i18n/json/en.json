@@ -691,8 +691,15 @@
     "accent-color.descr": "Choose the color the app will use to emphasize certain parts of the interface",
     "SWIPE-ACTIONS": {
       "title": "Swipe actions",
+      "choose-description": "Choose what action will be triggered when you swipe a transaction item in the list using this swipe direction",
       "swipe-left": "Swipe left",
-      "swipe-right": "Swipe right"
+      "swipe-right": "Swipe right",
+      "none": "No action",
+      "toggle-reconciled": "Toggle reconciled",
+      "toggle-pending": "Toggle pending",
+      "toggle-voided": "Toggle voided",
+      "toggle-unreconciled": "Toggle unreconciled",
+      "remove-status": "Remove status"
     },
     "SECURITY": {
       "title": "Seguridad",

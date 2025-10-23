@@ -1068,8 +1068,15 @@ class _TranslationsSettingsSwipeActionsZhTw implements TranslationsSettingsSwipe
 
 	// Translations
 	@override String get title => '滑動操作';
+	@override String get choose_description => '選擇當您使用此滑動方向滑動列表中的交易項目時將觸發什麼操作';
 	@override String get swipe_left => '向左滑動';
 	@override String get swipe_right => '向右滑動';
+	@override String get none => '無動作';
+	@override String get toggle_reconciled => '切換已調節';
+	@override String get toggle_pending => '切換待處理';
+	@override String get toggle_voided => '切換作廢';
+	@override String get toggle_unreconciled => '切換不可調和';
+	@override String get remove_status => '刪除狀態';
 }
 
 // Path: settings.security
@@ -1989,8 +1996,15 @@ extension on TranslationsZhTw {
 			case 'settings.accent_color': return '強調色';
 			case 'settings.accent_color_descr': return '選擇應用程式用來強調介面某些部分的顏色';
 			case 'settings.swipe_actions.title': return '滑動操作';
+			case 'settings.swipe_actions.choose_description': return '選擇當您使用此滑動方向滑動列表中的交易項目時將觸發什麼操作';
 			case 'settings.swipe_actions.swipe_left': return '向左滑動';
 			case 'settings.swipe_actions.swipe_right': return '向右滑動';
+			case 'settings.swipe_actions.none': return '無動作';
+			case 'settings.swipe_actions.toggle_reconciled': return '切換已調節';
+			case 'settings.swipe_actions.toggle_pending': return '切換待處理';
+			case 'settings.swipe_actions.toggle_voided': return '切換作廢';
+			case 'settings.swipe_actions.toggle_unreconciled': return '切換不可調和';
+			case 'settings.swipe_actions.remove_status': return '刪除狀態';
 			case 'settings.security.title': return '安全';
 			case 'settings.security.private_mode_at_launch': return '啟動時啟用的隱私模式';
 			case 'settings.security.private_mode_at_launch_descr': return '默認以隱私模式啟動應用程序';

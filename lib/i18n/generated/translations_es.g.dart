@@ -1067,9 +1067,16 @@ class _TranslationsSettingsSwipeActionsEs implements TranslationsSettingsSwipeAc
 	final TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Acciones de deslizamiento';
+	@override String get title => 'Acciones al deslizar el dedo';
+	@override String get choose_description => 'Elije qué acción se activará cuando deslices una transacción del listado de transacciones usando esta dirección de deslizamiento';
 	@override String get swipe_left => 'Desliza hacia la izquierda';
 	@override String get swipe_right => 'Desliza hacia la derecha';
+	@override String get none => 'No action';
+	@override String get toggle_reconciled => 'Alternar conciliado';
+	@override String get toggle_pending => 'Alternar pendiente';
+	@override String get toggle_voided => 'Alternar anulado';
+	@override String get toggle_unreconciled => 'Alternar no reconciliado';
+	@override String get remove_status => 'Eliminar estado';
 }
 
 // Path: settings.security
@@ -1990,9 +1997,16 @@ extension on TranslationsEs {
 			case 'settings.dynamic_colors_descr': return 'Usar el color de acento de su sistema siempre que sea posible';
 			case 'settings.accent_color': return 'Color de acento';
 			case 'settings.accent_color_descr': return 'Elegir el color que la aplicación usará para enfatizar ciertas partes de la interfaz';
-			case 'settings.swipe_actions.title': return 'Acciones de deslizamiento';
+			case 'settings.swipe_actions.title': return 'Acciones al deslizar el dedo';
+			case 'settings.swipe_actions.choose_description': return 'Elije qué acción se activará cuando deslices una transacción del listado de transacciones usando esta dirección de deslizamiento';
 			case 'settings.swipe_actions.swipe_left': return 'Desliza hacia la izquierda';
 			case 'settings.swipe_actions.swipe_right': return 'Desliza hacia la derecha';
+			case 'settings.swipe_actions.none': return 'No action';
+			case 'settings.swipe_actions.toggle_reconciled': return 'Alternar conciliado';
+			case 'settings.swipe_actions.toggle_pending': return 'Alternar pendiente';
+			case 'settings.swipe_actions.toggle_voided': return 'Alternar anulado';
+			case 'settings.swipe_actions.toggle_unreconciled': return 'Alternar no reconciliado';
+			case 'settings.swipe_actions.remove_status': return 'Eliminar estado';
 			case 'settings.security.title': return 'Seguridad';
 			case 'settings.security.private_mode_at_launch': return 'Modo privado al arrancar';
 			case 'settings.security.private_mode_at_launch_descr': return 'Arranca la app en modo privado por defecto';

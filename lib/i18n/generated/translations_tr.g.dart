@@ -1068,8 +1068,15 @@ class _TranslationsSettingsSwipeActionsTr implements TranslationsSettingsSwipeAc
 
 	// Translations
 	@override String get title => 'Kaydırma eylemleri';
+	@override String get choose_description => 'Bu kaydırma yönünü kullanarak listedeki bir işlem öğesini kaydırdığınızda hangi eylemin tetikleneceğini seçin';
 	@override String get swipe_left => 'Sola kaydırın';
 	@override String get swipe_right => 'Sağa kaydırın';
+	@override String get none => 'Eylem yok';
+	@override String get toggle_reconciled => 'Mutabık kılınmayı aç/kapat';
+	@override String get toggle_pending => 'Beklemede\'yi aç/kapat';
+	@override String get toggle_voided => 'Geçiş iptal edildi';
+	@override String get toggle_unreconciled => 'Mutabık kılınmayanları aç/kapat';
+	@override String get remove_status => 'Durumu kaldır';
 }
 
 // Path: settings.security
@@ -1989,8 +1996,15 @@ extension on TranslationsTr {
 			case 'settings.accent_color': return 'Vurgu rengi';
 			case 'settings.accent_color_descr': return 'Uygulamanın arayüzün belirli kısımlarını vurgulamak için kullanacağı rengi seçin';
 			case 'settings.swipe_actions.title': return 'Kaydırma eylemleri';
+			case 'settings.swipe_actions.choose_description': return 'Bu kaydırma yönünü kullanarak listedeki bir işlem öğesini kaydırdığınızda hangi eylemin tetikleneceğini seçin';
 			case 'settings.swipe_actions.swipe_left': return 'Sola kaydırın';
 			case 'settings.swipe_actions.swipe_right': return 'Sağa kaydırın';
+			case 'settings.swipe_actions.none': return 'Eylem yok';
+			case 'settings.swipe_actions.toggle_reconciled': return 'Mutabık kılınmayı aç/kapat';
+			case 'settings.swipe_actions.toggle_pending': return 'Beklemede\'yi aç/kapat';
+			case 'settings.swipe_actions.toggle_voided': return 'Geçiş iptal edildi';
+			case 'settings.swipe_actions.toggle_unreconciled': return 'Mutabık kılınmayanları aç/kapat';
+			case 'settings.swipe_actions.remove_status': return 'Durumu kaldır';
 			case 'settings.security.title': return 'Güvenlik';
 			case 'settings.security.private_mode_at_launch': return 'Başlangıçta özel mod';
 			case 'settings.security.private_mode_at_launch_descr': return 'Uygulamayı varsayılan olarak özel modda başlatın';

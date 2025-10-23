@@ -703,8 +703,15 @@
     "accent-color.descr": "選擇應用程式用來強調介面某些部分的顏色",
     "SWIPE-ACTIONS": {
       "title": "滑動操作",
+      "choose-description": "選擇當您使用此滑動方向滑動列表中的交易項目時將觸發什麼操作",
       "swipe-left": "向左滑動",
-      "swipe-right": "向右滑動"
+      "swipe-right": "向右滑動",
+      "none": "無動作",
+      "toggle-reconciled": "切換已調節",
+      "toggle-pending": "切換待處理",
+      "toggle-voided": "切換作廢",
+      "toggle-unreconciled": "切換不可調和",
+      "remove-status": "刪除狀態"
     },
     "SECURITY": {
       "title": "安全",

@@ -309,7 +309,11 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               if (result == null) return;
 
               UserSettingService.instance
-                  .setItem(direction, result.result?.name)
+                  .setItem(
+                    direction,
+                    result.result?.name,
+                    updateGlobalState: true,
+                  )
                   .then((value) => setState(() {}));
             });
           },

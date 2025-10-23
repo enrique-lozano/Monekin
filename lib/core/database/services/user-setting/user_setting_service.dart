@@ -25,7 +25,7 @@ enum SettingKey {
   amoledMode,
 
   transactionSwipeLeftAction,
-  transactionSwipeRightAction
+  transactionSwipeRightAction,
 }
 
 final Map<SettingKey, String?> appStateSettings = {};

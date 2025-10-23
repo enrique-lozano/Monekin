@@ -1068,8 +1068,15 @@ class _TranslationsSettingsSwipeActionsUk implements TranslationsSettingsSwipeAc
 
 	// Translations
 	@override String get title => 'Дії гортання';
+	@override String get choose_description => 'Виберіть, яка дія буде ініційована, коли ви проводите пальцем по елементу транзакції у списку в цьому напрямку';
 	@override String get swipe_left => 'Проведіть ліворуч';
 	@override String get swipe_right => 'Проведіть праворуч';
+	@override String get none => 'Ніяких дій';
+	@override String get toggle_reconciled => 'Перемикач узгоджено';
+	@override String get toggle_pending => 'Перемкнути в очікуванні';
+	@override String get toggle_voided => 'Перемикач скасовано';
+	@override String get toggle_unreconciled => 'Перемикач неузгоджений';
+	@override String get remove_status => 'Видалити статус';
 }
 
 // Path: settings.security
@@ -1989,8 +1996,15 @@ extension on TranslationsUk {
 			case 'settings.accent_color': return 'Колір акценту';
 			case 'settings.accent_color_descr': return 'Виберіть колір, який додаток буде використовувати для виділення певних частин інтерфейсу';
 			case 'settings.swipe_actions.title': return 'Дії гортання';
+			case 'settings.swipe_actions.choose_description': return 'Виберіть, яка дія буде ініційована, коли ви проводите пальцем по елементу транзакції у списку в цьому напрямку';
 			case 'settings.swipe_actions.swipe_left': return 'Проведіть ліворуч';
 			case 'settings.swipe_actions.swipe_right': return 'Проведіть праворуч';
+			case 'settings.swipe_actions.none': return 'Ніяких дій';
+			case 'settings.swipe_actions.toggle_reconciled': return 'Перемикач узгоджено';
+			case 'settings.swipe_actions.toggle_pending': return 'Перемкнути в очікуванні';
+			case 'settings.swipe_actions.toggle_voided': return 'Перемикач скасовано';
+			case 'settings.swipe_actions.toggle_unreconciled': return 'Перемикач неузгоджений';
+			case 'settings.swipe_actions.remove_status': return 'Видалити статус';
 			case 'settings.security.title': return 'Безпека';
 			case 'settings.security.private_mode_at_launch': return 'Приватний режим під час запуску';
 			case 'settings.security.private_mode_at_launch_descr': return 'За замовчуванням запускати програму в приватному режимі';

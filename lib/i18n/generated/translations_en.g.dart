@@ -1969,11 +1969,32 @@ class TranslationsSettingsSwipeActionsEn {
 	/// en: 'Swipe actions'
 	String get title => 'Swipe actions';
 
+	/// en: 'Choose what action will be triggered when you swipe a transaction item in the list using this swipe direction'
+	String get choose_description => 'Choose what action will be triggered when you swipe a transaction item in the list using this swipe direction';
+
 	/// en: 'Swipe left'
 	String get swipe_left => 'Swipe left';
 
 	/// en: 'Swipe right'
 	String get swipe_right => 'Swipe right';
+
+	/// en: 'No action'
+	String get none => 'No action';
+
+	/// en: 'Toggle reconciled'
+	String get toggle_reconciled => 'Toggle reconciled';
+
+	/// en: 'Toggle pending'
+	String get toggle_pending => 'Toggle pending';
+
+	/// en: 'Toggle voided'
+	String get toggle_voided => 'Toggle voided';
+
+	/// en: 'Toggle unreconciled'
+	String get toggle_unreconciled => 'Toggle unreconciled';
+
+	/// en: 'Remove status'
+	String get remove_status => 'Remove status';
 }
 
 // Path: settings.security
@@ -3102,8 +3123,15 @@ extension on Translations {
 			case 'settings.accent_color': return 'Accent color';
 			case 'settings.accent_color_descr': return 'Choose the color the app will use to emphasize certain parts of the interface';
 			case 'settings.swipe_actions.title': return 'Swipe actions';
+			case 'settings.swipe_actions.choose_description': return 'Choose what action will be triggered when you swipe a transaction item in the list using this swipe direction';
 			case 'settings.swipe_actions.swipe_left': return 'Swipe left';
 			case 'settings.swipe_actions.swipe_right': return 'Swipe right';
+			case 'settings.swipe_actions.none': return 'No action';
+			case 'settings.swipe_actions.toggle_reconciled': return 'Toggle reconciled';
+			case 'settings.swipe_actions.toggle_pending': return 'Toggle pending';
+			case 'settings.swipe_actions.toggle_voided': return 'Toggle voided';
+			case 'settings.swipe_actions.toggle_unreconciled': return 'Toggle unreconciled';
+			case 'settings.swipe_actions.remove_status': return 'Remove status';
 			case 'settings.security.title': return 'Seguridad';
 			case 'settings.security.private_mode_at_launch': return 'Private mode at launch';
 			case 'settings.security.private_mode_at_launch_descr': return 'Launch the app in private mode by default';
