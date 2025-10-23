@@ -689,6 +689,18 @@
     "dynamic-colors.descr": "Use your system accent color whenever possible",
     "accent-color": "Accent color",
     "accent-color.descr": "Choose the color the app will use to emphasize certain parts of the interface",
+    "SWIPE-ACTIONS": {
+      "title": "Swipe actions",
+      "choose-description": "Choose what action will be triggered when you swipe a transaction item in the list using this swipe direction",
+      "swipe-left": "Swipe left",
+      "swipe-right": "Swipe right",
+      "none": "No action",
+      "toggle-reconciled": "Toggle reconciled",
+      "toggle-pending": "Toggle pending",
+      "toggle-voided": "Toggle voided",
+      "toggle-unreconciled": "Toggle unreconciled",
+      "remove-status": "Remove status"
+    },
     "SECURITY": {
       "title": "Seguridad",
       "private-mode-at-launch": "Private mode at launch",

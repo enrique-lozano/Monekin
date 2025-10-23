@@ -23,6 +23,9 @@ enum SettingKey {
 
   /// Key to storage if the user have the AMOLED mode activated. Could be '1' (true) or '0' (false)
   amoledMode,
+
+  transactionSwipeLeftAction,
+  transactionSwipeRightAction,
 }
 
 final Map<SettingKey, String?> appStateSettings = {};

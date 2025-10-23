@@ -1,8 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/app/settings/transaction_swipe_action_selector.dart';
 import 'package:monekin/app/settings/widgets/language_selector.dart';
 import 'package:monekin/app/settings/widgets/monekin_tile_switch.dart';
 import 'package:monekin/app/settings/widgets/supported_locales.dart';
+import 'package:monekin/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
 import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/database/services/user-setting/utils/get_theme_from_string.dart';
@@ -34,7 +36,8 @@ class SelectItem<T> {
 }
 
 class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
-  late GlobalKey<MonekinDropdownSelectState>? _themeDropdownKey = GlobalKey();
+  late final GlobalKey<MonekinDropdownSelectState> _themeDropdownKey =
+      GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +104,16 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                 }
               },
             ),
+            createListSeparator(context, t.settings.swipe_actions.title),
+
+            buildSwipeActionTileSelector(
+              context,
+              SettingKey.transactionSwipeLeftAction,
+            ),
+            buildSwipeActionTileSelector(
+              context,
+              SettingKey.transactionSwipeRightAction,
+            ),
             createListSeparator(context, t.settings.theme_and_colors),
             Builder(
               builder: (context) {
@@ -118,7 +131,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     ],
                   ),
                   onTap: () {
-                    _themeDropdownKey!.currentState!.openDropdown();
+                    _themeDropdownKey.currentState!.openDropdown();
                   },
                   leading: ScaledAnimatedSwitcher(
                     keyToWatch: theme.icon(context).toString(),
@@ -252,6 +265,61 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Builder buildSwipeActionTileSelector(
+    BuildContext context,
+    SettingKey direction,
+  ) {
+    final t = Translations.of(context);
+
+    if (direction != SettingKey.transactionSwipeLeftAction &&
+        direction != SettingKey.transactionSwipeRightAction) {
+      throw Exception(
+        'The direction provided is not valid. Use either transactionSwipeLeftAction or transactionSwipeRightAction',
+      );
+    }
+
+    return Builder(
+      builder: (context) {
+        final selectedAction = TransactionSwipeAction.fromString(
+          appStateSettings[direction],
+        );
+
+        final tileTitle = direction == SettingKey.transactionSwipeLeftAction
+            ? t.settings.swipe_actions.swipe_left
+            : t.settings.swipe_actions.swipe_right;
+
+        final tileIcon = direction == SettingKey.transactionSwipeLeftAction
+            ? Icons.swipe_left
+            : Icons.swipe_right;
+
+        return ListTile(
+          title: Text(tileTitle),
+          subtitle: Text(selectedAction.displayName(context)),
+          onTap: () {
+            showTransactionSwipeActionSelector(
+              context,
+              TransactionSwipeActionSelector(
+                selectedAction: selectedAction,
+                title: tileTitle,
+              ),
+            ).then((result) {
+              if (result == null) return;
+
+              UserSettingService.instance
+                  .setItem(
+                    direction,
+                    result.result?.name,
+                    updateGlobalState: true,
+                  )
+                  .then((value) => setState(() {}));
+            });
+          },
+          leading: Icon(tileIcon),
+        );
+      },
     );
   }
 

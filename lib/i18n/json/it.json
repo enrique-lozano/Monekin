@@ -701,6 +701,18 @@
     "dynamic-colors.descr": "Usa il colore di accento del tuo sistema quando possibile",
     "accent-color": "Colore di accento",
     "accent-color.descr": "Scegli il colore che l'app utilizzerà per enfatizzare determinate parti dell'interfaccia",
+    "SWIPE-ACTIONS": {
+      "title": "Azioni di scorrimento",
+      "choose-description": "Scegli quale azione verrà attivata quando fai scorrere un elemento di transazione nell'elenco utilizzando questa direzione di scorrimento",
+      "swipe-left": "Scorri verso sinistra",
+      "swipe-right": "Scorri verso destra",
+      "none": "Nessuna azione",
+      "toggle-reconciled": "Attiva/disattiva riconciliato",
+      "toggle-pending": "Attiva/disattiva in sospeso",
+      "toggle-voided": "Attivazione/disattivazione annullata",
+      "toggle-unreconciled": "Attiva/disattiva non riconciliato",
+      "remove-status": "Rimuovi lo stato"
+    },
     "SECURITY": {
       "title": "Sicurezza",
       "private-mode-at-launch": "Modalità privata all'avvio",

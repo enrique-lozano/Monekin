@@ -701,6 +701,18 @@
     "dynamic-colors.descr": "Verwende wann immer möglich die Akzentfarbe des Systems",
     "accent-color": "Akzentfarbe",
     "accent-color.descr": "Wähle die Farbe aus, mit der die App bestimmte Teile der Benutzeroberfläche hervorhebt",
+    "SWIPE-ACTIONS": {
+      "title": "Wischaktionen",
+      "choose-description": "Wählen Sie aus, welche Aktion ausgelöst wird, wenn Sie mit dieser Wischrichtung über ein Transaktionselement in der Liste wischen",
+      "swipe-left": "Wischen Sie nach links",
+      "swipe-right": "Wischen Sie nach rechts",
+      "none": "Keine Aktion",
+      "toggle-reconciled": "Toggle abgeglichen",
+      "toggle-pending": "Umschalten steht aus",
+      "toggle-voided": "Umschalten ungültig",
+      "toggle-unreconciled": "Nicht abgestimmt umschalten",
+      "remove-status": "Status entfernen"
+    },
     "SECURITY": {
       "title": "Sicherheit",
       "private-mode-at-launch": "Privatmodus beim Start",

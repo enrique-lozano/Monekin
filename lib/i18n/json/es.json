@@ -704,6 +704,18 @@
     "dynamic-colors.descr": "Usar el color de acento de su sistema siempre que sea posible",
     "accent-color": "Color de acento",
     "accent-color.descr": "Elegir el color que la aplicación usará para enfatizar ciertas partes de la interfaz",
+    "SWIPE-ACTIONS": {
+      "title": "Acciones al deslizar el dedo",
+      "choose-description": "Elije qué acción se activará cuando deslices una transacción del listado de transacciones usando esta dirección de deslizamiento",
+      "swipe-left": "Desliza hacia la izquierda",
+      "swipe-right": "Desliza hacia la derecha",
+      "none": "No action",
+      "toggle-reconciled": "Alternar conciliado",
+      "toggle-pending": "Alternar pendiente",
+      "toggle-voided": "Alternar anulado",
+      "toggle-unreconciled": "Alternar no reconciliado",
+      "remove-status": "Eliminar estado"
+    },
     "SECURITY": {
       "title": "Seguridad",
       "private-mode-at-launch": "Modo privado al arrancar",
