@@ -845,10 +845,10 @@ packages:
     dependency: "direct main"
     description:
       name: slang
-      sha256: "47182d10ce284e232f25a02eb74a421a11e7eb6a6fab9ab84fd8182bb0761130"
+      sha256: "59615afd67de95033c0f14a8596d0691a17fa4cbf28eb4af23f00ed58c80b8f6"
       url: "https://pub.dev"
     source: hosted
-    version: "4.9.0"
+    version: "4.9.1"
   slang_build_runner:
     dependency: "direct dev"
     description:
