@@ -69,7 +69,7 @@ class ModalContainer extends StatelessWidget {
                     children: [
                       DefaultTextStyle(
                         style: Theme.of(context).textTheme.headlineSmall!
-                            .copyWith(fontWeight: FontWeight.w800),
+                            .copyWith(fontWeight: FontWeight.bold),
                         child: titleBuilder != null
                             ? titleBuilder!(title)
                             : Text(title),

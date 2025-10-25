@@ -488,6 +488,8 @@ class _TranslationsSettingsIt implements TranslationsSettingsEn {
 	@override String get dynamic_colors_descr => 'Usa il colore di accento del tuo sistema quando possibile';
 	@override String get accent_color => 'Colore di accento';
 	@override String get accent_color_descr => 'Scegli il colore che l\'app utilizzerà per enfatizzare determinate parti dell\'interfaccia';
+	@override String get font => 'Font';
+	@override String get font_platform => 'Piattaforma';
 	@override late final _TranslationsSettingsSwipeActionsIt swipe_actions = _TranslationsSettingsSwipeActionsIt._(_root);
 	@override late final _TranslationsSettingsSecurityIt security = _TranslationsSettingsSecurityIt._(_root);
 }
@@ -1381,181 +1383,190 @@ class _TranslationsGeneralTimeRangesTypesIt implements TranslationsGeneralTimeRa
 	@override String get date_range => 'Intervallo personalizzato';
 }
 
-/// Flat map(s) containing all translations.
+/// The flat map containing all translations for locale <it>.
 /// Only for edge cases! For simple maps, use the map function of this library.
+/// Note: We use a HashMap because Dart seems to be unable to compile large switch statements.
+Map<String, dynamic>? _map;
+
 extension on TranslationsIt {
 	dynamic _flatMapFunction(String path) {
-		switch (path) {
-			case 'ui_actions.cancel': return 'Annulla';
-			case 'ui_actions.confirm': return 'Conferma';
-			case 'ui_actions.continue_text': return 'Continua';
-			case 'ui_actions.save': return 'Salva';
-			case 'ui_actions.save_changes': return 'Salva modifiche';
-			case 'ui_actions.close_and_save': return 'Salva e chiudi';
-			case 'ui_actions.add': return 'Aggiungi';
-			case 'ui_actions.edit': return 'Modifica';
-			case 'ui_actions.delete': return 'Elimina';
-			case 'ui_actions.see_more': return 'Vedi altro';
-			case 'ui_actions.select_all': return 'Seleziona tutto';
-			case 'ui_actions.deselect_all': return 'Deseleziona tutto';
-			case 'ui_actions.select': return 'Seleziona';
-			case 'ui_actions.search': return 'Cerca';
-			case 'ui_actions.filter': return 'Filtra';
-			case 'ui_actions.reset': return 'Ripristina';
-			case 'ui_actions.submit': return 'Invia';
-			case 'ui_actions.next': return 'Avanti';
-			case 'ui_actions.previous': return 'Precedente';
-			case 'ui_actions.back': return 'Indietro';
-			case 'ui_actions.reload': return 'Ricarica';
-			case 'ui_actions.view': return 'Visualizza';
-			case 'ui_actions.download': return 'Scarica';
-			case 'ui_actions.upload': return 'Carica';
-			case 'ui_actions.retry': return 'Riprova';
-			case 'ui_actions.copy': return 'Copia';
-			case 'ui_actions.paste': return 'Incolla';
-			case 'ui_actions.undo': return 'Annulla';
-			case 'ui_actions.redo': return 'Ripristina';
-			case 'ui_actions.open': return 'Apri';
-			case 'ui_actions.close': return 'Chiudi';
-			case 'ui_actions.apply': return 'Applica';
-			case 'ui_actions.discard': return 'Ignora';
-			case 'ui_actions.refresh': return 'Aggiorna';
-			case 'ui_actions.details': return 'Dettagli';
-			case 'ui_actions.share': return 'Condividi';
-			case 'general.or': return 'o';
-			case 'general.understood': return 'Capito';
-			case 'general.unspecified': return 'Non specificato';
-			case 'general.quick_actions': return 'Azioni rapide';
-			case 'general.balance': return 'Saldo';
-			case 'general.account': return 'Conto';
-			case 'general.accounts': return 'Conti';
-			case 'general.categories': return 'Categorie';
-			case 'general.category': return 'Categoria';
-			case 'general.today': return 'Oggi';
-			case 'general.yesterday': return 'Ieri';
-			case 'general.filters': return 'Filtri';
-			case 'general.empty_warn': return 'Ops! È davvero vuoto';
-			case 'general.insufficient_data': return 'Dati insufficienti';
-			case 'general.show_more_fields': return 'Mostra più campi';
-			case 'general.show_less_fields': return 'Mostra meno campi';
-			case 'general.tap_to_search': return 'Tocca per cercare';
-			case 'general.clipboard.success': return ({required Object x}) => '${x} copiato negli appunti';
-			case 'general.clipboard.error': return 'Errore di copia';
-			case 'general.time.start_date': return 'Data di inizio';
-			case 'general.time.end_date': return 'Data di fine';
-			case 'general.time.from_date': return 'Dalla data';
-			case 'general.time.until_date': return 'Fino alla data';
-			case 'general.time.date': return 'Data';
-			case 'general.time.datetime': return 'Data e ora';
-			case 'general.time.time': return 'Ora';
-			case 'general.time.each': return 'Ogni';
-			case 'general.time.after': return 'Dopo';
-			case 'general.time.ranges.display': return 'Intervallo di tempo';
-			case 'general.time.ranges.it_repeat': return 'Si ripete';
-			case 'general.time.ranges.it_ends': return 'Termina';
-			case 'general.time.ranges.forever': return 'Sempre';
-			case 'general.time.ranges.types.cycle': return 'Cicli';
-			case 'general.time.ranges.types.last_days': return 'Ultimi giorni';
-			case 'general.time.ranges.types.last_days_form': return ({required Object x}) => '${x} giorni precedenti';
-			case 'general.time.ranges.types.all': return 'Sempre';
-			case 'general.time.ranges.types.date_range': return 'Intervallo personalizzato';
-			case 'general.time.ranges.each_range': return ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
+		final map = _map ?? _initFlatMap();
+		return map[path];
+	}
+
+	/// Initializes the flat map and returns it.
+	Map<String, dynamic> _initFlatMap() {
+		final map = <String, dynamic>{};
+		map['ui_actions.cancel'] = 'Annulla';
+		map['ui_actions.confirm'] = 'Conferma';
+		map['ui_actions.continue_text'] = 'Continua';
+		map['ui_actions.save'] = 'Salva';
+		map['ui_actions.save_changes'] = 'Salva modifiche';
+		map['ui_actions.close_and_save'] = 'Salva e chiudi';
+		map['ui_actions.add'] = 'Aggiungi';
+		map['ui_actions.edit'] = 'Modifica';
+		map['ui_actions.delete'] = 'Elimina';
+		map['ui_actions.see_more'] = 'Vedi altro';
+		map['ui_actions.select_all'] = 'Seleziona tutto';
+		map['ui_actions.deselect_all'] = 'Deseleziona tutto';
+		map['ui_actions.select'] = 'Seleziona';
+		map['ui_actions.search'] = 'Cerca';
+		map['ui_actions.filter'] = 'Filtra';
+		map['ui_actions.reset'] = 'Ripristina';
+		map['ui_actions.submit'] = 'Invia';
+		map['ui_actions.next'] = 'Avanti';
+		map['ui_actions.previous'] = 'Precedente';
+		map['ui_actions.back'] = 'Indietro';
+		map['ui_actions.reload'] = 'Ricarica';
+		map['ui_actions.view'] = 'Visualizza';
+		map['ui_actions.download'] = 'Scarica';
+		map['ui_actions.upload'] = 'Carica';
+		map['ui_actions.retry'] = 'Riprova';
+		map['ui_actions.copy'] = 'Copia';
+		map['ui_actions.paste'] = 'Incolla';
+		map['ui_actions.undo'] = 'Annulla';
+		map['ui_actions.redo'] = 'Ripristina';
+		map['ui_actions.open'] = 'Apri';
+		map['ui_actions.close'] = 'Chiudi';
+		map['ui_actions.apply'] = 'Applica';
+		map['ui_actions.discard'] = 'Ignora';
+		map['ui_actions.refresh'] = 'Aggiorna';
+		map['ui_actions.details'] = 'Dettagli';
+		map['ui_actions.share'] = 'Condividi';
+		map['general.or'] = 'o';
+		map['general.understood'] = 'Capito';
+		map['general.unspecified'] = 'Non specificato';
+		map['general.quick_actions'] = 'Azioni rapide';
+		map['general.balance'] = 'Saldo';
+		map['general.account'] = 'Conto';
+		map['general.accounts'] = 'Conti';
+		map['general.categories'] = 'Categorie';
+		map['general.category'] = 'Categoria';
+		map['general.today'] = 'Oggi';
+		map['general.yesterday'] = 'Ieri';
+		map['general.filters'] = 'Filtri';
+		map['general.empty_warn'] = 'Ops! È davvero vuoto';
+		map['general.insufficient_data'] = 'Dati insufficienti';
+		map['general.show_more_fields'] = 'Mostra più campi';
+		map['general.show_less_fields'] = 'Mostra meno campi';
+		map['general.tap_to_search'] = 'Tocca per cercare';
+		map['general.clipboard.success'] = ({required Object x}) => '${x} copiato negli appunti';
+		map['general.clipboard.error'] = 'Errore di copia';
+		map['general.time.start_date'] = 'Data di inizio';
+		map['general.time.end_date'] = 'Data di fine';
+		map['general.time.from_date'] = 'Dalla data';
+		map['general.time.until_date'] = 'Fino alla data';
+		map['general.time.date'] = 'Data';
+		map['general.time.datetime'] = 'Data e ora';
+		map['general.time.time'] = 'Ora';
+		map['general.time.each'] = 'Ogni';
+		map['general.time.after'] = 'Dopo';
+		map['general.time.ranges.display'] = 'Intervallo di tempo';
+		map['general.time.ranges.it_repeat'] = 'Si ripete';
+		map['general.time.ranges.it_ends'] = 'Termina';
+		map['general.time.ranges.forever'] = 'Sempre';
+		map['general.time.ranges.types.cycle'] = 'Cicli';
+		map['general.time.ranges.types.last_days'] = 'Ultimi giorni';
+		map['general.time.ranges.types.last_days_form'] = ({required Object x}) => '${x} giorni precedenti';
+		map['general.time.ranges.types.all'] = 'Sempre';
+		map['general.time.ranges.types.date_range'] = 'Intervallo personalizzato';
+		map['general.time.ranges.each_range'] = ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
 				one: 'Ogni ${range}',
 				other: 'Ogni ${n} ${range}',
 			);
-			case 'general.time.ranges.each_range_until_date': return ({required num n, required Object range, required Object day}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
+		map['general.time.ranges.each_range_until_date'] = ({required num n, required Object range, required Object day}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
 				one: 'Ogni ${range} fino al ${day}',
 				other: 'Ogni ${n} ${range} fino al ${day}',
 			);
-			case 'general.time.ranges.each_range_until_times': return ({required num n, required Object range, required Object limit}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
+		map['general.time.ranges.each_range_until_times'] = ({required num n, required Object range, required Object limit}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
 				one: 'Ogni ${range} ${limit} volte',
 				other: 'Ogni ${n} ${range} ${limit} volte',
 			);
-			case 'general.time.ranges.each_range_until_once': return ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
+		map['general.time.ranges.each_range_until_once'] = ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
 				one: 'Ogni ${range} una volta',
 				other: 'Ogni ${n} ${range} una volta',
 			);
-			case 'general.time.ranges.month': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
+		map['general.time.ranges.month'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
 				one: 'Mese',
 				other: 'Mesi',
 			);
-			case 'general.time.ranges.year': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
+		map['general.time.ranges.year'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
 				one: 'Anno',
 				other: 'Anni',
 			);
-			case 'general.time.ranges.day': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
+		map['general.time.ranges.day'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
 				one: 'Giorno',
 				other: 'Giorni',
 			);
-			case 'general.time.ranges.week': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
+		map['general.time.ranges.week'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
 				one: 'Settimana',
 				other: 'Settimane',
 			);
-			case 'general.time.periodicity.display': return 'Ricorrenza';
-			case 'general.time.periodicity.no_repeat': return 'Non si ripete';
-			case 'general.time.periodicity.repeat': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
+		map['general.time.periodicity.display'] = 'Ricorrenza';
+		map['general.time.periodicity.no_repeat'] = 'Non si ripete';
+		map['general.time.periodicity.repeat'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
 				one: 'Ripetizione',
 				other: 'Ripetizioni',
 			);
-			case 'general.time.periodicity.diary': return 'Giornaliera';
-			case 'general.time.periodicity.monthly': return 'Mensile';
-			case 'general.time.periodicity.annually': return 'Annuale';
-			case 'general.time.periodicity.quaterly': return 'Trimestrale';
-			case 'general.time.periodicity.weekly': return 'Settimanale';
-			case 'general.time.periodicity.custom': return 'Personalizzata';
-			case 'general.time.periodicity.infinite': return 'Sempre';
-			case 'general.time.current.monthly': return 'Questo mese';
-			case 'general.time.current.annually': return 'Quest\'anno';
-			case 'general.time.current.quaterly': return 'Questo trimestre';
-			case 'general.time.current.weekly': return 'Questa settimana';
-			case 'general.time.current.infinite': return 'Per sempre';
-			case 'general.time.current.custom': return 'Intervallo personalizzato';
-			case 'general.time.all.diary': return 'Ogni giorno';
-			case 'general.time.all.monthly': return 'Ogni mese';
-			case 'general.time.all.annually': return 'Ogni anno';
-			case 'general.time.all.quaterly': return 'Ogni trimestre';
-			case 'general.time.all.weekly': return 'Ogni settimana';
-			case 'general.transaction_order.display': return 'Ordina transazioni';
-			case 'general.transaction_order.category': return 'Per categoria';
-			case 'general.transaction_order.quantity': return 'Per quantità';
-			case 'general.transaction_order.date': return 'Per data';
-			case 'general.validations.form_error': return 'Correggi i campi indicati per continuare';
-			case 'general.validations.required': return 'Campo obbligatorio';
-			case 'general.validations.positive': return 'Deve essere positivo';
-			case 'general.validations.min_number': return ({required Object x}) => 'Deve essere maggiore di ${x}';
-			case 'general.validations.max_number': return ({required Object x}) => 'Deve essere minore di ${x}';
-			case 'intro.start': return 'Inizia';
-			case 'intro.skip': return 'Salta';
-			case 'intro.next': return 'Avanti';
-			case 'intro.select_your_currency': return 'Seleziona la tua valuta';
-			case 'intro.welcome_subtitle': return 'Il tuo gestore di finanze personali';
-			case 'intro.welcome_subtitle2': return '100% open, 100% gratuito';
-			case 'intro.welcome_footer': return 'Effettuando l\'accesso accetti l\'<a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>informativa sulla privacy</a> e i <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Termini di utilizzo</a> dell\'applicazione';
-			case 'intro.offline_descr_title': return 'CONTO OFFLINE:';
-			case 'intro.offline_descr': return 'I tuoi dati saranno conservati solo sul tuo dispositivo e saranno al sicuro finché non disinstallerai l\'app o cambierai telefono. Per prevenire la perdita di dati, si consiglia di effettuare un backup regolarmente dalle impostazioni dell\'app.';
-			case 'intro.offline_start': return 'Avvia sessione offline';
-			case 'intro.sl1_title': return 'Seleziona la tua valuta';
-			case 'intro.sl1_descr': return 'La tua valuta predefinita sarà utilizzata nei rapporti e nei grafici generali. Potrai cambiare la valuta e la lingua dell\'app in qualsiasi momento nelle impostazioni dell\'applicazione';
-			case 'intro.sl2_title': return 'Sicura, privata e affidabile';
-			case 'intro.sl2_descr': return 'I tuoi dati sono solo tuoi. Conserviamo le informazioni direttamente sul tuo dispositivo, senza passare per server esterni. Questo rende possibile usare l\'app anche senza internet';
-			case 'intro.sl2_descr2': return 'Inoltre, il codice sorgente dell\'applicazione è pubblico, chiunque può collaborare e vedere come funziona';
-			case 'intro.last_slide_title': return 'Tutto pronto';
-			case 'intro.last_slide_descr': return 'Con Monekin, puoi finalmente raggiungere l\'indipendenza finanziaria che tanto desideri. Avrai grafici, budget, consigli, statistiche e molto altro sul tuo denaro.';
-			case 'intro.last_slide_descr2': return 'Speriamo che la tua esperienza ti piaccia! Non esitare a contattarci in caso di dubbi, suggerimenti...';
-			case 'home.title': return 'Dashboard';
-			case 'home.filter_transactions': return 'Filtra transazioni';
-			case 'home.hello_day': return 'Buongiorno,';
-			case 'home.hello_night': return 'Buonasera,';
-			case 'home.total_balance': return 'Saldo totale';
-			case 'home.my_accounts': return 'I miei conti';
-			case 'home.active_accounts': return 'Conti attivi';
-			case 'home.no_accounts': return 'Nessun conto creato ancora';
-			case 'home.no_accounts_descr': return 'Inizia a usare tutta la magia di Monekin. Crea almeno un conto per iniziare ad aggiungere transazioni';
-			case 'home.last_transactions': return 'Ultime transazioni';
-			case 'home.should_create_account_header': return 'Oops!';
-			case 'home.should_create_account_message': return 'Devi avere almeno un conto non archiviato prima di poter iniziare a creare transazioni';
-			case 'financial_health.display': return 'Salute finanziaria';
-			case 'financial_health.review.very_good': return ({required GenderContext context}) {
+		map['general.time.periodicity.diary'] = 'Giornaliera';
+		map['general.time.periodicity.monthly'] = 'Mensile';
+		map['general.time.periodicity.annually'] = 'Annuale';
+		map['general.time.periodicity.quaterly'] = 'Trimestrale';
+		map['general.time.periodicity.weekly'] = 'Settimanale';
+		map['general.time.periodicity.custom'] = 'Personalizzata';
+		map['general.time.periodicity.infinite'] = 'Sempre';
+		map['general.time.current.monthly'] = 'Questo mese';
+		map['general.time.current.annually'] = 'Quest\'anno';
+		map['general.time.current.quaterly'] = 'Questo trimestre';
+		map['general.time.current.weekly'] = 'Questa settimana';
+		map['general.time.current.infinite'] = 'Per sempre';
+		map['general.time.current.custom'] = 'Intervallo personalizzato';
+		map['general.time.all.diary'] = 'Ogni giorno';
+		map['general.time.all.monthly'] = 'Ogni mese';
+		map['general.time.all.annually'] = 'Ogni anno';
+		map['general.time.all.quaterly'] = 'Ogni trimestre';
+		map['general.time.all.weekly'] = 'Ogni settimana';
+		map['general.transaction_order.display'] = 'Ordina transazioni';
+		map['general.transaction_order.category'] = 'Per categoria';
+		map['general.transaction_order.quantity'] = 'Per quantità';
+		map['general.transaction_order.date'] = 'Per data';
+		map['general.validations.form_error'] = 'Correggi i campi indicati per continuare';
+		map['general.validations.required'] = 'Campo obbligatorio';
+		map['general.validations.positive'] = 'Deve essere positivo';
+		map['general.validations.min_number'] = ({required Object x}) => 'Deve essere maggiore di ${x}';
+		map['general.validations.max_number'] = ({required Object x}) => 'Deve essere minore di ${x}';
+		map['intro.start'] = 'Inizia';
+		map['intro.skip'] = 'Salta';
+		map['intro.next'] = 'Avanti';
+		map['intro.select_your_currency'] = 'Seleziona la tua valuta';
+		map['intro.welcome_subtitle'] = 'Il tuo gestore di finanze personali';
+		map['intro.welcome_subtitle2'] = '100% open, 100% gratuito';
+		map['intro.welcome_footer'] = 'Effettuando l\'accesso accetti l\'<a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>informativa sulla privacy</a> e i <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Termini di utilizzo</a> dell\'applicazione';
+		map['intro.offline_descr_title'] = 'CONTO OFFLINE:';
+		map['intro.offline_descr'] = 'I tuoi dati saranno conservati solo sul tuo dispositivo e saranno al sicuro finché non disinstallerai l\'app o cambierai telefono. Per prevenire la perdita di dati, si consiglia di effettuare un backup regolarmente dalle impostazioni dell\'app.';
+		map['intro.offline_start'] = 'Avvia sessione offline';
+		map['intro.sl1_title'] = 'Seleziona la tua valuta';
+		map['intro.sl1_descr'] = 'La tua valuta predefinita sarà utilizzata nei rapporti e nei grafici generali. Potrai cambiare la valuta e la lingua dell\'app in qualsiasi momento nelle impostazioni dell\'applicazione';
+		map['intro.sl2_title'] = 'Sicura, privata e affidabile';
+		map['intro.sl2_descr'] = 'I tuoi dati sono solo tuoi. Conserviamo le informazioni direttamente sul tuo dispositivo, senza passare per server esterni. Questo rende possibile usare l\'app anche senza internet';
+		map['intro.sl2_descr2'] = 'Inoltre, il codice sorgente dell\'applicazione è pubblico, chiunque può collaborare e vedere come funziona';
+		map['intro.last_slide_title'] = 'Tutto pronto';
+		map['intro.last_slide_descr'] = 'Con Monekin, puoi finalmente raggiungere l\'indipendenza finanziaria che tanto desideri. Avrai grafici, budget, consigli, statistiche e molto altro sul tuo denaro.';
+		map['intro.last_slide_descr2'] = 'Speriamo che la tua esperienza ti piaccia! Non esitare a contattarci in caso di dubbi, suggerimenti...';
+		map['home.title'] = 'Dashboard';
+		map['home.filter_transactions'] = 'Filtra transazioni';
+		map['home.hello_day'] = 'Buongiorno,';
+		map['home.hello_night'] = 'Buonasera,';
+		map['home.total_balance'] = 'Saldo totale';
+		map['home.my_accounts'] = 'I miei conti';
+		map['home.active_accounts'] = 'Conti attivi';
+		map['home.no_accounts'] = 'Nessun conto creato ancora';
+		map['home.no_accounts_descr'] = 'Inizia a usare tutta la magia di Monekin. Crea almeno un conto per iniziare ad aggiungere transazioni';
+		map['home.last_transactions'] = 'Ultime transazioni';
+		map['home.should_create_account_header'] = 'Oops!';
+		map['home.should_create_account_message'] = 'Devi avere almeno un conto non archiviato prima di poter iniziare a creare transazioni';
+		map['financial_health.display'] = 'Salute finanziaria';
+		map['financial_health.review.very_good'] = ({required GenderContext context}) {
 				switch (context) {
 					case GenderContext.male:
 						return 'Ottima!';
@@ -1563,7 +1574,7 @@ extension on TranslationsIt {
 						return 'Ottima!';
 				}
 			};
-			case 'financial_health.review.good': return ({required GenderContext context}) {
+		map['financial_health.review.good'] = ({required GenderContext context}) {
 				switch (context) {
 					case GenderContext.male:
 						return 'Buona';
@@ -1571,7 +1582,7 @@ extension on TranslationsIt {
 						return 'Buona';
 				}
 			};
-			case 'financial_health.review.normal': return ({required GenderContext context}) {
+		map['financial_health.review.normal'] = ({required GenderContext context}) {
 				switch (context) {
 					case GenderContext.male:
 						return 'Media';
@@ -1579,7 +1590,7 @@ extension on TranslationsIt {
 						return 'Media';
 				}
 			};
-			case 'financial_health.review.bad': return ({required GenderContext context}) {
+		map['financial_health.review.bad'] = ({required GenderContext context}) {
 				switch (context) {
 					case GenderContext.male:
 						return 'Discreta';
@@ -1587,7 +1598,7 @@ extension on TranslationsIt {
 						return 'Discreta';
 				}
 			};
-			case 'financial_health.review.very_bad': return ({required GenderContext context}) {
+		map['financial_health.review.very_bad'] = ({required GenderContext context}) {
 				switch (context) {
 					case GenderContext.male:
 						return 'Molto Cattiva';
@@ -1595,7 +1606,7 @@ extension on TranslationsIt {
 						return 'Molto Cattiva';
 				}
 			};
-			case 'financial_health.review.insufficient_data': return ({required GenderContext context}) {
+		map['financial_health.review.insufficient_data'] = ({required GenderContext context}) {
 				switch (context) {
 					case GenderContext.male:
 						return 'Dati insufficienti';
@@ -1603,450 +1614,453 @@ extension on TranslationsIt {
 						return 'Dati insufficienti';
 				}
 			};
-			case 'financial_health.review.descr.insufficient_data': return 'Sembra che non abbiamo abbastanza spese per calcolare la tua salute finanziaria. Aggiungi alcune spese/entrate in questo periodo per permetterci di aiutarti!';
-			case 'financial_health.review.descr.very_good': return 'Congratulazioni! La tua salute finanziaria è eccezionale. Speriamo che continui la tua buona serie e continui a imparare con Monekin';
-			case 'financial_health.review.descr.good': return 'Ottimo! La tua salute finanziaria è buona. Visita la scheda di analisi per vedere come risparmiare ancora di più!';
-			case 'financial_health.review.descr.normal': return 'La tua salute finanziaria è più o meno nella media del resto della popolazione per questo periodo';
-			case 'financial_health.review.descr.bad': return 'Sembra che la tua situazione finanziaria non sia ancora delle migliori. Esplora il resto dei grafici per saperne di più sulle tue finanze';
-			case 'financial_health.review.descr.very_bad': return 'Mmm, la tua salute finanziaria è ben al di sotto di quanto dovrebbe essere. Esplora il resto dei grafici per saperne di più sulle tue finanze';
-			case 'financial_health.months_without_income.title': return 'Tasso di sopravvivenza';
-			case 'financial_health.months_without_income.subtitle': return 'Dato il tuo saldo, il tempo che potresti resistere senza entrate';
-			case 'financial_health.months_without_income.text_zero': return 'Non potresti sopravvivere un mese senza entrate a questo tasso di spese!';
-			case 'financial_health.months_without_income.text_one': return 'Potresti a malapena sopravvivere circa un mese senza entrate a questo tasso di spese!';
-			case 'financial_health.months_without_income.text_other': return ({required Object n}) => 'Potresti sopravvivere circa <b>${n} mesi</b> senza entrate a questo tasso di spesa.';
-			case 'financial_health.months_without_income.text_infinite': return 'Potresti sopravvivere circa <b>tutta la vita</b> senza entrate a questo tasso di spesa.';
-			case 'financial_health.months_without_income.suggestion': return 'Ricorda che è consigliabile mantenere questo rapporto al di sopra dei 5 mesi almeno. Se vedi che non hai un cuscinetto di risparmio sufficiente, riduci le spese non necessarie.';
-			case 'financial_health.months_without_income.insufficient_data': return 'Sembra che non abbiamo abbastanza spese per calcolare quanti mesi potresti sopravvivere senza entrate. Inserisci alcune transazioni e torna qui per controllare la tua salute finanziaria';
-			case 'financial_health.savings_percentage.title': return 'Percentuale di risparmio';
-			case 'financial_health.savings_percentage.subtitle': return 'Quale parte del tuo reddito non viene spesa in questo periodo';
-			case 'financial_health.savings_percentage.text.good': return ({required Object value}) => 'Congratulazioni! Sei riuscito a risparmiare il <b>${value}%</b> del tuo reddito durante questo periodo. Sembra che tu sia già un esperto, continua così!';
-			case 'financial_health.savings_percentage.text.normal': return ({required Object value}) => 'Congratulazioni, sei riuscito a risparmiare il <b>${value}%</b> del tuo reddito durante questo periodo.';
-			case 'financial_health.savings_percentage.text.bad': return ({required Object value}) => 'Sei riuscito a risparmiare il <b>${value}%</b> del tuo reddito durante questo periodo. Tuttavia, pensiamo che tu possa fare ancora molto di più!';
-			case 'financial_health.savings_percentage.text.very_bad': return 'Wow, non sei riuscito a risparmiare nulla durante questo periodo.';
-			case 'financial_health.savings_percentage.suggestion': return 'Ricorda che è consigliabile risparmiare almeno il 15-20% di ciò che guadagni.';
-			case 'stats.title': return 'Statistiche';
-			case 'stats.balance': return 'Saldo';
-			case 'stats.final_balance': return 'Saldo finale';
-			case 'stats.balance_by_account': return 'Saldo per conto';
-			case 'stats.balance_by_account_subtitle': return 'Dove ho la maggior parte dei miei soldi?';
-			case 'stats.balance_by_currency': return 'Saldo per valuta';
-			case 'stats.balance_by_currency_subtitle': return 'Quanti soldi ho in valuta estera?';
-			case 'stats.balance_evolution': return 'Andamento del saldo';
-			case 'stats.balance_evolution_subtitle': return 'Ho più soldi di prima?';
-			case 'stats.compared_to_previous_period': return 'Rispetto al periodo precedente';
-			case 'stats.cash_flow': return 'Flusso di cassa';
-			case 'stats.cash_flow_subtitle': return 'Sto spendendo meno di quanto guadagno?';
-			case 'stats.by_periods': return 'Per periodi';
-			case 'stats.by_categories': return 'Per categorie';
-			case 'stats.by_tags': return 'Per etichette';
-			case 'stats.distribution': return 'Distribuzione';
-			case 'stats.finance_health_resume': return 'Riepilogo';
-			case 'stats.finance_health_breakdown': return 'Ripartizione';
-			case 'icon_selector.name': return 'Nome:';
-			case 'icon_selector.icon': return 'Icona';
-			case 'icon_selector.color': return 'Colore';
-			case 'icon_selector.select_icon': return 'Seleziona un\'icona';
-			case 'icon_selector.select_color': return 'Seleziona un colore';
-			case 'icon_selector.custom_color': return 'Colore personalizzato';
-			case 'icon_selector.current_color_selection': return 'Selezione attuale';
-			case 'icon_selector.select_account_icon': return 'Identifica il tuo conto';
-			case 'icon_selector.select_category_icon': return 'Identifica la tua categoria';
-			case 'icon_selector.scopes.transport': return 'Trasporto';
-			case 'icon_selector.scopes.money': return 'Denaro';
-			case 'icon_selector.scopes.food': return 'Cibo';
-			case 'icon_selector.scopes.medical': return 'Salute';
-			case 'icon_selector.scopes.entertainment': return 'Tempo libero';
-			case 'icon_selector.scopes.technology': return 'Tecnologia';
-			case 'icon_selector.scopes.other': return 'Altro';
-			case 'icon_selector.scopes.logos_financial_institutions': return 'Istituzioni finanziarie';
-			case 'transaction.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
+		map['financial_health.review.descr.insufficient_data'] = 'Sembra che non abbiamo abbastanza spese per calcolare la tua salute finanziaria. Aggiungi alcune spese/entrate in questo periodo per permetterci di aiutarti!';
+		map['financial_health.review.descr.very_good'] = 'Congratulazioni! La tua salute finanziaria è eccezionale. Speriamo che continui la tua buona serie e continui a imparare con Monekin';
+		map['financial_health.review.descr.good'] = 'Ottimo! La tua salute finanziaria è buona. Visita la scheda di analisi per vedere come risparmiare ancora di più!';
+		map['financial_health.review.descr.normal'] = 'La tua salute finanziaria è più o meno nella media del resto della popolazione per questo periodo';
+		map['financial_health.review.descr.bad'] = 'Sembra che la tua situazione finanziaria non sia ancora delle migliori. Esplora il resto dei grafici per saperne di più sulle tue finanze';
+		map['financial_health.review.descr.very_bad'] = 'Mmm, la tua salute finanziaria è ben al di sotto di quanto dovrebbe essere. Esplora il resto dei grafici per saperne di più sulle tue finanze';
+		map['financial_health.months_without_income.title'] = 'Tasso di sopravvivenza';
+		map['financial_health.months_without_income.subtitle'] = 'Dato il tuo saldo, il tempo che potresti resistere senza entrate';
+		map['financial_health.months_without_income.text_zero'] = 'Non potresti sopravvivere un mese senza entrate a questo tasso di spese!';
+		map['financial_health.months_without_income.text_one'] = 'Potresti a malapena sopravvivere circa un mese senza entrate a questo tasso di spese!';
+		map['financial_health.months_without_income.text_other'] = ({required Object n}) => 'Potresti sopravvivere circa <b>${n} mesi</b> senza entrate a questo tasso di spesa.';
+		map['financial_health.months_without_income.text_infinite'] = 'Potresti sopravvivere circa <b>tutta la vita</b> senza entrate a questo tasso di spesa.';
+		map['financial_health.months_without_income.suggestion'] = 'Ricorda che è consigliabile mantenere questo rapporto al di sopra dei 5 mesi almeno. Se vedi che non hai un cuscinetto di risparmio sufficiente, riduci le spese non necessarie.';
+		map['financial_health.months_without_income.insufficient_data'] = 'Sembra che non abbiamo abbastanza spese per calcolare quanti mesi potresti sopravvivere senza entrate. Inserisci alcune transazioni e torna qui per controllare la tua salute finanziaria';
+		map['financial_health.savings_percentage.title'] = 'Percentuale di risparmio';
+		map['financial_health.savings_percentage.subtitle'] = 'Quale parte del tuo reddito non viene spesa in questo periodo';
+		map['financial_health.savings_percentage.text.good'] = ({required Object value}) => 'Congratulazioni! Sei riuscito a risparmiare il <b>${value}%</b> del tuo reddito durante questo periodo. Sembra che tu sia già un esperto, continua così!';
+		map['financial_health.savings_percentage.text.normal'] = ({required Object value}) => 'Congratulazioni, sei riuscito a risparmiare il <b>${value}%</b> del tuo reddito durante questo periodo.';
+		map['financial_health.savings_percentage.text.bad'] = ({required Object value}) => 'Sei riuscito a risparmiare il <b>${value}%</b> del tuo reddito durante questo periodo. Tuttavia, pensiamo che tu possa fare ancora molto di più!';
+		map['financial_health.savings_percentage.text.very_bad'] = 'Wow, non sei riuscito a risparmiare nulla durante questo periodo.';
+		map['financial_health.savings_percentage.suggestion'] = 'Ricorda che è consigliabile risparmiare almeno il 15-20% di ciò che guadagni.';
+		map['stats.title'] = 'Statistiche';
+		map['stats.balance'] = 'Saldo';
+		map['stats.final_balance'] = 'Saldo finale';
+		map['stats.balance_by_account'] = 'Saldo per conto';
+		map['stats.balance_by_account_subtitle'] = 'Dove ho la maggior parte dei miei soldi?';
+		map['stats.balance_by_currency'] = 'Saldo per valuta';
+		map['stats.balance_by_currency_subtitle'] = 'Quanti soldi ho in valuta estera?';
+		map['stats.balance_evolution'] = 'Andamento del saldo';
+		map['stats.balance_evolution_subtitle'] = 'Ho più soldi di prima?';
+		map['stats.compared_to_previous_period'] = 'Rispetto al periodo precedente';
+		map['stats.cash_flow'] = 'Flusso di cassa';
+		map['stats.cash_flow_subtitle'] = 'Sto spendendo meno di quanto guadagno?';
+		map['stats.by_periods'] = 'Per periodi';
+		map['stats.by_categories'] = 'Per categorie';
+		map['stats.by_tags'] = 'Per etichette';
+		map['stats.distribution'] = 'Distribuzione';
+		map['stats.finance_health_resume'] = 'Riepilogo';
+		map['stats.finance_health_breakdown'] = 'Ripartizione';
+		map['icon_selector.name'] = 'Nome:';
+		map['icon_selector.icon'] = 'Icona';
+		map['icon_selector.color'] = 'Colore';
+		map['icon_selector.select_icon'] = 'Seleziona un\'icona';
+		map['icon_selector.select_color'] = 'Seleziona un colore';
+		map['icon_selector.custom_color'] = 'Colore personalizzato';
+		map['icon_selector.current_color_selection'] = 'Selezione attuale';
+		map['icon_selector.select_account_icon'] = 'Identifica il tuo conto';
+		map['icon_selector.select_category_icon'] = 'Identifica la tua categoria';
+		map['icon_selector.scopes.transport'] = 'Trasporto';
+		map['icon_selector.scopes.money'] = 'Denaro';
+		map['icon_selector.scopes.food'] = 'Cibo';
+		map['icon_selector.scopes.medical'] = 'Salute';
+		map['icon_selector.scopes.entertainment'] = 'Tempo libero';
+		map['icon_selector.scopes.technology'] = 'Tecnologia';
+		map['icon_selector.scopes.other'] = 'Altro';
+		map['icon_selector.scopes.logos_financial_institutions'] = 'Istituzioni finanziarie';
+		map['transaction.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
 				one: 'Transazione',
 				other: 'Transazioni',
 			);
-			case 'transaction.create': return 'Nuova transazione';
-			case 'transaction.new_income': return 'Nuova entrata';
-			case 'transaction.new_expense': return 'Nuova spesa';
-			case 'transaction.new_success': return 'Transazione creata con successo';
-			case 'transaction.edit': return 'Modifica transazione';
-			case 'transaction.edit_success': return 'Transazione modificata con successo';
-			case 'transaction.edit_multiple': return 'Modifica transazioni';
-			case 'transaction.edit_multiple_success': return ({required Object x}) => '${x} transazioni modificate con successo';
-			case 'transaction.duplicate': return 'Clona transazione';
-			case 'transaction.duplicate_short': return 'Clona';
-			case 'transaction.duplicate_warning_message': return 'Verrà creata una transazione identica a questa con la stessa data, vuoi continuare?';
-			case 'transaction.duplicate_success': return 'Transazione clonata con successo';
-			case 'transaction.delete': return 'Elimina transazione';
-			case 'transaction.delete_warning_message': return 'Questa azione è irreversibile. Il saldo attuale dei tuoi conti e tutte le tue statistiche saranno ricalcolate';
-			case 'transaction.delete_success': return 'Transazione eliminata correttamente';
-			case 'transaction.delete_multiple': return 'Elimina transazioni';
-			case 'transaction.delete_multiple_warning_message': return ({required Object x}) => 'Questa azione è irreversibile ed eliminerà ${x} transazioni. Il saldo attuale dei tuoi conti e tutte le tue statistiche saranno ricalcolate';
-			case 'transaction.delete_multiple_success': return ({required Object x}) => '${x} transazioni eliminate correttamente';
-			case 'transaction.details': return 'Dettagli movimento';
-			case 'transaction.next_payments.accept': return 'Accetta';
-			case 'transaction.next_payments.skip': return 'Salta';
-			case 'transaction.next_payments.skip_success': return 'Transazione saltata con successo';
-			case 'transaction.next_payments.skip_dialog_title': return 'Salta transazione';
-			case 'transaction.next_payments.skip_dialog_msg': return ({required Object date}) => 'Questa azione è irreversibile. Sposteremo la data del prossimo movimento al ${date}';
-			case 'transaction.next_payments.accept_today': return 'Accetta oggi';
-			case 'transaction.next_payments.accept_in_required_date': return ({required Object date}) => 'Accetta alla data richiesta (${date})';
-			case 'transaction.next_payments.accept_dialog_title': return 'Accetta transazione';
-			case 'transaction.next_payments.accept_dialog_msg_single': return 'Il nuovo stato della transazione sarà nullo. Potrai ri-modificare lo stato di questa transazione quando vuoi';
-			case 'transaction.next_payments.accept_dialog_msg': return ({required Object date}) => 'Questa azione creerà una nuova transazione con data ${date}. Potrai controllare i dettagli di questa transazione sulla pagina delle transazioni';
-			case 'transaction.next_payments.recurrent_rule_finished': return 'La regola ricorrente è stata completata, non ci sono più pagamenti da effettuare!';
-			case 'transaction.list.empty': return 'Nessuna transazione trovata da mostrare qui. Aggiungi alcune transazioni nell\'app e magari sarai più fortunato la prossima volta.';
-			case 'transaction.list.searcher_placeholder': return 'Cerca per categoria, descrizione...';
-			case 'transaction.list.searcher_no_results': return 'Nessuna transazione trovata corrispondente ai criteri di ricerca';
-			case 'transaction.list.loading': return 'Caricamento di altre transazioni...';
-			case 'transaction.list.selected_short': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
+		map['transaction.create'] = 'Nuova transazione';
+		map['transaction.new_income'] = 'Nuova entrata';
+		map['transaction.new_expense'] = 'Nuova spesa';
+		map['transaction.new_success'] = 'Transazione creata con successo';
+		map['transaction.edit'] = 'Modifica transazione';
+		map['transaction.edit_success'] = 'Transazione modificata con successo';
+		map['transaction.edit_multiple'] = 'Modifica transazioni';
+		map['transaction.edit_multiple_success'] = ({required Object x}) => '${x} transazioni modificate con successo';
+		map['transaction.duplicate'] = 'Clona transazione';
+		map['transaction.duplicate_short'] = 'Clona';
+		map['transaction.duplicate_warning_message'] = 'Verrà creata una transazione identica a questa con la stessa data, vuoi continuare?';
+		map['transaction.duplicate_success'] = 'Transazione clonata con successo';
+		map['transaction.delete'] = 'Elimina transazione';
+		map['transaction.delete_warning_message'] = 'Questa azione è irreversibile. Il saldo attuale dei tuoi conti e tutte le tue statistiche saranno ricalcolate';
+		map['transaction.delete_success'] = 'Transazione eliminata correttamente';
+		map['transaction.delete_multiple'] = 'Elimina transazioni';
+		map['transaction.delete_multiple_warning_message'] = ({required Object x}) => 'Questa azione è irreversibile ed eliminerà ${x} transazioni. Il saldo attuale dei tuoi conti e tutte le tue statistiche saranno ricalcolate';
+		map['transaction.delete_multiple_success'] = ({required Object x}) => '${x} transazioni eliminate correttamente';
+		map['transaction.details'] = 'Dettagli movimento';
+		map['transaction.next_payments.accept'] = 'Accetta';
+		map['transaction.next_payments.skip'] = 'Salta';
+		map['transaction.next_payments.skip_success'] = 'Transazione saltata con successo';
+		map['transaction.next_payments.skip_dialog_title'] = 'Salta transazione';
+		map['transaction.next_payments.skip_dialog_msg'] = ({required Object date}) => 'Questa azione è irreversibile. Sposteremo la data del prossimo movimento al ${date}';
+		map['transaction.next_payments.accept_today'] = 'Accetta oggi';
+		map['transaction.next_payments.accept_in_required_date'] = ({required Object date}) => 'Accetta alla data richiesta (${date})';
+		map['transaction.next_payments.accept_dialog_title'] = 'Accetta transazione';
+		map['transaction.next_payments.accept_dialog_msg_single'] = 'Il nuovo stato della transazione sarà nullo. Potrai ri-modificare lo stato di questa transazione quando vuoi';
+		map['transaction.next_payments.accept_dialog_msg'] = ({required Object date}) => 'Questa azione creerà una nuova transazione con data ${date}. Potrai controllare i dettagli di questa transazione sulla pagina delle transazioni';
+		map['transaction.next_payments.recurrent_rule_finished'] = 'La regola ricorrente è stata completata, non ci sono più pagamenti da effettuare!';
+		map['transaction.list.empty'] = 'Nessuna transazione trovata da mostrare qui. Aggiungi alcune transazioni nell\'app e magari sarai più fortunato la prossima volta.';
+		map['transaction.list.searcher_placeholder'] = 'Cerca per categoria, descrizione...';
+		map['transaction.list.searcher_no_results'] = 'Nessuna transazione trovata corrispondente ai criteri di ricerca';
+		map['transaction.list.loading'] = 'Caricamento di altre transazioni...';
+		map['transaction.list.selected_short'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
 				one: '${n} selezionato',
 				other: '${n} selezionati',
 			);
-			case 'transaction.list.selected_long': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
+		map['transaction.list.selected_long'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
 				one: '${n} transazione selezionata',
 				other: '${n} transazioni selezionate',
 			);
-			case 'transaction.list.bulk_edit.dates': return 'Modifica date';
-			case 'transaction.list.bulk_edit.categories': return 'Modifica categorie';
-			case 'transaction.list.bulk_edit.status': return 'Modifica stati';
-			case 'transaction.filters.from_value': return 'Da importo';
-			case 'transaction.filters.to_value': return 'Fino a importo';
-			case 'transaction.filters.from_value_def': return ({required Object x}) => 'Da ${x}';
-			case 'transaction.filters.to_value_def': return ({required Object x}) => 'Fino a ${x}';
-			case 'transaction.filters.from_date_def': return ({required Object date}) => 'Dalla data ${date}';
-			case 'transaction.filters.to_date_def': return ({required Object date}) => 'Fino alla data ${date}';
-			case 'transaction.form.validators.zero': return 'Il valore di una transazione non può essere uguale a zero';
-			case 'transaction.form.validators.date_max': return 'La data selezionata è successiva a quella attuale. La transazione verrà aggiunta come in sospeso';
-			case 'transaction.form.validators.date_after_account_creation': return 'Non puoi creare una transazione la cui data sia precedente alla data di creazione del conto a cui appartiene';
-			case 'transaction.form.validators.negative_transfer': return 'Il valore monetario di un trasferimento non può essere negativo';
-			case 'transaction.form.validators.transfer_between_same_accounts': return 'Il conto di origine e quello di destinazione non possono essere gli stessi';
-			case 'transaction.form.title': return 'Titolo transazione';
-			case 'transaction.form.title_short': return 'Titolo';
-			case 'transaction.form.value': return 'Valore della transazione';
-			case 'transaction.form.tap_to_see_more': return 'Tocca per vedere più dettagli';
-			case 'transaction.form.no_tags': return '-- Nessuna etichetta --';
-			case 'transaction.form.description': return 'Descrizione';
-			case 'transaction.form.description_info': return 'Tocca qui per inserire una descrizione più dettagliata su questa transazione';
-			case 'transaction.form.exchange_to_preferred_title': return ({required Object currency}) => 'Tasso di cambio per ${currency}';
-			case 'transaction.form.exchange_to_preferred_in_date': return 'Alla data della transazione';
-			case 'transaction.reversed.title': return 'Transazione inversa';
-			case 'transaction.reversed.title_short': return 'Trans. inversa';
-			case 'transaction.reversed.description_for_expenses': return 'Nonostante sia una transazione di spesa, ha un importo positivo. Questi tipi di transazioni possono essere utilizzati per rappresentare la restituzione di una spesa precedentemente registrata, come un rimborso o il pagamento di un debito.';
-			case 'transaction.reversed.description_for_incomes': return 'Nonostante sia una transazione di entrata, ha un importo negativo. Questi tipi di transazioni possono essere utilizzati per annullare o correggere un\'entrata registrata in modo errato, per riflettere una restituzione o un rimborso di denaro o per registrare il pagamento di debiti.';
-			case 'transaction.status.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
+		map['transaction.list.bulk_edit.dates'] = 'Modifica date';
+		map['transaction.list.bulk_edit.categories'] = 'Modifica categorie';
+		map['transaction.list.bulk_edit.status'] = 'Modifica stati';
+		map['transaction.filters.from_value'] = 'Da importo';
+		map['transaction.filters.to_value'] = 'Fino a importo';
+		map['transaction.filters.from_value_def'] = ({required Object x}) => 'Da ${x}';
+		map['transaction.filters.to_value_def'] = ({required Object x}) => 'Fino a ${x}';
+		map['transaction.filters.from_date_def'] = ({required Object date}) => 'Dalla data ${date}';
+		map['transaction.filters.to_date_def'] = ({required Object date}) => 'Fino alla data ${date}';
+		map['transaction.form.validators.zero'] = 'Il valore di una transazione non può essere uguale a zero';
+		map['transaction.form.validators.date_max'] = 'La data selezionata è successiva a quella attuale. La transazione verrà aggiunta come in sospeso';
+		map['transaction.form.validators.date_after_account_creation'] = 'Non puoi creare una transazione la cui data sia precedente alla data di creazione del conto a cui appartiene';
+		map['transaction.form.validators.negative_transfer'] = 'Il valore monetario di un trasferimento non può essere negativo';
+		map['transaction.form.validators.transfer_between_same_accounts'] = 'Il conto di origine e quello di destinazione non possono essere gli stessi';
+		map['transaction.form.title'] = 'Titolo transazione';
+		map['transaction.form.title_short'] = 'Titolo';
+		map['transaction.form.value'] = 'Valore della transazione';
+		map['transaction.form.tap_to_see_more'] = 'Tocca per vedere più dettagli';
+		map['transaction.form.no_tags'] = '-- Nessuna etichetta --';
+		map['transaction.form.description'] = 'Descrizione';
+		map['transaction.form.description_info'] = 'Tocca qui per inserire una descrizione più dettagliata su questa transazione';
+		map['transaction.form.exchange_to_preferred_title'] = ({required Object currency}) => 'Tasso di cambio per ${currency}';
+		map['transaction.form.exchange_to_preferred_in_date'] = 'Alla data della transazione';
+		map['transaction.reversed.title'] = 'Transazione inversa';
+		map['transaction.reversed.title_short'] = 'Trans. inversa';
+		map['transaction.reversed.description_for_expenses'] = 'Nonostante sia una transazione di spesa, ha un importo positivo. Questi tipi di transazioni possono essere utilizzati per rappresentare la restituzione di una spesa precedentemente registrata, come un rimborso o il pagamento di un debito.';
+		map['transaction.reversed.description_for_incomes'] = 'Nonostante sia una transazione di entrata, ha un importo negativo. Questi tipi di transazioni possono essere utilizzati per annullare o correggere un\'entrata registrata in modo errato, per riflettere una restituzione o un rimborso di denaro o per registrare il pagamento di debiti.';
+		map['transaction.status.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
 				one: 'Stato',
 				other: 'Stati',
 			);
-			case 'transaction.status.display_long': return 'Stato transazione';
-			case 'transaction.status.tr_status': return ({required Object status}) => 'Transazione ${status}';
-			case 'transaction.status.none': return 'Senza stato';
-			case 'transaction.status.none_descr': return 'Transazione senza uno stato specifico';
-			case 'transaction.status.reconciled': return 'Riconciliata';
-			case 'transaction.status.reconciled_descr': return 'Questa transazione è già stata convalidata e corrisponde a una transazione reale della tua banca';
-			case 'transaction.status.unreconciled': return 'Non riconciliata';
-			case 'transaction.status.unreconciled_descr': return 'Questa transazione non è ancora stata convalidata e pertanto non appare ancora nei tuoi conti bancari reali. Tuttavia, conta per il calcolo dei saldi e delle statistiche in Monekin';
-			case 'transaction.status.pending': return 'In sospeso';
-			case 'transaction.status.pending_descr': return 'Questa transazione è in sospeso e pertanto non verrà presa in considerazione nel calcolo dei saldi e delle statistiche';
-			case 'transaction.status.voided': return 'Annullata';
-			case 'transaction.status.voided_descr': return 'Transazione annullata/cancellata a causa di errore di pagamento o qualsiasi altra ragione. Non verrà presa in considerazione nel calcolo dei saldi e delle statistiche';
-			case 'transaction.types.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
+		map['transaction.status.display_long'] = 'Stato transazione';
+		map['transaction.status.tr_status'] = ({required Object status}) => 'Transazione ${status}';
+		map['transaction.status.none'] = 'Senza stato';
+		map['transaction.status.none_descr'] = 'Transazione senza uno stato specifico';
+		map['transaction.status.reconciled'] = 'Riconciliata';
+		map['transaction.status.reconciled_descr'] = 'Questa transazione è già stata convalidata e corrisponde a una transazione reale della tua banca';
+		map['transaction.status.unreconciled'] = 'Non riconciliata';
+		map['transaction.status.unreconciled_descr'] = 'Questa transazione non è ancora stata convalidata e pertanto non appare ancora nei tuoi conti bancari reali. Tuttavia, conta per il calcolo dei saldi e delle statistiche in Monekin';
+		map['transaction.status.pending'] = 'In sospeso';
+		map['transaction.status.pending_descr'] = 'Questa transazione è in sospeso e pertanto non verrà presa in considerazione nel calcolo dei saldi e delle statistiche';
+		map['transaction.status.voided'] = 'Annullata';
+		map['transaction.status.voided_descr'] = 'Transazione annullata/cancellata a causa di errore di pagamento o qualsiasi altra ragione. Non verrà presa in considerazione nel calcolo dei saldi e delle statistiche';
+		map['transaction.types.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
 				one: 'Tipo di transazione',
 				other: 'Tipi di transazione',
 			);
-			case 'transaction.types.income': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
+		map['transaction.types.income'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
 				one: 'Entrata',
 				other: 'Entrate',
 			);
-			case 'transaction.types.expense': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
+		map['transaction.types.expense'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
 				one: 'Spesa',
 				other: 'Spese',
 			);
-			case 'transaction.types.transfer': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
+		map['transaction.types.transfer'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
 				one: 'Trasferimento',
 				other: 'Trasferimenti',
 			);
-			case 'transfer.display': return 'Trasferimento';
-			case 'transfer.transfers': return 'Trasferimenti';
-			case 'transfer.transfer_to': return ({required Object account}) => 'Trasferimento a ${account}';
-			case 'transfer.create': return 'Nuovo Trasferimento';
-			case 'transfer.need_two_accounts_warning_header': return 'Ops!';
-			case 'transfer.need_two_accounts_warning_message': return 'Sono necessari almeno due conti per eseguire questa azione. Se devi regolare o modificare il saldo attuale di questo conto, clicca sul pulsante modifica';
-			case 'transfer.form.from': return 'Conto di origine';
-			case 'transfer.form.to': return 'Conto di destinazione';
-			case 'transfer.form.value_in_destiny.title': return 'Importo trasferito a destinazione';
-			case 'transfer.form.value_in_destiny.amount_short': return ({required Object amount}) => '${amount} al conto di destinazione';
-			case 'recurrent_transactions.title': return 'Transazioni ricorrenti';
-			case 'recurrent_transactions.title_short': return 'Trans. ric.';
-			case 'recurrent_transactions.empty': return 'Sembra che tu non abbia transazioni ricorrenti. Crea una transazione ricorrente mensile, annuale o settimanale e apparirà qui';
-			case 'recurrent_transactions.total_expense_title': return 'Spesa totale per periodo';
-			case 'recurrent_transactions.total_expense_descr': return '* Senza considerare la data di inizio e fine di ciascuna ricorrenza';
-			case 'recurrent_transactions.details.title': return 'Transazione ricorrente';
-			case 'recurrent_transactions.details.descr': return 'I prossimi movimenti per questa transazione sono mostrati di seguito. Puoi accettare il primo movimento o saltarlo';
-			case 'recurrent_transactions.details.last_payment_info': return 'Questo movimento è l\'ultimo della regola ricorrente, quindi questa regola verrà automaticamente eliminata confermando questa azione';
-			case 'recurrent_transactions.details.delete_header': return 'Elimina transazione ricorrente';
-			case 'recurrent_transactions.details.delete_message': return 'Questa azione è irreversibile e non influenzerà le transazioni che hai già confermato/pagato';
-			case 'recurrent_transactions.status.delayed_by': return ({required Object x}) => 'Ritardato di ${x}g';
-			case 'recurrent_transactions.status.coming_in': return ({required Object x}) => 'Tra ${x} giorni';
-			case 'account.details': return 'Dettagli conto';
-			case 'account.date': return 'Data di apertura';
-			case 'account.close_date': return 'Data di chiusura';
-			case 'account.reopen': return 'Riapri conto';
-			case 'account.reopen_short': return 'Riapri';
-			case 'account.reopen_descr': return 'Sei sicuro di voler riaprire questo conto?';
-			case 'account.balance': return 'Saldo del conto';
-			case 'account.n_transactions': return 'Numero di transazioni';
-			case 'account.add_money': return 'Aggiungi denaro';
-			case 'account.withdraw_money': return 'Preleva denaro';
-			case 'account.no_accounts': return 'Nessuna transazione trovata da mostrare qui. Aggiungi una transazione cliccando sul pulsante \'+\' in basso';
-			case 'account.types.title': return 'Tipo di conto';
-			case 'account.types.warning': return 'Una volta scelto il tipo di conto, non potrà essere modificato in futuro';
-			case 'account.types.normal': return 'Conto normale';
-			case 'account.types.normal_descr': return 'Utile per registrare le tue finanze quotidiane. È il conto più comune, ti permette di aggiungere spese, entrate...';
-			case 'account.types.saving': return 'Conto risparmio';
-			case 'account.types.saving_descr': return 'Potrai solo aggiungere e prelevare denaro da esso da altri conti. Perfetto per iniziare a risparmiare denaro';
-			case 'account.form.name': return 'Nome conto';
-			case 'account.form.name_placeholder': return 'Es: Conto risparmio';
-			case 'account.form.notes': return 'Note';
-			case 'account.form.notes_placeholder': return 'Digita alcune note/descrizione su questo conto';
-			case 'account.form.initial_balance': return 'Saldo iniziale';
-			case 'account.form.current_balance': return 'Saldo attuale';
-			case 'account.form.create': return 'Crea conto';
-			case 'account.form.edit': return 'Modifica conto';
-			case 'account.form.currency_not_found_warn': return 'Non hai informazioni sui tassi di cambio per questa valuta. Verrà utilizzato 1.0 come tasso di cambio predefinito. Puoi modificarlo nelle impostazioni';
-			case 'account.form.already_exists': return 'Ne esiste già un altro con lo stesso nome, per favore scrivine un altro';
-			case 'account.form.tr_before_opening_date': return 'Ci sono transazioni in questo conto con una data precedente alla data di apertura';
-			case 'account.form.iban': return 'IBAN';
-			case 'account.form.swift': return 'SWIFT';
-			case 'account.delete.warning_header': return 'Eliminare conto?';
-			case 'account.delete.warning_text': return 'Questa azione eliminerà questo conto e tutte le sue transazioni';
-			case 'account.delete.success': return 'Conto eliminato con successo';
-			case 'account.close.title': return 'Chiudi conto';
-			case 'account.close.title_short': return 'Chiudi';
-			case 'account.close.warn': return 'Questo conto non apparirà più in determinati elenchi e non potrai creare transazioni in esso con una data successiva a quella specificata di seguito. Questa azione non influisce su transazioni o saldo, e puoi anche riaprire questo conto in qualsiasi momento.';
-			case 'account.close.should_have_zero_balance': return 'Devi avere un saldo attuale di 0 in questo conto per chiuderlo. Per favore modifica il conto prima di continuare';
-			case 'account.close.should_have_no_transactions': return 'Questo conto ha transazioni dopo la data di chiusura specificata. Eliminale o modifica la data di chiusura del conto prima di continuare';
-			case 'account.close.success': return 'Conto chiuso con successo';
-			case 'account.close.unarchive_succes': return 'Conto riaperto con successo';
-			case 'account.select.one': return 'Seleziona un conto';
-			case 'account.select.all': return 'Tutti i conti';
-			case 'account.select.multiple': return 'Seleziona conti';
-			case 'currencies.currency_converter': return 'Convertitore di valuta';
-			case 'currencies.currency': return 'Valuta';
-			case 'currencies.currency_manager': return 'Gestore valute';
-			case 'currencies.currency_manager_descr': return 'Configura la tua valuta e i suoi tassi di cambio con altre';
-			case 'currencies.preferred_currency': return 'Valuta preferita/base';
-			case 'currencies.change_preferred_currency_title': return 'Cambia valuta preferita';
-			case 'currencies.change_preferred_currency_msg': return 'Tutte le statistiche e i budget saranno visualizzati in questa valuta d\'ora in poi. Conti e transazioni manterranno la valuta che avevano. Tutti i tassi di cambio salvati verranno eliminati se esegui questa azione. Desideri continuare?';
-			case 'currencies.form.equal_to_preferred_warn': return 'La valuta non può essere uguale alla valuta dell\'utente';
-			case 'currencies.form.specify_a_currency': return 'Per favore specifica una valuta';
-			case 'currencies.form.add': return 'Aggiungi tasso di cambio';
-			case 'currencies.form.add_success': return 'Tasso di cambio aggiunto con successo';
-			case 'currencies.form.edit': return 'Modifica tasso di cambio';
-			case 'currencies.form.edit_success': return 'Tasso di cambio modificato con successo';
-			case 'currencies.delete_all_success': return 'Tassi di cambio eliminati con successo';
-			case 'currencies.historical': return 'Tassi storici';
-			case 'currencies.exchange_rate': return 'Tasso di cambio';
-			case 'currencies.exchange_rates': return 'Tassi di cambio';
-			case 'currencies.empty': return 'Aggiungi tassi di cambio qui in modo che se hai conti in valute diverse dalla tua valuta base i nostri grafici siano più accurati';
-			case 'currencies.select_a_currency': return 'Seleziona una valuta';
-			case 'currencies.search': return 'Cerca per nome o per codice valuta';
-			case 'tags.display': return ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
+		map['transfer.display'] = 'Trasferimento';
+		map['transfer.transfers'] = 'Trasferimenti';
+		map['transfer.transfer_to'] = ({required Object account}) => 'Trasferimento a ${account}';
+		map['transfer.create'] = 'Nuovo Trasferimento';
+		map['transfer.need_two_accounts_warning_header'] = 'Ops!';
+		map['transfer.need_two_accounts_warning_message'] = 'Sono necessari almeno due conti per eseguire questa azione. Se devi regolare o modificare il saldo attuale di questo conto, clicca sul pulsante modifica';
+		map['transfer.form.from'] = 'Conto di origine';
+		map['transfer.form.to'] = 'Conto di destinazione';
+		map['transfer.form.value_in_destiny.title'] = 'Importo trasferito a destinazione';
+		map['transfer.form.value_in_destiny.amount_short'] = ({required Object amount}) => '${amount} al conto di destinazione';
+		map['recurrent_transactions.title'] = 'Transazioni ricorrenti';
+		map['recurrent_transactions.title_short'] = 'Trans. ric.';
+		map['recurrent_transactions.empty'] = 'Sembra che tu non abbia transazioni ricorrenti. Crea una transazione ricorrente mensile, annuale o settimanale e apparirà qui';
+		map['recurrent_transactions.total_expense_title'] = 'Spesa totale per periodo';
+		map['recurrent_transactions.total_expense_descr'] = '* Senza considerare la data di inizio e fine di ciascuna ricorrenza';
+		map['recurrent_transactions.details.title'] = 'Transazione ricorrente';
+		map['recurrent_transactions.details.descr'] = 'I prossimi movimenti per questa transazione sono mostrati di seguito. Puoi accettare il primo movimento o saltarlo';
+		map['recurrent_transactions.details.last_payment_info'] = 'Questo movimento è l\'ultimo della regola ricorrente, quindi questa regola verrà automaticamente eliminata confermando questa azione';
+		map['recurrent_transactions.details.delete_header'] = 'Elimina transazione ricorrente';
+		map['recurrent_transactions.details.delete_message'] = 'Questa azione è irreversibile e non influenzerà le transazioni che hai già confermato/pagato';
+		map['recurrent_transactions.status.delayed_by'] = ({required Object x}) => 'Ritardato di ${x}g';
+		map['recurrent_transactions.status.coming_in'] = ({required Object x}) => 'Tra ${x} giorni';
+		map['account.details'] = 'Dettagli conto';
+		map['account.date'] = 'Data di apertura';
+		map['account.close_date'] = 'Data di chiusura';
+		map['account.reopen'] = 'Riapri conto';
+		map['account.reopen_short'] = 'Riapri';
+		map['account.reopen_descr'] = 'Sei sicuro di voler riaprire questo conto?';
+		map['account.balance'] = 'Saldo del conto';
+		map['account.n_transactions'] = 'Numero di transazioni';
+		map['account.add_money'] = 'Aggiungi denaro';
+		map['account.withdraw_money'] = 'Preleva denaro';
+		map['account.no_accounts'] = 'Nessuna transazione trovata da mostrare qui. Aggiungi una transazione cliccando sul pulsante \'+\' in basso';
+		map['account.types.title'] = 'Tipo di conto';
+		map['account.types.warning'] = 'Una volta scelto il tipo di conto, non potrà essere modificato in futuro';
+		map['account.types.normal'] = 'Conto normale';
+		map['account.types.normal_descr'] = 'Utile per registrare le tue finanze quotidiane. È il conto più comune, ti permette di aggiungere spese, entrate...';
+		map['account.types.saving'] = 'Conto risparmio';
+		map['account.types.saving_descr'] = 'Potrai solo aggiungere e prelevare denaro da esso da altri conti. Perfetto per iniziare a risparmiare denaro';
+		map['account.form.name'] = 'Nome conto';
+		map['account.form.name_placeholder'] = 'Es: Conto risparmio';
+		map['account.form.notes'] = 'Note';
+		map['account.form.notes_placeholder'] = 'Digita alcune note/descrizione su questo conto';
+		map['account.form.initial_balance'] = 'Saldo iniziale';
+		map['account.form.current_balance'] = 'Saldo attuale';
+		map['account.form.create'] = 'Crea conto';
+		map['account.form.edit'] = 'Modifica conto';
+		map['account.form.currency_not_found_warn'] = 'Non hai informazioni sui tassi di cambio per questa valuta. Verrà utilizzato 1.0 come tasso di cambio predefinito. Puoi modificarlo nelle impostazioni';
+		map['account.form.already_exists'] = 'Ne esiste già un altro con lo stesso nome, per favore scrivine un altro';
+		map['account.form.tr_before_opening_date'] = 'Ci sono transazioni in questo conto con una data precedente alla data di apertura';
+		map['account.form.iban'] = 'IBAN';
+		map['account.form.swift'] = 'SWIFT';
+		map['account.delete.warning_header'] = 'Eliminare conto?';
+		map['account.delete.warning_text'] = 'Questa azione eliminerà questo conto e tutte le sue transazioni';
+		map['account.delete.success'] = 'Conto eliminato con successo';
+		map['account.close.title'] = 'Chiudi conto';
+		map['account.close.title_short'] = 'Chiudi';
+		map['account.close.warn'] = 'Questo conto non apparirà più in determinati elenchi e non potrai creare transazioni in esso con una data successiva a quella specificata di seguito. Questa azione non influisce su transazioni o saldo, e puoi anche riaprire questo conto in qualsiasi momento.';
+		map['account.close.should_have_zero_balance'] = 'Devi avere un saldo attuale di 0 in questo conto per chiuderlo. Per favore modifica il conto prima di continuare';
+		map['account.close.should_have_no_transactions'] = 'Questo conto ha transazioni dopo la data di chiusura specificata. Eliminale o modifica la data di chiusura del conto prima di continuare';
+		map['account.close.success'] = 'Conto chiuso con successo';
+		map['account.close.unarchive_succes'] = 'Conto riaperto con successo';
+		map['account.select.one'] = 'Seleziona un conto';
+		map['account.select.all'] = 'Tutti i conti';
+		map['account.select.multiple'] = 'Seleziona conti';
+		map['currencies.currency_converter'] = 'Convertitore di valuta';
+		map['currencies.currency'] = 'Valuta';
+		map['currencies.currency_manager'] = 'Gestore valute';
+		map['currencies.currency_manager_descr'] = 'Configura la tua valuta e i suoi tassi di cambio con altre';
+		map['currencies.preferred_currency'] = 'Valuta preferita/base';
+		map['currencies.change_preferred_currency_title'] = 'Cambia valuta preferita';
+		map['currencies.change_preferred_currency_msg'] = 'Tutte le statistiche e i budget saranno visualizzati in questa valuta d\'ora in poi. Conti e transazioni manterranno la valuta che avevano. Tutti i tassi di cambio salvati verranno eliminati se esegui questa azione. Desideri continuare?';
+		map['currencies.form.equal_to_preferred_warn'] = 'La valuta non può essere uguale alla valuta dell\'utente';
+		map['currencies.form.specify_a_currency'] = 'Per favore specifica una valuta';
+		map['currencies.form.add'] = 'Aggiungi tasso di cambio';
+		map['currencies.form.add_success'] = 'Tasso di cambio aggiunto con successo';
+		map['currencies.form.edit'] = 'Modifica tasso di cambio';
+		map['currencies.form.edit_success'] = 'Tasso di cambio modificato con successo';
+		map['currencies.delete_all_success'] = 'Tassi di cambio eliminati con successo';
+		map['currencies.historical'] = 'Tassi storici';
+		map['currencies.exchange_rate'] = 'Tasso di cambio';
+		map['currencies.exchange_rates'] = 'Tassi di cambio';
+		map['currencies.empty'] = 'Aggiungi tassi di cambio qui in modo che se hai conti in valute diverse dalla tua valuta base i nostri grafici siano più accurati';
+		map['currencies.select_a_currency'] = 'Seleziona una valuta';
+		map['currencies.search'] = 'Cerca per nome o per codice valuta';
+		map['tags.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n,
 				one: 'Etichetta',
 				other: 'Etichette',
 			);
-			case 'tags.form.name': return 'Nome etichetta';
-			case 'tags.form.description': return 'Descrizione';
-			case 'tags.select.title': return 'Seleziona etichette';
-			case 'tags.select.all': return 'Tutte le etichette';
-			case 'tags.empty_list': return 'Non hai ancora creato alcuna etichetta. Etichette e categorie sono un ottimo modo per categorizzare i tuoi movimenti';
-			case 'tags.without_tags': return 'Senza etichette';
-			case 'tags.add': return 'Aggiungi etichetta';
-			case 'tags.create': return 'Crea etichetta';
-			case 'tags.create_success': return 'Etichetta creata con successo';
-			case 'tags.already_exists': return 'Questo nome di etichetta esiste già. Potresti volerla modificare';
-			case 'tags.edit': return 'Modifica etichetta';
-			case 'tags.edit_success': return 'Etichetta modificata con successo';
-			case 'tags.delete_success': return 'Categoria eliminata con successo';
-			case 'tags.delete_warning_header': return 'Eliminare etichetta?';
-			case 'tags.delete_warning_message': return 'Questa azione non eliminerà le transazioni che hanno questa etichetta.';
-			case 'categories.unknown': return 'Categoria sconosciuta';
-			case 'categories.create': return 'Crea categoria';
-			case 'categories.create_success': return 'Categoria creata correttamente';
-			case 'categories.new_category': return 'Nuova categoria';
-			case 'categories.already_exists': return 'Il nome di questa categoria esiste già. Magari vuoi modificarla';
-			case 'categories.edit': return 'Modifica categoria';
-			case 'categories.edit_success': return 'Categoria modificata correttamente';
-			case 'categories.name': return 'Nome categoria';
-			case 'categories.type': return 'Tipo di categoria';
-			case 'categories.both_types': return 'Entrambi i tipi';
-			case 'categories.subcategories': return 'Sottocategorie';
-			case 'categories.subcategories_add': return 'Aggiungi sottocategoria';
-			case 'categories.make_parent': return 'Rendi categoria';
-			case 'categories.make_child': return 'Rendi una sottocategoria';
-			case 'categories.make_child_warning1': return ({required Object destiny}) => 'Questa categoria e le sue sottocategorie diventeranno sottocategorie di <b>${destiny}</b>.';
-			case 'categories.make_child_warning2': return ({required Object x, required Object destiny}) => 'Le loro transazioni <b>(${x})</b> saranno spostate nelle nuove sottocategorie create all\'interno della categoria <b>${destiny}</b>.';
-			case 'categories.make_child_success': return 'Sottocategorie create con successo';
-			case 'categories.merge': return 'Unisci con un\'altra categoria';
-			case 'categories.merge_warning1': return ({required Object x, required Object from, required Object destiny}) => 'Tutte le transazioni (${x}) associate alla categoria <b>${from}</b> verranno spostate nella categoria <b>${destiny}</b>';
-			case 'categories.merge_warning2': return ({required Object from}) => 'La categoria <b>${from}</b> verrà eliminata irreversibilmente.';
-			case 'categories.merge_success': return 'Categoria unita con successo';
-			case 'categories.delete_success': return 'Categoria eliminata correttamente';
-			case 'categories.delete_warning_header': return 'Eliminare categoria?';
-			case 'categories.delete_warning_message': return ({required Object x}) => 'Questa azione eliminerà irreversibilmente tutte le transazioni <b>(${x})</b> relative a questa categoria.';
-			case 'categories.select.title': return 'Seleziona categorie';
-			case 'categories.select.select_one': return 'Seleziona una categoria';
-			case 'categories.select.select_subcategory': return 'Scegli una sottocategoria';
-			case 'categories.select.without_subcategory': return 'Senza sottocategoria';
-			case 'categories.select.all': return 'Tutte le categorie';
-			case 'categories.select.all_short': return 'Tutte';
-			case 'budgets.title': return 'Budget';
-			case 'budgets.repeated': return 'Ricorrente';
-			case 'budgets.one_time': return 'Una tantum';
-			case 'budgets.annual': return 'Annuali';
-			case 'budgets.week': return 'Settimanali';
-			case 'budgets.month': return 'Mensili';
-			case 'budgets.actives': return 'Attivi';
-			case 'budgets.pending': return 'In attesa di inizio';
-			case 'budgets.finish': return 'Terminati';
-			case 'budgets.from_budgeted': return 'rimanenti di ';
-			case 'budgets.days_left': return 'giorni rimasti';
-			case 'budgets.days_to_start': return 'giorni all\'inizio';
-			case 'budgets.since_expiration': return 'giorni dalla scadenza';
-			case 'budgets.no_budgets': return 'Sembra che non ci siano budget da visualizzare in questa sezione. Inizia creando un budget cliccando sul pulsante in basso';
-			case 'budgets.delete': return 'Elimina budget';
-			case 'budgets.delete_warning': return 'Questa azione è irreversibile. Categorie e transazioni relative a questa quotazione non verranno eliminate';
-			case 'budgets.form.title': return 'Aggiungi un budget';
-			case 'budgets.form.name': return 'Nome budget';
-			case 'budgets.form.value': return 'Quantità limite';
-			case 'budgets.form.create': return 'Aggiungi budget';
-			case 'budgets.form.edit': return 'Modifica budget';
-			case 'budgets.form.negative_warn': return 'I budget non possono avere un importo negativo';
-			case 'budgets.details.title': return 'Dettagli budget';
-			case 'budgets.details.statistics': return 'Statistiche';
-			case 'budgets.details.budget_value': return 'A budget';
-			case 'budgets.details.expend_diary_left': return ({required Object dailyAmount, required Object remainingDays}) => 'Puoi spendere ${dailyAmount}/giorno per ${remainingDays} giorni rimanenti';
-			case 'budgets.details.expend_evolution': return 'Evoluzione della spesa';
-			case 'budgets.details.no_transactions': return 'Sembra che tu non abbia effettuato spese relative a questo budget';
-			case 'backup.export.title': return 'Esporta i tuoi dati';
-			case 'backup.export.title_short': return 'Esporta';
-			case 'backup.export.all': return 'Backup completo';
-			case 'backup.export.all_descr': return 'Esporta tutti i tuoi dati (conti, transazioni, budget, impostazioni...). Importali di nuovo in qualsiasi momento per non perdere nulla.';
-			case 'backup.export.transactions': return 'Backup transazioni';
-			case 'backup.export.transactions_descr': return 'Esporta le tue transazioni in CSV in modo da poterle analizzare più facilmente in altri programmi o applicazioni.';
-			case 'backup.export.description': return 'Scarica i tuoi dati in diversi formati';
-			case 'backup.export.dialog_title': return 'Salva/Invia file';
-			case 'backup.export.success': return ({required Object x}) => 'File salvato/scaricato con successo in ${x}';
-			case 'backup.export.error': return 'Errore durante il download del file. Contatta lo sviluppatore tramite lozin.technologies@gmail.com';
-			case 'backup.import.title': return 'Importa i tuoi dati';
-			case 'backup.import.title_short': return 'Importa';
-			case 'backup.import.restore_backup': return 'Ripristina backup';
-			case 'backup.import.restore_backup_descr': return 'Importa un database precedentemente salvato da Monekin. Questa azione sostituirà tutti i dati attuali dell\'applicazione con i nuovi dati';
-			case 'backup.import.restore_backup_warn_description': return 'Importando un nuovo database, perderai tutti i dati attualmente salvati nell\'app. Si consiglia di effettuare un backup prima di continuare. Non caricare qui alcun file la cui origine non conosci, carica solo file che hai precedentemente scaricato da Monekin';
-			case 'backup.import.restore_backup_warn_title': return 'Sovrascrivi tutti i dati';
-			case 'backup.import.select_other_file': return 'Seleziona un altro file';
-			case 'backup.import.tap_to_select_file': return 'Tocca per selezionare un file';
-			case 'backup.import.manual_import.title': return 'Importazione manuale';
-			case 'backup.import.manual_import.descr': return 'Importa manualmente le transazioni da un file .csv';
-			case 'backup.import.manual_import.default_account': return 'Conto predefinito';
-			case 'backup.import.manual_import.remove_default_account': return 'Rimuovi conto predefinito';
-			case 'backup.import.manual_import.default_category': return 'Categoria predefinita';
-			case 'backup.import.manual_import.select_a_column': return 'Seleziona una colonna dal .csv';
-			case 'backup.import.manual_import.steps.0': return 'Seleziona il tuo file';
-			case 'backup.import.manual_import.steps.1': return 'Colonna per la quantità';
-			case 'backup.import.manual_import.steps.2': return 'Colonna per il conto';
-			case 'backup.import.manual_import.steps.3': return 'Colonna per la categoria';
-			case 'backup.import.manual_import.steps.4': return 'Colonna per la data';
-			case 'backup.import.manual_import.steps.5': return 'altre colonne';
-			case 'backup.import.manual_import.steps_descr.0': return 'Seleziona un file .csv dal tuo dispositivo. Assicurati che abbia una prima riga che descriva il nome di ciascuna colonna';
-			case 'backup.import.manual_import.steps_descr.1': return 'Seleziona la colonna in cui è specificato il valore di ogni transazione. Usa valori negativi per le spese e valori positivi per le entrate. Usa un punto come separatore decimale';
-			case 'backup.import.manual_import.steps_descr.2': return 'Seleziona la colonna in cui è specificato il conto a cui appartiene ogni transazione. Puoi anche selezionare un conto predefinito nel caso in cui non riusciamo a trovare il conto che desideri. Se non viene specificato un conto predefinito, ne creeremo uno con lo stesso nome';
-			case 'backup.import.manual_import.steps_descr.3': return 'Specifica la colonna in cui si trova il nome della categoria della transazione. Devi specificare una categoria predefinita in modo da assegnare questa categoria alle transazioni, nel caso in cui la categoria non possa essere trovata';
-			case 'backup.import.manual_import.steps_descr.4': return 'Seleziona la colonna in cui è specificata la data di ogni transazione. Se non specificato, le transazioni verranno create con la data attuale';
-			case 'backup.import.manual_import.steps_descr.5': return 'Specifica le colonne per altri attributi opzionali della transazione';
-			case 'backup.import.manual_import.success': return ({required Object x}) => '${x} transazioni importate con successo';
-			case 'backup.import.success': return 'Importazione eseguita con successo';
-			case 'backup.import.cancelled': return 'Importazione annullata dall\'utente';
-			case 'backup.import.error': return 'Errore durante l\'importazione del file. Contatta lo sviluppatore tramite lozin.technologies@gmail.com';
-			case 'backup.about.title': return 'Informazioni sul tuo database';
-			case 'backup.about.create_date': return 'Data di creazione';
-			case 'backup.about.modify_date': return 'Ultima modifica';
-			case 'backup.about.last_backup': return 'Ultimo backup';
-			case 'backup.about.size': return 'Dimensione';
-			case 'settings.title_long': return 'Impostazioni e aspetto';
-			case 'settings.title_short': return 'Impostazioni';
-			case 'settings.description': return 'Tema dell\'app, testi e altre impostazioni generali';
-			case 'settings.edit_profile': return 'Modifica profilo';
-			case 'settings.lang_section': return 'Lingua e testi';
-			case 'settings.lang_title': return 'Lingua dell\'app';
-			case 'settings.lang_descr': return 'Lingua in cui i testi verranno visualizzati nell\'app';
-			case 'settings.lang_help': return 'Se vuoi collaborare con le traduzioni di questa app, puoi consultare <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>la nostra guida</a>';
-			case 'settings.locale': return 'Regione';
-			case 'settings.locale_auto': return 'Sistema';
-			case 'settings.locale_descr': return 'Imposta il formato da utilizzare per date, numeri...';
-			case 'settings.locale_warn': return 'Quando cambi regione l\'app si aggiornerà';
-			case 'settings.first_day_of_week': return 'Primo giorno della settimana';
-			case 'settings.theme_and_colors': return 'Tema e colori';
-			case 'settings.theme': return 'Tema';
-			case 'settings.theme_auto': return 'Sistema';
-			case 'settings.theme_light': return 'Chiaro';
-			case 'settings.theme_dark': return 'Scuro';
-			case 'settings.amoled_mode': return 'Modalità AMOLED';
-			case 'settings.amoled_mode_descr': return 'Usa uno sfondo nero puro quando possibile. Questo aiuterà leggermente la batteria dei dispositivi con schermi AMOLED';
-			case 'settings.dynamic_colors': return 'Colori dinamici';
-			case 'settings.dynamic_colors_descr': return 'Usa il colore di accento del tuo sistema quando possibile';
-			case 'settings.accent_color': return 'Colore di accento';
-			case 'settings.accent_color_descr': return 'Scegli il colore che l\'app utilizzerà per enfatizzare determinate parti dell\'interfaccia';
-			case 'settings.swipe_actions.title': return 'Azioni di scorrimento';
-			case 'settings.swipe_actions.choose_description': return 'Scegli quale azione verrà attivata quando fai scorrere un elemento di transazione nell\'elenco utilizzando questa direzione di scorrimento';
-			case 'settings.swipe_actions.swipe_left': return 'Scorri verso sinistra';
-			case 'settings.swipe_actions.swipe_right': return 'Scorri verso destra';
-			case 'settings.swipe_actions.none': return 'Nessuna azione';
-			case 'settings.swipe_actions.toggle_reconciled': return 'Attiva/disattiva riconciliato';
-			case 'settings.swipe_actions.toggle_pending': return 'Attiva/disattiva in sospeso';
-			case 'settings.swipe_actions.toggle_voided': return 'Attivazione/disattivazione annullata';
-			case 'settings.swipe_actions.toggle_unreconciled': return 'Attiva/disattiva non riconciliato';
-			case 'settings.swipe_actions.remove_status': return 'Rimuovi lo stato';
-			case 'settings.security.title': return 'Sicurezza';
-			case 'settings.security.private_mode_at_launch': return 'Modalità privata all\'avvio';
-			case 'settings.security.private_mode_at_launch_descr': return 'Avvia l\'app in modalità privata per impostazione predefinita';
-			case 'settings.security.private_mode': return 'Modalità privata';
-			case 'settings.security.private_mode_descr': return 'Nascondi tutti i valori monetari';
-			case 'settings.security.private_mode_activated': return 'Modalità privata attivata';
-			case 'settings.security.private_mode_deactivated': return 'Modalità privata disattivata';
-			case 'more.title': return 'Altro';
-			case 'more.title_long': return 'Altre azioni';
-			case 'more.data.display': return 'Dati';
-			case 'more.data.display_descr': return 'Esporta e importa i tuoi dati per non perdere nulla';
-			case 'more.data.delete_all': return 'Elimina i miei dati';
-			case 'more.data.delete_all_header1': return 'Fermati subito padawan ⚠️⚠️';
-			case 'more.data.delete_all_message1': return 'Sei sicuro di voler continuare? Tutti i tuoi dati verranno eliminati in modo permanente e non potranno essere recuperati';
-			case 'more.data.delete_all_header2': return 'Un ultimo passo ⚠️⚠️';
-			case 'more.data.delete_all_message2': return 'Eliminando un account eliminerai tutti i tuoi dati personali memorizzati. I tuoi conti, transazioni, budget e categorie verranno eliminati e non potranno essere recuperati. Sei d\'accordo?';
-			case 'more.about_us.display': return 'Informazioni sull\'app';
-			case 'more.about_us.description': return 'Consulta i termini e altre informazioni rilevanti su Monekin. Entra in contatto con la comunità segnalando bug, lasciando suggerimenti...';
-			case 'more.about_us.legal.display': return 'Informazioni legali';
-			case 'more.about_us.legal.privacy': return 'Informativa sulla privacy';
-			case 'more.about_us.legal.terms': return 'Termini di utilizzo';
-			case 'more.about_us.legal.licenses': return 'Licenze';
-			case 'more.about_us.project.display': return 'Progetto';
-			case 'more.about_us.project.contributors': return 'Collaboratori';
-			case 'more.about_us.project.contributors_descr': return 'Tutti gli sviluppatori che hanno fatto crescere Monekin';
-			case 'more.about_us.project.contact': return 'Contattaci';
-			case 'more.help_us.display': return 'Aiutaci';
-			case 'more.help_us.description': return 'Scopri come puoi aiutare Monekin a migliorare sempre di più';
-			case 'more.help_us.rate_us': return 'Valutaci';
-			case 'more.help_us.rate_us_descr': return 'Ogni valutazione è benvenuta!';
-			case 'more.help_us.share': return 'Condividi Monekin';
-			case 'more.help_us.share_descr': return 'Condividi la nostra app con amici e famiglia';
-			case 'more.help_us.share_text': return 'Monekin! La migliore app di finanza personale. Scaricala qui';
-			case 'more.help_us.thanks': return 'Grazie!';
-			case 'more.help_us.thanks_long': return 'I tuoi contributi a Monekin e ad altri progetti open source, grandi e piccoli, rendono possibili grandi progetti come questo. Grazie per aver dedicato tempo a contribuire.';
-			case 'more.help_us.donate': return 'Fai una donazione';
-			case 'more.help_us.donate_descr': return 'Con la tua donazione aiuterai l\'app a continuare a ricevere miglioramenti. Quale modo migliore per ringraziare il lavoro svolto se non invitandomi per un caffè?';
-			case 'more.help_us.donate_success': return 'Donazione effettuata. Grazie mille per il tuo contributo! ❤️';
-			case 'more.help_us.donate_err': return 'Oops! Sembra che ci sia stato un errore nel ricevere il tuo pagamento';
-			case 'more.help_us.report': return 'Segnala bug, lascia suggerimenti...';
-			default: return null;
-		}
+		map['tags.form.name'] = 'Nome etichetta';
+		map['tags.form.description'] = 'Descrizione';
+		map['tags.select.title'] = 'Seleziona etichette';
+		map['tags.select.all'] = 'Tutte le etichette';
+		map['tags.empty_list'] = 'Non hai ancora creato alcuna etichetta. Etichette e categorie sono un ottimo modo per categorizzare i tuoi movimenti';
+		map['tags.without_tags'] = 'Senza etichette';
+		map['tags.add'] = 'Aggiungi etichetta';
+		map['tags.create'] = 'Crea etichetta';
+		map['tags.create_success'] = 'Etichetta creata con successo';
+		map['tags.already_exists'] = 'Questo nome di etichetta esiste già. Potresti volerla modificare';
+		map['tags.edit'] = 'Modifica etichetta';
+		map['tags.edit_success'] = 'Etichetta modificata con successo';
+		map['tags.delete_success'] = 'Categoria eliminata con successo';
+		map['tags.delete_warning_header'] = 'Eliminare etichetta?';
+		map['tags.delete_warning_message'] = 'Questa azione non eliminerà le transazioni che hanno questa etichetta.';
+		map['categories.unknown'] = 'Categoria sconosciuta';
+		map['categories.create'] = 'Crea categoria';
+		map['categories.create_success'] = 'Categoria creata correttamente';
+		map['categories.new_category'] = 'Nuova categoria';
+		map['categories.already_exists'] = 'Il nome di questa categoria esiste già. Magari vuoi modificarla';
+		map['categories.edit'] = 'Modifica categoria';
+		map['categories.edit_success'] = 'Categoria modificata correttamente';
+		map['categories.name'] = 'Nome categoria';
+		map['categories.type'] = 'Tipo di categoria';
+		map['categories.both_types'] = 'Entrambi i tipi';
+		map['categories.subcategories'] = 'Sottocategorie';
+		map['categories.subcategories_add'] = 'Aggiungi sottocategoria';
+		map['categories.make_parent'] = 'Rendi categoria';
+		map['categories.make_child'] = 'Rendi una sottocategoria';
+		map['categories.make_child_warning1'] = ({required Object destiny}) => 'Questa categoria e le sue sottocategorie diventeranno sottocategorie di <b>${destiny}</b>.';
+		map['categories.make_child_warning2'] = ({required Object x, required Object destiny}) => 'Le loro transazioni <b>(${x})</b> saranno spostate nelle nuove sottocategorie create all\'interno della categoria <b>${destiny}</b>.';
+		map['categories.make_child_success'] = 'Sottocategorie create con successo';
+		map['categories.merge'] = 'Unisci con un\'altra categoria';
+		map['categories.merge_warning1'] = ({required Object x, required Object from, required Object destiny}) => 'Tutte le transazioni (${x}) associate alla categoria <b>${from}</b> verranno spostate nella categoria <b>${destiny}</b>';
+		map['categories.merge_warning2'] = ({required Object from}) => 'La categoria <b>${from}</b> verrà eliminata irreversibilmente.';
+		map['categories.merge_success'] = 'Categoria unita con successo';
+		map['categories.delete_success'] = 'Categoria eliminata correttamente';
+		map['categories.delete_warning_header'] = 'Eliminare categoria?';
+		map['categories.delete_warning_message'] = ({required Object x}) => 'Questa azione eliminerà irreversibilmente tutte le transazioni <b>(${x})</b> relative a questa categoria.';
+		map['categories.select.title'] = 'Seleziona categorie';
+		map['categories.select.select_one'] = 'Seleziona una categoria';
+		map['categories.select.select_subcategory'] = 'Scegli una sottocategoria';
+		map['categories.select.without_subcategory'] = 'Senza sottocategoria';
+		map['categories.select.all'] = 'Tutte le categorie';
+		map['categories.select.all_short'] = 'Tutte';
+		map['budgets.title'] = 'Budget';
+		map['budgets.repeated'] = 'Ricorrente';
+		map['budgets.one_time'] = 'Una tantum';
+		map['budgets.annual'] = 'Annuali';
+		map['budgets.week'] = 'Settimanali';
+		map['budgets.month'] = 'Mensili';
+		map['budgets.actives'] = 'Attivi';
+		map['budgets.pending'] = 'In attesa di inizio';
+		map['budgets.finish'] = 'Terminati';
+		map['budgets.from_budgeted'] = 'rimanenti di ';
+		map['budgets.days_left'] = 'giorni rimasti';
+		map['budgets.days_to_start'] = 'giorni all\'inizio';
+		map['budgets.since_expiration'] = 'giorni dalla scadenza';
+		map['budgets.no_budgets'] = 'Sembra che non ci siano budget da visualizzare in questa sezione. Inizia creando un budget cliccando sul pulsante in basso';
+		map['budgets.delete'] = 'Elimina budget';
+		map['budgets.delete_warning'] = 'Questa azione è irreversibile. Categorie e transazioni relative a questa quotazione non verranno eliminate';
+		map['budgets.form.title'] = 'Aggiungi un budget';
+		map['budgets.form.name'] = 'Nome budget';
+		map['budgets.form.value'] = 'Quantità limite';
+		map['budgets.form.create'] = 'Aggiungi budget';
+		map['budgets.form.edit'] = 'Modifica budget';
+		map['budgets.form.negative_warn'] = 'I budget non possono avere un importo negativo';
+		map['budgets.details.title'] = 'Dettagli budget';
+		map['budgets.details.statistics'] = 'Statistiche';
+		map['budgets.details.budget_value'] = 'A budget';
+		map['budgets.details.expend_diary_left'] = ({required Object dailyAmount, required Object remainingDays}) => 'Puoi spendere ${dailyAmount}/giorno per ${remainingDays} giorni rimanenti';
+		map['budgets.details.expend_evolution'] = 'Evoluzione della spesa';
+		map['budgets.details.no_transactions'] = 'Sembra che tu non abbia effettuato spese relative a questo budget';
+		map['backup.export.title'] = 'Esporta i tuoi dati';
+		map['backup.export.title_short'] = 'Esporta';
+		map['backup.export.all'] = 'Backup completo';
+		map['backup.export.all_descr'] = 'Esporta tutti i tuoi dati (conti, transazioni, budget, impostazioni...). Importali di nuovo in qualsiasi momento per non perdere nulla.';
+		map['backup.export.transactions'] = 'Backup transazioni';
+		map['backup.export.transactions_descr'] = 'Esporta le tue transazioni in CSV in modo da poterle analizzare più facilmente in altri programmi o applicazioni.';
+		map['backup.export.description'] = 'Scarica i tuoi dati in diversi formati';
+		map['backup.export.dialog_title'] = 'Salva/Invia file';
+		map['backup.export.success'] = ({required Object x}) => 'File salvato/scaricato con successo in ${x}';
+		map['backup.export.error'] = 'Errore durante il download del file. Contatta lo sviluppatore tramite lozin.technologies@gmail.com';
+		map['backup.import.title'] = 'Importa i tuoi dati';
+		map['backup.import.title_short'] = 'Importa';
+		map['backup.import.restore_backup'] = 'Ripristina backup';
+		map['backup.import.restore_backup_descr'] = 'Importa un database precedentemente salvato da Monekin. Questa azione sostituirà tutti i dati attuali dell\'applicazione con i nuovi dati';
+		map['backup.import.restore_backup_warn_description'] = 'Importando un nuovo database, perderai tutti i dati attualmente salvati nell\'app. Si consiglia di effettuare un backup prima di continuare. Non caricare qui alcun file la cui origine non conosci, carica solo file che hai precedentemente scaricato da Monekin';
+		map['backup.import.restore_backup_warn_title'] = 'Sovrascrivi tutti i dati';
+		map['backup.import.select_other_file'] = 'Seleziona un altro file';
+		map['backup.import.tap_to_select_file'] = 'Tocca per selezionare un file';
+		map['backup.import.manual_import.title'] = 'Importazione manuale';
+		map['backup.import.manual_import.descr'] = 'Importa manualmente le transazioni da un file .csv';
+		map['backup.import.manual_import.default_account'] = 'Conto predefinito';
+		map['backup.import.manual_import.remove_default_account'] = 'Rimuovi conto predefinito';
+		map['backup.import.manual_import.default_category'] = 'Categoria predefinita';
+		map['backup.import.manual_import.select_a_column'] = 'Seleziona una colonna dal .csv';
+		map['backup.import.manual_import.steps.0'] = 'Seleziona il tuo file';
+		map['backup.import.manual_import.steps.1'] = 'Colonna per la quantità';
+		map['backup.import.manual_import.steps.2'] = 'Colonna per il conto';
+		map['backup.import.manual_import.steps.3'] = 'Colonna per la categoria';
+		map['backup.import.manual_import.steps.4'] = 'Colonna per la data';
+		map['backup.import.manual_import.steps.5'] = 'altre colonne';
+		map['backup.import.manual_import.steps_descr.0'] = 'Seleziona un file .csv dal tuo dispositivo. Assicurati che abbia una prima riga che descriva il nome di ciascuna colonna';
+		map['backup.import.manual_import.steps_descr.1'] = 'Seleziona la colonna in cui è specificato il valore di ogni transazione. Usa valori negativi per le spese e valori positivi per le entrate. Usa un punto come separatore decimale';
+		map['backup.import.manual_import.steps_descr.2'] = 'Seleziona la colonna in cui è specificato il conto a cui appartiene ogni transazione. Puoi anche selezionare un conto predefinito nel caso in cui non riusciamo a trovare il conto che desideri. Se non viene specificato un conto predefinito, ne creeremo uno con lo stesso nome';
+		map['backup.import.manual_import.steps_descr.3'] = 'Specifica la colonna in cui si trova il nome della categoria della transazione. Devi specificare una categoria predefinita in modo da assegnare questa categoria alle transazioni, nel caso in cui la categoria non possa essere trovata';
+		map['backup.import.manual_import.steps_descr.4'] = 'Seleziona la colonna in cui è specificata la data di ogni transazione. Se non specificato, le transazioni verranno create con la data attuale';
+		map['backup.import.manual_import.steps_descr.5'] = 'Specifica le colonne per altri attributi opzionali della transazione';
+		map['backup.import.manual_import.success'] = ({required Object x}) => '${x} transazioni importate con successo';
+		map['backup.import.success'] = 'Importazione eseguita con successo';
+		map['backup.import.cancelled'] = 'Importazione annullata dall\'utente';
+		map['backup.import.error'] = 'Errore durante l\'importazione del file. Contatta lo sviluppatore tramite lozin.technologies@gmail.com';
+		map['backup.about.title'] = 'Informazioni sul tuo database';
+		map['backup.about.create_date'] = 'Data di creazione';
+		map['backup.about.modify_date'] = 'Ultima modifica';
+		map['backup.about.last_backup'] = 'Ultimo backup';
+		map['backup.about.size'] = 'Dimensione';
+		map['settings.title_long'] = 'Impostazioni e aspetto';
+		map['settings.title_short'] = 'Impostazioni';
+		map['settings.description'] = 'Tema dell\'app, testi e altre impostazioni generali';
+		map['settings.edit_profile'] = 'Modifica profilo';
+		map['settings.lang_section'] = 'Lingua e testi';
+		map['settings.lang_title'] = 'Lingua dell\'app';
+		map['settings.lang_descr'] = 'Lingua in cui i testi verranno visualizzati nell\'app';
+		map['settings.lang_help'] = 'Se vuoi collaborare con le traduzioni di questa app, puoi consultare <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>la nostra guida</a>';
+		map['settings.locale'] = 'Regione';
+		map['settings.locale_auto'] = 'Sistema';
+		map['settings.locale_descr'] = 'Imposta il formato da utilizzare per date, numeri...';
+		map['settings.locale_warn'] = 'Quando cambi regione l\'app si aggiornerà';
+		map['settings.first_day_of_week'] = 'Primo giorno della settimana';
+		map['settings.theme_and_colors'] = 'Tema e colori';
+		map['settings.theme'] = 'Tema';
+		map['settings.theme_auto'] = 'Sistema';
+		map['settings.theme_light'] = 'Chiaro';
+		map['settings.theme_dark'] = 'Scuro';
+		map['settings.amoled_mode'] = 'Modalità AMOLED';
+		map['settings.amoled_mode_descr'] = 'Usa uno sfondo nero puro quando possibile. Questo aiuterà leggermente la batteria dei dispositivi con schermi AMOLED';
+		map['settings.dynamic_colors'] = 'Colori dinamici';
+		map['settings.dynamic_colors_descr'] = 'Usa il colore di accento del tuo sistema quando possibile';
+		map['settings.accent_color'] = 'Colore di accento';
+		map['settings.accent_color_descr'] = 'Scegli il colore che l\'app utilizzerà per enfatizzare determinate parti dell\'interfaccia';
+		map['settings.font'] = 'Font';
+		map['settings.font_platform'] = 'Piattaforma';
+		map['settings.swipe_actions.title'] = 'Azioni di scorrimento';
+		map['settings.swipe_actions.choose_description'] = 'Scegli quale azione verrà attivata quando fai scorrere un elemento di transazione nell\'elenco utilizzando questa direzione di scorrimento';
+		map['settings.swipe_actions.swipe_left'] = 'Scorri verso sinistra';
+		map['settings.swipe_actions.swipe_right'] = 'Scorri verso destra';
+		map['settings.swipe_actions.none'] = 'Nessuna azione';
+		map['settings.swipe_actions.toggle_reconciled'] = 'Attiva/disattiva riconciliato';
+		map['settings.swipe_actions.toggle_pending'] = 'Attiva/disattiva in sospeso';
+		map['settings.swipe_actions.toggle_voided'] = 'Attivazione/disattivazione annullata';
+		map['settings.swipe_actions.toggle_unreconciled'] = 'Attiva/disattiva non riconciliato';
+		map['settings.swipe_actions.remove_status'] = 'Rimuovi lo stato';
+		map['settings.security.title'] = 'Sicurezza';
+		map['settings.security.private_mode_at_launch'] = 'Modalità privata all\'avvio';
+		map['settings.security.private_mode_at_launch_descr'] = 'Avvia l\'app in modalità privata per impostazione predefinita';
+		map['settings.security.private_mode'] = 'Modalità privata';
+		map['settings.security.private_mode_descr'] = 'Nascondi tutti i valori monetari';
+		map['settings.security.private_mode_activated'] = 'Modalità privata attivata';
+		map['settings.security.private_mode_deactivated'] = 'Modalità privata disattivata';
+		map['more.title'] = 'Altro';
+		map['more.title_long'] = 'Altre azioni';
+		map['more.data.display'] = 'Dati';
+		map['more.data.display_descr'] = 'Esporta e importa i tuoi dati per non perdere nulla';
+		map['more.data.delete_all'] = 'Elimina i miei dati';
+		map['more.data.delete_all_header1'] = 'Fermati subito padawan ⚠️⚠️';
+		map['more.data.delete_all_message1'] = 'Sei sicuro di voler continuare? Tutti i tuoi dati verranno eliminati in modo permanente e non potranno essere recuperati';
+		map['more.data.delete_all_header2'] = 'Un ultimo passo ⚠️⚠️';
+		map['more.data.delete_all_message2'] = 'Eliminando un account eliminerai tutti i tuoi dati personali memorizzati. I tuoi conti, transazioni, budget e categorie verranno eliminati e non potranno essere recuperati. Sei d\'accordo?';
+		map['more.about_us.display'] = 'Informazioni sull\'app';
+		map['more.about_us.description'] = 'Consulta i termini e altre informazioni rilevanti su Monekin. Entra in contatto con la comunità segnalando bug, lasciando suggerimenti...';
+		map['more.about_us.legal.display'] = 'Informazioni legali';
+		map['more.about_us.legal.privacy'] = 'Informativa sulla privacy';
+		map['more.about_us.legal.terms'] = 'Termini di utilizzo';
+		map['more.about_us.legal.licenses'] = 'Licenze';
+		map['more.about_us.project.display'] = 'Progetto';
+		map['more.about_us.project.contributors'] = 'Collaboratori';
+		map['more.about_us.project.contributors_descr'] = 'Tutti gli sviluppatori che hanno fatto crescere Monekin';
+		map['more.about_us.project.contact'] = 'Contattaci';
+		map['more.help_us.display'] = 'Aiutaci';
+		map['more.help_us.description'] = 'Scopri come puoi aiutare Monekin a migliorare sempre di più';
+		map['more.help_us.rate_us'] = 'Valutaci';
+		map['more.help_us.rate_us_descr'] = 'Ogni valutazione è benvenuta!';
+		map['more.help_us.share'] = 'Condividi Monekin';
+		map['more.help_us.share_descr'] = 'Condividi la nostra app con amici e famiglia';
+		map['more.help_us.share_text'] = 'Monekin! La migliore app di finanza personale. Scaricala qui';
+		map['more.help_us.thanks'] = 'Grazie!';
+		map['more.help_us.thanks_long'] = 'I tuoi contributi a Monekin e ad altri progetti open source, grandi e piccoli, rendono possibili grandi progetti come questo. Grazie per aver dedicato tempo a contribuire.';
+		map['more.help_us.donate'] = 'Fai una donazione';
+		map['more.help_us.donate_descr'] = 'Con la tua donazione aiuterai l\'app a continuare a ricevere miglioramenti. Quale modo migliore per ringraziare il lavoro svolto se non invitandomi per un caffè?';
+		map['more.help_us.donate_success'] = 'Donazione effettuata. Grazie mille per il tuo contributo! ❤️';
+		map['more.help_us.donate_err'] = 'Oops! Sembra che ci sia stato un errore nel ricevere il tuo pagamento';
+		map['more.help_us.report'] = 'Segnala bug, lascia suggerimenti...';
+
+		_map = map;
+		return map;
 	}
 }
 

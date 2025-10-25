@@ -701,6 +701,8 @@
     "dynamic-colors.descr": "尽可能使用系统强调色",
     "accent-color": "强调色",
     "accent-color.descr": "选择应用中用来强调介面某些部分的颜色",
+    "font": "字体",
+    "font-platform": "平台",
     "SWIPE-ACTIONS": {
       "title": "滑动操作",
       "choose-description": "选择当您使用此滑动方向滑动列表中的交易项目时将触发什么操作",

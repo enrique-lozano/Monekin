@@ -701,6 +701,8 @@
     "dynamic-colors.descr": "Verwende wann immer möglich die Akzentfarbe des Systems",
     "accent-color": "Akzentfarbe",
     "accent-color.descr": "Wähle die Farbe aus, mit der die App bestimmte Teile der Benutzeroberfläche hervorhebt",
+    "font": "Schriftart",
+    "font-platform": "Plattform",
     "SWIPE-ACTIONS": {
       "title": "Wischaktionen",
       "choose-description": "Wählen Sie aus, welche Aktion ausgelöst wird, wenn Sie mit dieser Wischrichtung über ein Transaktionselement in der Liste wischen",

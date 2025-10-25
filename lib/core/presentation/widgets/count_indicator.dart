@@ -27,7 +27,7 @@ class CountIndicator extends StatelessWidget {
   const CountIndicator(
     this.countToDisplay, {
     super.key,
-    this.fontWeight = FontWeight.w700,
+    this.fontWeight = FontWeight.bold,
   });
 
   final int countToDisplay;

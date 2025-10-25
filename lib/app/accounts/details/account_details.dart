@@ -293,7 +293,6 @@ class _AccountDetailHeader extends SliverPersistentHeaderDelegate {
                             .copyWith(
                               fontSize:
                                   32 - (1 - pow(1 - shrinkPercent, 4)) * 15,
-                              fontWeight: FontWeight.w600,
                             ),
                         child: CurrencyDisplayer(
                           amountToConvert: snapshot.data!,

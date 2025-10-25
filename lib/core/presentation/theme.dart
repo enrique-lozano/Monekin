@@ -1,5 +1,7 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/core/database/services/user-setting/enum/app-fonts.enum.dart';
+import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 
 import 'app_colors.dart';
@@ -94,11 +96,15 @@ ThemeData getThemeData(
     isDark ? darkColorScheme : lightColorScheme,
   );
 
+  final fontFamily = AppFonts.fromDB(
+    appStateSettings[SettingKey.font],
+  )?.fontFamilyName;
+
   theme = ThemeData(
     colorScheme: isDark ? darkColorScheme : lightColorScheme,
     brightness: isDark ? Brightness.dark : Brightness.light,
     useMaterial3: true,
-    fontFamily: 'Jost',
+    fontFamily: fontFamily,
     extensions: [customAppColors],
   );
 
@@ -110,7 +116,8 @@ ThemeData getThemeData(
     fontSize: 14,
     wordSpacing: 0,
     decorationThickness: 1,
-    fontFamily: 'Jost',
+    fontWeight: FontWeight.bold,
+    fontFamily: fontFamily,
   );
 
   return theme.copyWith(

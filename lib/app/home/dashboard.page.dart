@@ -181,6 +181,9 @@ class _DashboardPageState extends State<DashboardPage> {
             StreamBuilder(
               stream: AccountService.instance.getAccounts(),
               builder: (context, accounts) {
+                final labelStyle = Theme.of(context).textTheme.labelMedium!
+                    .copyWith(color: onHeaderSmallTextColor(context));
+
                 if (_isIncomeExpenseAtSameLevel(context)) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -192,13 +195,13 @@ class _DashboardPageState extends State<DashboardPage> {
                         children: [
                           IncomeOrExpenseCard(
                             type: TransactionType.E,
-                            startDate: dateRangeService.startDate,
-                            endDate: dateRangeService.endDate,
+                            periodState: dateRangeService,
+                            labelStyle: labelStyle,
                           ),
                           IncomeOrExpenseCard(
                             type: TransactionType.I,
-                            startDate: dateRangeService.startDate,
-                            endDate: dateRangeService.endDate,
+                            periodState: dateRangeService,
+                            labelStyle: labelStyle,
                           ),
                         ],
                       ),
@@ -215,13 +218,13 @@ class _DashboardPageState extends State<DashboardPage> {
                       children: [
                         IncomeOrExpenseCard(
                           type: TransactionType.E,
-                          startDate: dateRangeService.startDate,
-                          endDate: dateRangeService.endDate,
+                          periodState: dateRangeService,
+                          labelStyle: labelStyle,
                         ),
                         IncomeOrExpenseCard(
                           type: TransactionType.I,
-                          startDate: dateRangeService.startDate,
-                          endDate: dateRangeService.endDate,
+                          periodState: dateRangeService,
+                          labelStyle: labelStyle,
                         ),
                       ],
                     ),
@@ -316,9 +319,8 @@ class _DashboardPageState extends State<DashboardPage> {
                     "Welcome again!",
                     softWrap: false,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontWeight: FontWeight.w300,
                       overflow: TextOverflow.fade,
-                      color: AppColors.of(context).onConsistentPrimary,
+                      color: onHeaderSmallTextColor(context),
                     ),
                   ),
                   StreamBuilder(
@@ -334,7 +336,6 @@ class _DashboardPageState extends State<DashboardPage> {
                         snapshot.data!,
                         softWrap: false,
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                          fontWeight: FontWeight.w600,
                           fontSize: 18,
                           overflow: TextOverflow.fade,
                           color: AppColors.of(context).onConsistentPrimary,
@@ -371,7 +372,7 @@ class _DashboardPageState extends State<DashboardPage> {
               Text(
                 t.home.total_balance,
                 style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                  color: AppColors.of(context).onConsistentPrimary,
+                  color: onHeaderSmallTextColor(context),
                 ),
               ),
               StreamBuilder(
@@ -388,7 +389,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 ).isSmallerOrEqualTo(BreakpointID.xs)
                             ? 22
                             : 26,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.bold,
                         color: AppColors.of(context).onConsistentPrimary,
                       ),
                     );
@@ -444,7 +445,7 @@ class _DashboardPageState extends State<DashboardPage> {
           Text(
             t.home.total_balance,
             style: Theme.of(context).textTheme.labelSmall!.copyWith(
-              color: AppColors.of(context).onConsistentPrimary,
+              color: onHeaderSmallTextColor(context),
             ),
           ),
           if (!accounts.hasData) ...[
@@ -467,7 +468,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                   ).isSmallerOrEqualTo(BreakpointID.xs)
                               ? 26
                               : 32,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.bold,
                           color: AppColors.of(context).onConsistentPrimary,
                         ),
                   );
@@ -492,7 +493,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
                   return TrendingValue(
                     percentage: snapshot.data!,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.bold,
                     filled: true,
                     outlined: true,
                     fontSize: 16,
@@ -519,3 +520,6 @@ class EmptyAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size(0.0, 0.0);
 }
+
+Color onHeaderSmallTextColor(BuildContext context) =>
+    AppColors.of(context).onConsistentPrimary.withOpacity(0.9);

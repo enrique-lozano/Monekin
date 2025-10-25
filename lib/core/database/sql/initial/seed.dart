@@ -16,6 +16,7 @@ String settingsInitialSeedSQL =
   INSERT INTO userSettings VALUES 
   ('${SettingKey.avatar.name}', 'man'), 
   ('${SettingKey.userName.name}', 'User'), 
+  ('${SettingKey.font.name}', '0'), 
   ('${SettingKey.appLanguage.name}', null), 
   ('${SettingKey.privateModeAtLaunch.name}', '0'), 
   ('${SettingKey.accentColor.name}', 'auto'), 

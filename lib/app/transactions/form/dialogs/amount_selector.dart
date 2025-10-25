@@ -334,7 +334,7 @@ class _AmountSelectorState extends State<AmountSelector> {
                             child: Builder(
                               builder: (context) {
                                 const bigSizeStyle = TextStyle(
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: FontWeight.bold,
                                 );
 
                                 return CurrencyDisplayer(
@@ -342,14 +342,14 @@ class _AmountSelectorState extends State<AmountSelector> {
                                   currency: widget.currency,
                                   followPrivateMode: false,
                                   decimalsStyle: TextStyle(
-                                    fontWeight: FontWeight.w200,
+                                    fontWeight: FontWeight.w300,
                                     fontSize: 22,
-                                    color: amountString.contains('.')
-                                        ? null
-                                        : Theme.of(context)
-                                              .colorScheme
-                                              .onSurface
-                                              .withOpacity(0.3),
+                                    color: AppColors.of(context).textBody
+                                        .withOpacity(
+                                          amountString.contains('.')
+                                              ? 1.0
+                                              : 0.3,
+                                        ),
                                   ),
                                   integerStyle: bigSizeStyle,
                                   currencyStyle: bigSizeStyle,
@@ -630,7 +630,7 @@ class CalculatorButton extends StatelessWidget {
           : Text(
               text!,
               softWrap: false,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
     );
   }
