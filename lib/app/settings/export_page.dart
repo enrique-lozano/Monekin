@@ -1,10 +1,13 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/presentation/styles/big_button_style.dart';
 import 'package:monekin/core/presentation/widgets/outlined_button_stacked.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../core/database/backup/backup_database_service.dart';
 
@@ -55,6 +58,45 @@ class _ExportDataPageState extends State<ExportDataPage> {
     );
   }
 
+  downloadFile() async {
+    final messeger = ScaffoldMessenger.of(context);
+    String? path = await FilePicker.platform.getDirectoryPath();
+
+    if (path == null) {
+      // TODO: Maybe we should also add a snackbar here
+      return;
+    }
+
+    if (selectedExportFormat == _ExportFormats.db) {
+      await BackupDatabaseService()
+          .exportDatabaseFile(path)
+          .then((value) {
+            messeger.showSnackBar(
+              SnackBar(content: Text(t.backup.export.success(x: path))),
+            );
+          })
+          .catchError((err) {
+            messeger.showSnackBar(SnackBar(content: Text('$err')));
+          });
+    } else {
+      await BackupDatabaseService()
+          .exportSpreadsheet(
+            path,
+            await TransactionService.instance
+                .getTransactions(filters: filters)
+                .first,
+          )
+          .then((value) {
+            messeger.showSnackBar(
+              SnackBar(content: Text(t.backup.export.success(x: value))),
+            );
+          })
+          .catchError((err) {
+            messeger.showSnackBar(SnackBar(content: Text('$err')));
+          });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -62,52 +104,86 @@ class _ExportDataPageState extends State<ExportDataPage> {
     return Scaffold(
       appBar: AppBar(title: Text(t.backup.export.title)),
       persistentFooterButtons: [
-        PersistentFooterButton(
-          child: FilledButton(
-            child: Text(t.backup.export.title),
-            onPressed: () async {
-              final messeger = ScaffoldMessenger.of(context);
-              String? path = await FilePicker.platform.getDirectoryPath();
+        Row(
+          children: [
+            Flexible(
+              child: PersistentFooterButton(
+                child: FilledButton.icon(
+                  icon: const Icon(Icons.download_rounded),
+                  label: Text(t.ui_actions.download),
+                  style: getBigButtonStyle(context),
+                  onPressed: () => downloadFile(),
+                ),
+              ),
+            ),
 
-              if (path == null) {
-                // TODO: Maybe we should also add a snackbar here
-                return;
-              }
+            Flexible(
+              child: PersistentFooterButton(
+                child: FilledButton.icon(
+                  icon: const Icon(Icons.share_rounded),
+                  label: Text(t.ui_actions.submit),
+                  style: getBigButtonStyle(context),
+                  onPressed: () async {
+                    final messeger = ScaffoldMessenger.of(context);
+                    final directory = await getApplicationCacheDirectory();
 
-              if (selectedExportFormat == _ExportFormats.db) {
-                await BackupDatabaseService()
-                    .exportDatabaseFile(path)
-                    .then((value) {
-                      messeger.showSnackBar(
-                        SnackBar(
-                          content: Text(t.backup.export.success(x: path)),
-                        ),
-                      );
-                    })
-                    .catchError((err) {
-                      messeger.showSnackBar(SnackBar(content: Text('$err')));
-                    });
-              } else {
-                await BackupDatabaseService()
-                    .exportSpreadsheet(
-                      path,
-                      await TransactionService.instance
-                          .getTransactions(filters: filters)
-                          .first,
-                    )
-                    .then((value) {
-                      messeger.showSnackBar(
-                        SnackBar(
-                          content: Text(t.backup.export.success(x: value)),
-                        ),
-                      );
-                    })
-                    .catchError((err) {
-                      messeger.showSnackBar(SnackBar(content: Text('$err')));
-                    });
-              }
-            },
-          ),
+                    if (selectedExportFormat == _ExportFormats.db) {
+                      final dbFile = await BackupDatabaseService()
+                          .exportDatabaseFile(directory.path);
+
+                      await SharePlus.instance
+                          .share(ShareParams(files: [XFile(dbFile.path)]))
+                          .then((value) {
+                            messeger.showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  t.backup.export.success(x: directory),
+                                ),
+                              ),
+                            );
+                          })
+                          .catchError((err) {
+                            messeger.showSnackBar(
+                              SnackBar(content: Text('$err')),
+                            );
+                          });
+                    } else {
+                      final csvFile = await BackupDatabaseService()
+                          .exportSpreadsheet(
+                            directory.path,
+                            await TransactionService.instance
+                                .getTransactions(filters: filters)
+                                .first,
+                          );
+
+                      await SharePlus.instance
+                          .share(
+                            ShareParams(
+                              files: [
+                                XFile(csvFile.path, mimeType: 'text/csv'),
+                              ],
+                            ),
+                          )
+                          .then((value) {
+                            messeger.showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  t.backup.export.success(x: directory),
+                                ),
+                              ),
+                            );
+                          })
+                          .catchError((err) {
+                            messeger.showSnackBar(
+                              SnackBar(content: Text('$err')),
+                            );
+                          });
+                    }
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
       ],
       body: SingleChildScrollView(

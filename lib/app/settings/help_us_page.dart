@@ -63,8 +63,11 @@ class HelpUsPage extends StatelessWidget {
                     icon: Icons.share,
                     mainAxis: Axis.horizontal,
                     onTap: () {
-                      Share.share(
-                        '${t.more.help_us.share_text}: https://play.google.com/store/apps/details?id=com.monekin.app',
+                      SharePlus.instance.share(
+                        ShareParams(
+                          text:
+                              '${t.more.help_us.share_text}: https://play.google.com/store/apps/details?id=com.monekin.app',
+                        ),
                       );
                     },
                   ),
