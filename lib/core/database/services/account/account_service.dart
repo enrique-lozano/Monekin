@@ -165,13 +165,18 @@ class AccountService {
         });
 
     // Sum the acount initial balance and the balance of the transactions
-    return Rx.combineLatest([
-      initialBalanceQuery,
-      getAccountsBalance(
-        filters: trFilters.copyWith(maxDate: date, accountsIDs: accountIds),
-        convertToPreferredCurrency: convertToPreferredCurrency,
-      ),
-    ], (res) => res[0] + res[1]);
+    return Rx.combineLatest(
+      [
+        initialBalanceQuery,
+        getAccountsBalance(
+          filters: trFilters.copyWith(maxDate: date, accountsIDs: accountIds),
+          convertToPreferredCurrency: convertToPreferredCurrency,
+        ),
+      ],
+      (res) {
+        return res[0] + res[1];
+      },
+    );
   }
 
   Stream<double> getAccountsBalance({
@@ -198,8 +203,8 @@ class AccountService {
   /// sets it to the minimum date in the list of accounts.
   ///
   /// You can add filters for the transactions that will be taken into account to calculate
-  /// this value, via the [trFilters] param. We will overwrite the accountsIds, the maxDate
-  /// and the minDate param of this filter, based on the other params in this func.
+  /// this value, via the [trFilters] param. We will overwrite the accountsIds
+  /// param of this filter, based on the param in this func.
   Stream<double> getAccountsMoneyVariation({
     required List<Account> accounts,
     DateTime? startDate,
@@ -213,8 +218,6 @@ class AccountService {
     startDate ??= accounts.map((e) => e.date).min;
 
     final overwrittenFilters = trFilters.copyWith(
-      maxDate: endDate,
-      minDate: startDate,
       accountsIDs: accounts.map((a) => a.id).toList(),
     );
 
@@ -227,16 +230,22 @@ class AccountService {
       convertToPreferredCurrency: convertToPreferredCurrency,
     );
 
-    final accountsBalanceEndPeriod = getAccountsMoney(
-      accountIds: accountIds,
-      date: endDate,
-      trFilters: overwrittenFilters,
+    final accountsBalanceDuringPeriod = getAccountsBalance(
+      filters: overwrittenFilters.copyWith(
+        minDate: startDate,
+        maxDate: endDate,
+      ),
       convertToPreferredCurrency: convertToPreferredCurrency,
     );
 
-    return Rx.combineLatest([
-      accountsBalanceStartPeriod,
-      accountsBalanceEndPeriod,
-    ], (res) => (res[1] - res[0]) / res[0]);
+    return Rx.combineLatest(
+      [accountsBalanceStartPeriod, accountsBalanceDuringPeriod],
+      (res) {
+        final startBalance = res[0];
+        final finalBalance = res[1] + startBalance;
+
+        return (finalBalance - startBalance) / startBalance;
+      },
+    );
   }
 }
