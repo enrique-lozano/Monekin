@@ -134,11 +134,9 @@ class CategoryStatsModal extends StatelessWidget {
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(
-                    dateRangeText,
-                    style: const TextStyle(fontWeight: FontWeight.w300),
-                  ),
+                  Text(dateRangeText),
                   CurrencyDisplayer(
                     amountToConvert: categoryData.value,
                     integerStyle: Theme.of(context).textTheme.titleLarge!,

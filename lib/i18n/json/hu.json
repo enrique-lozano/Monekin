@@ -701,6 +701,8 @@
     "dynamic-colors.descr": "Amikor csak lehetséges, használja a rendszer kiemelő színét",
     "accent-color": "Kiemelő szín",
     "accent-color.descr": "Válassza ki, hogy az alkalmazás milyen színnel emelje ki a felület bizonyos részeit",
+    "font": "Betűtípus",
+    "font-platform": "Platform",
     "SWIPE-ACTIONS": {
       "title": "Csúsztatási műveletek",
       "choose-description": "Válassza ki, hogy milyen művelet induljon el, ha a listában lévő tranzakciós tételt ezzel a csúsztatási irány segítségével csúsztatja",

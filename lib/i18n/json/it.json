@@ -701,6 +701,8 @@
     "dynamic-colors.descr": "Usa il colore di accento del tuo sistema quando possibile",
     "accent-color": "Colore di accento",
     "accent-color.descr": "Scegli il colore che l'app utilizzerà per enfatizzare determinate parti dell'interfaccia",
+    "font": "Font",
+    "font-platform": "Piattaforma",
     "SWIPE-ACTIONS": {
       "title": "Azioni di scorrimento",
       "choose-description": "Scegli quale azione verrà attivata quando fai scorrere un elemento di transazione nell'elenco utilizzando questa direzione di scorrimento",

@@ -50,7 +50,7 @@ class TrendingValue extends StatelessWidget {
             '=',
             style: TextStyle(
               height: 1,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.bold,
               fontSize: fontSize * (9 / 7),
               color: textColor,
             ),

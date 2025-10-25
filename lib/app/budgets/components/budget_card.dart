@@ -52,7 +52,7 @@ class BudgetCard extends StatelessWidget {
               DefaultTextStyle(
                 style: Theme.of(
                   context,
-                ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600),
+                ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -161,7 +161,6 @@ class BudgetCard extends StatelessWidget {
                                               .textTheme
                                               .labelSmall!
                                               .copyWith(
-                                                fontWeight: FontWeight.w300,
                                                 color: Theme.of(
                                                   context,
                                                 ).colorScheme.onTertiary,

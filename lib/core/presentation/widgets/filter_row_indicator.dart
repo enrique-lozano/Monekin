@@ -73,7 +73,7 @@ class _FilterRowIndicatorState extends State<FilterRowIndicator> {
                 '${t.general.filters}:',
                 style: Theme.of(
                   context,
-                ).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w700),
+                ).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
               ),
             ),
             Expanded(

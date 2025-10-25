@@ -4,6 +4,7 @@ import 'package:monekin/app/settings/transaction_swipe_action_selector.dart';
 import 'package:monekin/app/settings/widgets/language_selector.dart';
 import 'package:monekin/app/settings/widgets/monekin_tile_switch.dart';
 import 'package:monekin/app/settings/widgets/supported_locales.dart';
+import 'package:monekin/core/database/services/user-setting/enum/app-fonts.enum.dart';
 import 'package:monekin/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
 import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
@@ -13,6 +14,7 @@ import 'package:monekin/core/presentation/animations/scaled_animated_switcher.da
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker_modal.dart';
+import 'package:monekin/core/presentation/widgets/dynamic_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/monekin_dropdown_select.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -115,6 +117,60 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               SettingKey.transactionSwipeRightAction,
             ),
             createListSeparator(context, t.settings.theme_and_colors),
+            Builder(
+              builder: (context) {
+                final font = AppFonts.fromDB(appStateSettings[SettingKey.font]);
+
+                return ListTile(
+                  leading: Icon(Icons.font_download_rounded),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    spacing: 12,
+                    children: [
+                      Flexible(child: Text(t.settings.font)),
+                      Flexible(
+                        child: SelectorContainer(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
+                          child: Text(
+                            font?.fontFamilyName ?? t.settings.font_platform,
+                            style: Theme.of(context).textTheme.bodyLarge!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    showDynamicSelectorBottomSheet(
+                      context,
+                      selectorWidget: DynamicSelectorModal(
+                        items: const [null, ...AppFonts.values],
+                        selectedValue: font,
+                        displayNameGetter: (action) =>
+                            action?.fontFamilyName ?? t.settings.font_platform,
+                        elementTitleBuilder: (title, item) => Text(
+                          title,
+                          style: TextStyle(fontFamily: item?.fontFamilyName),
+                        ),
+                        valueGetter: (action) => action,
+                        title: t.settings.font,
+                      ),
+                    ).then((modalResult) async {
+                      if (modalResult == null) return;
+
+                      await UserSettingService.instance.setItem(
+                        SettingKey.font,
+                        modalResult.result?.toDB(),
+                        updateGlobalState: true,
+                      );
+                    });
+                  },
+                );
+              },
+            ),
             Builder(
               builder: (context) {
                 final theme = getThemeFromString(

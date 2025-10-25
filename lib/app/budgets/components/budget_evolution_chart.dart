@@ -117,20 +117,7 @@ class BudgetEvolutionChart extends StatelessWidget {
                 show: true,
                 leftTitles: noAxisTitles,
                 topTitles: noAxisTitles,
-                bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: false,
-                    getTitlesWidget: (value, meta) {
-                      return Text(
-                        snapshot.data!.labels[int.parse(meta.formattedValue)],
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w200,
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                bottomTitles: noAxisTitles,
                 rightTitles: AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
@@ -144,10 +131,7 @@ class BudgetEvolutionChart extends StatelessWidget {
                         meta: meta,
                         child: Text(
                           meta.formattedValue,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w300,
-                          ),
+                          style: smallAxisTitleStyle(context),
                         ),
                       );
                     },

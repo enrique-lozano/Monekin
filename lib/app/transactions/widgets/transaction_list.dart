@@ -120,8 +120,7 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
 
                 return CurrencyDisplayer(
                   amountToConvert: partialBalance,
-                  integerStyle: Theme.of(context).textTheme.labelMedium!
-                      .copyWith(fontWeight: FontWeight.w400),
+                  integerStyle: Theme.of(context).textTheme.labelMedium!,
                 );
               },
             ),

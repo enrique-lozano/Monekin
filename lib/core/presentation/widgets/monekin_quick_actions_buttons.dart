@@ -46,10 +46,7 @@ class MonekinQuickActionsButton extends StatelessWidget {
                             item.label,
                             softWrap: false,
                             overflow: TextOverflow.fade,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w300,
-                            ),
+                            style: Theme.of(context).textTheme.labelMedium,
                           ),
                         ],
                       ),

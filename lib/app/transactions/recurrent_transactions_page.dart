@@ -43,7 +43,7 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
 
                 return Text(
                   '${nOfRes} ${t.transaction.display(n: nOfRes)}',
-                  style: const TextStyle(fontWeight: FontWeight.w700),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 );
               },
             ),

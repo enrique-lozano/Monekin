@@ -359,10 +359,7 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
                                   textAlign: TextAlign.end,
                                   softWrap: false,
                                   overflow: TextOverflow.visible,
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w300,
-                                  ),
+                                  style: smallAxisTitleStyle(context),
                                 ),
                               ),
                             );

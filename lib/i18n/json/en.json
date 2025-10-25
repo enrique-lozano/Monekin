@@ -689,6 +689,8 @@
     "dynamic-colors.descr": "Use your system accent color whenever possible",
     "accent-color": "Accent color",
     "accent-color.descr": "Choose the color the app will use to emphasize certain parts of the interface",
+    "font": "Font",
+    "font-platform": "Platform",
     "SWIPE-ACTIONS": {
       "title": "Swipe actions",
       "choose-description": "Choose what action will be triggered when you swipe a transaction item in the list using this swipe direction",

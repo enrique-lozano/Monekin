@@ -28,7 +28,7 @@ class IntroPage extends StatelessWidget {
           'Monekin',
           style: Theme.of(
             context,
-          ).textTheme.headlineLarge!.copyWith(fontWeight: FontWeight.w800),
+          ).textTheme.headlineLarge!.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
         Text(
@@ -48,6 +48,8 @@ class IntroPage extends StatelessWidget {
   }
 
   Widget buildSecondSection(BuildContext context) {
+    final footerStyle = Theme.of(context).textTheme.bodySmall!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -56,7 +58,7 @@ class IntroPage extends StatelessWidget {
           t.intro.offline_descr_title,
           style: Theme.of(
             context,
-          ).textTheme.labelSmall!.copyWith(fontWeight: FontWeight.w600),
+          ).textTheme.labelSmall!.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 2),
         Text(
@@ -84,17 +86,8 @@ class IntroPage extends StatelessWidget {
         HTMLText(
           textAlign: TextAlign.center,
           htmlString: t.intro.welcome_footer,
-          defaultTextStyle: const TextStyle(
-            fontSize: 12.5,
-            fontWeight: FontWeight.w200,
-          ),
-          tags: {
-            'a': TextStyle(
-              color: AppColors.of(context).link,
-              fontSize: 12.5,
-              fontWeight: FontWeight.w200,
-            ),
-          },
+          defaultTextStyle: footerStyle,
+          tags: {'a': footerStyle.copyWith(color: AppColors.of(context).link)},
         ),
       ],
     );

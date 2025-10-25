@@ -257,7 +257,6 @@ class TransactionListTile extends StatelessWidget {
                             ),
                             style: TextStyle(
                               fontSize: 12,
-                              fontWeight: FontWeight.w400,
                               color: transaction.nextPayStatus!.color(context),
                             ),
                           ),

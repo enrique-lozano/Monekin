@@ -167,7 +167,7 @@ class _CategoryPickerState extends State<CategoryPicker>
                                   style: Theme.of(context)
                                       .textTheme
                                       .labelMedium!
-                                      .copyWith(fontWeight: FontWeight.w700),
+                                      .copyWith(fontWeight: FontWeight.bold),
                                 ),
                               ),
                               const SizedBox(height: 4),

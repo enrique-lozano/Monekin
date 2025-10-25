@@ -701,6 +701,8 @@
     "dynamic-colors.descr": "Mümkün olduğunda sistem vurgu renginizi kullanın",
     "accent-color": "Vurgu rengi",
     "accent-color.descr": "Uygulamanın arayüzün belirli kısımlarını vurgulamak için kullanacağı rengi seçin",
+    "font": "Yazı tipi",
+    "font-platform": "platformu",
     "SWIPE-ACTIONS": {
       "title": "Kaydırma eylemleri",
       "choose-description": "Bu kaydırma yönünü kullanarak listedeki bir işlem öğesini kaydırdığınızda hangi eylemin tetikleneceğini seçin",

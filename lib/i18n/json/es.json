@@ -704,6 +704,8 @@
     "dynamic-colors.descr": "Usar el color de acento de su sistema siempre que sea posible",
     "accent-color": "Color de acento",
     "accent-color.descr": "Elegir el color que la aplicación usará para enfatizar ciertas partes de la interfaz",
+    "font": "Fuente",
+    "font-platform": "Plataforma",
     "SWIPE-ACTIONS": {
       "title": "Acciones al deslizar el dedo",
       "choose-description": "Elije qué acción se activará cuando deslices una transacción del listado de transacciones usando esta dirección de deslizamiento",

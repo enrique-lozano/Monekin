@@ -662,7 +662,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                             trailing: CurrencyDisplayer(
                                               currency: userCurrency,
                                               integerStyle: const TextStyle(
-                                                fontWeight: FontWeight.w700,
+                                                fontWeight: FontWeight.bold,
                                               ),
                                               amountToConvert:
                                                   snapshot.data! *
@@ -707,7 +707,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                             trailing: CurrencyDisplayer(
                                               currency: userCurrency,
                                               integerStyle: const TextStyle(
-                                                fontWeight: FontWeight.w700,
+                                                fontWeight: FontWeight.bold,
                                               ),
                                               amountToConvert:
                                                   snapshot.data! *
@@ -809,7 +809,7 @@ class _TransactionDetailHeader extends SliverPersistentHeaderDelegate {
                   duration: const Duration(milliseconds: 100),
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                     fontSize: 34 - (1 - pow(1 - shrinkPercent, 4)) * 16,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.bold,
                     color: transaction.status == TransactionStatus.voided
                         ? Colors.grey.shade400
                         : transaction.type == TransactionType.T

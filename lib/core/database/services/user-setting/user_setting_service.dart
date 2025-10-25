@@ -8,6 +8,10 @@ enum SettingKey {
   userName,
   avatar,
 
+  /// Text font to be used across the entire app. It's a string representing
+  /// the font index in the font list, or `null` to use the platform font.
+  font,
+
   /// User preferred language (locale) for the app. It's a string representing the locale languageTag, like "en", "zh-TW"...
   /// If `null`, the app will use the device locale, or the fallback locale if the device locale is not supported.
   appLanguage,

@@ -197,16 +197,14 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                     title,
                     softWrap: false,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      fontWeight: FontWeight.w300,
-                    ),
+                    style: Theme.of(context).textTheme.labelMedium,
                   ),
                   Text(
                     inputValue ?? t.general.unspecified,
                     softWrap: false,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
@@ -607,7 +605,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
         bottom: TabBar(
           indicatorColor: Colors.white,
           labelColor: Colors.white,
-          labelStyle: const TextStyle(fontWeight: FontWeight.w700),
+          labelStyle: const TextStyle(fontWeight: FontWeight.bold),
           unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
           unselectedLabelColor: Colors.white.withOpacity(0.8),
           tabAlignment: TabAlignment.fill,
@@ -757,7 +755,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                       child: Builder(
                         builder: (context) {
                           const bigTextStyle = TextStyle(
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.bold,
                             color: Colors.white,
                           );
 

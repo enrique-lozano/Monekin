@@ -407,10 +407,7 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
                             meta: meta,
                             child: Text(
                               snapshot.data!.shortTitles[value.toInt()],
-                              style: const TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w300,
-                              ),
+                              style: smallAxisTitleStyle(context),
                             ),
                           );
                         },
@@ -429,10 +426,7 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
                             child: BlurBasedOnPrivateMode(
                               child: Text(
                                 meta.formattedValue,
-                                style: const TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w300,
-                                ),
+                                style: smallAxisTitleStyle(context),
                               ),
                             ),
                           );
