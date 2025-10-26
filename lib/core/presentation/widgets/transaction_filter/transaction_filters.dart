@@ -55,7 +55,7 @@ class TransactionFilters {
     this.tagsIDs,
   });
 
-  get hasFilter => [
+  bool get hasFilter => [
     minDate,
     maxDate,
     searchValue,

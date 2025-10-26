@@ -904,6 +904,13 @@ class TranslationsBackupEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'No file selected'
+	String get no_file_selected => 'No file selected';
+
+	/// en: 'No directory selected'
+	String get no_directory_selected => 'No directory selected';
+
 	late final TranslationsBackupExportEn export = TranslationsBackupExportEn._(_root);
 	late final TranslationsBackupImportEn import = TranslationsBackupImportEn._(_root);
 	late final TranslationsBackupAboutEn about = TranslationsBackupAboutEn._(_root);
@@ -1326,6 +1333,9 @@ class TranslationsTransactionListEn {
 
 	// Translations
 
+	/// en: 'All transactions'
+	String get all => 'All transactions';
+
 	/// en: 'No transactions found to display here. Add a few transactions in the app and maybe you'll have better luck next time.'
 	String get empty => 'No transactions found to display here. Add a few transactions in the app and maybe you\'ll have better luck next time.';
 
@@ -1360,6 +1370,9 @@ class TranslationsTransactionFiltersEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
+
+	/// en: 'Transaction filters'
+	String get title => 'Transaction filters';
 
 	/// en: 'From amount'
 	String get from_value => 'From amount';
@@ -1871,6 +1884,12 @@ class TranslationsBackupExportEn {
 	/// en: 'Export'
 	String get title_short => 'Export';
 
+	/// en: 'Type of export'
+	String get type_of_export => 'Type of export';
+
+	/// en: 'Options'
+	String get other_options => 'Options';
+
 	/// en: 'Full backup'
 	String get all => 'Full backup';
 
@@ -1883,14 +1902,23 @@ class TranslationsBackupExportEn {
 	/// en: 'Export your transactions in CSV so you can more easily analyze them in other programs or applications.'
 	String get transactions_descr => 'Export your transactions in CSV so you can more easily analyze them in other programs or applications.';
 
+	/// en: '(one) {1 transaction to export} (other) {{{ n }} transactions to export}'
+	String transactions_to_export({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+		one: '1 transaction to export',
+		other: '${n} transactions to export',
+	);
+
 	/// en: 'Download your data in different formats'
 	String get description => 'Download your data in different formats';
 
-	/// en: 'Save/Send file'
-	String get dialog_title => 'Save/Send file';
+	/// en: 'Send file'
+	String get send_file => 'Send file';
 
-	/// en: 'File saved/downloaded successfully in {{x}}'
-	String success({required Object x}) => 'File saved/downloaded successfully in ${x}';
+	/// en: 'See folder'
+	String get see_folder => 'See folder';
+
+	/// en: 'File saved successfully in {{x}}'
+	String success({required Object x}) => 'File saved successfully in ${x}';
 
 	/// en: 'Error downloading the file. Please contact the developer via lozin.technologies@gmail.com'
 	String get error => 'Error downloading the file. Please contact the developer via lozin.technologies@gmail.com';
@@ -1932,9 +1960,6 @@ class TranslationsBackupImportEn {
 
 	/// en: 'Import performed successfully'
 	String get success => 'Import performed successfully';
-
-	/// en: 'Import was cancelled by the user'
-	String get cancelled => 'Import was cancelled by the user';
 
 	/// en: 'Error importing file. Please contact developer via lozin.technologies@gmail.com'
 	String get error => 'Error importing file. Please contact developer via lozin.technologies@gmail.com';
@@ -2835,6 +2860,7 @@ extension on Translations {
 		map['transaction.next_payments.accept_dialog_msg_single'] = 'The new status of the transaction will be null. You can re-edit the status of this transaction whenever you want';
 		map['transaction.next_payments.accept_dialog_msg'] = ({required Object date}) => 'This action will create a new transaction with date ${date}. You will be able to check the details of this transaction on the transaction page';
 		map['transaction.next_payments.recurrent_rule_finished'] = 'The recurring rule has been completed, there are no more payments to make!';
+		map['transaction.list.all'] = 'All transactions';
 		map['transaction.list.empty'] = 'No transactions found to display here. Add a few transactions in the app and maybe you\'ll have better luck next time.';
 		map['transaction.list.searcher_placeholder'] = 'Search by category, description...';
 		map['transaction.list.searcher_no_results'] = 'No transactions found matching the search criteria';
@@ -2850,6 +2876,7 @@ extension on Translations {
 		map['transaction.list.bulk_edit.dates'] = 'Edit dates';
 		map['transaction.list.bulk_edit.categories'] = 'Edit categories';
 		map['transaction.list.bulk_edit.status'] = 'Edit statuses';
+		map['transaction.filters.title'] = 'Transaction filters';
 		map['transaction.filters.from_value'] = 'From amount';
 		map['transaction.filters.to_value'] = 'Up to amount';
 		map['transaction.filters.from_value_def'] = ({required Object x}) => 'From ${x}';
@@ -3068,15 +3095,24 @@ extension on Translations {
 		map['budgets.details.expend_diary_left'] = ({required Object dailyAmount, required Object remainingDays}) => 'You can spend ${dailyAmount}/day for ${remainingDays} remaining days';
 		map['budgets.details.expend_evolution'] = 'Expenditure evolution';
 		map['budgets.details.no_transactions'] = 'It seems that you have not made any expenses related to this budget';
+		map['backup.no_file_selected'] = 'No file selected';
+		map['backup.no_directory_selected'] = 'No directory selected';
 		map['backup.export.title'] = 'Export your data';
 		map['backup.export.title_short'] = 'Export';
+		map['backup.export.type_of_export'] = 'Type of export';
+		map['backup.export.other_options'] = 'Options';
 		map['backup.export.all'] = 'Full backup';
 		map['backup.export.all_descr'] = 'Export all your data (accounts, transactions, budgets, settings...). Import them again at any time so you don\'t lose anything.';
 		map['backup.export.transactions'] = 'Transactions backup';
 		map['backup.export.transactions_descr'] = 'Export your transactions in CSV so you can more easily analyze them in other programs or applications.';
+		map['backup.export.transactions_to_export'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n,
+				one: '1 transaction to export',
+				other: '${n} transactions to export',
+			);
 		map['backup.export.description'] = 'Download your data in different formats';
-		map['backup.export.dialog_title'] = 'Save/Send file';
-		map['backup.export.success'] = ({required Object x}) => 'File saved/downloaded successfully in ${x}';
+		map['backup.export.send_file'] = 'Send file';
+		map['backup.export.see_folder'] = 'See folder';
+		map['backup.export.success'] = ({required Object x}) => 'File saved successfully in ${x}';
 		map['backup.export.error'] = 'Error downloading the file. Please contact the developer via lozin.technologies@gmail.com';
 		map['backup.import.title'] = 'Import your data';
 		map['backup.import.title_short'] = 'Import';
@@ -3106,7 +3142,6 @@ extension on Translations {
 		map['backup.import.manual_import.steps_descr.5'] = 'Specifies the columns for other optional transaction attributes';
 		map['backup.import.manual_import.success'] = ({required Object x}) => 'Successfully imported ${x} transactions';
 		map['backup.import.success'] = 'Import performed successfully';
-		map['backup.import.cancelled'] = 'Import was cancelled by the user';
 		map['backup.import.error'] = 'Error importing file. Please contact developer via lozin.technologies@gmail.com';
 		map['backup.about.title'] = 'Information about your database';
 		map['backup.about.create_date'] = 'Creation date';

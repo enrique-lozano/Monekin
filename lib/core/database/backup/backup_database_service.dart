@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
@@ -12,25 +13,41 @@ import 'package:path/path.dart' as path;
 class BackupDatabaseService {
   AppDB db = AppDB.instance;
 
-  Future<void> exportDatabaseFile(String exportPath) async {
-    List<int> dbFileInBytes = await File(await db.databasePath).readAsBytes();
+  File createAndReturnFile({
+    required String exportPath,
+    required String fileName,
+  }) {
+    String downloadPath = path.join(exportPath, fileName);
 
-    exportPath = path.join(
-      exportPath,
-      "monekin-${DateFormat('yyyyMMdd-Hms').format(DateTime.now())}.db",
-    );
+    File downloadFile = File(downloadPath);
 
-    File downloadFile = File(exportPath);
+    if (!downloadFile.existsSync()) {
+      downloadFile.createSync(recursive: true);
+    }
 
-    await downloadFile.writeAsBytes(dbFileInBytes);
+    return downloadFile;
   }
 
-  Future<String> exportSpreadsheet(
-    String exportPath,
+  Future<File> exportDatabaseFile(String exportPath) async {
+    List<int> dbFileInBytes = await getDbFileInBytes();
+
+    final file = createAndReturnFile(
+      exportPath: exportPath,
+      fileName:
+          "monekin-${DateFormat('yyyyMMdd-Hms').format(DateTime.now())}.db",
+    );
+
+    return file.writeAsBytes(dbFileInBytes, mode: FileMode.write);
+  }
+
+  Future<Uint8List> getDbFileInBytes() async =>
+      File(await db.databasePath).readAsBytes();
+
+  String creatCsvFromTransactions(
     List<MoneyTransaction> data, {
     String format = 'csv',
     String separator = ',',
-  }) async {
+  }) {
     var csvData = '';
 
     var keys = [
@@ -85,14 +102,22 @@ class BackupDatabaseService {
       }
     }
 
-    exportPath =
-        '${exportPath}Transactions-${DateFormat('yyyyMMdd-Hms').format(DateTime.now())}.csv';
+    return csvData;
+  }
 
-    File exportFile = File(exportPath);
+  Future<File> exportSpreadsheet(
+    String exportPath,
+    List<MoneyTransaction> data,
+  ) async {
+    final csvData = creatCsvFromTransactions(data);
 
-    await exportFile.writeAsString(csvData);
+    final file = createAndReturnFile(
+      exportPath: exportPath,
+      fileName:
+          "Transactions-${DateFormat('yyyyMMdd-Hms').format(DateTime.now())}.csv",
+    );
 
-    return exportPath;
+    return file.writeAsString(csvData, mode: FileMode.writeOnly);
   }
 
   Future<bool> importDatabase() async {

@@ -452,6 +452,8 @@ class _TranslationsBackupZhTw implements TranslationsBackupEn {
 	final TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
+	@override String get no_file_selected => '未選擇文件';
+	@override String get no_directory_selected => '未選擇目錄';
 	@override late final _TranslationsBackupExportZhTw export = _TranslationsBackupExportZhTw._(_root);
 	@override late final _TranslationsBackupImportZhTw import = _TranslationsBackupImportZhTw._(_root);
 	@override late final _TranslationsBackupAboutZhTw about = _TranslationsBackupAboutZhTw._(_root);
@@ -700,6 +702,7 @@ class _TranslationsTransactionListZhTw implements TranslationsTransactionListEn 
 	final TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
+	@override String get all => '所有交易';
 	@override String get empty => '未發現此處顯示的交易。在應用程式中添加一些交易，也許您下次會有更好的運氣';
 	@override String get searcher_placeholder => '按類別、描述搜尋...';
 	@override String get searcher_no_results => '未找到符合搜尋條件的交易';
@@ -722,6 +725,7 @@ class _TranslationsTransactionFiltersZhTw implements TranslationsTransactionFilt
 	final TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
+	@override String get title => '交易過濾器';
 	@override String get from_value => '從金額';
 	@override String get to_value => '最多金額';
 	@override String from_value_def({required Object x}) => '來自 ${x}';
@@ -1017,14 +1021,22 @@ class _TranslationsBackupExportZhTw implements TranslationsBackupExportEn {
 	// Translations
 	@override String get title => '匯出您的資料';
 	@override String get title_short => '匯出';
+	@override String get type_of_export => '出口類型';
+	@override String get other_options => '選項';
 	@override String get all => '完整備份';
 	@override String get all_descr => '匯出您的所有資料（帳戶、交易、預算、設定...）。隨時重新匯入它們，這樣您就不會丟失任何內容。';
 	@override String get transactions => '交易備份';
 	@override String get transactions_descr => '以 CSV 格式匯出您的交易，以便您可以在其他程式或應用程式中更輕鬆地分析它們。';
+	@override String transactions_to_export({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
+		one: '1 筆交易要導出',
+		other: '要導出的 ${n} 筆交易',
+	);
 	@override String get description => '以不同格式下載資料';
-	@override String get dialog_title => '儲存/傳送文件';
+	@override String get send_file => '發送文件';
+	@override String get see_folder => '查看文件夾';
 	@override String success({required Object x}) => '檔案已在${x}中成功儲存/下載';
 	@override String get error => '下載檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員';
+	@override String get dialog_title => '儲存/傳送文件';
 }
 
 // Path: backup.import
@@ -1044,8 +1056,8 @@ class _TranslationsBackupImportZhTw implements TranslationsBackupImportEn {
 	@override String get tap_to_select_file => '點選選擇檔案';
 	@override late final _TranslationsBackupImportManualImportZhTw manual_import = _TranslationsBackupImportManualImportZhTw._(_root);
 	@override String get success => '導入成功';
-	@override String get cancelled => '導入已被用戶取消';
 	@override String get error => '匯入檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員。';
+	@override String get cancelled => '導入已被用戶取消';
 }
 
 // Path: backup.about
@@ -1704,6 +1716,7 @@ extension on TranslationsZhTw {
 		map['transaction.next_payments.accept_dialog_msg_single'] = '該交易的新狀態將為空。您可以隨時重新編輯該交易的狀態';
 		map['transaction.next_payments.accept_dialog_msg'] = ({required Object date}) => '此操作將建立日期為${date}的新交易。您將能夠在交易頁面上查看此交易的詳細資訊';
 		map['transaction.next_payments.recurrent_rule_finished'] = '循環規則已完成，無需再支付！';
+		map['transaction.list.all'] = '所有交易';
 		map['transaction.list.empty'] = '未發現此處顯示的交易。在應用程式中添加一些交易，也許您下次會有更好的運氣';
 		map['transaction.list.searcher_placeholder'] = '按類別、描述搜尋...';
 		map['transaction.list.searcher_no_results'] = '未找到符合搜尋條件的交易';
@@ -1719,6 +1732,7 @@ extension on TranslationsZhTw {
 		map['transaction.list.bulk_edit.dates'] = '編輯日期';
 		map['transaction.list.bulk_edit.categories'] = '編輯類別';
 		map['transaction.list.bulk_edit.status'] = '編輯狀態';
+		map['transaction.filters.title'] = '交易過濾器';
 		map['transaction.filters.from_value'] = '從金額';
 		map['transaction.filters.to_value'] = '最多金額';
 		map['transaction.filters.from_value_def'] = ({required Object x}) => '來自 ${x}';
@@ -1937,16 +1951,26 @@ extension on TranslationsZhTw {
 		map['budgets.details.expend_diary_left'] = ({required Object dailyAmount, required Object remainingDays}) => '您每天可以花費${dailyAmount}/天，持續${remainingDays}天';
 		map['budgets.details.expend_evolution'] = '支出變化';
 		map['budgets.details.no_transactions'] = '看來您還沒有做出與此預算相關的任何收入';
+		map['backup.no_file_selected'] = '未選擇文件';
+		map['backup.no_directory_selected'] = '未選擇目錄';
 		map['backup.export.title'] = '匯出您的資料';
 		map['backup.export.title_short'] = '匯出';
+		map['backup.export.type_of_export'] = '出口類型';
+		map['backup.export.other_options'] = '選項';
 		map['backup.export.all'] = '完整備份';
 		map['backup.export.all_descr'] = '匯出您的所有資料（帳戶、交易、預算、設定...）。隨時重新匯入它們，這樣您就不會丟失任何內容。';
 		map['backup.export.transactions'] = '交易備份';
 		map['backup.export.transactions_descr'] = '以 CSV 格式匯出您的交易，以便您可以在其他程式或應用程式中更輕鬆地分析它們。';
+		map['backup.export.transactions_to_export'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
+				one: '1 筆交易要導出',
+				other: '要導出的 ${n} 筆交易',
+			);
 		map['backup.export.description'] = '以不同格式下載資料';
-		map['backup.export.dialog_title'] = '儲存/傳送文件';
+		map['backup.export.send_file'] = '發送文件';
+		map['backup.export.see_folder'] = '查看文件夾';
 		map['backup.export.success'] = ({required Object x}) => '檔案已在${x}中成功儲存/下載';
 		map['backup.export.error'] = '下載檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員';
+		map['backup.export.dialog_title'] = '儲存/傳送文件';
 		map['backup.import.title'] = '匯入您的資料';
 		map['backup.import.title_short'] = '匯入';
 		map['backup.import.restore_backup'] = '恢復備份';
@@ -1975,8 +1999,8 @@ extension on TranslationsZhTw {
 		map['backup.import.manual_import.steps_descr.5'] = '選擇其他交易屬性的資料列';
 		map['backup.import.manual_import.success'] = ({required Object x}) => '已成功導入${x}筆交易';
 		map['backup.import.success'] = '導入成功';
-		map['backup.import.cancelled'] = '導入已被用戶取消';
 		map['backup.import.error'] = '匯入檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員。';
+		map['backup.import.cancelled'] = '導入已被用戶取消';
 		map['backup.about.title'] = '有關您的資料庫的資訊';
 		map['backup.about.create_date'] = '建立日期';
 		map['backup.about.modify_date'] = '上一次更改';

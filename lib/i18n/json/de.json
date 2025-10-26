@@ -324,6 +324,7 @@
       "recurrent-rule-finished": "Die wiederkehrende Regel ist abgeschlossen, es sind keine weiteren Zahlungen mehr zu leisten!"
     },
     "LIST": {
+      "all": "Alle Transaktionen",
       "empty": "Es wurden keine Transaktionen gefunden, die hier angezeigt werden könnten. ",
       "searcher.placeholder": "Suche nach Kategorie, Beschreibung...",
       "searcher.no-results": "Es wurden keine Transaktionen gefunden, die den Suchkriterien entsprechen",
@@ -343,6 +344,7 @@
       }
     },
     "FILTERS": {
+      "title": "Transaktionsfilter",
       "from_value": "Ab Betrag",
       "to_value": "Bis zum Betrag",
       "from_value_def": "Von {{ x }}",
@@ -618,17 +620,27 @@
     }
   },
   "BACKUP": {
+    "no_file_selected": "Keine Datei ausgewählt",
+    "no_directory_selected": "Kein Verzeichnis ausgewählt",
     "EXPORT": {
       "title": "Daten exportieren",
       "title.short": "Export",
+      "type-of-export": "Art des Exports",
+      "other-options": "Optionen",
       "all": "Vollständige Sicherung",
       "all.descr": "Exportiere alle Deine Daten (Konten, Transaktionen, Budgets, Einstellungen...). ",
       "transactions": "Sicherung der Transaktionen",
       "transactions.descr": "Exportiere Deine Transaktionen im CSV-Format, damit Du sie einfacher in anderen Programmen oder Anwendungen analysieren kannst.",
+      "transactions-to-export": {
+        "one": "1 Transaktion zum Exportieren",
+        "other": "{{ n }} Transaktionen zum Exportieren"
+      },
       "description": "Lade Deine Daten in verschiedenen Formaten herunter",
-      "dialog_title": "Datei speichern/senden",
+      "send_file": "Datei senden",
+      "see_folder": "Siehe Ordner",
       "success": "Datei erfolgreich gespeichert/heruntergeladen in {{x}}",
-      "error": "Fehler beim Herunterladen der Datei. "
+      "error": "Fehler beim Herunterladen der Datei. ",
+      "dialog_title": "Datei speichern/senden"
     },
     "IMPORT": {
       "title": "Daten importieren",
@@ -665,8 +677,8 @@
         "success": "Erfolgreich {{x}} Transaktionen importiert"
       },
       "success": "Der Import wurde erfolgreich durchgeführt",
-      "cancelled": "Der Import wurde vom Benutzer abgebrochen",
-      "error": "Fehler beim Importieren der Datei. Bitte kontaktiere den Entwickler lozin.technologies@gmail.com"
+      "error": "Fehler beim Importieren der Datei. Bitte kontaktiere den Entwickler lozin.technologies@gmail.com",
+      "cancelled": "Der Import wurde vom Benutzer abgebrochen"
     },
     "ABOUT": {
       "title": "Informationen zu Deiner Datenbank",

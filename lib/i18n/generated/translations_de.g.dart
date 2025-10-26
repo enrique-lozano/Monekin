@@ -452,6 +452,8 @@ class _TranslationsBackupDe implements TranslationsBackupEn {
 	final TranslationsDe _root; // ignore: unused_field
 
 	// Translations
+	@override String get no_file_selected => 'Keine Datei ausgewählt';
+	@override String get no_directory_selected => 'Kein Verzeichnis ausgewählt';
 	@override late final _TranslationsBackupExportDe export = _TranslationsBackupExportDe._(_root);
 	@override late final _TranslationsBackupImportDe import = _TranslationsBackupImportDe._(_root);
 	@override late final _TranslationsBackupAboutDe about = _TranslationsBackupAboutDe._(_root);
@@ -700,6 +702,7 @@ class _TranslationsTransactionListDe implements TranslationsTransactionListEn {
 	final TranslationsDe _root; // ignore: unused_field
 
 	// Translations
+	@override String get all => 'Alle Transaktionen';
 	@override String get empty => 'Es wurden keine Transaktionen gefunden, die hier angezeigt werden könnten. ';
 	@override String get searcher_placeholder => 'Suche nach Kategorie, Beschreibung...';
 	@override String get searcher_no_results => 'Es wurden keine Transaktionen gefunden, die den Suchkriterien entsprechen';
@@ -722,6 +725,7 @@ class _TranslationsTransactionFiltersDe implements TranslationsTransactionFilter
 	final TranslationsDe _root; // ignore: unused_field
 
 	// Translations
+	@override String get title => 'Transaktionsfilter';
 	@override String get from_value => 'Ab Betrag';
 	@override String get to_value => 'Bis zum Betrag';
 	@override String from_value_def({required Object x}) => 'Von ${x}';
@@ -1017,14 +1021,22 @@ class _TranslationsBackupExportDe implements TranslationsBackupExportEn {
 	// Translations
 	@override String get title => 'Daten exportieren';
 	@override String get title_short => 'Export';
+	@override String get type_of_export => 'Art des Exports';
+	@override String get other_options => 'Optionen';
 	@override String get all => 'Vollständige Sicherung';
 	@override String get all_descr => 'Exportiere alle Deine Daten (Konten, Transaktionen, Budgets, Einstellungen...). ';
 	@override String get transactions => 'Sicherung der Transaktionen';
 	@override String get transactions_descr => 'Exportiere Deine Transaktionen im CSV-Format, damit Du sie einfacher in anderen Programmen oder Anwendungen analysieren kannst.';
+	@override String transactions_to_export({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+		one: '1 Transaktion zum Exportieren',
+		other: '${n} Transaktionen zum Exportieren',
+	);
 	@override String get description => 'Lade Deine Daten in verschiedenen Formaten herunter';
-	@override String get dialog_title => 'Datei speichern/senden';
+	@override String get send_file => 'Datei senden';
+	@override String get see_folder => 'Siehe Ordner';
 	@override String success({required Object x}) => 'Datei erfolgreich gespeichert/heruntergeladen in ${x}';
 	@override String get error => 'Fehler beim Herunterladen der Datei. ';
+	@override String get dialog_title => 'Datei speichern/senden';
 }
 
 // Path: backup.import
@@ -1044,8 +1056,8 @@ class _TranslationsBackupImportDe implements TranslationsBackupImportEn {
 	@override String get tap_to_select_file => 'Tippe, um eine Datei auszuwählen';
 	@override late final _TranslationsBackupImportManualImportDe manual_import = _TranslationsBackupImportManualImportDe._(_root);
 	@override String get success => 'Der Import wurde erfolgreich durchgeführt';
-	@override String get cancelled => 'Der Import wurde vom Benutzer abgebrochen';
 	@override String get error => 'Fehler beim Importieren der Datei. Bitte kontaktiere den Entwickler lozin.technologies@gmail.com';
+	@override String get cancelled => 'Der Import wurde vom Benutzer abgebrochen';
 }
 
 // Path: backup.about
@@ -1704,6 +1716,7 @@ extension on TranslationsDe {
 		map['transaction.next_payments.accept_dialog_msg_single'] = 'Der neue Status der Transaktion ist null. ';
 		map['transaction.next_payments.accept_dialog_msg'] = ({required Object date}) => 'Diese Aktion erstellt eine neue Transaktion mit Datum ${date}. Du kannst die Details dieser Transaktion auf der Transaktionsseite überprüfen';
 		map['transaction.next_payments.recurrent_rule_finished'] = 'Die wiederkehrende Regel ist abgeschlossen, es sind keine weiteren Zahlungen mehr zu leisten!';
+		map['transaction.list.all'] = 'Alle Transaktionen';
 		map['transaction.list.empty'] = 'Es wurden keine Transaktionen gefunden, die hier angezeigt werden könnten. ';
 		map['transaction.list.searcher_placeholder'] = 'Suche nach Kategorie, Beschreibung...';
 		map['transaction.list.searcher_no_results'] = 'Es wurden keine Transaktionen gefunden, die den Suchkriterien entsprechen';
@@ -1719,6 +1732,7 @@ extension on TranslationsDe {
 		map['transaction.list.bulk_edit.dates'] = 'Daten bearbeiten';
 		map['transaction.list.bulk_edit.categories'] = 'Kategorien bearbeiten';
 		map['transaction.list.bulk_edit.status'] = 'Status bearbeiten';
+		map['transaction.filters.title'] = 'Transaktionsfilter';
 		map['transaction.filters.from_value'] = 'Ab Betrag';
 		map['transaction.filters.to_value'] = 'Bis zum Betrag';
 		map['transaction.filters.from_value_def'] = ({required Object x}) => 'Von ${x}';
@@ -1937,16 +1951,26 @@ extension on TranslationsDe {
 		map['budgets.details.expend_diary_left'] = ({required Object dailyAmount, required Object remainingDays}) => 'Du kannst ${dailyAmount}/Tag für ${remainingDays} verbleibende Tage ausgeben';
 		map['budgets.details.expend_evolution'] = 'Ausgabenentwicklung';
 		map['budgets.details.no_transactions'] = 'Es scheint, dass Du im Zusammenhang mit diesem Budget keine Ausgaben getätigt hast';
+		map['backup.no_file_selected'] = 'Keine Datei ausgewählt';
+		map['backup.no_directory_selected'] = 'Kein Verzeichnis ausgewählt';
 		map['backup.export.title'] = 'Daten exportieren';
 		map['backup.export.title_short'] = 'Export';
+		map['backup.export.type_of_export'] = 'Art des Exports';
+		map['backup.export.other_options'] = 'Optionen';
 		map['backup.export.all'] = 'Vollständige Sicherung';
 		map['backup.export.all_descr'] = 'Exportiere alle Deine Daten (Konten, Transaktionen, Budgets, Einstellungen...). ';
 		map['backup.export.transactions'] = 'Sicherung der Transaktionen';
 		map['backup.export.transactions_descr'] = 'Exportiere Deine Transaktionen im CSV-Format, damit Du sie einfacher in anderen Programmen oder Anwendungen analysieren kannst.';
+		map['backup.export.transactions_to_export'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+				one: '1 Transaktion zum Exportieren',
+				other: '${n} Transaktionen zum Exportieren',
+			);
 		map['backup.export.description'] = 'Lade Deine Daten in verschiedenen Formaten herunter';
-		map['backup.export.dialog_title'] = 'Datei speichern/senden';
+		map['backup.export.send_file'] = 'Datei senden';
+		map['backup.export.see_folder'] = 'Siehe Ordner';
 		map['backup.export.success'] = ({required Object x}) => 'Datei erfolgreich gespeichert/heruntergeladen in ${x}';
 		map['backup.export.error'] = 'Fehler beim Herunterladen der Datei. ';
+		map['backup.export.dialog_title'] = 'Datei speichern/senden';
 		map['backup.import.title'] = 'Daten importieren';
 		map['backup.import.title_short'] = 'Import';
 		map['backup.import.restore_backup'] = 'Sicherung wiederherstellen';
@@ -1975,8 +1999,8 @@ extension on TranslationsDe {
 		map['backup.import.manual_import.steps_descr.5'] = 'Gibt die Spalten für andere optionale Transaktionsattribute an';
 		map['backup.import.manual_import.success'] = ({required Object x}) => 'Erfolgreich ${x} Transaktionen importiert';
 		map['backup.import.success'] = 'Der Import wurde erfolgreich durchgeführt';
-		map['backup.import.cancelled'] = 'Der Import wurde vom Benutzer abgebrochen';
 		map['backup.import.error'] = 'Fehler beim Importieren der Datei. Bitte kontaktiere den Entwickler lozin.technologies@gmail.com';
+		map['backup.import.cancelled'] = 'Der Import wurde vom Benutzer abgebrochen';
 		map['backup.about.title'] = 'Informationen zu Deiner Datenbank';
 		map['backup.about.create_date'] = 'Erstellungsdatum';
 		map['backup.about.modify_date'] = 'Zuletzt geändert';

@@ -452,6 +452,8 @@ class _TranslationsBackupHu implements TranslationsBackupEn {
 	final TranslationsHu _root; // ignore: unused_field
 
 	// Translations
+	@override String get no_file_selected => 'Nincs kiválasztva fájl';
+	@override String get no_directory_selected => 'Nincs kiválasztott könyvtár';
 	@override late final _TranslationsBackupExportHu export = _TranslationsBackupExportHu._(_root);
 	@override late final _TranslationsBackupImportHu import = _TranslationsBackupImportHu._(_root);
 	@override late final _TranslationsBackupAboutHu about = _TranslationsBackupAboutHu._(_root);
@@ -700,6 +702,7 @@ class _TranslationsTransactionListHu implements TranslationsTransactionListEn {
 	final TranslationsHu _root; // ignore: unused_field
 
 	// Translations
+	@override String get all => 'Minden tranzakció';
 	@override String get empty => 'Nem található itt megjeleníthető tranzakció. Adjon hozzá néhány tranzakciót az alkalmazásban, és talán legközelebb több szerencséje lesz.';
 	@override String get searcher_placeholder => 'Keresés kategória, leírás alapján...';
 	@override String get searcher_no_results => 'Nincs a keresési feltételeknek megfelelő tranzakció';
@@ -722,6 +725,7 @@ class _TranslationsTransactionFiltersHu implements TranslationsTransactionFilter
 	final TranslationsHu _root; // ignore: unused_field
 
 	// Translations
+	@override String get title => 'Tranzakciós szűrők';
 	@override String get from_value => 'Ebből az összegből';
 	@override String get to_value => 'Eddig az összegig';
 	@override String from_value_def({required Object x}) => 'Innen: ${x}';
@@ -1017,14 +1021,22 @@ class _TranslationsBackupExportHu implements TranslationsBackupExportEn {
 	// Translations
 	@override String get title => 'Adatok exportálása';
 	@override String get title_short => 'Exportálás';
+	@override String get type_of_export => 'Az export típusa';
+	@override String get other_options => 'Opciók';
 	@override String get all => 'Teljes mentés';
 	@override String get all_descr => 'Exportálja az összes adatát (számlák, tranzakciók, költségvetések, beállítások...). Bármikor újra importálhatja őket, így semmit sem veszíthet el.';
 	@override String get transactions => 'Tranzakciók mentése';
 	@override String get transactions_descr => 'Exportálja tranzakcióit CSV formátumban, így könnyebben elemezheti azokat más programokban vagy alkalmazásokban.';
+	@override String transactions_to_export({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+		one: '1 exportálandó tranzakció',
+		other: '${n} exportálandó tranzakció',
+	);
 	@override String get description => 'Adatok letöltése különböző formátumokban';
-	@override String get dialog_title => 'Fájl mentése/küldése';
+	@override String get send_file => 'Fájl küldése';
+	@override String get see_folder => 'Lásd a mappát';
 	@override String success({required Object x}) => 'A fájl sikeresen mentve/letöltve ide: ${x}';
 	@override String get error => 'Hiba a fájl letöltésében. Kérjük, lépjen kapcsolatba a fejlesztővel a lozin.technologies@gmail.com címen keresztül.';
+	@override String get dialog_title => 'Fájl mentése/küldése';
 }
 
 // Path: backup.import
@@ -1044,8 +1056,8 @@ class _TranslationsBackupImportHu implements TranslationsBackupImportEn {
 	@override String get tap_to_select_file => 'Koppintson a fájl kiválasztásához';
 	@override late final _TranslationsBackupImportManualImportHu manual_import = _TranslationsBackupImportManualImportHu._(_root);
 	@override String get success => 'Az importálás sikeresen végrehajtva';
-	@override String get cancelled => 'Az importálást a felhasználó megszakította';
 	@override String get error => 'Hiba történt importálásakor. Kérjük, lépjen kapcsolatba a fejlesztővel a lozin.technologies@gmail.com címen keresztül.';
+	@override String get cancelled => 'Az importálást a felhasználó megszakította';
 }
 
 // Path: backup.about
@@ -1704,6 +1716,7 @@ extension on TranslationsHu {
 		map['transaction.next_payments.accept_dialog_msg_single'] = 'A tranzakció új állapota nulla lesz. A tranzakció státuszát bármikor újra módosíthatja, amikor csak akarja.';
 		map['transaction.next_payments.accept_dialog_msg'] = ({required Object date}) => 'Ez a művelet egy új tranzakciót hoz létre ${date} dátummal. A tranzakció részleteit a tranzakciós oldalon ellenőrizheti.';
 		map['transaction.next_payments.recurrent_rule_finished'] = 'Az ismétlődő szabály teljesült, nincs több kifizetés!';
+		map['transaction.list.all'] = 'Minden tranzakció';
 		map['transaction.list.empty'] = 'Nem található itt megjeleníthető tranzakció. Adjon hozzá néhány tranzakciót az alkalmazásban, és talán legközelebb több szerencséje lesz.';
 		map['transaction.list.searcher_placeholder'] = 'Keresés kategória, leírás alapján...';
 		map['transaction.list.searcher_no_results'] = 'Nincs a keresési feltételeknek megfelelő tranzakció';
@@ -1719,6 +1732,7 @@ extension on TranslationsHu {
 		map['transaction.list.bulk_edit.dates'] = 'Dátumok szerkesztése';
 		map['transaction.list.bulk_edit.categories'] = 'Kategóriák szerkesztése';
 		map['transaction.list.bulk_edit.status'] = 'Állapotok szerkesztése';
+		map['transaction.filters.title'] = 'Tranzakciós szűrők';
 		map['transaction.filters.from_value'] = 'Ebből az összegből';
 		map['transaction.filters.to_value'] = 'Eddig az összegig';
 		map['transaction.filters.from_value_def'] = ({required Object x}) => 'Innen: ${x}';
@@ -1937,16 +1951,26 @@ extension on TranslationsHu {
 		map['budgets.details.expend_diary_left'] = ({required Object dailyAmount, required Object remainingDays}) => 'Naponta ${dailyAmount} -ot költhet el, még ${remainingDays} napig';
 		map['budgets.details.expend_evolution'] = 'Költségek alakulása';
 		map['budgets.details.no_transactions'] = 'Úgy tűnik, hogy ezzel a költségvetéssel kapcsolatban semmilyen kiadást nem teljesített.';
+		map['backup.no_file_selected'] = 'Nincs kiválasztva fájl';
+		map['backup.no_directory_selected'] = 'Nincs kiválasztott könyvtár';
 		map['backup.export.title'] = 'Adatok exportálása';
 		map['backup.export.title_short'] = 'Exportálás';
+		map['backup.export.type_of_export'] = 'Az export típusa';
+		map['backup.export.other_options'] = 'Opciók';
 		map['backup.export.all'] = 'Teljes mentés';
 		map['backup.export.all_descr'] = 'Exportálja az összes adatát (számlák, tranzakciók, költségvetések, beállítások...). Bármikor újra importálhatja őket, így semmit sem veszíthet el.';
 		map['backup.export.transactions'] = 'Tranzakciók mentése';
 		map['backup.export.transactions_descr'] = 'Exportálja tranzakcióit CSV formátumban, így könnyebben elemezheti azokat más programokban vagy alkalmazásokban.';
+		map['backup.export.transactions_to_export'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+				one: '1 exportálandó tranzakció',
+				other: '${n} exportálandó tranzakció',
+			);
 		map['backup.export.description'] = 'Adatok letöltése különböző formátumokban';
-		map['backup.export.dialog_title'] = 'Fájl mentése/küldése';
+		map['backup.export.send_file'] = 'Fájl küldése';
+		map['backup.export.see_folder'] = 'Lásd a mappát';
 		map['backup.export.success'] = ({required Object x}) => 'A fájl sikeresen mentve/letöltve ide: ${x}';
 		map['backup.export.error'] = 'Hiba a fájl letöltésében. Kérjük, lépjen kapcsolatba a fejlesztővel a lozin.technologies@gmail.com címen keresztül.';
+		map['backup.export.dialog_title'] = 'Fájl mentése/küldése';
 		map['backup.import.title'] = 'Adatok importálása';
 		map['backup.import.title_short'] = 'Importálás';
 		map['backup.import.restore_backup'] = 'Mentés visszaállítása';
@@ -1975,8 +1999,8 @@ extension on TranslationsHu {
 		map['backup.import.manual_import.steps_descr.5'] = 'Az egyéb opcionális tranzakciós attribútumok oszlopainak meghatározása';
 		map['backup.import.manual_import.success'] = ({required Object x}) => '${x} tranzakció sikeresen importálva';
 		map['backup.import.success'] = 'Az importálás sikeresen végrehajtva';
-		map['backup.import.cancelled'] = 'Az importálást a felhasználó megszakította';
 		map['backup.import.error'] = 'Hiba történt importálásakor. Kérjük, lépjen kapcsolatba a fejlesztővel a lozin.technologies@gmail.com címen keresztül.';
+		map['backup.import.cancelled'] = 'Az importálást a felhasználó megszakította';
 		map['backup.about.title'] = 'Információk az adatbázisról';
 		map['backup.about.create_date'] = 'Létrehozás dátuma';
 		map['backup.about.modify_date'] = 'Utolsó módosítása';

@@ -315,6 +315,7 @@
       "recurrent-rule-finished": "The recurring rule has been completed, there are no more payments to make!"
     },
     "LIST": {
+      "all": "All transactions",
       "empty": "No transactions found to display here. Add a few transactions in the app and maybe you'll have better luck next time.",
       "searcher.placeholder": "Search by category, description...",
       "searcher.no-results": "No transactions found matching the search criteria",
@@ -331,6 +332,7 @@
       }
     },
     "FILTERS": {
+      "title": "Transaction filters",
       "from_value": "From amount",
       "to_value": "Up to amount",
       "from_value_def": "From {{ x }}",
@@ -606,16 +608,25 @@
     }
   },
   "BACKUP": {
+    "no_file_selected": "No file selected",
+    "no_directory_selected": "No directory selected",
     "EXPORT": {
       "title": "Export your data",
       "title.short": "Export",
+      "type-of-export": "Type of export",
+      "other-options": "Options",
       "all": "Full backup",
       "all.descr": "Export all your data (accounts, transactions, budgets, settings...). Import them again at any time so you don't lose anything.",
       "transactions": "Transactions backup",
       "transactions.descr": "Export your transactions in CSV so you can more easily analyze them in other programs or applications.",
+      "transactions-to-export": {
+        "one": "1 transaction to export",
+        "other": "{{ n }} transactions to export"
+      },
       "description": "Download your data in different formats",
-      "dialog_title": "Save/Send file",
-      "success": "File saved/downloaded successfully in {{x}}",
+      "send_file": "Send file",
+      "see_folder": "See folder",
+      "success": "File saved successfully in {{x}}",
       "error": "Error downloading the file. Please contact the developer via lozin.technologies@gmail.com"
     },
     "IMPORT": {
@@ -653,7 +664,6 @@
         "success": "Successfully imported {{x}} transactions"
       },
       "success": "Import performed successfully",
-      "cancelled": "Import was cancelled by the user",
       "error": "Error importing file. Please contact developer via lozin.technologies@gmail.com"
     },
     "ABOUT": {

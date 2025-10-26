@@ -54,7 +54,7 @@ class BackupSettingsPage extends StatelessWidget {
                           Navigator.pop(context);
 
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(t.backup.import.cancelled)),
+                            SnackBar(content: Text(t.backup.no_file_selected)),
                           );
 
                           return;

@@ -324,6 +324,7 @@
       "recurrent-rule-finished": "循环规则已完成，没有更多的支付！"
     },
     "LIST": {
+      "all": "所有交易",
       "empty": "未发现需要显示的交易。请先在应用中添加一些交易，下次再来查看",
       "searcher.placeholder": "按类别、描述等搜索",
       "searcher.no-results": "未找到符合搜索条件的交易",
@@ -343,6 +344,7 @@
       }
     },
     "FILTERS": {
+      "title": "交易过滤器",
       "from_value": "最小金额",
       "to_value": "最大金额",
       "from_value_def": "从 {{ x }}",
@@ -618,17 +620,27 @@
     }
   },
   "BACKUP": {
+    "no_file_selected": "未选择文件",
+    "no_directory_selected": "未选择目录",
     "EXPORT": {
       "title": "导出您的数据",
       "title.short": "导出",
+      "type-of-export": "出口类型",
+      "other-options": "选项",
       "all": "完整备份",
       "all.descr": "导出您的所有数据（账户、交易、预算、设置……）。随时再次导入它们，您就不会丟失任何內容。",
       "transactions": "交易备份",
       "transactions.descr": "以 CSV 格式导出您的交易，以便您可以在其它程序或应用中更轻松地分析。",
+      "transactions-to-export": {
+        "one": "1 笔交易要导出",
+        "other": "要导出的 {{ n }} 笔交易"
+      },
       "description": "以不同格式下载（导出）数据",
-      "dialog_title": "保存/发送文件",
+      "send_file": "发送文件",
+      "see_folder": "查看文件夹",
       "success": "文件已成功保存/下载至 {{x}}",
-      "error": "下载文件时发生错误。请通过 lozin.technologies@gmail.com 联系开发人员"
+      "error": "下载文件时发生错误。请通过 lozin.technologies@gmail.com 联系开发人员",
+      "dialog_title": "保存/发送文件"
     },
     "IMPORT": {
       "title": "导入您的数据",
@@ -665,8 +677,8 @@
         "success": "成功导入 {{x}} 笔交易"
       },
       "success": "导入成功",
-      "cancelled": "导入被用户取消",
-      "error": "导入文件时发生错误。请通过 lozin.technologies@gmail.com 联系开发人员。"
+      "error": "导入文件时发生错误。请通过 lozin.technologies@gmail.com 联系开发人员。",
+      "cancelled": "导入被用户取消"
     },
     "ABOUT": {
       "title": "有关您的数据库的信息",
