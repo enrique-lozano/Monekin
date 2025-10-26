@@ -621,6 +621,8 @@
     }
   },
   "BACKUP": {
+    "no_file_selected": "Ningún archivo seleccionado",
+    "no_directory_selected": "Ningún directorio seleccionado",
     "EXPORT": {
       "title": "Exportar datos",
       "title.short": "Exportar",
@@ -629,9 +631,11 @@
       "transactions": "Respaldo de transacciones",
       "transactions.descr": "Exporta tus transacciones en CSV para que puedas analizarlas mas facilmente en otros programas o aplicaciones.",
       "description": "Exporta tus datos en diferentes formatos",
-      "dialog_title": "Guardar/Enviar archivo",
-      "success": "Archivo guardado/enviado correctamente en {{x}}",
-      "error": "Error al descargar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com"
+      "send_file": "Enviar archivo",
+      "see_folder": "Ver carpeta",
+      "success": "Archivo guardado correctamente en {{x}}",
+      "error": "Error al descargar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com",
+      "dialog_title": "Guardar/Enviar archivo"
     },
     "IMPORT": {
       "title": "Importar tus datos",
@@ -668,8 +672,8 @@
         "success": "Se han importado correctamente {{x}} transacciones"
       },
       "success": "Importación realizada con exito",
-      "cancelled": "La importación fue cancelada por el usuario",
-      "error": "Error al importar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com"
+      "error": "Error al importar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com",
+      "cancelled": "La importación fue cancelada por el usuario"
     },
     "ABOUT": {
       "title": "Información sobre tu base de datos",

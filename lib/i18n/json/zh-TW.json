@@ -618,6 +618,8 @@
     }
   },
   "BACKUP": {
+    "no_file_selected": "未選擇文件",
+    "no_directory_selected": "未選擇目錄",
     "EXPORT": {
       "title": "匯出您的資料",
       "title.short": "匯出",
@@ -626,9 +628,11 @@
       "transactions": "交易備份",
       "transactions.descr": "以 CSV 格式匯出您的交易，以便您可以在其他程式或應用程式中更輕鬆地分析它們。",
       "description": "以不同格式下載資料",
-      "dialog_title": "儲存/傳送文件",
+      "send_file": "發送文件",
+      "see_folder": "查看文件夾",
       "success": "檔案已在{{x}}中成功儲存/下載",
-      "error": "下載檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員"
+      "error": "下載檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員",
+      "dialog_title": "儲存/傳送文件"
     },
     "IMPORT": {
       "title": "匯入您的資料",
@@ -665,8 +669,8 @@
         "success": "已成功導入{{x}}筆交易"
       },
       "success": "導入成功",
-      "cancelled": "導入已被用戶取消",
-      "error": "匯入檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員。"
+      "error": "匯入檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員。",
+      "cancelled": "導入已被用戶取消"
     },
     "ABOUT": {
       "title": "有關您的資料庫的資訊",

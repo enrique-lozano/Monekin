@@ -618,6 +618,8 @@
     }
   },
   "BACKUP": {
+    "no_file_selected": "Hiçbir dosya seçilmedi",
+    "no_directory_selected": "Hiçbir dizin seçilmedi",
     "EXPORT": {
       "title": "Verilerinizi dışa aktarın",
       "title.short": "Dışa Aktar",
@@ -626,9 +628,11 @@
       "transactions": "İşlemlerin yedeği",
       "transactions.descr": "İşlemlerinizi CSV olarak dışa aktarın, böylece diğer programlarda veya uygulamalarda daha kolay analiz edebilirsiniz.",
       "description": "Verilerinizi farklı formatlarda indirin",
-      "dialog_title": "Dosyayı Kaydet/Gönder",
+      "send_file": "Dosyayı gönder",
+      "see_folder": "Klasöre bakın",
       "success": "Dosya {{x}} olarak başarıyla kaydedildi/indirildi",
-      "error": "Dosya indirilirken hata oluştu. Lütfen lozin.technologies@gmail.com adresinden geliştirici ile iletişime geçin"
+      "error": "Dosya indirilirken hata oluştu. Lütfen lozin.technologies@gmail.com adresinden geliştirici ile iletişime geçin",
+      "dialog_title": "Dosyayı Kaydet/Gönder"
     },
     "IMPORT": {
       "title": "Verilerinizi içe aktarın",
@@ -665,8 +669,8 @@
         "success": "{{x}} işlem başarıyla içe aktarıldı"
       },
       "success": "İçe aktarma başarıyla gerçekleştirildi",
-      "cancelled": "İçe aktarma kullanıcı tarafından iptal edildi",
-      "error": "Dosya içe aktarılırken hata oluştu. Lütfen lozin.technologies@gmail.com adresinden geliştirici ile iletişime geçin"
+      "error": "Dosya içe aktarılırken hata oluştu. Lütfen lozin.technologies@gmail.com adresinden geliştirici ile iletişime geçin",
+      "cancelled": "İçe aktarma kullanıcı tarafından iptal edildi"
     },
     "ABOUT": {
       "title": "Veritabanınız hakkında bilgiler",

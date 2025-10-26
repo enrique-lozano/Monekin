@@ -452,6 +452,8 @@ class _TranslationsBackupEs implements TranslationsBackupEn {
 	final TranslationsEs _root; // ignore: unused_field
 
 	// Translations
+	@override String get no_file_selected => 'Ningún archivo seleccionado';
+	@override String get no_directory_selected => 'Ningún directorio seleccionado';
 	@override late final _TranslationsBackupExportEs export = _TranslationsBackupExportEs._(_root);
 	@override late final _TranslationsBackupImportEs import = _TranslationsBackupImportEs._(_root);
 	@override late final _TranslationsBackupAboutEs about = _TranslationsBackupAboutEs._(_root);
@@ -1022,9 +1024,11 @@ class _TranslationsBackupExportEs implements TranslationsBackupExportEn {
 	@override String get transactions => 'Respaldo de transacciones';
 	@override String get transactions_descr => 'Exporta tus transacciones en CSV para que puedas analizarlas mas facilmente en otros programas o aplicaciones.';
 	@override String get description => 'Exporta tus datos en diferentes formatos';
-	@override String get dialog_title => 'Guardar/Enviar archivo';
-	@override String success({required Object x}) => 'Archivo guardado/enviado correctamente en ${x}';
+	@override String get send_file => 'Enviar archivo';
+	@override String get see_folder => 'Ver carpeta';
+	@override String success({required Object x}) => 'Archivo guardado correctamente en ${x}';
 	@override String get error => 'Error al descargar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com';
+	@override String get dialog_title => 'Guardar/Enviar archivo';
 }
 
 // Path: backup.import
@@ -1044,8 +1048,8 @@ class _TranslationsBackupImportEs implements TranslationsBackupImportEn {
 	@override String get tap_to_select_file => 'Pulsa para seleccionar un archivo';
 	@override late final _TranslationsBackupImportManualImportEs manual_import = _TranslationsBackupImportManualImportEs._(_root);
 	@override String get success => 'Importación realizada con exito';
-	@override String get cancelled => 'La importación fue cancelada por el usuario';
 	@override String get error => 'Error al importar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com';
+	@override String get cancelled => 'La importación fue cancelada por el usuario';
 }
 
 // Path: backup.about
@@ -1939,6 +1943,8 @@ extension on TranslationsEs {
 		map['budgets.details.expend_diary_left'] = ({required Object dailyAmount, required Object remainingDays}) => 'Puedes gastar ${dailyAmount}/día por los ${remainingDays} días restantes';
 		map['budgets.details.expend_evolution'] = 'Evolución del gasto';
 		map['budgets.details.no_transactions'] = 'Parece que no has realizado ningún gasto relativo a este presupuesto';
+		map['backup.no_file_selected'] = 'Ningún archivo seleccionado';
+		map['backup.no_directory_selected'] = 'Ningún directorio seleccionado';
 		map['backup.export.title'] = 'Exportar datos';
 		map['backup.export.title_short'] = 'Exportar';
 		map['backup.export.all'] = 'Respaldo total';
@@ -1946,9 +1952,11 @@ extension on TranslationsEs {
 		map['backup.export.transactions'] = 'Respaldo de transacciones';
 		map['backup.export.transactions_descr'] = 'Exporta tus transacciones en CSV para que puedas analizarlas mas facilmente en otros programas o aplicaciones.';
 		map['backup.export.description'] = 'Exporta tus datos en diferentes formatos';
-		map['backup.export.dialog_title'] = 'Guardar/Enviar archivo';
-		map['backup.export.success'] = ({required Object x}) => 'Archivo guardado/enviado correctamente en ${x}';
+		map['backup.export.send_file'] = 'Enviar archivo';
+		map['backup.export.see_folder'] = 'Ver carpeta';
+		map['backup.export.success'] = ({required Object x}) => 'Archivo guardado correctamente en ${x}';
 		map['backup.export.error'] = 'Error al descargar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com';
+		map['backup.export.dialog_title'] = 'Guardar/Enviar archivo';
 		map['backup.import.title'] = 'Importar tus datos';
 		map['backup.import.title_short'] = 'Importar';
 		map['backup.import.restore_backup'] = 'Restaurar copia de seguridad';
@@ -1977,8 +1985,8 @@ extension on TranslationsEs {
 		map['backup.import.manual_import.steps_descr.5'] = 'Especifica las columnas para otros atributos optativos de las transacciones';
 		map['backup.import.manual_import.success'] = ({required Object x}) => 'Se han importado correctamente ${x} transacciones';
 		map['backup.import.success'] = 'Importación realizada con exito';
-		map['backup.import.cancelled'] = 'La importación fue cancelada por el usuario';
 		map['backup.import.error'] = 'Error al importar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com';
+		map['backup.import.cancelled'] = 'La importación fue cancelada por el usuario';
 		map['backup.about.title'] = 'Información sobre tu base de datos';
 		map['backup.about.create_date'] = 'Fecha de creación';
 		map['backup.about.modify_date'] = 'Última modificación';

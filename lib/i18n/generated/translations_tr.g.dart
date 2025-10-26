@@ -452,6 +452,8 @@ class _TranslationsBackupTr implements TranslationsBackupEn {
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
+	@override String get no_file_selected => 'Hiçbir dosya seçilmedi';
+	@override String get no_directory_selected => 'Hiçbir dizin seçilmedi';
 	@override late final _TranslationsBackupExportTr export = _TranslationsBackupExportTr._(_root);
 	@override late final _TranslationsBackupImportTr import = _TranslationsBackupImportTr._(_root);
 	@override late final _TranslationsBackupAboutTr about = _TranslationsBackupAboutTr._(_root);
@@ -1022,9 +1024,11 @@ class _TranslationsBackupExportTr implements TranslationsBackupExportEn {
 	@override String get transactions => 'İşlemlerin yedeği';
 	@override String get transactions_descr => 'İşlemlerinizi CSV olarak dışa aktarın, böylece diğer programlarda veya uygulamalarda daha kolay analiz edebilirsiniz.';
 	@override String get description => 'Verilerinizi farklı formatlarda indirin';
-	@override String get dialog_title => 'Dosyayı Kaydet/Gönder';
+	@override String get send_file => 'Dosyayı gönder';
+	@override String get see_folder => 'Klasöre bakın';
 	@override String success({required Object x}) => 'Dosya ${x} olarak başarıyla kaydedildi/indirildi';
 	@override String get error => 'Dosya indirilirken hata oluştu. Lütfen lozin.technologies@gmail.com adresinden geliştirici ile iletişime geçin';
+	@override String get dialog_title => 'Dosyayı Kaydet/Gönder';
 }
 
 // Path: backup.import
@@ -1044,8 +1048,8 @@ class _TranslationsBackupImportTr implements TranslationsBackupImportEn {
 	@override String get tap_to_select_file => 'Bir dosya seçmek için dokunun';
 	@override late final _TranslationsBackupImportManualImportTr manual_import = _TranslationsBackupImportManualImportTr._(_root);
 	@override String get success => 'İçe aktarma başarıyla gerçekleştirildi';
-	@override String get cancelled => 'İçe aktarma kullanıcı tarafından iptal edildi';
 	@override String get error => 'Dosya içe aktarılırken hata oluştu. Lütfen lozin.technologies@gmail.com adresinden geliştirici ile iletişime geçin';
+	@override String get cancelled => 'İçe aktarma kullanıcı tarafından iptal edildi';
 }
 
 // Path: backup.about
@@ -1937,6 +1941,8 @@ extension on TranslationsTr {
 		map['budgets.details.expend_diary_left'] = ({required Object remainingDays, required Object dailyAmount}) => '${remainingDays} kalan gün için günde ${dailyAmount} harcayabilirsiniz';
 		map['budgets.details.expend_evolution'] = 'Harcama gelişimi';
 		map['budgets.details.no_transactions'] = 'Bu bütçeyle ilgili herhangi bir harcama yapmamışsınız gibi görünüyor';
+		map['backup.no_file_selected'] = 'Hiçbir dosya seçilmedi';
+		map['backup.no_directory_selected'] = 'Hiçbir dizin seçilmedi';
 		map['backup.export.title'] = 'Verilerinizi dışa aktarın';
 		map['backup.export.title_short'] = 'Dışa Aktar';
 		map['backup.export.all'] = 'Tam yedekleme';
@@ -1944,9 +1950,11 @@ extension on TranslationsTr {
 		map['backup.export.transactions'] = 'İşlemlerin yedeği';
 		map['backup.export.transactions_descr'] = 'İşlemlerinizi CSV olarak dışa aktarın, böylece diğer programlarda veya uygulamalarda daha kolay analiz edebilirsiniz.';
 		map['backup.export.description'] = 'Verilerinizi farklı formatlarda indirin';
-		map['backup.export.dialog_title'] = 'Dosyayı Kaydet/Gönder';
+		map['backup.export.send_file'] = 'Dosyayı gönder';
+		map['backup.export.see_folder'] = 'Klasöre bakın';
 		map['backup.export.success'] = ({required Object x}) => 'Dosya ${x} olarak başarıyla kaydedildi/indirildi';
 		map['backup.export.error'] = 'Dosya indirilirken hata oluştu. Lütfen lozin.technologies@gmail.com adresinden geliştirici ile iletişime geçin';
+		map['backup.export.dialog_title'] = 'Dosyayı Kaydet/Gönder';
 		map['backup.import.title'] = 'Verilerinizi içe aktarın';
 		map['backup.import.title_short'] = 'İçe Aktar';
 		map['backup.import.restore_backup'] = 'Yedeklemeyi Geri Yükle';
@@ -1975,8 +1983,8 @@ extension on TranslationsTr {
 		map['backup.import.manual_import.steps_descr.5'] = 'Diğer isteğe bağlı işlem öznitelikleri için sütunları belirtir';
 		map['backup.import.manual_import.success'] = ({required Object x}) => '${x} işlem başarıyla içe aktarıldı';
 		map['backup.import.success'] = 'İçe aktarma başarıyla gerçekleştirildi';
-		map['backup.import.cancelled'] = 'İçe aktarma kullanıcı tarafından iptal edildi';
 		map['backup.import.error'] = 'Dosya içe aktarılırken hata oluştu. Lütfen lozin.technologies@gmail.com adresinden geliştirici ile iletişime geçin';
+		map['backup.import.cancelled'] = 'İçe aktarma kullanıcı tarafından iptal edildi';
 		map['backup.about.title'] = 'Veritabanınız hakkında bilgiler';
 		map['backup.about.create_date'] = 'Oluşturulma tarihi';
 		map['backup.about.modify_date'] = 'Son değiştirilme';

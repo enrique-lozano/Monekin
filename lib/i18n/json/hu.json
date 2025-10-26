@@ -618,6 +618,8 @@
     }
   },
   "BACKUP": {
+    "no_file_selected": "Nincs kiválasztva fájl",
+    "no_directory_selected": "Nincs kiválasztott könyvtár",
     "EXPORT": {
       "title": "Adatok exportálása",
       "title.short": "Exportálás",
@@ -626,9 +628,11 @@
       "transactions": "Tranzakciók mentése",
       "transactions.descr": "Exportálja tranzakcióit CSV formátumban, így könnyebben elemezheti azokat más programokban vagy alkalmazásokban.",
       "description": "Adatok letöltése különböző formátumokban",
-      "dialog_title": "Fájl mentése/küldése",
+      "send_file": "Fájl küldése",
+      "see_folder": "Lásd a mappát",
       "success": "A fájl sikeresen mentve/letöltve ide: {{x}}",
-      "error": "Hiba a fájl letöltésében. Kérjük, lépjen kapcsolatba a fejlesztővel a lozin.technologies@gmail.com címen keresztül."
+      "error": "Hiba a fájl letöltésében. Kérjük, lépjen kapcsolatba a fejlesztővel a lozin.technologies@gmail.com címen keresztül.",
+      "dialog_title": "Fájl mentése/küldése"
     },
     "IMPORT": {
       "title": "Adatok importálása",
@@ -665,8 +669,8 @@
         "success": "{{x}} tranzakció sikeresen importálva"
       },
       "success": "Az importálás sikeresen végrehajtva",
-      "cancelled": "Az importálást a felhasználó megszakította",
-      "error": "Hiba történt importálásakor. Kérjük, lépjen kapcsolatba a fejlesztővel a lozin.technologies@gmail.com címen keresztül."
+      "error": "Hiba történt importálásakor. Kérjük, lépjen kapcsolatba a fejlesztővel a lozin.technologies@gmail.com címen keresztül.",
+      "cancelled": "Az importálást a felhasználó megszakította"
     },
     "ABOUT": {
       "title": "Információk az adatbázisról",

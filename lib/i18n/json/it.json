@@ -618,6 +618,8 @@
     }
   },
   "BACKUP": {
+    "no_file_selected": "Nessun file selezionato",
+    "no_directory_selected": "Nessuna directory selezionata",
     "EXPORT": {
       "title": "Esporta i tuoi dati",
       "title.short": "Esporta",
@@ -626,9 +628,11 @@
       "transactions": "Backup transazioni",
       "transactions.descr": "Esporta le tue transazioni in CSV in modo da poterle analizzare più facilmente in altri programmi o applicazioni.",
       "description": "Scarica i tuoi dati in diversi formati",
-      "dialog_title": "Salva/Invia file",
+      "send_file": "Invia file",
+      "see_folder": "Vedi cartella",
       "success": "File salvato/scaricato con successo in {{x}}",
-      "error": "Errore durante il download del file. Contatta lo sviluppatore tramite lozin.technologies@gmail.com"
+      "error": "Errore durante il download del file. Contatta lo sviluppatore tramite lozin.technologies@gmail.com",
+      "dialog_title": "Salva/Invia file"
     },
     "IMPORT": {
       "title": "Importa i tuoi dati",
@@ -665,8 +669,8 @@
         "success": "{{x}} transazioni importate con successo"
       },
       "success": "Importazione eseguita con successo",
-      "cancelled": "Importazione annullata dall'utente",
-      "error": "Errore durante l'importazione del file. Contatta lo sviluppatore tramite lozin.technologies@gmail.com"
+      "error": "Errore durante l'importazione del file. Contatta lo sviluppatore tramite lozin.technologies@gmail.com",
+      "cancelled": "Importazione annullata dall'utente"
     },
     "ABOUT": {
       "title": "Informazioni sul tuo database",

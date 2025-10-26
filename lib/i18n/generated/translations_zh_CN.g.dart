@@ -452,6 +452,8 @@ class _TranslationsBackupZhCn implements TranslationsBackupEn {
 	final TranslationsZhCn _root; // ignore: unused_field
 
 	// Translations
+	@override String get no_file_selected => '未选择文件';
+	@override String get no_directory_selected => '未选择目录';
 	@override late final _TranslationsBackupExportZhCn export = _TranslationsBackupExportZhCn._(_root);
 	@override late final _TranslationsBackupImportZhCn import = _TranslationsBackupImportZhCn._(_root);
 	@override late final _TranslationsBackupAboutZhCn about = _TranslationsBackupAboutZhCn._(_root);
@@ -1022,9 +1024,11 @@ class _TranslationsBackupExportZhCn implements TranslationsBackupExportEn {
 	@override String get transactions => '交易备份';
 	@override String get transactions_descr => '以 CSV 格式导出您的交易，以便您可以在其它程序或应用中更轻松地分析。';
 	@override String get description => '以不同格式下载（导出）数据';
-	@override String get dialog_title => '保存/发送文件';
+	@override String get send_file => '发送文件';
+	@override String get see_folder => '查看文件夹';
 	@override String success({required Object x}) => '文件已成功保存/下载至 ${x}';
 	@override String get error => '下载文件时发生错误。请通过 lozin.technologies@gmail.com 联系开发人员';
+	@override String get dialog_title => '保存/发送文件';
 }
 
 // Path: backup.import
@@ -1044,8 +1048,8 @@ class _TranslationsBackupImportZhCn implements TranslationsBackupImportEn {
 	@override String get tap_to_select_file => '点击选择文件';
 	@override late final _TranslationsBackupImportManualImportZhCn manual_import = _TranslationsBackupImportManualImportZhCn._(_root);
 	@override String get success => '导入成功';
-	@override String get cancelled => '导入被用户取消';
 	@override String get error => '导入文件时发生错误。请通过 lozin.technologies@gmail.com 联系开发人员。';
+	@override String get cancelled => '导入被用户取消';
 }
 
 // Path: backup.about
@@ -1937,6 +1941,8 @@ extension on TranslationsZhCn {
 		map['budgets.details.expend_diary_left'] = ({required Object remainingDays, required Object dailyAmount}) => '在未来 ${remainingDays} 天中，您每天可以花费 ${dailyAmount}';
 		map['budgets.details.expend_evolution'] = '支出变化';
 		map['budgets.details.no_transactions'] = '看来您还没有与此预算相关的任何支出';
+		map['backup.no_file_selected'] = '未选择文件';
+		map['backup.no_directory_selected'] = '未选择目录';
 		map['backup.export.title'] = '导出您的数据';
 		map['backup.export.title_short'] = '导出';
 		map['backup.export.all'] = '完整备份';
@@ -1944,9 +1950,11 @@ extension on TranslationsZhCn {
 		map['backup.export.transactions'] = '交易备份';
 		map['backup.export.transactions_descr'] = '以 CSV 格式导出您的交易，以便您可以在其它程序或应用中更轻松地分析。';
 		map['backup.export.description'] = '以不同格式下载（导出）数据';
-		map['backup.export.dialog_title'] = '保存/发送文件';
+		map['backup.export.send_file'] = '发送文件';
+		map['backup.export.see_folder'] = '查看文件夹';
 		map['backup.export.success'] = ({required Object x}) => '文件已成功保存/下载至 ${x}';
 		map['backup.export.error'] = '下载文件时发生错误。请通过 lozin.technologies@gmail.com 联系开发人员';
+		map['backup.export.dialog_title'] = '保存/发送文件';
 		map['backup.import.title'] = '导入您的数据';
 		map['backup.import.title_short'] = '导入';
 		map['backup.import.restore_backup'] = '恢复备份';
@@ -1975,8 +1983,8 @@ extension on TranslationsZhCn {
 		map['backup.import.manual_import.steps_descr.5'] = '选择其它交易属性的数据列';
 		map['backup.import.manual_import.success'] = ({required Object x}) => '成功导入 ${x} 笔交易';
 		map['backup.import.success'] = '导入成功';
-		map['backup.import.cancelled'] = '导入被用户取消';
 		map['backup.import.error'] = '导入文件时发生错误。请通过 lozin.technologies@gmail.com 联系开发人员。';
+		map['backup.import.cancelled'] = '导入被用户取消';
 		map['backup.about.title'] = '有关您的数据库的信息';
 		map['backup.about.create_date'] = '创建日期';
 		map['backup.about.modify_date'] = '上一次更改';

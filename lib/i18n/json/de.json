@@ -618,6 +618,8 @@
     }
   },
   "BACKUP": {
+    "no_file_selected": "Keine Datei ausgewählt",
+    "no_directory_selected": "Kein Verzeichnis ausgewählt",
     "EXPORT": {
       "title": "Daten exportieren",
       "title.short": "Export",
@@ -626,9 +628,11 @@
       "transactions": "Sicherung der Transaktionen",
       "transactions.descr": "Exportiere Deine Transaktionen im CSV-Format, damit Du sie einfacher in anderen Programmen oder Anwendungen analysieren kannst.",
       "description": "Lade Deine Daten in verschiedenen Formaten herunter",
-      "dialog_title": "Datei speichern/senden",
+      "send_file": "Datei senden",
+      "see_folder": "Siehe Ordner",
       "success": "Datei erfolgreich gespeichert/heruntergeladen in {{x}}",
-      "error": "Fehler beim Herunterladen der Datei. "
+      "error": "Fehler beim Herunterladen der Datei. ",
+      "dialog_title": "Datei speichern/senden"
     },
     "IMPORT": {
       "title": "Daten importieren",
@@ -665,8 +669,8 @@
         "success": "Erfolgreich {{x}} Transaktionen importiert"
       },
       "success": "Der Import wurde erfolgreich durchgeführt",
-      "cancelled": "Der Import wurde vom Benutzer abgebrochen",
-      "error": "Fehler beim Importieren der Datei. Bitte kontaktiere den Entwickler lozin.technologies@gmail.com"
+      "error": "Fehler beim Importieren der Datei. Bitte kontaktiere den Entwickler lozin.technologies@gmail.com",
+      "cancelled": "Der Import wurde vom Benutzer abgebrochen"
     },
     "ABOUT": {
       "title": "Informationen zu Deiner Datenbank",
