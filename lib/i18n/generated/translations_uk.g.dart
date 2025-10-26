@@ -702,6 +702,7 @@ class _TranslationsTransactionListUk implements TranslationsTransactionListEn {
 	final TranslationsUk _root; // ignore: unused_field
 
 	// Translations
+	@override String get all => 'Всі транзакції';
 	@override String get empty => 'Тут не знайдено жодних транзакцій для відображення. Додайте кілька транзакцій у додаток, і, можливо, наступного разу вам пощастить більше';
 	@override String get searcher_placeholder => 'Шукати за категорією, описом...';
 	@override String get searcher_no_results => 'Не знайдено транзакцій, що відповідають критеріям пошуку';
@@ -724,6 +725,7 @@ class _TranslationsTransactionFiltersUk implements TranslationsTransactionFilter
 	final TranslationsUk _root; // ignore: unused_field
 
 	// Translations
+	@override String get title => 'Фільтри транзакцій';
 	@override String get from_value => 'Від суми';
 	@override String get to_value => 'До суми';
 	@override String from_value_def({required Object x}) => 'Від ${x}';
@@ -1019,10 +1021,16 @@ class _TranslationsBackupExportUk implements TranslationsBackupExportEn {
 	// Translations
 	@override String get title => 'Експорт ваших даних';
 	@override String get title_short => 'Експорт';
+	@override String get type_of_export => 'Тип експорту';
+	@override String get other_options => 'Опції';
 	@override String get all => 'Повне резервне копіювання';
 	@override String get all_descr => 'Експортувати всі ваші дані (рахунки, транзакції, бюджети, налаштування...). Імпортуйте їх знову у будь-який момент, щоб нічого не втратити.';
 	@override String get transactions => 'Резервне копіювання транзакцій';
 	@override String get transactions_descr => 'Експортуйте ваші транзакції у форматі CSV, щоб ви могли зручніше їх аналізувати в інших програмах або застосунках.';
+	@override String transactions_to_export({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
+		one: '1 транзакція для експорту',
+		other: '${n} транзакцій для експорту',
+	);
 	@override String get description => 'Завантажте ваші дані у різних форматах';
 	@override String get send_file => 'Надіслати файл';
 	@override String get see_folder => 'Дивіться папку';
@@ -1708,6 +1716,7 @@ extension on TranslationsUk {
 		map['transaction.next_payments.accept_dialog_msg_single'] = 'Новий статус транзакції буде нульовим. Ви можете знову редагувати статус цієї транзакції в будь-який момент';
 		map['transaction.next_payments.accept_dialog_msg'] = ({required Object date}) => 'Ця дія створить нову транзакцію з датою ${date}. Ви зможете переглянути деталі цієї транзакції на сторінці транзакцій';
 		map['transaction.next_payments.recurrent_rule_finished'] = 'Правило періодичності було завершено, більше немає платежів!';
+		map['transaction.list.all'] = 'Всі транзакції';
 		map['transaction.list.empty'] = 'Тут не знайдено жодних транзакцій для відображення. Додайте кілька транзакцій у додаток, і, можливо, наступного разу вам пощастить більше';
 		map['transaction.list.searcher_placeholder'] = 'Шукати за категорією, описом...';
 		map['transaction.list.searcher_no_results'] = 'Не знайдено транзакцій, що відповідають критеріям пошуку';
@@ -1723,6 +1732,7 @@ extension on TranslationsUk {
 		map['transaction.list.bulk_edit.dates'] = 'Редагувати дати';
 		map['transaction.list.bulk_edit.categories'] = 'Редагувати категорії';
 		map['transaction.list.bulk_edit.status'] = 'Редагувати статуси';
+		map['transaction.filters.title'] = 'Фільтри транзакцій';
 		map['transaction.filters.from_value'] = 'Від суми';
 		map['transaction.filters.to_value'] = 'До суми';
 		map['transaction.filters.from_value_def'] = ({required Object x}) => 'Від ${x}';
@@ -1945,10 +1955,16 @@ extension on TranslationsUk {
 		map['backup.no_directory_selected'] = 'Каталог не вибрано';
 		map['backup.export.title'] = 'Експорт ваших даних';
 		map['backup.export.title_short'] = 'Експорт';
+		map['backup.export.type_of_export'] = 'Тип експорту';
+		map['backup.export.other_options'] = 'Опції';
 		map['backup.export.all'] = 'Повне резервне копіювання';
 		map['backup.export.all_descr'] = 'Експортувати всі ваші дані (рахунки, транзакції, бюджети, налаштування...). Імпортуйте їх знову у будь-який момент, щоб нічого не втратити.';
 		map['backup.export.transactions'] = 'Резервне копіювання транзакцій';
 		map['backup.export.transactions_descr'] = 'Експортуйте ваші транзакції у форматі CSV, щоб ви могли зручніше їх аналізувати в інших програмах або застосунках.';
+		map['backup.export.transactions_to_export'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
+				one: '1 транзакція для експорту',
+				other: '${n} транзакцій для експорту',
+			);
 		map['backup.export.description'] = 'Завантажте ваші дані у різних форматах';
 		map['backup.export.send_file'] = 'Надіслати файл';
 		map['backup.export.see_folder'] = 'Дивіться папку';

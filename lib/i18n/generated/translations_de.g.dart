@@ -702,6 +702,7 @@ class _TranslationsTransactionListDe implements TranslationsTransactionListEn {
 	final TranslationsDe _root; // ignore: unused_field
 
 	// Translations
+	@override String get all => 'Alle Transaktionen';
 	@override String get empty => 'Es wurden keine Transaktionen gefunden, die hier angezeigt werden könnten. ';
 	@override String get searcher_placeholder => 'Suche nach Kategorie, Beschreibung...';
 	@override String get searcher_no_results => 'Es wurden keine Transaktionen gefunden, die den Suchkriterien entsprechen';
@@ -724,6 +725,7 @@ class _TranslationsTransactionFiltersDe implements TranslationsTransactionFilter
 	final TranslationsDe _root; // ignore: unused_field
 
 	// Translations
+	@override String get title => 'Transaktionsfilter';
 	@override String get from_value => 'Ab Betrag';
 	@override String get to_value => 'Bis zum Betrag';
 	@override String from_value_def({required Object x}) => 'Von ${x}';
@@ -1019,10 +1021,16 @@ class _TranslationsBackupExportDe implements TranslationsBackupExportEn {
 	// Translations
 	@override String get title => 'Daten exportieren';
 	@override String get title_short => 'Export';
+	@override String get type_of_export => 'Art des Exports';
+	@override String get other_options => 'Optionen';
 	@override String get all => 'Vollständige Sicherung';
 	@override String get all_descr => 'Exportiere alle Deine Daten (Konten, Transaktionen, Budgets, Einstellungen...). ';
 	@override String get transactions => 'Sicherung der Transaktionen';
 	@override String get transactions_descr => 'Exportiere Deine Transaktionen im CSV-Format, damit Du sie einfacher in anderen Programmen oder Anwendungen analysieren kannst.';
+	@override String transactions_to_export({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+		one: '1 Transaktion zum Exportieren',
+		other: '${n} Transaktionen zum Exportieren',
+	);
 	@override String get description => 'Lade Deine Daten in verschiedenen Formaten herunter';
 	@override String get send_file => 'Datei senden';
 	@override String get see_folder => 'Siehe Ordner';
@@ -1708,6 +1716,7 @@ extension on TranslationsDe {
 		map['transaction.next_payments.accept_dialog_msg_single'] = 'Der neue Status der Transaktion ist null. ';
 		map['transaction.next_payments.accept_dialog_msg'] = ({required Object date}) => 'Diese Aktion erstellt eine neue Transaktion mit Datum ${date}. Du kannst die Details dieser Transaktion auf der Transaktionsseite überprüfen';
 		map['transaction.next_payments.recurrent_rule_finished'] = 'Die wiederkehrende Regel ist abgeschlossen, es sind keine weiteren Zahlungen mehr zu leisten!';
+		map['transaction.list.all'] = 'Alle Transaktionen';
 		map['transaction.list.empty'] = 'Es wurden keine Transaktionen gefunden, die hier angezeigt werden könnten. ';
 		map['transaction.list.searcher_placeholder'] = 'Suche nach Kategorie, Beschreibung...';
 		map['transaction.list.searcher_no_results'] = 'Es wurden keine Transaktionen gefunden, die den Suchkriterien entsprechen';
@@ -1723,6 +1732,7 @@ extension on TranslationsDe {
 		map['transaction.list.bulk_edit.dates'] = 'Daten bearbeiten';
 		map['transaction.list.bulk_edit.categories'] = 'Kategorien bearbeiten';
 		map['transaction.list.bulk_edit.status'] = 'Status bearbeiten';
+		map['transaction.filters.title'] = 'Transaktionsfilter';
 		map['transaction.filters.from_value'] = 'Ab Betrag';
 		map['transaction.filters.to_value'] = 'Bis zum Betrag';
 		map['transaction.filters.from_value_def'] = ({required Object x}) => 'Von ${x}';
@@ -1945,10 +1955,16 @@ extension on TranslationsDe {
 		map['backup.no_directory_selected'] = 'Kein Verzeichnis ausgewählt';
 		map['backup.export.title'] = 'Daten exportieren';
 		map['backup.export.title_short'] = 'Export';
+		map['backup.export.type_of_export'] = 'Art des Exports';
+		map['backup.export.other_options'] = 'Optionen';
 		map['backup.export.all'] = 'Vollständige Sicherung';
 		map['backup.export.all_descr'] = 'Exportiere alle Deine Daten (Konten, Transaktionen, Budgets, Einstellungen...). ';
 		map['backup.export.transactions'] = 'Sicherung der Transaktionen';
 		map['backup.export.transactions_descr'] = 'Exportiere Deine Transaktionen im CSV-Format, damit Du sie einfacher in anderen Programmen oder Anwendungen analysieren kannst.';
+		map['backup.export.transactions_to_export'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n,
+				one: '1 Transaktion zum Exportieren',
+				other: '${n} Transaktionen zum Exportieren',
+			);
 		map['backup.export.description'] = 'Lade Deine Daten in verschiedenen Formaten herunter';
 		map['backup.export.send_file'] = 'Datei senden';
 		map['backup.export.see_folder'] = 'Siehe Ordner';

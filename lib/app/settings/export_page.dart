@@ -48,6 +48,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
       final transactions = await TransactionService.instance
           .getTransactions(filters: filters)
           .first;
+
       final csvFile = await BackupDatabaseService().exportSpreadsheet(
         directoryPath,
         transactions,
@@ -195,7 +196,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            createListSeparator(context, "Tipo de exportación"),
+            createListSeparator(context, t.backup.export.type_of_export),
             RadioGroup(
               onChanged: (v) {
                 if (v == null) return;
@@ -232,14 +233,33 @@ class _ExportDataPageState extends State<ExportDataPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  createListSeparator(context, "Options"),
+                  createListSeparator(context, t.backup.export.other_options),
                   ListTile(
-                    leading: const Icon(Icons.filter_alt_outlined),
+                    leading: Builder(
+                      builder: (context) {
+                        final icon = const Icon(Icons.filter_alt_outlined);
+
+                        if (!filters.hasFilter) {
+                          return icon;
+                        }
+
+                        return Badge(child: icon);
+                      },
+                    ),
                     title: Text(t.home.filter_transactions),
-                    subtitle: Text(
-                      filters.hasFilter
-                          ? "Todas las transacciones"
-                          : "${34.toString()} transactions to export",
+                    subtitle: StreamBuilder(
+                      stream: TransactionService.instance.countTransactions(
+                        predicate: filters,
+                      ),
+                      builder: (context, asyncSnapshot) {
+                        return Text(
+                          !filters.hasFilter
+                              ? t.transaction.list.all
+                              : t.backup.export.transactions_to_export(
+                                  n: asyncSnapshot.data?.numberOfRes ?? 0,
+                                ),
+                        );
+                      },
                     ),
                     onTap: () {
                       openFilterSheetModal(

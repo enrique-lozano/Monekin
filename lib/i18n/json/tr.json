@@ -324,6 +324,7 @@
       "recurrent-rule-finished": "Tekrarlama kuralı tamamlandı, yapılacak başka ödeme yok!"
     },
     "LIST": {
+      "all": "Tüm İşlemler",
       "empty": "Burada görüntülenecek işlem bulunamadı. Uygulamaya birkaç işlem ekleyin, belki bir dahaki sefere daha şanslı olursunuz.",
       "searcher.placeholder": "Kategoriye, açıklamaya göre ara...",
       "searcher.no-results": "Arama kriterlerine uyan işlem bulunamadı",
@@ -343,6 +344,7 @@
       }
     },
     "FILTERS": {
+      "title": "İşlem filtreleri",
       "from_value": "Miktardan",
       "to_value": "Miktara kadar",
       "from_value_def": "{{ x }} dan",
@@ -623,10 +625,16 @@
     "EXPORT": {
       "title": "Verilerinizi dışa aktarın",
       "title.short": "Dışa Aktar",
+      "type-of-export": "İhracat türü",
+      "other-options": "Seçenekler",
       "all": "Tam yedekleme",
       "all.descr": "Tüm verilerinizi (hesaplar, işlemler, bütçeler, ayarlar...) dışa aktarın. Herhangi bir şeyi kaybetmemek için bunları istediğiniz zaman tekrar içe aktarın.",
       "transactions": "İşlemlerin yedeği",
       "transactions.descr": "İşlemlerinizi CSV olarak dışa aktarın, böylece diğer programlarda veya uygulamalarda daha kolay analiz edebilirsiniz.",
+      "transactions-to-export": {
+        "one": "Dışa aktarılacak 1 işlem",
+        "other": "Dışa aktarılacak {{ n }} işlem"
+      },
       "description": "Verilerinizi farklı formatlarda indirin",
       "send_file": "Dosyayı gönder",
       "see_folder": "Klasöre bakın",

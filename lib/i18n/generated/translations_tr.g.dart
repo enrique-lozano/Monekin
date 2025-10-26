@@ -702,6 +702,7 @@ class _TranslationsTransactionListTr implements TranslationsTransactionListEn {
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
+	@override String get all => 'Tüm İşlemler';
 	@override String get empty => 'Burada görüntülenecek işlem bulunamadı. Uygulamaya birkaç işlem ekleyin, belki bir dahaki sefere daha şanslı olursunuz.';
 	@override String get searcher_placeholder => 'Kategoriye, açıklamaya göre ara...';
 	@override String get searcher_no_results => 'Arama kriterlerine uyan işlem bulunamadı';
@@ -724,6 +725,7 @@ class _TranslationsTransactionFiltersTr implements TranslationsTransactionFilter
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
+	@override String get title => 'İşlem filtreleri';
 	@override String get from_value => 'Miktardan';
 	@override String get to_value => 'Miktara kadar';
 	@override String from_value_def({required Object x}) => '${x} dan';
@@ -1019,10 +1021,16 @@ class _TranslationsBackupExportTr implements TranslationsBackupExportEn {
 	// Translations
 	@override String get title => 'Verilerinizi dışa aktarın';
 	@override String get title_short => 'Dışa Aktar';
+	@override String get type_of_export => 'İhracat türü';
+	@override String get other_options => 'Seçenekler';
 	@override String get all => 'Tam yedekleme';
 	@override String get all_descr => 'Tüm verilerinizi (hesaplar, işlemler, bütçeler, ayarlar...) dışa aktarın. Herhangi bir şeyi kaybetmemek için bunları istediğiniz zaman tekrar içe aktarın.';
 	@override String get transactions => 'İşlemlerin yedeği';
 	@override String get transactions_descr => 'İşlemlerinizi CSV olarak dışa aktarın, böylece diğer programlarda veya uygulamalarda daha kolay analiz edebilirsiniz.';
+	@override String transactions_to_export({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
+		one: 'Dışa aktarılacak 1 işlem',
+		other: 'Dışa aktarılacak ${n} işlem',
+	);
 	@override String get description => 'Verilerinizi farklı formatlarda indirin';
 	@override String get send_file => 'Dosyayı gönder';
 	@override String get see_folder => 'Klasöre bakın';
@@ -1708,6 +1716,7 @@ extension on TranslationsTr {
 		map['transaction.next_payments.accept_dialog_msg_single'] = 'İşlemin yeni durumu boş olacaktır. İstediğiniz zaman bu işlemin durumunu yeniden düzenleyebilirsiniz';
 		map['transaction.next_payments.accept_dialog_msg'] = ({required Object date}) => 'Bu eylem ${date} tarihli yeni bir işlem oluşturacaktır. İşlem sayfasında bu işlemin detaylarını kontrol edebileceksiniz';
 		map['transaction.next_payments.recurrent_rule_finished'] = 'Tekrarlama kuralı tamamlandı, yapılacak başka ödeme yok!';
+		map['transaction.list.all'] = 'Tüm İşlemler';
 		map['transaction.list.empty'] = 'Burada görüntülenecek işlem bulunamadı. Uygulamaya birkaç işlem ekleyin, belki bir dahaki sefere daha şanslı olursunuz.';
 		map['transaction.list.searcher_placeholder'] = 'Kategoriye, açıklamaya göre ara...';
 		map['transaction.list.searcher_no_results'] = 'Arama kriterlerine uyan işlem bulunamadı';
@@ -1723,6 +1732,7 @@ extension on TranslationsTr {
 		map['transaction.list.bulk_edit.dates'] = 'Tarihleri düzenle';
 		map['transaction.list.bulk_edit.categories'] = 'Kategorileri düzenle';
 		map['transaction.list.bulk_edit.status'] = 'Durumları düzenle';
+		map['transaction.filters.title'] = 'İşlem filtreleri';
 		map['transaction.filters.from_value'] = 'Miktardan';
 		map['transaction.filters.to_value'] = 'Miktara kadar';
 		map['transaction.filters.from_value_def'] = ({required Object x}) => '${x} dan';
@@ -1945,10 +1955,16 @@ extension on TranslationsTr {
 		map['backup.no_directory_selected'] = 'Hiçbir dizin seçilmedi';
 		map['backup.export.title'] = 'Verilerinizi dışa aktarın';
 		map['backup.export.title_short'] = 'Dışa Aktar';
+		map['backup.export.type_of_export'] = 'İhracat türü';
+		map['backup.export.other_options'] = 'Seçenekler';
 		map['backup.export.all'] = 'Tam yedekleme';
 		map['backup.export.all_descr'] = 'Tüm verilerinizi (hesaplar, işlemler, bütçeler, ayarlar...) dışa aktarın. Herhangi bir şeyi kaybetmemek için bunları istediğiniz zaman tekrar içe aktarın.';
 		map['backup.export.transactions'] = 'İşlemlerin yedeği';
 		map['backup.export.transactions_descr'] = 'İşlemlerinizi CSV olarak dışa aktarın, böylece diğer programlarda veya uygulamalarda daha kolay analiz edebilirsiniz.';
+		map['backup.export.transactions_to_export'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
+				one: 'Dışa aktarılacak 1 işlem',
+				other: 'Dışa aktarılacak ${n} işlem',
+			);
 		map['backup.export.description'] = 'Verilerinizi farklı formatlarda indirin';
 		map['backup.export.send_file'] = 'Dosyayı gönder';
 		map['backup.export.see_folder'] = 'Klasöre bakın';

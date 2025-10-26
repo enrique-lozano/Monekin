@@ -324,6 +324,7 @@
       "recurrent-rule-finished": "La regola ricorrente è stata completata, non ci sono più pagamenti da effettuare!"
     },
     "LIST": {
+      "all": "Tutte le transazioni",
       "empty": "Nessuna transazione trovata da mostrare qui. Aggiungi alcune transazioni nell'app e magari sarai più fortunato la prossima volta.",
       "searcher.placeholder": "Cerca per categoria, descrizione...",
       "searcher.no-results": "Nessuna transazione trovata corrispondente ai criteri di ricerca",
@@ -343,6 +344,7 @@
       }
     },
     "FILTERS": {
+      "title": "Filtri delle transazioni",
       "from_value": "Da importo",
       "to_value": "Fino a importo",
       "from_value_def": "Da {{ x }}",
@@ -623,10 +625,16 @@
     "EXPORT": {
       "title": "Esporta i tuoi dati",
       "title.short": "Esporta",
+      "type-of-export": "Tipo di esportazione",
+      "other-options": "Opzioni",
       "all": "Backup completo",
       "all.descr": "Esporta tutti i tuoi dati (conti, transazioni, budget, impostazioni...). Importali di nuovo in qualsiasi momento per non perdere nulla.",
       "transactions": "Backup transazioni",
       "transactions.descr": "Esporta le tue transazioni in CSV in modo da poterle analizzare più facilmente in altri programmi o applicazioni.",
+      "transactions-to-export": {
+        "one": "1 transazione da esportare",
+        "other": "{{ n }} transazioni da esportare"
+      },
       "description": "Scarica i tuoi dati in diversi formati",
       "send_file": "Invia file",
       "see_folder": "Vedi cartella",

@@ -324,6 +324,7 @@
       "recurrent-rule-finished": "Az ismétlődő szabály teljesült, nincs több kifizetés!"
     },
     "LIST": {
+      "all": "Minden tranzakció",
       "empty": "Nem található itt megjeleníthető tranzakció. Adjon hozzá néhány tranzakciót az alkalmazásban, és talán legközelebb több szerencséje lesz.",
       "searcher.placeholder": "Keresés kategória, leírás alapján...",
       "searcher.no-results": "Nincs a keresési feltételeknek megfelelő tranzakció",
@@ -343,6 +344,7 @@
       }
     },
     "FILTERS": {
+      "title": "Tranzakciós szűrők",
       "from_value": "Ebből az összegből",
       "to_value": "Eddig az összegig",
       "from_value_def": "Innen: {{ x }}",
@@ -623,10 +625,16 @@
     "EXPORT": {
       "title": "Adatok exportálása",
       "title.short": "Exportálás",
+      "type-of-export": "Az export típusa",
+      "other-options": "Opciók",
       "all": "Teljes mentés",
       "all.descr": "Exportálja az összes adatát (számlák, tranzakciók, költségvetések, beállítások...). Bármikor újra importálhatja őket, így semmit sem veszíthet el.",
       "transactions": "Tranzakciók mentése",
       "transactions.descr": "Exportálja tranzakcióit CSV formátumban, így könnyebben elemezheti azokat más programokban vagy alkalmazásokban.",
+      "transactions-to-export": {
+        "one": "1 exportálandó tranzakció",
+        "other": "{{ n }} exportálandó tranzakció"
+      },
       "description": "Adatok letöltése különböző formátumokban",
       "send_file": "Fájl küldése",
       "see_folder": "Lásd a mappát",

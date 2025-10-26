@@ -613,11 +613,13 @@
     "EXPORT": {
       "title": "Export your data",
       "title.short": "Export",
+      "type-of-export": "Type of export",
+      "other-options": "Options",
       "all": "Full backup",
       "all.descr": "Export all your data (accounts, transactions, budgets, settings...). Import them again at any time so you don't lose anything.",
       "transactions": "Transactions backup",
       "transactions.descr": "Export your transactions in CSV so you can more easily analyze them in other programs or applications.",
-      "transactions.to-export": {
+      "transactions-to-export": {
         "one": "1 transaction to export",
         "other": "{{ n }} transactions to export"
       },

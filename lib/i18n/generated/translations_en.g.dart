@@ -1884,6 +1884,12 @@ class TranslationsBackupExportEn {
 	/// en: 'Export'
 	String get title_short => 'Export';
 
+	/// en: 'Type of export'
+	String get type_of_export => 'Type of export';
+
+	/// en: 'Options'
+	String get other_options => 'Options';
+
 	/// en: 'Full backup'
 	String get all => 'Full backup';
 
@@ -3093,6 +3099,8 @@ extension on Translations {
 		map['backup.no_directory_selected'] = 'No directory selected';
 		map['backup.export.title'] = 'Export your data';
 		map['backup.export.title_short'] = 'Export';
+		map['backup.export.type_of_export'] = 'Type of export';
+		map['backup.export.other_options'] = 'Options';
 		map['backup.export.all'] = 'Full backup';
 		map['backup.export.all_descr'] = 'Export all your data (accounts, transactions, budgets, settings...). Import them again at any time so you don\'t lose anything.';
 		map['backup.export.transactions'] = 'Transactions backup';

@@ -702,6 +702,7 @@ class _TranslationsTransactionListZhCn implements TranslationsTransactionListEn 
 	final TranslationsZhCn _root; // ignore: unused_field
 
 	// Translations
+	@override String get all => '所有交易';
 	@override String get empty => '未发现需要显示的交易。请先在应用中添加一些交易，下次再来查看';
 	@override String get searcher_placeholder => '按类别、描述等搜索';
 	@override String get searcher_no_results => '未找到符合搜索条件的交易';
@@ -724,6 +725,7 @@ class _TranslationsTransactionFiltersZhCn implements TranslationsTransactionFilt
 	final TranslationsZhCn _root; // ignore: unused_field
 
 	// Translations
+	@override String get title => '交易过滤器';
 	@override String get from_value => '最小金额';
 	@override String get to_value => '最大金额';
 	@override String from_value_def({required Object x}) => '从 ${x}';
@@ -1019,10 +1021,16 @@ class _TranslationsBackupExportZhCn implements TranslationsBackupExportEn {
 	// Translations
 	@override String get title => '导出您的数据';
 	@override String get title_short => '导出';
+	@override String get type_of_export => '出口类型';
+	@override String get other_options => '选项';
 	@override String get all => '完整备份';
 	@override String get all_descr => '导出您的所有数据（账户、交易、预算、设置……）。随时再次导入它们，您就不会丟失任何內容。';
 	@override String get transactions => '交易备份';
 	@override String get transactions_descr => '以 CSV 格式导出您的交易，以便您可以在其它程序或应用中更轻松地分析。';
+	@override String transactions_to_export({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
+		one: '1 笔交易要导出',
+		other: '要导出的 ${n} 笔交易',
+	);
 	@override String get description => '以不同格式下载（导出）数据';
 	@override String get send_file => '发送文件';
 	@override String get see_folder => '查看文件夹';
@@ -1708,6 +1716,7 @@ extension on TranslationsZhCn {
 		map['transaction.next_payments.accept_dialog_msg_single'] = '此交易的新状态将为null。您可以随时重新编辑此交易的状态';
 		map['transaction.next_payments.accept_dialog_msg'] = ({required Object date}) => '此操作将建立日期为 ${date} 的新交易。您可以在交易页面查看此交易的详情';
 		map['transaction.next_payments.recurrent_rule_finished'] = '循环规则已完成，没有更多的支付！';
+		map['transaction.list.all'] = '所有交易';
 		map['transaction.list.empty'] = '未发现需要显示的交易。请先在应用中添加一些交易，下次再来查看';
 		map['transaction.list.searcher_placeholder'] = '按类别、描述等搜索';
 		map['transaction.list.searcher_no_results'] = '未找到符合搜索条件的交易';
@@ -1723,6 +1732,7 @@ extension on TranslationsZhCn {
 		map['transaction.list.bulk_edit.dates'] = '批量编辑日期';
 		map['transaction.list.bulk_edit.categories'] = '批量编辑类别';
 		map['transaction.list.bulk_edit.status'] = '批量编辑状态';
+		map['transaction.filters.title'] = '交易过滤器';
 		map['transaction.filters.from_value'] = '最小金额';
 		map['transaction.filters.to_value'] = '最大金额';
 		map['transaction.filters.from_value_def'] = ({required Object x}) => '从 ${x}';
@@ -1945,10 +1955,16 @@ extension on TranslationsZhCn {
 		map['backup.no_directory_selected'] = '未选择目录';
 		map['backup.export.title'] = '导出您的数据';
 		map['backup.export.title_short'] = '导出';
+		map['backup.export.type_of_export'] = '出口类型';
+		map['backup.export.other_options'] = '选项';
 		map['backup.export.all'] = '完整备份';
 		map['backup.export.all_descr'] = '导出您的所有数据（账户、交易、预算、设置……）。随时再次导入它们，您就不会丟失任何內容。';
 		map['backup.export.transactions'] = '交易备份';
 		map['backup.export.transactions_descr'] = '以 CSV 格式导出您的交易，以便您可以在其它程序或应用中更轻松地分析。';
+		map['backup.export.transactions_to_export'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
+				one: '1 笔交易要导出',
+				other: '要导出的 ${n} 笔交易',
+			);
 		map['backup.export.description'] = '以不同格式下载（导出）数据';
 		map['backup.export.send_file'] = '发送文件';
 		map['backup.export.see_folder'] = '查看文件夹';
