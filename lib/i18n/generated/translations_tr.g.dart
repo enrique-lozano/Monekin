@@ -993,7 +993,9 @@ class _TranslationsBudgetsFormTr implements TranslationsBudgetsFormEn {
 	@override String get name => 'Bütçe adı';
 	@override String get value => 'Limit miktarı';
 	@override String get create => 'Bütçe ekle';
+	@override String get create_success => 'Bütçe başarıyla oluşturuldu';
 	@override String get edit => 'Bütçeyi düzenle';
+	@override String get edit_success => 'Bütçe başarıyla düzenlendi';
 	@override String get negative_warn => 'Bütçeler negatif miktara sahip olamaz';
 }
 
@@ -1943,7 +1945,9 @@ extension on TranslationsTr {
 		map['budgets.form.name'] = 'Bütçe adı';
 		map['budgets.form.value'] = 'Limit miktarı';
 		map['budgets.form.create'] = 'Bütçe ekle';
+		map['budgets.form.create_success'] = 'Bütçe başarıyla oluşturuldu';
 		map['budgets.form.edit'] = 'Bütçeyi düzenle';
+		map['budgets.form.edit_success'] = 'Bütçe başarıyla düzenlendi';
 		map['budgets.form.negative_warn'] = 'Bütçeler negatif miktara sahip olamaz';
 		map['budgets.details.title'] = 'Bütçe Detayları';
 		map['budgets.details.statistics'] = 'İstatistikler';

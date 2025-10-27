@@ -607,7 +607,9 @@
       "name": "Költségvetés neve",
       "value": "Mennyiségkorlátozás",
       "create": "Hozzáadás",
+      "create-success": "A költségkeret sikeresen létrehozva",
       "edit": "Szerkesztés",
+      "edit-success": "A költségvetés szerkesztése sikeresen megtörtént",
       "negative-warn": "A költségvetések nem lehetnek negatív összegűek."
     },
     "DETAILS": {

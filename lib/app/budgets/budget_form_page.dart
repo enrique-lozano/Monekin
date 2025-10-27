@@ -10,6 +10,7 @@ import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
@@ -54,21 +55,18 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
     final t = Translations.of(context);
 
     if (valueToNumber! < 0) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(t.budgets.form.negative_warn)));
-
+      MonekinSnackbar.warning(SnackbarParams(t.budgets.form.negative_warn));
       return;
     }
 
     onSuccess() {
       Navigator.pop(context);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            isEditMode ? t.transaction.edit_success : t.transaction.new_success,
-          ),
+      MonekinSnackbar.success(
+        SnackbarParams(
+          isEditMode
+              ? t.budgets.form.edit_success
+              : t.budgets.form.create_success,
         ),
       );
     }
@@ -93,9 +91,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
             onSuccess();
           })
           .catchError((error) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(error.toString())));
+            MonekinSnackbar.error(SnackbarParams.fromError(error));
           });
     } else {
       BudgetServive.instance
@@ -104,9 +100,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
             onSuccess();
           })
           .catchError((error) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(error.toString())));
+            MonekinSnackbar.error(SnackbarParams.fromError(error));
           });
     }
   }

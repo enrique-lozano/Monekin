@@ -9,6 +9,7 @@ import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/routes/route_utils.dart';
@@ -387,17 +388,15 @@ Future<bool> executeTransactionSwipeAction(
   TransactionSwipeAction swipeAction,
 ) async {
   final t = Translations.of(context);
-  final scaffold = ScaffoldMessenger.of(context);
-  scaffold.removeCurrentSnackBar();
+  ScaffoldMessenger.of(context).removeCurrentSnackBar();
 
   switch (swipeAction) {
     case TransactionSwipeAction.delete:
-      await TransactionViewActionService()
-          .deleteTransactionWithAlertAndSnackBar(
-            context,
-            transactionId: transaction.id,
-            navigateBack: false,
-          );
+      TransactionViewActionService().deleteTransactionWithAlertAndSnackBar(
+        context,
+        transactionId: transaction.id,
+        navigateBack: false,
+      );
       break;
     case TransactionSwipeAction.edit:
       await RouteUtils.pushRoute(
@@ -420,10 +419,7 @@ Future<bool> executeTransactionSwipeAction(
         newTrStatus,
       );
 
-      scaffold.showSnackBar(
-        SnackBar(content: Text(t.transaction.edit_success)),
-      );
-
+      MonekinSnackbar.success(SnackbarParams(t.transaction.edit_success));
       break;
   }
 

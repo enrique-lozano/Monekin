@@ -18,6 +18,7 @@ import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/loading_overlay.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
@@ -58,8 +59,6 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
   int? titleColumn;
 
   Future<void> readFile() async {
-    final messenger = ScaffoldMessenger.of(context);
-
     try {
       final csvFile = await BackupDatabaseService().readFile();
       if (csvFile == null) return;
@@ -85,11 +84,9 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
       );
 
       if (!allRowsSameLength) {
-        messenger.showSnackBar(
-          const SnackBar(
-            content: Text(
-              'All rows in the CSV must have the same number of columns.',
-            ),
+        MonekinSnackbar.error(
+          SnackbarParams(
+            'All rows in the CSV must have the same number of columns.',
           ),
         );
 
@@ -100,7 +97,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
         csvData = parsedCSV;
       });
     } catch (err) {
-      messenger.showSnackBar(SnackBar(content: Text(err.toString())));
+      MonekinSnackbar.error(SnackbarParams.fromError(err));
     }
   }
 
@@ -175,25 +172,19 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
   }
 
   Future<void> addTransactions() async {
-    final snackbarDisplayer = ScaffoldMessenger.of(context).showSnackBar;
-
     onSuccess() {
       RouteUtils.popAllRoutesExceptFirst();
       RouteUtils.pushRoute(context, const TabsPage());
 
-      snackbarDisplayer(
-        SnackBar(
-          content: Text(
-            t.backup.import.manual_import.success(x: csvData!.slice(1).length),
-          ),
+      MonekinSnackbar.success(
+        SnackbarParams(
+          t.backup.import.manual_import.success(x: csvData!.slice(1).length),
         ),
       );
     }
 
     if (amountColumn == null) {
-      snackbarDisplayer(
-        const SnackBar(content: Text('Amount column can not be null')),
-      );
+      MonekinSnackbar.warning(SnackbarParams('Amount column can not be null'));
       return;
     }
 
@@ -317,7 +308,8 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
     } catch (e) {
       Logger.printDebug(e);
       loadingOverlay.hide();
-      snackbarDisplayer(SnackBar(content: Text(e.toString())));
+
+      MonekinSnackbar.error(SnackbarParams.fromError(e));
     }
   }
 

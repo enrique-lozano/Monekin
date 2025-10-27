@@ -5,6 +5,7 @@ import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
@@ -61,14 +62,13 @@ class TransactionViewActionService {
     ];
   }
 
-  deleteTransactionWithAlertAndSnackBar(
+  void deleteTransactionWithAlertAndSnackBar(
     BuildContext context, {
     required String transactionId,
     bool isRecurrent = false,
     required bool navigateBack,
   }) {
     final t = Translations.of(context);
-    final scaffold = ScaffoldMessenger.of(context);
 
     confirmDialog(
       context,
@@ -91,33 +91,32 @@ class TransactionViewActionService {
           .deleteTransaction(transactionId)
           .then((value) {
             if (value == 0) {
-              scaffold.showSnackBar(
-                const SnackBar(content: Text('Error removing the transaction')),
+              MonekinSnackbar.error(
+                SnackbarParams('Error removing the transaction'),
               );
 
               return;
             }
 
-            if (navigateBack) {
+            if (navigateBack && context.mounted) {
               Navigator.pop(context);
             }
 
-            scaffold.showSnackBar(
-              SnackBar(content: Text(t.transaction.delete_success)),
+            MonekinSnackbar.success(
+              SnackbarParams(t.transaction.delete_success),
             );
           })
           .catchError((err) {
-            scaffold.showSnackBar(SnackBar(content: Text('$err')));
+            MonekinSnackbar.error(SnackbarParams.fromError(err));
           });
     });
   }
 
-  cloneTransactionWithAlertAndSnackBar(
+  void cloneTransactionWithAlertAndSnackBar(
     BuildContext context, {
     required MoneyTransaction transaction,
   }) {
     final t = Translations.of(context);
-    final scaffold = ScaffoldMessenger.of(context);
 
     confirmDialog(
       context,
@@ -133,11 +132,11 @@ class TransactionViewActionService {
       try {
         await _duplicateTransaction(transaction, newTrId);
 
-        scaffold.showSnackBar(
-          SnackBar(content: Text(t.transaction.duplicate_success)),
+        MonekinSnackbar.success(
+          SnackbarParams(t.transaction.duplicate_success),
         );
       } catch (error) {
-        scaffold.showSnackBar(SnackBar(content: Text('$error')));
+        MonekinSnackbar.error(SnackbarParams.fromError(error));
       }
     });
   }

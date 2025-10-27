@@ -11,6 +11,7 @@ import 'package:monekin/core/database/services/user-setting/user_setting_service
 import 'package:monekin/core/database/services/user-setting/utils/get_theme_from_string.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/animations/scaled_animated_switcher.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker_modal.dart';
@@ -67,10 +68,6 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               leading: const Icon(Icons.language),
               subtitle: Text(currentSelectedLangDisplayName),
               onTap: () async {
-                final snackbarDisplayer = ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar;
-
                 final newLang = await showLanguageSelectorBottomSheet(
                   context,
                   LanguageSelector(selectedLangTag: currentLangTag),
@@ -96,11 +93,9 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     updateGlobalState: true,
                   );
                 } catch (e) {
-                  snackbarDisplayer(
-                    const SnackBar(
-                      content: Text(
-                        'There was an error persisting this setting on your device. Contact the developers for more information',
-                      ),
+                  MonekinSnackbar.error(
+                    SnackbarParams.fromError(
+                      'There was an error persisting this setting on your device. Contact the developers for more information',
                     ),
                   );
                 }

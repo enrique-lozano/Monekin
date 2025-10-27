@@ -5,6 +5,7 @@ import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/tags/tag.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker_modal.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
@@ -46,9 +47,7 @@ class _TagFormPageState extends State<TagFormPage> {
     _color = widget.tag?.color ?? defaultColorPickerOptions.randomItem();
   }
 
-  submitForm() async {
-    final messager = ScaffoldMessenger.of(context);
-
+  Future<void> submitForm() async {
     final tagToEdit = Tag(
       id: widget.tag?.id ?? generateUUID(),
       name: _nameController.text,
@@ -60,10 +59,10 @@ class _TagFormPageState extends State<TagFormPage> {
       await TagService.instance
           .updateTag(tagToEdit)
           .then((value) {
-            messager.showSnackBar(SnackBar(content: Text(t.tags.edit_success)));
+            MonekinSnackbar.success(SnackbarParams(t.tags.edit_success));
           })
           .catchError((error) {
-            messager.showSnackBar(SnackBar(content: Text(error.toString())));
+            MonekinSnackbar.error(SnackbarParams.fromError(error));
           });
     } else {
       final db = AppDB.instance;
@@ -73,22 +72,18 @@ class _TagFormPageState extends State<TagFormPage> {
         ..where((tbl) => tbl.name.isValue(_nameController.text));
 
       if (await query.watchSingleOrNull().first != null) {
-        messager.showSnackBar(SnackBar(content: Text(t.tags.already_exists)));
-
+        MonekinSnackbar.error(SnackbarParams(t.tags.already_exists));
         return;
       }
 
       await TagService.instance
           .insertTag(tagToEdit)
           .then((value) {
-            Navigator.pop(context);
-
-            messager.showSnackBar(
-              SnackBar(content: Text(t.tags.create_success)),
-            );
+            if (mounted) Navigator.pop(context);
+            MonekinSnackbar.success(SnackbarParams(t.tags.create_success));
           })
           .catchError((error) {
-            messager.showSnackBar(SnackBar(content: Text(error.toString())));
+            MonekinSnackbar.error(SnackbarParams.fromError(error));
           });
     }
   }
@@ -104,8 +99,6 @@ class _TagFormPageState extends State<TagFormPage> {
           if (widget.tag != null)
             IconButton(
               onPressed: () {
-                final scaffold = ScaffoldMessenger.of(context);
-
                 confirmDialog(
                   context,
                   dialogTitle: t.tags.delete_warning_header,
@@ -121,12 +114,12 @@ class _TagFormPageState extends State<TagFormPage> {
                       .then((value) {
                         Navigator.pop(context);
 
-                        scaffold.showSnackBar(
-                          SnackBar(content: Text(t.tags.delete_success)),
+                        MonekinSnackbar.success(
+                          SnackbarParams(t.tags.delete_success),
                         );
                       })
                       .catchError((err) {
-                        scaffold.showSnackBar(SnackBar(content: Text('$err')));
+                        MonekinSnackbar.error(SnackbarParams.fromError(err));
                       });
                 });
               },

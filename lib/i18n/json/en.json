@@ -595,7 +595,9 @@
       "name": "Budget name",
       "value": "Limit quantity",
       "create": "Add budget",
+      "create-success": "Budget created successfully",
       "edit": "Edit budget",
+      "edit-success": "Budget edited successfully",
       "negative-warn": "The budgets can not have a negative amount"
     },
     "DETAILS": {

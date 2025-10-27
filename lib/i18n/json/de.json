@@ -607,7 +607,9 @@
       "name": "Budgetname",
       "value": "Menge begrenzen",
       "create": "Budget hinzufügen",
+      "create-success": "Budget erfolgreich erstellt",
       "edit": "Budget bearbeiten",
+      "edit-success": "Budget erfolgreich bearbeitet",
       "negative-warn": "Die Budgets dürfen keinen negativen Betrag haben"
     },
     "DETAILS": {

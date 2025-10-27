@@ -993,7 +993,9 @@ class _TranslationsBudgetsFormHu implements TranslationsBudgetsFormEn {
 	@override String get name => 'Költségvetés neve';
 	@override String get value => 'Mennyiségkorlátozás';
 	@override String get create => 'Hozzáadás';
+	@override String get create_success => 'A költségkeret sikeresen létrehozva';
 	@override String get edit => 'Szerkesztés';
+	@override String get edit_success => 'A költségvetés szerkesztése sikeresen megtörtént';
 	@override String get negative_warn => 'A költségvetések nem lehetnek negatív összegűek.';
 }
 
@@ -1943,7 +1945,9 @@ extension on TranslationsHu {
 		map['budgets.form.name'] = 'Költségvetés neve';
 		map['budgets.form.value'] = 'Mennyiségkorlátozás';
 		map['budgets.form.create'] = 'Hozzáadás';
+		map['budgets.form.create_success'] = 'A költségkeret sikeresen létrehozva';
 		map['budgets.form.edit'] = 'Szerkesztés';
+		map['budgets.form.edit_success'] = 'A költségvetés szerkesztése sikeresen megtörtént';
 		map['budgets.form.negative_warn'] = 'A költségvetések nem lehetnek negatív összegűek.';
 		map['budgets.details.title'] = 'Költségvetés részletei';
 		map['budgets.details.statistics'] = 'Statisztika';

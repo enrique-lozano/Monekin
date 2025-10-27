@@ -23,6 +23,7 @@ import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/animations/scaled_animated_switcher.dart';
 import 'package:monekin/core/presentation/animations/shake_widget.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/dynamic_selector_modal.dart';
@@ -41,7 +42,10 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 import '../../../core/models/transaction/transaction_type.enum.dart';
 import '../../tags/tags_selector.modal.dart';
 
-openTransactionFormDialog(BuildContext context, TransactionFormPage widget) {
+Future openTransactionFormDialog(
+  BuildContext context,
+  TransactionFormPage widget,
+) {
   return showDialog(
     context: context,
     builder: (context) {
@@ -216,7 +220,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     );
   }
 
-  submitForm() {
+  void submitForm() {
     if (transactionType.isIncomeOrExpense && selectedCategory == null ||
         transactionType.isTransfer && transferAccount == null) {
       _shakeKey.currentState?.shake();
@@ -224,32 +228,27 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     }
 
     final t = Translations.of(context);
-    final scMessenger = ScaffoldMessenger.of(context);
 
     if (transactionValue == 0) {
-      scMessenger.showSnackBar(
-        SnackBar(content: Text(t.transaction.form.validators.zero)),
+      MonekinSnackbar.warning(
+        SnackbarParams(t.transaction.form.validators.zero),
       );
 
       return;
     }
 
     if (transactionValue < 0 && transactionType.isTransfer) {
-      scMessenger.showSnackBar(
-        SnackBar(
-          content: Text(t.transaction.form.validators.negative_transfer),
-        ),
+      MonekinSnackbar.warning(
+        SnackbarParams(t.transaction.form.validators.negative_transfer),
       );
 
       return;
     }
 
     if (fromAccount != null && fromAccount!.date.compareTo(date) > 0) {
-      scMessenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            t.transaction.form.validators.date_after_account_creation,
-          ),
+      MonekinSnackbar.warning(
+        SnackbarParams(
+          t.transaction.form.validators.date_after_account_creation,
         ),
       );
 
@@ -259,11 +258,9 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     onSuccess() {
       Navigator.pop(context);
 
-      scMessenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            isEditMode ? t.transaction.edit_success : t.transaction.new_success,
-          ),
+      MonekinSnackbar.success(
+        SnackbarParams(
+          isEditMode ? t.transaction.edit_success : t.transaction.new_success,
         ),
       );
     }
@@ -355,12 +352,12 @@ class _TransactionFormPageState extends State<TransactionFormPage>
 
             onSuccess();
           } catch (error) {
-            Navigator.pop(context);
-            scMessenger.showSnackBar(SnackBar(content: Text(error.toString())));
+            if (mounted) Navigator.pop(context);
+            MonekinSnackbar.error(SnackbarParams.fromError(error));
           }
         })
         .catchError((error) {
-          scMessenger.showSnackBar(SnackBar(content: Text(error.toString())));
+          MonekinSnackbar.error(SnackbarParams.fromError(error));
         });
   }
 
@@ -394,7 +391,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     }
   }
 
-  fillForm(MoneyTransaction transaction) async {
+  Future<void> fillForm(MoneyTransaction transaction) async {
     fromAccount = transaction.account;
     transferAccount = transaction.receivingAccount;
     date = transaction.date;
@@ -626,8 +623,8 @@ class _TransactionFormPageState extends State<TransactionFormPage>
 
                 submitForm();
               } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(t.general.validations.form_error)),
+                MonekinSnackbar.error(
+                  SnackbarParams(t.general.validations.form_error),
                 );
               }
             },

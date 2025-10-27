@@ -607,7 +607,9 @@
       "name": "Bütçe adı",
       "value": "Limit miktarı",
       "create": "Bütçe ekle",
+      "create-success": "Bütçe başarıyla oluşturuldu",
       "edit": "Bütçeyi düzenle",
+      "edit-success": "Bütçe başarıyla düzenlendi",
       "negative-warn": "Bütçeler negatif miktara sahip olamaz"
     },
     "DETAILS": {

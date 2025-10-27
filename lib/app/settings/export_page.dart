@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/settings/widgets/settings_list_separator.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/styles/big_button_style.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/filter_sheet_modal.dart';
@@ -34,7 +35,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
   bool _isSharing = false;
 
   void _showErrorSnackBar(String error) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
+    MonekinSnackbar.error(SnackbarParams.fromError(error));
   }
 
   Future<File> _generateExportFile(String directoryPath) async {
@@ -110,7 +111,6 @@ class _ExportDataPageState extends State<ExportDataPage> {
 
     try {
       String? path;
-      final messenger = ScaffoldMessenger.of(context);
 
       try {
         path = await FilePicker.platform.getDirectoryPath();
@@ -120,16 +120,15 @@ class _ExportDataPageState extends State<ExportDataPage> {
       }
 
       if (path == null) {
-        messenger.showSnackBar(
-          SnackBar(content: Text(t.backup.no_directory_selected)),
-        );
+        MonekinSnackbar.info(SnackbarParams(t.backup.no_directory_selected));
+
         return;
       }
 
       final file = await _generateExportFile(path);
 
-      messenger.showSnackBar(
-        SnackBar(content: Text(t.backup.export.success(x: file.parent.path))),
+      MonekinSnackbar.success(
+        SnackbarParams(t.backup.export.success(x: file.parent.path)),
       );
     } catch (err) {
       _showErrorSnackBar('$err');

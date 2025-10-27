@@ -993,7 +993,9 @@ class _TranslationsBudgetsFormUk implements TranslationsBudgetsFormEn {
 	@override String get name => 'Назва бюджету';
 	@override String get value => 'Обмежена кількість';
 	@override String get create => 'Додати бюджет';
+	@override String get create_success => 'Бюджет створено успішно';
 	@override String get edit => 'Редагувати бюджет';
+	@override String get edit_success => 'Бюджет успішно відредаговано';
 	@override String get negative_warn => 'Бюджети не можуть мати від\'ємну суму';
 }
 
@@ -1943,7 +1945,9 @@ extension on TranslationsUk {
 		map['budgets.form.name'] = 'Назва бюджету';
 		map['budgets.form.value'] = 'Обмежена кількість';
 		map['budgets.form.create'] = 'Додати бюджет';
+		map['budgets.form.create_success'] = 'Бюджет створено успішно';
 		map['budgets.form.edit'] = 'Редагувати бюджет';
+		map['budgets.form.edit_success'] = 'Бюджет успішно відредаговано';
 		map['budgets.form.negative_warn'] = 'Бюджети не можуть мати від\'ємну суму';
 		map['budgets.details.title'] = 'Деталі бюджету';
 		map['budgets.details.statistics'] = 'Статистика';

@@ -16,6 +16,7 @@ import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/debug_page.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/dates/date_period_modal.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -417,7 +418,6 @@ class _DashboardPageState extends State<DashboardPage> {
     return SuccessiveTapDetector(
       delayTrackingAfterGoal: 4000,
       onClickGoalReached: () async {
-        final sc = ScaffoldMessenger.of(context);
         final privateMode =
             await PrivateModeService.instance.privateModeStream.first;
 
@@ -425,13 +425,11 @@ class _DashboardPageState extends State<DashboardPage> {
 
         await HapticFeedback.lightImpact();
 
-        sc.showSnackBar(
-          SnackBar(
-            content: Text(
-              !privateMode
-                  ? t.settings.security.private_mode_activated
-                  : t.settings.security.private_mode_deactivated,
-            ),
+        MonekinSnackbar.success(
+          SnackbarParams(
+            !privateMode
+                ? t.settings.security.private_mode_activated
+                : t.settings.security.private_mode_deactivated,
           ),
         );
       },

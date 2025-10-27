@@ -10,6 +10,7 @@ import 'package:monekin/app/transactions/widgets/bulk_edit_transaction_modal.dar
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
@@ -365,15 +366,13 @@ class _TransactionsPageState extends State<TransactionsPage> {
 
                   Future.wait(futures)
                       .then((value) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              selectedTransactions.length <= 1
-                                  ? t.transaction.delete_success
-                                  : t.transaction.delete_multiple_success(
-                                      x: selectedTransactions.length,
-                                    ),
-                            ),
+                        MonekinSnackbar.success(
+                          SnackbarParams(
+                            selectedTransactions.length <= 1
+                                ? t.transaction.delete_success
+                                : t.transaction.delete_multiple_success(
+                                    x: selectedTransactions.length,
+                                  ),
                           ),
                         );
 
@@ -382,9 +381,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                         });
                       })
                       .catchError((err) {
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(SnackBar(content: Text(err.toString())));
+                        MonekinSnackbar.error(SnackbarParams.fromError(err));
                       });
                 });
               },

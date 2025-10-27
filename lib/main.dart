@@ -49,6 +49,8 @@ void main() async {
 final GlobalKey<TabsPageState> tabsPageKey = GlobalKey();
 final GlobalKey<NavigationSidebarState> navigationSidebarKey = GlobalKey();
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<ScaffoldMessengerState> snackbarKey =
+    GlobalKey<ScaffoldMessengerState>();
 
 // ignore: library_private_types_in_public_api
 GlobalKey<_InitializeAppState> appStateKey = GlobalKey();
@@ -175,6 +177,7 @@ class MaterialAppContainer extends StatelessWidget {
           scrollBehavior: ScrollBehaviorOverride(),
           supportedLocales: AppLocaleUtils.supportedLocales,
           localizationsDelegates: GlobalMaterialLocalizations.delegates,
+          scaffoldMessengerKey: snackbarKey,
           theme: getThemeData(
             context,
             isDark: false,

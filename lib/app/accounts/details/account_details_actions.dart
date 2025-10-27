@@ -5,6 +5,7 @@ import 'package:monekin/app/accounts/details/account_details.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
@@ -105,7 +106,7 @@ abstract class AccountDetailsActions {
     ];
   }
 
-  static showReopenAccountDialog(BuildContext context, Account account) {
+  static void showReopenAccountDialog(BuildContext context, Account account) {
     confirmDialog(
       context,
       showCancelButton: true,
@@ -117,15 +118,13 @@ abstract class AccountDetailsActions {
           .updateAccount(account.copyWith(closingDate: const drift.Value(null)))
           .then((value) {
             if (value) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(t.account.close.unarchive_succes)),
+              MonekinSnackbar.success(
+                SnackbarParams(t.account.close.unarchive_succes),
               );
             }
           })
           .catchError((err) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text('$err')));
+            MonekinSnackbar.error(SnackbarParams.fromError(err));
           });
     });
   }
@@ -149,8 +148,6 @@ abstract class AccountDetailsActions {
     required String accountId,
     required bool navigateBack,
   }) {
-    final scaffold = ScaffoldMessenger.of(context);
-
     confirmDialog(
       context,
       dialogTitle: t.account.delete.warning_header,
@@ -168,12 +165,10 @@ abstract class AccountDetailsActions {
               Navigator.pop(context);
             }
 
-            scaffold.showSnackBar(
-              SnackBar(content: Text(t.account.delete.success)),
-            );
+            MonekinSnackbar.success(SnackbarParams(t.account.delete.success));
           })
           .catchError((err) {
-            scaffold.showSnackBar(SnackBar(content: Text('$err')));
+            MonekinSnackbar.error(SnackbarParams.fromError(err));
           });
     });
   }
