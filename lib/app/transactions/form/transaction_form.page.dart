@@ -10,6 +10,7 @@ import 'package:monekin/app/transactions/form/widgets/tr_form_interval_selector.
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
@@ -342,13 +343,10 @@ class _TransactionFormPageState extends State<TransactionFormPage>
             }
 
             // Add new tags
-            for (final tag in tagsToAdd) {
-              await db
-                  .into(db.transactionTags)
-                  .insert(
-                    TransactionTag(transactionID: newTrID, tagID: tag.id),
-                  );
-            }
+            await TagService.instance.linkTagsToTransaction(
+              transactionId: newTrID,
+              tagIds: tagsToAdd.map((t) => t.id).toList(),
+            );
 
             onSuccess();
           } catch (error) {

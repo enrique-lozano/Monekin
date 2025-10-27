@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
@@ -145,17 +146,14 @@ class TransactionViewActionService {
     MoneyTransaction transaction,
     String newTrId,
   ) async {
-    final db = AppDB.instance;
-
     await transactionService.insertTransaction(
       transaction.copyWith(id: newTrId),
     );
 
-    for (final tag in transaction.tags) {
-      await db
-          .into(db.transactionTags)
-          .insert(TransactionTag(transactionID: newTrId, tagID: tag.id));
-    }
+    await TagService.instance.linkTagsToTransaction(
+      transactionId: newTrId,
+      tagIds: transaction.tags.map((t) => t.id).toList(),
+    );
   }
 
   Future<int> updateTransactionStatus(
