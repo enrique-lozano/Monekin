@@ -127,12 +127,12 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                         child: SelectorContainer(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 12,
-                            vertical: 4,
+                            vertical: 6,
                           ),
                           child: Text(
                             font?.fontFamilyName ?? t.settings.font_platform,
                             style: Theme.of(context).textTheme.bodyLarge!
-                                .copyWith(fontWeight: FontWeight.bold),
+                                .copyWith(fontWeight: FontWeight.w500),
                           ),
                         ),
                       ),
