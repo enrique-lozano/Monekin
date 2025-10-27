@@ -37,10 +37,14 @@ class CategoryPicker extends StatefulWidget {
     required this.selectedCategory,
     required this.categoryType,
     this.showSubcategories = true,
+    this.excludeCategoriesWithId = const [],
   }) : assert(categoryType.isNotEmpty);
 
   final Category? selectedCategory;
   final List<CategoryType> categoryType;
+
+  /// IDs of categories to exclude from the list
+  final List<String> excludeCategoriesWithId;
 
   final bool showSubcategories;
 
@@ -91,6 +95,7 @@ class _CategoryPickerState extends State<CategoryPicker>
               predicate: (c, p) => AppDB.instance.buildExpr([
                 c.parentCategoryID.isNull(),
                 c.type.isInValues(widget.categoryType),
+                c.id.isNotIn(widget.excludeCategoriesWithId),
                 drift.Expression.or([
                   c.name.contains(searchContoller.text),
                   if (selectedCategory != null)
