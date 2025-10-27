@@ -607,7 +607,9 @@
       "name": "预算名称",
       "value": "预算额度",
       "create": "创建预算",
+      "create-success": "预算创建成功",
       "edit": "编辑预算",
+      "edit-success": "预算编辑成功",
       "negative-warn": "预算额度不能为负数"
     },
     "DETAILS": {

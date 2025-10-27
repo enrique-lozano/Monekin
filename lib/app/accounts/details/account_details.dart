@@ -14,6 +14,7 @@ import 'package:monekin/core/database/services/exchange-rate/exchange_rate_servi
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
@@ -42,8 +43,6 @@ class AccountDetailsPage extends StatefulWidget {
 
 class _AccountDetailsPageState extends State<AccountDetailsPage> {
   LabelValueInfoListItem buildCopyableTile(String title, String value) {
-    final snackbarDisplayer = ScaffoldMessenger.of(context).showSnackBar;
-
     return LabelValueInfoListItem(
       label: title,
       value: Text(value, softWrap: false, overflow: TextOverflow.ellipsis),
@@ -51,15 +50,13 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
         onPressed: () {
           Clipboard.setData(ClipboardData(text: value))
               .then((_) {
-                snackbarDisplayer(
-                  SnackBar(
-                    content: Text(t.general.clipboard.success(x: title)),
-                  ),
+                MonekinSnackbar.success(
+                  SnackbarParams(t.general.clipboard.success(x: title)),
                 );
               })
               .catchError((_) {
-                snackbarDisplayer(
-                  SnackBar(content: Text(t.general.clipboard.error)),
+                MonekinSnackbar.error(
+                  SnackbarParams(t.general.clipboard.error),
                 );
               });
         },
@@ -410,16 +407,15 @@ class _ArchiveWarnDialogState extends State<ArchiveWarnDialog> {
                         )
                         .then((value) {
                           Navigator.pop(context, true);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(t.account.close.success)),
+
+                          MonekinSnackbar.success(
+                            SnackbarParams(t.account.close.success),
                           );
                         })
                         .catchError((err) {
                           Navigator.pop(context);
 
-                          ScaffoldMessenger.of(
-                            context,
-                          ).showSnackBar(SnackBar(content: Text('$err')));
+                          MonekinSnackbar.error(SnackbarParams.fromError(err));
                         });
                   },
           ),

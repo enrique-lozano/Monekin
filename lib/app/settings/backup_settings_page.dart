@@ -7,6 +7,7 @@ import 'package:monekin/app/settings/import_csv.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/routes/route_utils.dart';
@@ -51,10 +52,10 @@ class BackupSettingsPage extends StatelessWidget {
                       .importDatabase()
                       .then((value) {
                         if (!value) {
-                          Navigator.pop(context);
+                          if (context.mounted) Navigator.pop(context);
 
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(t.backup.no_file_selected)),
+                          MonekinSnackbar.info(
+                            SnackbarParams(t.backup.no_file_selected),
                           );
 
                           return;
@@ -72,16 +73,14 @@ class BackupSettingsPage extends StatelessWidget {
                           ),
                         );
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(t.backup.import.success)),
+                        MonekinSnackbar.success(
+                          SnackbarParams(t.backup.import.success),
                         );
                       })
                       .catchError((err) {
                         Navigator.pop(context);
 
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(SnackBar(content: Text(err.toString())));
+                        MonekinSnackbar.error(SnackbarParams.fromError(err));
                       });
                 });
               },

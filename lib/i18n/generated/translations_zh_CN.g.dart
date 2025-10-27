@@ -993,7 +993,9 @@ class _TranslationsBudgetsFormZhCn implements TranslationsBudgetsFormEn {
 	@override String get name => '预算名称';
 	@override String get value => '预算额度';
 	@override String get create => '创建预算';
+	@override String get create_success => '预算创建成功';
 	@override String get edit => '编辑预算';
+	@override String get edit_success => '预算编辑成功';
 	@override String get negative_warn => '预算额度不能为负数';
 }
 
@@ -1943,7 +1945,9 @@ extension on TranslationsZhCn {
 		map['budgets.form.name'] = '预算名称';
 		map['budgets.form.value'] = '预算额度';
 		map['budgets.form.create'] = '创建预算';
+		map['budgets.form.create_success'] = '预算创建成功';
 		map['budgets.form.edit'] = '编辑预算';
+		map['budgets.form.edit_success'] = '预算编辑成功';
 		map['budgets.form.negative_warn'] = '预算额度不能为负数';
 		map['budgets.details.title'] = '预算详情';
 		map['budgets.details.statistics'] = '统计数据';

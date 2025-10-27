@@ -6,6 +6,7 @@ import 'package:monekin/core/database/services/exchange-rate/exchange_rate_servi
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
@@ -100,20 +101,16 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
           ),
         )
         .then((value) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                isEditMode
-                    ? t.currencies.form.edit_success
-                    : t.currencies.form.add_success,
-              ),
+          MonekinSnackbar.success(
+            SnackbarParams(
+              isEditMode
+                  ? t.currencies.form.edit_success
+                  : t.currencies.form.add_success,
             ),
           );
         })
         .catchError((err) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(err)));
+          MonekinSnackbar.error(SnackbarParams.fromError(err));
         })
         .whenComplete(() => Navigator.pop(context));
   }

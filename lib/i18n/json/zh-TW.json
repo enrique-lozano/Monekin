@@ -607,7 +607,9 @@
       "name": "預算名稱",
       "value": "數量限制",
       "create": "添加預算",
+      "create-success": "預算創建成功",
       "edit": "編輯預算",
+      "edit-success": "預算編輯成功",
       "negative-warn": "預算不能有負數"
     },
     "DETAILS": {

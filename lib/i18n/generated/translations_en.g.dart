@@ -1836,8 +1836,14 @@ class TranslationsBudgetsFormEn {
 	/// en: 'Add budget'
 	String get create => 'Add budget';
 
+	/// en: 'Budget created successfully'
+	String get create_success => 'Budget created successfully';
+
 	/// en: 'Edit budget'
 	String get edit => 'Edit budget';
+
+	/// en: 'Budget edited successfully'
+	String get edit_success => 'Budget edited successfully';
 
 	/// en: 'The budgets can not have a negative amount'
 	String get negative_warn => 'The budgets can not have a negative amount';
@@ -3087,7 +3093,9 @@ extension on Translations {
 		map['budgets.form.name'] = 'Budget name';
 		map['budgets.form.value'] = 'Limit quantity';
 		map['budgets.form.create'] = 'Add budget';
+		map['budgets.form.create_success'] = 'Budget created successfully';
 		map['budgets.form.edit'] = 'Edit budget';
+		map['budgets.form.edit_success'] = 'Budget edited successfully';
 		map['budgets.form.negative_warn'] = 'The budgets can not have a negative amount';
 		map['budgets.details.title'] = 'Budget Details';
 		map['budgets.details.statistics'] = 'Statistics';

@@ -610,7 +610,9 @@
       "name": "Nombre del presupuesto",
       "value": "Cantidad límite",
       "create": "Añade el presupuesto",
+      "create-success": "Presupuesto creado exitosamente",
       "edit": "Editar presupuesto",
+      "edit-success": "Presupuesto editado exitosamente",
       "negative-warn": "Los presupuestos no pueden tener un valor límite negativo"
     },
     "DETAILS": {

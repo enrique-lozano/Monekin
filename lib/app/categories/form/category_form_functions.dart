@@ -7,6 +7,7 @@ import 'package:monekin/core/database/services/transaction/transaction_service.d
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/html_text.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
@@ -15,7 +16,7 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 import '../../../core/services/supported_icon/supported_icon_service.dart';
 
 class CategoryFormFunctions {
-  static deleteCategory(BuildContext context, String categoryId) {
+  static void deleteCategory(BuildContext context, String categoryId) {
     final t = Translations.of(context);
 
     confirmDialog(
@@ -57,21 +58,19 @@ class CategoryFormFunctions {
       CategoryService.instance
           .deleteCategory(categoryId)
           .then((value) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(t.categories.delete_success)),
+            MonekinSnackbar.success(
+              SnackbarParams(t.categories.delete_success),
             );
 
-            Navigator.of(context).pop();
+            if (context.mounted) Navigator.of(context).pop();
           })
           .catchError((error) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(error)));
+            MonekinSnackbar.error(SnackbarParams.fromError(error));
           });
     });
   }
 
-  static mergeCategory(BuildContext context, Category category) {
+  static void mergeCategory(BuildContext context, Category category) {
     final t = Translations.of(context);
 
     showCategoryPickerModal(
@@ -119,16 +118,6 @@ class CategoryFormFunctions {
       ).then((isConfirmed) async {
         if (isConfirmed != true) return;
 
-        final snackbarDisplayer = ScaffoldMessenger.of(context).showSnackBar;
-
-        onSuccess() {
-          Navigator.pop(context);
-
-          snackbarDisplayer(
-            SnackBar(content: Text(t.categories.merge_success)),
-          );
-        }
-
         List<Future<int>> futures = [];
 
         futures.add(CategoryService.instance.deleteCategory(category.id));
@@ -150,24 +139,24 @@ class CategoryFormFunctions {
         }
 
         await Future.wait(futures);
-        onSuccess();
+
+        if (context.mounted) Navigator.pop(context);
+        MonekinSnackbar.success(SnackbarParams(t.categories.merge_success));
       });
     });
   }
 
-  static makeMainCategory(BuildContext context, Category category) {
+  static void makeMainCategory(BuildContext context, Category category) {
     if (category.isMainCategory) return;
 
     CategoryService.instance.updateCategory(
       category.copyWith(parentCategoryID: const drift.Value(null)),
     );
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(t.categories.create_success)));
+    MonekinSnackbar.success(SnackbarParams(t.categories.create_success));
   }
 
-  static makeSubcategory(BuildContext context, Category category) {
+  static void makeSubcategory(BuildContext context, Category category) {
     if (category.isChildCategory) return;
 
     showCategoryPickerModal(
@@ -216,16 +205,6 @@ class CategoryFormFunctions {
       ).then((isConfirmed) async {
         if (isConfirmed != true) return;
 
-        final snackbarDisplayer = ScaffoldMessenger.of(context).showSnackBar;
-
-        onSuccess() {
-          Navigator.pop(context);
-
-          snackbarDisplayer(
-            SnackBar(content: Text(t.categories.make_child_success)),
-          );
-        }
-
         List<Future<bool>> futures = [];
 
         futures.add(
@@ -254,12 +233,16 @@ class CategoryFormFunctions {
         }
 
         await Future.wait(futures);
-        onSuccess();
+
+        if (context.mounted) Navigator.pop(context);
+        MonekinSnackbar.success(
+          SnackbarParams(t.categories.make_child_success),
+        );
       });
     });
   }
 
-  static openSubcategoryForm(
+  static void openSubcategoryForm(
     BuildContext context, {
     required void Function(String, SupportedIcon) onSubmit,
     required String color,

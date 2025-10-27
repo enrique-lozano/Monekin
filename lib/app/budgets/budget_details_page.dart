@@ -9,6 +9,7 @@ import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_ca
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/models/budget/budget.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
@@ -125,16 +126,16 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                           BudgetServive.instance
                               .deleteBudget(budget.id)
                               .then((value) {
-                                Navigator.pop(context);
+                                if (context.mounted) Navigator.pop(context);
 
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(t.budgets.delete)),
+                                MonekinSnackbar.success(
+                                  SnackbarParams(t.budgets.delete),
                                 );
                               })
                               .catchError((err) {
-                                ScaffoldMessenger.of(
-                                  context,
-                                ).showSnackBar(SnackBar(content: Text('$err')));
+                                MonekinSnackbar.error(
+                                  SnackbarParams.fromError(err),
+                                );
                               });
                         });
                       },

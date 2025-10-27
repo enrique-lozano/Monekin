@@ -15,6 +15,7 @@ import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
@@ -61,13 +62,12 @@ class _AccountFormPageState extends State<AccountFormPage> {
   DateTime _openingDate = DateTime.now();
   DateTime? _closeDate;
 
-  submitForm() async {
+  Future<void> submitForm() async {
     final accountService = AccountService.instance;
 
     double newBalance = double.parse(_balanceController.text);
 
     navigateBack() => Navigator.pop(context);
-    final snackbarDisplayer = ScaffoldMessenger.of(context).showSnackBar;
 
     if (_accountToEdit != null) {
       // Check if there are transactions before the opening date of the account:
@@ -81,8 +81,8 @@ class _AccountFormPageState extends State<AccountFormPage> {
               )
               .first)
           .isNotEmpty) {
-        snackbarDisplayer(
-          SnackBar(content: Text(t.account.form.tr_before_opening_date)),
+        MonekinSnackbar.warning(
+          SnackbarParams(t.account.form.tr_before_opening_date),
         );
 
         return;
@@ -119,9 +119,9 @@ class _AccountFormPageState extends State<AccountFormPage> {
         ..where((tbl) => tbl.name.isValue(_nameController.text));
 
       if (await query.watchSingleOrNull().first != null) {
-        snackbarDisplayer(
-          SnackBar(content: Text(t.account.form.already_exists)),
-        );
+        if (context.mounted) {
+          MonekinSnackbar.error(SnackbarParams(t.account.form.already_exists));
+        }
 
         return;
       }

@@ -9,6 +9,7 @@ import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/utils/constants.dart';
@@ -69,9 +70,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
     super.dispose();
   }
 
-  submitForm() async {
-    final messager = ScaffoldMessenger.of(context);
-
+  Future<void> submitForm() async {
     if (categoryToEdit != null) {
       categoryToEdit = Category(
         id: categoryToEdit!.id,
@@ -86,12 +85,10 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
       await CategoryService.instance
           .updateCategory(categoryToEdit!)
           .then((value) {
-            messager.showSnackBar(
-              SnackBar(content: Text(t.categories.edit_success)),
-            );
+            MonekinSnackbar.success(SnackbarParams(t.categories.edit_success));
           })
           .catchError((error) {
-            messager.showSnackBar(SnackBar(content: Text(error.toString())));
+            MonekinSnackbar.error(SnackbarParams.fromError(error));
           });
     } else {
       final db = AppDB.instance;
@@ -101,10 +98,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
         ..where((tbl) => tbl.name.isValue(_nameController.text));
 
       if (await query.watchSingleOrNull().first != null) {
-        messager.showSnackBar(
-          SnackBar(content: Text(t.categories.already_exists)),
-        );
-
+        MonekinSnackbar.error(SnackbarParams(t.categories.already_exists));
         return;
       }
 
@@ -120,14 +114,14 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
             ),
           )
           .then((value) {
-            Navigator.pop(context);
+            if (mounted) Navigator.pop(context);
 
-            messager.showSnackBar(
-              SnackBar(content: Text(t.categories.create_success)),
+            MonekinSnackbar.success(
+              SnackbarParams(t.categories.create_success),
             );
           })
           .catchError((error) {
-            messager.showSnackBar(SnackBar(content: Text(error.toString())));
+            MonekinSnackbar.error(SnackbarParams.fromError(error));
           });
     }
   }

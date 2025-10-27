@@ -993,7 +993,9 @@ class _TranslationsBudgetsFormEs implements TranslationsBudgetsFormEn {
 	@override String get name => 'Nombre del presupuesto';
 	@override String get value => 'Cantidad límite';
 	@override String get create => 'Añade el presupuesto';
+	@override String get create_success => 'Presupuesto creado exitosamente';
 	@override String get edit => 'Editar presupuesto';
+	@override String get edit_success => 'Presupuesto editado exitosamente';
 	@override String get negative_warn => 'Los presupuestos no pueden tener un valor límite negativo';
 }
 
@@ -1945,7 +1947,9 @@ extension on TranslationsEs {
 		map['budgets.form.name'] = 'Nombre del presupuesto';
 		map['budgets.form.value'] = 'Cantidad límite';
 		map['budgets.form.create'] = 'Añade el presupuesto';
+		map['budgets.form.create_success'] = 'Presupuesto creado exitosamente';
 		map['budgets.form.edit'] = 'Editar presupuesto';
+		map['budgets.form.edit_success'] = 'Presupuesto editado exitosamente';
 		map['budgets.form.negative_warn'] = 'Los presupuestos no pueden tener un valor límite negativo';
 		map['budgets.details.title'] = 'Detalles del presupuesto';
 		map['budgets.details.statistics'] = 'Estadísticas';

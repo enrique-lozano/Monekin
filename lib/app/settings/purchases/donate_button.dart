@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:monekin/app/settings/purchases/in_app_purchase.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -47,7 +48,9 @@ class _DonateButtonState extends State<DonateButton> {
                 _subscription?.cancel();
               },
               onError: (error) {
-                showSnackbarMessage(context, t.more.help_us.donate_err);
+                MonekinSnackbar.error(
+                  SnackbarParams.fromError(t.more.help_us.donate_err),
+                );
               },
             )
             as StreamSubscription<List<PurchaseDetails>>;
@@ -61,21 +64,19 @@ class _DonateButtonState extends State<DonateButton> {
         // LOADING
       } else {
         if (purchaseDetails.status == PurchaseStatus.error) {
-          showSnackbarMessage(context, t.more.help_us.donate_err);
+          MonekinSnackbar.error(
+            SnackbarParams.fromError(t.more.help_us.donate_err),
+          );
         } else if (purchaseDetails.status == PurchaseStatus.purchased) {
-          showSnackbarMessage(context, t.more.help_us.donate_success);
+          MonekinSnackbar.success(
+            SnackbarParams(t.more.help_us.donate_success),
+          );
         }
         if (purchaseDetails.pendingCompletePurchase) {
           await InAppPurchase.instance.completePurchase(purchaseDetails);
         }
       }
     });
-  }
-
-  showSnackbarMessage(BuildContext context, String msg) {
-    final snackbarDisplayer = ScaffoldMessenger.of(context).showSnackBar;
-
-    snackbarDisplayer(SnackBar(content: Text(msg)));
   }
 
   @override
@@ -87,15 +88,11 @@ class _DonateButtonState extends State<DonateButton> {
       child: InkWell(
         radius: 8,
         onTap: () async {
-          final snackbarDisplayer = ScaffoldMessenger.of(context).showSnackBar;
-
           if (!(await IAPConnection.isAvailable())) {
             // TODO: Implement other payment methods
-            snackbarDisplayer(
-              const SnackBar(
-                content: Text(
-                  'The current platform not supported or the store is not ready yet',
-                ),
+            MonekinSnackbar.error(
+              SnackbarParams.fromError(
+                'The current platform not supported or the store is not ready yet',
               ),
             );
 
@@ -108,17 +105,17 @@ class _DonateButtonState extends State<DonateButton> {
               .queryProductDetails(productsIDs);
 
           if (response.notFoundIDs.isNotEmpty) {
-            snackbarDisplayer(
-              SnackBar(
-                content: Text(
-                  "Products not found -> ${response.notFoundIDs.join(',')}",
-                ),
+            MonekinSnackbar.error(
+              SnackbarParams.fromError(
+                "Products not found -> ${response.notFoundIDs.join(',')}",
               ),
             );
 
             return;
           } else if (response.error != null) {
-            snackbarDisplayer(SnackBar(content: Text(response.error!.message)));
+            MonekinSnackbar.error(
+              SnackbarParams.fromError(response.error!.message),
+            );
 
             return;
           }

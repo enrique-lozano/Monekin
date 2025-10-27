@@ -5,6 +5,7 @@ import 'package:monekin/app/transactions/form/dialogs/transaction_status_selecto
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/outlined_button_stacked.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
@@ -135,24 +136,20 @@ class BulkEditTransactionModal extends StatelessWidget {
 
     Future.wait(futures)
         .then((value) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                transactionsToEdit.length <= 1
-                    ? t.transaction.edit_success
-                    : t.transaction.edit_multiple_success(
-                        x: transactionsToEdit.length,
-                      ),
-              ),
-            ),
+          MonekinSnackbar.success(
+            transactionsToEdit.length <= 1
+                ? SnackbarParams(t.transaction.edit_success)
+                : SnackbarParams(
+                    t.transaction.edit_multiple_success(
+                      x: transactionsToEdit.length,
+                    ),
+                  ),
           );
 
           onSuccess();
         })
         .catchError((err) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(err.toString())));
+          MonekinSnackbar.error(SnackbarParams.fromError(err));
         });
   }
 }

@@ -15,6 +15,7 @@ import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
@@ -69,12 +70,6 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
     final t = Translations.of(context);
 
     payTransaction(DateTime datetime) async {
-      void showSnackbar(String message) {
-        ScaffoldMessenger.of(
-          _scaffoldKey.currentContext ?? context,
-        ).showSnackBar(SnackBar(content: Text(message)));
-      }
-
       final payConfirmed = await confirmDialog(
         context,
         dialogTitle: t.transaction.next_payments.accept_dialog_title,
@@ -125,11 +120,13 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
 
           await transactionService.deleteTransaction(transaction.id);
 
-          showSnackbar(
-            '${t.transaction.new_success}. ${t.transaction.next_payments.recurrent_rule_finished}',
+          MonekinSnackbar.success(
+            SnackbarParams(
+              '${t.transaction.new_success}. ${t.transaction.next_payments.recurrent_rule_finished}',
+            ),
           );
 
-          Navigator.pop(context);
+          if (context.mounted) Navigator.pop(context);
 
           return;
         }
@@ -139,10 +136,10 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
             .setTransactionNextPayment(transaction);
 
         if (nextPaymentResult > 0) {
-          showSnackbar(t.transaction.new_success);
+          MonekinSnackbar.success(SnackbarParams(t.transaction.new_success));
         }
       } else {
-        showSnackbar(t.transaction.edit_success);
+        MonekinSnackbar.success(SnackbarParams(t.transaction.edit_success));
       }
     }
 
@@ -164,7 +161,10 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
     ];
   }
 
-  showSkipTransactionModal(BuildContext context, MoneyTransaction transaction) {
+  void showSkipTransactionModal(
+    BuildContext context,
+    MoneyTransaction transaction,
+  ) {
     final nextPaymentDate = transaction.followingDateToNext;
 
     confirmDialog(
@@ -187,15 +187,13 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
         TransactionService.instance.deleteTransaction(transaction.id).then((
           value,
         ) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                '${t.transaction.next_payments.skip_success}. ${t.transaction.next_payments.recurrent_rule_finished}',
-              ),
+          MonekinSnackbar.success(
+            SnackbarParams(
+              '${t.transaction.next_payments.skip_success}. ${t.transaction.next_payments.recurrent_rule_finished}',
             ),
           );
 
-          Navigator.pop(context);
+          if (context.mounted) Navigator.pop(context);
         });
 
         return;
@@ -207,8 +205,8 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
       ) {
         if (inserted == 0) return;
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(t.transaction.next_payments.skip_success)),
+        MonekinSnackbar.success(
+          SnackbarParams(t.transaction.next_payments.skip_success),
         );
       });
     });
@@ -287,7 +285,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
     );
   }
 
-  showPayModal(BuildContext context, MoneyTransaction transaction) {
+  void showPayModal(BuildContext context, MoneyTransaction transaction) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
