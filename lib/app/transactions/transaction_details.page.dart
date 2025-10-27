@@ -1,10 +1,10 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/transactions/label_value_info_table.dart';
+import 'package:monekin/app/transactions/utils/transaction_details.utils.dart';
 import 'package:monekin/app/transactions/widgets/translucent_transaction_status_card.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
@@ -23,8 +23,6 @@ import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/services/view-actions/transaction_view_actions_service.dart';
 import 'package:monekin/core/utils/constants.dart';
-import 'package:monekin/core/utils/list_tile_action_item.dart';
-import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 import '../../core/models/transaction/transaction_type.enum.dart';
@@ -63,104 +61,6 @@ class TransactionDetailsPage extends StatefulWidget {
 }
 
 class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
-  List<ListTileActionItem> _getPayActions(
-    BuildContext context,
-    MoneyTransaction transaction,
-  ) {
-    final t = Translations.of(context);
-
-    payTransaction(DateTime datetime) async {
-      final payConfirmed = await confirmDialog(
-        context,
-        dialogTitle: t.transaction.next_payments.accept_dialog_title,
-        contentParagraphs: [
-          Text(
-            transaction.recurrentInfo.isRecurrent
-                ? t.transaction.next_payments.accept_dialog_msg(
-                    date: DateFormat.yMMMd().format(datetime),
-                  )
-                : t.transaction.next_payments.accept_dialog_msg_single,
-          ),
-        ],
-      );
-
-      if (payConfirmed != true) {
-        return;
-      }
-
-      const nullValue = drift.Value(null);
-
-      final transactionToPost = transaction.copyWith(
-        date: datetime,
-        status: nullValue,
-        id: transaction.recurrentInfo.isRecurrent
-            ? generateUUID()
-            : transaction.id,
-
-        // The new transaction will be no-recurrent always
-        intervalEach: nullValue,
-        intervalPeriod: nullValue,
-        endDate: nullValue,
-        remainingTransactions: nullValue,
-      );
-
-      final transactionService = TransactionService.instance;
-
-      final transactionResult = transaction.recurrentInfo.isRecurrent
-          ? await transactionService.insertTransaction(transactionToPost)
-          : await transactionService.updateTransaction(transactionToPost);
-
-      if (transactionResult <= 0) return;
-
-      // Transaction created/updated successfully with a new empty status
-
-      if (transaction.recurrentInfo.isRecurrent) {
-        if (transaction.isOnLastPayment) {
-          // NO MORE PAYMENTS NEEDED
-
-          await transactionService.deleteTransaction(transaction.id);
-
-          MonekinSnackbar.success(
-            SnackbarParams(
-              '${t.transaction.new_success}. ${t.transaction.next_payments.recurrent_rule_finished}',
-            ),
-          );
-
-          if (context.mounted) Navigator.pop(context);
-
-          return;
-        }
-
-        // Change the next payment date and the remaining iterations (if required)
-        final nextPaymentResult = await transactionService
-            .setTransactionNextPayment(transaction);
-
-        if (nextPaymentResult > 0) {
-          MonekinSnackbar.success(SnackbarParams(t.transaction.new_success));
-        }
-      } else {
-        MonekinSnackbar.success(SnackbarParams(t.transaction.edit_success));
-      }
-    }
-
-    return [
-      ListTileActionItem(
-        label: t.transaction.next_payments.accept_in_required_date(
-          date: DateFormat.yMd().format(transaction.date),
-        ),
-        icon: Icons.today_rounded,
-        onClick: transaction.date.compareTo(DateTime.now()) < 0
-            ? () => payTransaction(transaction.date)
-            : null,
-      ),
-      ListTileActionItem(
-        label: t.transaction.next_payments.accept_today,
-        icon: Icons.event_available_rounded,
-        onClick: () => payTransaction(DateTime.now()),
-      ),
-    ];
-  }
-
   void showSkipTransactionModal(
     BuildContext context,
     MoneyTransaction transaction,
@@ -217,31 +117,22 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
     required DateTime date,
     bool isNext = false,
   }) {
-    return Card(
-      color: Colors.transparent,
-      elevation: 0,
+    return Container(
       margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(6),
-        side: BorderSide(
-          width: 1,
-          color: transaction.nextPayStatus!
-              .color(context)
-              .withOpacity(isNext ? 1 : 0.3),
-        ),
-      ),
       child: ListTile(
+        enabled: isNext,
         contentPadding: const EdgeInsets.only(left: 16, right: 6),
-        subtitleTextStyle: Theme.of(context).textTheme.labelSmall!.copyWith(
-          color: isNext
-              ? transaction.nextPayStatus!.color(context).darken(0.6)
-              : Theme.of(context).colorScheme.primaryContainer,
+        tileColor: transaction.nextPayStatus!.color(context).withOpacity(0.1),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(6),
+          side: BorderSide(
+            width: 1,
+            color: transaction.nextPayStatus!.color(context),
+          ),
         ),
         leading: Icon(
           isNext ? transaction.nextPayStatus!.icon : Icons.access_time,
-          color: transaction.nextPayStatus!
-              .color(context)
-              .withOpacity(isNext ? 1 : 0.3),
+          color: transaction.nextPayStatus!.color(context),
         ),
         title: Text(DateFormat.yMMMd().format(date)),
         subtitle: !isNext
@@ -251,32 +142,27 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                   context,
                   transaction.daysToPay(),
                 ),
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
               ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
+          spacing: 4,
           children: [
             IconButton(
               color: AppColors.of(context).danger,
-              disabledColor: AppColors.of(context).danger.withOpacity(0.3),
+              disabledColor: AppColors.of(context).danger.withOpacity(0.7),
               icon: const Icon(Icons.cancel_rounded),
               tooltip: t.transaction.next_payments.skip,
               onPressed: !isNext
                   ? null
                   : () => showSkipTransactionModal(context, transaction),
             ),
-            const SizedBox(width: 4),
             IconButton(
               onPressed: !isNext
                   ? null
                   : () => showPayModal(context, transaction),
-              color: AppColors.of(context).success.darken(0.4),
+              color: AppColors.of(context).success,
               tooltip: !isNext ? null : t.transaction.next_payments.accept,
-              disabledColor: AppColors.of(
-                context,
-              ).success.darken(0.4).withOpacity(0.3),
+              disabledColor: AppColors.of(context).success.withOpacity(0.7),
               icon: const Icon(Icons.price_check_rounded),
             ),
           ],
@@ -295,7 +181,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ...(_getPayActions(context, transaction).map(
+              ...(getPayActions(context, transaction).map(
                 (e) => ListTile(
                   leading: Icon(e.icon),
                   title: Text(e.label),
@@ -369,7 +255,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                     : transaction.status!.description(context),
               ),
             ),
-            if (transaction.recurrentInfo.isRecurrent) ...[
+            if (showRecurrencyStatus) ...[
               //const SizedBox(height: 12),
               Column(
                 children: transaction
@@ -389,7 +275,8 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                     .toList(),
               ),
             ],
-            if (transaction.status == TransactionStatus.pending) ...[
+            if (transaction.status == TransactionStatus.pending &&
+                !showRecurrencyStatus) ...[
               const SizedBox(height: 12),
               SizedBox(
                 width: double.infinity,

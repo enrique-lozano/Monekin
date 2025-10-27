@@ -77,6 +77,7 @@ class CategoryFormFunctions {
       context,
       modal: CategoryPicker(
         categoryType: [category.type, CategoryType.B],
+        excludeCategoriesWithId: [category.id],
         selectedCategory: null,
       ),
     ).then((selCategory) {
@@ -164,6 +165,7 @@ class CategoryFormFunctions {
       modal: CategoryPicker(
         categoryType: [category.type, CategoryType.B],
         selectedCategory: null,
+        excludeCategoriesWithId: [category.id],
         showSubcategories: false,
       ),
     ).then((selCategory) {
