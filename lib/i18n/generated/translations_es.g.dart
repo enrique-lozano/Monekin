@@ -121,6 +121,7 @@ class _TranslationsGeneralEs implements TranslationsGeneralEn {
 	@override String get yesterday => 'Ayer';
 	@override String get filters => 'Filtros';
 	@override String get empty_warn => 'Ops! Esto esta muy vacio';
+	@override String get search_no_results => 'No hay elementos que coincidan con tus criterios de búsqueda';
 	@override String get insufficient_data => 'Datos insuficientes';
 	@override String get show_more_fields => 'Show more fields';
 	@override String get show_less_fields => 'Show less fields';
@@ -326,7 +327,7 @@ class _TranslationsAccountEs implements TranslationsAccountEn {
 	@override String get n_transactions => 'Número de transacciones';
 	@override String get add_money => 'Añadir dinero';
 	@override String get withdraw_money => 'Retirar dinero';
-	@override String get no_accounts => 'No se han encontrado cuentas que mostrar aquí. Añade una transacción pulsando el botón \'+\' de la parte inferior';
+	@override String get no_accounts => 'No se han encontrado cuentas que mostrar aquí. Añade una cuenta pulsando el botón \'+\' de la parte inferior';
 	@override late final _TranslationsAccountTypesEs types = _TranslationsAccountTypesEs._(_root);
 	@override late final _TranslationsAccountFormEs form = _TranslationsAccountFormEs._(_root);
 	@override late final _TranslationsAccountDeleteEs delete = _TranslationsAccountDeleteEs._(_root);
@@ -1461,6 +1462,7 @@ extension on TranslationsEs {
 		map['general.yesterday'] = 'Ayer';
 		map['general.filters'] = 'Filtros';
 		map['general.empty_warn'] = 'Ops! Esto esta muy vacio';
+		map['general.search_no_results'] = 'No hay elementos que coincidan con tus criterios de búsqueda';
 		map['general.insufficient_data'] = 'Datos insuficientes';
 		map['general.show_more_fields'] = 'Show more fields';
 		map['general.show_less_fields'] = 'Show less fields';
@@ -1825,7 +1827,7 @@ extension on TranslationsEs {
 		map['account.n_transactions'] = 'Número de transacciones';
 		map['account.add_money'] = 'Añadir dinero';
 		map['account.withdraw_money'] = 'Retirar dinero';
-		map['account.no_accounts'] = 'No se han encontrado cuentas que mostrar aquí. Añade una transacción pulsando el botón \'+\' de la parte inferior';
+		map['account.no_accounts'] = 'No se han encontrado cuentas que mostrar aquí. Añade una cuenta pulsando el botón \'+\' de la parte inferior';
 		map['account.types.title'] = 'Tipo de cuenta';
 		map['account.types.warning'] = 'Una vez elegido el tipo de cuenta este no podrá cambiarse en un futuro';
 		map['account.types.normal'] = 'Cuenta corriente';

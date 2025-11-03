@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/app/home/widgets/click_tracker.dart';
 import 'package:monekin/app/home/widgets/dashboard_cards.dart';
@@ -15,6 +14,7 @@ import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
+import 'package:monekin/core/presentation/animations/animated_floating_button.dart';
 import 'package:monekin/core/presentation/debug_page.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
@@ -51,11 +51,10 @@ class _DashboardPageState extends State<DashboardPage> {
     _scrollController.addListener(() {
       _setSmallHeaderVisible();
 
-      bool shouldExtendButton =
-          BreakPoint.of(context).isLargerThan(BreakpointID.md) ||
-          _scrollController.offset <= 10 ||
-          _scrollController.position.userScrollDirection !=
-              ScrollDirection.reverse;
+      bool shouldExtendButton = AnimatedFloatingButton.shouldExtendButton(
+        context,
+        _scrollController,
+      );
 
       if (isFloatingButtonExtended != shouldExtendButton) {
         setState(() {

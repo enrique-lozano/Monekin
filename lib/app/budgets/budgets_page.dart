@@ -70,7 +70,7 @@ class BudgetsPage extends StatelessWidget {
                 }
 
                 return ListView.separated(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.only(top: 10, bottom: 74),
                   itemBuilder: (context, index) {
                     final budget = budgets[index];
 

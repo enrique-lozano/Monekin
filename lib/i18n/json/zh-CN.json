@@ -51,6 +51,7 @@
     "yesterday": "昨天",
     "filters": "筛选",
     "empty-warn": "喔！这里什么都没有",
+    "search-no-results": "没有符合您搜索条件的商品",
     "insufficient-data": "数据不足",
     "show-more-fields": "显示更多",
     "show-less-fields": "显示更少",

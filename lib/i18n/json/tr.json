@@ -51,6 +51,7 @@
     "yesterday": "Dün",
     "filters": "Filtreler",
     "empty-warn": "Ups! Burası çok boş",
+    "search-no-results": "Arama kriterlerinizle eşleşen öğe yok",
     "insufficient-data": "Yetersiz veri",
     "show-more-fields": "Daha fazla alan göster",
     "show-less-fields": "Daha az alan göster",

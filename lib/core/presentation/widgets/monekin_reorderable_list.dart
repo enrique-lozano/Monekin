@@ -10,6 +10,7 @@ class MonekinReorderableList extends StatefulWidget {
     this.isOrderEnabled = true,
     this.padding,
     this.spaceBetween = 0,
+    this.scrollController,
   });
 
   final Widget Function(BuildContext context, int index, bool isOrdering)
@@ -22,6 +23,8 @@ class MonekinReorderableList extends StatefulWidget {
   final EdgeInsets? padding;
   final double spaceBetween;
 
+  final ScrollController? scrollController;
+
   @override
   State<MonekinReorderableList> createState() => _MonekinReorderableListState();
 }
@@ -33,6 +36,7 @@ class _MonekinReorderableListState extends State<MonekinReorderableList> {
   Widget build(BuildContext context) {
     return ReorderableListView.builder(
       shrinkWrap: true,
+      scrollController: widget.scrollController,
       physics: const BouncingScrollPhysics(),
       padding: widget.padding,
       proxyDecorator: (child, index, animation) =>

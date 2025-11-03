@@ -223,6 +223,9 @@ class TranslationsGeneralEn {
 	/// en: 'Ops! This is very empty'
 	String get empty_warn => 'Ops! This is very empty';
 
+	/// en: 'No items match your search criteria'
+	String get search_no_results => 'No items match your search criteria';
+
 	/// en: 'Insufficient data'
 	String get insufficient_data => 'Insufficient data';
 
@@ -640,8 +643,8 @@ class TranslationsAccountEn {
 	/// en: 'Withdraw money'
 	String get withdraw_money => 'Withdraw money';
 
-	/// en: 'No transactions found to display here. Add a transaction by clicking the '+' button at the bottom'
-	String get no_accounts => 'No transactions found to display here. Add a transaction by clicking the \'+\' button at the bottom';
+	/// en: 'No accounts found to display here. Add an account by clicking the '+' button at the bottom'
+	String get no_accounts => 'No accounts found to display here. Add an account by clicking the \'+\' button at the bottom';
 
 	late final TranslationsAccountTypesEn types = TranslationsAccountTypesEn._(_root);
 	late final TranslationsAccountFormEn form = TranslationsAccountFormEn._(_root);
@@ -2608,6 +2611,7 @@ extension on Translations {
 		map['general.yesterday'] = 'Yesterday';
 		map['general.filters'] = 'Filters';
 		map['general.empty_warn'] = 'Ops! This is very empty';
+		map['general.search_no_results'] = 'No items match your search criteria';
 		map['general.insufficient_data'] = 'Insufficient data';
 		map['general.show_more_fields'] = 'Show more fields';
 		map['general.show_less_fields'] = 'Show less fields';
@@ -2971,7 +2975,7 @@ extension on Translations {
 		map['account.n_transactions'] = 'Number of transactions';
 		map['account.add_money'] = 'Add money';
 		map['account.withdraw_money'] = 'Withdraw money';
-		map['account.no_accounts'] = 'No transactions found to display here. Add a transaction by clicking the \'+\' button at the bottom';
+		map['account.no_accounts'] = 'No accounts found to display here. Add an account by clicking the \'+\' button at the bottom';
 		map['account.types.title'] = 'Account type';
 		map['account.types.warning'] = 'Once the type of account has been chosen, it cannot be changed in the future';
 		map['account.types.normal'] = 'Normal account';

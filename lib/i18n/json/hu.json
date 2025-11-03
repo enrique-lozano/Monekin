@@ -51,6 +51,7 @@
     "yesterday": "Tegnap",
     "filters": "Szűrők",
     "empty-warn": "Hoppá! Ez nagyon üres.",
+    "search-no-results": "Egyetlen elem sem felel meg a keresési feltételeknek",
     "insufficient-data": "Hiányos adatok",
     "show-more-fields": "Több mező mutatása",
     "show-less-fields": "Kevesebb mező mutatása",
