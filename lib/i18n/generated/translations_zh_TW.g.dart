@@ -121,6 +121,7 @@ class _TranslationsGeneralZhTw implements TranslationsGeneralEn {
 	@override String get yesterday => '昨天';
 	@override String get filters => '過濾';
 	@override String get empty_warn => '哦！這裡非常空';
+	@override String get search_no_results => '沒有符合您搜索條件的商品';
 	@override String get insufficient_data => '數據不足';
 	@override String get show_more_fields => '顯示更多欄位';
 	@override String get show_less_fields => '顯示較少的欄位';
@@ -1460,6 +1461,7 @@ extension on TranslationsZhTw {
 		map['general.yesterday'] = '昨天';
 		map['general.filters'] = '過濾';
 		map['general.empty_warn'] = '哦！這裡非常空';
+		map['general.search_no_results'] = '沒有符合您搜索條件的商品';
 		map['general.insufficient_data'] = '數據不足';
 		map['general.show_more_fields'] = '顯示更多欄位';
 		map['general.show_less_fields'] = '顯示較少的欄位';

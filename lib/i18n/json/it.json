@@ -51,6 +51,7 @@
     "yesterday": "Ieri",
     "filters": "Filtri",
     "empty-warn": "Ops! È davvero vuoto",
+    "search-no-results": "Nessun articolo corrisponde ai tuoi criteri di ricerca",
     "insufficient-data": "Dati insufficienti",
     "show-more-fields": "Mostra più campi",
     "show-less-fields": "Mostra meno campi",

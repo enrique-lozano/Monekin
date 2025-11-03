@@ -51,6 +51,7 @@
     "yesterday": "Yesterday",
     "filters": "Filters",
     "empty-warn": "Ops! This is very empty",
+    "search-no-results": "No items match your search criteria",
     "insufficient-data": "Insufficient data",
     "show-more-fields": "Show more fields",
     "show-less-fields": "Show less fields",
@@ -446,7 +447,7 @@
     "n_transactions": "Number of transactions",
     "add_money": "Add money",
     "withdraw_money": "Withdraw money",
-    "no-accounts": "No transactions found to display here. Add a transaction by clicking the '+' button at the bottom",
+    "no-accounts": "No accounts found to display here. Add an account by clicking the '+' button at the bottom",
     "TYPES": {
       "title": "Account type",
       "warning": "Once the type of account has been chosen, it cannot be changed in the future",

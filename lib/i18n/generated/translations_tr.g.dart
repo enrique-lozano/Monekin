@@ -121,6 +121,7 @@ class _TranslationsGeneralTr implements TranslationsGeneralEn {
 	@override String get yesterday => 'Dün';
 	@override String get filters => 'Filtreler';
 	@override String get empty_warn => 'Ups! Burası çok boş';
+	@override String get search_no_results => 'Arama kriterlerinizle eşleşen öğe yok';
 	@override String get insufficient_data => 'Yetersiz veri';
 	@override String get show_more_fields => 'Daha fazla alan göster';
 	@override String get show_less_fields => 'Daha az alan göster';
@@ -1460,6 +1461,7 @@ extension on TranslationsTr {
 		map['general.yesterday'] = 'Dün';
 		map['general.filters'] = 'Filtreler';
 		map['general.empty_warn'] = 'Ups! Burası çok boş';
+		map['general.search_no_results'] = 'Arama kriterlerinizle eşleşen öğe yok';
 		map['general.insufficient_data'] = 'Yetersiz veri';
 		map['general.show_more_fields'] = 'Daha fazla alan göster';
 		map['general.show_less_fields'] = 'Daha az alan göster';

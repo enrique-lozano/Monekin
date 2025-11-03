@@ -51,6 +51,7 @@
     "yesterday": "Вчора",
     "filters": "Фільтри",
     "empty-warn": "Ой! Тут порожньо",
+    "search-no-results": "Немає елементів, які відповідають вашим критеріям пошуку",
     "insufficient-data": "Недостатньо даних",
     "show-more-fields": "Показати більше полів",
     "show-less-fields": "Показати менше полів",

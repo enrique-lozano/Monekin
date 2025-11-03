@@ -121,6 +121,7 @@ class _TranslationsGeneralHu implements TranslationsGeneralEn {
 	@override String get yesterday => 'Tegnap';
 	@override String get filters => 'Szűrők';
 	@override String get empty_warn => 'Hoppá! Ez nagyon üres.';
+	@override String get search_no_results => 'Egyetlen elem sem felel meg a keresési feltételeknek';
 	@override String get insufficient_data => 'Hiányos adatok';
 	@override String get show_more_fields => 'Több mező mutatása';
 	@override String get show_less_fields => 'Kevesebb mező mutatása';
@@ -1460,6 +1461,7 @@ extension on TranslationsHu {
 		map['general.yesterday'] = 'Tegnap';
 		map['general.filters'] = 'Szűrők';
 		map['general.empty_warn'] = 'Hoppá! Ez nagyon üres.';
+		map['general.search_no_results'] = 'Egyetlen elem sem felel meg a keresési feltételeknek';
 		map['general.insufficient_data'] = 'Hiányos adatok';
 		map['general.show_more_fields'] = 'Több mező mutatása';
 		map['general.show_less_fields'] = 'Kevesebb mező mutatása';

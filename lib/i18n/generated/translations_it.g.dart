@@ -121,6 +121,7 @@ class _TranslationsGeneralIt implements TranslationsGeneralEn {
 	@override String get yesterday => 'Ieri';
 	@override String get filters => 'Filtri';
 	@override String get empty_warn => 'Ops! È davvero vuoto';
+	@override String get search_no_results => 'Nessun articolo corrisponde ai tuoi criteri di ricerca';
 	@override String get insufficient_data => 'Dati insufficienti';
 	@override String get show_more_fields => 'Mostra più campi';
 	@override String get show_less_fields => 'Mostra meno campi';
@@ -1460,6 +1461,7 @@ extension on TranslationsIt {
 		map['general.yesterday'] = 'Ieri';
 		map['general.filters'] = 'Filtri';
 		map['general.empty_warn'] = 'Ops! È davvero vuoto';
+		map['general.search_no_results'] = 'Nessun articolo corrisponde ai tuoi criteri di ricerca';
 		map['general.insufficient_data'] = 'Dati insufficienti';
 		map['general.show_more_fields'] = 'Mostra più campi';
 		map['general.show_less_fields'] = 'Mostra meno campi';

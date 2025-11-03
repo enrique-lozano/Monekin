@@ -121,6 +121,7 @@ class _TranslationsGeneralZhCn implements TranslationsGeneralEn {
 	@override String get yesterday => '昨天';
 	@override String get filters => '筛选';
 	@override String get empty_warn => '喔！这里什么都没有';
+	@override String get search_no_results => '没有符合您搜索条件的商品';
 	@override String get insufficient_data => '数据不足';
 	@override String get show_more_fields => '显示更多';
 	@override String get show_less_fields => '显示更少';
@@ -1460,6 +1461,7 @@ extension on TranslationsZhCn {
 		map['general.yesterday'] = '昨天';
 		map['general.filters'] = '筛选';
 		map['general.empty_warn'] = '喔！这里什么都没有';
+		map['general.search_no_results'] = '没有符合您搜索条件的商品';
 		map['general.insufficient_data'] = '数据不足';
 		map['general.show_more_fields'] = '显示更多';
 		map['general.show_less_fields'] = '显示更少';

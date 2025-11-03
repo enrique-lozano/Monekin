@@ -121,6 +121,7 @@ class _TranslationsGeneralUk implements TranslationsGeneralEn {
 	@override String get yesterday => 'Вчора';
 	@override String get filters => 'Фільтри';
 	@override String get empty_warn => 'Ой! Тут порожньо';
+	@override String get search_no_results => 'Немає елементів, які відповідають вашим критеріям пошуку';
 	@override String get insufficient_data => 'Недостатньо даних';
 	@override String get show_more_fields => 'Показати більше полів';
 	@override String get show_less_fields => 'Показати менше полів';
@@ -1460,6 +1461,7 @@ extension on TranslationsUk {
 		map['general.yesterday'] = 'Вчора';
 		map['general.filters'] = 'Фільтри';
 		map['general.empty_warn'] = 'Ой! Тут порожньо';
+		map['general.search_no_results'] = 'Немає елементів, які відповідають вашим критеріям пошуку';
 		map['general.insufficient_data'] = 'Недостатньо даних';
 		map['general.show_more_fields'] = 'Показати більше полів';
 		map['general.show_less_fields'] = 'Показати менше полів';
