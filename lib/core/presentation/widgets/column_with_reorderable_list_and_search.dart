@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/presentation/responsive/app_breakpoints.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -78,7 +79,10 @@ class _ColumnWithReorderableListAndSearchState
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          padding: const EdgeInsets.symmetric(
+            vertical: 12,
+            horizontal: 16,
+          ).withSafeBottom(context),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             spacing: 16,

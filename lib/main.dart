@@ -1,5 +1,7 @@
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/layout/navigation_sidebar.dart';
@@ -163,6 +165,28 @@ class MaterialAppContainer extends StatelessWidget {
 
   final bool introSeen;
 
+  SystemUiOverlayStyle getSystemUiOverlayStyle(Brightness brightness) {
+    if (brightness == Brightness.light) {
+      return SystemUiOverlayStyle(
+        statusBarBrightness: Brightness.light,
+        systemStatusBarContrastEnforced: false,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarColor: kIsWeb ? Colors.black : Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        systemNavigationBarContrastEnforced: false,
+      );
+    } else {
+      return SystemUiOverlayStyle(
+        statusBarBrightness: Brightness.dark,
+        systemStatusBarContrastEnforced: false,
+        statusBarIconBrightness: Brightness.light,
+        statusBarColor: kIsWeb ? Colors.black : Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.light,
+        systemNavigationBarContrastEnforced: false,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Get the language of the Intl in each rebuild of the TranslationProvider:
@@ -198,6 +222,10 @@ class MaterialAppContainer extends StatelessWidget {
           navigatorKey: navigatorKey,
           navigatorObservers: [MainLayoutNavObserver()],
           builder: (context, child) {
+            SystemChrome.setSystemUIOverlayStyle(
+              getSystemUiOverlayStyle(Theme.of(context).brightness),
+            );
+
             return Overlay(
               initialEntries: [
                 OverlayEntry(

@@ -133,11 +133,10 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
 
               final exchangeRates = snapshot.data!;
 
-              return SingleChildScrollView(
+              return Expanded(
                 child: ListView.separated(
                   itemCount: exchangeRates.length,
                   shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     final item = exchangeRates[index];
 
