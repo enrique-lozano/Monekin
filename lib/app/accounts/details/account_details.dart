@@ -12,6 +12,7 @@ import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
@@ -69,174 +70,170 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return StreamBuilder(
-      stream: AccountService.instance.getAccountById(widget.account.id),
-      initialData: widget.account,
-      builder: (context, snapshot) {
-        return Scaffold(
-          appBar: AppBar(elevation: 0, title: Text(t.account.details)),
-          body: Builder(
-            builder: (context) {
-              if (!snapshot.hasData) {
-                return const LinearProgressIndicator();
-              }
+    return Scaffold(
+      appBar: AppBar(title: Text(t.account.details)),
+      body: StreamBuilder(
+        stream: AccountService.instance.getAccountById(widget.account.id),
+        initialData: widget.account,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const LinearProgressIndicator();
+          }
 
-              final account = snapshot.data!;
+          final account = snapshot.data!;
 
-              final accountDetailsActions =
-                  AccountDetailsActions.getAccountDetailsActions(
-                    context,
-                    account: account,
-                    navigateBackOnDelete: true,
-                  );
+          final accountDetailsActions =
+              AccountDetailsActions.getAccountDetailsActions(
+                context,
+                account: account,
+                navigateBackOnDelete: true,
+              );
 
-              return CustomScrollView(
-                slivers: [
-                  SliverPersistentHeader(
-                    pinned: true,
-                    delegate: _AccountDetailHeader(
-                      account: account,
-                      accountIconHeroTag: widget.accountIconHeroTag,
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
-                      child: Column(
-                        children: [
-                          CardWithHeader(
-                            title: 'Info',
-                            footer: CardFooterWithSingleButton(
-                              text: t.ui_actions.edit,
-                              onButtonClick: () => RouteUtils.pushRoute(
-                                context,
-                                AccountFormPage(account: account),
+          return CustomScrollView(
+            slivers: [
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: _AccountDetailHeader(
+                  account: account,
+                  accountIconHeroTag: widget.accountIconHeroTag,
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 24,
+                  ).withSafeBottom(context),
+                  child: Column(
+                    children: [
+                      CardWithHeader(
+                        title: 'Info',
+                        footer: CardFooterWithSingleButton(
+                          text: t.ui_actions.edit,
+                          onButtonClick: () => RouteUtils.pushRoute(
+                            context,
+                            AccountFormPage(account: account),
+                          ),
+                        ),
+                        body: LabelValueInfoList(
+                          items: [
+                            LabelValueInfoListItem(
+                              value: Text(
+                                DateFormat.yMMMMEEEEd().add_Hm().format(
+                                  account.date,
+                                ),
                               ),
+                              label: t.account.date,
                             ),
-                            body: LabelValueInfoList(
-                              items: [
-                                LabelValueInfoListItem(
-                                  value: Text(
-                                    DateFormat.yMMMMEEEEd().add_Hm().format(
-                                      account.date,
-                                    ),
+                            if (account.isClosed) ...[
+                              LabelValueInfoListItem(
+                                label: t.account.close_date,
+                                value: Text(
+                                  DateFormat.yMMMMEEEEd().add_Hm().format(
+                                    account.closingDate!,
                                   ),
-                                  label: t.account.date,
                                 ),
-                                if (account.isClosed) ...[
-                                  LabelValueInfoListItem(
-                                    label: t.account.close_date,
-                                    value: Text(
-                                      DateFormat.yMMMMEEEEd().add_Hm().format(
-                                        account.closingDate!,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                                LabelValueInfoListItem(
-                                  label: t.account.types.title,
-                                  value: Text(account.type.title(context)),
-                                ),
-                                if (account.iban != null) ...[
-                                  buildCopyableTile(
-                                    t.account.form.iban,
-                                    account.iban!,
-                                  ),
-                                ],
-                                if (account.swift != null) ...[
-                                  buildCopyableTile(
-                                    t.account.form.swift,
-                                    account.swift!,
-                                  ),
-                                ],
-                                if (account.description != null) ...[
-                                  LabelValueInfoListItem(
-                                    label: t.account.form.notes,
-                                    value: Text(account.description!),
-                                  ),
-                                ],
-                              ],
+                              ),
+                            ],
+                            LabelValueInfoListItem(
+                              label: t.account.types.title,
+                              value: Text(account.type.title(context)),
+                            ),
+                            if (account.iban != null) ...[
+                              buildCopyableTile(
+                                t.account.form.iban,
+                                account.iban!,
+                              ),
+                            ],
+                            if (account.swift != null) ...[
+                              buildCopyableTile(
+                                t.account.form.swift,
+                                account.swift!,
+                              ),
+                            ],
+                            if (account.description != null) ...[
+                              LabelValueInfoListItem(
+                                label: t.account.form.notes,
+                                value: Text(account.description!),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      CardWithHeader(
+                        title: t.home.last_transactions,
+                        bodyPadding: const EdgeInsets.symmetric(vertical: 6),
+                        footer: StreamBuilder(
+                          stream: TransactionService.instance.countTransactions(
+                            predicate: TransactionFilters(
+                              status: TransactionStatus.notIn({
+                                TransactionStatus.pending,
+                                TransactionStatus.voided,
+                              }),
+                              accountsIDs: [widget.account.id],
                             ),
                           ),
-                          const SizedBox(height: 16),
-                          CardWithHeader(
-                            title: t.home.last_transactions,
-                            bodyPadding: const EdgeInsets.symmetric(
-                              vertical: 6,
-                            ),
-                            footer: StreamBuilder(
-                              stream: TransactionService.instance
-                                  .countTransactions(
-                                    predicate: TransactionFilters(
-                                      status: TransactionStatus.notIn({
-                                        TransactionStatus.pending,
-                                        TransactionStatus.voided,
-                                      }),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData ||
+                                snapshot.data!.numberOfRes < 5) {
+                              return const SizedBox.shrink();
+                            }
+
+                            return CardFooterWithSingleButton(
+                              onButtonClick: () {
+                                RouteUtils.pushRoute(
+                                  context,
+                                  TransactionsPage(
+                                    filters: TransactionFilters(
                                       accountsIDs: [widget.account.id],
                                     ),
                                   ),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData ||
-                                    snapshot.data!.numberOfRes < 5) {
-                                  return const SizedBox.shrink();
-                                }
-
-                                return CardFooterWithSingleButton(
-                                  onButtonClick: () {
-                                    RouteUtils.pushRoute(
-                                      context,
-                                      TransactionsPage(
-                                        filters: TransactionFilters(
-                                          accountsIDs: [widget.account.id],
-                                        ),
-                                      ),
-                                    );
-                                  },
                                 );
                               },
-                            ),
-                            body: TransactionListComponent(
-                              heroTagBuilder: (tr) =>
-                                  'account-details-page__tr-icon-${tr.id}',
-                              filters: TransactionFilters(
-                                status: TransactionStatus.notIn({
-                                  TransactionStatus.pending,
-                                  TransactionStatus.voided,
-                                }),
-                                accountsIDs: [widget.account.id],
-                              ),
-                              limit: 5,
-                              showGroupDivider: false,
-                              prevPage: AccountDetailsPage(
-                                account: widget.account,
-                                accountIconHeroTag: widget.accountIconHeroTag,
-                              ),
-                              onEmptyList: Padding(
-                                padding: const EdgeInsets.all(24),
-                                child: Text(
-                                  t.transaction.list.empty,
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
+                            );
+                          },
+                        ),
+                        body: TransactionListComponent(
+                          heroTagBuilder: (tr) =>
+                              'account-details-page__tr-icon-${tr.id}',
+                          filters: TransactionFilters(
+                            status: TransactionStatus.notIn({
+                              TransactionStatus.pending,
+                              TransactionStatus.voided,
+                            }),
+                            accountsIDs: [widget.account.id],
+                          ),
+                          limit: 5,
+                          showGroupDivider: false,
+                          prevPage: AccountDetailsPage(
+                            account: widget.account,
+                            accountIconHeroTag: widget.accountIconHeroTag,
+                          ),
+                          onEmptyList: Padding(
+                            padding: const EdgeInsets.all(24),
+                            child: Text(
+                              t.transaction.list.empty,
+                              textAlign: TextAlign.center,
                             ),
                           ),
-                          const SizedBox(height: 16),
-                          CardWithHeader(
-                            title: t.general.quick_actions,
-                            body: MonekinQuickActionsButton(
-                              actions: accountDetailsActions,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
+                      const SizedBox(height: 16),
+                      CardWithHeader(
+                        title: t.general.quick_actions,
+                        body: MonekinQuickActionsButton(
+                          actions: accountDetailsActions,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              );
-            },
-          ),
-        );
-      },
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

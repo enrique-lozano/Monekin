@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/settings/widgets/display_app_icon.dart';
+import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/utils/open_external_url.dart';
@@ -35,6 +36,7 @@ class AboutPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(t.more.about_us.display)),
       body: SingleChildScrollView(
+        padding: EdgeInsets.zero.withSafeBottom(context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/core/extensions/padding.extension.dart';
 
 /// Useful class if you want to differentiate the dismissal of the modal from a return of a result with a null value
 class ModalResult<T> {
@@ -47,7 +48,7 @@ class ModalContainer extends StatelessWidget {
         bottom: responseToKeyboard
             ? MediaQuery.of(context).viewInsets.bottom
             : 0,
-      ),
+      ).withSafeBottom(context),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,

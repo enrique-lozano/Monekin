@@ -10,6 +10,7 @@ import 'package:monekin/core/database/services/user-setting/private_mode_service
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/database/services/user-setting/utils/get_theme_from_string.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/presentation/animations/scaled_animated_switcher.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/theme.dart';
@@ -54,11 +55,10 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
             )
             ?.label ??
         t.settings.locale_auto;
-
     return Scaffold(
       appBar: AppBar(title: Text(t.settings.title_short)),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.only(bottom: 16).withSafeBottom(context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
