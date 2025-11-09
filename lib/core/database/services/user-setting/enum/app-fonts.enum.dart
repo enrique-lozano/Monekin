@@ -6,7 +6,7 @@ import 'package:monekin/core/extensions/string.extension.dart';
 enum AppFonts {
   nunito,
   jost,
-  chironHei,
+  cairo,
   exo;
 
   static AppFonts? fromDB(String? fontStringIndex) {
@@ -28,8 +28,8 @@ enum AppFonts {
         return 'Nunito';
       case AppFonts.jost:
         return 'Jost';
-      case AppFonts.chironHei:
-        return 'Chiron Hei';
+      case AppFonts.cairo:
+        return 'Cairo';
       case AppFonts.exo:
         return 'Exo';
     }
