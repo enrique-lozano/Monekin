@@ -1,4 +1,4 @@
-import 'package:monekin/app/settings/widgets/writing_system.enum.dart';
+import 'package:monekin/core/database/services/user-setting/enum/writing_system.enum.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 class SupportedLocale {

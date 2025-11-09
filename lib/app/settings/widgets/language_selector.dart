@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/settings/widgets/supported_locales.dart';
+import 'package:monekin/core/database/services/user-setting/enum/supported_locales.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/dynamic_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/html_text.dart';
