@@ -143,28 +143,6 @@ flutter:
         - asset: assets/fonts/Nunito/Nunito-LightItalic.ttf
           style: italic
           weight: 300
-    - family: Chiron Hei
-      fonts:
-        - asset: assets/fonts/Chiron_Hei_HK/ChironHeiHK-Regular.ttf
-        - asset: assets/fonts/Chiron_Hei_HK/ChironHeiHK-Italic.ttf
-          style: italic
-        - asset: assets/fonts/Chiron_Hei_HK/ChironHeiHK-Bold.ttf
-          weight: 700
-        - asset: assets/fonts/Chiron_Hei_HK/ChironHeiHK-BoldItalic.ttf
-          style: italic
-          weight: 700
-        - asset: assets/fonts/Chiron_Hei_HK/ChironHeiHK-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/Chiron_Hei_HK/ChironHeiHK-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/Chiron_Hei_HK/ChironHeiHK-MediumItalic.ttf
-          style: italic
-          weight: 500
-        - asset: assets/fonts/Chiron_Hei_HK/ChironHeiHK-Light.ttf
-          weight: 300
-        - asset: assets/fonts/Chiron_Hei_HK/ChironHeiHK-LightItalic.ttf
-          style: italic
-          weight: 300
     - family: Exo
       fonts:
         - asset: assets/fonts/Exo_2/Exo2-Regular.ttf
@@ -186,6 +164,17 @@ flutter:
           weight: 300
         - asset: assets/fonts/Exo_2/Exo2-LightItalic.ttf
           style: italic
+          weight: 300
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo/Cairo-Regular.ttf
+        - asset: assets/fonts/Cairo/Cairo-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Cairo/Cairo-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Cairo/Cairo-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Cairo/Cairo-Light.ttf
           weight: 300
     - family: Jost
       fonts:
