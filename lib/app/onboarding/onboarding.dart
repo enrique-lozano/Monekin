@@ -30,7 +30,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   int currentPage = 0;
   PageController pageController = PageController();
 
-  introFinished() {
+  void introFinished() {
     AppDataService.instance
         .setItem(AppDataKey.introSeen, '1', updateGlobalState: true)
         .then((value) {
@@ -42,14 +42,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
         });
   }
 
-  _goToNextPage() {
+  void _goToNextPage() {
     pageController.nextPage(
       duration: const Duration(milliseconds: 250),
       curve: Curves.easeInOut,
     );
   }
 
-  _goToPrevPage() {
+  void _goToPrevPage() {
     pageController.previousPage(
       duration: const Duration(milliseconds: 250),
       curve: Curves.easeInOut,
