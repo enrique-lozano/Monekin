@@ -143,7 +143,7 @@ class _FinanceHealthDetailTile extends StatelessWidget {
         minTileHeight: 20,
         minVerticalPadding: 0,
         contentPadding: const EdgeInsets.all(0),
-        subtitle: Text(subtitle),
+        subtitle: Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
       ),
       //   subtitle: Text(subtitle),
       childrenPadding: const EdgeInsets.fromLTRB(16, 4, 16, 16),

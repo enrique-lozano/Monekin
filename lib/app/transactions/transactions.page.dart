@@ -22,6 +22,7 @@ import 'package:monekin/core/presentation/widgets/transaction_filter/filter_shee
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:rxdart/rxdart.dart';
 
 class TransactionsPage extends StatefulWidget {
   const TransactionsPage({super.key, this.filters});
@@ -113,8 +114,14 @@ class _TransactionsPageState extends State<TransactionsPage> {
               ),
             ],
             StreamBuilder(
-              stream: TransactionService.instance.countTransactions(
-                predicate: filters.copyWith(searchValue: searchController.text),
+              stream: Rx.combineLatest2(
+                TransactionService.instance.countTransactions(
+                  filters: filters.copyWith(searchValue: searchController.text),
+                ),
+                TransactionService.instance.getTransactionsValueBalance(
+                  filters: filters.copyWith(searchValue: searchController.text),
+                ),
+                (a, b) => (count: a, value: b),
               ),
               builder: (context, snapshot) {
                 final res = snapshot.data;
@@ -150,14 +157,14 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                 children: [
                                   TextSpan(
                                     text:
-                                        '${selectedTransactions.isNotEmpty ? ' / ' : ''}${res.numberOfRes} ',
+                                        '${selectedTransactions.isNotEmpty ? ' / ' : ''}${res.count} ',
                                     style: selectedTransactions.isNotEmpty
                                         ? smallerTextStyle
                                         : null,
                                   ),
                                   TextSpan(
                                     text: t.transaction
-                                        .display(n: res.numberOfRes)
+                                        .display(n: res.count)
                                         .toLowerCase(),
                                   ),
                                 ],
@@ -179,7 +186,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                                   const Text("/ ", style: smallerTextStyle),
                                 ],
                                 CurrencyDisplayer(
-                                  amountToConvert: res.valueSum,
+                                  amountToConvert: res.value,
                                   showDecimals: selectedTransactions.isEmpty,
                                   integerStyle: selectedTransactions.isEmpty
                                       ? const TextStyle(inherit: true)

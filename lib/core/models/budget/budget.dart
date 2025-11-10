@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/date-utils/date_period.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
@@ -85,8 +85,8 @@ class Budget extends BudgetInDB {
   Stream<double> getValueOnDate(DateTime? date) {
     date ??= DateTime.now();
 
-    return AccountService.instance
-        .getAccountsBalance(
+    return TransactionService.instance
+        .getTransactionsValueBalance(
           filters: TransactionFilters(
             transactionTypes: [TransactionType.E],
             accountsIDs: accounts,

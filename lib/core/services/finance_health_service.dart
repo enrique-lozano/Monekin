@@ -199,30 +199,30 @@ class FinanceHealthService {
     final minDate = filters.minDate ?? kDefaultFirstSelectableDate;
     final maxDate = filters.maxDate ?? DateTime.now();
 
-    return Rx.combineLatest4(
+    print(
+      'Calculating months without income from $minDate to $maxDate with filters: $filters',
+    );
+    return Rx.combineLatest3(
+      TransactionService.instance.countTransactions(filters: filters),
+      AccountService.instance.getAccountsMoney(
+        accountIds: filters.accountsIDs,
+        trFilters: filters.copyWithNull(minDate: true),
+        date: maxDate,
+      ),
       TransactionService.instance
-          .countTransactions(predicate: filters)
-          .map((event) => event.numberOfRes),
-      AccountService.instance.getAccountsBalance(filters: filters),
-      AccountService.instance
-          .getAccountsBalance(
+          .getTransactionsValueBalance(
             filters: filters.copyWith(transactionTypes: [TransactionType.E]),
           )
           .map((e) => e.abs()),
-      AccountService.instance
-          .getAccountsMoney(
-            date: minDate,
-            trFilters: filters.copyWith(minDate: null),
-          )
-          .map((event) => max(event, 0)),
-      (numberOfTransactions, balance, expense, initialMoney) {
+      (numberOfTransactions, accountsMoney, expense) {
         if (numberOfTransactions < 4 || expense == 0) {
           return null;
         }
 
         final dateDiff = maxDate.difference(minDate).inDays;
+        final monthlyExpense = expense / dateDiff * 30;
 
-        return (initialMoney + balance) / expense / dateDiff * 30;
+        return accountsMoney / monthlyExpense;
       },
     );
   }
@@ -230,10 +230,10 @@ class FinanceHealthService {
   /// Returns a number (from 0 to 100) with the user's savings percentage for a given period (if specified)
   Stream<double> getSavingPercentage({required TransactionFilters filters}) {
     return StreamZip([
-      AccountService.instance.getAccountsBalance(
+      TransactionService.instance.getTransactionsValueBalance(
         filters: filters.copyWith(transactionTypes: [TransactionType.I]),
       ),
-      AccountService.instance.getAccountsBalance(
+      TransactionService.instance.getTransactionsValueBalance(
         filters: filters.copyWith(transactionTypes: [TransactionType.E]),
       ),
     ]).map((res) {

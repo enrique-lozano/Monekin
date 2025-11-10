@@ -368,7 +368,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                         ? Stream.value(true)
                         : TransactionService.instance
                               .countTransactions(
-                                predicate: TransactionFilters(
+                                filters: TransactionFilters(
                                   transactionTypes: [
                                     TransactionType.E,
                                     TransactionType.I,
@@ -376,7 +376,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                                   accountsIDs: [_accountToEdit!.id],
                                 ),
                               )
-                              .map((event) => event.numberOfRes == 0),
+                              .map((count) => count == 0),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData || snapshot.data! == false) {
                         return Container();
