@@ -5,8 +5,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/stats/utils/common_axis_titles.dart';
-import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
+import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/date-utils/date_period.dart';
@@ -61,7 +61,7 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
     DateTime? endDate,
     DatePeriodState range,
   ) async {
-    final accountService = AccountService.instance;
+    final transactionService = TransactionService.instance;
     final accounts = await widget.filters.accounts().first;
 
     final List<String> shortTitles = [];
@@ -79,8 +79,8 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
     final effectiveEnd = endDate ?? DateTime.now();
 
     Future<double> getIncomeData(DateTime start, DateTime end) {
-      return accountService
-          .getAccountsBalance(
+      return transactionService
+          .getTransactionsValueBalance(
             filters: widget.filters.copyWith(
               transactionTypes: [TransactionType.I]
                   .intersectionWithNullable(widget.filters.transactionTypes)
@@ -93,8 +93,8 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
     }
 
     Future<double> getExpenseData(DateTime start, DateTime end) {
-      return accountService
-          .getAccountsBalance(
+      return transactionService
+          .getTransactionsValueBalance(
             filters: widget.filters.copyWith(
               transactionTypes: [TransactionType.E]
                   .intersectionWithNullable(widget.filters.transactionTypes)

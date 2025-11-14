@@ -166,7 +166,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                         bodyPadding: const EdgeInsets.symmetric(vertical: 6),
                         footer: StreamBuilder(
                           stream: TransactionService.instance.countTransactions(
-                            predicate: TransactionFilters(
+                            filters: TransactionFilters(
                               status: TransactionStatus.notIn({
                                 TransactionStatus.pending,
                                 TransactionStatus.voided,
@@ -175,8 +175,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                             ),
                           ),
                           builder: (context, snapshot) {
-                            if (!snapshot.hasData ||
-                                snapshot.data!.numberOfRes < 5) {
+                            if (!snapshot.hasData || snapshot.data! < 5) {
                               return const SizedBox.shrink();
                             }
 
@@ -378,15 +377,14 @@ class _ArchiveWarnDialogState extends State<ArchiveWarnDialog> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: TransactionService.instance.countTransactions(
-        predicate: TransactionFilters(
+        filters: TransactionFilters(
           accountsIDs: [widget.account.id],
           minDate: date,
         ),
         convertToPreferredCurrency: false,
       ),
       builder: (context, snapshot) {
-        final hasNoTransactions =
-            !snapshot.hasData || snapshot.data!.numberOfRes == 0;
+        final hasNoTransactions = !snapshot.hasData || snapshot.data! == 0;
 
         return ModalContainer(
           title: t.account.close.title,

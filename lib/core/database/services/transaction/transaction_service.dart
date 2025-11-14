@@ -4,6 +4,7 @@ import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -137,11 +138,41 @@ class TransactionService {
     );
   }
 
-  Stream<TransactionQueryStatResult> countTransactions({
+  Stream<int> countTransactions({
+    TransactionFilters filters = const TransactionFilters(),
+    bool convertToPreferredCurrency = true,
+    DateTime? exchDate,
+  }) {
+    return _countTransactions(
+      predicate: filters,
+      convertToPreferredCurrency: convertToPreferredCurrency,
+      exchDate: exchDate,
+    ).map((event) => event.numberOfRes);
+  }
+
+  Stream<double> getTransactionsValueBalance({
+    TransactionFilters filters = const TransactionFilters(),
+    bool convertToPreferredCurrency = true,
+    DateTime? exchDate,
+  }) {
+    filters = filters.copyWith(
+      status: TransactionStatus.getStatusThatCountsForStats(filters.status),
+    );
+
+    return _countTransactions(
+      predicate: filters,
+      convertToPreferredCurrency: convertToPreferredCurrency,
+      exchDate: exchDate,
+    ).map((event) => event.valueSum);
+  }
+
+  Stream<TransactionQueryStatResult> _countTransactions({
     TransactionFilters predicate = const TransactionFilters(),
     bool convertToPreferredCurrency = true,
     DateTime? exchDate,
   }) {
+    final exchangeDate = exchDate ?? DateTime.now();
+
     if (predicate.transactionTypes == null ||
         predicate.transactionTypes!
             .map((e) => e.index)
@@ -164,7 +195,7 @@ class TransactionService {
                           [TransactionType.I, TransactionType.E],
                     )
                     .toTransactionExpression(),
-                date: (exchDate ?? DateTime.now()),
+                date: exchangeDate,
               )
               .watchSingle(),
 
@@ -177,7 +208,7 @@ class TransactionService {
                       includeReceivingAccountsInAccountFilters: false,
                     )
                     .toTransactionExpression(),
-                date: (exchDate ?? DateTime.now()),
+                date: exchangeDate,
               )
               .watchSingle(),
 
@@ -206,7 +237,7 @@ class TransactionService {
                               ),
                           ],
                     ),
-                date: (exchDate ?? DateTime.now()),
+                date: exchangeDate,
               )
               .watchSingle(),
         ],
@@ -227,7 +258,7 @@ class TransactionService {
     return db
         .countTransactions(
           predicate: predicate.toTransactionExpression(),
-          date: (exchDate ?? DateTime.now()),
+          date: exchangeDate,
         )
         .watchSingle()
         .map(

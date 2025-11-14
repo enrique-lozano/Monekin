@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
@@ -109,7 +108,7 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
             Text(DateFormat.yMMMMd().format(date)),
             StreamBuilder(
               initialData: 0.0,
-              stream: AccountService.instance.getAccountsBalance(
+              stream: TransactionService.instance.getTransactionsValueBalance(
                 filters: widget.filters.copyWith(
                   minDate: DateTime(date.year, date.month, date.day),
                   maxDate: DateTime(date.year, date.month, date.day + 1),

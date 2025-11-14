@@ -36,10 +36,10 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
             child: StreamBuilder(
               stream: TransactionService.instance.countTransactions(
                 convertToPreferredCurrency: false,
-                predicate: const TransactionFilters(isRecurrent: true),
+                filters: const TransactionFilters(isRecurrent: true),
               ),
               builder: (context, snapshot) {
-                final nOfRes = snapshot.data?.numberOfRes ?? 0;
+                final nOfRes = snapshot.data ?? 0;
 
                 return Text(
                   '${nOfRes} ${t.transaction.display(n: nOfRes)}',

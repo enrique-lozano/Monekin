@@ -248,14 +248,14 @@ class _ExportDataPageState extends State<ExportDataPage> {
                     title: Text(t.home.filter_transactions),
                     subtitle: StreamBuilder(
                       stream: TransactionService.instance.countTransactions(
-                        predicate: filters,
+                        filters: filters,
                       ),
                       builder: (context, asyncSnapshot) {
                         return Text(
                           !filters.hasFilter
                               ? t.transaction.list.all
                               : t.backup.export.transactions_to_export(
-                                  n: asyncSnapshot.data?.numberOfRes ?? 0,
+                                  n: asyncSnapshot.data ?? 0,
                                 ),
                         );
                       },

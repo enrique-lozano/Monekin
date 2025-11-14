@@ -3,7 +3,6 @@ import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -168,7 +167,7 @@ class AccountService {
     return Rx.combineLatest(
       [
         initialBalanceQuery,
-        getAccountsBalance(
+        TransactionService.instance.getTransactionsValueBalance(
           filters: trFilters.copyWith(maxDate: date, accountsIDs: accountIds),
           convertToPreferredCurrency: convertToPreferredCurrency,
         ),
@@ -177,23 +176,6 @@ class AccountService {
         return res[0] + res[1];
       },
     );
-  }
-
-  Stream<double> getAccountsBalance({
-    TransactionFilters filters = const TransactionFilters(),
-    bool convertToPreferredCurrency = true,
-  }) {
-    filters = filters.copyWith(
-      status: TransactionStatus.getStatusThatCountsForStats(filters.status),
-    );
-
-    return TransactionService.instance
-        .countTransactions(
-          predicate: filters,
-          exchDate: filters.maxDate ?? DateTime.now(),
-          convertToPreferredCurrency: convertToPreferredCurrency,
-        )
-        .map((event) => event.valueSum);
   }
 
   /// Returns a stream of a double, representing the variation in money for a list of accounts between two dates.
@@ -230,13 +212,14 @@ class AccountService {
       convertToPreferredCurrency: convertToPreferredCurrency,
     );
 
-    final accountsBalanceDuringPeriod = getAccountsBalance(
-      filters: overwrittenFilters.copyWith(
-        minDate: startDate,
-        maxDate: endDate,
-      ),
-      convertToPreferredCurrency: convertToPreferredCurrency,
-    );
+    final accountsBalanceDuringPeriod = TransactionService.instance
+        .getTransactionsValueBalance(
+          filters: overwrittenFilters.copyWith(
+            minDate: startDate,
+            maxDate: endDate,
+          ),
+          convertToPreferredCurrency: convertToPreferredCurrency,
+        );
 
     return Rx.combineLatest(
       [accountsBalanceStartPeriod, accountsBalanceDuringPeriod],

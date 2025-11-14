@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -40,12 +40,13 @@ class IncomeExpenseComparason extends StatelessWidget {
                 children: [
                   Text(t.general.balance),
                   StreamBuilder(
-                    stream: AccountService.instance.getAccountsBalance(
-                      filters: filters.copyWith(
-                        minDate: startDate,
-                        maxDate: endDate,
-                      ),
-                    ),
+                    stream: TransactionService.instance
+                        .getTransactionsValueBalance(
+                          filters: filters.copyWith(
+                            minDate: startDate,
+                            maxDate: endDate,
+                          ),
+                        ),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
                         return const Skeleton(width: 35, height: 32);
@@ -66,7 +67,7 @@ class IncomeExpenseComparason extends StatelessWidget {
         ),
         StreamBuilder(
           stream: Rx.combineLatest2(
-            AccountService.instance.getAccountsBalance(
+            TransactionService.instance.getTransactionsValueBalance(
               filters: filters.copyWith(
                 transactionTypes: [
                   TransactionType.I,
@@ -75,7 +76,7 @@ class IncomeExpenseComparason extends StatelessWidget {
                 maxDate: endDate,
               ),
             ),
-            AccountService.instance.getAccountsBalance(
+            TransactionService.instance.getTransactionsValueBalance(
               filters: filters.copyWith(
                 transactionTypes: [
                   TransactionType.E,

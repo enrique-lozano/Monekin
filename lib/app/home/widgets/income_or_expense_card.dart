@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
@@ -49,7 +49,7 @@ class IncomeOrExpenseCard extends StatelessWidget {
             children: [
               Text(type.displayName(context), style: labelStyle),
               StreamBuilder(
-                stream: AccountService.instance.getAccountsBalance(
+                stream: TransactionService.instance.getTransactionsValueBalance(
                   filters: TransactionFilters(
                     accountsIDs: filters?.accountsIDs,
                     categories: filters?.categories,
