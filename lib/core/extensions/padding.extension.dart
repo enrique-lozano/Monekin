@@ -8,10 +8,12 @@ extension PaddingExtension on EdgeInsets {
   EdgeInsets withSafeBottom(BuildContext context) {
     double bottomSafeAreaPadding = MediaQuery.paddingOf(context).bottom;
 
-    bottomSafeAreaPadding = max(
-      bottomSafeAreaPadding - _bottomOsHeightAdjustment,
-      _bottomOsHeightAdjustment,
-    );
+    if (bottomSafeAreaPadding > 0) {
+      bottomSafeAreaPadding = max(
+        bottomSafeAreaPadding - _bottomOsHeightAdjustment,
+        _bottomOsHeightAdjustment,
+      );
+    }
 
     return EdgeInsets.only(
       left: left,
@@ -26,10 +28,12 @@ extension PaddingDirectionalExtension on EdgeInsetsDirectional {
   EdgeInsetsDirectional withSafeBottom(BuildContext context) {
     double bottomSafeAreaPadding = MediaQuery.paddingOf(context).bottom;
 
-    bottomSafeAreaPadding = max(
-      bottomSafeAreaPadding - _bottomOsHeightAdjustment,
-      _bottomOsHeightAdjustment,
-    );
+    if (bottomSafeAreaPadding > 0) {
+      bottomSafeAreaPadding = max(
+        bottomSafeAreaPadding - _bottomOsHeightAdjustment,
+        _bottomOsHeightAdjustment,
+      );
+    }
 
     return EdgeInsetsDirectional.only(
       start: start,
