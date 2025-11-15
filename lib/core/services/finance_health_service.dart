@@ -199,9 +199,6 @@ class FinanceHealthService {
     final minDate = filters.minDate ?? kDefaultFirstSelectableDate;
     final maxDate = filters.maxDate ?? DateTime.now();
 
-    print(
-      'Calculating months without income from $minDate to $maxDate with filters: $filters',
-    );
     return Rx.combineLatest3(
       TransactionService.instance.countTransactions(filters: filters),
       AccountService.instance.getAccountsMoney(

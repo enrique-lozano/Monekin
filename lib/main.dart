@@ -87,7 +87,6 @@ class MonekinAppEntryPoint extends StatelessWidget {
 
     return TranslationProvider(
       child: MaterialAppContainer(
-        introSeen: appStateData[AppDataKey.introSeen] == '1',
         amoledMode: appStateSettings[SettingKey.amoledMode]! == '1',
         accentColor: appStateSettings[SettingKey.accentColor]!,
         themeMode: getThemeFromString(appStateSettings[SettingKey.themeMode]!),
@@ -156,14 +155,11 @@ class MaterialAppContainer extends StatelessWidget {
     required this.themeMode,
     required this.accentColor,
     required this.amoledMode,
-    required this.introSeen,
   });
 
   final ThemeMode themeMode;
   final String accentColor;
   final bool amoledMode;
-
-  final bool introSeen;
 
   SystemUiOverlayStyle getSystemUiOverlayStyle(Brightness brightness) {
     if (brightness == Brightness.light) {
@@ -191,6 +187,8 @@ class MaterialAppContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     // Get the language of the Intl in each rebuild of the TranslationProvider:
     Intl.defaultLocale = LocaleSettings.currentLocale.languageTag;
+
+    final introSeen = appStateData[AppDataKey.introSeen] == '1';
 
     return DynamicColorBuilder(
       builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
@@ -227,6 +225,7 @@ class MaterialAppContainer extends StatelessWidget {
             );
 
             return Overlay(
+              key: ValueKey("app_overlay_${introSeen ? "main" : "intro"}"),
               initialEntries: [
                 OverlayEntry(
                   builder: (context) => Stack(

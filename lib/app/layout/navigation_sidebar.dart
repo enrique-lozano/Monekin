@@ -35,7 +35,7 @@ class NavigationSidebar extends StatefulWidget {
 class NavigationSidebarState extends State<NavigationSidebar> {
   MainMenuDestination? selectedDestination;
 
-  setSelectedDestination(MainMenuDestination? destination) {
+  void setSelectedDestination(MainMenuDestination? destination) {
     setState(() {
       selectedDestination = destination;
     });
