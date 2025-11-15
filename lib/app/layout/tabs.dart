@@ -13,9 +13,9 @@ class TabsPage extends StatefulWidget {
 }
 
 class TabsPageState extends State<TabsPage> {
-  MainMenuDestination? selectedDestination;
+  AppMenuDestinationsID? selectedDestination;
 
-  void changePage(MainMenuDestination destination) {
+  void changePage(AppMenuDestinationsID destination) {
     navigationSidebarKey.currentState?.setSelectedDestination(destination);
 
     setState(() {
@@ -32,10 +32,10 @@ class TabsPageState extends State<TabsPage> {
       shortLabels: BreakPoint.of(context).isSmallerThan(BreakpointID.xl),
     );
 
-    selectedDestination ??= menuItems.elementAt(0);
+    selectedDestination ??= menuItems.elementAt(0).id;
 
     final selectedNavItemIndex = menuItems.indexWhere(
-      (element) => element.id == selectedDestination!.id,
+      (element) => element.id == selectedDestination!,
     );
 
     return Scaffold(
@@ -55,7 +55,8 @@ class TabsPageState extends State<TabsPage> {
                   .map((e) => e.toNavigationDestinationWidget(context))
                   .toList(),
               selectedIndex: selectedNavItemIndex,
-              onDestinationSelected: (e) => changePage(menuItems.elementAt(e)),
+              onDestinationSelected: (e) =>
+                  changePage(menuItems.elementAt(e).id),
             ),
       body: Builder(
         builder: (context) {
@@ -66,7 +67,7 @@ class TabsPageState extends State<TabsPage> {
 
           return FadeIndexedStack(
             index: allDestinations.indexWhere(
-              (element) => element.id == selectedDestination?.id,
+              (element) => element.id == selectedDestination,
             ),
             duration: const Duration(milliseconds: 300),
             children: allDestinations.map((e) => e.destination).toList(),

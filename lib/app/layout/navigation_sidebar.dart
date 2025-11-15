@@ -33,9 +33,9 @@ class NavigationSidebar extends StatefulWidget {
 }
 
 class NavigationSidebarState extends State<NavigationSidebar> {
-  MainMenuDestination? selectedDestination;
+  AppMenuDestinationsID? selectedDestination;
 
-  void setSelectedDestination(MainMenuDestination? destination) {
+  void setSelectedDestination(AppMenuDestinationsID? destination) {
     setState(() {
       selectedDestination = destination;
     });
@@ -48,15 +48,15 @@ class NavigationSidebarState extends State<NavigationSidebar> {
       shortLabels: BreakPoint.of(context).isSmallerThan(BreakpointID.xl),
     );
 
-    selectedDestination ??= menuItems.elementAt(0);
+    selectedDestination ??= menuItems.elementAt(0).id;
 
     final selectedNavItemIndex = menuItems.indexWhere(
-      (element) => element.id == selectedDestination!.id,
+      (element) => element.id == selectedDestination!,
     );
 
     onDestinationSelected(int e) {
       RouteUtils.popAllRoutesExceptFirst();
-      tabsPageKey.currentState?.changePage(menuItems.elementAt(e));
+      tabsPageKey.currentState?.changePage(menuItems.elementAt(e).id);
     }
 
     final navSidebarWidth = getNavigationSidebarWidth(context);

@@ -64,13 +64,7 @@ class BackupSettingsPage extends StatelessWidget {
                         RouteUtils.popAllRoutesExceptFirst();
 
                         tabsPageKey.currentState!.changePage(
-                          getAllDestinations(
-                            context,
-                            shortLabels: false,
-                          ).firstWhere(
-                            (element) =>
-                                element.id == AppMenuDestinationsID.dashboard,
-                          ),
+                          AppMenuDestinationsID.dashboard,
                         );
 
                         MonekinSnackbar.success(
