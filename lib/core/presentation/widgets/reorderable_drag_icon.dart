@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 class ReorderableDragIcon extends StatelessWidget {
-  const ReorderableDragIcon(
-      {super.key, required this.index, this.enabled = true});
+  const ReorderableDragIcon({
+    super.key,
+    required this.index,
+    this.enabled = true,
+  });
 
   final int index;
   final bool enabled;

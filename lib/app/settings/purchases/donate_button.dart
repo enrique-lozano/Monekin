@@ -4,16 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:monekin/app/settings/purchases/in_app_purchase.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 import '../../../core/presentation/app_colors.dart';
 
 class DonateButton extends StatefulWidget {
-  const DonateButton({
-    super.key,
-    required this.iapConnection,
-  });
+  const DonateButton({super.key, required this.iapConnection});
 
   final InAppPurchase iapConnection;
 
@@ -41,13 +39,21 @@ class _DonateButtonState extends State<DonateButton> {
 
     final Stream purchaseUpdated = IAPConnection.instance.purchaseStream;
 
-    _subscription = purchaseUpdated.listen((purchaseDetailsList) {
-      _listenToPurchaseUpdated(purchaseDetailsList);
-    }, onDone: () {
-      _subscription?.cancel();
-    }, onError: (error) {
-      showSnackbarMessage(context, t.more.help_us.donate_err);
-    }) as StreamSubscription<List<PurchaseDetails>>;
+    _subscription =
+        purchaseUpdated.listen(
+              (purchaseDetailsList) {
+                _listenToPurchaseUpdated(purchaseDetailsList);
+              },
+              onDone: () {
+                _subscription?.cancel();
+              },
+              onError: (error) {
+                MonekinSnackbar.error(
+                  SnackbarParams.fromError(t.more.help_us.donate_err),
+                );
+              },
+            )
+            as StreamSubscription<List<PurchaseDetails>>;
   }
 
   void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
@@ -58,21 +64,19 @@ class _DonateButtonState extends State<DonateButton> {
         // LOADING
       } else {
         if (purchaseDetails.status == PurchaseStatus.error) {
-          showSnackbarMessage(context, t.more.help_us.donate_err);
+          MonekinSnackbar.error(
+            SnackbarParams.fromError(t.more.help_us.donate_err),
+          );
         } else if (purchaseDetails.status == PurchaseStatus.purchased) {
-          showSnackbarMessage(context, t.more.help_us.donate_success);
+          MonekinSnackbar.success(
+            SnackbarParams(t.more.help_us.donate_success),
+          );
         }
         if (purchaseDetails.pendingCompletePurchase) {
           await InAppPurchase.instance.completePurchase(purchaseDetails);
         }
       }
     });
-  }
-
-  showSnackbarMessage(BuildContext context, String msg) {
-    final snackbarDisplayer = ScaffoldMessenger.of(context).showSnackBar;
-
-    snackbarDisplayer(SnackBar(content: Text(msg)));
   }
 
   @override
@@ -84,14 +88,11 @@ class _DonateButtonState extends State<DonateButton> {
       child: InkWell(
         radius: 8,
         onTap: () async {
-          final snackbarDisplayer = ScaffoldMessenger.of(context).showSnackBar;
-
           if (!(await IAPConnection.isAvailable())) {
             // TODO: Implement other payment methods
-            snackbarDisplayer(
-              const SnackBar(
-                content: Text(
-                    'The current platform not supported or the store is not ready yet'),
+            MonekinSnackbar.error(
+              SnackbarParams.fromError(
+                'The current platform not supported or the store is not ready yet',
               ),
             );
 
@@ -100,23 +101,20 @@ class _DonateButtonState extends State<DonateButton> {
 
           const Set<String> productsIDs = <String>{'donate'};
 
-          final ProductDetailsResponse response =
-              await widget.iapConnection.queryProductDetails(productsIDs);
+          final ProductDetailsResponse response = await widget.iapConnection
+              .queryProductDetails(productsIDs);
 
           if (response.notFoundIDs.isNotEmpty) {
-            snackbarDisplayer(
-              SnackBar(
-                content: Text(
-                    "Products not found -> ${response.notFoundIDs.join(',')}"),
+            MonekinSnackbar.error(
+              SnackbarParams.fromError(
+                "Products not found -> ${response.notFoundIDs.join(',')}",
               ),
             );
 
             return;
           } else if (response.error != null) {
-            snackbarDisplayer(
-              SnackBar(
-                content: Text(response.error!.message),
-              ),
+            MonekinSnackbar.error(
+              SnackbarParams.fromError(response.error!.message),
             );
 
             return;
@@ -135,9 +133,12 @@ class _DonateButtonState extends State<DonateButton> {
               ? AppColors.of(context).danger.lighten(0.8)
               : AppColors.of(context).danger.withOpacity(0.2),
           shape: RoundedRectangleBorder(
-              side: BorderSide(
-                  color: Theme.of(context).colorScheme.tertiary, width: 2),
-              borderRadius: BorderRadius.circular(8)),
+            side: BorderSide(
+              color: Theme.of(context).colorScheme.tertiary,
+              width: 2,
+            ),
+            borderRadius: BorderRadius.circular(8),
+          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(

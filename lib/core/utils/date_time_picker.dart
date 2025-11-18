@@ -21,18 +21,21 @@ Future<DateTime?> openDateTimePicker(
     return showTimePicker(
       context: context,
       initialEntryMode: initialTimeEntryMode,
-      initialTime:
-          TimeOfDay(hour: initialDate!.hour, minute: initialDate.minute),
+      initialTime: TimeOfDay(
+        hour: initialDate!.hour,
+        minute: initialDate.minute,
+      ),
     );
   }
 
   DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: initialDate,
-      firstDate: firstDate,
-      initialDatePickerMode: initialDatePickerMode,
-      initialEntryMode: initialEntryMode,
-      lastDate: lastDate);
+    context: context,
+    initialDate: initialDate,
+    firstDate: firstDate,
+    initialDatePickerMode: initialDatePickerMode,
+    initialEntryMode: initialEntryMode,
+    lastDate: lastDate,
+  );
 
   if (pickedDate == null || !showTimePickerAfterDate) return pickedDate;
 

@@ -51,6 +51,7 @@
     "yesterday": "Gestern",
     "filters": "Filter",
     "empty-warn": "Ops! Das ist sehr leer",
+    "search-no-results": "Keine Artikel entsprechen Ihren Suchkriterien",
     "insufficient-data": "Unzureichende Daten",
     "show-more-fields": "Weitere Felder anzeigen",
     "show-less-fields": "Weniger Felder anzeigen",
@@ -324,6 +325,7 @@
       "recurrent-rule-finished": "Die wiederkehrende Regel ist abgeschlossen, es sind keine weiteren Zahlungen mehr zu leisten!"
     },
     "LIST": {
+      "all": "Alle Transaktionen",
       "empty": "Es wurden keine Transaktionen gefunden, die hier angezeigt werden könnten. ",
       "searcher.placeholder": "Suche nach Kategorie, Beschreibung...",
       "searcher.no-results": "Es wurden keine Transaktionen gefunden, die den Suchkriterien entsprechen",
@@ -343,6 +345,7 @@
       }
     },
     "FILTERS": {
+      "title": "Transaktionsfilter",
       "from_value": "Ab Betrag",
       "to_value": "Bis zum Betrag",
       "from_value_def": "Von {{ x }}",
@@ -605,7 +608,9 @@
       "name": "Budgetname",
       "value": "Menge begrenzen",
       "create": "Budget hinzufügen",
+      "create-success": "Budget erfolgreich erstellt",
       "edit": "Budget bearbeiten",
+      "edit-success": "Budget erfolgreich bearbeitet",
       "negative-warn": "Die Budgets dürfen keinen negativen Betrag haben"
     },
     "DETAILS": {
@@ -618,17 +623,27 @@
     }
   },
   "BACKUP": {
+    "no_file_selected": "Keine Datei ausgewählt",
+    "no_directory_selected": "Kein Verzeichnis ausgewählt",
     "EXPORT": {
       "title": "Daten exportieren",
       "title.short": "Export",
+      "type-of-export": "Art des Exports",
+      "other-options": "Optionen",
       "all": "Vollständige Sicherung",
       "all.descr": "Exportiere alle Deine Daten (Konten, Transaktionen, Budgets, Einstellungen...). ",
       "transactions": "Sicherung der Transaktionen",
       "transactions.descr": "Exportiere Deine Transaktionen im CSV-Format, damit Du sie einfacher in anderen Programmen oder Anwendungen analysieren kannst.",
+      "transactions-to-export": {
+        "one": "1 Transaktion zum Exportieren",
+        "other": "{{ n }} Transaktionen zum Exportieren"
+      },
       "description": "Lade Deine Daten in verschiedenen Formaten herunter",
-      "dialog_title": "Datei speichern/senden",
+      "send_file": "Datei senden",
+      "see_folder": "Siehe Ordner",
       "success": "Datei erfolgreich gespeichert/heruntergeladen in {{x}}",
-      "error": "Fehler beim Herunterladen der Datei. "
+      "error": "Fehler beim Herunterladen der Datei. ",
+      "dialog_title": "Datei speichern/senden"
     },
     "IMPORT": {
       "title": "Daten importieren",
@@ -665,8 +680,8 @@
         "success": "Erfolgreich {{x}} Transaktionen importiert"
       },
       "success": "Der Import wurde erfolgreich durchgeführt",
-      "cancelled": "Der Import wurde vom Benutzer abgebrochen",
-      "error": "Fehler beim Importieren der Datei. Bitte kontaktiere den Entwickler lozin.technologies@gmail.com"
+      "error": "Fehler beim Importieren der Datei. Bitte kontaktiere den Entwickler lozin.technologies@gmail.com",
+      "cancelled": "Der Import wurde vom Benutzer abgebrochen"
     },
     "ABOUT": {
       "title": "Informationen zu Deiner Datenbank",
@@ -686,6 +701,7 @@
     "lang.descr": "Sprache, in der die Texte in der App angezeigt werden",
     "lang.help": "Wenn an den Übersetzungen dieser App mitarbeiten möchten, kannst du dich an <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>unser Beschreibung</a> wenden",
     "locale": "Region",
+    "locale_auto": "System",
     "locale.descr": "Lege das für Datumsangaben, Zahlen usw. zu verwendende Format fest.",
     "locale.warn": "Wenn Du die Region änderst, wird die App aktualisiert",
     "first_day_of_week": "Erster Tag der Woche",
@@ -700,6 +716,20 @@
     "dynamic-colors.descr": "Verwende wann immer möglich die Akzentfarbe des Systems",
     "accent-color": "Akzentfarbe",
     "accent-color.descr": "Wähle die Farbe aus, mit der die App bestimmte Teile der Benutzeroberfläche hervorhebt",
+    "font": "Schriftart",
+    "font-platform": "Plattform",
+    "SWIPE-ACTIONS": {
+      "title": "Wischaktionen",
+      "choose-description": "Wählen Sie aus, welche Aktion ausgelöst wird, wenn Sie mit dieser Wischrichtung über ein Transaktionselement in der Liste wischen",
+      "swipe-left": "Wischen Sie nach links",
+      "swipe-right": "Wischen Sie nach rechts",
+      "none": "Keine Aktion",
+      "toggle-reconciled": "Toggle abgeglichen",
+      "toggle-pending": "Umschalten steht aus",
+      "toggle-voided": "Umschalten ungültig",
+      "toggle-unreconciled": "Nicht abgestimmt umschalten",
+      "remove-status": "Status entfernen"
+    },
     "SECURITY": {
       "title": "Sicherheit",
       "private-mode-at-launch": "Privatmodus beim Start",

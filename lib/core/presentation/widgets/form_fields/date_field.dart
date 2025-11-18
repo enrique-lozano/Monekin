@@ -10,23 +10,24 @@ const double kCupertinoDatePickerHeight = 216;
 
 /// Constructor tearoff definition that matches [DateTimeField.new]
 // Note: This should match the definition of the [DateTimeField] constructor
-typedef DateTimeFieldCreator = DateTimeField Function({
-  Key? key,
-  required ValueChanged<DateTime>? onDateSelected,
-  required DateTime? selectedDate,
-  DateFormat? dateFormat,
-  TextStyle? dateTextStyle,
-  InputDecoration? decoration,
-  bool? enabled,
-  DateTime? firstDate,
-  DateTime? initialDate,
-  DatePickerMode? initialDatePickerMode,
-  DatePickerEntryMode initialEntryMode,
-  DateTime? lastDate,
-  DateTimeFieldPickerMode mode,
-  bool use24hFormat,
-  TimePickerEntryMode initialTimePickerEntryMode,
-});
+typedef DateTimeFieldCreator =
+    DateTimeField Function({
+      Key? key,
+      required ValueChanged<DateTime>? onDateSelected,
+      required DateTime? selectedDate,
+      DateFormat? dateFormat,
+      TextStyle? dateTextStyle,
+      InputDecoration? decoration,
+      bool? enabled,
+      DateTime? firstDate,
+      DateTime? initialDate,
+      DatePickerMode? initialDatePickerMode,
+      DatePickerEntryMode initialEntryMode,
+      DateTime? lastDate,
+      DateTimeFieldPickerMode mode,
+      bool use24hFormat,
+      TimePickerEntryMode initialTimePickerEntryMode,
+    });
 
 /// [DateTimeField]
 ///
@@ -50,9 +51,9 @@ class DateTimeField extends StatelessWidget {
     DateTime? lastDate,
     DateFormat? dateFormat,
     this.initialTimePickerEntryMode = TimePickerEntryMode.dial,
-  })  : dateFormat = dateFormat ?? getDateFormatFromDateFieldPickerMode(mode),
-        firstDate = firstDate ?? kDefaultFirstSelectableDate,
-        lastDate = lastDate ?? kDefaultLastSelectableDate;
+  }) : dateFormat = dateFormat ?? getDateFormatFromDateFieldPickerMode(mode),
+       firstDate = firstDate ?? kDefaultFirstSelectableDate,
+       lastDate = lastDate ?? kDefaultLastSelectableDate;
 
   DateTimeField.time({
     super.key,
@@ -67,11 +68,11 @@ class DateTimeField extends StatelessWidget {
     this.initialTimePickerEntryMode = TimePickerEntryMode.dial,
     DateTime? firstDate,
     DateTime? lastDate,
-  })  : initialDatePickerMode = null,
-        mode = DateTimeFieldPickerMode.time,
-        dateFormat = DateFormat.jm(),
-        firstDate = firstDate ?? DateTime(2000),
-        lastDate = lastDate ?? DateTime(2001);
+  }) : initialDatePickerMode = null,
+       mode = DateTimeFieldPickerMode.time,
+       dateFormat = DateFormat.jm(),
+       firstDate = firstDate ?? DateTime(2000),
+       lastDate = lastDate ?? DateTime(2001);
 
   /// Callback for whenever the user selects a [DateTime]
   final ValueChanged<DateTime>? onDateSelected;
@@ -152,8 +153,10 @@ class DateTimeField extends StatelessWidget {
       final TimeOfDay? selectedTime = await showTimePicker(
         context: context,
         initialEntryMode: initialTimePickerEntryMode,
-        initialTime:
-            TimeOfDay(hour: initialDate!.hour, minute: initialDate!.minute),
+        initialTime: TimeOfDay(
+          hour: initialDate!.hour,
+          minute: initialDate!.minute,
+        ),
       );
 
       if (selectedTime != null) {
@@ -183,8 +186,9 @@ class DateTimeField extends StatelessWidget {
     return TextFormField(
       controller: TextEditingController(text: text),
       decoration: (decoration ?? const InputDecoration()).copyWith(
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          hintText: '-- ${t.general.unspecified.toLowerCase()} --'),
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        hintText: '-- ${t.general.unspecified.toLowerCase()} --',
+      ),
       style: dateTextStyle,
       readOnly: true,
       mouseCursor: SystemMouseCursors.click,
@@ -209,7 +213,8 @@ enum DateTimeFieldPickerMode {
 /// [DateTimeFieldPickerMode]. This exists to prevent redundancy in the [DateTimeField]
 /// widget parameters.
 CupertinoDatePickerMode cupertinoModeFromPickerMode(
-    DateTimeFieldPickerMode mode) {
+  DateTimeFieldPickerMode mode,
+) {
   switch (mode) {
     case DateTimeFieldPickerMode.time:
       return CupertinoDatePickerMode.time;

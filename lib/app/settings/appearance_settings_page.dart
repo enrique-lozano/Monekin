@@ -1,15 +1,22 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/app/settings/transaction_swipe_action_selector.dart';
 import 'package:monekin/app/settings/widgets/language_selector.dart';
 import 'package:monekin/app/settings/widgets/monekin_tile_switch.dart';
-import 'package:monekin/app/settings/widgets/supported_locales.dart';
+import 'package:monekin/core/database/services/user-setting/enum/app-fonts.enum.dart';
+import 'package:monekin/core/database/services/user-setting/enum/supported_locales.dart';
+import 'package:monekin/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
 import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/database/services/user-setting/utils/get_theme_from_string.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/presentation/animations/scaled_animated_switcher.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker_modal.dart';
+import 'package:monekin/core/presentation/widgets/dynamic_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/monekin_dropdown_select.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -29,26 +36,29 @@ class SelectItem<T> {
 
   IconData? icon;
 
-  SelectItem({
-    required this.value,
-    required this.label,
-    this.icon,
-  });
+  SelectItem({required this.value, required this.label, this.icon});
 }
 
 class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
-  late GlobalKey<MonekinDropdownSelectState>? _themeDropdownKey = GlobalKey();
+  late final GlobalKey<MonekinDropdownSelectState> _themeDropdownKey =
+      GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
+    final currentLangTag = appStateSettings[SettingKey.appLanguage];
+    final currentSelectedLangDisplayName =
+        appSupportedLocales
+            .firstWhereOrNull(
+              (element) => element.locale.languageTag == currentLangTag,
+            )
+            ?.label ??
+        t.settings.locale_auto;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(t.settings.title_short),
-      ),
+      appBar: AppBar(title: Text(t.settings.title_short)),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.only(bottom: 16).withSafeBottom(context),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -56,50 +66,111 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
             ListTile(
               title: Text(t.settings.lang_title),
               leading: const Icon(Icons.language),
-              subtitle: Text(
-                appSupportedLocales
-                    .firstWhere((element) =>
-                        element.locale.languageTag ==
-                        LocaleSettings.currentLocale.languageTag)
-                    .label,
-              ),
+              subtitle: Text(currentSelectedLangDisplayName),
               onTap: () async {
-                final snackbarDisplayer =
-                    ScaffoldMessenger.of(context).showSnackBar;
-
                 final newLang = await showLanguageSelectorBottomSheet(
                   context,
-                  LanguageSelector(
-                      selectedLangTag:
-                          LocaleSettings.currentLocale.languageTag),
+                  LanguageSelector(selectedLangTag: currentLangTag),
                 );
 
-                if (newLang?.result == null) {
+                if (newLang == null) {
                   return;
                 }
 
-                LocaleSettings.setLocaleRaw(newLang!.result!,
-                    listenToDeviceLocale: true);
+                if (newLang.result != null) {
+                  await LocaleSettings.setLocaleRaw(
+                    newLang.result!,
+                    listenToDeviceLocale: true,
+                  );
+                } else {
+                  await LocaleSettings.useDeviceLocale();
+                }
 
                 try {
                   await UserSettingService.instance.setItem(
                     SettingKey.appLanguage,
-                    newLang.result!,
+                    newLang.result,
                     updateGlobalState: true,
                   );
                 } catch (e) {
-                  snackbarDisplayer(const SnackBar(
-                    content: Text(
-                        'There was an error persisting this setting on your device. Contact the developers for more information'),
-                  ));
+                  MonekinSnackbar.error(
+                    SnackbarParams.fromError(
+                      'There was an error persisting this setting on your device. Contact the developers for more information',
+                    ),
+                  );
                 }
               },
+            ),
+            createListSeparator(context, t.settings.swipe_actions.title),
+
+            buildSwipeActionTileSelector(
+              context,
+              SettingKey.transactionSwipeLeftAction,
+            ),
+            buildSwipeActionTileSelector(
+              context,
+              SettingKey.transactionSwipeRightAction,
             ),
             createListSeparator(context, t.settings.theme_and_colors),
             Builder(
               builder: (context) {
-                final theme =
-                    getThemeFromString(appStateSettings[SettingKey.themeMode]);
+                final font = AppFonts.fromDB(appStateSettings[SettingKey.font]);
+
+                return ListTile(
+                  leading: Icon(Icons.font_download_rounded),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    spacing: 12,
+                    children: [
+                      Flexible(child: Text(t.settings.font)),
+                      Flexible(
+                        child: SelectorContainer(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          child: Text(
+                            font?.fontFamilyName ?? t.settings.font_platform,
+                            style: Theme.of(context).textTheme.bodyLarge!
+                                .copyWith(fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    showDynamicSelectorBottomSheet(
+                      context,
+                      selectorWidget: DynamicSelectorModal(
+                        items: const [null, ...AppFonts.values],
+                        selectedValue: font,
+                        displayNameGetter: (action) =>
+                            action?.fontFamilyName ?? t.settings.font_platform,
+                        elementTitleBuilder: (title, item) => Text(
+                          title,
+                          style: TextStyle(fontFamily: item?.fontFamilyName),
+                        ),
+                        valueGetter: (action) => action,
+                        title: t.settings.font,
+                      ),
+                    ).then((modalResult) async {
+                      if (modalResult == null) return;
+
+                      await UserSettingService.instance.setItem(
+                        SettingKey.font,
+                        modalResult.result?.toDB(),
+                        updateGlobalState: true,
+                      );
+                    });
+                  },
+                );
+              },
+            ),
+            Builder(
+              builder: (context) {
+                final theme = getThemeFromString(
+                  appStateSettings[SettingKey.themeMode],
+                );
 
                 return ListTile(
                   title: Row(
@@ -107,11 +178,11 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
                     children: [
                       Flexible(child: Text(t.settings.theme)),
                       const SizedBox(width: 12),
-                      Flexible(child: _buildThemeDropdown(theme))
+                      Flexible(child: _buildThemeDropdown(theme)),
                     ],
                   ),
                   onTap: () {
-                    _themeDropdownKey!.currentState!.openDropdown();
+                    _themeDropdownKey.currentState!.openDropdown();
                   },
                   leading: ScaledAnimatedSwitcher(
                     keyToWatch: theme.icon(context).toString(),
@@ -148,62 +219,64 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               },
             ),
             StreamBuilder(
-                stream: UserSettingService.instance
-                    .getSettingFromDB(SettingKey.accentColor),
-                initialData: 'auto',
-                builder: (context, snapshot) {
-                  late final Color color;
+              stream: UserSettingService.instance.getSettingFromDB(
+                SettingKey.accentColor,
+              ),
+              initialData: 'auto',
+              builder: (context, snapshot) {
+                late final Color color;
 
-                  if (snapshot.data! == 'auto') {
-                    color = Theme.of(context).colorScheme.primary;
-                  } else {
-                    color = ColorHex.get(snapshot.data!);
-                  }
+                if (snapshot.data! == 'auto') {
+                  color = Theme.of(context).colorScheme.primary;
+                } else {
+                  color = ColorHex.get(snapshot.data!);
+                }
 
-                  return ListTile(
-                    onTap: snapshot.data! == 'auto'
-                        ? null
-                        : () => showColorPickerModal(
-                              context,
-                              ColorPickerModal(
-                                colorOptions: [
-                                  brandBlue.toHex(),
-                                  ...defaultColorPickerOptions
-                                ],
-                                selectedColor: color.toHex(),
-                                onColorSelected: (value) {
-                                  Navigator.pop(context);
+                return ListTile(
+                  onTap: snapshot.data! == 'auto'
+                      ? null
+                      : () => showColorPickerModal(
+                          context,
+                          ColorPickerModal(
+                            colorOptions: [
+                              brandBlue.toHex(),
+                              ...defaultColorPickerOptions,
+                            ],
+                            selectedColor: color.toHex(),
+                            onColorSelected: (value) {
+                              Navigator.pop(context);
 
-                                  setState(() {
-                                    UserSettingService.instance.setItem(
-                                      SettingKey.accentColor,
-                                      value.toHex(),
-                                      updateGlobalState: true,
-                                    );
-                                  });
-                                },
-                              ),
-                            ),
-                    title: Text(t.settings.accent_color),
-                    subtitle: Text(t.settings.accent_color_descr),
-                    enabled: snapshot.data! != 'auto',
-                    trailing: SizedBox(
-                      height: 46,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        clipBehavior: Clip.hardEdge,
-                        width: 46,
-                        height: 46,
-                        decoration: BoxDecoration(
-                          color: color.withOpacity(
-                            snapshot.data! != 'auto' ? 1 : 0.4,
+                              setState(() {
+                                UserSettingService.instance.setItem(
+                                  SettingKey.accentColor,
+                                  value.toHex(),
+                                  updateGlobalState: true,
+                                );
+                              });
+                            },
                           ),
-                          borderRadius: BorderRadius.circular(100),
                         ),
+                  title: Text(t.settings.accent_color),
+                  subtitle: Text(t.settings.accent_color_descr),
+                  enabled: snapshot.data! != 'auto',
+                  trailing: SizedBox(
+                    height: 46,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      clipBehavior: Clip.hardEdge,
+                      width: 46,
+                      height: 46,
+                      decoration: BoxDecoration(
+                        color: color.withOpacity(
+                          snapshot.data! != 'auto' ? 1 : 0.4,
+                        ),
+                        borderRadius: BorderRadius.circular(100),
                       ),
                     ),
-                  );
-                }),
+                  ),
+                );
+              },
+            ),
             createListSeparator(context, t.settings.security.title),
             MonekinTileSwitch(
               title: t.settings.security.private_mode_at_launch,
@@ -216,30 +289,88 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
               },
             ),
             StreamBuilder(
-                stream: PrivateModeService.instance.privateModeStream,
-                builder: (context, snapshot) {
-                  final initialValue = (snapshot.data ?? false);
+              stream: PrivateModeService.instance.privateModeStream,
+              builder: (context, snapshot) {
+                final initialValue = (snapshot.data ?? false);
 
-                  return MonekinTileSwitch(
-                    title: t.settings.security.private_mode,
-                    subtitle: t.settings.security.private_mode_descr,
-                    icon: ScaledAnimatedSwitcher(
-                      keyToWatch: initialValue.toString(),
-                      child: Icon(initialValue
+                return MonekinTileSwitch(
+                  title: t.settings.security.private_mode,
+                  subtitle: t.settings.security.private_mode_descr,
+                  icon: ScaledAnimatedSwitcher(
+                    keyToWatch: initialValue.toString(),
+                    child: Icon(
+                      initialValue
                           ? Icons.lock_outline_rounded
-                          : Icons.lock_open_rounded),
+                          : Icons.lock_open_rounded,
                     ),
-                    initialValue: initialValue,
-                    onSwitch: (bool value) {
-                      setState(() {
-                        PrivateModeService.instance.setPrivateMode(value);
-                      });
-                    },
-                  );
-                }),
+                  ),
+                  initialValue: initialValue,
+                  onSwitch: (bool value) {
+                    setState(() {
+                      PrivateModeService.instance.setPrivateMode(value);
+                    });
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  Builder buildSwipeActionTileSelector(
+    BuildContext context,
+    SettingKey direction,
+  ) {
+    final t = Translations.of(context);
+
+    if (direction != SettingKey.transactionSwipeLeftAction &&
+        direction != SettingKey.transactionSwipeRightAction) {
+      throw Exception(
+        'The direction provided is not valid. Use either transactionSwipeLeftAction or transactionSwipeRightAction',
+      );
+    }
+
+    return Builder(
+      builder: (context) {
+        final selectedAction = TransactionSwipeAction.fromString(
+          appStateSettings[direction],
+        );
+
+        final tileTitle = direction == SettingKey.transactionSwipeLeftAction
+            ? t.settings.swipe_actions.swipe_left
+            : t.settings.swipe_actions.swipe_right;
+
+        final tileIcon = direction == SettingKey.transactionSwipeLeftAction
+            ? Icons.swipe_left
+            : Icons.swipe_right;
+
+        return ListTile(
+          title: Text(tileTitle),
+          subtitle: Text(selectedAction.displayName(context)),
+          onTap: () {
+            showTransactionSwipeActionSelector(
+              context,
+              TransactionSwipeActionSelector(
+                selectedAction: selectedAction,
+                title: tileTitle,
+              ),
+            ).then((result) {
+              if (result == null) return;
+
+              UserSettingService.instance
+                  .setItem(
+                    direction,
+                    result.result?.name,
+                    updateGlobalState: true,
+                  )
+                  .then((value) => setState(() {}));
+            });
+          },
+          leading: Icon(tileIcon),
+        );
+      },
     );
   }
 
@@ -248,25 +379,18 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
       canRequestFocus: false,
       descendantsAreFocusable: false,
       child: MonekinDropdownSelect(
-          key: _themeDropdownKey,
-          initial: theme,
-          compact: true,
-          expanded: false,
-          items: const [
-            ThemeMode.system,
-            ThemeMode.light,
-            ThemeMode.dark,
-          ],
-          getLabel: (x) => x.displayName(context),
-          onChanged: (mode) {
-            UserSettingService.instance
-                .setItem(
-                  SettingKey.themeMode,
-                  mode.name,
-                  updateGlobalState: true,
-                )
-                .then((value) => null);
-          }),
+        key: _themeDropdownKey,
+        initial: theme,
+        compact: true,
+        expanded: false,
+        items: const [ThemeMode.system, ThemeMode.light, ThemeMode.dark],
+        getLabel: (x) => x.displayName(context),
+        onChanged: (mode) {
+          UserSettingService.instance
+              .setItem(SettingKey.themeMode, mode.name, updateGlobalState: true)
+              .then((value) => null);
+        },
+      ),
     );
   }
 }

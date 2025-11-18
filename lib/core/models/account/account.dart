@@ -78,8 +78,8 @@ class Account extends AccountInDB {
     return color != null
         ? ColorHex.get(color!)
         : Theme.of(context).brightness == Brightness.dark
-            ? Theme.of(context).colorScheme.primaryContainer
-            : Theme.of(context).colorScheme.primary;
+        ? Theme.of(context).colorScheme.primaryContainer
+        : Theme.of(context).colorScheme.primary;
   }
 
   IconDisplayer displayIcon(
@@ -94,10 +94,12 @@ class Account extends AccountInDB {
 
     return IconDisplayer(
       supportedIcon: icon,
-      mainColor: getComputedColor(context)
-          .lighten(isDark ? IconDisplayer.darkLightenFactor : 0),
-      secondaryColor: getComputedColor(context)
-          .lighten(isDark ? 0 : IconDisplayer.darkLightenFactor),
+      mainColor: getComputedColor(
+        context,
+      ).lighten(isDark ? IconDisplayer.darkLightenFactor : 0),
+      secondaryColor: getComputedColor(
+        context,
+      ).lighten(isDark ? 0 : IconDisplayer.darkLightenFactor),
       displayMode: IconDisplayMode.polygon,
       size: size,
       borderRadius: 20,
@@ -109,17 +111,18 @@ class Account extends AccountInDB {
   }
 
   static Account fromDB(AccountInDB account, CurrencyInDB currency) => Account(
-      id: account.id,
-      currency: currency,
-      iniValue: account.iniValue,
-      date: account.date,
-      displayOrder: account.displayOrder,
-      description: account.description,
-      iban: account.iban,
-      swift: account.swift,
-      name: account.name,
-      iconId: account.iconId,
-      closingDate: account.closingDate,
-      type: account.type,
-      color: account.color);
+    id: account.id,
+    currency: currency,
+    iniValue: account.iniValue,
+    date: account.date,
+    displayOrder: account.displayOrder,
+    description: account.description,
+    iban: account.iban,
+    swift: account.swift,
+    name: account.name,
+    iconId: account.iconId,
+    closingDate: account.closingDate,
+    type: account.type,
+    color: account.color,
+  );
 }

@@ -40,8 +40,9 @@ class SupportedIcon {
           urlToAssets,
           height: size,
           width: size,
-          colorFilter:
-              color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+          colorFilter: color != null
+              ? ColorFilter.mode(color, BlendMode.srcIn)
+              : null,
         ),
       ),
     );

@@ -26,50 +26,54 @@ class IntroPage extends StatelessWidget {
         const SizedBox(height: 12),
         Text(
           'Monekin',
-          style: Theme.of(context)
-              .textTheme
-              .headlineLarge!
-              .copyWith(fontWeight: FontWeight.w800),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineLarge!.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
-        Text(t.intro.welcome_subtitle,
-            style: Theme.of(context).textTheme.titleMedium!),
+        Text(
+          t.intro.welcome_subtitle,
+          style: Theme.of(context).textTheme.titleMedium!,
+        ),
         const SizedBox(height: 4),
         Text(
           t.intro.welcome_subtitle2,
           style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.bold,
-              ),
+            color: Theme.of(context).colorScheme.primary,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ],
     );
   }
 
   Widget buildSecondSection(BuildContext context) {
+    final footerStyle = Theme.of(context).textTheme.bodySmall!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Text(
           t.intro.offline_descr_title,
-          style: Theme.of(context)
-              .textTheme
-              .labelSmall!
-              .copyWith(fontWeight: FontWeight.w600),
+          style: Theme.of(
+            context,
+          ).textTheme.labelSmall!.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 2),
         Text(
           t.intro.offline_descr,
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall!
-              .copyWith(fontWeight: FontWeight.w300),
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall!.copyWith(fontWeight: FontWeight.w300),
         ),
         const SizedBox(height: 12),
         FilledButton.icon(
-          onPressed: () => RouteUtils.pushRoute(context, const OnboardingPage(),
-              withReplacement: true),
+          onPressed: () => RouteUtils.pushRoute(
+            context,
+            const OnboardingPage(),
+            withReplacement: true,
+          ),
           icon: const Icon(Icons.person_2_rounded, size: 24),
           label: Container(
             alignment: Alignment.centerLeft,
@@ -82,16 +86,8 @@ class IntroPage extends StatelessWidget {
         HTMLText(
           textAlign: TextAlign.center,
           htmlString: t.intro.welcome_footer,
-          defaultTextStyle: const TextStyle(
-            fontSize: 12.5,
-            fontWeight: FontWeight.w200,
-          ),
-          tags: {
-            'a': TextStyle(
-                color: AppColors.of(context).link,
-                fontSize: 12.5,
-                fontWeight: FontWeight.w200)
-          },
+          defaultTextStyle: footerStyle,
+          tags: {'a': footerStyle.copyWith(color: AppColors.of(context).link)},
         ),
       ],
     );
@@ -107,20 +103,26 @@ class IntroPage extends StatelessWidget {
             mdChild: Row(
               children: [
                 Flexible(
-                    flex: 1,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 24),
-                      child: buildFirstSection(context),
-                    )),
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 24,
+                    ),
+                    child: buildFirstSection(context),
+                  ),
+                ),
                 const VerticalDivider(),
                 Flexible(
-                    flex: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 24),
-                      child: buildSecondSection(context),
-                    )),
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 24,
+                    ),
+                    child: buildSecondSection(context),
+                  ),
+                ),
               ],
             ),
             child: Column(

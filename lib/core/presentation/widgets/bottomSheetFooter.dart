@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 class BottomSheetFooter extends StatelessWidget {
-  const BottomSheetFooter(
-      {super.key,
-      this.onSaved,
-      this.showCloseIcon = true,
-      this.submitText,
-      this.submitIcon = Icons.save});
+  const BottomSheetFooter({
+    super.key,
+    this.onSaved,
+    this.showCloseIcon = true,
+    this.submitText,
+    this.submitIcon = Icons.save,
+  });
 
   /// The text inside the submiit button. Defaults to "save" in the current language
   final String? submitText;
@@ -42,32 +43,34 @@ class BottomSheetFooter extends StatelessWidget {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  style: IconButton.styleFrom(
-                    side: BorderSide(color: colors.outline),
-                    backgroundColor: colors.surface,
-                  ).copyWith(
-                    foregroundColor: WidgetStateProperty.resolveWith(
-                        (Set<WidgetState> states) {
-                      if (states.contains(WidgetState.pressed)) {
-                        return colors.onSurface;
-                      }
-                      return null;
-                    }),
-                  ),
+                  style:
+                      IconButton.styleFrom(
+                        side: BorderSide(color: colors.outline),
+                        backgroundColor: colors.surface,
+                      ).copyWith(
+                        foregroundColor: WidgetStateProperty.resolveWith((
+                          Set<WidgetState> states,
+                        ) {
+                          if (states.contains(WidgetState.pressed)) {
+                            return colors.onSurface;
+                          }
+                          return null;
+                        }),
+                      ),
                 ),
               FilledButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    disabledBackgroundColor:
-                        Colors.grey[200], // Background Color
-                    disabledForegroundColor: Colors.grey, //Text Color
-                  ),
-                  icon: Icon(submitIcon),
-                  label: Text(submitText ?? t.ui_actions.save),
-                  onPressed: onSaved != null
-                      ? () {
-                          onSaved!();
-                        }
-                      : null),
+                style: ElevatedButton.styleFrom(
+                  disabledBackgroundColor: Colors.grey[200], // Background Color
+                  disabledForegroundColor: Colors.grey, //Text Color
+                ),
+                icon: Icon(submitIcon),
+                label: Text(submitText ?? t.ui_actions.save),
+                onPressed: onSaved != null
+                    ? () {
+                        onSaved!();
+                      }
+                    : null,
+              ),
             ],
           ),
         ),

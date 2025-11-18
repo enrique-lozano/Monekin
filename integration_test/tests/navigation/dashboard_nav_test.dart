@@ -21,19 +21,25 @@ void main() {
 
     await tester.tap(find.text('User'));
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(EditProfileModal, t.settings.edit_profile),
-        findsOneWidget);
+    expect(
+      find.widgetWithText(EditProfileModal, t.settings.edit_profile),
+      findsOneWidget,
+    );
     await tester.tap(find.byIcon(Icons.close));
 
     await tester.pumpAndSettle();
 
     final displayedMonth = find.descendant(
-        of: find.byType(ActionChip).first, matching: find.byType(Text));
+      of: find.byType(ActionChip).first,
+      matching: find.byType(Text),
+    );
 
     await tester.tap(displayedMonth);
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(DatePeriodModal, t.general.time.ranges.display),
-        findsOneWidget);
+    expect(
+      find.widgetWithText(DatePeriodModal, t.general.time.ranges.display),
+      findsOneWidget,
+    );
     await tester.tap(find.byIcon(Icons.close));
 
     await tester.pumpAndSettle();
@@ -45,11 +51,14 @@ void main() {
     await tester.pageBack();
 
     await tester.pumpAndSettle();
-    await tester
-        .tap(find.widgetWithText(FloatingActionButton, t.transaction.create));
+    await tester.tap(
+      find.widgetWithText(FloatingActionButton, t.transaction.create),
+    );
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(Dialog, t.home.should_create_account_header),
-        findsOneWidget);
+    expect(
+      find.widgetWithText(Dialog, t.home.should_create_account_header),
+      findsOneWidget,
+    );
     await tester.tap(find.text(t.ui_actions.continue_text));
     await tester.pumpAndSettle();
     expect(find.byType(AccountFormPage), findsOneWidget);

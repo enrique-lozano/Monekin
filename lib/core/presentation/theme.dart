@@ -1,5 +1,7 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/core/database/services/user-setting/enum/app-fonts.enum.dart';
+import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 
 import 'app_colors.dart';
@@ -90,24 +92,32 @@ ThemeData getThemeData(
     darkColorScheme = fallbackScheme;
   }
 
-  AppColors customAppColors =
-      AppColors.fromColorScheme(isDark ? darkColorScheme : lightColorScheme);
+  AppColors customAppColors = AppColors.fromColorScheme(
+    isDark ? darkColorScheme : lightColorScheme,
+  );
+
+  final fontFamily = AppFonts.fromDB(
+    appStateSettings[SettingKey.font],
+  )?.fontFamilyName;
 
   theme = ThemeData(
-      colorScheme: isDark ? darkColorScheme : lightColorScheme,
-      brightness: isDark ? Brightness.dark : Brightness.light,
-      useMaterial3: true,
-      fontFamily: 'Jost',
-      extensions: [customAppColors]);
+    colorScheme: isDark ? darkColorScheme : lightColorScheme,
+    brightness: isDark ? Brightness.dark : Brightness.light,
+    useMaterial3: true,
+    fontFamily: fontFamily,
+    extensions: [customAppColors],
+  );
 
-  final textTheme =
-      theme.textTheme.withDifferentBodyColors(customAppColors.textBody);
+  final textTheme = theme.textTheme.withDifferentBodyColors(
+    customAppColors.textBody,
+  );
 
   final listTileSmallText = textTheme.bodyMedium?.copyWith(
     fontSize: 14,
     wordSpacing: 0,
     decorationThickness: 1,
-    fontFamily: 'Jost',
+    fontWeight: FontWeight.bold,
+    fontFamily: fontFamily,
   );
 
   return theme.copyWith(
@@ -142,8 +152,9 @@ ThemeData getThemeData(
     ),
     listTileTheme: theme.listTileTheme.copyWith(
       minVerticalPadding: 8,
-      subtitleTextStyle:
-          listTileSmallText?.copyWith(fontWeight: FontWeight.w300),
+      subtitleTextStyle: listTileSmallText?.copyWith(
+        fontWeight: FontWeight.w300,
+      ),
       leadingAndTrailingTextStyle: listTileSmallText,
     ),
   );

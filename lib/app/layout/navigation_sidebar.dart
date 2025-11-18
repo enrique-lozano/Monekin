@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/home/widgets/navigation_drawer.dart';
+import 'package:monekin/app/layout/navigation_drawer.dart';
 import 'package:monekin/app/settings/widgets/display_app_icon.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
@@ -43,13 +43,16 @@ class NavigationSidebarState extends State<NavigationSidebar> {
 
   @override
   Widget build(BuildContext context) {
-    final menuItems = getDestinations(context,
-        shortLabels: BreakPoint.of(context).isSmallerThan(BreakpointID.xl));
+    final menuItems = getDestinations(
+      context,
+      shortLabels: BreakPoint.of(context).isSmallerThan(BreakpointID.xl),
+    );
 
     selectedDestination ??= menuItems.elementAt(0);
 
-    final selectedNavItemIndex = menuItems
-        .indexWhere((element) => element.id == selectedDestination!.id);
+    final selectedNavItemIndex = menuItems.indexWhere(
+      (element) => element.id == selectedDestination!.id,
+    );
 
     onDestinationSelected(int e) {
       RouteUtils.popAllRoutesExceptFirst();
@@ -65,24 +68,26 @@ class NavigationSidebarState extends State<NavigationSidebar> {
       child: BreakpointContainer(
         mdChild: SafeArea(
           child: NavigationRail(
-              leading: const SizedBox(height: 8),
-              backgroundColor: Theme.of(context).cardColor,
-              trailing: Expanded(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 16, top: 16),
-                    child: DisplayAppIcon(height: navSidebarWidth - 48),
-                  ),
+            leading: const SizedBox(height: 8),
+            backgroundColor: Theme.of(context).cardColor,
+            trailing: Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 16, top: 16),
+                  child: DisplayAppIcon(height: navSidebarWidth - 48),
                 ),
               ),
-              labelType: NavigationRailLabelType.all,
-              destinations: menuItems
-                  .map((e) => e.toNavigationRailDestinationWidget())
-                  .toList(),
-              onDestinationSelected: onDestinationSelected,
-              selectedIndex:
-                  selectedNavItemIndex < 0 ? null : selectedNavItemIndex),
+            ),
+            labelType: NavigationRailLabelType.all,
+            destinations: menuItems
+                .map((e) => e.toNavigationRailDestinationWidget())
+                .toList(),
+            onDestinationSelected: onDestinationSelected,
+            selectedIndex: selectedNavItemIndex < 0
+                ? null
+                : selectedNavItemIndex,
+          ),
         ),
         xlChild: SafeArea(
           child: SideNavigationDrawer(

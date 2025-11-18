@@ -4,8 +4,11 @@ import 'package:monekin/core/database/services/shared/key_value_pair.dart';
 import 'package:monekin/main.dart';
 
 /// Base service to handle key-value pairs for any table
-abstract class KeyValueService<KeyType extends Enum, TableType extends Table,
-    RowType> {
+abstract class KeyValueService<
+  KeyType extends Enum,
+  TableType extends Table,
+  RowType
+> {
   final AppDB db;
   final TableInfo<TableType, RowType> table;
   final Map<KeyType, String?> globalStateMap;
@@ -21,7 +24,7 @@ abstract class KeyValueService<KeyType extends Enum, TableType extends Table,
   });
 
   Future<void> initializeGlobalStateMap() async {
-    final savedSettings = await db.select(table).watch().first;
+    final savedSettings = await db.select(table).get();
 
     for (final savedSetting in savedSettings.map(rowToKeyPairInstance)) {
       globalStateMap[savedSetting.key] = savedSetting.value;
@@ -42,7 +45,9 @@ abstract class KeyValueService<KeyType extends Enum, TableType extends Table,
     globalStateMap[itemKey] = itemValue;
 
     try {
-      await db.into(table).insert(
+      await db
+          .into(table)
+          .insert(
             toDbRow(KeyValuePairInDB(key: itemKey, value: itemValue)),
             mode: InsertMode.insertOrReplace,
           );
@@ -59,7 +64,8 @@ abstract class KeyValueService<KeyType extends Enum, TableType extends Table,
   }
 
   Stream<List<RowType>> getItemsFromDB(
-      Expression<bool> Function(TableType) filter) {
+    Expression<bool> Function(TableType) filter,
+  ) {
     return (db.select(table)..where(filter)).watch();
   }
 }

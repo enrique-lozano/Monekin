@@ -3,7 +3,6 @@ import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -24,8 +23,9 @@ class AccountService {
   }
 
   Future<int> deleteAccount(String accountId) {
-    return (db.delete(db.accounts)..where((tbl) => tbl.id.equals(accountId)))
-        .go();
+    return (db.delete(
+      db.accounts,
+    )..where((tbl) => tbl.id.equals(accountId))).go();
   }
 
   Stream<List<Account>> getAccounts({
@@ -37,7 +37,8 @@ class AccountService {
     return db
         .getAccountsWithFullData(
           predicate: predicate,
-          orderBy: orderBy ??
+          orderBy:
+              orderBy ??
               (acc, curr) => OrderBy([OrderingTerm.asc(acc.displayOrder)]),
           limit: (a, currency) => Limit(limit ?? -1, offset),
         )
@@ -45,8 +46,10 @@ class AccountService {
   }
 
   Stream<Account?> getAccountById(String id) {
-    return getAccounts(predicate: (a, c) => a.id.equals(id), limit: 1)
-        .map((res) => res.firstOrNull);
+    return getAccounts(
+      predicate: (a, c) => a.id.equals(id),
+      limit: 1,
+    ).map((res) => res.firstOrNull);
   }
 
   String _joinAccountAndRate(DateTime? date, {String columnName = 'excRate'}) =>
@@ -142,13 +145,13 @@ class AccountService {
           """,
           readsFrom: {
             db.accounts,
-            if (convertToPreferredCurrency) db.exchangeRates
+            if (convertToPreferredCurrency) db.exchangeRates,
           },
           variables: [
             Variable.withDateTime(date),
             if (convertToPreferredCurrency) Variable.withDateTime(date),
             if (accountIds != null)
-              for (final id in accountIds) Variable.withString(id)
+              for (final id in accountIds) Variable.withString(id),
           ],
         )
         .watchSingleOrNull()
@@ -161,28 +164,18 @@ class AccountService {
         });
 
     // Sum the acount initial balance and the balance of the transactions
-    return Rx.combineLatest([
-      initialBalanceQuery,
-      getAccountsBalance(
-        filters: trFilters.copyWith(maxDate: date, accountsIDs: accountIds),
-        convertToPreferredCurrency: convertToPreferredCurrency,
-      )
-    ], (res) => res[0] + res[1]);
-  }
-
-  Stream<double> getAccountsBalance({
-    TransactionFilters filters = const TransactionFilters(),
-    bool convertToPreferredCurrency = true,
-  }) {
-    filters = filters.copyWith(
-        status: TransactionStatus.getStatusThatCountsForStats(filters.status));
-
-    return TransactionService.instance
-        .countTransactions(
-            predicate: filters,
-            exchDate: filters.maxDate ?? DateTime.now(),
-            convertToPreferredCurrency: convertToPreferredCurrency)
-        .map((event) => event.valueSum);
+    return Rx.combineLatest(
+      [
+        initialBalanceQuery,
+        TransactionService.instance.getTransactionsValueBalance(
+          filters: trFilters.copyWith(maxDate: date, accountsIDs: accountIds),
+          convertToPreferredCurrency: convertToPreferredCurrency,
+        ),
+      ],
+      (res) {
+        return res[0] + res[1];
+      },
+    );
   }
 
   /// Returns a stream of a double, representing the variation in money for a list of accounts between two dates.
@@ -192,8 +185,8 @@ class AccountService {
   /// sets it to the minimum date in the list of accounts.
   ///
   /// You can add filters for the transactions that will be taken into account to calculate
-  /// this value, via the [trFilters] param. We will overwrite the accountsIds, the maxDate
-  /// and the minDate param of this filter, based on the other params in this func.
+  /// this value, via the [trFilters] param. We will overwrite the accountsIds
+  /// param of this filter, based on the param in this func.
   Stream<double> getAccountsMoneyVariation({
     required List<Account> accounts,
     DateTime? startDate,
@@ -207,27 +200,35 @@ class AccountService {
     startDate ??= accounts.map((e) => e.date).min;
 
     final overwrittenFilters = trFilters.copyWith(
-      maxDate: endDate,
-      minDate: startDate,
       accountsIDs: accounts.map((a) => a.id).toList(),
     );
 
     final Iterable<String> accountIds = accounts.map((e) => e.id);
 
     final accountsBalanceStartPeriod = getAccountsMoney(
-        accountIds: accountIds,
-        date: startDate,
-        trFilters: overwrittenFilters,
-        convertToPreferredCurrency: convertToPreferredCurrency);
+      accountIds: accountIds,
+      date: startDate,
+      trFilters: overwrittenFilters,
+      convertToPreferredCurrency: convertToPreferredCurrency,
+    );
 
-    final accountsBalanceEndPeriod = getAccountsMoney(
-        accountIds: accountIds,
-        date: endDate,
-        trFilters: overwrittenFilters,
-        convertToPreferredCurrency: convertToPreferredCurrency);
+    final accountsBalanceDuringPeriod = TransactionService.instance
+        .getTransactionsValueBalance(
+          filters: overwrittenFilters.copyWith(
+            minDate: startDate,
+            maxDate: endDate,
+          ),
+          convertToPreferredCurrency: convertToPreferredCurrency,
+        );
 
     return Rx.combineLatest(
-        [accountsBalanceStartPeriod, accountsBalanceEndPeriod],
-        (res) => (res[1] - res[0]) / res[0]);
+      [accountsBalanceStartPeriod, accountsBalanceDuringPeriod],
+      (res) {
+        final startBalance = res[0];
+        final finalBalance = res[1] + startBalance;
+
+        return (finalBalance - startBalance) / startBalance;
+      },
+    );
   }
 }

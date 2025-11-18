@@ -51,6 +51,7 @@
     "yesterday": "昨天",
     "filters": "過濾",
     "empty-warn": "哦！這裡非常空",
+    "search-no-results": "沒有符合您搜索條件的商品",
     "insufficient-data": "數據不足",
     "show-more-fields": "顯示更多欄位",
     "show-less-fields": "顯示較少的欄位",
@@ -324,6 +325,7 @@
       "recurrent-rule-finished": "循環規則已完成，無需再支付！"
     },
     "LIST": {
+      "all": "所有交易",
       "empty": "未發現此處顯示的交易。在應用程式中添加一些交易，也許您下次會有更好的運氣",
       "searcher.placeholder": "按類別、描述搜尋...",
       "searcher.no-results": "未找到符合搜尋條件的交易",
@@ -343,6 +345,7 @@
       }
     },
     "FILTERS": {
+      "title": "交易過濾器",
       "from_value": "從金額",
       "to_value": "最多金額",
       "from_value_def": "來自 {{x}}",
@@ -605,7 +608,9 @@
       "name": "預算名稱",
       "value": "數量限制",
       "create": "添加預算",
+      "create-success": "預算創建成功",
       "edit": "編輯預算",
+      "edit-success": "預算編輯成功",
       "negative-warn": "預算不能有負數"
     },
     "DETAILS": {
@@ -618,17 +623,27 @@
     }
   },
   "BACKUP": {
+    "no_file_selected": "未選擇文件",
+    "no_directory_selected": "未選擇目錄",
     "EXPORT": {
       "title": "匯出您的資料",
       "title.short": "匯出",
+      "type-of-export": "出口類型",
+      "other-options": "選項",
       "all": "完整備份",
       "all.descr": "匯出您的所有資料（帳戶、交易、預算、設定...）。隨時重新匯入它們，這樣您就不會丟失任何內容。",
       "transactions": "交易備份",
       "transactions.descr": "以 CSV 格式匯出您的交易，以便您可以在其他程式或應用程式中更輕鬆地分析它們。",
+      "transactions-to-export": {
+        "one": "1 筆交易要導出",
+        "other": "要導出的 {{ n }} 筆交易"
+      },
       "description": "以不同格式下載資料",
-      "dialog_title": "儲存/傳送文件",
+      "send_file": "發送文件",
+      "see_folder": "查看文件夾",
       "success": "檔案已在{{x}}中成功儲存/下載",
-      "error": "下載檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員"
+      "error": "下載檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員",
+      "dialog_title": "儲存/傳送文件"
     },
     "IMPORT": {
       "title": "匯入您的資料",
@@ -665,8 +680,8 @@
         "success": "已成功導入{{x}}筆交易"
       },
       "success": "導入成功",
-      "cancelled": "導入已被用戶取消",
-      "error": "匯入檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員。"
+      "error": "匯入檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員。",
+      "cancelled": "導入已被用戶取消"
     },
     "ABOUT": {
       "title": "有關您的資料庫的資訊",
@@ -686,6 +701,7 @@
     "lang.descr": "應用程式中顯示文字的語言",
     "lang.help": "如果您想與此應用程式的翻譯合作，您可以參考<a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>我們的指南</a>",
     "locale": "地區",
+    "locale_auto": "系統",
     "locale.descr": "設定用於日期、數字的格式...",
     "locale.warn": "更改區域時應用程式將更新",
     "first_day_of_week": "一週的第一天",
@@ -700,6 +716,20 @@
     "dynamic-colors.descr": "盡可能使用系統強調色",
     "accent-color": "強調色",
     "accent-color.descr": "選擇應用程式用來強調介面某些部分的顏色",
+    "font": "字體",
+    "font-platform": "平台",
+    "SWIPE-ACTIONS": {
+      "title": "滑動操作",
+      "choose-description": "選擇當您使用此滑動方向滑動列表中的交易項目時將觸發什麼操作",
+      "swipe-left": "向左滑動",
+      "swipe-right": "向右滑動",
+      "none": "無動作",
+      "toggle-reconciled": "切換已調節",
+      "toggle-pending": "切換待處理",
+      "toggle-voided": "切換作廢",
+      "toggle-unreconciled": "切換不可調和",
+      "remove-status": "刪除狀態"
+    },
     "SECURITY": {
       "title": "安全",
       "private-mode-at-launch": "啟動時啟用的隱私模式",

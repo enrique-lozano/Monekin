@@ -6,9 +6,10 @@ Widget createListSeparator(BuildContext context, String title) {
     child: Text(
       title.toUpperCase(),
       style: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w700,
-          color: Theme.of(context).colorScheme.primary),
+        fontSize: 14,
+        fontWeight: FontWeight.bold,
+        color: Theme.of(context).colorScheme.primary,
+      ),
     ),
   );
 }

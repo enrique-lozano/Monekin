@@ -20,8 +20,9 @@ class CurrencyService {
   }
 
   Future<int> deleteCurrency(String currencyId) {
-    return (db.delete(db.categories)..where((tbl) => tbl.id.equals(currencyId)))
-        .go();
+    return (db.delete(
+      db.categories,
+    )..where((tbl) => tbl.id.equals(currencyId))).go();
   }
 
   Stream<List<Currency>?> getCurrencies() {
@@ -54,20 +55,23 @@ class CurrencyService {
     return settingService
         .getSettingFromDB(SettingKey.preferredCurrency)
         .asyncMap((currencyCode) async {
-      if (currencyCode == null) {
-        currencyCode = await getDeviceDefaultCurrencyCode();
+          if (currencyCode == null) {
+            currencyCode = await getDeviceDefaultCurrencyCode();
 
-        await settingService.setItem(
-            SettingKey.preferredCurrency, currencyCode);
-      }
+            await settingService.setItem(
+              SettingKey.preferredCurrency,
+              currencyCode,
+            );
+          }
 
-      return (await getCurrencyByCode(currencyCode).first)!;
-    });
+          return (await getCurrencyByCode(currencyCode).first)!;
+        });
   }
 
   Future<dynamic> getInitialCurrencies() async {
-    String defaultCurrencies =
-        await rootBundle.loadString('assets/sql/initial_currencies.json');
+    String defaultCurrencies = await rootBundle.loadString(
+      'assets/sql/initial_currencies.json',
+    );
 
     return jsonDecode(defaultCurrencies);
   }

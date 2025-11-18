@@ -18,10 +18,7 @@ class FinanceHealthAttrScore {
   /// The weight of this stat in the financial health
   final int weight;
 
-  const FinanceHealthAttrScore({
-    required this.score,
-    required this.weight,
-  });
+  const FinanceHealthAttrScore({required this.score, required this.weight});
 
   bool get canNotBeCalculated => score == null;
 
@@ -42,12 +39,11 @@ class FinanceHealthAttrScore {
   String getScoreReviewTitle(
     BuildContext context, {
     GenderContext genderContext = GenderContext.male,
-  }) =>
-      FinanceHealthData.getHealthyValueReviewTitle(
-        context,
-        value: score,
-        genderContext: genderContext,
-      );
+  }) => FinanceHealthData.getHealthyValueReviewTitle(
+    context,
+    value: score,
+    genderContext: genderContext,
+  );
 }
 
 class FinanceHealthData {
@@ -66,8 +62,10 @@ class FinanceHealthData {
   bool get healthyScoreCalculable => healthyScore != null;
 
   double? get healthyScore {
-    if ([savingPercentageScore, monthsWithoutIncomeScore]
-        .any((element) => element.canNotBeCalculated)) {
+    if ([
+      savingPercentageScore,
+      monthsWithoutIncomeScore,
+    ].any((element) => element.canNotBeCalculated)) {
       return null;
     }
 
@@ -85,10 +83,11 @@ class FinanceHealthData {
 
   FinanceHealthAttrScore get monthsWithoutIncomeScore {
     return FinanceHealthAttrScore(
-        score: monthsWithoutIncome == null
-            ? null
-            : min(monthsWithoutIncome! * 10, 100),
-        weight: monthsWithoutIncomeWeight);
+      score: monthsWithoutIncome == null
+          ? null
+          : min(monthsWithoutIncome! * 10, 100),
+      weight: monthsWithoutIncomeWeight,
+    );
   }
 
   FinanceHealthAttrScore get savingPercentageScore {
@@ -103,7 +102,9 @@ class FinanceHealthData {
     toReturn = 100 / (1 + exp(-1.25 - 0.2 * (savingsPercentage - 15))) - 2;
 
     return FinanceHealthAttrScore(
-        score: toReturn, weight: savingPercentageWeight);
+      score: toReturn,
+      weight: savingPercentageWeight,
+    );
   }
 
   final int savingPercentageWeight = 50;
@@ -111,8 +112,8 @@ class FinanceHealthData {
 
   static Color getHealthyValueColor(double? healthyValue) =>
       healthyValue == null
-          ? Colors.grey
-          : HSLColor.fromAHSL(1, healthyValue, 1, 0.35).toColor();
+      ? Colors.grey
+      : HSLColor.fromAHSL(1, healthyValue, 1, 0.35).toColor();
 
   Color getHealthyScoreColor() => getHealthyValueColor(healthyScore);
 
@@ -149,8 +150,9 @@ class FinanceHealthData {
     final t = Translations.of(context);
 
     if (value == null) {
-      return t.financial_health.review
-          .insufficient_data(context: genderContext);
+      return t.financial_health.review.insufficient_data(
+        context: genderContext,
+      );
     } else if (value < 20) {
       return t.financial_health.review.very_bad(context: genderContext);
     } else if (value < 40) {
@@ -183,8 +185,9 @@ class FinanceHealthData {
       return t.financial_health.months_without_income.text_infinite;
     }
 
-    return t.financial_health.months_without_income
-        .text_other(n: monthsWithoutIncome!.toStringAsFixed(0));
+    return t.financial_health.months_without_income.text_other(
+      n: monthsWithoutIncome!.toStringAsFixed(0),
+    );
   }
 }
 
@@ -196,51 +199,42 @@ class FinanceHealthService {
     final minDate = filters.minDate ?? kDefaultFirstSelectableDate;
     final maxDate = filters.maxDate ?? DateTime.now();
 
-    return Rx.combineLatest4(
-        TransactionService.instance
-            .countTransactions(predicate: filters)
-            .map((event) => event.numberOfRes),
-        AccountService.instance.getAccountsBalance(
-          filters: filters,
-        ),
-        AccountService.instance
-            .getAccountsBalance(
-              filters: filters.copyWith(
-                transactionTypes: [TransactionType.E],
-              ),
-            )
-            .map((e) => e.abs()),
-        AccountService.instance
-            .getAccountsMoney(
-              date: minDate,
-              trFilters: filters.copyWith(minDate: null),
-            )
-            .map((event) => max(event, 0)),
-        (numberOfTransactions, balance, expense, initialMoney) {
-      if (numberOfTransactions < 4 || expense == 0) {
-        return null;
-      }
+    print(
+      'Calculating months without income from $minDate to $maxDate with filters: $filters',
+    );
+    return Rx.combineLatest3(
+      TransactionService.instance.countTransactions(filters: filters),
+      AccountService.instance.getAccountsMoney(
+        accountIds: filters.accountsIDs,
+        trFilters: filters.copyWithNull(minDate: true),
+        date: maxDate,
+      ),
+      TransactionService.instance
+          .getTransactionsValueBalance(
+            filters: filters.copyWith(transactionTypes: [TransactionType.E]),
+          )
+          .map((e) => e.abs()),
+      (numberOfTransactions, accountsMoney, expense) {
+        if (numberOfTransactions < 4 || expense == 0) {
+          return null;
+        }
 
-      final dateDiff = maxDate.difference(minDate).inDays;
+        final dateDiff = maxDate.difference(minDate).inDays;
+        final monthlyExpense = expense / dateDiff * 30;
 
-      return (initialMoney + balance) / expense / dateDiff * 30;
-    });
+        return accountsMoney / monthlyExpense;
+      },
+    );
   }
 
   /// Returns a number (from 0 to 100) with the user's savings percentage for a given period (if specified)
-  Stream<double> getSavingPercentage({
-    required TransactionFilters filters,
-  }) {
+  Stream<double> getSavingPercentage({required TransactionFilters filters}) {
     return StreamZip([
-      AccountService.instance.getAccountsBalance(
-        filters: filters.copyWith(
-          transactionTypes: [TransactionType.I],
-        ),
+      TransactionService.instance.getTransactionsValueBalance(
+        filters: filters.copyWith(transactionTypes: [TransactionType.I]),
       ),
-      AccountService.instance.getAccountsBalance(
-        filters: filters.copyWith(
-          transactionTypes: [TransactionType.E],
-        ),
+      TransactionService.instance.getTransactionsValueBalance(
+        filters: filters.copyWith(transactionTypes: [TransactionType.E]),
       ),
     ]).map((res) {
       final income = res[0];

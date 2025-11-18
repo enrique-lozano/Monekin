@@ -11,13 +11,17 @@ String appDataInitialSeedSQL(int schemaVersion) {
 }
 
 // TODO: Pref currency missing, maybe we should initialise it too
-String settingsInitialSeedSQL = """
+String settingsInitialSeedSQL =
+    """
   INSERT INTO userSettings VALUES 
   ('${SettingKey.avatar.name}', 'man'), 
   ('${SettingKey.userName.name}', 'User'), 
+  ('${SettingKey.font.name}', '0'), 
   ('${SettingKey.appLanguage.name}', null), 
   ('${SettingKey.privateModeAtLaunch.name}', '0'), 
   ('${SettingKey.accentColor.name}', 'auto'), 
   ('${SettingKey.amoledMode.name}', '0'), 
-  ('${SettingKey.themeMode.name}', 'system');
+  ('${SettingKey.themeMode.name}', 'system'),
+  ('${SettingKey.transactionSwipeLeftAction.name}', null), 
+  ('${SettingKey.transactionSwipeRightAction.name}', null);
 """;

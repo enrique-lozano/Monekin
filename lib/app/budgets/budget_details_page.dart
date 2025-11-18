@@ -9,6 +9,7 @@ import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_ca
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/models/budget/budget.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
@@ -49,7 +50,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
         setState(() {
           budgetCurrentPercentage = event;
         });
-      })
+      }),
     ]);
   }
 
@@ -66,33 +67,35 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
     final t = Translations.of(context);
 
     return StreamBuilder(
-        stream: BudgetServive.instance.getBudgetById(widget.budget.id),
-        initialData: widget.budget,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return Container();
+      stream: BudgetServive.instance.getBudgetById(widget.budget.id),
+      initialData: widget.budget,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return Container();
 
-          final budget = snapshot.data!;
+        final budget = snapshot.data!;
 
-          return DefaultTabController(
-            length: 2,
-            initialIndex: 0,
-            child: Scaffold(
-              appBar: AppBar(
-                title: Text(t.budgets.details.title),
-                bottom: TabBar(
-                  tabAlignment:
-                      BreakPoint.of(context).isSmallerThan(BreakpointID.md)
-                          ? TabAlignment.fill
-                          : TabAlignment.start,
-                  isScrollable:
-                      !BreakPoint.of(context).isSmallerThan(BreakpointID.md),
-                  tabs: [
-                    Tab(text: t.budgets.details.statistics),
-                    Tab(text: t.transaction.display(n: 1)),
-                  ],
-                ),
-                actions: [
-                  MonekinPopupMenuButton(actionItems: [
+        return DefaultTabController(
+          length: 2,
+          initialIndex: 0,
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text(t.budgets.details.title),
+              bottom: TabBar(
+                tabAlignment:
+                    BreakPoint.of(context).isSmallerThan(BreakpointID.md)
+                    ? TabAlignment.fill
+                    : TabAlignment.start,
+                isScrollable: !BreakPoint.of(
+                  context,
+                ).isSmallerThan(BreakpointID.md),
+                tabs: [
+                  Tab(text: t.budgets.details.statistics),
+                  Tab(text: t.transaction.display(n: 1)),
+                ],
+              ),
+              actions: [
+                MonekinPopupMenuButton(
+                  actionItems: [
                     ListTileActionItem(
                       label: t.budgets.form.edit,
                       icon: Icons.edit,
@@ -100,8 +103,9 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                         RouteUtils.pushRoute(
                           context,
                           BudgetFormPage(
-                              prevPage: const BudgetsPage(),
-                              budgetToEdit: budget),
+                            prevPage: const BudgetsPage(),
+                            budgetToEdit: budget,
+                          ),
                         );
                       },
                     ),
@@ -122,28 +126,29 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                           BudgetServive.instance
                               .deleteBudget(budget.id)
                               .then((value) {
-                            Navigator.pop(context);
+                                if (context.mounted) Navigator.pop(context);
 
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(t.budgets.delete),
-                            ));
-                          }).catchError((err) {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(SnackBar(content: Text('$err')));
-                          });
+                                MonekinSnackbar.success(
+                                  SnackbarParams(t.budgets.delete),
+                                );
+                              })
+                              .catchError((err) {
+                                MonekinSnackbar.error(
+                                  SnackbarParams.fromError(err),
+                                );
+                              });
                         });
                       },
-                    )
-                  ])
-                ],
-              ),
-              body: TabBarView(children: [
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            body: TabBarView(
+              children: [
                 Column(
                   children: [
-                    BudgetCard(
-                      budget: budget,
-                      isHeader: true,
-                    ),
+                    BudgetCard(budget: budget, isHeader: true),
                     Expanded(
                       child: SingleChildScrollView(
                         padding: const EdgeInsets.all(16),
@@ -151,8 +156,9 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             CardWithHeader(
-                                title: t.budgets.details.expend_evolution,
-                                body: BudgetEvolutionChart(budget: budget)),
+                              title: t.budgets.details.expend_evolution,
+                              body: BudgetEvolutionChart(budget: budget),
+                            ),
                             const SizedBox(height: 16),
                             CardWithHeader(
                               title: t.stats.by_categories,
@@ -179,13 +185,16 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage> {
                     filters: budget.trFilters,
                     prevPage: BudgetDetailsPage(budget: budget),
                     onEmptyList: NoResults(
-                        title: t.general.empty_warn,
-                        description: t.budgets.details.no_transactions),
+                      title: t.general.empty_warn,
+                      description: t.budgets.details.no_transactions,
+                    ),
                   ),
-                )
-              ]),
+                ),
+              ],
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }

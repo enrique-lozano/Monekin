@@ -23,7 +23,8 @@ import 'package:path_provider/path_provider.dart';
 part 'app_db.g.dart';
 
 @DriftDatabase(
-    include: {'sql/initial/tables.drift', 'sql/queries/select-full-data.drift'})
+  include: {'sql/initial/tables.drift', 'sql/queries/select-full-data.drift'},
+)
 class AppDB extends _$AppDB {
   AppDB._({
     required this.dbName,
@@ -46,35 +47,44 @@ class AppDB extends _$AppDB {
       join((await getApplicationDocumentsDirectory()).path, dbName);
 
   Future<void> migrateDB(int from, int to) async {
-    Logger.printDebug('Executing migrations from previous version...');
+    Logger.printDebug('Executing migrations from previous version [$from]...');
+
+    await UserSettingService.instance.initializeGlobalStateMap();
+    await AppDataService.instance.initializeGlobalStateMap();
 
     for (var i = from + 1; i <= to; i++) {
-      Logger.printDebug('Migrating database from v$from to v$i...');
+      Logger.printDebug('Migrating database to v$i...');
 
-      String initialSQL =
-          await rootBundle.loadString('assets/sql/migrations/v$i.sql');
+      String initialSQL = await rootBundle.loadString(
+        'assets/sql/migrations/v$i.sql',
+      );
 
       for (final sqlStatement in splitSQLStatements(initialSQL)) {
-        Logger.printDebug('Running custom statement: $sqlStatement');
+        Logger.printDebug(
+          'Running custom statement: ${sqlStatement.substring(0, sqlStatement.length > 30 ? 30 : sqlStatement.length)}...',
+        );
         await customStatement(sqlStatement);
       }
 
-      await AppDataService.instance
-          .setItem(AppDataKey.dbVersion, i.toStringAsFixed(0));
+      await AppDataService.instance.setItem(
+        AppDataKey.dbVersion,
+        i.toStringAsFixed(0),
+      );
     }
 
     Logger.printDebug('Migration completed!');
   }
 
   @override
-  int get schemaVersion => 7;
+  int get schemaVersion => 8;
 
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
       beforeOpen: (details) async {
         Logger.printDebug(
-            'DB found! Version ${details.versionNow} (previous was ${details.versionBefore}). Path to DB -> ${await databasePath}');
+          'DB found! Version ${details.versionNow} (previous was ${details.versionBefore}). Path to DB -> ${await databasePath}',
+        );
 
         if (details.wasCreated) {
           Logger.printDebug('Executing seeders... Populating the database...');
@@ -82,7 +92,7 @@ class AppDB extends _$AppDB {
           try {
             final initialDbSeedersStatements = [
               settingsInitialSeedSQL,
-              appDataInitialSeedSQL(schemaVersion)
+              appDataInitialSeedSQL(schemaVersion),
             ];
 
             for (final sqlStatement in initialDbSeedersStatements) {
@@ -101,9 +111,11 @@ class AppDB extends _$AppDB {
 
         await customStatement('PRAGMA foreign_keys = ON');
 
-        final dbVersion = int.parse((await AppDataService.instance
-            .getAppDataItem(AppDataKey.dbVersion)
-            .first)!);
+        final dbVersion = int.parse(
+          (await AppDataService.instance
+              .getAppDataItem(AppDataKey.dbVersion)
+              .first)!,
+        );
 
         if (dbVersion < schemaVersion) {
           await migrateDB(dbVersion, schemaVersion);
@@ -145,11 +157,14 @@ class AppDB extends _$AppDB {
 LazyDatabase openConnection(String dbName, {bool logStatements = false}) {
   return LazyDatabase(() async {
     // Should be in the same route as the indicated in the databasePath getter of the AppDB class
-    final file =
-        File(join((await getApplicationDocumentsDirectory()).path, dbName));
+    final file = File(
+      join((await getApplicationDocumentsDirectory()).path, dbName),
+    );
 
-    return NativeDatabase.createBackgroundConnection(file,
-        logStatements: logStatements);
+    return NativeDatabase.createBackgroundConnection(
+      file,
+      logStatements: logStatements,
+    );
   });
 }
 

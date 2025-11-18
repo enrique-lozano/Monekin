@@ -24,8 +24,9 @@ class TrendingValue extends StatelessWidget {
   final bool filled, outlined, markNanAsZero;
 
   Widget paintTrendValue(BuildContext context) {
-    final textColor = _getColorBasedOnPercentage(context)
-        .lighten(filled && !outlined ? 0.85 : 0);
+    final textColor = _getColorBasedOnPercentage(
+      context,
+    ).lighten(filled && !outlined ? 0.85 : 0);
 
     double toDisplay = percentage;
 
@@ -49,7 +50,7 @@ class TrendingValue extends StatelessWidget {
             '=',
             style: TextStyle(
               height: 1,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.bold,
               fontSize: fontSize * (9 / 7),
               color: textColor,
             ),
@@ -62,36 +63,38 @@ class TrendingValue extends StatelessWidget {
             fontWeight: fontWeight,
             color: textColor,
           ),
-        ).getTextWidget(context)
+        ).getTextWidget(context),
       ],
     );
   }
 
   Color _getColorBasedOnPercentage(BuildContext context) {
     return (percentage == 0 || percentage.isNaN)
-        ? AppColors.of(context)
-            .brand
-            .lighten(filled
-                ? 0
-                : isAppInDarkBrightness(context)
+        ? AppColors.of(context).brand
+              .lighten(
+                filled
+                    ? 0
+                    : isAppInDarkBrightness(context)
                     ? 0.45
-                    : 0.25)
-            .withBlue(225)
+                    : 0.25,
+              )
+              .withBlue(225)
         : percentage > 0
-            ? AppColors.of(context).success
-            : AppColors.of(context).danger;
+        ? AppColors.of(context).success
+        : AppColors.of(context).danger;
   }
 
   @override
   Widget build(BuildContext context) {
     final trendColor = _getColorBasedOnPercentage(context);
-    final textColor = _getColorBasedOnPercentage(context)
-        .lighten(filled && !outlined ? 0.85 : 0);
+    final textColor = _getColorBasedOnPercentage(
+      context,
+    ).lighten(filled && !outlined ? 0.85 : 0);
     final backgroundColor = filled && outlined
         ? trendColor.lighten(0.85).withOpacity(0.95)
         : filled
-            ? trendColor
-            : null;
+        ? trendColor
+        : null;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),

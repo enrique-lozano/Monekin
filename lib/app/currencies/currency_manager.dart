@@ -46,15 +46,13 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
 
       UserSettingService.instance
           .setItem(SettingKey.preferredCurrency, newCurrency.code)
-          .then(
-        (value) {
-          setState(() {
-            _userCurrency = newCurrency;
-          });
+          .then((value) {
+            setState(() {
+              _userCurrency = newCurrency;
+            });
 
-          ExchangeRateService.instance.deleteExchangeRates();
-        },
-      );
+            ExchangeRateService.instance.deleteExchangeRates();
+          });
     });
   }
 
@@ -88,11 +86,12 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
               showCurrencySelectorModal(
                 context,
                 CurrencySelectorModal(
-                    preselectedCurrency: _userCurrency!,
-                    onCurrencySelected: (newCurrency) async {
-                      await Future.delayed(const Duration(milliseconds: 250));
-                      changePreferredCurrency(newCurrency);
-                    }),
+                  preselectedCurrency: _userCurrency!,
+                  onCurrencySelected: (newCurrency) async {
+                    await Future.delayed(const Duration(milliseconds: 250));
+                    changePreferredCurrency(newCurrency);
+                  },
+                ),
               );
             },
           ),
@@ -104,11 +103,14 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
               children: [
                 Text(t.currencies.exchange_rates),
                 TextButton(
-                    onPressed: () async {
-                      await showExchangeRateFormDialog(
-                          context, const ExchangeRateFormDialog());
-                    },
-                    child: Text(t.ui_actions.add))
+                  onPressed: () async {
+                    await showExchangeRateFormDialog(
+                      context,
+                      const ExchangeRateFormDialog(),
+                    );
+                  },
+                  child: Text(t.ui_actions.add),
+                ),
               ],
             ),
           ),
@@ -122,49 +124,54 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
               if (snapshot.data!.isEmpty) {
                 // Data has loaded but is empty:
                 return Expanded(
-                    child: NoResults(
-                        title: t.general.empty_warn,
-                        description: t.currencies.empty));
+                  child: NoResults(
+                    title: t.general.empty_warn,
+                    description: t.currencies.empty,
+                  ),
+                );
               }
 
               final exchangeRates = snapshot.data!;
 
-              return SingleChildScrollView(
+              return Expanded(
                 child: ListView.separated(
                   itemCount: exchangeRates.length,
                   shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     final item = exchangeRates[index];
 
                     return ListTile(
                       leading: Container(
-                          clipBehavior: Clip.hardEdge,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        child: StreamBuilder(
+                          stream: CurrencyService.instance.getCurrencyByCode(
+                            item.currencyCode,
                           ),
-                          child: StreamBuilder(
-                            stream: CurrencyService.instance
-                                .getCurrencyByCode(item.currencyCode),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return const Skeleton(width: 42, height: 42);
-                              }
-
-                              return snapshot.data!.displayFlagIcon(size: 42);
-                            },
-                          )),
-                      title: Text(item.currency.code),
-                      subtitle: StreamBuilder(
-                          stream: CurrencyService.instance
-                              .getCurrencyByCode(item.currencyCode),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
-                              return const Skeleton(width: 40, height: 16);
+                              return const Skeleton(width: 42, height: 42);
                             }
 
-                            return Text(snapshot.data!.name);
-                          }),
+                            return snapshot.data!.displayFlagIcon(size: 42);
+                          },
+                        ),
+                      ),
+                      title: Text(item.currency.code),
+                      subtitle: StreamBuilder(
+                        stream: CurrencyService.instance.getCurrencyByCode(
+                          item.currencyCode,
+                        ),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const Skeleton(width: 40, height: 16);
+                          }
+
+                          return Text(snapshot.data!.name);
+                        },
+                      ),
                       trailing: Text(item.exchangeRate.toString()),
                       onTap: () async {
                         final currency = await CurrencyService.instance
@@ -173,8 +180,10 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
 
                         if (currency == null) return;
 
-                        RouteUtils.pushRoute(context,
-                            ExchangeRateDetailsPage(currency: currency));
+                        RouteUtils.pushRoute(
+                          context,
+                          ExchangeRateDetailsPage(currency: currency),
+                        );
                       },
                     );
                   },
@@ -184,7 +193,7 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
                 ),
               );
             },
-          )
+          ),
         ],
       ),
     );

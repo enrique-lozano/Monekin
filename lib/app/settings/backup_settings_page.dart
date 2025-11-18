@@ -7,6 +7,7 @@ import 'package:monekin/app/settings/import_csv.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/routes/route_utils.dart';
@@ -35,44 +36,52 @@ class BackupSettingsPage extends StatelessWidget {
               subtitle: Text(t.backup.import.restore_backup_descr),
               minVerticalPadding: 16,
               onTap: () {
-                confirmDialog(context,
-                    icon: Icons.warning_rounded,
-                    dialogTitle: t.backup.import.restore_backup_warn_title,
-                    contentParagraphs: [
-                      Text(t.backup.import.restore_backup_warn_description)
-                    ]).then((value) {
+                confirmDialog(
+                  context,
+                  icon: Icons.warning_rounded,
+                  dialogTitle: t.backup.import.restore_backup_warn_title,
+                  contentParagraphs: [
+                    Text(t.backup.import.restore_backup_warn_description),
+                  ],
+                ).then((value) {
                   if (value == null || !value) {
                     return;
                   }
 
-                  BackupDatabaseService().importDatabase().then((value) {
-                    if (!value) {
-                      Navigator.pop(context);
+                  BackupDatabaseService()
+                      .importDatabase()
+                      .then((value) {
+                        if (!value) {
+                          if (context.mounted) Navigator.pop(context);
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(t.backup.import.cancelled)),
-                      );
+                          MonekinSnackbar.info(
+                            SnackbarParams(t.backup.no_file_selected),
+                          );
 
-                      return;
-                    }
+                          return;
+                        }
 
-                    RouteUtils.popAllRoutesExceptFirst();
+                        RouteUtils.popAllRoutesExceptFirst();
 
-                    tabsPageKey.currentState!.changePage(
-                      getAllDestinations(context, shortLabels: false)
-                          .firstWhere((element) =>
-                              element.id == AppMenuDestinationsID.dashboard),
-                    );
+                        tabsPageKey.currentState!.changePage(
+                          getAllDestinations(
+                            context,
+                            shortLabels: false,
+                          ).firstWhere(
+                            (element) =>
+                                element.id == AppMenuDestinationsID.dashboard,
+                          ),
+                        );
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(t.backup.import.success)),
-                    );
-                  }).catchError((err) {
-                    Navigator.pop(context);
+                        MonekinSnackbar.success(
+                          SnackbarParams(t.backup.import.success),
+                        );
+                      })
+                      .catchError((err) {
+                        Navigator.pop(context);
 
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text(err.toString())));
-                  });
+                        MonekinSnackbar.error(SnackbarParams.fromError(err));
+                      });
                 });
               },
             ),
@@ -97,35 +106,38 @@ class BackupSettingsPage extends StatelessWidget {
             ListTile(
               title: Text(t.backup.about.modify_date),
               trailing: FutureBuilder(
-                  future: AppDB.instance.databasePath,
-                  builder: (context, snapshot) {
-                    final path = snapshot.data;
+                future: AppDB.instance.databasePath,
+                builder: (context, snapshot) {
+                  final path = snapshot.data;
 
-                    if (path == null || path.isEmpty) {
-                      return const Text('----');
-                    }
+                  if (path == null || path.isEmpty) {
+                    return const Text('----');
+                  }
 
-                    return Text(
-                      DateFormat.yMMMd()
-                          .add_Hm()
-                          .format(File(path).lastModifiedSync()),
-                    );
-                  }),
+                  return Text(
+                    DateFormat.yMMMd().add_Hm().format(
+                      File(path).lastModifiedSync(),
+                    ),
+                  );
+                },
+              ),
             ),
             ListTile(
               title: Text(t.backup.about.size),
               trailing: FutureBuilder(
-                  future: AppDB.instance.databasePath
-                      .then((value) => File(value).stat()),
-                  builder: (context, snapshot) {
-                    final fileStats = snapshot.data;
+                future: AppDB.instance.databasePath.then(
+                  (value) => File(value).stat(),
+                ),
+                builder: (context, snapshot) {
+                  final fileStats = snapshot.data;
 
-                    if (fileStats == null) {
-                      return const Text('----');
-                    }
+                  if (fileStats == null) {
+                    return const Text('----');
+                  }
 
-                    return Text(fileStats.size.readableFileSize());
-                  }),
+                  return Text(fileStats.size.readableFileSize());
+                },
+              ),
             ),
           ],
         ),

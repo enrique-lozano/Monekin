@@ -13,16 +13,16 @@ Future<ModalResult<TransactionStatus>?> showTransactioStatusModal(
     isScrollControlled: true,
     showDragHandle: true,
     builder: (context) {
-      return TransactionStatusSelector(
-        initialTransactionStatus: initialStatus,
-      );
+      return TransactionStatusSelector(initialTransactionStatus: initialStatus);
     },
   );
 }
 
 class TransactionStatusSelector extends StatelessWidget {
-  const TransactionStatusSelector(
-      {super.key, required this.initialTransactionStatus});
+  const TransactionStatusSelector({
+    super.key,
+    required this.initialTransactionStatus,
+  });
 
   final TransactionStatus? initialTransactionStatus;
 
@@ -30,11 +30,12 @@ class TransactionStatusSelector extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       child: _TransactionStatusButtonSelector(
-          status: e,
-          isSelected: e?.index == initialTransactionStatus?.index,
-          onClick: () {
-            Navigator.pop(context, ModalResult(e));
-          }),
+        status: e,
+        isSelected: e?.index == initialTransactionStatus?.index,
+        onClick: () {
+          Navigator.pop(context, ModalResult(e));
+        },
+      ),
     );
   }
 
@@ -57,8 +58,9 @@ class TransactionStatusSelector extends StatelessWidget {
           child: Column(
             children: [
               buildTransactionButton(context, null),
-              ...TransactionStatus.values
-                  .map((e) => buildTransactionButton(context, e))
+              ...TransactionStatus.values.map(
+                (e) => buildTransactionButton(context, e),
+              ),
             ],
           ),
         ),
@@ -68,11 +70,12 @@ class TransactionStatusSelector extends StatelessWidget {
 }
 
 class _TransactionStatusButtonSelector extends StatelessWidget {
-  const _TransactionStatusButtonSelector(
-      {super.key,
-      required this.status,
-      required this.onClick,
-      required this.isSelected});
+  const _TransactionStatusButtonSelector({
+    super.key,
+    required this.status,
+    required this.onClick,
+    required this.isSelected,
+  });
 
   final TransactionStatus? status;
 

@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/app/home/widgets/click_tracker.dart';
 import 'package:monekin/app/home/widgets/dashboard_cards.dart';
@@ -15,7 +14,9 @@ import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
+import 'package:monekin/core/presentation/animations/animated_floating_button.dart';
 import 'package:monekin/core/presentation/debug_page.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/dates/date_period_modal.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -50,11 +51,10 @@ class _DashboardPageState extends State<DashboardPage> {
     _scrollController.addListener(() {
       _setSmallHeaderVisible();
 
-      bool shouldExtendButton =
-          BreakPoint.of(context).isLargerThan(BreakpointID.md) ||
-              _scrollController.offset <= 10 ||
-              _scrollController.position.userScrollDirection !=
-                  ScrollDirection.reverse;
+      bool shouldExtendButton = AnimatedFloatingButton.shouldExtendButton(
+        context,
+        _scrollController,
+      );
 
       if (isFloatingButtonExtended != shouldExtendButton) {
         setState(() {
@@ -93,38 +93,41 @@ class _DashboardPageState extends State<DashboardPage> {
 
     return Scaffold(
       appBar: EmptyAppBar(color: AppColors.of(context).consistentPrimary),
-      floatingActionButton:
-          NewTransactionButton(isExtended: isFloatingButtonExtended),
+      floatingActionButton: NewTransactionButton(
+        isExtended: isFloatingButtonExtended,
+      ),
       body: Stack(
         children: [
           SingleChildScrollView(
             controller: _scrollController,
-            child: Column(children: [
-              buildDashboadHeader(context, accountService),
+            child: Column(
+              children: [
+                buildDashboadHeader(context, accountService),
 
-              HorizontalScrollableAccountList(
-                dateRangeService: dateRangeService,
-              ),
-
-              // ------------- STATS GENERAL CARDS --------------
-
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 12,
-                  right: 12,
-                  top: 20,
-                  bottom: 64,
+                HorizontalScrollableAccountList(
+                  dateRangeService: dateRangeService,
                 ),
-                child: DashboardCards(dateRangeService: dateRangeService),
-              ),
 
-              if (kDebugMode)
-                TextButton(
+                // ------------- STATS GENERAL CARDS --------------
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 12,
+                    right: 12,
+                    top: 20,
+                    bottom: 64,
+                  ),
+                  child: DashboardCards(dateRangeService: dateRangeService),
+                ),
+
+                if (kDebugMode)
+                  TextButton(
                     onPressed: () {
                       RouteUtils.pushRoute(context, const DebugPage());
                     },
-                    child: const Text('DEBUG PAGE'))
-            ]),
+                    child: const Text('DEBUG PAGE'),
+                  ),
+              ],
+            ),
           ),
           Positioned(
             top: 0,
@@ -134,14 +137,16 @@ class _DashboardPageState extends State<DashboardPage> {
               expand: showSmallHeader,
               child: buildSmallHeader(context),
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
   Card buildDashboadHeader(
-      BuildContext context, AccountService accountService) {
+    BuildContext context,
+    AccountService accountService,
+  ) {
     return Card(
       color: AppColors.of(context).consistentPrimary,
       margin: const EdgeInsets.only(bottom: 24),
@@ -153,10 +158,11 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
       child: Padding(
         padding: EdgeInsets.fromLTRB(
-            _isIncomeExpenseAtSameLevel(context) ? 24 : 16,
-            16,
-            _isIncomeExpenseAtSameLevel(context) ? 24 : 16,
-            _isIncomeExpenseAtSameLevel(context) ? 24 : 14),
+          _isIncomeExpenseAtSameLevel(context) ? 24 : 16,
+          16,
+          _isIncomeExpenseAtSameLevel(context) ? 24 : 16,
+          _isIncomeExpenseAtSameLevel(context) ? 24 : 14,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -173,56 +179,59 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             const SizedBox(height: 8),
             StreamBuilder(
-                stream: AccountService.instance.getAccounts(),
-                builder: (context, accounts) {
-                  if (_isIncomeExpenseAtSameLevel(context)) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        totalBalanceIndicator(
-                            context, accounts, accountService),
-                        const SizedBox(width: 16),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            IncomeOrExpenseCard(
-                              type: TransactionType.E,
-                              startDate: dateRangeService.startDate,
-                              endDate: dateRangeService.endDate,
-                            ),
-                            IncomeOrExpenseCard(
-                              type: TransactionType.I,
-                              startDate: dateRangeService.startDate,
-                              endDate: dateRangeService.endDate,
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-                  }
+              stream: AccountService.instance.getAccounts(),
+              builder: (context, accounts) {
+                final labelStyle = Theme.of(context).textTheme.labelMedium!
+                    .copyWith(color: onHeaderSmallTextColor(context));
 
-                  return Column(
+                if (_isIncomeExpenseAtSameLevel(context)) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       totalBalanceIndicator(context, accounts, accountService),
-                      const SizedBox(height: 24),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      const SizedBox(width: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           IncomeOrExpenseCard(
                             type: TransactionType.E,
-                            startDate: dateRangeService.startDate,
-                            endDate: dateRangeService.endDate,
+                            periodState: dateRangeService,
+                            labelStyle: labelStyle,
                           ),
                           IncomeOrExpenseCard(
                             type: TransactionType.I,
-                            startDate: dateRangeService.startDate,
-                            endDate: dateRangeService.endDate,
+                            periodState: dateRangeService,
+                            labelStyle: labelStyle,
                           ),
                         ],
                       ),
                     ],
                   );
-                })
+                }
+
+                return Column(
+                  children: [
+                    totalBalanceIndicator(context, accounts, accountService),
+                    const SizedBox(height: 24),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IncomeOrExpenseCard(
+                          type: TransactionType.E,
+                          periodState: dateRangeService,
+                          labelStyle: labelStyle,
+                        ),
+                        IncomeOrExpenseCard(
+                          type: TransactionType.I,
+                          periodState: dateRangeService,
+                          labelStyle: labelStyle,
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -232,11 +241,12 @@ class _DashboardPageState extends State<DashboardPage> {
   ActionChip buildDatePeriodSelector(BuildContext context) {
     return ActionChip(
       label: Text(
-          dateRangeService.getText(
-            context,
-            showLongMonth: MediaQuery.of(context).size.width > 360,
-          ),
-          style: TextStyle(color: AppColors.of(context).onConsistentPrimary)),
+        dateRangeService.getText(
+          context,
+          showLongMonth: MediaQuery.of(context).size.width > 360,
+        ),
+        style: TextStyle(color: AppColors.of(context).onConsistentPrimary),
+      ),
       backgroundColor: AppColors.of(context).consistentPrimary,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
@@ -248,9 +258,7 @@ class _DashboardPageState extends State<DashboardPage> {
       onPressed: () {
         openDatePeriodModal(
           context,
-          DatePeriodModal(
-            initialDatePeriod: dateRangeService.datePeriod,
-          ),
+          DatePeriodModal(initialDatePeriod: dateRangeService.datePeriod),
         ).then((value) {
           if (value == null) return;
 
@@ -269,12 +277,13 @@ class _DashboardPageState extends State<DashboardPage> {
     return Tappable(
       onTap: () {
         showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            showDragHandle: true,
-            builder: (context) {
-              return const EditProfileModal();
-            });
+          context: context,
+          isScrollControlled: true,
+          showDragHandle: true,
+          builder: (context) {
+            return const EditProfileModal();
+          },
+        );
       },
       bgColor: Colors.transparent,
       borderRadius: BorderRadius.circular(12),
@@ -284,19 +293,22 @@ class _DashboardPageState extends State<DashboardPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             StreamBuilder(
-                stream: UserSettingService.instance
-                    .getSettingFromDB(SettingKey.avatar),
-                builder: (context, snapshot) {
-                  return UserAvatar(
-                    avatar: snapshot.data,
-                    backgroundColor:
-                        AppColors.of(context).onConsistentPrimary.darken(0.25),
-                    border: Border.all(
-                      width: 2,
-                      color: AppColors.of(context).onConsistentPrimary,
-                    ),
-                  );
-                }),
+              stream: UserSettingService.instance.getSettingFromDB(
+                SettingKey.avatar,
+              ),
+              builder: (context, snapshot) {
+                return UserAvatar(
+                  avatar: snapshot.data,
+                  backgroundColor: AppColors.of(
+                    context,
+                  ).onConsistentPrimary.darken(0.25),
+                  border: Border.all(
+                    width: 2,
+                    color: AppColors.of(context).onConsistentPrimary,
+                  ),
+                );
+              },
+            ),
             const SizedBox(width: 12),
             Flexible(
               child: Column(
@@ -307,14 +319,14 @@ class _DashboardPageState extends State<DashboardPage> {
                     "Welcome again!",
                     softWrap: false,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontWeight: FontWeight.w300,
-                          overflow: TextOverflow.fade,
-                          color: AppColors.of(context).onConsistentPrimary,
-                        ),
+                      overflow: TextOverflow.fade,
+                      color: onHeaderSmallTextColor(context),
+                    ),
                   ),
                   StreamBuilder(
-                    stream: UserSettingService.instance
-                        .getSettingFromDB(SettingKey.userName),
+                    stream: UserSettingService.instance.getSettingFromDB(
+                      SettingKey.userName,
+                    ),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
                         return const Skeleton(width: 70, height: 12);
@@ -324,34 +336,33 @@ class _DashboardPageState extends State<DashboardPage> {
                         snapshot.data!,
                         softWrap: false,
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
-                            overflow: TextOverflow.fade,
-                            color: AppColors.of(context).onConsistentPrimary),
+                          fontSize: 18,
+                          overflow: TextOverflow.fade,
+                          color: AppColors.of(context).onConsistentPrimary,
+                        ),
                       );
                     },
                   ),
                   const SizedBox(width: 8),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget buildSmallHeader(
-    BuildContext context,
-  ) {
+  Widget buildSmallHeader(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(16),
-            bottomRight: Radius.circular(16),
-          ),
-          color: AppColors.of(context).consistentPrimary),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(16),
+          bottomRight: Radius.circular(16),
+        ),
+        color: AppColors.of(context).consistentPrimary,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -360,10 +371,9 @@ class _DashboardPageState extends State<DashboardPage> {
             children: [
               Text(
                 t.home.total_balance,
-                style: Theme.of(context)
-                    .textTheme
-                    .labelSmall!
-                    .copyWith(color: AppColors.of(context).onConsistentPrimary),
+                style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                  color: onHeaderSmallTextColor(context),
+                ),
               ),
               StreamBuilder(
                 stream: AccountService.instance.getAccountsMoney(),
@@ -372,13 +382,16 @@ class _DashboardPageState extends State<DashboardPage> {
                     return CurrencyDisplayer(
                       amountToConvert: snapshot.data!,
                       integerStyle: TextStyle(
-                          fontSize: snapshot.data! >= 10000000 &&
-                                  BreakPoint.of(context)
-                                      .isSmallerOrEqualTo(BreakpointID.xs)
-                              ? 22
-                              : 26,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.of(context).onConsistentPrimary),
+                        fontSize:
+                            snapshot.data! >= 10000000 &&
+                                BreakPoint.of(
+                                  context,
+                                ).isSmallerOrEqualTo(BreakpointID.xs)
+                            ? 22
+                            : 26,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.of(context).onConsistentPrimary,
+                      ),
                     );
                   }
 
@@ -388,7 +401,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ],
           ),
           const SizedBox(width: 12),
-          Flexible(child: buildDatePeriodSelector(context))
+          Flexible(child: buildDatePeriodSelector(context)),
         ],
       ),
     );
@@ -404,7 +417,6 @@ class _DashboardPageState extends State<DashboardPage> {
     return SuccessiveTapDetector(
       delayTrackingAfterGoal: 4000,
       onClickGoalReached: () async {
-        final sc = ScaffoldMessenger.of(context);
         final privateMode =
             await PrivateModeService.instance.privateModeStream.first;
 
@@ -412,11 +424,11 @@ class _DashboardPageState extends State<DashboardPage> {
 
         await HapticFeedback.lightImpact();
 
-        sc.showSnackBar(
-          SnackBar(
-            content: Text(!privateMode
+        MonekinSnackbar.success(
+          SnackbarParams(
+            !privateMode
                 ? t.settings.security.private_mode_activated
-                : t.settings.security.private_mode_deactivated),
+                : t.settings.security.private_mode_deactivated,
           ),
         );
       },
@@ -429,10 +441,9 @@ class _DashboardPageState extends State<DashboardPage> {
         children: [
           Text(
             t.home.total_balance,
-            style: Theme.of(context)
-                .textTheme
-                .labelSmall!
-                .copyWith(color: AppColors.of(context).onConsistentPrimary),
+            style: Theme.of(context).textTheme.labelSmall!.copyWith(
+              color: onHeaderSmallTextColor(context),
+            ),
           ),
           if (!accounts.hasData) ...[
             const Skeleton(width: 70, height: 40),
@@ -445,17 +456,18 @@ class _DashboardPageState extends State<DashboardPage> {
                 if (snapshot.hasData) {
                   return CurrencyDisplayer(
                     amountToConvert: snapshot.data!,
-                    integerStyle: Theme.of(context)
-                        .textTheme
-                        .headlineLarge!
+                    integerStyle: Theme.of(context).textTheme.headlineLarge!
                         .copyWith(
-                            fontSize: snapshot.data! >= 100000000 &&
-                                    BreakPoint.of(context)
-                                        .isSmallerOrEqualTo(BreakpointID.xs)
-                                ? 26
-                                : 32,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.of(context).onConsistentPrimary),
+                          fontSize:
+                              snapshot.data! >= 100000000 &&
+                                  BreakPoint.of(
+                                    context,
+                                  ).isSmallerOrEqualTo(BreakpointID.xs)
+                              ? 26
+                              : 32,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.of(context).onConsistentPrimary,
+                        ),
                   );
                 }
 
@@ -466,10 +478,11 @@ class _DashboardPageState extends State<DashboardPage> {
                 dateRangeService.endDate != null)
               StreamBuilder(
                 stream: accountService.getAccountsMoneyVariation(
-                    accounts: accounts.data!,
-                    startDate: dateRangeService.startDate,
-                    endDate: dateRangeService.endDate,
-                    convertToPreferredCurrency: true),
+                  accounts: accounts.data!,
+                  startDate: dateRangeService.startDate,
+                  endDate: dateRangeService.endDate,
+                  convertToPreferredCurrency: true,
+                ),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return const Skeleton(width: 52, height: 22);
@@ -477,14 +490,14 @@ class _DashboardPageState extends State<DashboardPage> {
 
                   return TrendingValue(
                     percentage: snapshot.data!,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.bold,
                     filled: true,
                     outlined: true,
                     fontSize: 16,
                   );
                 },
               ),
-          ]
+          ],
         ],
       ),
     );
@@ -498,11 +511,12 @@ class EmptyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: color,
-    );
+    return Container(color: color);
   }
 
   @override
   Size get preferredSize => const Size(0.0, 0.0);
 }
+
+Color onHeaderSmallTextColor(BuildContext context) =>
+    AppColors.of(context).onConsistentPrimary.withOpacity(0.9);

@@ -7,6 +7,13 @@ enum SettingKey {
   preferredCurrency,
   userName,
   avatar,
+
+  /// Text font to be used across the entire app. It's a string representing
+  /// the font index in the font list, or `null` to use the platform font.
+  font,
+
+  /// User preferred language (locale) for the app. It's a string representing the locale languageTag, like "en", "zh-TW"...
+  /// If `null`, the app will use the device locale, or the fallback locale if the device locale is not supported.
   appLanguage,
 
   /// Key to storage if the user will enter in the "private mode" when the app launches.
@@ -20,6 +27,9 @@ enum SettingKey {
 
   /// Key to storage if the user have the AMOLED mode activated. Could be '1' (true) or '0' (false)
   amoledMode,
+
+  transactionSwipeLeftAction,
+  transactionSwipeRightAction,
 }
 
 final Map<SettingKey, String?> appStateSettings = {};
@@ -27,16 +37,17 @@ final Map<SettingKey, String?> appStateSettings = {};
 class UserSettingService
     extends KeyValueService<SettingKey, UserSettings, UserSetting> {
   UserSettingService._(AppDB db)
-      : super(
-          db: db,
-          table: db.userSettings,
-          globalStateMap: appStateSettings,
-          rowToKeyPairInstance: (row) => KeyValuePairInDB.fromUserSetting(row),
-          toDbRow: (x) => x.toUserSetting(),
-        );
+    : super(
+        db: db,
+        table: db.userSettings,
+        globalStateMap: appStateSettings,
+        rowToKeyPairInstance: (row) => KeyValuePairInDB.fromUserSetting(row),
+        toDbRow: (x) => x.toUserSetting(),
+      );
 
-  static final UserSettingService _instance =
-      UserSettingService._(AppDB.instance);
+  static final UserSettingService _instance = UserSettingService._(
+    AppDB.instance,
+  );
   static UserSettingService get instance => _instance;
 
   Stream<String?> getSettingFromDB(SettingKey settingKey) {

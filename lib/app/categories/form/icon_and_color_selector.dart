@@ -10,12 +10,13 @@ import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 class IconAndColorSelector extends StatelessWidget {
-  const IconAndColorSelector(
-      {super.key,
-      required this.iconSelectorModalSubtitle,
-      required this.iconDisplayer,
-      required this.onDataChange,
-      required this.data});
+  const IconAndColorSelector({
+    super.key,
+    required this.iconSelectorModalSubtitle,
+    required this.iconDisplayer,
+    required this.onDataChange,
+    required this.data,
+  });
 
   final String iconSelectorModalSubtitle;
 
@@ -62,8 +63,10 @@ class IconAndColorSelector extends StatelessWidget {
                   child: ListTile(
                     mouseCursor: SystemMouseCursors.click,
                     title: Text(t.icon_selector.icon),
-                    trailing:
-                        const Icon(Icons.arrow_forward_ios_rounded, size: 12),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 12,
+                    ),
                   ),
                 ),
                 Divider(color: bgColor.darken()),
@@ -75,13 +78,15 @@ class IconAndColorSelector extends StatelessWidget {
                       selectedColor: data.color.toHex(),
                       customColorPreviewBuilder: (color) =>
                           iconDisplayer.copyWith(
-                        secondaryColor:
-                            isAppInDarkBrightness(context) ? color : null,
-                        mainColor:
-                            isAppInLightBrightness(context) ? color : null,
-                        size: 32,
-                        outlineWidth: 2,
-                      ),
+                            secondaryColor: isAppInDarkBrightness(context)
+                                ? color
+                                : iconDisplayer.secondaryColor,
+                            mainColor: isAppInLightBrightness(context)
+                                ? color
+                                : iconDisplayer.mainColor,
+                            size: 32,
+                            outlineWidth: 2,
+                          ),
                       onColorSelected: (selColor) {
                         Navigator.pop(context);
                         onDataChange((color: selColor, icon: data.icon));
@@ -92,15 +97,12 @@ class IconAndColorSelector extends StatelessWidget {
                   child: ListTile(
                     mouseCursor: SystemMouseCursors.click,
                     title: Text(t.icon_selector.color),
-                    trailing: Icon(
-                      Icons.circle,
-                      color: data.color,
-                    ),
+                    trailing: Icon(Icons.circle, color: data.color),
                   ),
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

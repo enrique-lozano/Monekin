@@ -3,7 +3,8 @@
     "code": "AED",
     "names": {
       "en": "UAE Dirham",
-      "es": "Dírham de los Emiratos Árabes Unidos"
+      "es": "Dírham de los Emiratos Árabes Unidos",
+      "it": "Dirham EAU"
     },
     "symbol": "dh",
     "countryCodes": ["AE"]
@@ -12,7 +13,8 @@
     "code": "AFN",
     "names": {
       "en": "Afghani",
-      "es": "Afgani"
+      "es": "Afgani",
+      "it": "Afghani"
     },
     "symbol": "Af.",
     "countryCodes": ["AF"]
@@ -21,7 +23,8 @@
     "code": "ALL",
     "names": {
       "en": "Lek",
-      "es": "Lek"
+      "es": "Lek",
+      "it": "Lek"
     },
     "symbol": "Lek",
     "countryCodes": ["AL"]
@@ -30,7 +33,8 @@
     "code": "AMD",
     "names": {
       "en": "Armenian Dram",
-      "es": "Dram armenio"
+      "es": "Dram armenio",
+      "it": "Armenian Dram"
     },
     "symbol": "Dram",
     "countryCodes": ["AM"]
@@ -39,7 +43,8 @@
     "code": "ANG",
     "names": {
       "en": "Netherlands Antillian Guilder",
-      "es": "Florín antillano neerlandés"
+      "es": "Florín antillano neerlandés",
+      "it": "Fiorino"
     },
     "symbol": "ƒ",
     "countryCodes": ["CW", "SX"]
@@ -48,7 +53,8 @@
     "code": "AOA",
     "names": {
       "en": "Kwanza",
-      "es": "Kwanza"
+      "es": "Kwanza",
+      "it": "Kwanza"
     },
     "symbol": "Kz",
     "countryCodes": ["AO"]
@@ -57,7 +63,8 @@
     "code": "ARS",
     "names": {
       "en": "Argentine Peso",
-      "es": "Peso argentino"
+      "es": "Peso argentino",
+      "it": "Peso"
     },
     "symbol": "$",
     "countryCodes": ["AR"]
@@ -66,7 +73,8 @@
     "code": "AUD",
     "names": {
       "en": "Australian Dollar",
-      "es": "Dólar australiano"
+      "es": "Dólar australiano",
+      "it": "Dollaro australiano"
     },
     "symbol": "$",
     "countryCodes": ["AU", "KI", "NR", "TV"]
@@ -75,7 +83,8 @@
     "code": "AWG",
     "names": {
       "en": "Aruban Guilder",
-      "es": "Florín arubeño"
+      "es": "Florín arubeño",
+      "it": "Fiorino"
     },
     "symbol": "Afl.",
     "countryCodes": ["AW"]
@@ -84,7 +93,8 @@
     "code": "AZN",
     "names": {
       "en": "Azerbaijanian Manat",
-      "es": "Manat azerbaiyano"
+      "es": "Manat azerbaiyano",
+      "it": "Manat"
     },
     "symbol": "man.",
     "countryCodes": ["AZ"]
@@ -93,7 +103,8 @@
     "code": "BAM",
     "names": {
       "en": "Convertible Marks",
-      "es": "Marco convertible"
+      "es": "Marco convertible",
+      "it": "Marco"
     },
     "symbol": "KM",
     "countryCodes": ["BA"]
@@ -102,7 +113,8 @@
     "code": "BBD",
     "names": {
       "en": "Barbados Dollar",
-      "es": "Dólar de Barbados"
+      "es": "Dólar de Barbados",
+      "it": "Dollaro"
     },
     "symbol": "$",
     "countryCodes": ["BB"]
@@ -111,7 +123,8 @@
     "code": "BDT",
     "names": {
       "en": "Taka",
-      "es": "Taka"
+      "es": "Taka",
+      "it": "Taka"
     },
     "symbol": "৳",
     "countryCodes": ["BD"]
@@ -120,7 +133,8 @@
     "code": "BGN",
     "names": {
       "en": "Bulgarian Lev",
-      "es": "Lev búlgaro"
+      "es": "Lev búlgaro",
+      "it": "Lev"
     },
     "symbol": "lev",
     "countryCodes": ["BG"]
@@ -129,7 +143,8 @@
     "code": "BHD",
     "names": {
       "en": "Bahraini Dinar",
-      "es": "Dinar bareiní"
+      "es": "Dinar bareiní",
+      "it": "Dinar"
     },
     "symbol": "din",
     "countryCodes": ["BH"]
@@ -138,7 +153,8 @@
     "code": "BIF",
     "names": {
       "en": "Burundi Franc",
-      "es": "Franco de Burundi"
+      "es": "Franco de Burundi",
+      "it": "Franco"
     },
     "symbol": "FBu",
     "countryCodes": ["BI"]
@@ -147,7 +163,8 @@
     "code": "BND",
     "names": {
       "en": "Brunei Dollar",
-      "es": "Dólar de Brunéi"
+      "es": "Dólar de Brunéi",
+      "it": "Dollaro"
     },
     "symbol": "$",
     "countryCodes": ["BN"]
@@ -156,7 +173,8 @@
     "code": "BOB",
     "names": {
       "en": "Boliviano",
-      "es": "Boliviano"
+      "es": "Boliviano",
+      "it": "Boliviano"
     },
     "symbol": "Bs",
     "countryCodes": ["BO"]
@@ -165,7 +183,8 @@
     "code": "BRL",
     "names": {
       "en": "Brazilian Real",
-      "es": "Real brasileño"
+      "es": "Real brasileño",
+      "it": "Real brasiliano"
     },
     "symbol": "R$",
     "countryCodes": ["BR"]
@@ -174,7 +193,8 @@
     "code": "BSD",
     "names": {
       "en": "Bahamian Dollar",
-      "es": "Dólar bahameño"
+      "es": "Dólar bahameño",
+      "it": "Dollaro"
     },
     "symbol": "$",
     "countryCodes": ["BS"]
@@ -183,7 +203,8 @@
     "code": "BTN",
     "names": {
       "en": "Ngultrum",
-      "es": "Ngultrum"
+      "es": "Ngultrum",
+      "it": "Ngultrum"
     },
     "symbol": "Nu.",
     "countryCodes": ["BT"]
@@ -192,7 +213,8 @@
     "code": "BWP",
     "names": {
       "en": "Pula",
-      "es": "Pula"
+      "es": "Pula",
+      "it": "Pula"
     },
     "symbol": "P",
     "countryCodes": ["BW"]
@@ -200,7 +222,8 @@
   {
     "code": "BYR",
     "names": {
-      "en": "Belarussian Ruble"
+      "en": "Belarussian Ruble",
+      "it": "Rublo"
     },
     "symbol": "BYR",
     "countryCodes": ["BY"]
@@ -209,7 +232,8 @@
     "code": "BZD",
     "names": {
       "en": "Belize Dollar",
-      "es": "Dólar beliceño"
+      "es": "Dólar beliceño",
+      "it": "Dollaro"
     },
     "symbol": "$",
     "countryCodes": ["BZ"]
@@ -218,7 +242,8 @@
     "code": "CAD",
     "names": {
       "en": "Canadian Dollar",
-      "es": "Dólar canadiense"
+      "es": "Dólar canadiense",
+      "it": "Dollaro canadese"
     },
     "symbol": "$",
     "countryCodes": ["CA"]
@@ -227,7 +252,8 @@
     "code": "CDF",
     "names": {
       "en": "Congolese Franc",
-      "es": "Franco congoleño"
+      "es": "Franco congoleño",
+      "it": "Franco"
     },
     "symbol": "FrCD",
     "countryCodes": ["CD"]
@@ -236,7 +262,8 @@
     "code": "CHF",
     "names": {
       "en": "Swiss Franc",
-      "es": "Franco suizo"
+      "es": "Franco suizo",
+      "it": "Franco svizzero"
     },
     "symbol": "CHF",
     "countryCodes": ["CH", "LI"]
@@ -245,7 +272,8 @@
     "code": "CLP",
     "names": {
       "en": "Chilean Peso",
-      "es": "Peso chileno"
+      "es": "Peso chileno",
+      "it": "Peso"
     },
     "symbol": "$",
     "countryCodes": ["CL"]
@@ -254,7 +282,8 @@
     "code": "CNY",
     "names": {
       "en": "Chinese Yuan",
-      "es": "Yuan chino"
+      "es": "Yuan chino",
+      "it": "Yuan"
     },
     "symbol": "¥",
     "countryCodes": ["CN"]
@@ -263,7 +292,8 @@
     "code": "COP",
     "names": {
       "en": "Colombian Peso",
-      "es": "Peso colombiano"
+      "es": "Peso colombiano",
+      "it": "Peso"
     },
     "symbol": "$",
     "countryCodes": ["CO"]
@@ -272,7 +302,8 @@
     "code": "CRC",
     "names": {
       "en": "Costa Rican Colon",
-      "es": "Colón costarricense"
+      "es": "Colón costarricense",
+      "it": "Costa Rican Colon"
     },
     "symbol": "₡",
     "countryCodes": ["CR"]
@@ -281,7 +312,8 @@
     "code": "CUP",
     "names": {
       "en": "Cuban Peso",
-      "es": "Peso cubano"
+      "es": "Peso cubano",
+      "it": "Peso"
     },
     "symbol": "$",
     "countryCodes": ["CU"]
@@ -290,7 +322,8 @@
     "code": "CVE",
     "names": {
       "en": "Cape Verde Escudo",
-      "es": "Escudo caboverdiano"
+      "es": "Escudo caboverdiano",
+      "it": "Cape Verde Escudo"
     },
     "symbol": "CVE",
     "countryCodes": ["CV"]
@@ -299,7 +332,8 @@
     "code": "CZK",
     "names": {
       "en": "Czech Koruna",
-      "es": "Corona checa"
+      "es": "Corona checa",
+      "it": "Corona"
     },
     "symbol": "Kč",
     "countryCodes": ["CZ"]
@@ -308,7 +342,8 @@
     "code": "DJF",
     "names": {
       "en": "Djibouti Franc",
-      "es": "Franco yibutiano"
+      "es": "Franco yibutiano",
+      "it": "Franco"
     },
     "symbol": "Fdj",
     "countryCodes": ["DJ"]
@@ -317,7 +352,8 @@
     "code": "DKK",
     "names": {
       "en": "Danish Krone",
-      "es": "Corona danesa"
+      "es": "Corona danesa",
+      "it": "Corona"
     },
     "symbol": "kr",
     "countryCodes": ["DK", "FO", "GL"]
@@ -326,7 +362,8 @@
     "code": "DOP",
     "names": {
       "en": "Dominican Peso",
-      "es": "Peso dominicano"
+      "es": "Peso dominicano",
+      "it": "Peso"
     },
     "symbol": "$",
     "countryCodes": ["DO"]
@@ -335,7 +372,8 @@
     "code": "DZD",
     "names": {
       "en": "Algerian Dinar",
-      "es": "Dinar argelino"
+      "es": "Dinar argelino",
+      "it": "Dinar"
     },
     "symbol": "din",
     "countryCodes": ["DZ"]
@@ -344,7 +382,8 @@
     "code": "EGP",
     "names": {
       "en": "Egyptian Pound",
-      "es": "Libra egipcia"
+      "es": "Libra egipcia",
+      "it": "Sterlina"
     },
     "symbol": "E£",
     "countryCodes": ["EG"]
@@ -353,7 +392,8 @@
     "code": "ERN",
     "names": {
       "en": "Nakfa",
-      "es": "Nakfa"
+      "es": "Nakfa",
+      "it": "Nakfa"
     },
     "symbol": "Nfk",
     "countryCodes": ["ER"]
@@ -362,7 +402,8 @@
     "code": "ETB",
     "names": {
       "en": "Ethiopian Birr",
-      "es": "Birr etíope"
+      "es": "Birr etíope",
+      "it": "Birr"
     },
     "symbol": "Birr",
     "countryCodes": ["ET"]
@@ -371,7 +412,8 @@
     "code": "EUR",
     "names": {
       "en": "Euro",
-      "es": "Euro"
+      "es": "Euro",
+      "it": "Euro"
     },
     "symbol": "€",
     "countryCodes": [
@@ -405,7 +447,8 @@
     "code": "FJD",
     "names": {
       "en": "Fiji Dollar",
-      "es": "Dólar fiyiano"
+      "es": "Dólar fiyiano",
+      "it": "Dollaro"
     },
     "symbol": "$",
     "countryCodes": ["FJ"]
@@ -414,7 +457,8 @@
     "code": "FKP",
     "names": {
       "en": "Falkland Islands Pound",
-      "es": "Libra malvinense"
+      "es": "Libra malvinense",
+      "it": "Sterlina"
     },
     "symbol": "£",
     "countryCodes": ["FK"]
@@ -423,7 +467,8 @@
     "code": "GBP",
     "names": {
       "en": "Pound Sterling",
-      "es": "Libra esterlina"
+      "es": "Libra esterlina",
+      "it": "Sterlina"
     },
     "symbol": "£",
     "countryCodes": ["GB", "GG", "IM", "JE"]
@@ -432,7 +477,8 @@
     "code": "GEL",
     "names": {
       "en": "Lari",
-      "es": "Lari"
+      "es": "Lari",
+      "it": "Lari"
     },
     "symbol": "GEL",
     "countryCodes": ["GE"]
@@ -441,7 +487,8 @@
     "code": "GHS",
     "names": {
       "en": "Cedi",
-      "es": "Cedi ghanés"
+      "es": "Cedi ghanés",
+      "it": "Cedi"
     },
     "symbol": "GHS",
     "countryCodes": ["GH"]
@@ -450,7 +497,8 @@
     "code": "GIP",
     "names": {
       "en": "Gibraltar Pound",
-      "es": "Libra de Gibraltar"
+      "es": "Libra de Gibraltar",
+      "it": "Sterlina"
     },
     "symbol": "£",
     "countryCodes": ["GI"]
@@ -459,7 +507,8 @@
     "code": "GMD",
     "names": {
       "en": "Dalasi",
-      "es": "Dalasi"
+      "es": "Dalasi",
+      "it": "Dalasi"
     },
     "symbol": "GMD",
     "countryCodes": ["GM"]
@@ -468,7 +517,8 @@
     "code": "GNF",
     "names": {
       "en": "Guinea Franc",
-      "es": "Franco guineano"
+      "es": "Franco guineano",
+      "it": "Franco"
     },
     "symbol": "FG",
     "countryCodes": ["GN"]
@@ -477,7 +527,8 @@
     "code": "GTQ",
     "names": {
       "en": "Quetzal",
-      "es": "Quetzal"
+      "es": "Quetzal",
+      "it": "Quetzal"
     },
     "symbol": "Q",
     "countryCodes": ["GT"]
@@ -486,7 +537,8 @@
     "code": "HKD",
     "names": {
       "en": "Hong Kong Dollar",
-      "es": "Dólar de Hong Kong"
+      "es": "Dólar de Hong Kong",
+      "it": "Dollaro"
     },
     "symbol": "$",
     "countryCodes": ["HK"]
@@ -495,7 +547,8 @@
     "code": "HNL",
     "names": {
       "en": "Lempira",
-      "es": "Lempira"
+      "es": "Lempira",
+      "it": "Lempira"
     },
     "symbol": "L",
     "countryCodes": ["HN"]
@@ -504,7 +557,8 @@
     "code": "HRK",
     "names": {
       "en": "Croatian Kuna",
-      "es": "Kuna"
+      "es": "Kuna",
+      "it": "Croatian Kuna"
     },
     "symbol": "kn",
     "countryCodes": ["HR"]
@@ -513,7 +567,8 @@
     "code": "HTG",
     "names": {
       "en": "Gourde",
-      "es": "Gourde"
+      "es": "Gourde",
+      "it": "Gourde"
     },
     "symbol": "HTG",
     "countryCodes": ["HT"]
@@ -522,7 +577,8 @@
     "code": "HUF",
     "names": {
       "en": "Hungary Forint",
-      "es": "Forinto"
+      "es": "Forinto",
+      "it": "Hungary Forint"
     },
     "symbol": "Ft",
     "countryCodes": ["HU"]
@@ -531,7 +587,8 @@
     "code": "IDR",
     "names": {
       "en": "Rupiah",
-      "es": "Rupia indonesia"
+      "es": "Rupia indonesia",
+      "it": "Rupia"
     },
     "symbol": "Rp",
     "countryCodes": ["ID"]
@@ -540,7 +597,8 @@
     "code": "ILS",
     "names": {
       "en": "Israeli Sheqel",
-      "es": "Nuevo shéquel israelí"
+      "es": "Nuevo shéquel israelí",
+      "it": "Israeli Sheqel"
     },
     "symbol": "₪",
     "countryCodes": ["IL"]
@@ -549,7 +607,8 @@
     "code": "INR",
     "names": {
       "en": "Indian Rupee",
-      "es": "Rupia india"
+      "es": "Rupia india",
+      "it": "Rupia indiana"
     },
     "symbol": "₹",
     "countryCodes": ["IN", "BT"]
@@ -558,7 +617,8 @@
     "code": "IQD",
     "names": {
       "en": "Iraqi Dinar",
-      "es": "Dinar iraquí"
+      "es": "Dinar iraquí",
+      "it": "Dinar"
     },
     "symbol": "din",
     "countryCodes": ["IQ"]
@@ -567,7 +627,8 @@
     "code": "IRR",
     "names": {
       "en": "Iranian Rial",
-      "es": "Rial iraní"
+      "es": "Rial iraní",
+      "it": "Rial"
     },
     "symbol": "Rial",
     "countryCodes": ["IR"]
@@ -576,7 +637,8 @@
     "code": "ISK",
     "names": {
       "en": "Iceland Krona",
-      "es": "Corona islandesa"
+      "es": "Corona islandesa",
+      "it": "Corona"
     },
     "symbol": "kr",
     "countryCodes": ["IS"]
@@ -585,7 +647,8 @@
     "code": "JMD",
     "names": {
       "en": "Jamaican Dollar",
-      "es": "Dólar jamaiquino"
+      "es": "Dólar jamaiquino",
+      "it": "Dollaro"
     },
     "symbol": "$",
     "countryCodes": ["JM"]
@@ -594,7 +657,8 @@
     "code": "JOD",
     "names": {
       "en": "Jordanian Dinar",
-      "es": "Dinar jordano"
+      "es": "Dinar jordano",
+      "it": "Dinar"
     },
     "symbol": "din",
     "countryCodes": ["JO"]
@@ -603,7 +667,8 @@
     "code": "JPY",
     "names": {
       "en": "Japan Yen",
-      "es": "Yen"
+      "es": "Yen",
+      "it": "Japan Yen"
     },
     "symbol": "¥",
     "countryCodes": ["JP"]
@@ -612,7 +677,8 @@
     "code": "KES",
     "names": {
       "en": "Kenyan Shilling",
-      "es": "Chelín keniano"
+      "es": "Chelín keniano",
+      "it": "Scellino"
     },
     "symbol": "Ksh",
     "countryCodes": ["KE"]
@@ -621,7 +687,8 @@
     "code": "KGS",
     "names": {
       "en": "Som",
-      "es": "Som"
+      "es": "Som",
+      "it": "Som"
     },
     "symbol": "KGS",
     "countryCodes": ["KG"]
@@ -630,7 +697,8 @@
     "code": "KHR",
     "names": {
       "en": "Riel",
-      "es": "Riel"
+      "es": "Riel",
+      "it": "Riel"
     },
     "symbol": "Riel",
     "countryCodes": ["KH"]
@@ -639,7 +707,8 @@
     "code": "KMF",
     "names": {
       "en": "Comoro Franc",
-      "es": "Franco comorense"
+      "es": "Franco comorense",
+      "it": "Franco"
     },
     "symbol": "CF",
     "countryCodes": ["KM"]
@@ -648,7 +717,8 @@
     "code": "KPW",
     "names": {
       "en": "North Korean Won",
-      "es": "Won norcoreano"
+      "es": "Won norcoreano",
+      "it": "Won"
     },
     "symbol": "₩",
     "countryCodes": ["KP"]
@@ -657,7 +727,8 @@
     "code": "KRW",
     "names": {
       "en": "Won",
-      "es": "Won"
+      "es": "Won",
+      "it": "Won"
     },
     "symbol": "₩",
     "countryCodes": ["KR"]
@@ -666,7 +737,8 @@
     "code": "KWD",
     "names": {
       "en": "Kuwaiti Dinar",
-      "es": "Dinar kuwaití"
+      "es": "Dinar kuwaití",
+      "it": "Dinar"
     },
     "symbol": "din",
     "countryCodes": ["KW"]
@@ -675,7 +747,8 @@
     "code": "KYD",
     "names": {
       "en": "Cayman Islands Dollar",
-      "es": "Dólar de las Islas Caimán"
+      "es": "Dólar de las Islas Caimán",
+      "it": "Dollaro"
     },
     "symbol": "$",
     "countryCodes": ["KY"]
@@ -684,7 +757,8 @@
     "code": "KZT",
     "names": {
       "en": "Tenge",
-      "es": "Tenge"
+      "es": "Tenge",
+      "it": "Tenge"
     },
     "symbol": "₸",
     "countryCodes": ["KZ"]
@@ -693,7 +767,8 @@
     "code": "LAK",
     "names": {
       "en": "Kip",
-      "es": "Kip"
+      "es": "Kip",
+      "it": "Kip"
     },
     "symbol": "₭",
     "countryCodes": ["LA"]
@@ -702,7 +777,8 @@
     "code": "LBP",
     "names": {
       "en": "Lebanese Pound",
-      "es": "Libra libanesa"
+      "es": "Libra libanesa",
+      "it": "Sterlina"
     },
     "symbol": "L£",
     "countryCodes": ["LB"]
@@ -711,7 +787,8 @@
     "code": "LKR",
     "names": {
       "en": "Sri Lanka Rupee",
-      "es": "Rupia de Sri Lanka"
+      "es": "Rupia de Sri Lanka",
+      "it": "Rupia"
     },
     "symbol": "Rs",
     "countryCodes": ["LK"]
@@ -720,7 +797,8 @@
     "code": "LRD",
     "names": {
       "en": "Liberian Dollar",
-      "es": "Dólar liberiano"
+      "es": "Dólar liberiano",
+      "it": "Dollaro"
     },
     "symbol": "$",
     "countryCodes": ["LR"]
@@ -729,7 +807,8 @@
     "code": "LSL",
     "names": {
       "en": "Loti",
-      "es": "Loti"
+      "es": "Loti",
+      "it": "Loti"
     },
     "symbol": "LSL",
     "countryCodes": ["LS"]
@@ -738,7 +817,8 @@
     "code": "LYD",
     "names": {
       "en": "Libyan Dinar",
-      "es": "Dinar libio"
+      "es": "Dinar libio",
+      "it": "Dinar"
     },
     "symbol": "din",
     "countryCodes": ["LY"]
@@ -747,7 +827,8 @@
     "code": "MAD",
     "names": {
       "en": "Moroccan Dirham",
-      "es": "Dírham marroquí"
+      "es": "Dírham marroquí",
+      "it": "Dirham"
     },
     "symbol": "dh",
     "countryCodes": ["MA"]
@@ -756,7 +837,8 @@
     "code": "MDL",
     "names": {
       "en": "Moldovan Leu",
-      "es": "Leu moldavo"
+      "es": "Leu moldavo",
+      "it": "Moldovan Leu"
     },
     "symbol": "MDL",
     "countryCodes": ["MD"]
@@ -765,7 +847,8 @@
     "code": "MGA",
     "names": {
       "en": "Malagasy Ariary",
-      "es": "Ariary malgache"
+      "es": "Ariary malgache",
+      "it": "Ariary"
     },
     "symbol": "Ar",
     "countryCodes": ["MG"]
@@ -774,7 +857,8 @@
     "code": "MKD",
     "names": {
       "en": "Denar",
-      "es": "Denar"
+      "es": "Denar",
+      "it": "Denar"
     },
     "symbol": "din",
     "countryCodes": ["MK"]
@@ -783,7 +867,8 @@
     "code": "MMK",
     "names": {
       "en": "Kyat",
-      "es": "Kyat"
+      "es": "Kyat",
+      "it": "Kyat"
     },
     "symbol": "K",
     "countryCodes": ["MM"]
@@ -792,7 +877,8 @@
     "code": "MNT",
     "names": {
       "en": "Tugrik",
-      "es": "Tugrik"
+      "es": "Tugrik",
+      "it": "Tugrik"
     },
     "symbol": "₮",
     "countryCodes": ["MN"]
@@ -801,7 +887,8 @@
     "code": "MOP",
     "names": {
       "en": "Pataca",
-      "es": "Pataca"
+      "es": "Pataca",
+      "it": "Pataca"
     },
     "symbol": "MOP",
     "countryCodes": ["MO"]
@@ -810,7 +897,8 @@
     "code": "MUR",
     "names": {
       "en": "Mauritius Rupee",
-      "es": "Rupia de Mauricio"
+      "es": "Rupia de Mauricio",
+      "it": "Rupia"
     },
     "symbol": "Rs",
     "countryCodes": ["MU"]
@@ -819,7 +907,8 @@
     "code": "MVR",
     "names": {
       "en": "Rufiyaa",
-      "es": "Rufiyaa"
+      "es": "Rufiyaa",
+      "it": "Rufiyaa"
     },
     "symbol": "Rf",
     "countryCodes": ["MV"]
@@ -828,7 +917,8 @@
     "code": "MWK",
     "names": {
       "en": "Kwacha",
-      "es": "Kwacha"
+      "es": "Kwacha",
+      "it": "Kwacha"
     },
     "symbol": "MWK",
     "countryCodes": ["MW"]
@@ -837,7 +927,8 @@
     "code": "MXN",
     "names": {
       "en": "Mexican Peso",
-      "es": "Peso mexicano"
+      "es": "Peso mexicano",
+      "it": "Peso"
     },
     "symbol": "$",
     "countryCodes": ["MX"]
@@ -846,7 +937,8 @@
     "code": "MYR",
     "names": {
       "en": "Malaysian Ringgit",
-      "es": "Ringgit malayo"
+      "es": "Ringgit malayo",
+      "it": "Ringgit"
     },
     "symbol": "RM",
     "countryCodes": ["MY"]
@@ -855,7 +947,8 @@
     "code": "MZN",
     "names": {
       "en": "Metical",
-      "es": "Metical mozambiqueño"
+      "es": "Metical mozambiqueño",
+      "it": "Metical"
     },
     "symbol": "MTn",
     "countryCodes": ["MZ"]
@@ -864,7 +957,8 @@
     "code": "NAD",
     "names": {
       "en": "Namibia Dollar",
-      "es": "Dólar namibio"
+      "es": "Dólar namibio",
+      "it": "Dollaro"
     },
     "symbol": "$",
     "countryCodes": ["NA"]
@@ -873,7 +967,8 @@
     "code": "NGN",
     "names": {
       "en": "Naira",
-      "es": "Naira"
+      "es": "Naira",
+      "it": "Naira"
     },
     "symbol": "₦",
     "countryCodes": ["NG"]
@@ -882,7 +977,8 @@
     "code": "NIO",
     "names": {
       "en": "Cordoba Oro",
-      "es": "Córdoba"
+      "es": "Córdoba",
+      "it": "Cordoba Oro"
     },
     "symbol": "C$",
     "countryCodes": ["NI"]
@@ -891,7 +987,8 @@
     "code": "NOK",
     "names": {
       "en": "Norwegian Krone",
-      "es": "Corona noruega"
+      "es": "Corona noruega",
+      "it": "Corona"
     },
     "symbol": "kr",
     "countryCodes": ["NO"]
@@ -900,7 +997,8 @@
     "code": "NPR",
     "names": {
       "en": "Nepalese Rupee",
-      "es": "Rupia nepalí"
+      "es": "Rupia nepalí",
+      "it": "Rupia"
     },
     "symbol": "Rs",
     "countryCodes": ["NP"]
@@ -909,7 +1007,8 @@
     "code": "NZD",
     "names": {
       "en": "New Zealand Dollar",
-      "es": "Dólar neozelandés"
+      "es": "Dólar neozelandés",
+      "it": "Dollaro"
     },
     "symbol": "$",
     "countryCodes": ["NZ"]
@@ -918,7 +1017,8 @@
     "code": "OMR",
     "names": {
       "en": "Rial Omani",
-      "es": "Rial omaní"
+      "es": "Rial omaní",
+      "it": "Rial"
     },
     "symbol": "Rial",
     "countryCodes": ["OM"]
@@ -927,7 +1027,8 @@
     "code": "PAB",
     "names": {
       "en": "Balboa",
-      "es": "Balboa"
+      "es": "Balboa",
+      "it": "Balboa"
     },
     "symbol": "B/.",
     "countryCodes": ["PA"]
@@ -936,7 +1037,8 @@
     "code": "PEN",
     "names": {
       "en": "Nuevo Sol",
-      "es": "Sol"
+      "es": "Sol",
+      "it": "Sol"
     },
     "symbol": "S/",
     "countryCodes": ["PE"]
@@ -945,7 +1047,8 @@
     "code": "PGK",
     "names": {
       "en": "Kina",
-      "es": "Kina"
+      "es": "Kina",
+      "it": "Kina"
     },
     "symbol": "PGK",
     "countryCodes": ["PG"]
@@ -954,7 +1057,8 @@
     "code": "PHP",
     "names": {
       "en": "Philippine Peso",
-      "es": "Peso filipino"
+      "es": "Peso filipino",
+      "it": "Peso"
     },
     "symbol": "₱",
     "countryCodes": ["PH"]
@@ -963,7 +1067,8 @@
     "code": "PKR",
     "names": {
       "en": "Pakistan Rupee",
-      "es": "Rupia pakistaní"
+      "es": "Rupia pakistaní",
+      "it": "Rupia"
     },
     "symbol": "Rs",
     "countryCodes": ["PK"]
@@ -972,7 +1077,8 @@
     "code": "PLN",
     "names": {
       "en": "Zloty",
-      "es": "Zloty"
+      "es": "Zloty",
+      "it": "Zloty"
     },
     "symbol": "zł",
     "countryCodes": ["PL"]
@@ -981,7 +1087,8 @@
     "code": "PYG",
     "names": {
       "en": "Guarani",
-      "es": "Guaraní"
+      "es": "Guaraní",
+      "it": "Guarani"
     },
     "symbol": "Gs",
     "countryCodes": ["PY"]
@@ -990,7 +1097,8 @@
     "code": "QAR",
     "names": {
       "en": "Qatari Rial",
-      "es": "Rial catarí"
+      "es": "Rial catarí",
+      "it": "Rial"
     },
     "symbol": "Rial",
     "countryCodes": ["QA"]
@@ -999,7 +1107,8 @@
     "code": "RON",
     "names": {
       "en": "Leu",
-      "es": "Leu"
+      "es": "Leu",
+      "it": "Leu"
     },
     "symbol": "RON",
     "countryCodes": ["RO"]
@@ -1008,7 +1117,8 @@
     "code": "RSD",
     "names": {
       "en": "Serbian Dinar",
-      "es": "Dinar serbio"
+      "es": "Dinar serbio",
+      "it": "Dinar"
     },
     "symbol": "din",
     "countryCodes": ["RS"]
@@ -1017,7 +1127,8 @@
     "code": "RUB",
     "names": {
       "en": "Russian Ruble",
-      "es": "Rublo ruso"
+      "es": "Rublo ruso",
+      "it": "Rublo russo"
     },
     "symbol": "₽",
     "countryCodes": ["RU"]
@@ -1026,7 +1137,8 @@
     "code": "RWF",
     "names": {
       "en": "Rwanda Franc",
-      "es": "Franco ruandés"
+      "es": "Franco ruandés",
+      "it": "Franco"
     },
     "symbol": "RF",
     "countryCodes": ["RW"]
@@ -1035,7 +1147,8 @@
     "code": "SAR",
     "names": {
       "en": "Saudi Riyal",
-      "es": "Riyal saudí"
+      "es": "Riyal saudí",
+      "it": "Riyal"
     },
     "symbol": "Riyal",
     "countryCodes": ["SA"]
@@ -1044,7 +1157,8 @@
     "code": "SBD",
     "names": {
       "en": "Solomon Islands Dollar",
-      "es": "Dólar de las Islas Salomón"
+      "es": "Dólar de las Islas Salomón",
+      "it": "Dollaro"
     },
     "symbol": "$",
     "countryCodes": ["SB"]
@@ -1053,7 +1167,8 @@
     "code": "SCR",
     "names": {
       "en": "Seychelles Rupee",
-      "es": "Rupia de Seychelles"
+      "es": "Rupia de Seychelles",
+      "it": "Rupia"
     },
     "symbol": "Rs",
     "countryCodes": ["SC"]
@@ -1062,7 +1177,8 @@
     "code": "SDG",
     "names": {
       "en": "Sudanese Pound",
-      "es": "Libra sudanesa"
+      "es": "Libra sudanesa",
+      "it": "Sterlina"
     },
     "symbol": "£",
     "countryCodes": ["SD"]
@@ -1071,7 +1187,8 @@
     "code": "SEK",
     "names": {
       "en": "Swedish Krona",
-      "es": "Corona sueca"
+      "es": "Corona sueca",
+      "it": "Corona"
     },
     "symbol": "kr",
     "countryCodes": ["SE"]
@@ -1080,7 +1197,8 @@
     "code": "SGD",
     "names": {
       "en": "Singapore Dollar",
-      "es": "Dólar de Singapur"
+      "es": "Dólar de Singapur",
+      "it": "Dollaro"
     },
     "symbol": "$",
     "countryCodes": ["SG"]
@@ -1089,7 +1207,8 @@
     "code": "SHP",
     "names": {
       "en": "Saint Helena Pound",
-      "es": "Libra de Santa Elena"
+      "es": "Libra de Santa Elena",
+      "it": "Sterlina"
     },
     "symbol": "£",
     "countryCodes": ["SH"]
@@ -1098,7 +1217,8 @@
     "code": "SLL",
     "names": {
       "en": "Leone",
-      "es": "Leone"
+      "es": "Leone",
+      "it": "Leone"
     },
     "symbol": "Le",
     "countryCodes": ["SL"]
@@ -1107,7 +1227,8 @@
     "code": "SOS",
     "names": {
       "en": "Somali Shilling",
-      "es": "Chelín somalí"
+      "es": "Chelín somalí",
+      "it": "Scellino"
     },
     "symbol": "Sh",
     "countryCodes": ["SO"]
@@ -1116,7 +1237,8 @@
     "code": "SRD",
     "names": {
       "en": "Surinam Dollar",
-      "es": "Dólar surinamés"
+      "es": "Dólar surinamés",
+      "it": "Dollaro"
     },
     "symbol": "$",
     "countryCodes": ["SR"]
@@ -1125,7 +1247,8 @@
     "code": "SSP",
     "names": {
       "en": "South Sudanese Pound",
-      "es": "Libra sursudanesa"
+      "es": "Libra sursudanesa",
+      "it": "Sterlina"
     },
     "symbol": "£",
     "countryCodes": ["SS"]
@@ -1133,7 +1256,8 @@
   {
     "code": "STD",
     "names": {
-      "en": "Dobra"
+      "en": "Dobra",
+      "it": "Dobra"
     },
     "symbol": "Db",
     "countryCodes": ["ST"]
@@ -1142,7 +1266,8 @@
     "code": "SVC",
     "names": {
       "en": "Salvadoran Colon",
-      "es": "Colon Salvadoreño"
+      "es": "Colon Salvadoreño",
+      "it": "Salvadoran Colon"
     },
     "symbol": "₡"
   },
@@ -1150,7 +1275,8 @@
     "code": "SYP",
     "names": {
       "en": "Syrian Pound",
-      "es": "Libra siria"
+      "es": "Libra siria",
+      "it": "Sterlina"
     },
     "symbol": "£",
     "countryCodes": ["SY"]
@@ -1159,7 +1285,8 @@
     "code": "SZL",
     "names": {
       "en": "Lilangeni",
-      "es": "Lilangeni"
+      "es": "Lilangeni",
+      "it": "Lilangeni"
     },
     "symbol": "SZL",
     "countryCodes": ["SZ"]
@@ -1168,7 +1295,8 @@
     "code": "THB",
     "names": {
       "en": "Baht",
-      "es": "Baht"
+      "es": "Baht",
+      "it": "Baht"
     },
     "symbol": "฿",
     "countryCodes": ["TH"]
@@ -1177,7 +1305,8 @@
     "code": "TJS",
     "names": {
       "en": "Somoni",
-      "es": "Somoni"
+      "es": "Somoni",
+      "it": "Som"
     },
     "symbol": "Som",
     "countryCodes": ["TJ"]
@@ -1185,7 +1314,8 @@
   {
     "code": "TMT",
     "names": {
-      "en": "Manat"
+      "en": "Manat",
+      "it": "Manat"
     },
     "symbol": "TMT",
     "countryCodes": ["TM"]
@@ -1194,7 +1324,8 @@
     "code": "TND",
     "names": {
       "en": "Tunisian Dinar",
-      "es": "Dinar tunecino"
+      "es": "Dinar tunecino",
+      "it": "Dinar"
     },
     "symbol": "din",
     "countryCodes": ["TN"]
@@ -1203,7 +1334,8 @@
     "code": "TOP",
     "names": {
       "en": "Pa'anga",
-      "es": "Pa'anga"
+      "es": "Pa'anga",
+      "it": "Paanga"
     },
     "symbol": "T$",
     "countryCodes": ["TO"]
@@ -1212,7 +1344,8 @@
     "code": "TRY",
     "names": {
       "en": "Turkish Lira",
-      "es": "Lira turca"
+      "es": "Lira turca",
+      "it": "Lira"
     },
     "symbol": "₺",
     "countryCodes": ["TR"]
@@ -1221,7 +1354,8 @@
     "code": "TTD",
     "names": {
       "en": "Trinidad and Tobago Dollar",
-      "es": "Dólar de Trinidad y Tobago"
+      "es": "Dólar de Trinidad y Tobago",
+      "it": "Dollaro"
     },
     "symbol": "$",
     "countryCodes": ["TT"]
@@ -1230,7 +1364,8 @@
     "code": "TWD",
     "names": {
       "en": "Taiwan Dollar",
-      "es": "Nuevo dólar taiwanés"
+      "es": "Nuevo dólar taiwanés",
+      "it": "Dollaro"
     },
     "symbol": "NT$",
     "countryCodes": ["TW"]
@@ -1239,7 +1374,8 @@
     "code": "TZS",
     "names": {
       "en": "Tanzanian Shilling",
-      "es": "Chelín tanzano"
+      "es": "Chelín tanzano",
+      "it": "Scellino"
     },
     "symbol": "TSh",
     "countryCodes": ["TZ"]
@@ -1248,7 +1384,8 @@
     "code": "UAH",
     "names": {
       "en": "Hryvnia",
-      "es": "Grivna"
+      "es": "Grivna",
+      "it": "Hryvnia"
     },
     "symbol": "₴",
     "countryCodes": ["UA"]
@@ -1257,7 +1394,8 @@
     "code": "UGX",
     "names": {
       "en": "Uganda Shilling",
-      "es": "Chelín ugandés"
+      "es": "Chelín ugandés",
+      "it": "Scellino"
     },
     "symbol": "UGX",
     "countryCodes": ["UG"]
@@ -1266,7 +1404,8 @@
     "code": "USD",
     "names": {
       "en": "US Dollar",
-      "es": "Dólar estadounidense"
+      "es": "Dólar estadounidense",
+      "it": "Dollaro USA"
     },
     "symbol": "$",
     "countryCodes": ["US"]
@@ -1275,7 +1414,8 @@
     "code": "UYU",
     "names": {
       "en": "Peso Uruguayo",
-      "es": "Peso uruguayo"
+      "es": "Peso uruguayo",
+      "it": "Peso"
     },
     "symbol": "$",
     "countryCodes": ["UY"]
@@ -1284,7 +1424,8 @@
     "code": "UZS",
     "names": {
       "en": "Uzbekistan Sum",
-      "es": "Som uzbeko"
+      "es": "Som uzbeko",
+      "it": "Uzbekistan Sum"
     },
     "symbol": "soʼm",
     "countryCodes": ["UZ"]
@@ -1292,7 +1433,8 @@
   {
     "code": "VEF",
     "names": {
-      "en": "Bolivar Fuerte"
+      "en": "Bolivar Fuerte",
+      "it": "Bolivar Fuerte"
     },
     "symbol": "Bs",
     "countryCodes": ["VE"]
@@ -1301,7 +1443,8 @@
     "code": "VND",
     "names": {
       "en": "Dong",
-      "es": "Dong vietnamita"
+      "es": "Dong vietnamita",
+      "it": "Dong"
     },
     "symbol": "₫",
     "countryCodes": ["VN"]
@@ -1310,7 +1453,8 @@
     "code": "VUV",
     "names": {
       "en": "Vatu",
-      "es": "Vatu"
+      "es": "Vatu",
+      "it": "Vatu"
     },
     "symbol": "VUV",
     "countryCodes": ["VU"]
@@ -1319,7 +1463,8 @@
     "code": "WST",
     "names": {
       "en": "Tala",
-      "es": "Tala"
+      "es": "Tala",
+      "it": "Tala"
     },
     "symbol": "WST",
     "countryCodes": ["WS"]
@@ -1328,7 +1473,8 @@
     "code": "XAF",
     "names": {
       "en": "CFA Franc",
-      "es": "Franco CFA de África Central"
+      "es": "Franco CFA de África Central",
+      "it": "Franco"
     },
     "symbol": "FCFA",
     "countryCodes": ["CM", "CF", "TD", "CG", "GQ", "GA"]
@@ -1337,7 +1483,8 @@
     "code": "XCD",
     "names": {
       "en": "East Caribbean Dollar",
-      "es": "Dólar del Caribe Oriental"
+      "es": "Dólar del Caribe Oriental",
+      "it": "Dollaro"
     },
     "symbol": "$",
     "countryCodes": ["AG", "DM", "GD", "KN", "LC", "VC"]
@@ -1346,7 +1493,8 @@
     "code": "XOF",
     "names": {
       "en": "CFA Franc",
-      "es": "Franco CFA de África Occidental"
+      "es": "Franco CFA de África Occidental",
+      "it": "Franco"
     },
     "symbol": "CFA",
     "countryCodes": ["BJ", "BF", "CI", "GW", "ML", "NE", "SN", "TG"]
@@ -1355,7 +1503,8 @@
     "code": "XPF",
     "names": {
       "en": "CFP Franc",
-      "es": "Franco CFP"
+      "es": "Franco CFP",
+      "it": "Franco"
     },
     "symbol": "FCFP",
     "countryCodes": ["PF", "NC", "WF"]
@@ -1364,7 +1513,8 @@
     "code": "YER",
     "names": {
       "en": "Yemeni Rial",
-      "es": "Rial yemení"
+      "es": "Rial yemení",
+      "it": "Rial"
     },
     "symbol": "Rial",
     "countryCodes": ["YE"]
@@ -1373,7 +1523,8 @@
     "code": "ZAR",
     "names": {
       "en": "Rand",
-      "es": "Rand"
+      "es": "Rand",
+      "it": "Rand"
     },
     "symbol": "R",
     "countryCodes": ["ZA"]
@@ -1382,7 +1533,8 @@
     "code": "ZMW",
     "names": {
       "en": "Zambian Kwacha",
-      "es": "Kwacha zambiano"
+      "es": "Kwacha zambiano",
+      "it": "Kwacha"
     },
     "symbol": "ZK",
     "countryCodes": ["ZM"]
@@ -1390,7 +1542,8 @@
   {
     "code": "ZWL",
     "names": {
-      "en": "Zimbabwean dollar"
+      "en": "Zimbabwean dollar",
+      "it": "Dollaro"
     },
     "symbol": "$",
     "countryCodes": ["ZW"]

@@ -29,13 +29,13 @@ class SimpleShadow extends StatelessWidget {
             offset: offset,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
-                  sigmaY: sigma, sigmaX: sigma, tileMode: TileMode.decal),
+                sigmaY: sigma,
+                sigmaX: sigma,
+                tileMode: TileMode.decal,
+              ),
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.transparent,
-                    width: 0,
-                  ),
+                  border: Border.all(color: Colors.transparent, width: 0),
                 ),
                 child: ColorFiltered(
                   colorFilter: ColorFilter.mode(

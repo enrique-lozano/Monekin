@@ -6,19 +6,15 @@ class Currency extends CurrencyInDB {
       'assets/icons/currency_flags/${code.toLowerCase()}.svg';
 
   SvgPicture displayFlagIcon({double? size}) {
-    return SvgPicture.asset(
-      currencyIconPath,
-      height: size,
-      width: size,
-    );
+    return SvgPicture.asset(currencyIconPath, height: size, width: size);
   }
 
   Currency({required super.name, required super.code, required super.symbol});
 
   Currency.fromDB({required CurrencyInDB currencyInDB})
-      : this(
-          code: currencyInDB.code,
-          name: currencyInDB.name,
-          symbol: currencyInDB.symbol,
-        );
+    : this(
+        code: currencyInDB.code,
+        name: currencyInDB.name,
+        symbol: currencyInDB.symbol,
+      );
 }

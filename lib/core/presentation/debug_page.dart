@@ -18,46 +18,46 @@ class DebugPage extends StatelessWidget {
         'primaryContainer',
         themeColors.primaryContainer,
         'onPrimaryContainer',
-        themeColors.onPrimaryContainer
+        themeColors.onPrimaryContainer,
       ),
       (
         'primaryFixed',
         themeColors.primaryFixed,
         'onPrimaryFixed',
-        themeColors.onPrimaryFixed
+        themeColors.onPrimaryFixed,
       ),
       (
         'secondary',
         themeColors.secondary,
         'onSecondary',
-        themeColors.onSecondary
+        themeColors.onSecondary,
       ),
       (
         'secondaryContainer',
         themeColors.secondaryContainer,
         'onSecondaryContainer',
-        themeColors.onSecondaryContainer
+        themeColors.onSecondaryContainer,
       ),
       ('tertiary', themeColors.tertiary, 'onTertiary', themeColors.onTertiary),
       (
         'tertiaryContainer',
         themeColors.tertiaryContainer,
         'onTertiaryContainer',
-        themeColors.onTertiaryContainer
+        themeColors.onTertiaryContainer,
       ),
       ('error', themeColors.error, 'onError', themeColors.onError),
       (
         'errorContainer',
         themeColors.errorContainer,
         'onErrorContainer',
-        themeColors.onErrorContainer
+        themeColors.onErrorContainer,
       ),
       ('surface', themeColors.surface, 'onSurface', themeColors.onSurface),
       (
         'inverseSurface',
         themeColors.inverseSurface,
         'onInverseSurface',
-        themeColors.onInverseSurface
+        themeColors.onInverseSurface,
       ),
     ];
 
@@ -252,10 +252,7 @@ class _ThemeTextStylesPreview extends StatelessWidget {
         final (label, textStyle) = style;
         return Padding(
           padding: const EdgeInsets.only(bottom: 8),
-          child: Text(
-            label,
-            style: textStyle,
-          ),
+          child: Text(label, style: textStyle),
         );
       }).toList(),
     );
@@ -277,7 +274,8 @@ class _ColorPreviewTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveFg = foregroundColor ??
+    final effectiveFg =
+        foregroundColor ??
         (ThemeData.estimateBrightnessForColor(backgroundColor) ==
                 Brightness.dark
             ? Colors.white

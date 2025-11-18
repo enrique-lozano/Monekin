@@ -51,6 +51,7 @@
     "yesterday": "昨天",
     "filters": "筛选",
     "empty-warn": "喔！这里什么都没有",
+    "search-no-results": "没有符合您搜索条件的商品",
     "insufficient-data": "数据不足",
     "show-more-fields": "显示更多",
     "show-less-fields": "显示更少",
@@ -196,15 +197,24 @@
   "FINANCIAL-HEALTH": {
     "display": "财务健康",
     "review": {
-      "very_good(context=GenderContext)": { "male,female": "很好！" },
-      "good(context=GenderContext)": { "male,female": "好" },
-      "normal(context=GenderContext)": { "male,female": "一般" },
-      "bad(context=GenderContext)": { "male,female": "不好" },
-      "very_bad(context=GenderContext)": { "male,female": "很不好" },
+      "very_good(context=GenderContext)": {
+        "male,female": "很好！"
+      },
+      "good(context=GenderContext)": {
+        "male,female": "好"
+      },
+      "normal(context=GenderContext)": {
+        "male,female": "一般"
+      },
+      "bad(context=GenderContext)": {
+        "male,female": "不好"
+      },
+      "very_bad(context=GenderContext)": {
+        "male,female": "很不好"
+      },
       "insufficient_data(context=GenderContext)": {
         "male,female": "数据不足"
       },
-
       "descr": {
         "insufficient_data": "看起来我们没有足够的数据来计算您的财务健康情况。请添加一些支出/收入以便我们帮助您！",
         "very_good": "恭喜！您的财务状况非常好。我们希望您能够继续保持，并继续和 Monekin 一起学习。",
@@ -262,8 +272,8 @@
     "color": "颜色",
     "select-icon": "选择一个图标",
     "select-color": "选择一种颜色",
-    "current-color-selection": "当前选择",
     "custom-color": "自定义颜色",
+    "current-color-selection": "当前选择",
     "select-account-icon": "确认您的账户",
     "select-category-icon": "确认您的类别",
     "SCOPES": {
@@ -315,11 +325,15 @@
       "recurrent-rule-finished": "循环规则已完成，没有更多的支付！"
     },
     "LIST": {
+      "all": "所有交易",
       "empty": "未发现需要显示的交易。请先在应用中添加一些交易，下次再来查看",
       "searcher.placeholder": "按类别、描述等搜索",
       "searcher.no-results": "未找到符合搜索条件的交易",
       "loading": "正在加载更多的交易……",
-      "selected.short": { "one": "已选择 {{n}}", "other": "已选择 {{n}}" },
+      "selected.short": {
+        "one": "已选择 {{n}}",
+        "other": "已选择 {{n}}"
+      },
       "selected.long": {
         "one": "已选择 {{n}} 笔交易",
         "other": "已选择 {{n}} 笔交易"
@@ -331,6 +345,7 @@
       }
     },
     "FILTERS": {
+      "title": "交易过滤器",
       "from_value": "最小金额",
       "to_value": "最大金额",
       "from_value_def": "从 {{ x }}",
@@ -593,7 +608,9 @@
       "name": "预算名称",
       "value": "预算额度",
       "create": "创建预算",
+      "create-success": "预算创建成功",
       "edit": "编辑预算",
+      "edit-success": "预算编辑成功",
       "negative-warn": "预算额度不能为负数"
     },
     "DETAILS": {
@@ -606,17 +623,27 @@
     }
   },
   "BACKUP": {
+    "no_file_selected": "未选择文件",
+    "no_directory_selected": "未选择目录",
     "EXPORT": {
       "title": "导出您的数据",
       "title.short": "导出",
+      "type-of-export": "出口类型",
+      "other-options": "选项",
       "all": "完整备份",
       "all.descr": "导出您的所有数据（账户、交易、预算、设置……）。随时再次导入它们，您就不会丟失任何內容。",
       "transactions": "交易备份",
       "transactions.descr": "以 CSV 格式导出您的交易，以便您可以在其它程序或应用中更轻松地分析。",
+      "transactions-to-export": {
+        "one": "1 笔交易要导出",
+        "other": "要导出的 {{ n }} 笔交易"
+      },
       "description": "以不同格式下载（导出）数据",
-      "dialog_title": "保存/发送文件",
+      "send_file": "发送文件",
+      "see_folder": "查看文件夹",
       "success": "文件已成功保存/下载至 {{x}}",
-      "error": "下载文件时发生错误。请通过 lozin.technologies@gmail.com 联系开发人员"
+      "error": "下载文件时发生错误。请通过 lozin.technologies@gmail.com 联系开发人员",
+      "dialog_title": "保存/发送文件"
     },
     "IMPORT": {
       "title": "导入您的数据",
@@ -653,8 +680,8 @@
         "success": "成功导入 {{x}} 笔交易"
       },
       "success": "导入成功",
-      "cancelled": "导入被用户取消",
-      "error": "导入文件时发生错误。请通过 lozin.technologies@gmail.com 联系开发人员。"
+      "error": "导入文件时发生错误。请通过 lozin.technologies@gmail.com 联系开发人员。",
+      "cancelled": "导入被用户取消"
     },
     "ABOUT": {
       "title": "有关您的数据库的信息",
@@ -674,6 +701,7 @@
     "lang.descr": "应用中显示文字的语言",
     "lang.help": "如果您想合作翻译此应用，您可参考<a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>我们的指南</a>",
     "locale": "地区",
+    "locale_auto": "系统",
     "locale.descr": "设置用于日期、数字的格式……",
     "locale.warn": "更改区域时应用将更新",
     "first_day_of_week": "一周的第一天",
@@ -688,6 +716,20 @@
     "dynamic-colors.descr": "尽可能使用系统强调色",
     "accent-color": "强调色",
     "accent-color.descr": "选择应用中用来强调介面某些部分的颜色",
+    "font": "字体",
+    "font-platform": "平台",
+    "SWIPE-ACTIONS": {
+      "title": "滑动操作",
+      "choose-description": "选择当您使用此滑动方向滑动列表中的交易项目时将触发什么操作",
+      "swipe-left": "向左滑动",
+      "swipe-right": "向右滑动",
+      "none": "无动作",
+      "toggle-reconciled": "切换已调节",
+      "toggle-pending": "切换待处理",
+      "toggle-voided": "切换作废",
+      "toggle-unreconciled": "切换不可调和",
+      "remove-status": "删除状态"
+    },
     "SECURITY": {
       "title": "安全",
       "private-mode-at-launch": "启动隐私模式",

@@ -51,6 +51,7 @@
     "yesterday": "Ayer",
     "filters": "Filtros",
     "empty-warn": "Ops! Esto esta muy vacio",
+    "search-no-results": "No hay elementos que coincidan con tus criterios de búsqueda",
     "insufficient-data": "Datos insuficientes",
     "show-more-fields": "Show more fields",
     "show-less-fields": "Show less fields",
@@ -327,6 +328,7 @@
       "recurrent-rule-finished": "La regla recurrente se ha completado, ya no hay mas pagos a realizar!"
     },
     "LIST": {
+      "all": "Todas las transacciones",
       "empty": "No se han encontrado transacciones que mostrar aquí. Añade unas cuantas transacciones en la app y quizas tengas más suerte la proxima vez",
       "searcher.placeholder": "Busca por categoría, descripción...",
       "searcher.no-results": "No se han encontrado transacciones que coincidan con los criterios de busqueda",
@@ -346,6 +348,7 @@
       }
     },
     "FILTERS": {
+      "title": "Filtros de transacciones",
       "from_value": "Desde monto",
       "to_value": "Hasta monto",
       "from_value_def": "Desde {{ x }}",
@@ -459,7 +462,7 @@
     "n_transactions": "Número de transacciones",
     "add_money": "Añadir dinero",
     "withdraw_money": "Retirar dinero",
-    "no-accounts": "No se han encontrado cuentas que mostrar aquí. Añade una transacción pulsando el botón '+' de la parte inferior",
+    "no-accounts": "No se han encontrado cuentas que mostrar aquí. Añade una cuenta pulsando el botón '+' de la parte inferior",
     "TYPES": {
       "title": "Tipo de cuenta",
       "warning": "Una vez elegido el tipo de cuenta este no podrá cambiarse en un futuro",
@@ -608,7 +611,9 @@
       "name": "Nombre del presupuesto",
       "value": "Cantidad límite",
       "create": "Añade el presupuesto",
+      "create-success": "Presupuesto creado exitosamente",
       "edit": "Editar presupuesto",
+      "edit-success": "Presupuesto editado exitosamente",
       "negative-warn": "Los presupuestos no pueden tener un valor límite negativo"
     },
     "DETAILS": {
@@ -621,17 +626,27 @@
     }
   },
   "BACKUP": {
+    "no_file_selected": "Ningún archivo seleccionado",
+    "no_directory_selected": "Ningún directorio seleccionado",
     "EXPORT": {
       "title": "Exportar datos",
       "title.short": "Exportar",
+      "type-of-export": "Tipo de exportación",
+      "other-options": "Opciones",
       "all": "Respaldo total",
       "all.descr": "Exporta todos tus datos (cuentas, transacciones, presupuestos, ajustes...). Importalos de nuevo en cualquier momento para no perder nada.",
       "transactions": "Respaldo de transacciones",
       "transactions.descr": "Exporta tus transacciones en CSV para que puedas analizarlas mas facilmente en otros programas o aplicaciones.",
+      "transactions-to-export": {
+        "one": "1 transacción para exportar",
+        "other": "{{ n }} transacciones para exportar"
+      },
       "description": "Exporta tus datos en diferentes formatos",
-      "dialog_title": "Guardar/Enviar archivo",
-      "success": "Archivo guardado/enviado correctamente en {{x}}",
-      "error": "Error al descargar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com"
+      "send_file": "Enviar archivo",
+      "see_folder": "Ver carpeta",
+      "success": "Archivo guardado correctamente en {{x}}",
+      "error": "Error al descargar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com",
+      "dialog_title": "Guardar/Enviar archivo"
     },
     "IMPORT": {
       "title": "Importar tus datos",
@@ -668,8 +683,8 @@
         "success": "Se han importado correctamente {{x}} transacciones"
       },
       "success": "Importación realizada con exito",
-      "cancelled": "La importación fue cancelada por el usuario",
-      "error": "Error al importar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com"
+      "error": "Error al importar el archivo. Por favor contacte con el desarrollador via lozin.technologies@gmail.com",
+      "cancelled": "La importación fue cancelada por el usuario"
     },
     "ABOUT": {
       "title": "Información sobre tu base de datos",
@@ -689,6 +704,7 @@
     "lang.descr": "Idioma en el que se mostrarán los textos en la aplicación",
     "lang.help": "Si quieres colaborar con las traducciones de esta app puedes consultar <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>nuestra guía</a> ",
     "locale": "Región",
+    "locale_auto": "Sistema",
     "locale.descr": "Establecer el formato a utilizar para fechas, números...",
     "locale.warn": "Al cambiar la región, la aplicación se actualizará",
     "first_day_of_week": "Primer día de la semana",
@@ -703,6 +719,20 @@
     "dynamic-colors.descr": "Usar el color de acento de su sistema siempre que sea posible",
     "accent-color": "Color de acento",
     "accent-color.descr": "Elegir el color que la aplicación usará para enfatizar ciertas partes de la interfaz",
+    "font": "Fuente",
+    "font-platform": "Plataforma",
+    "SWIPE-ACTIONS": {
+      "title": "Acciones al deslizar el dedo",
+      "choose-description": "Elije qué acción se activará cuando deslices una transacción del listado de transacciones usando esta dirección de deslizamiento",
+      "swipe-left": "Desliza hacia la izquierda",
+      "swipe-right": "Desliza hacia la derecha",
+      "none": "No action",
+      "toggle-reconciled": "Alternar conciliado",
+      "toggle-pending": "Alternar pendiente",
+      "toggle-voided": "Alternar anulado",
+      "toggle-unreconciled": "Alternar no reconciliado",
+      "remove-status": "Eliminar estado"
+    },
     "SECURITY": {
       "title": "Seguridad",
       "private-mode-at-launch": "Modo privado al arrancar",

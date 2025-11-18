@@ -35,8 +35,9 @@ class SupportedIconService {
     return map;
   }
 
-  SupportedIcon get defaultSupportedIcon => getAllIcons()
-      .firstWhereOrNull((element) => element.id == 'question_mark')!;
+  SupportedIcon get defaultSupportedIcon => getAllIcons().firstWhereOrNull(
+    (element) => element.id == 'question_mark',
+  )!;
 
   /// Get an icon by its ID. Return a default icon if the icon is not found by the specified ID or a null ID is passed.
   SupportedIcon getIconByID(String? id) {
