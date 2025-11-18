@@ -47,4 +47,3 @@ app.*.map.json
 # Project specific
 **/generated/
 android/app/.cxx/
-.gitconfig
