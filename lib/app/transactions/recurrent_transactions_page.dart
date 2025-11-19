@@ -38,7 +38,7 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
               16,
               16,
               0,
-            ).withSafeBottom(context),            
+            ).withSafeBottom(context),
             child: StreamBuilder(
               stream: TransactionService.instance.countTransactions(
                 convertToPreferredCurrency: false,
