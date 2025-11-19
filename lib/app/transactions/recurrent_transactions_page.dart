@@ -33,7 +33,12 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+            padding: const EdgeInsets.fromLTRB(
+              16,
+              16,
+              16,
+              0,
+            ).withSafeBottom(context),            
             child: StreamBuilder(
               stream: TransactionService.instance.countTransactions(
                 convertToPreferredCurrency: false,
@@ -70,7 +75,7 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
           //
           const Divider(endIndent: 16, indent: 16),
           Padding(
-            padding: const EdgeInsets.all(16).withSafeBottom(context),
+            padding: const EdgeInsets.all(16),
             child: Card(
               clipBehavior: Clip.hardEdge,
               child: InkWell(
