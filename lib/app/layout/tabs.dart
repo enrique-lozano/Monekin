@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:monekin/app/layout/lazy_indexed_stack.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
@@ -65,11 +67,15 @@ class TabsPageState extends State<TabsPage> {
             shortLabels: BreakPoint.of(context).isSmallerThan(BreakpointID.xl),
           );
 
+          final selectedIndex = allDestinations.indexWhere(
+            (element) => element.id == selectedDestination,
+          );
+
           return FadeIndexedStack(
-            index: allDestinations.indexWhere(
-              (element) => element.id == selectedDestination,
-            ),
-            duration: const Duration(milliseconds: 300),
+            index: selectedIndex,
+            duration: Platform.isAndroid || Platform.isIOS
+                ? Duration.zero
+                : const Duration(milliseconds: 300),
             children: allDestinations.map((e) => e.destination).toList(),
           );
         },
