@@ -120,7 +120,12 @@ class _AccountFormPageState extends State<AccountFormPage> {
 
       if (await query.watchSingleOrNull().first != null) {
         if (context.mounted) {
-          MonekinSnackbar.error(SnackbarParams(t.account.form.already_exists));
+          MonekinSnackbar.error(
+            SnackbarParams.fromError(
+              t.account.form.already_exists,
+              duration: const Duration(seconds: 6),
+            ),
+          );
         }
 
         return;

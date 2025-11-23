@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/core/presentation/helpers/global_snackbar.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/utils/logger.dart';
 import 'package:monekin/main.dart';
@@ -53,100 +54,96 @@ abstract class MonekinSnackbar {
     }
 
     if (options.clearPrevious) {
+      final globalSnackbarState = globalSnackbarKey.currentState;
+
+      if (globalSnackbarState != null &&
+          globalSnackbarState.mounted &&
+          globalSnackbarState.currentQueue.isNotEmpty) {
+        Future.delayed(Duration(milliseconds: 1), () {
+          globalSnackbarState.animateOut();
+        });
+      }
+
       scaffoldMessenger!.clearSnackBars();
     }
 
     return scaffoldMessenger!;
   }
 
-  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason> success(
-    SnackbarParams options,
-  ) {
-    return _getScaffoldMessenger(options).showSnackBar(
-      SnackBar(
-        padding: options.padding,
-        backgroundColor: Colors.green[50],
-        //  margin: const EdgeInsets.all(8),
-        //  behavior: SnackBarBehavior.floating,
-        duration: options.duration,
-        content: MonekinSnackbarContent(
-          title: options.title,
-          message: options.message,
-          color: Colors.green,
-          icon: Icons.check_circle_rounded,
-          actions: options.actions,
-        ),
+  static void openSnackbar({
+    required SnackbarParams options,
+    required Color bgColor,
+    required Color textColor,
+    required IconData iconData,
+  }) {
+    _getScaffoldMessenger(options);
+
+    final snackbarResult = globalSnackbarKey.currentState!.post(
+      SnackbarInstance.fromParams(
+        options,
+        textColor: textColor,
+        backgroundColor: bgColor,
+        iconData: iconData,
       ),
+    );
+
+    return snackbarResult;
+
+    //  return _getScaffoldMessenger(options).showSnackBar(
+    //   SnackBar(
+    //     padding: options.padding,
+    //     backgroundColor: bgColor,
+    //     //  margin: const EdgeInsets.all(8),
+    //     //  behavior: SnackBarBehavior.floating,
+    //     duration: options.duration,
+    //     content: MonekinSnackbarContent(
+    //       title: options.title,
+    //       message: options.message,
+    //       color: textColor,
+    //       icon: iconData,
+    //       actions: options.actions,
+    //     ),
+    //   ),
+    // );
+  }
+
+  static void success(SnackbarParams options) {
+    return MonekinSnackbar.openSnackbar(
+      options: options,
+      bgColor: Colors.green[50]!,
+      textColor: Colors.green,
+      iconData: Icons.check_circle_outline,
     );
   }
 
-  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason> error(
-    SnackbarParams options,
-  ) {
-    final messenger = _getScaffoldMessenger(options);
-    final context = messenger.context;
-
-    return messenger.showSnackBar(
-      SnackBar(
-        padding: options.padding,
-        backgroundColor: isAppInLightBrightness(context)
-            ? Theme.of(context).colorScheme.errorContainer
-            : Theme.of(context).colorScheme.error,
-        //  margin: const EdgeInsets.all(8),
-        //  behavior: SnackBarBehavior.floating,
-        duration: options.duration,
-        content: MonekinSnackbarContent(
-          title: options.title,
-          message: options.message,
-          color: isAppInLightBrightness(context)
-              ? Theme.of(context).colorScheme.error
-              : Theme.of(context).colorScheme.errorContainer,
-          icon: Icons.dangerous_outlined,
-          actions: options.actions,
-        ),
-      ),
+  static void error(SnackbarParams options) {
+    return MonekinSnackbar.openSnackbar(
+      options: options,
+      bgColor: isAppInLightBrightness(snackbarKey.currentContext!)
+          ? Theme.of(snackbarKey.currentContext!).colorScheme.errorContainer
+          : Theme.of(snackbarKey.currentContext!).colorScheme.error,
+      textColor: isAppInLightBrightness(snackbarKey.currentContext!)
+          ? Theme.of(snackbarKey.currentContext!).colorScheme.error
+          : Theme.of(snackbarKey.currentContext!).colorScheme.errorContainer,
+      iconData: Icons.error_outline,
     );
   }
 
-  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason> warning(
-    SnackbarParams options,
-  ) {
-    return _getScaffoldMessenger(options).showSnackBar(
-      SnackBar(
-        padding: options.padding,
-        backgroundColor: Colors.amber[50],
-        //  margin: const EdgeInsets.all(8),
-        //  behavior: SnackBarBehavior.floating,
-        duration: options.duration,
-        content: MonekinSnackbarContent(
-          title: options.title,
-          message: options.message,
-          color: Colors.amber,
-          icon: Icons.warning_rounded,
-          actions: options.actions,
-        ),
-      ),
+  static void warning(SnackbarParams options) {
+    return MonekinSnackbar.openSnackbar(
+      options: options,
+      bgColor: Colors.amber[50]!,
+      textColor: Colors.amber,
+      iconData: Icons.warning_amber_rounded,
     );
   }
 
-  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason> info(
-    SnackbarParams options,
-  ) {
-    return _getScaffoldMessenger(options).showSnackBar(
-      SnackBar(
-        padding: options.padding,
-        backgroundColor: Colors.blue[50],
-        //  margin: const EdgeInsets.all(8),
-        //  behavior: SnackBarBehavior.floating,
-        duration: options.duration,
-        content: MonekinSnackbarContent(
-          title: options.title,
-          message: options.message,
-          color: Colors.blue,
-          icon: Icons.info_rounded,
-          actions: options.actions,
-        ),
-      ),
+  static void info(SnackbarParams options) {
+    return MonekinSnackbar.openSnackbar(
+      options: options,
+      bgColor: Colors.blue[50]!,
+      textColor: Colors.blue,
+      iconData: Icons.info_outline_rounded,
     );
   }
 }

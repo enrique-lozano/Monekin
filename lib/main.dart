@@ -11,8 +11,9 @@ import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/database/services/user-setting/utils/get_theme_from_string.dart';
+import 'package:monekin/core/presentation/helpers/global_snackbar.dart';
 import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/core/routes/root_navigator_observer.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/logger.dart';
 import 'package:monekin/core/utils/scroll_behavior_override.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -53,6 +54,7 @@ final GlobalKey<NavigationSidebarState> navigationSidebarKey = GlobalKey();
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<ScaffoldMessengerState> snackbarKey =
     GlobalKey<ScaffoldMessengerState>();
+GlobalKey<GlobalSnackbarState> globalSnackbarKey = GlobalKey();
 
 // ignore: library_private_types_in_public_api
 GlobalKey<_InitializeAppState> appStateKey = GlobalKey();
@@ -217,43 +219,45 @@ class MaterialAppContainer extends StatelessWidget {
             accentColor: accentColor,
           ),
           themeMode: themeMode,
-          navigatorKey: navigatorKey,
-          navigatorObservers: [MainLayoutNavObserver()],
           builder: (context, child) {
             SystemChrome.setSystemUIOverlayStyle(
               getSystemUiOverlayStyle(Theme.of(context).brightness),
             );
 
-            return Overlay(
-              key: ValueKey("app_overlay_${introSeen ? "main" : "intro"}"),
-              initialEntries: [
-                OverlayEntry(
-                  builder: (context) => Stack(
-                    children: [
-                      Row(
-                        children: [
-                          AnimatedContainer(
-                            duration: const Duration(milliseconds: 1500),
-                            curve: Curves.easeInOutCubicEmphasized,
-                            width: introSeen
-                                ? getNavigationSidebarWidth(context)
-                                : 0,
-                            color: Theme.of(context).canvasColor,
-                          ),
-                          Expanded(child: child ?? const SizedBox.shrink()),
-                        ],
-                      ),
-                      if (introSeen)
-                        NavigationSidebar(key: navigationSidebarKey),
-                    ],
-                  ),
-                ),
-              ],
-            );
+            return child ?? const SizedBox.shrink();
           },
-          home: introSeen ? TabsPage(key: tabsPageKey) : const IntroPage(),
+          home: Row(
+            children: [
+              if (introSeen) NavigationSidebar(key: navigationSidebarKey),
+              Expanded(
+                child: Stack(
+                  children: [
+                    InitialPageRouteNavigator(introSeen: introSeen),
+                    GlobalSnackbar(key: globalSnackbarKey),
+                  ],
+                ),
+              ),
+            ],
+          ),
         );
       },
+    );
+  }
+}
+
+// Handles onboarding too!
+class InitialPageRouteNavigator extends StatelessWidget {
+  const InitialPageRouteNavigator({super.key, required this.introSeen});
+
+  final bool introSeen;
+
+  @override
+  Widget build(BuildContext context) {
+    return Navigator(
+      key: navigatorKey,
+      onGenerateRoute: (settings) => RouteUtils.getPageRouteBuilder(
+        introSeen ? TabsPage(key: tabsPageKey) : const IntroPage(),
+      ),
     );
   }
 }

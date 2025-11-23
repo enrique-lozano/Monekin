@@ -65,6 +65,7 @@ dependencies:
   flutter_colorpicker: ^1.1.0
   smooth_page_indicator: ^1.2.1
   another_flushbar: ^1.12.32
+  pausable_timer: ^3.1.0+3
 
 dev_dependencies:
   flutter_test:
