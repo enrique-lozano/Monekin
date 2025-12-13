@@ -63,4 +63,16 @@ extension ColorBrightness on Color {
       blue + ((255 - blue) * amount).round(),
     );
   }
+
+  Color lightenPastel({double amount = 0.1}) {
+    return Color.alphaBlend(Colors.white.withOpacity(amount), this);
+  }
+
+  Color darkenPastel({double amount = 0.1}) {
+    return Color.alphaBlend(Colors.black.withOpacity(amount), this);
+  }
+
+  Color getContrastColor() {
+    return computeLuminance() < 0.5 ? Colors.white : Colors.black;
+  }
 }

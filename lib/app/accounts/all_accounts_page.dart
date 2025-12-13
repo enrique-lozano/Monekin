@@ -5,6 +5,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/details/account_details.dart';
+import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/presentation/animations/animated_floating_button.dart';
@@ -13,6 +14,7 @@ import 'package:monekin/core/presentation/widgets/column_with_reorderable_list_a
 import 'package:monekin/core/presentation/widgets/monekin_reorderable_list.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:monekin/page_framework.dart';
 
 import '../../core/presentation/widgets/no_results.dart';
 import '../../core/presentation/widgets/reorderable_drag_icon.dart';
@@ -24,11 +26,11 @@ class AllAccountsPage extends StatefulWidget {
   State<AllAccountsPage> createState() => _AllAccountsPageState();
 }
 
-class _AllAccountsPageState extends State<AllAccountsPage> {
+class _AllAccountsPageState extends State<AllAccountsPage>
+    with PageWithScaffold {
   String searchQuery = '';
 
   final ScrollController _scrollController = ScrollController();
-  bool isFloatingButtonExtended = true;
 
   void _onSearchChanged(String query) {
     setState(() {
@@ -43,19 +45,6 @@ class _AllAccountsPageState extends State<AllAccountsPage> {
   @override
   void initState() {
     super.initState();
-
-    _scrollController.addListener(() {
-      bool shouldExtendButton = AnimatedFloatingButton.shouldExtendButton(
-        context,
-        _scrollController,
-      );
-
-      if (isFloatingButtonExtended != shouldExtendButton) {
-        setState(() {
-          isFloatingButtonExtended = shouldExtendButton;
-        });
-      }
-    });
   }
 
   @override
@@ -65,19 +54,28 @@ class _AllAccountsPageState extends State<AllAccountsPage> {
   }
 
   @override
+  ScaffoldConfiguration get scaffoldConfiguration {
+    final t = Translations.of(context);
+
+    return ScaffoldConfiguration(
+      title: t.home.my_accounts,
+      floatingActionButton: BreakPoint.of(context).isLargerThan(BreakpointID.sm)
+          ? null
+          : AnimatedFloatingButtonBasedOnScroll(
+              onPressed: _onAddPressed,
+              icon: const Icon(Icons.add_rounded),
+              scrollController: _scrollController,
+              text: t.account.form.create,
+            ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(t.home.my_accounts)),
-      floatingActionButton: BreakPoint.of(context).isLargerThan(BreakpointID.sm)
-          ? null
-          : AnimatedFloatingButton(
-              onPressed: _onAddPressed,
-              icon: const Icon(Icons.add_rounded),
-              isExtended: isFloatingButtonExtended,
-              text: t.categories.create,
-            ),
+    return PageFramework(
+      scaffoldConfiguration: scaffoldConfiguration,
       body: ColumnWithReorderableListAndSearch(
         onSearchChanged: _onSearchChanged,
         onAddPressed: _onAddPressed,

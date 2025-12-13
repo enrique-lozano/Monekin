@@ -23,7 +23,7 @@ class TransactionListComponent extends StatefulWidget {
     this.onTap,
     this.selectedTransactions = const [],
     this.onTransactionsLoaded,
-    this.onScrollChange,
+    this.scrollController,
   });
 
   final TransactionFilters filters;
@@ -46,7 +46,7 @@ class TransactionListComponent extends StatefulWidget {
 
   final Object? Function(MoneyTransaction tr)? heroTagBuilder;
 
-  final void Function(ScrollController controller)? onScrollChange;
+  final ScrollController? scrollController;
 
   /// Action to trigger when a transaction tile is long pressed. If `null`,
   /// the tile will display a modal with some quick actions for
@@ -64,11 +64,11 @@ class TransactionListComponent extends StatefulWidget {
 
   @override
   State<TransactionListComponent> createState() =>
-      _TransactionListComponentState();
+      TransactionListComponentState();
 }
 
-class _TransactionListComponentState extends State<TransactionListComponent> {
-  ScrollController listScrollController = ScrollController();
+class TransactionListComponentState extends State<TransactionListComponent> {
+  late ScrollController listScrollController;
 
   int currentPage = 1;
   bool isEnabled = true;
@@ -77,6 +77,8 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
   void initState() {
     super.initState();
 
+    listScrollController = widget.scrollController ?? ScrollController();
+
     listScrollController.addListener(() {
       if (listScrollController.offset >=
               listScrollController.position.maxScrollExtent &&
@@ -84,9 +86,16 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
         currentPage += 1;
         setState(() {});
       }
-
-      widget.onScrollChange?.call(listScrollController);
     });
+  }
+
+  @override
+  void dispose() {
+    if (widget.scrollController == null) {
+      listScrollController.dispose();
+    }
+
+    super.dispose();
   }
 
   Widget dateSeparator(BuildContext context, DateTime date) {

@@ -7,6 +7,13 @@ import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
+// GlobalKeys for each destination page
+final GlobalKey<State<StatefulWidget>> dashboardPageKey = GlobalKey();
+final GlobalKey budgetsPageKey = GlobalKey();
+final GlobalKey<State<StatefulWidget>> transactionsPageKey = GlobalKey();
+final GlobalKey<State<StatefulWidget>> statsPageKey = GlobalKey();
+final GlobalKey<State<StatefulWidget>> settingsPageKey = GlobalKey();
+
 enum AppMenuDestinationsID {
   dashboard,
   budgets,
@@ -25,12 +32,14 @@ class MainMenuDestination {
     required this.label,
     required this.icon,
     this.selectedIcon,
+    this.pageKey,
   });
 
   final AppMenuDestinationsID id;
   final String label;
   final IconData icon;
   final IconData? selectedIcon;
+  final GlobalKey? pageKey;
 
   final Widget destination;
 
@@ -64,11 +73,9 @@ class MainMenuDestination {
   }
 }
 
-List<MainMenuDestination> getAllDestinations(
-  BuildContext context, {
-  required bool shortLabels,
-}) {
+List<MainMenuDestination> getAllDestinations(BuildContext context) {
   final t = Translations.of(context);
+  // final shortLabels = BreakPoint.of(context).isSmallerThan(BreakpointID.xl);
 
   return <MainMenuDestination>[
     MainMenuDestination(
@@ -76,14 +83,16 @@ List<MainMenuDestination> getAllDestinations(
       label: t.home.title,
       icon: Icons.home_outlined,
       selectedIcon: Icons.home,
-      destination: const DashboardPage(),
+      destination: DashboardPage(key: dashboardPageKey),
+      pageKey: dashboardPageKey,
     ),
     MainMenuDestination(
       AppMenuDestinationsID.budgets,
       label: t.budgets.title,
       icon: Icons.calculate_outlined,
       selectedIcon: Icons.calculate,
-      destination: const BudgetsPage(),
+      destination: BudgetsPage(key: budgetsPageKey),
+      pageKey: budgetsPageKey,
     ),
     /*   MainMenuDestination(
       AppMenuDestinationsID.accounts,
@@ -95,7 +104,8 @@ List<MainMenuDestination> getAllDestinations(
       AppMenuDestinationsID.transactions,
       label: t.transaction.display(n: 10),
       icon: Icons.list,
-      destination: const TransactionsPage(),
+      destination: TransactionsPage(key: transactionsPageKey),
+      pageKey: transactionsPageKey,
     ),
     /*   MainMenuDestination(
       AppMenuDestinationsID.recurrentTransactions,
@@ -109,28 +119,29 @@ List<MainMenuDestination> getAllDestinations(
       AppMenuDestinationsID.stats,
       label: t.stats.title,
       icon: Icons.auto_graph_rounded,
-      destination: const StatsPage(),
+      destination: StatsPage(key: statsPageKey),
+      pageKey: statsPageKey,
     ),
     MainMenuDestination(
       AppMenuDestinationsID.settings,
       label: t.more.title,
       selectedIcon: Icons.more_horiz_rounded,
       icon: Icons.more_horiz_rounded,
-      destination: const SettingsPage(),
+      destination: SettingsPage(key: settingsPageKey),
+      pageKey: settingsPageKey,
     ),
   ];
 }
 
 List<MainMenuDestination> getDestinations(
   BuildContext context, {
-  required bool shortLabels,
   bool showHome = true,
 }) {
   final bool isMobileMode = BreakPoint.of(
     context,
   ).isSmallerThan(BreakpointID.md);
 
-  var toReturn = getAllDestinations(context, shortLabels: shortLabels);
+  var toReturn = getAllDestinations(context);
 
   if (!showHome) {
     toReturn = toReturn

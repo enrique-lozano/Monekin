@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
@@ -9,6 +10,7 @@ import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.da
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:monekin/page_framework.dart';
 
 class IntervalSelectorPage extends StatefulWidget {
   const IntervalSelectorPage({super.key, this.preselectedRecurrentRule});
@@ -19,7 +21,8 @@ class IntervalSelectorPage extends StatefulWidget {
   State<IntervalSelectorPage> createState() => _IntervalSelectorPageState();
 }
 
-class _IntervalSelectorPageState extends State<IntervalSelectorPage> {
+class _IntervalSelectorPageState extends State<IntervalSelectorPage>
+    with PageWithScaffold {
   final _formKey = GlobalKey<FormState>();
 
   Periodicity intervalPeriod = Periodicity.month;
@@ -71,49 +74,51 @@ class _IntervalSelectorPageState extends State<IntervalSelectorPage> {
   }
 
   @override
+  ScaffoldConfiguration get scaffoldConfiguration => ScaffoldConfiguration(
+    title: Translations.of(context).general.time.periodicity.display,
+    persistentFooterButtons: [
+      PersistentFooterButton(
+        child: FilledButton.icon(
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              _formKey.currentState!.save();
+
+              Navigator.pop(
+                context,
+                ruleUntilMode == RuleUntilMode.infinity
+                    ? RecurrencyData.infinite(
+                        intervalPeriod: intervalPeriod,
+                        intervalEach: intervalEach,
+                      )
+                    : RecurrencyData.withLimit(
+                        ruleRecurrentLimit: RecurrentRuleLimit(
+                          endDate: ruleUntilMode == RuleUntilMode.date
+                              ? endDate
+                              : null,
+                          remainingIterations:
+                              ruleUntilMode == RuleUntilMode.nTimes
+                              ? remainingIterations
+                              : null,
+                        ),
+                        intervalPeriod: intervalPeriod,
+                        intervalEach: intervalEach,
+                      ),
+              );
+            }
+          },
+          icon: const Icon(Icons.save_rounded),
+          label: Text(t.ui_actions.continue_text),
+        ),
+      ),
+    ],
+  );
+
+  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(t.general.time.periodicity.display),
-        elevation: 0,
-      ),
-      persistentFooterButtons: [
-        PersistentFooterButton(
-          child: FilledButton.icon(
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                _formKey.currentState!.save();
-
-                Navigator.pop(
-                  context,
-                  ruleUntilMode == RuleUntilMode.infinity
-                      ? RecurrencyData.infinite(
-                          intervalPeriod: intervalPeriod,
-                          intervalEach: intervalEach,
-                        )
-                      : RecurrencyData.withLimit(
-                          ruleRecurrentLimit: RecurrentRuleLimit(
-                            endDate: ruleUntilMode == RuleUntilMode.date
-                                ? endDate
-                                : null,
-                            remainingIterations:
-                                ruleUntilMode == RuleUntilMode.nTimes
-                                ? remainingIterations
-                                : null,
-                          ),
-                          intervalPeriod: intervalPeriod,
-                          intervalEach: intervalEach,
-                        ),
-                );
-              }
-            },
-            icon: const Icon(Icons.save_rounded),
-            label: Text(t.ui_actions.continue_text),
-          ),
-        ),
-      ],
+    return PageFramework(
+      scaffoldConfiguration: scaffoldConfiguration,
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(top: 16),
         child: Column(

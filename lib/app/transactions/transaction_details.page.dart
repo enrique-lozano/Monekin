@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/app/transactions/label_value_info_table.dart';
 import 'package:monekin/app/transactions/utils/transaction_details.utils.dart';
 import 'package:monekin/app/transactions/widgets/translucent_transaction_status_card.dart';
@@ -25,6 +26,7 @@ import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_
 import 'package:monekin/core/services/view-actions/transaction_view_actions_service.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:monekin/page_framework.dart';
 
 import '../../core/models/transaction/transaction_type.enum.dart';
 import '../../core/presentation/app_colors.dart';
@@ -61,7 +63,8 @@ class TransactionDetailsPage extends StatefulWidget {
   State<TransactionDetailsPage> createState() => _TransactionDetailsPageState();
 }
 
-class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
+class _TransactionDetailsPageState extends State<TransactionDetailsPage>
+    with PageWithScaffold {
   void showSkipTransactionModal(
     BuildContext context,
     MoneyTransaction transaction,
@@ -305,7 +308,9 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
     );
   }
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  @override
+  ScaffoldConfiguration get scaffoldConfiguration =>
+      ScaffoldConfiguration(title: t.transaction.details);
 
   @override
   Widget build(BuildContext context) {
@@ -330,9 +335,8 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
               navigateBackOnDelete: true,
             );
 
-        return Scaffold(
-          key: _scaffoldKey,
-          appBar: AppBar(elevation: 0, title: Text(t.transaction.details)),
+        return PageFramework(
+          scaffoldConfiguration: scaffoldConfiguration,
           body: CustomScrollView(
             slivers: [
               SliverPersistentHeader(

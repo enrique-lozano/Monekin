@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/details/account_details_actions.dart';
+import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/app/transactions/label_value_info_list.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
@@ -26,6 +27,7 @@ import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:monekin/page_framework.dart';
 
 class AccountDetailsPage extends StatefulWidget {
   const AccountDetailsPage({
@@ -42,7 +44,15 @@ class AccountDetailsPage extends StatefulWidget {
   State<AccountDetailsPage> createState() => _AccountDetailsPageState();
 }
 
-class _AccountDetailsPageState extends State<AccountDetailsPage> {
+class _AccountDetailsPageState extends State<AccountDetailsPage>
+    with PageWithScaffold {
+  @override
+  ScaffoldConfiguration get scaffoldConfiguration {
+    final t = Translations.of(context);
+
+    return ScaffoldConfiguration(title: t.account.details);
+  }
+
   LabelValueInfoListItem buildCopyableTile(String title, String value) {
     return LabelValueInfoListItem(
       label: title,
@@ -70,8 +80,8 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(t.account.details)),
+    return PageFramework(
+      scaffoldConfiguration: scaffoldConfiguration,
       body: StreamBuilder(
         stream: AccountService.instance.getAccountById(widget.account.id),
         initialData: widget.account,

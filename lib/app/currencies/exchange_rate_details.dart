@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/currencies/exchange_rate_form.dart';
+import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
@@ -9,6 +10,7 @@ import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:monekin/page_framework.dart';
 
 class ExchangeRateDetailsPage extends StatefulWidget {
   const ExchangeRateDetailsPage({super.key, required this.currency});
@@ -20,7 +22,8 @@ class ExchangeRateDetailsPage extends StatefulWidget {
       _ExchangeRateDetailsPageState();
 }
 
-class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
+class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
+    with PageWithScaffold {
   List<ExchangeRate>? exchangeRates;
 
   @override
@@ -28,6 +31,42 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
     super.initState();
 
     getExchangeRates();
+  }
+
+  @override
+  ScaffoldConfiguration get scaffoldConfiguration {
+    final t = Translations.of(context);
+
+    return ScaffoldConfiguration(
+      title: t.currencies.exchange_rate,
+      appBarActions: [
+        MonekinPopupMenuButton(
+          actionItems: [
+            ListTileActionItem(
+              label: t.ui_actions.delete,
+              icon: Icons.delete,
+              onClick: () => deleteAllRates(),
+            ),
+          ],
+        ),
+      ],
+      persistentFooterButtons: [
+        PersistentFooterButton(
+          child: FilledButton.icon(
+            onPressed: () async {
+              await showExchangeRateFormDialog(
+                context,
+                ExchangeRateFormDialog(preSelectedCurrency: widget.currency),
+              );
+
+              getExchangeRates();
+            },
+            icon: const Icon(Icons.add),
+            label: Text(t.currencies.form.add),
+          ),
+        ),
+      ],
+    );
   }
 
   void getExchangeRates() {
@@ -57,21 +96,8 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(t.currencies.exchange_rate),
-        actions: [
-          MonekinPopupMenuButton(
-            actionItems: [
-              ListTileActionItem(
-                label: t.ui_actions.delete,
-                icon: Icons.delete,
-                onClick: () => deleteAllRates(),
-              ),
-            ],
-          ),
-        ],
-      ),
+    return PageFramework(
+      scaffoldConfiguration: scaffoldConfiguration,
       body: Column(
         children: [
           Padding(
@@ -150,22 +176,6 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
             ),
         ],
       ),
-      persistentFooterButtons: [
-        PersistentFooterButton(
-          child: FilledButton.icon(
-            onPressed: () async {
-              await showExchangeRateFormDialog(
-                context,
-                ExchangeRateFormDialog(preSelectedCurrency: widget.currency),
-              );
-
-              getExchangeRates();
-            },
-            icon: const Icon(Icons.add),
-            label: Text(t.currencies.form.add),
-          ),
-        ),
-      ],
     );
   }
 }

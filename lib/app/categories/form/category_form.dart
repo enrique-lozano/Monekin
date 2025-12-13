@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/form/category_form_functions.dart';
 import 'package:monekin/app/categories/form/icon_and_color_selector.dart';
+import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
@@ -16,6 +17,7 @@ import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:monekin/page_framework.dart';
 
 class CategoryFormPage extends StatefulWidget {
   const CategoryFormPage({super.key, this.categoryUUID});
@@ -27,7 +29,8 @@ class CategoryFormPage extends StatefulWidget {
   State<CategoryFormPage> createState() => _CategoryFormPageState();
 }
 
-class _CategoryFormPageState extends State<CategoryFormPage> {
+class _CategoryFormPageState extends State<CategoryFormPage>
+    with PageWithScaffold {
   final _formKey = GlobalKey<FormState>();
 
   Category? categoryToEdit;
@@ -127,83 +130,83 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
   }
 
   @override
+  ScaffoldConfiguration get scaffoldConfiguration => ScaffoldConfiguration(
+    title: widget.categoryUUID != null
+        ? t.categories.edit
+        : t.categories.create,
+    appBarActions: [
+      if (widget.categoryUUID != null)
+        PopupMenuButton(
+          itemBuilder: (context) {
+            return <PopupMenuEntry<String>>[
+              PopupMenuItem(
+                value: 'to_subcategory',
+                child: ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.login),
+                  minLeadingWidth: 26,
+                  title: Text(t.categories.make_child),
+                ),
+              ),
+              const PopupMenuDivider(),
+              PopupMenuItem(
+                value: 'merge',
+                child: ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.merge_type_rounded),
+                  minLeadingWidth: 26,
+                  title: Text(t.categories.merge),
+                ),
+              ),
+              const PopupMenuDivider(),
+              PopupMenuItem(
+                value: 'delete',
+                child: ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.delete),
+                  minLeadingWidth: 26,
+                  title: Text(t.ui_actions.delete),
+                ),
+              ),
+            ];
+          },
+          onSelected: (String value) {
+            if (value == 'delete') {
+              CategoryFormFunctions.deleteCategory(
+                context,
+                widget.categoryUUID!,
+              );
+            } else if (value == 'to_subcategory') {
+              CategoryFormFunctions.makeSubcategory(context, categoryToEdit!);
+            } else if (value == 'merge') {
+              CategoryFormFunctions.mergeCategory(context, categoryToEdit!);
+            }
+          },
+        ),
+    ],
+    persistentFooterButtons: [
+      PersistentFooterButton(
+        child: FilledButton.icon(
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              _formKey.currentState!.save();
+
+              submitForm();
+            }
+          },
+          icon: const Icon(Icons.check),
+          label: Text(t.ui_actions.save_changes),
+        ),
+      ),
+    ],
+  );
+
+  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Scaffold(
-      persistentFooterButtons: [
-        PersistentFooterButton(
-          child: FilledButton.icon(
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                _formKey.currentState!.save();
-
-                submitForm();
-              }
-            },
-            icon: const Icon(Icons.check),
-            label: Text(t.ui_actions.save_changes),
-          ),
-        ),
-      ],
-      appBar: AppBar(
-        title: Text(
-          widget.categoryUUID != null ? t.categories.edit : t.categories.create,
-        ),
-        actions: [
-          if (widget.categoryUUID != null)
-            PopupMenuButton(
-              itemBuilder: (context) {
-                return <PopupMenuEntry<String>>[
-                  PopupMenuItem(
-                    value: 'to_subcategory',
-                    child: ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: const Icon(Icons.login),
-                      minLeadingWidth: 26,
-                      title: Text(t.categories.make_child),
-                    ),
-                  ),
-                  const PopupMenuDivider(),
-                  PopupMenuItem(
-                    value: 'merge',
-                    child: ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: const Icon(Icons.merge_type_rounded),
-                      minLeadingWidth: 26,
-                      title: Text(t.categories.merge),
-                    ),
-                  ),
-                  const PopupMenuDivider(),
-                  PopupMenuItem(
-                    value: 'delete',
-                    child: ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: const Icon(Icons.delete),
-                      minLeadingWidth: 26,
-                      title: Text(t.ui_actions.delete),
-                    ),
-                  ),
-                ];
-              },
-              onSelected: (String value) {
-                if (value == 'delete') {
-                  CategoryFormFunctions.deleteCategory(
-                    context,
-                    widget.categoryUUID!,
-                  );
-                } else if (value == 'to_subcategory') {
-                  CategoryFormFunctions.makeSubcategory(
-                    context,
-                    categoryToEdit!,
-                  );
-                } else if (value == 'merge') {
-                  CategoryFormFunctions.mergeCategory(context, categoryToEdit!);
-                }
-              },
-            ),
-        ],
-      ),
+    return PageFramework(
+      scaffoldConfiguration: scaffoldConfiguration,
       body: widget.categoryUUID != null && categoryToEdit == null
           ? const LinearProgressIndicator()
           : SingleChildScrollView(

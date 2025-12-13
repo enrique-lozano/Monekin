@@ -45,3 +45,64 @@ class AnimatedFloatingButton extends StatelessWidget {
     );
   }
 }
+
+class AnimatedFloatingButtonBasedOnScroll extends StatefulWidget {
+  const AnimatedFloatingButtonBasedOnScroll({
+    super.key,
+    required this.scrollController,
+    this.onPressed,
+    required this.icon,
+    required this.text,
+  });
+
+  final void Function()? onPressed;
+  final Widget icon;
+  final String text;
+
+  final ScrollController scrollController;
+
+  @override
+  State<AnimatedFloatingButtonBasedOnScroll> createState() =>
+      _AnimatedFloatingButtonBasedOnScrollState();
+}
+
+class _AnimatedFloatingButtonBasedOnScrollState
+    extends State<AnimatedFloatingButtonBasedOnScroll> {
+  bool isFloatingButtonExtended = true;
+
+  void _setFloatingButtonState() {
+    bool shouldExtendButton =
+        BreakPoint.of(context).isLargerThan(BreakpointID.md) ||
+        widget.scrollController.offset <= 10 ||
+        widget.scrollController.position.userScrollDirection !=
+            ScrollDirection.reverse;
+
+    if (isFloatingButtonExtended != shouldExtendButton) {
+      setState(() {
+        isFloatingButtonExtended = shouldExtendButton;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.scrollController.addListener(_setFloatingButtonState);
+  }
+
+  @override
+  void dispose() {
+    widget.scrollController.removeListener(_setFloatingButtonState);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedFloatingButton(
+      onPressed: widget.onPressed,
+      icon: widget.icon,
+      text: widget.text,
+      isExtended: isFloatingButtonExtended,
+    );
+  }
+}

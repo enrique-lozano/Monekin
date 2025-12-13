@@ -15,8 +15,8 @@ import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
-import 'package:monekin/main.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingPage extends StatefulWidget {
@@ -91,7 +91,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     ];
 
     final isInLastPage = currentPage >= items.length - 1;
-    double screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       body: SafeArea(

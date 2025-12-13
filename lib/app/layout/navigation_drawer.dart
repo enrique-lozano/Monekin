@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/settings/widgets/display_app_icon.dart';
-import 'package:monekin/core/extensions/string.extension.dart';
+import 'package:monekin/app/layout/window_bar.dart';
+import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
+import 'package:monekin/core/presentation/widgets/user_avatar.dart';
 import 'package:monekin/core/routes/destinations.dart';
+import 'package:monekin/core/utils/app_utils.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SideNavigationDrawer extends StatelessWidget {
@@ -24,57 +28,59 @@ class SideNavigationDrawer extends StatelessWidget {
       child: NavigationDrawer(
         selectedIndex: selectedIndex,
         onDestinationSelected: onDestinationSelected,
-        backgroundColor: Theme.of(context).cardColor,
-        children: [
-          const SizedBox(height: 24),
-          ...List.generate(drawerActions.length, (index) {
-            final item = drawerActions[index];
+        backgroundColor: getWindowBackgroundColor(context),
+        indicatorColor: Theme.of(context).colorScheme.surfaceContainerHigh,
+        indicatorShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        header: SizedBox(height: AppUtils.isDesktop ? 8 : 12),
+        footer: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            spacing: 12,
+            children: [
+              UserAvatar(
+                avatar: appStateSettings[SettingKey.avatar],
+                backgroundColor: AppColors.of(
+                  context,
+                ).onConsistentPrimary.darken(0.25),
+                border: Border.all(
+                  width: 2,
+                  color: AppColors.of(context).onConsistentPrimary,
+                ),
+              ),
+              Expanded(
+                child: FutureBuilder(
+                  future: PackageInfo.fromPlatform(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Skeleton(width: 100, height: 32);
+                    }
 
-            return item.toNavigationDrawerDestinationWidget();
-          }),
-
-          // Solution thanks to: https://github.com/flutter/flutter/issues/127621#issuecomment-1566294032
-          // TODO: Waiting for a Flutter fix to have a better way of creating a footer here
-          SizedBox(
-            height:
-                MediaQuery.of(context).size.height -
-                (61 * drawerActions.length),
-            child: Column(
-              children: [
-                Expanded(child: Container()),
-                const Divider(thickness: 1.0),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
-                  ),
-                  child: Row(
-                    children: [
-                      const DisplayAppIcon(height: 48),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: FutureBuilder(
-                          future: PackageInfo.fromPlatform(),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData) {
-                              return const Skeleton(width: 100, height: 32);
-                            }
-
-                            return ListTile(
-                              contentPadding: const EdgeInsets.all(0),
-                              title: Text(snapshot.data!.appName.capitalize()),
-                              subtitle: Text('v${snapshot.data!.version}'),
-                            );
-                          },
+                    return ListTile(
+                      contentPadding: const EdgeInsets.all(0),
+                      title: Text(
+                        appStateSettings[SettingKey.userName] ?? 'User',
+                        softWrap: false,
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                          fontSize: 18,
+                          overflow: TextOverflow.fade,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
-                    ],
-                  ),
+                      subtitle: Text('Thanks for trust us ❤️'),
+                    );
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
+        children: List.generate(drawerActions.length, (index) {
+          final item = drawerActions[index];
+
+          return item.toNavigationDrawerDestinationWidget();
+        }),
       ),
     );
   }

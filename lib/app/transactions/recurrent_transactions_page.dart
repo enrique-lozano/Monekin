@@ -2,6 +2,7 @@
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
@@ -11,6 +12,7 @@ import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:monekin/page_framework.dart';
 
 class RecurrentTransactionPage extends StatefulWidget {
   const RecurrentTransactionPage({super.key});
@@ -20,15 +22,23 @@ class RecurrentTransactionPage extends StatefulWidget {
       _RecurrentTransactionPageState();
 }
 
-class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
+class _RecurrentTransactionPageState extends State<RecurrentTransactionPage>
+    with PageWithScaffold {
   Periodicity periodicity = Periodicity.month;
+
+  @override
+  ScaffoldConfiguration get scaffoldConfiguration {
+    final t = Translations.of(context);
+
+    return ScaffoldConfiguration(title: t.recurrent_transactions.title);
+  }
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(t.recurrent_transactions.title)),
+    return PageFramework(
+      scaffoldConfiguration: scaffoldConfiguration,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -1,16 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/app/settings/widgets/display_app_icon.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/utils/open_external_url.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:monekin/page_framework.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'widgets/settings_list_separator.dart';
 
-class AboutPage extends StatelessWidget {
+class AboutPage extends StatefulWidget {
   const AboutPage({super.key});
+
+  @override
+  State<AboutPage> createState() => _AboutPageState();
+}
+
+class _AboutPageState extends State<AboutPage> with PageWithScaffold {
+  @override
+  ScaffoldConfiguration get scaffoldConfiguration {
+    final t = Translations.of(context);
+
+    return ScaffoldConfiguration(title: t.more.about_us.display);
+  }
 
   Widget buildLinkItem(
     String title, {
@@ -33,8 +47,8 @@ class AboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(t.more.about_us.display)),
+    return PageFramework(
+      scaffoldConfiguration: scaffoldConfiguration,
       body: SingleChildScrollView(
         padding: EdgeInsets.zero.withSafeBottom(context),
         child: Column(

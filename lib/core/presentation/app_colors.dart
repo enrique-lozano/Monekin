@@ -20,6 +20,8 @@ class AppColors extends ThemeExtension<AppColors> {
   Color get modalBackground => colors['modalBackground']!;
   Color get consistentPrimary => colors['consistentPrimary']!;
   Color get onConsistentPrimary => colors['onConsistentPrimary']!;
+  Color get white => colors['white']!;
+  Color get black => colors['black']!;
 
   static AppColors fromColorScheme(ColorScheme colorScheme) {
     final isDark = colorScheme.brightness == Brightness.dark;
@@ -36,7 +38,7 @@ class AppColors extends ThemeExtension<AppColors> {
             ? const Color.fromARGB(105, 189, 189, 189)
             : const Color.fromARGB(100, 90, 90, 90),
         'shadowColorLight': isDark
-            ? const Color.fromARGB(40, 116, 116, 116)
+            ? Colors.transparent
             : const Color.fromARGB(44, 90, 90, 90),
         'textBody': isDark
             ? const Color.fromARGB(245, 211, 211, 211)
@@ -51,6 +53,8 @@ class AppColors extends ThemeExtension<AppColors> {
         'onConsistentPrimary': isDark
             ? colorScheme.onPrimaryContainer
             : colorScheme.onPrimary,
+        'white': !isDark ? Colors.white : Colors.black,
+        'black': isDark ? Colors.white : Colors.black,
       },
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/selectors/category_multi_selector.dart';
+import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
@@ -16,6 +17,7 @@ import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.da
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:monekin/page_framework.dart';
 
 import '../../core/models/account/account.dart';
 import '../../core/presentation/widgets/count_indicator.dart';
@@ -33,7 +35,7 @@ class BudgetFormPage extends StatefulWidget {
   State<BudgetFormPage> createState() => _BudgetFormPageState();
 }
 
-class _BudgetFormPageState extends State<BudgetFormPage> {
+class _BudgetFormPageState extends State<BudgetFormPage> with PageWithScaffold {
   final _formKey = GlobalKey<FormState>();
 
   bool get isEditMode => widget.budgetToEdit != null;
@@ -143,32 +145,35 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
   }
 
   @override
+  // TODO: implement scaffoldConfiguration
+  ScaffoldConfiguration get scaffoldConfiguration => ScaffoldConfiguration(
+    title: isEditMode ? t.budgets.form.edit : t.budgets.form.create,
+
+    persistentFooterButtons: [
+      PersistentFooterButton(
+        child: FilledButton.icon(
+          onPressed: categories != null && categories!.isEmpty
+              ? null
+              : () {
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
+
+                    submitForm();
+                  }
+                },
+          icon: const Icon(Icons.save),
+          label: Text(isEditMode ? t.budgets.form.edit : t.budgets.form.create),
+        ),
+      ),
+    ],
+  );
+
+  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(isEditMode ? t.budgets.form.edit : t.budgets.form.create),
-      ),
-      persistentFooterButtons: [
-        PersistentFooterButton(
-          child: FilledButton.icon(
-            onPressed: categories != null && categories!.isEmpty
-                ? null
-                : () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-
-                      submitForm();
-                    }
-                  },
-            icon: const Icon(Icons.save),
-            label: Text(
-              isEditMode ? t.budgets.form.edit : t.budgets.form.create,
-            ),
-          ),
-        ),
-      ],
+    return PageFramework(
+      scaffoldConfiguration: scaffoldConfiguration,
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
         child: Form(

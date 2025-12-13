@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/main.dart';
+import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 
 abstract class RouteUtils {
   static Future<T?> pushRoute<T extends Object>(
@@ -21,8 +21,8 @@ abstract class RouteUtils {
   static Route<T> getPageRouteBuilder<T>(Widget page) {
     return PageRouteBuilder<T>(
       opaque: false,
-      transitionDuration: const Duration(milliseconds: 250),
-      reverseTransitionDuration: const Duration(milliseconds: 125),
+      transitionDuration: const Duration(milliseconds: 350),
+      reverseTransitionDuration: const Duration(milliseconds: 350),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const transitionBuilder = FadeForwardsPageTransitionsBuilder();
         return transitionBuilder.buildTransitions(

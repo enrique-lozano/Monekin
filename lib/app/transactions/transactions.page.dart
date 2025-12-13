@@ -2,16 +2,15 @@
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
+import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/app/layout/tabs.dart';
 import 'package:monekin/app/transactions/widgets/bulk_edit_transaction_modal.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
@@ -21,8 +20,13 @@ import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
+import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:monekin/page_framework.dart';
 import 'package:rxdart/rxdart.dart';
+
+GlobalKey<TransactionListComponentState> _transactionListKey =
+    GlobalKey<TransactionListComponentState>();
 
 class TransactionsPage extends StatefulWidget {
   const TransactionsPage({super.key, this.filters});
@@ -33,16 +37,32 @@ class TransactionsPage extends StatefulWidget {
   State<TransactionsPage> createState() => _TransactionsPageState();
 }
 
-class _TransactionsPageState extends State<TransactionsPage> {
+class _TransactionsPageState extends State<TransactionsPage>
+    with PageWithScaffold {
   late TransactionFilters filters;
 
   bool searchActive = false;
   FocusNode searchFocusNode = FocusNode();
   final searchController = TextEditingController();
-
-  bool isFloatingButtonExtended = true;
+  final ScrollController listScrollController = ScrollController();
 
   List<MoneyTransaction> selectedTransactions = [];
+
+  @override
+  ScaffoldConfiguration get scaffoldConfiguration {
+    final t = Translations.of(context);
+
+    return ScaffoldConfiguration(
+      title: t.transaction.display(n: 10),
+      appBarBuilder: (_, _, _) => selectedTransactions.isNotEmpty
+          ? selectedTransactionsAppbar()
+          : transactionsPageDefaultAppBar(t, context),
+      floatingActionButton: NewTransactionButton(
+        key: const Key('transactions-page--new-transaction-button'),
+        scrollController: listScrollController,
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -94,13 +114,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
 
         Navigator.pop(context);
       },
-      child: Scaffold(
-        appBar: selectedTransactions.isNotEmpty
-            ? selectedTransactionsAppbar()
-            : transactionsPageDefaultAppBar(t, context),
-        floatingActionButton: NewTransactionButton(
-          isExtended: isFloatingButtonExtended,
-        ),
+      child: PageFramework(
+        scaffoldConfiguration: scaffoldConfiguration,
         body: Column(
           children: [
             if (filters.hasFilter) ...[
@@ -208,6 +223,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
             ),
             Expanded(
               child: TransactionListComponent(
+                scrollController: listScrollController,
                 heroTagBuilder: (tr) => 'transactions-page__tr-icon-${tr.id}',
                 filters: filters.copyWith(searchValue: searchController.text),
                 prevPage: const TabsPage(),
@@ -217,23 +233,9 @@ class _TransactionsPageState extends State<TransactionsPage> {
                     return;
                   }
 
-                  setState(() {
-                    selectedTransactions = [tr];
-                  });
+                  toggleTransaction(tr);
                 },
-                onScrollChange: (controller) {
-                  bool shouldExtendButton =
-                      BreakPoint.of(context).isLargerThan(BreakpointID.md) ||
-                      controller.offset <= 10 ||
-                      controller.position.userScrollDirection !=
-                          ScrollDirection.reverse;
-
-                  if (isFloatingButtonExtended != shouldExtendButton) {
-                    setState(() {
-                      isFloatingButtonExtended = shouldExtendButton;
-                    });
-                  }
-                },
+                key: _transactionListKey,
                 onTap: selectedTransactions.isEmpty ? null : toggleTransaction,
                 onEmptyList: NoResults(
                   title: filters.hasFilter ? null : t.general.empty_warn,
@@ -271,7 +273,9 @@ class _TransactionsPageState extends State<TransactionsPage> {
                 border: const UnderlineInputBorder(),
               ),
               onChanged: (text) {
-                setState(() {});
+                setState(() {
+                  tabsPageKey.currentState?.updateScaffoldConfiguration();
+                });
               },
             )
           : Text(t.transaction.display(n: 10)),
@@ -282,6 +286,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
             onPressed: () {
               setState(() {
                 searchActive = true;
+                tabsPageKey.currentState?.updateScaffoldConfiguration();
               });
 
               searchFocusNode.requestFocus();
@@ -334,7 +339,10 @@ class _TransactionsPageState extends State<TransactionsPage> {
                       transactionsToEdit: selectedTransactions,
                       onSuccess: () {
                         selectedTransactions = [];
-                        setState(() {});
+                        setState(() {
+                          tabsPageKey.currentState
+                              ?.updateScaffoldConfiguration();
+                        });
                       },
                     );
                   },
@@ -383,9 +391,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                           ),
                         );
 
-                        setState(() {
-                          selectedTransactions = [];
-                        });
+                        cleanSelectedTransactions();
                       })
                       .catchError((err) {
                         MonekinSnackbar.error(SnackbarParams.fromError(err));
@@ -404,6 +410,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
   void cleanSelectedTransactions() {
     setState(() {
       selectedTransactions = [];
+      tabsPageKey.currentState?.updateScaffoldConfiguration();
     });
   }
 
@@ -416,6 +423,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
       selectedTransactions.add(tr);
     }
 
-    setState(() {});
+    setState(() {
+      tabsPageKey.currentState?.updateScaffoldConfiguration();
+    });
   }
 }

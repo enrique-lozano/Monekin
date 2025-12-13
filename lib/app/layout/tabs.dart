@@ -1,10 +1,32 @@
-import 'dart:io';
-
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide BottomNavigationBar;
+import 'package:monekin/app/layout/bottom_navigation_bar.dart';
 import 'package:monekin/app/layout/lazy_indexed_stack.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/core/routes/destinations.dart';
-import 'package:monekin/main.dart';
+import 'package:monekin/core/utils/app_utils.dart';
+import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
+import 'package:monekin/page_framework.dart';
+
+class PageContext extends InheritedWidget {
+  final bool isInTabs;
+
+  const PageContext({super.key, required this.isInTabs, required super.child});
+
+  static PageContext? maybeOf(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<PageContext>();
+  }
+
+  static PageContext of(BuildContext context) {
+    final result = maybeOf(context);
+    assert(result != null, 'No PageContext found in context');
+    return result!;
+  }
+
+  @override
+  bool updateShouldNotify(PageContext oldWidget) {
+    return isInTabs != oldWidget.isInTabs;
+  }
+}
 
 /// This page is the entry point of the app once the user has complete onboarding
 class TabsPage extends StatefulWidget {
@@ -14,73 +36,128 @@ class TabsPage extends StatefulWidget {
   State<TabsPage> createState() => TabsPageState();
 }
 
-class TabsPageState extends State<TabsPage> {
+class TabsPageState extends State<TabsPage>
+    with PageWithScaffold, WidgetsBindingObserver {
   AppMenuDestinationsID? selectedDestination;
+  ScaffoldConfiguration currentScaffoldConfiguration = ScaffoldConfiguration(
+    title: '',
+  );
+
+  ScaffoldConfiguration? previousScaffoldConfiguration;
+
+  WidgetsBinding get widgetsBinding => WidgetsBinding.instance;
+
+  @override
+  ScaffoldConfiguration get scaffoldConfiguration =>
+      currentScaffoldConfiguration;
+
+  @override
+  void initState() {
+    super.initState();
+
+    widgetsBinding.addObserver(this);
+    updateScaffoldConfiguration();
+  }
+
+  @override
+  void dispose() {
+    widgetsBinding.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+    // Called when the window size changes.
+    // Scaffold config is not updated otherwise when resizing the window
+    updateScaffoldConfiguration();
+  }
 
   void changePage(AppMenuDestinationsID destination) {
+    print("--------------------");
     navigationSidebarKey.currentState?.setSelectedDestination(destination);
 
-    setState(() {
-      selectedDestination = destination;
-    });
+    // Update selected destination. No need to call setState here because
+    // updateScaffoldConfiguration will call setState when needed.
+    selectedDestination = destination;
+
+    updateScaffoldConfiguration();
 
     FocusScope.of(context).unfocus();
   }
 
+  void updateScaffoldConfiguration() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Add post frame callback to ensure that selectedItem.pageKey exists
+      if (!mounted) {
+        return;
+      }
+
+      final menuItems = getAllDestinations(context);
+
+      final selectedItem = menuItems.firstWhere(
+        (element) => element.id == selectedDestination,
+        orElse: () => menuItems.last,
+      );
+
+      if (selectedItem.pageKey?.currentState == null) {
+        // Load the page if needed. For some reason the currentState is null
+        // only after the second different page selection.
+        setState(() {});
+      }
+
+      if (selectedItem.pageKey?.currentState != null) {
+        final pageState = selectedItem.pageKey!.currentState;
+        if (pageState is PageWithScaffold) {
+          final config = (pageState as PageWithScaffold).scaffoldConfiguration;
+
+          // Only update if the configuration has actually changed
+          if (config != currentScaffoldConfiguration) {
+            setState(() {
+              previousScaffoldConfiguration = currentScaffoldConfiguration;
+              currentScaffoldConfiguration = config;
+            });
+          }
+        } else {
+          throw Exception(
+            'PageState is not of type PageWithScaffold. '
+            'That probably means that the page is not a valid destination for TabsPage.',
+          );
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final menuItems = getDestinations(
-      context,
-      shortLabels: BreakPoint.of(context).isSmallerThan(BreakpointID.xl),
-    );
-
+    final menuItems = getDestinations(context);
     selectedDestination ??= menuItems.elementAt(0).id;
 
-    final selectedNavItemIndex = menuItems.indexWhere(
-      (element) => element.id == selectedDestination!,
-    );
-
-    return Scaffold(
-      bottomNavigationBar:
-          BreakPoint.of(context).isLargerThan(BreakpointID.sm) ||
-              !(0 <= selectedNavItemIndex &&
-                  selectedNavItemIndex < menuItems.length)
+    return PageFramework(
+      scaffoldConfiguration: currentScaffoldConfiguration,
+      bottomNavigationBar: !AppUtils.isMobileLayout(context)
           ? null
-          : NavigationBar(
-              backgroundColor: Theme.of(
-                context,
-              ).colorScheme.surfaceContainerHigh,
-              indicatorColor: Theme.of(
-                context,
-              ).colorScheme.primary.withOpacity(0.2),
-              destinations: menuItems
-                  .map((e) => e.toNavigationDestinationWidget(context))
-                  .toList(),
-              selectedIndex: selectedNavItemIndex,
-              onDestinationSelected: (e) =>
-                  changePage(menuItems.elementAt(e).id),
-            ),
-      body: Builder(
-        builder: (context) {
-          final allDestinations = getAllDestinations(
-            context,
-            shortLabels: BreakPoint.of(context).isSmallerThan(BreakpointID.xl),
-          );
+          : BottomNavigationBar(selectedDestination: selectedDestination!),
+      body: PageContext(
+        isInTabs: true,
+        child: Builder(
+          builder: (context) {
+            final allDestinations = getAllDestinations(context);
 
-          final selectedIndex = allDestinations.indexWhere(
-            (element) => element.id == selectedDestination,
-          );
+            final selectedIndex = allDestinations.indexWhere(
+              (element) => element.id == selectedDestination,
+            );
 
-          return FadeIndexedStack(
-            index: selectedIndex,
-            duration: Platform.isAndroid || Platform.isIOS
-                ? Duration.zero
-                : const Duration(milliseconds: 300),
-            children: allDestinations.map((e) => e.destination).toList(),
-          );
-        },
+            return FadeIndexedStack(
+              index: selectedIndex,
+              duration: !AppUtils.isDesktop
+                  ? Duration.zero
+                  : const Duration(milliseconds: 300),
+              children: allDestinations.map((e) => e.destination).toList(),
+            );
+          },
+        ),
       ),
-      // selectedDestination?.destination ?? const SizedBox.shrink(),
     );
   }
 }

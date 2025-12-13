@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/currencies/exchange_rate_details.dart';
 import 'package:monekin/app/currencies/exchange_rate_form.dart';
+import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
@@ -10,6 +11,7 @@ import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:monekin/page_framework.dart';
 
 import '../../core/presentation/widgets/no_results.dart';
 
@@ -20,7 +22,8 @@ class CurrencyManagerPage extends StatefulWidget {
   State<CurrencyManagerPage> createState() => _CurrencyManagerPageState();
 }
 
-class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
+class _CurrencyManagerPageState extends State<CurrencyManagerPage>
+    with PageWithScaffold {
   Currency? _userCurrency;
 
   @override
@@ -57,11 +60,16 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
   }
 
   @override
+  ScaffoldConfiguration get scaffoldConfiguration => ScaffoldConfiguration(
+    title: Translations.of(context).currencies.currency_manager,
+  );
+
+  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(t.currencies.currency_manager)),
+    return PageFramework(
+      scaffoldConfiguration: scaffoldConfiguration,
       body: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,

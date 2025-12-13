@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/app/settings/purchases/donate_button.dart';
 import 'package:monekin/app/settings/purchases/in_app_purchase.dart';
 import 'package:monekin/app/settings/widgets/display_app_icon.dart';
@@ -6,18 +7,31 @@ import 'package:monekin/app/settings/widgets/setting_card_item.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/utils/open_external_url.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:monekin/page_framework.dart';
 import 'package:share_plus/share_plus.dart';
 
-class HelpUsPage extends StatelessWidget {
+class HelpUsPage extends StatefulWidget {
   const HelpUsPage({super.key});
+
+  @override
+  State<HelpUsPage> createState() => _HelpUsPageState();
+}
+
+class _HelpUsPageState extends State<HelpUsPage> with PageWithScaffold {
+  @override
+  ScaffoldConfiguration get scaffoldConfiguration {
+    final t = Translations.of(context);
+
+    return ScaffoldConfiguration(title: t.more.help_us.display);
+  }
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final iapConnection = IAPConnection.instance;
 
-    return Scaffold(
-      appBar: AppBar(title: Text(t.more.help_us.display)),
+    return PageFramework(
+      scaffoldConfiguration: scaffoldConfiguration,
       body: SingleChildScrollView(
         padding: EdgeInsets.zero.withSafeBottom(context),
         child: Column(
