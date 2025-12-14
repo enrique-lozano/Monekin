@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/app/transactions/label_value_info_table.dart';
 import 'package:monekin/app/transactions/utils/transaction_details.utils.dart';
 import 'package:monekin/app/transactions/widgets/translucent_transaction_status_card.dart';
@@ -23,6 +22,7 @@ import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/view-actions/transaction_view_actions_service.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -48,7 +48,6 @@ class TransactionDetailsPage extends StatefulWidget {
   const TransactionDetailsPage({
     super.key,
     required this.transaction,
-    required this.prevPage,
     required this.heroTag,
   });
 
@@ -56,15 +55,11 @@ class TransactionDetailsPage extends StatefulWidget {
 
   final Object? heroTag;
 
-  /// Widget to navigate if the transaction is removed
-  final Widget prevPage;
-
   @override
   State<TransactionDetailsPage> createState() => _TransactionDetailsPageState();
 }
 
-class _TransactionDetailsPageState extends State<TransactionDetailsPage>
-    with PageWithScaffold {
+class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
   void showSkipTransactionModal(
     BuildContext context,
     MoneyTransaction transaction,
@@ -97,7 +92,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage>
             ),
           );
 
-          if (context.mounted) Navigator.pop(context);
+          RouteUtils.popRoute();
         });
 
         return;
@@ -193,7 +188,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage>
                   onTap: e.onClick == null
                       ? null
                       : () {
-                          Navigator.pop(context);
+                          RouteUtils.popRoute();
                           e.onClick!();
                         },
                 ),
@@ -309,10 +304,6 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage>
   }
 
   @override
-  ScaffoldConfiguration get scaffoldConfiguration =>
-      ScaffoldConfiguration(title: t.transaction.details);
-
-  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
@@ -336,7 +327,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage>
             );
 
         return PageFramework(
-          scaffoldConfiguration: scaffoldConfiguration,
+          title: t.transaction.details,
           body: CustomScrollView(
             slivers: [
               SliverPersistentHeader(

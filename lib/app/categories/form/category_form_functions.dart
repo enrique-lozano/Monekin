@@ -11,6 +11,7 @@ import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/html_text.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 import '../../../core/services/supported_icon/supported_icon_service.dart';
@@ -62,7 +63,7 @@ class CategoryFormFunctions {
               SnackbarParams(t.categories.delete_success),
             );
 
-            if (context.mounted) Navigator.of(context).pop();
+            RouteUtils.popRoute();
           })
           .catchError((error) {
             MonekinSnackbar.error(SnackbarParams.fromError(error));
@@ -141,7 +142,7 @@ class CategoryFormFunctions {
 
         await Future.wait(futures);
 
-        if (context.mounted) Navigator.pop(context);
+        RouteUtils.popRoute();
         MonekinSnackbar.success(SnackbarParams(t.categories.merge_success));
       });
     });
@@ -236,7 +237,7 @@ class CategoryFormFunctions {
 
         await Future.wait(futures);
 
-        if (context.mounted) Navigator.pop(context);
+        RouteUtils.popRoute();
         MonekinSnackbar.success(
           SnackbarParams(t.categories.make_child_success),
         );

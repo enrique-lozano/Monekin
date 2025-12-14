@@ -33,6 +33,7 @@ class AnimatedFloatingButton extends StatelessWidget {
     return FloatingActionButton.extended(
       heroTag: null,
       onPressed: onPressed,
+      tooltip: isExtended ? null : text,
       icon: icon,
       extendedPadding: const EdgeInsetsDirectional.only(start: 16, end: 16),
       extendedIconLabelSpacing: isExtended ? 8 : 0,

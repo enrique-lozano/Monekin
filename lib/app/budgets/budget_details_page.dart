@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/budgets/budget_form_page.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/budgets/components/budget_evolution_chart.dart';
-import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/app/stats/stats_page.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
@@ -33,82 +32,12 @@ class BudgetDetailsPage extends StatefulWidget {
 }
 
 class _BudgetDetailsPageState extends State<BudgetDetailsPage>
-    with PageWithScaffold, SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   double? budgetCurrentValue;
   double? budgetCurrentPercentage;
 
   List<StreamSubscription<double>> subscrList = [];
   late TabController _tabController;
-
-  ScaffoldConfiguration _getScaffoldConfig(Budget budget) {
-    return ScaffoldConfiguration(
-      title: Translations.of(context).budgets.details.title,
-      tabBar: TabBar(
-        controller: _tabController,
-        tabAlignment: BreakPoint.of(context).isSmallerThan(BreakpointID.md)
-            ? TabAlignment.fill
-            : TabAlignment.start,
-        isScrollable: !BreakPoint.of(context).isSmallerThan(BreakpointID.md),
-        tabs: [
-          Tab(text: t.budgets.details.statistics),
-          Tab(text: t.transaction.display(n: 1)),
-        ],
-      ),
-      appBarActions: [
-        MonekinPopupMenuButton(
-          actionItems: [
-            ListTileActionItem(
-              label: t.budgets.form.edit,
-              icon: Icons.edit,
-              onClick: () {
-                RouteUtils.pushRoute(
-                  context,
-                  BudgetFormPage(
-                    prevPage: const BudgetsPage(),
-                    budgetToEdit: budget,
-                  ),
-                );
-              },
-            ),
-            ListTileActionItem(
-              label: t.ui_actions.delete,
-              icon: Icons.delete,
-              role: ListTileActionRole.delete,
-              onClick: () {
-                confirmDialog(
-                  context,
-                  dialogTitle: t.budgets.delete,
-                  contentParagraphs: [Text(t.budgets.delete_warning)],
-                  confirmationText: t.ui_actions.confirm,
-                  icon: Icons.delete,
-                ).then((confirmed) {
-                  if (confirmed != true) return;
-
-                  BudgetServive.instance
-                      .deleteBudget(budget.id)
-                      .then((value) {
-                        if (context.mounted) Navigator.pop(context);
-
-                        MonekinSnackbar.success(
-                          SnackbarParams(t.budgets.delete),
-                        );
-                      })
-                      .catchError((err) {
-                        MonekinSnackbar.error(SnackbarParams.fromError(err));
-                      });
-                });
-              },
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  @override
-  ScaffoldConfiguration get scaffoldConfiguration {
-    return _getScaffoldConfig(widget.budget);
-  }
 
   @override
   void initState() {
@@ -149,10 +78,73 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
         if (!snapshot.hasData) return Container();
 
         final budget = snapshot.data!;
-        scaffoldConfiguration = _getScaffoldConfig(budget);
 
         return PageFramework(
-          scaffoldConfiguration: scaffoldConfiguration,
+          title: Translations.of(context).budgets.details.title,
+          tabBar: TabBar(
+            controller: _tabController,
+            tabAlignment: BreakPoint.of(context).isSmallerThan(BreakpointID.md)
+                ? TabAlignment.fill
+                : TabAlignment.start,
+            isScrollable: !BreakPoint.of(
+              context,
+            ).isSmallerThan(BreakpointID.md),
+            tabs: [
+              Tab(text: t.budgets.details.statistics),
+              Tab(text: t.transaction.display(n: 1)),
+            ],
+          ),
+          appBarActions: [
+            MonekinPopupMenuButton(
+              actionItems: [
+                ListTileActionItem(
+                  label: t.budgets.form.edit,
+                  icon: Icons.edit,
+                  onClick: () {
+                    RouteUtils.pushRoute(
+                      context,
+                      BudgetFormPage(
+                        prevPage: const BudgetsPage(),
+                        budgetToEdit: budget,
+                      ),
+                    );
+                  },
+                ),
+                ListTileActionItem(
+                  label: t.ui_actions.delete,
+                  icon: Icons.delete,
+                  role: ListTileActionRole.delete,
+                  onClick: () {
+                    confirmDialog(
+                      context,
+                      dialogTitle: t.budgets.delete,
+                      contentParagraphs: [Text(t.budgets.delete_warning)],
+                      confirmationText: t.ui_actions.confirm,
+                      icon: Icons.delete,
+                    ).then((confirmed) {
+                      if (confirmed != true) return;
+
+                      BudgetServive.instance
+                          .deleteBudget(budget.id)
+                          .then((value) {
+                            RouteUtils.popRoute();
+
+                            MonekinSnackbar.success(
+                              SnackbarParams(t.budgets.delete),
+                            );
+                          })
+                          .catchError((err) {
+                            MonekinSnackbar.error(
+                              SnackbarParams.fromError(err),
+                            );
+                          });
+                    });
+                  },
+                ),
+              ],
+            ),
+          ],
+
           body: TabBarView(
             controller: _tabController,
             children: [
@@ -193,7 +185,6 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
                 child: TransactionListComponent(
                   heroTagBuilder: (tr) => 'budgets-page__tr-icon-${tr.id}',
                   filters: budget.trFilters,
-                  prevPage: BudgetDetailsPage(budget: budget),
                   onEmptyList: NoResults(
                     title: t.general.empty_warn,
                     description: t.budgets.details.no_transactions,

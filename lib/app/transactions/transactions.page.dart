@@ -4,8 +4,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
-import 'package:monekin/app/layout/scaffold_configuration.dart';
-import 'package:monekin/app/layout/tabs.dart';
 import 'package:monekin/app/transactions/widgets/bulk_edit_transaction_modal.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
@@ -20,13 +18,10 @@ import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
-import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:monekin/page_context.dart';
 import 'package:monekin/page_framework.dart';
 import 'package:rxdart/rxdart.dart';
-
-GlobalKey<TransactionListComponentState> _transactionListKey =
-    GlobalKey<TransactionListComponentState>();
 
 class TransactionsPage extends StatefulWidget {
   const TransactionsPage({super.key, this.filters});
@@ -34,14 +29,12 @@ class TransactionsPage extends StatefulWidget {
   final TransactionFilters? filters;
 
   @override
-  State<TransactionsPage> createState() => _TransactionsPageState();
+  State<TransactionsPage> createState() => TransactionsPageState();
 }
 
-class _TransactionsPageState extends State<TransactionsPage>
-    with PageWithScaffold {
+class TransactionsPageState extends State<TransactionsPage> {
   late TransactionFilters filters;
 
-  bool searchActive = false;
   FocusNode searchFocusNode = FocusNode();
   final searchController = TextEditingController();
   final ScrollController listScrollController = ScrollController();
@@ -49,34 +42,10 @@ class _TransactionsPageState extends State<TransactionsPage>
   List<MoneyTransaction> selectedTransactions = [];
 
   @override
-  ScaffoldConfiguration get scaffoldConfiguration {
-    final t = Translations.of(context);
-
-    return ScaffoldConfiguration(
-      title: t.transaction.display(n: 10),
-      appBarBuilder: (_, _, _) => selectedTransactions.isNotEmpty
-          ? selectedTransactionsAppbar()
-          : transactionsPageDefaultAppBar(t, context),
-      floatingActionButton: NewTransactionButton(
-        key: const Key('transactions-page--new-transaction-button'),
-        scrollController: listScrollController,
-      ),
-    );
-  }
-
-  @override
   void initState() {
     super.initState();
 
     filters = widget.filters ?? const TransactionFilters();
-
-    searchFocusNode.addListener(() {
-      if (!searchFocusNode.hasFocus && searchController.text.isEmpty) {
-        setState(() {
-          searchActive = false;
-        });
-      }
-    });
   }
 
   @override
@@ -86,23 +55,28 @@ class _TransactionsPageState extends State<TransactionsPage>
     super.dispose();
   }
 
+  bool get searchActive =>
+      searchController.text.isNotEmpty || searchFocusNode.hasFocus;
+
+  bool get canPop => !searchActive && selectedTransactions.isEmpty;
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
     return PopScope(
-      canPop: !searchActive && selectedTransactions.isEmpty,
+      canPop: canPop,
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
+
+        print("POP SCOPE FROM TRANSACTIONS PAGE");
 
         if (selectedTransactions.isNotEmpty) {
           cleanSelectedTransactions();
           return;
         }
 
-        if (searchActive ||
-            searchController.text.isNotEmpty ||
-            searchFocusNode.hasFocus) {
+        if (searchActive) {
           if (searchFocusNode.hasFocus) {
             searchFocusNode.unfocus();
           }
@@ -111,11 +85,15 @@ class _TransactionsPageState extends State<TransactionsPage>
 
           return;
         }
-
-        Navigator.pop(context);
       },
       child: PageFramework(
-        scaffoldConfiguration: scaffoldConfiguration,
+        title: t.transaction.display(n: 10),
+        appBarBuilder: (_, _, _) => selectedTransactions.isNotEmpty
+            ? selectedTransactionsAppbar()
+            : transactionsPageDefaultAppBar(t, context),
+        floatingActionButton: ifIsInTabs(context)
+            ? null
+            : NewTransactionButton(scrollController: listScrollController),
         body: Column(
           children: [
             if (filters.hasFilter) ...[
@@ -226,7 +204,6 @@ class _TransactionsPageState extends State<TransactionsPage>
                 scrollController: listScrollController,
                 heroTagBuilder: (tr) => 'transactions-page__tr-icon-${tr.id}',
                 filters: filters.copyWith(searchValue: searchController.text),
-                prevPage: const TabsPage(),
                 selectedTransactions: selectedTransactions,
                 onLongPress: (tr) {
                   if (selectedTransactions.isNotEmpty) {
@@ -235,7 +212,6 @@ class _TransactionsPageState extends State<TransactionsPage>
 
                   toggleTransaction(tr);
                 },
-                key: _transactionListKey,
                 onTap: selectedTransactions.isEmpty ? null : toggleTransaction,
                 onEmptyList: NoResults(
                   title: filters.hasFilter ? null : t.general.empty_warn,
@@ -254,8 +230,8 @@ class _TransactionsPageState extends State<TransactionsPage>
 
   void closeSearch() {
     setState(() {
-      searchActive = false;
       searchController.text = "";
+      searchFocusNode.unfocus();
     });
   }
 
@@ -272,11 +248,6 @@ class _TransactionsPageState extends State<TransactionsPage>
                 hintText: t.transaction.list.searcher_placeholder,
                 border: const UnderlineInputBorder(),
               ),
-              onChanged: (text) {
-                setState(() {
-                  tabsPageKey.currentState?.updateScaffoldConfiguration();
-                });
-              },
             )
           : Text(t.transaction.display(n: 10)),
       actions: [
@@ -284,12 +255,8 @@ class _TransactionsPageState extends State<TransactionsPage>
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
-              setState(() {
-                searchActive = true;
-                tabsPageKey.currentState?.updateScaffoldConfiguration();
-              });
-
               searchFocusNode.requestFocus();
+              setState(() {});
             },
           ),
         IconButton(
@@ -339,10 +306,6 @@ class _TransactionsPageState extends State<TransactionsPage>
                       transactionsToEdit: selectedTransactions,
                       onSuccess: () {
                         selectedTransactions = [];
-                        setState(() {
-                          tabsPageKey.currentState
-                              ?.updateScaffoldConfiguration();
-                        });
                       },
                     );
                   },
@@ -410,7 +373,6 @@ class _TransactionsPageState extends State<TransactionsPage>
   void cleanSelectedTransactions() {
     setState(() {
       selectedTransactions = [];
-      tabsPageKey.currentState?.updateScaffoldConfiguration();
     });
   }
 
@@ -423,8 +385,6 @@ class _TransactionsPageState extends State<TransactionsPage>
       selectedTransactions.add(tr);
     }
 
-    setState(() {
-      tabsPageKey.currentState?.updateScaffoldConfiguration();
-    });
+    setState(() {});
   }
 }

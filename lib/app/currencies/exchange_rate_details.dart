@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/currencies/exchange_rate_form.dart';
-import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:monekin/page_framework.dart';
@@ -22,8 +22,7 @@ class ExchangeRateDetailsPage extends StatefulWidget {
       _ExchangeRateDetailsPageState();
 }
 
-class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
-    with PageWithScaffold {
+class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
   List<ExchangeRate>? exchangeRates;
 
   @override
@@ -33,11 +32,34 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
     getExchangeRates();
   }
 
+  void getExchangeRates() {
+    ExchangeRateService.instance
+        .getExchangeRatesOf(widget.currency.code)
+        .first
+        .then((value) {
+          setState(() {
+            exchangeRates = value;
+          });
+        });
+  }
+
+  void deleteAllRates() {
+    ExchangeRateService.instance
+        .deleteExchangeRates(currencyCode: widget.currency.code)
+        .then((value) {
+          RouteUtils.popRoute();
+
+          MonekinSnackbar.success(
+            SnackbarParams(t.currencies.delete_all_success),
+          );
+        });
+  }
+
   @override
-  ScaffoldConfiguration get scaffoldConfiguration {
+  Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return ScaffoldConfiguration(
+    return PageFramework(
       title: t.currencies.exchange_rate,
       appBarActions: [
         MonekinPopupMenuButton(
@@ -66,38 +88,6 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
           ),
         ),
       ],
-    );
-  }
-
-  void getExchangeRates() {
-    ExchangeRateService.instance
-        .getExchangeRatesOf(widget.currency.code)
-        .first
-        .then((value) {
-          setState(() {
-            exchangeRates = value;
-          });
-        });
-  }
-
-  void deleteAllRates() {
-    ExchangeRateService.instance
-        .deleteExchangeRates(currencyCode: widget.currency.code)
-        .then((value) {
-          Navigator.pop(context);
-
-          MonekinSnackbar.success(
-            SnackbarParams(t.currencies.delete_all_success),
-          );
-        });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final t = Translations.of(context);
-
-    return PageFramework(
-      scaffoldConfiguration: scaffoldConfiguration,
       body: Column(
         children: [
           Padding(

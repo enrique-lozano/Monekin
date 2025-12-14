@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/budgets/budget_form_page.dart';
-import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:monekin/page_context.dart';
 import 'package:monekin/page_framework.dart';
 
 import 'components/budget_card.dart';
@@ -19,7 +19,7 @@ class BudgetsPage extends StatefulWidget {
 }
 
 class _BudgetsPageState extends State<BudgetsPage>
-    with PageWithScaffold, SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -31,41 +31,26 @@ class _BudgetsPageState extends State<BudgetsPage>
   }
 
   @override
-  ScaffoldConfiguration get scaffoldConfiguration {
-    final t = Translations.of(context);
-
-    return ScaffoldConfiguration(
-      title: t.budgets.title,
-      tabBar: TabBar(
-        controller: _tabController,
-        tabAlignment: BreakPoint.of(context).isSmallerThan(BreakpointID.md)
-            ? TabAlignment.fill
-            : TabAlignment.start,
-        isScrollable: !BreakPoint.of(context).isSmallerThan(BreakpointID.md),
-        tabs: [
-          Tab(text: t.budgets.repeated),
-          Tab(text: t.budgets.one_time),
-        ],
-      ),
-
-      floatingActionButton: FloatingActionButton.extended(
-        heroTag: UniqueKey(),
-        icon: const Icon(Icons.add_rounded),
-        label: Text(t.budgets.form.create),
-        onPressed: () => RouteUtils.pushRoute(
-          context,
-          const BudgetFormPage(prevPage: BudgetsPage()),
-        ),
-      ),
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final tabBar = TabBar(
+      controller: _tabController,
+      tabAlignment: BreakPoint.of(context).isSmallerThan(BreakpointID.md)
+          ? TabAlignment.fill
+          : TabAlignment.start,
+      isScrollable: !BreakPoint.of(context).isSmallerThan(BreakpointID.md),
+      tabs: [
+        Tab(text: t.budgets.repeated),
+        Tab(text: t.budgets.one_time),
+      ],
+    );
 
     return PageFramework(
-      scaffoldConfiguration: scaffoldConfiguration,
+      title: t.budgets.title,
+      tabBar: tabBar,
+      floatingActionButton: ifIsInTabs(context)
+          ? null
+          : const BudgetFabButton(),
       body: TabBarView(
         controller: _tabController,
         children: [
@@ -149,6 +134,25 @@ class _BudgetsPageState extends State<BudgetsPage>
             },
           ),
         ],
+      ),
+    );
+  }
+}
+
+class BudgetFabButton extends StatelessWidget {
+  const BudgetFabButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+
+    return FloatingActionButton.extended(
+      heroTag: UniqueKey(),
+      icon: const Icon(Icons.add_rounded),
+      label: Text(t.budgets.form.create),
+      onPressed: () => RouteUtils.pushRoute(
+        context,
+        const BudgetFormPage(prevPage: BudgetsPage()),
       ),
     );
   }

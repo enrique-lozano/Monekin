@@ -17,6 +17,7 @@ import 'package:monekin/core/presentation/helpers/global_snackbar.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/routes/root_navigator_observer.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/core/utils/logger.dart';
 import 'package:monekin/core/utils/scroll_behavior_override.dart';
@@ -218,7 +219,10 @@ class MaterialAppContainer extends StatelessWidget {
             accentColor: accentColor,
           ),
           themeMode: themeMode,
-          navigatorKey: navigatorKey,
+          // navigatorKey: navigatorKey,
+          // onGenerateRoute: (settings) => RouteUtils.getPageRouteBuilder(
+          //   InitialPageRouteNavigator(introSeen: introSeen),
+          // ),
           navigatorObservers: [MainLayoutNavObserver()],
           builder: (context, child) {
             SystemChrome.setSystemUIOverlayStyle(
@@ -271,13 +275,16 @@ class MaterialAppContainer extends StatelessWidget {
               ],
             );
           },
-          home: InitialPageRouteNavigator(introSeen: introSeen),
+          home: HandleWillPopScope(
+            child: InitialPageRouteNavigator(introSeen: introSeen),
+          ),
         );
       },
     );
   }
 }
 
+// Handles onboarding too!
 class InitialPageRouteNavigator extends StatelessWidget {
   const InitialPageRouteNavigator({super.key, required this.introSeen});
 
@@ -285,11 +292,15 @@ class InitialPageRouteNavigator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pageToDisplay = introSeen
-        ? TabsPage(key: tabsPageKey)
-        : const IntroPage();
-
-    return pageToDisplay;
+    return HeroControllerScope(
+      controller: MaterialApp.createMaterialHeroController(),
+      child: Navigator(
+        key: navigatorKey,
+        onGenerateRoute: (settings) => RouteUtils.getPageRouteBuilder(
+          introSeen ? TabsPage(key: tabsPageKey) : const IntroPage(),
+        ),
+      ),
+    );
   }
 }
 
@@ -297,22 +308,14 @@ class HandleWillPopScope extends StatelessWidget {
   const HandleWillPopScope({required this.child, super.key});
   final Widget child;
 
-  Future<bool> maybePopRoute<T extends Object?>(
-    BuildContext? context, [
-    T? result,
-  ]) async {
-    BuildContext? contextToPop = context;
-    if (context == null) contextToPop = navigatorKey.currentContext;
-    if (contextToPop == null) return false;
-    return Navigator.of(contextToPop, rootNavigator: false).maybePop(result);
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       child: child,
       onWillPop: () async {
-        bool popResult = await maybePopRoute(navigatorKey.currentContext);
+        bool popResult = await RouteUtils.maybePopRoute(
+          navigatorKey.currentContext,
+        );
         if (popResult == true) return false;
 
         if (tabsPageKey.currentState?.selectedDestination ==

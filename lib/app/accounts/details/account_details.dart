@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/details/account_details_actions.dart';
-import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/app/transactions/label_value_info_list.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
@@ -44,15 +43,7 @@ class AccountDetailsPage extends StatefulWidget {
   State<AccountDetailsPage> createState() => _AccountDetailsPageState();
 }
 
-class _AccountDetailsPageState extends State<AccountDetailsPage>
-    with PageWithScaffold {
-  @override
-  ScaffoldConfiguration get scaffoldConfiguration {
-    final t = Translations.of(context);
-
-    return ScaffoldConfiguration(title: t.account.details);
-  }
-
+class _AccountDetailsPageState extends State<AccountDetailsPage> {
   LabelValueInfoListItem buildCopyableTile(String title, String value) {
     return LabelValueInfoListItem(
       label: title,
@@ -81,7 +72,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage>
     final t = Translations.of(context);
 
     return PageFramework(
-      scaffoldConfiguration: scaffoldConfiguration,
+      title: t.account.details,
       body: StreamBuilder(
         stream: AccountService.instance.getAccountById(widget.account.id),
         initialData: widget.account,
@@ -215,10 +206,6 @@ class _AccountDetailsPageState extends State<AccountDetailsPage>
                           ),
                           limit: 5,
                           showGroupDivider: false,
-                          prevPage: AccountDetailsPage(
-                            account: widget.account,
-                            accountIconHeroTag: widget.accountIconHeroTag,
-                          ),
                           onEmptyList: Padding(
                             padding: const EdgeInsets.all(24),
                             child: Text(
@@ -418,7 +405,7 @@ class _ArchiveWarnDialogState extends State<ArchiveWarnDialog> {
                           );
                         })
                         .catchError((err) {
-                          Navigator.pop(context);
+                          RouteUtils.popRoute();
 
                           MonekinSnackbar.error(SnackbarParams.fromError(err));
                         });

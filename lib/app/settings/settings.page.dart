@@ -3,7 +3,6 @@ import 'package:monekin/app/accounts/all_accounts_page.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/categories/categories_list_page.dart';
 import 'package:monekin/app/currencies/currency_manager.dart';
-import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/app/settings/about_page.dart';
 import 'package:monekin/app/settings/appearance_settings_page.dart';
 import 'package:monekin/app/settings/backup_settings_page.dart';
@@ -12,7 +11,6 @@ import 'package:monekin/app/settings/widgets/setting_card_item.dart';
 import 'package:monekin/app/stats/stats_page.dart';
 import 'package:monekin/app/tags/tag_list.page.dart';
 import 'package:monekin/app/transactions/recurrent_transactions_page.dart';
-import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -25,19 +23,13 @@ class SettingsPage extends StatefulWidget {
   State<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> with PageWithScaffold {
-  @override
-  ScaffoldConfiguration get scaffoldConfiguration {
-    final t = Translations.of(context);
-    return ScaffoldConfiguration(title: t.more.title_long);
-  }
-
+class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
     return PageFramework(
-      scaffoldConfiguration: scaffoldConfiguration,
+      title: t.more.title_long,
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 24),
         child: Column(
@@ -166,13 +158,6 @@ class _SettingsPageState extends State<SettingsPage> with PageWithScaffold {
                   ),
                 ],
               ],
-            ),
-
-            TextButton(
-              onPressed: () {
-                RouteUtils.pushRoute(context, const TransactionsPage());
-              },
-              child: Text("HOALALALA"),
             ),
           ],
         ),

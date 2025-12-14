@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/page_framework.dart';
 
-class DebugPage extends StatelessWidget with PageWithScaffold {
+class DebugPage extends StatelessWidget {
   const DebugPage({super.key});
-
-  @override
-  ScaffoldConfiguration get scaffoldConfiguration =>
-      ScaffoldConfiguration(title: 'Debug Page');
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +63,7 @@ class DebugPage extends StatelessWidget with PageWithScaffold {
     ];
 
     return PageFramework(
-      scaffoldConfiguration: scaffoldConfiguration,
+      title: 'Debug Page',
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
         child: Column(

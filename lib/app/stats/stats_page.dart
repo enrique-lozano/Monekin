@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/layout/scaffold_configuration.dart';
+
 import 'package:monekin/app/stats/widgets/balance_bar_chart.dart';
 import 'package:monekin/app/stats/widgets/finance_health_details.dart';
 import 'package:monekin/app/stats/widgets/fund_evolution_info.dart';
@@ -15,7 +15,6 @@ import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
-import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:monekin/page_framework.dart';
 
@@ -40,7 +39,7 @@ class StatsPage extends StatefulWidget {
 }
 
 class _StatsPageState extends State<StatsPage>
-    with PageWithScaffold, SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   final accountService = AccountService.instance;
 
   late TransactionFilters filters;
@@ -59,8 +58,6 @@ class _StatsPageState extends State<StatsPage>
       initialIndex: widget.initialIndex,
       vsync: this,
     );
-
-    tabsPageKey.currentState?.updateScaffoldConfiguration();
   }
 
   @override
@@ -69,11 +66,27 @@ class _StatsPageState extends State<StatsPage>
     super.dispose();
   }
 
+  Widget buildContainerWithPadding(
+    List<Widget> children, {
+    EdgeInsetsGeometry padding = const EdgeInsets.symmetric(
+      vertical: 16,
+      horizontal: 16,
+    ),
+  }) {
+    return SingleChildScrollView(
+      padding: padding,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: children,
+      ),
+    );
+  }
+
   @override
-  ScaffoldConfiguration get scaffoldConfiguration {
+  Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return ScaffoldConfiguration(
+    return PageFramework(
       title: t.stats.title,
       appBarActions: [
         if (BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md)) ...[
@@ -145,31 +158,7 @@ class _StatsPageState extends State<StatsPage>
                 ),
               ),
             ],
-    );
-  }
 
-  Widget buildContainerWithPadding(
-    List<Widget> children, {
-    EdgeInsetsGeometry padding = const EdgeInsets.symmetric(
-      vertical: 16,
-      horizontal: 16,
-    ),
-  }) {
-    return SingleChildScrollView(
-      padding: padding,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: children,
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final t = Translations.of(context);
-
-    return PageFramework(
-      scaffoldConfiguration: scaffoldConfiguration,
       body: Column(
         children: [
           if (filters.hasFilter) ...[

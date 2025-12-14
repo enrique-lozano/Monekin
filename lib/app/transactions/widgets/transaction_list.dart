@@ -13,7 +13,6 @@ class TransactionListComponent extends StatefulWidget {
     required this.filters,
     this.showGroupDivider = true,
     this.periodicityInfo,
-    required this.prevPage,
     this.orderBy,
     this.limit = 40,
     this.onLoading = const Column(children: [LinearProgressIndicator()]),
@@ -41,8 +40,6 @@ class TransactionListComponent extends StatefulWidget {
 
   /// If defined, display info about the periodicity of the recurrent transactions, and the days to the next payment. Will show the amount of the recurrency based on the specified periodicity
   final Periodicity? periodicityInfo;
-
-  final Widget prevPage;
 
   final Object? Function(MoneyTransaction tr)? heroTagBuilder;
 
@@ -182,7 +179,6 @@ class TransactionListComponentState extends State<TransactionListComponent> {
 
             return TransactionListTile(
               transaction: transaction,
-              prevPage: widget.prevPage,
               periodicityInfo: widget.periodicityInfo,
               showDate: !widget.showGroupDivider,
               showTime: widget.showGroupDivider,

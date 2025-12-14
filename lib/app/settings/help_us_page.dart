@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/app/settings/purchases/donate_button.dart';
 import 'package:monekin/app/settings/purchases/in_app_purchase.dart';
 import 'package:monekin/app/settings/widgets/display_app_icon.dart';
@@ -17,21 +16,14 @@ class HelpUsPage extends StatefulWidget {
   State<HelpUsPage> createState() => _HelpUsPageState();
 }
 
-class _HelpUsPageState extends State<HelpUsPage> with PageWithScaffold {
-  @override
-  ScaffoldConfiguration get scaffoldConfiguration {
-    final t = Translations.of(context);
-
-    return ScaffoldConfiguration(title: t.more.help_us.display);
-  }
-
+class _HelpUsPageState extends State<HelpUsPage> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final iapConnection = IAPConnection.instance;
 
     return PageFramework(
-      scaffoldConfiguration: scaffoldConfiguration,
+      title: t.more.help_us.display,
       body: SingleChildScrollView(
         padding: EdgeInsets.zero.withSafeBottom(context),
         child: Column(

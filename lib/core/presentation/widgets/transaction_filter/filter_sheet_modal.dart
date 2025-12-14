@@ -20,6 +20,7 @@ import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/status_filter/transaction_status_filter.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -126,7 +127,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                     filtersToReturn.categories != null &&
                         filtersToReturn.categories!.isEmpty
                 ? null
-                : () => Navigator.of(context).pop(filtersToReturn),
+                : () => RouteUtils.popRoute(filtersToReturn),
           ),
           body: ScrollableWithBottomGradient(
             controller: scrollController,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/app/settings/widgets/display_app_icon.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
@@ -18,14 +17,7 @@ class AboutPage extends StatefulWidget {
   State<AboutPage> createState() => _AboutPageState();
 }
 
-class _AboutPageState extends State<AboutPage> with PageWithScaffold {
-  @override
-  ScaffoldConfiguration get scaffoldConfiguration {
-    final t = Translations.of(context);
-
-    return ScaffoldConfiguration(title: t.more.about_us.display);
-  }
-
+class _AboutPageState extends State<AboutPage> {
   Widget buildLinkItem(
     String title, {
     String? subtitle,
@@ -48,7 +40,7 @@ class _AboutPageState extends State<AboutPage> with PageWithScaffold {
     final t = Translations.of(context);
 
     return PageFramework(
-      scaffoldConfiguration: scaffoldConfiguration,
+      title: t.more.about_us.display,
       body: SingleChildScrollView(
         padding: EdgeInsets.zero.withSafeBottom(context),
         child: Column(

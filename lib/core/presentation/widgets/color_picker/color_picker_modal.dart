@@ -5,6 +5,7 @@ import 'package:monekin/core/presentation/widgets/color_picker/custom_color_pick
 import 'package:monekin/core/presentation/widgets/gradient-box.borders.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 Future<void> showColorPickerModal(
@@ -112,7 +113,7 @@ class ColorPickerModal extends StatelessWidget {
         child: Tappable(
           bgColor: Colors.transparent,
           onTap: () {
-            Navigator.pop(context);
+            RouteUtils.popRoute();
 
             showCustomColorPickerModal(
               context,

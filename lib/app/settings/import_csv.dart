@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
-import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/app/layout/tabs.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
@@ -38,7 +37,7 @@ class ImportCSVPage extends StatefulWidget {
 
 const _rowsToPreview = 5;
 
-class _ImportCSVPageState extends State<ImportCSVPage> with PageWithScaffold {
+class _ImportCSVPageState extends State<ImportCSVPage> {
   int currentStep = 0;
 
   List<List<dynamic>>? csvData;
@@ -59,13 +58,6 @@ class _ImportCSVPageState extends State<ImportCSVPage> with PageWithScaffold {
 
   int? notesColumn;
   int? titleColumn;
-
-  @override
-  ScaffoldConfiguration get scaffoldConfiguration {
-    final t = Translations.of(context);
-
-    return ScaffoldConfiguration(title: t.backup.import.manual_import.title);
-  }
 
   Future<void> readFile() async {
     try {
@@ -347,7 +339,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> with PageWithScaffold {
     final t = Translations.of(context);
 
     return PageFramework(
-      scaffoldConfiguration: scaffoldConfiguration,
+      title: t.backup.import.manual_import.title,
       body: Stepper(
         type: StepperType.vertical,
         currentStep: currentStep,

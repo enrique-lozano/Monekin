@@ -2,7 +2,6 @@
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
@@ -22,23 +21,15 @@ class RecurrentTransactionPage extends StatefulWidget {
       _RecurrentTransactionPageState();
 }
 
-class _RecurrentTransactionPageState extends State<RecurrentTransactionPage>
-    with PageWithScaffold {
+class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
   Periodicity periodicity = Periodicity.month;
-
-  @override
-  ScaffoldConfiguration get scaffoldConfiguration {
-    final t = Translations.of(context);
-
-    return ScaffoldConfiguration(title: t.recurrent_transactions.title);
-  }
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
     return PageFramework(
-      scaffoldConfiguration: scaffoldConfiguration,
+      title: t.recurrent_transactions.title,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -62,7 +53,6 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage>
           Expanded(
             child: TransactionListComponent(
               filters: const TransactionFilters(isRecurrent: true),
-              prevPage: const RecurrentTransactionPage(),
               periodicityInfo: periodicity,
               showGroupDivider: false,
               heroTagBuilder: (tr) =>

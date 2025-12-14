@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
-import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/app/transactions/form/dialogs/amount_selector.dart';
 import 'package:monekin/app/transactions/form/dialogs/transaction_status_selector.dart';
 import 'package:monekin/app/transactions/form/widgets/custom_interval_selector.dart';
@@ -76,7 +75,7 @@ class TransactionFormPage extends StatefulWidget {
 }
 
 class _TransactionFormPageState extends State<TransactionFormPage>
-    with TickerProviderStateMixin, PageWithScaffold {
+    with TickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
 
   double transactionValue = 0;
@@ -271,7 +270,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     }
 
     onSuccess() {
-      Navigator.pop(context);
+      RouteUtils.popRoute();
 
       MonekinSnackbar.success(
         SnackbarParams(
@@ -364,7 +363,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
 
             onSuccess();
           } catch (error) {
-            if (mounted) Navigator.pop(context);
+            if (mounted) RouteUtils.popRoute();
             MonekinSnackbar.error(SnackbarParams.fromError(error));
           }
         })
@@ -607,7 +606,50 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       right: false,
       top: BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md),
       child: PageFramework(
-        scaffoldConfiguration: scaffoldConfiguration,
+        title: isEditMode
+            ? t.transaction.edit
+            : transactionType == TransactionType.T
+            ? t.transfer.create
+            : transactionType == TransactionType.E
+            ? t.transaction.new_expense
+            : t.transaction.new_income,
+        appBarBackgroundColor: transactionType.color(context).withOpacity(0.85),
+        appBarForegroundColor: foregroundColor,
+        tabBar: TabBar(
+          indicatorColor: foregroundColor,
+          labelColor: foregroundColor,
+          labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
+          unselectedLabelColor: foregroundColor.withOpacity(0.8),
+          tabAlignment: TabAlignment.fill,
+          dividerColor: transactionType.color(context).darken(0.3),
+          controller: _tabController,
+          tabs: TransactionType.values
+              .map((tType) => Tab(text: tType.displayName(context)))
+              .toList(),
+          isScrollable: false,
+        ),
+        persistentFooterButtons: [
+          PersistentFooterButton(
+            child: FilledButton.icon(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
+
+                  submitForm();
+                } else {
+                  MonekinSnackbar.error(
+                    SnackbarParams(t.general.validations.form_error),
+                  );
+                }
+              },
+              icon: const Icon(Icons.save),
+              label: Text(
+                isEditMode ? t.transaction.edit : t.transaction.create,
+              ),
+            ),
+          ),
+        ],
         body: Form(
           key: _formKey,
           child: BreakpointContainer(
@@ -671,7 +713,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
         onSubmit: (amount) {
           setState(() {
             transactionValue = amount;
-            Navigator.pop(context);
+            RouteUtils.popRoute();
           });
         },
       ),
@@ -993,50 +1035,4 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       ),
     );
   }
-
-  @override
-  ScaffoldConfiguration get scaffoldConfiguration => ScaffoldConfiguration(
-    title: isEditMode
-        ? t.transaction.edit
-        : transactionType == TransactionType.T
-        ? t.transfer.create
-        : transactionType == TransactionType.E
-        ? t.transaction.new_expense
-        : t.transaction.new_income,
-    appBarBackgroundColor: transactionType.color(context).withOpacity(0.85),
-    appBarForegroundColor: foregroundColor,
-    tabBar: TabBar(
-      indicatorColor: foregroundColor,
-      labelColor: foregroundColor,
-      labelStyle: const TextStyle(fontWeight: FontWeight.bold),
-      unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
-      unselectedLabelColor: foregroundColor.withOpacity(0.8),
-      tabAlignment: TabAlignment.fill,
-      dividerColor: transactionType.color(context).darken(0.3),
-      controller: _tabController,
-      tabs: TransactionType.values
-          .map((tType) => Tab(text: tType.displayName(context)))
-          .toList(),
-      isScrollable: false,
-    ),
-    persistentFooterButtons: [
-      PersistentFooterButton(
-        child: FilledButton.icon(
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              _formKey.currentState!.save();
-
-              submitForm();
-            } else {
-              MonekinSnackbar.error(
-                SnackbarParams(t.general.validations.form_error),
-              );
-            }
-          },
-          icon: const Icon(Icons.save),
-          label: Text(isEditMode ? t.transaction.edit : t.transaction.create),
-        ),
-      ),
-    ],
-  );
 }

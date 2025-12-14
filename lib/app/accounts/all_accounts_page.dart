@@ -5,7 +5,6 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/details/account_details.dart';
-import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/presentation/animations/animated_floating_button.dart';
@@ -26,8 +25,7 @@ class AllAccountsPage extends StatefulWidget {
   State<AllAccountsPage> createState() => _AllAccountsPageState();
 }
 
-class _AllAccountsPageState extends State<AllAccountsPage>
-    with PageWithScaffold {
+class _AllAccountsPageState extends State<AllAccountsPage> {
   String searchQuery = '';
 
   final ScrollController _scrollController = ScrollController();
@@ -54,28 +52,20 @@ class _AllAccountsPageState extends State<AllAccountsPage>
   }
 
   @override
-  ScaffoldConfiguration get scaffoldConfiguration {
-    final t = Translations.of(context);
-
-    return ScaffoldConfiguration(
-      title: t.home.my_accounts,
-      floatingActionButton: BreakPoint.of(context).isLargerThan(BreakpointID.sm)
-          ? null
-          : AnimatedFloatingButtonBasedOnScroll(
-              onPressed: _onAddPressed,
-              icon: const Icon(Icons.add_rounded),
-              scrollController: _scrollController,
-              text: t.account.form.create,
-            ),
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final floatingActionButton = BreakPoint.of(context).isLargerThan(BreakpointID.sm)
+        ? null
+        : AnimatedFloatingButtonBasedOnScroll(
+            onPressed: _onAddPressed,
+            icon: const Icon(Icons.add_rounded),
+            scrollController: _scrollController,
+            text: t.account.form.create,
+          );
 
     return PageFramework(
-      scaffoldConfiguration: scaffoldConfiguration,
+      title: t.home.my_accounts,
+      floatingActionButton: floatingActionButton,
       body: ColumnWithReorderableListAndSearch(
         onSearchChanged: _onSearchChanged,
         onAddPressed: _onAddPressed,

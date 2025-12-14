@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/app/tags/tag_form_page.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
@@ -25,7 +24,7 @@ class TagListPage extends StatefulWidget {
   State<TagListPage> createState() => _TagListPageState();
 }
 
-class _TagListPageState extends State<TagListPage> with PageWithScaffold {
+class _TagListPageState extends State<TagListPage> {
   String searchQuery = '';
 
   final ScrollController _scrollController = ScrollController();
@@ -38,23 +37,6 @@ class _TagListPageState extends State<TagListPage> with PageWithScaffold {
 
   void _goToEdit() {
     RouteUtils.pushRoute(context, const TagFormPage());
-  }
-
-  @override
-  ScaffoldConfiguration get scaffoldConfiguration {
-    final t = Translations.of(context);
-
-    return ScaffoldConfiguration(
-      title: t.tags.display(n: 10),
-      floatingActionButton: BreakPoint.of(context).isLargerThan(BreakpointID.sm)
-          ? null
-          : AnimatedFloatingButtonBasedOnScroll(
-              onPressed: _goToEdit,
-              icon: const Icon(Icons.add_rounded),
-              scrollController: _scrollController,
-              text: t.tags.add,
-            ),
-    );
   }
 
   @override
@@ -141,9 +123,18 @@ class _TagListPageState extends State<TagListPage> with PageWithScaffold {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final fab = BreakPoint.of(context).isLargerThan(BreakpointID.sm)
+        ? null
+        : AnimatedFloatingButtonBasedOnScroll(
+            onPressed: _goToEdit,
+            icon: const Icon(Icons.add_rounded),
+            scrollController: _scrollController,
+            text: t.tags.add,
+          );
 
     return PageFramework(
-      scaffoldConfiguration: scaffoldConfiguration,
+      title: t.tags.display(n: 10),
+      floatingActionButton: fab,
       body: ColumnWithReorderableListAndSearch(
         onSearchChanged: _onSearchChanged,
         onAddPressed: _goToEdit,

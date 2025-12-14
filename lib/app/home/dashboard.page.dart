@@ -6,7 +6,6 @@ import 'package:monekin/app/home/widgets/dashboard_cards.dart';
 import 'package:monekin/app/home/widgets/horizontal_scrollable_account_list.dart';
 import 'package:monekin/app/home/widgets/income_or_expense_card.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
-import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/app/settings/edit_profile_modal.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
@@ -28,6 +27,7 @@ import 'package:monekin/core/presentation/widgets/user_avatar.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:monekin/page_context.dart';
 import 'package:monekin/page_framework.dart';
 
 import '../../core/models/transaction/transaction_type.enum.dart';
@@ -40,26 +40,10 @@ class DashboardPage extends StatefulWidget {
   State<DashboardPage> createState() => _DashboardPageState();
 }
 
-class _DashboardPageState extends State<DashboardPage> with PageWithScaffold {
+class _DashboardPageState extends State<DashboardPage> {
   DatePeriodState dateRangeService = const DatePeriodState();
   final ScrollController _scrollController = ScrollController();
   bool showSmallHeader = false;
-
-  @override
-  ScaffoldConfiguration get scaffoldConfiguration {
-    return ScaffoldConfiguration(
-      title: t.home.title,
-      appBarBackgroundColor:
-          BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md)
-          ? Colors.transparent
-          : AppColors.of(context).consistentPrimary,
-      enableAppBar: false,
-      floatingActionButton: NewTransactionButton(
-        key: const Key('dashboard--new-transaction-button'),
-        scrollController: _scrollController,
-      ),
-    );
-  }
 
   @override
   void initState() {
@@ -68,14 +52,6 @@ class _DashboardPageState extends State<DashboardPage> with PageWithScaffold {
     _scrollController.addListener(() {
       _setSmallHeaderVisible();
     });
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Notify TabsPage that scaffold configuration may have changed
-    // This is important when theme or other inherited widgets change
-    scaffoldConfiguration = null;
   }
 
   @override
@@ -105,14 +81,24 @@ class _DashboardPageState extends State<DashboardPage> with PageWithScaffold {
   Widget build(BuildContext context) {
     final accountService = AccountService.instance;
 
-    print("IN DASHBOARD PAGE!");
-
     return PageFramework(
-      scaffoldConfiguration: scaffoldConfiguration,
+      title: t.home.title,
+      enableAppBar: false,
+      appBarBackgroundColor:
+          BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md)
+          ? Colors.transparent
+          : AppColors.of(context).consistentPrimary,
+      floatingActionButton: ifIsInTabs(context)
+          ? null
+          : NewTransactionButton(
+              key: const Key('dashboard--new-transaction-button'),
+              scrollController: _scrollController,
+            ),
       body: Stack(
         children: [
           SingleChildScrollView(
             controller: _scrollController,
+            padding: const EdgeInsets.only(bottom: 24),
             child: Column(
               children: [
                 buildDashboadHeader(context, accountService),

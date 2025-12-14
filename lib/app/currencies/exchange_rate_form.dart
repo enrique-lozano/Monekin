@@ -12,6 +12,7 @@ import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
@@ -112,7 +113,7 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
         .catchError((err) {
           MonekinSnackbar.error(SnackbarParams.fromError(err));
         })
-        .whenComplete(() => Navigator.pop(context));
+        .whenComplete(() => RouteUtils.popRoute());
   }
 
   @override

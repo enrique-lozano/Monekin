@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/app/settings/widgets/settings_list_separator.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
@@ -28,55 +27,13 @@ class ExportDataPage extends StatefulWidget {
   State<ExportDataPage> createState() => _ExportDataPageState();
 }
 
-class _ExportDataPageState extends State<ExportDataPage> with PageWithScaffold {
+class _ExportDataPageState extends State<ExportDataPage> {
   _ExportFormats selectedExportFormat = _ExportFormats.db;
 
   TransactionFilters filters = const TransactionFilters();
 
   bool _isDownloading = false;
   bool _isSharing = false;
-
-  @override
-  ScaffoldConfiguration get scaffoldConfiguration {
-    final t = Translations.of(context);
-    final isDownloadingOrSharing = _isDownloading || _isSharing;
-
-    return ScaffoldConfiguration(
-      title: t.backup.export.title,
-      persistentFooterButtons: [
-        Row(
-          children: [
-            Flexible(
-              child: PersistentFooterButton(
-                child: FilledButton.icon(
-                  icon: _isDownloading
-                      ? buttonLoadingIndicator()
-                      : const Icon(Icons.download_rounded),
-                  label: Text(t.ui_actions.download),
-                  style: getBigButtonStyle(context),
-                  onPressed: isDownloadingOrSharing
-                      ? null
-                      : () => downloadFile(),
-                ),
-              ),
-            ),
-            Flexible(
-              child: PersistentFooterButton(
-                child: FilledButton.icon(
-                  icon: _isSharing
-                      ? buttonLoadingIndicator()
-                      : const Icon(Icons.share_rounded),
-                  label: Text(t.ui_actions.share),
-                  style: getBigButtonStyle(context),
-                  onPressed: isDownloadingOrSharing ? null : () => _shareFile(),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
 
   void _showErrorSnackBar(String error) {
     MonekinSnackbar.error(SnackbarParams.fromError(error));
@@ -196,9 +153,43 @@ class _ExportDataPageState extends State<ExportDataPage> with PageWithScaffold {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final isDownloadingOrSharing = _isDownloading || _isSharing;
+    final footerButtons = [
+      Row(
+        children: [
+          Flexible(
+            child: PersistentFooterButton(
+              child: FilledButton.icon(
+                icon: _isDownloading
+                    ? buttonLoadingIndicator()
+                    : const Icon(Icons.download_rounded),
+                label: Text(t.ui_actions.download),
+                style: getBigButtonStyle(context),
+                onPressed: isDownloadingOrSharing
+                    ? null
+                    : () => downloadFile(),
+              ),
+            ),
+          ),
+          Flexible(
+            child: PersistentFooterButton(
+              child: FilledButton.icon(
+                icon: _isSharing
+                    ? buttonLoadingIndicator()
+                    : const Icon(Icons.share_rounded),
+                label: Text(t.ui_actions.share),
+                style: getBigButtonStyle(context),
+                onPressed: isDownloadingOrSharing ? null : () => _shareFile(),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ];
 
     return PageFramework(
-      scaffoldConfiguration: scaffoldConfiguration,
+      title: t.backup.export.title,
+      persistentFooterButtons: footerButtons,
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(bottom: 12, top: 0),
         child: Column(

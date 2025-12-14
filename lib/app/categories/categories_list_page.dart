@@ -4,7 +4,6 @@ import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/form/category_form.dart';
-import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
@@ -26,8 +25,7 @@ class CategoriesListPage extends StatefulWidget {
   State<CategoriesListPage> createState() => _CategoriesListPageState();
 }
 
-class _CategoriesListPageState extends State<CategoriesListPage>
-    with PageWithScaffold {
+class _CategoriesListPageState extends State<CategoriesListPage> {
   String searchQuery = '';
 
   final ScrollController _scrollController = ScrollController();
@@ -40,23 +38,6 @@ class _CategoriesListPageState extends State<CategoriesListPage>
 
   void _goToEdit() {
     RouteUtils.pushRoute(context, const CategoryFormPage());
-  }
-
-  @override
-  ScaffoldConfiguration get scaffoldConfiguration {
-    final t = Translations.of(context);
-
-    return ScaffoldConfiguration(
-      title: t.general.categories,
-      floatingActionButton: BreakPoint.of(context).isLargerThan(BreakpointID.sm)
-          ? null
-          : AnimatedFloatingButtonBasedOnScroll(
-              onPressed: _goToEdit,
-              icon: const Icon(Icons.add_rounded),
-              scrollController: _scrollController,
-              text: t.categories.create,
-            ),
-    );
   }
 
   @override
@@ -75,7 +56,15 @@ class _CategoriesListPageState extends State<CategoriesListPage>
     final t = Translations.of(context);
 
     return PageFramework(
-      scaffoldConfiguration: scaffoldConfiguration,
+      title: t.general.categories,
+      floatingActionButton: BreakPoint.of(context).isLargerThan(BreakpointID.sm)
+          ? null
+          : AnimatedFloatingButtonBasedOnScroll(
+              onPressed: _goToEdit,
+              icon: const Icon(Icons.add_rounded),
+              scrollController: _scrollController,
+              text: t.categories.create,
+            ),
       body: ColumnWithReorderableListAndSearch(
         onSearchChanged: _onSearchChanged,
         onAddPressed: _goToEdit,

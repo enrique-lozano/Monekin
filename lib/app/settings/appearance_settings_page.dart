@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/app/settings/transaction_swipe_action_selector.dart';
 import 'package:monekin/app/settings/widgets/language_selector.dart';
 import 'package:monekin/app/settings/widgets/monekin_tile_switch.dart';
@@ -19,6 +18,7 @@ import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker_modal.dart';
 import 'package:monekin/core/presentation/widgets/dynamic_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/monekin_dropdown_select.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:monekin/page_framework.dart';
 
@@ -41,17 +41,9 @@ class SelectItem<T> {
   SelectItem({required this.value, required this.label, this.icon});
 }
 
-class _AdvancedSettingsPageState extends State<AdvancedSettingsPage>
-    with PageWithScaffold {
+class _AdvancedSettingsPageState extends State<AdvancedSettingsPage> {
   late final GlobalKey<MonekinDropdownSelectState> _themeDropdownKey =
       GlobalKey();
-
-  @override
-  ScaffoldConfiguration get scaffoldConfiguration {
-    final t = Translations.of(context);
-
-    return ScaffoldConfiguration(title: t.settings.title_long);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +58,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage>
             ?.label ??
         t.settings.locale_auto;
     return PageFramework(
-      scaffoldConfiguration: scaffoldConfiguration,
+      title: t.settings.title_long,
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(bottom: 16).withSafeBottom(context),
         child: Column(
@@ -254,7 +246,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage>
                             ],
                             selectedColor: color.toHex(),
                             onColorSelected: (value) {
-                              Navigator.pop(context);
+                              RouteUtils.popRoute();
 
                               setState(() {
                                 UserSettingService.instance.setItem(

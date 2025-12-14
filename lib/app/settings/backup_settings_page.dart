@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/layout/scaffold_configuration.dart';
 import 'package:monekin/app/settings/export_page.dart';
 import 'package:monekin/app/settings/import_csv.dart';
 import 'package:monekin/core/database/app_db.dart';
@@ -25,21 +24,13 @@ class BackupSettingsPage extends StatefulWidget {
   State<BackupSettingsPage> createState() => _BackupSettingsPageState();
 }
 
-class _BackupSettingsPageState extends State<BackupSettingsPage>
-    with PageWithScaffold {
-  @override
-  ScaffoldConfiguration get scaffoldConfiguration {
-    final t = Translations.of(context);
-
-    return ScaffoldConfiguration(title: t.more.data.display);
-  }
-
+class _BackupSettingsPageState extends State<BackupSettingsPage> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
     return PageFramework(
-      scaffoldConfiguration: scaffoldConfiguration,
+      title: t.more.data.display,
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(top: 0),
         child: Column(
@@ -67,7 +58,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage>
                       .importDatabase()
                       .then((value) {
                         if (!value) {
-                          if (context.mounted) Navigator.pop(context);
+                          RouteUtils.popRoute();
 
                           MonekinSnackbar.info(
                             SnackbarParams(t.backup.no_file_selected),
@@ -87,7 +78,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage>
                         );
                       })
                       .catchError((err) {
-                        Navigator.pop(context);
+                        RouteUtils.popRoute();
 
                         MonekinSnackbar.error(SnackbarParams.fromError(err));
                       });

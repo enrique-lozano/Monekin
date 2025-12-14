@@ -13,6 +13,7 @@ import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/outlined_button_stacked.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/presentation/widgets/tappable-text-entry.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -216,7 +217,7 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
         submitText: t.ui_actions.continue_text,
         submitIcon: Icons.arrow_forward_ios,
         onSaved: () {
-          Navigator.of(context).pop(toReturn);
+          RouteUtils.popRoute(toReturn);
         },
       ),
       body: Stack(

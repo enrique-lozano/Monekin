@@ -100,7 +100,7 @@ class TransactionViewActionService {
             }
 
             if (navigateBack && context.mounted) {
-              Navigator.pop(context);
+              RouteUtils.popRoute();
             }
 
             MonekinSnackbar.success(
