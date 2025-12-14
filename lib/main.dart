@@ -5,8 +5,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/layout/navigation_sidebar.dart';
-import 'package:monekin/app/layout/tabs.dart';
+import 'package:monekin/app/layout/page_switcher.dart';
+import 'package:monekin/app/layout/widgets/app_navigation_sidebar.dart';
 import 'package:monekin/app/layout/window_bar.dart';
 import 'package:monekin/app/onboarding/intro.page.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
@@ -242,7 +242,8 @@ class MaterialAppContainer extends StatelessWidget {
               color: getWindowBackgroundColor(context),
               child: Row(
                 children: [
-                  if (introSeen) NavigationSidebar(key: navigationSidebarKey),
+                  if (introSeen)
+                    AppNavigationSidebar(key: navigationSidebarKey),
                   Expanded(
                     child: Builder(
                       builder: (context) {
@@ -297,7 +298,7 @@ class InitialPageRouteNavigator extends StatelessWidget {
       child: Navigator(
         key: navigatorKey,
         onGenerateRoute: (settings) => RouteUtils.getPageRouteBuilder(
-          introSeen ? TabsPage(key: tabsPageKey) : const IntroPage(),
+          introSeen ? PageSwitcher(key: tabsPageKey) : const IntroPage(),
         ),
       ),
     );

@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart' hide BottomNavigationBar;
 import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
-import 'package:monekin/app/layout/bottom_navigation_bar.dart';
-import 'package:monekin/app/layout/lazy_indexed_stack.dart';
+import 'package:monekin/app/layout/indexed_stacks/fade_indexed_stack.dart';
+import 'package:monekin/app/layout/page_context.dart';
+import 'package:monekin/app/layout/page_framework.dart';
+import 'package:monekin/app/layout/widgets/app_bottom_bar.dart';
 import 'package:monekin/app/transactions/animate_fab.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
-import 'package:monekin/page_context.dart';
-import 'package:monekin/page_framework.dart';
 
 /// This page is the entry point of the app once the user has complete onboarding
-class TabsPage extends StatefulWidget {
-  const TabsPage({super.key});
+///
+/// It contains the main layout structure with the selected page/destination and
+/// the bottom navigation bar in mobile layouts
+class PageSwitcher extends StatefulWidget {
+  const PageSwitcher({super.key});
 
   @override
-  State<TabsPage> createState() => TabsPageState();
+  State<PageSwitcher> createState() => PageSwitcherState();
 }
 
-class TabsPageState extends State<TabsPage> {
+class PageSwitcherState extends State<PageSwitcher> {
   AppMenuDestinationsID? selectedDestination;
   final allDestinations = getAllDestinations();
 
@@ -89,72 +92,8 @@ class TabsPageState extends State<TabsPage> {
           ),
         ),
         bottomNavigationBar: AppUtils.isMobileLayout(context)
-            ? BottomNavigationBar(selectedDestination: selectedDestination!)
+            ? AppBottomBar(selectedDestination: selectedDestination!)
             : null,
-      ),
-    );
-  }
-}
-
-class FadeIndexedStack extends StatefulWidget {
-  final int index;
-  final List<Widget> children;
-  final Duration duration;
-  final AlignmentGeometry alignment;
-  final TextDirection? textDirection;
-  final StackFit sizing;
-
-  const FadeIndexedStack({
-    super.key,
-    required this.index,
-    required this.children,
-    this.duration = const Duration(milliseconds: 250),
-    this.alignment = AlignmentDirectional.topStart,
-    this.textDirection,
-    this.sizing = StackFit.loose,
-  });
-
-  @override
-  FadeIndexedStackState createState() => FadeIndexedStackState();
-}
-
-class FadeIndexedStackState extends State<FadeIndexedStack>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    vsync: this,
-    duration: widget.duration,
-  );
-
-  @override
-  void didUpdateWidget(FadeIndexedStack oldWidget) {
-    if (widget.index != oldWidget.index) {
-      _controller.forward(from: 0.0);
-    }
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
-  void initState() {
-    _controller.forward();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FadeTransition(
-      opacity: _controller,
-      child: LazyIndexedStack(
-        index: widget.index,
-        alignment: widget.alignment,
-        textDirection: widget.textDirection,
-        sizing: widget.sizing,
-        children: widget.children,
       ),
     );
   }

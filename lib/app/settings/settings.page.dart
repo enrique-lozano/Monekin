@@ -3,6 +3,7 @@ import 'package:monekin/app/accounts/all_accounts_page.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/categories/categories_list_page.dart';
 import 'package:monekin/app/currencies/currency_manager.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/about_page.dart';
 import 'package:monekin/app/settings/appearance_settings_page.dart';
 import 'package:monekin/app/settings/backup_settings_page.dart';
@@ -14,7 +15,6 @@ import 'package:monekin/app/transactions/recurrent_transactions_page.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
-import 'package:monekin/page_framework.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 
-class BottomNavigationBar extends StatelessWidget {
-  const BottomNavigationBar({super.key, required this.selectedDestination});
+/// Bottom navigation bar used in mobile layout
+class AppBottomBar extends StatelessWidget {
+  const AppBottomBar({super.key, required this.selectedDestination});
 
   final AppMenuDestinationsID selectedDestination;
 

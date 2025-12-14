@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:monekin/app/layout/navigation_drawer.dart';
+import 'package:monekin/app/layout/widgets/app_navigation_drawer.dart';
 import 'package:monekin/app/layout/window_bar.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
@@ -14,6 +14,7 @@ import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 
+/// Returns the appropriate width for the app navigation sidebar based on screen size
 double getNavigationSidebarWidth(BuildContext context) {
   final padding = MediaQuery.viewPaddingOf(context).left;
 
@@ -32,14 +33,15 @@ double getNavigationSidebarWidth(BuildContext context) {
   );
 }
 
-class NavigationSidebar extends StatefulWidget {
-  const NavigationSidebar({super.key});
+/// Sidebar navigation used in tablet and desktop layouts
+class AppNavigationSidebar extends StatefulWidget {
+  const AppNavigationSidebar({super.key});
 
   @override
-  State<NavigationSidebar> createState() => NavigationSidebarState();
+  State<AppNavigationSidebar> createState() => AppNavigationSidebarState();
 }
 
-class NavigationSidebarState extends State<NavigationSidebar> {
+class AppNavigationSidebarState extends State<AppNavigationSidebar> {
   AppMenuDestinationsID? selectedDestination;
 
   void setSelectedDestination(AppMenuDestinationsID? destination) {

@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_type_selector.dart';
 import 'package:monekin/app/categories/form/icon_and_color_selector.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
@@ -30,7 +31,6 @@ import 'package:monekin/core/services/supported_icon/supported_icon_service.dart
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
-import 'package:monekin/page_framework.dart';
 
 import '../../core/models/transaction/transaction_type.enum.dart';
 

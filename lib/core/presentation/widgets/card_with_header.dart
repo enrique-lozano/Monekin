@@ -1,20 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
+import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 /// The radius of the `CardWithHeader` widget, a very useful widget through the app
 const cardWithHeaderRadius = 12.0;
-
-List<BoxShadow> boxShadowGeneral(BuildContext context) {
-  return [
-    BoxShadow(
-      color: AppColors.of(context).shadowColorLight.withOpacity(0.12),
-      blurRadius: 10,
-      offset: Offset(0, 0),
-      spreadRadius: 4,
-    ),
-  ];
-}
 
 class CardWithHeader extends StatelessWidget {
   const CardWithHeader({

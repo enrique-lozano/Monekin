@@ -6,6 +6,8 @@ import 'package:monekin/app/home/widgets/dashboard_cards.dart';
 import 'package:monekin/app/home/widgets/horizontal_scrollable_account_list.dart';
 import 'package:monekin/app/home/widgets/income_or_expense_card.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
+import 'package:monekin/app/layout/page_context.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/edit_profile_modal.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
@@ -27,8 +29,6 @@ import 'package:monekin/core/presentation/widgets/user_avatar.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
-import 'package:monekin/page_context.dart';
-import 'package:monekin/page_framework.dart';
 
 import '../../core/models/transaction/transaction_type.enum.dart';
 import '../../core/presentation/app_colors.dart';

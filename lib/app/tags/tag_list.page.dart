@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/tags/tag_form_page.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
@@ -13,7 +14,6 @@ import 'package:monekin/core/presentation/widgets/monekin_reorderable_list.dart'
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
-import 'package:monekin/page_framework.dart';
 
 import '../../core/presentation/widgets/reorderable_drag_icon.dart';
 

@@ -9,6 +9,7 @@ import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/utils/app_utils.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+/// Sidebar navigation drawer used in desktop layouts only
 class SideNavigationDrawer extends StatelessWidget {
   const SideNavigationDrawer({
     super.key,

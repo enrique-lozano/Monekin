@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/budgets/budget_form_page.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/budgets/components/budget_evolution_chart.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/stats/stats_page.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
@@ -17,7 +18,6 @@ import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
-import 'package:monekin/page_framework.dart';
 
 import '../../core/presentation/widgets/no_results.dart';
 import 'components/budget_card.dart';

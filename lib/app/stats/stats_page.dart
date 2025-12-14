@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/stats/widgets/balance_bar_chart.dart';
 import 'package:monekin/app/stats/widgets/finance_health_details.dart';
 import 'package:monekin/app/stats/widgets/fund_evolution_info.dart';
@@ -16,7 +16,6 @@ import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart'
 import 'package:monekin/core/presentation/widgets/transaction_filter/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
-import 'package:monekin/page_framework.dart';
 
 import '../../core/models/transaction/transaction_type.enum.dart';
 import '../accounts/all_accounts_balance.dart';

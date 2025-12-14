@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/widgets/settings_list_separator.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
@@ -12,7 +13,6 @@ import 'package:monekin/core/presentation/widgets/transaction_filter/filter_shee
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/utils/logger.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
-import 'package:monekin/page_framework.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -165,9 +165,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
                     : const Icon(Icons.download_rounded),
                 label: Text(t.ui_actions.download),
                 style: getBigButtonStyle(context),
-                onPressed: isDownloadingOrSharing
-                    ? null
-                    : () => downloadFile(),
+                onPressed: isDownloadingOrSharing ? null : () => downloadFile(),
               ),
             ),
           ),

@@ -5,6 +5,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/details/account_details.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/presentation/animations/animated_floating_button.dart';
@@ -13,7 +14,6 @@ import 'package:monekin/core/presentation/widgets/column_with_reorderable_list_a
 import 'package:monekin/core/presentation/widgets/monekin_reorderable_list.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
-import 'package:monekin/page_framework.dart';
 
 import '../../core/presentation/widgets/no_results.dart';
 import '../../core/presentation/widgets/reorderable_drag_icon.dart';
@@ -54,7 +54,8 @@ class _AllAccountsPageState extends State<AllAccountsPage> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final floatingActionButton = BreakPoint.of(context).isLargerThan(BreakpointID.sm)
+    final floatingActionButton =
+        BreakPoint.of(context).isLargerThan(BreakpointID.sm)
         ? null
         : AnimatedFloatingButtonBasedOnScroll(
             onPressed: _onAddPressed,

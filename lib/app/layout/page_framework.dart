@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/transactions/animate_fab.dart';
+import 'package:monekin/core/presentation/helpers/empty_app_bar.dart';
 import 'package:monekin/core/utils/app_utils.dart';
-import 'package:monekin/empty_app_bar.dart';
 
 class PageFramework extends StatelessWidget {
   const PageFramework({

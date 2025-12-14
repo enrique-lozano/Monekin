@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:monekin/app/layout/tabs.dart';
+import 'package:monekin/app/layout/page_switcher.dart';
 import 'package:monekin/app/onboarding/classes/OnboardingItem.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
@@ -36,7 +36,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
         .then((value) {
           RouteUtils.pushRoute(
             context,
-            TabsPage(key: tabsPageKey),
+            PageSwitcher(key: tabsPageKey),
             withReplacement: true,
           );
         });
