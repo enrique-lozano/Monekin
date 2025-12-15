@@ -219,10 +219,6 @@ class MaterialAppContainer extends StatelessWidget {
             accentColor: accentColor,
           ),
           themeMode: themeMode,
-          // navigatorKey: navigatorKey,
-          // onGenerateRoute: (settings) => RouteUtils.getPageRouteBuilder(
-          //   InitialPageRouteNavigator(introSeen: introSeen),
-          // ),
           navigatorObservers: [MainLayoutNavObserver()],
           builder: (context, child) {
             SystemChrome.setSystemUIOverlayStyle(
