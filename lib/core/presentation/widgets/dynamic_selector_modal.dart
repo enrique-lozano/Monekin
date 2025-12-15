@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 
 /// A dynamic selector modal that displays a list of selectable items with radio buttons.
 ///
@@ -106,7 +107,7 @@ class DynamicSelectorModal<T, V> extends StatelessWidget {
         title: titleWidget,
         groupValue: selectedValue,
         onChanged: (V? newValue) {
-          Navigator.of(context).pop(ModalResult(newValue));
+          RouteUtils.popRoute(ModalResult(newValue));
         },
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 
@@ -61,8 +62,8 @@ class DebugPage extends StatelessWidget {
       ),
     ];
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Debug View')),
+    return PageFramework(
+      title: 'Debug Page',
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
         child: Column(

@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
@@ -11,6 +12,7 @@ import 'package:monekin/core/presentation/widgets/color_picker/color_picker_moda
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_field.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
@@ -79,7 +81,7 @@ class _TagFormPageState extends State<TagFormPage> {
       await TagService.instance
           .insertTag(tagToEdit)
           .then((value) {
-            if (mounted) Navigator.pop(context);
+            if (mounted) RouteUtils.popRoute();
             MonekinSnackbar.success(SnackbarParams(t.tags.create_success));
           })
           .catchError((error) {
@@ -92,41 +94,39 @@ class _TagFormPageState extends State<TagFormPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.tag != null ? t.tags.edit : t.tags.add),
-        actions: [
-          if (widget.tag != null)
-            IconButton(
-              onPressed: () {
-                confirmDialog(
-                  context,
-                  dialogTitle: t.tags.delete_warning_header,
-                  contentParagraphs: [Text(t.tags.delete_warning_message)],
-                  confirmationText: t.ui_actions.continue_text,
-                  showCancelButton: true,
-                  icon: Icons.delete,
-                ).then((isConfirmed) {
-                  if (isConfirmed != true) return;
+    return PageFramework(
+      title: widget.tag != null ? t.tags.edit : t.tags.add,
+      appBarActions: [
+        if (widget.tag != null)
+          IconButton(
+            onPressed: () {
+              confirmDialog(
+                context,
+                dialogTitle: t.tags.delete_warning_header,
+                contentParagraphs: [Text(t.tags.delete_warning_message)],
+                confirmationText: t.ui_actions.continue_text,
+                showCancelButton: true,
+                icon: Icons.delete,
+              ).then((isConfirmed) {
+                if (isConfirmed != true) return;
 
-                  TagService.instance
-                      .deleteTag(widget.tag!.id)
-                      .then((value) {
-                        Navigator.pop(context);
+                TagService.instance
+                    .deleteTag(widget.tag!.id)
+                    .then((value) {
+                      RouteUtils.popRoute();
 
-                        MonekinSnackbar.success(
-                          SnackbarParams(t.tags.delete_success),
-                        );
-                      })
-                      .catchError((err) {
-                        MonekinSnackbar.error(SnackbarParams.fromError(err));
-                      });
-                });
-              },
-              icon: const Icon(Icons.delete),
-            ),
-        ],
-      ),
+                      MonekinSnackbar.success(
+                        SnackbarParams(t.tags.delete_success),
+                      );
+                    })
+                    .catchError((err) {
+                      MonekinSnackbar.error(SnackbarParams.fromError(err));
+                    });
+              });
+            },
+            icon: const Icon(Icons.delete),
+          ),
+      ],
       persistentFooterButtons: [
         PersistentFooterButton(
           child: FilledButton.icon(
@@ -142,6 +142,7 @@ class _TagFormPageState extends State<TagFormPage> {
           ),
         ),
       ],
+
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -186,7 +187,7 @@ class _TagFormPageState extends State<TagFormPage> {
                         colorOptions: defaultColorPickerOptions,
                         selectedColor: _color,
                         onColorSelected: (value) {
-                          Navigator.pop(context);
+                          RouteUtils.popRoute();
 
                           setState(() {
                             _color = value.toHex();

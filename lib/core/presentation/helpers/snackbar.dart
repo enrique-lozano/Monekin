@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/core/presentation/helpers/global_snackbar.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/utils/logger.dart';
-import 'package:monekin/main.dart';
+import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 
 class SnackbarParams {
   /// The amount of time the snack bar should be displayed.
@@ -43,6 +43,8 @@ class SnackbarParams {
 }
 
 abstract class MonekinSnackbar {
+  static bool get showAtTop => false;
+
   /// Private method to get ScaffoldMessenger and optionally clear previous snackbars
   static ScaffoldMessengerState _getScaffoldMessenger(SnackbarParams options) {
     final scaffoldMessenger = snackbarKey.currentState;
@@ -70,44 +72,46 @@ abstract class MonekinSnackbar {
     return scaffoldMessenger!;
   }
 
-  static void openSnackbar({
+  static openSnackbar({
     required SnackbarParams options,
     required Color bgColor,
     required Color textColor,
     required IconData iconData,
   }) {
-    _getScaffoldMessenger(options);
+    if (showAtTop) {
+      _getScaffoldMessenger(options);
 
-    final snackbarResult = globalSnackbarKey.currentState!.post(
-      SnackbarInstance.fromParams(
-        options,
-        textColor: textColor,
+      final snackbarResult = globalSnackbarKey.currentState!.post(
+        SnackbarInstance.fromParams(
+          options,
+          textColor: textColor,
+          backgroundColor: bgColor,
+          iconData: iconData,
+        ),
+      );
+
+      return snackbarResult;
+    }
+
+    return _getScaffoldMessenger(options).showSnackBar(
+      SnackBar(
+        padding: options.padding,
         backgroundColor: bgColor,
-        iconData: iconData,
+        //  margin: const EdgeInsets.all(8),
+        //  behavior: SnackBarBehavior.floating,
+        duration: options.duration,
+        content: MonekinSnackbarContent(
+          title: options.title,
+          message: options.message,
+          color: textColor,
+          icon: iconData,
+          actions: options.actions,
+        ),
       ),
     );
-
-    return snackbarResult;
-
-    //  return _getScaffoldMessenger(options).showSnackBar(
-    //   SnackBar(
-    //     padding: options.padding,
-    //     backgroundColor: bgColor,
-    //     //  margin: const EdgeInsets.all(8),
-    //     //  behavior: SnackBarBehavior.floating,
-    //     duration: options.duration,
-    //     content: MonekinSnackbarContent(
-    //       title: options.title,
-    //       message: options.message,
-    //       color: textColor,
-    //       icon: iconData,
-    //       actions: options.actions,
-    //     ),
-    //   ),
-    // );
   }
 
-  static void success(SnackbarParams options) {
+  static success(SnackbarParams options) {
     return MonekinSnackbar.openSnackbar(
       options: options,
       bgColor: Colors.green[50]!,
@@ -116,7 +120,7 @@ abstract class MonekinSnackbar {
     );
   }
 
-  static void error(SnackbarParams options) {
+  static error(SnackbarParams options) {
     return MonekinSnackbar.openSnackbar(
       options: options,
       bgColor: isAppInLightBrightness(snackbarKey.currentContext!)
@@ -129,7 +133,7 @@ abstract class MonekinSnackbar {
     );
   }
 
-  static void warning(SnackbarParams options) {
+  static warning(SnackbarParams options) {
     return MonekinSnackbar.openSnackbar(
       options: options,
       bgColor: Colors.amber[50]!,
@@ -138,7 +142,7 @@ abstract class MonekinSnackbar {
     );
   }
 
-  static void info(SnackbarParams options) {
+  static info(SnackbarParams options) {
     return MonekinSnackbar.openSnackbar(
       options: options,
       bgColor: Colors.blue[50]!,

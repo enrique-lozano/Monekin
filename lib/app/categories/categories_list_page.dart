@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/form/category_form.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
@@ -28,7 +29,6 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
   String searchQuery = '';
 
   final ScrollController _scrollController = ScrollController();
-  bool isFloatingButtonExtended = true;
 
   void _onSearchChanged(String query) {
     setState(() {
@@ -43,19 +43,6 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
   @override
   void initState() {
     super.initState();
-
-    _scrollController.addListener(() {
-      bool shouldExtendButton = AnimatedFloatingButton.shouldExtendButton(
-        context,
-        _scrollController,
-      );
-
-      if (isFloatingButtonExtended != shouldExtendButton) {
-        setState(() {
-          isFloatingButtonExtended = shouldExtendButton;
-        });
-      }
-    });
   }
 
   @override
@@ -68,14 +55,14 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(t.general.categories)),
+    return PageFramework(
+      title: t.general.categories,
       floatingActionButton: BreakPoint.of(context).isLargerThan(BreakpointID.sm)
           ? null
-          : AnimatedFloatingButton(
+          : AnimatedFloatingButtonBasedOnScroll(
               onPressed: _goToEdit,
               icon: const Icon(Icons.add_rounded),
-              isExtended: isFloatingButtonExtended,
+              scrollController: _scrollController,
               text: t.categories.create,
             ),
       body: ColumnWithReorderableListAndSearch(

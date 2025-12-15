@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
-import 'package:monekin/app/layout/tabs.dart';
+import 'package:monekin/app/layout/page_framework.dart';
+import 'package:monekin/app/layout/page_switcher.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
@@ -174,7 +175,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
   Future<void> addTransactions() async {
     onSuccess() {
       RouteUtils.popAllRoutesExceptFirst();
-      RouteUtils.pushRoute(context, const TabsPage());
+      RouteUtils.pushRoute(context, const PageSwitcher());
 
       MonekinSnackbar.success(
         SnackbarParams(
@@ -337,8 +338,8 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(t.backup.import.manual_import.title)),
+    return PageFramework(
+      title: t.backup.import.manual_import.title,
       body: Stepper(
         type: StepperType.vertical,
         currentStep: currentStep,

@@ -7,6 +7,7 @@ import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 showCurrencySelectorModal(
@@ -189,7 +190,7 @@ class _CurrencySelectorModalState extends State<CurrencySelectorModal> {
           footer: BottomSheetFooter(
             onSaved: _selectedCurrency != null
                 ? () {
-                    Navigator.pop(context);
+                    RouteUtils.popRoute();
 
                     widget.onCurrencySelected!(_selectedCurrency!);
                   }

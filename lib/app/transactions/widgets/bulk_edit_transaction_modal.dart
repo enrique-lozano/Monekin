@@ -8,6 +8,7 @@ import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/outlined_button_stacked.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -132,7 +133,7 @@ class BulkEditTransactionModal extends StatelessWidget {
     BuildContext context, {
     required Iterable<Future<int>> futures,
   }) {
-    Navigator.pop(context);
+    RouteUtils.popRoute();
 
     Future.wait(futures)
         .then((value) {

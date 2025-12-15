@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
@@ -74,11 +75,8 @@ class _IntervalSelectorPageState extends State<IntervalSelectorPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(t.general.time.periodicity.display),
-        elevation: 0,
-      ),
+    return PageFramework(
+      title: Translations.of(context).general.time.periodicity.display,
       persistentFooterButtons: [
         PersistentFooterButton(
           child: FilledButton.icon(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/transactions/form/dialogs/amount_selector.dart';
 import 'package:monekin/app/transactions/form/dialogs/transaction_status_selector.dart';
 import 'package:monekin/app/transactions/form/widgets/custom_interval_selector.dart';
@@ -120,32 +121,44 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       vsync: this,
     );
 
-    _tabController.addListener(() {
-      transactionType = TransactionType.values.elementAt(_tabController.index);
-
-      // Function to execute when the transaction mode change:
-      if (transactionType.isTransfer && transactionValue.isNegative) {
-        transactionValue = transactionValue * -1;
-      }
-
-      if (selectedCategory != null &&
-          (selectedCategory!.type == CategoryType.E &&
-                  transactionType == TransactionType.I ||
-              selectedCategory!.type == CategoryType.I &&
-                  transactionType == TransactionType.E)) {
-        // Unselect the selected category if the transactionType don't match
-        selectedCategory = null;
-      }
-
-      setState(() {});
-    });
+    _tabController.addListener(_onTabSelectionChanged);
 
     if (widget.transactionToEdit != null) {
       fillForm(widget.transactionToEdit!);
-
       return;
     }
 
+    _setAccountsDefault();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  void _onTabSelectionChanged() {
+    transactionType = TransactionType.values.elementAt(_tabController.index);
+
+    // Function to execute when the transaction mode change:
+    if (transactionType.isTransfer && transactionValue.isNegative) {
+      transactionValue = transactionValue * -1;
+    }
+
+    if (selectedCategory != null &&
+        (selectedCategory!.type == CategoryType.E &&
+                transactionType == TransactionType.I ||
+            selectedCategory!.type == CategoryType.I &&
+                transactionType == TransactionType.E)) {
+      // Unselect the selected category if the transactionType don't match
+      selectedCategory = null;
+    }
+
+    setState(() {});
+  }
+
+  /// Set default accounts when opening the form (in edit mode)
+  void _setAccountsDefault() {
     AccountService.instance
         .getAccounts(
           predicate: (acc, curr) => AppDB.instance.buildExpr([
@@ -257,7 +270,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     }
 
     onSuccess() {
-      Navigator.pop(context);
+      RouteUtils.popRoute();
 
       MonekinSnackbar.success(
         SnackbarParams(
@@ -350,7 +363,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
 
             onSuccess();
           } catch (error) {
-            if (mounted) Navigator.pop(context);
+            if (mounted) RouteUtils.popRoute();
             MonekinSnackbar.error(SnackbarParams.fromError(error));
           }
         })
@@ -560,6 +573,10 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     );
   }
 
+  Color get foregroundColor {
+    return transactionType.color(context).getContrastColor();
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -583,26 +600,27 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       const Divider(),
     ];
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          isEditMode
-              ? t.transaction.edit
-              : transactionType == TransactionType.T
-              ? t.transfer.create
-              : transactionType == TransactionType.E
-              ? t.transaction.new_expense
-              : t.transaction.new_income,
-        ),
-        backgroundColor: transactionType.color(context).withOpacity(0.85),
-        foregroundColor: Colors.white,
-        elevation: 0,
-        bottom: TabBar(
-          indicatorColor: Colors.white,
-          labelColor: Colors.white,
+    return SafeArea(
+      bottom: false,
+      left: false,
+      right: false,
+      top: BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md),
+      child: PageFramework(
+        title: isEditMode
+            ? t.transaction.edit
+            : transactionType == TransactionType.T
+            ? t.transfer.create
+            : transactionType == TransactionType.E
+            ? t.transaction.new_expense
+            : t.transaction.new_income,
+        appBarBackgroundColor: transactionType.color(context).withOpacity(0.85),
+        appBarForegroundColor: foregroundColor,
+        tabBar: TabBar(
+          indicatorColor: foregroundColor,
+          labelColor: foregroundColor,
           labelStyle: const TextStyle(fontWeight: FontWeight.bold),
           unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
-          unselectedLabelColor: Colors.white.withOpacity(0.8),
+          unselectedLabelColor: foregroundColor.withOpacity(0.8),
           tabAlignment: TabAlignment.fill,
           dividerColor: transactionType.color(context).darken(0.3),
           controller: _tabController,
@@ -611,73 +629,71 @@ class _TransactionFormPageState extends State<TransactionFormPage>
               .toList(),
           isScrollable: false,
         ),
-      ),
-      persistentFooterButtons: [
-        PersistentFooterButton(
-          child: FilledButton.icon(
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                _formKey.currentState!.save();
+        persistentFooterButtons: [
+          PersistentFooterButton(
+            child: FilledButton.icon(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
 
-                submitForm();
-              } else {
-                MonekinSnackbar.error(
-                  SnackbarParams(t.general.validations.form_error),
-                );
-              }
-            },
-            icon: const Icon(Icons.save),
-            label: Text(isEditMode ? t.transaction.edit : t.transaction.create),
+                  submitForm();
+                } else {
+                  MonekinSnackbar.error(
+                    SnackbarParams(t.general.validations.form_error),
+                  );
+                }
+              },
+              icon: const Icon(Icons.save),
+              label: Text(
+                isEditMode ? t.transaction.edit : t.transaction.create,
+              ),
+            ),
           ),
-        ),
-      ],
-      body: Form(
-        key: _formKey,
-        child: BreakpointContainer(
-          lgChild: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          buildAmountContainer(context),
-                          buildAccoutAndCategorySelectorRow(context),
-                        ],
-                      ),
+        ],
+        body: Form(
+          key: _formKey,
+          child: BreakpointContainer(
+            mdChild: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        buildAmountContainer(context),
+                        buildAccoutAndCategorySelectorRow(context),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              const VerticalDivider(thickness: 2),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 0,
-                    vertical: 16,
                   ),
-                  child: Column(children: formFieldWithDividers),
                 ),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              buildAmountContainer(context),
-              buildAccoutAndCategorySelectorRow(context),
+                const VerticalDivider(thickness: 2),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 0,
+                      vertical: 16,
+                    ),
+                    child: Column(children: formFieldWithDividers),
+                  ),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                buildAmountContainer(context),
+                buildAccoutAndCategorySelectorRow(context),
 
-              //   const Divider(),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.only(top: 4, bottom: 12),
-                  child: Column(children: formFieldWithDividers),
+                //   const Divider(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.only(top: 4, bottom: 12),
+                    child: Column(children: formFieldWithDividers),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -697,7 +713,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
         onSubmit: (amount) {
           setState(() {
             transactionValue = amount;
-            Navigator.pop(context);
+            RouteUtils.popRoute();
           });
         },
       ),
@@ -708,7 +724,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     return Tappable(
       bgColor: transactionType.color(context).withOpacity(0.85),
       onTap: () => displayAmountModal(context),
-      borderRadius: BreakPoint.of(context).isLargerThan(BreakpointID.md)
+      borderRadius: BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md)
           ? BorderRadius.only(
               topLeft: Radius.circular(_mainContainerRadius),
               topRight: Radius.circular(_mainContainerRadius),
@@ -717,7 +733,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
         child: DefaultTextStyle(
-          style: const TextStyle(color: Colors.white),
+          style: TextStyle(color: foregroundColor),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -729,7 +745,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                     child: IconDisplayer(
                       key: ValueKey(transactionType.mathIcon.toString()),
                       mainColor: transactionType.color(context),
-                      secondaryColor: Colors.white,
+                      secondaryColor: foregroundColor,
                       padding: 2,
                       borderRadius: 4,
                       icon: transactionType.mathIcon,
@@ -749,9 +765,9 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                       duration: const Duration(milliseconds: 200),
                       child: Builder(
                         builder: (context) {
-                          const bigTextStyle = TextStyle(
+                          final bigTextStyle = TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: foregroundColor,
                           );
 
                           return CurrencyDisplayer(
@@ -792,9 +808,9 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                             const SizedBox(width: 4),
                             CurrencyDisplayer(
                               amountToConvert: exchangeRateSnapshot.data ?? 0,
-                              integerStyle: const TextStyle(
+                              integerStyle: TextStyle(
                                 fontWeight: FontWeight.w300,
-                                color: Colors.white,
+                                color: foregroundColor,
                               ),
                               followPrivateMode: false,
                             ),

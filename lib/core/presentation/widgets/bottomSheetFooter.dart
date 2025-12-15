@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 class BottomSheetFooter extends StatelessWidget {
@@ -41,7 +42,7 @@ class BottomSheetFooter extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.close),
                   onPressed: () {
-                    Navigator.pop(context);
+                    RouteUtils.popRoute();
                   },
                   style:
                       IconButton.styleFrom(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/selectors/category_multi_selector.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
@@ -13,6 +14,7 @@ import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -60,7 +62,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
     }
 
     onSuccess() {
-      Navigator.pop(context);
+      RouteUtils.popRoute();
 
       MonekinSnackbar.success(
         SnackbarParams(
@@ -146,10 +148,9 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(isEditMode ? t.budgets.form.edit : t.budgets.form.create),
-      ),
+    return PageFramework(
+      title: isEditMode ? t.budgets.form.edit : t.budgets.form.create,
+
       persistentFooterButtons: [
         PersistentFooterButton(
           child: FilledButton.icon(

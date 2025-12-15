@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/widgets/display_app_icon.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
@@ -9,9 +10,14 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import 'widgets/settings_list_separator.dart';
 
-class AboutPage extends StatelessWidget {
+class AboutPage extends StatefulWidget {
   const AboutPage({super.key});
 
+  @override
+  State<AboutPage> createState() => _AboutPageState();
+}
+
+class _AboutPageState extends State<AboutPage> {
   Widget buildLinkItem(
     String title, {
     String? subtitle,
@@ -33,8 +39,8 @@ class AboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(t.more.about_us.display)),
+    return PageFramework(
+      title: t.more.about_us.display,
       body: SingleChildScrollView(
         padding: EdgeInsets.zero.withSafeBottom(context),
         child: Column(

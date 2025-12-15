@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/form/category_form_functions.dart';
 import 'package:monekin/app/categories/form/icon_and_color_selector.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
@@ -12,6 +13,7 @@ import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
@@ -114,7 +116,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
             ),
           )
           .then((value) {
-            if (mounted) Navigator.pop(context);
+            if (mounted) RouteUtils.popRoute();
 
             MonekinSnackbar.success(
               SnackbarParams(t.categories.create_success),
@@ -130,7 +132,60 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Scaffold(
+    return PageFramework(
+      title: widget.categoryUUID != null
+          ? t.categories.edit
+          : t.categories.create,
+      appBarActions: [
+        if (widget.categoryUUID != null)
+          PopupMenuButton(
+            itemBuilder: (context) {
+              return <PopupMenuEntry<String>>[
+                PopupMenuItem(
+                  value: 'to_subcategory',
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.login),
+                    minLeadingWidth: 26,
+                    title: Text(t.categories.make_child),
+                  ),
+                ),
+                const PopupMenuDivider(),
+                PopupMenuItem(
+                  value: 'merge',
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.merge_type_rounded),
+                    minLeadingWidth: 26,
+                    title: Text(t.categories.merge),
+                  ),
+                ),
+                const PopupMenuDivider(),
+                PopupMenuItem(
+                  value: 'delete',
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.delete),
+                    minLeadingWidth: 26,
+                    title: Text(t.ui_actions.delete),
+                  ),
+                ),
+              ];
+            },
+            onSelected: (String value) {
+              if (value == 'delete') {
+                CategoryFormFunctions.deleteCategory(
+                  context,
+                  widget.categoryUUID!,
+                );
+              } else if (value == 'to_subcategory') {
+                CategoryFormFunctions.makeSubcategory(context, categoryToEdit!);
+              } else if (value == 'merge') {
+                CategoryFormFunctions.mergeCategory(context, categoryToEdit!);
+              }
+            },
+          ),
+      ],
       persistentFooterButtons: [
         PersistentFooterButton(
           child: FilledButton.icon(
@@ -146,64 +201,6 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
           ),
         ),
       ],
-      appBar: AppBar(
-        title: Text(
-          widget.categoryUUID != null ? t.categories.edit : t.categories.create,
-        ),
-        actions: [
-          if (widget.categoryUUID != null)
-            PopupMenuButton(
-              itemBuilder: (context) {
-                return <PopupMenuEntry<String>>[
-                  PopupMenuItem(
-                    value: 'to_subcategory',
-                    child: ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: const Icon(Icons.login),
-                      minLeadingWidth: 26,
-                      title: Text(t.categories.make_child),
-                    ),
-                  ),
-                  const PopupMenuDivider(),
-                  PopupMenuItem(
-                    value: 'merge',
-                    child: ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: const Icon(Icons.merge_type_rounded),
-                      minLeadingWidth: 26,
-                      title: Text(t.categories.merge),
-                    ),
-                  ),
-                  const PopupMenuDivider(),
-                  PopupMenuItem(
-                    value: 'delete',
-                    child: ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: const Icon(Icons.delete),
-                      minLeadingWidth: 26,
-                      title: Text(t.ui_actions.delete),
-                    ),
-                  ),
-                ];
-              },
-              onSelected: (String value) {
-                if (value == 'delete') {
-                  CategoryFormFunctions.deleteCategory(
-                    context,
-                    widget.categoryUUID!,
-                  );
-                } else if (value == 'to_subcategory') {
-                  CategoryFormFunctions.makeSubcategory(
-                    context,
-                    categoryToEdit!,
-                  );
-                } else if (value == 'merge') {
-                  CategoryFormFunctions.mergeCategory(context, categoryToEdit!);
-                }
-              },
-            ),
-        ],
-      ),
       body: widget.categoryUUID != null && categoryToEdit == null
           ? const LinearProgressIndicator()
           : SingleChildScrollView(

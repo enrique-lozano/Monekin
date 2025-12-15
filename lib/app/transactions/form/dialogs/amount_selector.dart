@@ -8,6 +8,7 @@ import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 
 class AmountSelector extends StatefulWidget {
   const AmountSelector({
@@ -71,7 +72,7 @@ class _AmountSelectorState extends State<AmountSelector> {
         if ((event.logicalKey == LogicalKeyboardKey.browserBack ||
             event.logicalKey == LogicalKeyboardKey.goBack ||
             event.logicalKey == LogicalKeyboardKey.escape)) {
-          Navigator.pop(context);
+          RouteUtils.popRoute();
         }
 
         for (final (index, element) in [

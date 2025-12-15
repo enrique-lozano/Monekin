@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/details/account_details_actions.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/transactions/label_value_info_list.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
@@ -70,8 +71,8 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(t.account.details)),
+    return PageFramework(
+      title: t.account.details,
       body: StreamBuilder(
         stream: AccountService.instance.getAccountById(widget.account.id),
         initialData: widget.account,
@@ -205,10 +206,6 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                           ),
                           limit: 5,
                           showGroupDivider: false,
-                          prevPage: AccountDetailsPage(
-                            account: widget.account,
-                            accountIconHeroTag: widget.accountIconHeroTag,
-                          ),
                           onEmptyList: Padding(
                             padding: const EdgeInsets.all(24),
                             child: Text(
@@ -408,7 +405,7 @@ class _ArchiveWarnDialogState extends State<ArchiveWarnDialog> {
                           );
                         })
                         .catchError((err) {
-                          Navigator.pop(context);
+                          RouteUtils.popRoute();
 
                           MonekinSnackbar.error(SnackbarParams.fromError(err));
                         });

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/currencies/exchange_rate_details.dart';
 import 'package:monekin/app/currencies/exchange_rate_form.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
@@ -60,8 +61,8 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(t.currencies.currency_manager)),
+    return PageFramework(
+      title: Translations.of(context).currencies.currency_manager,
       body: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,

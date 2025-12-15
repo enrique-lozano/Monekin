@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/widgets/settings_list_separator.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
@@ -152,44 +153,41 @@ class _ExportDataPageState extends State<ExportDataPage> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-
     final isDownloadingOrSharing = _isDownloading || _isSharing;
-
-    return Scaffold(
-      appBar: AppBar(title: Text(t.backup.export.title)),
-      persistentFooterButtons: [
-        Row(
-          children: [
-            Flexible(
-              child: PersistentFooterButton(
-                child: FilledButton.icon(
-                  icon: _isDownloading
-                      ? buttonLoadingIndicator()
-                      : const Icon(Icons.download_rounded),
-                  label: Text(t.ui_actions.download),
-                  style: getBigButtonStyle(context),
-                  onPressed: isDownloadingOrSharing
-                      ? null
-                      : () => downloadFile(),
-                ),
+    final footerButtons = [
+      Row(
+        children: [
+          Flexible(
+            child: PersistentFooterButton(
+              child: FilledButton.icon(
+                icon: _isDownloading
+                    ? buttonLoadingIndicator()
+                    : const Icon(Icons.download_rounded),
+                label: Text(t.ui_actions.download),
+                style: getBigButtonStyle(context),
+                onPressed: isDownloadingOrSharing ? null : () => downloadFile(),
               ),
             ),
-
-            Flexible(
-              child: PersistentFooterButton(
-                child: FilledButton.icon(
-                  icon: _isSharing
-                      ? buttonLoadingIndicator()
-                      : const Icon(Icons.share_rounded),
-                  label: Text(t.backup.export.send_file),
-                  style: getBigButtonStyle(context),
-                  onPressed: isDownloadingOrSharing ? null : _shareFile,
-                ),
+          ),
+          Flexible(
+            child: PersistentFooterButton(
+              child: FilledButton.icon(
+                icon: _isSharing
+                    ? buttonLoadingIndicator()
+                    : const Icon(Icons.share_rounded),
+                label: Text(t.ui_actions.share),
+                style: getBigButtonStyle(context),
+                onPressed: isDownloadingOrSharing ? null : () => _shareFile(),
               ),
             ),
-          ],
-        ),
-      ],
+          ),
+        ],
+      ),
+    ];
+
+    return PageFramework(
+      title: t.backup.export.title,
+      persistentFooterButtons: footerButtons,
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(bottom: 12, top: 0),
         child: Column(

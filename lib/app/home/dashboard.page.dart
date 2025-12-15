@@ -6,6 +6,8 @@ import 'package:monekin/app/home/widgets/dashboard_cards.dart';
 import 'package:monekin/app/home/widgets/horizontal_scrollable_account_list.dart';
 import 'package:monekin/app/home/widgets/income_or_expense_card.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
+import 'package:monekin/app/layout/page_context.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/edit_profile_modal.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
@@ -14,10 +16,10 @@ import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
-import 'package:monekin/core/presentation/animations/animated_floating_button.dart';
 import 'package:monekin/core/presentation/debug_page.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/dates/date_period_modal.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
@@ -25,6 +27,7 @@ import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/presentation/widgets/user_avatar.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 import '../../core/models/transaction/transaction_type.enum.dart';
@@ -42,25 +45,12 @@ class _DashboardPageState extends State<DashboardPage> {
   final ScrollController _scrollController = ScrollController();
   bool showSmallHeader = false;
 
-  bool isFloatingButtonExtended = true;
-
   @override
   void initState() {
     super.initState();
 
     _scrollController.addListener(() {
       _setSmallHeaderVisible();
-
-      bool shouldExtendButton = AnimatedFloatingButton.shouldExtendButton(
-        context,
-        _scrollController,
-      );
-
-      if (isFloatingButtonExtended != shouldExtendButton) {
-        setState(() {
-          isFloatingButtonExtended = shouldExtendButton;
-        });
-      }
     });
   }
 
@@ -84,22 +74,31 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   bool _isIncomeExpenseAtSameLevel(BuildContext context) {
-    return BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.lg);
+    return BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.sm);
   }
 
   @override
   Widget build(BuildContext context) {
     final accountService = AccountService.instance;
 
-    return Scaffold(
-      appBar: EmptyAppBar(color: AppColors.of(context).consistentPrimary),
-      floatingActionButton: NewTransactionButton(
-        isExtended: isFloatingButtonExtended,
-      ),
+    return PageFramework(
+      title: t.home.title,
+      enableAppBar: false,
+      appBarBackgroundColor:
+          BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md)
+          ? Colors.transparent
+          : AppColors.of(context).consistentPrimary,
+      floatingActionButton: ifIsInTabs(context)
+          ? null
+          : NewTransactionButton(
+              key: const Key('dashboard--new-transaction-button'),
+              scrollController: _scrollController,
+            ),
       body: Stack(
         children: [
           SingleChildScrollView(
             controller: _scrollController,
+            padding: const EdgeInsets.only(bottom: 24),
             child: Column(
               children: [
                 buildDashboadHeader(context, accountService),
@@ -110,12 +109,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
                 // ------------- STATS GENERAL CARDS --------------
                 Padding(
-                  padding: const EdgeInsets.only(
-                    left: 12,
-                    right: 12,
-                    top: 20,
-                    bottom: 64,
-                  ),
+                  padding: const EdgeInsets.only(left: 12, right: 12, top: 0),
                   child: DashboardCards(dateRangeService: dateRangeService),
                 ),
 
@@ -147,13 +141,21 @@ class _DashboardPageState extends State<DashboardPage> {
     BuildContext context,
     AccountService accountService,
   ) {
+    final shouldHavePadding =
+        !AppUtils.isDesktop && !AppUtils.isMobileLayout(context);
+
     return Card(
       color: AppColors.of(context).consistentPrimary,
-      margin: const EdgeInsets.only(bottom: 24),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(16),
-          bottomRight: Radius.circular(16),
+      margin: EdgeInsets.only(
+        bottom: 0,
+        top: shouldHavePadding ? 8 : 0,
+        left: shouldHavePadding ? 12 : 0,
+        right: shouldHavePadding ? 12 : 0,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(getCardBorderRadius()),
+          top: Radius.circular(shouldHavePadding ? getCardBorderRadius() : 0),
         ),
       ),
       child: Padding(
@@ -291,25 +293,18 @@ class _DashboardPageState extends State<DashboardPage> {
         padding: const EdgeInsets.fromLTRB(4, 8, 24, 8),
         child: Row(
           mainAxisSize: MainAxisSize.min,
+          spacing: 12,
           children: [
-            StreamBuilder(
-              stream: UserSettingService.instance.getSettingFromDB(
-                SettingKey.avatar,
+            UserAvatar(
+              avatar: appStateSettings[SettingKey.avatar],
+              backgroundColor: AppColors.of(
+                context,
+              ).onConsistentPrimary.darken(0.25),
+              border: Border.all(
+                width: 2,
+                color: AppColors.of(context).onConsistentPrimary,
               ),
-              builder: (context, snapshot) {
-                return UserAvatar(
-                  avatar: snapshot.data,
-                  backgroundColor: AppColors.of(
-                    context,
-                  ).onConsistentPrimary.darken(0.25),
-                  border: Border.all(
-                    width: 2,
-                    color: AppColors.of(context).onConsistentPrimary,
-                  ),
-                );
-              },
             ),
-            const SizedBox(width: 12),
             Flexible(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -323,26 +318,16 @@ class _DashboardPageState extends State<DashboardPage> {
                       color: onHeaderSmallTextColor(context),
                     ),
                   ),
-                  StreamBuilder(
-                    stream: UserSettingService.instance.getSettingFromDB(
-                      SettingKey.userName,
+                  Text(
+                    appStateSettings[SettingKey.userName] ?? 'User',
+                    softWrap: false,
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                      fontSize: 18,
+                      overflow: TextOverflow.fade,
+                      color: AppColors.of(context).onConsistentPrimary,
                     ),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const Skeleton(width: 70, height: 12);
-                      }
-
-                      return Text(
-                        snapshot.data!,
-                        softWrap: false,
-                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                          fontSize: 18,
-                          overflow: TextOverflow.fade,
-                          color: AppColors.of(context).onConsistentPrimary,
-                        ),
-                      );
-                    },
                   ),
+
                   const SizedBox(width: 8),
                 ],
               ),
@@ -502,20 +487,6 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
     );
   }
-}
-
-class EmptyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final Color color;
-
-  const EmptyAppBar({required this.color, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(color: color);
-  }
-
-  @override
-  Size get preferredSize => const Size(0.0, 0.0);
 }
 
 Color onHeaderSmallTextColor(BuildContext context) =>

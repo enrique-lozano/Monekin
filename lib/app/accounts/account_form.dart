@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_type_selector.dart';
 import 'package:monekin/app/categories/form/icon_and_color_selector.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
@@ -25,6 +26,7 @@ import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_fie
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
@@ -57,7 +59,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
   Currency? _currency;
   Currency? _userPrCurrency;
 
-  Account? _accountToEdit;
+  late final Account? _accountToEdit;
 
   DateTime _openingDate = DateTime.now();
   DateTime? _closeDate;
@@ -67,14 +69,12 @@ class _AccountFormPageState extends State<AccountFormPage> {
 
     double newBalance = double.parse(_balanceController.text);
 
-    navigateBack() => Navigator.pop(context);
-
     if (_accountToEdit != null) {
       // Check if there are transactions before the opening date of the account:
       if ((await TransactionService.instance
               .getTransactions(
                 filters: TransactionFilters(
-                  accountsIDs: [_accountToEdit!.id],
+                  accountsIDs: [_accountToEdit.id],
                   maxDate: _openingDate,
                 ),
                 limit: 2,
@@ -89,9 +89,9 @@ class _AccountFormPageState extends State<AccountFormPage> {
       }
 
       newBalance =
-          _accountToEdit!.iniValue +
+          _accountToEdit.iniValue +
           newBalance -
-          await accountService.getAccountMoney(account: _accountToEdit!).first;
+          await accountService.getAccountMoney(account: _accountToEdit).first;
     }
 
     Account accountToSubmit = Account(
@@ -111,22 +111,19 @@ class _AccountFormPageState extends State<AccountFormPage> {
     );
 
     // Check for accounts with same names before continue:
-    if (_accountToEdit == null ||
-        _accountToEdit!.name != accountToSubmit.name) {
+    if (_accountToEdit == null || _accountToEdit.name != accountToSubmit.name) {
       final db = AppDB.instance;
       final query = db.select(db.accounts)
         ..addColumns([db.accounts.id.count()])
         ..where((tbl) => tbl.name.isValue(_nameController.text));
 
       if (await query.watchSingleOrNull().first != null) {
-        if (context.mounted) {
-          MonekinSnackbar.error(
-            SnackbarParams.fromError(
-              t.account.form.already_exists,
-              duration: const Duration(seconds: 6),
-            ),
-          );
-        }
+        MonekinSnackbar.error(
+          SnackbarParams.fromError(
+            t.account.form.already_exists,
+            duration: const Duration(seconds: 6),
+          ),
+        );
 
         return;
       }
@@ -135,11 +132,11 @@ class _AccountFormPageState extends State<AccountFormPage> {
     if (_accountToEdit != null) {
       await accountService
           .updateAccount(accountToSubmit)
-          .then((value) => {navigateBack()});
+          .then((value) => {RouteUtils.popRoute()});
     } else {
       await accountService
           .insertAccount(accountToSubmit)
-          .then((value) => {navigateBack()});
+          .then((value) => {RouteUtils.popRoute()});
     }
   }
 
@@ -147,8 +144,9 @@ class _AccountFormPageState extends State<AccountFormPage> {
   void initState() {
     super.initState();
 
-    if (widget.account != null) {
-      _accountToEdit = widget.account;
+    _accountToEdit = widget.account;
+
+    if (_accountToEdit != null) {
       _fillForm();
     }
 
@@ -163,32 +161,30 @@ class _AccountFormPageState extends State<AccountFormPage> {
   }
 
   void _fillForm() {
-    final accountService = AccountService.instance;
-
     if (_accountToEdit == null) return;
 
-    _nameController.text = _accountToEdit!.name;
-    _ibanController.text = _accountToEdit!.iban ?? '';
-    _swiftController.text = _accountToEdit!.swift ?? '';
-    _textController.text = _accountToEdit!.description ?? '';
+    final accountService = AccountService.instance;
 
-    _openingDate = _accountToEdit!.date;
-    _closeDate = _accountToEdit!.closingDate;
+    _nameController.text = _accountToEdit.name;
+    _ibanController.text = _accountToEdit.iban ?? '';
+    _swiftController.text = _accountToEdit.swift ?? '';
+    _textController.text = _accountToEdit.description ?? '';
 
-    _type = _accountToEdit!.type;
+    _openingDate = _accountToEdit.date;
+    _closeDate = _accountToEdit.closingDate;
 
-    accountService.getAccountMoney(account: _accountToEdit!).first.then((
-      value,
-    ) {
+    _type = _accountToEdit.type;
+
+    accountService.getAccountMoney(account: _accountToEdit).first.then((value) {
       _balanceController.text = value.toString();
 
-      _color = _accountToEdit!.getComputedColor(context);
+      _color = _accountToEdit.getComputedColor(context);
     });
 
-    _icon = _accountToEdit!.icon;
+    _icon = _accountToEdit.icon;
 
     CurrencyService.instance
-        .getCurrencyByCode(_accountToEdit!.currency.code)
+        .getCurrencyByCode(_accountToEdit.currency.code)
         .first
         .then((value) {
           setState(() {
@@ -213,32 +209,26 @@ class _AccountFormPageState extends State<AccountFormPage> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-
-    return Scaffold(
-      persistentFooterButtons: [
-        PersistentFooterButton(
-          child: FilledButton.icon(
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                _formKey.currentState!.save();
-
-                submitForm();
-              }
-            },
-            icon: const Icon(Icons.save),
-            label: Text(
-              _accountToEdit != null
-                  ? t.account.form.edit
-                  : t.account.form.create,
-            ),
-          ),
-        ),
-      ],
-      appBar: AppBar(
-        title: Text(
-          widget.account != null ? t.account.form.edit : t.account.form.create,
+    final pageTitle = widget.account != null
+        ? t.account.form.edit
+        : t.account.form.create;
+    final footerButtons = [
+      PersistentFooterButton(
+        child: FilledButton.icon(
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              submitForm();
+            }
+          },
+          icon: const Icon(Icons.save),
+          label: Text(pageTitle),
         ),
       ),
+    ];
+
+    return PageFramework(
+      title: pageTitle,
+      persistentFooterButtons: footerButtons,
       body: Builder(
         builder: (context) {
           if (widget.account != null && _accountToEdit == null) {
@@ -378,7 +368,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                                     TransactionType.E,
                                     TransactionType.I,
                                   ],
-                                  accountsIDs: [_accountToEdit!.id],
+                                  accountsIDs: [_accountToEdit.id],
                                 ),
                               )
                               .map((count) => count == 0),
@@ -425,7 +415,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                         ),
                         const SizedBox(height: 22),
                         if (_accountToEdit != null &&
-                            _accountToEdit!.isClosed) ...[
+                            _accountToEdit.isClosed) ...[
                           DateTimeFormField(
                             decoration: InputDecoration(
                               suffixIcon: const Icon(Icons.event),

@@ -22,7 +22,6 @@ class TransactionListTile extends StatelessWidget {
   const TransactionListTile({
     super.key,
     required this.transaction,
-    required this.prevPage,
     this.showDate = true,
     this.showTime = true,
     this.periodicityInfo,
@@ -35,7 +34,6 @@ class TransactionListTile extends StatelessWidget {
 
   final MoneyTransaction transaction;
 
-  final Widget prevPage;
   final Periodicity? periodicityInfo;
   final bool showDate;
   final bool showTime;
@@ -74,7 +72,7 @@ class TransactionListTile extends StatelessWidget {
                   onTap: e.onClick == null
                       ? null
                       : () {
-                          Navigator.pop(context);
+                          RouteUtils.popRoute();
                           e.onClick!();
                         },
                 ),
@@ -329,7 +327,6 @@ class TransactionListTile extends StatelessWidget {
               TransactionDetailsPage(
                 transaction: transaction,
                 heroTag: heroTag,
-                prevPage: prevPage,
               ),
             );
           },

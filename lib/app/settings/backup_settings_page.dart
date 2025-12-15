@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/export_page.dart';
 import 'package:monekin/app/settings/import_csv.dart';
 import 'package:monekin/core/database/app_db.dart';
@@ -11,20 +12,25 @@ import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
-import 'package:monekin/main.dart';
 
 import 'widgets/settings_list_separator.dart';
 
-class BackupSettingsPage extends StatelessWidget {
+class BackupSettingsPage extends StatefulWidget {
   const BackupSettingsPage({super.key});
 
+  @override
+  State<BackupSettingsPage> createState() => _BackupSettingsPageState();
+}
+
+class _BackupSettingsPageState extends State<BackupSettingsPage> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(t.more.data.display)),
+    return PageFramework(
+      title: t.more.data.display,
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(top: 0),
         child: Column(
@@ -52,7 +58,7 @@ class BackupSettingsPage extends StatelessWidget {
                       .importDatabase()
                       .then((value) {
                         if (!value) {
-                          if (context.mounted) Navigator.pop(context);
+                          RouteUtils.popRoute();
 
                           MonekinSnackbar.info(
                             SnackbarParams(t.backup.no_file_selected),
@@ -72,7 +78,7 @@ class BackupSettingsPage extends StatelessWidget {
                         );
                       })
                       .catchError((err) {
-                        Navigator.pop(context);
+                        RouteUtils.popRoute();
 
                         MonekinSnackbar.error(SnackbarParams.fromError(err));
                       });

@@ -2,16 +2,15 @@
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
-import 'package:monekin/app/layout/tabs.dart';
+import 'package:monekin/app/layout/page_context.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/transactions/widgets/bulk_edit_transaction_modal.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
@@ -30,17 +29,15 @@ class TransactionsPage extends StatefulWidget {
   final TransactionFilters? filters;
 
   @override
-  State<TransactionsPage> createState() => _TransactionsPageState();
+  State<TransactionsPage> createState() => TransactionsPageState();
 }
 
-class _TransactionsPageState extends State<TransactionsPage> {
+class TransactionsPageState extends State<TransactionsPage> {
   late TransactionFilters filters;
 
-  bool searchActive = false;
   FocusNode searchFocusNode = FocusNode();
   final searchController = TextEditingController();
-
-  bool isFloatingButtonExtended = true;
+  final ScrollController listScrollController = ScrollController();
 
   List<MoneyTransaction> selectedTransactions = [];
 
@@ -49,14 +46,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
     super.initState();
 
     filters = widget.filters ?? const TransactionFilters();
-
-    searchFocusNode.addListener(() {
-      if (!searchFocusNode.hasFocus && searchController.text.isEmpty) {
-        setState(() {
-          searchActive = false;
-        });
-      }
-    });
   }
 
   @override
@@ -66,23 +55,28 @@ class _TransactionsPageState extends State<TransactionsPage> {
     super.dispose();
   }
 
+  bool get searchActive =>
+      searchController.text.isNotEmpty || searchFocusNode.hasFocus;
+
+  bool get canPop => !searchActive && selectedTransactions.isEmpty;
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
     return PopScope(
-      canPop: !searchActive && selectedTransactions.isEmpty,
+      canPop: canPop,
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
+
+        print("POP SCOPE FROM TRANSACTIONS PAGE");
 
         if (selectedTransactions.isNotEmpty) {
           cleanSelectedTransactions();
           return;
         }
 
-        if (searchActive ||
-            searchController.text.isNotEmpty ||
-            searchFocusNode.hasFocus) {
+        if (searchActive) {
           if (searchFocusNode.hasFocus) {
             searchFocusNode.unfocus();
           }
@@ -91,16 +85,15 @@ class _TransactionsPageState extends State<TransactionsPage> {
 
           return;
         }
-
-        Navigator.pop(context);
       },
-      child: Scaffold(
-        appBar: selectedTransactions.isNotEmpty
+      child: PageFramework(
+        title: t.transaction.display(n: 10),
+        appBarBuilder: (_, _, _) => selectedTransactions.isNotEmpty
             ? selectedTransactionsAppbar()
             : transactionsPageDefaultAppBar(t, context),
-        floatingActionButton: NewTransactionButton(
-          isExtended: isFloatingButtonExtended,
-        ),
+        floatingActionButton: ifIsInTabs(context)
+            ? null
+            : NewTransactionButton(scrollController: listScrollController),
         body: Column(
           children: [
             if (filters.hasFilter) ...[
@@ -208,31 +201,16 @@ class _TransactionsPageState extends State<TransactionsPage> {
             ),
             Expanded(
               child: TransactionListComponent(
+                scrollController: listScrollController,
                 heroTagBuilder: (tr) => 'transactions-page__tr-icon-${tr.id}',
                 filters: filters.copyWith(searchValue: searchController.text),
-                prevPage: const TabsPage(),
                 selectedTransactions: selectedTransactions,
                 onLongPress: (tr) {
                   if (selectedTransactions.isNotEmpty) {
                     return;
                   }
 
-                  setState(() {
-                    selectedTransactions = [tr];
-                  });
-                },
-                onScrollChange: (controller) {
-                  bool shouldExtendButton =
-                      BreakPoint.of(context).isLargerThan(BreakpointID.md) ||
-                      controller.offset <= 10 ||
-                      controller.position.userScrollDirection !=
-                          ScrollDirection.reverse;
-
-                  if (isFloatingButtonExtended != shouldExtendButton) {
-                    setState(() {
-                      isFloatingButtonExtended = shouldExtendButton;
-                    });
-                  }
+                  toggleTransaction(tr);
                 },
                 onTap: selectedTransactions.isEmpty ? null : toggleTransaction,
                 onEmptyList: NoResults(
@@ -252,8 +230,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
 
   void closeSearch() {
     setState(() {
-      searchActive = false;
       searchController.text = "";
+      searchFocusNode.unfocus();
     });
   }
 
@@ -270,9 +248,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
                 hintText: t.transaction.list.searcher_placeholder,
                 border: const UnderlineInputBorder(),
               ),
-              onChanged: (text) {
-                setState(() {});
-              },
             )
           : Text(t.transaction.display(n: 10)),
       actions: [
@@ -280,11 +255,8 @@ class _TransactionsPageState extends State<TransactionsPage> {
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
-              setState(() {
-                searchActive = true;
-              });
-
               searchFocusNode.requestFocus();
+              setState(() {});
             },
           ),
         IconButton(
@@ -334,7 +306,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
                       transactionsToEdit: selectedTransactions,
                       onSuccess: () {
                         selectedTransactions = [];
-                        setState(() {});
                       },
                     );
                   },
@@ -383,9 +354,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                           ),
                         );
 
-                        setState(() {
-                          selectedTransactions = [];
-                        });
+                        cleanSelectedTransactions();
                       })
                       .catchError((err) {
                         MonekinSnackbar.error(SnackbarParams.fromError(err));

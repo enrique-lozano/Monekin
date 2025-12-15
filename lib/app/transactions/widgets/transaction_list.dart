@@ -13,7 +13,6 @@ class TransactionListComponent extends StatefulWidget {
     required this.filters,
     this.showGroupDivider = true,
     this.periodicityInfo,
-    required this.prevPage,
     this.orderBy,
     this.limit = 40,
     this.onLoading = const Column(children: [LinearProgressIndicator()]),
@@ -23,7 +22,7 @@ class TransactionListComponent extends StatefulWidget {
     this.onTap,
     this.selectedTransactions = const [],
     this.onTransactionsLoaded,
-    this.onScrollChange,
+    this.scrollController,
   });
 
   final TransactionFilters filters;
@@ -42,11 +41,9 @@ class TransactionListComponent extends StatefulWidget {
   /// If defined, display info about the periodicity of the recurrent transactions, and the days to the next payment. Will show the amount of the recurrency based on the specified periodicity
   final Periodicity? periodicityInfo;
 
-  final Widget prevPage;
-
   final Object? Function(MoneyTransaction tr)? heroTagBuilder;
 
-  final void Function(ScrollController controller)? onScrollChange;
+  final ScrollController? scrollController;
 
   /// Action to trigger when a transaction tile is long pressed. If `null`,
   /// the tile will display a modal with some quick actions for
@@ -64,11 +61,11 @@ class TransactionListComponent extends StatefulWidget {
 
   @override
   State<TransactionListComponent> createState() =>
-      _TransactionListComponentState();
+      TransactionListComponentState();
 }
 
-class _TransactionListComponentState extends State<TransactionListComponent> {
-  ScrollController listScrollController = ScrollController();
+class TransactionListComponentState extends State<TransactionListComponent> {
+  late ScrollController listScrollController;
 
   int currentPage = 1;
   bool isEnabled = true;
@@ -77,6 +74,8 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
   void initState() {
     super.initState();
 
+    listScrollController = widget.scrollController ?? ScrollController();
+
     listScrollController.addListener(() {
       if (listScrollController.offset >=
               listScrollController.position.maxScrollExtent &&
@@ -84,9 +83,16 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
         currentPage += 1;
         setState(() {});
       }
-
-      widget.onScrollChange?.call(listScrollController);
     });
+  }
+
+  @override
+  void dispose() {
+    if (widget.scrollController == null) {
+      listScrollController.dispose();
+    }
+
+    super.dispose();
   }
 
   Widget dateSeparator(BuildContext context, DateTime date) {
@@ -173,7 +179,6 @@ class _TransactionListComponentState extends State<TransactionListComponent> {
 
             return TransactionListTile(
               transaction: transaction,
-              prevPage: widget.prevPage,
               periodicityInfo: widget.periodicityInfo,
               showDate: !widget.showGroupDivider,
               showTime: widget.showGroupDivider,

@@ -162,7 +162,7 @@ abstract class AccountDetailsActions {
           .deleteAccount(accountId)
           .then((value) {
             if (navigateBack) {
-              Navigator.pop(context);
+              RouteUtils.popRoute();
             }
 
             MonekinSnackbar.success(SnackbarParams(t.account.delete.success));

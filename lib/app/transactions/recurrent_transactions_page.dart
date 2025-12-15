@@ -2,6 +2,7 @@
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
@@ -27,8 +28,8 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(t.recurrent_transactions.title)),
+    return PageFramework(
+      title: t.recurrent_transactions.title,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -52,7 +53,6 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
           Expanded(
             child: TransactionListComponent(
               filters: const TransactionFilters(isRecurrent: true),
-              prevPage: const RecurrentTransactionPage(),
               periodicityInfo: periodicity,
               showGroupDivider: false,
               heroTagBuilder: (tr) =>
