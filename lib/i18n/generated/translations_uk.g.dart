@@ -97,7 +97,6 @@ class _TranslationsUiActionsUk implements TranslationsUiActionsEn {
 	@override String get apply => 'Застосувати';
 	@override String get discard => 'Скасувати зміни';
 	@override String get refresh => 'Оновити';
-	@override String get details => 'Деталі';
 	@override String get share => 'Поділитися';
 }
 
@@ -112,6 +111,7 @@ class _TranslationsGeneralUk implements TranslationsGeneralEn {
 	@override String get understood => 'Зрозуміло';
 	@override String get unspecified => 'Не вказано';
 	@override String get quick_actions => 'Швидкі дії';
+	@override String get details => 'Подробиці';
 	@override String get balance => 'Баланс';
 	@override String get account => 'Рахунок';
 	@override String get accounts => 'Рахунки';
@@ -344,16 +344,22 @@ class _TranslationsCurrenciesUk implements TranslationsCurrenciesEn {
 	// Translations
 	@override String get currency_converter => 'Конвертер валют';
 	@override String get currency => 'Валюта';
+	@override String get currency_settings => 'Параметри валюти';
 	@override String get currency_manager => 'Менеджер валют';
 	@override String get currency_manager_descr => 'Налаштуйте вашу валюту та її обмінні курси з іншими';
 	@override String get preferred_currency => 'Перевагова/базова валюта';
 	@override String get change_preferred_currency_title => 'Змінити перевагову валюту';
 	@override String get change_preferred_currency_msg => 'Усі статистичні дані та бюджети будуть відображатися в цій валюті відтепер. Рахунки та транзакції залишаться у тій валюті, яку вони мали. Усі збережені обмінні курси будуть видалені, якщо ви виконаєте цю дію. Ви хочете продовжити?';
-	@override late final _TranslationsCurrenciesFormUk form = _TranslationsCurrenciesFormUk._(_root);
+	@override late final _TranslationsCurrenciesExchangeRateFormUk exchange_rate_form = _TranslationsCurrenciesExchangeRateFormUk._(_root);
+	@override late final _TranslationsCurrenciesTypesUk types = _TranslationsCurrenciesTypesUk._(_root);
+	@override late final _TranslationsCurrenciesCurrencyFormUk currency_form = _TranslationsCurrenciesCurrencyFormUk._(_root);
 	@override String get delete_all_success => 'Обмінні курси успішно видалено';
 	@override String get historical => 'Історичні курси';
+	@override String get historical_empty => 'Історичних курсів обміну для цієї валюти не знайдено';
 	@override String get exchange_rate => 'Обмінний курс';
 	@override String get exchange_rates => 'Обмінні курси';
+	@override String get min_exchange_rate => 'Мінімальний курс обміну';
+	@override String get max_exchange_rate => 'Максимальний курс обміну';
 	@override String get empty => 'Додайте тут обмінні курси, щоб, якщо у вас є рахунки в інших валютах, наші графіки були б точнішими';
 	@override String get select_a_currency => 'Виберіть валюту';
 	@override String get search => 'Пошук за назвою або кодом валюти';
@@ -931,19 +937,53 @@ class _TranslationsAccountSelectUk implements TranslationsAccountSelectEn {
 	@override String get multiple => 'Вибрати рахунки';
 }
 
-// Path: currencies.form
-class _TranslationsCurrenciesFormUk implements TranslationsCurrenciesFormEn {
-	_TranslationsCurrenciesFormUk._(this._root);
+// Path: currencies.exchange_rate_form
+class _TranslationsCurrenciesExchangeRateFormUk implements TranslationsCurrenciesExchangeRateFormEn {
+	_TranslationsCurrenciesExchangeRateFormUk._(this._root);
 
 	final TranslationsUk _root; // ignore: unused_field
 
 	// Translations
 	@override String get equal_to_preferred_warn => 'Валюта не може бути однаковою з валютою користувача';
+	@override String get override_existing_warn => 'Курс обміну для цієї валюти на цю дату вже існує. Якщо ви продовжите, попередній буде перезаписано';
 	@override String get specify_a_currency => 'Будь ласка, вкажіть валюту';
 	@override String get add => 'Додати обмінний курс';
 	@override String get add_success => 'Обмінний курс успішно додано';
 	@override String get edit => 'Редагувати обмінний курс';
 	@override String get edit_success => 'Обмінний курс успішно відредаговано';
+	@override String get remove_all => 'Видалити всі курси валют';
+	@override String get remove_all_warning => 'Цю дію не можна відмінити, і всі курси обміну для цієї валюти буде видалено';
+}
+
+// Path: currencies.types
+class _TranslationsCurrenciesTypesUk implements TranslationsCurrenciesTypesEn {
+	_TranslationsCurrenciesTypesUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Тип валюти';
+	@override String get fiat => 'FIAT';
+	@override String get crypto => 'Криптовалюта';
+	@override String get other => 'інше';
+}
+
+// Path: currencies.currency_form
+class _TranslationsCurrenciesCurrencyFormUk implements TranslationsCurrenciesCurrencyFormEn {
+	_TranslationsCurrenciesCurrencyFormUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Відображуване ім\'я';
+	@override String get code => 'Код валюти';
+	@override String get symbol => 'символ';
+	@override String get decimal_digits => 'Десяткові цифри';
+	@override String get create => 'Створіть валюту';
+	@override String get create_success => 'Валюту створено успішно';
+	@override String get edit => 'Редагувати валюту';
+	@override String get edit_success => 'Валюту успішно відредаговано';
+	@override String get already_exists => 'Валюта з таким кодом уже існує. Ви можете відредагувати його';
 }
 
 // Path: tags.form
@@ -1446,12 +1486,12 @@ extension on TranslationsUk {
 		map['ui_actions.apply'] = 'Застосувати';
 		map['ui_actions.discard'] = 'Скасувати зміни';
 		map['ui_actions.refresh'] = 'Оновити';
-		map['ui_actions.details'] = 'Деталі';
 		map['ui_actions.share'] = 'Поділитися';
 		map['general.or'] = 'або';
 		map['general.understood'] = 'Зрозуміло';
 		map['general.unspecified'] = 'Не вказано';
 		map['general.quick_actions'] = 'Швидкі дії';
+		map['general.details'] = 'Подробиці';
 		map['general.balance'] = 'Баланс';
 		map['general.account'] = 'Рахунок';
 		map['general.accounts'] = 'Рахунки';
@@ -1860,21 +1900,41 @@ extension on TranslationsUk {
 		map['account.select.multiple'] = 'Вибрати рахунки';
 		map['currencies.currency_converter'] = 'Конвертер валют';
 		map['currencies.currency'] = 'Валюта';
+		map['currencies.currency_settings'] = 'Параметри валюти';
 		map['currencies.currency_manager'] = 'Менеджер валют';
 		map['currencies.currency_manager_descr'] = 'Налаштуйте вашу валюту та її обмінні курси з іншими';
 		map['currencies.preferred_currency'] = 'Перевагова/базова валюта';
 		map['currencies.change_preferred_currency_title'] = 'Змінити перевагову валюту';
 		map['currencies.change_preferred_currency_msg'] = 'Усі статистичні дані та бюджети будуть відображатися в цій валюті відтепер. Рахунки та транзакції залишаться у тій валюті, яку вони мали. Усі збережені обмінні курси будуть видалені, якщо ви виконаєте цю дію. Ви хочете продовжити?';
-		map['currencies.form.equal_to_preferred_warn'] = 'Валюта не може бути однаковою з валютою користувача';
-		map['currencies.form.specify_a_currency'] = 'Будь ласка, вкажіть валюту';
-		map['currencies.form.add'] = 'Додати обмінний курс';
-		map['currencies.form.add_success'] = 'Обмінний курс успішно додано';
-		map['currencies.form.edit'] = 'Редагувати обмінний курс';
-		map['currencies.form.edit_success'] = 'Обмінний курс успішно відредаговано';
+		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = 'Валюта не може бути однаковою з валютою користувача';
+		map['currencies.exchange_rate_form.override_existing_warn'] = 'Курс обміну для цієї валюти на цю дату вже існує. Якщо ви продовжите, попередній буде перезаписано';
+		map['currencies.exchange_rate_form.specify_a_currency'] = 'Будь ласка, вкажіть валюту';
+		map['currencies.exchange_rate_form.add'] = 'Додати обмінний курс';
+		map['currencies.exchange_rate_form.add_success'] = 'Обмінний курс успішно додано';
+		map['currencies.exchange_rate_form.edit'] = 'Редагувати обмінний курс';
+		map['currencies.exchange_rate_form.edit_success'] = 'Обмінний курс успішно відредаговано';
+		map['currencies.exchange_rate_form.remove_all'] = 'Видалити всі курси валют';
+		map['currencies.exchange_rate_form.remove_all_warning'] = 'Цю дію не можна відмінити, і всі курси обміну для цієї валюти буде видалено';
+		map['currencies.types.display'] = 'Тип валюти';
+		map['currencies.types.fiat'] = 'FIAT';
+		map['currencies.types.crypto'] = 'Криптовалюта';
+		map['currencies.types.other'] = 'інше';
+		map['currencies.currency_form.name'] = 'Відображуване ім\'я';
+		map['currencies.currency_form.code'] = 'Код валюти';
+		map['currencies.currency_form.symbol'] = 'символ';
+		map['currencies.currency_form.decimal_digits'] = 'Десяткові цифри';
+		map['currencies.currency_form.create'] = 'Створіть валюту';
+		map['currencies.currency_form.create_success'] = 'Валюту створено успішно';
+		map['currencies.currency_form.edit'] = 'Редагувати валюту';
+		map['currencies.currency_form.edit_success'] = 'Валюту успішно відредаговано';
+		map['currencies.currency_form.already_exists'] = 'Валюта з таким кодом уже існує. Ви можете відредагувати його';
 		map['currencies.delete_all_success'] = 'Обмінні курси успішно видалено';
 		map['currencies.historical'] = 'Історичні курси';
+		map['currencies.historical_empty'] = 'Історичних курсів обміну для цієї валюти не знайдено';
 		map['currencies.exchange_rate'] = 'Обмінний курс';
 		map['currencies.exchange_rates'] = 'Обмінні курси';
+		map['currencies.min_exchange_rate'] = 'Мінімальний курс обміну';
+		map['currencies.max_exchange_rate'] = 'Максимальний курс обміну';
 		map['currencies.empty'] = 'Додайте тут обмінні курси, щоб, якщо у вас є рахунки в інших валютах, наші графіки були б точнішими';
 		map['currencies.select_a_currency'] = 'Виберіть валюту';
 		map['currencies.search'] = 'Пошук за назвою або кодом валюти';

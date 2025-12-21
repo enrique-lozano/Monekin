@@ -34,7 +34,6 @@
     "apply": "应用",
     "discard": "放弃",
     "refresh": "刷新",
-    "details": "详情",
     "share": "分享"
   },
   "GENERAL": {
@@ -42,6 +41,7 @@
     "understood": "明白",
     "unspecified": "未指定",
     "quick_actions": "快捷行动",
+    "details": "细节",
     "balance": "余额",
     "account": "账户",
     "accounts": "账户",
@@ -506,23 +506,47 @@
   "CURRENCIES": {
     "currency-converter": "货币换算",
     "currency": "货币",
+    "currency-settings": "货币设置",
     "currency-manager": "货币管理",
     "currency-manager.descr": "设置您的货币及其与其他货币的汇率",
     "preferred-currency": "默认货币",
     "change-preferred-currency-title": "更改默认货币",
     "change-preferred-currency-msg": "从现在起，所有统计数据和预算都将以此货币显示。账户和交易将保留其原有货币单位。如果您执行此操作，所有保存的汇率都将被删除。您想继续吗？",
-    "FORM": {
+    "EXCHANGE-RATE-FORM": {
       "equal-to-preferred-warn": "货币不能与用户货币相同",
+      "override-existing-warn": "该货币在该日期的汇率已存在。如果继续，前一个将会被覆盖",
       "specify-a-currency": "请指定货币",
       "add": "添加汇率",
       "add-success": "汇率添加成功",
       "edit": "编辑汇率",
-      "edit-success": "汇率编辑成功"
+      "edit-success": "汇率编辑成功",
+      "remove-all": "删除所有汇率",
+      "remove-all-warning": "此操作不可逆转，并将删除该货币的所有汇率"
+    },
+    "TYPES": {
+      "display": "货币类型",
+      "fiat": "菲亚特",
+      "crypto": "加密货币",
+      "other": "其他"
+    },
+    "CURRENCY-FORM": {
+      "name": "显示名称",
+      "code": "货币代码",
+      "symbol": "象征",
+      "decimal-digits": "小数位",
+      "create": "创建货币",
+      "create-success": "货币创建成功",
+      "edit": "编辑货币",
+      "edit-success": "货币编辑成功",
+      "already-exists": "具有此代码的货币已存在。您可能想要编辑它"
     },
     "delete-all-success": "删除汇率成功",
     "historical": "历史汇率",
+    "historical-empty": "没有找到该货币的历史汇率",
     "exchange-rate": "汇率",
     "exchange-rates": "汇率",
+    "min-exchange-rate": "最低汇率",
+    "max-exchange-rate": "最高汇率",
     "empty": "如果您有账户使用默认货币以外的货币，请在此处添加汇率，以获得更准确的图表",
     "select-a-currency": "选择货币",
     "search": "按名称或货币代码搜索"

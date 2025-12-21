@@ -34,7 +34,6 @@
     "apply": "Anwenden",
     "discard": "Verwerfen",
     "refresh": "Aktualisieren",
-    "details": "Details",
     "share": "Teilen"
   },
   "GENERAL": {
@@ -42,6 +41,7 @@
     "understood": "Verstanden",
     "unspecified": "Nicht spezifiziert",
     "quick_actions": "Schnelle Aktionen",
+    "details": "Details",
     "balance": "Kontostand",
     "account": "Konto",
     "accounts": "Konten",
@@ -506,23 +506,47 @@
   "CURRENCIES": {
     "currency-converter": "Währungsrechner",
     "currency": "Währung",
+    "currency-settings": "Währungseinstellungen",
     "currency-manager": "Währungsmanager",
     "currency-manager.descr": "Konfiguriere Deine Währung und deren Wechselkurse mit anderen",
     "preferred-currency": "Bevorzugte/Basis Währung",
     "change-preferred-currency-title": "Änder die bevorzugte Währung",
     "change-preferred-currency-msg": "Alle Statistiken und Budgets werden ab sofort in dieser Währung angezeigt. Konten und Transaktionen behalten die Währung, die sie hatten. Alle gespeicherten Wechselkurse werden gelöscht, wenn Du diese Aktion ausführst. Möchtest Du fortfahren?",
-    "FORM": {
+    "EXCHANGE-RATE-FORM": {
       "equal-to-preferred-warn": "Die Währung darf nicht mit der Benutzerwährung übereinstimmen",
+      "override-existing-warn": "Für diese Währung existiert für dieses Datum bereits ein Wechselkurs. Wenn Sie fortfahren, wird die vorherige überschrieben",
       "specify-a-currency": "Bitte gib eine Währung an",
       "add": "Wechselkurs hinzufügen",
       "add-success": "Wechselkurs erfolgreich hinzugefügt",
       "edit": "Wechselkurs bearbeiten",
-      "edit-success": "Wechselkurs erfolgreich bearbeitet"
+      "edit-success": "Wechselkurs erfolgreich bearbeitet",
+      "remove-all": "Alle Wechselkurse löschen",
+      "remove-all-warning": "Diese Aktion ist unwiderruflich und löscht alle Wechselkurse für diese Währung"
+    },
+    "TYPES": {
+      "display": "Währungstyp",
+      "fiat": "FIAT",
+      "crypto": "Kryptowährung",
+      "other": "Andere"
+    },
+    "CURRENCY-FORM": {
+      "name": "Anzeigename",
+      "code": "Währungscode",
+      "symbol": "Symbol",
+      "decimal-digits": "Dezimalstellen",
+      "create": "Währung erstellen",
+      "create-success": "Währung erfolgreich erstellt",
+      "edit": "Währung bearbeiten",
+      "edit-success": "Währung erfolgreich bearbeitet",
+      "already-exists": "Eine Währung mit diesem Code existiert bereits. Möglicherweise möchten Sie es bearbeiten"
     },
     "delete-all-success": "Wechselkurse erfolgreich gelöscht",
     "historical": "Historische Kurse",
+    "historical-empty": "Für diese Währung wurden keine historischen Wechselkurse gefunden",
     "exchange-rate": "Wechselkurs",
     "exchange-rates": "Wechselkurse",
+    "min-exchange-rate": "Mindestwechselkurs",
+    "max-exchange-rate": "Maximaler Wechselkurs",
     "empty": "Füge hier Wechselkurse hinzu, damit unsere Diagramme genauer sind, wenn Du Konten in anderen Währungen als Deiner Basiswährung hast",
     "select-a-currency": "Wähle eine Währung aus",
     "search": "Suche nach Name oder Währungscode"

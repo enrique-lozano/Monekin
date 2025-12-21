@@ -34,7 +34,6 @@
     "apply": "Uygula",
     "discard": "Vazgeç",
     "refresh": "Yenile",
-    "details": "Detaylar",
     "share": "Paylaş"
   },
   "GENERAL": {
@@ -42,6 +41,7 @@
     "understood": "Anlaşıldı",
     "unspecified": "Belirtilmemiş",
     "quick_actions": "Hızlı İşlemler",
+    "details": "Detaylar",
     "balance": "Bakiye",
     "account": "Hesap",
     "accounts": "Hesaplar",
@@ -506,23 +506,47 @@
   "CURRENCIES": {
     "currency-converter": "Para birimi dönüştürücü",
     "currency": "Para birimi",
+    "currency-settings": "Para birimi ayarları",
     "currency-manager": "Para birimi yöneticisi",
     "currency-manager.descr": "Para biriminizi ve diğerleriyle döviz kurlarını yapılandırın",
     "preferred-currency": "Tercih edilen/temel para birimi",
     "change-preferred-currency-title": "Tercih edilen para birimini değiştir",
     "change-preferred-currency-msg": "Tüm istatistikler ve bütçeler bundan sonra bu para biriminde görüntülenecektir. Hesaplar ve işlemler sahip oldukları para birimini koruyacaktır. Bu eylemi gerçekleştirirseniz, kaydedilen tüm döviz kurları silinecektir. Devam etmek istiyor musunuz?",
-    "FORM": {
+    "EXCHANGE-RATE-FORM": {
       "equal-to-preferred-warn": "Para birimi, kullanıcı para birimine eşit olamaz",
+      "override-existing-warn": "Bu tarihte bu para birimi için bir döviz kuru zaten mevcut. Devam ederseniz öncekinin üzerine yazılacak",
       "specify-a-currency": "Lütfen bir para birimi belirtin",
       "add": "Döviz kuru ekle",
       "add-success": "Döviz kuru başarıyla eklendi",
       "edit": "Döviz kurunu düzenle",
-      "edit-success": "Döviz kuru başarıyla düzenlendi"
+      "edit-success": "Döviz kuru başarıyla düzenlendi",
+      "remove-all": "Tüm döviz kurlarını sil",
+      "remove-all-warning": "Bu işlem geri alınamaz ve bu para biriminin tüm döviz kurlarını silecektir"
+    },
+    "TYPES": {
+      "display": "Para birimi türü",
+      "fiat": "FIAT",
+      "crypto": "Kripto para birimi",
+      "other": "Diğer"
+    },
+    "CURRENCY-FORM": {
+      "name": "Ekran adı",
+      "code": "Para Birimi Kodu",
+      "symbol": "Sembol",
+      "decimal-digits": "Ondalık Basamaklar",
+      "create": "Para birimi oluştur",
+      "create-success": "Para birimi başarıyla oluşturuldu",
+      "edit": "Para birimini düzenle",
+      "edit-success": "Para birimi başarıyla düzenlendi",
+      "already-exists": "Bu koda sahip bir para birimi zaten mevcut. Düzenlemek isteyebilirsiniz"
     },
     "delete-all-success": "Döviz kurları başarıyla silindi",
     "historical": "Geçmiş oranlar",
+    "historical-empty": "Bu para birimi için geçmiş döviz kuru bulunamadı",
     "exchange-rate": "Döviz kuru",
     "exchange-rates": "Döviz kurları",
+    "min-exchange-rate": "Asgari döviz kuru",
+    "max-exchange-rate": "Maksimum döviz kuru",
     "empty": "Buraya döviz kurları ekleyin, böylece temel para biriminizden farklı para birimlerinde hesaplarınız varsa grafiklerimiz daha doğru olur",
     "select-a-currency": "Bir para birimi seçin",
     "search": "Adına veya para birimi koduna göre arayın"

@@ -7,6 +7,7 @@ import 'package:monekin/core/presentation/widgets/dynamic_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/tappable-text-entry.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 class CurrencyEditFields extends StatefulWidget {
   const CurrencyEditFields({
@@ -87,6 +88,8 @@ class CurrencyEditFieldsState extends State<CurrencyEditFields> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
+
     final inputBorder = UnderlineInputBorder(
       borderSide: TappableTextEntry.borderSide(context),
     );
@@ -94,7 +97,7 @@ class CurrencyEditFieldsState extends State<CurrencyEditFields> {
     return Column(
       children: [
         ListTile(
-          title: const Text('Display Name'),
+          title: Text(t.currencies.currency_form.name),
           subtitle: Text(_displayName),
           trailing: const Icon(Icons.edit_rounded),
           onTap: () async {
@@ -116,7 +119,7 @@ class CurrencyEditFieldsState extends State<CurrencyEditFields> {
         ),
 
         ListTile(
-          title: const Text('Currency Type'),
+          title: Text(t.currencies.types.display),
           subtitle: Text(_currencyType.name.toUpperCase()),
           enabled: !widget.isInFormMode,
           trailing: widget.isInFormMode || !widget.currency.isDefault
@@ -127,7 +130,7 @@ class CurrencyEditFieldsState extends State<CurrencyEditFields> {
 
         if (!widget.currency.isDefault)
           ListTile(
-            title: const Text('Code'),
+            title: Text(t.currencies.currency_form.code),
             trailing: SizedBox(
               width: 74,
               child: TextFormField(
@@ -157,7 +160,7 @@ class CurrencyEditFieldsState extends State<CurrencyEditFields> {
           ),
 
         ListTile(
-          title: const Text('Symbol'),
+          title: Text(t.currencies.currency_form.symbol),
           trailing: SizedBox(
             width: 64,
             child: TextFormField(
@@ -187,7 +190,7 @@ class CurrencyEditFieldsState extends State<CurrencyEditFields> {
 
         // Edit number of decimals places:
         ListTile(
-          title: const Text('Decimal Places'),
+          title: Text(t.currencies.currency_form.decimal_digits),
           subtitle: Text(_decimalPlaces.toString()),
           contentPadding: const EdgeInsetsDirectional.only(start: 16, end: 2),
           trailing: LayoutBuilder(
@@ -241,8 +244,10 @@ class _CurrencyNameModalState extends State<_CurrencyNameModal> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
+
     return ModalContainer(
-      title: 'Edit Display Name',
+      title: '${t.ui_actions.edit} - ${t.currencies.currency_form.name}',
       footer: BottomSheetFooter(
         onSaved: () {
           if (_controller.text.isNotEmpty) {
@@ -254,7 +259,7 @@ class _CurrencyNameModalState extends State<_CurrencyNameModal> {
       body: TextFormField(
         controller: _controller,
         autofocus: true,
-        decoration: const InputDecoration(labelText: 'Display Name'),
+        decoration: InputDecoration(labelText: t.currencies.currency_form.name),
         onFieldSubmitted: (value) {
           if (value.isNotEmpty) {
             RouteUtils.popRoute(value);

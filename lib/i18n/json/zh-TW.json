@@ -34,7 +34,6 @@
     "apply": "套用",
     "discard": "捨棄",
     "refresh": "重新整理",
-    "details": "詳細資訊",
     "share": "分享"
   },
   "GENERAL": {
@@ -42,6 +41,7 @@
     "understood": "明白了",
     "unspecified": "未指定",
     "quick_actions": "快速行動",
+    "details": "細節",
     "balance": "平衡",
     "account": "帳戶",
     "accounts": "帳戶",
@@ -506,23 +506,47 @@
   "CURRENCIES": {
     "currency-converter": "貨幣換算",
     "currency": "貨幣",
+    "currency-settings": "貨幣設置",
     "currency-manager": "貨幣管理",
     "currency-manager.descr": "配置您的貨幣及其與其他貨幣的匯率",
     "preferred-currency": "首選/基礎貨幣",
     "change-preferred-currency-title": "更改首選貨幣",
     "change-preferred-currency-msg": "從現在開始，所有統計數據和預算都將以該貨幣顯示。帳戶和交易將保留其所擁有的貨幣。如果您執行此操作，所有保存的匯率都將被刪除。您想繼續嗎？",
-    "FORM": {
+    "EXCHANGE-RATE-FORM": {
       "equal-to-preferred-warn": "幣種不能等於用戶幣種",
+      "override-existing-warn": "該貨幣在該日期的匯率已存在。如果繼續，前一個將會被覆蓋",
       "specify-a-currency": "請指定貨幣",
       "add": "添加匯率",
       "add-success": "匯率新增成功",
       "edit": "編輯匯率",
-      "edit-success": "匯率編輯成功"
+      "edit-success": "匯率編輯成功",
+      "remove-all": "刪除所有匯率",
+      "remove-all-warning": "此操作不可逆轉，並將刪除該貨幣的所有匯率"
+    },
+    "TYPES": {
+      "display": "貨幣類型",
+      "fiat": "菲亞特",
+      "crypto": "加密貨幣",
+      "other": "其他"
+    },
+    "CURRENCY-FORM": {
+      "name": "顯示名稱",
+      "code": "貨幣代碼",
+      "symbol": "象徵",
+      "decimal-digits": "小數位",
+      "create": "創建貨幣",
+      "create-success": "貨幣創建成功",
+      "edit": "編輯貨幣",
+      "edit-success": "貨幣編輯成功",
+      "already-exists": "具有此代碼的貨幣已存在。您可能想要編輯它"
     },
     "delete-all-success": "刪除匯率成功",
     "historical": "歷史利率",
+    "historical-empty": "沒有找到該貨幣的歷史匯率",
     "exchange-rate": "匯率",
     "exchange-rates": "匯率",
+    "min-exchange-rate": "最低匯率",
+    "max-exchange-rate": "最高匯率",
     "empty": "在此處添加匯率，以便如果您的帳戶使用基礎貨幣以外的貨幣，我們的圖表會更加準確",
     "select-a-currency": "選擇貨幣",
     "search": "按名稱或貨幣代碼搜尋"

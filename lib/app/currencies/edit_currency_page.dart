@@ -22,7 +22,7 @@ class _EditCurrencyPageState extends State<EditCurrencyPage> {
   final GlobalKey<CurrencyEditFieldsState> _formKey = GlobalKey();
   bool _hasChanged = false;
 
-  submitChanges() {
+  void submitChanges() {
     if (!_hasChanged) return;
 
     final t = Translations.of(context);
@@ -40,7 +40,7 @@ class _EditCurrencyPageState extends State<EditCurrencyPage> {
         .updateCurrency(widget.currency.code, updatedCurrency)
         .then((value) {
           MonekinSnackbar.success(
-            SnackbarParams(t.currencies.form.edit_success),
+            SnackbarParams(t.currencies.currency_form.edit_success),
           );
           RouteUtils.popRoute(updatedCurrency);
         })
@@ -70,7 +70,7 @@ class _EditCurrencyPageState extends State<EditCurrencyPage> {
         }
       },
       child: PageFramework(
-        title: 'Edit Currency',
+        title: t.currencies.currency_form.edit,
         persistentFooterButtons: [
           PersistentFooterButton(
             child: FilledButton.icon(

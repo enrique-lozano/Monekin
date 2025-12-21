@@ -109,13 +109,8 @@ class CurrencyManagerPage extends StatelessWidget {
                   AnimatedExpanded(
                     expand: userCurrency != null,
                     child: ListTile(
-                      title: Text("Currency Settings"),
-                      //leading: const Icon(Icons.edit_rounded),
+                      title: Text(t.currencies.currency_settings),
                       trailing: const Icon(Icons.chevron_right_rounded),
-                      // tileColor: Theme.of(
-                      //   context,
-                      // ).colorScheme.primary.withOpacity(0.05),
-                      //selected: true,
                       onTap: () {
                         if (userCurrency != null) {
                           RouteUtils.pushRoute(
@@ -154,7 +149,7 @@ class CurrencyManagerPage extends StatelessWidget {
                       FilledButton.tonalIcon(
                         onPressed: () => addExchangeRate(context),
                         icon: const Icon(Icons.add_rounded),
-                        label: Text(t.currencies.form.add),
+                        label: Text(t.currencies.exchange_rate_form.add),
                       ),
                     ],
                   ),
@@ -224,7 +219,7 @@ class CurrencyManagerPage extends StatelessWidget {
               return AnimatedExpanded(
                 expand: asyncSnapshot.hasData && asyncSnapshot.data!.isNotEmpty,
                 child: ListTile(
-                  title: Text(t.currencies.form.add),
+                  title: Text(t.currencies.exchange_rate_form.add),
                   minVerticalPadding: 16,
                   leading: Container(
                     width: 42,

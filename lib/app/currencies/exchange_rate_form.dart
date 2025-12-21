@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
+import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
+import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/constants.dart';
@@ -100,7 +103,9 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
     final t = Translations.of(context);
 
     return ModalContainer(
-      title: isEditMode ? t.currencies.form.edit : t.currencies.form.add,
+      title: isEditMode
+          ? t.currencies.exchange_rate_form.edit
+          : t.currencies.exchange_rate_form.add,
       footer: BottomSheetFooter(onSaved: () => onSubmitted()),
       bodyPadding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
       body: Form(
@@ -120,9 +125,12 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                   : SystemMouseCursors.basic,
               validator: (value) {
                 if (_currency == null) {
-                  return t.currencies.form.specify_a_currency;
+                  return t.currencies.exchange_rate_form.specify_a_currency;
                 } else if (_currency!.code == userPreferredCurrency?.code) {
-                  return t.currencies.form.equal_to_preferred_warn;
+                  return t
+                      .currencies
+                      .exchange_rate_form
+                      .equal_to_preferred_warn;
                 }
 
                 return null;
@@ -222,6 +230,31 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                 ),
               ],
             ),
+
+            if (_currency != null)
+              StreamBuilder(
+                stream: ExchangeRateService.instance
+                    .getExchangeRateItem(_currency!.code, date)
+                    .map((rate) => rate != null),
+                initialData: false,
+                builder: (context, snapshot) {
+                  final hasAlreadyAnRate = snapshot.hasData && snapshot.data!;
+
+                  return AnimatedExpanded(
+                    expand: hasAlreadyAnRate && !isEditMode,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: InlineInfoCard(
+                        text: t
+                            .currencies
+                            .exchange_rate_form
+                            .override_existing_warn,
+                        mode: InlineInfoCardMode.info,
+                      ),
+                    ),
+                  );
+                },
+              ),
           ],
         ),
       ),

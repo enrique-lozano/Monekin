@@ -97,7 +97,6 @@ class _TranslationsUiActionsIt implements TranslationsUiActionsEn {
 	@override String get apply => 'Applica';
 	@override String get discard => 'Ignora';
 	@override String get refresh => 'Aggiorna';
-	@override String get details => 'Dettagli';
 	@override String get share => 'Condividi';
 }
 
@@ -112,6 +111,7 @@ class _TranslationsGeneralIt implements TranslationsGeneralEn {
 	@override String get understood => 'Capito';
 	@override String get unspecified => 'Non specificato';
 	@override String get quick_actions => 'Azioni rapide';
+	@override String get details => 'Dettagli';
 	@override String get balance => 'Saldo';
 	@override String get account => 'Conto';
 	@override String get accounts => 'Conti';
@@ -344,16 +344,22 @@ class _TranslationsCurrenciesIt implements TranslationsCurrenciesEn {
 	// Translations
 	@override String get currency_converter => 'Convertitore di valuta';
 	@override String get currency => 'Valuta';
+	@override String get currency_settings => 'Impostazioni valuta';
 	@override String get currency_manager => 'Gestore valute';
 	@override String get currency_manager_descr => 'Configura la tua valuta e i suoi tassi di cambio con altre';
 	@override String get preferred_currency => 'Valuta preferita/base';
 	@override String get change_preferred_currency_title => 'Cambia valuta preferita';
 	@override String get change_preferred_currency_msg => 'Tutte le statistiche e i budget saranno visualizzati in questa valuta d\'ora in poi. Conti e transazioni manterranno la valuta che avevano. Tutti i tassi di cambio salvati verranno eliminati se esegui questa azione. Desideri continuare?';
-	@override late final _TranslationsCurrenciesFormIt form = _TranslationsCurrenciesFormIt._(_root);
+	@override late final _TranslationsCurrenciesExchangeRateFormIt exchange_rate_form = _TranslationsCurrenciesExchangeRateFormIt._(_root);
+	@override late final _TranslationsCurrenciesTypesIt types = _TranslationsCurrenciesTypesIt._(_root);
+	@override late final _TranslationsCurrenciesCurrencyFormIt currency_form = _TranslationsCurrenciesCurrencyFormIt._(_root);
 	@override String get delete_all_success => 'Tassi di cambio eliminati con successo';
 	@override String get historical => 'Tassi storici';
+	@override String get historical_empty => 'Nessun tasso di cambio storico trovato per questa valuta';
 	@override String get exchange_rate => 'Tasso di cambio';
 	@override String get exchange_rates => 'Tassi di cambio';
+	@override String get min_exchange_rate => 'Tasso di cambio minimo';
+	@override String get max_exchange_rate => 'Tasso di cambio massimo';
 	@override String get empty => 'Aggiungi tassi di cambio qui in modo che se hai conti in valute diverse dalla tua valuta base i nostri grafici siano più accurati';
 	@override String get select_a_currency => 'Seleziona una valuta';
 	@override String get search => 'Cerca per nome o per codice valuta';
@@ -931,19 +937,53 @@ class _TranslationsAccountSelectIt implements TranslationsAccountSelectEn {
 	@override String get multiple => 'Seleziona conti';
 }
 
-// Path: currencies.form
-class _TranslationsCurrenciesFormIt implements TranslationsCurrenciesFormEn {
-	_TranslationsCurrenciesFormIt._(this._root);
+// Path: currencies.exchange_rate_form
+class _TranslationsCurrenciesExchangeRateFormIt implements TranslationsCurrenciesExchangeRateFormEn {
+	_TranslationsCurrenciesExchangeRateFormIt._(this._root);
 
 	final TranslationsIt _root; // ignore: unused_field
 
 	// Translations
 	@override String get equal_to_preferred_warn => 'La valuta non può essere uguale alla valuta dell\'utente';
+	@override String get override_existing_warn => 'Esiste già un tasso di cambio per questa valuta in questa data. Se continui, quello precedente verrà sovrascritto';
 	@override String get specify_a_currency => 'Per favore specifica una valuta';
 	@override String get add => 'Aggiungi tasso di cambio';
 	@override String get add_success => 'Tasso di cambio aggiunto con successo';
 	@override String get edit => 'Modifica tasso di cambio';
 	@override String get edit_success => 'Tasso di cambio modificato con successo';
+	@override String get remove_all => 'Elimina tutti i tassi di cambio';
+	@override String get remove_all_warning => 'Questa azione è irreversibile e cancellerà tutti i tassi di cambio per questa valuta';
+}
+
+// Path: currencies.types
+class _TranslationsCurrenciesTypesIt implements TranslationsCurrenciesTypesEn {
+	_TranslationsCurrenciesTypesIt._(this._root);
+
+	final TranslationsIt _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Tipo di valuta';
+	@override String get fiat => 'FIAT';
+	@override String get crypto => 'Criptovaluta';
+	@override String get other => 'Altro';
+}
+
+// Path: currencies.currency_form
+class _TranslationsCurrenciesCurrencyFormIt implements TranslationsCurrenciesCurrencyFormEn {
+	_TranslationsCurrenciesCurrencyFormIt._(this._root);
+
+	final TranslationsIt _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Nome da visualizzare';
+	@override String get code => 'Codice valuta';
+	@override String get symbol => 'Simbolo';
+	@override String get decimal_digits => 'Cifre decimali';
+	@override String get create => 'Crea valuta';
+	@override String get create_success => 'Valuta creata con successo';
+	@override String get edit => 'Modifica valuta';
+	@override String get edit_success => 'Valuta modificata correttamente';
+	@override String get already_exists => 'Esiste già una valuta con questo codice. Potresti volerlo modificare';
 }
 
 // Path: tags.form
@@ -1446,12 +1486,12 @@ extension on TranslationsIt {
 		map['ui_actions.apply'] = 'Applica';
 		map['ui_actions.discard'] = 'Ignora';
 		map['ui_actions.refresh'] = 'Aggiorna';
-		map['ui_actions.details'] = 'Dettagli';
 		map['ui_actions.share'] = 'Condividi';
 		map['general.or'] = 'o';
 		map['general.understood'] = 'Capito';
 		map['general.unspecified'] = 'Non specificato';
 		map['general.quick_actions'] = 'Azioni rapide';
+		map['general.details'] = 'Dettagli';
 		map['general.balance'] = 'Saldo';
 		map['general.account'] = 'Conto';
 		map['general.accounts'] = 'Conti';
@@ -1860,21 +1900,41 @@ extension on TranslationsIt {
 		map['account.select.multiple'] = 'Seleziona conti';
 		map['currencies.currency_converter'] = 'Convertitore di valuta';
 		map['currencies.currency'] = 'Valuta';
+		map['currencies.currency_settings'] = 'Impostazioni valuta';
 		map['currencies.currency_manager'] = 'Gestore valute';
 		map['currencies.currency_manager_descr'] = 'Configura la tua valuta e i suoi tassi di cambio con altre';
 		map['currencies.preferred_currency'] = 'Valuta preferita/base';
 		map['currencies.change_preferred_currency_title'] = 'Cambia valuta preferita';
 		map['currencies.change_preferred_currency_msg'] = 'Tutte le statistiche e i budget saranno visualizzati in questa valuta d\'ora in poi. Conti e transazioni manterranno la valuta che avevano. Tutti i tassi di cambio salvati verranno eliminati se esegui questa azione. Desideri continuare?';
-		map['currencies.form.equal_to_preferred_warn'] = 'La valuta non può essere uguale alla valuta dell\'utente';
-		map['currencies.form.specify_a_currency'] = 'Per favore specifica una valuta';
-		map['currencies.form.add'] = 'Aggiungi tasso di cambio';
-		map['currencies.form.add_success'] = 'Tasso di cambio aggiunto con successo';
-		map['currencies.form.edit'] = 'Modifica tasso di cambio';
-		map['currencies.form.edit_success'] = 'Tasso di cambio modificato con successo';
+		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = 'La valuta non può essere uguale alla valuta dell\'utente';
+		map['currencies.exchange_rate_form.override_existing_warn'] = 'Esiste già un tasso di cambio per questa valuta in questa data. Se continui, quello precedente verrà sovrascritto';
+		map['currencies.exchange_rate_form.specify_a_currency'] = 'Per favore specifica una valuta';
+		map['currencies.exchange_rate_form.add'] = 'Aggiungi tasso di cambio';
+		map['currencies.exchange_rate_form.add_success'] = 'Tasso di cambio aggiunto con successo';
+		map['currencies.exchange_rate_form.edit'] = 'Modifica tasso di cambio';
+		map['currencies.exchange_rate_form.edit_success'] = 'Tasso di cambio modificato con successo';
+		map['currencies.exchange_rate_form.remove_all'] = 'Elimina tutti i tassi di cambio';
+		map['currencies.exchange_rate_form.remove_all_warning'] = 'Questa azione è irreversibile e cancellerà tutti i tassi di cambio per questa valuta';
+		map['currencies.types.display'] = 'Tipo di valuta';
+		map['currencies.types.fiat'] = 'FIAT';
+		map['currencies.types.crypto'] = 'Criptovaluta';
+		map['currencies.types.other'] = 'Altro';
+		map['currencies.currency_form.name'] = 'Nome da visualizzare';
+		map['currencies.currency_form.code'] = 'Codice valuta';
+		map['currencies.currency_form.symbol'] = 'Simbolo';
+		map['currencies.currency_form.decimal_digits'] = 'Cifre decimali';
+		map['currencies.currency_form.create'] = 'Crea valuta';
+		map['currencies.currency_form.create_success'] = 'Valuta creata con successo';
+		map['currencies.currency_form.edit'] = 'Modifica valuta';
+		map['currencies.currency_form.edit_success'] = 'Valuta modificata correttamente';
+		map['currencies.currency_form.already_exists'] = 'Esiste già una valuta con questo codice. Potresti volerlo modificare';
 		map['currencies.delete_all_success'] = 'Tassi di cambio eliminati con successo';
 		map['currencies.historical'] = 'Tassi storici';
+		map['currencies.historical_empty'] = 'Nessun tasso di cambio storico trovato per questa valuta';
 		map['currencies.exchange_rate'] = 'Tasso di cambio';
 		map['currencies.exchange_rates'] = 'Tassi di cambio';
+		map['currencies.min_exchange_rate'] = 'Tasso di cambio minimo';
+		map['currencies.max_exchange_rate'] = 'Tasso di cambio massimo';
 		map['currencies.empty'] = 'Aggiungi tassi di cambio qui in modo che se hai conti in valute diverse dalla tua valuta base i nostri grafici siano più accurati';
 		map['currencies.select_a_currency'] = 'Seleziona una valuta';
 		map['currencies.search'] = 'Cerca per nome o per codice valuta';

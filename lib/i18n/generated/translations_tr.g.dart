@@ -97,7 +97,6 @@ class _TranslationsUiActionsTr implements TranslationsUiActionsEn {
 	@override String get apply => 'Uygula';
 	@override String get discard => 'Vazgeç';
 	@override String get refresh => 'Yenile';
-	@override String get details => 'Detaylar';
 	@override String get share => 'Paylaş';
 }
 
@@ -112,6 +111,7 @@ class _TranslationsGeneralTr implements TranslationsGeneralEn {
 	@override String get understood => 'Anlaşıldı';
 	@override String get unspecified => 'Belirtilmemiş';
 	@override String get quick_actions => 'Hızlı İşlemler';
+	@override String get details => 'Detaylar';
 	@override String get balance => 'Bakiye';
 	@override String get account => 'Hesap';
 	@override String get accounts => 'Hesaplar';
@@ -344,16 +344,22 @@ class _TranslationsCurrenciesTr implements TranslationsCurrenciesEn {
 	// Translations
 	@override String get currency_converter => 'Para birimi dönüştürücü';
 	@override String get currency => 'Para birimi';
+	@override String get currency_settings => 'Para birimi ayarları';
 	@override String get currency_manager => 'Para birimi yöneticisi';
 	@override String get currency_manager_descr => 'Para biriminizi ve diğerleriyle döviz kurlarını yapılandırın';
 	@override String get preferred_currency => 'Tercih edilen/temel para birimi';
 	@override String get change_preferred_currency_title => 'Tercih edilen para birimini değiştir';
 	@override String get change_preferred_currency_msg => 'Tüm istatistikler ve bütçeler bundan sonra bu para biriminde görüntülenecektir. Hesaplar ve işlemler sahip oldukları para birimini koruyacaktır. Bu eylemi gerçekleştirirseniz, kaydedilen tüm döviz kurları silinecektir. Devam etmek istiyor musunuz?';
-	@override late final _TranslationsCurrenciesFormTr form = _TranslationsCurrenciesFormTr._(_root);
+	@override late final _TranslationsCurrenciesExchangeRateFormTr exchange_rate_form = _TranslationsCurrenciesExchangeRateFormTr._(_root);
+	@override late final _TranslationsCurrenciesTypesTr types = _TranslationsCurrenciesTypesTr._(_root);
+	@override late final _TranslationsCurrenciesCurrencyFormTr currency_form = _TranslationsCurrenciesCurrencyFormTr._(_root);
 	@override String get delete_all_success => 'Döviz kurları başarıyla silindi';
 	@override String get historical => 'Geçmiş oranlar';
+	@override String get historical_empty => 'Bu para birimi için geçmiş döviz kuru bulunamadı';
 	@override String get exchange_rate => 'Döviz kuru';
 	@override String get exchange_rates => 'Döviz kurları';
+	@override String get min_exchange_rate => 'Asgari döviz kuru';
+	@override String get max_exchange_rate => 'Maksimum döviz kuru';
 	@override String get empty => 'Buraya döviz kurları ekleyin, böylece temel para biriminizden farklı para birimlerinde hesaplarınız varsa grafiklerimiz daha doğru olur';
 	@override String get select_a_currency => 'Bir para birimi seçin';
 	@override String get search => 'Adına veya para birimi koduna göre arayın';
@@ -931,19 +937,53 @@ class _TranslationsAccountSelectTr implements TranslationsAccountSelectEn {
 	@override String get multiple => 'Hesapları seçin';
 }
 
-// Path: currencies.form
-class _TranslationsCurrenciesFormTr implements TranslationsCurrenciesFormEn {
-	_TranslationsCurrenciesFormTr._(this._root);
+// Path: currencies.exchange_rate_form
+class _TranslationsCurrenciesExchangeRateFormTr implements TranslationsCurrenciesExchangeRateFormEn {
+	_TranslationsCurrenciesExchangeRateFormTr._(this._root);
 
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
 	@override String get equal_to_preferred_warn => 'Para birimi, kullanıcı para birimine eşit olamaz';
+	@override String get override_existing_warn => 'Bu tarihte bu para birimi için bir döviz kuru zaten mevcut. Devam ederseniz öncekinin üzerine yazılacak';
 	@override String get specify_a_currency => 'Lütfen bir para birimi belirtin';
 	@override String get add => 'Döviz kuru ekle';
 	@override String get add_success => 'Döviz kuru başarıyla eklendi';
 	@override String get edit => 'Döviz kurunu düzenle';
 	@override String get edit_success => 'Döviz kuru başarıyla düzenlendi';
+	@override String get remove_all => 'Tüm döviz kurlarını sil';
+	@override String get remove_all_warning => 'Bu işlem geri alınamaz ve bu para biriminin tüm döviz kurlarını silecektir';
+}
+
+// Path: currencies.types
+class _TranslationsCurrenciesTypesTr implements TranslationsCurrenciesTypesEn {
+	_TranslationsCurrenciesTypesTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Para birimi türü';
+	@override String get fiat => 'FIAT';
+	@override String get crypto => 'Kripto para birimi';
+	@override String get other => 'Diğer';
+}
+
+// Path: currencies.currency_form
+class _TranslationsCurrenciesCurrencyFormTr implements TranslationsCurrenciesCurrencyFormEn {
+	_TranslationsCurrenciesCurrencyFormTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Ekran adı';
+	@override String get code => 'Para Birimi Kodu';
+	@override String get symbol => 'Sembol';
+	@override String get decimal_digits => 'Ondalık Basamaklar';
+	@override String get create => 'Para birimi oluştur';
+	@override String get create_success => 'Para birimi başarıyla oluşturuldu';
+	@override String get edit => 'Para birimini düzenle';
+	@override String get edit_success => 'Para birimi başarıyla düzenlendi';
+	@override String get already_exists => 'Bu koda sahip bir para birimi zaten mevcut. Düzenlemek isteyebilirsiniz';
 }
 
 // Path: tags.form
@@ -1446,12 +1486,12 @@ extension on TranslationsTr {
 		map['ui_actions.apply'] = 'Uygula';
 		map['ui_actions.discard'] = 'Vazgeç';
 		map['ui_actions.refresh'] = 'Yenile';
-		map['ui_actions.details'] = 'Detaylar';
 		map['ui_actions.share'] = 'Paylaş';
 		map['general.or'] = 'veya';
 		map['general.understood'] = 'Anlaşıldı';
 		map['general.unspecified'] = 'Belirtilmemiş';
 		map['general.quick_actions'] = 'Hızlı İşlemler';
+		map['general.details'] = 'Detaylar';
 		map['general.balance'] = 'Bakiye';
 		map['general.account'] = 'Hesap';
 		map['general.accounts'] = 'Hesaplar';
@@ -1860,21 +1900,41 @@ extension on TranslationsTr {
 		map['account.select.multiple'] = 'Hesapları seçin';
 		map['currencies.currency_converter'] = 'Para birimi dönüştürücü';
 		map['currencies.currency'] = 'Para birimi';
+		map['currencies.currency_settings'] = 'Para birimi ayarları';
 		map['currencies.currency_manager'] = 'Para birimi yöneticisi';
 		map['currencies.currency_manager_descr'] = 'Para biriminizi ve diğerleriyle döviz kurlarını yapılandırın';
 		map['currencies.preferred_currency'] = 'Tercih edilen/temel para birimi';
 		map['currencies.change_preferred_currency_title'] = 'Tercih edilen para birimini değiştir';
 		map['currencies.change_preferred_currency_msg'] = 'Tüm istatistikler ve bütçeler bundan sonra bu para biriminde görüntülenecektir. Hesaplar ve işlemler sahip oldukları para birimini koruyacaktır. Bu eylemi gerçekleştirirseniz, kaydedilen tüm döviz kurları silinecektir. Devam etmek istiyor musunuz?';
-		map['currencies.form.equal_to_preferred_warn'] = 'Para birimi, kullanıcı para birimine eşit olamaz';
-		map['currencies.form.specify_a_currency'] = 'Lütfen bir para birimi belirtin';
-		map['currencies.form.add'] = 'Döviz kuru ekle';
-		map['currencies.form.add_success'] = 'Döviz kuru başarıyla eklendi';
-		map['currencies.form.edit'] = 'Döviz kurunu düzenle';
-		map['currencies.form.edit_success'] = 'Döviz kuru başarıyla düzenlendi';
+		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = 'Para birimi, kullanıcı para birimine eşit olamaz';
+		map['currencies.exchange_rate_form.override_existing_warn'] = 'Bu tarihte bu para birimi için bir döviz kuru zaten mevcut. Devam ederseniz öncekinin üzerine yazılacak';
+		map['currencies.exchange_rate_form.specify_a_currency'] = 'Lütfen bir para birimi belirtin';
+		map['currencies.exchange_rate_form.add'] = 'Döviz kuru ekle';
+		map['currencies.exchange_rate_form.add_success'] = 'Döviz kuru başarıyla eklendi';
+		map['currencies.exchange_rate_form.edit'] = 'Döviz kurunu düzenle';
+		map['currencies.exchange_rate_form.edit_success'] = 'Döviz kuru başarıyla düzenlendi';
+		map['currencies.exchange_rate_form.remove_all'] = 'Tüm döviz kurlarını sil';
+		map['currencies.exchange_rate_form.remove_all_warning'] = 'Bu işlem geri alınamaz ve bu para biriminin tüm döviz kurlarını silecektir';
+		map['currencies.types.display'] = 'Para birimi türü';
+		map['currencies.types.fiat'] = 'FIAT';
+		map['currencies.types.crypto'] = 'Kripto para birimi';
+		map['currencies.types.other'] = 'Diğer';
+		map['currencies.currency_form.name'] = 'Ekran adı';
+		map['currencies.currency_form.code'] = 'Para Birimi Kodu';
+		map['currencies.currency_form.symbol'] = 'Sembol';
+		map['currencies.currency_form.decimal_digits'] = 'Ondalık Basamaklar';
+		map['currencies.currency_form.create'] = 'Para birimi oluştur';
+		map['currencies.currency_form.create_success'] = 'Para birimi başarıyla oluşturuldu';
+		map['currencies.currency_form.edit'] = 'Para birimini düzenle';
+		map['currencies.currency_form.edit_success'] = 'Para birimi başarıyla düzenlendi';
+		map['currencies.currency_form.already_exists'] = 'Bu koda sahip bir para birimi zaten mevcut. Düzenlemek isteyebilirsiniz';
 		map['currencies.delete_all_success'] = 'Döviz kurları başarıyla silindi';
 		map['currencies.historical'] = 'Geçmiş oranlar';
+		map['currencies.historical_empty'] = 'Bu para birimi için geçmiş döviz kuru bulunamadı';
 		map['currencies.exchange_rate'] = 'Döviz kuru';
 		map['currencies.exchange_rates'] = 'Döviz kurları';
+		map['currencies.min_exchange_rate'] = 'Asgari döviz kuru';
+		map['currencies.max_exchange_rate'] = 'Maksimum döviz kuru';
 		map['currencies.empty'] = 'Buraya döviz kurları ekleyin, böylece temel para biriminizden farklı para birimlerinde hesaplarınız varsa grafiklerimiz daha doğru olur';
 		map['currencies.select_a_currency'] = 'Bir para birimi seçin';
 		map['currencies.search'] = 'Adına veya para birimi koduna göre arayın';

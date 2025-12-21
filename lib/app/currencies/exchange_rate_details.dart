@@ -209,14 +209,47 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
         }
       },
       child: PageFramework(
-        title: '${_currency.name} - ${t.currencies.exchange_rate}',
+        title: _currency.name,
         appBarActions: [
           MonekinPopupMenuButton(
             actionItems: [
               ListTileActionItem(
-                label: t.ui_actions.delete,
-                icon: Icons.delete,
+                label: t.currencies.exchange_rate_form.remove_all,
+                icon: Icons.settings_backup_restore_rounded,
                 onClick: () => deleteAllRates(),
+              ),
+              ListTileActionItem(
+                label: t.ui_actions.delete,
+                role: ListTileActionRole.delete,
+                icon: Icons.delete_forever_rounded,
+                onClick: _currency.isDefault
+                    ? null
+                    : () async {
+                        print("HPA");
+                        final confirmed = await confirmDialog(
+                          context,
+                          dialogTitle: t.ui_actions.delete,
+                          contentParagraphs: [],
+                          canPop: false,
+                        );
+
+                        if (confirmed == true) {
+                          CurrencyService.instance
+                              .deleteCurrency(_currency.code)
+                              .then((value) {
+                                MonekinSnackbar.success(
+                                  SnackbarParams("DELETE"),
+                                );
+
+                                RouteUtils.popRoute();
+                              })
+                              .catchError((err) {
+                                MonekinSnackbar.error(
+                                  SnackbarParams.fromError(err),
+                                );
+                              });
+                        }
+                      },
               ),
             ],
           ),
@@ -226,7 +259,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
             : TabBar(
                 controller: _tabController,
                 tabs: [
-                  Tab(text: 'Details'),
+                  Tab(text: t.general.details),
                   Tab(text: t.currencies.historical),
                 ],
               ),
@@ -404,9 +437,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
             child: Builder(
               builder: (context) {
                 if (_currentRates!.isEmpty) {
-                  return NoResults(
-                    description: "t.currencies.no_exchange_rates",
-                  );
+                  return NoResults(description: t.currencies.historical_empty);
                 }
 
                 if (BreakPoint.of(context).isSmallerThan(breakpointChangeIn)) {
@@ -526,7 +557,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
           Skeletonizer(
             enabled: _currentRates == null,
             child: ListTile(
-              title: Skeleton.keep(child: Text('Minimum Rate')),
+              title: Skeleton.keep(child: Text(t.currencies.min_exchange_rate)),
               subtitle: _currentRates != null && _currentRates!.isNotEmpty
                   ? ExchangeRateRowInDetails(
                       exchangeRate: _currentRates!.reduce(
@@ -543,7 +574,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
           Skeletonizer(
             enabled: _currentRates == null,
             child: ListTile(
-              title: Skeleton.keep(child: Text('Maximum Rate')),
+              title: Skeleton.keep(child: Text(t.currencies.max_exchange_rate)),
               subtitle: _currentRates != null && _currentRates!.isNotEmpty
                   ? ExchangeRateRowInDetails(
                       exchangeRate: _currentRates!.reduce(
@@ -574,7 +605,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: CardWithHeader(
-                title: 'Currency Details',
+                title: t.currencies.currency_settings,
                 body: Column(
                   children: [
                     const SizedBox(height: 8),

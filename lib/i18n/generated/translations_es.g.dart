@@ -97,7 +97,6 @@ class _TranslationsUiActionsEs implements TranslationsUiActionsEn {
 	@override String get apply => 'Aplicar';
 	@override String get discard => 'Descartar';
 	@override String get refresh => 'Actualizar';
-	@override String get details => 'Detalles';
 	@override String get share => 'Compartir';
 }
 
@@ -112,6 +111,7 @@ class _TranslationsGeneralEs implements TranslationsGeneralEn {
 	@override String get understood => 'Entendido';
 	@override String get unspecified => 'Sin especificar';
 	@override String get quick_actions => 'Acciones rápidas';
+	@override String get details => 'Detalles';
 	@override String get balance => 'Balance';
 	@override String get account => 'Cuenta';
 	@override String get accounts => 'Cuentas';
@@ -344,16 +344,22 @@ class _TranslationsCurrenciesEs implements TranslationsCurrenciesEn {
 	// Translations
 	@override String get currency_converter => 'Conversor de divisas';
 	@override String get currency => 'Divisa';
+	@override String get currency_settings => 'Configuración de la divisa';
 	@override String get currency_manager => 'Administrador de divisas';
 	@override String get currency_manager_descr => 'Configura tu divisa y sus tipos de cambio con otras';
 	@override String get preferred_currency => 'Divisa predeterminada/base';
 	@override String get change_preferred_currency_title => 'Cambiar divisa predeterminada';
 	@override String get change_preferred_currency_msg => 'Todas las estadisticas y presupuestos serán mostradas en esta divisa a partir de ahora. Las cuentas y transacciones mantendrán la divisa que tenían. Todos los tipos de cambios guardados serán eliminados si ejecutas esta acción, ¿Desea continuar?';
-	@override late final _TranslationsCurrenciesFormEs form = _TranslationsCurrenciesFormEs._(_root);
+	@override late final _TranslationsCurrenciesExchangeRateFormEs exchange_rate_form = _TranslationsCurrenciesExchangeRateFormEs._(_root);
+	@override late final _TranslationsCurrenciesTypesEs types = _TranslationsCurrenciesTypesEs._(_root);
+	@override late final _TranslationsCurrenciesCurrencyFormEs currency_form = _TranslationsCurrenciesCurrencyFormEs._(_root);
 	@override String get delete_all_success => 'Tipos de cambio borrados con exito';
 	@override String get historical => 'Histórico de tasas';
+	@override String get historical_empty => 'No se encontraron tipos de cambio históricos para esta divisa';
 	@override String get exchange_rate => 'Tipo de cambio';
 	@override String get exchange_rates => 'Tipos de cambio';
+	@override String get min_exchange_rate => 'Tipo de cambio mínimo';
+	@override String get max_exchange_rate => 'Tipo de cambio máximo';
 	@override String get empty => 'Añade tipos de cambio aqui para que en caso de tener cuentas en otras divisas distintas a tu divisa base nuestros gráficos sean mas exactos';
 	@override String get select_a_currency => 'Selecciona una divisa';
 	@override String get search => 'Busca por nombre o por código de la divisa';
@@ -931,19 +937,53 @@ class _TranslationsAccountSelectEs implements TranslationsAccountSelectEn {
 	@override String get multiple => 'Selecciona cuentas';
 }
 
-// Path: currencies.form
-class _TranslationsCurrenciesFormEs implements TranslationsCurrenciesFormEn {
-	_TranslationsCurrenciesFormEs._(this._root);
+// Path: currencies.exchange_rate_form
+class _TranslationsCurrenciesExchangeRateFormEs implements TranslationsCurrenciesExchangeRateFormEn {
+	_TranslationsCurrenciesExchangeRateFormEs._(this._root);
 
 	final TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get equal_to_preferred_warn => 'The currency can not be equal to the user currency';
+	@override String get equal_to_preferred_warn => 'La divisa seleccionada no puede ser la misma que la divisa predeterminada';
+	@override String get override_existing_warn => 'Ya existe un tipo de cambio para esta moneda en esta fecha. Si continúas se sobrescribirá el anterior.';
 	@override String get specify_a_currency => 'Por favor, especifica una divisa';
 	@override String get add => 'Añadir tipo de cambio';
 	@override String get add_success => 'Tipo de cambio añadido correctamente';
 	@override String get edit => 'Editar tipo de cambio';
 	@override String get edit_success => 'Tipo de cambio editado correctamente';
+	@override String get remove_all => 'Eliminar todos los tipos de cambio';
+	@override String get remove_all_warning => 'Esta acción es irreversible y eliminará todos los tipos de cambio de esta moneda.';
+}
+
+// Path: currencies.types
+class _TranslationsCurrenciesTypesEs implements TranslationsCurrenciesTypesEn {
+	_TranslationsCurrenciesTypesEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Tipo de moneda';
+	@override String get fiat => 'FÍAT';
+	@override String get crypto => 'Criptomoneda';
+	@override String get other => 'Otro';
+}
+
+// Path: currencies.currency_form
+class _TranslationsCurrenciesCurrencyFormEs implements TranslationsCurrenciesCurrencyFormEn {
+	_TranslationsCurrenciesCurrencyFormEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Nombre a mostrar';
+	@override String get code => 'Código de la divisa';
+	@override String get symbol => 'Símbolo';
+	@override String get decimal_digits => 'Dígitos decimales';
+	@override String get create => 'Crear divisa';
+	@override String get create_success => 'Divisa creada exitosamente';
+	@override String get edit => 'Editar divisa';
+	@override String get edit_success => 'Divisa editada correctamente';
+	@override String get already_exists => 'Ya existe una divisa con este código. Quizás quieras editarlo';
 }
 
 // Path: tags.form
@@ -1447,12 +1487,12 @@ extension on TranslationsEs {
 		map['ui_actions.apply'] = 'Aplicar';
 		map['ui_actions.discard'] = 'Descartar';
 		map['ui_actions.refresh'] = 'Actualizar';
-		map['ui_actions.details'] = 'Detalles';
 		map['ui_actions.share'] = 'Compartir';
 		map['general.or'] = 'o';
 		map['general.understood'] = 'Entendido';
 		map['general.unspecified'] = 'Sin especificar';
 		map['general.quick_actions'] = 'Acciones rápidas';
+		map['general.details'] = 'Detalles';
 		map['general.balance'] = 'Balance';
 		map['general.account'] = 'Cuenta';
 		map['general.accounts'] = 'Cuentas';
@@ -1862,21 +1902,41 @@ extension on TranslationsEs {
 		map['account.select.multiple'] = 'Selecciona cuentas';
 		map['currencies.currency_converter'] = 'Conversor de divisas';
 		map['currencies.currency'] = 'Divisa';
+		map['currencies.currency_settings'] = 'Configuración de la divisa';
 		map['currencies.currency_manager'] = 'Administrador de divisas';
 		map['currencies.currency_manager_descr'] = 'Configura tu divisa y sus tipos de cambio con otras';
 		map['currencies.preferred_currency'] = 'Divisa predeterminada/base';
 		map['currencies.change_preferred_currency_title'] = 'Cambiar divisa predeterminada';
 		map['currencies.change_preferred_currency_msg'] = 'Todas las estadisticas y presupuestos serán mostradas en esta divisa a partir de ahora. Las cuentas y transacciones mantendrán la divisa que tenían. Todos los tipos de cambios guardados serán eliminados si ejecutas esta acción, ¿Desea continuar?';
-		map['currencies.form.equal_to_preferred_warn'] = 'The currency can not be equal to the user currency';
-		map['currencies.form.specify_a_currency'] = 'Por favor, especifica una divisa';
-		map['currencies.form.add'] = 'Añadir tipo de cambio';
-		map['currencies.form.add_success'] = 'Tipo de cambio añadido correctamente';
-		map['currencies.form.edit'] = 'Editar tipo de cambio';
-		map['currencies.form.edit_success'] = 'Tipo de cambio editado correctamente';
+		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = 'La divisa seleccionada no puede ser la misma que la divisa predeterminada';
+		map['currencies.exchange_rate_form.override_existing_warn'] = 'Ya existe un tipo de cambio para esta moneda en esta fecha. Si continúas se sobrescribirá el anterior.';
+		map['currencies.exchange_rate_form.specify_a_currency'] = 'Por favor, especifica una divisa';
+		map['currencies.exchange_rate_form.add'] = 'Añadir tipo de cambio';
+		map['currencies.exchange_rate_form.add_success'] = 'Tipo de cambio añadido correctamente';
+		map['currencies.exchange_rate_form.edit'] = 'Editar tipo de cambio';
+		map['currencies.exchange_rate_form.edit_success'] = 'Tipo de cambio editado correctamente';
+		map['currencies.exchange_rate_form.remove_all'] = 'Eliminar todos los tipos de cambio';
+		map['currencies.exchange_rate_form.remove_all_warning'] = 'Esta acción es irreversible y eliminará todos los tipos de cambio de esta moneda.';
+		map['currencies.types.display'] = 'Tipo de moneda';
+		map['currencies.types.fiat'] = 'FÍAT';
+		map['currencies.types.crypto'] = 'Criptomoneda';
+		map['currencies.types.other'] = 'Otro';
+		map['currencies.currency_form.name'] = 'Nombre a mostrar';
+		map['currencies.currency_form.code'] = 'Código de la divisa';
+		map['currencies.currency_form.symbol'] = 'Símbolo';
+		map['currencies.currency_form.decimal_digits'] = 'Dígitos decimales';
+		map['currencies.currency_form.create'] = 'Crear divisa';
+		map['currencies.currency_form.create_success'] = 'Divisa creada exitosamente';
+		map['currencies.currency_form.edit'] = 'Editar divisa';
+		map['currencies.currency_form.edit_success'] = 'Divisa editada correctamente';
+		map['currencies.currency_form.already_exists'] = 'Ya existe una divisa con este código. Quizás quieras editarlo';
 		map['currencies.delete_all_success'] = 'Tipos de cambio borrados con exito';
 		map['currencies.historical'] = 'Histórico de tasas';
+		map['currencies.historical_empty'] = 'No se encontraron tipos de cambio históricos para esta divisa';
 		map['currencies.exchange_rate'] = 'Tipo de cambio';
 		map['currencies.exchange_rates'] = 'Tipos de cambio';
+		map['currencies.min_exchange_rate'] = 'Tipo de cambio mínimo';
+		map['currencies.max_exchange_rate'] = 'Tipo de cambio máximo';
 		map['currencies.empty'] = 'Añade tipos de cambio aqui para que en caso de tener cuentas en otras divisas distintas a tu divisa base nuestros gráficos sean mas exactos';
 		map['currencies.select_a_currency'] = 'Selecciona una divisa';
 		map['currencies.search'] = 'Busca por nombre o por código de la divisa';

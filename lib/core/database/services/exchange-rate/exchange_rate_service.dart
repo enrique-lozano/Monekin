@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -46,6 +47,21 @@ class ExchangeRateService {
     limit ??= -1;
 
     return db.getLastExchangeRates(limit: limit).watch();
+  }
+
+  /// Get all the exchange rates that a currency have in the app
+  Stream<ExchangeRate?> getExchangeRateItem(
+    String currencyCode,
+    DateTime date,
+  ) {
+    return db
+        .getExchangeRates(
+          predicate: (e, currency) =>
+              e.currencyCode.equals(currencyCode) &
+              e.date.date.equals(DateFormat('yyyy-MM-dd').format(date)),
+          limit: 1,
+        )
+        .watchSingleOrNull();
   }
 
   /// Get all the exchange rates that a currency have in the app
