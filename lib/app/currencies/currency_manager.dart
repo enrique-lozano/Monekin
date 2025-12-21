@@ -220,25 +220,33 @@ class CurrencyManagerPage extends StatelessWidget {
             builder: (context, asyncSnapshot) {
               return AnimatedExpanded(
                 expand: asyncSnapshot.hasData && asyncSnapshot.data!.isNotEmpty,
-                child: ListTile(
-                  title: Text(t.currencies.exchange_rate_form.add),
-                  minVerticalPadding: 16,
-                  leading: Container(
-                    width: 42,
-                    height: 42,
-                    decoration: BoxDecoration(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.primary.withOpacity(0.125),
-                      borderRadius: BorderRadius.circular(100),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Divider(indent: 68, height: 10, thickness: 1),
+                    ListTile(
+                      title: Text(t.currencies.exchange_rate_form.add),
+                      minVerticalPadding: 16,
+
+                      leading: Container(
+                        width: 42,
+                        height: 42,
+                        decoration: BoxDecoration(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.primary.withOpacity(0.125),
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        alignment: Alignment.center,
+                        child: Icon(
+                          Icons.add_rounded,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                      onTap: () => addExchangeRate(context),
                     ),
-                    alignment: Alignment.center,
-                    child: Icon(
-                      Icons.add_rounded,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                  onTap: () => addExchangeRate(context),
+                  ],
                 ),
               );
             },
