@@ -76,7 +76,7 @@ class NoResults extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: const TextStyle(fontWeight: FontWeight.w300),
                 ),
-                const SizedBox(height: 42),
+                const SizedBox(height: 16),
                 // Lottie.asset('assets/animations/search-animation.json'),
               ],
             ),

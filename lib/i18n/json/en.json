@@ -34,7 +34,6 @@
     "apply": "Apply",
     "discard": "Discard",
     "refresh": "Refresh",
-    "details": "Details",
     "share": "Share"
   },
   "GENERAL": {
@@ -42,6 +41,7 @@
     "understood": "Understood",
     "unspecified": "Unspecified",
     "quick_actions": "Quick actions",
+    "details": "Details",
     "balance": "Balance",
     "account": "Account",
     "accounts": "Accounts",
@@ -56,6 +56,10 @@
     "show-more-fields": "Show more fields",
     "show-less-fields": "Show less fields",
     "tap-to-search": "Tap to search",
+    "LEAVE-WITHOUT-SAVING": {
+      "title": "Leave without saving?",
+      "message": "You have unsaved changes, are you sure you want to leave without saving them?"
+    },
     "CLIPBOARD": {
       "success": "{{x}} copied to the clipboard",
       "error": "Error copying"
@@ -494,23 +498,50 @@
   "CURRENCIES": {
     "currency-converter": "Currency converter",
     "currency": "Currency",
+    "currency-settings": "Currency settings",
     "currency-manager": "Currency manager",
     "currency-manager.descr": "Configure your currency and its exchange rates with others",
     "preferred-currency": "Preferred/base currency",
+    "tap-to-change-preferred-currency": "Tap to change",
     "change-preferred-currency-title": "Change preferred currency",
     "change-preferred-currency-msg": "All stats and budgets will be displayed in this currency from now on. Accounts and transactions will keep the currency they had. All saved exchange rates will be deleted if you execute this action. Do you wish to continue?",
-    "FORM": {
+    "EXCHANGE-RATE-FORM": {
       "equal-to-preferred-warn": "The currency cannot be equal to the user currency",
+      "override-existing-warn": "An exchange rate for this currency in this date already exists. If you continue, the previous one will be overwritten",
       "specify-a-currency": "Please specify a currency",
       "add": "Add exchange rate",
       "add-success": "Exchange rate added successfully",
       "edit": "Edit exchange rate",
-      "edit-success": "Exchange rate edited successfully"
+      "edit-success": "Exchange rate edited successfully",
+      "remove-all": "Delete all exchange rates",
+      "remove-all-warning": "This action is irreversible and will delete all exchange rates for this currency"
+    },
+    "TYPES": {
+      "display": "Currency type",
+      "fiat": "FIAT",
+      "crypto": "Cryptocurrency",
+      "other": "Other"
+    },
+    "CURRENCY-FORM": {
+      "name": "Display Name",
+      "code": "Currency Code",
+      "symbol": "Symbol",
+      "decimal-digits": "Decimal Digits",
+      "create": "Create currency",
+      "create-success": "Currency created successfully",
+      "edit": "Edit currency",
+      "edit-success": "Currency edited successfully",
+      "delete": "Delete currency",
+      "delete-success": "Currency deleted successfully",
+      "already-exists": "A currency with this code already exists. You may want to edit it"
     },
     "delete-all-success": "Deleted exchange rates successfully",
     "historical": "Historical rates",
+    "historical-empty": "No historical exchange rates found for this currency",
     "exchange-rate": "Exchange rate",
     "exchange-rates": "Exchange rates",
+    "min-exchange-rate": "Minimum exchange rate",
+    "max-exchange-rate": "Maximum exchange rate",
     "empty": "Add exchange rates here so that if you have accounts in currencies other than your base currency our charts are more accurate",
     "select-a-currency": "Select a currency",
     "search": "Search by name or by currency code"

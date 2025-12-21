@@ -34,7 +34,6 @@
     "apply": "Applica",
     "discard": "Ignora",
     "refresh": "Aggiorna",
-    "details": "Dettagli",
     "share": "Condividi"
   },
   "GENERAL": {
@@ -42,6 +41,7 @@
     "understood": "Capito",
     "unspecified": "Non specificato",
     "quick_actions": "Azioni rapide",
+    "details": "Dettagli",
     "balance": "Saldo",
     "account": "Conto",
     "accounts": "Conti",
@@ -56,6 +56,10 @@
     "show-more-fields": "Mostra più campi",
     "show-less-fields": "Mostra meno campi",
     "tap-to-search": "Tocca per cercare",
+    "LEAVE-WITHOUT-SAVING": {
+      "title": "Uscire senza salvare?",
+      "message": "Hai modifiche non salvate, sei sicuro di voler uscire senza salvarle?"
+    },
     "CLIPBOARD": {
       "success": "{{x}} copiato negli appunti",
       "error": "Errore di copia"
@@ -506,23 +510,50 @@
   "CURRENCIES": {
     "currency-converter": "Convertitore di valuta",
     "currency": "Valuta",
+    "currency-settings": "Impostazioni valuta",
     "currency-manager": "Gestore valute",
     "currency-manager.descr": "Configura la tua valuta e i suoi tassi di cambio con altre",
     "preferred-currency": "Valuta preferita/base",
+    "tap-to-change-preferred-currency": "Tocca per modificare",
     "change-preferred-currency-title": "Cambia valuta preferita",
     "change-preferred-currency-msg": "Tutte le statistiche e i budget saranno visualizzati in questa valuta d'ora in poi. Conti e transazioni manterranno la valuta che avevano. Tutti i tassi di cambio salvati verranno eliminati se esegui questa azione. Desideri continuare?",
-    "FORM": {
+    "EXCHANGE-RATE-FORM": {
       "equal-to-preferred-warn": "La valuta non può essere uguale alla valuta dell'utente",
+      "override-existing-warn": "Esiste già un tasso di cambio per questa valuta in questa data. Se continui, quello precedente verrà sovrascritto",
       "specify-a-currency": "Per favore specifica una valuta",
       "add": "Aggiungi tasso di cambio",
       "add-success": "Tasso di cambio aggiunto con successo",
       "edit": "Modifica tasso di cambio",
-      "edit-success": "Tasso di cambio modificato con successo"
+      "edit-success": "Tasso di cambio modificato con successo",
+      "remove-all": "Elimina tutti i tassi di cambio",
+      "remove-all-warning": "Questa azione è irreversibile e cancellerà tutti i tassi di cambio per questa valuta"
+    },
+    "TYPES": {
+      "display": "Tipo di valuta",
+      "fiat": "FIAT",
+      "crypto": "Criptovaluta",
+      "other": "Altro"
+    },
+    "CURRENCY-FORM": {
+      "name": "Nome da visualizzare",
+      "code": "Codice valuta",
+      "symbol": "Simbolo",
+      "decimal-digits": "Cifre decimali",
+      "create": "Crea valuta",
+      "create-success": "Valuta creata con successo",
+      "edit": "Modifica valuta",
+      "edit-success": "Valuta modificata correttamente",
+      "delete": "Elimina valuta",
+      "delete-success": "Valuta eliminata correttamente",
+      "already-exists": "Esiste già una valuta con questo codice. Potresti volerlo modificare"
     },
     "delete-all-success": "Tassi di cambio eliminati con successo",
     "historical": "Tassi storici",
+    "historical-empty": "Nessun tasso di cambio storico trovato per questa valuta",
     "exchange-rate": "Tasso di cambio",
     "exchange-rates": "Tassi di cambio",
+    "min-exchange-rate": "Tasso di cambio minimo",
+    "max-exchange-rate": "Tasso di cambio massimo",
     "empty": "Aggiungi tassi di cambio qui in modo che se hai conti in valute diverse dalla tua valuta base i nostri grafici siano più accurati",
     "select-a-currency": "Seleziona una valuta",
     "search": "Cerca per nome o per codice valuta"

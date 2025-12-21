@@ -1,41 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/app/currencies/edit_currency_page.dart';
 import 'package:monekin/app/currencies/exchange_rate_details.dart';
 import 'package:monekin/app/currencies/exchange_rate_form.dart';
 import 'package:monekin/app/layout/page_framework.dart';
+import 'package:monekin/app/settings/widgets/settings_list_separator.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/models/currency/currency.dart';
+import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:skeletonizer/skeletonizer.dart' hide Skeleton;
 
 import '../../core/presentation/widgets/no_results.dart';
 
-class CurrencyManagerPage extends StatefulWidget {
+class CurrencyManagerPage extends StatelessWidget {
   const CurrencyManagerPage({super.key});
 
-  @override
-  State<CurrencyManagerPage> createState() => _CurrencyManagerPageState();
-}
-
-class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
-  Currency? _userCurrency;
-
-  @override
-  void initState() {
-    super.initState();
-
-    CurrencyService.instance.getUserPreferredCurrency().first.then((value) {
-      setState(() {
-        _userCurrency = value;
-      });
-    });
-  }
-
-  changePreferredCurrency(Currency newCurrency) {
+  void changePreferredCurrency(BuildContext context, Currency newCurrency) {
     final t = Translations.of(context);
 
     confirmDialog(
@@ -48,13 +34,20 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
       UserSettingService.instance
           .setItem(SettingKey.preferredCurrency, newCurrency.code)
           .then((value) {
-            setState(() {
-              _userCurrency = newCurrency;
-            });
-
             ExchangeRateService.instance.deleteExchangeRates();
           });
     });
+  }
+
+  Future<void> addExchangeRate(BuildContext context) async {
+    final newRate = await showExchangeRateFormDialog(
+      context,
+      const ExchangeRateFormDialog(),
+    );
+
+    if (newRate != null) {
+      await ExchangeRateService.instance.insertOrUpdateExchangeRate(newRate);
+    }
   }
 
   @override
@@ -67,54 +60,75 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ListTile(
-            leading: Container(
-              clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-              ),
-              child: _userCurrency != null
-                  ? _userCurrency!.displayFlagIcon(size: 42)
-                  : const Skeleton(height: 42, width: 42),
-            ),
-            title: Text(t.currencies.preferred_currency),
-            subtitle: _userCurrency != null
-                ? Text(_userCurrency!.name)
-                : const Skeleton(height: 12, width: 50),
-            onTap: () {
-              if (_userCurrency == null) return;
+          createListSeparator(context, t.currencies.preferred_currency),
+          StreamBuilder(
+            stream: CurrencyService.instance.ensureAndGetPreferredCurrency(),
+            builder: (context, snapshot) {
+              final userCurrency = snapshot.data;
 
-              showCurrencySelectorModal(
-                context,
-                CurrencySelectorModal(
-                  preselectedCurrency: _userCurrency!,
-                  onCurrencySelected: (newCurrency) async {
-                    await Future.delayed(const Duration(milliseconds: 250));
-                    changePreferredCurrency(newCurrency);
-                  },
-                ),
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Skeletonizer(
+                    enabled: userCurrency == null,
+                    child: ListTile(
+                      leading: ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: userCurrency != null
+                            ? userCurrency.displayFlagIcon(size: 42)
+                            : Container(
+                                height: 42,
+                                width: 42,
+                                color: Colors.red,
+                              ),
+                      ),
+                      title: Text(
+                        userCurrency == null
+                            ? 'PLA - Placeholder'
+                            : ('${userCurrency.name} - ${userCurrency.code}'),
+                      ),
+                      subtitle: Text(
+                        t.currencies.tap_to_change_preferred_currency,
+                      ),
+                      onTap: () {
+                        if (userCurrency == null) return;
+
+                        showCurrencySelectorModal(
+                          context,
+                          CurrencySelectorModal(
+                            preselectedCurrency: userCurrency,
+                            onCurrencySelected: (newCurrency) async {
+                              await Future.delayed(
+                                const Duration(milliseconds: 250),
+                              );
+                              changePreferredCurrency(context, newCurrency);
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  AnimatedExpanded(
+                    expand: userCurrency != null,
+                    child: ListTile(
+                      title: Text(t.currencies.currency_settings),
+                      trailing: const Icon(Icons.chevron_right_rounded),
+                      onTap: () {
+                        if (userCurrency != null) {
+                          RouteUtils.pushRoute(
+                            context,
+                            EditCurrencyPage(currency: userCurrency),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                ],
               );
             },
           ),
-          const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(t.currencies.exchange_rates),
-                TextButton(
-                  onPressed: () async {
-                    await showExchangeRateFormDialog(
-                      context,
-                      const ExchangeRateFormDialog(),
-                    );
-                  },
-                  child: Text(t.ui_actions.add),
-                ),
-              ],
-            ),
-          ),
+          createListSeparator(context, t.currencies.exchange_rates),
+
           StreamBuilder(
             stream: ExchangeRateService.instance.getExchangeRates(),
             builder: (context, snapshot) {
@@ -122,75 +136,117 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
                 return const LinearProgressIndicator();
               }
 
-              if (snapshot.data!.isEmpty) {
+              final exchangeRates = snapshot.data!;
+
+              if (exchangeRates.isEmpty) {
                 // Data has loaded but is empty:
                 return Expanded(
-                  child: NoResults(
-                    title: t.general.empty_warn,
-                    description: t.currencies.empty,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      NoResults(
+                        title: t.general.empty_warn,
+                        description: t.currencies.empty,
+                      ),
+                      FilledButton.tonalIcon(
+                        onPressed: () => addExchangeRate(context),
+                        icon: const Icon(Icons.add_rounded),
+                        label: Text(t.currencies.exchange_rate_form.add),
+                      ),
+                    ],
                   ),
                 );
               }
 
-              final exchangeRates = snapshot.data!;
+              return ListView.separated(
+                itemCount: exchangeRates.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  final item = exchangeRates[index];
 
-              return Expanded(
-                child: ListView.separated(
-                  itemCount: exchangeRates.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    final item = exchangeRates[index];
-
-                    return ListTile(
-                      leading: Container(
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        child: StreamBuilder(
-                          stream: CurrencyService.instance.getCurrencyByCode(
-                            item.currencyCode,
-                          ),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData) {
-                              return const Skeleton(width: 42, height: 42);
-                            }
-
-                            return snapshot.data!.displayFlagIcon(size: 42);
-                          },
-                        ),
-                      ),
-                      title: Text(item.currency.code),
-                      subtitle: StreamBuilder(
+                  return ListTile(
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: StreamBuilder(
                         stream: CurrencyService.instance.getCurrencyByCode(
                           item.currencyCode,
                         ),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
-                            return const Skeleton(width: 40, height: 16);
+                            return const Skeleton(width: 42, height: 42);
                           }
 
-                          return Text(snapshot.data!.name);
+                          return snapshot.data!.displayFlagIcon(size: 42);
                         },
                       ),
-                      trailing: Text(item.exchangeRate.toString()),
-                      onTap: () async {
-                        final currency = await CurrencyService.instance
-                            .getCurrencyByCode(item.currencyCode)
-                            .first;
+                    ),
+                    title: Text(item.currency.code),
+                    subtitle: StreamBuilder(
+                      stream: CurrencyService.instance.getCurrencyByCode(
+                        item.currencyCode,
+                      ),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Skeleton(width: 40, height: 16);
+                        }
 
-                        if (currency == null) return;
-
-                        RouteUtils.pushRoute(
-                          context,
-                          ExchangeRateDetailsPage(currency: currency),
-                        );
+                        return Text(snapshot.data!.name);
                       },
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const Divider(indent: 68);
-                  },
+                    ),
+                    trailing: Text(item.exchangeRate.toString()),
+                    onTap: () async {
+                      final currency = await CurrencyService.instance
+                          .getCurrencyByCode(item.currencyCode)
+                          .first;
+
+                      if (currency == null) return;
+
+                      RouteUtils.pushRoute(
+                        context,
+                        ExchangeRateDetailsPage(currency: currency),
+                      );
+                    },
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return const Divider(indent: 68);
+                },
+              );
+            },
+          ),
+
+          StreamBuilder(
+            stream: ExchangeRateService.instance.getExchangeRates(),
+            builder: (context, asyncSnapshot) {
+              return AnimatedExpanded(
+                expand: asyncSnapshot.hasData && asyncSnapshot.data!.isNotEmpty,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Divider(indent: 68, height: 10, thickness: 1),
+                    ListTile(
+                      title: Text(t.currencies.exchange_rate_form.add),
+                      minVerticalPadding: 16,
+
+                      leading: Container(
+                        width: 42,
+                        height: 42,
+                        decoration: BoxDecoration(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.primary.withOpacity(0.125),
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        alignment: Alignment.center,
+                        child: Icon(
+                          Icons.add_rounded,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                      onTap: () => addExchangeRate(context),
+                    ),
+                  ],
                 ),
               );
             },

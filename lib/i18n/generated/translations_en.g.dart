@@ -169,9 +169,6 @@ class TranslationsUiActionsEn {
 	/// en: 'Refresh'
 	String get refresh => 'Refresh';
 
-	/// en: 'Details'
-	String get details => 'Details';
-
 	/// en: 'Share'
 	String get share => 'Share';
 }
@@ -195,6 +192,9 @@ class TranslationsGeneralEn {
 
 	/// en: 'Quick actions'
 	String get quick_actions => 'Quick actions';
+
+	/// en: 'Details'
+	String get details => 'Details';
 
 	/// en: 'Balance'
 	String get balance => 'Balance';
@@ -238,6 +238,7 @@ class TranslationsGeneralEn {
 	/// en: 'Tap to search'
 	String get tap_to_search => 'Tap to search';
 
+	late final TranslationsGeneralLeaveWithoutSavingEn leave_without_saving = TranslationsGeneralLeaveWithoutSavingEn._(_root);
 	late final TranslationsGeneralClipboardEn clipboard = TranslationsGeneralClipboardEn._(_root);
 	late final TranslationsGeneralTimeEn time = TranslationsGeneralTimeEn._(_root);
 	late final TranslationsGeneralTransactionOrderEn transaction_order = TranslationsGeneralTransactionOrderEn._(_root);
@@ -667,6 +668,9 @@ class TranslationsCurrenciesEn {
 	/// en: 'Currency'
 	String get currency => 'Currency';
 
+	/// en: 'Currency settings'
+	String get currency_settings => 'Currency settings';
+
 	/// en: 'Currency manager'
 	String get currency_manager => 'Currency manager';
 
@@ -676,13 +680,18 @@ class TranslationsCurrenciesEn {
 	/// en: 'Preferred/base currency'
 	String get preferred_currency => 'Preferred/base currency';
 
+	/// en: 'Tap to change'
+	String get tap_to_change_preferred_currency => 'Tap to change';
+
 	/// en: 'Change preferred currency'
 	String get change_preferred_currency_title => 'Change preferred currency';
 
 	/// en: 'All stats and budgets will be displayed in this currency from now on. Accounts and transactions will keep the currency they had. All saved exchange rates will be deleted if you execute this action. Do you wish to continue?'
 	String get change_preferred_currency_msg => 'All stats and budgets will be displayed in this currency from now on. Accounts and transactions will keep the currency they had. All saved exchange rates will be deleted if you execute this action. Do you wish to continue?';
 
-	late final TranslationsCurrenciesFormEn form = TranslationsCurrenciesFormEn._(_root);
+	late final TranslationsCurrenciesExchangeRateFormEn exchange_rate_form = TranslationsCurrenciesExchangeRateFormEn._(_root);
+	late final TranslationsCurrenciesTypesEn types = TranslationsCurrenciesTypesEn._(_root);
+	late final TranslationsCurrenciesCurrencyFormEn currency_form = TranslationsCurrenciesCurrencyFormEn._(_root);
 
 	/// en: 'Deleted exchange rates successfully'
 	String get delete_all_success => 'Deleted exchange rates successfully';
@@ -690,11 +699,20 @@ class TranslationsCurrenciesEn {
 	/// en: 'Historical rates'
 	String get historical => 'Historical rates';
 
+	/// en: 'No historical exchange rates found for this currency'
+	String get historical_empty => 'No historical exchange rates found for this currency';
+
 	/// en: 'Exchange rate'
 	String get exchange_rate => 'Exchange rate';
 
 	/// en: 'Exchange rates'
 	String get exchange_rates => 'Exchange rates';
+
+	/// en: 'Minimum exchange rate'
+	String get min_exchange_rate => 'Minimum exchange rate';
+
+	/// en: 'Maximum exchange rate'
+	String get max_exchange_rate => 'Maximum exchange rate';
 
 	/// en: 'Add exchange rates here so that if you have accounts in currencies other than your base currency our charts are more accurate'
 	String get empty => 'Add exchange rates here so that if you have accounts in currencies other than your base currency our charts are more accurate';
@@ -1026,6 +1044,21 @@ class TranslationsMoreEn {
 	late final TranslationsMoreDataEn data = TranslationsMoreDataEn._(_root);
 	late final TranslationsMoreAboutUsEn about_us = TranslationsMoreAboutUsEn._(_root);
 	late final TranslationsMoreHelpUsEn help_us = TranslationsMoreHelpUsEn._(_root);
+}
+
+// Path: general.leave_without_saving
+class TranslationsGeneralLeaveWithoutSavingEn {
+	TranslationsGeneralLeaveWithoutSavingEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Leave without saving?'
+	String get title => 'Leave without saving?';
+
+	/// en: 'You have unsaved changes, are you sure you want to leave without saving them?'
+	String get message => 'You have unsaved changes, are you sure you want to leave without saving them?';
 }
 
 // Path: general.clipboard
@@ -1735,9 +1768,9 @@ class TranslationsAccountSelectEn {
 	String get multiple => 'Select accounts';
 }
 
-// Path: currencies.form
-class TranslationsCurrenciesFormEn {
-	TranslationsCurrenciesFormEn._(this._root);
+// Path: currencies.exchange_rate_form
+class TranslationsCurrenciesExchangeRateFormEn {
+	TranslationsCurrenciesExchangeRateFormEn._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1745,6 +1778,9 @@ class TranslationsCurrenciesFormEn {
 
 	/// en: 'The currency cannot be equal to the user currency'
 	String get equal_to_preferred_warn => 'The currency cannot be equal to the user currency';
+
+	/// en: 'An exchange rate for this currency in this date already exists. If you continue, the previous one will be overwritten'
+	String get override_existing_warn => 'An exchange rate for this currency in this date already exists. If you continue, the previous one will be overwritten';
 
 	/// en: 'Please specify a currency'
 	String get specify_a_currency => 'Please specify a currency';
@@ -1760,6 +1796,75 @@ class TranslationsCurrenciesFormEn {
 
 	/// en: 'Exchange rate edited successfully'
 	String get edit_success => 'Exchange rate edited successfully';
+
+	/// en: 'Delete all exchange rates'
+	String get remove_all => 'Delete all exchange rates';
+
+	/// en: 'This action is irreversible and will delete all exchange rates for this currency'
+	String get remove_all_warning => 'This action is irreversible and will delete all exchange rates for this currency';
+}
+
+// Path: currencies.types
+class TranslationsCurrenciesTypesEn {
+	TranslationsCurrenciesTypesEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Currency type'
+	String get display => 'Currency type';
+
+	/// en: 'FIAT'
+	String get fiat => 'FIAT';
+
+	/// en: 'Cryptocurrency'
+	String get crypto => 'Cryptocurrency';
+
+	/// en: 'Other'
+	String get other => 'Other';
+}
+
+// Path: currencies.currency_form
+class TranslationsCurrenciesCurrencyFormEn {
+	TranslationsCurrenciesCurrencyFormEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Display Name'
+	String get name => 'Display Name';
+
+	/// en: 'Currency Code'
+	String get code => 'Currency Code';
+
+	/// en: 'Symbol'
+	String get symbol => 'Symbol';
+
+	/// en: 'Decimal Digits'
+	String get decimal_digits => 'Decimal Digits';
+
+	/// en: 'Create currency'
+	String get create => 'Create currency';
+
+	/// en: 'Currency created successfully'
+	String get create_success => 'Currency created successfully';
+
+	/// en: 'Edit currency'
+	String get edit => 'Edit currency';
+
+	/// en: 'Currency edited successfully'
+	String get edit_success => 'Currency edited successfully';
+
+	/// en: 'Delete currency'
+	String get delete => 'Delete currency';
+
+	/// en: 'Currency deleted successfully'
+	String get delete_success => 'Currency deleted successfully';
+
+	/// en: 'A currency with this code already exists. You may want to edit it'
+	String get already_exists => 'A currency with this code already exists. You may want to edit it';
 }
 
 // Path: tags.form
@@ -2596,12 +2701,12 @@ extension on Translations {
 		map['ui_actions.apply'] = 'Apply';
 		map['ui_actions.discard'] = 'Discard';
 		map['ui_actions.refresh'] = 'Refresh';
-		map['ui_actions.details'] = 'Details';
 		map['ui_actions.share'] = 'Share';
 		map['general.or'] = 'or';
 		map['general.understood'] = 'Understood';
 		map['general.unspecified'] = 'Unspecified';
 		map['general.quick_actions'] = 'Quick actions';
+		map['general.details'] = 'Details';
 		map['general.balance'] = 'Balance';
 		map['general.account'] = 'Account';
 		map['general.accounts'] = 'Accounts';
@@ -2616,6 +2721,8 @@ extension on Translations {
 		map['general.show_more_fields'] = 'Show more fields';
 		map['general.show_less_fields'] = 'Show less fields';
 		map['general.tap_to_search'] = 'Tap to search';
+		map['general.leave_without_saving.title'] = 'Leave without saving?';
+		map['general.leave_without_saving.message'] = 'You have unsaved changes, are you sure you want to leave without saving them?';
 		map['general.clipboard.success'] = ({required Object x}) => '${x} copied to the clipboard';
 		map['general.clipboard.error'] = 'Error copying';
 		map['general.time.start_date'] = 'Start date';
@@ -3010,21 +3117,44 @@ extension on Translations {
 		map['account.select.multiple'] = 'Select accounts';
 		map['currencies.currency_converter'] = 'Currency converter';
 		map['currencies.currency'] = 'Currency';
+		map['currencies.currency_settings'] = 'Currency settings';
 		map['currencies.currency_manager'] = 'Currency manager';
 		map['currencies.currency_manager_descr'] = 'Configure your currency and its exchange rates with others';
 		map['currencies.preferred_currency'] = 'Preferred/base currency';
+		map['currencies.tap_to_change_preferred_currency'] = 'Tap to change';
 		map['currencies.change_preferred_currency_title'] = 'Change preferred currency';
 		map['currencies.change_preferred_currency_msg'] = 'All stats and budgets will be displayed in this currency from now on. Accounts and transactions will keep the currency they had. All saved exchange rates will be deleted if you execute this action. Do you wish to continue?';
-		map['currencies.form.equal_to_preferred_warn'] = 'The currency cannot be equal to the user currency';
-		map['currencies.form.specify_a_currency'] = 'Please specify a currency';
-		map['currencies.form.add'] = 'Add exchange rate';
-		map['currencies.form.add_success'] = 'Exchange rate added successfully';
-		map['currencies.form.edit'] = 'Edit exchange rate';
-		map['currencies.form.edit_success'] = 'Exchange rate edited successfully';
+		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = 'The currency cannot be equal to the user currency';
+		map['currencies.exchange_rate_form.override_existing_warn'] = 'An exchange rate for this currency in this date already exists. If you continue, the previous one will be overwritten';
+		map['currencies.exchange_rate_form.specify_a_currency'] = 'Please specify a currency';
+		map['currencies.exchange_rate_form.add'] = 'Add exchange rate';
+		map['currencies.exchange_rate_form.add_success'] = 'Exchange rate added successfully';
+		map['currencies.exchange_rate_form.edit'] = 'Edit exchange rate';
+		map['currencies.exchange_rate_form.edit_success'] = 'Exchange rate edited successfully';
+		map['currencies.exchange_rate_form.remove_all'] = 'Delete all exchange rates';
+		map['currencies.exchange_rate_form.remove_all_warning'] = 'This action is irreversible and will delete all exchange rates for this currency';
+		map['currencies.types.display'] = 'Currency type';
+		map['currencies.types.fiat'] = 'FIAT';
+		map['currencies.types.crypto'] = 'Cryptocurrency';
+		map['currencies.types.other'] = 'Other';
+		map['currencies.currency_form.name'] = 'Display Name';
+		map['currencies.currency_form.code'] = 'Currency Code';
+		map['currencies.currency_form.symbol'] = 'Symbol';
+		map['currencies.currency_form.decimal_digits'] = 'Decimal Digits';
+		map['currencies.currency_form.create'] = 'Create currency';
+		map['currencies.currency_form.create_success'] = 'Currency created successfully';
+		map['currencies.currency_form.edit'] = 'Edit currency';
+		map['currencies.currency_form.edit_success'] = 'Currency edited successfully';
+		map['currencies.currency_form.delete'] = 'Delete currency';
+		map['currencies.currency_form.delete_success'] = 'Currency deleted successfully';
+		map['currencies.currency_form.already_exists'] = 'A currency with this code already exists. You may want to edit it';
 		map['currencies.delete_all_success'] = 'Deleted exchange rates successfully';
 		map['currencies.historical'] = 'Historical rates';
+		map['currencies.historical_empty'] = 'No historical exchange rates found for this currency';
 		map['currencies.exchange_rate'] = 'Exchange rate';
 		map['currencies.exchange_rates'] = 'Exchange rates';
+		map['currencies.min_exchange_rate'] = 'Minimum exchange rate';
+		map['currencies.max_exchange_rate'] = 'Maximum exchange rate';
 		map['currencies.empty'] = 'Add exchange rates here so that if you have accounts in currencies other than your base currency our charts are more accurate';
 		map['currencies.select_a_currency'] = 'Select a currency';
 		map['currencies.search'] = 'Search by name or by currency code';

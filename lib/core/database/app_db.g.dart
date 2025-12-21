@@ -35,8 +35,46 @@ class Currencies extends Table with TableInfo<Currencies, CurrencyInDB> {
     requiredDuringInsert: true,
     $customConstraints: 'NOT NULL',
   );
+  static const VerificationMeta _decimalPlacesMeta = const VerificationMeta(
+    'decimalPlaces',
+  );
+  late final GeneratedColumn<int> decimalPlaces = GeneratedColumn<int>(
+    'decimalPlaces',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _isDefaultMeta = const VerificationMeta(
+    'isDefault',
+  );
+  late final GeneratedColumn<bool> isDefault = GeneratedColumn<bool>(
+    'isDefault',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  late final GeneratedColumn<int> type = GeneratedColumn<int>(
+    'type',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
   @override
-  List<GeneratedColumn> get $columns => [code, symbol, name];
+  List<GeneratedColumn> get $columns => [
+    code,
+    symbol,
+    name,
+    decimalPlaces,
+    isDefault,
+    type,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -73,6 +111,33 @@ class Currencies extends Table with TableInfo<Currencies, CurrencyInDB> {
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
+    if (data.containsKey('decimalPlaces')) {
+      context.handle(
+        _decimalPlacesMeta,
+        decimalPlaces.isAcceptableOrUnknown(
+          data['decimalPlaces']!,
+          _decimalPlacesMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_decimalPlacesMeta);
+    }
+    if (data.containsKey('isDefault')) {
+      context.handle(
+        _isDefaultMeta,
+        isDefault.isAcceptableOrUnknown(data['isDefault']!, _isDefaultMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_isDefaultMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+        _typeMeta,
+        type.isAcceptableOrUnknown(data['type']!, _typeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
     return context;
   }
 
@@ -93,6 +158,18 @@ class Currencies extends Table with TableInfo<Currencies, CurrencyInDB> {
       name: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}name'],
+      )!,
+      decimalPlaces: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}decimalPlaces'],
+      )!,
+      isDefault: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}isDefault'],
+      )!,
+      type: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}type'],
       )!,
     );
   }
@@ -115,10 +192,25 @@ class CurrencyInDB extends DataClass implements Insertable<CurrencyInDB> {
 
   /// Name of the currency (in the user language at database creation)
   final String name;
+
+  /// Number of decimal places used by this currency
+  final int decimalPlaces;
+
+  /// Whether this currency is the default one for the user
+  final bool isDefault;
+
+  /// Type of currency:
+  /// 0 = fiat
+  /// 1 = crypto
+  /// 2 = other
+  final int type;
   const CurrencyInDB({
     required this.code,
     required this.symbol,
     required this.name,
+    required this.decimalPlaces,
+    required this.isDefault,
+    required this.type,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -126,6 +218,9 @@ class CurrencyInDB extends DataClass implements Insertable<CurrencyInDB> {
     map['code'] = Variable<String>(code);
     map['symbol'] = Variable<String>(symbol);
     map['name'] = Variable<String>(name);
+    map['decimalPlaces'] = Variable<int>(decimalPlaces);
+    map['isDefault'] = Variable<bool>(isDefault);
+    map['type'] = Variable<int>(type);
     return map;
   }
 
@@ -134,6 +229,9 @@ class CurrencyInDB extends DataClass implements Insertable<CurrencyInDB> {
       code: Value(code),
       symbol: Value(symbol),
       name: Value(name),
+      decimalPlaces: Value(decimalPlaces),
+      isDefault: Value(isDefault),
+      type: Value(type),
     );
   }
 
@@ -146,6 +244,9 @@ class CurrencyInDB extends DataClass implements Insertable<CurrencyInDB> {
       code: serializer.fromJson<String>(json['code']),
       symbol: serializer.fromJson<String>(json['symbol']),
       name: serializer.fromJson<String>(json['name']),
+      decimalPlaces: serializer.fromJson<int>(json['decimalPlaces']),
+      isDefault: serializer.fromJson<bool>(json['isDefault']),
+      type: serializer.fromJson<int>(json['type']),
     );
   }
   @override
@@ -155,20 +256,37 @@ class CurrencyInDB extends DataClass implements Insertable<CurrencyInDB> {
       'code': serializer.toJson<String>(code),
       'symbol': serializer.toJson<String>(symbol),
       'name': serializer.toJson<String>(name),
+      'decimalPlaces': serializer.toJson<int>(decimalPlaces),
+      'isDefault': serializer.toJson<bool>(isDefault),
+      'type': serializer.toJson<int>(type),
     };
   }
 
-  CurrencyInDB copyWith({String? code, String? symbol, String? name}) =>
-      CurrencyInDB(
-        code: code ?? this.code,
-        symbol: symbol ?? this.symbol,
-        name: name ?? this.name,
-      );
+  CurrencyInDB copyWith({
+    String? code,
+    String? symbol,
+    String? name,
+    int? decimalPlaces,
+    bool? isDefault,
+    int? type,
+  }) => CurrencyInDB(
+    code: code ?? this.code,
+    symbol: symbol ?? this.symbol,
+    name: name ?? this.name,
+    decimalPlaces: decimalPlaces ?? this.decimalPlaces,
+    isDefault: isDefault ?? this.isDefault,
+    type: type ?? this.type,
+  );
   CurrencyInDB copyWithCompanion(CurrenciesCompanion data) {
     return CurrencyInDB(
       code: data.code.present ? data.code.value : this.code,
       symbol: data.symbol.present ? data.symbol.value : this.symbol,
       name: data.name.present ? data.name.value : this.name,
+      decimalPlaces: data.decimalPlaces.present
+          ? data.decimalPlaces.value
+          : this.decimalPlaces,
+      isDefault: data.isDefault.present ? data.isDefault.value : this.isDefault,
+      type: data.type.present ? data.type.value : this.type,
     );
   }
 
@@ -177,51 +295,76 @@ class CurrencyInDB extends DataClass implements Insertable<CurrencyInDB> {
     return (StringBuffer('CurrencyInDB(')
           ..write('code: $code, ')
           ..write('symbol: $symbol, ')
-          ..write('name: $name')
+          ..write('name: $name, ')
+          ..write('decimalPlaces: $decimalPlaces, ')
+          ..write('isDefault: $isDefault, ')
+          ..write('type: $type')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(code, symbol, name);
+  int get hashCode =>
+      Object.hash(code, symbol, name, decimalPlaces, isDefault, type);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is CurrencyInDB &&
           other.code == this.code &&
           other.symbol == this.symbol &&
-          other.name == this.name);
+          other.name == this.name &&
+          other.decimalPlaces == this.decimalPlaces &&
+          other.isDefault == this.isDefault &&
+          other.type == this.type);
 }
 
 class CurrenciesCompanion extends UpdateCompanion<CurrencyInDB> {
   final Value<String> code;
   final Value<String> symbol;
   final Value<String> name;
+  final Value<int> decimalPlaces;
+  final Value<bool> isDefault;
+  final Value<int> type;
   final Value<int> rowid;
   const CurrenciesCompanion({
     this.code = const Value.absent(),
     this.symbol = const Value.absent(),
     this.name = const Value.absent(),
+    this.decimalPlaces = const Value.absent(),
+    this.isDefault = const Value.absent(),
+    this.type = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   CurrenciesCompanion.insert({
     required String code,
     required String symbol,
     required String name,
+    required int decimalPlaces,
+    required bool isDefault,
+    required int type,
     this.rowid = const Value.absent(),
   }) : code = Value(code),
        symbol = Value(symbol),
-       name = Value(name);
+       name = Value(name),
+       decimalPlaces = Value(decimalPlaces),
+       isDefault = Value(isDefault),
+       type = Value(type);
   static Insertable<CurrencyInDB> custom({
     Expression<String>? code,
     Expression<String>? symbol,
     Expression<String>? name,
+    Expression<int>? decimalPlaces,
+    Expression<bool>? isDefault,
+    Expression<int>? type,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (code != null) 'code': code,
       if (symbol != null) 'symbol': symbol,
       if (name != null) 'name': name,
+      if (decimalPlaces != null) 'decimalPlaces': decimalPlaces,
+      if (isDefault != null) 'isDefault': isDefault,
+      if (type != null) 'type': type,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -230,12 +373,18 @@ class CurrenciesCompanion extends UpdateCompanion<CurrencyInDB> {
     Value<String>? code,
     Value<String>? symbol,
     Value<String>? name,
+    Value<int>? decimalPlaces,
+    Value<bool>? isDefault,
+    Value<int>? type,
     Value<int>? rowid,
   }) {
     return CurrenciesCompanion(
       code: code ?? this.code,
       symbol: symbol ?? this.symbol,
       name: name ?? this.name,
+      decimalPlaces: decimalPlaces ?? this.decimalPlaces,
+      isDefault: isDefault ?? this.isDefault,
+      type: type ?? this.type,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -252,6 +401,15 @@ class CurrenciesCompanion extends UpdateCompanion<CurrencyInDB> {
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
+    if (decimalPlaces.present) {
+      map['decimalPlaces'] = Variable<int>(decimalPlaces.value);
+    }
+    if (isDefault.present) {
+      map['isDefault'] = Variable<bool>(isDefault.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<int>(type.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -264,6 +422,9 @@ class CurrenciesCompanion extends UpdateCompanion<CurrencyInDB> {
           ..write('code: $code, ')
           ..write('symbol: $symbol, ')
           ..write('name: $name, ')
+          ..write('decimalPlaces: $decimalPlaces, ')
+          ..write('isDefault: $isDefault, ')
+          ..write('type: $type, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -5034,7 +5195,7 @@ abstract class _$AppDB extends GeneratedDatabase {
     );
     $arrayStartIndex += generatedlimit.amountOfVariables;
     return customSelect(
-      'SELECT a.*,"currency"."code" AS "nested_0.code", "currency"."symbol" AS "nested_0.symbol", "currency"."name" AS "nested_0.name" FROM accounts AS a INNER JOIN currencies AS currency ON a.currencyId = currency.code WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
+      'SELECT a.*,"currency"."code" AS "nested_0.code", "currency"."symbol" AS "nested_0.symbol", "currency"."name" AS "nested_0.name", "currency"."decimalPlaces" AS "nested_0.decimalPlaces", "currency"."isDefault" AS "nested_0.isDefault", "currency"."type" AS "nested_0.type" FROM accounts AS a INNER JOIN currencies AS currency ON a.currencyId = currency.code WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
       variables: [
         ...generatedpredicate.introducedVariables,
         ...generatedorderBy.introducedVariables,
@@ -5117,7 +5278,7 @@ abstract class _$AppDB extends GeneratedDatabase {
     );
     $arrayStartIndex += generatedlimit.amountOfVariables;
     return customSelect(
-      'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."iconId" AS "nested_0.iconId", "a"."displayOrder" AS "nested_0.displayOrder", "a"."color" AS "nested_0.color", "a"."closingDate" AS "nested_0.closingDate", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol", "accountCurrency"."name" AS "nested_1.name","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol", "receivingAccountCurrency"."name" AS "nested_2.name","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."iconId" AS "nested_3.iconId", "ra"."displayOrder" AS "nested_3.displayOrder", "ra"."color" AS "nested_3.color", "ra"."closingDate" AS "nested_3.closingDate", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."displayOrder" AS "nested_4.displayOrder", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."displayOrder" AS "nested_5.displayOrder", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRate.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
+      'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."iconId" AS "nested_0.iconId", "a"."displayOrder" AS "nested_0.displayOrder", "a"."color" AS "nested_0.color", "a"."closingDate" AS "nested_0.closingDate", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol", "accountCurrency"."name" AS "nested_1.name", "accountCurrency"."decimalPlaces" AS "nested_1.decimalPlaces", "accountCurrency"."isDefault" AS "nested_1.isDefault", "accountCurrency"."type" AS "nested_1.type","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol", "receivingAccountCurrency"."name" AS "nested_2.name", "receivingAccountCurrency"."decimalPlaces" AS "nested_2.decimalPlaces", "receivingAccountCurrency"."isDefault" AS "nested_2.isDefault", "receivingAccountCurrency"."type" AS "nested_2.type","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."iconId" AS "nested_3.iconId", "ra"."displayOrder" AS "nested_3.displayOrder", "ra"."color" AS "nested_3.color", "ra"."closingDate" AS "nested_3.closingDate", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."displayOrder" AS "nested_4.displayOrder", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."displayOrder" AS "nested_5.displayOrder", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRate.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
       variables: [
         ...generatedpredicate.introducedVariables,
         ...generatedorderBy.introducedVariables,
@@ -5315,7 +5476,7 @@ abstract class _$AppDB extends GeneratedDatabase {
     );
     $arrayStartIndex += generatedpredicate.amountOfVariables;
     return customSelect(
-      'SELECT e.*,"currency"."code" AS "nested_0.code", "currency"."symbol" AS "nested_0.symbol", "currency"."name" AS "nested_0.name" FROM exchangeRates AS e INNER JOIN currencies AS currency ON e.currencyCode = currency.code WHERE ${generatedpredicate.sql} ORDER BY date DESC LIMIT ?1',
+      'SELECT e.*,"currency"."code" AS "nested_0.code", "currency"."symbol" AS "nested_0.symbol", "currency"."name" AS "nested_0.name", "currency"."decimalPlaces" AS "nested_0.decimalPlaces", "currency"."isDefault" AS "nested_0.isDefault", "currency"."type" AS "nested_0.type" FROM exchangeRates AS e INNER JOIN currencies AS currency ON e.currencyCode = currency.code WHERE ${generatedpredicate.sql} ORDER BY date DESC LIMIT ?1',
       variables: [
         Variable<double>(limit),
         ...generatedpredicate.introducedVariables,
@@ -5337,7 +5498,7 @@ abstract class _$AppDB extends GeneratedDatabase {
 
   Selectable<ExchangeRate> getLastExchangeRates({required double limit}) {
     return customSelect(
-      'SELECT er.*,"currency"."code" AS "nested_0.code", "currency"."symbol" AS "nested_0.symbol", "currency"."name" AS "nested_0.name" FROM exchangeRates AS er INNER JOIN currencies AS currency ON er.currencyCode = currency.code WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode) ORDER BY currency.code LIMIT ?1',
+      'SELECT er.*,"currency"."code" AS "nested_0.code", "currency"."symbol" AS "nested_0.symbol", "currency"."name" AS "nested_0.name", "currency"."decimalPlaces" AS "nested_0.decimalPlaces", "currency"."isDefault" AS "nested_0.isDefault", "currency"."type" AS "nested_0.type" FROM exchangeRates AS er INNER JOIN currencies AS currency ON er.currencyCode = currency.code WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode) ORDER BY currency.code LIMIT ?1',
       variables: [Variable<double>(limit)],
       readsFrom: {exchangeRates, currencies},
     ).asyncMap(
@@ -5596,6 +5757,9 @@ typedef $CurrenciesCreateCompanionBuilder =
       required String code,
       required String symbol,
       required String name,
+      required int decimalPlaces,
+      required bool isDefault,
+      required int type,
       Value<int> rowid,
     });
 typedef $CurrenciesUpdateCompanionBuilder =
@@ -5603,6 +5767,9 @@ typedef $CurrenciesUpdateCompanionBuilder =
       Value<String> code,
       Value<String> symbol,
       Value<String> name,
+      Value<int> decimalPlaces,
+      Value<bool> isDefault,
+      Value<int> type,
       Value<int> rowid,
     });
 
@@ -5670,6 +5837,21 @@ class $CurrenciesFilterComposer extends Composer<_$AppDB, Currencies> {
 
   ColumnFilters<String> get name => $composableBuilder(
     column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get decimalPlaces => $composableBuilder(
+    column: $table.decimalPlaces,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isDefault => $composableBuilder(
+    column: $table.isDefault,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get type => $composableBuilder(
+    column: $table.type,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -5746,6 +5928,21 @@ class $CurrenciesOrderingComposer extends Composer<_$AppDB, Currencies> {
     column: $table.name,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<int> get decimalPlaces => $composableBuilder(
+    column: $table.decimalPlaces,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isDefault => $composableBuilder(
+    column: $table.isDefault,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $CurrenciesAnnotationComposer extends Composer<_$AppDB, Currencies> {
@@ -5764,6 +5961,17 @@ class $CurrenciesAnnotationComposer extends Composer<_$AppDB, Currencies> {
 
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<int> get decimalPlaces => $composableBuilder(
+    column: $table.decimalPlaces,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get isDefault =>
+      $composableBuilder(column: $table.isDefault, builder: (column) => column);
+
+  GeneratedColumn<int> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
 
   Expression<T> accountsRefs<T extends Object>(
     Expression<T> Function($AccountsAnnotationComposer a) f,
@@ -5847,11 +6055,17 @@ class $CurrenciesTableManager
                 Value<String> code = const Value.absent(),
                 Value<String> symbol = const Value.absent(),
                 Value<String> name = const Value.absent(),
+                Value<int> decimalPlaces = const Value.absent(),
+                Value<bool> isDefault = const Value.absent(),
+                Value<int> type = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => CurrenciesCompanion(
                 code: code,
                 symbol: symbol,
                 name: name,
+                decimalPlaces: decimalPlaces,
+                isDefault: isDefault,
+                type: type,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -5859,11 +6073,17 @@ class $CurrenciesTableManager
                 required String code,
                 required String symbol,
                 required String name,
+                required int decimalPlaces,
+                required bool isDefault,
+                required int type,
                 Value<int> rowid = const Value.absent(),
               }) => CurrenciesCompanion.insert(
                 code: code,
                 symbol: symbol,
                 name: name,
+                decimalPlaces: decimalPlaces,
+                isDefault: isDefault,
+                type: type,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

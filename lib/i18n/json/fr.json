@@ -34,7 +34,6 @@
     "apply": "Appliquer",
     "discard": "Abandonner",
     "refresh": "Actualiser",
-    "details": "Détails",
     "share": "Partager"
   },
   "GENERAL": {
@@ -42,6 +41,7 @@
     "understood": "Compris",
     "unspecified": "Non spécifié",
     "quick_actions": "Actions rapides",
+    "details": "Détails",
     "balance": "Solde",
     "account": "Compte",
     "accounts": "Comptes",
@@ -56,6 +56,10 @@
     "show-more-fields": "Afficher plus de champs",
     "show-less-fields": "Afficher moins de champs",
     "tap-to-search": "Touchez pour rechercher",
+    "LEAVE-WITHOUT-SAVING": {
+      "title": "Partir sans économiser ?",
+      "message": "Vous avez des modifications non enregistrées, êtes-vous sûr de vouloir quitter sans les enregistrer ?"
+    },
     "CLIPBOARD": {
       "success": "{{x}} copié dans le presse-papiers",
       "error": "Erreur lors de la copie"
@@ -197,11 +201,21 @@
   "FINANCIAL-HEALTH": {
     "display": "Santé financière",
     "review": {
-      "very_good(context=GenderContext)": { "male,female": "Excellent !" },
-      "good(context=GenderContext)": { "male,female": "Bon" },
-      "normal(context=GenderContext)": { "male,female": "Moyen" },
-      "bad(context=GenderContext)": { "male,female": "Passable" },
-      "very_bad(context=GenderContext)": { "male,female": "Très mauvais" },
+      "very_good(context=GenderContext)": {
+        "male,female": "Excellent !"
+      },
+      "good(context=GenderContext)": {
+        "male,female": "Bon"
+      },
+      "normal(context=GenderContext)": {
+        "male,female": "Moyen"
+      },
+      "bad(context=GenderContext)": {
+        "male,female": "Passable"
+      },
+      "very_bad(context=GenderContext)": {
+        "male,female": "Très mauvais"
+      },
       "insufficient_data(context=GenderContext)": {
         "male,female": "Données insuffisantes"
       },
@@ -320,7 +334,10 @@
       "searcher.placeholder": "Rechercher par catégorie, description...",
       "searcher.no-results": "Aucune transaction ne correspond aux critères de recherche",
       "loading": "Chargement de nouvelles transactions...",
-      "selected.short": { "one": "{{n}} sélectionnée", "other": "{{n}} sélectionnées" },
+      "selected.short": {
+        "one": "{{n}} sélectionnée",
+        "other": "{{n}} sélectionnées"
+      },
       "selected.long": {
         "one": "{{n}} transaction sélectionnée",
         "other": "{{n}} transactions sélectionnées"
@@ -493,23 +510,50 @@
   "CURRENCIES": {
     "currency-converter": "Convertisseur de devises",
     "currency": "Devise",
+    "currency-settings": "Paramètres de devise",
     "currency-manager": "Gestionnaire de devises",
     "currency-manager.descr": "Configurez votre devise et ses taux de change avec les autres",
     "preferred-currency": "Devise de base/préférée",
+    "tap-to-change-preferred-currency": "Appuyez pour modifier",
     "change-preferred-currency-title": "Changer la devise préférée",
     "change-preferred-currency-msg": "Toutes les statistiques et budgets seront affichés dans cette devise à partir de maintenant. Les comptes et transactions conserveront la devise qu'ils avaient. Tous les taux de change enregistrés seront supprimés si vous effectuez cette action. Voulez-vous continuer ?",
-    "FORM": {
+    "EXCHANGE-RATE-FORM": {
       "equal-to-preferred-warn": "La devise ne peut pas être identique à la devise de l'utilisateur",
+      "override-existing-warn": "Un taux de change pour cette devise à cette date existe déjà. Si vous continuez, le précédent sera écrasé",
       "specify-a-currency": "Veuillez spécifier une devise",
       "add": "Ajouter un taux de change",
       "add-success": "Taux de change ajouté avec succès",
       "edit": "Modifier le taux de change",
-      "edit-success": "Taux de change modifié avec succès"
+      "edit-success": "Taux de change modifié avec succès",
+      "remove-all": "Supprimer tous les taux de change",
+      "remove-all-warning": "Cette action est irréversible et supprimera tous les taux de change de cette devise"
+    },
+    "TYPES": {
+      "display": "Type de devise",
+      "fiat": "DÉCRET",
+      "crypto": "Crypto-monnaie",
+      "other": "Autre"
+    },
+    "CURRENCY-FORM": {
+      "name": "Nom d'affichage",
+      "code": "Code de devise",
+      "symbol": "Symbole",
+      "decimal-digits": "Chiffres décimaux",
+      "create": "Créer une devise",
+      "create-success": "Devise créée avec succès",
+      "edit": "Modifier la devise",
+      "edit-success": "Devise modifiée avec succès",
+      "delete": "Supprimer la devise",
+      "delete-success": "Devise supprimée avec succès",
+      "already-exists": "Une devise avec ce code existe déjà. Vous voudrez peut-être le modifier"
     },
     "delete-all-success": "Taux de change supprimés avec succès",
     "historical": "Taux historiques",
+    "historical-empty": "Aucun taux de change historique trouvé pour cette devise",
     "exchange-rate": "Taux de change",
     "exchange-rates": "Taux de change",
+    "min-exchange-rate": "Taux de change minimum",
+    "max-exchange-rate": "Taux de change maximum",
     "empty": "Ajoutez ici des taux de change pour que, si vous avez des comptes dans d'autres devises que votre devise de base, nos graphiques soient plus précis",
     "select-a-currency": "Sélectionnez une devise",
     "search": "Rechercher par nom ou par code de devise"

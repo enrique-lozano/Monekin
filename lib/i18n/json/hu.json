@@ -34,7 +34,6 @@
     "apply": "Alkalmaz",
     "discard": "Elvetés",
     "refresh": "Frissítés",
-    "details": "Részletek",
     "share": "Megosztás"
   },
   "GENERAL": {
@@ -42,6 +41,7 @@
     "understood": "Megértve",
     "unspecified": "Meghatározatlan",
     "quick_actions": "Gyorsműveletek",
+    "details": "Részletek",
     "balance": "Egyenleg",
     "account": "Számla",
     "accounts": "Számlák",
@@ -56,6 +56,10 @@
     "show-more-fields": "Több mező mutatása",
     "show-less-fields": "Kevesebb mező mutatása",
     "tap-to-search": "Koppintson a kereséshez",
+    "LEAVE-WITHOUT-SAVING": {
+      "title": "Mentés nélkül távozik?",
+      "message": "Vannak nem mentett módosításai. Biztos, hogy mentés nélkül kilép?"
+    },
     "CLIPBOARD": {
       "success": "{{x}} a vágólapra másolva",
       "error": "Másolási hiba"
@@ -506,23 +510,50 @@
   "CURRENCIES": {
     "currency-converter": "Valutaváltó",
     "currency": "Pénznem",
+    "currency-settings": "Pénznem beállítások",
     "currency-manager": "Valutakezelő",
     "currency-manager.descr": "Konfigurálja a pénznemet és annak árfolyamait másokkal együtt",
     "preferred-currency": "Kedvelt/alap pénznem",
+    "tap-to-change-preferred-currency": "Érintse meg a módosításhoz",
     "change-preferred-currency-title": "Kedvelt pénznem módosítása",
     "change-preferred-currency-msg": "Mostantól minden statisztika és költségvetés ebben a pénznemben jelenik meg. A számlák és tranzakciók megtartják a korábbi pénznemet. Minden elmentett árfolyam törlődik, ha ezt a műveletet végrehajtja. Szeretné folytatni?",
-    "FORM": {
+    "EXCHANGE-RATE-FORM": {
       "equal-to-preferred-warn": "A pénznem nem lehet azonos a felhasználói pénznemmel",
+      "override-existing-warn": "Ebben a dátumban már létezik árfolyam ehhez a pénznemhez. Ha folytatja, az előző felülírásra kerül",
       "specify-a-currency": "Kérjük, adjon meg egy pénznemet",
       "add": "Árfolyam hozzáadása",
       "add-success": "Az árfolyam sikeresen hozzáadva",
       "edit": "Árfolyam szerkesztése",
-      "edit-success": "Az árfolyam szerkesztése sikerült"
+      "edit-success": "Az árfolyam szerkesztése sikerült",
+      "remove-all": "Törölje az összes árfolyamot",
+      "remove-all-warning": "Ez a művelet visszafordíthatatlan, és törli az összes átváltási árfolyamot ehhez a pénznemhez"
+    },
+    "TYPES": {
+      "display": "Pénznem típusa",
+      "fiat": "FIAT",
+      "crypto": "Kriptovaluta",
+      "other": "Más"
+    },
+    "CURRENCY-FORM": {
+      "name": "Megjelenítési név",
+      "code": "Pénznem kódja",
+      "symbol": "Szimbólum",
+      "decimal-digits": "Tizedesjegyek",
+      "create": "Pénznem létrehozása",
+      "create-success": "A pénznem sikeresen létrehozva",
+      "edit": "Pénznem szerkesztése",
+      "edit-success": "A pénznem sikeresen szerkesztve",
+      "delete": "Pénznem törlése",
+      "delete-success": "A pénznem sikeresen törölve",
+      "already-exists": "Már létezik ilyen kóddal rendelkező pénznem. Érdemes lehet szerkeszteni"
     },
     "delete-all-success": "Az árfolyamok sikeresen törlésre kerültek",
     "historical": "Árfolyamtörténetek",
+    "historical-empty": "Ehhez a pénznemhez nem található történelmi átváltási árfolyam",
     "exchange-rate": "Árfolyam",
     "exchange-rates": "Árfolyamok",
+    "min-exchange-rate": "Minimális árfolyam",
+    "max-exchange-rate": "Maximális árfolyam",
     "empty": "Adja hozzá az árfolyamokat, hogy ha az alapvalutától eltérő valutában vezetett számlái vannak, és így a grafikonok pontosabbak legyenek.",
     "select-a-currency": "Válasszon ki egy pénznemet",
     "search": "Keresés név vagy pénznemkód alapján"

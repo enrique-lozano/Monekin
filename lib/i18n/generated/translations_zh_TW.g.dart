@@ -97,7 +97,6 @@ class _TranslationsUiActionsZhTw implements TranslationsUiActionsEn {
 	@override String get apply => '套用';
 	@override String get discard => '捨棄';
 	@override String get refresh => '重新整理';
-	@override String get details => '詳細資訊';
 	@override String get share => '分享';
 }
 
@@ -112,6 +111,7 @@ class _TranslationsGeneralZhTw implements TranslationsGeneralEn {
 	@override String get understood => '明白了';
 	@override String get unspecified => '未指定';
 	@override String get quick_actions => '快速行動';
+	@override String get details => '細節';
 	@override String get balance => '平衡';
 	@override String get account => '帳戶';
 	@override String get accounts => '帳戶';
@@ -126,6 +126,7 @@ class _TranslationsGeneralZhTw implements TranslationsGeneralEn {
 	@override String get show_more_fields => '顯示更多欄位';
 	@override String get show_less_fields => '顯示較少的欄位';
 	@override String get tap_to_search => '點擊即可搜尋';
+	@override late final _TranslationsGeneralLeaveWithoutSavingZhTw leave_without_saving = _TranslationsGeneralLeaveWithoutSavingZhTw._(_root);
 	@override late final _TranslationsGeneralClipboardZhTw clipboard = _TranslationsGeneralClipboardZhTw._(_root);
 	@override late final _TranslationsGeneralTimeZhTw time = _TranslationsGeneralTimeZhTw._(_root);
 	@override late final _TranslationsGeneralTransactionOrderZhTw transaction_order = _TranslationsGeneralTransactionOrderZhTw._(_root);
@@ -344,16 +345,23 @@ class _TranslationsCurrenciesZhTw implements TranslationsCurrenciesEn {
 	// Translations
 	@override String get currency_converter => '貨幣換算';
 	@override String get currency => '貨幣';
+	@override String get currency_settings => '貨幣設置';
 	@override String get currency_manager => '貨幣管理';
 	@override String get currency_manager_descr => '配置您的貨幣及其與其他貨幣的匯率';
 	@override String get preferred_currency => '首選/基礎貨幣';
+	@override String get tap_to_change_preferred_currency => '點擊即可更改';
 	@override String get change_preferred_currency_title => '更改首選貨幣';
 	@override String get change_preferred_currency_msg => '從現在開始，所有統計數據和預算都將以該貨幣顯示。帳戶和交易將保留其所擁有的貨幣。如果您執行此操作，所有保存的匯率都將被刪除。您想繼續嗎？';
-	@override late final _TranslationsCurrenciesFormZhTw form = _TranslationsCurrenciesFormZhTw._(_root);
+	@override late final _TranslationsCurrenciesExchangeRateFormZhTw exchange_rate_form = _TranslationsCurrenciesExchangeRateFormZhTw._(_root);
+	@override late final _TranslationsCurrenciesTypesZhTw types = _TranslationsCurrenciesTypesZhTw._(_root);
+	@override late final _TranslationsCurrenciesCurrencyFormZhTw currency_form = _TranslationsCurrenciesCurrencyFormZhTw._(_root);
 	@override String get delete_all_success => '刪除匯率成功';
 	@override String get historical => '歷史利率';
+	@override String get historical_empty => '沒有找到該貨幣的歷史匯率';
 	@override String get exchange_rate => '匯率';
 	@override String get exchange_rates => '匯率';
+	@override String get min_exchange_rate => '最低匯率';
+	@override String get max_exchange_rate => '最高匯率';
 	@override String get empty => '在此處添加匯率，以便如果您的帳戶使用基礎貨幣以外的貨幣，我們的圖表會更加準確';
 	@override String get select_a_currency => '選擇貨幣';
 	@override String get search => '按名稱或貨幣代碼搜尋';
@@ -509,6 +517,17 @@ class _TranslationsMoreZhTw implements TranslationsMoreEn {
 	@override late final _TranslationsMoreDataZhTw data = _TranslationsMoreDataZhTw._(_root);
 	@override late final _TranslationsMoreAboutUsZhTw about_us = _TranslationsMoreAboutUsZhTw._(_root);
 	@override late final _TranslationsMoreHelpUsZhTw help_us = _TranslationsMoreHelpUsZhTw._(_root);
+}
+
+// Path: general.leave_without_saving
+class _TranslationsGeneralLeaveWithoutSavingZhTw implements TranslationsGeneralLeaveWithoutSavingEn {
+	_TranslationsGeneralLeaveWithoutSavingZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '不保存就離開？';
+	@override String get message => '您有未保存的更改，確定要離開而不保存它們嗎？';
 }
 
 // Path: general.clipboard
@@ -931,19 +950,55 @@ class _TranslationsAccountSelectZhTw implements TranslationsAccountSelectEn {
 	@override String get multiple => '選擇帳戶';
 }
 
-// Path: currencies.form
-class _TranslationsCurrenciesFormZhTw implements TranslationsCurrenciesFormEn {
-	_TranslationsCurrenciesFormZhTw._(this._root);
+// Path: currencies.exchange_rate_form
+class _TranslationsCurrenciesExchangeRateFormZhTw implements TranslationsCurrenciesExchangeRateFormEn {
+	_TranslationsCurrenciesExchangeRateFormZhTw._(this._root);
 
 	final TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
 	@override String get equal_to_preferred_warn => '幣種不能等於用戶幣種';
+	@override String get override_existing_warn => '該貨幣在該日期的匯率已存在。如果繼續，前一個將會被覆蓋';
 	@override String get specify_a_currency => '請指定貨幣';
 	@override String get add => '添加匯率';
 	@override String get add_success => '匯率新增成功';
 	@override String get edit => '編輯匯率';
 	@override String get edit_success => '匯率編輯成功';
+	@override String get remove_all => '刪除所有匯率';
+	@override String get remove_all_warning => '此操作不可逆轉，並將刪除該貨幣的所有匯率';
+}
+
+// Path: currencies.types
+class _TranslationsCurrenciesTypesZhTw implements TranslationsCurrenciesTypesEn {
+	_TranslationsCurrenciesTypesZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => '貨幣類型';
+	@override String get fiat => '菲亞特';
+	@override String get crypto => '加密貨幣';
+	@override String get other => '其他';
+}
+
+// Path: currencies.currency_form
+class _TranslationsCurrenciesCurrencyFormZhTw implements TranslationsCurrenciesCurrencyFormEn {
+	_TranslationsCurrenciesCurrencyFormZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => '顯示名稱';
+	@override String get code => '貨幣代碼';
+	@override String get symbol => '象徵';
+	@override String get decimal_digits => '小數位';
+	@override String get create => '創建貨幣';
+	@override String get create_success => '貨幣創建成功';
+	@override String get edit => '編輯貨幣';
+	@override String get edit_success => '貨幣編輯成功';
+	@override String get delete => '刪除貨幣';
+	@override String get delete_success => '幣種刪除成功';
+	@override String get already_exists => '具有此代碼的貨幣已存在。您可能想要編輯它';
 }
 
 // Path: tags.form
@@ -1446,12 +1501,12 @@ extension on TranslationsZhTw {
 		map['ui_actions.apply'] = '套用';
 		map['ui_actions.discard'] = '捨棄';
 		map['ui_actions.refresh'] = '重新整理';
-		map['ui_actions.details'] = '詳細資訊';
 		map['ui_actions.share'] = '分享';
 		map['general.or'] = '或';
 		map['general.understood'] = '明白了';
 		map['general.unspecified'] = '未指定';
 		map['general.quick_actions'] = '快速行動';
+		map['general.details'] = '細節';
 		map['general.balance'] = '平衡';
 		map['general.account'] = '帳戶';
 		map['general.accounts'] = '帳戶';
@@ -1466,6 +1521,8 @@ extension on TranslationsZhTw {
 		map['general.show_more_fields'] = '顯示更多欄位';
 		map['general.show_less_fields'] = '顯示較少的欄位';
 		map['general.tap_to_search'] = '點擊即可搜尋';
+		map['general.leave_without_saving.title'] = '不保存就離開？';
+		map['general.leave_without_saving.message'] = '您有未保存的更改，確定要離開而不保存它們嗎？';
 		map['general.clipboard.success'] = ({required Object x}) => '${x}已複製到剪貼簿';
 		map['general.clipboard.error'] = '複製錯誤';
 		map['general.time.start_date'] = '開始日期';
@@ -1860,21 +1917,44 @@ extension on TranslationsZhTw {
 		map['account.select.multiple'] = '選擇帳戶';
 		map['currencies.currency_converter'] = '貨幣換算';
 		map['currencies.currency'] = '貨幣';
+		map['currencies.currency_settings'] = '貨幣設置';
 		map['currencies.currency_manager'] = '貨幣管理';
 		map['currencies.currency_manager_descr'] = '配置您的貨幣及其與其他貨幣的匯率';
 		map['currencies.preferred_currency'] = '首選/基礎貨幣';
+		map['currencies.tap_to_change_preferred_currency'] = '點擊即可更改';
 		map['currencies.change_preferred_currency_title'] = '更改首選貨幣';
 		map['currencies.change_preferred_currency_msg'] = '從現在開始，所有統計數據和預算都將以該貨幣顯示。帳戶和交易將保留其所擁有的貨幣。如果您執行此操作，所有保存的匯率都將被刪除。您想繼續嗎？';
-		map['currencies.form.equal_to_preferred_warn'] = '幣種不能等於用戶幣種';
-		map['currencies.form.specify_a_currency'] = '請指定貨幣';
-		map['currencies.form.add'] = '添加匯率';
-		map['currencies.form.add_success'] = '匯率新增成功';
-		map['currencies.form.edit'] = '編輯匯率';
-		map['currencies.form.edit_success'] = '匯率編輯成功';
+		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = '幣種不能等於用戶幣種';
+		map['currencies.exchange_rate_form.override_existing_warn'] = '該貨幣在該日期的匯率已存在。如果繼續，前一個將會被覆蓋';
+		map['currencies.exchange_rate_form.specify_a_currency'] = '請指定貨幣';
+		map['currencies.exchange_rate_form.add'] = '添加匯率';
+		map['currencies.exchange_rate_form.add_success'] = '匯率新增成功';
+		map['currencies.exchange_rate_form.edit'] = '編輯匯率';
+		map['currencies.exchange_rate_form.edit_success'] = '匯率編輯成功';
+		map['currencies.exchange_rate_form.remove_all'] = '刪除所有匯率';
+		map['currencies.exchange_rate_form.remove_all_warning'] = '此操作不可逆轉，並將刪除該貨幣的所有匯率';
+		map['currencies.types.display'] = '貨幣類型';
+		map['currencies.types.fiat'] = '菲亞特';
+		map['currencies.types.crypto'] = '加密貨幣';
+		map['currencies.types.other'] = '其他';
+		map['currencies.currency_form.name'] = '顯示名稱';
+		map['currencies.currency_form.code'] = '貨幣代碼';
+		map['currencies.currency_form.symbol'] = '象徵';
+		map['currencies.currency_form.decimal_digits'] = '小數位';
+		map['currencies.currency_form.create'] = '創建貨幣';
+		map['currencies.currency_form.create_success'] = '貨幣創建成功';
+		map['currencies.currency_form.edit'] = '編輯貨幣';
+		map['currencies.currency_form.edit_success'] = '貨幣編輯成功';
+		map['currencies.currency_form.delete'] = '刪除貨幣';
+		map['currencies.currency_form.delete_success'] = '幣種刪除成功';
+		map['currencies.currency_form.already_exists'] = '具有此代碼的貨幣已存在。您可能想要編輯它';
 		map['currencies.delete_all_success'] = '刪除匯率成功';
 		map['currencies.historical'] = '歷史利率';
+		map['currencies.historical_empty'] = '沒有找到該貨幣的歷史匯率';
 		map['currencies.exchange_rate'] = '匯率';
 		map['currencies.exchange_rates'] = '匯率';
+		map['currencies.min_exchange_rate'] = '最低匯率';
+		map['currencies.max_exchange_rate'] = '最高匯率';
 		map['currencies.empty'] = '在此處添加匯率，以便如果您的帳戶使用基礎貨幣以外的貨幣，我們的圖表會更加準確';
 		map['currencies.select_a_currency'] = '選擇貨幣';
 		map['currencies.search'] = '按名稱或貨幣代碼搜尋';

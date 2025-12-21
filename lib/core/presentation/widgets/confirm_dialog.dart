@@ -19,6 +19,7 @@ Future<bool?> confirmDialog(
   return showDialog<bool>(
     context: context,
     barrierDismissible: canPop,
+    useRootNavigator: true,
     builder: (context) => PopScope(
       canPop: canPop,
       child: AlertDialog.adaptive(

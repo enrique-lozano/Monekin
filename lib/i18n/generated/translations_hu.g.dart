@@ -97,7 +97,6 @@ class _TranslationsUiActionsHu implements TranslationsUiActionsEn {
 	@override String get apply => 'Alkalmaz';
 	@override String get discard => 'Elvetés';
 	@override String get refresh => 'Frissítés';
-	@override String get details => 'Részletek';
 	@override String get share => 'Megosztás';
 }
 
@@ -112,6 +111,7 @@ class _TranslationsGeneralHu implements TranslationsGeneralEn {
 	@override String get understood => 'Megértve';
 	@override String get unspecified => 'Meghatározatlan';
 	@override String get quick_actions => 'Gyorsműveletek';
+	@override String get details => 'Részletek';
 	@override String get balance => 'Egyenleg';
 	@override String get account => 'Számla';
 	@override String get accounts => 'Számlák';
@@ -126,6 +126,7 @@ class _TranslationsGeneralHu implements TranslationsGeneralEn {
 	@override String get show_more_fields => 'Több mező mutatása';
 	@override String get show_less_fields => 'Kevesebb mező mutatása';
 	@override String get tap_to_search => 'Koppintson a kereséshez';
+	@override late final _TranslationsGeneralLeaveWithoutSavingHu leave_without_saving = _TranslationsGeneralLeaveWithoutSavingHu._(_root);
 	@override late final _TranslationsGeneralClipboardHu clipboard = _TranslationsGeneralClipboardHu._(_root);
 	@override late final _TranslationsGeneralTimeHu time = _TranslationsGeneralTimeHu._(_root);
 	@override late final _TranslationsGeneralTransactionOrderHu transaction_order = _TranslationsGeneralTransactionOrderHu._(_root);
@@ -344,16 +345,23 @@ class _TranslationsCurrenciesHu implements TranslationsCurrenciesEn {
 	// Translations
 	@override String get currency_converter => 'Valutaváltó';
 	@override String get currency => 'Pénznem';
+	@override String get currency_settings => 'Pénznem beállítások';
 	@override String get currency_manager => 'Valutakezelő';
 	@override String get currency_manager_descr => 'Konfigurálja a pénznemet és annak árfolyamait másokkal együtt';
 	@override String get preferred_currency => 'Kedvelt/alap pénznem';
+	@override String get tap_to_change_preferred_currency => 'Érintse meg a módosításhoz';
 	@override String get change_preferred_currency_title => 'Kedvelt pénznem módosítása';
 	@override String get change_preferred_currency_msg => 'Mostantól minden statisztika és költségvetés ebben a pénznemben jelenik meg. A számlák és tranzakciók megtartják a korábbi pénznemet. Minden elmentett árfolyam törlődik, ha ezt a műveletet végrehajtja. Szeretné folytatni?';
-	@override late final _TranslationsCurrenciesFormHu form = _TranslationsCurrenciesFormHu._(_root);
+	@override late final _TranslationsCurrenciesExchangeRateFormHu exchange_rate_form = _TranslationsCurrenciesExchangeRateFormHu._(_root);
+	@override late final _TranslationsCurrenciesTypesHu types = _TranslationsCurrenciesTypesHu._(_root);
+	@override late final _TranslationsCurrenciesCurrencyFormHu currency_form = _TranslationsCurrenciesCurrencyFormHu._(_root);
 	@override String get delete_all_success => 'Az árfolyamok sikeresen törlésre kerültek';
 	@override String get historical => 'Árfolyamtörténetek';
+	@override String get historical_empty => 'Ehhez a pénznemhez nem található történelmi átváltási árfolyam';
 	@override String get exchange_rate => 'Árfolyam';
 	@override String get exchange_rates => 'Árfolyamok';
+	@override String get min_exchange_rate => 'Minimális árfolyam';
+	@override String get max_exchange_rate => 'Maximális árfolyam';
 	@override String get empty => 'Adja hozzá az árfolyamokat, hogy ha az alapvalutától eltérő valutában vezetett számlái vannak, és így a grafikonok pontosabbak legyenek.';
 	@override String get select_a_currency => 'Válasszon ki egy pénznemet';
 	@override String get search => 'Keresés név vagy pénznemkód alapján';
@@ -509,6 +517,17 @@ class _TranslationsMoreHu implements TranslationsMoreEn {
 	@override late final _TranslationsMoreDataHu data = _TranslationsMoreDataHu._(_root);
 	@override late final _TranslationsMoreAboutUsHu about_us = _TranslationsMoreAboutUsHu._(_root);
 	@override late final _TranslationsMoreHelpUsHu help_us = _TranslationsMoreHelpUsHu._(_root);
+}
+
+// Path: general.leave_without_saving
+class _TranslationsGeneralLeaveWithoutSavingHu implements TranslationsGeneralLeaveWithoutSavingEn {
+	_TranslationsGeneralLeaveWithoutSavingHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Mentés nélkül távozik?';
+	@override String get message => 'Vannak nem mentett módosításai. Biztos, hogy mentés nélkül kilép?';
 }
 
 // Path: general.clipboard
@@ -931,19 +950,55 @@ class _TranslationsAccountSelectHu implements TranslationsAccountSelectEn {
 	@override String get multiple => 'Számlák kiválasztása';
 }
 
-// Path: currencies.form
-class _TranslationsCurrenciesFormHu implements TranslationsCurrenciesFormEn {
-	_TranslationsCurrenciesFormHu._(this._root);
+// Path: currencies.exchange_rate_form
+class _TranslationsCurrenciesExchangeRateFormHu implements TranslationsCurrenciesExchangeRateFormEn {
+	_TranslationsCurrenciesExchangeRateFormHu._(this._root);
 
 	final TranslationsHu _root; // ignore: unused_field
 
 	// Translations
 	@override String get equal_to_preferred_warn => 'A pénznem nem lehet azonos a felhasználói pénznemmel';
+	@override String get override_existing_warn => 'Ebben a dátumban már létezik árfolyam ehhez a pénznemhez. Ha folytatja, az előző felülírásra kerül';
 	@override String get specify_a_currency => 'Kérjük, adjon meg egy pénznemet';
 	@override String get add => 'Árfolyam hozzáadása';
 	@override String get add_success => 'Az árfolyam sikeresen hozzáadva';
 	@override String get edit => 'Árfolyam szerkesztése';
 	@override String get edit_success => 'Az árfolyam szerkesztése sikerült';
+	@override String get remove_all => 'Törölje az összes árfolyamot';
+	@override String get remove_all_warning => 'Ez a művelet visszafordíthatatlan, és törli az összes átváltási árfolyamot ehhez a pénznemhez';
+}
+
+// Path: currencies.types
+class _TranslationsCurrenciesTypesHu implements TranslationsCurrenciesTypesEn {
+	_TranslationsCurrenciesTypesHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Pénznem típusa';
+	@override String get fiat => 'FIAT';
+	@override String get crypto => 'Kriptovaluta';
+	@override String get other => 'Más';
+}
+
+// Path: currencies.currency_form
+class _TranslationsCurrenciesCurrencyFormHu implements TranslationsCurrenciesCurrencyFormEn {
+	_TranslationsCurrenciesCurrencyFormHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Megjelenítési név';
+	@override String get code => 'Pénznem kódja';
+	@override String get symbol => 'Szimbólum';
+	@override String get decimal_digits => 'Tizedesjegyek';
+	@override String get create => 'Pénznem létrehozása';
+	@override String get create_success => 'A pénznem sikeresen létrehozva';
+	@override String get edit => 'Pénznem szerkesztése';
+	@override String get edit_success => 'A pénznem sikeresen szerkesztve';
+	@override String get delete => 'Pénznem törlése';
+	@override String get delete_success => 'A pénznem sikeresen törölve';
+	@override String get already_exists => 'Már létezik ilyen kóddal rendelkező pénznem. Érdemes lehet szerkeszteni';
 }
 
 // Path: tags.form
@@ -1446,12 +1501,12 @@ extension on TranslationsHu {
 		map['ui_actions.apply'] = 'Alkalmaz';
 		map['ui_actions.discard'] = 'Elvetés';
 		map['ui_actions.refresh'] = 'Frissítés';
-		map['ui_actions.details'] = 'Részletek';
 		map['ui_actions.share'] = 'Megosztás';
 		map['general.or'] = 'vagy';
 		map['general.understood'] = 'Megértve';
 		map['general.unspecified'] = 'Meghatározatlan';
 		map['general.quick_actions'] = 'Gyorsműveletek';
+		map['general.details'] = 'Részletek';
 		map['general.balance'] = 'Egyenleg';
 		map['general.account'] = 'Számla';
 		map['general.accounts'] = 'Számlák';
@@ -1466,6 +1521,8 @@ extension on TranslationsHu {
 		map['general.show_more_fields'] = 'Több mező mutatása';
 		map['general.show_less_fields'] = 'Kevesebb mező mutatása';
 		map['general.tap_to_search'] = 'Koppintson a kereséshez';
+		map['general.leave_without_saving.title'] = 'Mentés nélkül távozik?';
+		map['general.leave_without_saving.message'] = 'Vannak nem mentett módosításai. Biztos, hogy mentés nélkül kilép?';
 		map['general.clipboard.success'] = ({required Object x}) => '${x} a vágólapra másolva';
 		map['general.clipboard.error'] = 'Másolási hiba';
 		map['general.time.start_date'] = 'Kezdő dátum';
@@ -1860,21 +1917,44 @@ extension on TranslationsHu {
 		map['account.select.multiple'] = 'Számlák kiválasztása';
 		map['currencies.currency_converter'] = 'Valutaváltó';
 		map['currencies.currency'] = 'Pénznem';
+		map['currencies.currency_settings'] = 'Pénznem beállítások';
 		map['currencies.currency_manager'] = 'Valutakezelő';
 		map['currencies.currency_manager_descr'] = 'Konfigurálja a pénznemet és annak árfolyamait másokkal együtt';
 		map['currencies.preferred_currency'] = 'Kedvelt/alap pénznem';
+		map['currencies.tap_to_change_preferred_currency'] = 'Érintse meg a módosításhoz';
 		map['currencies.change_preferred_currency_title'] = 'Kedvelt pénznem módosítása';
 		map['currencies.change_preferred_currency_msg'] = 'Mostantól minden statisztika és költségvetés ebben a pénznemben jelenik meg. A számlák és tranzakciók megtartják a korábbi pénznemet. Minden elmentett árfolyam törlődik, ha ezt a műveletet végrehajtja. Szeretné folytatni?';
-		map['currencies.form.equal_to_preferred_warn'] = 'A pénznem nem lehet azonos a felhasználói pénznemmel';
-		map['currencies.form.specify_a_currency'] = 'Kérjük, adjon meg egy pénznemet';
-		map['currencies.form.add'] = 'Árfolyam hozzáadása';
-		map['currencies.form.add_success'] = 'Az árfolyam sikeresen hozzáadva';
-		map['currencies.form.edit'] = 'Árfolyam szerkesztése';
-		map['currencies.form.edit_success'] = 'Az árfolyam szerkesztése sikerült';
+		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = 'A pénznem nem lehet azonos a felhasználói pénznemmel';
+		map['currencies.exchange_rate_form.override_existing_warn'] = 'Ebben a dátumban már létezik árfolyam ehhez a pénznemhez. Ha folytatja, az előző felülírásra kerül';
+		map['currencies.exchange_rate_form.specify_a_currency'] = 'Kérjük, adjon meg egy pénznemet';
+		map['currencies.exchange_rate_form.add'] = 'Árfolyam hozzáadása';
+		map['currencies.exchange_rate_form.add_success'] = 'Az árfolyam sikeresen hozzáadva';
+		map['currencies.exchange_rate_form.edit'] = 'Árfolyam szerkesztése';
+		map['currencies.exchange_rate_form.edit_success'] = 'Az árfolyam szerkesztése sikerült';
+		map['currencies.exchange_rate_form.remove_all'] = 'Törölje az összes árfolyamot';
+		map['currencies.exchange_rate_form.remove_all_warning'] = 'Ez a művelet visszafordíthatatlan, és törli az összes átváltási árfolyamot ehhez a pénznemhez';
+		map['currencies.types.display'] = 'Pénznem típusa';
+		map['currencies.types.fiat'] = 'FIAT';
+		map['currencies.types.crypto'] = 'Kriptovaluta';
+		map['currencies.types.other'] = 'Más';
+		map['currencies.currency_form.name'] = 'Megjelenítési név';
+		map['currencies.currency_form.code'] = 'Pénznem kódja';
+		map['currencies.currency_form.symbol'] = 'Szimbólum';
+		map['currencies.currency_form.decimal_digits'] = 'Tizedesjegyek';
+		map['currencies.currency_form.create'] = 'Pénznem létrehozása';
+		map['currencies.currency_form.create_success'] = 'A pénznem sikeresen létrehozva';
+		map['currencies.currency_form.edit'] = 'Pénznem szerkesztése';
+		map['currencies.currency_form.edit_success'] = 'A pénznem sikeresen szerkesztve';
+		map['currencies.currency_form.delete'] = 'Pénznem törlése';
+		map['currencies.currency_form.delete_success'] = 'A pénznem sikeresen törölve';
+		map['currencies.currency_form.already_exists'] = 'Már létezik ilyen kóddal rendelkező pénznem. Érdemes lehet szerkeszteni';
 		map['currencies.delete_all_success'] = 'Az árfolyamok sikeresen törlésre kerültek';
 		map['currencies.historical'] = 'Árfolyamtörténetek';
+		map['currencies.historical_empty'] = 'Ehhez a pénznemhez nem található történelmi átváltási árfolyam';
 		map['currencies.exchange_rate'] = 'Árfolyam';
 		map['currencies.exchange_rates'] = 'Árfolyamok';
+		map['currencies.min_exchange_rate'] = 'Minimális árfolyam';
+		map['currencies.max_exchange_rate'] = 'Maximális árfolyam';
 		map['currencies.empty'] = 'Adja hozzá az árfolyamokat, hogy ha az alapvalutától eltérő valutában vezetett számlái vannak, és így a grafikonok pontosabbak legyenek.';
 		map['currencies.select_a_currency'] = 'Válasszon ki egy pénznemet';
 		map['currencies.search'] = 'Keresés név vagy pénznemkód alapján';

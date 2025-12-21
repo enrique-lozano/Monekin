@@ -287,7 +287,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     final t = Translations.of(context);
 
     return StreamBuilder(
-      stream: CurrencyService.instance.getUserPreferredCurrency(),
+      stream: CurrencyService.instance.ensureAndGetPreferredCurrency(),
       builder: (context, snapshot) {
         final userCurrency = snapshot.data;
 

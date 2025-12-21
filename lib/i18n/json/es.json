@@ -34,7 +34,6 @@
     "apply": "Aplicar",
     "discard": "Descartar",
     "refresh": "Actualizar",
-    "details": "Detalles",
     "share": "Compartir"
   },
   "GENERAL": {
@@ -42,6 +41,7 @@
     "understood": "Entendido",
     "unspecified": "Sin especificar",
     "quick_actions": "Acciones rápidas",
+    "details": "Detalles",
     "balance": "Balance",
     "account": "Cuenta",
     "accounts": "Cuentas",
@@ -56,6 +56,10 @@
     "show-more-fields": "Show more fields",
     "show-less-fields": "Show less fields",
     "tap-to-search": "Toca para buscar",
+    "LEAVE-WITHOUT-SAVING": {
+      "title": "¿Salir sin guardar?",
+      "message": "Tienes cambios sin guardar, ¿estás seguro de que quieres continuar y salir sin guardarlos?"
+    },
     "CLIPBOARD": {
       "success": "{{x}} copiado al portapapeles",
       "error": "Error al copiar"
@@ -509,23 +513,50 @@
   "CURRENCIES": {
     "currency-converter": "Conversor de divisas",
     "currency": "Divisa",
+    "currency-settings": "Configuración de la divisa",
     "currency-manager": "Administrador de divisas",
     "currency-manager.descr": "Configura tu divisa y sus tipos de cambio con otras",
     "preferred-currency": "Divisa predeterminada/base",
+    "tap-to-change-preferred-currency": "Toca para cambiar",
     "change-preferred-currency-title": "Cambiar divisa predeterminada",
     "change-preferred-currency-msg": "Todas las estadisticas y presupuestos serán mostradas en esta divisa a partir de ahora. Las cuentas y transacciones mantendrán la divisa que tenían. Todos los tipos de cambios guardados serán eliminados si ejecutas esta acción, ¿Desea continuar?",
-    "FORM": {
-      "equal-to-preferred-warn": "The currency can not be equal to the user currency",
+    "EXCHANGE-RATE-FORM": {
+      "equal-to-preferred-warn": "La divisa seleccionada no puede ser la misma que la divisa predeterminada",
+      "override-existing-warn": "Ya existe un tipo de cambio para esta moneda en esta fecha. Si continúas se sobrescribirá el anterior.",
       "specify-a-currency": "Por favor, especifica una divisa",
       "add": "Añadir tipo de cambio",
       "add-success": "Tipo de cambio añadido correctamente",
       "edit": "Editar tipo de cambio",
-      "edit-success": "Tipo de cambio editado correctamente"
+      "edit-success": "Tipo de cambio editado correctamente",
+      "remove-all": "Eliminar todos los tipos de cambio",
+      "remove-all-warning": "Esta acción es irreversible y eliminará todos los tipos de cambio de esta moneda."
+    },
+    "TYPES": {
+      "display": "Tipo de moneda",
+      "fiat": "FÍAT",
+      "crypto": "Criptomoneda",
+      "other": "Otro"
+    },
+    "CURRENCY-FORM": {
+      "name": "Nombre a mostrar",
+      "code": "Código de la divisa",
+      "symbol": "Símbolo",
+      "decimal-digits": "Dígitos decimales",
+      "create": "Crear divisa",
+      "create-success": "Divisa creada exitosamente",
+      "edit": "Editar divisa",
+      "edit-success": "Divisa editada correctamente",
+      "delete": "Eliminar moneda",
+      "delete-success": "Moneda eliminada exitosamente",
+      "already-exists": "Ya existe una divisa con este código. Quizás quieras editarlo"
     },
     "delete-all-success": "Tipos de cambio borrados con exito",
     "historical": "Histórico de tasas",
+    "historical-empty": "No se encontraron tipos de cambio históricos para esta divisa",
     "exchange-rate": "Tipo de cambio",
     "exchange-rates": "Tipos de cambio",
+    "min-exchange-rate": "Tipo de cambio mínimo",
+    "max-exchange-rate": "Tipo de cambio máximo",
     "empty": "Añade tipos de cambio aqui para que en caso de tener cuentas en otras divisas distintas a tu divisa base nuestros gráficos sean mas exactos",
     "select-a-currency": "Selecciona una divisa",
     "search": "Busca por nombre o por código de la divisa"

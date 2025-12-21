@@ -147,7 +147,8 @@
       "it": "Dinar"
     },
     "symbol": "din",
-    "countryCodes": ["BH"]
+    "countryCodes": ["BH"],
+    "decimalPlaces": 3
   },
   {
     "code": "BIF",
@@ -157,7 +158,8 @@
       "it": "Franco"
     },
     "symbol": "FBu",
-    "countryCodes": ["BI"]
+    "countryCodes": ["BI"],
+    "decimalPlaces": 0
   },
   {
     "code": "BND",
@@ -198,6 +200,14 @@
     },
     "symbol": "$",
     "countryCodes": ["BS"]
+  },
+  {
+    "code": "BTC",
+    "names": { "en": "Bitcoin" },
+    "symbol": "₿",
+    "countryCodes": [],
+    "decimalPlaces": 6,
+    "type": 1
   },
   {
     "code": "BTN",
@@ -276,7 +286,8 @@
       "it": "Peso"
     },
     "symbol": "$",
-    "countryCodes": ["CL"]
+    "countryCodes": ["CL"],
+    "decimalPlaces": 0
   },
   {
     "code": "CNY",
@@ -346,7 +357,8 @@
       "it": "Franco"
     },
     "symbol": "Fdj",
-    "countryCodes": ["DJ"]
+    "countryCodes": ["DJ"],
+    "decimalPlaces": 0
   },
   {
     "code": "DKK",
@@ -409,12 +421,17 @@
     "countryCodes": ["ET"]
   },
   {
+    "code": "ETH",
+    "names": { "en": "Ethereum" },
+    "symbol": "Ξ",
+    "countryCodes": [],
+    "decimalPlaces": 6,
+    "type": 1,
+    "isDefault": false
+  },
+  {
     "code": "EUR",
-    "names": {
-      "en": "Euro",
-      "es": "Euro",
-      "it": "Euro"
-    },
+    "names": { "en": "Euro" },
     "symbol": "€",
     "countryCodes": [
       "AD",
@@ -521,7 +538,8 @@
       "it": "Franco"
     },
     "symbol": "FG",
-    "countryCodes": ["GN"]
+    "countryCodes": ["GN"],
+    "decimalPlaces": 0
   },
   {
     "code": "GTQ",
@@ -621,7 +639,8 @@
       "it": "Dinar"
     },
     "symbol": "din",
-    "countryCodes": ["IQ"]
+    "countryCodes": ["IQ"],
+    "decimalPlaces": 3
   },
   {
     "code": "IRR",
@@ -661,7 +680,8 @@
       "it": "Dinar"
     },
     "symbol": "din",
-    "countryCodes": ["JO"]
+    "countryCodes": ["JO"],
+    "decimalPlaces": 3
   },
   {
     "code": "JPY",
@@ -671,7 +691,8 @@
       "it": "Japan Yen"
     },
     "symbol": "¥",
-    "countryCodes": ["JP"]
+    "countryCodes": ["JP"],
+    "decimalPlaces": 0
   },
   {
     "code": "KES",
@@ -711,7 +732,8 @@
       "it": "Franco"
     },
     "symbol": "CF",
-    "countryCodes": ["KM"]
+    "countryCodes": ["KM"],
+    "decimalPlaces": 0
   },
   {
     "code": "KPW",
@@ -731,7 +753,8 @@
       "it": "Won"
     },
     "symbol": "₩",
-    "countryCodes": ["KR"]
+    "countryCodes": ["KR"],
+    "decimalPlaces": 0
   },
   {
     "code": "KWD",
@@ -741,7 +764,8 @@
       "it": "Dinar"
     },
     "symbol": "din",
-    "countryCodes": ["KW"]
+    "countryCodes": ["KW"],
+    "decimalPlaces": 3
   },
   {
     "code": "KYD",
@@ -771,7 +795,8 @@
       "it": "Kip"
     },
     "symbol": "₭",
-    "countryCodes": ["LA"]
+    "countryCodes": ["LA"],
+    "decimalPlaces": 0
   },
   {
     "code": "LBP",
@@ -821,7 +846,8 @@
       "it": "Dinar"
     },
     "symbol": "din",
-    "countryCodes": ["LY"]
+    "countryCodes": ["LY"],
+    "decimalPlaces": 3
   },
   {
     "code": "MAD",
@@ -1021,7 +1047,8 @@
       "it": "Rial"
     },
     "symbol": "Rial",
-    "countryCodes": ["OM"]
+    "countryCodes": ["OM"],
+    "decimalPlaces": 3
   },
   {
     "code": "PAB",
@@ -1091,7 +1118,8 @@
       "it": "Guarani"
     },
     "symbol": "Gs",
-    "countryCodes": ["PY"]
+    "countryCodes": ["PY"],
+    "decimalPlaces": 0
   },
   {
     "code": "QAR",
@@ -1141,7 +1169,8 @@
       "it": "Franco"
     },
     "symbol": "RF",
-    "countryCodes": ["RW"]
+    "countryCodes": ["RW"],
+    "decimalPlaces": 0
   },
   {
     "code": "SAR",
@@ -1328,7 +1357,8 @@
       "it": "Dinar"
     },
     "symbol": "din",
-    "countryCodes": ["TN"]
+    "countryCodes": ["TN"],
+    "decimalPlaces": 3
   },
   {
     "code": "TOP",
@@ -1368,7 +1398,8 @@
       "it": "Dollaro"
     },
     "symbol": "NT$",
-    "countryCodes": ["TW"]
+    "countryCodes": ["TW"],
+    "decimalPlaces": 0
   },
   {
     "code": "TZS",
@@ -1398,7 +1429,8 @@
       "it": "Scellino"
     },
     "symbol": "UGX",
-    "countryCodes": ["UG"]
+    "countryCodes": ["UG"],
+    "decimalPlaces": 0
   },
   {
     "code": "USD",
@@ -1447,7 +1479,8 @@
       "it": "Dong"
     },
     "symbol": "₫",
-    "countryCodes": ["VN"]
+    "countryCodes": ["VN"],
+    "decimalPlaces": 0
   },
   {
     "code": "VUV",
@@ -1457,7 +1490,8 @@
       "it": "Vatu"
     },
     "symbol": "VUV",
-    "countryCodes": ["VU"]
+    "countryCodes": ["VU"],
+    "decimalPlaces": 0
   },
   {
     "code": "WST",
@@ -1477,7 +1511,8 @@
       "it": "Franco"
     },
     "symbol": "FCFA",
-    "countryCodes": ["CM", "CF", "TD", "CG", "GQ", "GA"]
+    "countryCodes": ["CM", "CF", "TD", "CG", "GQ", "GA"],
+    "decimalPlaces": 0
   },
   {
     "code": "XCD",
@@ -1497,7 +1532,8 @@
       "it": "Franco"
     },
     "symbol": "CFA",
-    "countryCodes": ["BJ", "BF", "CI", "GW", "ML", "NE", "SN", "TG"]
+    "countryCodes": ["BJ", "BF", "CI", "GW", "ML", "NE", "SN", "TG"],
+    "decimalPlaces": 0
   },
   {
     "code": "XPF",
@@ -1507,7 +1543,8 @@
       "it": "Franco"
     },
     "symbol": "FCFP",
-    "countryCodes": ["PF", "NC", "WF"]
+    "countryCodes": ["PF", "NC", "WF"],
+    "decimalPlaces": 0
   },
   {
     "code": "YER",
@@ -1521,11 +1558,7 @@
   },
   {
     "code": "ZAR",
-    "names": {
-      "en": "Rand",
-      "es": "Rand",
-      "it": "Rand"
-    },
+    "names": { "en": "Rand" },
     "symbol": "R",
     "countryCodes": ["ZA"]
   },

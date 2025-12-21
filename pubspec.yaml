@@ -67,6 +67,7 @@ dependencies:
   another_flushbar: ^1.12.32
   pausable_timer: ^3.1.0+3
   bitsdojo_window: ^0.1.6
+  skeletonizer: ^2.1.2
 
 dev_dependencies:
   flutter_test:

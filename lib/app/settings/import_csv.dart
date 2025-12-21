@@ -205,7 +205,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
 
       // Cache preferred currency once
       final preferredCurrency = await CurrencyService.instance
-          .getUserPreferredCurrency()
+          .ensureAndGetPreferredCurrency()
           .first;
 
       final List<TransactionInDB> transactionsToInsert = [];

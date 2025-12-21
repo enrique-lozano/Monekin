@@ -353,7 +353,8 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                   /* ------- TRANSACTION AMOUNT ------- */
                   /* ---------------------------------- */
                   StreamBuilder(
-                    stream: CurrencyService.instance.getUserPreferredCurrency(),
+                    stream: CurrencyService.instance
+                        .ensureAndGetPreferredCurrency(),
                     builder: (context, prefCurrencySnapshot) {
                       return Row(
                         children: [

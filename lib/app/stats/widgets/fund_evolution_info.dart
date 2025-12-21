@@ -279,7 +279,7 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
             : Colors.white12;
 
         return StreamBuilder(
-          stream: CurrencyService.instance.getUserPreferredCurrency(),
+          stream: CurrencyService.instance.ensureAndGetPreferredCurrency(),
           builder: (context, userCurrencySnapshot) {
             return Stack(
               children: [

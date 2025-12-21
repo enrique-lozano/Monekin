@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
 
 class Skeleton extends StatelessWidget {
   const Skeleton({
@@ -20,16 +23,22 @@ class Skeleton extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          height: height,
-          width: width,
-          margin: applyMarging
-              ? const EdgeInsets.symmetric(vertical: 2, horizontal: 0)
-              : null,
-          decoration: BoxDecoration(
-            color: color ?? Colors.black.withOpacity(0.04),
-            borderRadius: BorderRadius.circular(4),
-          ),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            return Container(
+              height: height,
+              width: min(width * 0.9, constraints.maxWidth),
+              margin: applyMarging
+                  ? const EdgeInsets.symmetric(vertical: 2, horizontal: 0)
+                  : null,
+              decoration: BoxDecoration(
+                color:
+                    color ??
+                    AppColors.of(context).shadowColor.withOpacity(0.25),
+                borderRadius: BorderRadius.circular(4),
+              ),
+            );
+          },
         ),
       ],
     );

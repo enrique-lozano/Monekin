@@ -97,7 +97,6 @@ class _TranslationsUiActionsFr implements TranslationsUiActionsEn {
 	@override String get apply => 'Appliquer';
 	@override String get discard => 'Abandonner';
 	@override String get refresh => 'Actualiser';
-	@override String get details => 'Détails';
 	@override String get share => 'Partager';
 }
 
@@ -112,6 +111,7 @@ class _TranslationsGeneralFr implements TranslationsGeneralEn {
 	@override String get understood => 'Compris';
 	@override String get unspecified => 'Non spécifié';
 	@override String get quick_actions => 'Actions rapides';
+	@override String get details => 'Détails';
 	@override String get balance => 'Solde';
 	@override String get account => 'Compte';
 	@override String get accounts => 'Comptes';
@@ -126,6 +126,7 @@ class _TranslationsGeneralFr implements TranslationsGeneralEn {
 	@override String get show_more_fields => 'Afficher plus de champs';
 	@override String get show_less_fields => 'Afficher moins de champs';
 	@override String get tap_to_search => 'Touchez pour rechercher';
+	@override late final _TranslationsGeneralLeaveWithoutSavingFr leave_without_saving = _TranslationsGeneralLeaveWithoutSavingFr._(_root);
 	@override late final _TranslationsGeneralClipboardFr clipboard = _TranslationsGeneralClipboardFr._(_root);
 	@override late final _TranslationsGeneralTimeFr time = _TranslationsGeneralTimeFr._(_root);
 	@override late final _TranslationsGeneralTransactionOrderFr transaction_order = _TranslationsGeneralTransactionOrderFr._(_root);
@@ -344,16 +345,23 @@ class _TranslationsCurrenciesFr implements TranslationsCurrenciesEn {
 	// Translations
 	@override String get currency_converter => 'Convertisseur de devises';
 	@override String get currency => 'Devise';
+	@override String get currency_settings => 'Paramètres de devise';
 	@override String get currency_manager => 'Gestionnaire de devises';
 	@override String get currency_manager_descr => 'Configurez votre devise et ses taux de change avec les autres';
 	@override String get preferred_currency => 'Devise de base/préférée';
+	@override String get tap_to_change_preferred_currency => 'Appuyez pour modifier';
 	@override String get change_preferred_currency_title => 'Changer la devise préférée';
 	@override String get change_preferred_currency_msg => 'Toutes les statistiques et budgets seront affichés dans cette devise à partir de maintenant. Les comptes et transactions conserveront la devise qu\'ils avaient. Tous les taux de change enregistrés seront supprimés si vous effectuez cette action. Voulez-vous continuer ?';
-	@override late final _TranslationsCurrenciesFormFr form = _TranslationsCurrenciesFormFr._(_root);
+	@override late final _TranslationsCurrenciesExchangeRateFormFr exchange_rate_form = _TranslationsCurrenciesExchangeRateFormFr._(_root);
+	@override late final _TranslationsCurrenciesTypesFr types = _TranslationsCurrenciesTypesFr._(_root);
+	@override late final _TranslationsCurrenciesCurrencyFormFr currency_form = _TranslationsCurrenciesCurrencyFormFr._(_root);
 	@override String get delete_all_success => 'Taux de change supprimés avec succès';
 	@override String get historical => 'Taux historiques';
+	@override String get historical_empty => 'Aucun taux de change historique trouvé pour cette devise';
 	@override String get exchange_rate => 'Taux de change';
 	@override String get exchange_rates => 'Taux de change';
+	@override String get min_exchange_rate => 'Taux de change minimum';
+	@override String get max_exchange_rate => 'Taux de change maximum';
 	@override String get empty => 'Ajoutez ici des taux de change pour que, si vous avez des comptes dans d\'autres devises que votre devise de base, nos graphiques soient plus précis';
 	@override String get select_a_currency => 'Sélectionnez une devise';
 	@override String get search => 'Rechercher par nom ou par code de devise';
@@ -509,6 +517,17 @@ class _TranslationsMoreFr implements TranslationsMoreEn {
 	@override late final _TranslationsMoreDataFr data = _TranslationsMoreDataFr._(_root);
 	@override late final _TranslationsMoreAboutUsFr about_us = _TranslationsMoreAboutUsFr._(_root);
 	@override late final _TranslationsMoreHelpUsFr help_us = _TranslationsMoreHelpUsFr._(_root);
+}
+
+// Path: general.leave_without_saving
+class _TranslationsGeneralLeaveWithoutSavingFr implements TranslationsGeneralLeaveWithoutSavingEn {
+	_TranslationsGeneralLeaveWithoutSavingFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Partir sans économiser ?';
+	@override String get message => 'Vous avez des modifications non enregistrées, êtes-vous sûr de vouloir quitter sans les enregistrer ?';
 }
 
 // Path: general.clipboard
@@ -931,19 +950,55 @@ class _TranslationsAccountSelectFr implements TranslationsAccountSelectEn {
 	@override String get multiple => 'Sélectionnez des comptes';
 }
 
-// Path: currencies.form
-class _TranslationsCurrenciesFormFr implements TranslationsCurrenciesFormEn {
-	_TranslationsCurrenciesFormFr._(this._root);
+// Path: currencies.exchange_rate_form
+class _TranslationsCurrenciesExchangeRateFormFr implements TranslationsCurrenciesExchangeRateFormEn {
+	_TranslationsCurrenciesExchangeRateFormFr._(this._root);
 
 	final TranslationsFr _root; // ignore: unused_field
 
 	// Translations
 	@override String get equal_to_preferred_warn => 'La devise ne peut pas être identique à la devise de l\'utilisateur';
+	@override String get override_existing_warn => 'Un taux de change pour cette devise à cette date existe déjà. Si vous continuez, le précédent sera écrasé';
 	@override String get specify_a_currency => 'Veuillez spécifier une devise';
 	@override String get add => 'Ajouter un taux de change';
 	@override String get add_success => 'Taux de change ajouté avec succès';
 	@override String get edit => 'Modifier le taux de change';
 	@override String get edit_success => 'Taux de change modifié avec succès';
+	@override String get remove_all => 'Supprimer tous les taux de change';
+	@override String get remove_all_warning => 'Cette action est irréversible et supprimera tous les taux de change de cette devise';
+}
+
+// Path: currencies.types
+class _TranslationsCurrenciesTypesFr implements TranslationsCurrenciesTypesEn {
+	_TranslationsCurrenciesTypesFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Type de devise';
+	@override String get fiat => 'DÉCRET';
+	@override String get crypto => 'Crypto-monnaie';
+	@override String get other => 'Autre';
+}
+
+// Path: currencies.currency_form
+class _TranslationsCurrenciesCurrencyFormFr implements TranslationsCurrenciesCurrencyFormEn {
+	_TranslationsCurrenciesCurrencyFormFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Nom d\'affichage';
+	@override String get code => 'Code de devise';
+	@override String get symbol => 'Symbole';
+	@override String get decimal_digits => 'Chiffres décimaux';
+	@override String get create => 'Créer une devise';
+	@override String get create_success => 'Devise créée avec succès';
+	@override String get edit => 'Modifier la devise';
+	@override String get edit_success => 'Devise modifiée avec succès';
+	@override String get delete => 'Supprimer la devise';
+	@override String get delete_success => 'Devise supprimée avec succès';
+	@override String get already_exists => 'Une devise avec ce code existe déjà. Vous voudrez peut-être le modifier';
 }
 
 // Path: tags.form
@@ -1444,12 +1499,12 @@ extension on TranslationsFr {
 		map['ui_actions.apply'] = 'Appliquer';
 		map['ui_actions.discard'] = 'Abandonner';
 		map['ui_actions.refresh'] = 'Actualiser';
-		map['ui_actions.details'] = 'Détails';
 		map['ui_actions.share'] = 'Partager';
 		map['general.or'] = 'ou';
 		map['general.understood'] = 'Compris';
 		map['general.unspecified'] = 'Non spécifié';
 		map['general.quick_actions'] = 'Actions rapides';
+		map['general.details'] = 'Détails';
 		map['general.balance'] = 'Solde';
 		map['general.account'] = 'Compte';
 		map['general.accounts'] = 'Comptes';
@@ -1464,6 +1519,8 @@ extension on TranslationsFr {
 		map['general.show_more_fields'] = 'Afficher plus de champs';
 		map['general.show_less_fields'] = 'Afficher moins de champs';
 		map['general.tap_to_search'] = 'Touchez pour rechercher';
+		map['general.leave_without_saving.title'] = 'Partir sans économiser ?';
+		map['general.leave_without_saving.message'] = 'Vous avez des modifications non enregistrées, êtes-vous sûr de vouloir quitter sans les enregistrer ?';
 		map['general.clipboard.success'] = ({required Object x}) => '${x} copié dans le presse-papiers';
 		map['general.clipboard.error'] = 'Erreur lors de la copie';
 		map['general.time.start_date'] = 'Date de début';
@@ -1858,21 +1915,44 @@ extension on TranslationsFr {
 		map['account.select.multiple'] = 'Sélectionnez des comptes';
 		map['currencies.currency_converter'] = 'Convertisseur de devises';
 		map['currencies.currency'] = 'Devise';
+		map['currencies.currency_settings'] = 'Paramètres de devise';
 		map['currencies.currency_manager'] = 'Gestionnaire de devises';
 		map['currencies.currency_manager_descr'] = 'Configurez votre devise et ses taux de change avec les autres';
 		map['currencies.preferred_currency'] = 'Devise de base/préférée';
+		map['currencies.tap_to_change_preferred_currency'] = 'Appuyez pour modifier';
 		map['currencies.change_preferred_currency_title'] = 'Changer la devise préférée';
 		map['currencies.change_preferred_currency_msg'] = 'Toutes les statistiques et budgets seront affichés dans cette devise à partir de maintenant. Les comptes et transactions conserveront la devise qu\'ils avaient. Tous les taux de change enregistrés seront supprimés si vous effectuez cette action. Voulez-vous continuer ?';
-		map['currencies.form.equal_to_preferred_warn'] = 'La devise ne peut pas être identique à la devise de l\'utilisateur';
-		map['currencies.form.specify_a_currency'] = 'Veuillez spécifier une devise';
-		map['currencies.form.add'] = 'Ajouter un taux de change';
-		map['currencies.form.add_success'] = 'Taux de change ajouté avec succès';
-		map['currencies.form.edit'] = 'Modifier le taux de change';
-		map['currencies.form.edit_success'] = 'Taux de change modifié avec succès';
+		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = 'La devise ne peut pas être identique à la devise de l\'utilisateur';
+		map['currencies.exchange_rate_form.override_existing_warn'] = 'Un taux de change pour cette devise à cette date existe déjà. Si vous continuez, le précédent sera écrasé';
+		map['currencies.exchange_rate_form.specify_a_currency'] = 'Veuillez spécifier une devise';
+		map['currencies.exchange_rate_form.add'] = 'Ajouter un taux de change';
+		map['currencies.exchange_rate_form.add_success'] = 'Taux de change ajouté avec succès';
+		map['currencies.exchange_rate_form.edit'] = 'Modifier le taux de change';
+		map['currencies.exchange_rate_form.edit_success'] = 'Taux de change modifié avec succès';
+		map['currencies.exchange_rate_form.remove_all'] = 'Supprimer tous les taux de change';
+		map['currencies.exchange_rate_form.remove_all_warning'] = 'Cette action est irréversible et supprimera tous les taux de change de cette devise';
+		map['currencies.types.display'] = 'Type de devise';
+		map['currencies.types.fiat'] = 'DÉCRET';
+		map['currencies.types.crypto'] = 'Crypto-monnaie';
+		map['currencies.types.other'] = 'Autre';
+		map['currencies.currency_form.name'] = 'Nom d\'affichage';
+		map['currencies.currency_form.code'] = 'Code de devise';
+		map['currencies.currency_form.symbol'] = 'Symbole';
+		map['currencies.currency_form.decimal_digits'] = 'Chiffres décimaux';
+		map['currencies.currency_form.create'] = 'Créer une devise';
+		map['currencies.currency_form.create_success'] = 'Devise créée avec succès';
+		map['currencies.currency_form.edit'] = 'Modifier la devise';
+		map['currencies.currency_form.edit_success'] = 'Devise modifiée avec succès';
+		map['currencies.currency_form.delete'] = 'Supprimer la devise';
+		map['currencies.currency_form.delete_success'] = 'Devise supprimée avec succès';
+		map['currencies.currency_form.already_exists'] = 'Une devise avec ce code existe déjà. Vous voudrez peut-être le modifier';
 		map['currencies.delete_all_success'] = 'Taux de change supprimés avec succès';
 		map['currencies.historical'] = 'Taux historiques';
+		map['currencies.historical_empty'] = 'Aucun taux de change historique trouvé pour cette devise';
 		map['currencies.exchange_rate'] = 'Taux de change';
 		map['currencies.exchange_rates'] = 'Taux de change';
+		map['currencies.min_exchange_rate'] = 'Taux de change minimum';
+		map['currencies.max_exchange_rate'] = 'Taux de change maximum';
 		map['currencies.empty'] = 'Ajoutez ici des taux de change pour que, si vous avez des comptes dans d\'autres devises que votre devise de base, nos graphiques soient plus précis';
 		map['currencies.select_a_currency'] = 'Sélectionnez une devise';
 		map['currencies.search'] = 'Rechercher par nom ou par code de devise';

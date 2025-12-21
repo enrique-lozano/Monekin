@@ -20,7 +20,19 @@ CREATE TABLE IF NOT EXISTS currencies (
     symbol TEXT NOT NULL,
 
     -- Name of the currency (in the user language at database creation)
-    name TEXT NOT NULL
+    name TEXT NOT NULL,
+
+    -- Number of decimal places used by this currency
+    decimalPlaces INTEGER NOT NULL,
+
+    -- Whether this currency is one of the default currencies of the app
+    isDefault BOOLEAN NOT NULL,
+
+    -- Type of currency:
+    -- 0 = fiat
+    -- 1 = crypto
+    -- 2 = other
+    type INTEGER NOT NULL
 ) AS CurrencyInDB;
 
 CREATE TABLE IF NOT EXISTS exchangeRates (

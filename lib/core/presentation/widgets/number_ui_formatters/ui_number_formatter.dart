@@ -111,7 +111,7 @@ class UINumberFormatter {
       return formatter.format(amountToConvert);
     } else {
       return NumberFormat.currency(
-        decimalDigits: showDecimals ? 2 : 0,
+        decimalDigits: showDecimals ? currency?.decimalPlaces : 0,
         symbol: _currencySymbolWithoutDecimalSep,
       ).format(amountToConvert);
     }

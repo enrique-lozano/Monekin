@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
+import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/constants.dart';
@@ -18,11 +18,11 @@ import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
-showExchangeRateFormDialog(
+Future<ExchangeRate?> showExchangeRateFormDialog(
   BuildContext context,
   ExchangeRateFormDialog dialog,
 ) {
-  return showModalBottomSheet(
+  return showModalBottomSheet<ExchangeRate>(
     context: context,
     isScrollControlled: true,
     showDragHandle: true,
@@ -33,17 +33,15 @@ showExchangeRateFormDialog(
 class ExchangeRateFormDialog extends StatefulWidget {
   const ExchangeRateFormDialog({
     super.key,
-    this.preSelectedCurrency,
-    this.preSelectedDate,
-    this.preSelectedRate,
-    this.idToEdit,
-  });
+    this.currency,
+    this.exchangeRateToEdit,
+  }) : assert(
+         currency == null || exchangeRateToEdit == null,
+         'You cannot provide both a currency and an exchange rate to edit',
+       );
 
-  final Currency? preSelectedCurrency;
-  final DateTime? preSelectedDate;
-  final double? preSelectedRate;
-
-  final String? idToEdit;
+  final Currency? currency;
+  final ExchangeRate? exchangeRateToEdit;
 
   @override
   State<ExchangeRateFormDialog> createState() => _ExchangeRateFormDialogState();
@@ -60,60 +58,44 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
 
   Currency? userPreferredCurrency;
 
-  bool get isEditMode => widget.idToEdit != null;
+  bool get isEditMode => widget.exchangeRateToEdit != null;
 
   @override
   void initState() {
     super.initState();
 
-    rateController.text = widget.preSelectedRate == null
-        ? ''
-        : widget.preSelectedRate.toString();
+    if (isEditMode) {
+      final rate = widget.exchangeRateToEdit!;
+      rateController.text = rate.exchangeRate.toString();
+      _currency = Currency.fromDB(currencyInDB: rate.currency);
+      date = rate.date;
+    } else {
+      rateController.text = '';
+      _currency = widget.currency;
+    }
 
-    setState(() {
-      _currency = widget.preSelectedCurrency;
-
-      if (widget.preSelectedDate != null) {
-        date = widget.preSelectedDate!;
-      }
-    });
-
-    CurrencyService.instance.getUserPreferredCurrency().first.then((value) {
+    CurrencyService.instance.ensureAndGetPreferredCurrency().first.then((
+      value,
+    ) {
       setState(() {
         userPreferredCurrency = value;
       });
     });
   }
 
-  onSubmitted() {
+  void onSubmitted() {
     if (!_formKey.currentState!.validate()) return;
 
     _formKey.currentState!.save();
 
-    final t = Translations.of(context);
+    final newRate = ExchangeRate(
+      id: widget.exchangeRateToEdit?.id ?? generateUUID(),
+      currency: _currency!,
+      date: date,
+      exchangeRate: double.parse(rateController.text),
+    );
 
-    ExchangeRateService.instance
-        .insertOrUpdateExchangeRate(
-          ExchangeRate(
-            id: widget.idToEdit ?? generateUUID(),
-            currency: _currency!,
-            date: date,
-            exchangeRate: double.parse(rateController.text),
-          ),
-        )
-        .then((value) {
-          MonekinSnackbar.success(
-            SnackbarParams(
-              isEditMode
-                  ? t.currencies.form.edit_success
-                  : t.currencies.form.add_success,
-            ),
-          );
-        })
-        .catchError((err) {
-          MonekinSnackbar.error(SnackbarParams.fromError(err));
-        })
-        .whenComplete(() => RouteUtils.popRoute());
+    RouteUtils.popRoute(newRate);
   }
 
   @override
@@ -121,7 +103,9 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
     final t = Translations.of(context);
 
     return ModalContainer(
-      title: isEditMode ? t.currencies.form.edit : t.currencies.form.add,
+      title: isEditMode
+          ? t.currencies.exchange_rate_form.edit
+          : t.currencies.exchange_rate_form.add,
       footer: BottomSheetFooter(onSaved: () => onSubmitted()),
       bodyPadding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
       body: Form(
@@ -136,12 +120,17 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                     : t.general.unspecified,
               ),
               readOnly: true,
-              mouseCursor: SystemMouseCursors.click,
+              mouseCursor: isEditMode
+                  ? SystemMouseCursors.click
+                  : SystemMouseCursors.basic,
               validator: (value) {
                 if (_currency == null) {
-                  return t.currencies.form.specify_a_currency;
+                  return t.currencies.exchange_rate_form.specify_a_currency;
                 } else if (_currency!.code == userPreferredCurrency?.code) {
-                  return t.currencies.form.equal_to_preferred_warn;
+                  return t
+                      .currencies
+                      .exchange_rate_form
+                      .equal_to_preferred_warn;
                 }
 
                 return null;
@@ -161,18 +150,19 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
               },
               decoration: InputDecoration(
                 labelText: t.currencies.currency,
+                enabled: !(isEditMode || widget.currency != null),
                 suffixIcon: const Icon(Icons.arrow_drop_down),
                 prefixIcon: _currency != null
-                    ? Container(
-                        margin: const EdgeInsets.all(10),
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(999),
-                        ),
-                        child: SvgPicture.asset(
-                          'assets/icons/currency_flags/${_currency!.code.toLowerCase()}.svg',
-                          height: 25,
-                          width: 25,
+                    ? Opacity(
+                        opacity: isEditMode || widget.currency != null
+                            ? 0.5
+                            : 1.0,
+                        child: Container(
+                          margin: const EdgeInsets.all(10),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(999),
+                            child: _currency!.displayFlagIcon(size: 25),
+                          ),
                         ),
                       )
                     : Container(
@@ -193,6 +183,7 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
               children: [
                 Expanded(
                   child: DateTimeFormField(
+                    enabled: !isEditMode,
                     decoration: InputDecoration(
                       labelText: '${t.general.time.date} *',
                     ),
@@ -239,6 +230,31 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                 ),
               ],
             ),
+
+            if (_currency != null)
+              StreamBuilder(
+                stream: ExchangeRateService.instance
+                    .getExchangeRateItem(_currency!.code, date)
+                    .map((rate) => rate != null),
+                initialData: false,
+                builder: (context, snapshot) {
+                  final hasAlreadyAnRate = snapshot.hasData && snapshot.data!;
+
+                  return AnimatedExpanded(
+                    expand: hasAlreadyAnRate && !isEditMode,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: InlineInfoCard(
+                        text: t
+                            .currencies
+                            .exchange_rate_form
+                            .override_existing_warn,
+                        mode: InlineInfoCardMode.info,
+                      ),
+                    ),
+                  );
+                },
+              ),
           ],
         ),
       ),

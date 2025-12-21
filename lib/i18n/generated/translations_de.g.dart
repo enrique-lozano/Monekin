@@ -97,7 +97,6 @@ class _TranslationsUiActionsDe implements TranslationsUiActionsEn {
 	@override String get apply => 'Anwenden';
 	@override String get discard => 'Verwerfen';
 	@override String get refresh => 'Aktualisieren';
-	@override String get details => 'Details';
 	@override String get share => 'Teilen';
 }
 
@@ -112,6 +111,7 @@ class _TranslationsGeneralDe implements TranslationsGeneralEn {
 	@override String get understood => 'Verstanden';
 	@override String get unspecified => 'Nicht spezifiziert';
 	@override String get quick_actions => 'Schnelle Aktionen';
+	@override String get details => 'Details';
 	@override String get balance => 'Kontostand';
 	@override String get account => 'Konto';
 	@override String get accounts => 'Konten';
@@ -126,6 +126,7 @@ class _TranslationsGeneralDe implements TranslationsGeneralEn {
 	@override String get show_more_fields => 'Weitere Felder anzeigen';
 	@override String get show_less_fields => 'Weniger Felder anzeigen';
 	@override String get tap_to_search => 'Zum Suchen tippen';
+	@override late final _TranslationsGeneralLeaveWithoutSavingDe leave_without_saving = _TranslationsGeneralLeaveWithoutSavingDe._(_root);
 	@override late final _TranslationsGeneralClipboardDe clipboard = _TranslationsGeneralClipboardDe._(_root);
 	@override late final _TranslationsGeneralTimeDe time = _TranslationsGeneralTimeDe._(_root);
 	@override late final _TranslationsGeneralTransactionOrderDe transaction_order = _TranslationsGeneralTransactionOrderDe._(_root);
@@ -344,16 +345,23 @@ class _TranslationsCurrenciesDe implements TranslationsCurrenciesEn {
 	// Translations
 	@override String get currency_converter => 'Währungsrechner';
 	@override String get currency => 'Währung';
+	@override String get currency_settings => 'Währungseinstellungen';
 	@override String get currency_manager => 'Währungsmanager';
 	@override String get currency_manager_descr => 'Konfiguriere Deine Währung und deren Wechselkurse mit anderen';
 	@override String get preferred_currency => 'Bevorzugte/Basis Währung';
+	@override String get tap_to_change_preferred_currency => 'Zum Ändern tippen';
 	@override String get change_preferred_currency_title => 'Änder die bevorzugte Währung';
 	@override String get change_preferred_currency_msg => 'Alle Statistiken und Budgets werden ab sofort in dieser Währung angezeigt. Konten und Transaktionen behalten die Währung, die sie hatten. Alle gespeicherten Wechselkurse werden gelöscht, wenn Du diese Aktion ausführst. Möchtest Du fortfahren?';
-	@override late final _TranslationsCurrenciesFormDe form = _TranslationsCurrenciesFormDe._(_root);
+	@override late final _TranslationsCurrenciesExchangeRateFormDe exchange_rate_form = _TranslationsCurrenciesExchangeRateFormDe._(_root);
+	@override late final _TranslationsCurrenciesTypesDe types = _TranslationsCurrenciesTypesDe._(_root);
+	@override late final _TranslationsCurrenciesCurrencyFormDe currency_form = _TranslationsCurrenciesCurrencyFormDe._(_root);
 	@override String get delete_all_success => 'Wechselkurse erfolgreich gelöscht';
 	@override String get historical => 'Historische Kurse';
+	@override String get historical_empty => 'Für diese Währung wurden keine historischen Wechselkurse gefunden';
 	@override String get exchange_rate => 'Wechselkurs';
 	@override String get exchange_rates => 'Wechselkurse';
+	@override String get min_exchange_rate => 'Mindestwechselkurs';
+	@override String get max_exchange_rate => 'Maximaler Wechselkurs';
 	@override String get empty => 'Füge hier Wechselkurse hinzu, damit unsere Diagramme genauer sind, wenn Du Konten in anderen Währungen als Deiner Basiswährung hast';
 	@override String get select_a_currency => 'Wähle eine Währung aus';
 	@override String get search => 'Suche nach Name oder Währungscode';
@@ -509,6 +517,17 @@ class _TranslationsMoreDe implements TranslationsMoreEn {
 	@override late final _TranslationsMoreDataDe data = _TranslationsMoreDataDe._(_root);
 	@override late final _TranslationsMoreAboutUsDe about_us = _TranslationsMoreAboutUsDe._(_root);
 	@override late final _TranslationsMoreHelpUsDe help_us = _TranslationsMoreHelpUsDe._(_root);
+}
+
+// Path: general.leave_without_saving
+class _TranslationsGeneralLeaveWithoutSavingDe implements TranslationsGeneralLeaveWithoutSavingEn {
+	_TranslationsGeneralLeaveWithoutSavingDe._(this._root);
+
+	final TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Ohne zu speichern verlassen?';
+	@override String get message => 'Sie haben noch nicht gespeicherte Änderungen. Möchten Sie die Seite wirklich verlassen, ohne sie zu speichern?';
 }
 
 // Path: general.clipboard
@@ -931,19 +950,55 @@ class _TranslationsAccountSelectDe implements TranslationsAccountSelectEn {
 	@override String get multiple => 'Wähle Konten aus';
 }
 
-// Path: currencies.form
-class _TranslationsCurrenciesFormDe implements TranslationsCurrenciesFormEn {
-	_TranslationsCurrenciesFormDe._(this._root);
+// Path: currencies.exchange_rate_form
+class _TranslationsCurrenciesExchangeRateFormDe implements TranslationsCurrenciesExchangeRateFormEn {
+	_TranslationsCurrenciesExchangeRateFormDe._(this._root);
 
 	final TranslationsDe _root; // ignore: unused_field
 
 	// Translations
 	@override String get equal_to_preferred_warn => 'Die Währung darf nicht mit der Benutzerwährung übereinstimmen';
+	@override String get override_existing_warn => 'Für diese Währung existiert für dieses Datum bereits ein Wechselkurs. Wenn Sie fortfahren, wird die vorherige überschrieben';
 	@override String get specify_a_currency => 'Bitte gib eine Währung an';
 	@override String get add => 'Wechselkurs hinzufügen';
 	@override String get add_success => 'Wechselkurs erfolgreich hinzugefügt';
 	@override String get edit => 'Wechselkurs bearbeiten';
 	@override String get edit_success => 'Wechselkurs erfolgreich bearbeitet';
+	@override String get remove_all => 'Alle Wechselkurse löschen';
+	@override String get remove_all_warning => 'Diese Aktion ist unwiderruflich und löscht alle Wechselkurse für diese Währung';
+}
+
+// Path: currencies.types
+class _TranslationsCurrenciesTypesDe implements TranslationsCurrenciesTypesEn {
+	_TranslationsCurrenciesTypesDe._(this._root);
+
+	final TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Währungstyp';
+	@override String get fiat => 'FIAT';
+	@override String get crypto => 'Kryptowährung';
+	@override String get other => 'Andere';
+}
+
+// Path: currencies.currency_form
+class _TranslationsCurrenciesCurrencyFormDe implements TranslationsCurrenciesCurrencyFormEn {
+	_TranslationsCurrenciesCurrencyFormDe._(this._root);
+
+	final TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Anzeigename';
+	@override String get code => 'Währungscode';
+	@override String get symbol => 'Symbol';
+	@override String get decimal_digits => 'Dezimalstellen';
+	@override String get create => 'Währung erstellen';
+	@override String get create_success => 'Währung erfolgreich erstellt';
+	@override String get edit => 'Währung bearbeiten';
+	@override String get edit_success => 'Währung erfolgreich bearbeitet';
+	@override String get delete => 'Währung löschen';
+	@override String get delete_success => 'Währung erfolgreich gelöscht';
+	@override String get already_exists => 'Eine Währung mit diesem Code existiert bereits. Möglicherweise möchten Sie es bearbeiten';
 }
 
 // Path: tags.form
@@ -1446,12 +1501,12 @@ extension on TranslationsDe {
 		map['ui_actions.apply'] = 'Anwenden';
 		map['ui_actions.discard'] = 'Verwerfen';
 		map['ui_actions.refresh'] = 'Aktualisieren';
-		map['ui_actions.details'] = 'Details';
 		map['ui_actions.share'] = 'Teilen';
 		map['general.or'] = 'oder';
 		map['general.understood'] = 'Verstanden';
 		map['general.unspecified'] = 'Nicht spezifiziert';
 		map['general.quick_actions'] = 'Schnelle Aktionen';
+		map['general.details'] = 'Details';
 		map['general.balance'] = 'Kontostand';
 		map['general.account'] = 'Konto';
 		map['general.accounts'] = 'Konten';
@@ -1466,6 +1521,8 @@ extension on TranslationsDe {
 		map['general.show_more_fields'] = 'Weitere Felder anzeigen';
 		map['general.show_less_fields'] = 'Weniger Felder anzeigen';
 		map['general.tap_to_search'] = 'Zum Suchen tippen';
+		map['general.leave_without_saving.title'] = 'Ohne zu speichern verlassen?';
+		map['general.leave_without_saving.message'] = 'Sie haben noch nicht gespeicherte Änderungen. Möchten Sie die Seite wirklich verlassen, ohne sie zu speichern?';
 		map['general.clipboard.success'] = ({required Object x}) => '${x} in die Zwischenablage kopiert';
 		map['general.clipboard.error'] = 'Fehler beim Kopieren';
 		map['general.time.start_date'] = 'Startdatum';
@@ -1860,21 +1917,44 @@ extension on TranslationsDe {
 		map['account.select.multiple'] = 'Wähle Konten aus';
 		map['currencies.currency_converter'] = 'Währungsrechner';
 		map['currencies.currency'] = 'Währung';
+		map['currencies.currency_settings'] = 'Währungseinstellungen';
 		map['currencies.currency_manager'] = 'Währungsmanager';
 		map['currencies.currency_manager_descr'] = 'Konfiguriere Deine Währung und deren Wechselkurse mit anderen';
 		map['currencies.preferred_currency'] = 'Bevorzugte/Basis Währung';
+		map['currencies.tap_to_change_preferred_currency'] = 'Zum Ändern tippen';
 		map['currencies.change_preferred_currency_title'] = 'Änder die bevorzugte Währung';
 		map['currencies.change_preferred_currency_msg'] = 'Alle Statistiken und Budgets werden ab sofort in dieser Währung angezeigt. Konten und Transaktionen behalten die Währung, die sie hatten. Alle gespeicherten Wechselkurse werden gelöscht, wenn Du diese Aktion ausführst. Möchtest Du fortfahren?';
-		map['currencies.form.equal_to_preferred_warn'] = 'Die Währung darf nicht mit der Benutzerwährung übereinstimmen';
-		map['currencies.form.specify_a_currency'] = 'Bitte gib eine Währung an';
-		map['currencies.form.add'] = 'Wechselkurs hinzufügen';
-		map['currencies.form.add_success'] = 'Wechselkurs erfolgreich hinzugefügt';
-		map['currencies.form.edit'] = 'Wechselkurs bearbeiten';
-		map['currencies.form.edit_success'] = 'Wechselkurs erfolgreich bearbeitet';
+		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = 'Die Währung darf nicht mit der Benutzerwährung übereinstimmen';
+		map['currencies.exchange_rate_form.override_existing_warn'] = 'Für diese Währung existiert für dieses Datum bereits ein Wechselkurs. Wenn Sie fortfahren, wird die vorherige überschrieben';
+		map['currencies.exchange_rate_form.specify_a_currency'] = 'Bitte gib eine Währung an';
+		map['currencies.exchange_rate_form.add'] = 'Wechselkurs hinzufügen';
+		map['currencies.exchange_rate_form.add_success'] = 'Wechselkurs erfolgreich hinzugefügt';
+		map['currencies.exchange_rate_form.edit'] = 'Wechselkurs bearbeiten';
+		map['currencies.exchange_rate_form.edit_success'] = 'Wechselkurs erfolgreich bearbeitet';
+		map['currencies.exchange_rate_form.remove_all'] = 'Alle Wechselkurse löschen';
+		map['currencies.exchange_rate_form.remove_all_warning'] = 'Diese Aktion ist unwiderruflich und löscht alle Wechselkurse für diese Währung';
+		map['currencies.types.display'] = 'Währungstyp';
+		map['currencies.types.fiat'] = 'FIAT';
+		map['currencies.types.crypto'] = 'Kryptowährung';
+		map['currencies.types.other'] = 'Andere';
+		map['currencies.currency_form.name'] = 'Anzeigename';
+		map['currencies.currency_form.code'] = 'Währungscode';
+		map['currencies.currency_form.symbol'] = 'Symbol';
+		map['currencies.currency_form.decimal_digits'] = 'Dezimalstellen';
+		map['currencies.currency_form.create'] = 'Währung erstellen';
+		map['currencies.currency_form.create_success'] = 'Währung erfolgreich erstellt';
+		map['currencies.currency_form.edit'] = 'Währung bearbeiten';
+		map['currencies.currency_form.edit_success'] = 'Währung erfolgreich bearbeitet';
+		map['currencies.currency_form.delete'] = 'Währung löschen';
+		map['currencies.currency_form.delete_success'] = 'Währung erfolgreich gelöscht';
+		map['currencies.currency_form.already_exists'] = 'Eine Währung mit diesem Code existiert bereits. Möglicherweise möchten Sie es bearbeiten';
 		map['currencies.delete_all_success'] = 'Wechselkurse erfolgreich gelöscht';
 		map['currencies.historical'] = 'Historische Kurse';
+		map['currencies.historical_empty'] = 'Für diese Währung wurden keine historischen Wechselkurse gefunden';
 		map['currencies.exchange_rate'] = 'Wechselkurs';
 		map['currencies.exchange_rates'] = 'Wechselkurse';
+		map['currencies.min_exchange_rate'] = 'Mindestwechselkurs';
+		map['currencies.max_exchange_rate'] = 'Maximaler Wechselkurs';
 		map['currencies.empty'] = 'Füge hier Wechselkurse hinzu, damit unsere Diagramme genauer sind, wenn Du Konten in anderen Währungen als Deiner Basiswährung hast';
 		map['currencies.select_a_currency'] = 'Wähle eine Währung aus';
 		map['currencies.search'] = 'Suche nach Name oder Währungscode';

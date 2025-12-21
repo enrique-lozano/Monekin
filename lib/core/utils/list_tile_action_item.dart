@@ -2,20 +2,23 @@ import 'package:flutter/material.dart';
 
 import '../presentation/app_colors.dart';
 
-enum ListTileActionRole { delete, warn }
+enum ListTileActionRole { delete, warn, checkbox }
 
 class ListTileActionItem {
   final String label;
-  final IconData icon;
+  final IconData? icon;
 
   final ListTileActionRole? role;
+
+  final bool selected;
 
   final void Function()? onClick;
 
   ListTileActionItem({
     required this.label,
-    required this.icon,
     required this.onClick,
+    this.icon,
+    this.selected = false,
     this.role,
   });
 
@@ -28,6 +31,6 @@ class ListTileActionItem {
       }
     }
 
-    return Theme.of(context).colorScheme.primary;
+    return Theme.of(context).colorScheme.onSurface;
   }
 }
