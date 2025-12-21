@@ -19,19 +19,28 @@ class CurrencyService {
     return db.into(db.currencies).insert(currency);
   }
 
-  Future<int> deleteCurrency(String currencyId) {
+  Future<int> deleteCurrency(String currencyCode) {
     return (db.delete(
-      db.categories,
-    )..where((tbl) => tbl.id.equals(currencyId))).go();
+      db.currencies,
+    )..where((tbl) => tbl.code.equals(currencyCode))).go();
   }
 
-  Stream<List<Currency>?> getCurrencies() {
+  Future<int> updateCurrency(String currencyCode, CurrencyInDB currency) {
+    return (db.update(
+      db.currencies,
+    )..where((tbl) => tbl.code.equals(currencyCode))).write(currency);
+  }
+
+  /// Get all the currencies available in the app, regardless if the user is using them or not.
+  /// This include the default currencies that come with the app and the ones added by the user.
+  Stream<List<Currency>?> getAllCurrencies() {
     return db
         .select(db.currencies)
         .map((e) => Currency.fromDB(currencyInDB: e))
         .watch();
   }
 
+  /// Get a currency by its code
   Stream<Currency?> getCurrencyByCode(String code) {
     return (db.select(db.currencies)..where((a) => a.code.equals(code)))
         .map((e) => Currency.fromDB(currencyInDB: e))
@@ -39,7 +48,7 @@ class CurrencyService {
   }
 
   Stream<List<Currency>?> searchCurrencies(String? toSearch) {
-    if (toSearch == null || toSearch.trim() == '') return getCurrencies();
+    if (toSearch == null || toSearch.trim() == '') return getAllCurrencies();
 
     toSearch = '%${toSearch.trim()}%';
 
@@ -49,7 +58,17 @@ class CurrencyService {
         .watch();
   }
 
-  Stream<Currency> getUserPreferredCurrency() {
+  /// Get the preferred currency of the user. If not set, get the device default currency
+  ///
+  /// If you want to just get the code of the preferred currency, use
+  /// `appStateSettings[SettingKey.preferredCurrency]` instead.
+  Stream<Currency> ensureAndGetPreferredCurrency() {
+    final currencyCode = appStateSettings[SettingKey.preferredCurrency];
+
+    if (currencyCode != null) {
+      return getCurrencyByCode(currencyCode).map((currency) => currency!);
+    }
+
     final settingService = UserSettingService.instance;
 
     return settingService
@@ -68,7 +87,8 @@ class CurrencyService {
         });
   }
 
-  Future<dynamic> getInitialCurrencies() async {
+  /// Load the initial default app currencies from the seeder json file
+  Future<dynamic> _getInitialCurrencies() async {
     String defaultCurrencies = await rootBundle.loadString(
       'assets/sql/initial_currencies.json',
     );
@@ -87,7 +107,7 @@ class CurrencyService {
         return defaultCurrencyCode;
       }
 
-      dynamic json = await getInitialCurrencies();
+      dynamic json = await _getInitialCurrencies();
 
       for (final currency in json) {
         if (currency['countryCodes'] != null &&
@@ -107,7 +127,7 @@ class CurrencyService {
   ///
   /// This function is called only when the user database is created.
   Future<void> initializeCurrencies() async {
-    dynamic json = await getInitialCurrencies();
+    dynamic json = await _getInitialCurrencies();
 
     // The category initialization is done before the app language is set, so we need to trigger this:
     String systemLang = AppLocaleUtils.findDeviceLocale().languageCode;
@@ -121,6 +141,9 @@ class CurrencyService {
         name: currency['names'][systemLang] ?? currency['names']['en'],
         symbol: currency['symbol'],
         code: currency['code'],
+        decimalPlaces: currency['decimalPlaces'] ?? 2,
+        isDefault: true,
+        type: currency['type'] ?? 0,
       );
 
       await db.customStatement("""

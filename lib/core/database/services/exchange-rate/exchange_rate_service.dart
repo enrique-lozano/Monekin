@@ -37,6 +37,10 @@ class ExchangeRateService {
         .go();
   }
 
+  Future<int> deleteExchangeRateById(String id) {
+    return (db.delete(db.exchangeRates)..where((e) => e.id.equals(id))).go();
+  }
+
   /// Get the last exchange rates for all the currencies that the user have in the list of exchange rates
   Stream<List<ExchangeRate>> getExchangeRates({double? limit}) {
     limit ??= -1;

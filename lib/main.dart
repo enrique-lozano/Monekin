@@ -227,53 +227,57 @@ class MaterialAppContainer extends StatelessWidget {
 
             child ??= const SizedBox.shrink();
 
-            final mainSide = Stack(
-              children: [
-                child,
-                GlobalSnackbar(key: globalSnackbarKey),
-              ],
-            );
-
-            final mainContent = ColoredBox(
-              color: getWindowBackgroundColor(context),
-              child: Row(
-                children: [
-                  if (introSeen)
-                    AppNavigationSidebar(key: navigationSidebarKey),
-                  Expanded(
-                    child: Builder(
-                      builder: (context) {
-                        if (AppUtils.isDesktop &&
-                            !AppUtils.isMobileLayout(context)) {
-                          return ClipRRect(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(12),
-                            ),
-                            child: mainSide,
-                          );
-                        }
-
-                        return mainSide;
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            );
-
-            if (!AppUtils.isDesktop) {
-              return mainContent;
-            }
-
-            return Column(
-              children: [
-                WindowBar(key: windowBarKey),
-                Expanded(child: mainContent),
-              ],
-            );
+            return child;
           },
-          home: HandleWillPopScope(
-            child: InitialPageRouteNavigator(introSeen: introSeen),
+          home: Builder(
+            builder: (context) {
+              final mainSide = Stack(
+                children: [
+                  HandleWillPopScope(
+                    child: InitialPageRouteNavigator(introSeen: introSeen),
+                  ),
+                  GlobalSnackbar(key: globalSnackbarKey),
+                ],
+              );
+
+              final mainContent = ColoredBox(
+                color: getWindowBackgroundColor(context),
+                child: Row(
+                  children: [
+                    if (introSeen)
+                      AppNavigationSidebar(key: navigationSidebarKey),
+                    Expanded(
+                      child: Builder(
+                        builder: (context) {
+                          if (AppUtils.isDesktop &&
+                              !AppUtils.isMobileLayout(context)) {
+                            return ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(12),
+                              ),
+                              child: mainSide,
+                            );
+                          }
+
+                          return mainSide;
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+
+              if (!AppUtils.isDesktop) {
+                return mainContent;
+              }
+
+              return Column(
+                children: [
+                  WindowBar(key: windowBarKey),
+                  Expanded(child: mainContent),
+                ],
+              );
+            },
           ),
         );
       },

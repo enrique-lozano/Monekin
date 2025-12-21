@@ -193,7 +193,8 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                   labelText: '${t.budgets.form.value} *',
                   hintText: 'Ex.: 200',
                   suffix: StreamBuilder(
-                    stream: CurrencyService.instance.getUserPreferredCurrency(),
+                    stream: CurrencyService.instance
+                        .ensureAndGetPreferredCurrency(),
                     builder: (context, snapshot) {
                       return Text(snapshot.data?.symbol ?? '');
                     },

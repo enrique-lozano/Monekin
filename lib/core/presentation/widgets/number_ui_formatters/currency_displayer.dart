@@ -87,7 +87,7 @@ class CurrencyDisplayer extends StatelessWidget {
     }
 
     return StreamBuilder(
-      stream: CurrencyService.instance.getUserPreferredCurrency(),
+      stream: CurrencyService.instance.ensureAndGetPreferredCurrency(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Skeleton(width: 50, height: valueFontSize);

@@ -231,7 +231,7 @@ class BudgetCard extends StatelessWidget {
                   children: [
                     StreamBuilder(
                       stream: CurrencyService.instance
-                          .getUserPreferredCurrency(),
+                          .ensureAndGetPreferredCurrency(),
                       builder: (context, snapshot) {
                         return StreamBuilder(
                           stream: budget.currentValue,

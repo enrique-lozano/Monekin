@@ -496,7 +496,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                           ],
                           StreamBuilder(
                             stream: CurrencyService.instance
-                                .getUserPreferredCurrency(),
+                                .ensureAndGetPreferredCurrency(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData ||
                                   snapshot.data!.code ==

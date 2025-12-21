@@ -150,7 +150,9 @@ class _AccountFormPageState extends State<AccountFormPage> {
       _fillForm();
     }
 
-    CurrencyService.instance.getUserPreferredCurrency().first.then((value) {
+    CurrencyService.instance.ensureAndGetPreferredCurrency().first.then((
+      value,
+    ) {
       setState(() {
         if (widget.account == null) {
           _currency = value;

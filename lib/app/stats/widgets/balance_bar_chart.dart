@@ -294,7 +294,7 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
     return SizedBox(
       height: 300,
       child: StreamBuilder(
-        stream: CurrencyService.instance.getUserPreferredCurrency(),
+        stream: CurrencyService.instance.ensureAndGetPreferredCurrency(),
         builder: (context, userCurrencySnapshot) {
           return FutureBuilder(
             future: getDataByPeriods(

@@ -6,9 +6,9 @@ import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
-import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 showCurrencySelectorModal(
   BuildContext context,
@@ -51,7 +51,7 @@ class _CurrencySelectorModalState extends State<CurrencySelectorModal> {
     _currencyService = CurrencyService.instance;
     _selectedCurrency = widget.preselectedCurrency;
 
-    _currencyService!.getCurrencies().first.then((value) {
+    _currencyService!.getAllCurrencies().first.then((value) {
       setState(() {
         _filteredCurrencies = value;
       });
@@ -75,22 +75,13 @@ class _CurrencySelectorModalState extends State<CurrencySelectorModal> {
           endWidget: Chip(
             side: BorderSide(color: colors.primary, width: 2),
             // backgroundColor: Theme.of(context).colorScheme.primaryLight,
-            label: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(child: Text(_selectedCurrency?.code ?? '???')),
-                Container(
-                  margin: const EdgeInsets.only(left: 6),
-                  clipBehavior: Clip.hardEdge,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: _selectedCurrency != null
-                      ? _selectedCurrency!.displayFlagIcon(size: 20)
-                      : const Skeleton(width: 22, height: 22),
-                ),
-              ],
+            avatar: ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: _selectedCurrency != null
+                  ? _selectedCurrency!.displayFlagIcon(size: 22)
+                  : Bone.circle(size: 22),
             ),
+            label: Text(_selectedCurrency?.code ?? '???'),
           ),
           body: Column(
             children: [
