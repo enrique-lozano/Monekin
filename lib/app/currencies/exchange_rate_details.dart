@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/currencies/exchange_rate_form.dart';
@@ -16,6 +17,7 @@ import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
+import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
@@ -127,9 +129,9 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
     // 2. Upsert modified or new rates
     if (_currentRates != null) {
       final ratesToUpsert = _currentRates!.where((rate) {
-        final original = _originalRates
-            ?.where((r) => r.id == rate.id)
-            .firstOrNull;
+        final original = _originalRates?.firstWhereOrNull(
+          (r) => r.id == rate.id,
+        );
 
         // If original is null, it is a new rate
         if (original == null) return true;
@@ -342,9 +344,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (_currentRates != null &&
-            _currentRates!.isNotEmpty &&
-            MediaQuery.of(context).size.height > 550)
+        if (_currentRates != null && MediaQuery.of(context).size.height > 550)
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 24, 0, 8),
             child: ExchangeRateEvolutionChart(
@@ -375,9 +375,22 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
                   );
 
                   if (newRate != null) {
-                    setState(() {
+                    final existingIndex = _currentRates?.indexWhere(
+                      (r) => DateUtils.isSameDay(r.date, newRate.date),
+                    );
+
+                    if (existingIndex != null && existingIndex != -1) {
+                      _currentRates![existingIndex] = ExchangeRate(
+                        id: _currentRates![existingIndex].id,
+                        date: newRate.date,
+                        currency: newRate.currency,
+                        exchangeRate: newRate.exchangeRate,
+                      );
+                    } else {
                       _currentRates?.add(newRate);
-                    });
+                    }
+
+                    setState(() {});
                   }
                 },
                 icon: const Icon(Icons.add_rounded),
@@ -390,6 +403,12 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
           Flexible(
             child: Builder(
               builder: (context) {
+                if (_currentRates!.isEmpty) {
+                  return NoResults(
+                    description: "t.currencies.no_exchange_rates",
+                  );
+                }
+
                 if (BreakPoint.of(context).isSmallerThan(breakpointChangeIn)) {
                   return buildExchangeRateList();
                 }
