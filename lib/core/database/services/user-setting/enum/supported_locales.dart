@@ -24,6 +24,11 @@ const appSupportedLocales = [
     label: 'English',
     writingSystem: WritingSystem.latin,
   ),
+   SupportedLocale(
+    locale: AppLocale.fr,
+    label: 'Français',
+    writingSystem: WritingSystem.latin,
+  ),
   SupportedLocale(
     locale: AppLocale.de,
     label: 'Deutsch',
