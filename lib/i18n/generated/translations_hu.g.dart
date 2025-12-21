@@ -126,6 +126,7 @@ class _TranslationsGeneralHu implements TranslationsGeneralEn {
 	@override String get show_more_fields => 'Több mező mutatása';
 	@override String get show_less_fields => 'Kevesebb mező mutatása';
 	@override String get tap_to_search => 'Koppintson a kereséshez';
+	@override late final _TranslationsGeneralLeaveWithoutSavingHu leave_without_saving = _TranslationsGeneralLeaveWithoutSavingHu._(_root);
 	@override late final _TranslationsGeneralClipboardHu clipboard = _TranslationsGeneralClipboardHu._(_root);
 	@override late final _TranslationsGeneralTimeHu time = _TranslationsGeneralTimeHu._(_root);
 	@override late final _TranslationsGeneralTransactionOrderHu transaction_order = _TranslationsGeneralTransactionOrderHu._(_root);
@@ -348,6 +349,7 @@ class _TranslationsCurrenciesHu implements TranslationsCurrenciesEn {
 	@override String get currency_manager => 'Valutakezelő';
 	@override String get currency_manager_descr => 'Konfigurálja a pénznemet és annak árfolyamait másokkal együtt';
 	@override String get preferred_currency => 'Kedvelt/alap pénznem';
+	@override String get tap_to_change_preferred_currency => 'Érintse meg a módosításhoz';
 	@override String get change_preferred_currency_title => 'Kedvelt pénznem módosítása';
 	@override String get change_preferred_currency_msg => 'Mostantól minden statisztika és költségvetés ebben a pénznemben jelenik meg. A számlák és tranzakciók megtartják a korábbi pénznemet. Minden elmentett árfolyam törlődik, ha ezt a műveletet végrehajtja. Szeretné folytatni?';
 	@override late final _TranslationsCurrenciesExchangeRateFormHu exchange_rate_form = _TranslationsCurrenciesExchangeRateFormHu._(_root);
@@ -515,6 +517,17 @@ class _TranslationsMoreHu implements TranslationsMoreEn {
 	@override late final _TranslationsMoreDataHu data = _TranslationsMoreDataHu._(_root);
 	@override late final _TranslationsMoreAboutUsHu about_us = _TranslationsMoreAboutUsHu._(_root);
 	@override late final _TranslationsMoreHelpUsHu help_us = _TranslationsMoreHelpUsHu._(_root);
+}
+
+// Path: general.leave_without_saving
+class _TranslationsGeneralLeaveWithoutSavingHu implements TranslationsGeneralLeaveWithoutSavingEn {
+	_TranslationsGeneralLeaveWithoutSavingHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Mentés nélkül távozik?';
+	@override String get message => 'Vannak nem mentett módosításai. Biztos, hogy mentés nélkül kilép?';
 }
 
 // Path: general.clipboard
@@ -1506,6 +1519,8 @@ extension on TranslationsHu {
 		map['general.show_more_fields'] = 'Több mező mutatása';
 		map['general.show_less_fields'] = 'Kevesebb mező mutatása';
 		map['general.tap_to_search'] = 'Koppintson a kereséshez';
+		map['general.leave_without_saving.title'] = 'Mentés nélkül távozik?';
+		map['general.leave_without_saving.message'] = 'Vannak nem mentett módosításai. Biztos, hogy mentés nélkül kilép?';
 		map['general.clipboard.success'] = ({required Object x}) => '${x} a vágólapra másolva';
 		map['general.clipboard.error'] = 'Másolási hiba';
 		map['general.time.start_date'] = 'Kezdő dátum';
@@ -1904,6 +1919,7 @@ extension on TranslationsHu {
 		map['currencies.currency_manager'] = 'Valutakezelő';
 		map['currencies.currency_manager_descr'] = 'Konfigurálja a pénznemet és annak árfolyamait másokkal együtt';
 		map['currencies.preferred_currency'] = 'Kedvelt/alap pénznem';
+		map['currencies.tap_to_change_preferred_currency'] = 'Érintse meg a módosításhoz';
 		map['currencies.change_preferred_currency_title'] = 'Kedvelt pénznem módosítása';
 		map['currencies.change_preferred_currency_msg'] = 'Mostantól minden statisztika és költségvetés ebben a pénznemben jelenik meg. A számlák és tranzakciók megtartják a korábbi pénznemet. Minden elmentett árfolyam törlődik, ha ezt a műveletet végrehajtja. Szeretné folytatni?';
 		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = 'A pénznem nem lehet azonos a felhasználói pénznemmel';

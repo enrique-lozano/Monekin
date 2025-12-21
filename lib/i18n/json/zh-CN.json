@@ -56,6 +56,10 @@
     "show-more-fields": "显示更多",
     "show-less-fields": "显示更少",
     "tap-to-search": "点击以搜索",
+    "LEAVE-WITHOUT-SAVING": {
+      "title": "不保存就离开？",
+      "message": "您有未保存的更改，确定要离开而不保存它们吗？"
+    },
     "CLIPBOARD": {
       "success": "已复制 {{x}}",
       "error": "复制出错"
@@ -510,6 +514,7 @@
     "currency-manager": "货币管理",
     "currency-manager.descr": "设置您的货币及其与其他货币的汇率",
     "preferred-currency": "默认货币",
+    "tap-to-change-preferred-currency": "点击即可更改",
     "change-preferred-currency-title": "更改默认货币",
     "change-preferred-currency-msg": "从现在起，所有统计数据和预算都将以此货币显示。账户和交易将保留其原有货币单位。如果您执行此操作，所有保存的汇率都将被删除。您想继续吗？",
     "EXCHANGE-RATE-FORM": {

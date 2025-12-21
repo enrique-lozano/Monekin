@@ -238,6 +238,7 @@ class TranslationsGeneralEn {
 	/// en: 'Tap to search'
 	String get tap_to_search => 'Tap to search';
 
+	late final TranslationsGeneralLeaveWithoutSavingEn leave_without_saving = TranslationsGeneralLeaveWithoutSavingEn._(_root);
 	late final TranslationsGeneralClipboardEn clipboard = TranslationsGeneralClipboardEn._(_root);
 	late final TranslationsGeneralTimeEn time = TranslationsGeneralTimeEn._(_root);
 	late final TranslationsGeneralTransactionOrderEn transaction_order = TranslationsGeneralTransactionOrderEn._(_root);
@@ -679,6 +680,9 @@ class TranslationsCurrenciesEn {
 	/// en: 'Preferred/base currency'
 	String get preferred_currency => 'Preferred/base currency';
 
+	/// en: 'Tap to change'
+	String get tap_to_change_preferred_currency => 'Tap to change';
+
 	/// en: 'Change preferred currency'
 	String get change_preferred_currency_title => 'Change preferred currency';
 
@@ -1040,6 +1044,21 @@ class TranslationsMoreEn {
 	late final TranslationsMoreDataEn data = TranslationsMoreDataEn._(_root);
 	late final TranslationsMoreAboutUsEn about_us = TranslationsMoreAboutUsEn._(_root);
 	late final TranslationsMoreHelpUsEn help_us = TranslationsMoreHelpUsEn._(_root);
+}
+
+// Path: general.leave_without_saving
+class TranslationsGeneralLeaveWithoutSavingEn {
+	TranslationsGeneralLeaveWithoutSavingEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Leave without saving?'
+	String get title => 'Leave without saving?';
+
+	/// en: 'You have unsaved changes, are you sure you want to leave without saving them?'
+	String get message => 'You have unsaved changes, are you sure you want to leave without saving them?';
 }
 
 // Path: general.clipboard
@@ -2696,6 +2715,8 @@ extension on Translations {
 		map['general.show_more_fields'] = 'Show more fields';
 		map['general.show_less_fields'] = 'Show less fields';
 		map['general.tap_to_search'] = 'Tap to search';
+		map['general.leave_without_saving.title'] = 'Leave without saving?';
+		map['general.leave_without_saving.message'] = 'You have unsaved changes, are you sure you want to leave without saving them?';
 		map['general.clipboard.success'] = ({required Object x}) => '${x} copied to the clipboard';
 		map['general.clipboard.error'] = 'Error copying';
 		map['general.time.start_date'] = 'Start date';
@@ -3094,6 +3115,7 @@ extension on Translations {
 		map['currencies.currency_manager'] = 'Currency manager';
 		map['currencies.currency_manager_descr'] = 'Configure your currency and its exchange rates with others';
 		map['currencies.preferred_currency'] = 'Preferred/base currency';
+		map['currencies.tap_to_change_preferred_currency'] = 'Tap to change';
 		map['currencies.change_preferred_currency_title'] = 'Change preferred currency';
 		map['currencies.change_preferred_currency_msg'] = 'All stats and budgets will be displayed in this currency from now on. Accounts and transactions will keep the currency they had. All saved exchange rates will be deleted if you execute this action. Do you wish to continue?';
 		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = 'The currency cannot be equal to the user currency';

@@ -56,6 +56,10 @@
     "show-more-fields": "Weitere Felder anzeigen",
     "show-less-fields": "Weniger Felder anzeigen",
     "tap-to-search": "Zum Suchen tippen",
+    "LEAVE-WITHOUT-SAVING": {
+      "title": "Ohne zu sparen weggehen?",
+      "message": "Sie haben noch nicht gespeicherte Änderungen. Möchten Sie die Seite wirklich verlassen, ohne sie zu speichern?"
+    },
     "CLIPBOARD": {
       "success": "{{x}} in die Zwischenablage kopiert",
       "error": "Fehler beim Kopieren"
@@ -510,6 +514,7 @@
     "currency-manager": "Währungsmanager",
     "currency-manager.descr": "Konfiguriere Deine Währung und deren Wechselkurse mit anderen",
     "preferred-currency": "Bevorzugte/Basis Währung",
+    "tap-to-change-preferred-currency": "Zum Ändern tippen",
     "change-preferred-currency-title": "Änder die bevorzugte Währung",
     "change-preferred-currency-msg": "Alle Statistiken und Budgets werden ab sofort in dieser Währung angezeigt. Konten und Transaktionen behalten die Währung, die sie hatten. Alle gespeicherten Wechselkurse werden gelöscht, wenn Du diese Aktion ausführst. Möchtest Du fortfahren?",
     "EXCHANGE-RATE-FORM": {

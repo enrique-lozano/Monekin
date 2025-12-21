@@ -126,6 +126,7 @@ class _TranslationsGeneralUk implements TranslationsGeneralEn {
 	@override String get show_more_fields => 'Показати більше полів';
 	@override String get show_less_fields => 'Показати менше полів';
 	@override String get tap_to_search => 'Натисніть для пошуку';
+	@override late final _TranslationsGeneralLeaveWithoutSavingUk leave_without_saving = _TranslationsGeneralLeaveWithoutSavingUk._(_root);
 	@override late final _TranslationsGeneralClipboardUk clipboard = _TranslationsGeneralClipboardUk._(_root);
 	@override late final _TranslationsGeneralTimeUk time = _TranslationsGeneralTimeUk._(_root);
 	@override late final _TranslationsGeneralTransactionOrderUk transaction_order = _TranslationsGeneralTransactionOrderUk._(_root);
@@ -348,6 +349,7 @@ class _TranslationsCurrenciesUk implements TranslationsCurrenciesEn {
 	@override String get currency_manager => 'Менеджер валют';
 	@override String get currency_manager_descr => 'Налаштуйте вашу валюту та її обмінні курси з іншими';
 	@override String get preferred_currency => 'Перевагова/базова валюта';
+	@override String get tap_to_change_preferred_currency => 'Торкніться, щоб змінити';
 	@override String get change_preferred_currency_title => 'Змінити перевагову валюту';
 	@override String get change_preferred_currency_msg => 'Усі статистичні дані та бюджети будуть відображатися в цій валюті відтепер. Рахунки та транзакції залишаться у тій валюті, яку вони мали. Усі збережені обмінні курси будуть видалені, якщо ви виконаєте цю дію. Ви хочете продовжити?';
 	@override late final _TranslationsCurrenciesExchangeRateFormUk exchange_rate_form = _TranslationsCurrenciesExchangeRateFormUk._(_root);
@@ -515,6 +517,17 @@ class _TranslationsMoreUk implements TranslationsMoreEn {
 	@override late final _TranslationsMoreDataUk data = _TranslationsMoreDataUk._(_root);
 	@override late final _TranslationsMoreAboutUsUk about_us = _TranslationsMoreAboutUsUk._(_root);
 	@override late final _TranslationsMoreHelpUsUk help_us = _TranslationsMoreHelpUsUk._(_root);
+}
+
+// Path: general.leave_without_saving
+class _TranslationsGeneralLeaveWithoutSavingUk implements TranslationsGeneralLeaveWithoutSavingEn {
+	_TranslationsGeneralLeaveWithoutSavingUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Вийти без збереження?';
+	@override String get message => 'У вас є незбережені зміни. Ви впевнені, що бажаєте вийти, не зберігаючи їх?';
 }
 
 // Path: general.clipboard
@@ -1506,6 +1519,8 @@ extension on TranslationsUk {
 		map['general.show_more_fields'] = 'Показати більше полів';
 		map['general.show_less_fields'] = 'Показати менше полів';
 		map['general.tap_to_search'] = 'Натисніть для пошуку';
+		map['general.leave_without_saving.title'] = 'Вийти без збереження?';
+		map['general.leave_without_saving.message'] = 'У вас є незбережені зміни. Ви впевнені, що бажаєте вийти, не зберігаючи їх?';
 		map['general.clipboard.success'] = ({required Object x}) => '${x} скопійовано в буфер обміну';
 		map['general.clipboard.error'] = 'Помилка копіювання';
 		map['general.time.start_date'] = 'Початкова дата';
@@ -1904,6 +1919,7 @@ extension on TranslationsUk {
 		map['currencies.currency_manager'] = 'Менеджер валют';
 		map['currencies.currency_manager_descr'] = 'Налаштуйте вашу валюту та її обмінні курси з іншими';
 		map['currencies.preferred_currency'] = 'Перевагова/базова валюта';
+		map['currencies.tap_to_change_preferred_currency'] = 'Торкніться, щоб змінити';
 		map['currencies.change_preferred_currency_title'] = 'Змінити перевагову валюту';
 		map['currencies.change_preferred_currency_msg'] = 'Усі статистичні дані та бюджети будуть відображатися в цій валюті відтепер. Рахунки та транзакції залишаться у тій валюті, яку вони мали. Усі збережені обмінні курси будуть видалені, якщо ви виконаєте цю дію. Ви хочете продовжити?';
 		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = 'Валюта не може бути однаковою з валютою користувача';

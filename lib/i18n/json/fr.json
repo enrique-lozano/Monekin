@@ -56,6 +56,10 @@
     "show-more-fields": "Afficher plus de champs",
     "show-less-fields": "Afficher moins de champs",
     "tap-to-search": "Touchez pour rechercher",
+    "LEAVE-WITHOUT-SAVING": {
+      "title": "Partir sans économiser ?",
+      "message": "Vous avez des modifications non enregistrées, êtes-vous sûr de vouloir quitter sans les enregistrer ?"
+    },
     "CLIPBOARD": {
       "success": "{{x}} copié dans le presse-papiers",
       "error": "Erreur lors de la copie"
@@ -510,6 +514,7 @@
     "currency-manager": "Gestionnaire de devises",
     "currency-manager.descr": "Configurez votre devise et ses taux de change avec les autres",
     "preferred-currency": "Devise de base/préférée",
+    "tap-to-change-preferred-currency": "Appuyez pour modifier",
     "change-preferred-currency-title": "Changer la devise préférée",
     "change-preferred-currency-msg": "Toutes les statistiques et budgets seront affichés dans cette devise à partir de maintenant. Les comptes et transactions conserveront la devise qu'ils avaient. Tous les taux de change enregistrés seront supprimés si vous effectuez cette action. Voulez-vous continuer ?",
     "EXCHANGE-RATE-FORM": {

@@ -87,7 +87,9 @@ class CurrencyManagerPage extends StatelessWidget {
                             ? 'PLA - Placeholder'
                             : ('${userCurrency.name} - ${userCurrency.code}'),
                       ),
-                      subtitle: Text("Click to change"),
+                      subtitle: Text(
+                        t.currencies.tap_to_change_preferred_currency,
+                      ),
                       onTap: () {
                         if (userCurrency == null) return;
 

@@ -126,6 +126,7 @@ class _TranslationsGeneralIt implements TranslationsGeneralEn {
 	@override String get show_more_fields => 'Mostra più campi';
 	@override String get show_less_fields => 'Mostra meno campi';
 	@override String get tap_to_search => 'Tocca per cercare';
+	@override late final _TranslationsGeneralLeaveWithoutSavingIt leave_without_saving = _TranslationsGeneralLeaveWithoutSavingIt._(_root);
 	@override late final _TranslationsGeneralClipboardIt clipboard = _TranslationsGeneralClipboardIt._(_root);
 	@override late final _TranslationsGeneralTimeIt time = _TranslationsGeneralTimeIt._(_root);
 	@override late final _TranslationsGeneralTransactionOrderIt transaction_order = _TranslationsGeneralTransactionOrderIt._(_root);
@@ -348,6 +349,7 @@ class _TranslationsCurrenciesIt implements TranslationsCurrenciesEn {
 	@override String get currency_manager => 'Gestore valute';
 	@override String get currency_manager_descr => 'Configura la tua valuta e i suoi tassi di cambio con altre';
 	@override String get preferred_currency => 'Valuta preferita/base';
+	@override String get tap_to_change_preferred_currency => 'Tocca per modificare';
 	@override String get change_preferred_currency_title => 'Cambia valuta preferita';
 	@override String get change_preferred_currency_msg => 'Tutte le statistiche e i budget saranno visualizzati in questa valuta d\'ora in poi. Conti e transazioni manterranno la valuta che avevano. Tutti i tassi di cambio salvati verranno eliminati se esegui questa azione. Desideri continuare?';
 	@override late final _TranslationsCurrenciesExchangeRateFormIt exchange_rate_form = _TranslationsCurrenciesExchangeRateFormIt._(_root);
@@ -515,6 +517,17 @@ class _TranslationsMoreIt implements TranslationsMoreEn {
 	@override late final _TranslationsMoreDataIt data = _TranslationsMoreDataIt._(_root);
 	@override late final _TranslationsMoreAboutUsIt about_us = _TranslationsMoreAboutUsIt._(_root);
 	@override late final _TranslationsMoreHelpUsIt help_us = _TranslationsMoreHelpUsIt._(_root);
+}
+
+// Path: general.leave_without_saving
+class _TranslationsGeneralLeaveWithoutSavingIt implements TranslationsGeneralLeaveWithoutSavingEn {
+	_TranslationsGeneralLeaveWithoutSavingIt._(this._root);
+
+	final TranslationsIt _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Uscire senza salvare?';
+	@override String get message => 'Hai modifiche non salvate, sei sicuro di voler uscire senza salvarle?';
 }
 
 // Path: general.clipboard
@@ -1506,6 +1519,8 @@ extension on TranslationsIt {
 		map['general.show_more_fields'] = 'Mostra più campi';
 		map['general.show_less_fields'] = 'Mostra meno campi';
 		map['general.tap_to_search'] = 'Tocca per cercare';
+		map['general.leave_without_saving.title'] = 'Uscire senza salvare?';
+		map['general.leave_without_saving.message'] = 'Hai modifiche non salvate, sei sicuro di voler uscire senza salvarle?';
 		map['general.clipboard.success'] = ({required Object x}) => '${x} copiato negli appunti';
 		map['general.clipboard.error'] = 'Errore di copia';
 		map['general.time.start_date'] = 'Data di inizio';
@@ -1904,6 +1919,7 @@ extension on TranslationsIt {
 		map['currencies.currency_manager'] = 'Gestore valute';
 		map['currencies.currency_manager_descr'] = 'Configura la tua valuta e i suoi tassi di cambio con altre';
 		map['currencies.preferred_currency'] = 'Valuta preferita/base';
+		map['currencies.tap_to_change_preferred_currency'] = 'Tocca per modificare';
 		map['currencies.change_preferred_currency_title'] = 'Cambia valuta preferita';
 		map['currencies.change_preferred_currency_msg'] = 'Tutte le statistiche e i budget saranno visualizzati in questa valuta d\'ora in poi. Conti e transazioni manterranno la valuta che avevano. Tutti i tassi di cambio salvati verranno eliminati se esegui questa azione. Desideri continuare?';
 		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = 'La valuta non può essere uguale alla valuta dell\'utente';

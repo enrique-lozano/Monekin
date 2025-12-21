@@ -56,6 +56,10 @@
     "show-more-fields": "顯示更多欄位",
     "show-less-fields": "顯示較少的欄位",
     "tap-to-search": "點擊即可搜尋",
+    "LEAVE-WITHOUT-SAVING": {
+      "title": "不保存就離開？",
+      "message": "您有未保存的更改，確定要離開而不保存它們嗎？"
+    },
     "CLIPBOARD": {
       "success": "{{x}}已複製到剪貼簿",
       "error": "複製錯誤"
@@ -510,6 +514,7 @@
     "currency-manager": "貨幣管理",
     "currency-manager.descr": "配置您的貨幣及其與其他貨幣的匯率",
     "preferred-currency": "首選/基礎貨幣",
+    "tap-to-change-preferred-currency": "點擊即可更改",
     "change-preferred-currency-title": "更改首選貨幣",
     "change-preferred-currency-msg": "從現在開始，所有統計數據和預算都將以該貨幣顯示。帳戶和交易將保留其所擁有的貨幣。如果您執行此操作，所有保存的匯率都將被刪除。您想繼續嗎？",
     "EXCHANGE-RATE-FORM": {

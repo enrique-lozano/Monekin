@@ -56,6 +56,10 @@
     "show-more-fields": "Show more fields",
     "show-less-fields": "Show less fields",
     "tap-to-search": "Tap to search",
+    "LEAVE-WITHOUT-SAVING": {
+      "title": "Leave without saving?",
+      "message": "You have unsaved changes, are you sure you want to leave without saving them?"
+    },
     "CLIPBOARD": {
       "success": "{{x}} copied to the clipboard",
       "error": "Error copying"
@@ -498,6 +502,7 @@
     "currency-manager": "Currency manager",
     "currency-manager.descr": "Configure your currency and its exchange rates with others",
     "preferred-currency": "Preferred/base currency",
+    "tap-to-change-preferred-currency": "Tap to change",
     "change-preferred-currency-title": "Change preferred currency",
     "change-preferred-currency-msg": "All stats and budgets will be displayed in this currency from now on. Accounts and transactions will keep the currency they had. All saved exchange rates will be deleted if you execute this action. Do you wish to continue?",
     "EXCHANGE-RATE-FORM": {

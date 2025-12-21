@@ -126,6 +126,7 @@ class _TranslationsGeneralEs implements TranslationsGeneralEn {
 	@override String get show_more_fields => 'Show more fields';
 	@override String get show_less_fields => 'Show less fields';
 	@override String get tap_to_search => 'Toca para buscar';
+	@override late final _TranslationsGeneralLeaveWithoutSavingEs leave_without_saving = _TranslationsGeneralLeaveWithoutSavingEs._(_root);
 	@override late final _TranslationsGeneralClipboardEs clipboard = _TranslationsGeneralClipboardEs._(_root);
 	@override late final _TranslationsGeneralTimeEs time = _TranslationsGeneralTimeEs._(_root);
 	@override late final _TranslationsGeneralTransactionOrderEs transaction_order = _TranslationsGeneralTransactionOrderEs._(_root);
@@ -348,6 +349,7 @@ class _TranslationsCurrenciesEs implements TranslationsCurrenciesEn {
 	@override String get currency_manager => 'Administrador de divisas';
 	@override String get currency_manager_descr => 'Configura tu divisa y sus tipos de cambio con otras';
 	@override String get preferred_currency => 'Divisa predeterminada/base';
+	@override String get tap_to_change_preferred_currency => 'Toca para cambiar';
 	@override String get change_preferred_currency_title => 'Cambiar divisa predeterminada';
 	@override String get change_preferred_currency_msg => 'Todas las estadisticas y presupuestos serán mostradas en esta divisa a partir de ahora. Las cuentas y transacciones mantendrán la divisa que tenían. Todos los tipos de cambios guardados serán eliminados si ejecutas esta acción, ¿Desea continuar?';
 	@override late final _TranslationsCurrenciesExchangeRateFormEs exchange_rate_form = _TranslationsCurrenciesExchangeRateFormEs._(_root);
@@ -515,6 +517,17 @@ class _TranslationsMoreEs implements TranslationsMoreEn {
 	@override late final _TranslationsMoreDataEs data = _TranslationsMoreDataEs._(_root);
 	@override late final _TranslationsMoreAboutUsEs about_us = _TranslationsMoreAboutUsEs._(_root);
 	@override late final _TranslationsMoreHelpUsEs help_us = _TranslationsMoreHelpUsEs._(_root);
+}
+
+// Path: general.leave_without_saving
+class _TranslationsGeneralLeaveWithoutSavingEs implements TranslationsGeneralLeaveWithoutSavingEn {
+	_TranslationsGeneralLeaveWithoutSavingEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '¿Salir sin guardar?';
+	@override String get message => 'Tienes cambios sin guardar, ¿estás seguro de que quieres continuar y salir sin guardarlos?';
 }
 
 // Path: general.clipboard
@@ -1507,6 +1520,8 @@ extension on TranslationsEs {
 		map['general.show_more_fields'] = 'Show more fields';
 		map['general.show_less_fields'] = 'Show less fields';
 		map['general.tap_to_search'] = 'Toca para buscar';
+		map['general.leave_without_saving.title'] = '¿Salir sin guardar?';
+		map['general.leave_without_saving.message'] = 'Tienes cambios sin guardar, ¿estás seguro de que quieres continuar y salir sin guardarlos?';
 		map['general.clipboard.success'] = ({required Object x}) => '${x} copiado al portapapeles';
 		map['general.clipboard.error'] = 'Error al copiar';
 		map['general.time.start_date'] = 'Fecha de inicio';
@@ -1906,6 +1921,7 @@ extension on TranslationsEs {
 		map['currencies.currency_manager'] = 'Administrador de divisas';
 		map['currencies.currency_manager_descr'] = 'Configura tu divisa y sus tipos de cambio con otras';
 		map['currencies.preferred_currency'] = 'Divisa predeterminada/base';
+		map['currencies.tap_to_change_preferred_currency'] = 'Toca para cambiar';
 		map['currencies.change_preferred_currency_title'] = 'Cambiar divisa predeterminada';
 		map['currencies.change_preferred_currency_msg'] = 'Todas las estadisticas y presupuestos serán mostradas en esta divisa a partir de ahora. Las cuentas y transacciones mantendrán la divisa que tenían. Todos los tipos de cambios guardados serán eliminados si ejecutas esta acción, ¿Desea continuar?';
 		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = 'La divisa seleccionada no puede ser la misma que la divisa predeterminada';

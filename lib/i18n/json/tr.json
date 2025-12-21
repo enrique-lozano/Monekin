@@ -56,6 +56,10 @@
     "show-more-fields": "Daha fazla alan göster",
     "show-less-fields": "Daha az alan göster",
     "tap-to-search": "Aramak için dokunun",
+    "LEAVE-WITHOUT-SAVING": {
+      "title": "Kaydetmeden ayrılmak mı istiyorsunuz?",
+      "message": "Kaydedilmemiş değişiklikleriniz var, bunları kaydetmeden ayrılmak istediğinizden emin misiniz?"
+    },
     "CLIPBOARD": {
       "success": "{{x}} panoya kopyalandı",
       "error": "Kopyalama hatası"
@@ -510,6 +514,7 @@
     "currency-manager": "Para birimi yöneticisi",
     "currency-manager.descr": "Para biriminizi ve diğerleriyle döviz kurlarını yapılandırın",
     "preferred-currency": "Tercih edilen/temel para birimi",
+    "tap-to-change-preferred-currency": "Değiştirmek için dokunun",
     "change-preferred-currency-title": "Tercih edilen para birimini değiştir",
     "change-preferred-currency-msg": "Tüm istatistikler ve bütçeler bundan sonra bu para biriminde görüntülenecektir. Hesaplar ve işlemler sahip oldukları para birimini koruyacaktır. Bu eylemi gerçekleştirirseniz, kaydedilen tüm döviz kurları silinecektir. Devam etmek istiyor musunuz?",
     "EXCHANGE-RATE-FORM": {

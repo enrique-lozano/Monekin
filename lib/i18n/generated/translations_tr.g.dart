@@ -126,6 +126,7 @@ class _TranslationsGeneralTr implements TranslationsGeneralEn {
 	@override String get show_more_fields => 'Daha fazla alan göster';
 	@override String get show_less_fields => 'Daha az alan göster';
 	@override String get tap_to_search => 'Aramak için dokunun';
+	@override late final _TranslationsGeneralLeaveWithoutSavingTr leave_without_saving = _TranslationsGeneralLeaveWithoutSavingTr._(_root);
 	@override late final _TranslationsGeneralClipboardTr clipboard = _TranslationsGeneralClipboardTr._(_root);
 	@override late final _TranslationsGeneralTimeTr time = _TranslationsGeneralTimeTr._(_root);
 	@override late final _TranslationsGeneralTransactionOrderTr transaction_order = _TranslationsGeneralTransactionOrderTr._(_root);
@@ -348,6 +349,7 @@ class _TranslationsCurrenciesTr implements TranslationsCurrenciesEn {
 	@override String get currency_manager => 'Para birimi yöneticisi';
 	@override String get currency_manager_descr => 'Para biriminizi ve diğerleriyle döviz kurlarını yapılandırın';
 	@override String get preferred_currency => 'Tercih edilen/temel para birimi';
+	@override String get tap_to_change_preferred_currency => 'Değiştirmek için dokunun';
 	@override String get change_preferred_currency_title => 'Tercih edilen para birimini değiştir';
 	@override String get change_preferred_currency_msg => 'Tüm istatistikler ve bütçeler bundan sonra bu para biriminde görüntülenecektir. Hesaplar ve işlemler sahip oldukları para birimini koruyacaktır. Bu eylemi gerçekleştirirseniz, kaydedilen tüm döviz kurları silinecektir. Devam etmek istiyor musunuz?';
 	@override late final _TranslationsCurrenciesExchangeRateFormTr exchange_rate_form = _TranslationsCurrenciesExchangeRateFormTr._(_root);
@@ -515,6 +517,17 @@ class _TranslationsMoreTr implements TranslationsMoreEn {
 	@override late final _TranslationsMoreDataTr data = _TranslationsMoreDataTr._(_root);
 	@override late final _TranslationsMoreAboutUsTr about_us = _TranslationsMoreAboutUsTr._(_root);
 	@override late final _TranslationsMoreHelpUsTr help_us = _TranslationsMoreHelpUsTr._(_root);
+}
+
+// Path: general.leave_without_saving
+class _TranslationsGeneralLeaveWithoutSavingTr implements TranslationsGeneralLeaveWithoutSavingEn {
+	_TranslationsGeneralLeaveWithoutSavingTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Kaydetmeden ayrılmak mı istiyorsunuz?';
+	@override String get message => 'Kaydedilmemiş değişiklikleriniz var, bunları kaydetmeden ayrılmak istediğinizden emin misiniz?';
 }
 
 // Path: general.clipboard
@@ -1506,6 +1519,8 @@ extension on TranslationsTr {
 		map['general.show_more_fields'] = 'Daha fazla alan göster';
 		map['general.show_less_fields'] = 'Daha az alan göster';
 		map['general.tap_to_search'] = 'Aramak için dokunun';
+		map['general.leave_without_saving.title'] = 'Kaydetmeden ayrılmak mı istiyorsunuz?';
+		map['general.leave_without_saving.message'] = 'Kaydedilmemiş değişiklikleriniz var, bunları kaydetmeden ayrılmak istediğinizden emin misiniz?';
 		map['general.clipboard.success'] = ({required Object x}) => '${x} panoya kopyalandı';
 		map['general.clipboard.error'] = 'Kopyalama hatası';
 		map['general.time.start_date'] = 'Başlangıç tarihi';
@@ -1904,6 +1919,7 @@ extension on TranslationsTr {
 		map['currencies.currency_manager'] = 'Para birimi yöneticisi';
 		map['currencies.currency_manager_descr'] = 'Para biriminizi ve diğerleriyle döviz kurlarını yapılandırın';
 		map['currencies.preferred_currency'] = 'Tercih edilen/temel para birimi';
+		map['currencies.tap_to_change_preferred_currency'] = 'Değiştirmek için dokunun';
 		map['currencies.change_preferred_currency_title'] = 'Tercih edilen para birimini değiştir';
 		map['currencies.change_preferred_currency_msg'] = 'Tüm istatistikler ve bütçeler bundan sonra bu para biriminde görüntülenecektir. Hesaplar ve işlemler sahip oldukları para birimini koruyacaktır. Bu eylemi gerçekleştirirseniz, kaydedilen tüm döviz kurları silinecektir. Devam etmek istiyor musunuz?';
 		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = 'Para birimi, kullanıcı para birimine eşit olamaz';

@@ -16,6 +16,7 @@ import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
+import 'package:monekin/core/presentation/widgets/exit_without_save_warn_dialog.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
@@ -198,14 +199,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
         if (didPop) return;
 
         if (_hasChanges) {
-          confirmDialog(
-            context,
-            canPop: false,
-            dialogTitle: "UNs",
-            contentParagraphs: [],
-          ).then((isConfirmed) {
-            if (isConfirmed == true) RouteUtils.popRoute();
-          });
+          showExitWithoutSaveWarnDialog(context);
         }
       },
       child: PageFramework(

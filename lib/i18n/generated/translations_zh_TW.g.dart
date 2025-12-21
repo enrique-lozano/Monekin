@@ -126,6 +126,7 @@ class _TranslationsGeneralZhTw implements TranslationsGeneralEn {
 	@override String get show_more_fields => '顯示更多欄位';
 	@override String get show_less_fields => '顯示較少的欄位';
 	@override String get tap_to_search => '點擊即可搜尋';
+	@override late final _TranslationsGeneralLeaveWithoutSavingZhTw leave_without_saving = _TranslationsGeneralLeaveWithoutSavingZhTw._(_root);
 	@override late final _TranslationsGeneralClipboardZhTw clipboard = _TranslationsGeneralClipboardZhTw._(_root);
 	@override late final _TranslationsGeneralTimeZhTw time = _TranslationsGeneralTimeZhTw._(_root);
 	@override late final _TranslationsGeneralTransactionOrderZhTw transaction_order = _TranslationsGeneralTransactionOrderZhTw._(_root);
@@ -348,6 +349,7 @@ class _TranslationsCurrenciesZhTw implements TranslationsCurrenciesEn {
 	@override String get currency_manager => '貨幣管理';
 	@override String get currency_manager_descr => '配置您的貨幣及其與其他貨幣的匯率';
 	@override String get preferred_currency => '首選/基礎貨幣';
+	@override String get tap_to_change_preferred_currency => '點擊即可更改';
 	@override String get change_preferred_currency_title => '更改首選貨幣';
 	@override String get change_preferred_currency_msg => '從現在開始，所有統計數據和預算都將以該貨幣顯示。帳戶和交易將保留其所擁有的貨幣。如果您執行此操作，所有保存的匯率都將被刪除。您想繼續嗎？';
 	@override late final _TranslationsCurrenciesExchangeRateFormZhTw exchange_rate_form = _TranslationsCurrenciesExchangeRateFormZhTw._(_root);
@@ -515,6 +517,17 @@ class _TranslationsMoreZhTw implements TranslationsMoreEn {
 	@override late final _TranslationsMoreDataZhTw data = _TranslationsMoreDataZhTw._(_root);
 	@override late final _TranslationsMoreAboutUsZhTw about_us = _TranslationsMoreAboutUsZhTw._(_root);
 	@override late final _TranslationsMoreHelpUsZhTw help_us = _TranslationsMoreHelpUsZhTw._(_root);
+}
+
+// Path: general.leave_without_saving
+class _TranslationsGeneralLeaveWithoutSavingZhTw implements TranslationsGeneralLeaveWithoutSavingEn {
+	_TranslationsGeneralLeaveWithoutSavingZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '不保存就離開？';
+	@override String get message => '您有未保存的更改，確定要離開而不保存它們嗎？';
 }
 
 // Path: general.clipboard
@@ -1506,6 +1519,8 @@ extension on TranslationsZhTw {
 		map['general.show_more_fields'] = '顯示更多欄位';
 		map['general.show_less_fields'] = '顯示較少的欄位';
 		map['general.tap_to_search'] = '點擊即可搜尋';
+		map['general.leave_without_saving.title'] = '不保存就離開？';
+		map['general.leave_without_saving.message'] = '您有未保存的更改，確定要離開而不保存它們嗎？';
 		map['general.clipboard.success'] = ({required Object x}) => '${x}已複製到剪貼簿';
 		map['general.clipboard.error'] = '複製錯誤';
 		map['general.time.start_date'] = '開始日期';
@@ -1904,6 +1919,7 @@ extension on TranslationsZhTw {
 		map['currencies.currency_manager'] = '貨幣管理';
 		map['currencies.currency_manager_descr'] = '配置您的貨幣及其與其他貨幣的匯率';
 		map['currencies.preferred_currency'] = '首選/基礎貨幣';
+		map['currencies.tap_to_change_preferred_currency'] = '點擊即可更改';
 		map['currencies.change_preferred_currency_title'] = '更改首選貨幣';
 		map['currencies.change_preferred_currency_msg'] = '從現在開始，所有統計數據和預算都將以該貨幣顯示。帳戶和交易將保留其所擁有的貨幣。如果您執行此操作，所有保存的匯率都將被刪除。您想繼續嗎？';
 		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = '幣種不能等於用戶幣種';

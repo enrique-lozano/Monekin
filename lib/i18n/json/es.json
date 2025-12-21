@@ -56,6 +56,10 @@
     "show-more-fields": "Show more fields",
     "show-less-fields": "Show less fields",
     "tap-to-search": "Toca para buscar",
+    "LEAVE-WITHOUT-SAVING": {
+      "title": "¿Salir sin guardar?",
+      "message": "Tienes cambios sin guardar, ¿estás seguro de que quieres continuar y salir sin guardarlos?"
+    },
     "CLIPBOARD": {
       "success": "{{x}} copiado al portapapeles",
       "error": "Error al copiar"
@@ -513,6 +517,7 @@
     "currency-manager": "Administrador de divisas",
     "currency-manager.descr": "Configura tu divisa y sus tipos de cambio con otras",
     "preferred-currency": "Divisa predeterminada/base",
+    "tap-to-change-preferred-currency": "Toca para cambiar",
     "change-preferred-currency-title": "Cambiar divisa predeterminada",
     "change-preferred-currency-msg": "Todas las estadisticas y presupuestos serán mostradas en esta divisa a partir de ahora. Las cuentas y transacciones mantendrán la divisa que tenían. Todos los tipos de cambios guardados serán eliminados si ejecutas esta acción, ¿Desea continuar?",
     "EXCHANGE-RATE-FORM": {

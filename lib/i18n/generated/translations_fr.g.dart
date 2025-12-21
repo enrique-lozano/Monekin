@@ -126,6 +126,7 @@ class _TranslationsGeneralFr implements TranslationsGeneralEn {
 	@override String get show_more_fields => 'Afficher plus de champs';
 	@override String get show_less_fields => 'Afficher moins de champs';
 	@override String get tap_to_search => 'Touchez pour rechercher';
+	@override late final _TranslationsGeneralLeaveWithoutSavingFr leave_without_saving = _TranslationsGeneralLeaveWithoutSavingFr._(_root);
 	@override late final _TranslationsGeneralClipboardFr clipboard = _TranslationsGeneralClipboardFr._(_root);
 	@override late final _TranslationsGeneralTimeFr time = _TranslationsGeneralTimeFr._(_root);
 	@override late final _TranslationsGeneralTransactionOrderFr transaction_order = _TranslationsGeneralTransactionOrderFr._(_root);
@@ -348,6 +349,7 @@ class _TranslationsCurrenciesFr implements TranslationsCurrenciesEn {
 	@override String get currency_manager => 'Gestionnaire de devises';
 	@override String get currency_manager_descr => 'Configurez votre devise et ses taux de change avec les autres';
 	@override String get preferred_currency => 'Devise de base/préférée';
+	@override String get tap_to_change_preferred_currency => 'Appuyez pour modifier';
 	@override String get change_preferred_currency_title => 'Changer la devise préférée';
 	@override String get change_preferred_currency_msg => 'Toutes les statistiques et budgets seront affichés dans cette devise à partir de maintenant. Les comptes et transactions conserveront la devise qu\'ils avaient. Tous les taux de change enregistrés seront supprimés si vous effectuez cette action. Voulez-vous continuer ?';
 	@override late final _TranslationsCurrenciesExchangeRateFormFr exchange_rate_form = _TranslationsCurrenciesExchangeRateFormFr._(_root);
@@ -515,6 +517,17 @@ class _TranslationsMoreFr implements TranslationsMoreEn {
 	@override late final _TranslationsMoreDataFr data = _TranslationsMoreDataFr._(_root);
 	@override late final _TranslationsMoreAboutUsFr about_us = _TranslationsMoreAboutUsFr._(_root);
 	@override late final _TranslationsMoreHelpUsFr help_us = _TranslationsMoreHelpUsFr._(_root);
+}
+
+// Path: general.leave_without_saving
+class _TranslationsGeneralLeaveWithoutSavingFr implements TranslationsGeneralLeaveWithoutSavingEn {
+	_TranslationsGeneralLeaveWithoutSavingFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Partir sans économiser ?';
+	@override String get message => 'Vous avez des modifications non enregistrées, êtes-vous sûr de vouloir quitter sans les enregistrer ?';
 }
 
 // Path: general.clipboard
@@ -1504,6 +1517,8 @@ extension on TranslationsFr {
 		map['general.show_more_fields'] = 'Afficher plus de champs';
 		map['general.show_less_fields'] = 'Afficher moins de champs';
 		map['general.tap_to_search'] = 'Touchez pour rechercher';
+		map['general.leave_without_saving.title'] = 'Partir sans économiser ?';
+		map['general.leave_without_saving.message'] = 'Vous avez des modifications non enregistrées, êtes-vous sûr de vouloir quitter sans les enregistrer ?';
 		map['general.clipboard.success'] = ({required Object x}) => '${x} copié dans le presse-papiers';
 		map['general.clipboard.error'] = 'Erreur lors de la copie';
 		map['general.time.start_date'] = 'Date de début';
@@ -1902,6 +1917,7 @@ extension on TranslationsFr {
 		map['currencies.currency_manager'] = 'Gestionnaire de devises';
 		map['currencies.currency_manager_descr'] = 'Configurez votre devise et ses taux de change avec les autres';
 		map['currencies.preferred_currency'] = 'Devise de base/préférée';
+		map['currencies.tap_to_change_preferred_currency'] = 'Appuyez pour modifier';
 		map['currencies.change_preferred_currency_title'] = 'Changer la devise préférée';
 		map['currencies.change_preferred_currency_msg'] = 'Toutes les statistiques et budgets seront affichés dans cette devise à partir de maintenant. Les comptes et transactions conserveront la devise qu\'ils avaient. Tous les taux de change enregistrés seront supprimés si vous effectuez cette action. Voulez-vous continuer ?';
 		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = 'La devise ne peut pas être identique à la devise de l\'utilisateur';

@@ -126,6 +126,7 @@ class _TranslationsGeneralDe implements TranslationsGeneralEn {
 	@override String get show_more_fields => 'Weitere Felder anzeigen';
 	@override String get show_less_fields => 'Weniger Felder anzeigen';
 	@override String get tap_to_search => 'Zum Suchen tippen';
+	@override late final _TranslationsGeneralLeaveWithoutSavingDe leave_without_saving = _TranslationsGeneralLeaveWithoutSavingDe._(_root);
 	@override late final _TranslationsGeneralClipboardDe clipboard = _TranslationsGeneralClipboardDe._(_root);
 	@override late final _TranslationsGeneralTimeDe time = _TranslationsGeneralTimeDe._(_root);
 	@override late final _TranslationsGeneralTransactionOrderDe transaction_order = _TranslationsGeneralTransactionOrderDe._(_root);
@@ -348,6 +349,7 @@ class _TranslationsCurrenciesDe implements TranslationsCurrenciesEn {
 	@override String get currency_manager => 'Währungsmanager';
 	@override String get currency_manager_descr => 'Konfiguriere Deine Währung und deren Wechselkurse mit anderen';
 	@override String get preferred_currency => 'Bevorzugte/Basis Währung';
+	@override String get tap_to_change_preferred_currency => 'Zum Ändern tippen';
 	@override String get change_preferred_currency_title => 'Änder die bevorzugte Währung';
 	@override String get change_preferred_currency_msg => 'Alle Statistiken und Budgets werden ab sofort in dieser Währung angezeigt. Konten und Transaktionen behalten die Währung, die sie hatten. Alle gespeicherten Wechselkurse werden gelöscht, wenn Du diese Aktion ausführst. Möchtest Du fortfahren?';
 	@override late final _TranslationsCurrenciesExchangeRateFormDe exchange_rate_form = _TranslationsCurrenciesExchangeRateFormDe._(_root);
@@ -515,6 +517,17 @@ class _TranslationsMoreDe implements TranslationsMoreEn {
 	@override late final _TranslationsMoreDataDe data = _TranslationsMoreDataDe._(_root);
 	@override late final _TranslationsMoreAboutUsDe about_us = _TranslationsMoreAboutUsDe._(_root);
 	@override late final _TranslationsMoreHelpUsDe help_us = _TranslationsMoreHelpUsDe._(_root);
+}
+
+// Path: general.leave_without_saving
+class _TranslationsGeneralLeaveWithoutSavingDe implements TranslationsGeneralLeaveWithoutSavingEn {
+	_TranslationsGeneralLeaveWithoutSavingDe._(this._root);
+
+	final TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Ohne zu sparen weggehen?';
+	@override String get message => 'Sie haben noch nicht gespeicherte Änderungen. Möchten Sie die Seite wirklich verlassen, ohne sie zu speichern?';
 }
 
 // Path: general.clipboard
@@ -1506,6 +1519,8 @@ extension on TranslationsDe {
 		map['general.show_more_fields'] = 'Weitere Felder anzeigen';
 		map['general.show_less_fields'] = 'Weniger Felder anzeigen';
 		map['general.tap_to_search'] = 'Zum Suchen tippen';
+		map['general.leave_without_saving.title'] = 'Ohne zu sparen weggehen?';
+		map['general.leave_without_saving.message'] = 'Sie haben noch nicht gespeicherte Änderungen. Möchten Sie die Seite wirklich verlassen, ohne sie zu speichern?';
 		map['general.clipboard.success'] = ({required Object x}) => '${x} in die Zwischenablage kopiert';
 		map['general.clipboard.error'] = 'Fehler beim Kopieren';
 		map['general.time.start_date'] = 'Startdatum';
@@ -1904,6 +1919,7 @@ extension on TranslationsDe {
 		map['currencies.currency_manager'] = 'Währungsmanager';
 		map['currencies.currency_manager_descr'] = 'Konfiguriere Deine Währung und deren Wechselkurse mit anderen';
 		map['currencies.preferred_currency'] = 'Bevorzugte/Basis Währung';
+		map['currencies.tap_to_change_preferred_currency'] = 'Zum Ändern tippen';
 		map['currencies.change_preferred_currency_title'] = 'Änder die bevorzugte Währung';
 		map['currencies.change_preferred_currency_msg'] = 'Alle Statistiken und Budgets werden ab sofort in dieser Währung angezeigt. Konten und Transaktionen behalten die Währung, die sie hatten. Alle gespeicherten Wechselkurse werden gelöscht, wenn Du diese Aktion ausführst. Möchtest Du fortfahren?';
 		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = 'Die Währung darf nicht mit der Benutzerwährung übereinstimmen';
