@@ -225,7 +225,6 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
                 onClick: _currency.isDefault
                     ? null
                     : () async {
-                        print("HPA");
                         final confirmed = await confirmDialog(
                           context,
                           dialogTitle: t.ui_actions.delete,
