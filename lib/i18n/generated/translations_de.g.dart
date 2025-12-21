@@ -526,7 +526,7 @@ class _TranslationsGeneralLeaveWithoutSavingDe implements TranslationsGeneralLea
 	final TranslationsDe _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Ohne zu sparen weggehen?';
+	@override String get title => 'Ohne zu speichern verlassen?';
 	@override String get message => 'Sie haben noch nicht gespeicherte Änderungen. Möchten Sie die Seite wirklich verlassen, ohne sie zu speichern?';
 }
 
@@ -996,6 +996,8 @@ class _TranslationsCurrenciesCurrencyFormDe implements TranslationsCurrenciesCur
 	@override String get create_success => 'Währung erfolgreich erstellt';
 	@override String get edit => 'Währung bearbeiten';
 	@override String get edit_success => 'Währung erfolgreich bearbeitet';
+	@override String get delete => 'Währung löschen';
+	@override String get delete_success => 'Währung erfolgreich gelöscht';
 	@override String get already_exists => 'Eine Währung mit diesem Code existiert bereits. Möglicherweise möchten Sie es bearbeiten';
 }
 
@@ -1519,7 +1521,7 @@ extension on TranslationsDe {
 		map['general.show_more_fields'] = 'Weitere Felder anzeigen';
 		map['general.show_less_fields'] = 'Weniger Felder anzeigen';
 		map['general.tap_to_search'] = 'Zum Suchen tippen';
-		map['general.leave_without_saving.title'] = 'Ohne zu sparen weggehen?';
+		map['general.leave_without_saving.title'] = 'Ohne zu speichern verlassen?';
 		map['general.leave_without_saving.message'] = 'Sie haben noch nicht gespeicherte Änderungen. Möchten Sie die Seite wirklich verlassen, ohne sie zu speichern?';
 		map['general.clipboard.success'] = ({required Object x}) => '${x} in die Zwischenablage kopiert';
 		map['general.clipboard.error'] = 'Fehler beim Kopieren';
@@ -1943,6 +1945,8 @@ extension on TranslationsDe {
 		map['currencies.currency_form.create_success'] = 'Währung erfolgreich erstellt';
 		map['currencies.currency_form.edit'] = 'Währung bearbeiten';
 		map['currencies.currency_form.edit_success'] = 'Währung erfolgreich bearbeitet';
+		map['currencies.currency_form.delete'] = 'Währung löschen';
+		map['currencies.currency_form.delete_success'] = 'Währung erfolgreich gelöscht';
 		map['currencies.currency_form.already_exists'] = 'Eine Währung mit diesem Code existiert bereits. Möglicherweise möchten Sie es bearbeiten';
 		map['currencies.delete_all_success'] = 'Wechselkurse erfolgreich gelöscht';
 		map['currencies.historical'] = 'Historische Kurse';

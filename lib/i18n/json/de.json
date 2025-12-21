@@ -57,7 +57,7 @@
     "show-less-fields": "Weniger Felder anzeigen",
     "tap-to-search": "Zum Suchen tippen",
     "LEAVE-WITHOUT-SAVING": {
-      "title": "Ohne zu sparen weggehen?",
+      "title": "Ohne zu speichern verlassen?",
       "message": "Sie haben noch nicht gespeicherte Änderungen. Möchten Sie die Seite wirklich verlassen, ohne sie zu speichern?"
     },
     "CLIPBOARD": {
@@ -543,6 +543,8 @@
       "create-success": "Währung erfolgreich erstellt",
       "edit": "Währung bearbeiten",
       "edit-success": "Währung erfolgreich bearbeitet",
+      "delete": "Währung löschen",
+      "delete-success": "Währung erfolgreich gelöscht",
       "already-exists": "Eine Währung mit diesem Code existiert bereits. Möglicherweise möchten Sie es bearbeiten"
     },
     "delete-all-success": "Wechselkurse erfolgreich gelöscht",

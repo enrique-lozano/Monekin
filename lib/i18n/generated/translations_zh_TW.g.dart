@@ -996,6 +996,8 @@ class _TranslationsCurrenciesCurrencyFormZhTw implements TranslationsCurrenciesC
 	@override String get create_success => '貨幣創建成功';
 	@override String get edit => '編輯貨幣';
 	@override String get edit_success => '貨幣編輯成功';
+	@override String get delete => '刪除貨幣';
+	@override String get delete_success => '幣種刪除成功';
 	@override String get already_exists => '具有此代碼的貨幣已存在。您可能想要編輯它';
 }
 
@@ -1943,6 +1945,8 @@ extension on TranslationsZhTw {
 		map['currencies.currency_form.create_success'] = '貨幣創建成功';
 		map['currencies.currency_form.edit'] = '編輯貨幣';
 		map['currencies.currency_form.edit_success'] = '貨幣編輯成功';
+		map['currencies.currency_form.delete'] = '刪除貨幣';
+		map['currencies.currency_form.delete_success'] = '幣種刪除成功';
 		map['currencies.currency_form.already_exists'] = '具有此代碼的貨幣已存在。您可能想要編輯它';
 		map['currencies.delete_all_success'] = '刪除匯率成功';
 		map['currencies.historical'] = '歷史利率';

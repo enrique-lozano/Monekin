@@ -531,6 +531,8 @@
       "create-success": "Currency created successfully",
       "edit": "Edit currency",
       "edit-success": "Currency edited successfully",
+      "delete": "Delete currency",
+      "delete-success": "Currency deleted successfully",
       "already-exists": "A currency with this code already exists. You may want to edit it"
     },
     "delete-all-success": "Deleted exchange rates successfully",

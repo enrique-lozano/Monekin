@@ -543,6 +543,8 @@
       "create-success": "Valuta creata con successo",
       "edit": "Modifica valuta",
       "edit-success": "Valuta modificata correttamente",
+      "delete": "Elimina valuta",
+      "delete-success": "Valuta eliminata correttamente",
       "already-exists": "Esiste già una valuta con questo codice. Potresti volerlo modificare"
     },
     "delete-all-success": "Tassi di cambio eliminati con successo",

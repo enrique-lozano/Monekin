@@ -543,6 +543,8 @@
       "create-success": "Devise créée avec succès",
       "edit": "Modifier la devise",
       "edit-success": "Devise modifiée avec succès",
+      "delete": "Supprimer la devise",
+      "delete-success": "Devise supprimée avec succès",
       "already-exists": "Une devise avec ce code existe déjà. Vous voudrez peut-être le modifier"
     },
     "delete-all-success": "Taux de change supprimés avec succès",

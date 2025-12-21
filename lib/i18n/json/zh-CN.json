@@ -543,6 +543,8 @@
       "create-success": "货币创建成功",
       "edit": "编辑货币",
       "edit-success": "货币编辑成功",
+      "delete": "删除货币",
+      "delete-success": "币种删除成功",
       "already-exists": "具有此代码的货币已存在。您可能想要编辑它"
     },
     "delete-all-success": "删除汇率成功",

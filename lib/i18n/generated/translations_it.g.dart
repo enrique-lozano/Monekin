@@ -996,6 +996,8 @@ class _TranslationsCurrenciesCurrencyFormIt implements TranslationsCurrenciesCur
 	@override String get create_success => 'Valuta creata con successo';
 	@override String get edit => 'Modifica valuta';
 	@override String get edit_success => 'Valuta modificata correttamente';
+	@override String get delete => 'Elimina valuta';
+	@override String get delete_success => 'Valuta eliminata correttamente';
 	@override String get already_exists => 'Esiste già una valuta con questo codice. Potresti volerlo modificare';
 }
 
@@ -1943,6 +1945,8 @@ extension on TranslationsIt {
 		map['currencies.currency_form.create_success'] = 'Valuta creata con successo';
 		map['currencies.currency_form.edit'] = 'Modifica valuta';
 		map['currencies.currency_form.edit_success'] = 'Valuta modificata correttamente';
+		map['currencies.currency_form.delete'] = 'Elimina valuta';
+		map['currencies.currency_form.delete_success'] = 'Valuta eliminata correttamente';
 		map['currencies.currency_form.already_exists'] = 'Esiste già una valuta con questo codice. Potresti volerlo modificare';
 		map['currencies.delete_all_success'] = 'Tassi di cambio eliminati con successo';
 		map['currencies.historical'] = 'Tassi storici';

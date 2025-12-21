@@ -1857,6 +1857,12 @@ class TranslationsCurrenciesCurrencyFormEn {
 	/// en: 'Currency edited successfully'
 	String get edit_success => 'Currency edited successfully';
 
+	/// en: 'Delete currency'
+	String get delete => 'Delete currency';
+
+	/// en: 'Currency deleted successfully'
+	String get delete_success => 'Currency deleted successfully';
+
 	/// en: 'A currency with this code already exists. You may want to edit it'
 	String get already_exists => 'A currency with this code already exists. You may want to edit it';
 }
@@ -3139,6 +3145,8 @@ extension on Translations {
 		map['currencies.currency_form.create_success'] = 'Currency created successfully';
 		map['currencies.currency_form.edit'] = 'Edit currency';
 		map['currencies.currency_form.edit_success'] = 'Currency edited successfully';
+		map['currencies.currency_form.delete'] = 'Delete currency';
+		map['currencies.currency_form.delete_success'] = 'Currency deleted successfully';
 		map['currencies.currency_form.already_exists'] = 'A currency with this code already exists. You may want to edit it';
 		map['currencies.delete_all_success'] = 'Deleted exchange rates successfully';
 		map['currencies.historical'] = 'Historical rates';

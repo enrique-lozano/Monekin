@@ -996,6 +996,8 @@ class _TranslationsCurrenciesCurrencyFormTr implements TranslationsCurrenciesCur
 	@override String get create_success => 'Para birimi başarıyla oluşturuldu';
 	@override String get edit => 'Para birimini düzenle';
 	@override String get edit_success => 'Para birimi başarıyla düzenlendi';
+	@override String get delete => 'Para birimini sil';
+	@override String get delete_success => 'Para birimi başarıyla silindi';
 	@override String get already_exists => 'Bu koda sahip bir para birimi zaten mevcut. Düzenlemek isteyebilirsiniz';
 }
 
@@ -1943,6 +1945,8 @@ extension on TranslationsTr {
 		map['currencies.currency_form.create_success'] = 'Para birimi başarıyla oluşturuldu';
 		map['currencies.currency_form.edit'] = 'Para birimini düzenle';
 		map['currencies.currency_form.edit_success'] = 'Para birimi başarıyla düzenlendi';
+		map['currencies.currency_form.delete'] = 'Para birimini sil';
+		map['currencies.currency_form.delete_success'] = 'Para birimi başarıyla silindi';
 		map['currencies.currency_form.already_exists'] = 'Bu koda sahip bir para birimi zaten mevcut. Düzenlemek isteyebilirsiniz';
 		map['currencies.delete_all_success'] = 'Döviz kurları başarıyla silindi';
 		map['currencies.historical'] = 'Geçmiş oranlar';

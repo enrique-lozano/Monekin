@@ -996,6 +996,8 @@ class _TranslationsCurrenciesCurrencyFormHu implements TranslationsCurrenciesCur
 	@override String get create_success => 'A pénznem sikeresen létrehozva';
 	@override String get edit => 'Pénznem szerkesztése';
 	@override String get edit_success => 'A pénznem sikeresen szerkesztve';
+	@override String get delete => 'Pénznem törlése';
+	@override String get delete_success => 'A pénznem sikeresen törölve';
 	@override String get already_exists => 'Már létezik ilyen kóddal rendelkező pénznem. Érdemes lehet szerkeszteni';
 }
 
@@ -1943,6 +1945,8 @@ extension on TranslationsHu {
 		map['currencies.currency_form.create_success'] = 'A pénznem sikeresen létrehozva';
 		map['currencies.currency_form.edit'] = 'Pénznem szerkesztése';
 		map['currencies.currency_form.edit_success'] = 'A pénznem sikeresen szerkesztve';
+		map['currencies.currency_form.delete'] = 'Pénznem törlése';
+		map['currencies.currency_form.delete_success'] = 'A pénznem sikeresen törölve';
 		map['currencies.currency_form.already_exists'] = 'Már létezik ilyen kóddal rendelkező pénznem. Érdemes lehet szerkeszteni';
 		map['currencies.delete_all_success'] = 'Az árfolyamok sikeresen törlésre kerültek';
 		map['currencies.historical'] = 'Árfolyamtörténetek';

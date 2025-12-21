@@ -546,6 +546,8 @@
       "create-success": "Divisa creada exitosamente",
       "edit": "Editar divisa",
       "edit-success": "Divisa editada correctamente",
+      "delete": "Eliminar moneda",
+      "delete-success": "Moneda eliminada exitosamente",
       "already-exists": "Ya existe una divisa con este código. Quizás quieras editarlo"
     },
     "delete-all-success": "Tipos de cambio borrados con exito",

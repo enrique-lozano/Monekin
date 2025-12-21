@@ -996,6 +996,8 @@ class _TranslationsCurrenciesCurrencyFormZhCn implements TranslationsCurrenciesC
 	@override String get create_success => '货币创建成功';
 	@override String get edit => '编辑货币';
 	@override String get edit_success => '货币编辑成功';
+	@override String get delete => '删除货币';
+	@override String get delete_success => '币种删除成功';
 	@override String get already_exists => '具有此代码的货币已存在。您可能想要编辑它';
 }
 
@@ -1943,6 +1945,8 @@ extension on TranslationsZhCn {
 		map['currencies.currency_form.create_success'] = '货币创建成功';
 		map['currencies.currency_form.edit'] = '编辑货币';
 		map['currencies.currency_form.edit_success'] = '货币编辑成功';
+		map['currencies.currency_form.delete'] = '删除货币';
+		map['currencies.currency_form.delete_success'] = '币种删除成功';
 		map['currencies.currency_form.already_exists'] = '具有此代码的货币已存在。您可能想要编辑它';
 		map['currencies.delete_all_success'] = '删除汇率成功';
 		map['currencies.historical'] = '历史汇率';

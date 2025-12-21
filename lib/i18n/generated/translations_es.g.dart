@@ -996,6 +996,8 @@ class _TranslationsCurrenciesCurrencyFormEs implements TranslationsCurrenciesCur
 	@override String get create_success => 'Divisa creada exitosamente';
 	@override String get edit => 'Editar divisa';
 	@override String get edit_success => 'Divisa editada correctamente';
+	@override String get delete => 'Eliminar moneda';
+	@override String get delete_success => 'Moneda eliminada exitosamente';
 	@override String get already_exists => 'Ya existe una divisa con este código. Quizás quieras editarlo';
 }
 
@@ -1945,6 +1947,8 @@ extension on TranslationsEs {
 		map['currencies.currency_form.create_success'] = 'Divisa creada exitosamente';
 		map['currencies.currency_form.edit'] = 'Editar divisa';
 		map['currencies.currency_form.edit_success'] = 'Divisa editada correctamente';
+		map['currencies.currency_form.delete'] = 'Eliminar moneda';
+		map['currencies.currency_form.delete_success'] = 'Moneda eliminada exitosamente';
 		map['currencies.currency_form.already_exists'] = 'Ya existe una divisa con este código. Quizás quieras editarlo';
 		map['currencies.delete_all_success'] = 'Tipos de cambio borrados con exito';
 		map['currencies.historical'] = 'Histórico de tasas';

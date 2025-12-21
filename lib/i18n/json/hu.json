@@ -543,6 +543,8 @@
       "create-success": "A pénznem sikeresen létrehozva",
       "edit": "Pénznem szerkesztése",
       "edit-success": "A pénznem sikeresen szerkesztve",
+      "delete": "Pénznem törlése",
+      "delete-success": "A pénznem sikeresen törölve",
       "already-exists": "Már létezik ilyen kóddal rendelkező pénznem. Érdemes lehet szerkeszteni"
     },
     "delete-all-success": "Az árfolyamok sikeresen törlésre kerültek",

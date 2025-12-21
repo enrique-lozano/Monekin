@@ -115,6 +115,30 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
     });
   }
 
+  Future<void> deleteCurrency() async {
+    final confirmed = await confirmDialog(
+      context,
+      icon: Icons.delete_forever_rounded,
+      dialogTitle: t.currencies.currency_form.delete,
+      contentParagraphs: [],
+    );
+
+    if (confirmed == true) {
+      CurrencyService.instance
+          .deleteCurrency(_currency.code)
+          .then((value) {
+            MonekinSnackbar.success(
+              SnackbarParams(t.currencies.currency_form.delete_success),
+            );
+
+            RouteUtils.popRoute();
+          })
+          .catchError((err) {
+            MonekinSnackbar.error(SnackbarParams.fromError(err));
+          });
+    }
+  }
+
   Future<void> saveChanges() async {
     final t = Translations.of(context);
 
@@ -178,8 +202,9 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
       setState(() {});
     }
 
-    // FINISHED: Show success snackbar
-    MonekinSnackbar.success(SnackbarParams("t.general.save_succes"));
+    MonekinSnackbar.success(
+      SnackbarParams(t.currencies.currency_form.edit_success),
+    );
     getExchangeRates();
   }
 
@@ -216,33 +241,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
                 label: t.ui_actions.delete,
                 role: ListTileActionRole.delete,
                 icon: Icons.delete_forever_rounded,
-                onClick: _currency.isDefault
-                    ? null
-                    : () async {
-                        final confirmed = await confirmDialog(
-                          context,
-                          dialogTitle: t.ui_actions.delete,
-                          contentParagraphs: [],
-                          canPop: false,
-                        );
-
-                        if (confirmed == true) {
-                          CurrencyService.instance
-                              .deleteCurrency(_currency.code)
-                              .then((value) {
-                                MonekinSnackbar.success(
-                                  SnackbarParams("DELETE"),
-                                );
-
-                                RouteUtils.popRoute();
-                              })
-                              .catchError((err) {
-                                MonekinSnackbar.error(
-                                  SnackbarParams.fromError(err),
-                                );
-                              });
-                        }
-                      },
+                onClick: _currency.isDefault ? null : () => deleteCurrency(),
               ),
             ],
           ),

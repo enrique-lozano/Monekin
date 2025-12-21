@@ -996,6 +996,8 @@ class _TranslationsCurrenciesCurrencyFormUk implements TranslationsCurrenciesCur
 	@override String get create_success => 'Валюту створено успішно';
 	@override String get edit => 'Редагувати валюту';
 	@override String get edit_success => 'Валюту успішно відредаговано';
+	@override String get delete => 'Видалити валюту';
+	@override String get delete_success => 'Валюту успішно видалено';
 	@override String get already_exists => 'Валюта з таким кодом уже існує. Ви можете відредагувати його';
 }
 
@@ -1943,6 +1945,8 @@ extension on TranslationsUk {
 		map['currencies.currency_form.create_success'] = 'Валюту створено успішно';
 		map['currencies.currency_form.edit'] = 'Редагувати валюту';
 		map['currencies.currency_form.edit_success'] = 'Валюту успішно відредаговано';
+		map['currencies.currency_form.delete'] = 'Видалити валюту';
+		map['currencies.currency_form.delete_success'] = 'Валюту успішно видалено';
 		map['currencies.currency_form.already_exists'] = 'Валюта з таким кодом уже існує. Ви можете відредагувати його';
 		map['currencies.delete_all_success'] = 'Обмінні курси успішно видалено';
 		map['currencies.historical'] = 'Історичні курси';

@@ -543,6 +543,8 @@
       "create-success": "Para birimi başarıyla oluşturuldu",
       "edit": "Para birimini düzenle",
       "edit-success": "Para birimi başarıyla düzenlendi",
+      "delete": "Para birimini sil",
+      "delete-success": "Para birimi başarıyla silindi",
       "already-exists": "Bu koda sahip bir para birimi zaten mevcut. Düzenlemek isteyebilirsiniz"
     },
     "delete-all-success": "Döviz kurları başarıyla silindi",
