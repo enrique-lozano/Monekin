@@ -202,6 +202,14 @@
     "countryCodes": ["BS"]
   },
   {
+    "code": "BTC",
+    "names": { "en": "Bitcoin" },
+    "symbol": "₿",
+    "countryCodes": [],
+    "decimalPlaces": 6,
+    "type": 1
+  },
+  {
     "code": "BTN",
     "names": {
       "en": "Ngultrum",
@@ -413,12 +421,17 @@
     "countryCodes": ["ET"]
   },
   {
+    "code": "ETH",
+    "names": { "en": "Ethereum" },
+    "symbol": "Ξ",
+    "countryCodes": [],
+    "decimalPlaces": 6,
+    "type": 1,
+    "isDefault": false
+  },
+  {
     "code": "EUR",
-    "names": {
-      "en": "Euro",
-      "es": "Euro",
-      "it": "Euro"
-    },
+    "names": { "en": "Euro" },
     "symbol": "€",
     "countryCodes": [
       "AD",
@@ -1545,11 +1558,7 @@
   },
   {
     "code": "ZAR",
-    "names": {
-      "en": "Rand",
-      "es": "Rand",
-      "it": "Rand"
-    },
+    "names": { "en": "Rand" },
     "symbol": "R",
     "countryCodes": ["ZA"]
   },

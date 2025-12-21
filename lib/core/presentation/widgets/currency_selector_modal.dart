@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
@@ -134,18 +133,11 @@ class _CurrencySelectorModalState extends State<CurrencySelectorModal> {
                           selected:
                               currencyItem.code == _selectedCurrency?.code,
                           // selectedTileColor: colors.primaryContainer,
-                          leading: Container(
-                            clipBehavior: Clip.hardEdge,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                            ),
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
                             child: Stack(
                               children: [
-                                SvgPicture.asset(
-                                  currencyItem.currencyIconPath,
-                                  height: 35,
-                                  width: 35,
-                                ),
+                                currencyItem.displayFlagIcon(size: 35),
                                 if (currencyItem.code ==
                                     _selectedCurrency?.code)
                                   Container(

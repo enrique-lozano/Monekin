@@ -152,8 +152,6 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
     // 3. Save currency changes if any
     final formState = _currencyFormKey.currentState;
 
-    print("SAVING CURRENCY CHANGES");
-    print("HAS CHANGED: ${formState?.hasChanged}");
     if (formState?.hasChanged ?? false) {
       final updatedCurrency = _currency.copyWith(
         code: formState!.code,

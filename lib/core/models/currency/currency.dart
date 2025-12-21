@@ -1,6 +1,7 @@
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/models/currency/currency_type.enum.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class Currency extends CurrencyInDB {
   CurrencyType get currencyType => CurrencyType.values[type];
@@ -9,7 +10,12 @@ class Currency extends CurrencyInDB {
       'assets/icons/currency_flags/${code.toLowerCase()}.svg';
 
   SvgPicture displayFlagIcon({double? size}) {
-    return SvgPicture.asset(currencyIconPath, height: size, width: size);
+    return SvgPicture.asset(
+      currencyIconPath,
+      height: size,
+      width: size,
+      placeholderBuilder: (context) => Bone.square(size: size),
+    );
   }
 
   Currency({

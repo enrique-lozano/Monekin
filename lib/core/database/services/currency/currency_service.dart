@@ -62,10 +62,12 @@ class CurrencyService {
   ///
   /// If you want to just get the code of the preferred currency, use
   /// `appStateSettings[SettingKey.preferredCurrency]` instead.
-  Stream<Currency> ensureAndGetPreferredCurrency() {
+  Stream<Currency> ensureAndGetPreferredCurrency({
+    bool listenToChanges = true,
+  }) {
     final currencyCode = appStateSettings[SettingKey.preferredCurrency];
 
-    if (currencyCode != null) {
+    if (!listenToChanges && currencyCode != null) {
       return getCurrencyByCode(currencyCode).map((currency) => currency!);
     }
 
@@ -146,14 +148,7 @@ class CurrencyService {
         type: currency['type'] ?? 0,
       );
 
-      await db.customStatement("""
-            INSERT INTO currencies(code, symbol, name) 
-            VALUES (
-              '${currencyToPush.code}', 
-              '${currencyToPush.symbol.replaceAll("'", "''")}', 
-              '${currencyToPush.name.replaceAll("'", "''")}'
-            )
-          """);
+      await db.into(db.currencies).insert(currencyToPush);
     }
   }
 }
