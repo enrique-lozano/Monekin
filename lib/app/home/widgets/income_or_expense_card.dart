@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../core/models/transaction/transaction_type.enum.dart';
 import '../../../core/presentation/app_colors.dart';
@@ -59,17 +59,16 @@ class IncomeOrExpenseCard extends StatelessWidget {
                   ),
                 ),
                 builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Skeleton(width: 26, height: 18);
-                  }
-
-                  return CurrencyDisplayer(
-                    amountToConvert: snapshot.data!.abs(),
-                    compactView: true,
-                    showDecimals: false,
-                    integerStyle: TextStyle(
-                      fontSize: 18,
-                      color: AppColors.of(context).onConsistentPrimary,
+                  return Skeletonizer(
+                    enabled: !snapshot.hasData,
+                    child: CurrencyDisplayer(
+                      amountToConvert: snapshot.data?.abs() ?? 9999,
+                      compactView: true,
+                      showDecimals: false,
+                      integerStyle: TextStyle(
+                        fontSize: 18,
+                        color: AppColors.of(context).onConsistentPrimary,
+                      ),
                     ),
                   );
                 },

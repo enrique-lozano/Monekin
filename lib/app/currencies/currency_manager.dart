@@ -11,7 +11,6 @@ import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
-import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart' hide Skeleton;
@@ -108,19 +107,17 @@ class CurrencyManagerPage extends StatelessWidget {
                       },
                     ),
                   ),
-                  AnimatedExpanded(
-                    expand: userCurrency != null,
-                    child: ListTile(
-                      title: Text(t.currencies.currency_settings),
-                      trailing: const Icon(Icons.chevron_right_rounded),
-                      onTap: () {
-                        if (userCurrency != null) {
-                          RouteUtils.pushRoute(
-                            EditCurrencyPage(currency: userCurrency),
-                          );
-                        }
-                      },
-                    ),
+                  ListTile(
+                    title: Text(t.currencies.currency_settings),
+                    trailing: const Icon(Icons.chevron_right_rounded),
+                    enabled: userCurrency != null,
+                    onTap: () {
+                      if (userCurrency != null) {
+                        RouteUtils.pushRoute(
+                          EditCurrencyPage(currency: userCurrency),
+                        );
+                      }
+                    },
                   ),
                 ],
               );
@@ -172,7 +169,7 @@ class CurrencyManagerPage extends StatelessWidget {
                         ),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
-                            return const Skeleton(width: 42, height: 42);
+                            return Bone.square(size: 42);
                           }
 
                           return snapshot.data!.displayFlagIcon(size: 42);
@@ -185,11 +182,10 @@ class CurrencyManagerPage extends StatelessWidget {
                         item.currencyCode,
                       ),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Skeleton(width: 40, height: 16);
-                        }
-
-                        return Text(snapshot.data!.name);
+                        return Skeletonizer(
+                          enabled: !snapshot.hasData,
+                          child: Text(snapshot.data?.name ?? BoneMock.name),
+                        );
                       },
                     ),
                     trailing: Text(item.exchangeRate.toString()),

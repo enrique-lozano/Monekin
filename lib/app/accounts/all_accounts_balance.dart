@@ -12,10 +12,10 @@ import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../core/database/services/currency/currency_service.dart';
 import '../../core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import '../../core/presentation/widgets/skeleton.dart';
 
 class AccountWithMoney {
   final double money;
@@ -210,18 +210,17 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                             currencyWithMoney.currency.code,
                           ),
                           builder: (context, snapshot) {
-                            if (!snapshot.hasData) {
-                              return const Skeleton(width: 42, height: 42);
-                            }
+                            final currency = snapshot.data;
 
-                            final currency = snapshot.data!;
-
-                            return Container(
-                              clipBehavior: Clip.hardEdge,
-                              decoration: BoxDecoration(
+                            return Skeletonizer(
+                              enabled: currency == null,
+                              child: ClipRRect(
+                                clipBehavior: Clip.hardEdge,
                                 borderRadius: BorderRadius.circular(100),
+                                child: currency == null
+                                    ? Bone.square(size: 32)
+                                    : currency.displayFlagIcon(size: 32),
                               ),
-                              child: currency.displayFlagIcon(size: 32),
                             );
                           },
                         ),
@@ -237,20 +236,16 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                                         currencyWithMoney.currency.code,
                                       ),
                                   builder: (context, snapshot) {
-                                    if (!snapshot.hasData) {
-                                      return const Skeleton(
-                                        width: 42,
-                                        height: 42,
-                                      );
-                                    }
-
-                                    final currency = snapshot.data!;
+                                    final currency = snapshot.data;
 
                                     return Flexible(
-                                      child: Text(
-                                        currency.name,
-                                        softWrap: false,
-                                        overflow: TextOverflow.fade,
+                                      child: Skeletonizer(
+                                        enabled: currency == null,
+                                        child: Text(
+                                          currency?.name ?? BoneMock.name,
+                                          softWrap: false,
+                                          overflow: TextOverflow.fade,
+                                        ),
                                       ),
                                     );
                                   },
