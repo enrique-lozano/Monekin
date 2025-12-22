@@ -16,12 +16,12 @@ import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class TransactionsPage extends StatefulWidget {
   const TransactionsPage({super.key, this.filters});
@@ -117,52 +117,60 @@ class TransactionsPageState extends State<TransactionsPage> {
                 (a, b) => (count: a, value: b),
               ),
               builder: (context, snapshot) {
-                final res = snapshot.data;
+                final trCountAndBalance = snapshot.data;
 
                 const smallerTextStyle = TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w300,
                 );
 
-                return Card(
-                  elevation: 2,
-                  //color: Theme.of(context).colorScheme.primary,
-                  margin: const EdgeInsets.all(8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8,
-                      horizontal: 14,
+                return Skeletonizer(
+                  enabled: trCountAndBalance == null,
+                  child: Card(
+                    elevation: 2,
+                    //color: Theme.of(context).colorScheme.primary,
+                    margin: const EdgeInsets.all(8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
                     ),
-                    child: DefaultTextStyle(
-                      style: Theme.of(context).textTheme.titleMedium!,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          if (res != null) ...[
-                            Text.rich(
-                              TextSpan(
-                                text: selectedTransactions.isNotEmpty
-                                    ? ('${selectedTransactions.length.toStringAsFixed(0)}')
-                                    : '',
-                                children: [
-                                  TextSpan(
-                                    text:
-                                        '${selectedTransactions.isNotEmpty ? ' / ' : ''}${res.count} ',
-                                    style: selectedTransactions.isNotEmpty
-                                        ? smallerTextStyle
-                                        : null,
-                                  ),
-                                  TextSpan(
-                                    text: t.transaction
-                                        .display(n: res.count)
-                                        .toLowerCase(),
-                                  ),
-                                ],
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 14,
+                      ),
+                      child: DefaultTextStyle(
+                        style: Theme.of(context).textTheme.titleMedium!,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            if (trCountAndBalance == null)
+                              Text("XX Transactions"),
+                            if (trCountAndBalance != null)
+                              Text.rich(
+                                TextSpan(
+                                  text: selectedTransactions.isNotEmpty
+                                      ? ('${selectedTransactions.length.toStringAsFixed(0)}')
+                                      : '',
+                                  children: [
+                                    TextSpan(
+                                      text:
+                                          '${selectedTransactions.isNotEmpty ? ' / ' : ''}${trCountAndBalance.count} ',
+                                      style: selectedTransactions.isNotEmpty
+                                          ? smallerTextStyle
+                                          : null,
+                                    ),
+
+                                    if (selectedTransactions.isNotEmpty)
+                                      const TextSpan(text: " "),
+
+                                    TextSpan(
+                                      text: t.transaction
+                                          .display(n: trCountAndBalance.count)
+                                          .toLowerCase(),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
                             Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -176,10 +184,11 @@ class TransactionsPageState extends State<TransactionsPage> {
                                         .sum,
                                     showDecimals: false,
                                   ),
-                                  const Text("/ ", style: smallerTextStyle),
+                                  const Text(" / ", style: smallerTextStyle),
                                 ],
                                 CurrencyDisplayer(
-                                  amountToConvert: res.value,
+                                  amountToConvert:
+                                      trCountAndBalance?.value ?? 0,
                                   showDecimals: selectedTransactions.isEmpty,
                                   integerStyle: selectedTransactions.isEmpty
                                       ? const TextStyle(inherit: true)
@@ -188,11 +197,7 @@ class TransactionsPageState extends State<TransactionsPage> {
                               ],
                             ),
                           ],
-                          if (res == null) ...[
-                            const Skeleton(width: 38, height: 18),
-                            const Skeleton(width: 28, height: 18),
-                          ],
-                        ],
+                        ),
                       ),
                     ),
                   ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:monekin/core/presentation/widgets/skeleton.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class UserAvatar extends StatelessWidget {
   const UserAvatar({
@@ -38,7 +38,7 @@ class UserAvatar extends StatelessWidget {
         child: Builder(
           builder: (context) {
             if (avatar == null) {
-              return const Skeleton(width: 36, height: 36, applyMarging: false);
+              return Bone.square(size: size);
             }
 
             return SvgPicture.asset(
