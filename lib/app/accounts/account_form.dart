@@ -23,6 +23,7 @@ import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/expansion_panel/single_expansion_panel.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_field.dart';
+import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
@@ -254,6 +255,20 @@ class _AccountFormPageState extends State<AccountFormPage> {
                       size: 36,
                       isOutline: true,
                       outlineWidth: 1.5,
+                      onTap: () {
+                        showIconSelectorModal(
+                          context,
+                          IconSelectorModal(
+                            preselectedIconID: _icon.id,
+                            subtitle: t.icon_selector.select_account_icon,
+                            onIconSelected: (selectedIcon) {
+                              setState(() {
+                                _icon = selectedIcon;
+                              });
+                            },
+                          ),
+                        );
+                      },
                       mainColor: _color.lighten(
                         isDark ? IconDisplayer.darkLightenFactor : 0,
                       ),
