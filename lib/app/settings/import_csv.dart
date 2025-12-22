@@ -175,7 +175,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
   Future<void> addTransactions() async {
     onSuccess() {
       RouteUtils.popAllRoutesExceptFirst();
-      RouteUtils.pushRoute(context, const PageSwitcher());
+      RouteUtils.pushRoute(const PageSwitcher());
 
       MonekinSnackbar.success(
         SnackbarParams(

@@ -323,7 +323,6 @@ class TransactionListTile extends StatelessWidget {
           onTap ??
           () {
             RouteUtils.pushRoute(
-              context,
               TransactionDetailsPage(
                 transaction: transaction,
                 heroTag: heroTag,
@@ -397,7 +396,6 @@ Future<bool> executeTransactionSwipeAction(
       break;
     case TransactionSwipeAction.edit:
       await RouteUtils.pushRoute(
-        context,
         TransactionFormPage(transactionToEdit: transaction),
       );
 

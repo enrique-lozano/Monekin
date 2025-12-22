@@ -36,10 +36,7 @@ class BudgetCard extends StatelessWidget {
       ),
       onTap: isHeader
           ? null
-          : () => RouteUtils.pushRoute(
-              context,
-              BudgetDetailsPage(budget: budget),
-            ),
+          : () => RouteUtils.pushRoute(BudgetDetailsPage(budget: budget)),
       child: Card(
         margin: const EdgeInsets.all(0),
         color: Colors.transparent,

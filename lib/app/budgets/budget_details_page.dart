@@ -102,7 +102,6 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
                   icon: Icons.edit,
                   onClick: () {
                     RouteUtils.pushRoute(
-                      context,
                       BudgetFormPage(
                         prevPage: const BudgetsPage(),
                         budgetToEdit: budget,
@@ -170,7 +169,6 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
                             ),
                             footer: CardFooterWithSingleButton(
                               onButtonClick: () => RouteUtils.pushRoute(
-                                context,
                                 const StatsPage(initialIndex: 1),
                               ),
                             ),

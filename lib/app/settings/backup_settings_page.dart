@@ -90,7 +90,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
               subtitle: Text(t.backup.import.manual_import.descr),
               minVerticalPadding: 16,
               onTap: () {
-                RouteUtils.pushRoute(context, const ImportCSVPage());
+                RouteUtils.pushRoute(const ImportCSVPage());
               },
             ),
             createListSeparator(context, t.backup.export.title_short),
@@ -99,7 +99,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
               subtitle: Text(t.backup.export.description),
               minVerticalPadding: 16,
               onTap: () {
-                RouteUtils.pushRoute(context, const ExportDataPage());
+                RouteUtils.pushRoute(const ExportDataPage());
               },
             ),
             createListSeparator(context, t.backup.about.title),

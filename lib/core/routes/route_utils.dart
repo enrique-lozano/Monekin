@@ -3,7 +3,6 @@ import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 
 abstract class RouteUtils {
   static Future<T?> pushRoute<T extends Object>(
-    BuildContext context,
     Widget page, {
     bool withReplacement = false,
   }) {

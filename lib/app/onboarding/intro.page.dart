@@ -70,7 +70,6 @@ class IntroPage extends StatelessWidget {
         const SizedBox(height: 12),
         FilledButton.icon(
           onPressed: () => RouteUtils.pushRoute(
-            context,
             const OnboardingPage(),
             withReplacement: true,
           ),

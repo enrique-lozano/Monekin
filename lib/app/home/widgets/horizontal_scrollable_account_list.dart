@@ -48,7 +48,6 @@ class HorizontalScrollableAccountList extends StatelessWidget {
                       shape: RoundedRectangleBorder(borderRadius: borderRadius),
                       child: Tappable(
                         onTap: () => RouteUtils.pushRoute(
-                          context,
                           AccountDetailsPage(
                             account: account,
                             accountIconHeroTag:
@@ -138,7 +137,7 @@ class HorizontalScrollableAccountList extends StatelessWidget {
                   opacity: 0.6,
                   child: Tappable(
                     onTap: () {
-                      RouteUtils.pushRoute(context, const AccountFormPage());
+                      RouteUtils.pushRoute(const AccountFormPage());
                     },
                     shape: RoundedRectangleBorder(
                       borderRadius: borderRadius,

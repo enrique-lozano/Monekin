@@ -35,7 +35,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
         .setItem(AppDataKey.introSeen, '1', updateGlobalState: true)
         .then((value) {
           RouteUtils.pushRoute(
-            context,
             PageSwitcher(key: tabsPageKey),
             withReplacement: true,
           );

@@ -522,7 +522,6 @@ class _TransactionFormPageState extends State<TransactionFormPage>
             });
           } else {
             RouteUtils.pushRoute(
-              context,
               IntervalSelectorPage(preselectedRecurrentRule: recurrentRule),
             ).then((value) {
               if (value == null) return;

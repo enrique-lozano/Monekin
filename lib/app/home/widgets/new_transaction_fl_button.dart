@@ -20,7 +20,7 @@ void _showShouldCreateAccountWarn(BuildContext context) {
   ).then((value) {
     if (value != true || !context.mounted) return;
 
-    RouteUtils.pushRoute(context, const AccountFormPage());
+    RouteUtils.pushRoute(const AccountFormPage());
   });
 }
 
@@ -33,7 +33,7 @@ void onNewTransactionButtonPressed(BuildContext context) {
     if (!value) {
       _showShouldCreateAccountWarn(context);
     } else {
-      RouteUtils.pushRoute(context, const TransactionFormPage());
+      RouteUtils.pushRoute(const TransactionFormPage());
     }
   });
 }

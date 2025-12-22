@@ -112,7 +112,6 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                         footer: CardFooterWithSingleButton(
                           text: t.ui_actions.edit,
                           onButtonClick: () => RouteUtils.pushRoute(
-                            context,
                             AccountFormPage(account: account),
                           ),
                         ),
@@ -183,7 +182,6 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                             return CardFooterWithSingleButton(
                               onButtonClick: () {
                                 RouteUtils.pushRoute(
-                                  context,
                                   TransactionsPage(
                                     filters: TransactionFilters(
                                       accountsIDs: [widget.account.id],

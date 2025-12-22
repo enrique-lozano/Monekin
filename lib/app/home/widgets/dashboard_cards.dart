@@ -38,7 +38,6 @@ class DashboardCards extends StatelessWidget {
                 title: t.financial_health.display,
                 footer: CardFooterWithSingleButton(
                   onButtonClick: () => RouteUtils.pushRoute(
-                    context,
                     StatsPage(
                       dateRangeService: dateRangeService,
                       initialIndex: 0,
@@ -72,7 +71,6 @@ class DashboardCards extends StatelessWidget {
                 body: PieChartByCategories(datePeriodState: dateRangeService),
                 footer: CardFooterWithSingleButton(
                   onButtonClick: () => RouteUtils.pushRoute(
-                    context,
                     StatsPage(
                       dateRangeService: dateRangeService,
                       initialIndex: 1,
@@ -95,7 +93,6 @@ class DashboardCards extends StatelessWidget {
                 footer: CardFooterWithSingleButton(
                   onButtonClick: () {
                     RouteUtils.pushRoute(
-                      context,
                       StatsPage(
                         dateRangeService: dateRangeService,
                         initialIndex: 2,
@@ -122,7 +119,6 @@ class DashboardCards extends StatelessWidget {
                 footer: CardFooterWithSingleButton(
                   onButtonClick: () {
                     RouteUtils.pushRoute(
-                      context,
                       StatsPage(
                         dateRangeService: dateRangeService,
                         initialIndex: 3,

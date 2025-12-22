@@ -116,7 +116,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 if (kDebugMode)
                   TextButton(
                     onPressed: () {
-                      RouteUtils.pushRoute(context, const DebugPage());
+                      RouteUtils.pushRoute(const DebugPage());
                     },
                     child: const Text('DEBUG PAGE'),
                   ),

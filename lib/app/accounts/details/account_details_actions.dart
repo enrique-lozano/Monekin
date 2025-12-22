@@ -25,8 +25,7 @@ abstract class AccountDetailsActions {
       ListTileActionItem(
         label: t.ui_actions.edit,
         icon: Icons.edit,
-        onClick: () =>
-            RouteUtils.pushRoute(context, AccountFormPage(account: account)),
+        onClick: () => RouteUtils.pushRoute(AccountFormPage(account: account)),
       ),
       ListTileActionItem(
         label: t.transfer.create,
@@ -43,7 +42,6 @@ abstract class AccountDetailsActions {
                 );
 
                 navigateToTransferForm() => RouteUtils.pushRoute(
-                  context,
                   TransactionFormPage(
                     fromAccount: account,
                     mode: TransactionType.T,

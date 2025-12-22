@@ -119,7 +119,6 @@ class CategoryStatsModal extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () => RouteUtils.pushRoute(
-                      context,
                       TransactionsPage(
                         filters: filters.copyWith(
                           categories: [categoryData.category.id],

@@ -34,6 +34,7 @@ class _SettingsPageState extends State<SettingsPage> {
         padding: const EdgeInsets.only(top: 8, left: 16, right: 16, bottom: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 8,
           children: [
             SettingCardItem(
               isPrimary: true,
@@ -41,53 +42,44 @@ class _SettingsPageState extends State<SettingsPage> {
               subtitle: t.more.help_us.description,
               icon: Icons.favorite_rounded,
               mainAxis: Axis.horizontal,
-              onTap: () => RouteUtils.pushRoute(context, const HelpUsPage()),
+              onTap: () => RouteUtils.pushRoute(const HelpUsPage()),
             ),
-            const SizedBox(height: 8),
             SettingCardItem(
               title: t.settings.title_long,
               subtitle: t.settings.description,
               icon: Icons.palette_outlined,
               mainAxis: Axis.horizontal,
-              onTap: () =>
-                  RouteUtils.pushRoute(context, const AdvancedSettingsPage()),
+              onTap: () => RouteUtils.pushRoute(const AdvancedSettingsPage()),
             ),
-            const SizedBox(height: 8),
             SettingCardItem(
               title: t.currencies.currency_manager,
               subtitle: t.currencies.currency_manager_descr,
               icon: Icons.currency_exchange,
               mainAxis: Axis.horizontal,
-              onTap: () =>
-                  RouteUtils.pushRoute(context, const CurrencyManagerPage()),
+              onTap: () => RouteUtils.pushRoute(const CurrencyManagerPage()),
             ),
-            const SizedBox(height: 8),
             SettingCardItem(
               title: t.more.data.display,
               subtitle: t.more.data.display_descr,
               icon: Icons.storage_rounded,
               mainAxis: Axis.horizontal,
-              onTap: () =>
-                  RouteUtils.pushRoute(context, const BackupSettingsPage()),
+              onTap: () => RouteUtils.pushRoute(const BackupSettingsPage()),
             ),
-            const SizedBox(height: 8),
             SettingCardItem(
               title: t.more.about_us.display,
               subtitle: t.more.about_us.description,
               icon: Icons.info_outline_rounded,
               mainAxis: Axis.horizontal,
-              onTap: () => RouteUtils.pushRoute(context, const AboutPage()),
+              onTap: () => RouteUtils.pushRoute(const AboutPage()),
             ),
-            if (BreakPoint.of(context).isSmallerThan(BreakpointID.md)) ...[
-              const SizedBox(height: 8),
+            if (BreakPoint.of(context).isSmallerThan(BreakpointID.md))
               Row(
                 children: [
                   Expanded(
                     child: SettingCardItem(
                       title: t.stats.title,
                       icon: Icons.area_chart_rounded,
-                      onTap: () =>
-                          RouteUtils.pushRoute(context, const StatsPage()),
+                      onTap: () => RouteUtils.pushRoute(const StatsPage()),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -95,8 +87,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: SettingCardItem(
                       title: t.budgets.title,
                       icon: Icons.pie_chart_rounded,
-                      onTap: () =>
-                          RouteUtils.pushRoute(context, const BudgetsPage()),
+                      onTap: () => RouteUtils.pushRoute(const BudgetsPage()),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -105,25 +96,21 @@ class _SettingsPageState extends State<SettingsPage> {
                       title: t.recurrent_transactions.title_short,
                       icon: Icons.repeat_rounded,
                       onTap: () => RouteUtils.pushRoute(
-                        context,
                         const RecurrentTransactionPage(),
                       ),
                     ),
                   ),
                 ],
               ),
-            ],
-            const SizedBox(height: 8),
+
             Row(
               children: [
                 Expanded(
                   child: SettingCardItem(
                     title: t.general.categories,
                     icon: Icons.category_rounded,
-                    onTap: () => RouteUtils.pushRoute(
-                      context,
-                      const CategoriesListPage(),
-                    ),
+                    onTap: () =>
+                        RouteUtils.pushRoute(const CategoriesListPage()),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -131,8 +118,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: SettingCardItem(
                     title: t.tags.display(n: 10),
                     icon: Icons.label_outline_rounded,
-                    onTap: () =>
-                        RouteUtils.pushRoute(context, const TagListPage()),
+                    onTap: () => RouteUtils.pushRoute(const TagListPage()),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -140,8 +126,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: SettingCardItem(
                     title: t.general.accounts,
                     icon: Icons.account_balance_wallet_rounded,
-                    onTap: () =>
-                        RouteUtils.pushRoute(context, const AllAccountsPage()),
+                    onTap: () => RouteUtils.pushRoute(const AllAccountsPage()),
                   ),
                 ),
                 if (BreakPoint.of(context).isLargerThan(BreakpointID.sm)) ...[
@@ -151,7 +136,6 @@ class _SettingsPageState extends State<SettingsPage> {
                       title: t.recurrent_transactions.title_short,
                       icon: Icons.repeat_rounded,
                       onTap: () => RouteUtils.pushRoute(
-                        context,
                         const RecurrentTransactionPage(),
                       ),
                     ),

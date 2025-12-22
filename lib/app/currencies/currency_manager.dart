@@ -116,7 +116,6 @@ class CurrencyManagerPage extends StatelessWidget {
                       onTap: () {
                         if (userCurrency != null) {
                           RouteUtils.pushRoute(
-                            context,
                             EditCurrencyPage(currency: userCurrency),
                           );
                         }
@@ -202,7 +201,6 @@ class CurrencyManagerPage extends StatelessWidget {
                       if (currency == null) return;
 
                       RouteUtils.pushRoute(
-                        context,
                         ExchangeRateDetailsPage(currency: currency),
                       );
                     },

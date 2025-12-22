@@ -36,7 +36,7 @@ class _TagListPageState extends State<TagListPage> {
   }
 
   void _goToEdit() {
-    RouteUtils.pushRoute(context, const TagFormPage());
+    RouteUtils.pushRoute(const TagFormPage());
   }
 
   @override
@@ -84,8 +84,7 @@ class _TagListPageState extends State<TagListPage> {
 
             return ReorderableListTileStyling(
               child: ListTile(
-                onTap: () =>
-                    RouteUtils.pushRoute(context, TagFormPage(tag: tag)),
+                onTap: () => RouteUtils.pushRoute(TagFormPage(tag: tag)),
                 trailing: tags.length > 1
                     ? ReorderableDragIcon(index: index, enabled: isOrderEnabled)
                     : null,

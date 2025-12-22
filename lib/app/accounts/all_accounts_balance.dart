@@ -145,7 +145,6 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                             context,
                           ),
                           onTap: () => RouteUtils.pushRoute(
-                            context,
                             AccountFormPage(account: accountWithMoney.account),
                           ),
                           title: Column(

@@ -37,7 +37,7 @@ class _AllAccountsPageState extends State<AllAccountsPage> {
   }
 
   void _onAddPressed() {
-    RouteUtils.pushRoute(context, const AccountFormPage());
+    RouteUtils.pushRoute(const AccountFormPage());
   }
 
   @override
@@ -106,7 +106,6 @@ class _AllAccountsPageState extends State<AllAccountsPage> {
                 return ReorderableListTileStyling(
                   child: ListTile(
                     onTap: () => RouteUtils.pushRoute(
-                      context,
                       AccountDetailsPage(
                         account: account,
                         accountIconHeroTag:
