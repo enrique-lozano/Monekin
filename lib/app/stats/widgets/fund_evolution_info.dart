@@ -12,12 +12,12 @@ import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
-import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class LineChartDataItem {
   List<double> balance;
@@ -54,92 +54,90 @@ class FundEvolutionInfo extends StatelessWidget {
             if (showBalanceHeader)
               Builder(
                 builder: (context) {
-                  if (!accountsSnapshot.hasData) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  final accounts = accountsSnapshot.data;
+
+                  return Skeletonizer(
+                    enabled: accounts == null,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'Final balance - ${dateRange.getText(context)}',
-                          style: const TextStyle(fontSize: 12),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              t.stats.final_balance,
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                            if (accounts == null)
+                              Text(
+                                '--',
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.headlineSmall,
+                              ),
+                            if (accounts != null)
+                              StreamBuilder(
+                                stream: accountService.getAccountsMoney(
+                                  accountIds: accounts.map((e) => e.id),
+                                  trFilters: filters,
+                                  date: dateRange.endDate,
+                                ),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return const Bone(width: 70, height: 40);
+                                  }
+
+                                  return CurrencyDisplayer(
+                                    amountToConvert: snapshot.data!,
+                                    integerStyle: Theme.of(
+                                      context,
+                                    ).textTheme.headlineSmall!,
+                                  );
+                                },
+                              ),
+                          ],
                         ),
-                        const Skeleton(width: 70, height: 40),
-                        const Skeleton(width: 30, height: 14),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              t.stats.compared_to_previous_period,
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                            if (accounts != null)
+                              StreamBuilder(
+                                stream: accountService
+                                    .getAccountsMoneyVariation(
+                                      accounts: accounts,
+                                      startDate: dateRange.startDate,
+                                      endDate: dateRange.endDate,
+                                      trFilters: filters,
+                                      convertToPreferredCurrency: true,
+                                    ),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return const Bone(width: 52, height: 22);
+                                  }
+
+                                  return TrendingValue(
+                                    percentage: snapshot.data!,
+                                    filled: false,
+                                    fontWeight: Theme.of(
+                                      context,
+                                    ).textTheme.headlineSmall!.fontWeight!,
+                                    fontSize: Theme.of(
+                                      context,
+                                    ).textTheme.headlineSmall!.fontSize!,
+                                    outlined: false,
+                                  );
+                                },
+                              ),
+                          ],
+                        ),
                       ],
-                    );
-                  }
-
-                  final accounts = accountsSnapshot.data!;
-
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            t.stats.final_balance,
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                          StreamBuilder(
-                            stream: accountService.getAccountsMoney(
-                              accountIds: accounts.map((e) => e.id),
-                              trFilters: filters,
-                              date: dateRange.endDate,
-                            ),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return const Skeleton(width: 70, height: 40);
-                              }
-
-                              return CurrencyDisplayer(
-                                amountToConvert: snapshot.data!,
-                                integerStyle: Theme.of(
-                                  context,
-                                ).textTheme.headlineSmall!,
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            t.stats.compared_to_previous_period,
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                          StreamBuilder(
-                            stream: accountService.getAccountsMoneyVariation(
-                              accounts: accounts,
-                              startDate: dateRange.startDate,
-                              endDate: dateRange.endDate,
-                              trFilters: filters,
-                              convertToPreferredCurrency: true,
-                            ),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return const Skeleton(width: 52, height: 22);
-                              }
-
-                              return TrendingValue(
-                                percentage: snapshot.data!,
-                                filled: false,
-                                fontWeight: Theme.of(
-                                  context,
-                                ).textTheme.headlineSmall!.fontWeight!,
-                                fontSize: Theme.of(
-                                  context,
-                                ).textTheme.headlineSmall!.fontSize!,
-                                outlined: false,
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
+                    ),
                   );
                 },
               ),

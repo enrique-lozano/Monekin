@@ -5,10 +5,10 @@ import 'package:monekin/core/database/services/transaction/transaction_service.d
 import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../core/models/transaction/transaction_type.enum.dart';
 
@@ -48,15 +48,14 @@ class IncomeExpenseComparason extends StatelessWidget {
                           ),
                         ),
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const Skeleton(width: 35, height: 32);
-                      }
-
-                      return CurrencyDisplayer(
-                        amountToConvert: snapshot.data!,
-                        integerStyle: Theme.of(
-                          context,
-                        ).textTheme.headlineSmall!,
+                      return Skeletonizer(
+                        enabled: !snapshot.hasData,
+                        child: CurrencyDisplayer(
+                          amountToConvert: snapshot.data ?? 22,
+                          integerStyle: Theme.of(
+                            context,
+                          ).textTheme.headlineSmall!,
+                        ),
                       );
                     },
                   ),

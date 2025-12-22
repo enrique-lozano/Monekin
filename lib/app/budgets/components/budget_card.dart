@@ -7,10 +7,10 @@ import 'package:monekin/core/models/date-utils/period_type.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class BudgetCard extends StatelessWidget {
   const BudgetCard({super.key, required this.budget, this.isHeader = false});
@@ -60,13 +60,13 @@ class BudgetCard extends StatelessWidget {
                     StreamBuilder(
                       stream: budget.currentValue,
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Skeleton(width: 25, height: 18);
-                        }
-
-                        return CurrencyDisplayer(
-                          amountToConvert: budget.limitAmount - snapshot.data!,
-                          showDecimals: false,
+                        return Skeletonizer(
+                          enabled: !snapshot.hasData,
+                          child: CurrencyDisplayer(
+                            amountToConvert:
+                                budget.limitAmount - (snapshot.data ?? 0),
+                            showDecimals: false,
+                          ),
                         );
                       },
                     ),

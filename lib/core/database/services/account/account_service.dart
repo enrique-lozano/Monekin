@@ -199,11 +199,11 @@ class AccountService {
     endDate ??= DateTime.now();
     startDate ??= accounts.map((e) => e.date).min;
 
-    final overwrittenFilters = trFilters.copyWith(
-      accountsIDs: accounts.map((a) => a.id).toList(),
-    );
-
     final Iterable<String> accountIds = accounts.map((e) => e.id);
+
+    final overwrittenFilters = trFilters.copyWith(
+      accountsIDs: accountIds.toList(),
+    );
 
     final accountsBalanceStartPeriod = getAccountsMoney(
       accountIds: accountIds,

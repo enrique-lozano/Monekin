@@ -3,10 +3,10 @@ import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/widgets/display_app_icon.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
-import 'package:monekin/core/presentation/widgets/skeleton.dart';
 import 'package:monekin/core/utils/open_external_url.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import 'widgets/settings_list_separator.dart';
 
@@ -56,35 +56,33 @@ class _AboutPageState extends State<AboutPage> {
                   FutureBuilder(
                     future: PackageInfo.fromPlatform(),
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const Column(
-                          children: [
-                            Skeleton(width: 25, height: 16),
-                            Skeleton(width: 12, height: 12),
-                          ],
-                        );
-                      }
+                      final packageInfo = snapshot.data;
 
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            snapshot.data!.appName.capitalize(),
-                            style: Theme.of(context).textTheme.headlineMedium,
-                          ),
-                          Text(
-                            'v${snapshot.data!.version} (${snapshot.data!.buildNumber})',
-                            style: Theme.of(context).textTheme.labelSmall,
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            t.intro.welcome_subtitle2,
-                            style: Theme.of(context).textTheme.labelSmall!
-                                .copyWith(
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                          ),
-                        ],
+                      return Skeletonizer(
+                        enabled: packageInfo == null,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              snapshot.data?.appName.capitalize() ?? 'Monekin',
+                              style: Theme.of(context).textTheme.headlineMedium,
+                            ),
+                            Text(
+                              'v${snapshot.data?.version ?? 'X.X.X'} (${snapshot.data?.buildNumber ?? '??????'})',
+                              style: Theme.of(context).textTheme.labelSmall,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              t.intro.welcome_subtitle2,
+                              style: Theme.of(context).textTheme.labelSmall!
+                                  .copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                  ),
+                            ),
+                          ],
+                        ),
                       );
                     },
                   ),
