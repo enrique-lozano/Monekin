@@ -44,18 +44,6 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 import '../../../core/models/transaction/transaction_type.enum.dart';
 import '../../tags/tags_selector.modal.dart';
 
-Future openTransactionFormDialog(
-  BuildContext context,
-  TransactionFormPage widget,
-) {
-  return showDialog(
-    context: context,
-    builder: (context) {
-      return widget;
-    },
-  );
-}
-
 class TransactionFormPage extends StatefulWidget {
   const TransactionFormPage({
     super.key,
