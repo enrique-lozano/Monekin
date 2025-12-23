@@ -11,6 +11,7 @@ class NoResults extends StatelessWidget {
     this.padding,
     this.noSearchResultsVariation = false,
     this.title,
+    this.bottom,
   });
 
   final String? title;
@@ -18,6 +19,8 @@ class NoResults extends StatelessWidget {
   final Color? tintColor;
   final EdgeInsets? padding;
   final bool noSearchResultsVariation;
+
+  final Widget? bottom;
 
   @override
   Widget build(BuildContext context) {
@@ -76,8 +79,9 @@ class NoResults extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: const TextStyle(fontWeight: FontWeight.w300),
                 ),
-                const SizedBox(height: 16),
-                // Lottie.asset('assets/animations/search-animation.json'),
+
+                if (bottom != null) ...[const SizedBox(height: 16), bottom!],
+                const SizedBox(height: 42),
               ],
             ),
           ),

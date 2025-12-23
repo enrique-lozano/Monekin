@@ -396,7 +396,7 @@ class _ArchiveWarnDialogState extends State<ArchiveWarnDialog> {
                           ),
                         )
                         .then((value) {
-                          Navigator.pop(context, true);
+                          RouteUtils.popRoute(true);
 
                           MonekinSnackbar.success(
                             SnackbarParams(t.account.close.success),

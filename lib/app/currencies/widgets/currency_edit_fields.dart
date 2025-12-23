@@ -165,7 +165,6 @@ class CurrencyEditFieldsState extends State<CurrencyEditFields> {
             width: 64,
             child: TextFormField(
               controller: _symbolController,
-              keyboardType: TextInputType.number,
               maxLength: 5,
               textAlign: TextAlign.center,
               decoration: InputDecoration(

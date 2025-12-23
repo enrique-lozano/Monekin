@@ -8,6 +8,7 @@ import 'package:monekin/core/models/transaction/rule_recurrent_limit.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -84,8 +85,7 @@ class _IntervalSelectorPageState extends State<IntervalSelectorPage> {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
 
-                Navigator.pop(
-                  context,
+                RouteUtils.popRoute(
                   ruleUntilMode == RuleUntilMode.infinity
                       ? RecurrencyData.infinite(
                           intervalPeriod: intervalPeriod,

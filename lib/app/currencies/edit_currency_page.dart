@@ -73,17 +73,19 @@ class _EditCurrencyPageState extends State<EditCurrencyPage> {
             ),
           ),
         ],
-        body: CurrencyEditFields(
-          key: _formKey,
-          currency: widget.currency,
-          onChanged: () {
-            final changed = _formKey.currentState?.hasChanged ?? false;
-            if (changed != _hasChanged) {
-              setState(() {
-                _hasChanged = changed;
-              });
-            }
-          },
+        body: SingleChildScrollView(
+          child: CurrencyEditFields(
+            key: _formKey,
+            currency: widget.currency,
+            onChanged: () {
+              final changed = _formKey.currentState?.hasChanged ?? false;
+              if (changed != _hasChanged) {
+                setState(() {
+                  _hasChanged = changed;
+                });
+              }
+            },
+          ),
         ),
       ),
     );
