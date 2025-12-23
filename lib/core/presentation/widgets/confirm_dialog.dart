@@ -16,11 +16,30 @@ Future<bool?> confirmDialog(
 }) {
   final t = Translations.of(context);
 
-  return showDialog<bool>(
+  final useRootNavigator = true;
+
+  return showGeneralDialog<bool>(
     context: context,
     barrierDismissible: canPop,
-    useRootNavigator: true,
-    builder: (context) => PopScope(
+    barrierColor: Colors.black.withOpacity(0.4),
+    barrierLabel: '',
+    transitionBuilder: (_, anim, __, child) {
+      Tween<double> tween;
+      if (anim.status == AnimationStatus.reverse) {
+        tween = Tween(begin: 0.9, end: 1);
+      } else {
+        tween = Tween(begin: 0.95, end: 1);
+      }
+      return ScaleTransition(
+        scale: tween.animate(
+          CurvedAnimation(parent: anim, curve: Curves.easeInOutQuart),
+        ),
+        child: FadeTransition(opacity: anim, child: child),
+      );
+    },
+    transitionDuration: Duration(milliseconds: 200),
+    useRootNavigator: useRootNavigator,
+    pageBuilder: (_, __, ___) => PopScope(
       canPop: canPop,
       child: AlertDialog.adaptive(
         title: Text(dialogTitle),
@@ -38,13 +57,18 @@ Future<bool?> confirmDialog(
             TextButton(
               child: Text(t.ui_actions.cancel),
               onPressed: () {
-                Navigator.of(context, rootNavigator: true).pop(false);
+                Navigator.of(
+                  context,
+                  rootNavigator: useRootNavigator,
+                ).pop(false);
+
+                // NOW EVERY TIME I PRESS THE PHYSICAL DEVICE BACK BUTTON, IT CLOSES THE APP
               },
             ),
           TextButton(
             child: Text(confirmationText ?? t.general.understood),
             onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop(true);
+              Navigator.of(context, rootNavigator: useRootNavigator).pop(true);
             },
           ),
         ],
