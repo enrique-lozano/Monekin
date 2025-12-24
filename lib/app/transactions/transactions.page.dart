@@ -35,6 +35,8 @@ class TransactionsPage extends StatefulWidget {
 class TransactionsPageState extends State<TransactionsPage> {
   late TransactionFilters filters;
 
+  bool searchActive = false;
+
   FocusNode searchFocusNode = FocusNode();
   final searchController = TextEditingController();
   final ScrollController listScrollController = ScrollController();
@@ -46,6 +48,14 @@ class TransactionsPageState extends State<TransactionsPage> {
     super.initState();
 
     filters = widget.filters ?? const TransactionFilters();
+
+    searchFocusNode.addListener(() {
+      if (!searchFocusNode.hasFocus && searchController.text.isEmpty) {
+        setState(() {
+          searchActive = false;
+        });
+      }
+    });
   }
 
   @override
@@ -54,9 +64,6 @@ class TransactionsPageState extends State<TransactionsPage> {
     searchController.dispose();
     super.dispose();
   }
-
-  bool get searchActive =>
-      searchController.text.isNotEmpty || searchFocusNode.hasFocus;
 
   bool get canPop => !searchActive && selectedTransactions.isEmpty;
 
@@ -69,14 +76,14 @@ class TransactionsPageState extends State<TransactionsPage> {
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
 
-        print("POP SCOPE FROM TRANSACTIONS PAGE");
-
         if (selectedTransactions.isNotEmpty) {
           cleanSelectedTransactions();
           return;
         }
 
-        if (searchActive) {
+        if (searchActive ||
+            searchController.text.isNotEmpty ||
+            searchFocusNode.hasFocus) {
           if (searchFocusNode.hasFocus) {
             searchFocusNode.unfocus();
           }
@@ -245,21 +252,33 @@ class TransactionsPageState extends State<TransactionsPage> {
       leading: searchActive
           ? IconButton(onPressed: closeSearch, icon: const Icon(Icons.close))
           : null,
-      title: searchActive
-          ? TextField(
-              controller: searchController,
-              focusNode: searchFocusNode,
-              decoration: InputDecoration(
-                hintText: t.transaction.list.searcher_placeholder,
-                border: const UnderlineInputBorder(),
-              ),
-            )
-          : Text(t.transaction.display(n: 10)),
+      title: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 175),
+        child: searchActive
+            ? TextField(
+                controller: searchController,
+                focusNode: searchFocusNode,
+                decoration: InputDecoration(
+                  hintText: t.transaction.list.searcher_placeholder,
+                  border: const UnderlineInputBorder(),
+                  filled: true,
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 8,
+                  ),
+                ),
+                onChanged: (text) {
+                  setState(() {});
+                },
+              )
+            : Text(t.transaction.display(n: 10)),
+      ),
       actions: [
         if (!searchActive)
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
+              searchActive = true;
               searchFocusNode.requestFocus();
               setState(() {});
             },

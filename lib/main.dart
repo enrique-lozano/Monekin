@@ -15,7 +15,7 @@ import 'package:monekin/core/database/services/user-setting/user_setting_service
 import 'package:monekin/core/database/services/user-setting/utils/get_theme_from_string.dart';
 import 'package:monekin/core/presentation/helpers/global_snackbar.dart';
 import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/core/routes/destinations.dart';
+import 'package:monekin/core/routes/handle_will_pop_scope.dart';
 import 'package:monekin/core/routes/root_navigator_observer.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/app_utils.dart';
@@ -229,55 +229,55 @@ class MaterialAppContainer extends StatelessWidget {
 
             return child;
           },
-          home: Builder(
-            builder: (context) {
-              final mainSide = Stack(
-                children: [
-                  HandleWillPopScope(
-                    child: InitialPageRouteNavigator(introSeen: introSeen),
-                  ),
-                  GlobalSnackbar(key: globalSnackbarKey),
-                ],
-              );
-
-              final mainContent = ColoredBox(
-                color: getWindowBackgroundColor(context),
-                child: Row(
+          home: HandleWillPopScope(
+            child: Builder(
+              builder: (context) {
+                final mainSide = Stack(
                   children: [
-                    if (introSeen)
-                      AppNavigationSidebar(key: navigationSidebarKey),
-                    Expanded(
-                      child: Builder(
-                        builder: (context) {
-                          if (AppUtils.isDesktop &&
-                              !AppUtils.isMobileLayout(context)) {
-                            return ClipRRect(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(12),
-                              ),
-                              child: mainSide,
-                            );
-                          }
-
-                          return mainSide;
-                        },
-                      ),
-                    ),
+                    InitialPageRouteNavigator(introSeen: introSeen),
+                    GlobalSnackbar(key: globalSnackbarKey),
                   ],
-                ),
-              );
+                );
 
-              if (!AppUtils.isDesktop) {
-                return mainContent;
-              }
+                final mainContent = ColoredBox(
+                  color: getWindowBackgroundColor(context),
+                  child: Row(
+                    children: [
+                      if (introSeen)
+                        AppNavigationSidebar(key: navigationSidebarKey),
+                      Expanded(
+                        child: Builder(
+                          builder: (context) {
+                            if (AppUtils.isDesktop &&
+                                !AppUtils.isMobileLayout(context)) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                ),
+                                child: mainSide,
+                              );
+                            }
 
-              return Column(
-                children: [
-                  WindowBar(key: windowBarKey),
-                  Expanded(child: mainContent),
-                ],
-              );
-            },
+                            return mainSide;
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+
+                if (!AppUtils.isDesktop) {
+                  return mainContent;
+                }
+
+                return Column(
+                  children: [
+                    WindowBar(key: windowBarKey),
+                    Expanded(child: mainContent),
+                  ],
+                );
+              },
+            ),
           ),
         );
       },
@@ -301,33 +301,6 @@ class InitialPageRouteNavigator extends StatelessWidget {
           introSeen ? PageSwitcher(key: tabsPageKey) : const IntroPage(),
         ),
       ),
-    );
-  }
-}
-
-class HandleWillPopScope extends StatelessWidget {
-  const HandleWillPopScope({required this.child, super.key});
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      child: child,
-      onWillPop: () async {
-        bool popResult = await RouteUtils.maybePopRoute(
-          navigatorKey.currentContext,
-        );
-        if (popResult == true) return false;
-
-        if (tabsPageKey.currentState?.selectedDestination ==
-            AppMenuDestinationsID.dashboard) {
-          return true;
-        } else {
-          tabsPageKey.currentState?.changePage(AppMenuDestinationsID.dashboard);
-        }
-
-        return false;
-      },
     );
   }
 }

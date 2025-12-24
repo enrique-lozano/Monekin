@@ -55,7 +55,8 @@ class PageSwitcherState extends State<PageSwitcher> {
         if (didPop) return;
 
         if (selectedDestination != AppMenuDestinationsID.dashboard &&
-            transactionsPageKey.currentState?.canPop == true) {
+            (transactionsPageKey.currentState == null ||
+                transactionsPageKey.currentState?.canPop == true)) {
           changePage(AppMenuDestinationsID.dashboard);
           return;
         }
