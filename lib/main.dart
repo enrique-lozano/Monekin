@@ -19,6 +19,7 @@ import 'package:monekin/core/routes/handle_will_pop_scope.dart';
 import 'package:monekin/core/routes/root_navigator_observer.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/app_utils.dart';
+import 'package:monekin/core/utils/keyboard_intents.dart';
 import 'package:monekin/core/utils/logger.dart';
 import 'package:monekin/core/utils/scroll_behavior_override.dart';
 import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
@@ -197,6 +198,8 @@ class MaterialAppContainer extends StatelessWidget {
           title: 'Monekin',
           debugShowCheckedModeBanner: false,
           color: Theme.of(context).colorScheme.primary,
+          shortcuts: appShortcuts,
+          actions: keyboardIntents,
           locale: TranslationProvider.of(context).flutterLocale,
           scrollBehavior: ScrollBehaviorOverride(),
           supportedLocales: AppLocaleUtils.supportedLocales,
@@ -219,6 +222,7 @@ class MaterialAppContainer extends StatelessWidget {
             accentColor: accentColor,
           ),
           themeMode: themeMode,
+          navigatorKey: rootNavigatorKey,
           navigatorObservers: [MainLayoutNavObserver()],
           builder: (context, child) {
             SystemChrome.setSystemUIOverlayStyle(
