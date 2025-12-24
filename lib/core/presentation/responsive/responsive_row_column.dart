@@ -48,8 +48,8 @@ class ResponsiveRowColumn extends StatelessWidget {
   /// Outside padding of all the elements in the column
   final EdgeInsets columnPadding;
 
-  get isRow => direction == Axis.horizontal;
-  get isColumn => direction == Axis.vertical;
+  bool get isRow => direction == Axis.horizontal;
+  bool get isColumn => direction == Axis.vertical;
 
   /// The [ResponsiveRowColumn] constructor
   const ResponsiveRowColumn({
@@ -104,6 +104,7 @@ class ResponsiveRowColumn extends StatelessWidget {
       return Padding(
         padding: rowPadding,
         child: Row(
+          spacing: rowSpacing ?? 0,
           mainAxisAlignment: rowMainAxisAlignment,
           mainAxisSize: rowMainAxisSize,
           crossAxisAlignment: rowCrossAxisAlignment,
@@ -118,6 +119,7 @@ class ResponsiveRowColumn extends StatelessWidget {
     return Padding(
       padding: columnPadding,
       child: Column(
+        spacing: columnSpacing ?? 0,
         mainAxisAlignment: columnMainAxisAlignment,
         mainAxisSize: columnMainAxisSize,
         crossAxisAlignment: columnCrossAxisAlignment,
@@ -150,16 +152,8 @@ class ResponsiveRowColumn extends StatelessWidget {
     List<Widget> widgetList = [];
     for (int i = 0; i < childrenHolder.length; i++) {
       widgetList.add(childrenHolder[i].copyWith(rowColumn: rowColumn));
-      if (spacing != null && i != childrenHolder.length - 1) {
-        widgetList.add(
-          Padding(
-            padding: rowColumn
-                ? EdgeInsets.only(right: spacing)
-                : EdgeInsets.only(bottom: spacing),
-          ),
-        );
-      }
     }
+
     return widgetList;
   }
 }
