@@ -93,23 +93,25 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
               color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
-          body: ScrollableWithBottomGradient(
-            gradientColor: AppColors.of(context).modalBackground,
-            controller: scrollController,
-            child: Builder(
-              builder: (context) {
-                final scopes = iconsByScope.keys.toList();
+          body: Stack(
+            children: [
+              Builder(
+                builder: (context) {
+                  final scopes = iconsByScope.keys.toList();
 
-                return ListView.builder(
-                  itemCount: scopes.length,
-                  shrinkWrap: true,
-                  physics: const BouncingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return _buildIconGroup(scopes.elementAt(index));
-                  },
-                );
-              },
-            ),
+                  return ListView.builder(
+                    itemCount: scopes.length,
+                    controller: scrollController,
+                    itemBuilder: (context, index) {
+                      return _buildIconGroup(scopes.elementAt(index));
+                    },
+                  );
+                },
+              ),
+              ScrollableWithBottomGradient.buildPositionedGradient(
+                AppColors.of(context).modalBackground,
+              ),
+            ],
           ),
           footer: BottomSheetFooter(
             submitIcon: Icons.check,
