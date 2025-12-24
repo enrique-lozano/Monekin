@@ -101,7 +101,6 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
 
                   return ListView.builder(
                     itemCount: scopes.length,
-                    shrinkWrap: true,
                     controller: scrollController,
                     itemBuilder: (context, index) {
                       return _buildIconGroup(scopes.elementAt(index));
