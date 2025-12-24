@@ -20,7 +20,8 @@ Map<Type, Action<Intent>> keyboardIntents = {
   ),
 };
 
-Map<ShortcutActivator, Intent> shortcuts = {
+/// Shortcuts applying to the entire app
+Map<ShortcutActivator, Intent> appShortcuts = {
   LogicalKeySet(LogicalKeyboardKey.goBack): const GoBackIntent(),
   LogicalKeySet(LogicalKeyboardKey.browserBack): const GoBackIntent(),
 };

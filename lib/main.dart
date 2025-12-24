@@ -198,7 +198,7 @@ class MaterialAppContainer extends StatelessWidget {
           title: 'Monekin',
           debugShowCheckedModeBanner: false,
           color: Theme.of(context).colorScheme.primary,
-          shortcuts: shortcuts,
+          shortcuts: appShortcuts,
           actions: keyboardIntents,
           locale: TranslationProvider.of(context).flutterLocale,
           scrollBehavior: ScrollBehaviorOverride(),
