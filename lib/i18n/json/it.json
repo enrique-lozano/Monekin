@@ -648,10 +648,34 @@
       "title": "Dettagli budget",
       "statistics": "Statistiche",
       "budget-value": "A budget",
-      "expend-diary-left": "Puoi spendere {{ dailyAmount }}/giorno per {{ remainingDays }} giorni rimanenti",
       "expend-evolution": "Evoluzione della spesa",
       "no-transactions": "Sembra che tu non abbia effettuato spese relative a questo budget"
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "Budget attivo",
+      "past": "Budget passato",
+      "future": "Budget futuro"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "In linea",
+        "active-overspending": "Spesa eccessiva",
+        "success": "Raggiunto",
+        "fail": "Budget superato"
+      },
+      "DESCRIPTION": {
+        "active-on-track": "Puoi spendere {{ dailyAmount }} al giorno per i restanti {{ remainingDays }} giorni",
+        "active-overspending": "Per tornare in linea, dovresti limitare la tua spesa a {{ dailyAmount }} al giorno per i restanti {{ remainingDays }} giorni",
+        "active-exceeded": "Hai già superato il limite del budget di {{ amount }}. Se non trovi entrate per questo budget, dovresti smettere di spendere per il resto del periodo",
+        "success": "Ottimo lavoro! Questo budget è terminato con successo. Continua a creare budget per gestire le tue spese",
+        "fail": "Hai superato il budget di {{ amount }}. Cerca di fare più attenzione la prossima volta!"
+      }
     }
+  },
+  "TARGET_TIMELINE_STATUSES": {
+    "active": "Attivo",
+    "past": "Passato",
+    "future": "Futuro"
   },
   "BACKUP": {
     "no_file_selected": "Nessun file selezionato",

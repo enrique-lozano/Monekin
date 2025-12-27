@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/models/budget/target_progress_status.enum.dart';
 import 'package:monekin/core/models/date-utils/date_period.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/utils/date_utils.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 import '../transaction/transaction_type.enum.dart';
+import 'target_timeline_status.enum.dart';
 
 class Budget extends BudgetInDB {
   List<String>? categories;
@@ -58,16 +61,39 @@ class Budget extends BudgetInDB {
   double get todayPercent =>
       getPercentBetweenDates(currentDateRange, DateTime.now());
 
+  /// Get the current time status of the budget based on the current date.
+  TargetTimelineStatus get timelineStatus {
+    final now = DateTime.now();
+    if (now.compareTo(currentDateRange.end) > 0) {
+      return TargetTimelineStatus.past;
+    }
+    if (now.compareTo(currentDateRange.start) < 0) {
+      return TargetTimelineStatus.future;
+    }
+    return TargetTimelineStatus.active;
+  }
+
+  String timelineStatusLabel(BuildContext context) {
+    final t = Translations.of(context).budgets.target_timeline_statuses;
+    switch (timelineStatus) {
+      case TargetTimelineStatus.active:
+        return t.active;
+      case TargetTimelineStatus.past:
+        return t.past;
+      case TargetTimelineStatus.future:
+        return t.future;
+    }
+  }
+
   /// Whether or not the budget is relative to the current datetime.
   /// That is, if the budget has not already passed and has already started
-  bool get isActiveBudget => !isPastBudget && !isFutureBudget;
+  bool get isActiveBudget => timelineStatus == TargetTimelineStatus.active;
 
   /// True if the period range of the budget has passed
-  bool get isPastBudget => DateTime.now().compareTo(currentDateRange.end) > 0;
+  bool get isPastBudget => timelineStatus == TargetTimelineStatus.past;
 
   /// True if the budget has not started yet
-  bool get isFutureBudget =>
-      DateTime.now().compareTo(currentDateRange.start) < 0;
+  bool get isFutureBudget => timelineStatus == TargetTimelineStatus.future;
 
   TransactionFilters get trFilters => TransactionFilters(
     status: TransactionStatus.notIn({
@@ -114,5 +140,16 @@ class Budget extends BudgetInDB {
   /// Get the percentage of the budget already filled. The return value can be greather than 1 (>100%)
   Stream<double> get percentageAlreadyUsed {
     return currentValue.map((event) => event / limitAmount);
+  }
+
+  /// Get the process status of the budget based on the current date and value
+  Stream<TargetProgressStatus?> get progressStatus {
+    return percentageAlreadyUsed.map((percentage) {
+      return TargetProgressStatus.fromPercentages(
+        percentage,
+        todayPercent / 100,
+        timelineStatus,
+      );
+    });
   }
 }

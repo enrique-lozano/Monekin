@@ -51,6 +51,7 @@ class TranslationsTr implements Translations {
 	@override late final _TranslationsTagsTr tags = _TranslationsTagsTr._(_root);
 	@override late final _TranslationsCategoriesTr categories = _TranslationsCategoriesTr._(_root);
 	@override late final _TranslationsBudgetsTr budgets = _TranslationsBudgetsTr._(_root);
+	@override late final _TranslationsTargetTimelineStatusesTr target_timeline_statuses = _TranslationsTargetTimelineStatusesTr._(_root);
 	@override late final _TranslationsBackupTr backup = _TranslationsBackupTr._(_root);
 	@override late final _TranslationsSettingsTr settings = _TranslationsSettingsTr._(_root);
 	@override late final _TranslationsMoreTr more = _TranslationsMoreTr._(_root);
@@ -452,6 +453,20 @@ class _TranslationsBudgetsTr implements TranslationsBudgetsEn {
 	@override String get delete_warning => 'Bu eylem geri alınamaz. Bu bütçeye atıfta bulunan kategoriler ve işlemler silinmez';
 	@override late final _TranslationsBudgetsFormTr form = _TranslationsBudgetsFormTr._(_root);
 	@override late final _TranslationsBudgetsDetailsTr details = _TranslationsBudgetsDetailsTr._(_root);
+	@override late final _TranslationsBudgetsTargetTimelineStatusesTr target_timeline_statuses = _TranslationsBudgetsTargetTimelineStatusesTr._(_root);
+	@override late final _TranslationsBudgetsProgressTr progress = _TranslationsBudgetsProgressTr._(_root);
+}
+
+// Path: target_timeline_statuses
+class _TranslationsTargetTimelineStatusesTr implements TranslationsTargetTimelineStatusesEn {
+	_TranslationsTargetTimelineStatusesTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => 'Aktif';
+	@override String get past => 'Geçmiş';
+	@override String get future => 'Gelecek';
 }
 
 // Path: backup
@@ -1065,9 +1080,31 @@ class _TranslationsBudgetsDetailsTr implements TranslationsBudgetsDetailsEn {
 	@override String get title => 'Bütçe Detayları';
 	@override String get statistics => 'İstatistikler';
 	@override String get budget_value => 'Bütçelenen';
-	@override String expend_diary_left({required Object remainingDays, required Object dailyAmount}) => '${remainingDays} kalan gün için günde ${dailyAmount} harcayabilirsiniz';
 	@override String get expend_evolution => 'Harcama gelişimi';
 	@override String get no_transactions => 'Bu bütçeyle ilgili herhangi bir harcama yapmamışsınız gibi görünüyor';
+}
+
+// Path: budgets.target_timeline_statuses
+class _TranslationsBudgetsTargetTimelineStatusesTr implements TranslationsBudgetsTargetTimelineStatusesEn {
+	_TranslationsBudgetsTargetTimelineStatusesTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => 'Aktif bütçe';
+	@override String get past => 'Geçmiş bütçe';
+	@override String get future => 'Gelecek bütçe';
+}
+
+// Path: budgets.progress
+class _TranslationsBudgetsProgressTr implements TranslationsBudgetsProgressEn {
+	_TranslationsBudgetsProgressTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsBudgetsProgressLabelsTr labels = _TranslationsBudgetsProgressLabelsTr._(_root);
+	@override late final _TranslationsBudgetsProgressDescriptionTr description = _TranslationsBudgetsProgressDescriptionTr._(_root);
 }
 
 // Path: backup.export
@@ -1379,6 +1416,33 @@ class _TranslationsTransferFormValueInDestinyTr implements TranslationsTransferF
 	// Translations
 	@override String get title => 'Hedefte aktarılan miktar';
 	@override String amount_short({required Object amount}) => 'Hedef hesaba ${amount}';
+}
+
+// Path: budgets.progress.labels
+class _TranslationsBudgetsProgressLabelsTr implements TranslationsBudgetsProgressLabelsEn {
+	_TranslationsBudgetsProgressLabelsTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get active_on_track => 'Yolunda';
+	@override String get active_overspending => 'Aşırı harcama';
+	@override String get success => 'Başarılı';
+	@override String get fail => 'Bütçe aşıldı';
+}
+
+// Path: budgets.progress.description
+class _TranslationsBudgetsProgressDescriptionTr implements TranslationsBudgetsProgressDescriptionEn {
+	_TranslationsBudgetsProgressDescriptionTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String active_on_track({required Object remainingDays, required Object dailyAmount}) => 'Kalan ${remainingDays} gün için günde ${dailyAmount} harcayabilirsiniz';
+	@override String active_overspending({required Object remainingDays, required Object dailyAmount}) => 'Tekrar rayına oturmak için, kalan ${remainingDays} gün boyunca harcamalarınızı günde ${dailyAmount} ile sınırlamalısınız';
+	@override String active_exceeded({required Object amount}) => 'Bütçe limitinizi ${amount} aştınız. Bu bütçe için herhangi bir gelir bulamazsanız, dönemin geri kalanında harcama yapmayı bırakmalısınız';
+	@override String get success => 'Harika iş! Bu bütçe başarıyla tamamlandı. Harcamalarınızı yönetmek için bütçe oluşturmaya devam edin';
+	@override String fail({required Object amount}) => 'Bütçeyi ${amount} aştınız. Bir dahaki sefere daha dikkatli olmaya çalışın!';
 }
 
 // Path: backup.import.manual_import
@@ -2034,9 +2098,23 @@ extension on TranslationsTr {
 		map['budgets.details.title'] = 'Bütçe Detayları';
 		map['budgets.details.statistics'] = 'İstatistikler';
 		map['budgets.details.budget_value'] = 'Bütçelenen';
-		map['budgets.details.expend_diary_left'] = ({required Object remainingDays, required Object dailyAmount}) => '${remainingDays} kalan gün için günde ${dailyAmount} harcayabilirsiniz';
 		map['budgets.details.expend_evolution'] = 'Harcama gelişimi';
 		map['budgets.details.no_transactions'] = 'Bu bütçeyle ilgili herhangi bir harcama yapmamışsınız gibi görünüyor';
+		map['budgets.target_timeline_statuses.active'] = 'Aktif bütçe';
+		map['budgets.target_timeline_statuses.past'] = 'Geçmiş bütçe';
+		map['budgets.target_timeline_statuses.future'] = 'Gelecek bütçe';
+		map['budgets.progress.labels.active_on_track'] = 'Yolunda';
+		map['budgets.progress.labels.active_overspending'] = 'Aşırı harcama';
+		map['budgets.progress.labels.success'] = 'Başarılı';
+		map['budgets.progress.labels.fail'] = 'Bütçe aşıldı';
+		map['budgets.progress.description.active_on_track'] = ({required Object remainingDays, required Object dailyAmount}) => 'Kalan ${remainingDays} gün için günde ${dailyAmount} harcayabilirsiniz';
+		map['budgets.progress.description.active_overspending'] = ({required Object remainingDays, required Object dailyAmount}) => 'Tekrar rayına oturmak için, kalan ${remainingDays} gün boyunca harcamalarınızı günde ${dailyAmount} ile sınırlamalısınız';
+		map['budgets.progress.description.active_exceeded'] = ({required Object amount}) => 'Bütçe limitinizi ${amount} aştınız. Bu bütçe için herhangi bir gelir bulamazsanız, dönemin geri kalanında harcama yapmayı bırakmalısınız';
+		map['budgets.progress.description.success'] = 'Harika iş! Bu bütçe başarıyla tamamlandı. Harcamalarınızı yönetmek için bütçe oluşturmaya devam edin';
+		map['budgets.progress.description.fail'] = ({required Object amount}) => 'Bütçeyi ${amount} aştınız. Bir dahaki sefere daha dikkatli olmaya çalışın!';
+		map['target_timeline_statuses.active'] = 'Aktif';
+		map['target_timeline_statuses.past'] = 'Geçmiş';
+		map['target_timeline_statuses.future'] = 'Gelecek';
 		map['backup.no_file_selected'] = 'Hiçbir dosya seçilmedi';
 		map['backup.no_directory_selected'] = 'Hiçbir dizin seçilmedi';
 		map['backup.export.title'] = 'Verilerinizi dışa aktarın';

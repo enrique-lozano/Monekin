@@ -648,10 +648,34 @@
       "title": "Détails du budget",
       "statistics": "Statistiques",
       "budget-value": "Budgeté",
-      "expend-diary-left": "Vous pouvez dépenser {{ dailyAmount }}/jour pendant {{ remainingDays }} jours restants",
       "expend-evolution": "Évolution des dépenses",
       "no-transactions": "Il semble que vous n'ayez pas encore fait de dépenses liées à ce budget"
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "Budget actif",
+      "past": "Budget passé",
+      "future": "Budget futur"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "En bonne voie",
+        "active-overspending": "Dépenses excessives",
+        "success": "Atteint",
+        "fail": "Budget dépassé"
+      },
+      "DESCRIPTION": {
+        "active-on-track": "Vous pouvez dépenser {{ dailyAmount }} par jour pour les {{ remainingDays }} jours restants",
+        "active-overspending": "Pour revenir sur la bonne voie, vous devriez limiter vos dépenses à {{ dailyAmount }} par jour pour les {{ remainingDays }} jours restants",
+        "active-exceeded": "Vous avez déjà dépassé votre limite budgétaire de {{ amount }}. Si vous ne trouvez aucun revenu pour ce budget, vous devriez arrêter de dépenser pour le reste de sa période",
+        "success": "Bon travail ! Ce budget est terminé avec succès. Continuez à créer des budgets pour gérer vos dépenses",
+        "fail": "Vous avez dépassé le budget de {{ amount }}. Essayez d'être plus prudent la prochaine fois !"
+      }
     }
+  },
+  "TARGET_TIMELINE_STATUSES": {
+    "active": "Actif",
+    "past": "Passé",
+    "future": "Futur"
   },
   "BACKUP": {
     "no_file_selected": "Aucun fichier sélectionné",

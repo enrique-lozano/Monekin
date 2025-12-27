@@ -1,273 +1,231 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart' show DateFormat, NumberFormat;
+import 'package:intl/intl.dart' show DateFormat;
 import 'package:monekin/app/budgets/budget_details_page.dart';
-import 'package:monekin/core/database/services/currency/currency_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/budget/budget.dart';
-import 'package:monekin/core/models/date-utils/period_type.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
+import 'package:monekin/core/presentation/styles/borders.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class BudgetCard extends StatelessWidget {
-  const BudgetCard({super.key, required this.budget, this.isHeader = false});
+  const BudgetCard({super.key, required this.budget});
 
   final Budget budget;
 
-  final bool isHeader;
-
   @override
   Widget build(BuildContext context) {
-    const Radius radius = Radius.circular(14);
+    final Radius radius = Radius.circular(getCardBorderRadius());
     final t = Translations.of(context);
 
-    return Tappable(
-      margin: isHeader
-          ? const EdgeInsets.all(0)
-          : const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-      bgColor: Theme.of(context).colorScheme.surfaceContainer,
-      shape: RoundedRectangleBorder(
-        borderRadius: isHeader
-            ? const BorderRadius.only(bottomLeft: radius, bottomRight: radius)
-            : const BorderRadius.all(radius),
-      ),
-      onTap: isHeader
-          ? null
-          : () => RouteUtils.pushRoute(BudgetDetailsPage(budget: budget)),
-      child: Card(
-        margin: const EdgeInsets.all(0),
-        color: Colors.transparent,
-        elevation: 0,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              DefaultTextStyle(
-                style: Theme.of(
-                  context,
-                ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(budget.name),
-                    StreamBuilder(
-                      stream: budget.currentValue,
+    return DecoratedBox(
+      decoration: BoxDecoration(boxShadow: boxShadowGeneral(context)),
+      child: Tappable(
+        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+        bgColor: Theme.of(context).colorScheme.surfaceContainer,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(radius)),
+
+        onTap: () => RouteUtils.pushRoute(BudgetDetailsPage(budget: budget)),
+        child: Card(
+          margin: const EdgeInsets.all(0),
+          color: Colors.transparent,
+          elevation: 0,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                BudgetMainHeaderInfo(budget: budget),
+                const SizedBox(height: 12),
+                Builder(
+                  builder: (context) {
+                    return StreamBuilder(
+                      stream: budget.percentageAlreadyUsed,
                       builder: (context, snapshot) {
-                        return Skeletonizer(
-                          enabled: !snapshot.hasData,
-                          child: CurrencyDisplayer(
-                            amountToConvert:
-                                budget.limitAmount - (snapshot.data ?? 0),
-                            showDecimals: false,
+                        final budgetValue = snapshot.data;
+
+                        return AnimatedProgressBarWithIndicatorLabel(
+                          indicatorLabelOptions: IndicatorLabelOptions(
+                            label: Text(t.general.today),
+                            isLabelBeforeBar: false,
+                            labelPercent: budget.todayPercent / 100,
+                          ),
+                          enableLabel: budget.isActiveBudget,
+                          animatedProgressBar: AnimatedProgressBar(
+                            width: 16,
+                            radius: 99,
+                            showPercentageText: true,
+                            animationDuration: 1500,
+                            value: budgetValue != null && budgetValue >= 1
+                                ? 1
+                                : budgetValue ?? 0,
+                            color: budgetValue != null && budgetValue >= 1
+                                ? AppColors.of(context).danger
+                                : null,
                           ),
                         );
                       },
-                    ),
-                  ],
+                    );
+                  },
                 ),
-              ),
-              DefaultTextStyle(
-                style: const TextStyle(fontWeight: FontWeight.w300),
-                child: Row(
+                SizedBox(height: budget.isActiveBudget ? 24 : 8),
+                const Divider(height: 16),
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                   children: [
-                    Text(
-                      budget.intervalPeriod?.allThePeriodsText(context) ??
-                          '${DateFormat.yMMMd().format(budget.currentDateRange.start)} - ${DateFormat.yMMMd().format(budget.currentDateRange.end)}',
-                    ),
                     Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      spacing: 8,
                       children: [
-                        Text(t.budgets.from_budgeted.toLowerCase()),
-                        CurrencyDisplayer(
-                          amountToConvert: budget.limitAmount,
-                          showDecimals: false,
-                        ),
+                        budget.timelineStatus.icon(size: 16),
+                        Text(budget.timelineStatus.displayName(context)),
                       ],
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 32),
-              Builder(
-                builder: (context) {
-                  const double barWidth = 16;
-                  final Color labelColor = Theme.of(
-                    context,
-                  ).colorScheme.tertiary;
 
-                  return LayoutBuilder(
-                    builder: (context, constraints) {
-                      return Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          StreamBuilder(
-                            stream: budget.percentageAlreadyUsed,
-                            builder: (context, snapshot) {
-                              final budgetValue = snapshot.data;
+                    StreamBuilder(
+                      stream: budget.progressStatus,
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const SizedBox.shrink();
+                        }
 
-                              return AnimatedProgressBar(
-                                width: barWidth,
-                                radius: 24,
-                                value: budgetValue != null && budgetValue >= 1
-                                    ? 1
-                                    : budgetValue ?? 0,
-                                color: budgetValue != null && budgetValue >= 1
-                                    ? AppColors.of(context).danger
-                                    : null,
-                              );
-                            },
-                          ),
-                          if (budget.isActiveBudget)
-                            Positioned(
-                              top: -4,
-                              left:
-                                  constraints.maxWidth *
-                                  budget.todayPercent /
-                                  100,
-                              child: Stack(
-                                children: [
-                                  Transform.translate(
-                                    offset: const Offset(0, -barWidth),
-                                    child: FractionalTranslation(
-                                      translation: Offset(
-                                        budget.todayPercent < 10
-                                            ? 0.8
-                                            : budget.todayPercent > 90
-                                            ? -0.8
-                                            : -0.5,
-                                        0,
-                                      ),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: labelColor,
-                                          borderRadius: BorderRadius.circular(
-                                            4,
-                                          ),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 4,
-                                        ),
-                                        child: Text(
-                                          t.general.today,
-                                          softWrap: false,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .labelSmall!
-                                              .copyWith(
-                                                color: Theme.of(
-                                                  context,
-                                                ).colorScheme.onTertiary,
-                                              ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(50),
-                                    child: Container(
-                                      width: 2.5,
-                                      height: barWidth + 4,
-                                      color: labelColor,
-                                    ),
-                                  ),
-                                ],
+                        final progressStatus = snapshot.data!;
+
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          spacing: 4,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: progressStatus.color
+                                    .lighten(0.2)
+                                    .withOpacity(0.2),
+                              ),
+                              child: Icon(
+                                progressStatus.iconData,
+                                size: 12,
+                                color: progressStatus.color,
                               ),
                             ),
-                        ],
-                      );
-                    },
-                  );
-                },
-              ),
-              if (isHeader &&
-                  budget.periodState.datePeriod.periodType ==
-                      PeriodType.cycle) ...[
-                const SizedBox(height: 6),
-                DefaultTextStyle(
-                  style: Theme.of(context).textTheme.labelMedium!,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        DateFormat.yMMMd().format(
-                          budget.currentDateRange.start,
-                        ),
-                      ),
-                      Text(
-                        DateFormat.yMMMd().format(budget.currentDateRange.end),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-              if (budget.isPastBudget || budget.isFutureBudget) ...[
-                const SizedBox(height: 6),
-                Row(
-                  children: [
-                    const Icon(Icons.circle, size: 12, color: Colors.amber),
-                    const SizedBox(width: 4),
-                    Text(
-                      budget.isPastBudget
-                          ? '${budget.daysToTheEnd.abs()} ${t.budgets.since_expiration}'
-                          : '${budget.daysToTheStart} ${t.budgets.days_to_start}',
-                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                        fontWeight: FontWeight.w300,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-              if (isHeader && budget.isActiveBudget) ...[
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    StreamBuilder(
-                      stream: CurrencyService.instance
-                          .ensureAndGetPreferredCurrency(),
-                      builder: (context, snapshot) {
-                        return StreamBuilder(
-                          stream: budget.currentValue,
-                          builder: (context, budgetCurrentValue) {
-                            return Text(
-                              t.budgets.details.expend_diary_left(
-                                dailyAmount:
-                                    NumberFormat.currency(
-                                      symbol: snapshot.data?.symbol ?? '',
-                                      decimalDigits: 0,
-                                    ).format(
-                                      ((budget.limitAmount -
-                                                  (budgetCurrentValue.data ??
-                                                      0)) >
-                                              0)
-                                          ? ((budget.limitAmount -
-                                                    (budgetCurrentValue.data ??
-                                                        0)) /
-                                                budget.daysToTheEnd)
-                                          : 0,
-                                    ),
-                                remainingDays: budget.daysToTheEnd,
-                              ),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w300,
-                              ),
-                            );
-                          },
+                            Text(progressStatus.displayName(context)),
+                          ],
                         );
                       },
                     ),
                   ],
                 ),
               ],
-            ],
+            ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class BudgetMainHeaderInfo extends StatelessWidget {
+  const BudgetMainHeaderInfo({super.key, required this.budget});
+
+  final Budget budget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 8,
+      children: [
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Hero(
+              tag: 'budget_card_${budget.id}_header_info',
+
+              child: Text(
+                budget.name,
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
+              ),
+            ),
+            buildMoneyValueLine(),
+          ],
+        ),
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Builder(
+                builder: (context) {
+                  String datePeriodText =
+                      budget.intervalPeriod?.allThePeriodsText(context) ?? '';
+
+                  if (datePeriodText.isEmpty) {
+                    final startDate = budget.currentDateRange.start;
+                    final endDate = budget.currentDateRange.end;
+
+                    final startDateLabel = startDate.year == currentYear
+                        ? DateFormat.MMMd().format(startDate)
+                        : DateFormat.yMMMd().format(startDate);
+
+                    final endDateLabel = endDate.year == currentYear
+                        ? DateFormat.MMMd().format(endDate)
+                        : DateFormat.yMMMd().format(endDate);
+
+                    datePeriodText = '$startDateLabel - $endDateLabel';
+                  }
+
+                  return Text(datePeriodText);
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  StreamBuilder<double> buildMoneyValueLine() {
+    return StreamBuilder(
+      stream: budget.currentValue,
+      builder: (context, snapshot) {
+        return Skeletonizer(
+          enabled: !snapshot.hasData,
+          child: DefaultTextStyle(
+            style: Theme.of(context).textTheme.labelMedium!,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                CurrencyDisplayer(
+                  amountToConvert: budget.limitAmount - (snapshot.data ?? 0),
+                  showDecimals: false,
+                  integerStyle: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                ),
+                Text(' / '),
+                CurrencyDisplayer(
+                  amountToConvert: budget.limitAmount,
+                  showDecimals: false,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -648,10 +648,34 @@
       "title": "Bütçe Detayları",
       "statistics": "İstatistikler",
       "budget-value": "Bütçelenen",
-      "expend-diary-left": "{{ remainingDays }} kalan gün için günde {{ dailyAmount }} harcayabilirsiniz",
       "expend-evolution": "Harcama gelişimi",
       "no-transactions": "Bu bütçeyle ilgili herhangi bir harcama yapmamışsınız gibi görünüyor"
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "Aktif bütçe",
+      "past": "Geçmiş bütçe",
+      "future": "Gelecek bütçe"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "Yolunda",
+        "active-overspending": "Aşırı harcama",
+        "success": "Başarılı",
+        "fail": "Bütçe aşıldı"
+      },
+      "DESCRIPTION": {
+        "active-on-track": "Kalan {{ remainingDays }} gün için günde {{ dailyAmount }} harcayabilirsiniz",
+        "active-overspending": "Tekrar rayına oturmak için, kalan {{ remainingDays }} gün boyunca harcamalarınızı günde {{ dailyAmount }} ile sınırlamalısınız",
+        "active-exceeded": "Bütçe limitinizi {{ amount }} aştınız. Bu bütçe için herhangi bir gelir bulamazsanız, dönemin geri kalanında harcama yapmayı bırakmalısınız",
+        "success": "Harika iş! Bu bütçe başarıyla tamamlandı. Harcamalarınızı yönetmek için bütçe oluşturmaya devam edin",
+        "fail": "Bütçeyi {{ amount }} aştınız. Bir dahaki sefere daha dikkatli olmaya çalışın!"
+      }
     }
+  },
+  "TARGET_TIMELINE_STATUSES": {
+    "active": "Aktif",
+    "past": "Geçmiş",
+    "future": "Gelecek"
   },
   "BACKUP": {
     "no_file_selected": "Hiçbir dosya seçilmedi",

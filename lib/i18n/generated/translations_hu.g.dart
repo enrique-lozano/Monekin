@@ -51,6 +51,7 @@ class TranslationsHu implements Translations {
 	@override late final _TranslationsTagsHu tags = _TranslationsTagsHu._(_root);
 	@override late final _TranslationsCategoriesHu categories = _TranslationsCategoriesHu._(_root);
 	@override late final _TranslationsBudgetsHu budgets = _TranslationsBudgetsHu._(_root);
+	@override late final _TranslationsTargetTimelineStatusesHu target_timeline_statuses = _TranslationsTargetTimelineStatusesHu._(_root);
 	@override late final _TranslationsBackupHu backup = _TranslationsBackupHu._(_root);
 	@override late final _TranslationsSettingsHu settings = _TranslationsSettingsHu._(_root);
 	@override late final _TranslationsMoreHu more = _TranslationsMoreHu._(_root);
@@ -452,6 +453,20 @@ class _TranslationsBudgetsHu implements TranslationsBudgetsEn {
 	@override String get delete_warning => 'Ez a művelet visszafordíthatatlan. Az erre az ajánlatra hivatkozó kategóriák és tranzakciók nem törlődnek.';
 	@override late final _TranslationsBudgetsFormHu form = _TranslationsBudgetsFormHu._(_root);
 	@override late final _TranslationsBudgetsDetailsHu details = _TranslationsBudgetsDetailsHu._(_root);
+	@override late final _TranslationsBudgetsTargetTimelineStatusesHu target_timeline_statuses = _TranslationsBudgetsTargetTimelineStatusesHu._(_root);
+	@override late final _TranslationsBudgetsProgressHu progress = _TranslationsBudgetsProgressHu._(_root);
+}
+
+// Path: target_timeline_statuses
+class _TranslationsTargetTimelineStatusesHu implements TranslationsTargetTimelineStatusesEn {
+	_TranslationsTargetTimelineStatusesHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => 'Aktív';
+	@override String get past => 'Múlt';
+	@override String get future => 'Jövő';
 }
 
 // Path: backup
@@ -1065,9 +1080,31 @@ class _TranslationsBudgetsDetailsHu implements TranslationsBudgetsDetailsEn {
 	@override String get title => 'Költségvetés részletei';
 	@override String get statistics => 'Statisztika';
 	@override String get budget_value => 'Költségvetésben';
-	@override String expend_diary_left({required Object dailyAmount, required Object remainingDays}) => 'Naponta ${dailyAmount} -ot költhet el, még ${remainingDays} napig';
 	@override String get expend_evolution => 'Költségek alakulása';
 	@override String get no_transactions => 'Úgy tűnik, hogy ezzel a költségvetéssel kapcsolatban semmilyen kiadást nem teljesített.';
+}
+
+// Path: budgets.target_timeline_statuses
+class _TranslationsBudgetsTargetTimelineStatusesHu implements TranslationsBudgetsTargetTimelineStatusesEn {
+	_TranslationsBudgetsTargetTimelineStatusesHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => 'Aktív költségvetés';
+	@override String get past => 'Múltbeli költségvetés';
+	@override String get future => 'Jövőbeli költségvetés';
+}
+
+// Path: budgets.progress
+class _TranslationsBudgetsProgressHu implements TranslationsBudgetsProgressEn {
+	_TranslationsBudgetsProgressHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsBudgetsProgressLabelsHu labels = _TranslationsBudgetsProgressLabelsHu._(_root);
+	@override late final _TranslationsBudgetsProgressDescriptionHu description = _TranslationsBudgetsProgressDescriptionHu._(_root);
 }
 
 // Path: backup.export
@@ -1379,6 +1416,33 @@ class _TranslationsTransferFormValueInDestinyHu implements TranslationsTransferF
 	// Translations
 	@override String get title => 'A rendeltetési helyre átutalt összeg';
 	@override String amount_short({required Object amount}) => '${amount} a célszámlához';
+}
+
+// Path: budgets.progress.labels
+class _TranslationsBudgetsProgressLabelsHu implements TranslationsBudgetsProgressLabelsEn {
+	_TranslationsBudgetsProgressLabelsHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get active_on_track => 'Terv szerint';
+	@override String get active_overspending => 'Túlköltekezés';
+	@override String get success => 'Teljesítve';
+	@override String get fail => 'Költségvetés túllépve';
+}
+
+// Path: budgets.progress.description
+class _TranslationsBudgetsProgressDescriptionHu implements TranslationsBudgetsProgressDescriptionEn {
+	_TranslationsBudgetsProgressDescriptionHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String active_on_track({required Object dailyAmount, required Object remainingDays}) => 'Naponta ${dailyAmount} összeget költhet a hátralévő ${remainingDays} napban';
+	@override String active_overspending({required Object dailyAmount, required Object remainingDays}) => 'Hogy visszatérjen a tervhez, korlátoznia kell kiadásait napi ${dailyAmount} összegre a hátralévő ${remainingDays} napban';
+	@override String active_exceeded({required Object amount}) => 'Már túllépte a költségvetési keretet ${amount} összeggel. Ha nem talál bevételt ehhez a költségvetéshez, abba kell hagynia a költekezést az időszak hátralévő részében';
+	@override String get success => 'Szép munka! Ez a költségvetés sikeresen lezárult. Hozzon létre további költségvetéseket kiadásai kezeléséhez';
+	@override String fail({required Object amount}) => 'Túllépte a költségvetést ${amount} összeggel. Próbáljon meg óvatosabb lenni legközelebb!';
 }
 
 // Path: backup.import.manual_import
@@ -2034,9 +2098,23 @@ extension on TranslationsHu {
 		map['budgets.details.title'] = 'Költségvetés részletei';
 		map['budgets.details.statistics'] = 'Statisztika';
 		map['budgets.details.budget_value'] = 'Költségvetésben';
-		map['budgets.details.expend_diary_left'] = ({required Object dailyAmount, required Object remainingDays}) => 'Naponta ${dailyAmount} -ot költhet el, még ${remainingDays} napig';
 		map['budgets.details.expend_evolution'] = 'Költségek alakulása';
 		map['budgets.details.no_transactions'] = 'Úgy tűnik, hogy ezzel a költségvetéssel kapcsolatban semmilyen kiadást nem teljesített.';
+		map['budgets.target_timeline_statuses.active'] = 'Aktív költségvetés';
+		map['budgets.target_timeline_statuses.past'] = 'Múltbeli költségvetés';
+		map['budgets.target_timeline_statuses.future'] = 'Jövőbeli költségvetés';
+		map['budgets.progress.labels.active_on_track'] = 'Terv szerint';
+		map['budgets.progress.labels.active_overspending'] = 'Túlköltekezés';
+		map['budgets.progress.labels.success'] = 'Teljesítve';
+		map['budgets.progress.labels.fail'] = 'Költségvetés túllépve';
+		map['budgets.progress.description.active_on_track'] = ({required Object dailyAmount, required Object remainingDays}) => 'Naponta ${dailyAmount} összeget költhet a hátralévő ${remainingDays} napban';
+		map['budgets.progress.description.active_overspending'] = ({required Object dailyAmount, required Object remainingDays}) => 'Hogy visszatérjen a tervhez, korlátoznia kell kiadásait napi ${dailyAmount} összegre a hátralévő ${remainingDays} napban';
+		map['budgets.progress.description.active_exceeded'] = ({required Object amount}) => 'Már túllépte a költségvetési keretet ${amount} összeggel. Ha nem talál bevételt ehhez a költségvetéshez, abba kell hagynia a költekezést az időszak hátralévő részében';
+		map['budgets.progress.description.success'] = 'Szép munka! Ez a költségvetés sikeresen lezárult. Hozzon létre további költségvetéseket kiadásai kezeléséhez';
+		map['budgets.progress.description.fail'] = ({required Object amount}) => 'Túllépte a költségvetést ${amount} összeggel. Próbáljon meg óvatosabb lenni legközelebb!';
+		map['target_timeline_statuses.active'] = 'Aktív';
+		map['target_timeline_statuses.past'] = 'Múlt';
+		map['target_timeline_statuses.future'] = 'Jövő';
 		map['backup.no_file_selected'] = 'Nincs kiválasztva fájl';
 		map['backup.no_directory_selected'] = 'Nincs kiválasztott könyvtár';
 		map['backup.export.title'] = 'Adatok exportálása';

@@ -13,9 +13,13 @@ Future<DateTime?> openDateTimePicker(
   TimePickerEntryMode initialTimeEntryMode = TimePickerEntryMode.dial,
   DatePickerEntryMode initialEntryMode = DatePickerEntryMode.calendar,
 }) async {
-  initialDate ??= DateTime.now();
   firstDate ??= kDefaultFirstSelectableDate;
   lastDate ??= kDefaultLastSelectableDate;
+
+  final today = DateTime.now();
+  if (today.isAfter(firstDate) && today.isBefore(lastDate)) {
+    initialDate = today;
+  }
 
   showTimePickerDef() {
     return showTimePicker(

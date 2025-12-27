@@ -51,6 +51,7 @@ class TranslationsZhCn implements Translations {
 	@override late final _TranslationsTagsZhCn tags = _TranslationsTagsZhCn._(_root);
 	@override late final _TranslationsCategoriesZhCn categories = _TranslationsCategoriesZhCn._(_root);
 	@override late final _TranslationsBudgetsZhCn budgets = _TranslationsBudgetsZhCn._(_root);
+	@override late final _TranslationsTargetTimelineStatusesZhCn target_timeline_statuses = _TranslationsTargetTimelineStatusesZhCn._(_root);
 	@override late final _TranslationsBackupZhCn backup = _TranslationsBackupZhCn._(_root);
 	@override late final _TranslationsSettingsZhCn settings = _TranslationsSettingsZhCn._(_root);
 	@override late final _TranslationsMoreZhCn more = _TranslationsMoreZhCn._(_root);
@@ -452,6 +453,20 @@ class _TranslationsBudgetsZhCn implements TranslationsBudgetsEn {
 	@override String get delete_warning => '此操作无法撤回。此预算中的类别和交易不会被删除';
 	@override late final _TranslationsBudgetsFormZhCn form = _TranslationsBudgetsFormZhCn._(_root);
 	@override late final _TranslationsBudgetsDetailsZhCn details = _TranslationsBudgetsDetailsZhCn._(_root);
+	@override late final _TranslationsBudgetsTargetTimelineStatusesZhCn target_timeline_statuses = _TranslationsBudgetsTargetTimelineStatusesZhCn._(_root);
+	@override late final _TranslationsBudgetsProgressZhCn progress = _TranslationsBudgetsProgressZhCn._(_root);
+}
+
+// Path: target_timeline_statuses
+class _TranslationsTargetTimelineStatusesZhCn implements TranslationsTargetTimelineStatusesEn {
+	_TranslationsTargetTimelineStatusesZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => '进行中';
+	@override String get past => '已结束';
+	@override String get future => '未开始';
 }
 
 // Path: backup
@@ -1065,9 +1080,31 @@ class _TranslationsBudgetsDetailsZhCn implements TranslationsBudgetsDetailsEn {
 	@override String get title => '预算详情';
 	@override String get statistics => '统计数据';
 	@override String get budget_value => '预算';
-	@override String expend_diary_left({required Object remainingDays, required Object dailyAmount}) => '在未来 ${remainingDays} 天中，您每天可以花费 ${dailyAmount}';
 	@override String get expend_evolution => '支出变化';
 	@override String get no_transactions => '看来您还没有与此预算相关的任何支出';
+}
+
+// Path: budgets.target_timeline_statuses
+class _TranslationsBudgetsTargetTimelineStatusesZhCn implements TranslationsBudgetsTargetTimelineStatusesEn {
+	_TranslationsBudgetsTargetTimelineStatusesZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => '当前预算';
+	@override String get past => '过去预算';
+	@override String get future => '未来预算';
+}
+
+// Path: budgets.progress
+class _TranslationsBudgetsProgressZhCn implements TranslationsBudgetsProgressEn {
+	_TranslationsBudgetsProgressZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsBudgetsProgressLabelsZhCn labels = _TranslationsBudgetsProgressLabelsZhCn._(_root);
+	@override late final _TranslationsBudgetsProgressDescriptionZhCn description = _TranslationsBudgetsProgressDescriptionZhCn._(_root);
 }
 
 // Path: backup.export
@@ -1379,6 +1416,33 @@ class _TranslationsTransferFormValueInDestinyZhCn implements TranslationsTransfe
 	// Translations
 	@override String get title => '转账数额';
 	@override String amount_short({required Object amount}) => '${amount} 至目标账户';
+}
+
+// Path: budgets.progress.labels
+class _TranslationsBudgetsProgressLabelsZhCn implements TranslationsBudgetsProgressLabelsEn {
+	_TranslationsBudgetsProgressLabelsZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get active_on_track => '正常';
+	@override String get active_overspending => '超支';
+	@override String get success => '已达成';
+	@override String get fail => '超出预算';
+}
+
+// Path: budgets.progress.description
+class _TranslationsBudgetsProgressDescriptionZhCn implements TranslationsBudgetsProgressDescriptionEn {
+	_TranslationsBudgetsProgressDescriptionZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String active_on_track({required Object remainingDays, required Object dailyAmount}) => '在剩余的 ${remainingDays} 天里，您每天可以花费 ${dailyAmount}';
+	@override String active_overspending({required Object remainingDays, required Object dailyAmount}) => '为了回到正轨，您应该在剩余的 ${remainingDays} 天里将每天的支出限制在 ${dailyAmount}';
+	@override String active_exceeded({required Object amount}) => '您已经超出了预算限额 ${amount}。如果您找不到此预算的任何收入，您应该在其剩余期间停止支出';
+	@override String get success => '干得好！该预算已成功完成。继续创建预算以管理您的支出';
+	@override String fail({required Object amount}) => '您超出了预算 ${amount}。下次请更加小心！';
 }
 
 // Path: backup.import.manual_import
@@ -2034,9 +2098,23 @@ extension on TranslationsZhCn {
 		map['budgets.details.title'] = '预算详情';
 		map['budgets.details.statistics'] = '统计数据';
 		map['budgets.details.budget_value'] = '预算';
-		map['budgets.details.expend_diary_left'] = ({required Object remainingDays, required Object dailyAmount}) => '在未来 ${remainingDays} 天中，您每天可以花费 ${dailyAmount}';
 		map['budgets.details.expend_evolution'] = '支出变化';
 		map['budgets.details.no_transactions'] = '看来您还没有与此预算相关的任何支出';
+		map['budgets.target_timeline_statuses.active'] = '当前预算';
+		map['budgets.target_timeline_statuses.past'] = '过去预算';
+		map['budgets.target_timeline_statuses.future'] = '未来预算';
+		map['budgets.progress.labels.active_on_track'] = '正常';
+		map['budgets.progress.labels.active_overspending'] = '超支';
+		map['budgets.progress.labels.success'] = '已达成';
+		map['budgets.progress.labels.fail'] = '超出预算';
+		map['budgets.progress.description.active_on_track'] = ({required Object remainingDays, required Object dailyAmount}) => '在剩余的 ${remainingDays} 天里，您每天可以花费 ${dailyAmount}';
+		map['budgets.progress.description.active_overspending'] = ({required Object remainingDays, required Object dailyAmount}) => '为了回到正轨，您应该在剩余的 ${remainingDays} 天里将每天的支出限制在 ${dailyAmount}';
+		map['budgets.progress.description.active_exceeded'] = ({required Object amount}) => '您已经超出了预算限额 ${amount}。如果您找不到此预算的任何收入，您应该在其剩余期间停止支出';
+		map['budgets.progress.description.success'] = '干得好！该预算已成功完成。继续创建预算以管理您的支出';
+		map['budgets.progress.description.fail'] = ({required Object amount}) => '您超出了预算 ${amount}。下次请更加小心！';
+		map['target_timeline_statuses.active'] = '进行中';
+		map['target_timeline_statuses.past'] = '已结束';
+		map['target_timeline_statuses.future'] = '未开始';
 		map['backup.no_file_selected'] = '未选择文件';
 		map['backup.no_directory_selected'] = '未选择目录';
 		map['backup.export.title'] = '导出您的数据';

@@ -651,10 +651,34 @@
       "title": "Detalles del presupuesto",
       "statistics": "Estadísticas",
       "budget-value": "Presupuestado",
-      "expend-diary-left": "Puedes gastar {{ dailyAmount }}/día por los {{ remainingDays }} días restantes",
       "expend-evolution": "Evolución del gasto",
       "no-transactions": "Parece que no has realizado ningún gasto relativo a este presupuesto"
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "Presupuesto activo",
+      "past": "Presupuesto pasado",
+      "future": "Presupuesto futuro"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "Vas bien",
+        "active-overspending": "Gastando de más",
+        "success": "Objetivo cumplido",
+        "fail": "Presupuesto excedido"
+      },
+      "DESCRIPTION": {
+        "active-on-track": "Puedes gastar {{ dailyAmount }} al día durante los {{ remainingDays }} días restantes para cumplir con el presupuesto",
+        "active-overspending": "Para volver al camino correcto, deberías limitar tu gasto a {{ dailyAmount }} al día durante los {{ remainingDays }} días restantes de este presuesto",
+        "active-exceeded": "Ya has excedido el límite de tu presupuesto por {{ amount }}. Si no encuentras ningún ingreso para este presupuesto, deberías dejar de gastar durante el resto de su periodo",
+        "success": "¡Buen trabajo! Este presupuesto ha finalizado con éxito. Sigue creando presupuestos para gestionar tus gastos",
+        "fail": "Has excedido el presupuesto por {{ amount }}. ¡Intenta tener más cuidado la próxima vez!"
+      }
     }
+  },
+  "TARGET_TIMELINE_STATUSES": {
+    "active": "Activo",
+    "past": "Pasado",
+    "future": "Futuro"
   },
   "BACKUP": {
     "no_file_selected": "Ningún archivo seleccionado",

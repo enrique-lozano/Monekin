@@ -54,6 +54,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final TranslationsTagsEn tags = TranslationsTagsEn._(_root);
 	late final TranslationsCategoriesEn categories = TranslationsCategoriesEn._(_root);
 	late final TranslationsBudgetsEn budgets = TranslationsBudgetsEn._(_root);
+	late final TranslationsTargetTimelineStatusesEn target_timeline_statuses = TranslationsTargetTimelineStatusesEn._(_root);
 	late final TranslationsBackupEn backup = TranslationsBackupEn._(_root);
 	late final TranslationsSettingsEn settings = TranslationsSettingsEn._(_root);
 	late final TranslationsMoreEn more = TranslationsMoreEn._(_root);
@@ -916,6 +917,26 @@ class TranslationsBudgetsEn {
 
 	late final TranslationsBudgetsFormEn form = TranslationsBudgetsFormEn._(_root);
 	late final TranslationsBudgetsDetailsEn details = TranslationsBudgetsDetailsEn._(_root);
+	late final TranslationsBudgetsTargetTimelineStatusesEn target_timeline_statuses = TranslationsBudgetsTargetTimelineStatusesEn._(_root);
+	late final TranslationsBudgetsProgressEn progress = TranslationsBudgetsProgressEn._(_root);
+}
+
+// Path: target_timeline_statuses
+class TranslationsTargetTimelineStatusesEn {
+	TranslationsTargetTimelineStatusesEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Active'
+	String get active => 'Active';
+
+	/// en: 'Past'
+	String get past => 'Past';
+
+	/// en: 'Future'
+	String get future => 'Future';
 }
 
 // Path: backup
@@ -1974,14 +1995,40 @@ class TranslationsBudgetsDetailsEn {
 	/// en: 'Budgeted'
 	String get budget_value => 'Budgeted';
 
-	/// en: 'You can spend {{ dailyAmount }}/day for {{ remainingDays }} remaining days'
-	String expend_diary_left({required Object dailyAmount, required Object remainingDays}) => 'You can spend ${dailyAmount}/day for ${remainingDays} remaining days';
-
 	/// en: 'Expenditure evolution'
 	String get expend_evolution => 'Expenditure evolution';
 
 	/// en: 'It seems that you have not made any expenses related to this budget'
 	String get no_transactions => 'It seems that you have not made any expenses related to this budget';
+}
+
+// Path: budgets.target_timeline_statuses
+class TranslationsBudgetsTargetTimelineStatusesEn {
+	TranslationsBudgetsTargetTimelineStatusesEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Active budget'
+	String get active => 'Active budget';
+
+	/// en: 'Past budget'
+	String get past => 'Past budget';
+
+	/// en: 'Future budget'
+	String get future => 'Future budget';
+}
+
+// Path: budgets.progress
+class TranslationsBudgetsProgressEn {
+	TranslationsBudgetsProgressEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	late final TranslationsBudgetsProgressLabelsEn labels = TranslationsBudgetsProgressLabelsEn._(_root);
+	late final TranslationsBudgetsProgressDescriptionEn description = TranslationsBudgetsProgressDescriptionEn._(_root);
 }
 
 // Path: backup.export
@@ -2538,6 +2585,51 @@ class TranslationsTransferFormValueInDestinyEn {
 
 	/// en: '{{amount}} to target account'
 	String amount_short({required Object amount}) => '${amount} to target account';
+}
+
+// Path: budgets.progress.labels
+class TranslationsBudgetsProgressLabelsEn {
+	TranslationsBudgetsProgressLabelsEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'On track'
+	String get active_on_track => 'On track';
+
+	/// en: 'Overspending'
+	String get active_overspending => 'Overspending';
+
+	/// en: 'Achieved'
+	String get success => 'Achieved';
+
+	/// en: 'Budget exceeded'
+	String get fail => 'Budget exceeded';
+}
+
+// Path: budgets.progress.description
+class TranslationsBudgetsProgressDescriptionEn {
+	TranslationsBudgetsProgressDescriptionEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'You can spend {{ dailyAmount }} per day for the remaining {{ remainingDays }} days'
+	String active_on_track({required Object dailyAmount, required Object remainingDays}) => 'You can spend ${dailyAmount} per day for the remaining ${remainingDays} days';
+
+	/// en: 'To get back on track, you should limit your spending to {{ dailyAmount }} per day for the remaining {{ remainingDays }} days'
+	String active_overspending({required Object dailyAmount, required Object remainingDays}) => 'To get back on track, you should limit your spending to ${dailyAmount} per day for the remaining ${remainingDays} days';
+
+	/// en: 'You have already exceeded your budget limit by {{ amount }}. If you don't find any incomes for this budget, you should stop spending for the rest of its period'
+	String active_exceeded({required Object amount}) => 'You have already exceeded your budget limit by ${amount}. If you don\'t find any incomes for this budget, you should stop spending for the rest of its period';
+
+	/// en: 'Great job! This budget has already finish successfully. Keep creating budgets to manage your expenses'
+	String get success => 'Great job! This budget has already finish successfully. Keep creating budgets to manage your expenses';
+
+	/// en: 'You exceeded the budget by {{ amount }}. Try to be more careful next time!'
+	String fail({required Object amount}) => 'You exceeded the budget by ${amount}. Try to be more careful next time!';
 }
 
 // Path: backup.import.manual_import
@@ -3234,9 +3326,23 @@ extension on Translations {
 		map['budgets.details.title'] = 'Budget Details';
 		map['budgets.details.statistics'] = 'Statistics';
 		map['budgets.details.budget_value'] = 'Budgeted';
-		map['budgets.details.expend_diary_left'] = ({required Object dailyAmount, required Object remainingDays}) => 'You can spend ${dailyAmount}/day for ${remainingDays} remaining days';
 		map['budgets.details.expend_evolution'] = 'Expenditure evolution';
 		map['budgets.details.no_transactions'] = 'It seems that you have not made any expenses related to this budget';
+		map['budgets.target_timeline_statuses.active'] = 'Active budget';
+		map['budgets.target_timeline_statuses.past'] = 'Past budget';
+		map['budgets.target_timeline_statuses.future'] = 'Future budget';
+		map['budgets.progress.labels.active_on_track'] = 'On track';
+		map['budgets.progress.labels.active_overspending'] = 'Overspending';
+		map['budgets.progress.labels.success'] = 'Achieved';
+		map['budgets.progress.labels.fail'] = 'Budget exceeded';
+		map['budgets.progress.description.active_on_track'] = ({required Object dailyAmount, required Object remainingDays}) => 'You can spend ${dailyAmount} per day for the remaining ${remainingDays} days';
+		map['budgets.progress.description.active_overspending'] = ({required Object dailyAmount, required Object remainingDays}) => 'To get back on track, you should limit your spending to ${dailyAmount} per day for the remaining ${remainingDays} days';
+		map['budgets.progress.description.active_exceeded'] = ({required Object amount}) => 'You have already exceeded your budget limit by ${amount}. If you don\'t find any incomes for this budget, you should stop spending for the rest of its period';
+		map['budgets.progress.description.success'] = 'Great job! This budget has already finish successfully. Keep creating budgets to manage your expenses';
+		map['budgets.progress.description.fail'] = ({required Object amount}) => 'You exceeded the budget by ${amount}. Try to be more careful next time!';
+		map['target_timeline_statuses.active'] = 'Active';
+		map['target_timeline_statuses.past'] = 'Past';
+		map['target_timeline_statuses.future'] = 'Future';
 		map['backup.no_file_selected'] = 'No file selected';
 		map['backup.no_directory_selected'] = 'No directory selected';
 		map['backup.export.title'] = 'Export your data';

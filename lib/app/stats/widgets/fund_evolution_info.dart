@@ -368,14 +368,8 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
                     borderData: FlBorderData(
                       show: false,
                       border: Border(
-                        bottom: BorderSide(
-                          color: ultraLightBorderColor,
-                          width: 1,
-                        ),
-                        right: BorderSide(
-                          color: ultraLightBorderColor,
-                          width: 1,
-                        ),
+                        bottom: BorderSide(color: ultraLightBorderColor),
+                        right: BorderSide(color: ultraLightBorderColor),
                       ),
                     ),
                     lineBarsData: [

@@ -51,6 +51,7 @@ class TranslationsUk implements Translations {
 	@override late final _TranslationsTagsUk tags = _TranslationsTagsUk._(_root);
 	@override late final _TranslationsCategoriesUk categories = _TranslationsCategoriesUk._(_root);
 	@override late final _TranslationsBudgetsUk budgets = _TranslationsBudgetsUk._(_root);
+	@override late final _TranslationsTargetTimelineStatusesUk target_timeline_statuses = _TranslationsTargetTimelineStatusesUk._(_root);
 	@override late final _TranslationsBackupUk backup = _TranslationsBackupUk._(_root);
 	@override late final _TranslationsSettingsUk settings = _TranslationsSettingsUk._(_root);
 	@override late final _TranslationsMoreUk more = _TranslationsMoreUk._(_root);
@@ -452,6 +453,20 @@ class _TranslationsBudgetsUk implements TranslationsBudgetsEn {
 	@override String get delete_warning => 'Ця дія незворотня. Категорії та транзакції, що стосуються цитати, не будуть видалені';
 	@override late final _TranslationsBudgetsFormUk form = _TranslationsBudgetsFormUk._(_root);
 	@override late final _TranslationsBudgetsDetailsUk details = _TranslationsBudgetsDetailsUk._(_root);
+	@override late final _TranslationsBudgetsTargetTimelineStatusesUk target_timeline_statuses = _TranslationsBudgetsTargetTimelineStatusesUk._(_root);
+	@override late final _TranslationsBudgetsProgressUk progress = _TranslationsBudgetsProgressUk._(_root);
+}
+
+// Path: target_timeline_statuses
+class _TranslationsTargetTimelineStatusesUk implements TranslationsTargetTimelineStatusesEn {
+	_TranslationsTargetTimelineStatusesUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => 'Активний';
+	@override String get past => 'Минулий';
+	@override String get future => 'Майбутній';
 }
 
 // Path: backup
@@ -1065,9 +1080,31 @@ class _TranslationsBudgetsDetailsUk implements TranslationsBudgetsDetailsEn {
 	@override String get title => 'Деталі бюджету';
 	@override String get statistics => 'Статистика';
 	@override String get budget_value => 'Заплановано';
-	@override String expend_diary_left({required Object dailyAmount, required Object remainingDays}) => 'Ви можете витрачати ${dailyAmount} на день ще ${remainingDays} днів';
 	@override String get expend_evolution => 'Еволюція витрат';
 	@override String get no_transactions => 'Здається, ви не здійснили жодних витрат, пов\'язаних з цим бюджетом';
+}
+
+// Path: budgets.target_timeline_statuses
+class _TranslationsBudgetsTargetTimelineStatusesUk implements TranslationsBudgetsTargetTimelineStatusesEn {
+	_TranslationsBudgetsTargetTimelineStatusesUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => 'Активний бюджет';
+	@override String get past => 'Минулий бюджет';
+	@override String get future => 'Майбутній бюджет';
+}
+
+// Path: budgets.progress
+class _TranslationsBudgetsProgressUk implements TranslationsBudgetsProgressEn {
+	_TranslationsBudgetsProgressUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsBudgetsProgressLabelsUk labels = _TranslationsBudgetsProgressLabelsUk._(_root);
+	@override late final _TranslationsBudgetsProgressDescriptionUk description = _TranslationsBudgetsProgressDescriptionUk._(_root);
 }
 
 // Path: backup.export
@@ -1379,6 +1416,33 @@ class _TranslationsTransferFormValueInDestinyUk implements TranslationsTransferF
 	// Translations
 	@override String get title => 'Сума переказу в пункті призначення';
 	@override String amount_short({required Object amount}) => '${amount} на цільовий рахунок';
+}
+
+// Path: budgets.progress.labels
+class _TranslationsBudgetsProgressLabelsUk implements TranslationsBudgetsProgressLabelsEn {
+	_TranslationsBudgetsProgressLabelsUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get active_on_track => 'За планом';
+	@override String get active_overspending => 'Перевитрата';
+	@override String get success => 'Досягнуто';
+	@override String get fail => 'Бюджет перевищено';
+}
+
+// Path: budgets.progress.description
+class _TranslationsBudgetsProgressDescriptionUk implements TranslationsBudgetsProgressDescriptionEn {
+	_TranslationsBudgetsProgressDescriptionUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String active_on_track({required Object dailyAmount, required Object remainingDays}) => 'Ви можете витрачати ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися';
+	@override String active_overspending({required Object dailyAmount, required Object remainingDays}) => 'Щоб повернутися до плану, вам слід обмежити витрати до ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися';
+	@override String active_exceeded({required Object amount}) => 'Ви вже перевищили ліміт бюджету на ${amount}. Якщо ви не знайдете жодних доходів для цього бюджету, вам слід припинити витрати до кінця його періоду';
+	@override String get success => 'Чудова робота! Цей бюджет успішно завершено. Продовжуйте створювати бюджети для управління витратами';
+	@override String fail({required Object amount}) => 'Ви перевищили бюджет на ${amount}. Спробуйте бути уважнішими наступного разу!';
 }
 
 // Path: backup.import.manual_import
@@ -2034,9 +2098,23 @@ extension on TranslationsUk {
 		map['budgets.details.title'] = 'Деталі бюджету';
 		map['budgets.details.statistics'] = 'Статистика';
 		map['budgets.details.budget_value'] = 'Заплановано';
-		map['budgets.details.expend_diary_left'] = ({required Object dailyAmount, required Object remainingDays}) => 'Ви можете витрачати ${dailyAmount} на день ще ${remainingDays} днів';
 		map['budgets.details.expend_evolution'] = 'Еволюція витрат';
 		map['budgets.details.no_transactions'] = 'Здається, ви не здійснили жодних витрат, пов\'язаних з цим бюджетом';
+		map['budgets.target_timeline_statuses.active'] = 'Активний бюджет';
+		map['budgets.target_timeline_statuses.past'] = 'Минулий бюджет';
+		map['budgets.target_timeline_statuses.future'] = 'Майбутній бюджет';
+		map['budgets.progress.labels.active_on_track'] = 'За планом';
+		map['budgets.progress.labels.active_overspending'] = 'Перевитрата';
+		map['budgets.progress.labels.success'] = 'Досягнуто';
+		map['budgets.progress.labels.fail'] = 'Бюджет перевищено';
+		map['budgets.progress.description.active_on_track'] = ({required Object dailyAmount, required Object remainingDays}) => 'Ви можете витрачати ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися';
+		map['budgets.progress.description.active_overspending'] = ({required Object dailyAmount, required Object remainingDays}) => 'Щоб повернутися до плану, вам слід обмежити витрати до ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися';
+		map['budgets.progress.description.active_exceeded'] = ({required Object amount}) => 'Ви вже перевищили ліміт бюджету на ${amount}. Якщо ви не знайдете жодних доходів для цього бюджету, вам слід припинити витрати до кінця його періоду';
+		map['budgets.progress.description.success'] = 'Чудова робота! Цей бюджет успішно завершено. Продовжуйте створювати бюджети для управління витратами';
+		map['budgets.progress.description.fail'] = ({required Object amount}) => 'Ви перевищили бюджет на ${amount}. Спробуйте бути уважнішими наступного разу!';
+		map['target_timeline_statuses.active'] = 'Активний';
+		map['target_timeline_statuses.past'] = 'Минулий';
+		map['target_timeline_statuses.future'] = 'Майбутній';
 		map['backup.no_file_selected'] = 'Файл не вибрано';
 		map['backup.no_directory_selected'] = 'Каталог не вибрано';
 		map['backup.export.title'] = 'Експорт ваших даних';

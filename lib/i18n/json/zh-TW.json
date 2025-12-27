@@ -648,10 +648,34 @@
       "title": "預算詳情",
       "statistics": "統計數據",
       "budget-value": "預算",
-      "expend-diary-left": "您每天可以花費{{dailyAmount}}/天，持續{{remainingDays}}天",
       "expend-evolution": "支出變化",
       "no-transactions": "看來您還沒有做出與此預算相關的任何收入"
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "目前預算",
+      "past": "過去預算",
+      "future": "未來預算"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "正常",
+        "active-overspending": "超支",
+        "success": "已達成",
+        "fail": "超出預算"
+      },
+      "DESCRIPTION": {
+        "active-on-track": "在剩餘的 {{ remainingDays }} 天裡，您每天可以花費 {{ dailyAmount }}",
+        "active-overspending": "為了回到正軌，您應該在剩餘的 {{ remainingDays }} 天裡將每天的支出限制在 {{ dailyAmount }}",
+        "active-exceeded": "您已經超出了預算限額 {{ amount }}。如果您找不到此預算的任何收入，您應該在其剩餘期間停止支出",
+        "success": "做得好！該預算已成功完成。繼續創建預算以管理您的支出",
+        "fail": "您超出了預算 {{ amount }}。下次請更加小心！"
+      }
     }
+  },
+  "TARGET_TIMELINE_STATUSES": {
+    "active": "進行中",
+    "past": "已結束",
+    "future": "未開始"
   },
   "BACKUP": {
     "no_file_selected": "未選擇文件",
