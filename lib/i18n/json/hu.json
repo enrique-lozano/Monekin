@@ -648,10 +648,34 @@
       "title": "Költségvetés részletei",
       "statistics": "Statisztika",
       "budget-value": "Költségvetésben",
-      "expend-diary-left": "Naponta {{ dailyAmount }} -ot költhet el, még {{ remainingDays }} napig",
       "expend-evolution": "Költségek alakulása",
       "no-transactions": "Úgy tűnik, hogy ezzel a költségvetéssel kapcsolatban semmilyen kiadást nem teljesített."
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "Aktív költségvetés",
+      "past": "Múltbeli költségvetés",
+      "future": "Jövőbeli költségvetés"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "Terv szerint",
+        "active-overspending": "Túlköltekezés",
+        "success": "Teljesítve",
+        "fail": "Költségvetés túllépve"
+      },
+      "DESCRIPTION": {
+        "active-on-track": "Naponta {{ dailyAmount }} összeget költhet a hátralévő {{ remainingDays }} napban",
+        "active-overspending": "Hogy visszatérjen a tervhez, korlátoznia kell kiadásait napi {{ dailyAmount }} összegre a hátralévő {{ remainingDays }} napban",
+        "active-exceeded": "Már túllépte a költségvetési keretet {{ amount }} összeggel. Ha nem talál bevételt ehhez a költségvetéshez, abba kell hagynia a költekezést az időszak hátralévő részében",
+        "success": "Szép munka! Ez a költségvetés sikeresen lezárult. Hozzon létre további költségvetéseket kiadásai kezeléséhez",
+        "fail": "Túllépte a költségvetést {{ amount }} összeggel. Próbáljon meg óvatosabb lenni legközelebb!"
+      }
     }
+  },
+  "TARGET_TIMELINE_STATUSES": {
+    "active": "Aktív",
+    "past": "Múlt",
+    "future": "Jövő"
   },
   "BACKUP": {
     "no_file_selected": "Nincs kiválasztva fájl",

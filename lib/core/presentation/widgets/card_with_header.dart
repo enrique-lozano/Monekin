@@ -13,12 +13,14 @@ class CardWithHeader extends StatelessWidget {
     required this.body,
     this.bodyPadding = const EdgeInsets.all(0),
     this.footer,
+    this.titleBuilder,
   });
 
   final Widget body;
   final Widget? footer;
 
   final String title;
+  final Widget Function(String title)? titleBuilder;
   final String? subtitle;
 
   final EdgeInsets bodyPadding;
@@ -51,11 +53,13 @@ class CardWithHeader extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        title,
+                      DefaultTextStyle(
                         style: Theme.of(
                           context,
                         ).textTheme.titleMedium!.copyWith(fontSize: 18),
+                        child: titleBuilder != null
+                            ? titleBuilder!(title)
+                            : Text(title),
                       ),
                       if (subtitle != null)
                         Text(

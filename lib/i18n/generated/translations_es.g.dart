@@ -51,6 +51,7 @@ class TranslationsEs implements Translations {
 	@override late final _TranslationsTagsEs tags = _TranslationsTagsEs._(_root);
 	@override late final _TranslationsCategoriesEs categories = _TranslationsCategoriesEs._(_root);
 	@override late final _TranslationsBudgetsEs budgets = _TranslationsBudgetsEs._(_root);
+	@override late final _TranslationsTargetTimelineStatusesEs target_timeline_statuses = _TranslationsTargetTimelineStatusesEs._(_root);
 	@override late final _TranslationsBackupEs backup = _TranslationsBackupEs._(_root);
 	@override late final _TranslationsSettingsEs settings = _TranslationsSettingsEs._(_root);
 	@override late final _TranslationsMoreEs more = _TranslationsMoreEs._(_root);
@@ -452,6 +453,20 @@ class _TranslationsBudgetsEs implements TranslationsBudgetsEn {
 	@override String get delete_warning => 'Esta acción es irreversible. Categorías y transacciones referentes a este presupuesto no serán eliminados';
 	@override late final _TranslationsBudgetsFormEs form = _TranslationsBudgetsFormEs._(_root);
 	@override late final _TranslationsBudgetsDetailsEs details = _TranslationsBudgetsDetailsEs._(_root);
+	@override late final _TranslationsBudgetsTargetTimelineStatusesEs target_timeline_statuses = _TranslationsBudgetsTargetTimelineStatusesEs._(_root);
+	@override late final _TranslationsBudgetsProgressEs progress = _TranslationsBudgetsProgressEs._(_root);
+}
+
+// Path: target_timeline_statuses
+class _TranslationsTargetTimelineStatusesEs implements TranslationsTargetTimelineStatusesEn {
+	_TranslationsTargetTimelineStatusesEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => 'Activo';
+	@override String get past => 'Pasado';
+	@override String get future => 'Futuro';
 }
 
 // Path: backup
@@ -1065,9 +1080,31 @@ class _TranslationsBudgetsDetailsEs implements TranslationsBudgetsDetailsEn {
 	@override String get title => 'Detalles del presupuesto';
 	@override String get statistics => 'Estadísticas';
 	@override String get budget_value => 'Presupuestado';
-	@override String expend_diary_left({required Object dailyAmount, required Object remainingDays}) => 'Puedes gastar ${dailyAmount}/día por los ${remainingDays} días restantes';
 	@override String get expend_evolution => 'Evolución del gasto';
 	@override String get no_transactions => 'Parece que no has realizado ningún gasto relativo a este presupuesto';
+}
+
+// Path: budgets.target_timeline_statuses
+class _TranslationsBudgetsTargetTimelineStatusesEs implements TranslationsBudgetsTargetTimelineStatusesEn {
+	_TranslationsBudgetsTargetTimelineStatusesEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => 'Presupuesto activo';
+	@override String get past => 'Presupuesto pasado';
+	@override String get future => 'Presupuesto futuro';
+}
+
+// Path: budgets.progress
+class _TranslationsBudgetsProgressEs implements TranslationsBudgetsProgressEn {
+	_TranslationsBudgetsProgressEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsBudgetsProgressLabelsEs labels = _TranslationsBudgetsProgressLabelsEs._(_root);
+	@override late final _TranslationsBudgetsProgressDescriptionEs description = _TranslationsBudgetsProgressDescriptionEs._(_root);
 }
 
 // Path: backup.export
@@ -1380,6 +1417,33 @@ class _TranslationsTransferFormValueInDestinyEs implements TranslationsTransferF
 	// Translations
 	@override String get title => 'Cantidad transferida en destino';
 	@override String amount_short({required Object amount}) => '${amount} a cuenta de destino';
+}
+
+// Path: budgets.progress.labels
+class _TranslationsBudgetsProgressLabelsEs implements TranslationsBudgetsProgressLabelsEn {
+	_TranslationsBudgetsProgressLabelsEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get active_on_track => 'Vas bien';
+	@override String get active_overspending => 'Gastando de más';
+	@override String get success => 'Objetivo cumplido';
+	@override String get fail => 'Presupuesto excedido';
+}
+
+// Path: budgets.progress.description
+class _TranslationsBudgetsProgressDescriptionEs implements TranslationsBudgetsProgressDescriptionEn {
+	_TranslationsBudgetsProgressDescriptionEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String active_on_track({required Object dailyAmount, required Object remainingDays}) => 'Puedes gastar ${dailyAmount} al día durante los ${remainingDays} días restantes para cumplir con el presupuesto';
+	@override String active_overspending({required Object dailyAmount, required Object remainingDays}) => 'Para volver al camino correcto, deberías limitar tu gasto a ${dailyAmount} al día durante los ${remainingDays} días restantes de este presuesto';
+	@override String active_exceeded({required Object amount}) => 'Ya has excedido el límite de tu presupuesto por ${amount}. Si no encuentras ningún ingreso para este presupuesto, deberías dejar de gastar durante el resto de su periodo';
+	@override String get success => '¡Buen trabajo! Este presupuesto ha finalizado con éxito. Sigue creando presupuestos para gestionar tus gastos';
+	@override String fail({required Object amount}) => 'Has excedido el presupuesto por ${amount}. ¡Intenta tener más cuidado la próxima vez!';
 }
 
 // Path: backup.import.manual_import
@@ -2036,9 +2100,23 @@ extension on TranslationsEs {
 		map['budgets.details.title'] = 'Detalles del presupuesto';
 		map['budgets.details.statistics'] = 'Estadísticas';
 		map['budgets.details.budget_value'] = 'Presupuestado';
-		map['budgets.details.expend_diary_left'] = ({required Object dailyAmount, required Object remainingDays}) => 'Puedes gastar ${dailyAmount}/día por los ${remainingDays} días restantes';
 		map['budgets.details.expend_evolution'] = 'Evolución del gasto';
 		map['budgets.details.no_transactions'] = 'Parece que no has realizado ningún gasto relativo a este presupuesto';
+		map['budgets.target_timeline_statuses.active'] = 'Presupuesto activo';
+		map['budgets.target_timeline_statuses.past'] = 'Presupuesto pasado';
+		map['budgets.target_timeline_statuses.future'] = 'Presupuesto futuro';
+		map['budgets.progress.labels.active_on_track'] = 'Vas bien';
+		map['budgets.progress.labels.active_overspending'] = 'Gastando de más';
+		map['budgets.progress.labels.success'] = 'Objetivo cumplido';
+		map['budgets.progress.labels.fail'] = 'Presupuesto excedido';
+		map['budgets.progress.description.active_on_track'] = ({required Object dailyAmount, required Object remainingDays}) => 'Puedes gastar ${dailyAmount} al día durante los ${remainingDays} días restantes para cumplir con el presupuesto';
+		map['budgets.progress.description.active_overspending'] = ({required Object dailyAmount, required Object remainingDays}) => 'Para volver al camino correcto, deberías limitar tu gasto a ${dailyAmount} al día durante los ${remainingDays} días restantes de este presuesto';
+		map['budgets.progress.description.active_exceeded'] = ({required Object amount}) => 'Ya has excedido el límite de tu presupuesto por ${amount}. Si no encuentras ningún ingreso para este presupuesto, deberías dejar de gastar durante el resto de su periodo';
+		map['budgets.progress.description.success'] = '¡Buen trabajo! Este presupuesto ha finalizado con éxito. Sigue creando presupuestos para gestionar tus gastos';
+		map['budgets.progress.description.fail'] = ({required Object amount}) => 'Has excedido el presupuesto por ${amount}. ¡Intenta tener más cuidado la próxima vez!';
+		map['target_timeline_statuses.active'] = 'Activo';
+		map['target_timeline_statuses.past'] = 'Pasado';
+		map['target_timeline_statuses.future'] = 'Futuro';
 		map['backup.no_file_selected'] = 'Ningún archivo seleccionado';
 		map['backup.no_directory_selected'] = 'Ningún directorio seleccionado';
 		map['backup.export.title'] = 'Exportar datos';

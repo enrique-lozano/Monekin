@@ -77,7 +77,7 @@ class UINumberFormatter {
   String get _currencySymbolWithoutDecimalSep =>
       currency!.symbol.replaceAll(currentDecimalSep, '');
 
-  String _getFormattedAmount() {
+  String getFormattedAmount() {
     String formattedAmount;
 
     switch (mode) {
@@ -188,7 +188,7 @@ class UINumberFormatter {
             DefaultTextStyle.of(context).style.fontSize) ??
         16;
 
-    final String formattedAmount = _getFormattedAmount();
+    final String formattedAmount = getFormattedAmount();
 
     if (mode != UINumberFormatterMode.currency) {
       return _getTextSpanListForAFormattedNumber(

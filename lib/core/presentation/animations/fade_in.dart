@@ -6,10 +6,12 @@ class FadeIn extends StatefulWidget {
     super.key,
     required this.child,
     this.duration = const Duration(milliseconds: 200),
+    this.delay,
   });
 
   final Widget child;
   final Duration duration;
+  final Duration? delay;
 
   @override
   _FadeInState createState() => _FadeInState(duration);
@@ -34,7 +36,15 @@ class _FadeInState extends AnimationControllerState<FadeIn> {
       end: 1,
     ).animate(animationController);
 
-    animationController.forward();
+    if (widget.delay != null) {
+      Future.delayed(widget.delay!, () {
+        if (mounted) {
+          animationController.forward();
+        }
+      });
+    } else {
+      animationController.forward();
+    }
   }
 
   @override

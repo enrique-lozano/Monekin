@@ -636,10 +636,34 @@
       "title": "Budget Details",
       "statistics": "Statistics",
       "budget-value": "Budgeted",
-      "expend-diary-left": "You can spend {{ dailyAmount }}/day for {{ remainingDays }} remaining days",
       "expend-evolution": "Expenditure evolution",
       "no-transactions": "It seems that you have not made any expenses related to this budget"
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "Active budget",
+      "past": "Past budget",
+      "future": "Future budget"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "On track",
+        "active-overspending": "Overspending",
+        "success": "Achieved",
+        "fail": "Budget exceeded"
+      },
+      "DESCRIPTION": {
+        "active-on-track": "You can spend {{ dailyAmount }} per day for the remaining {{ remainingDays }} days",
+        "active-overspending": "To get back on track, you should limit your spending to {{ dailyAmount }} per day for the remaining {{ remainingDays }} days",
+        "active-exceeded": "You have already exceeded your budget limit by {{ amount }}. If you don't find any incomes for this budget, you should stop spending for the rest of its period",
+        "success": "Great job! This budget has already finish successfully. Keep creating budgets to manage your expenses",
+        "fail": "You exceeded the budget by {{ amount }}. Try to be more careful next time!"
+      }
     }
+  },
+  "TARGET_TIMELINE_STATUSES": {
+    "active": "Active",
+    "past": "Past",
+    "future": "Future"
   },
   "BACKUP": {
     "no_file_selected": "No file selected",
