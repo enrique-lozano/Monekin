@@ -8,7 +8,9 @@ import 'package:monekin/app/layout/page_context.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/transactions/widgets/bulk_edit_transaction_modal.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
+import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
@@ -42,6 +44,12 @@ class TransactionsPageState extends State<TransactionsPage> {
   final ScrollController listScrollController = ScrollController();
 
   List<MoneyTransaction> selectedTransactions = [];
+
+  void resetScroll() {
+    if (listScrollController.hasClients) {
+      listScrollController.jumpTo(0);
+    }
+  }
 
   @override
   void initState() {
@@ -214,17 +222,26 @@ class TransactionsPageState extends State<TransactionsPage> {
             Expanded(
               child: TransactionListComponent(
                 scrollController: listScrollController,
-                heroTagBuilder: (tr) => 'transactions-page__tr-icon-${tr.id}',
+                isScrollable: true,
+                listPadding: const EdgeInsets.only(
+                  bottom: 64,
+                ).withSafeBottom(context),
+                tileBuilder: (tr) => TransactionListTile(
+                  transaction: tr,
+                  heroTag: 'transactions-page__tr-icon-${tr.id}',
+                  onLongPress: selectedTransactions.isNotEmpty
+                      ? null
+                      : () => toggleTransaction(tr),
+                  onTap: selectedTransactions.isEmpty
+                      ? null
+                      : () => toggleTransaction(tr),
+                  isSelected: selectedTransactions.any(
+                    (element) => element.id == tr.id,
+                  ),
+                  showDate: false,
+                  applySwipeActions: true,
+                ),
                 filters: filters.copyWith(searchValue: searchController.text),
-                selectedTransactions: selectedTransactions,
-                onLongPress: (tr) {
-                  if (selectedTransactions.isNotEmpty) {
-                    return;
-                  }
-
-                  toggleTransaction(tr);
-                },
-                onTap: selectedTransactions.isEmpty ? null : toggleTransaction,
                 onEmptyList: NoResults(
                   title: filters.hasFilter ? null : t.general.empty_warn,
                   description: filters.hasFilter

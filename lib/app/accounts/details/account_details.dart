@@ -10,6 +10,7 @@ import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/transactions/label_value_info_list.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
+import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
@@ -193,8 +194,11 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                           },
                         ),
                         body: TransactionListComponent(
-                          heroTagBuilder: (tr) =>
-                              'account-details-page__tr-icon-${tr.id}',
+                          tileBuilder: (transaction) => TransactionListTile(
+                            transaction: transaction,
+                            heroTag:
+                                'account-details-page__tr-icon-${transaction.id}',
+                          ),
                           filters: TransactionFilters(
                             status: TransactionStatus.notIn({
                               TransactionStatus.pending,
