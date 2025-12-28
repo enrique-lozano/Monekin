@@ -95,7 +95,7 @@ class CategoryFormFunctions {
             stream: TransactionService.instance
                 .getTransactions(
                   filters: TransactionFilters(
-                    categories: [category.id],
+                    categoriesIds: [category.id],
                     includeParentCategoriesInSearch: true,
                   ),
                 )
@@ -128,7 +128,7 @@ class CategoryFormFunctions {
             in await TransactionService.instance
                 .getTransactions(
                   filters: TransactionFilters(
-                    categories: [category.id],
+                    categoriesIds: [category.id],
                     includeParentCategoriesInSearch: true,
                   ),
                 )
@@ -188,7 +188,7 @@ class CategoryFormFunctions {
             stream: TransactionService.instance
                 .getTransactions(
                   filters: TransactionFilters(
-                    categories: [category.id],
+                    categoriesIds: [category.id],
                     includeParentCategoriesInSearch: true,
                   ),
                 )

@@ -181,12 +181,12 @@ class _FilterRowIndicatorState extends State<FilterRowIndicator> {
                           },
                         ),
                       ],
-                    if (filters.categories != null)
+                    if (filters.categoriesIds != null)
                       ResponsiveRowColumnItem(
                         child: StreamBuilder(
                           stream: CategoryService.instance.getCategories(
                             predicate: (catTable, parentCatTable) =>
-                                catTable.id.isIn(filters.categories!),
+                                catTable.id.isIn(filters.categoriesIds!),
                           ),
                           initialData: const <Category>[],
                           builder: (context, snapshot) {

@@ -192,8 +192,8 @@ class _$TransactionFiltersCWProxyImpl implements _$TransactionFiltersCWProxy {
           ? _value.accountsIDs
           // ignore: cast_nullable_to_non_nullable
           : accountsIDs as Iterable<String>?,
-      categories: categories == const $CopyWithPlaceholder()
-          ? _value.categories
+      categoriesIds: categories == const $CopyWithPlaceholder()
+          ? _value.categoriesIds
           // ignore: cast_nullable_to_non_nullable
           : categories as Iterable<String>?,
       status: status == const $CopyWithPlaceholder()
@@ -247,7 +247,7 @@ extension $TransactionFiltersCopyWith on TransactionFilters {
       transactionTypes: transactionTypes == true ? null : this.transactionTypes,
       isRecurrent: isRecurrent == true ? null : this.isRecurrent,
       accountsIDs: accountsIDs == true ? null : this.accountsIDs,
-      categories: categories == true ? null : this.categories,
+      categoriesIds: categories == true ? null : this.categoriesIds,
       status: status == true ? null : this.status,
       tagsIDs: tagsIDs == true ? null : this.tagsIDs,
     );

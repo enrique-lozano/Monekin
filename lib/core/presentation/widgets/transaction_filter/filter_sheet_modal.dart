@@ -124,8 +124,8 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                         filtersToReturn.tagsIDs!.isEmpty ||
                     filtersToReturn.accountsIDs != null &&
                         filtersToReturn.accountsIDs!.isEmpty ||
-                    filtersToReturn.categories != null &&
-                        filtersToReturn.categories!.isEmpty
+                    filtersToReturn.categoriesIds != null &&
+                        filtersToReturn.categoriesIds!.isEmpty
                 ? null
                 : () => RouteUtils.popRoute(filtersToReturn),
           ),
@@ -255,11 +255,11 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                     stream: CategoryService.instance.getCategories(),
                     builder: (context, snapshot) {
                       List<Category>? selectedCategories =
-                          filtersToReturn.categories == null
+                          filtersToReturn.categoriesIds == null
                           ? snapshot.data
                           : (snapshot.data ?? [])
                                 .where(
-                                  (element) => filtersToReturn.categories!
+                                  (element) => filtersToReturn.categoriesIds!
                                       .contains(element.id),
                                 )
                                 .toList();
@@ -268,9 +268,9 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                         title: t.general.categories,
                         leading: const Icon(Icons.category_rounded),
                         trailing: CountIndicatorWithExpandArrow(
-                          countToDisplay: filtersToReturn.categories?.length,
+                          countToDisplay: filtersToReturn.categoriesIds?.length,
                         ),
-                        subtitle: filtersToReturn.categories != null
+                        subtitle: filtersToReturn.categoriesIds != null
                             ? selectedCategories!
                                   .map((e) => e.name)
                                   .printFormatted()

@@ -52,7 +52,7 @@ class IncomeOrExpenseCard extends StatelessWidget {
                 stream: TransactionService.instance.getTransactionsValueBalance(
                   filters: TransactionFilters(
                     accountsIDs: filters?.accountsIDs,
-                    categories: filters?.categories,
+                    categoriesIds: filters?.categoriesIds,
                     minDate: periodState.startDate,
                     maxDate: periodState.endDate,
                     transactionTypes: [type],

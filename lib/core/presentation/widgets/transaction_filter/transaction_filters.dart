@@ -17,7 +17,7 @@ class TransactionFilters {
   final bool includeReceivingAccountsInAccountFilters;
 
   /// Categories that this filter contains. Will be null if this filter is not in use, or if all categories are selected
-  final Iterable<String>? categories;
+  final Iterable<String>? categoriesIds;
 
   /// If we specify a categories filter, return the transactions within a subcategory which parent is on the list
   ///
@@ -50,7 +50,7 @@ class TransactionFilters {
     this.transactionTypes,
     this.isRecurrent,
     this.accountsIDs,
-    this.categories,
+    this.categoriesIds,
     this.status,
     this.tagsIDs,
   });
@@ -64,7 +64,7 @@ class TransactionFilters {
     transactionTypes,
     isRecurrent,
     accountsIDs,
-    categories,
+    categoriesIds,
     status,
     tagsIDs,
   ].any((element) => element != null);
@@ -140,11 +140,11 @@ class TransactionFilters {
       if (accountsIDs != null && includeReceivingAccountsInAccountFilters)
         transaction.accountID.isIn(accountsIDs!) |
             transaction.receivingAccountID.isIn(accountsIDs!),
-      if (categories != null && includeParentCategoriesInSearch)
-        transaction.categoryID.isIn(categories!) |
-            c.parentCategoryID.isIn(categories!),
-      if (categories != null && !includeParentCategoriesInSearch)
-        transaction.categoryID.isIn(categories!),
+      if (categoriesIds != null && includeParentCategoriesInSearch)
+        transaction.categoryID.isIn(categoriesIds!) |
+            c.parentCategoryID.isIn(categoriesIds!),
+      if (categoriesIds != null && !includeParentCategoriesInSearch)
+        transaction.categoryID.isIn(categoriesIds!),
       if (status != null) transaction.status.isInValues(status!),
       if (extraFilters != null)
         AppDB.instance.buildExpr(
