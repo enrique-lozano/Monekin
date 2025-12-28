@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
+import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
@@ -53,10 +54,15 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
           Expanded(
             child: TransactionListComponent(
               filters: const TransactionFilters(isRecurrent: true),
-              periodicityInfo: periodicity,
               showGroupDivider: false,
-              heroTagBuilder: (tr) =>
-                  'recurrent-transactions-page__tr-icon-${tr.id}',
+              isScrollable: true,
+              tileBuilder: (transaction) => TransactionListTile(
+                transaction: transaction,
+                heroTag:
+                    'recurrent-transactions-page__tr-icon-${transaction.id}',
+                periodicityInfo: periodicity,
+                showTime: false,
+              ),
               onEmptyList: Center(
                 child: NoResults(
                   title: t.general.empty_warn,

@@ -8,6 +8,7 @@ import 'package:monekin/app/budgets/components/budget_evolution_chart.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
+import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
@@ -206,8 +207,11 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
                     ),
                     SingleChildScrollView(
                       child: TransactionListComponent(
-                        heroTagBuilder: (tr) =>
-                            'budgets-page__tr-icon-${tr.id}',
+                        isScrollable: true,
+                        tileBuilder: (transaction) => TransactionListTile(
+                          transaction: transaction,
+                          heroTag: 'budgets-page__tr-icon-${transaction.id}',
+                        ),
                         filters: budget.trFilters,
                         onEmptyList: NoResults(
                           title: t.general.empty_warn,
