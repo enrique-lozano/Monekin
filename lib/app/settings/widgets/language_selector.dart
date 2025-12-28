@@ -34,10 +34,11 @@ class LanguageSelector extends StatelessWidget {
     return DynamicSelectorModal<SupportedLocale?, String?>(
       items: const [null, ...appSupportedLocales],
       selectedValue: selectedLangTag,
-      displayNameGetter: (locale) => locale?.label ?? t.settings.locale_auto,
+      displayNameGetter: (locale) =>
+          locale?.label ?? t.settings.general.locale.auto,
       valueGetter: (locale) => locale?.locale.languageTag,
-      title: t.settings.lang_title,
-      subtitle: t.settings.lang_descr,
+      title: t.settings.general.language.title,
+      subtitle: t.settings.general.language.descr,
       headerWidget: SizedBox(
         width: double.infinity,
         child: Card(
@@ -52,7 +53,7 @@ class LanguageSelector extends StatelessWidget {
                 const SizedBox(width: 12),
                 Flexible(
                   child: HTMLText(
-                    htmlString: t.settings.lang_help,
+                    htmlString: t.settings.general.language.help,
                     tags: {'a': TextStyle(color: AppColors.of(context).link)},
                   ),
                 ),

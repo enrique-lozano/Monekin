@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/home/dashboard.page.dart';
-import 'package:monekin/app/settings/edit_profile_modal.dart';
+import 'package:monekin/app/settings/widgets/edit_profile_modal.dart';
 import 'package:monekin/app/stats/stats_page.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';

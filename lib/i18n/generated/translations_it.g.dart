@@ -490,34 +490,14 @@ class _TranslationsSettingsIt implements TranslationsSettingsEn {
 	final TranslationsIt _root; // ignore: unused_field
 
 	// Translations
-	@override String get title_long => 'Impostazioni e aspetto';
+	@override String get title_long => 'Impostazioni e Personalizzazione';
 	@override String get title_short => 'Impostazioni';
-	@override String get description => 'Tema dell\'app, testi e altre impostazioni generali';
+	@override String get description => 'Tema, Lingua, Dati e altro';
 	@override String get edit_profile => 'Modifica profilo';
-	@override String get lang_section => 'Lingua e testi';
-	@override String get lang_title => 'Lingua dell\'app';
-	@override String get lang_descr => 'Lingua in cui i testi verranno visualizzati nell\'app';
-	@override String get lang_help => 'Se vuoi collaborare con le traduzioni di questa app, puoi consultare <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>la nostra guida</a>';
-	@override String get locale => 'Regione';
-	@override String get locale_auto => 'Sistema';
-	@override String get locale_descr => 'Imposta il formato da utilizzare per date, numeri...';
-	@override String get locale_warn => 'Quando cambi regione l\'app si aggiornerà';
-	@override String get first_day_of_week => 'Primo giorno della settimana';
-	@override String get theme_and_colors => 'Tema e colori';
-	@override String get theme => 'Tema';
-	@override String get theme_auto => 'Sistema';
-	@override String get theme_light => 'Chiaro';
-	@override String get theme_dark => 'Scuro';
-	@override String get amoled_mode => 'Modalità AMOLED';
-	@override String get amoled_mode_descr => 'Usa uno sfondo nero puro quando possibile. Questo aiuterà leggermente la batteria dei dispositivi con schermi AMOLED';
-	@override String get dynamic_colors => 'Colori dinamici';
-	@override String get dynamic_colors_descr => 'Usa il colore di accento del tuo sistema quando possibile';
-	@override String get accent_color => 'Colore di accento';
-	@override String get accent_color_descr => 'Scegli il colore che l\'app utilizzerà per enfatizzare determinate parti dell\'interfaccia';
-	@override String get font => 'Font';
-	@override String get font_platform => 'Piattaforma';
-	@override late final _TranslationsSettingsSwipeActionsIt swipe_actions = _TranslationsSettingsSwipeActionsIt._(_root);
+	@override late final _TranslationsSettingsGeneralIt general = _TranslationsSettingsGeneralIt._(_root);
 	@override late final _TranslationsSettingsSecurityIt security = _TranslationsSettingsSecurityIt._(_root);
+	@override late final _TranslationsSettingsTransactionsIt transactions = _TranslationsSettingsTransactionsIt._(_root);
+	@override late final _TranslationsSettingsAppearanceIt appearance = _TranslationsSettingsAppearanceIt._(_root);
 }
 
 // Path: more
@@ -1169,23 +1149,17 @@ class _TranslationsBackupAboutIt implements TranslationsBackupAboutEn {
 	@override String get size => 'Dimensione';
 }
 
-// Path: settings.swipe_actions
-class _TranslationsSettingsSwipeActionsIt implements TranslationsSettingsSwipeActionsEn {
-	_TranslationsSettingsSwipeActionsIt._(this._root);
+// Path: settings.general
+class _TranslationsSettingsGeneralIt implements TranslationsSettingsGeneralEn {
+	_TranslationsSettingsGeneralIt._(this._root);
 
 	final TranslationsIt _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Azioni di scorrimento';
-	@override String get choose_description => 'Scegli quale azione verrà attivata quando fai scorrere un elemento di transazione nell\'elenco utilizzando questa direzione di scorrimento';
-	@override String get swipe_left => 'Scorri verso sinistra';
-	@override String get swipe_right => 'Scorri verso destra';
-	@override String get none => 'Nessuna azione';
-	@override String get toggle_reconciled => 'Attiva/disattiva riconciliato';
-	@override String get toggle_pending => 'Attiva/disattiva in sospeso';
-	@override String get toggle_voided => 'Attivazione/disattivazione annullata';
-	@override String get toggle_unreconciled => 'Attiva/disattiva non riconciliato';
-	@override String get remove_status => 'Rimuovi lo stato';
+	@override String get menu_title => 'Impostazioni generali';
+	@override String get menu_descr => 'Lingua, privacy e altro';
+	@override late final _TranslationsSettingsGeneralLanguageIt language = _TranslationsSettingsGeneralLanguageIt._(_root);
+	@override late final _TranslationsSettingsGeneralLocaleIt locale = _TranslationsSettingsGeneralLocaleIt._(_root);
 }
 
 // Path: settings.security
@@ -1202,6 +1176,41 @@ class _TranslationsSettingsSecurityIt implements TranslationsSettingsSecurityEn 
 	@override String get private_mode_descr => 'Nascondi tutti i valori monetari';
 	@override String get private_mode_activated => 'Modalità privata attivata';
 	@override String get private_mode_deactivated => 'Modalità privata disattivata';
+}
+
+// Path: settings.transactions
+class _TranslationsSettingsTransactionsIt implements TranslationsSettingsTransactionsEn {
+	_TranslationsSettingsTransactionsIt._(this._root);
+
+	final TranslationsIt _root; // ignore: unused_field
+
+	// Translations
+	@override String get menu_title => 'Transazioni';
+	@override String get menu_descr => 'Configura il comportamento delle tue transazioni';
+	@override String get title => 'Impostazioni transazioni';
+	@override late final _TranslationsSettingsTransactionsSwipeActionsIt swipe_actions = _TranslationsSettingsTransactionsSwipeActionsIt._(_root);
+}
+
+// Path: settings.appearance
+class _TranslationsSettingsAppearanceIt implements TranslationsSettingsAppearanceEn {
+	_TranslationsSettingsAppearanceIt._(this._root);
+
+	final TranslationsIt _root; // ignore: unused_field
+
+	// Translations
+	@override String get menu_title => 'Tema e stile';
+	@override String get menu_descr => 'Selezione del tema, colori e altre cose relative all\'aspetto dell\'app';
+	@override String get theme_and_colors => 'Tema e colori';
+	@override late final _TranslationsSettingsAppearanceThemeIt theme = _TranslationsSettingsAppearanceThemeIt._(_root);
+	@override String get amoled_mode => 'Modalità AMOLED';
+	@override String get amoled_mode_descr => 'Usa uno sfondo nero puro quando possibile. Questo aiuterà leggermente la batteria dei dispositivi con schermi AMOLED';
+	@override String get dynamic_colors => 'Colori dinamici';
+	@override String get dynamic_colors_descr => 'Usa il colore di accento del tuo sistema quando possibile';
+	@override String get accent_color => 'Colore di accento';
+	@override String get accent_color_descr => 'Scegli il colore che l\'app utilizzerà per enfatizzare determinate parti dell\'interfaccia';
+	@override String get text => 'Testo';
+	@override String get font => 'Font';
+	@override String get font_platform => 'Piattaforma';
 }
 
 // Path: more.data
@@ -1475,6 +1484,65 @@ class _TranslationsBackupImportManualImportIt implements TranslationsBackupImpor
 		'Specifica le colonne per altri attributi opzionali della transazione',
 	];
 	@override String success({required Object x}) => '${x} transazioni importate con successo';
+}
+
+// Path: settings.general.language
+class _TranslationsSettingsGeneralLanguageIt implements TranslationsSettingsGeneralLanguageEn {
+	_TranslationsSettingsGeneralLanguageIt._(this._root);
+
+	final TranslationsIt _root; // ignore: unused_field
+
+	// Translations
+	@override String get section => 'Lingua e testi';
+	@override String get title => 'Lingua dell\'app';
+	@override String get descr => 'Lingua in cui i testi verranno visualizzati nell\'app';
+	@override String get help => 'Se vuoi collaborare con le traduzioni di questa app, puoi consultare <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>la nostra guida</a>';
+}
+
+// Path: settings.general.locale
+class _TranslationsSettingsGeneralLocaleIt implements TranslationsSettingsGeneralLocaleEn {
+	_TranslationsSettingsGeneralLocaleIt._(this._root);
+
+	final TranslationsIt _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Regione';
+	@override String get auto => 'Sistema';
+	@override String get descr => 'Imposta il formato da utilizzare per date, numeri...';
+	@override String get warn => 'Quando cambi regione l\'app si aggiornerà';
+	@override String get first_day_of_week => 'Primo giorno della settimana';
+}
+
+// Path: settings.transactions.swipe_actions
+class _TranslationsSettingsTransactionsSwipeActionsIt implements TranslationsSettingsTransactionsSwipeActionsEn {
+	_TranslationsSettingsTransactionsSwipeActionsIt._(this._root);
+
+	final TranslationsIt _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Azioni di scorrimento';
+	@override String get choose_description => 'Scegli quale azione verrà attivata quando fai scorrere un elemento di transazione nell\'elenco utilizzando questa direzione di scorrimento';
+	@override String get swipe_left => 'Scorri verso sinistra';
+	@override String get swipe_right => 'Scorri verso destra';
+	@override String get none => 'Nessuna azione';
+	@override String get toggle_reconciled => 'Attiva/disattiva riconciliato';
+	@override String get toggle_pending => 'Attiva/disattiva in sospeso';
+	@override String get toggle_voided => 'Attivazione/disattivazione annullata';
+	@override String get toggle_unreconciled => 'Attiva/disattiva non riconciliato';
+	@override String get remove_status => 'Rimuovi lo stato';
+}
+
+// Path: settings.appearance.theme
+class _TranslationsSettingsAppearanceThemeIt implements TranslationsSettingsAppearanceThemeEn {
+	_TranslationsSettingsAppearanceThemeIt._(this._root);
+
+	final TranslationsIt _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Tema';
+	@override String get auto => 'Sistema';
+	@override String get light => 'Chiaro';
+	@override String get dark => 'Scuro';
 }
 
 // Path: more.about_us.legal
@@ -2170,42 +2238,21 @@ extension on TranslationsIt {
 		map['backup.about.modify_date'] = 'Ultima modifica';
 		map['backup.about.last_backup'] = 'Ultimo backup';
 		map['backup.about.size'] = 'Dimensione';
-		map['settings.title_long'] = 'Impostazioni e aspetto';
+		map['settings.title_long'] = 'Impostazioni e Personalizzazione';
 		map['settings.title_short'] = 'Impostazioni';
-		map['settings.description'] = 'Tema dell\'app, testi e altre impostazioni generali';
+		map['settings.description'] = 'Tema, Lingua, Dati e altro';
 		map['settings.edit_profile'] = 'Modifica profilo';
-		map['settings.lang_section'] = 'Lingua e testi';
-		map['settings.lang_title'] = 'Lingua dell\'app';
-		map['settings.lang_descr'] = 'Lingua in cui i testi verranno visualizzati nell\'app';
-		map['settings.lang_help'] = 'Se vuoi collaborare con le traduzioni di questa app, puoi consultare <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>la nostra guida</a>';
-		map['settings.locale'] = 'Regione';
-		map['settings.locale_auto'] = 'Sistema';
-		map['settings.locale_descr'] = 'Imposta il formato da utilizzare per date, numeri...';
-		map['settings.locale_warn'] = 'Quando cambi regione l\'app si aggiornerà';
-		map['settings.first_day_of_week'] = 'Primo giorno della settimana';
-		map['settings.theme_and_colors'] = 'Tema e colori';
-		map['settings.theme'] = 'Tema';
-		map['settings.theme_auto'] = 'Sistema';
-		map['settings.theme_light'] = 'Chiaro';
-		map['settings.theme_dark'] = 'Scuro';
-		map['settings.amoled_mode'] = 'Modalità AMOLED';
-		map['settings.amoled_mode_descr'] = 'Usa uno sfondo nero puro quando possibile. Questo aiuterà leggermente la batteria dei dispositivi con schermi AMOLED';
-		map['settings.dynamic_colors'] = 'Colori dinamici';
-		map['settings.dynamic_colors_descr'] = 'Usa il colore di accento del tuo sistema quando possibile';
-		map['settings.accent_color'] = 'Colore di accento';
-		map['settings.accent_color_descr'] = 'Scegli il colore che l\'app utilizzerà per enfatizzare determinate parti dell\'interfaccia';
-		map['settings.font'] = 'Font';
-		map['settings.font_platform'] = 'Piattaforma';
-		map['settings.swipe_actions.title'] = 'Azioni di scorrimento';
-		map['settings.swipe_actions.choose_description'] = 'Scegli quale azione verrà attivata quando fai scorrere un elemento di transazione nell\'elenco utilizzando questa direzione di scorrimento';
-		map['settings.swipe_actions.swipe_left'] = 'Scorri verso sinistra';
-		map['settings.swipe_actions.swipe_right'] = 'Scorri verso destra';
-		map['settings.swipe_actions.none'] = 'Nessuna azione';
-		map['settings.swipe_actions.toggle_reconciled'] = 'Attiva/disattiva riconciliato';
-		map['settings.swipe_actions.toggle_pending'] = 'Attiva/disattiva in sospeso';
-		map['settings.swipe_actions.toggle_voided'] = 'Attivazione/disattivazione annullata';
-		map['settings.swipe_actions.toggle_unreconciled'] = 'Attiva/disattiva non riconciliato';
-		map['settings.swipe_actions.remove_status'] = 'Rimuovi lo stato';
+		map['settings.general.menu_title'] = 'Impostazioni generali';
+		map['settings.general.menu_descr'] = 'Lingua, privacy e altro';
+		map['settings.general.language.section'] = 'Lingua e testi';
+		map['settings.general.language.title'] = 'Lingua dell\'app';
+		map['settings.general.language.descr'] = 'Lingua in cui i testi verranno visualizzati nell\'app';
+		map['settings.general.language.help'] = 'Se vuoi collaborare con le traduzioni di questa app, puoi consultare <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>la nostra guida</a>';
+		map['settings.general.locale.title'] = 'Regione';
+		map['settings.general.locale.auto'] = 'Sistema';
+		map['settings.general.locale.descr'] = 'Imposta il formato da utilizzare per date, numeri...';
+		map['settings.general.locale.warn'] = 'Quando cambi regione l\'app si aggiornerà';
+		map['settings.general.locale.first_day_of_week'] = 'Primo giorno della settimana';
 		map['settings.security.title'] = 'Sicurezza';
 		map['settings.security.private_mode_at_launch'] = 'Modalità privata all\'avvio';
 		map['settings.security.private_mode_at_launch_descr'] = 'Avvia l\'app in modalità privata per impostazione predefinita';
@@ -2213,6 +2260,35 @@ extension on TranslationsIt {
 		map['settings.security.private_mode_descr'] = 'Nascondi tutti i valori monetari';
 		map['settings.security.private_mode_activated'] = 'Modalità privata attivata';
 		map['settings.security.private_mode_deactivated'] = 'Modalità privata disattivata';
+		map['settings.transactions.menu_title'] = 'Transazioni';
+		map['settings.transactions.menu_descr'] = 'Configura il comportamento delle tue transazioni';
+		map['settings.transactions.title'] = 'Impostazioni transazioni';
+		map['settings.transactions.swipe_actions.title'] = 'Azioni di scorrimento';
+		map['settings.transactions.swipe_actions.choose_description'] = 'Scegli quale azione verrà attivata quando fai scorrere un elemento di transazione nell\'elenco utilizzando questa direzione di scorrimento';
+		map['settings.transactions.swipe_actions.swipe_left'] = 'Scorri verso sinistra';
+		map['settings.transactions.swipe_actions.swipe_right'] = 'Scorri verso destra';
+		map['settings.transactions.swipe_actions.none'] = 'Nessuna azione';
+		map['settings.transactions.swipe_actions.toggle_reconciled'] = 'Attiva/disattiva riconciliato';
+		map['settings.transactions.swipe_actions.toggle_pending'] = 'Attiva/disattiva in sospeso';
+		map['settings.transactions.swipe_actions.toggle_voided'] = 'Attivazione/disattivazione annullata';
+		map['settings.transactions.swipe_actions.toggle_unreconciled'] = 'Attiva/disattiva non riconciliato';
+		map['settings.transactions.swipe_actions.remove_status'] = 'Rimuovi lo stato';
+		map['settings.appearance.menu_title'] = 'Tema e stile';
+		map['settings.appearance.menu_descr'] = 'Selezione del tema, colori e altre cose relative all\'aspetto dell\'app';
+		map['settings.appearance.theme_and_colors'] = 'Tema e colori';
+		map['settings.appearance.theme.title'] = 'Tema';
+		map['settings.appearance.theme.auto'] = 'Sistema';
+		map['settings.appearance.theme.light'] = 'Chiaro';
+		map['settings.appearance.theme.dark'] = 'Scuro';
+		map['settings.appearance.amoled_mode'] = 'Modalità AMOLED';
+		map['settings.appearance.amoled_mode_descr'] = 'Usa uno sfondo nero puro quando possibile. Questo aiuterà leggermente la batteria dei dispositivi con schermi AMOLED';
+		map['settings.appearance.dynamic_colors'] = 'Colori dinamici';
+		map['settings.appearance.dynamic_colors_descr'] = 'Usa il colore di accento del tuo sistema quando possibile';
+		map['settings.appearance.accent_color'] = 'Colore di accento';
+		map['settings.appearance.accent_color_descr'] = 'Scegli il colore che l\'app utilizzerà per enfatizzare determinate parti dell\'interfaccia';
+		map['settings.appearance.text'] = 'Testo';
+		map['settings.appearance.font'] = 'Font';
+		map['settings.appearance.font_platform'] = 'Piattaforma';
 		map['more.title'] = 'Altro';
 		map['more.title_long'] = 'Altre azioni';
 		map['more.data.display'] = 'Dati';

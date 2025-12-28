@@ -4,10 +4,9 @@ import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/categories/categories_list_page.dart';
 import 'package:monekin/app/currencies/currency_manager.dart';
 import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/settings/about_page.dart';
-import 'package:monekin/app/settings/appearance_settings_page.dart';
-import 'package:monekin/app/settings/backup_settings_page.dart';
+import 'package:monekin/app/settings/about.page.dart';
 import 'package:monekin/app/settings/help_us_page.dart';
+import 'package:monekin/app/settings/settings_page.dart';
 import 'package:monekin/app/settings/widgets/setting_card_item.dart';
 import 'package:monekin/app/stats/stats_page.dart';
 import 'package:monekin/app/tags/tag_list.page.dart';
@@ -16,14 +15,15 @@ import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
-class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+/// "More Actions" Page that contains links to various other pages. Usually at last place in the main navbar
+class MoreActionsPage extends StatefulWidget {
+  const MoreActionsPage({super.key});
 
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
+  State<MoreActionsPage> createState() => _MoreActionsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _MoreActionsPageState extends State<MoreActionsPage> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -47,9 +47,9 @@ class _SettingsPageState extends State<SettingsPage> {
             SettingCardItem(
               title: t.settings.title_long,
               subtitle: t.settings.description,
-              icon: Icons.palette_outlined,
+              icon: Icons.settings_rounded,
               mainAxis: Axis.horizontal,
-              onTap: () => RouteUtils.pushRoute(const AdvancedSettingsPage()),
+              onTap: () => RouteUtils.pushRoute(const SettingsPage()),
             ),
             SettingCardItem(
               title: t.currencies.currency_manager,
@@ -57,13 +57,6 @@ class _SettingsPageState extends State<SettingsPage> {
               icon: Icons.currency_exchange,
               mainAxis: Axis.horizontal,
               onTap: () => RouteUtils.pushRoute(const CurrencyManagerPage()),
-            ),
-            SettingCardItem(
-              title: t.more.data.display,
-              subtitle: t.more.data.display_descr,
-              icon: Icons.storage_rounded,
-              mainAxis: Axis.horizontal,
-              onTap: () => RouteUtils.pushRoute(const BackupSettingsPage()),
             ),
             SettingCardItem(
               title: t.more.about_us.display,

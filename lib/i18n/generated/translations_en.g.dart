@@ -966,86 +966,22 @@ class TranslationsSettingsEn {
 
 	// Translations
 
-	/// en: 'Settings and appearance'
-	String get title_long => 'Settings and appearance';
+	/// en: 'Settings & Customization'
+	String get title_long => 'Settings & Customization';
 
 	/// en: 'Settings'
 	String get title_short => 'Settings';
 
-	/// en: 'App theme, texts and other general settings'
-	String get description => 'App theme, texts and other general settings';
+	/// en: 'Theme, Language, Data and more'
+	String get description => 'Theme, Language, Data and more';
 
 	/// en: 'Edit profile'
 	String get edit_profile => 'Edit profile';
 
-	/// en: 'Language and texts'
-	String get lang_section => 'Language and texts';
-
-	/// en: 'App language'
-	String get lang_title => 'App language';
-
-	/// en: 'Language in which the texts will be displayed in the app'
-	String get lang_descr => 'Language in which the texts will be displayed in the app';
-
-	/// en: 'If you want to collaborate with the translations of this app, you can consult <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>our guide</a>'
-	String get lang_help => 'If you want to collaborate with the translations of this app, you can consult <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>our guide</a>';
-
-	/// en: 'Region'
-	String get locale => 'Region';
-
-	/// en: 'System'
-	String get locale_auto => 'System';
-
-	/// en: 'Set the format to use for dates, numbers...'
-	String get locale_descr => 'Set the format to use for dates, numbers...';
-
-	/// en: 'When changing region the app will update'
-	String get locale_warn => 'When changing region the app will update';
-
-	/// en: 'First day of week'
-	String get first_day_of_week => 'First day of week';
-
-	/// en: 'Theme and colors'
-	String get theme_and_colors => 'Theme and colors';
-
-	/// en: 'Theme'
-	String get theme => 'Theme';
-
-	/// en: 'System'
-	String get theme_auto => 'System';
-
-	/// en: 'Light'
-	String get theme_light => 'Light';
-
-	/// en: 'Dark'
-	String get theme_dark => 'Dark';
-
-	/// en: 'AMOLED mode'
-	String get amoled_mode => 'AMOLED mode';
-
-	/// en: 'Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens'
-	String get amoled_mode_descr => 'Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens';
-
-	/// en: 'Dynamic colors'
-	String get dynamic_colors => 'Dynamic colors';
-
-	/// en: 'Use your system accent color whenever possible'
-	String get dynamic_colors_descr => 'Use your system accent color whenever possible';
-
-	/// en: 'Accent color'
-	String get accent_color => 'Accent color';
-
-	/// en: 'Choose the color the app will use to emphasize certain parts of the interface'
-	String get accent_color_descr => 'Choose the color the app will use to emphasize certain parts of the interface';
-
-	/// en: 'Font'
-	String get font => 'Font';
-
-	/// en: 'Platform'
-	String get font_platform => 'Platform';
-
-	late final TranslationsSettingsSwipeActionsEn swipe_actions = TranslationsSettingsSwipeActionsEn._(_root);
+	late final TranslationsSettingsGeneralEn general = TranslationsSettingsGeneralEn._(_root);
 	late final TranslationsSettingsSecurityEn security = TranslationsSettingsSecurityEn._(_root);
+	late final TranslationsSettingsTransactionsEn transactions = TranslationsSettingsTransactionsEn._(_root);
+	late final TranslationsSettingsAppearanceEn appearance = TranslationsSettingsAppearanceEn._(_root);
 }
 
 // Path: more
@@ -2150,43 +2086,22 @@ class TranslationsBackupAboutEn {
 	String get size => 'Size';
 }
 
-// Path: settings.swipe_actions
-class TranslationsSettingsSwipeActionsEn {
-	TranslationsSettingsSwipeActionsEn._(this._root);
+// Path: settings.general
+class TranslationsSettingsGeneralEn {
+	TranslationsSettingsGeneralEn._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
 	// Translations
 
-	/// en: 'Swipe actions'
-	String get title => 'Swipe actions';
+	/// en: 'General Settings'
+	String get menu_title => 'General Settings';
 
-	/// en: 'Choose what action will be triggered when you swipe a transaction item in the list using this swipe direction'
-	String get choose_description => 'Choose what action will be triggered when you swipe a transaction item in the list using this swipe direction';
+	/// en: 'Language, privacy, and more'
+	String get menu_descr => 'Language, privacy, and more';
 
-	/// en: 'Swipe left'
-	String get swipe_left => 'Swipe left';
-
-	/// en: 'Swipe right'
-	String get swipe_right => 'Swipe right';
-
-	/// en: 'No action'
-	String get none => 'No action';
-
-	/// en: 'Toggle reconciled'
-	String get toggle_reconciled => 'Toggle reconciled';
-
-	/// en: 'Toggle pending'
-	String get toggle_pending => 'Toggle pending';
-
-	/// en: 'Toggle voided'
-	String get toggle_voided => 'Toggle voided';
-
-	/// en: 'Toggle unreconciled'
-	String get toggle_unreconciled => 'Toggle unreconciled';
-
-	/// en: 'Remove status'
-	String get remove_status => 'Remove status';
+	late final TranslationsSettingsGeneralLanguageEn language = TranslationsSettingsGeneralLanguageEn._(_root);
+	late final TranslationsSettingsGeneralLocaleEn locale = TranslationsSettingsGeneralLocaleEn._(_root);
 }
 
 // Path: settings.security
@@ -2197,8 +2112,8 @@ class TranslationsSettingsSecurityEn {
 
 	// Translations
 
-	/// en: 'Seguridad'
-	String get title => 'Seguridad';
+	/// en: 'Security'
+	String get title => 'Security';
 
 	/// en: 'Private mode at launch'
 	String get private_mode_at_launch => 'Private mode at launch';
@@ -2217,6 +2132,73 @@ class TranslationsSettingsSecurityEn {
 
 	/// en: 'Private mode disabled'
 	String get private_mode_deactivated => 'Private mode disabled';
+}
+
+// Path: settings.transactions
+class TranslationsSettingsTransactionsEn {
+	TranslationsSettingsTransactionsEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Transactions'
+	String get menu_title => 'Transactions';
+
+	/// en: 'Configure the behavior of your transactions'
+	String get menu_descr => 'Configure the behavior of your transactions';
+
+	/// en: 'Transactions Settings'
+	String get title => 'Transactions Settings';
+
+	late final TranslationsSettingsTransactionsSwipeActionsEn swipe_actions = TranslationsSettingsTransactionsSwipeActionsEn._(_root);
+}
+
+// Path: settings.appearance
+class TranslationsSettingsAppearanceEn {
+	TranslationsSettingsAppearanceEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Theme & Style'
+	String get menu_title => 'Theme & Style';
+
+	/// en: 'Theme selection, colors and other things related to the app appearance'
+	String get menu_descr => 'Theme selection, colors and other things related to the app appearance';
+
+	/// en: 'Theme and colors'
+	String get theme_and_colors => 'Theme and colors';
+
+	late final TranslationsSettingsAppearanceThemeEn theme = TranslationsSettingsAppearanceThemeEn._(_root);
+
+	/// en: 'AMOLED mode'
+	String get amoled_mode => 'AMOLED mode';
+
+	/// en: 'Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens'
+	String get amoled_mode_descr => 'Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens';
+
+	/// en: 'Dynamic colors'
+	String get dynamic_colors => 'Dynamic colors';
+
+	/// en: 'Use your system accent color whenever possible'
+	String get dynamic_colors_descr => 'Use your system accent color whenever possible';
+
+	/// en: 'Accent color'
+	String get accent_color => 'Accent color';
+
+	/// en: 'Choose the color the app will use to emphasize certain parts of the interface'
+	String get accent_color_descr => 'Choose the color the app will use to emphasize certain parts of the interface';
+
+	/// en: 'Text'
+	String get text => 'Text';
+
+	/// en: 'Font'
+	String get font => 'Font';
+
+	/// en: 'Platform'
+	String get font_platform => 'Platform';
 }
 
 // Path: more.data
@@ -2677,6 +2659,111 @@ class TranslationsBackupImportManualImportEn {
 
 	/// en: 'Successfully imported {{x}} transactions'
 	String success({required Object x}) => 'Successfully imported ${x} transactions';
+}
+
+// Path: settings.general.language
+class TranslationsSettingsGeneralLanguageEn {
+	TranslationsSettingsGeneralLanguageEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Language and texts'
+	String get section => 'Language and texts';
+
+	/// en: 'App language'
+	String get title => 'App language';
+
+	/// en: 'Language in which the texts will be displayed in the app'
+	String get descr => 'Language in which the texts will be displayed in the app';
+
+	/// en: 'If you want to collaborate with the translations of this app, you can consult <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>our guide</a>'
+	String get help => 'If you want to collaborate with the translations of this app, you can consult <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>our guide</a>';
+}
+
+// Path: settings.general.locale
+class TranslationsSettingsGeneralLocaleEn {
+	TranslationsSettingsGeneralLocaleEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Region'
+	String get title => 'Region';
+
+	/// en: 'System'
+	String get auto => 'System';
+
+	/// en: 'Set the format to use for dates, numbers...'
+	String get descr => 'Set the format to use for dates, numbers...';
+
+	/// en: 'When changing region the app will update'
+	String get warn => 'When changing region the app will update';
+
+	/// en: 'First day of week'
+	String get first_day_of_week => 'First day of week';
+}
+
+// Path: settings.transactions.swipe_actions
+class TranslationsSettingsTransactionsSwipeActionsEn {
+	TranslationsSettingsTransactionsSwipeActionsEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Swipe actions'
+	String get title => 'Swipe actions';
+
+	/// en: 'Choose what action will be triggered when you swipe a transaction item in the list using this swipe direction'
+	String get choose_description => 'Choose what action will be triggered when you swipe a transaction item in the list using this swipe direction';
+
+	/// en: 'Swipe left'
+	String get swipe_left => 'Swipe left';
+
+	/// en: 'Swipe right'
+	String get swipe_right => 'Swipe right';
+
+	/// en: 'No action'
+	String get none => 'No action';
+
+	/// en: 'Toggle reconciled'
+	String get toggle_reconciled => 'Toggle reconciled';
+
+	/// en: 'Toggle pending'
+	String get toggle_pending => 'Toggle pending';
+
+	/// en: 'Toggle voided'
+	String get toggle_voided => 'Toggle voided';
+
+	/// en: 'Toggle unreconciled'
+	String get toggle_unreconciled => 'Toggle unreconciled';
+
+	/// en: 'Remove status'
+	String get remove_status => 'Remove status';
+}
+
+// Path: settings.appearance.theme
+class TranslationsSettingsAppearanceThemeEn {
+	TranslationsSettingsAppearanceThemeEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Theme'
+	String get title => 'Theme';
+
+	/// en: 'System'
+	String get auto => 'System';
+
+	/// en: 'Light'
+	String get light => 'Light';
+
+	/// en: 'Dark'
+	String get dark => 'Dark';
 }
 
 // Path: more.about_us.legal
@@ -3396,49 +3483,57 @@ extension on Translations {
 		map['backup.about.modify_date'] = 'Last modified';
 		map['backup.about.last_backup'] = 'Last backup';
 		map['backup.about.size'] = 'Size';
-		map['settings.title_long'] = 'Settings and appearance';
+		map['settings.title_long'] = 'Settings & Customization';
 		map['settings.title_short'] = 'Settings';
-		map['settings.description'] = 'App theme, texts and other general settings';
+		map['settings.description'] = 'Theme, Language, Data and more';
 		map['settings.edit_profile'] = 'Edit profile';
-		map['settings.lang_section'] = 'Language and texts';
-		map['settings.lang_title'] = 'App language';
-		map['settings.lang_descr'] = 'Language in which the texts will be displayed in the app';
-		map['settings.lang_help'] = 'If you want to collaborate with the translations of this app, you can consult <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>our guide</a>';
-		map['settings.locale'] = 'Region';
-		map['settings.locale_auto'] = 'System';
-		map['settings.locale_descr'] = 'Set the format to use for dates, numbers...';
-		map['settings.locale_warn'] = 'When changing region the app will update';
-		map['settings.first_day_of_week'] = 'First day of week';
-		map['settings.theme_and_colors'] = 'Theme and colors';
-		map['settings.theme'] = 'Theme';
-		map['settings.theme_auto'] = 'System';
-		map['settings.theme_light'] = 'Light';
-		map['settings.theme_dark'] = 'Dark';
-		map['settings.amoled_mode'] = 'AMOLED mode';
-		map['settings.amoled_mode_descr'] = 'Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens';
-		map['settings.dynamic_colors'] = 'Dynamic colors';
-		map['settings.dynamic_colors_descr'] = 'Use your system accent color whenever possible';
-		map['settings.accent_color'] = 'Accent color';
-		map['settings.accent_color_descr'] = 'Choose the color the app will use to emphasize certain parts of the interface';
-		map['settings.font'] = 'Font';
-		map['settings.font_platform'] = 'Platform';
-		map['settings.swipe_actions.title'] = 'Swipe actions';
-		map['settings.swipe_actions.choose_description'] = 'Choose what action will be triggered when you swipe a transaction item in the list using this swipe direction';
-		map['settings.swipe_actions.swipe_left'] = 'Swipe left';
-		map['settings.swipe_actions.swipe_right'] = 'Swipe right';
-		map['settings.swipe_actions.none'] = 'No action';
-		map['settings.swipe_actions.toggle_reconciled'] = 'Toggle reconciled';
-		map['settings.swipe_actions.toggle_pending'] = 'Toggle pending';
-		map['settings.swipe_actions.toggle_voided'] = 'Toggle voided';
-		map['settings.swipe_actions.toggle_unreconciled'] = 'Toggle unreconciled';
-		map['settings.swipe_actions.remove_status'] = 'Remove status';
-		map['settings.security.title'] = 'Seguridad';
+		map['settings.general.menu_title'] = 'General Settings';
+		map['settings.general.menu_descr'] = 'Language, privacy, and more';
+		map['settings.general.language.section'] = 'Language and texts';
+		map['settings.general.language.title'] = 'App language';
+		map['settings.general.language.descr'] = 'Language in which the texts will be displayed in the app';
+		map['settings.general.language.help'] = 'If you want to collaborate with the translations of this app, you can consult <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>our guide</a>';
+		map['settings.general.locale.title'] = 'Region';
+		map['settings.general.locale.auto'] = 'System';
+		map['settings.general.locale.descr'] = 'Set the format to use for dates, numbers...';
+		map['settings.general.locale.warn'] = 'When changing region the app will update';
+		map['settings.general.locale.first_day_of_week'] = 'First day of week';
+		map['settings.security.title'] = 'Security';
 		map['settings.security.private_mode_at_launch'] = 'Private mode at launch';
 		map['settings.security.private_mode_at_launch_descr'] = 'Launch the app in private mode by default';
 		map['settings.security.private_mode'] = 'Private mode';
 		map['settings.security.private_mode_descr'] = 'Hide all monetary values';
 		map['settings.security.private_mode_activated'] = 'Private mode activated';
 		map['settings.security.private_mode_deactivated'] = 'Private mode disabled';
+		map['settings.transactions.menu_title'] = 'Transactions';
+		map['settings.transactions.menu_descr'] = 'Configure the behavior of your transactions';
+		map['settings.transactions.title'] = 'Transactions Settings';
+		map['settings.transactions.swipe_actions.title'] = 'Swipe actions';
+		map['settings.transactions.swipe_actions.choose_description'] = 'Choose what action will be triggered when you swipe a transaction item in the list using this swipe direction';
+		map['settings.transactions.swipe_actions.swipe_left'] = 'Swipe left';
+		map['settings.transactions.swipe_actions.swipe_right'] = 'Swipe right';
+		map['settings.transactions.swipe_actions.none'] = 'No action';
+		map['settings.transactions.swipe_actions.toggle_reconciled'] = 'Toggle reconciled';
+		map['settings.transactions.swipe_actions.toggle_pending'] = 'Toggle pending';
+		map['settings.transactions.swipe_actions.toggle_voided'] = 'Toggle voided';
+		map['settings.transactions.swipe_actions.toggle_unreconciled'] = 'Toggle unreconciled';
+		map['settings.transactions.swipe_actions.remove_status'] = 'Remove status';
+		map['settings.appearance.menu_title'] = 'Theme & Style';
+		map['settings.appearance.menu_descr'] = 'Theme selection, colors and other things related to the app appearance';
+		map['settings.appearance.theme_and_colors'] = 'Theme and colors';
+		map['settings.appearance.theme.title'] = 'Theme';
+		map['settings.appearance.theme.auto'] = 'System';
+		map['settings.appearance.theme.light'] = 'Light';
+		map['settings.appearance.theme.dark'] = 'Dark';
+		map['settings.appearance.amoled_mode'] = 'AMOLED mode';
+		map['settings.appearance.amoled_mode_descr'] = 'Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens';
+		map['settings.appearance.dynamic_colors'] = 'Dynamic colors';
+		map['settings.appearance.dynamic_colors_descr'] = 'Use your system accent color whenever possible';
+		map['settings.appearance.accent_color'] = 'Accent color';
+		map['settings.appearance.accent_color_descr'] = 'Choose the color the app will use to emphasize certain parts of the interface';
+		map['settings.appearance.text'] = 'Text';
+		map['settings.appearance.font'] = 'Font';
+		map['settings.appearance.font_platform'] = 'Platform';
 		map['more.title'] = 'More';
 		map['more.title_long'] = 'More actions';
 		map['more.data.display'] = 'Data';

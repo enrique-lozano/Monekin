@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/settings/export_page.dart';
-import 'package:monekin/app/settings/import_csv.dart';
+import 'package:monekin/app/settings/pages/backup/export_page.dart';
+import 'package:monekin/app/settings/pages/backup/import_csv.page.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
@@ -15,7 +15,7 @@ import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
-import 'widgets/settings_list_separator.dart';
+import '../../widgets/settings_list_separator.dart';
 
 class BackupSettingsPage extends StatefulWidget {
   const BackupSettingsPage({super.key});

@@ -490,34 +490,14 @@ class _TranslationsSettingsZhTw implements TranslationsSettingsEn {
 	final TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get title_long => '設定和外觀';
+	@override String get title_long => '設定與自訂';
 	@override String get title_short => '設定';
-	@override String get description => '應用程式主題、文字和其他常規設定';
+	@override String get description => '主題、語言、數據等';
 	@override String get edit_profile => '編輯個人資料';
-	@override String get lang_section => '語言和文本';
-	@override String get lang_title => '應用程式語言';
-	@override String get lang_descr => '應用程式中顯示文字的語言';
-	@override String get lang_help => '如果您想與此應用程式的翻譯合作，您可以參考<a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>我們的指南</a>';
-	@override String get locale => '地區';
-	@override String get locale_auto => '系統';
-	@override String get locale_descr => '設定用於日期、數字的格式...';
-	@override String get locale_warn => '更改區域時應用程式將更新';
-	@override String get first_day_of_week => '一週的第一天';
-	@override String get theme_and_colors => '主題和顏色';
-	@override String get theme => '主題';
-	@override String get theme_auto => '系統';
-	@override String get theme_light => '明亮主題';
-	@override String get theme_dark => '黑暗主題';
-	@override String get amoled_mode => 'amoled mode';
-	@override String get amoled_mode_descr => '盡可能使用純黑色壁紙。這對 AMOLED 螢幕設備的電池略有幫助';
-	@override String get dynamic_colors => '動態色彩';
-	@override String get dynamic_colors_descr => '盡可能使用系統強調色';
-	@override String get accent_color => '強調色';
-	@override String get accent_color_descr => '選擇應用程式用來強調介面某些部分的顏色';
-	@override String get font => '字體';
-	@override String get font_platform => '平台';
-	@override late final _TranslationsSettingsSwipeActionsZhTw swipe_actions = _TranslationsSettingsSwipeActionsZhTw._(_root);
+	@override late final _TranslationsSettingsGeneralZhTw general = _TranslationsSettingsGeneralZhTw._(_root);
 	@override late final _TranslationsSettingsSecurityZhTw security = _TranslationsSettingsSecurityZhTw._(_root);
+	@override late final _TranslationsSettingsTransactionsZhTw transactions = _TranslationsSettingsTransactionsZhTw._(_root);
+	@override late final _TranslationsSettingsAppearanceZhTw appearance = _TranslationsSettingsAppearanceZhTw._(_root);
 }
 
 // Path: more
@@ -1169,23 +1149,17 @@ class _TranslationsBackupAboutZhTw implements TranslationsBackupAboutEn {
 	@override String get size => '檔案大小';
 }
 
-// Path: settings.swipe_actions
-class _TranslationsSettingsSwipeActionsZhTw implements TranslationsSettingsSwipeActionsEn {
-	_TranslationsSettingsSwipeActionsZhTw._(this._root);
+// Path: settings.general
+class _TranslationsSettingsGeneralZhTw implements TranslationsSettingsGeneralEn {
+	_TranslationsSettingsGeneralZhTw._(this._root);
 
 	final TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '滑動操作';
-	@override String get choose_description => '選擇當您使用此滑動方向滑動列表中的交易項目時將觸發什麼操作';
-	@override String get swipe_left => '向左滑動';
-	@override String get swipe_right => '向右滑動';
-	@override String get none => '無動作';
-	@override String get toggle_reconciled => '切換已調節';
-	@override String get toggle_pending => '切換待處理';
-	@override String get toggle_voided => '切換作廢';
-	@override String get toggle_unreconciled => '切換不可調和';
-	@override String get remove_status => '刪除狀態';
+	@override String get menu_title => '常規設定';
+	@override String get menu_descr => '語言、隱私等';
+	@override late final _TranslationsSettingsGeneralLanguageZhTw language = _TranslationsSettingsGeneralLanguageZhTw._(_root);
+	@override late final _TranslationsSettingsGeneralLocaleZhTw locale = _TranslationsSettingsGeneralLocaleZhTw._(_root);
 }
 
 // Path: settings.security
@@ -1202,6 +1176,41 @@ class _TranslationsSettingsSecurityZhTw implements TranslationsSettingsSecurityE
 	@override String get private_mode_descr => '隱藏所有貨幣值';
 	@override String get private_mode_activated => '隱私模式已啟用';
 	@override String get private_mode_deactivated => '隱私模式已禁用';
+}
+
+// Path: settings.transactions
+class _TranslationsSettingsTransactionsZhTw implements TranslationsSettingsTransactionsEn {
+	_TranslationsSettingsTransactionsZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get menu_title => '交易';
+	@override String get menu_descr => '配置交易行為';
+	@override String get title => '交易設定';
+	@override late final _TranslationsSettingsTransactionsSwipeActionsZhTw swipe_actions = _TranslationsSettingsTransactionsSwipeActionsZhTw._(_root);
+}
+
+// Path: settings.appearance
+class _TranslationsSettingsAppearanceZhTw implements TranslationsSettingsAppearanceEn {
+	_TranslationsSettingsAppearanceZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get menu_title => '主題與風格';
+	@override String get menu_descr => '主題選擇、顏色以及與應用程式外觀相關的其他內容';
+	@override String get theme_and_colors => '主題和顏色';
+	@override late final _TranslationsSettingsAppearanceThemeZhTw theme = _TranslationsSettingsAppearanceThemeZhTw._(_root);
+	@override String get amoled_mode => 'amoled mode';
+	@override String get amoled_mode_descr => '盡可能使用純黑色壁紙。這對 AMOLED 螢幕設備的電池略有幫助';
+	@override String get dynamic_colors => '動態色彩';
+	@override String get dynamic_colors_descr => '盡可能使用系統強調色';
+	@override String get accent_color => '強調色';
+	@override String get accent_color_descr => '選擇應用程式用來強調介面某些部分的顏色';
+	@override String get text => '文本';
+	@override String get font => '字體';
+	@override String get font_platform => '平台';
 }
 
 // Path: more.data
@@ -1475,6 +1484,65 @@ class _TranslationsBackupImportManualImportZhTw implements TranslationsBackupImp
 		'選擇其他交易屬性的資料列',
 	];
 	@override String success({required Object x}) => '已成功導入${x}筆交易';
+}
+
+// Path: settings.general.language
+class _TranslationsSettingsGeneralLanguageZhTw implements TranslationsSettingsGeneralLanguageEn {
+	_TranslationsSettingsGeneralLanguageZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get section => '語言和文本';
+	@override String get title => '應用程式語言';
+	@override String get descr => '應用程式中顯示文字的語言';
+	@override String get help => '如果您想與此應用程式的翻譯合作，您可以參考<a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>我們的指南</a>';
+}
+
+// Path: settings.general.locale
+class _TranslationsSettingsGeneralLocaleZhTw implements TranslationsSettingsGeneralLocaleEn {
+	_TranslationsSettingsGeneralLocaleZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '地區';
+	@override String get auto => '系統';
+	@override String get descr => '設定用於日期、數字的格式...';
+	@override String get warn => '更改區域時應用程式將更新';
+	@override String get first_day_of_week => '一週的第一天';
+}
+
+// Path: settings.transactions.swipe_actions
+class _TranslationsSettingsTransactionsSwipeActionsZhTw implements TranslationsSettingsTransactionsSwipeActionsEn {
+	_TranslationsSettingsTransactionsSwipeActionsZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '滑動操作';
+	@override String get choose_description => '選擇當您使用此滑動方向滑動列表中的交易項目時將觸發什麼操作';
+	@override String get swipe_left => '向左滑動';
+	@override String get swipe_right => '向右滑動';
+	@override String get none => '無動作';
+	@override String get toggle_reconciled => '切換已調節';
+	@override String get toggle_pending => '切換待處理';
+	@override String get toggle_voided => '切換作廢';
+	@override String get toggle_unreconciled => '切換不可調和';
+	@override String get remove_status => '刪除狀態';
+}
+
+// Path: settings.appearance.theme
+class _TranslationsSettingsAppearanceThemeZhTw implements TranslationsSettingsAppearanceThemeEn {
+	_TranslationsSettingsAppearanceThemeZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '主題';
+	@override String get auto => '系統';
+	@override String get light => '明亮主題';
+	@override String get dark => '黑暗主題';
 }
 
 // Path: more.about_us.legal
@@ -2170,42 +2238,21 @@ extension on TranslationsZhTw {
 		map['backup.about.modify_date'] = '上一次更改';
 		map['backup.about.last_backup'] = '上次備份';
 		map['backup.about.size'] = '檔案大小';
-		map['settings.title_long'] = '設定和外觀';
+		map['settings.title_long'] = '設定與自訂';
 		map['settings.title_short'] = '設定';
-		map['settings.description'] = '應用程式主題、文字和其他常規設定';
+		map['settings.description'] = '主題、語言、數據等';
 		map['settings.edit_profile'] = '編輯個人資料';
-		map['settings.lang_section'] = '語言和文本';
-		map['settings.lang_title'] = '應用程式語言';
-		map['settings.lang_descr'] = '應用程式中顯示文字的語言';
-		map['settings.lang_help'] = '如果您想與此應用程式的翻譯合作，您可以參考<a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>我們的指南</a>';
-		map['settings.locale'] = '地區';
-		map['settings.locale_auto'] = '系統';
-		map['settings.locale_descr'] = '設定用於日期、數字的格式...';
-		map['settings.locale_warn'] = '更改區域時應用程式將更新';
-		map['settings.first_day_of_week'] = '一週的第一天';
-		map['settings.theme_and_colors'] = '主題和顏色';
-		map['settings.theme'] = '主題';
-		map['settings.theme_auto'] = '系統';
-		map['settings.theme_light'] = '明亮主題';
-		map['settings.theme_dark'] = '黑暗主題';
-		map['settings.amoled_mode'] = 'amoled mode';
-		map['settings.amoled_mode_descr'] = '盡可能使用純黑色壁紙。這對 AMOLED 螢幕設備的電池略有幫助';
-		map['settings.dynamic_colors'] = '動態色彩';
-		map['settings.dynamic_colors_descr'] = '盡可能使用系統強調色';
-		map['settings.accent_color'] = '強調色';
-		map['settings.accent_color_descr'] = '選擇應用程式用來強調介面某些部分的顏色';
-		map['settings.font'] = '字體';
-		map['settings.font_platform'] = '平台';
-		map['settings.swipe_actions.title'] = '滑動操作';
-		map['settings.swipe_actions.choose_description'] = '選擇當您使用此滑動方向滑動列表中的交易項目時將觸發什麼操作';
-		map['settings.swipe_actions.swipe_left'] = '向左滑動';
-		map['settings.swipe_actions.swipe_right'] = '向右滑動';
-		map['settings.swipe_actions.none'] = '無動作';
-		map['settings.swipe_actions.toggle_reconciled'] = '切換已調節';
-		map['settings.swipe_actions.toggle_pending'] = '切換待處理';
-		map['settings.swipe_actions.toggle_voided'] = '切換作廢';
-		map['settings.swipe_actions.toggle_unreconciled'] = '切換不可調和';
-		map['settings.swipe_actions.remove_status'] = '刪除狀態';
+		map['settings.general.menu_title'] = '常規設定';
+		map['settings.general.menu_descr'] = '語言、隱私等';
+		map['settings.general.language.section'] = '語言和文本';
+		map['settings.general.language.title'] = '應用程式語言';
+		map['settings.general.language.descr'] = '應用程式中顯示文字的語言';
+		map['settings.general.language.help'] = '如果您想與此應用程式的翻譯合作，您可以參考<a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>我們的指南</a>';
+		map['settings.general.locale.title'] = '地區';
+		map['settings.general.locale.auto'] = '系統';
+		map['settings.general.locale.descr'] = '設定用於日期、數字的格式...';
+		map['settings.general.locale.warn'] = '更改區域時應用程式將更新';
+		map['settings.general.locale.first_day_of_week'] = '一週的第一天';
 		map['settings.security.title'] = '安全';
 		map['settings.security.private_mode_at_launch'] = '啟動時啟用的隱私模式';
 		map['settings.security.private_mode_at_launch_descr'] = '默認以隱私模式啟動應用程序';
@@ -2213,6 +2260,35 @@ extension on TranslationsZhTw {
 		map['settings.security.private_mode_descr'] = '隱藏所有貨幣值';
 		map['settings.security.private_mode_activated'] = '隱私模式已啟用';
 		map['settings.security.private_mode_deactivated'] = '隱私模式已禁用';
+		map['settings.transactions.menu_title'] = '交易';
+		map['settings.transactions.menu_descr'] = '配置交易行為';
+		map['settings.transactions.title'] = '交易設定';
+		map['settings.transactions.swipe_actions.title'] = '滑動操作';
+		map['settings.transactions.swipe_actions.choose_description'] = '選擇當您使用此滑動方向滑動列表中的交易項目時將觸發什麼操作';
+		map['settings.transactions.swipe_actions.swipe_left'] = '向左滑動';
+		map['settings.transactions.swipe_actions.swipe_right'] = '向右滑動';
+		map['settings.transactions.swipe_actions.none'] = '無動作';
+		map['settings.transactions.swipe_actions.toggle_reconciled'] = '切換已調節';
+		map['settings.transactions.swipe_actions.toggle_pending'] = '切換待處理';
+		map['settings.transactions.swipe_actions.toggle_voided'] = '切換作廢';
+		map['settings.transactions.swipe_actions.toggle_unreconciled'] = '切換不可調和';
+		map['settings.transactions.swipe_actions.remove_status'] = '刪除狀態';
+		map['settings.appearance.menu_title'] = '主題與風格';
+		map['settings.appearance.menu_descr'] = '主題選擇、顏色以及與應用程式外觀相關的其他內容';
+		map['settings.appearance.theme_and_colors'] = '主題和顏色';
+		map['settings.appearance.theme.title'] = '主題';
+		map['settings.appearance.theme.auto'] = '系統';
+		map['settings.appearance.theme.light'] = '明亮主題';
+		map['settings.appearance.theme.dark'] = '黑暗主題';
+		map['settings.appearance.amoled_mode'] = 'amoled mode';
+		map['settings.appearance.amoled_mode_descr'] = '盡可能使用純黑色壁紙。這對 AMOLED 螢幕設備的電池略有幫助';
+		map['settings.appearance.dynamic_colors'] = '動態色彩';
+		map['settings.appearance.dynamic_colors_descr'] = '盡可能使用系統強調色';
+		map['settings.appearance.accent_color'] = '強調色';
+		map['settings.appearance.accent_color_descr'] = '選擇應用程式用來強調介面某些部分的顏色';
+		map['settings.appearance.text'] = '文本';
+		map['settings.appearance.font'] = '字體';
+		map['settings.appearance.font_platform'] = '平台';
 		map['more.title'] = '更多';
 		map['more.title_long'] = '更多';
 		map['more.data.display'] = '數據';

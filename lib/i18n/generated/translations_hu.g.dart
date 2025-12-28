@@ -490,34 +490,14 @@ class _TranslationsSettingsHu implements TranslationsSettingsEn {
 	final TranslationsHu _root; // ignore: unused_field
 
 	// Translations
-	@override String get title_long => 'Beállítások és megjelenés';
+	@override String get title_long => 'Beállítások és Testreszabás';
 	@override String get title_short => 'Beállítások';
-	@override String get description => 'Alkalmazás témája, szövegek és egyéb általános beállítások';
+	@override String get description => 'Téma, Nyelv, Adatok és egyebek';
 	@override String get edit_profile => 'Profil szerkesztése';
-	@override String get lang_section => 'Nyelv és szövegek';
-	@override String get lang_title => 'Alkalmazás nyelve';
-	@override String get lang_descr => 'Nyelv, amelyen a szövegek megjelennek az alkalmazásban';
-	@override String get lang_help => 'Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'> útmutatónk</a>';
-	@override String get locale => 'Régió';
-	@override String get locale_auto => 'Rendszer';
-	@override String get locale_descr => 'Dátumok, számformátumok beállítása...';
-	@override String get locale_warn => 'Régióváltáskor az alkalmazás frissülni fog';
-	@override String get first_day_of_week => 'A hét első napja';
-	@override String get theme_and_colors => 'Témák és színek';
-	@override String get theme => 'Téma';
-	@override String get theme_auto => 'Rendszer';
-	@override String get theme_light => 'Világos';
-	@override String get theme_dark => 'Sötét';
-	@override String get amoled_mode => 'AMOLED mód';
-	@override String get amoled_mode_descr => 'Ha lehetséges, használjon tiszta fekete háttérképet. Ez némileg segíti az AMOLED képernyővel rendelkező készülékek akkumulátorát.';
-	@override String get dynamic_colors => 'Dinamikus színek';
-	@override String get dynamic_colors_descr => 'Amikor csak lehetséges, használja a rendszer kiemelő színét';
-	@override String get accent_color => 'Kiemelő szín';
-	@override String get accent_color_descr => 'Válassza ki, hogy az alkalmazás milyen színnel emelje ki a felület bizonyos részeit';
-	@override String get font => 'Betűtípus';
-	@override String get font_platform => 'Platform';
-	@override late final _TranslationsSettingsSwipeActionsHu swipe_actions = _TranslationsSettingsSwipeActionsHu._(_root);
+	@override late final _TranslationsSettingsGeneralHu general = _TranslationsSettingsGeneralHu._(_root);
 	@override late final _TranslationsSettingsSecurityHu security = _TranslationsSettingsSecurityHu._(_root);
+	@override late final _TranslationsSettingsTransactionsHu transactions = _TranslationsSettingsTransactionsHu._(_root);
+	@override late final _TranslationsSettingsAppearanceHu appearance = _TranslationsSettingsAppearanceHu._(_root);
 }
 
 // Path: more
@@ -1169,23 +1149,17 @@ class _TranslationsBackupAboutHu implements TranslationsBackupAboutEn {
 	@override String get size => 'Méret';
 }
 
-// Path: settings.swipe_actions
-class _TranslationsSettingsSwipeActionsHu implements TranslationsSettingsSwipeActionsEn {
-	_TranslationsSettingsSwipeActionsHu._(this._root);
+// Path: settings.general
+class _TranslationsSettingsGeneralHu implements TranslationsSettingsGeneralEn {
+	_TranslationsSettingsGeneralHu._(this._root);
 
 	final TranslationsHu _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Csúsztatási műveletek';
-	@override String get choose_description => 'Válassza ki, hogy milyen művelet induljon el, ha a listában lévő tranzakciós tételt ezzel a csúsztatási irány segítségével csúsztatja';
-	@override String get swipe_left => 'Csúsztasson balra';
-	@override String get swipe_right => 'Csúsztasson jobbra';
-	@override String get none => 'Nincs akció';
-	@override String get toggle_reconciled => 'Váltás egyeztetve';
-	@override String get toggle_pending => 'Váltás függőben';
-	@override String get toggle_voided => 'Váltó érvénytelenítve';
-	@override String get toggle_unreconciled => 'Váltás nem egyeztetve';
-	@override String get remove_status => 'Állapot eltávolítása';
+	@override String get menu_title => 'Általános beállítások';
+	@override String get menu_descr => 'Nyelv, adatvédelem és egyebek';
+	@override late final _TranslationsSettingsGeneralLanguageHu language = _TranslationsSettingsGeneralLanguageHu._(_root);
+	@override late final _TranslationsSettingsGeneralLocaleHu locale = _TranslationsSettingsGeneralLocaleHu._(_root);
 }
 
 // Path: settings.security
@@ -1202,6 +1176,41 @@ class _TranslationsSettingsSecurityHu implements TranslationsSettingsSecurityEn 
 	@override String get private_mode_descr => 'Minden pénzösszeg elrejtése';
 	@override String get private_mode_activated => 'Privát mód aktiválva';
 	@override String get private_mode_deactivated => 'Privát mód letiltva';
+}
+
+// Path: settings.transactions
+class _TranslationsSettingsTransactionsHu implements TranslationsSettingsTransactionsEn {
+	_TranslationsSettingsTransactionsHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get menu_title => 'Tranzakciók';
+	@override String get menu_descr => 'Konfigurálja tranzakciói viselkedését';
+	@override String get title => 'Tranzakciós beállítások';
+	@override late final _TranslationsSettingsTransactionsSwipeActionsHu swipe_actions = _TranslationsSettingsTransactionsSwipeActionsHu._(_root);
+}
+
+// Path: settings.appearance
+class _TranslationsSettingsAppearanceHu implements TranslationsSettingsAppearanceEn {
+	_TranslationsSettingsAppearanceHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get menu_title => 'Téma és stílus';
+	@override String get menu_descr => 'Témaválasztás, színek és egyéb, az alkalmazás megjelenésével kapcsolatos dolgok';
+	@override String get theme_and_colors => 'Témák és színek';
+	@override late final _TranslationsSettingsAppearanceThemeHu theme = _TranslationsSettingsAppearanceThemeHu._(_root);
+	@override String get amoled_mode => 'AMOLED mód';
+	@override String get amoled_mode_descr => 'Ha lehetséges, használjon tiszta fekete háttérképet. Ez némileg segíti az AMOLED képernyővel rendelkező készülékek akkumulátorát.';
+	@override String get dynamic_colors => 'Dinamikus színek';
+	@override String get dynamic_colors_descr => 'Amikor csak lehetséges, használja a rendszer kiemelő színét';
+	@override String get accent_color => 'Kiemelő szín';
+	@override String get accent_color_descr => 'Válassza ki, hogy az alkalmazás milyen színnel emelje ki a felület bizonyos részeit';
+	@override String get text => 'Szöveg';
+	@override String get font => 'Betűtípus';
+	@override String get font_platform => 'Platform';
 }
 
 // Path: more.data
@@ -1475,6 +1484,65 @@ class _TranslationsBackupImportManualImportHu implements TranslationsBackupImpor
 		'Az egyéb opcionális tranzakciós attribútumok oszlopainak meghatározása',
 	];
 	@override String success({required Object x}) => '${x} tranzakció sikeresen importálva';
+}
+
+// Path: settings.general.language
+class _TranslationsSettingsGeneralLanguageHu implements TranslationsSettingsGeneralLanguageEn {
+	_TranslationsSettingsGeneralLanguageHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get section => 'Nyelv és szövegek';
+	@override String get title => 'Alkalmazás nyelve';
+	@override String get descr => 'Nyelv, amelyen a szövegek megjelennek az alkalmazásban';
+	@override String get help => 'Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'> útmutatónk</a>';
+}
+
+// Path: settings.general.locale
+class _TranslationsSettingsGeneralLocaleHu implements TranslationsSettingsGeneralLocaleEn {
+	_TranslationsSettingsGeneralLocaleHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Régió';
+	@override String get auto => 'Rendszer';
+	@override String get descr => 'Dátumok, számformátumok beállítása...';
+	@override String get warn => 'Régióváltáskor az alkalmazás frissülni fog';
+	@override String get first_day_of_week => 'A hét első napja';
+}
+
+// Path: settings.transactions.swipe_actions
+class _TranslationsSettingsTransactionsSwipeActionsHu implements TranslationsSettingsTransactionsSwipeActionsEn {
+	_TranslationsSettingsTransactionsSwipeActionsHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Csúsztatási műveletek';
+	@override String get choose_description => 'Válassza ki, hogy milyen művelet induljon el, ha a listában lévő tranzakciós tételt ezzel a csúsztatási irány segítségével csúsztatja';
+	@override String get swipe_left => 'Csúsztasson balra';
+	@override String get swipe_right => 'Csúsztasson jobbra';
+	@override String get none => 'Nincs akció';
+	@override String get toggle_reconciled => 'Váltás egyeztetve';
+	@override String get toggle_pending => 'Váltás függőben';
+	@override String get toggle_voided => 'Váltó érvénytelenítve';
+	@override String get toggle_unreconciled => 'Váltás nem egyeztetve';
+	@override String get remove_status => 'Állapot eltávolítása';
+}
+
+// Path: settings.appearance.theme
+class _TranslationsSettingsAppearanceThemeHu implements TranslationsSettingsAppearanceThemeEn {
+	_TranslationsSettingsAppearanceThemeHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Téma';
+	@override String get auto => 'Rendszer';
+	@override String get light => 'Világos';
+	@override String get dark => 'Sötét';
 }
 
 // Path: more.about_us.legal
@@ -2170,42 +2238,21 @@ extension on TranslationsHu {
 		map['backup.about.modify_date'] = 'Utolsó módosítása';
 		map['backup.about.last_backup'] = 'Utolsó mentés';
 		map['backup.about.size'] = 'Méret';
-		map['settings.title_long'] = 'Beállítások és megjelenés';
+		map['settings.title_long'] = 'Beállítások és Testreszabás';
 		map['settings.title_short'] = 'Beállítások';
-		map['settings.description'] = 'Alkalmazás témája, szövegek és egyéb általános beállítások';
+		map['settings.description'] = 'Téma, Nyelv, Adatok és egyebek';
 		map['settings.edit_profile'] = 'Profil szerkesztése';
-		map['settings.lang_section'] = 'Nyelv és szövegek';
-		map['settings.lang_title'] = 'Alkalmazás nyelve';
-		map['settings.lang_descr'] = 'Nyelv, amelyen a szövegek megjelennek az alkalmazásban';
-		map['settings.lang_help'] = 'Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'> útmutatónk</a>';
-		map['settings.locale'] = 'Régió';
-		map['settings.locale_auto'] = 'Rendszer';
-		map['settings.locale_descr'] = 'Dátumok, számformátumok beállítása...';
-		map['settings.locale_warn'] = 'Régióváltáskor az alkalmazás frissülni fog';
-		map['settings.first_day_of_week'] = 'A hét első napja';
-		map['settings.theme_and_colors'] = 'Témák és színek';
-		map['settings.theme'] = 'Téma';
-		map['settings.theme_auto'] = 'Rendszer';
-		map['settings.theme_light'] = 'Világos';
-		map['settings.theme_dark'] = 'Sötét';
-		map['settings.amoled_mode'] = 'AMOLED mód';
-		map['settings.amoled_mode_descr'] = 'Ha lehetséges, használjon tiszta fekete háttérképet. Ez némileg segíti az AMOLED képernyővel rendelkező készülékek akkumulátorát.';
-		map['settings.dynamic_colors'] = 'Dinamikus színek';
-		map['settings.dynamic_colors_descr'] = 'Amikor csak lehetséges, használja a rendszer kiemelő színét';
-		map['settings.accent_color'] = 'Kiemelő szín';
-		map['settings.accent_color_descr'] = 'Válassza ki, hogy az alkalmazás milyen színnel emelje ki a felület bizonyos részeit';
-		map['settings.font'] = 'Betűtípus';
-		map['settings.font_platform'] = 'Platform';
-		map['settings.swipe_actions.title'] = 'Csúsztatási műveletek';
-		map['settings.swipe_actions.choose_description'] = 'Válassza ki, hogy milyen művelet induljon el, ha a listában lévő tranzakciós tételt ezzel a csúsztatási irány segítségével csúsztatja';
-		map['settings.swipe_actions.swipe_left'] = 'Csúsztasson balra';
-		map['settings.swipe_actions.swipe_right'] = 'Csúsztasson jobbra';
-		map['settings.swipe_actions.none'] = 'Nincs akció';
-		map['settings.swipe_actions.toggle_reconciled'] = 'Váltás egyeztetve';
-		map['settings.swipe_actions.toggle_pending'] = 'Váltás függőben';
-		map['settings.swipe_actions.toggle_voided'] = 'Váltó érvénytelenítve';
-		map['settings.swipe_actions.toggle_unreconciled'] = 'Váltás nem egyeztetve';
-		map['settings.swipe_actions.remove_status'] = 'Állapot eltávolítása';
+		map['settings.general.menu_title'] = 'Általános beállítások';
+		map['settings.general.menu_descr'] = 'Nyelv, adatvédelem és egyebek';
+		map['settings.general.language.section'] = 'Nyelv és szövegek';
+		map['settings.general.language.title'] = 'Alkalmazás nyelve';
+		map['settings.general.language.descr'] = 'Nyelv, amelyen a szövegek megjelennek az alkalmazásban';
+		map['settings.general.language.help'] = 'Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'> útmutatónk</a>';
+		map['settings.general.locale.title'] = 'Régió';
+		map['settings.general.locale.auto'] = 'Rendszer';
+		map['settings.general.locale.descr'] = 'Dátumok, számformátumok beállítása...';
+		map['settings.general.locale.warn'] = 'Régióváltáskor az alkalmazás frissülni fog';
+		map['settings.general.locale.first_day_of_week'] = 'A hét első napja';
 		map['settings.security.title'] = 'Biztonság';
 		map['settings.security.private_mode_at_launch'] = 'Privát mód indításkor';
 		map['settings.security.private_mode_at_launch_descr'] = 'Az alkalmazás alapértelmezés szerinti indítása privát módban';
@@ -2213,6 +2260,35 @@ extension on TranslationsHu {
 		map['settings.security.private_mode_descr'] = 'Minden pénzösszeg elrejtése';
 		map['settings.security.private_mode_activated'] = 'Privát mód aktiválva';
 		map['settings.security.private_mode_deactivated'] = 'Privát mód letiltva';
+		map['settings.transactions.menu_title'] = 'Tranzakciók';
+		map['settings.transactions.menu_descr'] = 'Konfigurálja tranzakciói viselkedését';
+		map['settings.transactions.title'] = 'Tranzakciós beállítások';
+		map['settings.transactions.swipe_actions.title'] = 'Csúsztatási műveletek';
+		map['settings.transactions.swipe_actions.choose_description'] = 'Válassza ki, hogy milyen művelet induljon el, ha a listában lévő tranzakciós tételt ezzel a csúsztatási irány segítségével csúsztatja';
+		map['settings.transactions.swipe_actions.swipe_left'] = 'Csúsztasson balra';
+		map['settings.transactions.swipe_actions.swipe_right'] = 'Csúsztasson jobbra';
+		map['settings.transactions.swipe_actions.none'] = 'Nincs akció';
+		map['settings.transactions.swipe_actions.toggle_reconciled'] = 'Váltás egyeztetve';
+		map['settings.transactions.swipe_actions.toggle_pending'] = 'Váltás függőben';
+		map['settings.transactions.swipe_actions.toggle_voided'] = 'Váltó érvénytelenítve';
+		map['settings.transactions.swipe_actions.toggle_unreconciled'] = 'Váltás nem egyeztetve';
+		map['settings.transactions.swipe_actions.remove_status'] = 'Állapot eltávolítása';
+		map['settings.appearance.menu_title'] = 'Téma és stílus';
+		map['settings.appearance.menu_descr'] = 'Témaválasztás, színek és egyéb, az alkalmazás megjelenésével kapcsolatos dolgok';
+		map['settings.appearance.theme_and_colors'] = 'Témák és színek';
+		map['settings.appearance.theme.title'] = 'Téma';
+		map['settings.appearance.theme.auto'] = 'Rendszer';
+		map['settings.appearance.theme.light'] = 'Világos';
+		map['settings.appearance.theme.dark'] = 'Sötét';
+		map['settings.appearance.amoled_mode'] = 'AMOLED mód';
+		map['settings.appearance.amoled_mode_descr'] = 'Ha lehetséges, használjon tiszta fekete háttérképet. Ez némileg segíti az AMOLED képernyővel rendelkező készülékek akkumulátorát.';
+		map['settings.appearance.dynamic_colors'] = 'Dinamikus színek';
+		map['settings.appearance.dynamic_colors_descr'] = 'Amikor csak lehetséges, használja a rendszer kiemelő színét';
+		map['settings.appearance.accent_color'] = 'Kiemelő szín';
+		map['settings.appearance.accent_color_descr'] = 'Válassza ki, hogy az alkalmazás milyen színnel emelje ki a felület bizonyos részeit';
+		map['settings.appearance.text'] = 'Szöveg';
+		map['settings.appearance.font'] = 'Betűtípus';
+		map['settings.appearance.font_platform'] = 'Platform';
 		map['more.title'] = 'Továbbiak';
 		map['more.title_long'] = 'További műveletek';
 		map['more.data.display'] = 'Adatok';

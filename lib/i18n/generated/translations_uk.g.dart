@@ -490,34 +490,14 @@ class _TranslationsSettingsUk implements TranslationsSettingsEn {
 	final TranslationsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title_long => 'Налаштування та вигляд';
+	@override String get title_long => 'Налаштування та Персоналізація';
 	@override String get title_short => 'Налаштування';
-	@override String get description => 'Тема додатку, тексти та інші загальні налаштування';
+	@override String get description => 'Тема, Мова, Дані та інше';
 	@override String get edit_profile => 'Редагувати профіль';
-	@override String get lang_section => 'Мова та тексти';
-	@override String get lang_title => 'Мова додатку';
-	@override String get lang_descr => 'Мова, в якій будуть відображатися тексти в додатку';
-	@override String get lang_help => 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>нашого посібник</ a>';
-	@override String get locale => 'Регіон';
-	@override String get locale_auto => 'Система';
-	@override String get locale_descr => 'Встановіть формат, який буде використовуватися для дат, чисел...';
-	@override String get locale_warn => 'Після зміни регіону додаток оновиться';
-	@override String get first_day_of_week => 'Перший день тижня';
-	@override String get theme_and_colors => 'Тема та кольори';
-	@override String get theme => 'Тема';
-	@override String get theme_auto => 'система';
-	@override String get theme_light => 'Світла';
-	@override String get theme_dark => 'Темна';
-	@override String get amoled_mode => 'Режим AMOLED';
-	@override String get amoled_mode_descr => 'Використовуйте чисто чорний шпалери, якщо це можливо. Це трохи допоможе акумулятору пристроїв з екранами AMOLED';
-	@override String get dynamic_colors => 'Динамічні кольори';
-	@override String get dynamic_colors_descr => 'Використовуйте колір акценту вашої системи, коли це можливо';
-	@override String get accent_color => 'Колір акценту';
-	@override String get accent_color_descr => 'Виберіть колір, який додаток буде використовувати для виділення певних частин інтерфейсу';
-	@override String get font => 'Шрифт';
-	@override String get font_platform => 'Платформа';
-	@override late final _TranslationsSettingsSwipeActionsUk swipe_actions = _TranslationsSettingsSwipeActionsUk._(_root);
+	@override late final _TranslationsSettingsGeneralUk general = _TranslationsSettingsGeneralUk._(_root);
 	@override late final _TranslationsSettingsSecurityUk security = _TranslationsSettingsSecurityUk._(_root);
+	@override late final _TranslationsSettingsTransactionsUk transactions = _TranslationsSettingsTransactionsUk._(_root);
+	@override late final _TranslationsSettingsAppearanceUk appearance = _TranslationsSettingsAppearanceUk._(_root);
 }
 
 // Path: more
@@ -1169,23 +1149,17 @@ class _TranslationsBackupAboutUk implements TranslationsBackupAboutEn {
 	@override String get size => 'Розмір';
 }
 
-// Path: settings.swipe_actions
-class _TranslationsSettingsSwipeActionsUk implements TranslationsSettingsSwipeActionsEn {
-	_TranslationsSettingsSwipeActionsUk._(this._root);
+// Path: settings.general
+class _TranslationsSettingsGeneralUk implements TranslationsSettingsGeneralEn {
+	_TranslationsSettingsGeneralUk._(this._root);
 
 	final TranslationsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Дії гортання';
-	@override String get choose_description => 'Виберіть, яка дія буде ініційована, коли ви проводите пальцем по елементу транзакції у списку в цьому напрямку';
-	@override String get swipe_left => 'Проведіть ліворуч';
-	@override String get swipe_right => 'Проведіть праворуч';
-	@override String get none => 'Ніяких дій';
-	@override String get toggle_reconciled => 'Перемикач узгоджено';
-	@override String get toggle_pending => 'Перемкнути в очікуванні';
-	@override String get toggle_voided => 'Перемикач скасовано';
-	@override String get toggle_unreconciled => 'Перемикач неузгоджений';
-	@override String get remove_status => 'Видалити статус';
+	@override String get menu_title => 'Загальні налаштування';
+	@override String get menu_descr => 'Мова, конфіденційність та інше';
+	@override late final _TranslationsSettingsGeneralLanguageUk language = _TranslationsSettingsGeneralLanguageUk._(_root);
+	@override late final _TranslationsSettingsGeneralLocaleUk locale = _TranslationsSettingsGeneralLocaleUk._(_root);
 }
 
 // Path: settings.security
@@ -1202,6 +1176,41 @@ class _TranslationsSettingsSecurityUk implements TranslationsSettingsSecurityEn 
 	@override String get private_mode_descr => 'Приховати всі грошові значення';
 	@override String get private_mode_activated => 'Приватний режим активовано';
 	@override String get private_mode_deactivated => 'Приватний режим вимкнено';
+}
+
+// Path: settings.transactions
+class _TranslationsSettingsTransactionsUk implements TranslationsSettingsTransactionsEn {
+	_TranslationsSettingsTransactionsUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get menu_title => 'Транзакції';
+	@override String get menu_descr => 'Налаштуйте поведінку ваших транзакцій';
+	@override String get title => 'Налаштування транзакцій';
+	@override late final _TranslationsSettingsTransactionsSwipeActionsUk swipe_actions = _TranslationsSettingsTransactionsSwipeActionsUk._(_root);
+}
+
+// Path: settings.appearance
+class _TranslationsSettingsAppearanceUk implements TranslationsSettingsAppearanceEn {
+	_TranslationsSettingsAppearanceUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get menu_title => 'Тема та стиль';
+	@override String get menu_descr => 'Вибір теми, кольори та інші речі, пов\'язані з виглядом програми';
+	@override String get theme_and_colors => 'Тема та кольори';
+	@override late final _TranslationsSettingsAppearanceThemeUk theme = _TranslationsSettingsAppearanceThemeUk._(_root);
+	@override String get amoled_mode => 'Режим AMOLED';
+	@override String get amoled_mode_descr => 'Використовуйте чисто чорний шпалери, якщо це можливо. Це трохи допоможе акумулятору пристроїв з екранами AMOLED';
+	@override String get dynamic_colors => 'Динамічні кольори';
+	@override String get dynamic_colors_descr => 'Використовуйте колір акценту вашої системи, коли це можливо';
+	@override String get accent_color => 'Колір акценту';
+	@override String get accent_color_descr => 'Виберіть колір, який додаток буде використовувати для виділення певних частин інтерфейсу';
+	@override String get text => 'Текст';
+	@override String get font => 'Шрифт';
+	@override String get font_platform => 'Платформа';
 }
 
 // Path: more.data
@@ -1475,6 +1484,65 @@ class _TranslationsBackupImportManualImportUk implements TranslationsBackupImpor
 		'Вкажіть стовпці для інших необов\'язкових атрибутів транзакцій',
 	];
 	@override String success({required Object x}) => 'Успішно імпортовано ${x} транзакцій';
+}
+
+// Path: settings.general.language
+class _TranslationsSettingsGeneralLanguageUk implements TranslationsSettingsGeneralLanguageEn {
+	_TranslationsSettingsGeneralLanguageUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get section => 'Мова та тексти';
+	@override String get title => 'Мова додатку';
+	@override String get descr => 'Мова, в якій будуть відображатися тексти в додатку';
+	@override String get help => 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>нашого посібник</ a>';
+}
+
+// Path: settings.general.locale
+class _TranslationsSettingsGeneralLocaleUk implements TranslationsSettingsGeneralLocaleEn {
+	_TranslationsSettingsGeneralLocaleUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Регіон';
+	@override String get auto => 'Система';
+	@override String get descr => 'Встановіть формат, який буде використовуватися для дат, чисел...';
+	@override String get warn => 'Після зміни регіону додаток оновиться';
+	@override String get first_day_of_week => 'Перший день тижня';
+}
+
+// Path: settings.transactions.swipe_actions
+class _TranslationsSettingsTransactionsSwipeActionsUk implements TranslationsSettingsTransactionsSwipeActionsEn {
+	_TranslationsSettingsTransactionsSwipeActionsUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Дії гортання';
+	@override String get choose_description => 'Виберіть, яка дія буде ініційована, коли ви проводите пальцем по елементу транзакції у списку в цьому напрямку';
+	@override String get swipe_left => 'Проведіть ліворуч';
+	@override String get swipe_right => 'Проведіть праворуч';
+	@override String get none => 'Ніяких дій';
+	@override String get toggle_reconciled => 'Перемикач узгоджено';
+	@override String get toggle_pending => 'Перемкнути в очікуванні';
+	@override String get toggle_voided => 'Перемикач скасовано';
+	@override String get toggle_unreconciled => 'Перемикач неузгоджений';
+	@override String get remove_status => 'Видалити статус';
+}
+
+// Path: settings.appearance.theme
+class _TranslationsSettingsAppearanceThemeUk implements TranslationsSettingsAppearanceThemeEn {
+	_TranslationsSettingsAppearanceThemeUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Тема';
+	@override String get auto => 'система';
+	@override String get light => 'Світла';
+	@override String get dark => 'Темна';
 }
 
 // Path: more.about_us.legal
@@ -2170,42 +2238,21 @@ extension on TranslationsUk {
 		map['backup.about.modify_date'] = 'Останнє змінено';
 		map['backup.about.last_backup'] = 'Остання резервна копія';
 		map['backup.about.size'] = 'Розмір';
-		map['settings.title_long'] = 'Налаштування та вигляд';
+		map['settings.title_long'] = 'Налаштування та Персоналізація';
 		map['settings.title_short'] = 'Налаштування';
-		map['settings.description'] = 'Тема додатку, тексти та інші загальні налаштування';
+		map['settings.description'] = 'Тема, Мова, Дані та інше';
 		map['settings.edit_profile'] = 'Редагувати профіль';
-		map['settings.lang_section'] = 'Мова та тексти';
-		map['settings.lang_title'] = 'Мова додатку';
-		map['settings.lang_descr'] = 'Мова, в якій будуть відображатися тексти в додатку';
-		map['settings.lang_help'] = 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>нашого посібник</ a>';
-		map['settings.locale'] = 'Регіон';
-		map['settings.locale_auto'] = 'Система';
-		map['settings.locale_descr'] = 'Встановіть формат, який буде використовуватися для дат, чисел...';
-		map['settings.locale_warn'] = 'Після зміни регіону додаток оновиться';
-		map['settings.first_day_of_week'] = 'Перший день тижня';
-		map['settings.theme_and_colors'] = 'Тема та кольори';
-		map['settings.theme'] = 'Тема';
-		map['settings.theme_auto'] = 'система';
-		map['settings.theme_light'] = 'Світла';
-		map['settings.theme_dark'] = 'Темна';
-		map['settings.amoled_mode'] = 'Режим AMOLED';
-		map['settings.amoled_mode_descr'] = 'Використовуйте чисто чорний шпалери, якщо це можливо. Це трохи допоможе акумулятору пристроїв з екранами AMOLED';
-		map['settings.dynamic_colors'] = 'Динамічні кольори';
-		map['settings.dynamic_colors_descr'] = 'Використовуйте колір акценту вашої системи, коли це можливо';
-		map['settings.accent_color'] = 'Колір акценту';
-		map['settings.accent_color_descr'] = 'Виберіть колір, який додаток буде використовувати для виділення певних частин інтерфейсу';
-		map['settings.font'] = 'Шрифт';
-		map['settings.font_platform'] = 'Платформа';
-		map['settings.swipe_actions.title'] = 'Дії гортання';
-		map['settings.swipe_actions.choose_description'] = 'Виберіть, яка дія буде ініційована, коли ви проводите пальцем по елементу транзакції у списку в цьому напрямку';
-		map['settings.swipe_actions.swipe_left'] = 'Проведіть ліворуч';
-		map['settings.swipe_actions.swipe_right'] = 'Проведіть праворуч';
-		map['settings.swipe_actions.none'] = 'Ніяких дій';
-		map['settings.swipe_actions.toggle_reconciled'] = 'Перемикач узгоджено';
-		map['settings.swipe_actions.toggle_pending'] = 'Перемкнути в очікуванні';
-		map['settings.swipe_actions.toggle_voided'] = 'Перемикач скасовано';
-		map['settings.swipe_actions.toggle_unreconciled'] = 'Перемикач неузгоджений';
-		map['settings.swipe_actions.remove_status'] = 'Видалити статус';
+		map['settings.general.menu_title'] = 'Загальні налаштування';
+		map['settings.general.menu_descr'] = 'Мова, конфіденційність та інше';
+		map['settings.general.language.section'] = 'Мова та тексти';
+		map['settings.general.language.title'] = 'Мова додатку';
+		map['settings.general.language.descr'] = 'Мова, в якій будуть відображатися тексти в додатку';
+		map['settings.general.language.help'] = 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>нашого посібник</ a>';
+		map['settings.general.locale.title'] = 'Регіон';
+		map['settings.general.locale.auto'] = 'Система';
+		map['settings.general.locale.descr'] = 'Встановіть формат, який буде використовуватися для дат, чисел...';
+		map['settings.general.locale.warn'] = 'Після зміни регіону додаток оновиться';
+		map['settings.general.locale.first_day_of_week'] = 'Перший день тижня';
 		map['settings.security.title'] = 'Безпека';
 		map['settings.security.private_mode_at_launch'] = 'Приватний режим під час запуску';
 		map['settings.security.private_mode_at_launch_descr'] = 'За замовчуванням запускати програму в приватному режимі';
@@ -2213,6 +2260,35 @@ extension on TranslationsUk {
 		map['settings.security.private_mode_descr'] = 'Приховати всі грошові значення';
 		map['settings.security.private_mode_activated'] = 'Приватний режим активовано';
 		map['settings.security.private_mode_deactivated'] = 'Приватний режим вимкнено';
+		map['settings.transactions.menu_title'] = 'Транзакції';
+		map['settings.transactions.menu_descr'] = 'Налаштуйте поведінку ваших транзакцій';
+		map['settings.transactions.title'] = 'Налаштування транзакцій';
+		map['settings.transactions.swipe_actions.title'] = 'Дії гортання';
+		map['settings.transactions.swipe_actions.choose_description'] = 'Виберіть, яка дія буде ініційована, коли ви проводите пальцем по елементу транзакції у списку в цьому напрямку';
+		map['settings.transactions.swipe_actions.swipe_left'] = 'Проведіть ліворуч';
+		map['settings.transactions.swipe_actions.swipe_right'] = 'Проведіть праворуч';
+		map['settings.transactions.swipe_actions.none'] = 'Ніяких дій';
+		map['settings.transactions.swipe_actions.toggle_reconciled'] = 'Перемикач узгоджено';
+		map['settings.transactions.swipe_actions.toggle_pending'] = 'Перемкнути в очікуванні';
+		map['settings.transactions.swipe_actions.toggle_voided'] = 'Перемикач скасовано';
+		map['settings.transactions.swipe_actions.toggle_unreconciled'] = 'Перемикач неузгоджений';
+		map['settings.transactions.swipe_actions.remove_status'] = 'Видалити статус';
+		map['settings.appearance.menu_title'] = 'Тема та стиль';
+		map['settings.appearance.menu_descr'] = 'Вибір теми, кольори та інші речі, пов\'язані з виглядом програми';
+		map['settings.appearance.theme_and_colors'] = 'Тема та кольори';
+		map['settings.appearance.theme.title'] = 'Тема';
+		map['settings.appearance.theme.auto'] = 'система';
+		map['settings.appearance.theme.light'] = 'Світла';
+		map['settings.appearance.theme.dark'] = 'Темна';
+		map['settings.appearance.amoled_mode'] = 'Режим AMOLED';
+		map['settings.appearance.amoled_mode_descr'] = 'Використовуйте чисто чорний шпалери, якщо це можливо. Це трохи допоможе акумулятору пристроїв з екранами AMOLED';
+		map['settings.appearance.dynamic_colors'] = 'Динамічні кольори';
+		map['settings.appearance.dynamic_colors_descr'] = 'Використовуйте колір акценту вашої системи, коли це можливо';
+		map['settings.appearance.accent_color'] = 'Колір акценту';
+		map['settings.appearance.accent_color_descr'] = 'Виберіть колір, який додаток буде використовувати для виділення певних частин інтерфейсу';
+		map['settings.appearance.text'] = 'Текст';
+		map['settings.appearance.font'] = 'Шрифт';
+		map['settings.appearance.font_platform'] = 'Платформа';
 		map['more.title'] = 'Більше';
 		map['more.title_long'] = 'Більше дій';
 		map['more.data.display'] = 'Дані';
