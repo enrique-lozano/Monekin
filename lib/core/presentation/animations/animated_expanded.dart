@@ -108,7 +108,7 @@ class _AnimatedExpandedState extends State<AnimatedExpanded>
 class AnimatedSizeSwitcher extends StatelessWidget {
   const AnimatedSizeSwitcher({
     required this.child,
-    this.duration = const Duration(milliseconds: 250),
+    this.duration = const Duration(milliseconds: 800),
     this.enabled = true,
     this.axis = Axis.vertical,
     super.key,
@@ -123,19 +123,14 @@ class AnimatedSizeSwitcher extends StatelessWidget {
   Widget build(BuildContext context) {
     if (enabled == false) return child;
 
-    return AnimatedSwitcher(
-      switchInCurve: Curves.fastEaseInToSlowEaseOut,
-      switchOutCurve: Curves.fastOutSlowIn,
+    return AnimatedSize(
+      curve: Curves.easeInOutCubicEmphasized,
       duration: duration,
-      transitionBuilder: (child, animation) {
-        return SizeTransition(
-          axisAlignment: 1,
-          sizeFactor: animation,
-          axis: axis,
-          child: child,
-        );
-      },
-      child: child,
+      clipBehavior: Clip.hardEdge,
+      child: AnimatedSwitcher(
+        duration: Duration(milliseconds: duration.inMilliseconds ~/ 4),
+        child: child,
+      ),
     );
   }
 }

@@ -20,12 +20,12 @@ import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
-import 'package:monekin/core/presentation/widgets/expansion_panel/single_expansion_panel.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_field.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:monekin/core/presentation/widgets/show_more_content_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
@@ -410,7 +410,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  SingleExpansionPanel(
+                  ShowMoreContentButton(
                     child: Column(
                       children: [
                         const SizedBox(height: 12),
