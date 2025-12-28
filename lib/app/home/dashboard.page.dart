@@ -408,27 +408,31 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
+  Future<void> _togglePrivateModeValue({bool showSnackbar = false}) async {
+    final privateMode =
+        await PrivateModeService.instance.privateModeStream.first;
+
+    PrivateModeService.instance.setPrivateMode(!privateMode);
+
+    await HapticFeedback.lightImpact();
+
+    if (showSnackbar) {
+      MonekinSnackbar.success(
+        SnackbarParams(
+          !privateMode
+              ? t.settings.security.private_mode_activated
+              : t.settings.security.private_mode_deactivated,
+        ),
+      );
+    }
+  }
+
   Widget totalBalanceIndicator(BuildContext context) {
     final t = Translations.of(context);
 
     return SuccessiveTapDetector(
       delayTrackingAfterGoal: 4000,
-      onClickGoalReached: () async {
-        final privateMode =
-            await PrivateModeService.instance.privateModeStream.first;
-
-        PrivateModeService.instance.setPrivateMode(!privateMode);
-
-        await HapticFeedback.lightImpact();
-
-        MonekinSnackbar.success(
-          SnackbarParams(
-            !privateMode
-                ? t.settings.security.private_mode_activated
-                : t.settings.security.private_mode_deactivated,
-          ),
-        );
-      },
+      onClickGoalReached: () => _togglePrivateModeValue(showSnackbar: true),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: _isIncomeExpenseAtSameLevel(context)
@@ -436,11 +440,40 @@ class _DashboardPageState extends State<DashboardPage> {
             : CrossAxisAlignment.center,
         spacing: 2,
         children: [
-          Text(
-            t.home.total_balance,
-            style: Theme.of(context).textTheme.labelSmall!.copyWith(
-              color: onHeaderSmallTextColor(context),
-            ),
+          Row(
+            mainAxisAlignment: _isIncomeExpenseAtSameLevel(context)
+                ? MainAxisAlignment.start
+                : MainAxisAlignment.center,
+            spacing: 4,
+            children: [
+              Text(
+                t.home.total_balance,
+                style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                  color: onHeaderSmallTextColor(context),
+                ),
+              ),
+              Tappable(
+                bgColor: Colors.transparent,
+                shape: const CircleBorder(),
+                onTap: () => _togglePrivateModeValue(),
+                child: Padding(
+                  padding: const EdgeInsets.all(2),
+                  child: StreamBuilder(
+                    stream: PrivateModeService.instance.privateModeStream,
+                    initialData: false,
+                    builder: (context, snapshot) {
+                      return Icon(
+                        snapshot.data!
+                            ? Icons.visibility_off_rounded
+                            : Icons.visibility_rounded,
+                        size: 16,
+                        color: onHeaderSmallTextColor(context),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
 
           // ----- CURRENT BALANCE AMOUNT HEADER -----
