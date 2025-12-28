@@ -747,52 +747,72 @@
     }
   },
   "SETTINGS": {
-    "title_long": "Ayarlar ve görünüm",
+    "title_long": "Ayarlar ve Özelleştirme",
     "title_short": "Ayarlar",
-    "description": "Uygulama teması, metinler ve diğer genel ayarlar",
+    "description": "Tema, Dil, Veriler ve daha fazlası",
     "edit_profile": "Profili düzenle",
-    "lang.section": "Dil ve metinler",
-    "lang.title": "Uygulama dili",
-    "lang.descr": "Metinlerin uygulamada görüntüleneceği dil",
-    "lang.help": "Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>kılavuzumuza</a> başvurabilirsiniz",
-    "locale": "Bölge",
-    "locale_auto": "Sistem",
-    "locale.descr": "Tarihler, sayılar için kullanılacak biçimi ayarlayın...",
-    "locale.warn": "Bölge değiştirildiğinde uygulama güncellenecektir",
-    "first_day_of_week": "Haftanın ilk günü",
-    "theme_and_colors": "Tema ve renkler",
-    "theme": "Tema",
-    "theme.auto": "Sistem",
-    "theme.light": "Açık",
-    "theme.dark": "Koyu",
-    "amoled-mode": "AMOLED modu",
-    "amoled-mode.descr": "Mümkün olduğunda saf siyah bir duvar kağıdı kullanın. Bu, AMOLED ekranlara sahip cihazların pili için biraz yardımcı olacaktır",
-    "dynamic-colors": "Dinamik renkler",
-    "dynamic-colors.descr": "Mümkün olduğunda sistem vurgu renginizi kullanın",
-    "accent-color": "Vurgu rengi",
-    "accent-color.descr": "Uygulamanın arayüzün belirli kısımlarını vurgulamak için kullanacağı rengi seçin",
-    "font": "Yazı tipi",
-    "font-platform": "platformu",
-    "SWIPE-ACTIONS": {
-      "title": "Kaydırma eylemleri",
-      "choose-description": "Bu kaydırma yönünü kullanarak listedeki bir işlem öğesini kaydırdığınızda hangi eylemin tetikleneceğini seçin",
-      "swipe-left": "Sola kaydırın",
-      "swipe-right": "Sağa kaydırın",
-      "none": "Eylem yok",
-      "toggle-reconciled": "Mutabık kılınmayı aç/kapat",
-      "toggle-pending": "Beklemede'yi aç/kapat",
-      "toggle-voided": "Geçiş iptal edildi",
-      "toggle-unreconciled": "Mutabık kılınmayanları aç/kapat",
-      "remove-status": "Durumu kaldır"
+    "GENERAL": {
+      "menu_title": "Genel Ayarlar",
+      "menu_descr": "Dil, gizlilik ve daha fazlası",
+      "LANGUAGE": {
+        "section": "Dil ve metinler",
+        "title": "Uygulama dili",
+        "descr": "Metinlerin uygulamada görüntüleneceği dil",
+        "help": "Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>kılavuzumuza</a> başvurabilirsiniz"
+      },
+      "LOCALE": {
+        "title": "Bölge",
+        "auto": "Sistem",
+        "descr": "Tarihler, sayılar için kullanılacak biçimi ayarlayın...",
+        "warn": "Bölge değiştirildiğinde uygulama güncellenecektir",
+        "first_day_of_week": "Haftanın ilk günü"
+      }
     },
     "SECURITY": {
       "title": "Güvenlik",
-      "private-mode-at-launch": "Başlangıçta özel mod",
-      "private-mode-at-launch.descr": "Uygulamayı varsayılan olarak özel modda başlatın",
-      "private-mode": "Özel mod",
-      "private-mode.descr": "Tüm parasal değerleri gizle",
-      "private-mode.activated": "Özel mod etkinleştirildi",
-      "private-mode.deactivated": "Özel mod devre dışı bırakıldı"
+      "private_mode_at_launch": "Başlangıçta özel mod",
+      "private_mode_at_launch_descr": "Uygulamayı varsayılan olarak özel modda başlatın",
+      "private_mode": "Özel mod",
+      "private_mode_descr": "Tüm parasal değerleri gizle",
+      "private_mode_activated": "Özel mod etkinleştirildi",
+      "private_mode_deactivated": "Özel mod devre dışı bırakıldı"
+    },
+    "TRANSACTIONS": {
+      "menu_title": "İşlemler",
+      "menu_descr": "İşlemlerinizin davranışını yapılandırın",
+      "title": "İşlem Ayarları",
+      "SWIPE_ACTIONS": {
+        "title": "Kaydırma eylemleri",
+        "choose_description": "Bu kaydırma yönünü kullanarak listedeki bir işlem öğesini kaydırdığınızda hangi eylemin tetikleneceğini seçin",
+        "swipe_left": "Sola kaydırın",
+        "swipe_right": "Sağa kaydırın",
+        "none": "Eylem yok",
+        "toggle_reconciled": "Mutabık kılınmayı aç/kapat",
+        "toggle_pending": "Beklemede'yi aç/kapat",
+        "toggle_voided": "Geçiş iptal edildi",
+        "toggle_unreconciled": "Mutabık kılınmayanları aç/kapat",
+        "remove_status": "Durumu kaldır"
+      }
+    },
+    "APPEARANCE": {
+      "menu_title": "Tema ve Stil",
+      "menu_descr": "Tema seçimi, renkler ve uygulama görünümüyle ilgili diğer şeyler",
+      "theme_and_colors": "Tema ve renkler",
+      "THEME": {
+        "title": "Tema",
+        "auto": "Sistem",
+        "light": "Açık",
+        "dark": "Koyu"
+      },
+      "amoled_mode": "AMOLED modu",
+      "amoled_mode_descr": "Mümkün olduğunda saf siyah bir duvar kağıdı kullanın. Bu, AMOLED ekranlara sahip cihazların pili için biraz yardımcı olacaktır",
+      "dynamic_colors": "Dinamik renkler",
+      "dynamic_colors_descr": "Mümkün olduğunda sistem vurgu renginizi kullanın",
+      "accent_color": "Vurgu rengi",
+      "accent_color_descr": "Uygulamanın arayüzün belirli kısımlarını vurgulamak için kullanacağı rengi seçin",
+      "text": "Metin",
+      "font": "Yazı tipi",
+      "font_platform": "platformu"
     }
   },
   "MORE": {

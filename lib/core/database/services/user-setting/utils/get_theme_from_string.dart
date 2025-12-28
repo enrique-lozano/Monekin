@@ -20,11 +20,11 @@ extension ThemeModeExt on ThemeMode {
 
     switch (this) {
       case ThemeMode.system:
-        return t.settings.theme_auto;
+        return t.settings.appearance.theme.auto;
       case ThemeMode.light:
-        return t.settings.theme_light;
+        return t.settings.appearance.theme.light;
       case ThemeMode.dark:
-        return t.settings.theme_dark;
+        return t.settings.appearance.theme.dark;
     }
   }
 

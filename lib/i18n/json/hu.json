@@ -747,52 +747,72 @@
     }
   },
   "SETTINGS": {
-    "title_long": "Beállítások és megjelenés",
+    "title_long": "Beállítások és Testreszabás",
     "title_short": "Beállítások",
-    "description": "Alkalmazás témája, szövegek és egyéb általános beállítások",
+    "description": "Téma, Nyelv, Adatok és egyebek",
     "edit_profile": "Profil szerkesztése",
-    "lang.section": "Nyelv és szövegek",
-    "lang.title": "Alkalmazás nyelve",
-    "lang.descr": "Nyelv, amelyen a szövegek megjelennek az alkalmazásban",
-    "lang.help": "Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'> útmutatónk</a>",
-    "locale": "Régió",
-    "locale_auto": "Rendszer",
-    "locale.descr": "Dátumok, számformátumok beállítása...",
-    "locale.warn": "Régióváltáskor az alkalmazás frissülni fog",
-    "first_day_of_week": "A hét első napja",
-    "theme_and_colors": "Témák és színek",
-    "theme": "Téma",
-    "theme.auto": "Rendszer",
-    "theme.light": "Világos",
-    "theme.dark": "Sötét",
-    "amoled-mode": "AMOLED mód",
-    "amoled-mode.descr": "Ha lehetséges, használjon tiszta fekete háttérképet. Ez némileg segíti az AMOLED képernyővel rendelkező készülékek akkumulátorát.",
-    "dynamic-colors": "Dinamikus színek",
-    "dynamic-colors.descr": "Amikor csak lehetséges, használja a rendszer kiemelő színét",
-    "accent-color": "Kiemelő szín",
-    "accent-color.descr": "Válassza ki, hogy az alkalmazás milyen színnel emelje ki a felület bizonyos részeit",
-    "font": "Betűtípus",
-    "font-platform": "Platform",
-    "SWIPE-ACTIONS": {
-      "title": "Csúsztatási műveletek",
-      "choose-description": "Válassza ki, hogy milyen művelet induljon el, ha a listában lévő tranzakciós tételt ezzel a csúsztatási irány segítségével csúsztatja",
-      "swipe-left": "Csúsztasson balra",
-      "swipe-right": "Csúsztasson jobbra",
-      "none": "Nincs akció",
-      "toggle-reconciled": "Váltás egyeztetve",
-      "toggle-pending": "Váltás függőben",
-      "toggle-voided": "Váltó érvénytelenítve",
-      "toggle-unreconciled": "Váltás nem egyeztetve",
-      "remove-status": "Állapot eltávolítása"
+    "GENERAL": {
+      "menu_title": "Általános beállítások",
+      "menu_descr": "Nyelv, adatvédelem és egyebek",
+      "LANGUAGE": {
+        "section": "Nyelv és szövegek",
+        "title": "Alkalmazás nyelve",
+        "descr": "Nyelv, amelyen a szövegek megjelennek az alkalmazásban",
+        "help": "Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'> útmutatónk</a>"
+      },
+      "LOCALE": {
+        "title": "Régió",
+        "auto": "Rendszer",
+        "descr": "Dátumok, számformátumok beállítása...",
+        "warn": "Régióváltáskor az alkalmazás frissülni fog",
+        "first_day_of_week": "A hét első napja"
+      }
     },
     "SECURITY": {
       "title": "Biztonság",
-      "private-mode-at-launch": "Privát mód indításkor",
-      "private-mode-at-launch.descr": "Az alkalmazás alapértelmezés szerinti indítása privát módban",
-      "private-mode": "Privát mód",
-      "private-mode.descr": "Minden pénzösszeg elrejtése",
-      "private-mode.activated": "Privát mód aktiválva",
-      "private-mode.deactivated": "Privát mód letiltva"
+      "private_mode_at_launch": "Privát mód indításkor",
+      "private_mode_at_launch_descr": "Az alkalmazás alapértelmezés szerinti indítása privát módban",
+      "private_mode": "Privát mód",
+      "private_mode_descr": "Minden pénzösszeg elrejtése",
+      "private_mode_activated": "Privát mód aktiválva",
+      "private_mode_deactivated": "Privát mód letiltva"
+    },
+    "TRANSACTIONS": {
+      "menu_title": "Tranzakciók",
+      "menu_descr": "Konfigurálja tranzakciói viselkedését",
+      "title": "Tranzakciós beállítások",
+      "SWIPE_ACTIONS": {
+        "title": "Csúsztatási műveletek",
+        "choose_description": "Válassza ki, hogy milyen művelet induljon el, ha a listában lévő tranzakciós tételt ezzel a csúsztatási irány segítségével csúsztatja",
+        "swipe_left": "Csúsztasson balra",
+        "swipe_right": "Csúsztasson jobbra",
+        "none": "Nincs akció",
+        "toggle_reconciled": "Váltás egyeztetve",
+        "toggle_pending": "Váltás függőben",
+        "toggle_voided": "Váltó érvénytelenítve",
+        "toggle_unreconciled": "Váltás nem egyeztetve",
+        "remove_status": "Állapot eltávolítása"
+      }
+    },
+    "APPEARANCE": {
+      "menu_title": "Téma és stílus",
+      "menu_descr": "Témaválasztás, színek és egyéb, az alkalmazás megjelenésével kapcsolatos dolgok",
+      "theme_and_colors": "Témák és színek",
+      "THEME": {
+        "title": "Téma",
+        "auto": "Rendszer",
+        "light": "Világos",
+        "dark": "Sötét"
+      },
+      "amoled_mode": "AMOLED mód",
+      "amoled_mode_descr": "Ha lehetséges, használjon tiszta fekete háttérképet. Ez némileg segíti az AMOLED képernyővel rendelkező készülékek akkumulátorát.",
+      "dynamic_colors": "Dinamikus színek",
+      "dynamic_colors_descr": "Amikor csak lehetséges, használja a rendszer kiemelő színét",
+      "accent_color": "Kiemelő szín",
+      "accent_color_descr": "Válassza ki, hogy az alkalmazás milyen színnel emelje ki a felület bizonyos részeit",
+      "text": "Szöveg",
+      "font": "Betűtípus",
+      "font_platform": "Platform"
     }
   },
   "MORE": {

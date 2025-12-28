@@ -88,15 +88,15 @@ extension TransactionSwipeActionExtension on TransactionSwipeAction? {
       case TransactionSwipeAction.edit:
         return t.ui_actions.edit;
       case TransactionSwipeAction.voided:
-        return t.settings.swipe_actions.toggle_voided;
+        return t.settings.transactions.swipe_actions.toggle_voided;
       case TransactionSwipeAction.pending:
-        return t.settings.swipe_actions.toggle_pending;
+        return t.settings.transactions.swipe_actions.toggle_pending;
       case TransactionSwipeAction.reconciled:
-        return t.settings.swipe_actions.toggle_reconciled;
+        return t.settings.transactions.swipe_actions.toggle_reconciled;
       case TransactionSwipeAction.unreconciled:
-        return t.settings.swipe_actions.toggle_unreconciled;
+        return t.settings.transactions.swipe_actions.toggle_unreconciled;
       default:
-        return t.settings.swipe_actions.none;
+        return t.settings.transactions.swipe_actions.none;
     }
   }
 }

@@ -747,52 +747,72 @@
     }
   },
   "SETTINGS": {
-    "title_long": "Einstellungen und Aussehen",
+    "title_long": "Einstellungen & Anpassung",
     "title_short": "Einstellungen",
-    "description": "App-Theme, Texte und andere allgemeine Einstellungen",
+    "description": "Thema, Sprache, Daten und mehr",
     "edit_profile": "Profil bearbeiten",
-    "lang.section": "Sprache und Texte",
-    "lang.title": "App-Sprache",
-    "lang.descr": "Sprache, in der die Texte in der App angezeigt werden",
-    "lang.help": "Wenn an den Übersetzungen dieser App mitarbeiten möchten, kannst du dich an <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>unser Beschreibung</a> wenden",
-    "locale": "Region",
-    "locale_auto": "System",
-    "locale.descr": "Lege das für Datumsangaben, Zahlen usw. zu verwendende Format fest.",
-    "locale.warn": "Wenn Du die Region änderst, wird die App aktualisiert",
-    "first_day_of_week": "Erster Tag der Woche",
-    "theme_and_colors": "Thema und Farben",
-    "theme": "Thema",
-    "theme.auto": "System",
-    "theme.light": "Hell",
-    "theme.dark": "Dunkel",
-    "amoled-mode": "AMOLED-Modus",
-    "amoled-mode.descr": "Verwende nach Möglichkeit einn rein schwarzen Hintergrund. Das wird den Akku von Geräten mit AMOLED-Bildschirmen etwas schonen.",
-    "dynamic-colors": "Dynamische Farben",
-    "dynamic-colors.descr": "Verwende wann immer möglich die Akzentfarbe des Systems",
-    "accent-color": "Akzentfarbe",
-    "accent-color.descr": "Wähle die Farbe aus, mit der die App bestimmte Teile der Benutzeroberfläche hervorhebt",
-    "font": "Schriftart",
-    "font-platform": "Plattform",
-    "SWIPE-ACTIONS": {
-      "title": "Wischaktionen",
-      "choose-description": "Wählen Sie aus, welche Aktion ausgelöst wird, wenn Sie mit dieser Wischrichtung über ein Transaktionselement in der Liste wischen",
-      "swipe-left": "Wischen Sie nach links",
-      "swipe-right": "Wischen Sie nach rechts",
-      "none": "Keine Aktion",
-      "toggle-reconciled": "Toggle abgeglichen",
-      "toggle-pending": "Umschalten steht aus",
-      "toggle-voided": "Umschalten ungültig",
-      "toggle-unreconciled": "Nicht abgestimmt umschalten",
-      "remove-status": "Status entfernen"
+    "GENERAL": {
+      "menu_title": "Allgemeine Einstellungen",
+      "menu_descr": "Sprache, Datenschutz und mehr",
+      "LANGUAGE": {
+        "section": "Sprache und Texte",
+        "title": "App-Sprache",
+        "descr": "Sprache, in der die Texte in der App angezeigt werden",
+        "help": "Wenn an den Übersetzungen dieser App mitarbeiten möchten, kannst du dich an <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>unser Beschreibung</a> wenden"
+      },
+      "LOCALE": {
+        "title": "Region",
+        "auto": "System",
+        "descr": "Lege das für Datumsangaben, Zahlen usw. zu verwendende Format fest.",
+        "warn": "Wenn Du die Region änderst, wird die App aktualisiert",
+        "first_day_of_week": "Erster Tag der Woche"
+      }
     },
     "SECURITY": {
       "title": "Sicherheit",
-      "private-mode-at-launch": "Privatmodus beim Start",
-      "private-mode-at-launch.descr": "Starte die App standardmäßig im privaten Modus",
-      "private-mode": "Privatmodus",
-      "private-mode.descr": "Alle Geldwerte ausblenden",
-      "private-mode.activated": "Privatmodus aktiviert",
-      "private-mode.deactivated": "Privatmodus deaktiviert"
+      "private_mode_at_launch": "Privatmodus beim Start",
+      "private_mode_at_launch_descr": "Starte die App standardmäßig im privaten Modus",
+      "private_mode": "Privatmodus",
+      "private_mode_descr": "Alle Geldwerte ausblenden",
+      "private_mode_activated": "Privatmodus aktiviert",
+      "private_mode_deactivated": "Privatmodus deaktiviert"
+    },
+    "TRANSACTIONS": {
+      "menu_title": "Transaktionen",
+      "menu_descr": "Konfigurieren Sie das Verhalten Ihrer Transaktionen",
+      "title": "Transaktionseinstellungen",
+      "SWIPE_ACTIONS": {
+        "title": "Wischaktionen",
+        "choose_description": "Wählen Sie aus, welche Aktion ausgelöst wird, wenn Sie mit dieser Wischrichtung über ein Transaktionselement in der Liste wischen",
+        "swipe_left": "Wischen Sie nach links",
+        "swipe_right": "Wischen Sie nach rechts",
+        "none": "Keine Aktion",
+        "toggle_reconciled": "Toggle abgeglichen",
+        "toggle_pending": "Umschalten steht aus",
+        "toggle_voided": "Umschalten ungültig",
+        "toggle_unreconciled": "Nicht abgestimmt umschalten",
+        "remove_status": "Status entfernen"
+      }
+    },
+    "APPEARANCE": {
+      "menu_title": "Thema & Stil",
+      "menu_descr": "Themenauswahl, Farben und andere Dinge im Zusammenhang mit dem Erscheinungsbild der App",
+      "theme_and_colors": "Thema und Farben",
+      "THEME": {
+        "title": "Thema",
+        "auto": "System",
+        "light": "Hell",
+        "dark": "Dunkel"
+      },
+      "amoled_mode": "AMOLED-Modus",
+      "amoled_mode_descr": "Verwende nach Möglichkeit einn rein schwarzen Hintergrund. Das wird den Akku von Geräten mit AMOLED-Bildschirmen etwas schonen.",
+      "dynamic_colors": "Dynamische Farben",
+      "dynamic_colors_descr": "Verwende wann immer möglich die Akzentfarbe des Systems",
+      "accent_color": "Akzentfarbe",
+      "accent_color_descr": "Wähle die Farbe aus, mit der die App bestimmte Teile der Benutzeroberfläche hervorhebt",
+      "text": "Text",
+      "font": "Schriftart",
+      "font_platform": "Plattform"
     }
   },
   "MORE": {

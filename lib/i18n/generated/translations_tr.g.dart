@@ -490,34 +490,14 @@ class _TranslationsSettingsTr implements TranslationsSettingsEn {
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get title_long => 'Ayarlar ve görünüm';
+	@override String get title_long => 'Ayarlar ve Özelleştirme';
 	@override String get title_short => 'Ayarlar';
-	@override String get description => 'Uygulama teması, metinler ve diğer genel ayarlar';
+	@override String get description => 'Tema, Dil, Veriler ve daha fazlası';
 	@override String get edit_profile => 'Profili düzenle';
-	@override String get lang_section => 'Dil ve metinler';
-	@override String get lang_title => 'Uygulama dili';
-	@override String get lang_descr => 'Metinlerin uygulamada görüntüleneceği dil';
-	@override String get lang_help => 'Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>kılavuzumuza</a> başvurabilirsiniz';
-	@override String get locale => 'Bölge';
-	@override String get locale_auto => 'Sistem';
-	@override String get locale_descr => 'Tarihler, sayılar için kullanılacak biçimi ayarlayın...';
-	@override String get locale_warn => 'Bölge değiştirildiğinde uygulama güncellenecektir';
-	@override String get first_day_of_week => 'Haftanın ilk günü';
-	@override String get theme_and_colors => 'Tema ve renkler';
-	@override String get theme => 'Tema';
-	@override String get theme_auto => 'Sistem';
-	@override String get theme_light => 'Açık';
-	@override String get theme_dark => 'Koyu';
-	@override String get amoled_mode => 'AMOLED modu';
-	@override String get amoled_mode_descr => 'Mümkün olduğunda saf siyah bir duvar kağıdı kullanın. Bu, AMOLED ekranlara sahip cihazların pili için biraz yardımcı olacaktır';
-	@override String get dynamic_colors => 'Dinamik renkler';
-	@override String get dynamic_colors_descr => 'Mümkün olduğunda sistem vurgu renginizi kullanın';
-	@override String get accent_color => 'Vurgu rengi';
-	@override String get accent_color_descr => 'Uygulamanın arayüzün belirli kısımlarını vurgulamak için kullanacağı rengi seçin';
-	@override String get font => 'Yazı tipi';
-	@override String get font_platform => 'platformu';
-	@override late final _TranslationsSettingsSwipeActionsTr swipe_actions = _TranslationsSettingsSwipeActionsTr._(_root);
+	@override late final _TranslationsSettingsGeneralTr general = _TranslationsSettingsGeneralTr._(_root);
 	@override late final _TranslationsSettingsSecurityTr security = _TranslationsSettingsSecurityTr._(_root);
+	@override late final _TranslationsSettingsTransactionsTr transactions = _TranslationsSettingsTransactionsTr._(_root);
+	@override late final _TranslationsSettingsAppearanceTr appearance = _TranslationsSettingsAppearanceTr._(_root);
 }
 
 // Path: more
@@ -1169,23 +1149,17 @@ class _TranslationsBackupAboutTr implements TranslationsBackupAboutEn {
 	@override String get size => 'Boyut';
 }
 
-// Path: settings.swipe_actions
-class _TranslationsSettingsSwipeActionsTr implements TranslationsSettingsSwipeActionsEn {
-	_TranslationsSettingsSwipeActionsTr._(this._root);
+// Path: settings.general
+class _TranslationsSettingsGeneralTr implements TranslationsSettingsGeneralEn {
+	_TranslationsSettingsGeneralTr._(this._root);
 
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Kaydırma eylemleri';
-	@override String get choose_description => 'Bu kaydırma yönünü kullanarak listedeki bir işlem öğesini kaydırdığınızda hangi eylemin tetikleneceğini seçin';
-	@override String get swipe_left => 'Sola kaydırın';
-	@override String get swipe_right => 'Sağa kaydırın';
-	@override String get none => 'Eylem yok';
-	@override String get toggle_reconciled => 'Mutabık kılınmayı aç/kapat';
-	@override String get toggle_pending => 'Beklemede\'yi aç/kapat';
-	@override String get toggle_voided => 'Geçiş iptal edildi';
-	@override String get toggle_unreconciled => 'Mutabık kılınmayanları aç/kapat';
-	@override String get remove_status => 'Durumu kaldır';
+	@override String get menu_title => 'Genel Ayarlar';
+	@override String get menu_descr => 'Dil, gizlilik ve daha fazlası';
+	@override late final _TranslationsSettingsGeneralLanguageTr language = _TranslationsSettingsGeneralLanguageTr._(_root);
+	@override late final _TranslationsSettingsGeneralLocaleTr locale = _TranslationsSettingsGeneralLocaleTr._(_root);
 }
 
 // Path: settings.security
@@ -1202,6 +1176,41 @@ class _TranslationsSettingsSecurityTr implements TranslationsSettingsSecurityEn 
 	@override String get private_mode_descr => 'Tüm parasal değerleri gizle';
 	@override String get private_mode_activated => 'Özel mod etkinleştirildi';
 	@override String get private_mode_deactivated => 'Özel mod devre dışı bırakıldı';
+}
+
+// Path: settings.transactions
+class _TranslationsSettingsTransactionsTr implements TranslationsSettingsTransactionsEn {
+	_TranslationsSettingsTransactionsTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get menu_title => 'İşlemler';
+	@override String get menu_descr => 'İşlemlerinizin davranışını yapılandırın';
+	@override String get title => 'İşlem Ayarları';
+	@override late final _TranslationsSettingsTransactionsSwipeActionsTr swipe_actions = _TranslationsSettingsTransactionsSwipeActionsTr._(_root);
+}
+
+// Path: settings.appearance
+class _TranslationsSettingsAppearanceTr implements TranslationsSettingsAppearanceEn {
+	_TranslationsSettingsAppearanceTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get menu_title => 'Tema ve Stil';
+	@override String get menu_descr => 'Tema seçimi, renkler ve uygulama görünümüyle ilgili diğer şeyler';
+	@override String get theme_and_colors => 'Tema ve renkler';
+	@override late final _TranslationsSettingsAppearanceThemeTr theme = _TranslationsSettingsAppearanceThemeTr._(_root);
+	@override String get amoled_mode => 'AMOLED modu';
+	@override String get amoled_mode_descr => 'Mümkün olduğunda saf siyah bir duvar kağıdı kullanın. Bu, AMOLED ekranlara sahip cihazların pili için biraz yardımcı olacaktır';
+	@override String get dynamic_colors => 'Dinamik renkler';
+	@override String get dynamic_colors_descr => 'Mümkün olduğunda sistem vurgu renginizi kullanın';
+	@override String get accent_color => 'Vurgu rengi';
+	@override String get accent_color_descr => 'Uygulamanın arayüzün belirli kısımlarını vurgulamak için kullanacağı rengi seçin';
+	@override String get text => 'Metin';
+	@override String get font => 'Yazı tipi';
+	@override String get font_platform => 'platformu';
 }
 
 // Path: more.data
@@ -1475,6 +1484,65 @@ class _TranslationsBackupImportManualImportTr implements TranslationsBackupImpor
 		'Diğer isteğe bağlı işlem öznitelikleri için sütunları belirtir',
 	];
 	@override String success({required Object x}) => '${x} işlem başarıyla içe aktarıldı';
+}
+
+// Path: settings.general.language
+class _TranslationsSettingsGeneralLanguageTr implements TranslationsSettingsGeneralLanguageEn {
+	_TranslationsSettingsGeneralLanguageTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get section => 'Dil ve metinler';
+	@override String get title => 'Uygulama dili';
+	@override String get descr => 'Metinlerin uygulamada görüntüleneceği dil';
+	@override String get help => 'Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>kılavuzumuza</a> başvurabilirsiniz';
+}
+
+// Path: settings.general.locale
+class _TranslationsSettingsGeneralLocaleTr implements TranslationsSettingsGeneralLocaleEn {
+	_TranslationsSettingsGeneralLocaleTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Bölge';
+	@override String get auto => 'Sistem';
+	@override String get descr => 'Tarihler, sayılar için kullanılacak biçimi ayarlayın...';
+	@override String get warn => 'Bölge değiştirildiğinde uygulama güncellenecektir';
+	@override String get first_day_of_week => 'Haftanın ilk günü';
+}
+
+// Path: settings.transactions.swipe_actions
+class _TranslationsSettingsTransactionsSwipeActionsTr implements TranslationsSettingsTransactionsSwipeActionsEn {
+	_TranslationsSettingsTransactionsSwipeActionsTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Kaydırma eylemleri';
+	@override String get choose_description => 'Bu kaydırma yönünü kullanarak listedeki bir işlem öğesini kaydırdığınızda hangi eylemin tetikleneceğini seçin';
+	@override String get swipe_left => 'Sola kaydırın';
+	@override String get swipe_right => 'Sağa kaydırın';
+	@override String get none => 'Eylem yok';
+	@override String get toggle_reconciled => 'Mutabık kılınmayı aç/kapat';
+	@override String get toggle_pending => 'Beklemede\'yi aç/kapat';
+	@override String get toggle_voided => 'Geçiş iptal edildi';
+	@override String get toggle_unreconciled => 'Mutabık kılınmayanları aç/kapat';
+	@override String get remove_status => 'Durumu kaldır';
+}
+
+// Path: settings.appearance.theme
+class _TranslationsSettingsAppearanceThemeTr implements TranslationsSettingsAppearanceThemeEn {
+	_TranslationsSettingsAppearanceThemeTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Tema';
+	@override String get auto => 'Sistem';
+	@override String get light => 'Açık';
+	@override String get dark => 'Koyu';
 }
 
 // Path: more.about_us.legal
@@ -2170,42 +2238,21 @@ extension on TranslationsTr {
 		map['backup.about.modify_date'] = 'Son değiştirilme';
 		map['backup.about.last_backup'] = 'Son yedekleme';
 		map['backup.about.size'] = 'Boyut';
-		map['settings.title_long'] = 'Ayarlar ve görünüm';
+		map['settings.title_long'] = 'Ayarlar ve Özelleştirme';
 		map['settings.title_short'] = 'Ayarlar';
-		map['settings.description'] = 'Uygulama teması, metinler ve diğer genel ayarlar';
+		map['settings.description'] = 'Tema, Dil, Veriler ve daha fazlası';
 		map['settings.edit_profile'] = 'Profili düzenle';
-		map['settings.lang_section'] = 'Dil ve metinler';
-		map['settings.lang_title'] = 'Uygulama dili';
-		map['settings.lang_descr'] = 'Metinlerin uygulamada görüntüleneceği dil';
-		map['settings.lang_help'] = 'Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>kılavuzumuza</a> başvurabilirsiniz';
-		map['settings.locale'] = 'Bölge';
-		map['settings.locale_auto'] = 'Sistem';
-		map['settings.locale_descr'] = 'Tarihler, sayılar için kullanılacak biçimi ayarlayın...';
-		map['settings.locale_warn'] = 'Bölge değiştirildiğinde uygulama güncellenecektir';
-		map['settings.first_day_of_week'] = 'Haftanın ilk günü';
-		map['settings.theme_and_colors'] = 'Tema ve renkler';
-		map['settings.theme'] = 'Tema';
-		map['settings.theme_auto'] = 'Sistem';
-		map['settings.theme_light'] = 'Açık';
-		map['settings.theme_dark'] = 'Koyu';
-		map['settings.amoled_mode'] = 'AMOLED modu';
-		map['settings.amoled_mode_descr'] = 'Mümkün olduğunda saf siyah bir duvar kağıdı kullanın. Bu, AMOLED ekranlara sahip cihazların pili için biraz yardımcı olacaktır';
-		map['settings.dynamic_colors'] = 'Dinamik renkler';
-		map['settings.dynamic_colors_descr'] = 'Mümkün olduğunda sistem vurgu renginizi kullanın';
-		map['settings.accent_color'] = 'Vurgu rengi';
-		map['settings.accent_color_descr'] = 'Uygulamanın arayüzün belirli kısımlarını vurgulamak için kullanacağı rengi seçin';
-		map['settings.font'] = 'Yazı tipi';
-		map['settings.font_platform'] = 'platformu';
-		map['settings.swipe_actions.title'] = 'Kaydırma eylemleri';
-		map['settings.swipe_actions.choose_description'] = 'Bu kaydırma yönünü kullanarak listedeki bir işlem öğesini kaydırdığınızda hangi eylemin tetikleneceğini seçin';
-		map['settings.swipe_actions.swipe_left'] = 'Sola kaydırın';
-		map['settings.swipe_actions.swipe_right'] = 'Sağa kaydırın';
-		map['settings.swipe_actions.none'] = 'Eylem yok';
-		map['settings.swipe_actions.toggle_reconciled'] = 'Mutabık kılınmayı aç/kapat';
-		map['settings.swipe_actions.toggle_pending'] = 'Beklemede\'yi aç/kapat';
-		map['settings.swipe_actions.toggle_voided'] = 'Geçiş iptal edildi';
-		map['settings.swipe_actions.toggle_unreconciled'] = 'Mutabık kılınmayanları aç/kapat';
-		map['settings.swipe_actions.remove_status'] = 'Durumu kaldır';
+		map['settings.general.menu_title'] = 'Genel Ayarlar';
+		map['settings.general.menu_descr'] = 'Dil, gizlilik ve daha fazlası';
+		map['settings.general.language.section'] = 'Dil ve metinler';
+		map['settings.general.language.title'] = 'Uygulama dili';
+		map['settings.general.language.descr'] = 'Metinlerin uygulamada görüntüleneceği dil';
+		map['settings.general.language.help'] = 'Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>kılavuzumuza</a> başvurabilirsiniz';
+		map['settings.general.locale.title'] = 'Bölge';
+		map['settings.general.locale.auto'] = 'Sistem';
+		map['settings.general.locale.descr'] = 'Tarihler, sayılar için kullanılacak biçimi ayarlayın...';
+		map['settings.general.locale.warn'] = 'Bölge değiştirildiğinde uygulama güncellenecektir';
+		map['settings.general.locale.first_day_of_week'] = 'Haftanın ilk günü';
 		map['settings.security.title'] = 'Güvenlik';
 		map['settings.security.private_mode_at_launch'] = 'Başlangıçta özel mod';
 		map['settings.security.private_mode_at_launch_descr'] = 'Uygulamayı varsayılan olarak özel modda başlatın';
@@ -2213,6 +2260,35 @@ extension on TranslationsTr {
 		map['settings.security.private_mode_descr'] = 'Tüm parasal değerleri gizle';
 		map['settings.security.private_mode_activated'] = 'Özel mod etkinleştirildi';
 		map['settings.security.private_mode_deactivated'] = 'Özel mod devre dışı bırakıldı';
+		map['settings.transactions.menu_title'] = 'İşlemler';
+		map['settings.transactions.menu_descr'] = 'İşlemlerinizin davranışını yapılandırın';
+		map['settings.transactions.title'] = 'İşlem Ayarları';
+		map['settings.transactions.swipe_actions.title'] = 'Kaydırma eylemleri';
+		map['settings.transactions.swipe_actions.choose_description'] = 'Bu kaydırma yönünü kullanarak listedeki bir işlem öğesini kaydırdığınızda hangi eylemin tetikleneceğini seçin';
+		map['settings.transactions.swipe_actions.swipe_left'] = 'Sola kaydırın';
+		map['settings.transactions.swipe_actions.swipe_right'] = 'Sağa kaydırın';
+		map['settings.transactions.swipe_actions.none'] = 'Eylem yok';
+		map['settings.transactions.swipe_actions.toggle_reconciled'] = 'Mutabık kılınmayı aç/kapat';
+		map['settings.transactions.swipe_actions.toggle_pending'] = 'Beklemede\'yi aç/kapat';
+		map['settings.transactions.swipe_actions.toggle_voided'] = 'Geçiş iptal edildi';
+		map['settings.transactions.swipe_actions.toggle_unreconciled'] = 'Mutabık kılınmayanları aç/kapat';
+		map['settings.transactions.swipe_actions.remove_status'] = 'Durumu kaldır';
+		map['settings.appearance.menu_title'] = 'Tema ve Stil';
+		map['settings.appearance.menu_descr'] = 'Tema seçimi, renkler ve uygulama görünümüyle ilgili diğer şeyler';
+		map['settings.appearance.theme_and_colors'] = 'Tema ve renkler';
+		map['settings.appearance.theme.title'] = 'Tema';
+		map['settings.appearance.theme.auto'] = 'Sistem';
+		map['settings.appearance.theme.light'] = 'Açık';
+		map['settings.appearance.theme.dark'] = 'Koyu';
+		map['settings.appearance.amoled_mode'] = 'AMOLED modu';
+		map['settings.appearance.amoled_mode_descr'] = 'Mümkün olduğunda saf siyah bir duvar kağıdı kullanın. Bu, AMOLED ekranlara sahip cihazların pili için biraz yardımcı olacaktır';
+		map['settings.appearance.dynamic_colors'] = 'Dinamik renkler';
+		map['settings.appearance.dynamic_colors_descr'] = 'Mümkün olduğunda sistem vurgu renginizi kullanın';
+		map['settings.appearance.accent_color'] = 'Vurgu rengi';
+		map['settings.appearance.accent_color_descr'] = 'Uygulamanın arayüzün belirli kısımlarını vurgulamak için kullanacağı rengi seçin';
+		map['settings.appearance.text'] = 'Metin';
+		map['settings.appearance.font'] = 'Yazı tipi';
+		map['settings.appearance.font_platform'] = 'platformu';
 		map['more.title'] = 'Daha Fazla';
 		map['more.title_long'] = 'Daha fazla eylem';
 		map['more.data.display'] = 'Veri';

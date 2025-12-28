@@ -16,7 +16,7 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../core/database/backup/backup_database_service.dart';
+import '../../../../core/database/backup/backup_database_service.dart';
 
 enum _ExportFormats { csv, db }
 

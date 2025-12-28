@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/home/dashboard.page.dart';
-import 'package:monekin/app/settings/settings.page.dart';
+import 'package:monekin/app/settings/more_actions.page.dart';
 import 'package:monekin/app/stats/stats_page.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
@@ -124,7 +124,7 @@ List<MainMenuDestination> getAllDestinations() {
       label: t.more.title,
       selectedIcon: Icons.more_horiz_rounded,
       icon: Icons.more_horiz_rounded,
-      destination: SettingsPage(key: settingsPageKey),
+      destination: MoreActionsPage(key: settingsPageKey),
       pageKey: settingsPageKey,
     ),
   ];

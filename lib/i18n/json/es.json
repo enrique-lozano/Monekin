@@ -750,52 +750,72 @@
     }
   },
   "SETTINGS": {
-    "title_long": "Configuración y apariencia",
+    "title_long": "Ajustes y Personalización",
     "title_short": "Configuración",
-    "description": "Tema de la aplicación, textos y otras configuraciones generales",
+    "description": "Tema, Idioma, Datos y más",
     "edit_profile": "Editar perfil",
-    "lang.section": "Idioma y textos",
-    "lang.title": "Idioma de la aplicación",
-    "lang.descr": "Idioma en el que se mostrarán los textos en la aplicación",
-    "lang.help": "Si quieres colaborar con las traducciones de esta app puedes consultar <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>nuestra guía</a> ",
-    "locale": "Región",
-    "locale_auto": "Sistema",
-    "locale.descr": "Establecer el formato a utilizar para fechas, números...",
-    "locale.warn": "Al cambiar la región, la aplicación se actualizará",
-    "first_day_of_week": "Primer día de la semana",
-    "theme_and_colors": "Tema y colores",
-    "theme": "Tema",
-    "theme.auto": "Sistema",
-    "theme.light": "Claro",
-    "theme.dark": "Oscuro",
-    "amoled-mode": "Modo AMOLED",
-    "amoled-mode.descr": "Usar un fondo negro puro cuando sea posible. Esto ayudará ligeramente a la batería de dispositivos con pantallas AMOLED",
-    "dynamic-colors": "Colores dinámicos",
-    "dynamic-colors.descr": "Usar el color de acento de su sistema siempre que sea posible",
-    "accent-color": "Color de acento",
-    "accent-color.descr": "Elegir el color que la aplicación usará para enfatizar ciertas partes de la interfaz",
-    "font": "Fuente",
-    "font-platform": "Plataforma",
-    "SWIPE-ACTIONS": {
-      "title": "Acciones al deslizar el dedo",
-      "choose-description": "Elije qué acción se activará cuando deslices una transacción del listado de transacciones usando esta dirección de deslizamiento",
-      "swipe-left": "Desliza hacia la izquierda",
-      "swipe-right": "Desliza hacia la derecha",
-      "none": "No action",
-      "toggle-reconciled": "Alternar conciliado",
-      "toggle-pending": "Alternar pendiente",
-      "toggle-voided": "Alternar anulado",
-      "toggle-unreconciled": "Alternar no reconciliado",
-      "remove-status": "Eliminar estado"
+    "GENERAL": {
+      "menu_title": "Ajustes generales",
+      "menu_descr": "Idioma, privacidad y más",
+      "LANGUAGE": {
+        "section": "Idioma y textos",
+        "title": "Idioma de la aplicación",
+        "descr": "Idioma en el que se mostrarán los textos en la aplicación",
+        "help": "Si quieres colaborar con las traducciones de esta app puedes consultar <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>nuestra guía</a> "
+      },
+      "LOCALE": {
+        "title": "Región",
+        "auto": "Sistema",
+        "descr": "Establecer el formato a utilizar para fechas, números...",
+        "warn": "Al cambiar la región, la aplicación se actualizará",
+        "first_day_of_week": "Primer día de la semana"
+      }
     },
     "SECURITY": {
       "title": "Seguridad",
-      "private-mode-at-launch": "Modo privado al arrancar",
-      "private-mode-at-launch.descr": "Arranca la app en modo privado por defecto",
-      "private-mode": "Modo privado",
-      "private-mode.descr": "Oculta todos los valores monetarios",
-      "private-mode.activated": "Modo privado activado",
-      "private-mode.deactivated": "Modo privado desactivado"
+      "private_mode_at_launch": "Modo privado al arrancar",
+      "private_mode_at_launch_descr": "Arranca la app en modo privado por defecto",
+      "private_mode": "Modo privado",
+      "private_mode_descr": "Oculta todos los valores monetarios",
+      "private_mode_activated": "Modo privado activado",
+      "private_mode_deactivated": "Modo privado desactivado"
+    },
+    "TRANSACTIONS": {
+      "menu_title": "Transacciones",
+      "menu_descr": "Configura el comportamiento de tus transacciones",
+      "title": "Ajustes de transacciones",
+      "SWIPE_ACTIONS": {
+        "title": "Acciones al deslizar el dedo",
+        "choose_description": "Elije qué acción se activará cuando deslices una transacción del listado de transacciones usando esta dirección de deslizamiento",
+        "swipe_left": "Desliza hacia la izquierda",
+        "swipe_right": "Desliza hacia la derecha",
+        "none": "No action",
+        "toggle_reconciled": "Alternar conciliado",
+        "toggle_pending": "Alternar pendiente",
+        "toggle_voided": "Alternar anulado",
+        "toggle_unreconciled": "Alternar no reconciliado",
+        "remove_status": "Eliminar estado"
+      }
+    },
+    "APPEARANCE": {
+      "menu_title": "Tema y estilo",
+      "menu_descr": "Selección de tema, colores y otras cosas relacionadas con la apariencia de la aplicación",
+      "theme_and_colors": "Tema y colores",
+      "THEME": {
+        "title": "Tema",
+        "auto": "Sistema",
+        "light": "Claro",
+        "dark": "Oscuro"
+      },
+      "amoled_mode": "Modo AMOLED",
+      "amoled_mode_descr": "Usar un fondo negro puro cuando sea posible. Esto ayudará ligeramente a la batería de dispositivos con pantallas AMOLED",
+      "dynamic_colors": "Colores dinámicos",
+      "dynamic_colors_descr": "Usar el color de acento de su sistema siempre que sea posible",
+      "accent_color": "Color de acento",
+      "accent_color_descr": "Elegir el color que la aplicación usará para enfatizar ciertas partes de la interfaz",
+      "text": "Texto",
+      "font": "Fuente",
+      "font_platform": "Plataforma"
     }
   },
   "MORE": {

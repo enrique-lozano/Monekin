@@ -733,52 +733,72 @@
     }
   },
   "SETTINGS": {
-    "title_long": "Settings and appearance",
+    "title_long": "Settings & Customization",
     "title_short": "Settings",
-    "description": "App theme, texts and other general settings",
+    "description": "Theme, Language, Data and more",
     "edit_profile": "Edit profile",
-    "lang.section": "Language and texts",
-    "lang.title": "App language",
-    "lang.descr": "Language in which the texts will be displayed in the app",
-    "lang.help": "If you want to collaborate with the translations of this app, you can consult <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>our guide</a>",
-    "locale": "Region",
-    "locale_auto": "System",
-    "locale.descr": "Set the format to use for dates, numbers...",
-    "locale.warn": "When changing region the app will update",
-    "first_day_of_week": "First day of week",
-    "theme_and_colors": "Theme and colors",
-    "theme": "Theme",
-    "theme.auto": "System",
-    "theme.light": "Light",
-    "theme.dark": "Dark",
-    "amoled-mode": "AMOLED mode",
-    "amoled-mode.descr": "Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens",
-    "dynamic-colors": "Dynamic colors",
-    "dynamic-colors.descr": "Use your system accent color whenever possible",
-    "accent-color": "Accent color",
-    "accent-color.descr": "Choose the color the app will use to emphasize certain parts of the interface",
-    "font": "Font",
-    "font-platform": "Platform",
-    "SWIPE-ACTIONS": {
-      "title": "Swipe actions",
-      "choose-description": "Choose what action will be triggered when you swipe a transaction item in the list using this swipe direction",
-      "swipe-left": "Swipe left",
-      "swipe-right": "Swipe right",
-      "none": "No action",
-      "toggle-reconciled": "Toggle reconciled",
-      "toggle-pending": "Toggle pending",
-      "toggle-voided": "Toggle voided",
-      "toggle-unreconciled": "Toggle unreconciled",
-      "remove-status": "Remove status"
+    "GENERAL": {
+      "menu_title": "General Settings",
+      "menu_descr": "Language, privacy, and more",
+      "LANGUAGE": {
+        "section": "Language and texts",
+        "title": "App language",
+        "descr": "Language in which the texts will be displayed in the app",
+        "help": "If you want to collaborate with the translations of this app, you can consult <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>our guide</a>"
+      },
+      "LOCALE": {
+        "title": "Region",
+        "auto": "System",
+        "descr": "Set the format to use for dates, numbers...",
+        "warn": "When changing region the app will update",
+        "first_day_of_week": "First day of week"
+      }
     },
     "SECURITY": {
-      "title": "Seguridad",
-      "private-mode-at-launch": "Private mode at launch",
-      "private-mode-at-launch.descr": "Launch the app in private mode by default",
-      "private-mode": "Private mode",
-      "private-mode.descr": "Hide all monetary values",
-      "private-mode.activated": "Private mode activated",
-      "private-mode.deactivated": "Private mode disabled"
+      "title": "Security",
+      "private_mode_at_launch": "Private mode at launch",
+      "private_mode_at_launch_descr": "Launch the app in private mode by default",
+      "private_mode": "Private mode",
+      "private_mode_descr": "Hide all monetary values",
+      "private_mode_activated": "Private mode activated",
+      "private_mode_deactivated": "Private mode disabled"
+    },
+    "TRANSACTIONS": {
+      "menu_title": "Transactions",
+      "menu_descr": "Configure the behavior of your transactions",
+      "title": "Transactions Settings",
+      "SWIPE_ACTIONS": {
+        "title": "Swipe actions",
+        "choose_description": "Choose what action will be triggered when you swipe a transaction item in the list using this swipe direction",
+        "swipe_left": "Swipe left",
+        "swipe_right": "Swipe right",
+        "none": "No action",
+        "toggle_reconciled": "Toggle reconciled",
+        "toggle_pending": "Toggle pending",
+        "toggle_voided": "Toggle voided",
+        "toggle_unreconciled": "Toggle unreconciled",
+        "remove_status": "Remove status"
+      }
+    },
+    "APPEARANCE": {
+      "menu_title": "Theme & Style",
+      "menu_descr": "Theme selection, colors and other things related to the app appearance",
+      "theme_and_colors": "Theme and colors",
+      "THEME": {
+        "title": "Theme",
+        "auto": "System",
+        "light": "Light",
+        "dark": "Dark"
+      },
+      "amoled_mode": "AMOLED mode",
+      "amoled_mode_descr": "Use a pure black wallpaper when possible. This will slightly help the battery of devices with AMOLED screens",
+      "dynamic_colors": "Dynamic colors",
+      "dynamic_colors_descr": "Use your system accent color whenever possible",
+      "accent_color": "Accent color",
+      "accent_color_descr": "Choose the color the app will use to emphasize certain parts of the interface",
+      "text": "Text",
+      "font": "Font",
+      "font_platform": "Platform"
     }
   },
   "MORE": {

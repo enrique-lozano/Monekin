@@ -747,52 +747,72 @@
     }
   },
   "SETTINGS": {
-    "title_long": "設定和外觀",
+    "title_long": "設定與自訂",
     "title_short": "設定",
-    "description": "應用程式主題、文字和其他常規設定",
+    "description": "主題、語言、數據等",
     "edit_profile": "編輯個人資料",
-    "lang.section": "語言和文本",
-    "lang.title": "應用程式語言",
-    "lang.descr": "應用程式中顯示文字的語言",
-    "lang.help": "如果您想與此應用程式的翻譯合作，您可以參考<a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>我們的指南</a>",
-    "locale": "地區",
-    "locale_auto": "系統",
-    "locale.descr": "設定用於日期、數字的格式...",
-    "locale.warn": "更改區域時應用程式將更新",
-    "first_day_of_week": "一週的第一天",
-    "theme_and_colors": "主題和顏色",
-    "theme": "主題",
-    "theme.auto": "系統",
-    "theme.light": "明亮主題",
-    "theme.dark": "黑暗主題",
-    "amoled-mode": "amoled mode",
-    "amoled-mode.descr": "盡可能使用純黑色壁紙。這對 AMOLED 螢幕設備的電池略有幫助",
-    "dynamic-colors": "動態色彩",
-    "dynamic-colors.descr": "盡可能使用系統強調色",
-    "accent-color": "強調色",
-    "accent-color.descr": "選擇應用程式用來強調介面某些部分的顏色",
-    "font": "字體",
-    "font-platform": "平台",
-    "SWIPE-ACTIONS": {
-      "title": "滑動操作",
-      "choose-description": "選擇當您使用此滑動方向滑動列表中的交易項目時將觸發什麼操作",
-      "swipe-left": "向左滑動",
-      "swipe-right": "向右滑動",
-      "none": "無動作",
-      "toggle-reconciled": "切換已調節",
-      "toggle-pending": "切換待處理",
-      "toggle-voided": "切換作廢",
-      "toggle-unreconciled": "切換不可調和",
-      "remove-status": "刪除狀態"
+    "GENERAL": {
+      "menu_title": "常規設定",
+      "menu_descr": "語言、隱私等",
+      "LANGUAGE": {
+        "section": "語言和文本",
+        "title": "應用程式語言",
+        "descr": "應用程式中顯示文字的語言",
+        "help": "如果您想與此應用程式的翻譯合作，您可以參考<a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>我們的指南</a>"
+      },
+      "LOCALE": {
+        "title": "地區",
+        "auto": "系統",
+        "descr": "設定用於日期、數字的格式...",
+        "warn": "更改區域時應用程式將更新",
+        "first_day_of_week": "一週的第一天"
+      }
     },
     "SECURITY": {
       "title": "安全",
-      "private-mode-at-launch": "啟動時啟用的隱私模式",
-      "private-mode-at-launch.descr": "默認以隱私模式啟動應用程序",
-      "private-mode": "隱私模式",
-      "private-mode.descr": "隱藏所有貨幣值",
-      "private-mode.activated": "隱私模式已啟用",
-      "private-mode.deactivated": "隱私模式已禁用"
+      "private_mode_at_launch": "啟動時啟用的隱私模式",
+      "private_mode_at_launch_descr": "默認以隱私模式啟動應用程序",
+      "private_mode": "隱私模式",
+      "private_mode_descr": "隱藏所有貨幣值",
+      "private_mode_activated": "隱私模式已啟用",
+      "private_mode_deactivated": "隱私模式已禁用"
+    },
+    "TRANSACTIONS": {
+      "menu_title": "交易",
+      "menu_descr": "配置交易行為",
+      "title": "交易設定",
+      "SWIPE_ACTIONS": {
+        "title": "滑動操作",
+        "choose_description": "選擇當您使用此滑動方向滑動列表中的交易項目時將觸發什麼操作",
+        "swipe_left": "向左滑動",
+        "swipe_right": "向右滑動",
+        "none": "無動作",
+        "toggle_reconciled": "切換已調節",
+        "toggle_pending": "切換待處理",
+        "toggle_voided": "切換作廢",
+        "toggle_unreconciled": "切換不可調和",
+        "remove_status": "刪除狀態"
+      }
+    },
+    "APPEARANCE": {
+      "menu_title": "主題與風格",
+      "menu_descr": "主題選擇、顏色以及與應用程式外觀相關的其他內容",
+      "theme_and_colors": "主題和顏色",
+      "THEME": {
+        "title": "主題",
+        "auto": "系統",
+        "light": "明亮主題",
+        "dark": "黑暗主題"
+      },
+      "amoled_mode": "amoled mode",
+      "amoled_mode_descr": "盡可能使用純黑色壁紙。這對 AMOLED 螢幕設備的電池略有幫助",
+      "dynamic_colors": "動態色彩",
+      "dynamic_colors_descr": "盡可能使用系統強調色",
+      "accent_color": "強調色",
+      "accent_color_descr": "選擇應用程式用來強調介面某些部分的顏色",
+      "text": "文本",
+      "font": "字體",
+      "font_platform": "平台"
     }
   },
   "MORE": {

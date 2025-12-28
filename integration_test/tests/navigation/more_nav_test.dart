@@ -6,13 +6,13 @@ import 'package:monekin/app/budgets/budget_form_page.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/categories/categories_list_page.dart';
 import 'package:monekin/app/categories/form/category_form.dart';
-import 'package:monekin/app/settings/about_page.dart';
-import 'package:monekin/app/settings/appearance_settings_page.dart';
-import 'package:monekin/app/settings/backup_settings_page.dart';
-import 'package:monekin/app/settings/export_page.dart';
+import 'package:monekin/app/settings/about.page.dart';
 import 'package:monekin/app/settings/help_us_page.dart';
-import 'package:monekin/app/settings/import_csv.dart';
-import 'package:monekin/app/settings/settings.page.dart';
+import 'package:monekin/app/settings/more_actions.page.dart';
+import 'package:monekin/app/settings/pages/backup/backup_settings.page.dart';
+import 'package:monekin/app/settings/pages/backup/export_page.dart';
+import 'package:monekin/app/settings/pages/backup/import_csv.page.dart';
+import 'package:monekin/app/settings/settings_page.dart';
 import 'package:monekin/app/settings/widgets/language_selector.dart';
 import 'package:monekin/app/stats/stats_page.dart';
 import 'package:monekin/app/tags/tag_form_page.dart';
@@ -28,7 +28,7 @@ void main() {
   });
 
   testWidgets('More Actions Page navigation', (tester) async {
-    final settingsPage = find.byType(SettingsPage);
+    final settingsPage = find.byType(MoreActionsPage);
 
     await startMonekin(tester);
     await openMorePage(tester);
@@ -43,20 +43,23 @@ void main() {
     expect(settingsPage, findsOneWidget);
     await tester.tap(find.text(t.settings.title_long));
     await tester.pumpAndSettle();
-    expect(find.byType(AdvancedSettingsPage), findsOneWidget);
+    expect(find.byType(SettingsPage), findsOneWidget);
 
-    await tester.tap(find.text(t.settings.lang_title));
+    await tester.tap(find.text(t.settings.general.language.title));
     await tester.pumpAndSettle();
     expect(
-      find.widgetWithText(LanguageSelector, t.settings.lang_title),
+      find.widgetWithText(LanguageSelector, t.settings.general.language.title),
       findsOneWidget,
     );
     await tester.pageBack();
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text(t.settings.theme));
+    await tester.tap(find.text(t.settings.appearance.theme.title));
     await tester.pumpAndSettle();
-    expect(find.text(t.settings.theme_light), findsOneWidget); // "Light"
+    expect(
+      find.text(t.settings.appearance.theme.light),
+      findsOneWidget,
+    ); // "Light"
     await tester.pageBack();
     await tester.pumpAndSettle();
     await tester.pageBack();

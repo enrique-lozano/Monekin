@@ -747,52 +747,72 @@
     }
   },
   "SETTINGS": {
-    "title_long": "Impostazioni e aspetto",
+    "title_long": "Impostazioni e Personalizzazione",
     "title_short": "Impostazioni",
-    "description": "Tema dell'app, testi e altre impostazioni generali",
+    "description": "Tema, Lingua, Dati e altro",
     "edit_profile": "Modifica profilo",
-    "lang.section": "Lingua e testi",
-    "lang.title": "Lingua dell'app",
-    "lang.descr": "Lingua in cui i testi verranno visualizzati nell'app",
-    "lang.help": "Se vuoi collaborare con le traduzioni di questa app, puoi consultare <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>la nostra guida</a>",
-    "locale": "Regione",
-    "locale_auto": "Sistema",
-    "locale.descr": "Imposta il formato da utilizzare per date, numeri...",
-    "locale.warn": "Quando cambi regione l'app si aggiornerà",
-    "first_day_of_week": "Primo giorno della settimana",
-    "theme_and_colors": "Tema e colori",
-    "theme": "Tema",
-    "theme.auto": "Sistema",
-    "theme.light": "Chiaro",
-    "theme.dark": "Scuro",
-    "amoled-mode": "Modalità AMOLED",
-    "amoled-mode.descr": "Usa uno sfondo nero puro quando possibile. Questo aiuterà leggermente la batteria dei dispositivi con schermi AMOLED",
-    "dynamic-colors": "Colori dinamici",
-    "dynamic-colors.descr": "Usa il colore di accento del tuo sistema quando possibile",
-    "accent-color": "Colore di accento",
-    "accent-color.descr": "Scegli il colore che l'app utilizzerà per enfatizzare determinate parti dell'interfaccia",
-    "font": "Font",
-    "font-platform": "Piattaforma",
-    "SWIPE-ACTIONS": {
-      "title": "Azioni di scorrimento",
-      "choose-description": "Scegli quale azione verrà attivata quando fai scorrere un elemento di transazione nell'elenco utilizzando questa direzione di scorrimento",
-      "swipe-left": "Scorri verso sinistra",
-      "swipe-right": "Scorri verso destra",
-      "none": "Nessuna azione",
-      "toggle-reconciled": "Attiva/disattiva riconciliato",
-      "toggle-pending": "Attiva/disattiva in sospeso",
-      "toggle-voided": "Attivazione/disattivazione annullata",
-      "toggle-unreconciled": "Attiva/disattiva non riconciliato",
-      "remove-status": "Rimuovi lo stato"
+    "GENERAL": {
+      "menu_title": "Impostazioni generali",
+      "menu_descr": "Lingua, privacy e altro",
+      "LANGUAGE": {
+        "section": "Lingua e testi",
+        "title": "Lingua dell'app",
+        "descr": "Lingua in cui i testi verranno visualizzati nell'app",
+        "help": "Se vuoi collaborare con le traduzioni di questa app, puoi consultare <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>la nostra guida</a>"
+      },
+      "LOCALE": {
+        "title": "Regione",
+        "auto": "Sistema",
+        "descr": "Imposta il formato da utilizzare per date, numeri...",
+        "warn": "Quando cambi regione l'app si aggiornerà",
+        "first_day_of_week": "Primo giorno della settimana"
+      }
     },
     "SECURITY": {
       "title": "Sicurezza",
-      "private-mode-at-launch": "Modalità privata all'avvio",
-      "private-mode-at-launch.descr": "Avvia l'app in modalità privata per impostazione predefinita",
-      "private-mode": "Modalità privata",
-      "private-mode.descr": "Nascondi tutti i valori monetari",
-      "private-mode.activated": "Modalità privata attivata",
-      "private-mode.deactivated": "Modalità privata disattivata"
+      "private_mode_at_launch": "Modalità privata all'avvio",
+      "private_mode_at_launch_descr": "Avvia l'app in modalità privata per impostazione predefinita",
+      "private_mode": "Modalità privata",
+      "private_mode_descr": "Nascondi tutti i valori monetari",
+      "private_mode_activated": "Modalità privata attivata",
+      "private_mode_deactivated": "Modalità privata disattivata"
+    },
+    "TRANSACTIONS": {
+      "menu_title": "Transazioni",
+      "menu_descr": "Configura il comportamento delle tue transazioni",
+      "title": "Impostazioni transazioni",
+      "SWIPE_ACTIONS": {
+        "title": "Azioni di scorrimento",
+        "choose_description": "Scegli quale azione verrà attivata quando fai scorrere un elemento di transazione nell'elenco utilizzando questa direzione di scorrimento",
+        "swipe_left": "Scorri verso sinistra",
+        "swipe_right": "Scorri verso destra",
+        "none": "Nessuna azione",
+        "toggle_reconciled": "Attiva/disattiva riconciliato",
+        "toggle_pending": "Attiva/disattiva in sospeso",
+        "toggle_voided": "Attivazione/disattivazione annullata",
+        "toggle_unreconciled": "Attiva/disattiva non riconciliato",
+        "remove_status": "Rimuovi lo stato"
+      }
+    },
+    "APPEARANCE": {
+      "menu_title": "Tema e stile",
+      "menu_descr": "Selezione del tema, colori e altre cose relative all'aspetto dell'app",
+      "theme_and_colors": "Tema e colori",
+      "THEME": {
+        "title": "Tema",
+        "auto": "Sistema",
+        "light": "Chiaro",
+        "dark": "Scuro"
+      },
+      "amoled_mode": "Modalità AMOLED",
+      "amoled_mode_descr": "Usa uno sfondo nero puro quando possibile. Questo aiuterà leggermente la batteria dei dispositivi con schermi AMOLED",
+      "dynamic_colors": "Colori dinamici",
+      "dynamic_colors_descr": "Usa il colore di accento del tuo sistema quando possibile",
+      "accent_color": "Colore di accento",
+      "accent_color_descr": "Scegli il colore che l'app utilizzerà per enfatizzare determinate parti dell'interfaccia",
+      "text": "Testo",
+      "font": "Font",
+      "font_platform": "Piattaforma"
     }
   },
   "MORE": {

@@ -8,7 +8,7 @@ import 'package:monekin/app/home/widgets/income_or_expense_card.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
 import 'package:monekin/app/layout/page_context.dart';
 import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/settings/edit_profile_modal.dart';
+import 'package:monekin/app/settings/widgets/edit_profile_modal.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
