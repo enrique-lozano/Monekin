@@ -40,7 +40,7 @@ dependencies:
   slang_flutter: ^4.4.0
 
   # Drift
-  drift: ^2.8.1
+  drift: ^2.30.0
   path_provider: ^2.0.13
   http: ^1.5.0
   sqlite3: ^2.0.0
