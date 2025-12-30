@@ -1189,6 +1189,8 @@ class _TranslationsSettingsTransactionsDe implements TranslationsSettingsTransac
 	@override String get menu_descr => 'Konfigurieren Sie das Verhalten Ihrer Transaktionen';
 	@override String get title => 'Transaktionseinstellungen';
 	@override late final _TranslationsSettingsTransactionsSwipeActionsDe swipe_actions = _TranslationsSettingsTransactionsSwipeActionsDe._(_root);
+	@override late final _TranslationsSettingsTransactionsDefaultValuesDe default_values = _TranslationsSettingsTransactionsDefaultValuesDe._(_root);
+	@override late final _TranslationsSettingsTransactionsDefaultTypeDe default_type = _TranslationsSettingsTransactionsDefaultTypeDe._(_root);
 }
 
 // Path: settings.appearance
@@ -1530,6 +1532,37 @@ class _TranslationsSettingsTransactionsSwipeActionsDe implements TranslationsSet
 	@override String get toggle_voided => 'Umschalten ungültig';
 	@override String get toggle_unreconciled => 'Nicht abgestimmt umschalten';
 	@override String get remove_status => 'Status entfernen';
+}
+
+// Path: settings.transactions.default_values
+class _TranslationsSettingsTransactionsDefaultValuesDe implements TranslationsSettingsTransactionsDefaultValuesEn {
+	_TranslationsSettingsTransactionsDefaultValuesDe._(this._root);
+
+	final TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Default Form Values';
+	@override String get page_title => 'New Transaction: Default Form Values';
+	@override String get reuse_last_transaction => 'Reuse Last Transaction Values';
+	@override String get reuse_last_transaction_descr => 'Automatically fill the form with some values from the last created transaction';
+	@override String get fields_to_reuse => 'Fields to reuse';
+	@override String get reuse_last_values_modal_descr => 'Select the fields that should be pre-filled with the values from the last created transaction.';
+	@override String get default_values_separator => 'Default Values';
+	@override String get default_category => 'Default Category';
+	@override String get default_status => 'Default Status';
+	@override String get default_tags => 'Default Tags';
+	@override String get no_tags_selected => 'No tags selected';
+}
+
+// Path: settings.transactions.default_type
+class _TranslationsSettingsTransactionsDefaultTypeDe implements TranslationsSettingsTransactionsDefaultTypeEn {
+	_TranslationsSettingsTransactionsDefaultTypeDe._(this._root);
+
+	final TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Default Type';
+	@override String get modal_title => 'Select Default Type';
 }
 
 // Path: settings.appearance.theme
@@ -2273,6 +2306,19 @@ extension on TranslationsDe {
 		map['settings.transactions.swipe_actions.toggle_voided'] = 'Umschalten ungültig';
 		map['settings.transactions.swipe_actions.toggle_unreconciled'] = 'Nicht abgestimmt umschalten';
 		map['settings.transactions.swipe_actions.remove_status'] = 'Status entfernen';
+		map['settings.transactions.default_values.title'] = 'Default Form Values';
+		map['settings.transactions.default_values.page_title'] = 'New Transaction: Default Form Values';
+		map['settings.transactions.default_values.reuse_last_transaction'] = 'Reuse Last Transaction Values';
+		map['settings.transactions.default_values.reuse_last_transaction_descr'] = 'Automatically fill the form with some values from the last created transaction';
+		map['settings.transactions.default_values.fields_to_reuse'] = 'Fields to reuse';
+		map['settings.transactions.default_values.reuse_last_values_modal_descr'] = 'Select the fields that should be pre-filled with the values from the last created transaction.';
+		map['settings.transactions.default_values.default_values_separator'] = 'Default Values';
+		map['settings.transactions.default_values.default_category'] = 'Default Category';
+		map['settings.transactions.default_values.default_status'] = 'Default Status';
+		map['settings.transactions.default_values.default_tags'] = 'Default Tags';
+		map['settings.transactions.default_values.no_tags_selected'] = 'No tags selected';
+		map['settings.transactions.default_type.title'] = 'Default Type';
+		map['settings.transactions.default_type.modal_title'] = 'Select Default Type';
 		map['settings.appearance.menu_title'] = 'Thema & Stil';
 		map['settings.appearance.menu_descr'] = 'Themenauswahl, Farben und andere Dinge im Zusammenhang mit dem Erscheinungsbild der App';
 		map['settings.appearance.theme_and_colors'] = 'Thema und Farben';

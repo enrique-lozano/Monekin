@@ -1,10 +1,15 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/layout/page_framework.dart';
+import 'package:monekin/app/settings/pages/default_form_transacation_values.page.dart';
 import 'package:monekin/app/settings/widgets/settings_list_separator.dart';
 import 'package:monekin/app/settings/widgets/transaction_swipe_action_selector.dart';
 import 'package:monekin/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
+import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
+import 'package:monekin/core/presentation/widgets/dynamic_selector_modal.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 class TransactionsSettingsPage extends StatelessWidget {
@@ -33,6 +38,68 @@ class TransactionsSettingsPage extends StatelessWidget {
             buildSwipeActionTileSelector(
               context,
               SettingKey.transactionSwipeRightAction,
+            ),
+
+            createListSeparator(context, t.transaction.create),
+
+            StreamBuilder<String?>(
+              stream: UserSettingService.instance.getSettingFromDB(
+                SettingKey.defaultTransactionType,
+              ),
+              builder: (context, snapshot) {
+                final typeStr = snapshot.data;
+                final type = typeStr != null
+                    ? TransactionType.values.firstWhereOrNull(
+                        (e) => e.name == typeStr,
+                      )
+                    : TransactionType.E;
+
+                final displayType = type ?? TransactionType.E;
+
+                return ListTile(
+                  title: Text(t.settings.transactions.default_type.title),
+                  subtitle: Text(displayType.displayName(context)),
+                  leading: Icon(
+                    displayType.icon,
+                    color: displayType.color(context),
+                  ),
+                  onTap: () {
+                    showDynamicSelectorBottomSheet<
+                          TransactionType,
+                          TransactionType
+                        >(
+                          context,
+                          selectorWidget: DynamicSelectorModal(
+                            title: t
+                                .settings
+                                .transactions
+                                .default_type
+                                .modal_title,
+                            items: TransactionType.values,
+                            selectedValue: displayType,
+                            displayNameGetter: (t) => t.displayName(context),
+                            valueGetter: (t) => t,
+                            trailingIconGetter: (t) => t.icon,
+                          ),
+                        )
+                        .then((selected) {
+                          if (selected != null && selected.result != null) {
+                            UserSettingService.instance.setItem(
+                              SettingKey.defaultTransactionType,
+                              selected.result!.name,
+                            );
+                          }
+                        });
+                  },
+                );
+              },
+            ),
+            ListTile(
+              title: Text(t.settings.transactions.default_values.title),
+              trailing: const Icon(Icons.arrow_forward_ios_rounded),
+              onTap: () => RouteUtils.pushRoute(
+                const DefaultFormTransactionValuesPage(),
+              ),
             ),
           ],
         ),

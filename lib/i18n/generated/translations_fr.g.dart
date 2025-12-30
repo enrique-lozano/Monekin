@@ -1187,6 +1187,8 @@ class _TranslationsSettingsTransactionsFr implements TranslationsSettingsTransac
 	@override String get menu_descr => 'Configurer le comportement de vos transactions';
 	@override String get title => 'Paramètres des transactions';
 	@override late final _TranslationsSettingsTransactionsSwipeActionsFr swipe_actions = _TranslationsSettingsTransactionsSwipeActionsFr._(_root);
+	@override late final _TranslationsSettingsTransactionsDefaultValuesFr default_values = _TranslationsSettingsTransactionsDefaultValuesFr._(_root);
+	@override late final _TranslationsSettingsTransactionsDefaultTypeFr default_type = _TranslationsSettingsTransactionsDefaultTypeFr._(_root);
 }
 
 // Path: settings.appearance
@@ -1528,6 +1530,37 @@ class _TranslationsSettingsTransactionsSwipeActionsFr implements TranslationsSet
 	@override String get toggle_voided => 'Basculer annulée';
 	@override String get toggle_unreconciled => 'Basculer non rapprochée';
 	@override String get remove_status => 'Supprimer le statut';
+}
+
+// Path: settings.transactions.default_values
+class _TranslationsSettingsTransactionsDefaultValuesFr implements TranslationsSettingsTransactionsDefaultValuesEn {
+	_TranslationsSettingsTransactionsDefaultValuesFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Valeurs par défaut du formulaire';
+	@override String get page_title => 'Nouvelle transaction : Valeurs par défaut';
+	@override String get reuse_last_transaction => 'Réutiliser les valeurs de la dernière transaction';
+	@override String get reuse_last_transaction_descr => 'Remplir automatiquement le formulaire avec certaines valeurs de la dernière transaction créée';
+	@override String get fields_to_reuse => 'Champs à réutiliser';
+	@override String get reuse_last_values_modal_descr => 'Sélectionnez les champs qui doivent être pré-remplis avec les valeurs de la dernière transaction créée.';
+	@override String get default_values_separator => 'Valeurs par défaut';
+	@override String get default_category => 'Catégorie par défaut';
+	@override String get default_status => 'Statut par défaut';
+	@override String get default_tags => 'Étiquettes par défaut';
+	@override String get no_tags_selected => 'Aucune étiquette sélectionnée';
+}
+
+// Path: settings.transactions.default_type
+class _TranslationsSettingsTransactionsDefaultTypeFr implements TranslationsSettingsTransactionsDefaultTypeEn {
+	_TranslationsSettingsTransactionsDefaultTypeFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Type par défaut';
+	@override String get modal_title => 'Sélectionner le type par défaut';
 }
 
 // Path: settings.appearance.theme
@@ -2269,6 +2302,19 @@ extension on TranslationsFr {
 		map['settings.transactions.swipe_actions.toggle_voided'] = 'Basculer annulée';
 		map['settings.transactions.swipe_actions.toggle_unreconciled'] = 'Basculer non rapprochée';
 		map['settings.transactions.swipe_actions.remove_status'] = 'Supprimer le statut';
+		map['settings.transactions.default_values.title'] = 'Valeurs par défaut du formulaire';
+		map['settings.transactions.default_values.page_title'] = 'Nouvelle transaction : Valeurs par défaut';
+		map['settings.transactions.default_values.reuse_last_transaction'] = 'Réutiliser les valeurs de la dernière transaction';
+		map['settings.transactions.default_values.reuse_last_transaction_descr'] = 'Remplir automatiquement le formulaire avec certaines valeurs de la dernière transaction créée';
+		map['settings.transactions.default_values.fields_to_reuse'] = 'Champs à réutiliser';
+		map['settings.transactions.default_values.reuse_last_values_modal_descr'] = 'Sélectionnez les champs qui doivent être pré-remplis avec les valeurs de la dernière transaction créée.';
+		map['settings.transactions.default_values.default_values_separator'] = 'Valeurs par défaut';
+		map['settings.transactions.default_values.default_category'] = 'Catégorie par défaut';
+		map['settings.transactions.default_values.default_status'] = 'Statut par défaut';
+		map['settings.transactions.default_values.default_tags'] = 'Étiquettes par défaut';
+		map['settings.transactions.default_values.no_tags_selected'] = 'Aucune étiquette sélectionnée';
+		map['settings.transactions.default_type.title'] = 'Type par défaut';
+		map['settings.transactions.default_type.modal_title'] = 'Sélectionner le type par défaut';
 		map['settings.appearance.menu_title'] = 'Thème et style';
 		map['settings.appearance.menu_descr'] = 'Sélection du thème, couleurs et autres éléments liés à l\'apparence de l\'application';
 		map['settings.appearance.theme_and_colors'] = 'Thème et couleurs';

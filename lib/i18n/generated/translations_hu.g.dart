@@ -1189,6 +1189,8 @@ class _TranslationsSettingsTransactionsHu implements TranslationsSettingsTransac
 	@override String get menu_descr => 'Konfigurálja tranzakciói viselkedését';
 	@override String get title => 'Tranzakciós beállítások';
 	@override late final _TranslationsSettingsTransactionsSwipeActionsHu swipe_actions = _TranslationsSettingsTransactionsSwipeActionsHu._(_root);
+	@override late final _TranslationsSettingsTransactionsDefaultValuesHu default_values = _TranslationsSettingsTransactionsDefaultValuesHu._(_root);
+	@override late final _TranslationsSettingsTransactionsDefaultTypeHu default_type = _TranslationsSettingsTransactionsDefaultTypeHu._(_root);
 }
 
 // Path: settings.appearance
@@ -1530,6 +1532,37 @@ class _TranslationsSettingsTransactionsSwipeActionsHu implements TranslationsSet
 	@override String get toggle_voided => 'Váltó érvénytelenítve';
 	@override String get toggle_unreconciled => 'Váltás nem egyeztetve';
 	@override String get remove_status => 'Állapot eltávolítása';
+}
+
+// Path: settings.transactions.default_values
+class _TranslationsSettingsTransactionsDefaultValuesHu implements TranslationsSettingsTransactionsDefaultValuesEn {
+	_TranslationsSettingsTransactionsDefaultValuesHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Default Form Values';
+	@override String get page_title => 'New Transaction: Default Form Values';
+	@override String get reuse_last_transaction => 'Reuse Last Transaction Values';
+	@override String get reuse_last_transaction_descr => 'Automatically fill the form with some values from the last created transaction';
+	@override String get fields_to_reuse => 'Fields to reuse';
+	@override String get reuse_last_values_modal_descr => 'Select the fields that should be pre-filled with the values from the last created transaction.';
+	@override String get default_values_separator => 'Default Values';
+	@override String get default_category => 'Default Category';
+	@override String get default_status => 'Default Status';
+	@override String get default_tags => 'Default Tags';
+	@override String get no_tags_selected => 'No tags selected';
+}
+
+// Path: settings.transactions.default_type
+class _TranslationsSettingsTransactionsDefaultTypeHu implements TranslationsSettingsTransactionsDefaultTypeEn {
+	_TranslationsSettingsTransactionsDefaultTypeHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Default Type';
+	@override String get modal_title => 'Select Default Type';
 }
 
 // Path: settings.appearance.theme
@@ -2273,6 +2306,19 @@ extension on TranslationsHu {
 		map['settings.transactions.swipe_actions.toggle_voided'] = 'Váltó érvénytelenítve';
 		map['settings.transactions.swipe_actions.toggle_unreconciled'] = 'Váltás nem egyeztetve';
 		map['settings.transactions.swipe_actions.remove_status'] = 'Állapot eltávolítása';
+		map['settings.transactions.default_values.title'] = 'Default Form Values';
+		map['settings.transactions.default_values.page_title'] = 'New Transaction: Default Form Values';
+		map['settings.transactions.default_values.reuse_last_transaction'] = 'Reuse Last Transaction Values';
+		map['settings.transactions.default_values.reuse_last_transaction_descr'] = 'Automatically fill the form with some values from the last created transaction';
+		map['settings.transactions.default_values.fields_to_reuse'] = 'Fields to reuse';
+		map['settings.transactions.default_values.reuse_last_values_modal_descr'] = 'Select the fields that should be pre-filled with the values from the last created transaction.';
+		map['settings.transactions.default_values.default_values_separator'] = 'Default Values';
+		map['settings.transactions.default_values.default_category'] = 'Default Category';
+		map['settings.transactions.default_values.default_status'] = 'Default Status';
+		map['settings.transactions.default_values.default_tags'] = 'Default Tags';
+		map['settings.transactions.default_values.no_tags_selected'] = 'No tags selected';
+		map['settings.transactions.default_type.title'] = 'Default Type';
+		map['settings.transactions.default_type.modal_title'] = 'Select Default Type';
 		map['settings.appearance.menu_title'] = 'Téma és stílus';
 		map['settings.appearance.menu_descr'] = 'Témaválasztás, színek és egyéb, az alkalmazás megjelenésével kapcsolatos dolgok';
 		map['settings.appearance.theme_and_colors'] = 'Témák és színek';

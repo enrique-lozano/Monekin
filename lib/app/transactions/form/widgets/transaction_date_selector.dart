@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/transaction/transaction_form_field.enum.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
@@ -29,7 +30,7 @@ class TransactionDateSelector extends StatelessWidget {
     return Column(
       children: [
         ListTile(
-          leading: const Icon(Icons.event),
+          leading: Icon(TransactionFormField.date.icon),
           minTileHeight: 64,
           title: Text(dateFormat.format(date)),
           onTap: () async {

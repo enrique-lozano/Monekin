@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
@@ -11,14 +12,18 @@ import 'package:monekin/app/transactions/form/widgets/transaction_form_fields.da
 import 'package:monekin/app/transactions/form/widgets/transaction_selectors.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/database/services/user-setting/default_transaction_values.service.dart';
+import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/models/transaction/transaction_form_field.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/animations/shake_widget.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
@@ -34,12 +39,12 @@ import '../../../core/models/transaction/transaction_type.enum.dart';
 class TransactionFormPage extends StatefulWidget {
   const TransactionFormPage({
     super.key,
-    this.mode = TransactionType.E,
+    this.mode,
     this.fromAccount,
     this.transactionToEdit,
   });
 
-  final TransactionType mode;
+  final TransactionType? mode;
 
   final MoneyTransaction? transactionToEdit;
 
@@ -52,6 +57,10 @@ class TransactionFormPage extends StatefulWidget {
 class _TransactionFormPageState extends State<TransactionFormPage>
     with TickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
+  final _shakeKey = GlobalKey<ShakeWidgetState>();
+  late TabController _tabController;
+
+  // --- Form Fields ---
 
   double transactionValue = 0;
 
@@ -71,24 +80,38 @@ class _TransactionFormPageState extends State<TransactionFormPage>
   TextEditingController notesController = TextEditingController();
   TextEditingController titleController = TextEditingController();
 
-  bool get isEditMode => widget.transactionToEdit != null;
-
   RecurrencyData recurrentRule = const RecurrencyData.noRepeat();
 
   List<Tag> tags = [];
 
+  // --- End Form Fields ---
+
+  bool get isEditMode => widget.transactionToEdit != null;
+
   late TransactionType transactionType;
-
-  final _shakeKey = GlobalKey<ShakeWidgetState>();
-
-  late TabController _tabController;
-  final _mainContainerRadius = 12.0;
 
   @override
   void initState() {
     super.initState();
 
-    transactionType = widget.mode;
+    if (widget.transactionToEdit != null) {
+      transactionType = widget.transactionToEdit!.type;
+    } else if (widget.mode != null) {
+      transactionType = widget.mode!;
+    } else {
+      final defaultTypeStr =
+          appStateSettings[SettingKey.defaultTransactionType];
+
+      if (defaultTypeStr != null) {
+        transactionType =
+            TransactionType.values.firstWhereOrNull(
+              (e) => e.name == defaultTypeStr,
+            ) ??
+            TransactionType.E;
+      } else {
+        transactionType = TransactionType.E;
+      }
+    }
 
     _tabController = TabController(
       length: 3,
@@ -99,11 +122,11 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     _tabController.addListener(_onTabSelectionChanged);
 
     if (widget.transactionToEdit != null) {
-      fillForm(widget.transactionToEdit!);
+      _fillForm(widget.transactionToEdit!);
       return;
     }
 
-    _setAccountsDefault();
+    _initializeFormValues();
   }
 
   @override
@@ -121,10 +144,8 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     }
 
     if (selectedCategory != null &&
-        (selectedCategory!.type == CategoryType.E &&
-                transactionType == TransactionType.I ||
-            selectedCategory!.type == CategoryType.I &&
-                transactionType == TransactionType.E)) {
+        !transactionType.isTransfer &&
+        !selectedCategory!.type.matchWithTransactionType(transactionType)) {
       // Unselect the selected category if the transactionType don't match
       selectedCategory = null;
     }
@@ -132,30 +153,96 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     setState(() {});
   }
 
-  /// Set default accounts when opening the form (in edit mode)
-  void _setAccountsDefault() {
-    AccountService.instance
-        .getAccounts(
-          predicate: (acc, curr) => AppDB.instance.buildExpr([
-            acc.type.equalsValue(AccountType.saving).not(),
-            acc.closingDate.isNull(),
-          ]),
-          limit: transactionType.isTransfer ? 2 : 1,
-        )
-        .first
-        .then((acc) {
-          fromAccount = widget.fromAccount ?? acc[0];
+  /// Set default values when opening the form (in create mode)
+  Future<void> _initializeFormValues() async {
+    final settings = await DefaultTransactionValuesService.instance
+        .getAllSettings()
+        .first;
+    final lastTr = DefaultTransactionValuesService.lastCreatedTransaction.value;
 
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            displayAmountModal(context);
-          });
+    bool useLast(TransactionFormField f) =>
+        settings.lastUsedFields.contains(f) && lastTr != null;
 
-          if (widget.mode.isTransfer) {
-            transferAccount = (acc[1].id != fromAccount!.id ? acc[1] : acc[0]);
-          }
+    // 1. Account
+    if (widget.fromAccount != null) {
+      fromAccount = widget.fromAccount;
+    } else if (useLast(TransactionFormField.account)) {
+      final acc = await AccountService.instance
+          .getAccountById(lastTr!.transaction.accountID)
+          .first;
+      if (acc != null) fromAccount = acc;
+    }
 
-          setState(() {});
-        });
+    // If still null (or not using last), use default logic (first available account)
+    if (fromAccount == null) {
+      final accounts = await AccountService.instance
+          .getAccounts(
+            predicate: (acc, curr) => AppDB.instance.buildExpr([
+              acc.type.equalsValue(AccountType.saving).not(),
+              acc.closingDate.isNull(),
+            ]),
+            limit: transactionType.isTransfer ? 2 : 1,
+          )
+          .first;
+
+      if (accounts.isNotEmpty) {
+        fromAccount = accounts[0];
+        if (transactionType.isTransfer && accounts.length > 1) {
+          transferAccount = accounts[1];
+        }
+      }
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _displayAmountModal(context);
+    });
+
+    // 2. Category
+    String? categoryIdToLoad;
+    if (useLast(TransactionFormField.category)) {
+      categoryIdToLoad = lastTr!.transaction.categoryID;
+    } else {
+      categoryIdToLoad = settings.values.categoryId;
+    }
+
+    if (categoryIdToLoad != null) {
+      selectedCategory = await CategoryService.instance
+          .getCategoryById(categoryIdToLoad)
+          .first;
+    }
+
+    // 3. Status
+    if (useLast(TransactionFormField.status)) {
+      status = lastTr!.transaction.status;
+    } else {
+      status = settings.values.status;
+    }
+
+    // 4. Tags
+    List<String>? tagIdsToLoad;
+    if (useLast(TransactionFormField.tags)) {
+      tagIdsToLoad = lastTr!.tagIds;
+    } else {
+      tagIdsToLoad = settings.values.tagIds;
+    }
+
+    if (tagIdsToLoad != null && tagIdsToLoad.isNotEmpty) {
+      tags = await TagService.instance
+          .getTags(filter: (t) => t.id.isIn(tagIdsToLoad!))
+          .first;
+    }
+
+    // 5. Date
+    if (useLast(TransactionFormField.date)) {
+      date = lastTr!.transaction.date;
+    }
+
+    // 6. Note
+    if (useLast(TransactionFormField.note)) {
+      notesController.text = lastTr!.transaction.notes ?? '';
+    }
+
+    setState(() {});
   }
 
   void submitForm() {
@@ -191,16 +278,6 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       );
 
       return;
-    }
-
-    onSuccess() {
-      RouteUtils.popRoute();
-
-      MonekinSnackbar.success(
-        SnackbarParams(
-          isEditMode ? t.transaction.edit_success : t.transaction.new_success,
-        ),
-      );
     }
 
     final newTrID = widget.transactionToEdit?.id ?? generateUUID();
@@ -285,7 +362,20 @@ class _TransactionFormPageState extends State<TransactionFormPage>
               tagIds: tagsToAdd.map((t) => t.id).toList(),
             );
 
-            onSuccess();
+            DefaultTransactionValuesService.lastCreatedTransaction.value = (
+              transaction: transactionToPost,
+              tagIds: tags.map((t) => t.id).toList(),
+            );
+
+            RouteUtils.popRoute();
+
+            MonekinSnackbar.success(
+              SnackbarParams(
+                isEditMode
+                    ? t.transaction.edit_success
+                    : t.transaction.new_success,
+              ),
+            );
           } catch (error) {
             if (mounted) RouteUtils.popRoute();
             MonekinSnackbar.error(SnackbarParams.fromError(error));
@@ -326,7 +416,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     }
   }
 
-  Future<void> fillForm(MoneyTransaction transaction) async {
+  Future<void> _fillForm(MoneyTransaction transaction) async {
     fromAccount = transaction.account;
     transferAccount = transaction.receivingAccount;
     date = transaction.date;
@@ -546,7 +636,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     );
   }
 
-  void displayAmountModal(BuildContext context) {
+  void _displayAmountModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,

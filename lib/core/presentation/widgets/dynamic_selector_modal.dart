@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 /// A dynamic selector modal that displays a list of selectable items with radio buttons.
 ///
@@ -138,6 +140,126 @@ Future<ModalResult<V>?> showDynamicSelectorBottomSheet<T, V>(
   required DynamicSelectorModal<T, V> selectorWidget,
 }) {
   return showModalBottomSheet<ModalResult<V>>(
+    context: context,
+    showDragHandle: true,
+    isScrollControlled: true,
+    builder: (context) {
+      return selectorWidget;
+    },
+  );
+}
+
+class DynamicMultiSelectorModal<T, V> extends StatefulWidget {
+  const DynamicMultiSelectorModal({
+    super.key,
+    required this.title,
+    required this.items,
+    required this.selectedValues,
+    required this.displayNameGetter,
+    required this.valueGetter,
+    this.subtitle,
+    this.elementTitleBuilder,
+    this.headerWidget,
+    this.trailingIconGetter,
+  });
+
+  final List<T> items;
+  final List<V> selectedValues;
+  final String Function(T) displayNameGetter;
+  final Widget Function(String title, T item)? elementTitleBuilder;
+  final IconData? Function(T)? trailingIconGetter;
+  final V Function(T) valueGetter;
+  final String title;
+  final String? subtitle;
+  final Widget? headerWidget;
+
+  @override
+  State<DynamicMultiSelectorModal<T, V>> createState() =>
+      _DynamicMultiSelectorModalState<T, V>();
+}
+
+class _DynamicMultiSelectorModalState<T, V>
+    extends State<DynamicMultiSelectorModal<T, V>> {
+  late List<V> _currentSelectedValues;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentSelectedValues = List.from(widget.selectedValues);
+  }
+
+  Widget _checkboxTile(BuildContext context, T item) {
+    final value = widget.valueGetter(item);
+    final displayName = widget.displayNameGetter(item);
+    final icon = widget.trailingIconGetter != null
+        ? widget.trailingIconGetter!(item)
+        : null;
+
+    Widget titleWidget = widget.elementTitleBuilder != null
+        ? widget.elementTitleBuilder!(displayName, item)
+        : Text(displayName);
+
+    final isSelected = _currentSelectedValues.contains(value);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: CheckboxListTile(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        selectedTileColor: Theme.of(context).colorScheme.surfaceContainerHigh,
+        selected: isSelected,
+        secondary: icon == null
+            ? null
+            : Icon(icon, color: Colors.grey.shade600),
+        value: isSelected,
+        title: titleWidget,
+        onChanged: (bool? checked) {
+          setState(() {
+            if (checked == true) {
+              _currentSelectedValues.add(value);
+            } else {
+              _currentSelectedValues.remove(value);
+            }
+          });
+        },
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+
+    return ModalContainer(
+      title: widget.title,
+      subtitle: widget.subtitle,
+      responseToKeyboard: false,
+      footer: BottomSheetFooter(
+        submitText: t.ui_actions.continue_text,
+        submitIcon: Icons.check_rounded,
+        onSaved: () {
+          RouteUtils.popRoute(ModalResult(_currentSelectedValues));
+        },
+      ),
+
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (widget.headerWidget != null) widget.headerWidget!,
+            ...widget.items.map((item) => _checkboxTile(context, item)),
+            const SizedBox(height: 12),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+Future<ModalResult<List<V>>?> showDynamicMultiSelectorBottomSheet<T, V>(
+  BuildContext context, {
+  required DynamicMultiSelectorModal<T, V> selectorWidget,
+}) {
+  return showModalBottomSheet<ModalResult<List<V>>>(
     context: context,
     showDragHandle: true,
     isScrollControlled: true,

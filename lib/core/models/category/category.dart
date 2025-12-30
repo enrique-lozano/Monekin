@@ -1,4 +1,5 @@
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 
 import '../../services/supported_icon/supported_icon_service.dart';
 import '../supported-icon/supported_icon.dart';
@@ -18,6 +19,18 @@ enum CategoryType {
 
   /// True if you can create expense transactions in this category type
   bool get isExpense => this == E || this == B;
+
+  /// Returns whether the category type matches the given transaction type.
+  /// Return `false` for transfer transaction types, since they don't have a category type.
+  bool matchWithTransactionType(TransactionType transactionType) {
+    if (transactionType == TransactionType.E) {
+      return isExpense;
+    } else if (transactionType == TransactionType.I) {
+      return isIncome;
+    }
+
+    return false;
+  }
 }
 
 class Category extends CategoryInDB {

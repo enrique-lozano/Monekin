@@ -792,6 +792,23 @@
         "toggle_voided": "切換作廢",
         "toggle_unreconciled": "切換不可調和",
         "remove_status": "刪除狀態"
+      },
+      "DEFAULT_VALUES": {
+        "title": "Default Form Values",
+        "page_title": "New Transaction: Default Form Values",
+        "reuse_last_transaction": "Reuse Last Transaction Values",
+        "reuse_last_transaction_descr": "Automatically fill the form with some values from the last created transaction",
+        "fields_to_reuse": "Fields to reuse",
+        "reuse_last_values_modal_descr": "Select the fields that should be pre-filled with the values from the last created transaction.",
+        "default_values_separator": "Default Values",
+        "default_category": "Default Category",
+        "default_status": "Default Status",
+        "default_tags": "Default Tags",
+        "no_tags_selected": "No tags selected"
+      },
+      "DEFAULT_TYPE": {
+        "title": "Default Type",
+        "modal_title": "Select Default Type"
       }
     },
     "APPEARANCE": {

@@ -27,3 +27,6 @@ VALUES ('BTC', '₿', 'Bitcoin', 6, 1, 0);
 
 INSERT INTO currencies (code, symbol, name, decimalPlaces, type, isDefault)
 VALUES ('ETH', 'Ξ', 'Ethereum', 6, 1, 0);
+
+--- ----------- NEW USER SETTINGS ------------
+INSERT INTO userSettings VALUES ('defaultTransactionType', 'E');

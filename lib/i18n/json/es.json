@@ -795,6 +795,23 @@
         "toggle_voided": "Alternar anulado",
         "toggle_unreconciled": "Alternar no reconciliado",
         "remove_status": "Eliminar estado"
+      },
+      "DEFAULT_VALUES": {
+        "title": "Valores por defecto",
+        "page_title": "Nueva transacción: Valores por defecto",
+        "reuse_last_transaction": "Reutilizar valores de la última transacción",
+        "reuse_last_transaction_descr": "Rellenar automáticamente el formulario con valores de la última transacción creada",
+        "fields_to_reuse": "Campos a reutilizar",
+        "reuse_last_values_modal_descr": "Selecciona los campos que deben rellenarse con los valores de la última transacción creada.",
+        "default_values_separator": "Valores por defecto",
+        "default_category": "Categoría por defecto",
+        "default_status": "Estado por defecto",
+        "default_tags": "Etiquetas por defecto",
+        "no_tags_selected": "Sin etiquetas seleccionadas"
+      },
+      "DEFAULT_TYPE": {
+        "title": "Tipo por defecto",
+        "modal_title": "Seleccionar tipo por defecto"
       }
     },
     "APPEARANCE": {
