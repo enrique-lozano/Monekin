@@ -37,7 +37,7 @@ enum TransactionFormField {
       case TransactionFormField.account:
         return Icons.account_balance_wallet_outlined;
       case TransactionFormField.date:
-        return Icons.calendar_today_outlined;
+        return Icons.event_rounded;
       case TransactionFormField.note:
         return Icons.notes_rounded;
       case TransactionFormField.tags:

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/transaction/transaction_form_field.enum.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -38,7 +39,7 @@ class TransactionDescriptionField extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     return ListTile(
-      leading: const Icon(Icons.description_rounded),
+      leading: Icon(TransactionFormField.note.icon),
       minTileHeight: 64,
       titleAlignment: ListTileTitleAlignment.titleHeight,
       title: TextFormField(
