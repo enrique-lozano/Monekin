@@ -27,7 +27,7 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
     final t = Translations.of(context);
 
     return PageFramework(
-      title: "New Transaction: Default Form Values",
+      title: t.settings.transactions.default_values.page_title,
       body: StreamBuilder(
         stream: DefaultTransactionValuesService.instance.getAllSettings(),
         builder: (context, snapshot) {
@@ -43,9 +43,16 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 MonekinTileSwitch(
-                  title: "Reuse Last Transaction Values",
-                  subtitle:
-                      "Automatically fill the form with some values from the last created transaction",
+                  title: t
+                      .settings
+                      .transactions
+                      .default_values
+                      .reuse_last_transaction,
+                  subtitle: t
+                      .settings
+                      .transactions
+                      .default_values
+                      .reuse_last_transaction_descr,
                   initialValue: lastUsedFields.isNotEmpty,
                   onSwitch: (value) {
                     if (value) {
@@ -64,7 +71,9 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
                 AnimatedExpanded(
                   expand: lastUsedFields.isNotEmpty,
                   child: ListTile(
-                    title: const Text("Fields to reuse"),
+                    title: Text(
+                      t.settings.transactions.default_values.fields_to_reuse,
+                    ),
                     subtitle: Text(
                       lastUsedFields
                           .map((e) => e.displayName(context))
@@ -74,7 +83,14 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
                     onTap: () => _selectLastUsedFields(context, lastUsedFields),
                   ),
                 ),
-                createListSeparator(context, "Default Form Values"),
+                createListSeparator(
+                  context,
+                  t
+                      .settings
+                      .transactions
+                      .default_values
+                      .default_values_separator,
+                ),
                 _buildCategoryTile(context, values),
                 _buildStatusTile(context, values),
                 _buildTagsTile(context, values),
@@ -90,6 +106,7 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
     BuildContext context,
     List<TransactionFormField> currentSelection,
   ) async {
+    final t = Translations.of(context);
     final selected =
         await showDynamicMultiSelectorBottomSheet<
           TransactionFormField,
@@ -97,9 +114,12 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
         >(
           context,
           selectorWidget: DynamicMultiSelectorModal(
-            title: "Reuse Last Values",
-            subtitle:
-                "Select the fields that should be pre-filled with the values from the last created transaction.",
+            title: t.settings.transactions.default_values.fields_to_reuse,
+            subtitle: t
+                .settings
+                .transactions
+                .default_values
+                .reuse_last_values_modal_descr,
             items: TransactionFormField.values,
             selectedValues: currentSelection,
             displayNameGetter: (f) => f.displayName(context),
@@ -119,13 +139,14 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
     BuildContext context,
     DefaultTransactionValues values,
   ) {
+    final t = Translations.of(context);
     return StreamBuilder<Category?>(
       stream: CategoryService.instance.getCategoryById(values.categoryId ?? ''),
       builder: (context, snapshot) {
         final category = snapshot.data ?? Category.unkown();
 
         return ListTile(
-          title: const Text("Default Category"),
+          title: Text(t.settings.transactions.default_values.default_category),
           subtitle: Text(category.name),
           leading: IconDisplayer.fromCategory(
             context,
@@ -171,10 +192,11 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
     BuildContext context,
     DefaultTransactionValues values,
   ) {
+    final t = Translations.of(context);
     final status = values.status;
 
     return ListTile(
-      title: const Text("Default Status"),
+      title: Text(t.settings.transactions.default_values.default_status),
       subtitle: Text(status.displayName(context)),
       leading: Icon(status.icon, size: 24, color: status.color),
       onTap: () => _selectStatus(context, values),
@@ -185,6 +207,7 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
     BuildContext context,
     DefaultTransactionValues values,
   ) async {
+    final t = Translations.of(context);
     final selected =
         await showDynamicSelectorBottomSheet<
           TransactionStatus?,
@@ -192,7 +215,7 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
         >(
           context,
           selectorWidget: DynamicSelectorModal(
-            title: "Default Status",
+            title: t.settings.transactions.default_values.default_status,
             items: [null, ...TransactionStatus.values],
             selectedValue: values.status,
             displayNameGetter: (s) => s.displayName(context),
@@ -209,6 +232,7 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
   }
 
   Widget _buildTagsTile(BuildContext context, DefaultTransactionValues values) {
+    final t = Translations.of(context);
     return StreamBuilder<List<Tag>>(
       stream: TagService.instance.getTags(
         filter: (t) {
@@ -222,10 +246,10 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
         final tags = snapshot.data ?? [];
 
         return ListTile(
-          title: const Text("Default Tags"),
+          title: Text(t.settings.transactions.default_values.default_tags),
           subtitle: Text(
             tags.isEmpty
-                ? "No tags selected"
+                ? t.settings.transactions.default_values.no_tags_selected
                 : tags.map((e) => e.name).join(", "),
           ),
           leading: ScaledAnimatedSwitcher(

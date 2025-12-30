@@ -790,6 +790,23 @@
         "toggle_voided": "Basculer annulée",
         "toggle_unreconciled": "Basculer non rapprochée",
         "remove_status": "Supprimer le statut"
+      },
+      "DEFAULT_VALUES": {
+        "title": "Valeurs par défaut du formulaire",
+        "page_title": "Nouvelle transaction : Valeurs par défaut",
+        "reuse_last_transaction": "Réutiliser les valeurs de la dernière transaction",
+        "reuse_last_transaction_descr": "Remplir automatiquement le formulaire avec certaines valeurs de la dernière transaction créée",
+        "fields_to_reuse": "Champs à réutiliser",
+        "reuse_last_values_modal_descr": "Sélectionnez les champs qui doivent être pré-remplis avec les valeurs de la dernière transaction créée.",
+        "default_values_separator": "Valeurs par défaut",
+        "default_category": "Catégorie par défaut",
+        "default_status": "Statut par défaut",
+        "default_tags": "Étiquettes par défaut",
+        "no_tags_selected": "Aucune étiquette sélectionnée"
+      },
+      "DEFAULT_TYPE": {
+        "title": "Type par défaut",
+        "modal_title": "Sélectionner le type par défaut"
       }
     },
     "APPEARANCE": {

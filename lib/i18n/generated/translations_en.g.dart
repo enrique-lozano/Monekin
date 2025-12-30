@@ -2152,6 +2152,8 @@ class TranslationsSettingsTransactionsEn {
 	String get title => 'Transactions Settings';
 
 	late final TranslationsSettingsTransactionsSwipeActionsEn swipe_actions = TranslationsSettingsTransactionsSwipeActionsEn._(_root);
+	late final TranslationsSettingsTransactionsDefaultValuesEn default_values = TranslationsSettingsTransactionsDefaultValuesEn._(_root);
+	late final TranslationsSettingsTransactionsDefaultTypeEn default_type = TranslationsSettingsTransactionsDefaultTypeEn._(_root);
 }
 
 // Path: settings.appearance
@@ -2743,6 +2745,63 @@ class TranslationsSettingsTransactionsSwipeActionsEn {
 
 	/// en: 'Remove status'
 	String get remove_status => 'Remove status';
+}
+
+// Path: settings.transactions.default_values
+class TranslationsSettingsTransactionsDefaultValuesEn {
+	TranslationsSettingsTransactionsDefaultValuesEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Default Form Values'
+	String get title => 'Default Form Values';
+
+	/// en: 'New Transaction: Default Form Values'
+	String get page_title => 'New Transaction: Default Form Values';
+
+	/// en: 'Reuse Last Transaction Values'
+	String get reuse_last_transaction => 'Reuse Last Transaction Values';
+
+	/// en: 'Automatically fill the form with some values from the last created transaction'
+	String get reuse_last_transaction_descr => 'Automatically fill the form with some values from the last created transaction';
+
+	/// en: 'Fields to reuse'
+	String get fields_to_reuse => 'Fields to reuse';
+
+	/// en: 'Select the fields that should be pre-filled with the values from the last created transaction.'
+	String get reuse_last_values_modal_descr => 'Select the fields that should be pre-filled with the values from the last created transaction.';
+
+	/// en: 'Default Values'
+	String get default_values_separator => 'Default Values';
+
+	/// en: 'Default Category'
+	String get default_category => 'Default Category';
+
+	/// en: 'Default Status'
+	String get default_status => 'Default Status';
+
+	/// en: 'Default Tags'
+	String get default_tags => 'Default Tags';
+
+	/// en: 'No tags selected'
+	String get no_tags_selected => 'No tags selected';
+}
+
+// Path: settings.transactions.default_type
+class TranslationsSettingsTransactionsDefaultTypeEn {
+	TranslationsSettingsTransactionsDefaultTypeEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Default Type'
+	String get title => 'Default Type';
+
+	/// en: 'Select Default Type'
+	String get modal_title => 'Select Default Type';
 }
 
 // Path: settings.appearance.theme
@@ -3518,6 +3577,19 @@ extension on Translations {
 		map['settings.transactions.swipe_actions.toggle_voided'] = 'Toggle voided';
 		map['settings.transactions.swipe_actions.toggle_unreconciled'] = 'Toggle unreconciled';
 		map['settings.transactions.swipe_actions.remove_status'] = 'Remove status';
+		map['settings.transactions.default_values.title'] = 'Default Form Values';
+		map['settings.transactions.default_values.page_title'] = 'New Transaction: Default Form Values';
+		map['settings.transactions.default_values.reuse_last_transaction'] = 'Reuse Last Transaction Values';
+		map['settings.transactions.default_values.reuse_last_transaction_descr'] = 'Automatically fill the form with some values from the last created transaction';
+		map['settings.transactions.default_values.fields_to_reuse'] = 'Fields to reuse';
+		map['settings.transactions.default_values.reuse_last_values_modal_descr'] = 'Select the fields that should be pre-filled with the values from the last created transaction.';
+		map['settings.transactions.default_values.default_values_separator'] = 'Default Values';
+		map['settings.transactions.default_values.default_category'] = 'Default Category';
+		map['settings.transactions.default_values.default_status'] = 'Default Status';
+		map['settings.transactions.default_values.default_tags'] = 'Default Tags';
+		map['settings.transactions.default_values.no_tags_selected'] = 'No tags selected';
+		map['settings.transactions.default_type.title'] = 'Default Type';
+		map['settings.transactions.default_type.modal_title'] = 'Select Default Type';
 		map['settings.appearance.menu_title'] = 'Theme & Style';
 		map['settings.appearance.menu_descr'] = 'Theme selection, colors and other things related to the app appearance';
 		map['settings.appearance.theme_and_colors'] = 'Theme and colors';

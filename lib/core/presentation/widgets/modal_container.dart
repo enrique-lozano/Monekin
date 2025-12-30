@@ -6,6 +6,11 @@ class ModalResult<T> {
   final T? result;
 
   const ModalResult(this.result);
+
+  @override
+  String toString() {
+    return 'ModalResult: $result';
+  }
 }
 
 class ModalContainer extends StatelessWidget {

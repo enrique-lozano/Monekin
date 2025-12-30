@@ -57,7 +57,7 @@ class TransactionsSettingsPage extends StatelessWidget {
                 final displayType = type ?? TransactionType.E;
 
                 return ListTile(
-                  title: const Text("Default Type"),
+                  title: Text(t.settings.transactions.default_type.title),
                   subtitle: Text(displayType.displayName(context)),
                   leading: Icon(
                     displayType.icon,
@@ -70,7 +70,11 @@ class TransactionsSettingsPage extends StatelessWidget {
                         >(
                           context,
                           selectorWidget: DynamicSelectorModal(
-                            title: "Select Default Type",
+                            title: t
+                                .settings
+                                .transactions
+                                .default_type
+                                .modal_title,
                             items: TransactionType.values,
                             selectedValue: displayType,
                             displayNameGetter: (t) => t.displayName(context),
@@ -83,7 +87,6 @@ class TransactionsSettingsPage extends StatelessWidget {
                             UserSettingService.instance.setItem(
                               SettingKey.defaultTransactionType,
                               selected.result!.name,
-                              updateGlobalState: true,
                             );
                           }
                         });
@@ -92,8 +95,8 @@ class TransactionsSettingsPage extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text("Default Form Values"),
-              trailing: Icon(Icons.arrow_forward_ios_rounded),
+              title: Text(t.settings.transactions.default_values.title),
+              trailing: const Icon(Icons.arrow_forward_ios_rounded),
               onTap: () => RouteUtils.pushRoute(
                 const DefaultFormTransactionValuesPage(),
               ),
