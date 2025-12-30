@@ -22,6 +22,7 @@ String settingsInitialSeedSQL =
   ('${SettingKey.accentColor.name}', 'auto'), 
   ('${SettingKey.amoledMode.name}', '0'), 
   ('${SettingKey.themeMode.name}', 'system'),
+  ('${SettingKey.defaultTransactionType.name}', 'E'),
   ('${SettingKey.transactionSwipeLeftAction.name}', null), 
   ('${SettingKey.transactionSwipeRightAction.name}', null);
 """;

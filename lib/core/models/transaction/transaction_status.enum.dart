@@ -63,6 +63,7 @@ extension TransactionStatusExtension on TransactionStatus? {
     return Icons.question_mark;
   }
 
+  /// Get a user-friendly display name for the transaction status
   String displayName(BuildContext context) {
     final t = Translations.of(context);
 
@@ -78,6 +79,7 @@ extension TransactionStatusExtension on TransactionStatus? {
     return t.transaction.status.none;
   }
 
+  /// Get a description for the transaction status
   String description(BuildContext context) {
     final t = Translations.of(context);
 
