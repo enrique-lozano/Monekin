@@ -121,13 +121,14 @@ class DynamicSelectorModal<T, V> extends StatelessWidget {
       title: title,
       subtitle: subtitle,
       responseToKeyboard: false,
+      showTitleDivider: true,
       body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(vertical: 12),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (headerWidget != null) headerWidget!,
             ...items.map((item) => _radioTile(context, item)),
-            const SizedBox(height: 12),
           ],
         ),
       ),
@@ -233,6 +234,7 @@ class _DynamicMultiSelectorModalState<T, V>
       title: widget.title,
       subtitle: widget.subtitle,
       responseToKeyboard: false,
+      showTitleDivider: true,
       footer: BottomSheetFooter(
         submitText: t.ui_actions.continue_text,
         submitIcon: Icons.check_rounded,
@@ -242,12 +244,12 @@ class _DynamicMultiSelectorModalState<T, V>
       ),
 
       body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(vertical: 12),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (widget.headerWidget != null) widget.headerWidget!,
             ...widget.items.map((item) => _checkboxTile(context, item)),
-            const SizedBox(height: 12),
           ],
         ),
       ),

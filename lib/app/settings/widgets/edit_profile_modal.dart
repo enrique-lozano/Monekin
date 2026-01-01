@@ -52,6 +52,33 @@ class _EditProfileModalState extends State<EditProfileModal> {
 
     return ModalContainer(
       title: t.settings.edit_profile,
+      showTitleDivider: true,
+      bodyPadding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Form(
+            key: _formKey,
+            child: TextFormField(
+              controller: _nameController,
+              maxLength: 20,
+              decoration: const InputDecoration(labelText: 'User name *'),
+              validator: (value) => fieldValidator(value, isRequired: true),
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              textInputAction: TextInputAction.done,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Wrap(
+            spacing: 8, // gap between adjacent cards
+            runSpacing: 12, // gap between lines
+            alignment: WrapAlignment.center,
+            children: allAvatars
+                .map((avatarName) => buildTappableAvatar(context, avatarName))
+                .toList(),
+          ),
+        ],
+      ),
       footer: BottomSheetFooter(
         onSaved: selectedAvatar == null
             ? null
@@ -77,32 +104,6 @@ class _EditProfileModalState extends State<EditProfileModal> {
                   });
                 }
               },
-      ),
-      bodyPadding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Form(
-            key: _formKey,
-            child: TextFormField(
-              controller: _nameController,
-              maxLength: 20,
-              decoration: const InputDecoration(labelText: 'User name *'),
-              validator: (value) => fieldValidator(value, isRequired: true),
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              textInputAction: TextInputAction.done,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Wrap(
-            spacing: 8, // gap between adjacent cards
-            runSpacing: 12, // gap between lines
-            alignment: WrapAlignment.center,
-            children: allAvatars
-                .map((avatarName) => buildTappableAvatar(context, avatarName))
-                .toList(),
-          ),
-        ],
       ),
     );
   }

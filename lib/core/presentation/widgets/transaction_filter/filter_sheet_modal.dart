@@ -129,9 +129,10 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                 ? null
                 : () => RouteUtils.popRoute(filtersToReturn),
           ),
+          showTitleDivider: true,
           body: ScrollableWithBottomGradient(
             controller: scrollController,
-            padding: const EdgeInsets.fromLTRB(16, 2, 16, 24),
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
             gradientColor: AppColors.of(context).modalBackground,
             child: Form(
               key: _formKey,

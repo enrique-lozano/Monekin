@@ -25,9 +25,12 @@ class ModalContainer extends StatelessWidget {
     this.footer,
     this.responseToKeyboard = true,
     this.bodyFit = FlexFit.loose,
+    this.showTitleDivider = false,
   });
 
   final String title;
+
+  final bool showTitleDivider;
 
   /// In case you want something more complex that a simple text as a title, or in case
   /// you want specific styles for the title
@@ -64,7 +67,7 @@ class ModalContainer extends StatelessWidget {
           // here with ther respective paddings and styles
           // ---------------
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 22),
+            padding: EdgeInsets.fromLTRB(16, 8, 16, showTitleDivider ? 0 : 22),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -91,6 +94,11 @@ class ModalContainer extends StatelessWidget {
               ],
             ),
           ),
+
+          if (showTitleDivider) ...[
+            const SizedBox(height: 10),
+            const Divider(),
+          ],
 
           // --- Header end ---
           Flexible(
