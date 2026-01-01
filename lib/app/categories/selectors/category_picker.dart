@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/app/categories/selectors/category_button_selector.dart';
 import 'package:monekin/app/categories/selectors/draggableScrollableKeyboardAware.mixin.dart';
-import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
+import 'package:monekin/core/database/utils/drift_utils.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/models/category/category.dart';
@@ -93,7 +93,7 @@ class _CategoryPickerState extends State<CategoryPicker>
           //     IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
           body: StreamBuilder(
             stream: CategoryService.instance.getCategories(
-              predicate: (c, p) => AppDB.instance.buildExpr([
+              predicate: (c, p) => buildDriftExpr([
                 c.parentCategoryID.isNull(),
                 c.type.isInValues(widget.categoryType),
                 c.id.isNotIn(widget.excludeCategoriesWithId),

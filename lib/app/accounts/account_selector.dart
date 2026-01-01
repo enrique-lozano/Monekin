@@ -2,8 +2,8 @@ import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/selectors/draggableScrollableKeyboardAware.mixin.dart';
-import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/utils/drift_utils.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
@@ -84,7 +84,7 @@ class _AccountSelectorModalState extends State<AccountSelectorModal>
                 },
           body: StreamBuilder(
             stream: AccountService.instance.getAccounts(
-              predicate: (acc, curr) => AppDB.instance.buildExpr([
+              predicate: (acc, curr) => buildDriftExpr([
                 acc.name.contains(searchValue),
                 if (widget.filterSavingAccounts)
                   acc.type.equalsValue(AccountType.saving).not(),

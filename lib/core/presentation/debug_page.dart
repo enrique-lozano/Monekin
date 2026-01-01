@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/core/database/demo_app_seeders.dart';
+import 'package:monekin/core/database/utils/demo_app_seeders.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';

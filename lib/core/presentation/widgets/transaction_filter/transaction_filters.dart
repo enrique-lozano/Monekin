@@ -2,6 +2,7 @@ import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/utils/drift_utils.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 
@@ -104,7 +105,7 @@ class TransactionFilters {
       receivingAccountCurrency,
       c,
       p6,
-    ) => AppDB.instance.buildExpr([
+    ) => buildDriftExpr([
       if (tagsIDs != null)
         CustomExpression(
           "t.id IN (SELECT transactionID FROM transactionTags WHERE tagID IN (${tagsIDs!.where((element) => element != null).map((s) => "'$s'").join(', ')})) ${tagsIDs!.any((element) => element == null) ? 'OR t.id NOT IN (SELECT transactionID FROM transactionTags)' : ''}",
@@ -147,7 +148,7 @@ class TransactionFilters {
         transaction.categoryID.isIn(categoriesIds!),
       if (status != null) transaction.status.isInValues(status!),
       if (extraFilters != null)
-        AppDB.instance.buildExpr(
+        buildDriftExpr(
           extraFilters(
             transaction,
             account,

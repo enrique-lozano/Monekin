@@ -17,6 +17,7 @@ import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/database/services/user-setting/default_transaction_values.service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
+import 'package:monekin/core/database/utils/drift_utils.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
@@ -177,7 +178,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     if (fromAccount == null) {
       final accounts = await AccountService.instance
           .getAccounts(
-            predicate: (acc, curr) => AppDB.instance.buildExpr([
+            predicate: (acc, curr) => buildDriftExpr([
               acc.type.equalsValue(AccountType.saving).not(),
               acc.closingDate.isNull(),
             ]),
