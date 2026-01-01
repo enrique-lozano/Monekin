@@ -34,16 +34,12 @@ class TransactionStatusSelector extends StatelessWidget {
         ? TransactionStatus.pending
         : status;
 
-    // Handle null status if it can be null, but here it seems it's used as non-null in display
-    if (selectedStatus == null) return const SizedBox.shrink();
-
     return ListTile(
       leading: ScaledAnimatedSwitcher(
         keyToWatch: selectedStatus.icon.toString(),
         child: Icon(
           selectedStatus.icon,
-          color: (selectedStatus.color ?? Theme.of(context).colorScheme.primary)
-              .withOpacity(isSelectorDisabled ? 0.3 : 1),
+          color: selectedStatus.color.withOpacity(isSelectorDisabled ? 0.3 : 1),
         ),
       ),
       minTileHeight: 64,
