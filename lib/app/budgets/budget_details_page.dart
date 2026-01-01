@@ -205,18 +205,16 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
                         ],
                       ),
                     ),
-                    SingleChildScrollView(
-                      child: TransactionListComponent(
-                        isScrollable: true,
-                        tileBuilder: (transaction) => TransactionListTile(
-                          transaction: transaction,
-                          heroTag: 'budgets-page__tr-icon-${transaction.id}',
-                        ),
-                        filters: budget.trFilters,
-                        onEmptyList: NoResults(
-                          title: t.general.empty_warn,
-                          description: t.budgets.details.no_transactions,
-                        ),
+                    TransactionListComponent(
+                      isScrollable: true,
+                      tileBuilder: (transaction) => TransactionListTile(
+                        transaction: transaction,
+                        heroTag: 'budgets-page__tr-icon-${transaction.id}',
+                      ),
+                      filters: budget.trFilters,
+                      onEmptyList: NoResults(
+                        title: t.general.empty_warn,
+                        description: t.budgets.details.no_transactions,
                       ),
                     ),
                   ],

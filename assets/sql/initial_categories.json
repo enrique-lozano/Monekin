@@ -8,6 +8,7 @@
       "tr": "Estetik & Sağlık",
       "zh_TW": "醫美 & 健康"
     },
+    "id": "1",
     "icon": "ecg_heart",
     "color": "CC0605",
     "type": "E",
@@ -56,6 +57,7 @@
       "tr": "Yiyecek & Yemek",
       "zh_TW": "食品 & 餐飲"
     },
+    "id": "2",
     "icon": "shopping_cart",
     "color": "F4A900",
     "type": "E",
@@ -93,6 +95,7 @@
       "tr": "Satın Alımlar",
       "zh_TW": "購買"
     },
+    "id": "3",
     "icon": "shopping_bag",
     "color": "3D642D",
     "type": "E",
@@ -141,6 +144,7 @@
       "tr": "Boş Zaman",
       "zh_TW": "閒暇"
     },
+    "id": "4",
     "icon": "golf_course",
     "color": "2A6478",
     "type": "E",
@@ -200,6 +204,7 @@
       "tr": "Ulaşım",
       "zh_TW": "交通"
     },
+    "id": "5",
     "icon": "tram",
     "color": "84C3BE",
     "type": "E",
@@ -270,6 +275,7 @@
       "tr": "Konut",
       "zh_TW": "居家"
     },
+    "id": "6",
     "icon": "home",
     "color": "4E5452",
     "type": "E",
@@ -362,6 +368,7 @@
       "tr": "Vergiler",
       "zh_TW": "稅款"
     },
+    "id": "7",
     "icon": "receipt",
     "color": "B32821",
     "type": "E"
@@ -375,10 +382,10 @@
       "tr": "Bitkiler & Evcil Hayvanlar",
       "zh_TW": "植物 & 寵物"
     },
+    "id": "8",
     "icon": "pets",
     "color": "587246",
-    "type": "E",
-    "subcategories": []
+    "type": "E"
   },
   {
     "names": {
@@ -389,6 +396,7 @@
       "tr": "Tatiller",
       "zh_TW": "假期"
     },
+    "id": "9",
     "icon": "landscape",
     "color": "FF7514",
     "type": "E",
@@ -426,6 +434,7 @@
       "tr": "Maaş",
       "zh_TW": "薪水"
     },
+    "id": "10",
     "icon": "work",
     "color": "4C9141",
     "type": "I"
@@ -439,6 +448,7 @@
       "tr": "Hediyeler & Bağışlar",
       "zh_TW": "禮品 & 贈與"
     },
+    "id": "11",
     "icon": "redeem",
     "color": "BB4B4B",
     "type": "B"
@@ -452,6 +462,7 @@
       "tr": "Satış",
       "zh_TW": "銷售"
     },
+    "id": "12",
     "icon": "logout",
     "color": "CDA434",
     "type": "I"
@@ -465,6 +476,7 @@
       "tr": "Yatırımlar",
       "zh_TW": "投資"
     },
+    "id": "13",
     "icon": "auto_graph",
     "color": "1E2460",
     "type": "B"
@@ -478,6 +490,7 @@
       "tr": "Kumar",
       "zh_TW": "賭博"
     },
+    "id": "14",
     "icon": "casino",
     "color": "2A6478",
     "type": "B"
@@ -491,6 +504,7 @@
       "tr": "Ödüller & Onurlar",
       "zh_TW": "獎項 & 榮譽"
     },
+    "id": "15",
     "icon": "military_tech",
     "color": "F39F18",
     "type": "I"
@@ -504,6 +518,7 @@
       "tr": "Borçlar",
       "zh_TW": "債務"
     },
+    "id": "16",
     "icon": "redo",
     "color": "781F19",
     "type": "E"
@@ -517,6 +532,7 @@
       "tr": "Krediler",
       "zh_TW": "貸款"
     },
+    "id": "17",
     "icon": "undo",
     "color": "781F19",
     "type": "I"
@@ -530,6 +546,7 @@
       "tr": "Diğerleri",
       "zh_TW": "其他"
     },
+    "id": "18",
     "icon": "inventory_2",
     "color": "403A3A",
     "type": "B"

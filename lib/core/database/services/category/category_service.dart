@@ -93,8 +93,10 @@ class CategoryService {
     }
 
     for (final category in json) {
+      final parentCategoryID = category['id'] ?? generateUUID();
+
       final categoryToPush = CategoryInDB(
-        id: generateUUID(),
+        id: parentCategoryID,
         displayOrder: 10,
         name: category['names'][systemLang] ?? category['names']['en'],
         iconId: category['icon'],
@@ -114,9 +116,10 @@ class CategoryService {
           """);
 
       if (category['subcategories'] != null) {
-        for (final subcategory in category['subcategories']) {
+        for (final (index, subcategory)
+            in (category['subcategories']! as List<dynamic>).indexed) {
           final subcategoryToPush = CategoryInDB(
-            id: generateUUID(),
+            id: '${parentCategoryID}_${index + 1}',
             displayOrder: 10,
             name:
                 subcategory['names'][systemLang] ?? subcategory['names']['en'],
