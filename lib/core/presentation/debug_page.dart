@@ -72,12 +72,10 @@ class DebugPage extends StatelessWidget {
           children: [
             const Text('Flutter color scheme:', style: sectionStyle),
             const SizedBox(height: 4),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: colorSchemePairs.length,
-              itemBuilder: (context, index) {
-                final (bgName, bgColor, fgName, fgColor) =
-                    colorSchemePairs[index];
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: colorSchemePairs.map((pair) {
+                final (bgName, bgColor, fgName, fgColor) = pair;
 
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12),
@@ -103,8 +101,9 @@ class DebugPage extends StatelessWidget {
                     ],
                   ),
                 );
-              },
+              }).toList(),
             ),
+
             Column(
               spacing: 12,
               mainAxisSize: MainAxisSize.min,
