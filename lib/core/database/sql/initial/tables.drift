@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS transactions (
   -- Whether the transacton is an income, an expense or a transfer
   type TEXT NOT NULL CHECK(type IN ('E', 'I', 'T')) MAPPED BY `CustomEnumConverter(TransactionType.values)`,
   
-  status ENUMNAME(TransactionStatus) CHECK(status IN ('voided', 'pending', 'reconciled', 'unreconciled')),
+  status TEXT CHECK(status IN ('V', 'P', 'R', 'U')) MAPPED BY `CustomEnumConverter(TransactionStatus.values)`,
   categoryID TEXT REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE,
   valueInDestiny REAL,
   receivingAccountID TEXT REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE,

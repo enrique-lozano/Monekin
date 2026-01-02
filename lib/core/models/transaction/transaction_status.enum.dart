@@ -1,16 +1,24 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/core/database/utils/database_enum.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 /// Literally the `null` value, just casted to TransactionStatus? to avoid
 /// issues with null safety
 const nullTransactionStatus = null as TransactionStatus?;
 
-enum TransactionStatus {
-  voided,
-  pending,
-  reconciled,
-  unreconciled;
+enum TransactionStatus implements DatabaseEnum<String> {
+  voided('V'),
+  pending('P'),
+  reconciled('R'),
+  unreconciled('U');
+
+  const TransactionStatus(this.id);
+
+  final String id;
+
+  @override
+  String get databaseValue => id;
 
   /// Get a list of statuses that are not in a set of statuses.
   ///
