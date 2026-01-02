@@ -162,18 +162,10 @@ getLastExchangeRates(:limit AS NUMBER) WITH ExchangeRate:
     LIMIT :limit;
 
 getBudgetsWithFullData($predicate = TRUE) WITH Budget:
-    SELECT id, name, limitAmount, intervalPeriod, startDate, endDate,
-        LIST(
-            SELECT categoryID
-            FROM budgetCategory
-            WHERE budgetID = budgets.id
-        ) AS categories,
-        LIST(
-            SELECT accountID
-            FROM budgetAccount
-            WHERE budgetID = budgets.id
-        ) AS accounts
-    FROM budgets
+    SELECT b.*, trFilter.** 
+    FROM budgets b 
+        INNER JOIN transactionFilters trFilter 
+        ON b.filterID = trFilter.id
     WHERE $predicate 
     ORDER BY $orderBy
     LIMIT $limit;
