@@ -1777,8 +1777,7 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
     true,
     type: DriftSqlType.string,
     requiredDuringInsert: false,
-    $customConstraints:
-        'CHECK (status IN (\'voided\', \'pending\', \'reconciled\', \'unreconciled\'))',
+    $customConstraints: 'CHECK (status IN (\'V\', \'P\', \'R\', \'U\'))',
   ).withConverter<TransactionStatus?>(Transactions.$converterstatusn);
   static const VerificationMeta _categoryIDMeta = const VerificationMeta(
     'categoryID',
@@ -2156,12 +2155,10 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
 
   static TypeConverter<TransactionType, String> $convertertype =
       CustomEnumConverter(TransactionType.values);
-  static JsonTypeConverter2<TransactionStatus, String, String>
-  $converterstatus = const EnumNameConverter<TransactionStatus>(
-    TransactionStatus.values,
-  );
-  static JsonTypeConverter2<TransactionStatus?, String?, String?>
-  $converterstatusn = JsonTypeConverter2.asNullable($converterstatus);
+  static TypeConverter<TransactionStatus, String> $converterstatus =
+      CustomEnumConverter(TransactionStatus.values);
+  static TypeConverter<TransactionStatus?, String?> $converterstatusn =
+      NullAwareTypeConverter.wrap($converterstatus);
   static JsonTypeConverter2<Periodicity, String, String>
   $converterintervalPeriod = const EnumNameConverter<Periodicity>(
     Periodicity.values,
@@ -2371,9 +2368,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       title: serializer.fromJson<String?>(json['title']),
       notes: serializer.fromJson<String?>(json['notes']),
       type: serializer.fromJson<TransactionType>(json['type']),
-      status: Transactions.$converterstatusn.fromJson(
-        serializer.fromJson<String?>(json['status']),
-      ),
+      status: serializer.fromJson<TransactionStatus?>(json['status']),
       categoryID: serializer.fromJson<String?>(json['categoryID']),
       valueInDestiny: serializer.fromJson<double?>(json['valueInDestiny']),
       receivingAccountID: serializer.fromJson<String?>(
@@ -2404,9 +2399,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       'title': serializer.toJson<String?>(title),
       'notes': serializer.toJson<String?>(notes),
       'type': serializer.toJson<TransactionType>(type),
-      'status': serializer.toJson<String?>(
-        Transactions.$converterstatusn.toJson(status),
-      ),
+      'status': serializer.toJson<TransactionStatus?>(status),
       'categoryID': serializer.toJson<String?>(categoryID),
       'valueInDestiny': serializer.toJson<double?>(valueInDestiny),
       'receivingAccountID': serializer.toJson<String?>(receivingAccountID),
@@ -5373,7 +5366,7 @@ abstract class _$AppDB extends GeneratedDatabase {
     );
     $arrayStartIndex += generatedpredicate.amountOfVariables;
     return customSelect(
-      'SELECT COUNT(*) AS transactionsNumber, COALESCE(SUM(t.value), 0) AS sum, COALESCE(SUM(COALESCE(t.valueInDestiny, t.value)), 0) AS sumInDestiny, COALESCE(SUM(t.value * COALESCE(excRate.exchangeRate, 1)), 0) AS sumInPrefCurrency, COALESCE(SUM(COALESCE(t.valueInDestiny, t.value) * COALESCE(excRateOfDestiny.exchangeRate, 1)), 0) AS sumInDestinyInPrefCurrency FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= ?1) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= ?1) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql}',
+      'SELECT COUNT(*) AS transactionsNumber, COALESCE(SUM(t.value), 0) AS sum, COALESCE(SUM(COALESCE(t.valueInDestiny, t.value)), 0) AS sumInDestiny, COALESCE(SUM(t.value * COALESCE(excRate.exchangeRate, 1)), 0) AS sumInPrefCurrency, COALESCE(SUM(COALESCE(t.valueInDestiny, t.value) * COALESCE(excRateOfDestiny.exchangeRate, 1)), 0) AS sumInDestinyInPrefCurrency FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND unixepoch(DATE) <= unixepoch(?1)) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND unixepoch(DATE) <= unixepoch(?1)) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql}',
       variables: [
         Variable<DateTime>(date),
         ...generatedpredicate.introducedVariables,
