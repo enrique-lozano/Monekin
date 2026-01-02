@@ -382,8 +382,8 @@ class _AccountFormPageState extends State<AccountFormPage> {
                               .countTransactions(
                                 filters: TransactionFilters(
                                   transactionTypes: [
-                                    TransactionType.E,
-                                    TransactionType.I,
+                                    TransactionType.expense,
+                                    TransactionType.income,
                                   ],
                                   accountsIDs: [_accountToEdit.id],
                                 ),

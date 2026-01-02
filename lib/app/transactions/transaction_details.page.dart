@@ -361,7 +361,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                               body: Padding(
                                 padding: const EdgeInsets.all(12),
                                 child: Text(
-                                  transaction.type == TransactionType.E
+                                  transaction.type == TransactionType.expense
                                       ? t
                                             .transaction
                                             .reversed
@@ -698,7 +698,7 @@ class _TransactionDetailHeader extends SliverPersistentHeaderDelegate {
                     fontWeight: FontWeight.bold,
                     color: transaction.status == TransactionStatus.voided
                         ? Colors.grey.shade400
-                        : transaction.type == TransactionType.T
+                        : transaction.type == TransactionType.transfer
                         ? null
                         : transaction.type.color(context),
                     decoration: transaction.status == TransactionStatus.voided

@@ -196,7 +196,7 @@ class _FilterRowIndicatorState extends State<FilterRowIndicator> {
                                   '${snapshot.data!.where((cat) => cat.isMainCategory).length} ${t.general.categories}',
                               onDeleted: () {
                                 filters = filters.copyWithNull(
-                                  categories: true,
+                                  categoriesIds: true,
                                 );
                                 widget.onChange(filters);
                               },

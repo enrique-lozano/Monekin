@@ -202,12 +202,12 @@ class _DashboardPageState extends State<DashboardPage> {
 
                   final incomeAndExpenseCards = [
                     IncomeOrExpenseCard(
-                      type: TransactionType.E,
+                      type: TransactionType.expense,
                       periodState: dateRangeService,
                       labelStyle: labelStyle,
                     ),
                     IncomeOrExpenseCard(
-                      type: TransactionType.I,
+                      type: TransactionType.income,
                       periodState: dateRangeService,
                       labelStyle: labelStyle,
                     ),

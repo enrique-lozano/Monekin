@@ -279,7 +279,9 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                     _dateFormatController.text,
                     'en_US',
                   ).parse(row[dateColumn!].toString()),
-            type: trValue < 0 ? TransactionType.E : TransactionType.I,
+            type: trValue < 0
+                ? TransactionType.expense
+                : TransactionType.income,
             accountID: accountID,
             value: trValue,
             isHidden: false,

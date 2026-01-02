@@ -286,7 +286,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                             if (selection == null) return;
 
                             filtersToReturn = filtersToReturn.copyWith(
-                              categories:
+                              categoriesIds:
                                   selection.length == snapshot.data!.length
                                   ? null
                                   : selection.map((e) => e.id),
@@ -477,11 +477,14 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        transactionTypeFilter(context, TransactionType.I),
+                        transactionTypeFilter(context, TransactionType.income),
                         const SizedBox(width: 6),
-                        transactionTypeFilter(context, TransactionType.E),
+                        transactionTypeFilter(context, TransactionType.expense),
                         const SizedBox(width: 6),
-                        transactionTypeFilter(context, TransactionType.T),
+                        transactionTypeFilter(
+                          context,
+                          TransactionType.transfer,
+                        ),
                       ],
                     ),
                   ),

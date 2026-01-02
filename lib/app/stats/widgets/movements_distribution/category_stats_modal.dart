@@ -58,7 +58,7 @@ class CategoryStatsModal extends StatelessWidget {
 
       final trValue =
           transaction.currentValueInPreferredCurrency *
-          (transaction.type == TransactionType.E ? -1 : 1);
+          (transaction.type == TransactionType.expense ? -1 : 1);
 
       if (categoryToEdit != null) {
         categoryToEdit.value += trValue;
@@ -121,7 +121,7 @@ class CategoryStatsModal extends StatelessWidget {
                     onPressed: () => RouteUtils.pushRoute(
                       TransactionsPage(
                         filters: filters.copyWith(
-                          categories: [categoryData.category.id],
+                          categoriesIds: [categoryData.category.id],
                           includeParentCategoriesInSearch: true,
                         ),
                       ),

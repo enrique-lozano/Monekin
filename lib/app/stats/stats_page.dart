@@ -189,7 +189,7 @@ class _StatsPageState extends State<StatsPage>
                     body: PieChartByCategories(
                       datePeriodState: dateRangeService,
                       showList: true,
-                      initialSelectedType: TransactionType.E,
+                      initialSelectedType: TransactionType.expense,
                       filters: filters,
                     ),
                   ),

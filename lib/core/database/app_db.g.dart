@@ -196,7 +196,7 @@ class CurrencyInDB extends DataClass implements Insertable<CurrencyInDB> {
   /// Number of decimal places used by this currency
   final int decimalPlaces;
 
-  /// Whether this currency is the default one for the user
+  /// Whether this currency is one of the default currencies of the app
   final bool isDefault;
 
   /// Type of currency:
@@ -2154,8 +2154,8 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
     return Transactions(attachedDatabase, alias);
   }
 
-  static JsonTypeConverter2<TransactionType, String, String> $convertertype =
-      const EnumNameConverter<TransactionType>(TransactionType.values);
+  static TypeConverter<TransactionType, String> $convertertype =
+      CustomEnumConverter(TransactionType.values);
   static JsonTypeConverter2<TransactionStatus, String, String>
   $converterstatus = const EnumNameConverter<TransactionStatus>(
     TransactionStatus.values,
@@ -2370,9 +2370,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       value: serializer.fromJson<double>(json['value']),
       title: serializer.fromJson<String?>(json['title']),
       notes: serializer.fromJson<String?>(json['notes']),
-      type: Transactions.$convertertype.fromJson(
-        serializer.fromJson<String>(json['type']),
-      ),
+      type: serializer.fromJson<TransactionType>(json['type']),
       status: Transactions.$converterstatusn.fromJson(
         serializer.fromJson<String?>(json['status']),
       ),
@@ -2405,9 +2403,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       'value': serializer.toJson<double>(value),
       'title': serializer.toJson<String?>(title),
       'notes': serializer.toJson<String?>(notes),
-      'type': serializer.toJson<String>(
-        Transactions.$convertertype.toJson(type),
-      ),
+      'type': serializer.toJson<TransactionType>(type),
       'status': serializer.toJson<String?>(
         Transactions.$converterstatusn.toJson(status),
       ),

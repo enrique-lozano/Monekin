@@ -82,7 +82,7 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
       return transactionService
           .getTransactionsValueBalance(
             filters: widget.filters.copyWith(
-              transactionTypes: [TransactionType.I]
+              transactionTypes: [TransactionType.income]
                   .intersectionWithNullable(widget.filters.transactionTypes)
                   .toList(),
               minDate: start,
@@ -96,7 +96,7 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
       return transactionService
           .getTransactionsValueBalance(
             filters: widget.filters.copyWith(
-              transactionTypes: [TransactionType.E]
+              transactionTypes: [TransactionType.expense]
                   .intersectionWithNullable(widget.filters.transactionTypes)
                   .toList(),
               minDate: start,

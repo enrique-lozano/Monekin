@@ -31,7 +31,7 @@ abstract class _$TransactionFiltersCWProxy {
 
   TransactionFilters accountsIDs(Iterable<String>? accountsIDs);
 
-  TransactionFilters categories(Iterable<String>? categories);
+  TransactionFilters categoriesIds(Iterable<String>? categoriesIds);
 
   TransactionFilters status(List<TransactionStatus?>? status);
 
@@ -55,7 +55,7 @@ abstract class _$TransactionFiltersCWProxy {
     List<TransactionType>? transactionTypes,
     bool? isRecurrent,
     Iterable<String>? accountsIDs,
-    Iterable<String>? categories,
+    Iterable<String>? categoriesIds,
     List<TransactionStatus?>? status,
     Iterable<String?>? tagsIDs,
   });
@@ -111,8 +111,8 @@ class _$TransactionFiltersCWProxyImpl implements _$TransactionFiltersCWProxy {
       call(accountsIDs: accountsIDs);
 
   @override
-  TransactionFilters categories(Iterable<String>? categories) =>
-      call(categories: categories);
+  TransactionFilters categoriesIds(Iterable<String>? categoriesIds) =>
+      call(categoriesIds: categoriesIds);
 
   @override
   TransactionFilters status(List<TransactionStatus?>? status) =>
@@ -142,7 +142,7 @@ class _$TransactionFiltersCWProxyImpl implements _$TransactionFiltersCWProxy {
     Object? transactionTypes = const $CopyWithPlaceholder(),
     Object? isRecurrent = const $CopyWithPlaceholder(),
     Object? accountsIDs = const $CopyWithPlaceholder(),
-    Object? categories = const $CopyWithPlaceholder(),
+    Object? categoriesIds = const $CopyWithPlaceholder(),
     Object? status = const $CopyWithPlaceholder(),
     Object? tagsIDs = const $CopyWithPlaceholder(),
   }) {
@@ -192,10 +192,10 @@ class _$TransactionFiltersCWProxyImpl implements _$TransactionFiltersCWProxy {
           ? _value.accountsIDs
           // ignore: cast_nullable_to_non_nullable
           : accountsIDs as Iterable<String>?,
-      categoriesIds: categories == const $CopyWithPlaceholder()
+      categoriesIds: categoriesIds == const $CopyWithPlaceholder()
           ? _value.categoriesIds
           // ignore: cast_nullable_to_non_nullable
-          : categories as Iterable<String>?,
+          : categoriesIds as Iterable<String>?,
       status: status == const $CopyWithPlaceholder()
           ? _value.status
           // ignore: cast_nullable_to_non_nullable
@@ -231,7 +231,7 @@ extension $TransactionFiltersCopyWith on TransactionFilters {
     bool transactionTypes = false,
     bool isRecurrent = false,
     bool accountsIDs = false,
-    bool categories = false,
+    bool categoriesIds = false,
     bool status = false,
     bool tagsIDs = false,
   }) {
@@ -247,7 +247,7 @@ extension $TransactionFiltersCopyWith on TransactionFilters {
       transactionTypes: transactionTypes == true ? null : this.transactionTypes,
       isRecurrent: isRecurrent == true ? null : this.isRecurrent,
       accountsIDs: accountsIDs == true ? null : this.accountsIDs,
-      categoriesIds: categories == true ? null : this.categoriesIds,
+      categoriesIds: categoriesIds == true ? null : this.categoriesIds,
       status: status == true ? null : this.status,
       tagsIDs: tagsIDs == true ? null : this.tagsIDs,
     );

@@ -108,9 +108,9 @@ class _TransactionFormPageState extends State<TransactionFormPage>
             TransactionType.values.firstWhereOrNull(
               (e) => e.name == defaultTypeStr,
             ) ??
-            TransactionType.E;
+            TransactionType.expense;
       } else {
-        transactionType = TransactionType.E;
+        transactionType = TransactionType.expense;
       }
     }
 
@@ -288,7 +288,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       date: date,
       type: transactionType,
       accountID: fromAccount!.id,
-      value: transactionType == TransactionType.E
+      value: transactionType == TransactionType.expense
           ? transactionValue * -1
           : transactionValue,
       isHidden: false,
@@ -404,7 +404,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       context,
       modal: CategoryPicker(
         selectedCategory: selectedCategory,
-        categoryType: transactionType == TransactionType.E
+        categoryType: transactionType == TransactionType.expense
             ? [CategoryType.E, CategoryType.B]
             : [CategoryType.I, CategoryType.B],
       ),
@@ -431,7 +431,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     transactionValue = transaction.value;
     transactionType = transaction.type;
 
-    if (transactionType == TransactionType.E) {
+    if (transactionType == TransactionType.expense) {
       transactionValue = transactionValue * -1;
     }
 
@@ -551,9 +551,9 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       child: PageFramework(
         title: isEditMode
             ? t.transaction.edit
-            : transactionType == TransactionType.T
+            : transactionType == TransactionType.transfer
             ? t.transfer.create
-            : transactionType == TransactionType.E
+            : transactionType == TransactionType.expense
             ? t.transaction.new_expense
             : t.transaction.new_income,
         appBarBackgroundColor: transactionType.color(context).withOpacity(0.85),
@@ -598,6 +598,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
           child: BreakpointContainer(
             mdChild: Row(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: SingleChildScrollView(

@@ -23,9 +23,9 @@ enum CategoryType {
   /// Returns whether the category type matches the given transaction type.
   /// Return `false` for transfer transaction types, since they don't have a category type.
   bool matchWithTransactionType(TransactionType transactionType) {
-    if (transactionType == TransactionType.E) {
+    if (transactionType == TransactionType.expense) {
       return isExpense;
-    } else if (transactionType == TransactionType.I) {
+    } else if (transactionType == TransactionType.income) {
       return isIncome;
     }
 

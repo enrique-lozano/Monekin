@@ -69,7 +69,7 @@ class IncomeExpenseComparason extends StatelessWidget {
             TransactionService.instance.getTransactionsValueBalance(
               filters: filters.copyWith(
                 transactionTypes: [
-                  TransactionType.I,
+                  TransactionType.income,
                 ].intersectionWithNullable(filters.transactionTypes).toList(),
                 minDate: startDate,
                 maxDate: endDate,
@@ -78,7 +78,7 @@ class IncomeExpenseComparason extends StatelessWidget {
             TransactionService.instance.getTransactionsValueBalance(
               filters: filters.copyWith(
                 transactionTypes: [
-                  TransactionType.E,
+                  TransactionType.expense,
                 ].intersectionWithNullable(filters.transactionTypes).toList(),
                 minDate: startDate,
                 maxDate: endDate,
@@ -97,12 +97,12 @@ class IncomeExpenseComparason extends StatelessWidget {
             return Column(
               children: [
                 IncomeExpenseTile(
-                  type: TransactionType.I,
+                  type: TransactionType.income,
                   value: income,
                   total: income + expense,
                 ),
                 IncomeExpenseTile(
-                  type: TransactionType.E,
+                  type: TransactionType.expense,
                   value: expense,
                   total: income + expense,
                 ),
@@ -147,7 +147,7 @@ class IncomeExpenseTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                type == TransactionType.E
+                type == TransactionType.expense
                     ? t.transaction.types.expense(n: 1)
                     : t.transaction.types.income(n: 1),
               ),

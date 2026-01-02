@@ -11,6 +11,7 @@ import './../../../models/category/category.dart';
 import './../../../models/account/account.dart';
 import './../../services/user-setting/user_setting_service.dart';
 import './../../services/app-data/app_data_service.dart';
+import './../../utils/database_enum.dart';
 
 CREATE TABLE IF NOT EXISTS currencies (
     -- ISO 4217 currency code. Identifies a currency uniquely ([see more](https://en.wikipedia.org/wiki/ISO_4217#List_of_ISO_4217_currency_codes))
@@ -119,7 +120,7 @@ CREATE TABLE IF NOT EXISTS transactions (
   notes TEXT,
 
   -- Whether the transacton is an income, an expense or a transfer
-  type ENUMNAME(TransactionType) NOT NULL CHECK(type IN ('E', 'I', 'T')),
+  type TEXT NOT NULL CHECK(type IN ('E', 'I', 'T')) MAPPED BY `CustomEnumConverter(TransactionType.values)`,
   
   status ENUMNAME(TransactionStatus) CHECK(status IN ('voided', 'pending', 'reconciled', 'unreconciled')),
   categoryID TEXT REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE,

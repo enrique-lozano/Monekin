@@ -100,7 +100,7 @@ class Budget extends BudgetInDB {
       TransactionStatus.pending,
       TransactionStatus.voided,
     }),
-    transactionTypes: [TransactionType.E],
+    transactionTypes: [TransactionType.expense],
     minDate: currentDateRange.start,
     maxDate: currentDateRange.end,
     categoriesIds: categories,
@@ -114,7 +114,7 @@ class Budget extends BudgetInDB {
     return TransactionService.instance
         .getTransactionsValueBalance(
           filters: TransactionFilters(
-            transactionTypes: [TransactionType.E],
+            transactionTypes: [TransactionType.expense],
             accountsIDs: accounts,
             categoriesIds: categories,
             minDate: currentDateRange.start,

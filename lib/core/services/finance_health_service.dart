@@ -208,7 +208,9 @@ class FinanceHealthService {
       ),
       TransactionService.instance
           .getTransactionsValueBalance(
-            filters: filters.copyWith(transactionTypes: [TransactionType.E]),
+            filters: filters.copyWith(
+              transactionTypes: [TransactionType.expense],
+            ),
           )
           .map((e) => e.abs()),
       (numberOfTransactions, accountsMoney, expense) {
@@ -228,10 +230,10 @@ class FinanceHealthService {
   Stream<double> getSavingPercentage({required TransactionFilters filters}) {
     return StreamZip([
       TransactionService.instance.getTransactionsValueBalance(
-        filters: filters.copyWith(transactionTypes: [TransactionType.I]),
+        filters: filters.copyWith(transactionTypes: [TransactionType.income]),
       ),
       TransactionService.instance.getTransactionsValueBalance(
-        filters: filters.copyWith(transactionTypes: [TransactionType.E]),
+        filters: filters.copyWith(transactionTypes: [TransactionType.expense]),
       ),
     ]).map((res) {
       final income = res[0];

@@ -92,11 +92,11 @@ class MoneyTransaction extends TransactionInDB {
   /// Get the color that represent this category. Will be the category color when the transaction is an income or an expense, and the primary color of the app otherwise
   Color color(BuildContext context) => isIncomeOrExpense
       ? ColorHex.get(category!.color)
-      : TransactionType.T.color(context);
+      : TransactionType.transfer.color(context);
 
   /// Get the balance (positive or negative) that this transaction cause to the user accounts
   double getCurrentBalanceInPreferredCurrency() {
-    if (type == TransactionType.T) {
+    if (type == TransactionType.transfer) {
       return (currentValueInDestinyInPreferredCurrency ??
               currentValueInPreferredCurrency) -
           currentValueInPreferredCurrency;
@@ -106,8 +106,8 @@ class MoneyTransaction extends TransactionInDB {
   }
 
   bool get isReversed {
-    return type == TransactionType.E && value > 0 ||
-        type == TransactionType.I && value < 0;
+    return type == TransactionType.expense && value > 0 ||
+        type == TransactionType.income && value < 0;
   }
 
   static IconData get reversedIcon {
@@ -128,7 +128,7 @@ class MoneyTransaction extends TransactionInDB {
         )
       : IconDisplayer(
           mainColor: color(context),
-          icon: TransactionType.T.icon,
+          icon: TransactionType.transfer.icon,
           size: size,
           padding: padding,
           borderRadius: 999999,

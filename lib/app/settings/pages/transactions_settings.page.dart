@@ -52,9 +52,9 @@ class TransactionsSettingsPage extends StatelessWidget {
                     ? TransactionType.values.firstWhereOrNull(
                         (e) => e.name == typeStr,
                       )
-                    : TransactionType.E;
+                    : TransactionType.expense;
 
-                final displayType = type ?? TransactionType.E;
+                final displayType = type ?? TransactionType.expense;
 
                 return ListTile(
                   title: Text(t.settings.transactions.default_type.title),

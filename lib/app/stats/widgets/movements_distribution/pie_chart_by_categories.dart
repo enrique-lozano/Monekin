@@ -25,7 +25,7 @@ class PieChartByCategories extends StatefulWidget {
     super.key,
     required this.datePeriodState,
     this.showList = false,
-    this.initialSelectedType = TransactionType.E,
+    this.initialSelectedType = TransactionType.expense,
     this.filters = const TransactionFilters(),
   });
 
@@ -69,7 +69,7 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
     for (final transaction in transactions) {
       final trValue =
           transaction.currentValueInPreferredCurrency *
-          (transactionsType == TransactionType.E ? -1 : 1);
+          (transactionsType == TransactionType.expense ? -1 : 1);
 
       final categoryToEdit = data.firstWhereOrNull(
         (cat) =>
@@ -234,11 +234,11 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
               child: SegmentedButton(
                 segments: [
                   ButtonSegment(
-                    value: TransactionType.E,
+                    value: TransactionType.expense,
                     label: Text(t.transaction.types.expense(n: 1)),
                   ),
                   ButtonSegment(
-                    value: TransactionType.I,
+                    value: TransactionType.income,
                     label: Text(t.transaction.types.income(n: 1)),
                   ),
                 ],
