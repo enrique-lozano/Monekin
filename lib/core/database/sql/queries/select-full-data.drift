@@ -109,7 +109,7 @@ countTransactions($predicate = TRUE, :date AS DATETIME):
                                 SELECT MAX(date) 
                                 FROM exchangeRates
                                 WHERE currencyCode = er.currencyCode 
-                                AND DATE <= :date
+                                AND unixepoch(DATE) <= unixepoch(:date)
                             )
                 ORDER BY currencyCode
         )
@@ -123,7 +123,7 @@ countTransactions($predicate = TRUE, :date AS DATETIME):
                                 SELECT MAX(date) 
                                 FROM exchangeRates
                                 WHERE currencyCode = er.currencyCode 
-                                AND DATE <= :date
+                                AND unixepoch(DATE) <= unixepoch(:date)
                             )
                 ORDER BY currencyCode
         )

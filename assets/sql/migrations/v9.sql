@@ -72,3 +72,17 @@ DROP TABLE budgetAccount;
 
 --- ----------- NEW USER SETTINGS ------------
 INSERT INTO userSettings VALUES ('defaultTransactionType', 'E');
+
+--- ----------- TRANSACTION STATUS MIGRATION ------------
+-- 1. Add new temporary column with the new check constraint
+ALTER TABLE transactions ADD COLUMN status_new TEXT CHECK(status_new IN ('V', 'P', 'R', 'U'));
+
+-- 2. Migrate data from old column to new column
+UPDATE transactions SET status_new = 'V' WHERE status = 'voided';
+UPDATE transactions SET status_new = 'P' WHERE status = 'pending';
+UPDATE transactions SET status_new = 'R' WHERE status = 'reconciled';
+UPDATE transactions SET status_new = 'U' WHERE status = 'unreconciled';
+
+-- 3. Drop the old column and rename the new column to the original name
+ALTER TABLE transactions DROP COLUMN status;
+ALTER TABLE transactions RENAME COLUMN status_new TO status;
