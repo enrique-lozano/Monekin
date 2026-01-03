@@ -3,15 +3,18 @@ import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/utils/drift_utils.dart';
+import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
+import 'package:monekin/core/utils/uuid.dart';
 
 import '../../../models/transaction/transaction_type.enum.dart';
 
 part 'transaction_filters.g.dart';
 
 @CopyWith()
-class TransactionFilters {
+/// A set of filters to apply to transactions queries
+class TransactionFilterSet {
   /// Accounts that this filter contains. Will be null if this filter is not in use, or if all accounts are selected
   final Iterable<String>? accountsIDs;
 
@@ -40,7 +43,7 @@ class TransactionFilters {
 
   final Iterable<String?>? tagsIDs;
 
-  const TransactionFilters({
+  const TransactionFilterSet({
     this.minDate,
     this.maxDate,
     this.searchValue,
@@ -56,10 +59,42 @@ class TransactionFilters {
     this.tagsIDs,
   });
 
+  /// Factory constructor to create a [TransactionFilterSet] from a [TransactionFilterSetInDB]
+  factory TransactionFilterSet.fromDB(TransactionFilterSetInDB dbModel) {
+    return TransactionFilterSet(
+      minDate: dbModel.minDate,
+      maxDate: dbModel.maxDate,
+      searchValue: dbModel.searchValue,
+      minValue: dbModel.minValue,
+      maxValue: dbModel.maxValue,
+      transactionTypes: dbModel.transactionTypes,
+      accountsIDs: dbModel.accountsIDs,
+      categoriesIds: dbModel.categoriesIds,
+      status: dbModel.status,
+      tagsIDs: dbModel.tagsIDs,
+    );
+  }
+
+  TransactionFilterSetInDB toDBModel({String? id}) {
+    return TransactionFilterSetInDB(
+      id: id ?? generateUUID(),
+      minDate: minDate,
+      maxDate: maxDate,
+      searchValue: searchValue,
+      minValue: minValue,
+      maxValue: maxValue,
+      transactionTypes: transactionTypes,
+      accountsIDs: accountsIDs?.toList(),
+      categoriesIds: categoriesIds?.toList(),
+      status: status,
+      tagsIDs: tagsIDs?.toList(),
+    );
+  }
+
   bool get hasFilter => [
     minDate,
     maxDate,
-    searchValue,
+    searchValue?.trim().nullIfEmpty(),
     minValue,
     maxValue,
     transactionTypes,
@@ -160,5 +195,10 @@ class TransactionFilters {
           ).toList(),
         ),
     ]);
+  }
+
+  @override
+  String toString() {
+    return 'TransactionFilterSet(accountsIDs: $accountsIDs, categoriesIds: $categoriesIds, includeParentCategoriesInSearch: $includeParentCategoriesInSearch, status: $status, minDate: $minDate, maxDate: $maxDate, searchValue: $searchValue, transactionTypes: $transactionTypes, isRecurrent: $isRecurrent, minValue: $minValue, maxValue: $maxValue, tagsIDs: $tagsIDs)';
   }
 }

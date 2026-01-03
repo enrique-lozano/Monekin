@@ -35,12 +35,12 @@ class AllAccountBalancePage extends StatefulWidget {
   const AllAccountBalancePage({
     super.key,
     required this.date,
-    this.filters = const TransactionFilters(),
+    this.filters = const TransactionFilterSet(),
   });
 
   final DateTime date;
 
-  final TransactionFilters filters;
+  final TransactionFilterSet filters;
 
   @override
   State<AllAccountBalancePage> createState() => _AllAccountBalancePageState();
@@ -49,7 +49,7 @@ class AllAccountBalancePage extends StatefulWidget {
 class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
   Future<List<AccountWithMoney>> getAccountsWithMoney(
     DateTime date, {
-    TransactionFilters filters = const TransactionFilters(),
+    TransactionFilterSet filters = const TransactionFilterSet(),
   }) async {
     final accounts = (await filters.accounts().first).where(
       (element) =>

@@ -28,11 +28,11 @@ import '../../../models/transaction/transaction_type.enum.dart';
 import '../count_indicator.dart';
 import '../form_fields/list_tile_field.dart';
 
-Future<TransactionFilters?> openFilterSheetModal(
+Future<TransactionFilterSet?> openFilterSheetModal(
   BuildContext context,
   FilterSheetModal modalData,
 ) {
-  return showModalBottomSheet<TransactionFilters>(
+  return showModalBottomSheet<TransactionFilterSet>(
     context: context,
     isScrollControlled: true,
     showDragHandle: true,
@@ -47,7 +47,7 @@ class FilterSheetModal extends StatefulWidget {
     this.showDateFilter = true,
   });
 
-  final TransactionFilters preselectedFilter;
+  final TransactionFilterSet preselectedFilter;
 
   final bool showDateFilter;
 
@@ -56,7 +56,7 @@ class FilterSheetModal extends StatefulWidget {
 }
 
 class _FilterSheetModalState extends State<FilterSheetModal> {
-  late TransactionFilters filtersToReturn;
+  late TransactionFilterSet filtersToReturn;
 
   final _formKey = GlobalKey<FormState>();
 

@@ -53,3 +53,28 @@ class EnumListTypeConverter<E extends DatabaseEnum<V>, V>
     return json.encode(dbValues);
   }
 }
+
+/// Converter to store a list of optional enum values as a JSON-encoded string in the database
+class OptEnumListTypeConverter<E extends DatabaseEnum<V>, V>
+    extends TypeConverter<List<E?>, String> {
+  final CustomEnumConverter<E, V> _enumConverter;
+
+  OptEnumListTypeConverter(List<E> values)
+    : _enumConverter = CustomEnumConverter<E, V>(values);
+
+  @override
+  List<E?> fromSql(String fromDb) {
+    final List<dynamic> decoded = json.decode(fromDb);
+    return decoded
+        .map((e) => e == null ? null : _enumConverter.fromSql(e as V))
+        .toList();
+  }
+
+  @override
+  String toSql(List<E?> value) {
+    final List<V?> dbValues = value
+        .map((e) => e == null ? null : _enumConverter.toSql(e))
+        .toList();
+    return json.encode(dbValues);
+  }
+}

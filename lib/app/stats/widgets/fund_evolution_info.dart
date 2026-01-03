@@ -29,7 +29,7 @@ class LineChartDataItem {
 class FundEvolutionInfo extends StatelessWidget {
   const FundEvolutionInfo({
     super.key,
-    this.filters = const TransactionFilters(),
+    this.filters = const TransactionFilterSet(),
     required this.dateRange,
     this.showBalanceHeader = false,
   });
@@ -38,7 +38,7 @@ class FundEvolutionInfo extends StatelessWidget {
 
   final bool showBalanceHeader;
 
-  final TransactionFilters filters;
+  final TransactionFilterSet filters;
 
   @override
   Widget build(BuildContext context) {
@@ -197,7 +197,7 @@ class FundEvolutionLineChart extends StatefulWidget {
   });
 
   final DateTimeRange? timeRange;
-  final TransactionFilters filters;
+  final TransactionFilterSet filters;
   final Widget loadingWidget;
 
   @override

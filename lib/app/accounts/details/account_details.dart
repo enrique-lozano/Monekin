@@ -167,7 +167,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                         bodyPadding: const EdgeInsets.symmetric(vertical: 6),
                         footer: StreamBuilder(
                           stream: TransactionService.instance.countTransactions(
-                            filters: TransactionFilters(
+                            filters: TransactionFilterSet(
                               status: TransactionStatus.notIn({
                                 TransactionStatus.pending,
                                 TransactionStatus.voided,
@@ -184,7 +184,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                               onButtonClick: () {
                                 RouteUtils.pushRoute(
                                   TransactionsPage(
-                                    filters: TransactionFilters(
+                                    filters: TransactionFilterSet(
                                       accountsIDs: [widget.account.id],
                                     ),
                                   ),
@@ -199,7 +199,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                             heroTag:
                                 'account-details-page__tr-icon-${transaction.id}',
                           ),
-                          filters: TransactionFilters(
+                          filters: TransactionFilterSet(
                             status: TransactionStatus.notIn({
                               TransactionStatus.pending,
                               TransactionStatus.voided,
@@ -376,7 +376,7 @@ class _ArchiveWarnDialogState extends State<ArchiveWarnDialog> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: TransactionService.instance.countTransactions(
-        filters: TransactionFilters(
+        filters: TransactionFilterSet(
           accountsIDs: [widget.account.id],
           minDate: date,
         ),

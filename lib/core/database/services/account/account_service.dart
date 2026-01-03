@@ -97,7 +97,7 @@ class AccountService {
   Stream<double> getAccountMoney({
     required Account account,
     DateTime? date,
-    TransactionFilters trFilters = const TransactionFilters(),
+    TransactionFilterSet trFilters = const TransactionFilterSet(),
     bool convertToPreferredCurrency = false,
   }) {
     return getAccountsMoney(
@@ -121,7 +121,7 @@ class AccountService {
   Stream<double> getAccountsMoney({
     Iterable<String>? accountIds,
     DateTime? date,
-    TransactionFilters trFilters = const TransactionFilters(),
+    TransactionFilterSet trFilters = const TransactionFilterSet(),
     bool convertToPreferredCurrency = true,
   }) {
     date ??= DateTime.now();
@@ -191,7 +191,7 @@ class AccountService {
     required List<Account> accounts,
     DateTime? startDate,
     DateTime? endDate,
-    TransactionFilters trFilters = const TransactionFilters(),
+    TransactionFilterSet trFilters = const TransactionFilterSet(),
     bool convertToPreferredCurrency = true,
   }) {
     if (accounts.isEmpty) return Stream.value(0);

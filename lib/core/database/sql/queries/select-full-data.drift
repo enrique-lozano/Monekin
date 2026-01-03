@@ -162,10 +162,10 @@ getLastExchangeRates(:limit AS NUMBER) WITH ExchangeRate:
     LIMIT :limit;
 
 getBudgetsWithFullData($predicate = TRUE) WITH Budget:
-    SELECT b.*, trFilter.** 
+    SELECT b.*, trFilters.** 
     FROM budgets b 
-        INNER JOIN transactionFilters trFilter 
-        ON b.filterID = trFilter.id
+        INNER JOIN transactionFilterSets trFilters 
+        ON b.filterID = trFilters.id
     WHERE $predicate 
     ORDER BY $orderBy
     LIMIT $limit;

@@ -47,7 +47,7 @@ class DashboardCards extends StatelessWidget {
                 bodyPadding: const EdgeInsets.all(16),
                 body: StreamBuilder(
                   stream: FinanceHealthService().getHealthyValue(
-                    filters: TransactionFilters(
+                    filters: TransactionFilterSet(
                       minDate: dateRangeService.startDate,
                       maxDate: dateRangeService.endDate,
                     ),
@@ -111,7 +111,7 @@ class DashboardCards extends StatelessWidget {
                 ),
                 body: BalanceBarChart(
                   dateRange: dateRangeService,
-                  filters: TransactionFilters(
+                  filters: TransactionFilterSet(
                     minDate: dateRangeService.startDate,
                     maxDate: dateRangeService.endDate,
                   ),

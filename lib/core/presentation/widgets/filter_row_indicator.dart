@@ -13,15 +13,15 @@ class FilterRowIndicator extends StatefulWidget {
     required this.onChange,
   });
 
-  final TransactionFilters filters;
-  final void Function(TransactionFilters newFilters) onChange;
+  final TransactionFilterSet filters;
+  final void Function(TransactionFilterSet newFilters) onChange;
 
   @override
   State<FilterRowIndicator> createState() => _FilterRowIndicatorState();
 }
 
 class _FilterRowIndicatorState extends State<FilterRowIndicator> {
-  late TransactionFilters filters;
+  late TransactionFilterSet filters;
 
   @override
   void initState() {

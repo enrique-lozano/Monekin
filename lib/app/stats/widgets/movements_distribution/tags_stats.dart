@@ -12,7 +12,7 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 class TagStats extends StatelessWidget {
   const TagStats({super.key, required this.filters});
 
-  final TransactionFilters filters;
+  final TransactionFilterSet filters;
 
   TrDistributionChartItem<Tag> getTagInfo(
     Tag tag,

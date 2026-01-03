@@ -24,13 +24,13 @@ class StatsPage extends StatefulWidget {
   const StatsPage({
     super.key,
     this.initialIndex = 0,
-    this.filters = const TransactionFilters(),
+    this.filters = const TransactionFilterSet(),
     this.dateRangeService = const DatePeriodState(),
   });
 
   final int initialIndex;
 
-  final TransactionFilters filters;
+  final TransactionFilterSet filters;
   final DatePeriodState dateRangeService;
 
   @override
@@ -41,7 +41,7 @@ class _StatsPageState extends State<StatsPage>
     with SingleTickerProviderStateMixin {
   final accountService = AccountService.instance;
 
-  late TransactionFilters filters;
+  late TransactionFilterSet filters;
   late DatePeriodState dateRangeService;
   late TabController _tabController;
 

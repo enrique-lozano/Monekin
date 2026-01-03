@@ -11,6 +11,10 @@ class BudgetServive {
   Future<bool> insertBudget(Budget budget) {
     return db.transaction(() async {
       await db
+          .into(db.transactionFilterSets)
+          .insert(budget.trFilters.toDBModel(id: budget.filterID));
+
+      await db
           .into(db.budgets)
           .insert(
             BudgetInDB(
@@ -20,28 +24,9 @@ class BudgetServive {
               intervalPeriod: budget.intervalPeriod,
               startDate: budget.startDate,
               endDate: budget.endDate,
+              filterID: budget.filterID,
             ),
           );
-
-      if (budget.categories != null) {
-        for (final category in budget.categories!) {
-          await db
-              .into(db.budgetCategory)
-              .insert(
-                BudgetCategoryData(budgetID: budget.id, categoryID: category),
-              );
-        }
-      }
-
-      if (budget.accounts != null) {
-        for (final account in budget.accounts!) {
-          await db
-              .into(db.budgetAccount)
-              .insert(
-                BudgetAccountData(budgetID: budget.id, accountID: account),
-              );
-        }
-      }
 
       return true;
     });
@@ -49,13 +34,18 @@ class BudgetServive {
 
   Future<bool> deleteBudget(String id) {
     return db.transaction(() async {
-      await (db.delete(
-        db.budgetAccount,
-      )..where((tbl) => tbl.budgetID.isValue(id))).go();
+      // Delete the filter first:
+      final budgetToDelete = await (db.select(
+        db.budgets,
+      )..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+
+      if (budgetToDelete == null) {
+        return false;
+      }
 
       await (db.delete(
-        db.budgetCategory,
-      )..where((tbl) => tbl.budgetID.isValue(id))).go();
+        db.transactionFilterSets,
+      )..where((tbl) => tbl.id.equals(budgetToDelete.filterID))).go();
 
       await (db.delete(db.budgets)..where((tbl) => tbl.id.isValue(id))).go();
 
@@ -74,8 +64,8 @@ class BudgetServive {
   }
 
   Stream<List<Budget>> getBudgets({
-    Expression<bool> Function(Budgets)? predicate,
-    OrderBy Function(Budgets)? orderBy,
+    Expression<bool> Function(Budgets, TransactionFilterSets)? predicate,
+    OrderBy Function(Budgets, TransactionFilterSets)? orderBy,
     int? limit,
     int? offset,
   }) {
@@ -83,14 +73,14 @@ class BudgetServive {
         .getBudgetsWithFullData(
           predicate: predicate,
           orderBy: orderBy,
-          limit: (b) => Limit(limit ?? -1, offset),
+          limit: (b, trFilter) => Limit(limit ?? -1, offset),
         )
         .watch();
   }
 
   Stream<Budget?> getBudgetById(String id) {
     return getBudgets(
-      predicate: (p0) => p0.id.equals(id),
+      predicate: (p0, trFilter) => p0.id.equals(id),
       limit: 1,
     ).map((res) => res.firstOrNull);
   }

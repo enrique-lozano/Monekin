@@ -74,7 +74,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
       // Check if there are transactions before the opening date of the account:
       if ((await TransactionService.instance
               .getTransactions(
-                filters: TransactionFilters(
+                filters: TransactionFilterSet(
                   accountsIDs: [_accountToEdit.id],
                   maxDate: _openingDate,
                 ),
@@ -380,7 +380,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                         ? Stream.value(true)
                         : TransactionService.instance
                               .countTransactions(
-                                filters: TransactionFilters(
+                                filters: TransactionFilterSet(
                                   transactionTypes: [
                                     TransactionType.expense,
                                     TransactionType.income,

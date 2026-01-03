@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/selectors/category_multi_selector.dart';
 import 'package:monekin/app/layout/page_framework.dart';
+import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
@@ -82,8 +83,11 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
       intervalPeriod: intervalPeriod,
       startDate: intervalPeriod == null ? startDate : null,
       endDate: intervalPeriod == null ? endDate : null,
-      categories: categories?.map((e) => e.id).toList(),
-      accounts: accounts?.map((e) => e.id).toList(),
+      trFilters: TransactionFilterSetInDB(
+        id: generateUUID(),
+        categoriesIds: categories?.map((e) => e.id).toList(),
+        accountsIDs: accounts?.map((e) => e.id).toList(),
+      ),
     );
 
     if (isEditMode) {
@@ -125,18 +129,22 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
       endDate = budget.endDate;
     }
 
-    categories = budget.categories == null
+    categories = budget.trFilters.categoriesIds == null
         ? null
         : await CategoryService.instance
               .getCategories(
-                predicate: (p0, p1) => p0.id.isIn(budget.categories!),
+                predicate: (p0, p1) =>
+                    p0.id.isIn(budget.trFilters.categoriesIds!),
               )
               .first;
 
-    accounts = budget.accounts == null
+    accounts = budget.trFilters.accountsIDs == null
         ? null
         : await AccountService.instance
-              .getAccounts(predicate: (p0, p1) => p0.id.isIn(budget.accounts!))
+              .getAccounts(
+                predicate: (p0, p1) =>
+                    p0.id.isIn(budget.trFilters.accountsIDs!),
+              )
               .first;
 
     intervalPeriod = budget.intervalPeriod;

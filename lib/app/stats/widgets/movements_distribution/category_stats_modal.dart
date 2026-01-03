@@ -38,7 +38,7 @@ class CategoryStatsModal extends StatelessWidget {
   });
 
   final TrDistributionChartItem<Category> categoryData;
-  final TransactionFilters filters;
+  final TransactionFilterSet filters;
 
   final String dateRangeText;
 

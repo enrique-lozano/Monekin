@@ -9,7 +9,7 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 class FinanceHealthDetails extends StatefulWidget {
   const FinanceHealthDetails({super.key, required this.filters});
 
-  final TransactionFilters filters;
+  final TransactionFilterSet filters;
 
   @override
   State<FinanceHealthDetails> createState() => _FinanceHealthDetailsState();

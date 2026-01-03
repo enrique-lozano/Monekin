@@ -20,7 +20,7 @@ class TransactionListComponent extends StatefulWidget {
     this.listPadding = const EdgeInsets.all(0),
   });
 
-  final TransactionFilters filters;
+  final TransactionFilterSet filters;
 
   final TransactionQueryOrderBy? orderBy;
   final int limit;
@@ -53,6 +53,8 @@ class TransactionListComponentState extends State<TransactionListComponent> {
   @override
   void initState() {
     super.initState();
+
+    print("HAS FILTERS: ${widget.filters.hasFilter}");
 
     listScrollController = widget.scrollController ?? ScrollController();
 

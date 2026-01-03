@@ -41,12 +41,12 @@ class BalanceBarChart extends StatefulWidget {
   const BalanceBarChart({
     super.key,
     required this.dateRange,
-    this.filters = const TransactionFilters(),
+    this.filters = const TransactionFilterSet(),
   });
 
   final DatePeriodState dateRange;
 
-  final TransactionFilters filters;
+  final TransactionFilterSet filters;
 
   @override
   State<BalanceBarChart> createState() => _BalanceBarChartState();

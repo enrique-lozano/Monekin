@@ -9,6 +9,7 @@ import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/database/sql/initial/seed.dart';
 import 'package:monekin/core/database/utils/database_enum.dart';
+import 'package:monekin/core/database/utils/list_converters.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/category/category.dart';

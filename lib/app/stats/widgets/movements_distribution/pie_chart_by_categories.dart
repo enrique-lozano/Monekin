@@ -26,7 +26,7 @@ class PieChartByCategories extends StatefulWidget {
     required this.datePeriodState,
     this.showList = false,
     this.initialSelectedType = TransactionType.expense,
-    this.filters = const TransactionFilters(),
+    this.filters = const TransactionFilterSet(),
   });
 
   final DatePeriodState datePeriodState;
@@ -35,7 +35,7 @@ class PieChartByCategories extends StatefulWidget {
 
   final TransactionType initialSelectedType;
 
-  final TransactionFilters filters;
+  final TransactionFilterSet filters;
 
   @override
   State<PieChartByCategories> createState() => _PieChartByCategoriesState();
@@ -47,7 +47,7 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
 
   final centerRadius = 35;
 
-  TransactionFilters _getTransactionFilters() {
+  TransactionFilterSet _getTransactionFilters() {
     return widget.filters.copyWith(
       status: TransactionStatus.getStatusThatCountsForStats(
         widget.filters.status,

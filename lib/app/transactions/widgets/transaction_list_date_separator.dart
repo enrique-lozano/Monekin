@@ -12,7 +12,7 @@ class TransactionListDateSeparator extends StatelessWidget {
     required this.date,
   });
 
-  final TransactionFilters filters;
+  final TransactionFilterSet filters;
   final DateTime date;
 
   @override

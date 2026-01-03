@@ -28,14 +28,14 @@ import 'package:skeletonizer/skeletonizer.dart';
 class TransactionsPage extends StatefulWidget {
   const TransactionsPage({super.key, this.filters});
 
-  final TransactionFilters? filters;
+  final TransactionFilterSet? filters;
 
   @override
   State<TransactionsPage> createState() => TransactionsPageState();
 }
 
 class TransactionsPageState extends State<TransactionsPage> {
-  late TransactionFilters filters;
+  late TransactionFilterSet filters;
 
   bool searchActive = false;
 
@@ -55,7 +55,9 @@ class TransactionsPageState extends State<TransactionsPage> {
   void initState() {
     super.initState();
 
-    filters = widget.filters ?? const TransactionFilters();
+    filters = widget.filters ?? const TransactionFilterSet();
+
+    print("INITIAL FILTERS: $filters");
 
     searchFocusNode.addListener(() {
       if (!searchFocusNode.hasFocus && searchController.text.isEmpty) {

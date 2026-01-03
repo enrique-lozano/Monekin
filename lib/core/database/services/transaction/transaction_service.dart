@@ -122,7 +122,7 @@ class TransactionService {
   ///
   /// By default, the transactions will be returned ordered by date
   Stream<List<MoneyTransaction>> getTransactions({
-    TransactionFilters? filters,
+    TransactionFilterSet? filters,
     TransactionQueryOrderBy? orderBy,
     int? limit,
     int? offset,
@@ -140,7 +140,7 @@ class TransactionService {
   }
 
   Stream<int> countTransactions({
-    TransactionFilters filters = const TransactionFilters(),
+    TransactionFilterSet filters = const TransactionFilterSet(),
     bool convertToPreferredCurrency = true,
     DateTime? exchDate,
   }) {
@@ -152,7 +152,7 @@ class TransactionService {
   }
 
   Stream<double> getTransactionsValueBalance({
-    TransactionFilters filters = const TransactionFilters(),
+    TransactionFilterSet filters = const TransactionFilterSet(),
     bool convertToPreferredCurrency = true,
     DateTime? exchDate,
   }) {
@@ -168,7 +168,7 @@ class TransactionService {
   }
 
   Stream<TransactionQueryStatResult> _countTransactions({
-    TransactionFilters predicate = const TransactionFilters(),
+    TransactionFilterSet predicate = const TransactionFilterSet(),
     bool convertToPreferredCurrency = true,
     DateTime? exchDate,
   }) {

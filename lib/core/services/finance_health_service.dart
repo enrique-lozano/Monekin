@@ -194,7 +194,7 @@ class FinanceHealthData {
 class FinanceHealthService {
   /// Returns the number of months that the user can live without income, taking into account their spending rate in the last 12 months.
   Stream<double?> getMonthsWithoutIncome({
-    required TransactionFilters filters,
+    required TransactionFilterSet filters,
   }) {
     final minDate = filters.minDate ?? kDefaultFirstSelectableDate;
     final maxDate = filters.maxDate ?? DateTime.now();
@@ -227,7 +227,7 @@ class FinanceHealthService {
   }
 
   /// Returns a number (from 0 to 100) with the user's savings percentage for a given period (if specified)
-  Stream<double> getSavingPercentage({required TransactionFilters filters}) {
+  Stream<double> getSavingPercentage({required TransactionFilterSet filters}) {
     return StreamZip([
       TransactionService.instance.getTransactionsValueBalance(
         filters: filters.copyWith(transactionTypes: [TransactionType.income]),
@@ -256,7 +256,7 @@ class FinanceHealthService {
 
   /// Return a decimal number between 0 and 100 with the healthy value
   Stream<FinanceHealthData> getHealthyValue({
-    required TransactionFilters filters,
+    required TransactionFilterSet filters,
   }) {
     return Rx.combineLatest2(
       getMonthsWithoutIncome(filters: filters),

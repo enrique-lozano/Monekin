@@ -21,7 +21,7 @@ class IncomeOrExpenseCard extends StatelessWidget {
 
   final DatePeriodState periodState;
 
-  final TransactionFilters? filters;
+  final TransactionFilterSet? filters;
 
   final TextStyle? labelStyle;
 
@@ -50,7 +50,7 @@ class IncomeOrExpenseCard extends StatelessWidget {
               Text(type.displayName(context), style: labelStyle),
               StreamBuilder(
                 stream: TransactionService.instance.getTransactionsValueBalance(
-                  filters: TransactionFilters(
+                  filters: TransactionFilterSet(
                     accountsIDs: filters?.accountsIDs,
                     categoriesIds: filters?.categoriesIds,
                     minDate: periodState.startDate,

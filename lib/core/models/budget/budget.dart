@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/database/app_db.dart'
+    show BudgetInDB, TransactionFilterInDB, TransactionFilterSetInDB;
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/budget/target_progress_status.enum.dart';
 import 'package:monekin/core/models/date-utils/date_period.dart';
@@ -13,25 +14,18 @@ import '../transaction/transaction_type.enum.dart';
 import 'target_timeline_status.enum.dart';
 
 class Budget extends BudgetInDB {
-  List<String>? categories;
-  List<String>? accounts;
+  TransactionFilterSetInDB _dbTrFilters;
 
   Budget({
     required super.id,
     required super.name,
     required super.limitAmount,
-    required List<String>? categories,
-    required List<String>? accounts,
+    required TransactionFilterSetInDB trFilters,
     super.intervalPeriod,
     super.startDate,
     super.endDate,
-  }) {
-    this.categories = categories != null && categories.isEmpty
-        ? null
-        : categories;
-
-    this.accounts = accounts != null && accounts.isEmpty ? null : accounts;
-  }
+  }) : _dbTrFilters = trFilters,
+       super(filterID: trFilters.id);
 
   DateTimeRange get currentDateRange {
     final toReturn = periodState.getDates();
@@ -95,32 +89,22 @@ class Budget extends BudgetInDB {
   /// True if the budget has not started yet
   bool get isFutureBudget => timelineStatus == TargetTimelineStatus.future;
 
-  TransactionFilters get trFilters => TransactionFilters(
-    status: TransactionStatus.notIn({
-      TransactionStatus.pending,
-      TransactionStatus.voided,
-    }),
-    transactionTypes: [TransactionType.expense],
-    minDate: currentDateRange.start,
-    maxDate: currentDateRange.end,
-    categoriesIds: categories,
-    accountsIDs: accounts,
-  );
+  TransactionFilterSet get trFilters =>
+      TransactionFilterSet.fromDB(_dbTrFilters).copyWith(
+        status: TransactionStatus.getStatusThatCountsForStats(
+          _dbTrFilters.status,
+        ),
+        transactionTypes: [TransactionType.expense],
+        minDate: currentDateRange.start,
+        maxDate: currentDateRange.end,
+      );
 
   /// Get the amount of money relative to this budget for a given date
   Stream<double> getValueOnDate(DateTime? date) {
     date ??= DateTime.now();
 
     return TransactionService.instance
-        .getTransactionsValueBalance(
-          filters: TransactionFilters(
-            transactionTypes: [TransactionType.expense],
-            accountsIDs: accounts,
-            categoriesIds: categories,
-            minDate: currentDateRange.start,
-            maxDate: date,
-          ),
-        )
+        .getTransactionsValueBalance(filters: trFilters.copyWith(maxDate: date))
         .map((res) {
           res = res * -1;
 

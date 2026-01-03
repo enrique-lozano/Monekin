@@ -193,7 +193,7 @@ CREATE TABLE IF NOT EXISTS transactionTags (
   tagID TEXT NOT NULL REFERENCES tags(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS transactionFilters (
+CREATE TABLE IF NOT EXISTS transactionFilterSets (
     id TEXT NOT NULL PRIMARY KEY,
 
     -- JSON list of account IDs. Will be null if this filter is not in use, or if all accounts are selected
@@ -203,7 +203,7 @@ CREATE TABLE IF NOT EXISTS transactionFilters (
     categoriesIds TEXT MAPPED BY `const StringListTypeConverter()`,
 
     -- JSON list of transaction statuses
-    status TEXT MAPPED BY `EnumListTypeConverter(TransactionStatus.values)`, 
+    status TEXT MAPPED BY `OptEnumListTypeConverter(TransactionStatus.values)`, 
 
     minDate DATETIME,
     maxDate DATETIME,
@@ -217,12 +217,12 @@ CREATE TABLE IF NOT EXISTS transactionFilters (
 
     -- JSON list of tag IDs
     tagsIDs TEXT MAPPED BY `const OptStringListTypeConverter()`
-) AS TransactionFilterInDB;
+) AS TransactionFilterSetInDB;
 
 CREATE TABLE IF NOT EXISTS savedFilters (
     id TEXT NOT NULL PRIMARY KEY,
     name TEXT NOT NULL,
-    filterID TEXT NOT NULL REFERENCES transactionFilters(id) ON DELETE CASCADE ON UPDATE CASCADE
+    filterID TEXT NOT NULL REFERENCES transactionFilterSets(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) AS SavedFilterInDB;
 
 CREATE TABLE IF NOT EXISTS budgets (
@@ -243,7 +243,7 @@ CREATE TABLE IF NOT EXISTS budgets (
   -- Custom end date. Only if the budget has no periodicity
   endDate DATETIME,
 
-  filterID TEXT NOT NULL REFERENCES transactionFilters(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  filterID TEXT NOT NULL REFERENCES transactionFilterSets(id) ON DELETE CASCADE ON UPDATE CASCADE,
 
   CHECK ((startDate IS NULL AND endDate IS NULL) != (intervalPeriod IS NULL))
 ) AS BudgetInDB;

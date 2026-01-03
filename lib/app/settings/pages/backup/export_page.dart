@@ -30,7 +30,7 @@ class ExportDataPage extends StatefulWidget {
 class _ExportDataPageState extends State<ExportDataPage> {
   _ExportFormats selectedExportFormat = _ExportFormats.db;
 
-  TransactionFilters filters = const TransactionFilters();
+  TransactionFilterSet filters = const TransactionFilterSet();
 
   bool _isDownloading = false;
   bool _isSharing = false;
@@ -201,7 +201,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
                 selectedExportFormat = v;
 
                 if (selectedExportFormat == _ExportFormats.db) {
-                  filters = const TransactionFilters();
+                  filters = const TransactionFilterSet();
                 }
 
                 setState(() {});

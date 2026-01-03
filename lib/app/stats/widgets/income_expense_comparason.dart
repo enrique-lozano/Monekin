@@ -17,13 +17,13 @@ class IncomeExpenseComparason extends StatelessWidget {
     super.key,
     this.startDate,
     this.endDate,
-    this.filters = const TransactionFilters(),
+    this.filters = const TransactionFilterSet(),
   });
 
   final DateTime? startDate;
   final DateTime? endDate;
 
-  final TransactionFilters filters;
+  final TransactionFilterSet filters;
 
   @override
   Widget build(BuildContext context) {
