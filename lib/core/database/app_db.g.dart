@@ -5029,6 +5029,17 @@ class SavedFilters extends Table with TableInfo<SavedFilters, SavedFilterInDB> {
     requiredDuringInsert: true,
     $customConstraints: 'NOT NULL',
   );
+  static const VerificationMeta _displayOrderMeta = const VerificationMeta(
+    'displayOrder',
+  );
+  late final GeneratedColumn<int> displayOrder = GeneratedColumn<int>(
+    'displayOrder',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
   static const VerificationMeta _filterIDMeta = const VerificationMeta(
     'filterID',
   );
@@ -5042,7 +5053,7 @@ class SavedFilters extends Table with TableInfo<SavedFilters, SavedFilterInDB> {
         'NOT NULL REFERENCES transactionFilterSets(id)ON UPDATE CASCADE ON DELETE CASCADE',
   );
   @override
-  List<GeneratedColumn> get $columns => [id, name, filterID];
+  List<GeneratedColumn> get $columns => [id, name, displayOrder, filterID];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -5067,6 +5078,17 @@ class SavedFilters extends Table with TableInfo<SavedFilters, SavedFilterInDB> {
       );
     } else if (isInserting) {
       context.missing(_nameMeta);
+    }
+    if (data.containsKey('displayOrder')) {
+      context.handle(
+        _displayOrderMeta,
+        displayOrder.isAcceptableOrUnknown(
+          data['displayOrder']!,
+          _displayOrderMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_displayOrderMeta);
     }
     if (data.containsKey('filterID')) {
       context.handle(
@@ -5093,6 +5115,10 @@ class SavedFilters extends Table with TableInfo<SavedFilters, SavedFilterInDB> {
         DriftSqlType.string,
         data['${effectivePrefix}name'],
       )!,
+      displayOrder: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}displayOrder'],
+      )!,
       filterID: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}filterID'],
@@ -5112,10 +5138,14 @@ class SavedFilters extends Table with TableInfo<SavedFilters, SavedFilterInDB> {
 class SavedFilterInDB extends DataClass implements Insertable<SavedFilterInDB> {
   final String id;
   final String name;
+
+  /// The display order when listing the saved filters
+  final int displayOrder;
   final String filterID;
   const SavedFilterInDB({
     required this.id,
     required this.name,
+    required this.displayOrder,
     required this.filterID,
   });
   @override
@@ -5123,6 +5153,7 @@ class SavedFilterInDB extends DataClass implements Insertable<SavedFilterInDB> {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
     map['name'] = Variable<String>(name);
+    map['displayOrder'] = Variable<int>(displayOrder);
     map['filterID'] = Variable<String>(filterID);
     return map;
   }
@@ -5131,6 +5162,7 @@ class SavedFilterInDB extends DataClass implements Insertable<SavedFilterInDB> {
     return SavedFiltersCompanion(
       id: Value(id),
       name: Value(name),
+      displayOrder: Value(displayOrder),
       filterID: Value(filterID),
     );
   }
@@ -5143,6 +5175,7 @@ class SavedFilterInDB extends DataClass implements Insertable<SavedFilterInDB> {
     return SavedFilterInDB(
       id: serializer.fromJson<String>(json['id']),
       name: serializer.fromJson<String>(json['name']),
+      displayOrder: serializer.fromJson<int>(json['displayOrder']),
       filterID: serializer.fromJson<String>(json['filterID']),
     );
   }
@@ -5152,20 +5185,29 @@ class SavedFilterInDB extends DataClass implements Insertable<SavedFilterInDB> {
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
       'name': serializer.toJson<String>(name),
+      'displayOrder': serializer.toJson<int>(displayOrder),
       'filterID': serializer.toJson<String>(filterID),
     };
   }
 
-  SavedFilterInDB copyWith({String? id, String? name, String? filterID}) =>
-      SavedFilterInDB(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        filterID: filterID ?? this.filterID,
-      );
+  SavedFilterInDB copyWith({
+    String? id,
+    String? name,
+    int? displayOrder,
+    String? filterID,
+  }) => SavedFilterInDB(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    displayOrder: displayOrder ?? this.displayOrder,
+    filterID: filterID ?? this.filterID,
+  );
   SavedFilterInDB copyWithCompanion(SavedFiltersCompanion data) {
     return SavedFilterInDB(
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
+      displayOrder: data.displayOrder.present
+          ? data.displayOrder.value
+          : this.displayOrder,
       filterID: data.filterID.present ? data.filterID.value : this.filterID,
     );
   }
@@ -5175,50 +5217,58 @@ class SavedFilterInDB extends DataClass implements Insertable<SavedFilterInDB> {
     return (StringBuffer('SavedFilterInDB(')
           ..write('id: $id, ')
           ..write('name: $name, ')
+          ..write('displayOrder: $displayOrder, ')
           ..write('filterID: $filterID')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, filterID);
+  int get hashCode => Object.hash(id, name, displayOrder, filterID);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is SavedFilterInDB &&
           other.id == this.id &&
           other.name == this.name &&
+          other.displayOrder == this.displayOrder &&
           other.filterID == this.filterID);
 }
 
 class SavedFiltersCompanion extends UpdateCompanion<SavedFilterInDB> {
   final Value<String> id;
   final Value<String> name;
+  final Value<int> displayOrder;
   final Value<String> filterID;
   final Value<int> rowid;
   const SavedFiltersCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
+    this.displayOrder = const Value.absent(),
     this.filterID = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   SavedFiltersCompanion.insert({
     required String id,
     required String name,
+    required int displayOrder,
     required String filterID,
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        name = Value(name),
+       displayOrder = Value(displayOrder),
        filterID = Value(filterID);
   static Insertable<SavedFilterInDB> custom({
     Expression<String>? id,
     Expression<String>? name,
+    Expression<int>? displayOrder,
     Expression<String>? filterID,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
+      if (displayOrder != null) 'displayOrder': displayOrder,
       if (filterID != null) 'filterID': filterID,
       if (rowid != null) 'rowid': rowid,
     });
@@ -5227,12 +5277,14 @@ class SavedFiltersCompanion extends UpdateCompanion<SavedFilterInDB> {
   SavedFiltersCompanion copyWith({
     Value<String>? id,
     Value<String>? name,
+    Value<int>? displayOrder,
     Value<String>? filterID,
     Value<int>? rowid,
   }) {
     return SavedFiltersCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
+      displayOrder: displayOrder ?? this.displayOrder,
       filterID: filterID ?? this.filterID,
       rowid: rowid ?? this.rowid,
     );
@@ -5246,6 +5298,9 @@ class SavedFiltersCompanion extends UpdateCompanion<SavedFilterInDB> {
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
+    }
+    if (displayOrder.present) {
+      map['displayOrder'] = Variable<int>(displayOrder.value);
     }
     if (filterID.present) {
       map['filterID'] = Variable<String>(filterID.value);
@@ -5261,6 +5316,7 @@ class SavedFiltersCompanion extends UpdateCompanion<SavedFilterInDB> {
     return (StringBuffer('SavedFiltersCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
+          ..write('displayOrder: $displayOrder, ')
           ..write('filterID: $filterID, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -6165,6 +6221,68 @@ abstract class _$AppDB extends GeneratedDatabase {
         ),
         startDate: row.readNullable<DateTime>('startDate'),
         endDate: row.readNullable<DateTime>('endDate'),
+      ),
+    );
+  }
+
+  Selectable<SavedFilter> getSavedFiltersWithFullData({
+    GetSavedFiltersWithFullData$predicate? predicate,
+    GetSavedFiltersWithFullData$orderBy? orderBy,
+    required GetSavedFiltersWithFullData$limit limit,
+  }) {
+    var $arrayStartIndex = 1;
+    final generatedpredicate = $write(
+      predicate?.call(
+            alias(this.savedFilters, 'sf'),
+            alias(this.transactionFilterSets, 'filterSet'),
+          ) ??
+          const CustomExpression('(TRUE)'),
+      hasMultipleTables: true,
+      startIndex: $arrayStartIndex,
+    );
+    $arrayStartIndex += generatedpredicate.amountOfVariables;
+    final generatedorderBy = $write(
+      orderBy?.call(
+            alias(this.savedFilters, 'sf'),
+            alias(this.transactionFilterSets, 'filterSet'),
+          ) ??
+          const OrderBy.nothing(),
+      hasMultipleTables: true,
+      startIndex: $arrayStartIndex,
+    );
+    $arrayStartIndex += generatedorderBy.amountOfVariables;
+    final generatedlimit = $write(
+      limit(
+        alias(this.savedFilters, 'sf'),
+        alias(this.transactionFilterSets, 'filterSet'),
+      ),
+      hasMultipleTables: true,
+      startIndex: $arrayStartIndex,
+    );
+    $arrayStartIndex += generatedlimit.amountOfVariables;
+    return customSelect(
+      'SELECT sf.*,"filterSet"."id" AS "nested_0.id", "filterSet"."accountsIDs" AS "nested_0.accountsIDs", "filterSet"."categoriesIds" AS "nested_0.categoriesIds", "filterSet"."status" AS "nested_0.status", "filterSet"."minDate" AS "nested_0.minDate", "filterSet"."maxDate" AS "nested_0.maxDate", "filterSet"."searchValue" AS "nested_0.searchValue", "filterSet"."transactionTypes" AS "nested_0.transactionTypes", "filterSet"."minValue" AS "nested_0.minValue", "filterSet"."maxValue" AS "nested_0.maxValue", "filterSet"."tagsIDs" AS "nested_0.tagsIDs" FROM savedFilters AS sf INNER JOIN transactionFilterSets AS filterSet ON sf.filterID = filterSet.id WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
+      variables: [
+        ...generatedpredicate.introducedVariables,
+        ...generatedorderBy.introducedVariables,
+        ...generatedlimit.introducedVariables,
+      ],
+      readsFrom: {
+        savedFilters,
+        transactionFilterSets,
+        ...generatedpredicate.watchedTables,
+        ...generatedorderBy.watchedTables,
+        ...generatedlimit.watchedTables,
+      },
+    ).asyncMap(
+      (QueryRow row) async => SavedFilter(
+        id: row.read<String>('id'),
+        name: row.read<String>('name'),
+        filterSet: await transactionFilterSets.mapFromRow(
+          row,
+          tablePrefix: 'nested_0',
+        ),
+        displayOrder: row.read<int>('displayOrder'),
       ),
     );
   }
@@ -10285,6 +10403,7 @@ typedef $SavedFiltersCreateCompanionBuilder =
     SavedFiltersCompanion Function({
       required String id,
       required String name,
+      required int displayOrder,
       required String filterID,
       Value<int> rowid,
     });
@@ -10292,6 +10411,7 @@ typedef $SavedFiltersUpdateCompanionBuilder =
     SavedFiltersCompanion Function({
       Value<String> id,
       Value<String> name,
+      Value<int> displayOrder,
       Value<String> filterID,
       Value<int> rowid,
     });
@@ -10341,6 +10461,11 @@ class $SavedFiltersFilterComposer extends Composer<_$AppDB, SavedFilters> {
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<int> get displayOrder => $composableBuilder(
+    column: $table.displayOrder,
+    builder: (column) => ColumnFilters(column),
+  );
+
   $TransactionFilterSetsFilterComposer get filterID {
     final $TransactionFilterSetsFilterComposer composer = $composerBuilder(
       composer: this,
@@ -10383,6 +10508,11 @@ class $SavedFiltersOrderingComposer extends Composer<_$AppDB, SavedFilters> {
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get displayOrder => $composableBuilder(
+    column: $table.displayOrder,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $TransactionFilterSetsOrderingComposer get filterID {
     final $TransactionFilterSetsOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -10420,6 +10550,11 @@ class $SavedFiltersAnnotationComposer extends Composer<_$AppDB, SavedFilters> {
 
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<int> get displayOrder => $composableBuilder(
+    column: $table.displayOrder,
+    builder: (column) => column,
+  );
 
   $TransactionFilterSetsAnnotationComposer get filterID {
     final $TransactionFilterSetsAnnotationComposer composer = $composerBuilder(
@@ -10475,11 +10610,13 @@ class $SavedFiltersTableManager
               ({
                 Value<String> id = const Value.absent(),
                 Value<String> name = const Value.absent(),
+                Value<int> displayOrder = const Value.absent(),
                 Value<String> filterID = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => SavedFiltersCompanion(
                 id: id,
                 name: name,
+                displayOrder: displayOrder,
                 filterID: filterID,
                 rowid: rowid,
               ),
@@ -10487,11 +10624,13 @@ class $SavedFiltersTableManager
               ({
                 required String id,
                 required String name,
+                required int displayOrder,
                 required String filterID,
                 Value<int> rowid = const Value.absent(),
               }) => SavedFiltersCompanion.insert(
                 id: id,
                 name: name,
+                displayOrder: displayOrder,
                 filterID: filterID,
                 rowid: rowid,
               ),
@@ -10941,3 +11080,9 @@ typedef GetBudgetsWithFullData$orderBy =
     OrderBy Function(Budgets b, TransactionFilterSets trFilters);
 typedef GetBudgetsWithFullData$limit =
     Limit Function(Budgets b, TransactionFilterSets trFilters);
+typedef GetSavedFiltersWithFullData$predicate =
+    Expression<bool> Function(SavedFilters sf, TransactionFilterSets filterSet);
+typedef GetSavedFiltersWithFullData$orderBy =
+    OrderBy Function(SavedFilters sf, TransactionFilterSets filterSet);
+typedef GetSavedFiltersWithFullData$limit =
+    Limit Function(SavedFilters sf, TransactionFilterSets filterSet);

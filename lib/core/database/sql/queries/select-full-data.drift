@@ -10,6 +10,7 @@ import './../../../models/category/category.dart';
 import './../../../models/budget/budget.dart';
 import './../../../models/exchange-rate/exchange_rate.dart';
 import './../../../models/transaction/transaction.dart';
+import './../../../models/filters/saved_filter.dart';
 
 getAccountsWithFullData($predicate = TRUE) WITH Account: 
     SELECT a.*, currency.** 
@@ -166,6 +167,16 @@ getBudgetsWithFullData($predicate = TRUE) WITH Budget:
     FROM budgets b 
         INNER JOIN transactionFilterSets trFilters 
         ON b.filterID = trFilters.id
+    WHERE $predicate 
+    ORDER BY $orderBy
+    LIMIT $limit;
+
+
+getSavedFiltersWithFullData($predicate = TRUE) WITH SavedFilter:
+    SELECT sf.*, filterSet.** 
+    FROM savedFilters sf 
+        INNER JOIN transactionFilterSets filterSet 
+        ON sf.filterID = filterSet.id
     WHERE $predicate 
     ORDER BY $orderBy
     LIMIT $limit;

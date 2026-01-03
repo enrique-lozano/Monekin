@@ -49,6 +49,7 @@ CREATE TABLE transactionFilterSets (
 CREATE TABLE savedFilters (
     id TEXT NOT NULL PRIMARY KEY,
     name TEXT NOT NULL,
+    displayOrder INTEGER NOT NULL,
     filterID TEXT NOT NULL REFERENCES transactionFilterSets(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 

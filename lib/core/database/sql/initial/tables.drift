@@ -222,6 +222,10 @@ CREATE TABLE IF NOT EXISTS transactionFilterSets (
 CREATE TABLE IF NOT EXISTS savedFilters (
     id TEXT NOT NULL PRIMARY KEY,
     name TEXT NOT NULL,
+    
+    -- The display order when listing the saved filters
+    displayOrder INTEGER NOT NULL,
+
     filterID TEXT NOT NULL REFERENCES transactionFilterSets(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) AS SavedFilterInDB;
 

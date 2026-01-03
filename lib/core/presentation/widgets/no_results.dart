@@ -10,6 +10,7 @@ class NoResults extends StatelessWidget {
     this.tintColor,
     this.padding,
     this.noSearchResultsVariation = false,
+    this.showIllustration = true,
     this.title,
     this.bottom,
   });
@@ -18,7 +19,9 @@ class NoResults extends StatelessWidget {
   final String description;
   final Color? tintColor;
   final EdgeInsets? padding;
+
   final bool noSearchResultsVariation;
+  final bool showIllustration;
 
   final Widget? bottom;
 
@@ -38,34 +41,37 @@ class NoResults extends StatelessWidget {
                 ),
             child: Column(
               children: [
-                Container(
-                  constraints: BoxConstraints(
-                    maxWidth:
-                        MediaQuery.sizeOf(context).height <=
-                            MediaQuery.sizeOf(context).width
-                        ? MediaQuery.sizeOf(context).height * 0.4 > 400
-                              ? 400
-                              : MediaQuery.sizeOf(context).height * 0.4
-                        : 270,
-                  ),
-                  child: Opacity(
-                    opacity: 1,
-                    child: SvgPicture.asset(
-                      noSearchResultsVariation
-                          ? 'assets/icons/page_states/no_results.svg'
-                          : 'assets/icons/page_states/empty_folder.svg',
-                      colorFilter: ColorFilter.mode(
-                        tintColor == null
-                            ? Theme.of(
-                                context,
-                              ).colorScheme.primary.withOpacity(0.7)
-                            : tintColor!.withOpacity(0.7),
-                        BlendMode.srcIn,
+                if (showIllustration)
+                  Container(
+                    constraints: BoxConstraints(
+                      maxWidth:
+                          MediaQuery.sizeOf(context).height <=
+                              MediaQuery.sizeOf(context).width
+                          ? MediaQuery.sizeOf(context).height * 0.4 > 400
+                                ? 400
+                                : MediaQuery.sizeOf(context).height * 0.4
+                          : 270,
+                    ),
+                    child: Opacity(
+                      opacity: 1,
+                      child: SvgPicture.asset(
+                        noSearchResultsVariation
+                            ? 'assets/icons/page_states/no_results.svg'
+                            : 'assets/icons/page_states/empty_folder.svg',
+                        colorFilter: ColorFilter.mode(
+                          tintColor == null
+                              ? Theme.of(
+                                  context,
+                                ).colorScheme.primary.withOpacity(0.7)
+                              : tintColor!.withOpacity(0.7),
+                          BlendMode.srcIn,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 30),
+
+                if (showIllustration) const SizedBox(height: 30),
+
                 if (title != null) ...[
                   Text(
                     title!,

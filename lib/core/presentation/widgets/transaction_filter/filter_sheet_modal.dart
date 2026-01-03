@@ -18,9 +18,11 @@ import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/saved_filters_selector.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/status_filter/transaction_status_filter.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -112,12 +114,63 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
       maxChildSize: 0.85,
       minChildSize: 0.65,
       builder: (context, scrollController) {
+        final buttonConstraints = BoxConstraints(maxHeight: 36, maxWidth: 36);
+
         return ModalContainer(
           title: t.general.filters,
           bodyFit: FlexFit.tight,
+          endWidget: Row(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 8,
+            children: [
+              IconButton.filledTonal(
+                onPressed: !filtersToReturn.hasFilter
+                    ? null
+                    : () {
+                        setState(() {
+                          filtersToReturn = TransactionFilterSet();
+                        });
+                      },
+                icon: const Icon(Icons.save_rounded),
+                iconSize: 18,
+                constraints: buttonConstraints,
+                tooltip: t.ui_actions.save,
+              ),
+              IconButton.filledTonal(
+                onPressed: () {
+                  showSavedFiltersBottomSheetSelector(context).then((
+                    savedFilter,
+                  ) {
+                    if (savedFilter == null) return;
+
+                    setState(() {
+                      filtersToReturn = TransactionFilterSet.fromDB(
+                        savedFilter.filterSet,
+                      );
+                    });
+                  });
+                },
+                constraints: buttonConstraints,
+                iconSize: 18,
+                icon: const Icon(Icons.upload_rounded),
+              ),
+            ],
+          ),
           footer: BottomSheetFooter(
             submitIcon: Icons.filter_alt_outlined,
             submitText: t.ui_actions.apply,
+            extraActions: [
+              ListTileActionItem(
+                label: "Refresh",
+                onClick: () {
+                  print("HOLA");
+                  setState(() {
+                    filtersToReturn = TransactionFilterSet(minValue: 203);
+                  });
+                },
+                icon: Icons.refresh_rounded,
+              ),
+            ],
             onSaved:
                 !(_formKey.currentState?.validate() ?? true) ||
                     filtersToReturn.tagsIDs != null &&

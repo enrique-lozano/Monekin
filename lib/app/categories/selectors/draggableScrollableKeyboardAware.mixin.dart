@@ -36,9 +36,10 @@ mixin DraggableScrollableKeyboardAware<T extends StatefulWidget> on State<T> {
     required double minChildSize,
     required double defaultSize,
     required Widget Function(BuildContext, ScrollController) builder,
+    double maxChildSize = 1.0,
   }) {
     if (isKeyboardVisible) {
-      moveSheetTo(1);
+      moveSheetTo(maxChildSize);
     } else {
       moveSheetTo(initialSize ?? defaultSize);
     }
@@ -47,6 +48,7 @@ mixin DraggableScrollableKeyboardAware<T extends StatefulWidget> on State<T> {
       controller: controller,
       expand: false,
       minChildSize: minChildSize,
+      maxChildSize: maxChildSize,
       initialChildSize: initialSize ?? defaultSize,
       snap: true,
       snapSizes: [defaultSize],
