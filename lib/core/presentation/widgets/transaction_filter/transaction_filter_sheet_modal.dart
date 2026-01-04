@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/database/services/filters/saved_filters_service.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/saved_filter_form_page.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/saved_filters_selector.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_form.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
+import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 Future<TransactionFilterSet?> openFilterSheetModal(
@@ -51,6 +53,75 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
     filtersToReturn = widget.preselectedFilter;
   }
 
+  Future<void> _showSaveFilterDialog(BuildContext context) async {
+    final t = Translations.of(context);
+    final nameController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Save Filter"), // TODO: Translation
+        content: Form(
+          key: formKey,
+          child: TextFormField(
+            controller: nameController,
+            decoration: const InputDecoration(
+              labelText: "Filter Name", // TODO: Translation
+              hintText: "My custom filter",
+            ),
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return t.general.validations.required;
+              }
+              return null;
+            },
+            autofocus: true,
+            textCapitalization: TextCapitalization.sentences,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(t.ui_actions.cancel),
+          ),
+          TextButton(
+            onPressed: () async {
+              if (!formKey.currentState!.validate()) return;
+
+              final name = nameController.text.trim();
+              Navigator.of(context).pop();
+
+              final filterSetId = generateUUID();
+              final savedFilterId = generateUUID();
+
+              final filterSetDB = filtersToReturn.toDBModel(id: filterSetId);
+
+              final savedFilterDB = SavedFilterInDB(
+                id: savedFilterId,
+                name: name,
+                displayOrder: 0,
+                filterID: filterSetId,
+              );
+
+              final db = SavedFiltersService.instance.db;
+
+              await db.transaction(() async {
+                await db
+                    .into(db.transactionFilterSets)
+                    .insertOnConflictUpdate(filterSetDB);
+                await db
+                    .into(db.savedFilters)
+                    .insertOnConflictUpdate(savedFilterDB);
+              });
+            },
+            child: Text(t.ui_actions.save),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -73,19 +144,11 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
               IconButton.filledTonal(
                 onPressed: !filtersToReturn.hasFilter
                     ? null
-                    : () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => SavedFilterFormPage(
-                              initialFilter: filtersToReturn,
-                            ),
-                          ),
-                        );
-                      },
+                    : () => _showSaveFilterDialog(context),
                 icon: const Icon(Icons.save_rounded),
                 iconSize: 18,
                 constraints: buttonConstraints,
-                tooltip: t.ui_actions.save,
+                tooltip: "Save current filter",
               ),
               IconButton.filledTonal(
                 onPressed: () {
@@ -104,6 +167,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                 constraints: buttonConstraints,
                 iconSize: 18,
                 icon: const Icon(Icons.upload_rounded),
+                tooltip: "Load saved filter",
               ),
             ],
           ),
