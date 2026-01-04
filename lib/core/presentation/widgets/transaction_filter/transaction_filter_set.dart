@@ -10,7 +10,7 @@ import 'package:monekin/core/utils/uuid.dart';
 
 import '../../../models/transaction/transaction_type.enum.dart';
 
-part 'transaction_filters.g.dart';
+part 'transaction_filter_set.g.dart';
 
 @CopyWith()
 /// A set of filters to apply to transactions queries

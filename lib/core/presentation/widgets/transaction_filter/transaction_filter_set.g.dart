@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'transaction_filters.dart';
+part of 'transaction_filter_set.dart';
 
 // **************************************************************************
 // CopyWithGenerator
