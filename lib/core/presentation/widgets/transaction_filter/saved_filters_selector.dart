@@ -81,7 +81,10 @@ class _SavedFiltersSelectorState extends State<SavedFiltersSelector>
                       border: const UnderlineInputBorder(),
                     ),
                     onChanged: (value) {
-                      searchValue = value;
+                      setState(() {
+                        searchValue = value;
+                      });
+
                       rebuild();
                     },
                   ),

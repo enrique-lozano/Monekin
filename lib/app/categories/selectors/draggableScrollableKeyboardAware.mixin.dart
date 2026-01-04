@@ -15,6 +15,8 @@ mixin DraggableScrollableKeyboardAware<T extends StatefulWidget> on State<T> {
   bool get isKeyboardVisible => MediaQuery.of(context).viewInsets.bottom > 0;
 
   void rebuild() {
+    if (!controller.isAttached) return;
+
     final newSize = isKeyboardVisible ? initialSize : controller.size;
 
     setState(() {
