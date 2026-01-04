@@ -747,6 +747,8 @@ class _TranslationsTransactionFiltersZhCn implements TranslationsTransactionFilt
 	@override String to_value_def({required Object x}) => '到 ${x}';
 	@override String from_date_def({required Object date}) => '从 ${date}';
 	@override String to_date_def({required Object date}) => '到 ${date}';
+	@override String get reset => '重置过滤器';
+	@override late final _TranslationsTransactionFiltersSavedZhCn saved = _TranslationsTransactionFiltersSavedZhCn._(_root);
 }
 
 // Path: transaction.form
@@ -1404,6 +1406,27 @@ class _TranslationsTransactionListBulkEditZhCn implements TranslationsTransactio
 	@override String get status => '批量编辑状态';
 }
 
+// Path: transaction.filters.saved
+class _TranslationsTransactionFiltersSavedZhCn implements TranslationsTransactionFiltersSavedEn {
+	_TranslationsTransactionFiltersSavedZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '已保存的过滤器';
+	@override String get new_title => '新建过滤器';
+	@override String get edit_title => '编辑过滤器';
+	@override String get name_label => '过滤器名称';
+	@override String get name_hint => '我的自定义过滤器';
+	@override String get save_dialog_title => '保存过滤器';
+	@override String get save_tooltip => '保存当前过滤器';
+	@override String get load_tooltip => '加载已保存的过滤器';
+	@override String get empty_title => '未找到已保存的过滤器';
+	@override String get empty_description => '在此保存过滤器以便稍后快速访问。';
+	@override String get save_success => '筛选器保存成功';
+	@override String get delete_success => '筛选器删除成功';
+}
+
 // Path: transaction.form.validators
 class _TranslationsTransactionFormValidatorsZhCn implements TranslationsTransactionFormValidatorsEn {
 	_TranslationsTransactionFormValidatorsZhCn._(this._root);
@@ -1965,6 +1988,19 @@ extension on TranslationsZhCn {
 		map['transaction.filters.to_value_def'] = ({required Object x}) => '到 ${x}';
 		map['transaction.filters.from_date_def'] = ({required Object date}) => '从 ${date}';
 		map['transaction.filters.to_date_def'] = ({required Object date}) => '到 ${date}';
+		map['transaction.filters.reset'] = '重置过滤器';
+		map['transaction.filters.saved.title'] = '已保存的过滤器';
+		map['transaction.filters.saved.new_title'] = '新建过滤器';
+		map['transaction.filters.saved.edit_title'] = '编辑过滤器';
+		map['transaction.filters.saved.name_label'] = '过滤器名称';
+		map['transaction.filters.saved.name_hint'] = '我的自定义过滤器';
+		map['transaction.filters.saved.save_dialog_title'] = '保存过滤器';
+		map['transaction.filters.saved.save_tooltip'] = '保存当前过滤器';
+		map['transaction.filters.saved.load_tooltip'] = '加载已保存的过滤器';
+		map['transaction.filters.saved.empty_title'] = '未找到已保存的过滤器';
+		map['transaction.filters.saved.empty_description'] = '在此保存过滤器以便稍后快速访问。';
+		map['transaction.filters.saved.save_success'] = '筛选器保存成功';
+		map['transaction.filters.saved.delete_success'] = '筛选器删除成功';
 		map['transaction.form.validators.zero'] = '交易数额不应为零';
 		map['transaction.form.validators.date_max'] = '所选日期晚于当前日期。交易将新增为待办';
 		map['transaction.form.validators.date_after_account_creation'] = '无法创建早于账户创建日期的交易';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:monekin/core/presentation/animations/fade_in.dart';
+import 'package:monekin/core/presentation/animations/scaled_animated_switcher.dart';
 import 'package:monekin/core/presentation/theme.dart';
 
 class NoResults extends StatelessWidget {
@@ -52,8 +53,9 @@ class NoResults extends StatelessWidget {
                                 : MediaQuery.sizeOf(context).height * 0.4
                           : 270,
                     ),
-                    child: Opacity(
-                      opacity: 1,
+                    child: ScaledAnimatedSwitcher(
+                      keyToWatch: noSearchResultsVariation.toString(),
+                      duration: const Duration(milliseconds: 250),
                       child: SvgPicture.asset(
                         noSearchResultsVariation
                             ? 'assets/icons/page_states/no_results.svg'

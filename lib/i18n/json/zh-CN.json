@@ -355,7 +355,22 @@
       "from_value_def": "从 {{ x }}",
       "to_value_def": "到 {{ x }}",
       "from_date_def": "从 {{ date }}",
-      "to_date_def": "到 {{ date }}"
+      "to_date_def": "到 {{ date }}",
+      "reset": "重置过滤器",
+      "saved": {
+        "title": "已保存的过滤器",
+        "new_title": "新建过滤器",
+        "edit_title": "编辑过滤器",
+        "name_label": "过滤器名称",
+        "name_hint": "我的自定义过滤器",
+        "save_dialog_title": "保存过滤器",
+        "save_tooltip": "保存当前过滤器",
+        "load_tooltip": "加载已保存的过滤器",
+        "empty_title": "未找到已保存的过滤器",
+        "empty_description": "在此保存过滤器以便稍后快速访问。",
+        "save_success": "筛选器保存成功",
+        "delete_success": "筛选器删除成功"
+      }
     },
     "FORM": {
       "VALIDATORS": {

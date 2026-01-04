@@ -747,6 +747,8 @@ class _TranslationsTransactionFiltersEs implements TranslationsTransactionFilter
 	@override String to_value_def({required Object x}) => 'Hasta ${x}';
 	@override String from_date_def({required Object date}) => 'Desde el ${date}';
 	@override String to_date_def({required Object date}) => 'Hasta el ${date}';
+	@override String get reset => 'Restablecer filtros';
+	@override late final _TranslationsTransactionFiltersSavedEs saved = _TranslationsTransactionFiltersSavedEs._(_root);
 }
 
 // Path: transaction.form
@@ -1405,6 +1407,27 @@ class _TranslationsTransactionListBulkEditEs implements TranslationsTransactionL
 	@override String get status => 'Editar estados';
 }
 
+// Path: transaction.filters.saved
+class _TranslationsTransactionFiltersSavedEs implements TranslationsTransactionFiltersSavedEn {
+	_TranslationsTransactionFiltersSavedEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Filtros guardados';
+	@override String get new_title => 'Nuevo filtro';
+	@override String get edit_title => 'Editar filtro';
+	@override String get name_label => 'Nombre del filtro';
+	@override String get name_hint => 'Mi filtro personalizado';
+	@override String get save_dialog_title => 'Guardar filtro';
+	@override String get save_tooltip => 'Guardar filtro actual';
+	@override String get load_tooltip => 'Cargar filtro guardado';
+	@override String get empty_title => 'No se encontraron filtros guardados';
+	@override String get empty_description => 'Guarda filtros aquí para acceder a ellos rápidamente más tarde.';
+	@override String get save_success => 'Filtro guardado correctamente';
+	@override String get delete_success => 'Filtro eliminado correctamente';
+}
+
 // Path: transaction.form.validators
 class _TranslationsTransactionFormValidatorsEs implements TranslationsTransactionFormValidatorsEn {
 	_TranslationsTransactionFormValidatorsEs._(this._root);
@@ -1967,6 +1990,19 @@ extension on TranslationsEs {
 		map['transaction.filters.to_value_def'] = ({required Object x}) => 'Hasta ${x}';
 		map['transaction.filters.from_date_def'] = ({required Object date}) => 'Desde el ${date}';
 		map['transaction.filters.to_date_def'] = ({required Object date}) => 'Hasta el ${date}';
+		map['transaction.filters.reset'] = 'Restablecer filtros';
+		map['transaction.filters.saved.title'] = 'Filtros guardados';
+		map['transaction.filters.saved.new_title'] = 'Nuevo filtro';
+		map['transaction.filters.saved.edit_title'] = 'Editar filtro';
+		map['transaction.filters.saved.name_label'] = 'Nombre del filtro';
+		map['transaction.filters.saved.name_hint'] = 'Mi filtro personalizado';
+		map['transaction.filters.saved.save_dialog_title'] = 'Guardar filtro';
+		map['transaction.filters.saved.save_tooltip'] = 'Guardar filtro actual';
+		map['transaction.filters.saved.load_tooltip'] = 'Cargar filtro guardado';
+		map['transaction.filters.saved.empty_title'] = 'No se encontraron filtros guardados';
+		map['transaction.filters.saved.empty_description'] = 'Guarda filtros aquí para acceder a ellos rápidamente más tarde.';
+		map['transaction.filters.saved.save_success'] = 'Filtro guardado correctamente';
+		map['transaction.filters.saved.delete_success'] = 'Filtro eliminado correctamente';
 		map['transaction.form.validators.zero'] = 'El valor de una transacción no puede ser igual a cero';
 		map['transaction.form.validators.date_max'] = 'La fecha seleccionada es posterior a la actual. Se añadirá la transacción como pendiente';
 		map['transaction.form.validators.date_after_account_creation'] = 'No puedes crear una transacción cuya fecha es anterior a la fecha de creación de la cuenta a la que pertenece';

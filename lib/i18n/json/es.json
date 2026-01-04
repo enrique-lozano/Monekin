@@ -358,7 +358,22 @@
       "from_value_def": "Desde {{ x }}",
       "to_value_def": "Hasta {{ x }}",
       "from_date_def": "Desde el {{ date }}",
-      "to_date_def": "Hasta el {{ date }}"
+      "to_date_def": "Hasta el {{ date }}",
+      "reset": "Restablecer filtros",
+      "saved": {
+        "title": "Filtros guardados",
+        "new_title": "Nuevo filtro",
+        "edit_title": "Editar filtro",
+        "name_label": "Nombre del filtro",
+        "name_hint": "Mi filtro personalizado",
+        "save_dialog_title": "Guardar filtro",
+        "save_tooltip": "Guardar filtro actual",
+        "load_tooltip": "Cargar filtro guardado",
+        "empty_title": "No se encontraron filtros guardados",
+        "empty_description": "Guarda filtros aquí para acceder a ellos rápidamente más tarde.",
+        "save_success": "Filtro guardado correctamente",
+        "delete_success": "Filtro eliminado correctamente"
+      }
     },
     "FORM": {
       "VALIDATORS": {

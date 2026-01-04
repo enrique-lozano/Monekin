@@ -42,7 +42,7 @@ class _SavedFiltersSelectorState extends State<SavedFiltersSelector>
         final buttonConstraints = BoxConstraints(maxHeight: 36, maxWidth: 36);
 
         return ModalContainer(
-          title: "Saved filters",
+          title: t.transaction.filters.saved.title,
           endWidget: IconButton.filledTonal(
             onPressed: () {
               Navigator.of(context).push(
@@ -90,9 +90,9 @@ class _SavedFiltersSelectorState extends State<SavedFiltersSelector>
                       builder: (context) {
                         if (filteredFilterList.isEmpty) {
                           return NoResults(
-                            title: "No saved filters found",
+                            title: t.transaction.filters.saved.empty_title,
                             description:
-                                "Save filters here to quickly access them later.",
+                                t.transaction.filters.saved.empty_description,
                             showIllustration: false,
                             bottom: FilledButton.icon(
                               onPressed: () {

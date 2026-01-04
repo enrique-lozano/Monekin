@@ -355,7 +355,22 @@
       "from_value_def": "À partir de {{ x }}",
       "to_value_def": "Jusqu'à {{ x }}",
       "from_date_def": "À partir du {{ date }}",
-      "to_date_def": "Jusqu'au {{ date }}"
+      "to_date_def": "Jusqu'au {{ date }}",
+      "reset": "Réinitialiser les filtres",
+      "saved": {
+        "title": "Filtres enregistrés",
+        "new_title": "Nouveau filtre",
+        "edit_title": "Modifier le filtre",
+        "name_label": "Nom du filtre",
+        "name_hint": "Mon filtre personnalisé",
+        "save_dialog_title": "Enregistrer le filtre",
+        "save_tooltip": "Enregistrer le filtre actuel",
+        "load_tooltip": "Charger un filtre enregistré",
+        "empty_title": "Aucun filtre enregistré trouvé",
+        "empty_description": "Enregistrez des filtres ici pour y accéder rapidement plus tard.",
+        "save_success": "Filtre enregistré avec succès",
+        "delete_success": "Filtre supprimé avec succès"
+      }
     },
     "FORM": {
       "VALIDATORS": {

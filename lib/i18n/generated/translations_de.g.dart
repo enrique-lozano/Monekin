@@ -747,6 +747,8 @@ class _TranslationsTransactionFiltersDe implements TranslationsTransactionFilter
 	@override String to_value_def({required Object x}) => 'Bis zu ${x}';
 	@override String from_date_def({required Object date}) => 'Von der ${date}';
 	@override String to_date_def({required Object date}) => 'Bis zum ${date}';
+	@override String get reset => 'Filter zurücksetzen';
+	@override late final _TranslationsTransactionFiltersSavedDe saved = _TranslationsTransactionFiltersSavedDe._(_root);
 }
 
 // Path: transaction.form
@@ -1404,6 +1406,27 @@ class _TranslationsTransactionListBulkEditDe implements TranslationsTransactionL
 	@override String get status => 'Status bearbeiten';
 }
 
+// Path: transaction.filters.saved
+class _TranslationsTransactionFiltersSavedDe implements TranslationsTransactionFiltersSavedEn {
+	_TranslationsTransactionFiltersSavedDe._(this._root);
+
+	final TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Gespeicherte Filter';
+	@override String get new_title => 'Neuer Filter';
+	@override String get edit_title => 'Filter bearbeiten';
+	@override String get name_label => 'Filtername';
+	@override String get name_hint => 'Mein benutzerdefinierter Filter';
+	@override String get save_dialog_title => 'Filter speichern';
+	@override String get save_tooltip => 'Aktuellen Filter speichern';
+	@override String get load_tooltip => 'Gespeicherten Filter laden';
+	@override String get empty_title => 'Keine gespeicherten Filter gefunden';
+	@override String get empty_description => 'Speichern Sie Filter hier, um später schnell darauf zugreifen zu können.';
+	@override String get save_success => 'Filter erfolgreich gespeichert';
+	@override String get delete_success => 'Filter erfolgreich gelöscht';
+}
+
 // Path: transaction.form.validators
 class _TranslationsTransactionFormValidatorsDe implements TranslationsTransactionFormValidatorsEn {
 	_TranslationsTransactionFormValidatorsDe._(this._root);
@@ -1965,6 +1988,19 @@ extension on TranslationsDe {
 		map['transaction.filters.to_value_def'] = ({required Object x}) => 'Bis zu ${x}';
 		map['transaction.filters.from_date_def'] = ({required Object date}) => 'Von der ${date}';
 		map['transaction.filters.to_date_def'] = ({required Object date}) => 'Bis zum ${date}';
+		map['transaction.filters.reset'] = 'Filter zurücksetzen';
+		map['transaction.filters.saved.title'] = 'Gespeicherte Filter';
+		map['transaction.filters.saved.new_title'] = 'Neuer Filter';
+		map['transaction.filters.saved.edit_title'] = 'Filter bearbeiten';
+		map['transaction.filters.saved.name_label'] = 'Filtername';
+		map['transaction.filters.saved.name_hint'] = 'Mein benutzerdefinierter Filter';
+		map['transaction.filters.saved.save_dialog_title'] = 'Filter speichern';
+		map['transaction.filters.saved.save_tooltip'] = 'Aktuellen Filter speichern';
+		map['transaction.filters.saved.load_tooltip'] = 'Gespeicherten Filter laden';
+		map['transaction.filters.saved.empty_title'] = 'Keine gespeicherten Filter gefunden';
+		map['transaction.filters.saved.empty_description'] = 'Speichern Sie Filter hier, um später schnell darauf zugreifen zu können.';
+		map['transaction.filters.saved.save_success'] = 'Filter erfolgreich gespeichert';
+		map['transaction.filters.saved.delete_success'] = 'Filter erfolgreich gelöscht';
 		map['transaction.form.validators.zero'] = 'Der Wert einer Transaktion kann nicht gleich Null sein';
 		map['transaction.form.validators.date_max'] = 'Das ausgewählte Datum liegt nach dem aktuellen. ';
 		map['transaction.form.validators.date_after_account_creation'] = 'Du kannst keine Transaktion erstellen, deren Datum vor dem Erstellungsdatum des Kontos liegt, zu dem sie gehört';

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/filters/saved_filters_service.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
@@ -61,14 +62,14 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Save Filter"), // TODO: Translation
+        title: Text(t.transaction.filters.saved.save_dialog_title),
         content: Form(
           key: formKey,
           child: TextFormField(
             controller: nameController,
-            decoration: const InputDecoration(
-              labelText: "Filter Name", // TODO: Translation
-              hintText: "My custom filter",
+            decoration: InputDecoration(
+              labelText: t.transaction.filters.saved.name_label,
+              hintText: t.transaction.filters.saved.name_hint,
             ),
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
@@ -106,14 +107,29 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
 
               final db = SavedFiltersService.instance.db;
 
-              await db.transaction(() async {
-                await db
-                    .into(db.transactionFilterSets)
-                    .insertOnConflictUpdate(filterSetDB);
-                await db
-                    .into(db.savedFilters)
-                    .insertOnConflictUpdate(savedFilterDB);
-              });
+              try {
+                await db.transaction(() async {
+                  await db
+                      .into(db.transactionFilterSets)
+                      .insertOnConflictUpdate(filterSetDB);
+                  await db
+                      .into(db.savedFilters)
+                      .insertOnConflictUpdate(savedFilterDB);
+                });
+
+                if (context.mounted) {
+                  MonekinSnackbar.success(
+                    SnackbarParams(
+                      t.transaction.filters.saved.save_success,
+                      showAtTop: true,
+                    ),
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  MonekinSnackbar.error(SnackbarParams.fromError(e));
+                }
+              }
             },
             child: Text(t.ui_actions.save),
           ),
@@ -148,7 +164,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                 icon: const Icon(Icons.save_rounded),
                 iconSize: 18,
                 constraints: buttonConstraints,
-                tooltip: "Save current filter",
+                tooltip: t.transaction.filters.saved.save_tooltip,
               ),
               IconButton.filledTonal(
                 onPressed: () {
@@ -167,7 +183,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                 constraints: buttonConstraints,
                 iconSize: 18,
                 icon: const Icon(Icons.upload_rounded),
-                tooltip: "Load saved filter",
+                tooltip: t.transaction.filters.saved.load_tooltip,
               ),
             ],
           ),
@@ -176,7 +192,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
             submitText: t.ui_actions.apply,
             extraActions: [
               ListTileActionItem(
-                label: "Reset filters", // TODO: Add translation
+                label: t.transaction.filters.reset,
                 onClick: () {
                   setState(() {
                     filtersToReturn = TransactionFilterSet();

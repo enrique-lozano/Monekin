@@ -3,6 +3,7 @@ import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/filters/saved_filters_service.dart';
 import 'package:monekin/core/models/filters/saved_filter.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_form.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
@@ -73,6 +74,9 @@ class _SavedFilterFormPageState extends State<SavedFilterFormPage> {
     });
 
     if (mounted) {
+      MonekinSnackbar.success(
+        SnackbarParams(t.transaction.filters.saved.save_success),
+      );
       Navigator.of(context).pop();
     }
   }
@@ -83,7 +87,6 @@ class _SavedFilterFormPageState extends State<SavedFilterFormPage> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(t.ui_actions.delete),
-        content: Text(t.ui_actions.delete),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -102,6 +105,9 @@ class _SavedFilterFormPageState extends State<SavedFilterFormPage> {
         widget.savedFilter!.id,
       );
       if (mounted) {
+        MonekinSnackbar.success(
+          SnackbarParams(t.transaction.filters.saved.delete_success),
+        );
         Navigator.of(context).pop();
       }
     }
@@ -113,7 +119,9 @@ class _SavedFilterFormPageState extends State<SavedFilterFormPage> {
     final isEditing = widget.savedFilter != null;
 
     return PageFramework(
-      title: isEditing ? "Edit Filter" : "New Filter",
+      title: isEditing
+          ? t.transaction.filters.saved.edit_title
+          : t.transaction.filters.saved.new_title,
       appBarActions: [
         if (isEditing)
           IconButton(
@@ -141,7 +149,7 @@ class _SavedFilterFormPageState extends State<SavedFilterFormPage> {
               TextFormField(
                 controller: _nameController,
                 decoration: InputDecoration(
-                  labelText: "Filter Name", // TODO: Add translation
+                  labelText: t.transaction.filters.saved.name_label,
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {

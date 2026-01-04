@@ -59,10 +59,13 @@ class _SavedFiltersListPageState extends State<SavedFiltersListPage> {
 
         if (snapshot.data!.isEmpty) {
           return NoResults(
-            title: t.general.empty_warn,
+            title: searchQuery.isNotEmpty
+                ? t.general.empty_warn
+                : t.transaction.filters.saved.empty_title,
+            noSearchResultsVariation: searchQuery.isNotEmpty,
             description: searchQuery.isNotEmpty
                 ? t.general.search_no_results
-                : "No saved filters found", // TODO: Add translation
+                : t.transaction.filters.saved.empty_description,
           );
         }
 
@@ -123,7 +126,7 @@ class _SavedFiltersListPageState extends State<SavedFiltersListPage> {
           );
 
     return PageFramework(
-      title: "Saved filters", // TODO: Add translation
+      title: t.transaction.filters.saved.title,
       floatingActionButton: fab,
       body: ColumnWithReorderableListAndSearch(
         onSearchChanged: _onSearchChanged,

@@ -1384,6 +1384,11 @@ class TranslationsTransactionFiltersEn {
 
 	/// en: 'Up to the {{ date }}'
 	String to_date_def({required Object date}) => 'Up to the ${date}';
+
+	/// en: 'Reset filters'
+	String get reset => 'Reset filters';
+
+	late final TranslationsTransactionFiltersSavedEn saved = TranslationsTransactionFiltersSavedEn._(_root);
 }
 
 // Path: transaction.form
@@ -2532,6 +2537,51 @@ class TranslationsTransactionListBulkEditEn {
 	String get status => 'Edit statuses';
 }
 
+// Path: transaction.filters.saved
+class TranslationsTransactionFiltersSavedEn {
+	TranslationsTransactionFiltersSavedEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Saved filters'
+	String get title => 'Saved filters';
+
+	/// en: 'New Filter'
+	String get new_title => 'New Filter';
+
+	/// en: 'Edit Filter'
+	String get edit_title => 'Edit Filter';
+
+	/// en: 'Filter Name'
+	String get name_label => 'Filter Name';
+
+	/// en: 'My custom filter'
+	String get name_hint => 'My custom filter';
+
+	/// en: 'Save Filter'
+	String get save_dialog_title => 'Save Filter';
+
+	/// en: 'Save current filter'
+	String get save_tooltip => 'Save current filter';
+
+	/// en: 'Load saved filter'
+	String get load_tooltip => 'Load saved filter';
+
+	/// en: 'No saved filters found'
+	String get empty_title => 'No saved filters found';
+
+	/// en: 'Save filters here to quickly access them later.'
+	String get empty_description => 'Save filters here to quickly access them later.';
+
+	/// en: 'Filter saved successfully'
+	String get save_success => 'Filter saved successfully';
+
+	/// en: 'Filter deleted successfully'
+	String get delete_success => 'Filter deleted successfully';
+}
+
 // Path: transaction.form.validators
 class TranslationsTransactionFormValidatorsEn {
 	TranslationsTransactionFormValidatorsEn._(this._root);
@@ -3238,6 +3288,19 @@ extension on Translations {
 		map['transaction.filters.to_value_def'] = ({required Object x}) => 'Up to ${x}';
 		map['transaction.filters.from_date_def'] = ({required Object date}) => 'From the ${date}';
 		map['transaction.filters.to_date_def'] = ({required Object date}) => 'Up to the ${date}';
+		map['transaction.filters.reset'] = 'Reset filters';
+		map['transaction.filters.saved.title'] = 'Saved filters';
+		map['transaction.filters.saved.new_title'] = 'New Filter';
+		map['transaction.filters.saved.edit_title'] = 'Edit Filter';
+		map['transaction.filters.saved.name_label'] = 'Filter Name';
+		map['transaction.filters.saved.name_hint'] = 'My custom filter';
+		map['transaction.filters.saved.save_dialog_title'] = 'Save Filter';
+		map['transaction.filters.saved.save_tooltip'] = 'Save current filter';
+		map['transaction.filters.saved.load_tooltip'] = 'Load saved filter';
+		map['transaction.filters.saved.empty_title'] = 'No saved filters found';
+		map['transaction.filters.saved.empty_description'] = 'Save filters here to quickly access them later.';
+		map['transaction.filters.saved.save_success'] = 'Filter saved successfully';
+		map['transaction.filters.saved.delete_success'] = 'Filter deleted successfully';
 		map['transaction.form.validators.zero'] = 'The value of a transaction cannot be equal to zero';
 		map['transaction.form.validators.date_max'] = 'The selected date is after the current one. The transaction will be added as pending';
 		map['transaction.form.validators.date_after_account_creation'] = 'You cannot create a transaction whose date is before the creation date of the account it belongs to';

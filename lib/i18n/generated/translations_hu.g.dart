@@ -747,6 +747,8 @@ class _TranslationsTransactionFiltersHu implements TranslationsTransactionFilter
 	@override String to_value_def({required Object x}) => 'Ide: ${x}';
 	@override String from_date_def({required Object date}) => 'Ettől: ${date}';
 	@override String to_date_def({required Object date}) => 'Eddig: ${date}';
+	@override String get reset => 'Szűrők visszaállítása';
+	@override late final _TranslationsTransactionFiltersSavedHu saved = _TranslationsTransactionFiltersSavedHu._(_root);
 }
 
 // Path: transaction.form
@@ -1404,6 +1406,27 @@ class _TranslationsTransactionListBulkEditHu implements TranslationsTransactionL
 	@override String get status => 'Állapotok szerkesztése';
 }
 
+// Path: transaction.filters.saved
+class _TranslationsTransactionFiltersSavedHu implements TranslationsTransactionFiltersSavedEn {
+	_TranslationsTransactionFiltersSavedHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Mentett szűrők';
+	@override String get new_title => 'Új szűrő';
+	@override String get edit_title => 'Szűrő szerkesztése';
+	@override String get name_label => 'Szűrő neve';
+	@override String get name_hint => 'Saját szűrőm';
+	@override String get save_dialog_title => 'Szűrő mentése';
+	@override String get save_tooltip => 'Jelenlegi szűrő mentése';
+	@override String get load_tooltip => 'Mentett szűrő betöltése';
+	@override String get empty_title => 'Nincsenek mentett szűrők';
+	@override String get empty_description => 'Mentse el a szűrőket itt, hogy később gyorsan elérhesse őket.';
+	@override String get save_success => 'Szűrő sikeresen mentve';
+	@override String get delete_success => 'Szűrő sikeresen törölve';
+}
+
 // Path: transaction.form.validators
 class _TranslationsTransactionFormValidatorsHu implements TranslationsTransactionFormValidatorsEn {
 	_TranslationsTransactionFormValidatorsHu._(this._root);
@@ -1965,6 +1988,19 @@ extension on TranslationsHu {
 		map['transaction.filters.to_value_def'] = ({required Object x}) => 'Ide: ${x}';
 		map['transaction.filters.from_date_def'] = ({required Object date}) => 'Ettől: ${date}';
 		map['transaction.filters.to_date_def'] = ({required Object date}) => 'Eddig: ${date}';
+		map['transaction.filters.reset'] = 'Szűrők visszaállítása';
+		map['transaction.filters.saved.title'] = 'Mentett szűrők';
+		map['transaction.filters.saved.new_title'] = 'Új szűrő';
+		map['transaction.filters.saved.edit_title'] = 'Szűrő szerkesztése';
+		map['transaction.filters.saved.name_label'] = 'Szűrő neve';
+		map['transaction.filters.saved.name_hint'] = 'Saját szűrőm';
+		map['transaction.filters.saved.save_dialog_title'] = 'Szűrő mentése';
+		map['transaction.filters.saved.save_tooltip'] = 'Jelenlegi szűrő mentése';
+		map['transaction.filters.saved.load_tooltip'] = 'Mentett szűrő betöltése';
+		map['transaction.filters.saved.empty_title'] = 'Nincsenek mentett szűrők';
+		map['transaction.filters.saved.empty_description'] = 'Mentse el a szűrőket itt, hogy később gyorsan elérhesse őket.';
+		map['transaction.filters.saved.save_success'] = 'Szűrő sikeresen mentve';
+		map['transaction.filters.saved.delete_success'] = 'Szűrő sikeresen törölve';
 		map['transaction.form.validators.zero'] = 'A tranzakció értéke nem lehet nulla.';
 		map['transaction.form.validators.date_max'] = 'A kiválasztott dátum az aktuális dátum után van. A tranzakció függő tranzakcióként kerül hozzáadásra.';
 		map['transaction.form.validators.date_after_account_creation'] = 'Nem hozhat létre olyan tranzakciót, amelynek a dátuma megelőzi a hozzá tartozó számla létrehozásának a dátumát.';

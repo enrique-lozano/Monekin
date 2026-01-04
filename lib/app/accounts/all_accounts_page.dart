@@ -85,6 +85,7 @@ class _AllAccountsPageState extends State<AllAccountsPage> {
             if (accounts.isEmpty) {
               return NoResults(
                 title: t.general.empty_warn,
+                noSearchResultsVariation: searchQuery.isNotEmpty,
                 description: searchQuery.isNotEmpty
                     ? t.general.search_no_results
                     : t.account.no_accounts,

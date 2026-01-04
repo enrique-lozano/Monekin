@@ -343,7 +343,22 @@
       "from_value_def": "From {{ x }}",
       "to_value_def": "Up to {{ x }}",
       "from_date_def": "From the {{ date }}",
-      "to_date_def": "Up to the {{ date }}"
+      "to_date_def": "Up to the {{ date }}",
+      "reset": "Reset filters",
+      "saved": {
+        "title": "Saved filters",
+        "new_title": "New Filter",
+        "edit_title": "Edit Filter",
+        "name_label": "Filter Name",
+        "name_hint": "My custom filter",
+        "save_dialog_title": "Save Filter",
+        "save_tooltip": "Save current filter",
+        "load_tooltip": "Load saved filter",
+        "empty_title": "No saved filters found",
+        "empty_description": "Save filters here to quickly access them later.",
+        "save_success": "Filter saved successfully",
+        "delete_success": "Filter deleted successfully"
+      }
     },
     "FORM": {
       "VALIDATORS": {

@@ -355,7 +355,22 @@
       "from_value_def": "Від {{ x }}",
       "to_value_def": "До {{ x }}",
       "from_date_def": "З {{ date }}",
-      "to_date_def": "До {{ date }}"
+      "to_date_def": "До {{ date }}",
+      "reset": "Скинути фільтри",
+      "saved": {
+        "title": "Збережені фільтри",
+        "new_title": "Новий фільтр",
+        "edit_title": "Редагувати фільтр",
+        "name_label": "Назва фільтру",
+        "name_hint": "Мій власний фільтр",
+        "save_dialog_title": "Зберегти фільтр",
+        "save_tooltip": "Зберегти поточний фільтр",
+        "load_tooltip": "Завантажити збережений фільтр",
+        "empty_title": "Збережених фільтрів не знайдено",
+        "empty_description": "Зберігайте фільтри тут, щоб швидко отримати до них доступ пізніше.",
+        "save_success": "Фільтр успішно збережено",
+        "delete_success": "Фільтр успішно видалено"
+      }
     },
     "FORM": {
       "VALIDATORS": {

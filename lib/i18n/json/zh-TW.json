@@ -355,7 +355,22 @@
       "from_value_def": "來自 {{x}}",
       "to_value_def": "最多 {{x}}",
       "from_date_def": "從{{date}}開始",
-      "to_date_def": "截至 {{date}}"
+      "to_date_def": "截至 {{date}}",
+      "reset": "重置過濾器",
+      "saved": {
+        "title": "已儲存的過濾器",
+        "new_title": "新增過濾器",
+        "edit_title": "編輯過濾器",
+        "name_label": "過濾器名稱",
+        "name_hint": "我的自訂過濾器",
+        "save_dialog_title": "儲存過濾器",
+        "save_tooltip": "儲存目前的過濾器",
+        "load_tooltip": "載入已儲存的過濾器",
+        "empty_title": "未找到已儲存的過濾器",
+        "empty_description": "在此儲存過濾器以便稍後快速存取。",
+        "save_success": "篩選器儲存成功",
+        "delete_success": "篩選器刪除成功"
+      }
     },
     "FORM": {
       "VALIDATORS": {

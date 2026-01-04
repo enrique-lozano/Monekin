@@ -355,7 +355,22 @@
       "from_value_def": "{{ x }} dan",
       "to_value_def": "{{ x }} a kadar",
       "from_date_def": "{{ date }} tarihinden",
-      "to_date_def": "{{ date }} tarihine kadar"
+      "to_date_def": "{{ date }} tarihine kadar",
+      "reset": "Filtreleri sıfırla",
+      "saved": {
+        "title": "Kaydedilen filtreler",
+        "new_title": "Yeni Filtre",
+        "edit_title": "Filtreyi Düzenle",
+        "name_label": "Filtre Adı",
+        "name_hint": "Özel filtrem",
+        "save_dialog_title": "Filtreyi Kaydet",
+        "save_tooltip": "Mevcut filtreyi kaydet",
+        "load_tooltip": "Kaydedilen filtreyi yükle",
+        "empty_title": "Kaydedilen filtre bulunamadı",
+        "empty_description": "Filtreleri daha sonra hızlıca erişmek için buraya kaydedin.",
+        "save_success": "Filtre başarıyla kaydedildi",
+        "delete_success": "Filtre başarıyla silindi"
+      }
     },
     "FORM": {
       "VALIDATORS": {

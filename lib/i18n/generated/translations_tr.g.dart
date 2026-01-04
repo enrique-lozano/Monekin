@@ -747,6 +747,8 @@ class _TranslationsTransactionFiltersTr implements TranslationsTransactionFilter
 	@override String to_value_def({required Object x}) => '${x} a kadar';
 	@override String from_date_def({required Object date}) => '${date} tarihinden';
 	@override String to_date_def({required Object date}) => '${date} tarihine kadar';
+	@override String get reset => 'Filtreleri sıfırla';
+	@override late final _TranslationsTransactionFiltersSavedTr saved = _TranslationsTransactionFiltersSavedTr._(_root);
 }
 
 // Path: transaction.form
@@ -1404,6 +1406,27 @@ class _TranslationsTransactionListBulkEditTr implements TranslationsTransactionL
 	@override String get status => 'Durumları düzenle';
 }
 
+// Path: transaction.filters.saved
+class _TranslationsTransactionFiltersSavedTr implements TranslationsTransactionFiltersSavedEn {
+	_TranslationsTransactionFiltersSavedTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Kaydedilen filtreler';
+	@override String get new_title => 'Yeni Filtre';
+	@override String get edit_title => 'Filtreyi Düzenle';
+	@override String get name_label => 'Filtre Adı';
+	@override String get name_hint => 'Özel filtrem';
+	@override String get save_dialog_title => 'Filtreyi Kaydet';
+	@override String get save_tooltip => 'Mevcut filtreyi kaydet';
+	@override String get load_tooltip => 'Kaydedilen filtreyi yükle';
+	@override String get empty_title => 'Kaydedilen filtre bulunamadı';
+	@override String get empty_description => 'Filtreleri daha sonra hızlıca erişmek için buraya kaydedin.';
+	@override String get save_success => 'Filtre başarıyla kaydedildi';
+	@override String get delete_success => 'Filtre başarıyla silindi';
+}
+
 // Path: transaction.form.validators
 class _TranslationsTransactionFormValidatorsTr implements TranslationsTransactionFormValidatorsEn {
 	_TranslationsTransactionFormValidatorsTr._(this._root);
@@ -1965,6 +1988,19 @@ extension on TranslationsTr {
 		map['transaction.filters.to_value_def'] = ({required Object x}) => '${x} a kadar';
 		map['transaction.filters.from_date_def'] = ({required Object date}) => '${date} tarihinden';
 		map['transaction.filters.to_date_def'] = ({required Object date}) => '${date} tarihine kadar';
+		map['transaction.filters.reset'] = 'Filtreleri sıfırla';
+		map['transaction.filters.saved.title'] = 'Kaydedilen filtreler';
+		map['transaction.filters.saved.new_title'] = 'Yeni Filtre';
+		map['transaction.filters.saved.edit_title'] = 'Filtreyi Düzenle';
+		map['transaction.filters.saved.name_label'] = 'Filtre Adı';
+		map['transaction.filters.saved.name_hint'] = 'Özel filtrem';
+		map['transaction.filters.saved.save_dialog_title'] = 'Filtreyi Kaydet';
+		map['transaction.filters.saved.save_tooltip'] = 'Mevcut filtreyi kaydet';
+		map['transaction.filters.saved.load_tooltip'] = 'Kaydedilen filtreyi yükle';
+		map['transaction.filters.saved.empty_title'] = 'Kaydedilen filtre bulunamadı';
+		map['transaction.filters.saved.empty_description'] = 'Filtreleri daha sonra hızlıca erişmek için buraya kaydedin.';
+		map['transaction.filters.saved.save_success'] = 'Filtre başarıyla kaydedildi';
+		map['transaction.filters.saved.delete_success'] = 'Filtre başarıyla silindi';
 		map['transaction.form.validators.zero'] = 'Bir işlemin değeri sıfıra eşit olamaz';
 		map['transaction.form.validators.date_max'] = 'Seçilen tarih, güncel tarihten sonra. İşlem askıda olarak eklenecektir';
 		map['transaction.form.validators.date_after_account_creation'] = 'Bir işlemin tarihi, ait olduğu hesabın oluşturulma tarihinden önce olamaz';

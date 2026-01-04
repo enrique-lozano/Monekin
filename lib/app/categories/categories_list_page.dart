@@ -84,6 +84,7 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
             if (categories.isEmpty) {
               return NoResults(
                 title: t.general.empty_warn,
+                noSearchResultsVariation: searchQuery.isNotEmpty,
                 description: searchQuery.isNotEmpty
                     ? t.general.search_no_results
                     : '',
