@@ -4,6 +4,8 @@ import 'package:monekin/core/database/services/filters/saved_filters_service.dar
 import 'package:monekin/core/models/filters/saved_filter.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/saved_filter_form_page.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/saved_filters_list_page.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 Future<SavedFilter?> showSavedFiltersBottomSheetSelector(BuildContext context) {
@@ -43,7 +45,11 @@ class _SavedFiltersSelectorState extends State<SavedFiltersSelector>
           title: "Saved filters",
           endWidget: IconButton.filledTonal(
             onPressed: () {
-              //TODO: Send to the config filters page
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const SavedFiltersListPage(),
+                ),
+              );
             },
             icon: const Icon(Icons.settings_rounded),
             iconSize: 18,
@@ -89,7 +95,14 @@ class _SavedFiltersSelectorState extends State<SavedFiltersSelector>
                                 "Save filters here to quickly access them later.",
                             showIllustration: false,
                             bottom: FilledButton.icon(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SavedFilterFormPage(),
+                                  ),
+                                );
+                              },
                               label: Text(t.ui_actions.add),
                               icon: const Icon(Icons.add),
                             ),
@@ -114,6 +127,18 @@ class _SavedFiltersSelectorState extends State<SavedFiltersSelector>
                               onTap: () {
                                 Navigator.of(context).pop(savedFilter);
                               },
+                              trailing: IconButton(
+                                icon: const Icon(Icons.edit_rounded),
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => SavedFilterFormPage(
+                                        savedFilter: savedFilter,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                             );
                           },
                         );

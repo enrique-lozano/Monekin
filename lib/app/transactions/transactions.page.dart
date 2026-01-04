@@ -12,6 +12,7 @@ import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
@@ -113,8 +114,10 @@ class TransactionsPageState extends State<TransactionsPage> {
             : NewTransactionButton(scrollController: listScrollController),
         body: Column(
           children: [
-            if (filters.hasFilter) ...[
-              FilterRowIndicator(
+            AnimatedExpanded(
+              expand: filters.hasFilter,
+              duration: const Duration(milliseconds: 250),
+              child: FilterRowIndicator(
                 filters: filters.copyWith(searchValue: searchController.text),
                 onChange: (newFilters) {
                   setState(() {
@@ -122,7 +125,7 @@ class TransactionsPageState extends State<TransactionsPage> {
                   });
                 },
               ),
-            ],
+            ),
             StreamBuilder(
               stream: Rx.combineLatest2(
                 TransactionService.instance.countTransactions(
