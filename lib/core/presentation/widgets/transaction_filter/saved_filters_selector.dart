@@ -6,6 +6,7 @@ import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/saved_filter_form_page.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/saved_filters_list_page.dart';
+import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 Future<SavedFilter?> showSavedFiltersBottomSheetSelector(BuildContext context) {
@@ -52,8 +53,8 @@ class _SavedFiltersSelectorState extends State<SavedFiltersSelector>
               );
             },
             icon: const Icon(Icons.settings_rounded),
-            iconSize: 18,
-            constraints: buttonConstraints,
+            iconSize: AppUtils.isDesktop ? 18 : null,
+            constraints: AppUtils.isDesktop ? buttonConstraints : null,
             tooltip: t.settings.title_short,
           ),
           body: StreamBuilder(

@@ -122,6 +122,7 @@ ThemeData getThemeData(
     brightness: isDark ? Brightness.dark : Brightness.light,
     useMaterial3: true,
     fontFamily: fontFamily,
+    //materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     extensions: [customAppColors],
   );
 

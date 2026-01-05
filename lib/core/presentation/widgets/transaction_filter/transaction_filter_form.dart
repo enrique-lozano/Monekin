@@ -11,6 +11,7 @@ import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/tags/tag.dart';
+import 'package:monekin/core/models/transaction/transaction_form_field.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
@@ -146,7 +147,7 @@ class _TransactionFilterFormState extends State<TransactionFilterForm> {
 
             return ListTileField(
               title: t.general.accounts,
-              leading: const Icon(Icons.account_balance_rounded),
+              leading: Icon(TransactionFormField.account.icon),
               trailing: CountIndicatorWithExpandArrow(
                 countToDisplay: filtersToReturn.accountsIDs?.length,
               ),
@@ -246,7 +247,7 @@ class _TransactionFilterFormState extends State<TransactionFilterForm> {
 
             return ListTileField(
               title: t.general.categories,
-              leading: const Icon(Icons.category_rounded),
+              leading: Icon(TransactionFormField.category.icon),
               trailing: CountIndicatorWithExpandArrow(
                 countToDisplay: filtersToReturn.categoriesIds?.length,
               ),

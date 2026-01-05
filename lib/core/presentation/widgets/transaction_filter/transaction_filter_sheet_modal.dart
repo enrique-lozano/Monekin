@@ -11,6 +11,7 @@ import 'package:monekin/core/presentation/widgets/transaction_filter/saved_filte
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_form.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -148,21 +149,23 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
       maxChildSize: 0.85,
       minChildSize: 0.65,
       builder: (context, scrollController) {
-        final buttonConstraints = BoxConstraints(maxHeight: 36, maxWidth: 36);
+        final buttonConstraints = AppUtils.isDesktop
+            ? BoxConstraints(maxHeight: 36, maxWidth: 36)
+            : null;
 
         return ModalContainer(
           title: t.general.filters,
           bodyFit: FlexFit.tight,
           endWidget: Row(
             mainAxisSize: MainAxisSize.min,
-            spacing: 8,
+            spacing: AppUtils.isDesktop ? 8 : 0,
             children: [
               IconButton.filledTonal(
                 onPressed: !filtersToReturn.hasFilter
                     ? null
                     : () => _showSaveFilterDialog(context),
                 icon: const Icon(Icons.save_rounded),
-                iconSize: 18,
+                iconSize: AppUtils.isDesktop ? 18 : null,
                 constraints: buttonConstraints,
                 tooltip: t.transaction.filters.saved.save_tooltip,
               ),
@@ -181,7 +184,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                   });
                 },
                 constraints: buttonConstraints,
-                iconSize: 18,
+                iconSize: AppUtils.isDesktop ? 18 : null,
                 icon: const Icon(Icons.upload_rounded),
                 tooltip: t.transaction.filters.saved.load_tooltip,
               ),
