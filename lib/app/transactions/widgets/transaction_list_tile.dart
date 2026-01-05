@@ -191,9 +191,7 @@ class TransactionListTile extends StatelessWidget {
         ],
       ),
       subtitle: DefaultTextStyle(
-        style: Theme.of(
-          context,
-        ).textTheme.labelSmall!.copyWith(fontWeight: FontWeight.w300),
+        style: Theme.of(context).textTheme.labelMedium!,
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
