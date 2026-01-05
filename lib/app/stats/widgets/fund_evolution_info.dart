@@ -12,7 +12,7 @@ import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -29,7 +29,7 @@ class LineChartDataItem {
 class FundEvolutionInfo extends StatelessWidget {
   const FundEvolutionInfo({
     super.key,
-    this.filters = const TransactionFilters(),
+    this.filters = const TransactionFilterSet(),
     required this.dateRange,
     this.showBalanceHeader = false,
   });
@@ -38,7 +38,7 @@ class FundEvolutionInfo extends StatelessWidget {
 
   final bool showBalanceHeader;
 
-  final TransactionFilters filters;
+  final TransactionFilterSet filters;
 
   @override
   Widget build(BuildContext context) {
@@ -197,7 +197,7 @@ class FundEvolutionLineChart extends StatefulWidget {
   });
 
   final DateTimeRange? timeRange;
-  final TransactionFilters filters;
+  final TransactionFilterSet filters;
   final Widget loadingWidget;
 
   @override

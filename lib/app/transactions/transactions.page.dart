@@ -12,14 +12,15 @@ import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/filter_sheet_modal.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_sheet_modal.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
@@ -28,14 +29,14 @@ import 'package:skeletonizer/skeletonizer.dart';
 class TransactionsPage extends StatefulWidget {
   const TransactionsPage({super.key, this.filters});
 
-  final TransactionFilters? filters;
+  final TransactionFilterSet? filters;
 
   @override
   State<TransactionsPage> createState() => TransactionsPageState();
 }
 
 class TransactionsPageState extends State<TransactionsPage> {
-  late TransactionFilters filters;
+  late TransactionFilterSet filters;
 
   bool searchActive = false;
 
@@ -55,7 +56,9 @@ class TransactionsPageState extends State<TransactionsPage> {
   void initState() {
     super.initState();
 
-    filters = widget.filters ?? const TransactionFilters();
+    filters = widget.filters ?? const TransactionFilterSet();
+
+    print("INITIAL FILTERS: $filters");
 
     searchFocusNode.addListener(() {
       if (!searchFocusNode.hasFocus && searchController.text.isEmpty) {
@@ -111,8 +114,10 @@ class TransactionsPageState extends State<TransactionsPage> {
             : NewTransactionButton(scrollController: listScrollController),
         body: Column(
           children: [
-            if (filters.hasFilter) ...[
-              FilterRowIndicator(
+            AnimatedExpanded(
+              expand: filters.hasFilter,
+              duration: const Duration(milliseconds: 250),
+              child: FilterRowIndicator(
                 filters: filters.copyWith(searchValue: searchController.text),
                 onChange: (newFilters) {
                   setState(() {
@@ -120,7 +125,7 @@ class TransactionsPageState extends State<TransactionsPage> {
                   });
                 },
               ),
-            ],
+            ),
             StreamBuilder(
               stream: Rx.combineLatest2(
                 TransactionService.instance.countTransactions(

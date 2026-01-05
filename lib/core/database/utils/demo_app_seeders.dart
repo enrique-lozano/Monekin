@@ -45,19 +45,19 @@ final List<TagInDB> _tagsToCreate = [
   const TagInDB(id: 'tag2', name: 'Work', color: '33FF57', displayOrder: 2),
 ];
 
+final TransactionFilterSetInDB _defaultBudgetFilterSet =
+    TransactionFilterSetInDB(
+      id: generateUUID(),
+      categoriesIds: ['2'], // Food & Dining
+    );
+
 final List<BudgetInDB> _budgetsToCreate = [
   BudgetInDB(
     id: 'budget1',
     name: 'Monthly Food',
     limitAmount: 500,
     intervalPeriod: Periodicity.month,
-  ),
-];
-
-final List<BudgetCategoryData> _budgetCategoriesToCreate = [
-  const BudgetCategoryData(
-    budgetID: 'budget1',
-    categoryID: '2', // Food & Dining
+    filterID: _defaultBudgetFilterSet.id,
   ),
 ];
 
@@ -246,8 +246,8 @@ Future<void> fillWithDemoData() async {
   await db.batch((batch) {
     batch.insertAll(db.accounts, _accountsToCreate);
     batch.insertAll(db.tags, _tagsToCreate);
+    batch.insertAll(db.transactionFilterSets, [_defaultBudgetFilterSet]);
     batch.insertAll(db.budgets, _budgetsToCreate);
-    batch.insertAll(db.budgetCategory, _budgetCategoriesToCreate);
     batch.insertAll(db.transactions, transactions);
     batch.insertAll(db.transactionTags, transactionTags);
   });

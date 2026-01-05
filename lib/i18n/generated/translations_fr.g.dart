@@ -747,6 +747,8 @@ class _TranslationsTransactionFiltersFr implements TranslationsTransactionFilter
 	@override String to_value_def({required Object x}) => 'Jusqu\'à ${x}';
 	@override String from_date_def({required Object date}) => 'À partir du ${date}';
 	@override String to_date_def({required Object date}) => 'Jusqu\'au ${date}';
+	@override String get reset => 'Réinitialiser les filtres';
+	@override late final _TranslationsTransactionFiltersSavedFr saved = _TranslationsTransactionFiltersSavedFr._(_root);
 }
 
 // Path: transaction.form
@@ -1237,7 +1239,7 @@ class _TranslationsMoreAboutUsFr implements TranslationsMoreAboutUsEn {
 
 	// Translations
 	@override String get display => 'Informations sur l\'application';
-	@override String get description => 'Consultez les conditions et autres informations importantes sur Monekin. Rejoignez la communauté en signalant des bugs, en laissant des suggestions...';
+	@override String get description => 'Trouvez les conditions de Monekin, des informations importantes, et connectez-vous en signalant des bugs ou en partageant des idées';
 	@override late final _TranslationsMoreAboutUsLegalFr legal = _TranslationsMoreAboutUsLegalFr._(_root);
 	@override late final _TranslationsMoreAboutUsProjectFr project = _TranslationsMoreAboutUsProjectFr._(_root);
 }
@@ -1400,6 +1402,27 @@ class _TranslationsTransactionListBulkEditFr implements TranslationsTransactionL
 	@override String get dates => 'Modifier les dates';
 	@override String get categories => 'Modifier les catégories';
 	@override String get status => 'Modifier les statuts';
+}
+
+// Path: transaction.filters.saved
+class _TranslationsTransactionFiltersSavedFr implements TranslationsTransactionFiltersSavedEn {
+	_TranslationsTransactionFiltersSavedFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Filtres enregistrés';
+	@override String get new_title => 'Nouveau filtre';
+	@override String get edit_title => 'Modifier le filtre';
+	@override String get name_label => 'Nom du filtre';
+	@override String get name_hint => 'Mon filtre personnalisé';
+	@override String get save_dialog_title => 'Enregistrer le filtre';
+	@override String get save_tooltip => 'Enregistrer le filtre actuel';
+	@override String get load_tooltip => 'Charger un filtre enregistré';
+	@override String get empty_title => 'Aucun filtre enregistré trouvé';
+	@override String get empty_description => 'Enregistrez des filtres ici pour y accéder rapidement plus tard.';
+	@override String get save_success => 'Filtre enregistré avec succès';
+	@override String get delete_success => 'Filtre supprimé avec succès';
 }
 
 // Path: transaction.form.validators
@@ -1963,6 +1986,19 @@ extension on TranslationsFr {
 		map['transaction.filters.to_value_def'] = ({required Object x}) => 'Jusqu\'à ${x}';
 		map['transaction.filters.from_date_def'] = ({required Object date}) => 'À partir du ${date}';
 		map['transaction.filters.to_date_def'] = ({required Object date}) => 'Jusqu\'au ${date}';
+		map['transaction.filters.reset'] = 'Réinitialiser les filtres';
+		map['transaction.filters.saved.title'] = 'Filtres enregistrés';
+		map['transaction.filters.saved.new_title'] = 'Nouveau filtre';
+		map['transaction.filters.saved.edit_title'] = 'Modifier le filtre';
+		map['transaction.filters.saved.name_label'] = 'Nom du filtre';
+		map['transaction.filters.saved.name_hint'] = 'Mon filtre personnalisé';
+		map['transaction.filters.saved.save_dialog_title'] = 'Enregistrer le filtre';
+		map['transaction.filters.saved.save_tooltip'] = 'Enregistrer le filtre actuel';
+		map['transaction.filters.saved.load_tooltip'] = 'Charger un filtre enregistré';
+		map['transaction.filters.saved.empty_title'] = 'Aucun filtre enregistré trouvé';
+		map['transaction.filters.saved.empty_description'] = 'Enregistrez des filtres ici pour y accéder rapidement plus tard.';
+		map['transaction.filters.saved.save_success'] = 'Filtre enregistré avec succès';
+		map['transaction.filters.saved.delete_success'] = 'Filtre supprimé avec succès';
 		map['transaction.form.validators.zero'] = 'La valeur d\'une transaction ne peut pas être égale à zéro';
 		map['transaction.form.validators.date_max'] = 'La date sélectionnée est postérieure à la date actuelle. La transaction sera ajoutée comme en attente';
 		map['transaction.form.validators.date_after_account_creation'] = 'Vous ne pouvez pas créer une transaction dont la date est antérieure à la date de création du compte auquel elle appartient';
@@ -2341,7 +2377,7 @@ extension on TranslationsFr {
 		map['more.data.delete_all_header2'] = 'Une dernière étape ⚠️⚠️';
 		map['more.data.delete_all_message2'] = 'En supprimant un compte vous supprimerez toutes vos données personnelles enregistrées. Vos comptes, transactions, budgets et catégories seront supprimés et ne pourront pas être récupérés. Êtes-vous d\'accord ?';
 		map['more.about_us.display'] = 'Informations sur l\'application';
-		map['more.about_us.description'] = 'Consultez les conditions et autres informations importantes sur Monekin. Rejoignez la communauté en signalant des bugs, en laissant des suggestions...';
+		map['more.about_us.description'] = 'Trouvez les conditions de Monekin, des informations importantes, et connectez-vous en signalant des bugs ou en partageant des idées';
 		map['more.about_us.legal.display'] = 'Informations légales';
 		map['more.about_us.legal.privacy'] = 'Politique de confidentialité';
 		map['more.about_us.legal.terms'] = 'Conditions d\'utilisation';

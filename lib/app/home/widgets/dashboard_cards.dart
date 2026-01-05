@@ -8,7 +8,7 @@ import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/finance_health_service.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -47,7 +47,7 @@ class DashboardCards extends StatelessWidget {
                 bodyPadding: const EdgeInsets.all(16),
                 body: StreamBuilder(
                   stream: FinanceHealthService().getHealthyValue(
-                    filters: TransactionFilters(
+                    filters: TransactionFilterSet(
                       minDate: dateRangeService.startDate,
                       maxDate: dateRangeService.endDate,
                     ),
@@ -111,7 +111,7 @@ class DashboardCards extends StatelessWidget {
                 ),
                 body: BalanceBarChart(
                   dateRange: dateRangeService,
-                  filters: TransactionFilters(
+                  filters: TransactionFilterSet(
                     minDate: dateRangeService.startDate,
                     maxDate: dateRangeService.endDate,
                   ),

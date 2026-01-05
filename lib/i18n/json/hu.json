@@ -355,7 +355,22 @@
       "from_value_def": "Innen: {{ x }}",
       "to_value_def": "Ide: {{ x }}",
       "from_date_def": "Ettől: {{ date }}",
-      "to_date_def": "Eddig: {{ date }}"
+      "to_date_def": "Eddig: {{ date }}",
+      "reset": "Szűrők visszaállítása",
+      "saved": {
+        "title": "Mentett szűrők",
+        "new_title": "Új szűrő",
+        "edit_title": "Szűrő szerkesztése",
+        "name_label": "Szűrő neve",
+        "name_hint": "Saját szűrőm",
+        "save_dialog_title": "Szűrő mentése",
+        "save_tooltip": "Jelenlegi szűrő mentése",
+        "load_tooltip": "Mentett szűrő betöltése",
+        "empty_title": "Nincsenek mentett szűrők",
+        "empty_description": "Mentse el a szűrőket itt, hogy később gyorsan elérhesse őket.",
+        "save_success": "Szűrő sikeresen mentve",
+        "delete_success": "Szűrő sikeresen törölve"
+      }
     },
     "FORM": {
       "VALIDATORS": {
@@ -846,7 +861,7 @@
     },
     "ABOUT_US": {
       "display": "Alkalmazásinformációk",
-      "description": "Nézze meg a Monekinre vonatkozó feltételeket és egyéb fontos információkat. Lépjen kapcsolatba a közösséggel a hibák bejelentésével, javaslatok megtételével...",
+      "description": "Találja meg a Monekin feltételeit, fontos információkat, és lépjen kapcsolatba hibák bejelentésével vagy ötletek megosztásával",
       "LEGAL": {
         "display": "Jogi információk",
         "privacy": "Adatvédelem",

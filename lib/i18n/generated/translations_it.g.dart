@@ -747,6 +747,8 @@ class _TranslationsTransactionFiltersIt implements TranslationsTransactionFilter
 	@override String to_value_def({required Object x}) => 'Fino a ${x}';
 	@override String from_date_def({required Object date}) => 'Dalla data ${date}';
 	@override String to_date_def({required Object date}) => 'Fino alla data ${date}';
+	@override String get reset => 'Ripristina filtri';
+	@override late final _TranslationsTransactionFiltersSavedIt saved = _TranslationsTransactionFiltersSavedIt._(_root);
 }
 
 // Path: transaction.form
@@ -1239,7 +1241,7 @@ class _TranslationsMoreAboutUsIt implements TranslationsMoreAboutUsEn {
 
 	// Translations
 	@override String get display => 'Informazioni sull\'app';
-	@override String get description => 'Consulta i termini e altre informazioni rilevanti su Monekin. Entra in contatto con la comunità segnalando bug, lasciando suggerimenti...';
+	@override String get description => 'Trova i termini di Monekin, informazioni importanti e connettiti segnalando bug o condividendo idee';
 	@override late final _TranslationsMoreAboutUsLegalIt legal = _TranslationsMoreAboutUsLegalIt._(_root);
 	@override late final _TranslationsMoreAboutUsProjectIt project = _TranslationsMoreAboutUsProjectIt._(_root);
 }
@@ -1402,6 +1404,27 @@ class _TranslationsTransactionListBulkEditIt implements TranslationsTransactionL
 	@override String get dates => 'Modifica date';
 	@override String get categories => 'Modifica categorie';
 	@override String get status => 'Modifica stati';
+}
+
+// Path: transaction.filters.saved
+class _TranslationsTransactionFiltersSavedIt implements TranslationsTransactionFiltersSavedEn {
+	_TranslationsTransactionFiltersSavedIt._(this._root);
+
+	final TranslationsIt _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Filtri salvati';
+	@override String get new_title => 'Nuovo filtro';
+	@override String get edit_title => 'Modifica filtro';
+	@override String get name_label => 'Nome del filtro';
+	@override String get name_hint => 'Il mio filtro personalizzato';
+	@override String get save_dialog_title => 'Salva filtro';
+	@override String get save_tooltip => 'Salva filtro corrente';
+	@override String get load_tooltip => 'Carica filtro salvato';
+	@override String get empty_title => 'Nessun filtro salvato trovato';
+	@override String get empty_description => 'Salva i filtri qui per accedervi rapidamente in seguito.';
+	@override String get save_success => 'Filtro salvato con successo';
+	@override String get delete_success => 'Filtro eliminato con successo';
 }
 
 // Path: transaction.form.validators
@@ -1965,6 +1988,19 @@ extension on TranslationsIt {
 		map['transaction.filters.to_value_def'] = ({required Object x}) => 'Fino a ${x}';
 		map['transaction.filters.from_date_def'] = ({required Object date}) => 'Dalla data ${date}';
 		map['transaction.filters.to_date_def'] = ({required Object date}) => 'Fino alla data ${date}';
+		map['transaction.filters.reset'] = 'Ripristina filtri';
+		map['transaction.filters.saved.title'] = 'Filtri salvati';
+		map['transaction.filters.saved.new_title'] = 'Nuovo filtro';
+		map['transaction.filters.saved.edit_title'] = 'Modifica filtro';
+		map['transaction.filters.saved.name_label'] = 'Nome del filtro';
+		map['transaction.filters.saved.name_hint'] = 'Il mio filtro personalizzato';
+		map['transaction.filters.saved.save_dialog_title'] = 'Salva filtro';
+		map['transaction.filters.saved.save_tooltip'] = 'Salva filtro corrente';
+		map['transaction.filters.saved.load_tooltip'] = 'Carica filtro salvato';
+		map['transaction.filters.saved.empty_title'] = 'Nessun filtro salvato trovato';
+		map['transaction.filters.saved.empty_description'] = 'Salva i filtri qui per accedervi rapidamente in seguito.';
+		map['transaction.filters.saved.save_success'] = 'Filtro salvato con successo';
+		map['transaction.filters.saved.delete_success'] = 'Filtro eliminato con successo';
 		map['transaction.form.validators.zero'] = 'Il valore di una transazione non può essere uguale a zero';
 		map['transaction.form.validators.date_max'] = 'La data selezionata è successiva a quella attuale. La transazione verrà aggiunta come in sospeso';
 		map['transaction.form.validators.date_after_account_creation'] = 'Non puoi creare una transazione la cui data sia precedente alla data di creazione del conto a cui appartiene';
@@ -2345,7 +2381,7 @@ extension on TranslationsIt {
 		map['more.data.delete_all_header2'] = 'Un ultimo passo ⚠️⚠️';
 		map['more.data.delete_all_message2'] = 'Eliminando un account eliminerai tutti i tuoi dati personali memorizzati. I tuoi conti, transazioni, budget e categorie verranno eliminati e non potranno essere recuperati. Sei d\'accordo?';
 		map['more.about_us.display'] = 'Informazioni sull\'app';
-		map['more.about_us.description'] = 'Consulta i termini e altre informazioni rilevanti su Monekin. Entra in contatto con la comunità segnalando bug, lasciando suggerimenti...';
+		map['more.about_us.description'] = 'Trova i termini di Monekin, informazioni importanti e connettiti segnalando bug o condividendo idee';
 		map['more.about_us.legal.display'] = 'Informazioni legali';
 		map['more.about_us.legal.privacy'] = 'Informativa sulla privacy';
 		map['more.about_us.legal.terms'] = 'Termini di utilizzo';

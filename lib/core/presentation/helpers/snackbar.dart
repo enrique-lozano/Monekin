@@ -18,11 +18,18 @@ class SnackbarParams {
   /// Defaults to true.
   final bool clearPrevious;
 
+  /// Whether to show the snackbar at the top of the screen using global snackbar
+  /// or at the bottom using ScaffoldMessenger.
+  ///
+  /// If null, uses the default defined in [MonekinSnackbar.showAtTopDefault].
+  final bool? showAtTop;
+
   SnackbarParams(
     this.title, {
     this.duration = const Duration(seconds: 4),
     this.actions,
     this.message,
+    this.showAtTop,
     this.clearPrevious = true,
   });
 
@@ -31,6 +38,7 @@ class SnackbarParams {
     this.duration = const Duration(seconds: 6),
     this.actions,
     this.clearPrevious = true,
+    this.showAtTop = false,
   }) : title = 'Error',
        message = '$errorMessage';
 
@@ -43,7 +51,9 @@ class SnackbarParams {
 }
 
 abstract class MonekinSnackbar {
-  static bool get showAtTop => false;
+  /// Whether to show snackbars at the top of the screen using global snackbar
+  /// or at the bottom using ScaffoldMessenger.
+  static bool get showAtTopDefault => false;
 
   /// Private method to get ScaffoldMessenger and optionally clear previous snackbars
   static ScaffoldMessengerState _getScaffoldMessenger(SnackbarParams options) {
@@ -78,6 +88,8 @@ abstract class MonekinSnackbar {
     required Color textColor,
     required IconData iconData,
   }) {
+    final showAtTop = options.showAtTop ?? MonekinSnackbar.showAtTopDefault;
+
     if (showAtTop) {
       _getScaffoldMessenger(options);
 

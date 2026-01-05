@@ -122,19 +122,12 @@ ThemeData getThemeData(
     brightness: isDark ? Brightness.dark : Brightness.light,
     useMaterial3: true,
     fontFamily: fontFamily,
+    //materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     extensions: [customAppColors],
   );
 
   final textTheme = theme.textTheme.withDifferentBodyColors(
     customAppColors.textBody,
-  );
-
-  final listTileSmallText = textTheme.bodyMedium?.copyWith(
-    fontSize: 14,
-    wordSpacing: 0,
-    decorationThickness: 1,
-    fontWeight: FontWeight.bold,
-    fontFamily: fontFamily,
   );
 
   final cardColor = isDark
@@ -176,12 +169,6 @@ ThemeData getThemeData(
       dragHandleColor: Colors.grey[300],
       clipBehavior: Clip.hardEdge,
     ),
-    listTileTheme: theme.listTileTheme.copyWith(
-      minVerticalPadding: 8,
-      subtitleTextStyle: listTileSmallText?.copyWith(
-        fontWeight: FontWeight.w300,
-      ),
-      leadingAndTrailingTextStyle: listTileSmallText,
-    ),
+    listTileTheme: ListTileThemeData(minVerticalPadding: 12),
   );
 }

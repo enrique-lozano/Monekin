@@ -747,6 +747,8 @@ class _TranslationsTransactionFiltersZhTw implements TranslationsTransactionFilt
 	@override String to_value_def({required Object x}) => '最多 ${x}';
 	@override String from_date_def({required Object date}) => '從${date}開始';
 	@override String to_date_def({required Object date}) => '截至 ${date}';
+	@override String get reset => '重置過濾器';
+	@override late final _TranslationsTransactionFiltersSavedZhTw saved = _TranslationsTransactionFiltersSavedZhTw._(_root);
 }
 
 // Path: transaction.form
@@ -1239,7 +1241,7 @@ class _TranslationsMoreAboutUsZhTw implements TranslationsMoreAboutUsEn {
 
 	// Translations
 	@override String get display => '應用程式資訊';
-	@override String get description => '查看有關 Monekin 的條款和其他相關資訊。透過報告錯誤、留下建議與社區取得聯繫......';
+	@override String get description => '查找 Monekin 的條款、重要資訊，並透過回報錯誤或分享想法與我們聯繫';
 	@override late final _TranslationsMoreAboutUsLegalZhTw legal = _TranslationsMoreAboutUsLegalZhTw._(_root);
 	@override late final _TranslationsMoreAboutUsProjectZhTw project = _TranslationsMoreAboutUsProjectZhTw._(_root);
 }
@@ -1402,6 +1404,27 @@ class _TranslationsTransactionListBulkEditZhTw implements TranslationsTransactio
 	@override String get dates => '編輯日期';
 	@override String get categories => '編輯類別';
 	@override String get status => '編輯狀態';
+}
+
+// Path: transaction.filters.saved
+class _TranslationsTransactionFiltersSavedZhTw implements TranslationsTransactionFiltersSavedEn {
+	_TranslationsTransactionFiltersSavedZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '已儲存的過濾器';
+	@override String get new_title => '新增過濾器';
+	@override String get edit_title => '編輯過濾器';
+	@override String get name_label => '過濾器名稱';
+	@override String get name_hint => '我的自訂過濾器';
+	@override String get save_dialog_title => '儲存過濾器';
+	@override String get save_tooltip => '儲存目前的過濾器';
+	@override String get load_tooltip => '載入已儲存的過濾器';
+	@override String get empty_title => '未找到已儲存的過濾器';
+	@override String get empty_description => '在此儲存過濾器以便稍後快速存取。';
+	@override String get save_success => '篩選器儲存成功';
+	@override String get delete_success => '篩選器刪除成功';
 }
 
 // Path: transaction.form.validators
@@ -1965,6 +1988,19 @@ extension on TranslationsZhTw {
 		map['transaction.filters.to_value_def'] = ({required Object x}) => '最多 ${x}';
 		map['transaction.filters.from_date_def'] = ({required Object date}) => '從${date}開始';
 		map['transaction.filters.to_date_def'] = ({required Object date}) => '截至 ${date}';
+		map['transaction.filters.reset'] = '重置過濾器';
+		map['transaction.filters.saved.title'] = '已儲存的過濾器';
+		map['transaction.filters.saved.new_title'] = '新增過濾器';
+		map['transaction.filters.saved.edit_title'] = '編輯過濾器';
+		map['transaction.filters.saved.name_label'] = '過濾器名稱';
+		map['transaction.filters.saved.name_hint'] = '我的自訂過濾器';
+		map['transaction.filters.saved.save_dialog_title'] = '儲存過濾器';
+		map['transaction.filters.saved.save_tooltip'] = '儲存目前的過濾器';
+		map['transaction.filters.saved.load_tooltip'] = '載入已儲存的過濾器';
+		map['transaction.filters.saved.empty_title'] = '未找到已儲存的過濾器';
+		map['transaction.filters.saved.empty_description'] = '在此儲存過濾器以便稍後快速存取。';
+		map['transaction.filters.saved.save_success'] = '篩選器儲存成功';
+		map['transaction.filters.saved.delete_success'] = '篩選器刪除成功';
 		map['transaction.form.validators.zero'] = '一筆交易的價值不能等於零';
 		map['transaction.form.validators.date_max'] = '所選日期晚於當前日期。交易將新增為待處理';
 		map['transaction.form.validators.date_after_account_creation'] = '您無法建立日期早於所屬帳戶建立日期的交易';
@@ -2345,7 +2381,7 @@ extension on TranslationsZhTw {
 		map['more.data.delete_all_header2'] = '最後一步⚠️⚠️';
 		map['more.data.delete_all_message2'] = '刪除帳戶後，您將刪除所有儲存的個人資料。您的帳戶、交易、預算和類別將被刪除且無法恢復。您同意嗎？';
 		map['more.about_us.display'] = '應用程式資訊';
-		map['more.about_us.description'] = '查看有關 Monekin 的條款和其他相關資訊。透過報告錯誤、留下建議與社區取得聯繫......';
+		map['more.about_us.description'] = '查找 Monekin 的條款、重要資訊，並透過回報錯誤或分享想法與我們聯繫';
 		map['more.about_us.legal.display'] = '法律資訊';
 		map['more.about_us.legal.privacy'] = '隱私權政策';
 		map['more.about_us.legal.terms'] = '使用條款';

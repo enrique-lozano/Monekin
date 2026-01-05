@@ -26,7 +26,7 @@ import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/show_more_content_button.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
@@ -74,7 +74,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
       // Check if there are transactions before the opening date of the account:
       if ((await TransactionService.instance
               .getTransactions(
-                filters: TransactionFilters(
+                filters: TransactionFilterSet(
                   accountsIDs: [_accountToEdit.id],
                   maxDate: _openingDate,
                 ),
@@ -380,7 +380,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                         ? Stream.value(true)
                         : TransactionService.instance
                               .countTransactions(
-                                filters: TransactionFilters(
+                                filters: TransactionFilterSet(
                                   transactionTypes: [
                                     TransactionType.expense,
                                     TransactionType.income,

@@ -747,6 +747,8 @@ class _TranslationsTransactionFiltersUk implements TranslationsTransactionFilter
 	@override String to_value_def({required Object x}) => 'До ${x}';
 	@override String from_date_def({required Object date}) => 'З ${date}';
 	@override String to_date_def({required Object date}) => 'До ${date}';
+	@override String get reset => 'Скинути фільтри';
+	@override late final _TranslationsTransactionFiltersSavedUk saved = _TranslationsTransactionFiltersSavedUk._(_root);
 }
 
 // Path: transaction.form
@@ -1239,7 +1241,7 @@ class _TranslationsMoreAboutUsUk implements TranslationsMoreAboutUsEn {
 
 	// Translations
 	@override String get display => 'Інформація про додаток';
-	@override String get description => 'Перегляньте умови та іншу важливу інформацію про Monekin. Зв\'яжіться зі спільнотою, повідомте про помилки, залиште пропозиції ...';
+	@override String get description => 'Знаходьте умови Monekin, важливу інформацію та зв\'язуйтеся, повідомляючи про помилки або ділячись ідеями';
 	@override late final _TranslationsMoreAboutUsLegalUk legal = _TranslationsMoreAboutUsLegalUk._(_root);
 	@override late final _TranslationsMoreAboutUsProjectUk project = _TranslationsMoreAboutUsProjectUk._(_root);
 }
@@ -1402,6 +1404,27 @@ class _TranslationsTransactionListBulkEditUk implements TranslationsTransactionL
 	@override String get dates => 'Редагувати дати';
 	@override String get categories => 'Редагувати категорії';
 	@override String get status => 'Редагувати статуси';
+}
+
+// Path: transaction.filters.saved
+class _TranslationsTransactionFiltersSavedUk implements TranslationsTransactionFiltersSavedEn {
+	_TranslationsTransactionFiltersSavedUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Збережені фільтри';
+	@override String get new_title => 'Новий фільтр';
+	@override String get edit_title => 'Редагувати фільтр';
+	@override String get name_label => 'Назва фільтру';
+	@override String get name_hint => 'Мій власний фільтр';
+	@override String get save_dialog_title => 'Зберегти фільтр';
+	@override String get save_tooltip => 'Зберегти поточний фільтр';
+	@override String get load_tooltip => 'Завантажити збережений фільтр';
+	@override String get empty_title => 'Збережених фільтрів не знайдено';
+	@override String get empty_description => 'Зберігайте фільтри тут, щоб швидко отримати до них доступ пізніше.';
+	@override String get save_success => 'Фільтр успішно збережено';
+	@override String get delete_success => 'Фільтр успішно видалено';
 }
 
 // Path: transaction.form.validators
@@ -1965,6 +1988,19 @@ extension on TranslationsUk {
 		map['transaction.filters.to_value_def'] = ({required Object x}) => 'До ${x}';
 		map['transaction.filters.from_date_def'] = ({required Object date}) => 'З ${date}';
 		map['transaction.filters.to_date_def'] = ({required Object date}) => 'До ${date}';
+		map['transaction.filters.reset'] = 'Скинути фільтри';
+		map['transaction.filters.saved.title'] = 'Збережені фільтри';
+		map['transaction.filters.saved.new_title'] = 'Новий фільтр';
+		map['transaction.filters.saved.edit_title'] = 'Редагувати фільтр';
+		map['transaction.filters.saved.name_label'] = 'Назва фільтру';
+		map['transaction.filters.saved.name_hint'] = 'Мій власний фільтр';
+		map['transaction.filters.saved.save_dialog_title'] = 'Зберегти фільтр';
+		map['transaction.filters.saved.save_tooltip'] = 'Зберегти поточний фільтр';
+		map['transaction.filters.saved.load_tooltip'] = 'Завантажити збережений фільтр';
+		map['transaction.filters.saved.empty_title'] = 'Збережених фільтрів не знайдено';
+		map['transaction.filters.saved.empty_description'] = 'Зберігайте фільтри тут, щоб швидко отримати до них доступ пізніше.';
+		map['transaction.filters.saved.save_success'] = 'Фільтр успішно збережено';
+		map['transaction.filters.saved.delete_success'] = 'Фільтр успішно видалено';
 		map['transaction.form.validators.zero'] = 'Значення транзакції не може бути рівним нулю';
 		map['transaction.form.validators.date_max'] = 'Обрана дата після поточної. Транзакція буде додана як очікувана';
 		map['transaction.form.validators.date_after_account_creation'] = 'Ви не можете створити транзакцію з датою до створення рахунку, до якого вона належить';
@@ -2345,7 +2381,7 @@ extension on TranslationsUk {
 		map['more.data.delete_all_header2'] = 'Останній крок ⚠️⚠️';
 		map['more.data.delete_all_message2'] = 'Видаляючи обліковий запис, ви видалите всі ваші збережені особисті дані. Ваші облікові записи, транзакції, бюджети та категорії будуть видалені і не можуть бути відновлені. Ви згодні?';
 		map['more.about_us.display'] = 'Інформація про додаток';
-		map['more.about_us.description'] = 'Перегляньте умови та іншу важливу інформацію про Monekin. Зв\'яжіться зі спільнотою, повідомте про помилки, залиште пропозиції ...';
+		map['more.about_us.description'] = 'Знаходьте умови Monekin, важливу інформацію та зв\'язуйтеся, повідомляючи про помилки або ділячись ідеями';
 		map['more.about_us.legal.display'] = 'Юридична інформація';
 		map['more.about_us.legal.privacy'] = 'Політика конфіденційності';
 		map['more.about_us.legal.terms'] = 'Умови використання';

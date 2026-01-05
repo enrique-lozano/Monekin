@@ -355,7 +355,22 @@
       "from_value_def": "Von {{ x }}",
       "to_value_def": "Bis zu {{ x }}",
       "from_date_def": "Von der {{ date }}",
-      "to_date_def": "Bis zum {{ date }}"
+      "to_date_def": "Bis zum {{ date }}",
+      "reset": "Filter zurücksetzen",
+      "saved": {
+        "title": "Gespeicherte Filter",
+        "new_title": "Neuer Filter",
+        "edit_title": "Filter bearbeiten",
+        "name_label": "Filtername",
+        "name_hint": "Mein benutzerdefinierter Filter",
+        "save_dialog_title": "Filter speichern",
+        "save_tooltip": "Aktuellen Filter speichern",
+        "load_tooltip": "Gespeicherten Filter laden",
+        "empty_title": "Keine gespeicherten Filter gefunden",
+        "empty_description": "Speichern Sie Filter hier, um später schnell darauf zugreifen zu können.",
+        "save_success": "Filter erfolgreich gespeichert",
+        "delete_success": "Filter erfolgreich gelöscht"
+      }
     },
     "FORM": {
       "VALIDATORS": {
@@ -846,7 +861,7 @@
     },
     "ABOUT_US": {
       "display": "App-Informationen",
-      "description": "Schaue Dir die Bedingungen und andere relevante Informationen über Monekin an. Treten mit der Community in Kontakt, indem Du Fehler meldest, Vorschläge machst...",
+      "description": "Finden Sie die Bedingungen von Monekin und wichtige Informationen, und nehmen Sie Kontakt auf, um Fehler zu melden oder Ideen zu teilen",
       "LEGAL": {
         "display": "Rechtliche Informationen",
         "privacy": "Datenschutzrichtlinie",

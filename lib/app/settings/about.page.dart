@@ -3,12 +3,13 @@ import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/widgets/display_app_icon.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/utils/open_external_url.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import 'widgets/settings_list_separator.dart';
+import 'widgets/settings_list_utils.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({super.key});
@@ -24,12 +25,17 @@ class _AboutPageState extends State<AboutPage> {
     required Function() onTap,
   }) {
     return ListTile(
-      title: Text(title),
-      minVerticalPadding: 16,
+      title: Text(title, style: TextStyle(fontWeight: FontWeight.w500)),
       subtitle: subtitle != null ? Text(subtitle) : null,
-      trailing: const Column(
+      trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [Icon(Icons.arrow_forward_ios, size: 14)],
+        children: [
+          Icon(
+            Icons.open_in_new_rounded,
+            size: 20,
+            color: AppColors.of(context).textHint,
+          ),
+        ],
       ),
       onTap: onTap,
     );

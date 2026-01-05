@@ -747,6 +747,8 @@ class _TranslationsTransactionFiltersTr implements TranslationsTransactionFilter
 	@override String to_value_def({required Object x}) => '${x} a kadar';
 	@override String from_date_def({required Object date}) => '${date} tarihinden';
 	@override String to_date_def({required Object date}) => '${date} tarihine kadar';
+	@override String get reset => 'Filtreleri sıfırla';
+	@override late final _TranslationsTransactionFiltersSavedTr saved = _TranslationsTransactionFiltersSavedTr._(_root);
 }
 
 // Path: transaction.form
@@ -1239,7 +1241,7 @@ class _TranslationsMoreAboutUsTr implements TranslationsMoreAboutUsEn {
 
 	// Translations
 	@override String get display => 'Uygulama bilgileri';
-	@override String get description => 'Monekin hakkında şartları ve diğer ilgili bilgileri inceleyin. Hata bildirerek, önerilerde bulunarak toplulukla etkileşime geçin...';
+	@override String get description => 'Monekin\'in şartlarını, önemli bilgilerini bulun ve hata bildirerek veya fikir paylaşımları ile iletişime geçin';
 	@override late final _TranslationsMoreAboutUsLegalTr legal = _TranslationsMoreAboutUsLegalTr._(_root);
 	@override late final _TranslationsMoreAboutUsProjectTr project = _TranslationsMoreAboutUsProjectTr._(_root);
 }
@@ -1402,6 +1404,27 @@ class _TranslationsTransactionListBulkEditTr implements TranslationsTransactionL
 	@override String get dates => 'Tarihleri düzenle';
 	@override String get categories => 'Kategorileri düzenle';
 	@override String get status => 'Durumları düzenle';
+}
+
+// Path: transaction.filters.saved
+class _TranslationsTransactionFiltersSavedTr implements TranslationsTransactionFiltersSavedEn {
+	_TranslationsTransactionFiltersSavedTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Kaydedilen filtreler';
+	@override String get new_title => 'Yeni Filtre';
+	@override String get edit_title => 'Filtreyi Düzenle';
+	@override String get name_label => 'Filtre Adı';
+	@override String get name_hint => 'Özel filtrem';
+	@override String get save_dialog_title => 'Filtreyi Kaydet';
+	@override String get save_tooltip => 'Mevcut filtreyi kaydet';
+	@override String get load_tooltip => 'Kaydedilen filtreyi yükle';
+	@override String get empty_title => 'Kaydedilen filtre bulunamadı';
+	@override String get empty_description => 'Filtreleri daha sonra hızlıca erişmek için buraya kaydedin.';
+	@override String get save_success => 'Filtre başarıyla kaydedildi';
+	@override String get delete_success => 'Filtre başarıyla silindi';
 }
 
 // Path: transaction.form.validators
@@ -1965,6 +1988,19 @@ extension on TranslationsTr {
 		map['transaction.filters.to_value_def'] = ({required Object x}) => '${x} a kadar';
 		map['transaction.filters.from_date_def'] = ({required Object date}) => '${date} tarihinden';
 		map['transaction.filters.to_date_def'] = ({required Object date}) => '${date} tarihine kadar';
+		map['transaction.filters.reset'] = 'Filtreleri sıfırla';
+		map['transaction.filters.saved.title'] = 'Kaydedilen filtreler';
+		map['transaction.filters.saved.new_title'] = 'Yeni Filtre';
+		map['transaction.filters.saved.edit_title'] = 'Filtreyi Düzenle';
+		map['transaction.filters.saved.name_label'] = 'Filtre Adı';
+		map['transaction.filters.saved.name_hint'] = 'Özel filtrem';
+		map['transaction.filters.saved.save_dialog_title'] = 'Filtreyi Kaydet';
+		map['transaction.filters.saved.save_tooltip'] = 'Mevcut filtreyi kaydet';
+		map['transaction.filters.saved.load_tooltip'] = 'Kaydedilen filtreyi yükle';
+		map['transaction.filters.saved.empty_title'] = 'Kaydedilen filtre bulunamadı';
+		map['transaction.filters.saved.empty_description'] = 'Filtreleri daha sonra hızlıca erişmek için buraya kaydedin.';
+		map['transaction.filters.saved.save_success'] = 'Filtre başarıyla kaydedildi';
+		map['transaction.filters.saved.delete_success'] = 'Filtre başarıyla silindi';
 		map['transaction.form.validators.zero'] = 'Bir işlemin değeri sıfıra eşit olamaz';
 		map['transaction.form.validators.date_max'] = 'Seçilen tarih, güncel tarihten sonra. İşlem askıda olarak eklenecektir';
 		map['transaction.form.validators.date_after_account_creation'] = 'Bir işlemin tarihi, ait olduğu hesabın oluşturulma tarihinden önce olamaz';
@@ -2345,7 +2381,7 @@ extension on TranslationsTr {
 		map['more.data.delete_all_header2'] = 'Son bir adım ⚠️⚠️';
 		map['more.data.delete_all_message2'] = 'Bir hesabı sildiğinizde, kayıtlı tüm kişisel verilerinizi silmiş olursunuz. Hesaplarınız, işlemleriniz, bütçeleriniz ve kategorileriniz silinecek ve kurtarılamayacaktır. Kabul ediyor musunuz?';
 		map['more.about_us.display'] = 'Uygulama bilgileri';
-		map['more.about_us.description'] = 'Monekin hakkında şartları ve diğer ilgili bilgileri inceleyin. Hata bildirerek, önerilerde bulunarak toplulukla etkileşime geçin...';
+		map['more.about_us.description'] = 'Monekin\'in şartlarını, önemli bilgilerini bulun ve hata bildirerek veya fikir paylaşımları ile iletişime geçin';
 		map['more.about_us.legal.display'] = 'Yasal bilgiler';
 		map['more.about_us.legal.privacy'] = 'Gizlilik politikası';
 		map['more.about_us.legal.terms'] = 'Kullanım koşulları';

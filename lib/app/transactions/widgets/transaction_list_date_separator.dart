@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 class TransactionListDateSeparator extends StatelessWidget {
@@ -12,7 +12,7 @@ class TransactionListDateSeparator extends StatelessWidget {
     required this.date,
   });
 
-  final TransactionFilters filters;
+  final TransactionFilterSet filters;
   final DateTime date;
 
   @override

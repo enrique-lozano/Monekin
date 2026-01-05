@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/settings/widgets/settings_list_separator.dart';
+import 'package:monekin/app/settings/widgets/settings_list_utils.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/styles/big_button_style.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/filter_sheet_modal.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_sheet_modal.dart';
 import 'package:monekin/core/utils/logger.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:path_provider/path_provider.dart';
@@ -30,7 +30,7 @@ class ExportDataPage extends StatefulWidget {
 class _ExportDataPageState extends State<ExportDataPage> {
   _ExportFormats selectedExportFormat = _ExportFormats.db;
 
-  TransactionFilters filters = const TransactionFilters();
+  TransactionFilterSet filters = const TransactionFilterSet();
 
   bool _isDownloading = false;
   bool _isSharing = false;
@@ -201,7 +201,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
                 selectedExportFormat = v;
 
                 if (selectedExportFormat == _ExportFormats.db) {
-                  filters = const TransactionFilters();
+                  filters = const TransactionFilterSet();
                 }
 
                 setState(() {});

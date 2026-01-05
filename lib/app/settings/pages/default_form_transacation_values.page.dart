@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/widgets/monekin_tile_switch.dart';
-import 'package:monekin/app/settings/widgets/settings_list_separator.dart';
+import 'package:monekin/app/settings/widgets/settings_list_utils.dart';
 import 'package:monekin/app/tags/tags_selector.modal.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
@@ -28,76 +28,82 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
 
     return PageFramework(
       title: t.settings.transactions.default_values.page_title,
-      body: StreamBuilder(
-        stream: DefaultTransactionValuesService.instance.getAllSettings(),
-        builder: (context, snapshot) {
-          final data = snapshot.data;
-          if (data == null) return const SizedBox();
+      body: ListTileTheme(
+        data: getSettingListTileStyle(context),
+        child: StreamBuilder(
+          stream: DefaultTransactionValuesService.instance.getAllSettings(),
+          builder: (context, snapshot) {
+            final data = snapshot.data;
+            if (data == null) return const SizedBox();
 
-          final values = data.values;
-          final lastUsedFields = data.lastUsedFields;
+            final values = data.values;
+            final lastUsedFields = data.lastUsedFields;
 
-          return SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 16).withSafeBottom(context),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                MonekinTileSwitch(
-                  title: t
-                      .settings
-                      .transactions
-                      .default_values
-                      .reuse_last_transaction,
-                  subtitle: t
-                      .settings
-                      .transactions
-                      .default_values
-                      .reuse_last_transaction_descr,
-                  initialValue: lastUsedFields.isNotEmpty,
-                  onSwitch: (value) {
-                    if (value) {
-                      DefaultTransactionValuesService.instance
-                          .updateFieldsToUseLastUsedValue([
-                            TransactionFormField.account,
-                            TransactionFormField.category,
-                            TransactionFormField.status,
-                          ]);
-                    } else {
-                      DefaultTransactionValuesService.instance
-                          .updateFieldsToUseLastUsedValue([]);
-                    }
-                  },
-                ),
-                AnimatedExpanded(
-                  expand: lastUsedFields.isNotEmpty,
-                  child: ListTile(
-                    title: Text(
-                      t.settings.transactions.default_values.fields_to_reuse,
-                    ),
-                    subtitle: Text(
-                      lastUsedFields
-                          .map((e) => e.displayName(context))
-                          .join(", "),
-                    ),
-                    trailing: const Icon(Icons.arrow_forward_ios_rounded),
-                    onTap: () => _selectLastUsedFields(context, lastUsedFields),
+            return SingleChildScrollView(
+              padding: const EdgeInsets.only(
+                bottom: 16,
+              ).withSafeBottom(context),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MonekinTileSwitch(
+                    title: t
+                        .settings
+                        .transactions
+                        .default_values
+                        .reuse_last_transaction,
+                    subtitle: t
+                        .settings
+                        .transactions
+                        .default_values
+                        .reuse_last_transaction_descr,
+                    initialValue: lastUsedFields.isNotEmpty,
+                    onSwitch: (value) {
+                      if (value) {
+                        DefaultTransactionValuesService.instance
+                            .updateFieldsToUseLastUsedValue([
+                              TransactionFormField.account,
+                              TransactionFormField.category,
+                              TransactionFormField.status,
+                            ]);
+                      } else {
+                        DefaultTransactionValuesService.instance
+                            .updateFieldsToUseLastUsedValue([]);
+                      }
+                    },
                   ),
-                ),
-                createListSeparator(
-                  context,
-                  t
-                      .settings
-                      .transactions
-                      .default_values
-                      .default_values_separator,
-                ),
-                _buildCategoryTile(context, values),
-                _buildStatusTile(context, values),
-                _buildTagsTile(context, values),
-              ],
-            ),
-          );
-        },
+                  AnimatedExpanded(
+                    expand: lastUsedFields.isNotEmpty,
+                    child: ListTile(
+                      title: Text(
+                        t.settings.transactions.default_values.fields_to_reuse,
+                      ),
+                      subtitle: Text(
+                        lastUsedFields
+                            .map((e) => e.displayName(context))
+                            .join(", "),
+                      ),
+                      trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                      onTap: () =>
+                          _selectLastUsedFields(context, lastUsedFields),
+                    ),
+                  ),
+                  createListSeparator(
+                    context,
+                    t
+                        .settings
+                        .transactions
+                        .default_values
+                        .default_values_separator,
+                  ),
+                  _buildCategoryTile(context, values),
+                  _buildStatusTile(context, values),
+                  _buildTagsTile(context, values),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

@@ -11,7 +11,7 @@ import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 class RecurrentTransactionPage extends StatefulWidget {
@@ -39,7 +39,7 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
             child: StreamBuilder(
               stream: TransactionService.instance.countTransactions(
                 convertToPreferredCurrency: false,
-                filters: const TransactionFilters(isRecurrent: true),
+                filters: const TransactionFilterSet(isRecurrent: true),
               ),
               builder: (context, snapshot) {
                 final nOfRes = snapshot.data ?? 0;
@@ -53,7 +53,7 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
           ),
           Expanded(
             child: TransactionListComponent(
-              filters: const TransactionFilters(isRecurrent: true),
+              filters: const TransactionFilterSet(isRecurrent: true),
               showGroupDivider: false,
               isScrollable: true,
               tileBuilder: (transaction) => TransactionListTile(
@@ -117,7 +117,7 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
                           StreamBuilder(
                             stream: TransactionService.instance
                                 .getTransactions(
-                                  filters: const TransactionFilters(
+                                  filters: const TransactionFilterSet(
                                     isRecurrent: true,
                                   ),
                                 )

@@ -1,6 +1,7 @@
 ---- * WHEN CONVERTING TO .sql:
 ---- * --- Remove the 'AS ....' after a table creation  
 ---- * --- Convert DATETIME to TEXT, BOOL to INT and ENUMS to TEXT
+---- * --- Remove the MAPPED BY to only leave the CHECK constraints
 ---- * --- Remove the imports 
 
 import './../../../models/transaction/transaction.dart';
@@ -12,6 +13,7 @@ import './../../../models/account/account.dart';
 import './../../services/user-setting/user_setting_service.dart';
 import './../../services/app-data/app_data_service.dart';
 import './../../utils/database_enum.dart';
+import './../../utils/list_converters.dart';
 
 CREATE TABLE IF NOT EXISTS currencies (
     -- ISO 4217 currency code. Identifies a currency uniquely ([see more](https://en.wikipedia.org/wiki/ISO_4217#List_of_ISO_4217_currency_codes))
@@ -191,6 +193,41 @@ CREATE TABLE IF NOT EXISTS transactionTags (
   tagID TEXT NOT NULL REFERENCES tags(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS transactionFilterSets (
+    id TEXT NOT NULL PRIMARY KEY,
+
+    -- JSON list of account IDs. Will be null if this filter is not in use, or if all accounts are selected
+    accountsIDs TEXT MAPPED BY `const StringListTypeConverter()`, 
+    
+    -- JSON list of category IDs. Will be null if this filter is not in use, or if all categories are selected
+    categoriesIds TEXT MAPPED BY `const StringListTypeConverter()`,
+
+    -- JSON list of transaction statuses
+    status TEXT MAPPED BY `OptEnumListTypeConverter(TransactionStatus.values)`, 
+
+    minDate DATETIME,
+    maxDate DATETIME,
+    searchValue TEXT,
+
+    -- JSON list of transaction types
+    transactionTypes TEXT MAPPED BY `EnumListTypeConverter(TransactionType.values)`, 
+
+    minValue REAL,
+    maxValue REAL,
+
+    -- JSON list of tag IDs
+    tagsIDs TEXT MAPPED BY `const OptStringListTypeConverter()`
+) AS TransactionFilterSetInDB;
+
+CREATE TABLE IF NOT EXISTS savedFilters (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    
+    -- The display order when listing the saved filters
+    displayOrder INTEGER NOT NULL,
+
+    filterID TEXT NOT NULL REFERENCES transactionFilterSets(id) ON DELETE CASCADE ON UPDATE CASCADE
+) AS SavedFilterInDB;
 
 CREATE TABLE IF NOT EXISTS budgets (
   id TEXT NOT NULL PRIMARY KEY,
@@ -210,18 +247,10 @@ CREATE TABLE IF NOT EXISTS budgets (
   -- Custom end date. Only if the budget has no periodicity
   endDate DATETIME,
 
+  filterID TEXT NOT NULL REFERENCES transactionFilterSets(id) ON DELETE CASCADE ON UPDATE CASCADE,
+
   CHECK ((startDate IS NULL AND endDate IS NULL) != (intervalPeriod IS NULL))
 ) AS BudgetInDB;
-
-CREATE TABLE IF NOT EXISTS budgetCategory (
-  budgetID TEXT NOT NULL REFERENCES budgets(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  categoryID TEXT NOT NULL REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS budgetAccount (
-  budgetID TEXT NOT NULL REFERENCES budgets(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  accountID TEXT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
 
 CREATE TABLE IF NOT EXISTS userSettings (
   settingKey ENUMNAME(SettingKey) NOT NULL PRIMARY KEY,

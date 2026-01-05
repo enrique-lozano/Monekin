@@ -15,7 +15,7 @@ import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 import '../../../../core/models/transaction/transaction_type.enum.dart';
@@ -26,7 +26,7 @@ class PieChartByCategories extends StatefulWidget {
     required this.datePeriodState,
     this.showList = false,
     this.initialSelectedType = TransactionType.expense,
-    this.filters = const TransactionFilters(),
+    this.filters = const TransactionFilterSet(),
   });
 
   final DatePeriodState datePeriodState;
@@ -35,7 +35,7 @@ class PieChartByCategories extends StatefulWidget {
 
   final TransactionType initialSelectedType;
 
-  final TransactionFilters filters;
+  final TransactionFilterSet filters;
 
   @override
   State<PieChartByCategories> createState() => _PieChartByCategoriesState();
@@ -47,7 +47,7 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
 
   final centerRadius = 35;
 
-  TransactionFilters _getTransactionFilters() {
+  TransactionFilterSet _getTransactionFilters() {
     return widget.filters.copyWith(
       status: TransactionStatus.getStatusThatCountsForStats(
         widget.filters.status,

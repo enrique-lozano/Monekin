@@ -1,30 +1,29 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
-import 'package:drift/drift.dart' as drift;
+import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/tags/tag_form_page.dart';
-import 'package:monekin/core/database/services/tags/tags_service.dart';
+import 'package:monekin/core/database/services/filters/saved_filters_service.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/presentation/animations/animated_floating_button.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/column_with_reorderable_list_and_search.dart';
 import 'package:monekin/core/presentation/widgets/monekin_reorderable_list.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
+import 'package:monekin/core/presentation/widgets/reorderable_drag_icon.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/saved_filter_form_page.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
-import '../../core/presentation/widgets/reorderable_drag_icon.dart';
-
-class TagListPage extends StatefulWidget {
-  const TagListPage({super.key});
+class SavedFiltersListPage extends StatefulWidget {
+  const SavedFiltersListPage({super.key});
 
   @override
-  State<TagListPage> createState() => _TagListPageState();
+  State<SavedFiltersListPage> createState() => _SavedFiltersListPageState();
 }
 
-class _TagListPageState extends State<TagListPage> {
+class _SavedFiltersListPageState extends State<SavedFiltersListPage> {
   String searchQuery = '';
 
   final ScrollController _scrollController = ScrollController();
@@ -36,12 +35,7 @@ class _TagListPageState extends State<TagListPage> {
   }
 
   void _goToEdit() {
-    RouteUtils.pushRoute(const TagFormPage());
-  }
-
-  @override
-  void initState() {
-    super.initState();
+    RouteUtils.pushRoute(const SavedFilterFormPage());
   }
 
   @override
@@ -51,9 +45,12 @@ class _TagListPageState extends State<TagListPage> {
   }
 
   Widget buildList() {
+    final t = Translations.of(context);
+
     return StreamBuilder(
-      stream: TagService.instance.getTags(
-        filter: (p0) => p0.name.contains(searchQuery),
+      stream: SavedFiltersService.instance.getSavedFilters(
+        predicate: (savedFilter, filterSet) =>
+            savedFilter.name.contains(searchQuery),
       ),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
@@ -62,56 +59,52 @@ class _TagListPageState extends State<TagListPage> {
 
         if (snapshot.data!.isEmpty) {
           return NoResults(
-            title: t.general.empty_warn,
+            title: searchQuery.isNotEmpty
+                ? t.general.empty_warn
+                : t.transaction.filters.saved.empty_title,
             noSearchResultsVariation: searchQuery.isNotEmpty,
             description: searchQuery.isNotEmpty
                 ? t.general.search_no_results
-                : t.tags.empty_list,
+                : t.transaction.filters.saved.empty_description,
           );
         }
 
-        final tags = snapshot.data!;
+        final filters = snapshot.data!;
 
-        final isOrderEnabled = tags.length > 1 && searchQuery.isNullOrEmpty;
+        final isOrderEnabled = filters.length > 1 && searchQuery.isNullOrEmpty;
 
         return MonekinReorderableList(
-          totalItemCount: tags.length,
+          totalItemCount: filters.length,
           padding: ColumnWithReorderableListAndSearch.listPadding(context),
           scrollController: _scrollController,
           isOrderEnabled: isOrderEnabled,
           spaceBetween: 8,
           itemBuilder: (context, index, isOrdering) {
-            final tag = tags.elementAt(index);
+            final filter = filters.elementAt(index);
 
             return ReorderableListTileStyling(
               child: ListTile(
-                onTap: () => RouteUtils.pushRoute(TagFormPage(tag: tag)),
-                trailing: tags.length > 1
+                onTap: () => RouteUtils.pushRoute(
+                  SavedFilterFormPage(savedFilter: filter),
+                ),
+                trailing: filters.length > 1
                     ? ReorderableDragIcon(index: index, enabled: isOrderEnabled)
                     : null,
-                leading: tag.displayIcon(),
-                title: Text(tag.name),
-                subtitle: tag.description != null && tag.description!.isNotEmpty
-                    ? Text(
-                        tag.description!,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      )
-                    : null,
+                leading: const Icon(Icons.filter_alt_outlined),
+                title: Text(filter.name),
               ),
             );
           },
           onReorder: (from, to) async {
             if (to > from) to--;
 
-            final item = tags.removeAt(from);
-            tags.insert(to, item);
+            final item = filters.removeAt(from);
+            filters.insert(to, item);
 
             await Future.wait(
-              tags.mapIndexed(
-                (index, element) => TagService.instance.updateTag(
-                  element.copyWith(displayOrder: index),
-                ),
+              filters.mapIndexed(
+                (index, element) => SavedFiltersService.instance
+                    .updateSavedFilter(element.copyWith(displayOrder: index)),
               ),
             );
           },
@@ -129,16 +122,16 @@ class _TagListPageState extends State<TagListPage> {
             onPressed: _goToEdit,
             icon: const Icon(Icons.add_rounded),
             scrollController: _scrollController,
-            text: t.tags.add,
+            text: t.ui_actions.add,
           );
 
     return PageFramework(
-      title: t.tags.display(n: 10),
+      title: t.transaction.filters.saved.title,
       floatingActionButton: fab,
       body: ColumnWithReorderableListAndSearch(
         onSearchChanged: _onSearchChanged,
         onAddPressed: _goToEdit,
-        addText: t.tags.add,
+        addText: t.ui_actions.add,
         child: buildList(),
       ),
     );

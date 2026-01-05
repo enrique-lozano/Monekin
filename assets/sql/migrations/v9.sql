@@ -28,6 +28,49 @@ VALUES ('BTC', '₿', 'Bitcoin', 6, 1, 0);
 INSERT INTO currencies (code, symbol, name, decimalPlaces, type, isDefault)
 VALUES ('ETH', 'Ξ', 'Ethereum', 6, 1, 0);
 
+------- SAVE FILTERS AND TRANSACTION FILTERS -------
+
+-- Create new tables
+CREATE TABLE transactionFilterSets (
+    id TEXT NOT NULL PRIMARY KEY,
+    accountsIDs TEXT,
+    categoriesIds TEXT,
+    status TEXT,
+    minDate DATETIME,
+    maxDate DATETIME,
+    searchValue TEXT,
+    transactionTypes TEXT,
+    isRecurrent BOOLEAN,
+    minValue REAL,
+    maxValue REAL,
+    tagsIDs TEXT
+);
+
+CREATE TABLE savedFilters (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    displayOrder INTEGER NOT NULL,
+    filterID TEXT NOT NULL REFERENCES transactionFilterSets(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- Migrate existing budget filters to transactionFilterSets
+INSERT INTO transactionFilterSets (id, categoriesIds, accountsIDs)
+SELECT 
+    b.id || '_filter',
+    NULLIF((SELECT json_group_array(categoryID) FROM budgetCategory WHERE budgetID = b.id), '[]'),
+    NULLIF((SELECT json_group_array(accountID) FROM budgetAccount WHERE budgetID = b.id), '[]')
+FROM budgets b;
+
+-- Add filterID to budgets
+ALTER TABLE budgets ADD COLUMN filterID TEXT REFERENCES transactionFilterSets(id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- Link budgets to their filters
+UPDATE budgets SET filterID = id || '_filter';
+
+-- Drop old tables
+DROP TABLE budgetCategory;
+DROP TABLE budgetAccount;
+
 --- ----------- NEW USER SETTINGS ------------
 INSERT INTO userSettings VALUES ('defaultTransactionType', 'E');
 

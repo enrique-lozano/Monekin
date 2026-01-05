@@ -1,50 +1,52 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'transaction_filters.dart';
+part of 'transaction_filter_set.dart';
 
 // **************************************************************************
 // CopyWithGenerator
 // **************************************************************************
 
-abstract class _$TransactionFiltersCWProxy {
-  TransactionFilters minDate(DateTime? minDate);
+abstract class _$TransactionFilterSetCWProxy {
+  TransactionFilterSet minDate(DateTime? minDate);
 
-  TransactionFilters maxDate(DateTime? maxDate);
+  TransactionFilterSet maxDate(DateTime? maxDate);
 
-  TransactionFilters searchValue(String? searchValue);
+  TransactionFilterSet searchValue(String? searchValue);
 
-  TransactionFilters includeParentCategoriesInSearch(
+  TransactionFilterSet includeParentCategoriesInSearch(
     bool includeParentCategoriesInSearch,
   );
 
-  TransactionFilters includeReceivingAccountsInAccountFilters(
+  TransactionFilterSet includeReceivingAccountsInAccountFilters(
     bool includeReceivingAccountsInAccountFilters,
   );
 
-  TransactionFilters minValue(double? minValue);
+  TransactionFilterSet minValue(double? minValue);
 
-  TransactionFilters maxValue(double? maxValue);
+  TransactionFilterSet maxValue(double? maxValue);
 
-  TransactionFilters transactionTypes(List<TransactionType>? transactionTypes);
+  TransactionFilterSet transactionTypes(
+    List<TransactionType>? transactionTypes,
+  );
 
-  TransactionFilters isRecurrent(bool? isRecurrent);
+  TransactionFilterSet isRecurrent(bool? isRecurrent);
 
-  TransactionFilters accountsIDs(Iterable<String>? accountsIDs);
+  TransactionFilterSet accountsIDs(Iterable<String>? accountsIDs);
 
-  TransactionFilters categoriesIds(Iterable<String>? categoriesIds);
+  TransactionFilterSet categoriesIds(Iterable<String>? categoriesIds);
 
-  TransactionFilters status(List<TransactionStatus?>? status);
+  TransactionFilterSet status(List<TransactionStatus?>? status);
 
-  TransactionFilters tagsIDs(Iterable<String?>? tagsIDs);
+  TransactionFilterSet tagsIDs(Iterable<String?>? tagsIDs);
 
   /// Creates a new instance with the provided field values.
-  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `TransactionFilters(...).copyWith.fieldName(value)`.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `TransactionFilterSet(...).copyWith.fieldName(value)`.
   ///
   /// Example:
   /// ```dart
-  /// TransactionFilters(...).copyWith(id: 12, name: "My name")
+  /// TransactionFilterSet(...).copyWith(id: 12, name: "My name")
   /// ```
-  TransactionFilters call({
+  TransactionFilterSet call({
     DateTime? minDate,
     DateTime? maxDate,
     String? searchValue,
@@ -62,29 +64,30 @@ abstract class _$TransactionFiltersCWProxy {
 }
 
 /// Callable proxy for `copyWith` functionality.
-/// Use as `instanceOfTransactionFilters.copyWith(...)` or call `instanceOfTransactionFilters.copyWith.fieldName(value)` for a single field.
-class _$TransactionFiltersCWProxyImpl implements _$TransactionFiltersCWProxy {
-  const _$TransactionFiltersCWProxyImpl(this._value);
+/// Use as `instanceOfTransactionFilterSet.copyWith(...)` or call `instanceOfTransactionFilterSet.copyWith.fieldName(value)` for a single field.
+class _$TransactionFilterSetCWProxyImpl
+    implements _$TransactionFilterSetCWProxy {
+  const _$TransactionFilterSetCWProxyImpl(this._value);
 
-  final TransactionFilters _value;
-
-  @override
-  TransactionFilters minDate(DateTime? minDate) => call(minDate: minDate);
+  final TransactionFilterSet _value;
 
   @override
-  TransactionFilters maxDate(DateTime? maxDate) => call(maxDate: maxDate);
+  TransactionFilterSet minDate(DateTime? minDate) => call(minDate: minDate);
 
   @override
-  TransactionFilters searchValue(String? searchValue) =>
+  TransactionFilterSet maxDate(DateTime? maxDate) => call(maxDate: maxDate);
+
+  @override
+  TransactionFilterSet searchValue(String? searchValue) =>
       call(searchValue: searchValue);
 
   @override
-  TransactionFilters includeParentCategoriesInSearch(
+  TransactionFilterSet includeParentCategoriesInSearch(
     bool includeParentCategoriesInSearch,
   ) => call(includeParentCategoriesInSearch: includeParentCategoriesInSearch);
 
   @override
-  TransactionFilters includeReceivingAccountsInAccountFilters(
+  TransactionFilterSet includeReceivingAccountsInAccountFilters(
     bool includeReceivingAccountsInAccountFilters,
   ) => call(
     includeReceivingAccountsInAccountFilters:
@@ -92,45 +95,45 @@ class _$TransactionFiltersCWProxyImpl implements _$TransactionFiltersCWProxy {
   );
 
   @override
-  TransactionFilters minValue(double? minValue) => call(minValue: minValue);
+  TransactionFilterSet minValue(double? minValue) => call(minValue: minValue);
 
   @override
-  TransactionFilters maxValue(double? maxValue) => call(maxValue: maxValue);
+  TransactionFilterSet maxValue(double? maxValue) => call(maxValue: maxValue);
 
   @override
-  TransactionFilters transactionTypes(
+  TransactionFilterSet transactionTypes(
     List<TransactionType>? transactionTypes,
   ) => call(transactionTypes: transactionTypes);
 
   @override
-  TransactionFilters isRecurrent(bool? isRecurrent) =>
+  TransactionFilterSet isRecurrent(bool? isRecurrent) =>
       call(isRecurrent: isRecurrent);
 
   @override
-  TransactionFilters accountsIDs(Iterable<String>? accountsIDs) =>
+  TransactionFilterSet accountsIDs(Iterable<String>? accountsIDs) =>
       call(accountsIDs: accountsIDs);
 
   @override
-  TransactionFilters categoriesIds(Iterable<String>? categoriesIds) =>
+  TransactionFilterSet categoriesIds(Iterable<String>? categoriesIds) =>
       call(categoriesIds: categoriesIds);
 
   @override
-  TransactionFilters status(List<TransactionStatus?>? status) =>
+  TransactionFilterSet status(List<TransactionStatus?>? status) =>
       call(status: status);
 
   @override
-  TransactionFilters tagsIDs(Iterable<String?>? tagsIDs) =>
+  TransactionFilterSet tagsIDs(Iterable<String?>? tagsIDs) =>
       call(tagsIDs: tagsIDs);
 
   @override
   /// Creates a new instance with the provided field values.
-  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `TransactionFilters(...).copyWith.fieldName(value)`.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `TransactionFilterSet(...).copyWith.fieldName(value)`.
   ///
   /// Example:
   /// ```dart
-  /// TransactionFilters(...).copyWith(id: 12, name: "My name")
+  /// TransactionFilterSet(...).copyWith(id: 12, name: "My name")
   /// ```
-  TransactionFilters call({
+  TransactionFilterSet call({
     Object? minDate = const $CopyWithPlaceholder(),
     Object? maxDate = const $CopyWithPlaceholder(),
     Object? searchValue = const $CopyWithPlaceholder(),
@@ -146,7 +149,7 @@ class _$TransactionFiltersCWProxyImpl implements _$TransactionFiltersCWProxy {
     Object? status = const $CopyWithPlaceholder(),
     Object? tagsIDs = const $CopyWithPlaceholder(),
   }) {
-    return TransactionFilters(
+    return TransactionFilterSet(
       minDate: minDate == const $CopyWithPlaceholder()
           ? _value.minDate
           // ignore: cast_nullable_to_non_nullable
@@ -208,21 +211,21 @@ class _$TransactionFiltersCWProxyImpl implements _$TransactionFiltersCWProxy {
   }
 }
 
-extension $TransactionFiltersCopyWith on TransactionFilters {
+extension $TransactionFilterSetCopyWith on TransactionFilterSet {
   /// Returns a callable class used to build a new instance with modified fields.
-  /// Example: `instanceOfTransactionFilters.copyWith(...)` or `instanceOfTransactionFilters.copyWith.fieldName(...)`.
+  /// Example: `instanceOfTransactionFilterSet.copyWith(...)` or `instanceOfTransactionFilterSet.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
-  _$TransactionFiltersCWProxy get copyWith =>
-      _$TransactionFiltersCWProxyImpl(this);
+  _$TransactionFilterSetCWProxy get copyWith =>
+      _$TransactionFilterSetCWProxyImpl(this);
 
   /// Returns a copy of the object with the selected fields set to `null`.
   /// A flag set to `false` leaves the field unchanged. Prefer `copyWith(field: null)` or `copyWith.fieldName(null)` for single-field updates.
   ///
   /// Example:
   /// ```dart
-  /// TransactionFilters(...).copyWithNull(firstField: true, secondField: true)
+  /// TransactionFilterSet(...).copyWithNull(firstField: true, secondField: true)
   /// ```
-  TransactionFilters copyWithNull({
+  TransactionFilterSet copyWithNull({
     bool minDate = false,
     bool maxDate = false,
     bool searchValue = false,
@@ -235,7 +238,7 @@ extension $TransactionFiltersCopyWith on TransactionFilters {
     bool status = false,
     bool tagsIDs = false,
   }) {
-    return TransactionFilters(
+    return TransactionFilterSet(
       minDate: minDate == true ? null : this.minDate,
       maxDate: maxDate == true ? null : this.maxDate,
       searchValue: searchValue == true ? null : this.searchValue,

@@ -56,7 +56,7 @@ class _BudgetsPageState extends State<BudgetsPage>
         children: [
           StreamBuilder(
             stream: BudgetServive.instance.getBudgets(
-              predicate: (p0) => p0.intervalPeriod.isNotNull(),
+              predicate: (p0, trF) => p0.intervalPeriod.isNotNull(),
             ),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
@@ -97,7 +97,7 @@ class _BudgetsPageState extends State<BudgetsPage>
           ),
           StreamBuilder(
             stream: BudgetServive.instance.getBudgets(
-              predicate: (p0) => p0.intervalPeriod.isNull(),
+              predicate: (p0, trF) => p0.intervalPeriod.isNull(),
             ),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {

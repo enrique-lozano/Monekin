@@ -3,7 +3,7 @@ import 'package:monekin/app/transactions/widgets/transaction_list_date_separator
 import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 
 class TransactionListComponent extends StatefulWidget {
   const TransactionListComponent({
@@ -20,7 +20,7 @@ class TransactionListComponent extends StatefulWidget {
     this.listPadding = const EdgeInsets.all(0),
   });
 
-  final TransactionFilters filters;
+  final TransactionFilterSet filters;
 
   final TransactionQueryOrderBy? orderBy;
   final int limit;
@@ -53,6 +53,8 @@ class TransactionListComponentState extends State<TransactionListComponent> {
   @override
   void initState() {
     super.initState();
+
+    print("HAS FILTERS: ${widget.filters.hasFilter}");
 
     listScrollController = widget.scrollController ?? ScrollController();
 

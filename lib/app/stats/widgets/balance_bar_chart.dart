@@ -16,7 +16,7 @@ import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 
 import '../../../core/models/transaction/transaction_type.enum.dart';
 import '../../../core/presentation/app_colors.dart';
@@ -41,12 +41,12 @@ class BalanceBarChart extends StatefulWidget {
   const BalanceBarChart({
     super.key,
     required this.dateRange,
-    this.filters = const TransactionFilters(),
+    this.filters = const TransactionFilterSet(),
   });
 
   final DatePeriodState dateRange;
 
-  final TransactionFilters filters;
+  final TransactionFilterSet filters;
 
   @override
   State<BalanceBarChart> createState() => _BalanceBarChartState();

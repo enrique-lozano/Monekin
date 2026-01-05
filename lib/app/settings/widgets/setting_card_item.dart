@@ -46,6 +46,7 @@ class SettingCardItem extends StatelessWidget {
         ),
         child: Flex(
           direction: mainAxis,
+          spacing: mainAxis == Axis.horizontal ? 12 : 8,
           //mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
@@ -54,8 +55,6 @@ class SettingCardItem extends StatelessWidget {
               size: mainAxis == Axis.horizontal ? 24 : 28,
               // color: Theme.of(context).colorScheme.primary,
             ),
-            if (mainAxis == Axis.horizontal) const SizedBox(width: 12),
-            if (mainAxis == Axis.vertical) const SizedBox(height: 8),
             Builder(
               builder: (context) {
                 final toReturn = Column(
@@ -76,7 +75,7 @@ class SettingCardItem extends StatelessWidget {
                     if (subtitle != null)
                       Text(
                         subtitle!,
-                        style: Theme.of(context).textTheme.bodySmall,
+                        style: Theme.of(context).textTheme.bodyMedium,
                         textAlign: mainAxis == Axis.vertical
                             ? TextAlign.center
                             : TextAlign.start,

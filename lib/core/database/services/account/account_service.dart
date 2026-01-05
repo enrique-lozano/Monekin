@@ -3,7 +3,7 @@ import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filters.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:rxdart/rxdart.dart';
 
 enum AccountDataFilter { income, expense, balance }
@@ -97,7 +97,7 @@ class AccountService {
   Stream<double> getAccountMoney({
     required Account account,
     DateTime? date,
-    TransactionFilters trFilters = const TransactionFilters(),
+    TransactionFilterSet trFilters = const TransactionFilterSet(),
     bool convertToPreferredCurrency = false,
   }) {
     return getAccountsMoney(
@@ -121,7 +121,7 @@ class AccountService {
   Stream<double> getAccountsMoney({
     Iterable<String>? accountIds,
     DateTime? date,
-    TransactionFilters trFilters = const TransactionFilters(),
+    TransactionFilterSet trFilters = const TransactionFilterSet(),
     bool convertToPreferredCurrency = true,
   }) {
     date ??= DateTime.now();
@@ -191,7 +191,7 @@ class AccountService {
     required List<Account> accounts,
     DateTime? startDate,
     DateTime? endDate,
-    TransactionFilters trFilters = const TransactionFilters(),
+    TransactionFilterSet trFilters = const TransactionFilterSet(),
     bool convertToPreferredCurrency = true,
   }) {
     if (accounts.isEmpty) return Stream.value(0);
