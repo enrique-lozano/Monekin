@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:monekin/app/currencies/edit_currency_page.dart';
 import 'package:monekin/app/currencies/exchange_rate_details.dart';
@@ -186,7 +188,12 @@ class CurrencyManagerPage extends StatelessWidget {
                           );
                         },
                       ),
-                      trailing: Text(item.exchangeRate.toString()),
+                      trailing: Text(
+                        item.exchangeRate.toStringAsFixed(
+                          max(4, item.currency.decimalPlaces),
+                        ),
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
                       onTap: () async {
                         final currency = await CurrencyService.instance
                             .getCurrencyByCode(item.currencyCode)
