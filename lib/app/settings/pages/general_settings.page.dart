@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/widgets/language_selector.dart';
 import 'package:monekin/app/settings/widgets/monekin_tile_switch.dart';
-import 'package:monekin/app/settings/widgets/settings_list_separator.dart';
+import 'package:monekin/app/settings/widgets/settings_list_utils.dart';
 import 'package:monekin/core/database/services/user-setting/enum/supported_locales.dart';
 import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
@@ -37,85 +37,90 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
       title: t.settings.general.menu_title,
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(bottom: 16).withSafeBottom(context),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            createListSeparator(context, t.settings.general.language.section),
-            ListTile(
-              title: Text(t.settings.general.language.title),
-              leading: const Icon(Icons.language),
-              subtitle: Text(currentSelectedLangDisplayName),
-              onTap: () async {
-                final newLang = await showLanguageSelectorBottomSheet(
-                  context,
-                  LanguageSelector(selectedLangTag: currentLangTag),
-                );
-
-                if (newLang == null) {
-                  return;
-                }
-
-                if (newLang.result != null) {
-                  await LocaleSettings.setLocaleRaw(
-                    newLang.result!,
-                    listenToDeviceLocale: true,
+        child: ListTileTheme(
+          data: getSettingListTileStyle(context),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              createListSeparator(context, t.settings.general.language.section),
+              ListTile(
+                title: Text(t.settings.general.language.title),
+                leading: const Icon(Icons.language),
+                subtitle: Text(currentSelectedLangDisplayName),
+                onTap: () async {
+                  final newLang = await showLanguageSelectorBottomSheet(
+                    context,
+                    LanguageSelector(selectedLangTag: currentLangTag),
                   );
-                } else {
-                  await LocaleSettings.useDeviceLocale();
-                }
 
-                try {
-                  await UserSettingService.instance.setItem(
-                    SettingKey.appLanguage,
-                    newLang.result,
-                    updateGlobalState: true,
+                  if (newLang == null) {
+                    return;
+                  }
+
+                  if (newLang.result != null) {
+                    await LocaleSettings.setLocaleRaw(
+                      newLang.result!,
+                      listenToDeviceLocale: true,
+                    );
+                  } else {
+                    await LocaleSettings.useDeviceLocale();
+                  }
+
+                  try {
+                    await UserSettingService.instance.setItem(
+                      SettingKey.appLanguage,
+                      newLang.result,
+                      updateGlobalState: true,
+                    );
+                  } catch (e) {
+                    MonekinSnackbar.error(
+                      SnackbarParams.fromError(
+                        'There was an error persisting this setting on your device. Contact the developers for more information',
+                      ),
+                    );
+                  }
+                },
+              ),
+              createListSeparator(context, t.settings.security.title),
+              MonekinTileSwitch(
+                title: t.settings.security.private_mode_at_launch,
+                subtitle: t.settings.security.private_mode_at_launch_descr,
+                icon: const Icon(Icons.phonelink_lock_outlined),
+                initialValue:
+                    appStateSettings[SettingKey.privateModeAtLaunch] == '1',
+                onSwitch: (bool value) async {
+                  await PrivateModeService.instance.setPrivateModeAtLaunch(
+                    value,
                   );
-                } catch (e) {
-                  MonekinSnackbar.error(
-                    SnackbarParams.fromError(
-                      'There was an error persisting this setting on your device. Contact the developers for more information',
+                },
+              ),
+              StreamBuilder(
+                stream: PrivateModeService.instance.privateModeStream,
+                builder: (context, snapshot) {
+                  final initialValue = (snapshot.data ?? false);
+
+                  return MonekinTileSwitch(
+                    title: t.settings.security.private_mode,
+                    subtitle: t.settings.security.private_mode_descr,
+                    icon: ScaledAnimatedSwitcher(
+                      keyToWatch: initialValue.toString(),
+                      child: Icon(
+                        initialValue
+                            ? Icons.lock_outline_rounded
+                            : Icons.lock_open_rounded,
+                      ),
                     ),
+                    initialValue: initialValue,
+                    onSwitch: (bool value) {
+                      setState(() {
+                        PrivateModeService.instance.setPrivateMode(value);
+                      });
+                    },
                   );
-                }
-              },
-            ),
-            createListSeparator(context, t.settings.security.title),
-            MonekinTileSwitch(
-              title: t.settings.security.private_mode_at_launch,
-              subtitle: t.settings.security.private_mode_at_launch_descr,
-              icon: const Icon(Icons.phonelink_lock_outlined),
-              initialValue:
-                  appStateSettings[SettingKey.privateModeAtLaunch] == '1',
-              onSwitch: (bool value) async {
-                await PrivateModeService.instance.setPrivateModeAtLaunch(value);
-              },
-            ),
-            StreamBuilder(
-              stream: PrivateModeService.instance.privateModeStream,
-              builder: (context, snapshot) {
-                final initialValue = (snapshot.data ?? false);
-
-                return MonekinTileSwitch(
-                  title: t.settings.security.private_mode,
-                  subtitle: t.settings.security.private_mode_descr,
-                  icon: ScaledAnimatedSwitcher(
-                    keyToWatch: initialValue.toString(),
-                    child: Icon(
-                      initialValue
-                          ? Icons.lock_outline_rounded
-                          : Icons.lock_open_rounded,
-                    ),
-                  ),
-                  initialValue: initialValue,
-                  onSwitch: (bool value) {
-                    setState(() {
-                      PrivateModeService.instance.setPrivateMode(value);
-                    });
-                  },
-                );
-              },
-            ),
-          ],
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

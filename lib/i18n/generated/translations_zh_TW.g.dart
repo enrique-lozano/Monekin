@@ -1241,7 +1241,7 @@ class _TranslationsMoreAboutUsZhTw implements TranslationsMoreAboutUsEn {
 
 	// Translations
 	@override String get display => '應用程式資訊';
-	@override String get description => '查看有關 Monekin 的條款和其他相關資訊。透過報告錯誤、留下建議與社區取得聯繫......';
+	@override String get description => '查找 Monekin 的條款、重要資訊，並透過回報錯誤或分享想法與我們聯繫';
 	@override late final _TranslationsMoreAboutUsLegalZhTw legal = _TranslationsMoreAboutUsLegalZhTw._(_root);
 	@override late final _TranslationsMoreAboutUsProjectZhTw project = _TranslationsMoreAboutUsProjectZhTw._(_root);
 }
@@ -2381,7 +2381,7 @@ extension on TranslationsZhTw {
 		map['more.data.delete_all_header2'] = '最後一步⚠️⚠️';
 		map['more.data.delete_all_message2'] = '刪除帳戶後，您將刪除所有儲存的個人資料。您的帳戶、交易、預算和類別將被刪除且無法恢復。您同意嗎？';
 		map['more.about_us.display'] = '應用程式資訊';
-		map['more.about_us.description'] = '查看有關 Monekin 的條款和其他相關資訊。透過報告錯誤、留下建議與社區取得聯繫......';
+		map['more.about_us.description'] = '查找 Monekin 的條款、重要資訊，並透過回報錯誤或分享想法與我們聯繫';
 		map['more.about_us.legal.display'] = '法律資訊';
 		map['more.about_us.legal.privacy'] = '隱私權政策';
 		map['more.about_us.legal.terms'] = '使用條款';

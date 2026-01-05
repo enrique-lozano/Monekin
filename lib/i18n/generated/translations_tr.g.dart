@@ -1241,7 +1241,7 @@ class _TranslationsMoreAboutUsTr implements TranslationsMoreAboutUsEn {
 
 	// Translations
 	@override String get display => 'Uygulama bilgileri';
-	@override String get description => 'Monekin hakkında şartları ve diğer ilgili bilgileri inceleyin. Hata bildirerek, önerilerde bulunarak toplulukla etkileşime geçin...';
+	@override String get description => 'Monekin\'in şartlarını, önemli bilgilerini bulun ve hata bildirerek veya fikir paylaşımları ile iletişime geçin';
 	@override late final _TranslationsMoreAboutUsLegalTr legal = _TranslationsMoreAboutUsLegalTr._(_root);
 	@override late final _TranslationsMoreAboutUsProjectTr project = _TranslationsMoreAboutUsProjectTr._(_root);
 }
@@ -2381,7 +2381,7 @@ extension on TranslationsTr {
 		map['more.data.delete_all_header2'] = 'Son bir adım ⚠️⚠️';
 		map['more.data.delete_all_message2'] = 'Bir hesabı sildiğinizde, kayıtlı tüm kişisel verilerinizi silmiş olursunuz. Hesaplarınız, işlemleriniz, bütçeleriniz ve kategorileriniz silinecek ve kurtarılamayacaktır. Kabul ediyor musunuz?';
 		map['more.about_us.display'] = 'Uygulama bilgileri';
-		map['more.about_us.description'] = 'Monekin hakkında şartları ve diğer ilgili bilgileri inceleyin. Hata bildirerek, önerilerde bulunarak toplulukla etkileşime geçin...';
+		map['more.about_us.description'] = 'Monekin\'in şartlarını, önemli bilgilerini bulun ve hata bildirerek veya fikir paylaşımları ile iletişime geçin';
 		map['more.about_us.legal.display'] = 'Yasal bilgiler';
 		map['more.about_us.legal.privacy'] = 'Gizlilik politikası';
 		map['more.about_us.legal.terms'] = 'Kullanım koşulları';

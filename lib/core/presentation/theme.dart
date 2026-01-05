@@ -130,14 +130,6 @@ ThemeData getThemeData(
     customAppColors.textBody,
   );
 
-  final listTileSmallText = textTheme.bodyMedium?.copyWith(
-    fontSize: 14,
-    wordSpacing: 0,
-    decorationThickness: 1,
-    fontWeight: FontWeight.bold,
-    fontFamily: fontFamily,
-  );
-
   final cardColor = isDark
       ? theme.colorScheme.primary.darkenPastel(amount: .85)
       : theme.colorScheme.primary.lightenPastel(amount: .96);
@@ -177,12 +169,6 @@ ThemeData getThemeData(
       dragHandleColor: Colors.grey[300],
       clipBehavior: Clip.hardEdge,
     ),
-    listTileTheme: theme.listTileTheme.copyWith(
-      minVerticalPadding: 8,
-      subtitleTextStyle: listTileSmallText?.copyWith(
-        fontWeight: FontWeight.w300,
-      ),
-      leadingAndTrailingTextStyle: listTileSmallText,
-    ),
+    listTileTheme: ListTileThemeData(minVerticalPadding: 12),
   );
 }

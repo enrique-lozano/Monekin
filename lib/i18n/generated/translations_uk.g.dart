@@ -1241,7 +1241,7 @@ class _TranslationsMoreAboutUsUk implements TranslationsMoreAboutUsEn {
 
 	// Translations
 	@override String get display => 'Інформація про додаток';
-	@override String get description => 'Перегляньте умови та іншу важливу інформацію про Monekin. Зв\'яжіться зі спільнотою, повідомте про помилки, залиште пропозиції ...';
+	@override String get description => 'Знаходьте умови Monekin, важливу інформацію та зв\'язуйтеся, повідомляючи про помилки або ділячись ідеями';
 	@override late final _TranslationsMoreAboutUsLegalUk legal = _TranslationsMoreAboutUsLegalUk._(_root);
 	@override late final _TranslationsMoreAboutUsProjectUk project = _TranslationsMoreAboutUsProjectUk._(_root);
 }
@@ -2381,7 +2381,7 @@ extension on TranslationsUk {
 		map['more.data.delete_all_header2'] = 'Останній крок ⚠️⚠️';
 		map['more.data.delete_all_message2'] = 'Видаляючи обліковий запис, ви видалите всі ваші збережені особисті дані. Ваші облікові записи, транзакції, бюджети та категорії будуть видалені і не можуть бути відновлені. Ви згодні?';
 		map['more.about_us.display'] = 'Інформація про додаток';
-		map['more.about_us.description'] = 'Перегляньте умови та іншу важливу інформацію про Monekin. Зв\'яжіться зі спільнотою, повідомте про помилки, залиште пропозиції ...';
+		map['more.about_us.description'] = 'Знаходьте умови Monekin, важливу інформацію та зв\'язуйтеся, повідомляючи про помилки або ділячись ідеями';
 		map['more.about_us.legal.display'] = 'Юридична інформація';
 		map['more.about_us.legal.privacy'] = 'Політика конфіденційності';
 		map['more.about_us.legal.terms'] = 'Умови використання';

@@ -1241,7 +1241,7 @@ class _TranslationsMoreAboutUsEs implements TranslationsMoreAboutUsEn {
 
 	// Translations
 	@override String get display => 'Información de la app';
-	@override String get description => 'Consulta los terminos y otra información relevante sobre Monekin. Ponte en contacto con la comunidad reportando errores, dejando sugerencias...';
+	@override String get description => 'Consulta información relevante sobre Monekin. Conecta reportando errores o compartiendo ideas';
 	@override late final _TranslationsMoreAboutUsLegalEs legal = _TranslationsMoreAboutUsLegalEs._(_root);
 	@override late final _TranslationsMoreAboutUsProjectEs project = _TranslationsMoreAboutUsProjectEs._(_root);
 }
@@ -2383,7 +2383,7 @@ extension on TranslationsEs {
 		map['more.data.delete_all_header2'] = 'Un último paso ⚠️⚠️';
 		map['more.data.delete_all_message2'] = 'Al eliminar una cuenta eliminarás todos tus datos personales almacenados. Tus cuentas, transacciones, presupuestos y categorías serán borrados y no podrán ser recuperados. ¿Estas de acuerdo?';
 		map['more.about_us.display'] = 'Información de la app';
-		map['more.about_us.description'] = 'Consulta los terminos y otra información relevante sobre Monekin. Ponte en contacto con la comunidad reportando errores, dejando sugerencias...';
+		map['more.about_us.description'] = 'Consulta información relevante sobre Monekin. Conecta reportando errores o compartiendo ideas';
 		map['more.about_us.legal.display'] = 'Información legal';
 		map['more.about_us.legal.privacy'] = 'Política de privacidad';
 		map['more.about_us.legal.terms'] = 'Términos de uso';

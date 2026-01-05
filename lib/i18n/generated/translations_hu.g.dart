@@ -1241,7 +1241,7 @@ class _TranslationsMoreAboutUsHu implements TranslationsMoreAboutUsEn {
 
 	// Translations
 	@override String get display => 'Alkalmazásinformációk';
-	@override String get description => 'Nézze meg a Monekinre vonatkozó feltételeket és egyéb fontos információkat. Lépjen kapcsolatba a közösséggel a hibák bejelentésével, javaslatok megtételével...';
+	@override String get description => 'Találja meg a Monekin feltételeit, fontos információkat, és lépjen kapcsolatba hibák bejelentésével vagy ötletek megosztásával';
 	@override late final _TranslationsMoreAboutUsLegalHu legal = _TranslationsMoreAboutUsLegalHu._(_root);
 	@override late final _TranslationsMoreAboutUsProjectHu project = _TranslationsMoreAboutUsProjectHu._(_root);
 }
@@ -2381,7 +2381,7 @@ extension on TranslationsHu {
 		map['more.data.delete_all_header2'] = 'Még egy utolsó lépés ⚠️⚠️';
 		map['more.data.delete_all_message2'] = 'A fiók törlésével törli az összes tárolt személyes adatát. A számlái, tranzakciói, költségvetései és kategóriái törlődnek, és nem állíthatók helyre. Egyetért ezzel?';
 		map['more.about_us.display'] = 'Alkalmazásinformációk';
-		map['more.about_us.description'] = 'Nézze meg a Monekinre vonatkozó feltételeket és egyéb fontos információkat. Lépjen kapcsolatba a közösséggel a hibák bejelentésével, javaslatok megtételével...';
+		map['more.about_us.description'] = 'Találja meg a Monekin feltételeit, fontos információkat, és lépjen kapcsolatba hibák bejelentésével vagy ötletek megosztásával';
 		map['more.about_us.legal.display'] = 'Jogi információk';
 		map['more.about_us.legal.privacy'] = 'Adatvédelem';
 		map['more.about_us.legal.terms'] = 'Használati feltételek';

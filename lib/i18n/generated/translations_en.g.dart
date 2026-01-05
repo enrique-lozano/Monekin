@@ -2249,8 +2249,8 @@ class TranslationsMoreAboutUsEn {
 	/// en: 'App information'
 	String get display => 'App information';
 
-	/// en: 'Check out the terms and other relevant information about Monekin. Get in touch with the community by reporting bugs, leaving suggestions...'
-	String get description => 'Check out the terms and other relevant information about Monekin. Get in touch with the community by reporting bugs, leaving suggestions...';
+	/// en: 'Find Monekin’s terms, important info, and connect by reporting bugs or sharing ideas'
+	String get description => 'Find Monekin’s terms, important info, and connect by reporting bugs or sharing ideas';
 
 	late final TranslationsMoreAboutUsLegalEn legal = TranslationsMoreAboutUsLegalEn._(_root);
 	late final TranslationsMoreAboutUsProjectEn project = TranslationsMoreAboutUsProjectEn._(_root);
@@ -3679,7 +3679,7 @@ extension on Translations {
 		map['more.data.delete_all_header2'] = 'One last step ⚠️⚠️';
 		map['more.data.delete_all_message2'] = 'By deleting an account you will delete all your stored personal data. Your accounts, transactions, budgets and categories will be deleted and cannot be recovered. Do you agree?';
 		map['more.about_us.display'] = 'App information';
-		map['more.about_us.description'] = 'Check out the terms and other relevant information about Monekin. Get in touch with the community by reporting bugs, leaving suggestions...';
+		map['more.about_us.description'] = 'Find Monekin’s terms, important info, and connect by reporting bugs or sharing ideas';
 		map['more.about_us.legal.display'] = 'Legal information';
 		map['more.about_us.legal.privacy'] = 'Privacy policy';
 		map['more.about_us.legal.terms'] = 'Terms of use';

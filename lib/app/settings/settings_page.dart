@@ -27,31 +27,35 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SettingRouteTile(
+            _SettingRouteTile(
               title: t.settings.general.menu_title,
               subtitle: t.settings.general.menu_descr,
               icon: Icons.settings_rounded,
               onTap: () => RouteUtils.pushRoute(const GeneralSettingsPage()),
             ),
-            SettingRouteTile(
+            const Divider(),
+            _SettingRouteTile(
               title: t.settings.transactions.menu_title,
               subtitle: t.settings.transactions.menu_descr,
               icon: Icons.list,
               onTap: () =>
                   RouteUtils.pushRoute(const TransactionsSettingsPage()),
             ),
-            SettingRouteTile(
+            const Divider(),
+            _SettingRouteTile(
               title: t.settings.appearance.menu_title,
               subtitle: t.settings.appearance.menu_descr,
               icon: Icons.color_lens_rounded,
               onTap: () => RouteUtils.pushRoute(const AppareanceSettingsPage()),
             ),
-            SettingRouteTile(
+            const Divider(),
+            _SettingRouteTile(
               title: t.more.data.display,
               subtitle: t.more.data.display_descr,
               icon: Icons.save_rounded,
               onTap: () => RouteUtils.pushRoute(const BackupSettingsPage()),
             ),
+            const Divider(),
           ],
         ),
       ),
@@ -59,9 +63,8 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 }
 
-class SettingRouteTile extends StatelessWidget {
-  const SettingRouteTile({
-    super.key,
+class _SettingRouteTile extends StatelessWidget {
+  const _SettingRouteTile({
     required this.title,
     required this.subtitle,
     required this.icon,
@@ -76,10 +79,9 @@ class SettingRouteTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(title),
-      titleTextStyle: Theme.of(context).textTheme.titleMedium,
+      title: Text(title, style: TextStyle(fontWeight: FontWeight.w500)),
       subtitle: Text(subtitle),
-      leading: Icon(icon),
+      leading: Icon(icon, size: 26),
       onTap: onTap,
     );
   }
