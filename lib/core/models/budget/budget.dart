@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart'
     show BudgetInDB, TransactionFilterInDB, TransactionFilterSetInDB;
-import 'package:monekin/core/models/budget/target_progress_status.enum.dart';
 import 'package:monekin/core/models/date-utils/date_period.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/mixins/financial_target_direction.enum.dart';
@@ -14,7 +13,9 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 import '../transaction/transaction_type.enum.dart';
 import 'target_timeline_status.enum.dart';
 
-class Budget extends BudgetInDB with FinancialTargetMixin {
+class Budget extends BudgetInDB
+    with FinancialTargetMixin
+    implements FinancialTarget {
   final TransactionFilterSetInDB _dbTrFilters;
 
   @override
@@ -59,6 +60,7 @@ class Budget extends BudgetInDB with FinancialTargetMixin {
     return currentDateRange.start.difference(DateTime.now()).inDays;
   }
 
+  @override
   double get todayPercent =>
       getPercentBetweenDates(currentDateRange, DateTime.now());
 
@@ -89,15 +91,4 @@ class Budget extends BudgetInDB with FinancialTargetMixin {
         minDate: currentDateRange.start,
         maxDate: currentDateRange.end,
       );
-
-  @override
-  get progressStatus {
-    return percentageAlreadyUsed.map((percentage) {
-      return TargetProgressStatus.fromPercentages(
-        percentage,
-        todayPercent / 100,
-        timelineStatus,
-      );
-    });
-  }
 }

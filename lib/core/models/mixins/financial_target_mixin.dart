@@ -4,6 +4,27 @@ import 'package:monekin/core/models/budget/target_timeline_status.enum.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/mixins/financial_target_direction.enum.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:monekin/core/utils/date_utils.dart';
+
+/// Interface for financial targets that can be displayed in the UI
+abstract interface class FinancialTarget {
+  String get id;
+  String get name;
+  TransactionFilterSet get trFilters;
+  double get targetAmount;
+  FinancialTargetDirection get targetDirection;
+  DatePeriodState get periodState;
+
+  TargetTimelineStatus get timelineStatus;
+  double? get todayPercent;
+  Stream<TargetProgressStatus?> get progressStatus;
+  Stream<double> get percentageAlreadyUsed;
+  Stream<double> get currentValue;
+
+  bool get isActive;
+  bool get isPast;
+  bool get isFuture;
+}
 
 /// Mixin for financial targets like Budgets and Goals
 ///
@@ -12,18 +33,7 @@ import 'package:monekin/core/presentation/widgets/transaction_filter/transaction
 ///  - Expense        → -balance ≥ target
 ///
 /// Budgets are always of type Expense → -balance <= target
-mixin FinancialTargetMixin {
-  TransactionFilterSet get trFilters;
-
-  /// The target amount for this financial target, in the user preferred currency.
-  double get targetAmount;
-
-  /// The direction of the financial target (Income/Savings or Expense).
-  /// This determines how transaction balances are treated.
-  FinancialTargetDirection get targetDirection;
-
-  DatePeriodState get periodState;
-
+mixin FinancialTargetMixin implements FinancialTarget {
   /// Get the amount of money relative to this target for a given date
   Stream<double> getValueOnDate(DateTime? date) {
     date ??= DateTime.now();
@@ -44,27 +54,37 @@ mixin FinancialTargetMixin {
   }
 
   /// Get the amount of money relative to this target for the current date-time
+  @override
   Stream<double> get currentValue {
     return getValueOnDate(null);
   }
 
   /// Get the percentage of the target already filled. The return value can be greater than 1 (>100%)
+  @override
   Stream<double> get percentageAlreadyUsed {
     if (targetAmount == 0) return Stream.value(0.0);
     return currentValue.map((event) => event / targetAmount);
   }
 
+  @override
+  double? get todayPercent {
+    final range = periodState.toDateTimeRange;
+    if (range == null) return null;
+
+    return getPercentBetweenDates(range, DateTime.now());
+  }
+
   /// Get the current time status of the target based on the current date.
+  @override
   TargetTimelineStatus get timelineStatus {
+    final range = periodState.toDateTimeRange;
+    if (range == null) return TargetTimelineStatus.active;
+
     final now = DateTime.now();
-
-    final startDate = periodState.startDate!;
-    final endDate = periodState.endDate;
-
-    if (endDate != null && now.compareTo(endDate) > 0) {
+    if (now.compareTo(range.end) > 0) {
       return TargetTimelineStatus.past;
     }
-    if (now.compareTo(startDate) < 0) {
+    if (now.compareTo(range.start) < 0) {
       return TargetTimelineStatus.future;
     }
     return TargetTimelineStatus.active;
@@ -72,14 +92,39 @@ mixin FinancialTargetMixin {
 
   /// Whether or not the target is relative to the current datetime.
   /// That is, if the target has not already passed and has already started
+  @override
   bool get isActive => timelineStatus == TargetTimelineStatus.active;
 
   /// True if the period range of the target has passed
+  @override
   bool get isPast => timelineStatus == TargetTimelineStatus.past;
 
   /// True if the target has not started yet
+  @override
   bool get isFuture => timelineStatus == TargetTimelineStatus.future;
 
   /// Get the process status of the budget based on the current date and value
-  Stream<TargetProgressStatus?> get progressStatus;
+  @override
+  Stream<TargetProgressStatus?> get progressStatus {
+    return percentageAlreadyUsed.map((percentage) {
+      double tp;
+      if (todayPercent != null) {
+        tp = todayPercent! / 100;
+      } else {
+        // No time limit
+        if (targetDirection == FinancialTargetDirection.toExpense) {
+          tp = 1.0;
+        } else {
+          tp = 0.0;
+        }
+      }
+
+      return TargetProgressStatus.fromPercentages(
+        percentage,
+        tp,
+        timelineStatus,
+        direction: targetDirection,
+      );
+    });
+  }
 }

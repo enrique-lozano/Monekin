@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/goals/components/goal_card.dart';
 import 'package:monekin/app/goals/goal_form_page.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:monekin/app/widgets/financial_target_card.dart';
 import 'package:monekin/core/database/services/goal/goal_service.dart';
 import 'package:monekin/core/models/date-utils/date_period.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
@@ -133,7 +133,7 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
               Container(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                 decoration: BoxDecoration(color: Theme.of(context).cardColor),
-                child: GoalMainHeaderInfo(goal: goal),
+                child: TargetHeader(target: goal),
               ),
               Expanded(
                 child: TabBarView(

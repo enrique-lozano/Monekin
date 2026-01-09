@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/goals/components/goal_card.dart';
 import 'package:monekin/app/goals/goal_form_page.dart';
 import 'package:monekin/app/layout/page_framework.dart';
+import 'package:monekin/app/widgets/financial_target_card.dart';
 import 'package:monekin/core/database/services/goal/goal_service.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
@@ -42,7 +42,7 @@ class GoalsPage extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 24).withSafeBottom(context),
             itemCount: goals.length,
             itemBuilder: (context, index) {
-              return GoalCard(goal: goals[index]);
+              return FinancialTargetCard(target: goals[index]);
             },
           );
         },

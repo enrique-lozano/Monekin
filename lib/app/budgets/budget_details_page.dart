@@ -9,6 +9,7 @@ import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:monekin/app/widgets/financial_target_card.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
@@ -29,7 +30,6 @@ import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../core/presentation/widgets/no_results.dart';
-import 'components/budget_card.dart';
 
 class BudgetDetailsPage extends StatefulWidget {
   const BudgetDetailsPage({super.key, required this.budget});
@@ -158,7 +158,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
               Container(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                 decoration: BoxDecoration(color: Theme.of(context).cardColor),
-                child: BudgetMainHeaderInfo(budget: budget),
+                child: TargetHeader(target: budget),
               ),
               Expanded(
                 child: TabBarView(
