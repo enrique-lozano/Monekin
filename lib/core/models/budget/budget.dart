@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart'
     show BudgetInDB, TransactionFilterInDB, TransactionFilterSetInDB;
-import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/budget/target_progress_status.enum.dart';
 import 'package:monekin/core/models/date-utils/date_period.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
+import 'package:monekin/core/models/mixins/financial_target_direction.enum.dart';
+import 'package:monekin/core/models/mixins/financial_target_mixin.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/utils/date_utils.dart';
@@ -13,8 +14,15 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 import '../transaction/transaction_type.enum.dart';
 import 'target_timeline_status.enum.dart';
 
-class Budget extends BudgetInDB {
-  TransactionFilterSetInDB _dbTrFilters;
+class Budget extends BudgetInDB with FinancialTargetMixin {
+  final TransactionFilterSetInDB _dbTrFilters;
+
+  @override
+  double get targetAmount => limitAmount;
+
+  @override
+  FinancialTargetDirection get targetDirection =>
+      FinancialTargetDirection.toExpense;
 
   Budget({
     required super.id,
@@ -67,6 +75,11 @@ class Budget extends BudgetInDB {
     return TargetTimelineStatus.active;
   }
 
+  /// Get the localized label of the timeline status. This is not the
+  /// same as the enum display name. For example:
+  ///
+  /// - Enum display name: "Active"
+  /// - Timeline status label: "Active budget"
   String timelineStatusLabel(BuildContext context) {
     final t = Translations.of(context).budgets.target_timeline_statuses;
     switch (timelineStatus) {
@@ -89,6 +102,7 @@ class Budget extends BudgetInDB {
   /// True if the budget has not started yet
   bool get isFutureBudget => timelineStatus == TargetTimelineStatus.future;
 
+  @override
   TransactionFilterSet get trFilters =>
       TransactionFilterSet.fromDB(_dbTrFilters).copyWith(
         status: TransactionStatus.getStatusThatCountsForStats(
@@ -98,33 +112,6 @@ class Budget extends BudgetInDB {
         minDate: currentDateRange.start,
         maxDate: currentDateRange.end,
       );
-
-  /// Get the amount of money relative to this budget for a given date
-  Stream<double> getValueOnDate(DateTime? date) {
-    date ??= DateTime.now();
-
-    return TransactionService.instance
-        .getTransactionsValueBalance(filters: trFilters.copyWith(maxDate: date))
-        .map((res) {
-          res = res * -1;
-
-          if (res <= 0) {
-            return 0.0;
-          }
-
-          return res;
-        });
-  }
-
-  /// Get the amount of money relative to this budget for the current date-time
-  Stream<double> get currentValue {
-    return getValueOnDate(null);
-  }
-
-  /// Get the percentage of the budget already filled. The return value can be greather than 1 (>100%)
-  Stream<double> get percentageAlreadyUsed {
-    return currentValue.map((event) => event / limitAmount);
-  }
 
   /// Get the process status of the budget based on the current date and value
   Stream<TargetProgressStatus?> get progressStatus {
