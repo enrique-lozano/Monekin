@@ -56,7 +56,7 @@ class BudgetCard extends StatelessWidget {
                             isLabelBeforeBar: false,
                             labelPercent: budget.todayPercent / 100,
                           ),
-                          enableLabel: budget.isActiveBudget,
+                          enableLabel: budget.isActive,
                           animatedProgressBar: AnimatedProgressBar(
                             width: 16,
                             radius: 99,
@@ -74,7 +74,7 @@ class BudgetCard extends StatelessWidget {
                     );
                   },
                 ),
-                SizedBox(height: budget.isActiveBudget ? 24 : 8),
+                SizedBox(height: budget.isActive ? 24 : 8),
                 const Divider(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

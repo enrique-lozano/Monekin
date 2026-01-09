@@ -225,31 +225,37 @@ class _GoalStatusCard extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 8),
           StreamBuilder(
             stream: goal.percentageAlreadyUsed,
             builder: (context, snapshot) {
               final goalPercent = snapshot.data;
-              return AnimatedProgressBar(
-                width: 16,
-                radius: 99,
-                showPercentageText: true,
-                animationDuration: 1500,
-                value: goalPercent != null && goalPercent >= 1
-                    ? 1
-                    : goalPercent ?? 0,
-                color: goalPercent != null && goalPercent >= 1
-                    ? AppColors.of(context).success
-                    : (goal.targetDirection ==
-                              FinancialTargetDirection.toExpense
-                          ? AppColors.of(context).danger
-                          : AppColors.of(context).success),
+              return AnimatedProgressBarWithIndicatorLabel(
+                enableLabel: goal.todayPercent != null,
+                indicatorLabelOptions: IndicatorLabelOptions(
+                  label: Text(t.general.today),
+                  isLabelBeforeBar: false,
+                  labelPercent: (goal.todayPercent ?? 0) / 100,
+                ),
+                animatedProgressBar: AnimatedProgressBar(
+                  width: 16,
+                  radius: 99,
+                  showPercentageText: true,
+                  animationDuration: 1500,
+                  value: goalPercent != null && goalPercent >= 1
+                      ? 1
+                      : goalPercent ?? 0,
+                  color: goalPercent != null && goalPercent >= 1
+                      ? AppColors.of(context).success
+                      : (goal.targetDirection ==
+                                FinancialTargetDirection.toExpense
+                            ? AppColors.of(context).danger
+                            : AppColors.of(context).success),
+                ),
               );
             },
           ),
-          const SizedBox(height: 12),
-          const Divider(),
-          const SizedBox(height: 12),
+          SizedBox(height: goal.todayPercent != null ? 16 : 12),
+          const Divider(height: 12),
 
           StreamBuilder(
             stream: goal.currentValue,

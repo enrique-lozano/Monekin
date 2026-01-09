@@ -251,9 +251,9 @@ class MainStatusCard extends StatelessWidget {
           children: [budget.timelineStatus.icon(size: 16), Text(title)],
         ),
       ),
-      subtitle: budget.isPastBudget
+      subtitle: budget.isPast
           ? '${budget.daysToTheEnd.abs()} ${t.budgets.since_expiration}'
-          : budget.isFutureBudget
+          : budget.isFuture
           ? '${budget.daysToTheStart} ${t.budgets.days_to_start}'
           : null,
       bodyPadding: EdgeInsets.all(16),
@@ -299,12 +299,12 @@ class MainStatusCard extends StatelessWidget {
             },
           ),
 
-          if (!budget.isFutureBudget) ...[
+          if (!budget.isFuture) ...[
             const SizedBox(height: 12),
             const Divider(height: 24),
           ],
 
-          if (!budget.isFutureBudget)
+          if (!budget.isFuture)
             StreamBuilder(
               stream: CurrencyService.instance
                   .ensureAndGetPreferredCurrency()
