@@ -27,7 +27,7 @@ class Goal extends GoalInDB with FinancialTargetMixin {
     required super.amount,
     required super.initialAmount,
     required super.startDate,
-    required super.endDate,
+    super.endDate,
     required super.type,
     required TransactionFilterSetInDB trFilters,
   }) : _dbTrFilters = trFilters,

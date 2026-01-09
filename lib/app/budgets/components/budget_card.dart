@@ -152,7 +152,6 @@ class BudgetMainHeaderInfo extends StatelessWidget {
           children: [
             Hero(
               tag: 'budget_card_${budget.id}_header_info',
-
               child: Text(
                 budget.name,
                 style: Theme.of(
@@ -216,7 +215,7 @@ class BudgetMainHeaderInfo extends StatelessWidget {
                     context,
                   ).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
                 ),
-                Text(' / '),
+                Text('  ${t.budgets.from_budgeted.toLowerCase()}'),
                 CurrencyDisplayer(
                   amountToConvert: budget.limitAmount,
                   showDecimals: false,

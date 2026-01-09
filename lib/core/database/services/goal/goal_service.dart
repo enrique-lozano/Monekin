@@ -10,10 +10,9 @@ class GoalService {
 
   Future<bool> insertGoal(Goal goal) {
     return db.transaction(() async {
-      //TODO:
-      // await db
-      //     .into(db.transactionFilterSets)
-      //     .insert(goal.trFilters.toDBModel(id: goal.filterID));
+      await db
+          .into(db.transactionFilterSets)
+          .insert(goal.trFilters.toDBModel(id: goal.filterID));
 
       await db
           .into(db.goals)
