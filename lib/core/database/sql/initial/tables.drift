@@ -11,6 +11,7 @@ import './../../../models/date-utils/periodicity.dart';
 import './../../../models/category/category.dart';
 import './../../../models/account/account.dart';
 import './../../../models/goal/goal.dart';
+import './../../../models/goal/goal_type.enum.dart';
 import './../../services/user-setting/user_setting_service.dart';
 import './../../services/app-data/app_data_service.dart';
 import './../../utils/database_enum.dart';

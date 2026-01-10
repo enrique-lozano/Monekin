@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart'
-    show BudgetInDB, TransactionFilterInDB, TransactionFilterSetInDB;
+    show BudgetInDB, TransactionFilterSetInDB;
 import 'package:monekin/core/models/date-utils/date_period.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/mixins/financial_target_direction.enum.dart';
@@ -17,6 +17,9 @@ class Budget extends BudgetInDB
     with FinancialTargetMixin
     implements FinancialTarget {
   final TransactionFilterSetInDB _dbTrFilters;
+
+  @override
+  bool get isTargetLimit => true;
 
   @override
   double get targetAmount => limitAmount;

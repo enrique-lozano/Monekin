@@ -56,6 +56,7 @@
     "show-more-fields": "Daha fazla alan göster",
     "show-less-fields": "Daha az alan göster",
     "tap-to-search": "Aramak için dokunun",
+    "delete_success": "Öğe başarıyla silindi",
     "LEAVE-WITHOUT-SAVING": {
       "title": "Kaydetmeden ayrılmak mı istiyorsunuz?",
       "message": "Kaydedilmemiş değişiklikleriniz var, bunları kaydetmeden ayrılmak istediğinizden emin misiniz?"
@@ -634,14 +635,10 @@
   },
   "BUDGETS": {
     "title": "Bütçeler",
+    "status": "Bütçe durumu",
     "repeated": "Tekrarlayan",
     "one-time": "Tek seferlik",
-    "annual": "Yıllık",
-    "week": "Haftalık",
-    "month": "Aylık",
     "actives": "Aktifler",
-    "pending": "Başlangıcı Bekliyor",
-    "finish": "Bitti",
     "from-budgeted": "kalan ",
     "days-left": "gün kaldı",
     "days-to-start": "başlangıca kalan gün",
@@ -668,7 +665,7 @@
     },
     "TARGET_TIMELINE_STATUSES": {
       "active": "Aktif bütçe",
-      "past": "Geçmiş bütçe",
+      "past": "Tamamlanan bütçe",
       "future": "Gelecek bütçe"
     },
     "PROGRESS": {
@@ -687,9 +684,65 @@
       }
     }
   },
+  "GOALS": {
+    "title": "Hedefler",
+    "status": "Hedef durumu",
+    "type": {
+      "display": "Goal Type",
+      "income": {
+        "title": "Tasarruf Hedefi",
+        "descr": "Para biriktirmek için ideal. Bakiye hedefinizi aştığında başarılı olursunuz."
+      },
+      "expense": {
+        "title": "Harcama Hedefi",
+        "descr": "Ne kadar harcadığınızı takip edin ve bir hedef tutara ulaşmayı amaçlayın. Bağışlar için ..."
+      }
+    },
+    "empty_title": "Hedef bulunamadı",
+    "empty_description": "Tasarruflarınızı takip etmek için yeni bir hedef oluşturun!",
+    "delete": "Delete goal",
+    "delete_warning": "This action is irreversible. Categories and transactions referring to this goal will not be deleted",
+    "FORM": {
+      "new_title": "New Goal",
+      "edit_title": "Edit Goal",
+      "target_amount": "Target Amount",
+      "initial_amount": "Initial Amount",
+      "name": "Name",
+      "name_hint": "My Saving Goal",
+      "create_success": "Goal created successfully",
+      "edit_success": "Goal edited successfully",
+      "negative_warn": "The goal amount cannot be negative"
+    },
+    "DETAILS": {
+      "title": "Goal Details",
+      "statistics": "Statistics",
+      "goal_value": "Goal Target",
+      "evolution": "Evolution",
+      "no_transactions": "It seems that you have not made any transactions related to this goal"
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "Active goal",
+      "past": "Finished goal",
+      "future": "Future goal"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "Yolda",
+        "active-behind-schedule": "Programın gerisinde",
+        "success": "Hedefe ulaşıldı",
+        "fail": "Hedef başarısız oldu"
+      },
+      "DESCRIPTION": {
+        "active-on-track": "Hedefinizi arama yolundasınız! Kalan {{ remainingDays }} gün boyunca günde {{ dailyAmount }} tasarruf etmelisiniz",
+        "active-behind-schedule": "Programın gerisindesiniz. Hedefinize {{ remainingDays }} gün içinde ulaşmak için günde {{ dailyAmount }} tasarruf etmeniz gerekiyor",
+        "success": "Tebrikler! Hedefine ulaştın.",
+        "fail": "Hedefinizi {{ amount }} kadar kaçırdınız."
+      }
+    }
+  },
   "TARGET_TIMELINE_STATUSES": {
     "active": "Aktif",
-    "past": "Geçmiş",
+    "past": "Tamamlandı",
     "future": "Gelecek"
   },
   "BACKUP": {

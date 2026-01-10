@@ -1,26 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:monekin/app/goals/goal_form_page.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:monekin/app/widgets/financial_target_card.dart';
 import 'package:monekin/core/database/services/goal/goal_service.dart';
 import 'package:monekin/core/models/date-utils/date_period.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/goal/goal.dart';
-import 'package:monekin/core/models/mixins/financial_target_direction.enum.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
-import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/targets/financial_target_card.dart';
+import 'package:monekin/core/presentation/widgets/targets/target_status_card.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -68,7 +64,7 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
         );
 
         return PageFramework(
-          title: goal.name,
+          title: t.goals.details.title,
           tabBar: TabBar(
             controller: _tabController,
             tabAlignment: BreakPoint.of(context).isSmallerThan(BreakpointID.md)
@@ -78,7 +74,7 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
               context,
             ).isSmallerThan(BreakpointID.md),
             tabs: [
-              Tab(text: t.budgets.details.statistics),
+              Tab(text: t.goals.details.statistics),
               Tab(text: t.transaction.display(n: 10)),
             ],
           ),
@@ -86,7 +82,7 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
             MonekinPopupMenuButton(
               actionItems: [
                 ListTileActionItem(
-                  label: t.budgets.form.edit,
+                  label: t.goals.form.edit_title,
                   icon: Icons.edit,
                   onClick: () {
                     RouteUtils.pushRoute(GoalFormPage(goalToEdit: goal));
@@ -99,10 +95,8 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
                   onClick: () {
                     confirmDialog(
                       context,
-                      dialogTitle: 'Delete Goal', // Add translation if needed
-                      contentParagraphs: [
-                        Text('Are you sure you want to delete this goal?'),
-                      ],
+                      dialogTitle: t.goals.delete,
+                      contentParagraphs: [Text(t.goals.delete_warning)],
                       confirmationText: t.ui_actions.confirm,
                       icon: Icons.delete,
                     ).then((confirmed) {
@@ -113,7 +107,7 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
                           .then((value) {
                             RouteUtils.popRoute();
                             MonekinSnackbar.success(
-                              SnackbarParams('Goal deleted successfully'),
+                              SnackbarParams(t.general.delete_success),
                             );
                           })
                           .catchError((err) {
@@ -156,8 +150,15 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
                               mainAxisSize: MainAxisSize.min,
                               spacing: 16,
                               children: [
-                                _GoalStatusCard(goal: goal),
-                                // We can add evolution chart here later if implementing history
+                                StreamBuilder<double>(
+                                  stream: goal.currentValue,
+                                  builder: (context, currentValueSnapshot) {
+                                    return FinancialTargetStatusCard(
+                                      target: goal,
+                                      currentValue: currentValueSnapshot.data,
+                                    );
+                                  },
+                                ),
                               ],
                             ),
                           ),
@@ -193,102 +194,6 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
           ),
         );
       },
-    );
-  }
-}
-
-class _GoalStatusCard extends StatelessWidget {
-  const _GoalStatusCard({required this.goal});
-
-  final Goal goal;
-
-  @override
-  Widget build(BuildContext context) {
-    final t = Translations.of(context);
-
-    return CardWithHeader(
-      title: 'Goal Status',
-      bodyPadding: const EdgeInsets.all(16),
-      body: Column(
-        spacing: 4,
-        children: [
-          DefaultTextStyle(
-            style: Theme.of(context).textTheme.labelMedium!,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(DateFormat.yMMMd().format(goal.startDate)),
-                if (goal.endDate != null)
-                  Text(DateFormat.yMMMd().format(goal.endDate!))
-                else
-                  const Text('∞'),
-              ],
-            ),
-          ),
-          StreamBuilder(
-            stream: goal.percentageAlreadyUsed,
-            builder: (context, snapshot) {
-              final goalPercent = snapshot.data;
-              return AnimatedProgressBarWithIndicatorLabel(
-                enableLabel: goal.todayPercent != null,
-                indicatorLabelOptions: IndicatorLabelOptions(
-                  label: Text(t.general.today),
-                  isLabelBeforeBar: false,
-                  labelPercent: (goal.todayPercent ?? 0) / 100,
-                ),
-                animatedProgressBar: AnimatedProgressBar(
-                  width: 16,
-                  radius: 99,
-                  showPercentageText: true,
-                  animationDuration: 1500,
-                  value: goalPercent != null && goalPercent >= 1
-                      ? 1
-                      : goalPercent ?? 0,
-                  color: goalPercent != null && goalPercent >= 1
-                      ? AppColors.of(context).success
-                      : (goal.targetDirection ==
-                                FinancialTargetDirection.toExpense
-                            ? AppColors.of(context).danger
-                            : AppColors.of(context).success),
-                ),
-              );
-            },
-          ),
-          SizedBox(height: goal.todayPercent != null ? 16 : 12),
-          const Divider(height: 12),
-
-          StreamBuilder(
-            stream: goal.currentValue,
-            builder: (context, snapshot) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Current:'),
-                  CurrencyDisplayer(
-                    amountToConvert: snapshot.data ?? 0,
-                    showDecimals: true,
-                    integerStyle: Theme.of(context).textTheme.bodyLarge!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              );
-            },
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Target:'),
-              CurrencyDisplayer(
-                amountToConvert: goal.targetAmount,
-                showDecimals: true,
-                integerStyle: Theme.of(
-                  context,
-                ).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        ],
-      ),
     );
   }
 }

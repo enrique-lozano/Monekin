@@ -15,6 +15,12 @@ abstract interface class FinancialTarget {
   FinancialTargetDirection get targetDirection;
   DatePeriodState get periodState;
 
+  /// Whether the target is a limit (e.g. Budget) or a goal to reach (e.g. Savings Goal)
+  ///
+  /// - True: Values above the target are BAD.
+  /// - False: Values above the target are GOOD.
+  bool get isTargetLimit;
+
   TargetTimelineStatus get timelineStatus;
   double? get todayPercent;
   Stream<TargetProgressStatus?> get progressStatus;
@@ -112,9 +118,21 @@ mixin FinancialTargetMixin implements FinancialTarget {
         tp = todayPercent! / 100;
       } else {
         // No time limit
-        if (targetDirection == FinancialTargetDirection.toExpense) {
+        if (isTargetLimit) {
+          // Budget with no time limit:
+          // Assume strict progress (always active, check agains 100%??)
+          // Actually if no time limit, todayPercent is null.
+          // Passed to fromPercentage:
+          // If percentage > 1 ? Bad : Good.
+          // What to pass as todayPercent? 1.0 implies time is up?
+          // If I pass 0, then percentage > 0 is "Warning".
+          // If I pass 1, then percentage > 1 is "Failed".
           tp = 1.0;
         } else {
+          // Goal with no time limit.
+          // Saving anything is good.
+          // Should be Good unless 0?
+          // Pass 0.0 -> percentage > 0 -> Good/Warning logic?
           tp = 0.0;
         }
       }
@@ -123,7 +141,7 @@ mixin FinancialTargetMixin implements FinancialTarget {
         percentage,
         tp,
         timelineStatus,
-        direction: targetDirection,
+        isTargetLimit: isTargetLimit,
       );
     });
   }

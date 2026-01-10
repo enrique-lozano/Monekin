@@ -105,10 +105,10 @@ class FinancialTargetCard extends StatelessWidget {
                   },
                 ),
 
-                SizedBox(height: todayLabelEnabled ? 24 : 8),
+                SizedBox(height: todayLabelEnabled ? 20 : 8),
 
                 // Footer (Status & Icons)
-                const Divider(height: 16),
+                const Divider(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -116,10 +116,13 @@ class FinancialTargetCard extends StatelessWidget {
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      spacing: 8,
+                      spacing: 4,
                       children: [
-                        target.timelineStatus.icon(size: 16),
-                        Text(target.timelineStatus.displayName(context)),
+                        target.timelineStatus.icon(size: 14),
+                        Text(
+                          target.timelineStatus.displayName(context),
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
                       ],
                     ),
 
@@ -152,7 +155,13 @@ class FinancialTargetCard extends StatelessWidget {
                                 color: progressStatus.color,
                               ),
                             ),
-                            Text(progressStatus.displayName(context)),
+                            Text(
+                              progressStatus.displayName(
+                                context,
+                                isTargetLimit: target.isTargetLimit,
+                              ),
+                              style: Theme.of(context).textTheme.labelMedium,
+                            ),
                           ],
                         );
                       },
@@ -187,11 +196,31 @@ class TargetHeader extends StatelessWidget {
           children: [
             Hero(
               tag: 'target_card_${target.id}_header_info',
-              child: Text(
-                target.name,
-                style: Theme.of(
-                  context,
-                ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
+              child: Row(
+                spacing: 8,
+                children: [
+                  if (target is Goal)
+                    Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: (target as Goal).type
+                            .color(context)
+                            .lightenPastel(amount: .25),
+                      ),
+                      child: Icon(
+                        Icons.golf_course_sharp,
+                        size: 20,
+                        color: Theme.of(context).colorScheme.surface,
+                      ),
+                    ),
+                  Text(
+                    target.name,
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
             ),
             _buildMoneyValueLine(context),
@@ -200,6 +229,7 @@ class TargetHeader extends StatelessWidget {
         Flexible(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
+            spacing: 4,
             children: [
               Builder(
                 builder: (context) {

@@ -1,24 +1,12 @@
 import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/utils/database_enum.dart';
 import 'package:monekin/core/models/date-utils/date_period.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
+import 'package:monekin/core/models/goal/goal_type.enum.dart';
 import 'package:monekin/core/models/mixins/financial_target_direction.enum.dart';
 import 'package:monekin/core/models/mixins/financial_target_mixin.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-
-enum GoalType implements DatabaseEnum<int> {
-  expense(0),
-  income(1);
-
-  const GoalType(this.id);
-
-  final int id;
-
-  @override
-  int get databaseValue => id;
-}
 
 class Goal extends GoalInDB
     with FinancialTargetMixin
@@ -39,6 +27,9 @@ class Goal extends GoalInDB
 
   @override
   double get targetAmount => amount;
+
+  @override
+  bool get isTargetLimit => false;
 
   @override
   FinancialTargetDirection get targetDirection => type == GoalType.expense

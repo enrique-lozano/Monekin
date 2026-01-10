@@ -157,8 +157,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
     final t = Translations.of(context);
 
     return PageFramework(
-      title: isEditMode ? t.budgets.form.edit : t.budgets.form.create,
-
+      title: isEditMode ? t.budgets.form.edit : t.budgets.form.title,
       persistentFooterButtons: [
         PersistentFooterButton(
           child: FilledButton.icon(

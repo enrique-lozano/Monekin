@@ -56,6 +56,7 @@
     "show-more-fields": "顯示更多欄位",
     "show-less-fields": "顯示較少的欄位",
     "tap-to-search": "點擊即可搜尋",
+    "delete_success": "項目刪除成功",
     "LEAVE-WITHOUT-SAVING": {
       "title": "不保存就離開？",
       "message": "您有未保存的更改，確定要離開而不保存它們嗎？"
@@ -634,14 +635,10 @@
   },
   "BUDGETS": {
     "title": "預算",
+    "status": "預算狀況",
     "repeated": "週期性",
     "one-time": "一次性",
-    "annual": "年度",
-    "week": "每週",
-    "month": "每月",
     "actives": "活躍",
-    "pending": "等待開始",
-    "finish": "完成的",
     "from-budgeted": "從預算",
     "days-left": "還剩幾天",
     "days-to-start": "開始的日子",
@@ -668,7 +665,7 @@
     },
     "TARGET_TIMELINE_STATUSES": {
       "active": "目前預算",
-      "past": "過去預算",
+      "past": "已完成預算",
       "future": "未來預算"
     },
     "PROGRESS": {
@@ -687,9 +684,65 @@
       }
     }
   },
+  "GOALS": {
+    "title": "目標",
+    "status": "目標狀態",
+    "type": {
+      "display": "Goal Type",
+      "income": {
+        "title": "儲蓄目標",
+        "descr": "非常適合儲蓄。當餘額超過目標時，即為成功。"
+      },
+      "expense": {
+        "title": "支出目標",
+        "descr": "跟踪您的支出並以此達到目標金額。適用於捐款、慈善..."
+      }
+    },
+    "empty_title": "未找到目標",
+    "empty_description": "創建一個新目標以開始追蹤您的儲蓄！",
+    "delete": "Delete goal",
+    "delete_warning": "This action is irreversible. Categories and transactions referring to this goal will not be deleted",
+    "FORM": {
+      "new_title": "New Goal",
+      "edit_title": "Edit Goal",
+      "target_amount": "Target Amount",
+      "initial_amount": "Initial Amount",
+      "name": "Name",
+      "name_hint": "My Saving Goal",
+      "create_success": "Goal created successfully",
+      "edit_success": "Goal edited successfully",
+      "negative_warn": "The goal amount cannot be negative"
+    },
+    "DETAILS": {
+      "title": "Goal Details",
+      "statistics": "Statistics",
+      "goal_value": "Goal Target",
+      "evolution": "Evolution",
+      "no_transactions": "It seems that you have not made any transactions related to this goal"
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "Active goal",
+      "past": "Finished goal",
+      "future": "Future goal"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "步入正軌",
+        "active-behind-schedule": "落後於計劃",
+        "success": "目標達成",
+        "fail": "目標失敗"
+      },
+      "DESCRIPTION": {
+        "active-on-track": "您正在尋找目標的軌道上！您必須在剩餘的 {{ remainingDays }} 天內每天節省 {{ dailyAmount }}",
+        "active-behind-schedule": "你落後於計劃了。您必須每天節省 {{ dailyAmount }} 才能在 {{ remainingDays }} 天后達到您的目標",
+        "success": "恭喜！你達到了你的目標。",
+        "fail": "您與目標相差了 {{ amount }}。"
+      }
+    }
+  },
   "TARGET_TIMELINE_STATUSES": {
     "active": "進行中",
-    "past": "已結束",
+    "past": "已完成",
     "future": "未開始"
   },
   "BACKUP": {

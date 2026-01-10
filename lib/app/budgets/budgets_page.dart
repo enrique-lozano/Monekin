@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/budgets/budget_form_page.dart';
 import 'package:monekin/app/layout/page_context.dart';
 import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/widgets/financial_target_card.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
+import 'package:monekin/core/presentation/widgets/targets/financial_target_card.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 

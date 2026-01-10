@@ -88,7 +88,7 @@ class _MoreActionsPageState extends State<MoreActionsPage> {
     // 2. Define all possible items
     final allItems = [
       _ActionItem(
-        title: 'Goals',
+        title: t.goals.title,
         icon: Icons.flag_rounded,
         onTap: () => RouteUtils.pushRoute(const GoalsPage()),
         id: null, // Goals is not yet in the main menu enum/list

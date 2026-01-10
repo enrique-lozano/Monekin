@@ -56,6 +56,7 @@
     "show-more-fields": "Show more fields",
     "show-less-fields": "Show less fields",
     "tap-to-search": "Tap to search",
+    "delete_success": "Item deleted successfully",
     "LEAVE-WITHOUT-SAVING": {
       "title": "Leave without saving?",
       "message": "You have unsaved changes, are you sure you want to leave without saving them?"
@@ -201,15 +202,24 @@
   "FINANCIAL-HEALTH": {
     "display": "Financial health",
     "review": {
-      "very_good(context=GenderContext)": { "male,female": "Very good!" },
-      "good(context=GenderContext)": { "male,female": "Good" },
-      "normal(context=GenderContext)": { "male,female": "Average" },
-      "bad(context=GenderContext)": { "male,female": "Fair" },
-      "very_bad(context=GenderContext)": { "male,female": "Very Bad" },
+      "very_good(context=GenderContext)": {
+        "male,female": "Very good!"
+      },
+      "good(context=GenderContext)": {
+        "male,female": "Good"
+      },
+      "normal(context=GenderContext)": {
+        "male,female": "Average"
+      },
+      "bad(context=GenderContext)": {
+        "male,female": "Fair"
+      },
+      "very_bad(context=GenderContext)": {
+        "male,female": "Very Bad"
+      },
       "insufficient_data(context=GenderContext)": {
         "male,female": "Insufficient data"
       },
-
       "descr": {
         "insufficient_data": "It looks like we don't have enough expenses to calculate your financial health. Add some expenses/incomes in this period to allow us to help you!",
         "very_good": "Congratulations! Your financial health is tremendous. We hope you continue your good streak and continue learning with Monekin",
@@ -325,7 +335,10 @@
       "searcher.placeholder": "Search by category, description...",
       "searcher.no-results": "No transactions found matching the search criteria",
       "loading": "Loading more transactions...",
-      "selected.short": { "one": "{{n}} selected", "other": "{{n}} selected" },
+      "selected.short": {
+        "one": "{{n}} selected",
+        "other": "{{n}} selected"
+      },
       "selected.long": {
         "one": "{{n}} transaction selected",
         "other": "{{n}} transactions selected"
@@ -622,14 +635,10 @@
   },
   "BUDGETS": {
     "title": "Budgets",
+    "status": "Budget status",
     "repeated": "Recurring",
     "one-time": "Once",
-    "annual": "Annuals",
-    "week": "Weekly",
-    "month": "Monthly",
     "actives": "Actives",
-    "pending": "Pending start",
-    "finish": "Finished",
     "from-budgeted": "left of ",
     "days-left": "days left",
     "days-to-start": "days to start",
@@ -656,7 +665,7 @@
     },
     "TARGET_TIMELINE_STATUSES": {
       "active": "Active budget",
-      "past": "Past budget",
+      "past": "Finished budget",
       "future": "Future budget"
     },
     "PROGRESS": {
@@ -675,9 +684,65 @@
       }
     }
   },
+  "GOALS": {
+    "title": "Goals",
+    "status": "Goal status",
+    "type": {
+      "display": "Goal Type",
+      "income": {
+        "title": "Savings Goal",
+        "descr": "Ideal for saving money. You succeed when the balance goes above your target."
+      },
+      "expense": {
+        "title": "Spending Goal",
+        "descr": "Track how much you spend and aim to reach a target amount. Works good for donations, charity, leisure spending..."
+      }
+    },
+    "empty_title": "No goals found",
+    "empty_description": "Create a new goal to start tracking your savings!",
+    "delete": "Delete goal",
+    "delete_warning": "This action is irreversible. Categories and transactions referring to this goal will not be deleted",
+    "FORM": {
+      "new_title": "New Goal",
+      "edit_title": "Edit Goal",
+      "target_amount": "Target Amount",
+      "initial_amount": "Initial Amount",
+      "name": "Name",
+      "name_hint": "My Saving Goal",
+      "create_success": "Goal created successfully",
+      "edit_success": "Goal edited successfully",
+      "negative_warn": "The goal amount cannot be negative"
+    },
+    "DETAILS": {
+      "title": "Goal Details",
+      "statistics": "Statistics",
+      "goal_value": "Goal Target",
+      "evolution": "Evolution",
+      "no_transactions": "It seems that you have not made any transactions related to this goal"
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "Active goal",
+      "past": "Finished goal",
+      "future": "Future goal"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "On track",
+        "active-behind-schedule": "Behind schedule",
+        "success": "Goal reached",
+        "fail": "Goal failed"
+      },
+      "DESCRIPTION": {
+        "active-on-track": "You are on track to seek your goal! You have to save {{ dailyAmount }} per day for the remaining {{ remainingDays }} days",
+        "active-behind-schedule": "You are behind schedule. You have to save {{ dailyAmount }} per day to reach your goal in {{ remainingDays }} days",
+        "success": "Congratulations! You reached your goal.",
+        "fail": "You missed your goal by {{ amount }}."
+      }
+    }
+  },
   "TARGET_TIMELINE_STATUSES": {
     "active": "Active",
-    "past": "Past",
+    "past": "Finished",
     "future": "Future"
   },
   "BACKUP": {

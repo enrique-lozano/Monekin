@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/goals/goal_form_page.dart';
 import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/widgets/financial_target_card.dart';
 import 'package:monekin/core/database/services/goal/goal_service.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
+import 'package:monekin/core/presentation/widgets/targets/financial_target_card.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -16,10 +16,10 @@ class GoalsPage extends StatelessWidget {
     final t = Translations.of(context);
 
     return PageFramework(
-      title: 'Goals',
+      title: t.goals.title,
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.add_rounded),
-        label: Text(t.ui_actions.add),
+        label: Text(t.goals.form.new_title),
         onPressed: () => RouteUtils.pushRoute(const GoalFormPage()),
       ),
       body: StreamBuilder(
@@ -32,9 +32,9 @@ class GoalsPage extends StatelessWidget {
           final goals = snapshot.data!;
 
           if (goals.isEmpty) {
-            return const NoResults(
-              title: 'No goals found',
-              description: 'Create a new goal to start tracking your savings!',
+            return NoResults(
+              title: t.goals.empty_title,
+              description: t.goals.empty_description,
             );
           }
 

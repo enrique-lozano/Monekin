@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/models/budget/target_timeline_status.enum.dart';
-import 'package:monekin/core/models/mixins/financial_target_direction.enum.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 ///  The progress status of a target (budget or goal) based on its current progress.
 enum TargetProgressStatus {
   /// Target is on track (for expenses: under budget; for income: on track)
-  good,
+  onTrack,
 
   /// Target is off track (for expenses: over budget; for income: behind schedule)
-  bad,
+  warning,
 
-  /// Target has already been fulfilled before the end date, but the timeline is still
-  /// active so this situation can be reversed.
-  alreadyFulfilled,
+  /// Target is a limit and has been exceeded (Overspending)
+  limitExceeded,
+
+  /// Target is a goal and has been reached (Goal Reached)
+  goalReached,
 
   /// Target has finished and was successfully met (for expenses: within budget; for income: met or exceeded)
   success,
@@ -27,30 +28,43 @@ enum TargetProgressStatus {
     double percentage,
     double todayPercent,
     TargetTimelineStatus timelineStatus, {
-    FinancialTargetDirection direction = FinancialTargetDirection.toExpense,
+    required bool isTargetLimit,
   }) {
-    final isExpense = direction == FinancialTargetDirection.toExpense;
-
     switch (timelineStatus) {
       case TargetTimelineStatus.active:
         if (percentage >= 1) {
-          return TargetProgressStatus.alreadyFulfilled;
+          // If 100% reached:
+          // Limit (Budget) -> BAD (limitExceeded)
+          // Target (Goal) -> GOOD (goalReached)
+          return isTargetLimit
+              ? TargetProgressStatus.limitExceeded
+              : TargetProgressStatus.goalReached;
         } else if (percentage > todayPercent) {
-          return isExpense
-              ? TargetProgressStatus.bad
-              : TargetProgressStatus.good;
+          // Progress is faster than time:
+          // Limit (Budget) -> Spending too fast -> BAD (warning)
+          // Target (Goal) -> Saving fast -> GOOD (onTrack)
+          return isTargetLimit
+              ? TargetProgressStatus.warning
+              : TargetProgressStatus.onTrack;
         } else {
-          return isExpense
-              ? TargetProgressStatus.good
-              : TargetProgressStatus.bad;
+          // Progress is slower than time:
+          // Limit (Budget) -> Spending slow -> GOOD (onTrack)
+          // Target (Goal) -> Saving slow -> BAD (warning)
+          return isTargetLimit
+              ? TargetProgressStatus.onTrack
+              : TargetProgressStatus.warning;
         }
       case TargetTimelineStatus.past:
         if (percentage <= 1) {
-          return isExpense
+          // Limit (Budget) (<100%) -> Success
+          // Target (Goal) (<100%) -> Fail
+          return isTargetLimit
               ? TargetProgressStatus.success
               : TargetProgressStatus.fail;
         } else {
-          return isExpense
+          // Limit (Budget) (>100%) -> Fail
+          // Target (Goal) (>100%) -> Success
+          return isTargetLimit
               ? TargetProgressStatus.fail
               : TargetProgressStatus.success;
         }
@@ -61,45 +75,74 @@ enum TargetProgressStatus {
 
   IconData get iconData {
     switch (this) {
-      case TargetProgressStatus.good:
+      case TargetProgressStatus.onTrack:
         return Icons.thumb_up_alt_rounded;
-      case TargetProgressStatus.bad:
-        return Icons.front_hand_rounded;
+      case TargetProgressStatus.warning:
+        return Icons.warning_rounded;
       case TargetProgressStatus.success:
+      case TargetProgressStatus.goalReached:
         return Icons.done_all_rounded;
-      case TargetProgressStatus.fail || TargetProgressStatus.alreadyFulfilled:
+      case TargetProgressStatus.fail:
+      case TargetProgressStatus.limitExceeded:
         return Icons.close_rounded;
     }
   }
 
   Color get color {
     switch (this) {
-      case TargetProgressStatus.good || TargetProgressStatus.success:
+      case TargetProgressStatus.onTrack:
+      case TargetProgressStatus.success:
+      case TargetProgressStatus.goalReached:
         return Colors.green;
-      case TargetProgressStatus.bad:
+      case TargetProgressStatus.warning:
         return Colors.orange;
-      case TargetProgressStatus.fail || TargetProgressStatus.alreadyFulfilled:
+      case TargetProgressStatus.fail:
+      case TargetProgressStatus.limitExceeded:
         return Colors.red;
     }
   }
 
-  String displayName(BuildContext context) {
+  String displayName(BuildContext context, {required bool isTargetLimit}) {
     final t = Translations.of(context);
 
-    switch (this) {
-      case TargetProgressStatus.good:
-        return t.budgets.progress.labels.active_on_track;
-      case TargetProgressStatus.bad:
-        return t.budgets.progress.labels.active_overspending;
-      case TargetProgressStatus.success:
-        return t.budgets.progress.labels.success;
-      case TargetProgressStatus.fail || TargetProgressStatus.alreadyFulfilled:
-        return t.budgets.progress.labels.fail;
+    if (isTargetLimit) {
+      switch (this) {
+        case TargetProgressStatus.onTrack:
+          return t.budgets.progress.labels.active_on_track;
+        case TargetProgressStatus.warning:
+          return t.budgets.progress.labels.active_overspending;
+        case TargetProgressStatus.limitExceeded:
+          return t.budgets.progress.labels.fail;
+        case TargetProgressStatus.goalReached:
+          // Should not happen for Limit
+          return t.budgets.progress.labels.success;
+        case TargetProgressStatus.success:
+          return t.budgets.progress.labels.success;
+        case TargetProgressStatus.fail:
+          return t.budgets.progress.labels.fail;
+      }
+    } else {
+      switch (this) {
+        case TargetProgressStatus.onTrack:
+          return t.goals.progress.labels.active_on_track;
+        case TargetProgressStatus.warning:
+          return t.goals.progress.labels.active_behind_schedule;
+        case TargetProgressStatus.limitExceeded:
+          // Should not happen for Goal
+          return t.goals.progress.labels.fail;
+        case TargetProgressStatus.goalReached:
+          return t.goals.progress.labels.success;
+        case TargetProgressStatus.success:
+          return t.goals.progress.labels.success;
+        case TargetProgressStatus.fail:
+          return t.goals.progress.labels.fail;
+      }
     }
   }
 
-  String description(
-    BuildContext context, {
+  String description({
+    required BuildContext context,
+    required bool isTargetLimit,
     CurrencyInDB? currency,
     double? dailyAmountLeft,
     int? daysLeft,
@@ -112,26 +155,56 @@ enum TargetProgressStatus {
       decimalDigits: 0,
     );
 
+    // Helper to format
+    String amount(double? val) => formatter.format(val ?? 0);
+    int days = daysLeft ?? 0;
+
     switch (this) {
-      case TargetProgressStatus.good:
-        return t.budgets.progress.description.active_on_track(
-          dailyAmount: formatter.format(dailyAmountLeft),
-          remainingDays: daysLeft!,
-        );
-      case TargetProgressStatus.bad:
-        return t.budgets.progress.description.active_overspending(
-          dailyAmount: formatter.format(dailyAmountLeft),
-          remainingDays: daysLeft!,
-        );
+      case TargetProgressStatus.onTrack:
+        if (isTargetLimit) {
+          return t.budgets.progress.description.active_on_track(
+            dailyAmount: amount(dailyAmountLeft),
+            remainingDays: days,
+          );
+        } else {
+          return t.goals.progress.description.active_on_track(
+            dailyAmount: amount(dailyAmountLeft),
+            remainingDays: days,
+          );
+        }
+      case TargetProgressStatus.warning:
+        if (isTargetLimit) {
+          return t.budgets.progress.description.active_overspending(
+            dailyAmount: amount(dailyAmountLeft),
+            remainingDays: days,
+          );
+        } else {
+          return t.goals.progress.description.active_behind_schedule(
+            dailyAmount: amount(dailyAmountLeft),
+            remainingDays: days,
+          );
+        }
       case TargetProgressStatus.success:
-        return t.budgets.progress.description.success;
+        if (isTargetLimit) {
+          return t.budgets.progress.description.success;
+        } else {
+          return t.goals.progress.description.success;
+        }
+      case TargetProgressStatus.goalReached:
+        return t.goals.progress.description.success;
       case TargetProgressStatus.fail:
+        if (isTargetLimit) {
+          return t.budgets.progress.description.fail(
+            amount: amount(failedByAmount),
+          );
+        } else {
+          return t.goals.progress.description.fail(
+            amount: amount(failedByAmount),
+          );
+        }
+      case TargetProgressStatus.limitExceeded:
         return t.budgets.progress.description.fail(
-          amount: formatter.format(failedByAmount),
-        );
-      case TargetProgressStatus.alreadyFulfilled:
-        return t.budgets.progress.description.active_exceeded(
-          amount: formatter.format(failedByAmount),
+          amount: amount(failedByAmount),
         );
     }
   }

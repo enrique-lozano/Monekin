@@ -8,10 +8,13 @@ import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/goal/goal_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/goal/goal.dart';
+import 'package:monekin/core/models/goal/goal_type.enum.dart';
+import 'package:monekin/core/models/goal/goal_type_selector.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/count_indicator.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
@@ -99,7 +102,7 @@ class _GoalFormPageState extends State<GoalFormPage> {
     _formKey.currentState!.save();
 
     if ((amountToNumber ?? 0) < 0 || (initialAmountToNumber ?? 0) < 0) {
-      MonekinSnackbar.warning(SnackbarParams(t.budgets.form.negative_warn));
+      MonekinSnackbar.warning(SnackbarParams(t.goals.form.negative_warn));
       return;
     }
 
@@ -128,8 +131,8 @@ class _GoalFormPageState extends State<GoalFormPage> {
           MonekinSnackbar.success(
             SnackbarParams(
               isEditMode
-                  ? t.budgets.form.edit_success
-                  : t.budgets.form.create_success,
+                  ? t.goals.form.edit_success
+                  : t.goals.form.create_success,
             ),
           );
         })
@@ -143,7 +146,7 @@ class _GoalFormPageState extends State<GoalFormPage> {
     final t = Translations.of(context);
 
     return PageFramework(
-      title: isEditMode ? "Edit Goal" : "New Goal",
+      title: isEditMode ? t.goals.form.edit_title : t.goals.form.new_title,
       persistentFooterButtons: [
         PersistentFooterButton(
           child: FilledButton.icon(
@@ -166,8 +169,8 @@ class _GoalFormPageState extends State<GoalFormPage> {
                 maxLength: 25,
                 validator: (value) => fieldValidator(value, isRequired: true),
                 decoration: InputDecoration(
-                  labelText: '${t.budgets.form.name} *',
-                  hintText: 'My Saving Goal',
+                  labelText: '${t.goals.form.name} *',
+                  hintText: t.goals.form.name_hint,
                 ),
               ),
               const SizedBox(height: 8),
@@ -182,7 +185,7 @@ class _GoalFormPageState extends State<GoalFormPage> {
                         decimal: true,
                       ),
                       decoration: InputDecoration(
-                        labelText: 'Target Amount *',
+                        labelText: '${t.goals.form.target_amount} *',
                         suffix: _buildCurrencySuffix(),
                       ),
                       validator: (value) => fieldValidator(
@@ -200,7 +203,7 @@ class _GoalFormPageState extends State<GoalFormPage> {
                         decimal: true,
                       ),
                       decoration: InputDecoration(
-                        labelText: 'Initial Amount',
+                        labelText: t.goals.form.initial_amount,
                         suffix: _buildCurrencySuffix(),
                       ),
                       validator: (value) => fieldValidator(
@@ -215,23 +218,36 @@ class _GoalFormPageState extends State<GoalFormPage> {
 
               const SizedBox(height: 16),
 
-              DropdownButtonFormField<GoalType>(
-                value: goalType,
-                decoration: const InputDecoration(labelText: 'Goal Type *'),
-                items: [
-                  DropdownMenuItem(
-                    value: GoalType.income,
-                    child: Text('Savings (Income)'),
+              TextField(
+                controller: TextEditingController(
+                  text: goalType.title(context),
+                ),
+                mouseCursor: SystemMouseCursors.click,
+                decoration: InputDecoration(
+                  labelText: '${t.goals.type.display} *',
+                  suffixIcon: Icon(Icons.arrow_drop_down_rounded),
+                  prefix: Container(
+                    padding: const EdgeInsets.all(4),
+                    margin: const EdgeInsets.only(right: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      color: goalType.color(context).lighten(),
+                    ),
+                    child: Icon(Icons.golf_course_rounded, size: 14),
                   ),
-                  DropdownMenuItem(
-                    value: GoalType.expense,
-                    child: Text('Spending Limit (Expense)'),
-                  ),
-                ],
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() => goalType = value);
-                  }
+                ),
+                readOnly: true,
+
+                onTap: () {
+                  showGoalTypeModal(context, initialType: goalType).then((
+                    modalRes,
+                  ) {
+                    if (modalRes == null || modalRes.result == null) return;
+
+                    setState(() {
+                      goalType = modalRes.result!;
+                    });
+                  });
                 },
               ),
 
@@ -280,10 +296,14 @@ class _GoalFormPageState extends State<GoalFormPage> {
               ),
 
               const SizedBox(height: 16),
-              const Divider(),
-              const SizedBox(height: 8),
-              Text("Filters", style: Theme.of(context).textTheme.titleMedium),
+              const Divider(height: 8),
               const SizedBox(height: 16),
+
+              Text(
+                t.general.filters,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 6),
 
               _buildAccountSelector(t),
               const SizedBox(height: 16),

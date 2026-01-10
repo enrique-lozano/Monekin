@@ -56,6 +56,7 @@
     "show-more-fields": "Показати більше полів",
     "show-less-fields": "Показати менше полів",
     "tap-to-search": "Натисніть для пошуку",
+    "delete_success": "Елемент успішно видалено",
     "LEAVE-WITHOUT-SAVING": {
       "title": "Вийти без збереження?",
       "message": "У вас є незбережені зміни. Ви впевнені, що бажаєте вийти, не зберігаючи їх?"
@@ -634,14 +635,10 @@
   },
   "BUDGETS": {
     "title": "Бюджети",
+    "status": "Стан бюджету",
     "repeated": "Повторювані",
     "one-time": "Одноразові",
-    "annual": "Щорічні",
-    "week": "Щотижневі",
-    "month": "Щомісячні",
     "actives": "Активні",
-    "pending": "Очікує початку",
-    "finish": "Завершені",
     "from-budgeted": "з ",
     "days-left": "днів залишилось",
     "days-to-start": "днів до початку",
@@ -668,7 +665,7 @@
     },
     "TARGET_TIMELINE_STATUSES": {
       "active": "Активний бюджет",
-      "past": "Минулий бюджет",
+      "past": "Завершений бюджет",
       "future": "Майбутній бюджет"
     },
     "PROGRESS": {
@@ -687,9 +684,65 @@
       }
     }
   },
+  "GOALS": {
+    "title": "Цілі",
+    "status": "Статус цілі",
+    "type": {
+      "display": "Goal Type",
+      "income": {
+        "title": "Ціль заощадження",
+        "descr": "Ідеально для заощадження грошей. Ви досягаєте успіху, коли баланс перевищує вашу ціль."
+      },
+      "expense": {
+        "title": "Ціль витрат",
+        "descr": "Відстежуйте, скільки ви витрачаєте, і намагайтеся досягти цільової суми. Добре підходить для пожертвувань..."
+      }
+    },
+    "empty_title": "Цілей не знайдено",
+    "empty_description": "Створіть нову ціль, щоб почати відстежувати свої заощадження!",
+    "delete": "Delete goal",
+    "delete_warning": "This action is irreversible. Categories and transactions referring to this goal will not be deleted",
+    "FORM": {
+      "new_title": "New Goal",
+      "edit_title": "Edit Goal",
+      "target_amount": "Target Amount",
+      "initial_amount": "Initial Amount",
+      "name": "Name",
+      "name_hint": "My Saving Goal",
+      "create_success": "Goal created successfully",
+      "edit_success": "Goal edited successfully",
+      "negative_warn": "The goal amount cannot be negative"
+    },
+    "DETAILS": {
+      "title": "Goal Details",
+      "statistics": "Statistics",
+      "goal_value": "Goal Target",
+      "evolution": "Evolution",
+      "no_transactions": "It seems that you have not made any transactions related to this goal"
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "Active goal",
+      "past": "Finished goal",
+      "future": "Future goal"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "На шляху",
+        "active-behind-schedule": "Відставання від графіка",
+        "success": "Мета досягнута",
+        "fail": "Мета не вдалася"
+      },
+      "DESCRIPTION": {
+        "active-on-track": "Ви на шляху до своєї мети! Ви повинні відкладати {{ dailyAmount }} на день протягом {{ remainingDays }} днів, що залишилися",
+        "active-behind-schedule": "Ви відстаєте від графіка. Ви повинні заощаджувати {{ dailyAmount }} на день, щоб досягти своєї мети за {{ remainingDays }} днів",
+        "success": "Щиро вітаю! Ви досягли своєї мети.",
+        "fail": "Ви не досягли цілі на {{ amount }}."
+      }
+    }
+  },
   "TARGET_TIMELINE_STATUSES": {
     "active": "Активний",
-    "past": "Минулий",
+    "past": "Завершений",
     "future": "Майбутній"
   },
   "BACKUP": {
@@ -799,9 +852,9 @@
       "SWIPE_ACTIONS": {
         "title": "Дії гортання",
         "choose_description": "Виберіть, яка дія буде ініційована, коли ви проводите пальцем по елементу транзакції у списку в цьому напрямку",
+        "none": "Ніяких дій",
         "swipe-left": "Проведіть ліворуч",
         "swipe-right": "Проведіть праворуч",
-        "none": "Ніяких дій",
         "toggle-reconciled": "Перемикач узгоджено",
         "toggle-pending": "Перемкнути в очікуванні",
         "toggle-voided": "Перемикач скасовано",

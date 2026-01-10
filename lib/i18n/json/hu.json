@@ -56,6 +56,7 @@
     "show-more-fields": "Több mező mutatása",
     "show-less-fields": "Kevesebb mező mutatása",
     "tap-to-search": "Koppintson a kereséshez",
+    "delete_success": "Az elem sikeresen törölve",
     "LEAVE-WITHOUT-SAVING": {
       "title": "Mentés nélkül távozik?",
       "message": "Vannak nem mentett módosításai. Biztos, hogy mentés nélkül kilép?"
@@ -634,14 +635,10 @@
   },
   "BUDGETS": {
     "title": "Költségvetések",
+    "status": "Költségkeret állapota",
     "repeated": "Ismétlődő",
     "one-time": "Egyszer",
-    "annual": "Éves",
-    "week": "Hetente",
-    "month": "Havonta",
     "actives": "Aktívok",
-    "pending": "Függőben lévő kezdés",
-    "finish": "Kész",
     "from-budgeted": "maradt ",
     "days-left": "nap van hátra",
     "days-to-start": "nap van a kezdésig",
@@ -668,7 +665,7 @@
     },
     "TARGET_TIMELINE_STATUSES": {
       "active": "Aktív költségvetés",
-      "past": "Múltbeli költségvetés",
+      "past": "Befejezett költségvetés",
       "future": "Jövőbeli költségvetés"
     },
     "PROGRESS": {
@@ -687,9 +684,65 @@
       }
     }
   },
+  "GOALS": {
+    "title": "Célok",
+    "status": "A cél állapota",
+    "type": {
+      "display": "Goal Type",
+      "income": {
+        "title": "Megtakarítási cél",
+        "descr": "Ideális pénzmegtakarításhoz. Akkor sikeres, ha az egyenleg meghaladja a célösszeget."
+      },
+      "expense": {
+        "title": "Költési cél",
+        "descr": "Kövesse nyomon kiadásait, és próbáljon meg elérni egy célösszeget. Jól használható adományokhoz..."
+      }
+    },
+    "empty_title": "Nincsenek célok",
+    "empty_description": "Hozzon létre új célt megtakarításai követéséhez!",
+    "delete": "Delete goal",
+    "delete_warning": "This action is irreversible. Categories and transactions referring to this goal will not be deleted",
+    "FORM": {
+      "new_title": "New Goal",
+      "edit_title": "Edit Goal",
+      "target_amount": "Target Amount",
+      "initial_amount": "Initial Amount",
+      "name": "Name",
+      "name_hint": "My Saving Goal",
+      "create_success": "Goal created successfully",
+      "edit_success": "Goal edited successfully",
+      "negative_warn": "The goal amount cannot be negative"
+    },
+    "DETAILS": {
+      "title": "Goal Details",
+      "statistics": "Statistics",
+      "goal_value": "Goal Target",
+      "evolution": "Evolution",
+      "no_transactions": "It seems that you have not made any transactions related to this goal"
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "Active goal",
+      "past": "Finished goal",
+      "future": "Future goal"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "Pályán",
+        "active-behind-schedule": "A menetrend lemaradásával",
+        "success": "A cél elérve",
+        "fail": "A gól nem sikerült"
+      },
+      "DESCRIPTION": {
+        "active-on-track": "Jó úton haladsz a cél felé! Naponta {{ dailyAmount }} összeget kell megtakarítania a fennmaradó {{ remainingDays }} napig",
+        "active-behind-schedule": "Lemaradsz a menetrendről. Naponta {{ dailyAmount }} összeget kell megtakarítania, hogy {{ remainingDays }} napon belül elérje célját",
+        "success": "Gratulálok! Elérted a célodat.",
+        "fail": "{{ amount }} értékkel eltévesztette a célt."
+      }
+    }
+  },
   "TARGET_TIMELINE_STATUSES": {
     "active": "Aktív",
-    "past": "Múlt",
+    "past": "Befejezve",
     "future": "Jövő"
   },
   "BACKUP": {

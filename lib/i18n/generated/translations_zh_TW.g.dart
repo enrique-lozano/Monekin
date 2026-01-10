@@ -51,6 +51,7 @@ class TranslationsZhTw implements Translations {
 	@override late final _TranslationsTagsZhTw tags = _TranslationsTagsZhTw._(_root);
 	@override late final _TranslationsCategoriesZhTw categories = _TranslationsCategoriesZhTw._(_root);
 	@override late final _TranslationsBudgetsZhTw budgets = _TranslationsBudgetsZhTw._(_root);
+	@override late final _TranslationsGoalsZhTw goals = _TranslationsGoalsZhTw._(_root);
 	@override late final _TranslationsTargetTimelineStatusesZhTw target_timeline_statuses = _TranslationsTargetTimelineStatusesZhTw._(_root);
 	@override late final _TranslationsBackupZhTw backup = _TranslationsBackupZhTw._(_root);
 	@override late final _TranslationsSettingsZhTw settings = _TranslationsSettingsZhTw._(_root);
@@ -127,6 +128,7 @@ class _TranslationsGeneralZhTw implements TranslationsGeneralEn {
 	@override String get show_more_fields => '顯示更多欄位';
 	@override String get show_less_fields => '顯示較少的欄位';
 	@override String get tap_to_search => '點擊即可搜尋';
+	@override String get delete_success => '項目刪除成功';
 	@override late final _TranslationsGeneralLeaveWithoutSavingZhTw leave_without_saving = _TranslationsGeneralLeaveWithoutSavingZhTw._(_root);
 	@override late final _TranslationsGeneralClipboardZhTw clipboard = _TranslationsGeneralClipboardZhTw._(_root);
 	@override late final _TranslationsGeneralTimeZhTw time = _TranslationsGeneralTimeZhTw._(_root);
@@ -436,14 +438,10 @@ class _TranslationsBudgetsZhTw implements TranslationsBudgetsEn {
 
 	// Translations
 	@override String get title => '預算';
+	@override String get status => '預算狀況';
 	@override String get repeated => '週期性';
 	@override String get one_time => '一次性';
-	@override String get annual => '年度';
-	@override String get week => '每週';
-	@override String get month => '每月';
 	@override String get actives => '活躍';
-	@override String get pending => '等待開始';
-	@override String get finish => '完成的';
 	@override String get from_budgeted => '從預算';
 	@override String get days_left => '還剩幾天';
 	@override String get days_to_start => '開始的日子';
@@ -457,6 +455,26 @@ class _TranslationsBudgetsZhTw implements TranslationsBudgetsEn {
 	@override late final _TranslationsBudgetsProgressZhTw progress = _TranslationsBudgetsProgressZhTw._(_root);
 }
 
+// Path: goals
+class _TranslationsGoalsZhTw implements TranslationsGoalsEn {
+	_TranslationsGoalsZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '目標';
+	@override String get status => '目標狀態';
+	@override late final _TranslationsGoalsTypeZhTw type = _TranslationsGoalsTypeZhTw._(_root);
+	@override String get empty_title => '未找到目標';
+	@override String get empty_description => '創建一個新目標以開始追蹤您的儲蓄！';
+	@override String get delete => 'Delete goal';
+	@override String get delete_warning => 'This action is irreversible. Categories and transactions referring to this goal will not be deleted';
+	@override late final _TranslationsGoalsFormZhTw form = _TranslationsGoalsFormZhTw._(_root);
+	@override late final _TranslationsGoalsDetailsZhTw details = _TranslationsGoalsDetailsZhTw._(_root);
+	@override late final _TranslationsGoalsTargetTimelineStatusesZhTw target_timeline_statuses = _TranslationsGoalsTargetTimelineStatusesZhTw._(_root);
+	@override late final _TranslationsGoalsProgressZhTw progress = _TranslationsGoalsProgressZhTw._(_root);
+}
+
 // Path: target_timeline_statuses
 class _TranslationsTargetTimelineStatusesZhTw implements TranslationsTargetTimelineStatusesEn {
 	_TranslationsTargetTimelineStatusesZhTw._(this._root);
@@ -465,7 +483,7 @@ class _TranslationsTargetTimelineStatusesZhTw implements TranslationsTargetTimel
 
 	// Translations
 	@override String get active => '進行中';
-	@override String get past => '已結束';
+	@override String get past => '已完成';
 	@override String get future => '未開始';
 }
 
@@ -1074,7 +1092,7 @@ class _TranslationsBudgetsTargetTimelineStatusesZhTw implements TranslationsBudg
 
 	// Translations
 	@override String get active => '目前預算';
-	@override String get past => '過去預算';
+	@override String get past => '已完成預算';
 	@override String get future => '未來預算';
 }
 
@@ -1087,6 +1105,73 @@ class _TranslationsBudgetsProgressZhTw implements TranslationsBudgetsProgressEn 
 	// Translations
 	@override late final _TranslationsBudgetsProgressLabelsZhTw labels = _TranslationsBudgetsProgressLabelsZhTw._(_root);
 	@override late final _TranslationsBudgetsProgressDescriptionZhTw description = _TranslationsBudgetsProgressDescriptionZhTw._(_root);
+}
+
+// Path: goals.type
+class _TranslationsGoalsTypeZhTw implements TranslationsGoalsTypeEn {
+	_TranslationsGoalsTypeZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Goal Type';
+	@override late final _TranslationsGoalsTypeIncomeZhTw income = _TranslationsGoalsTypeIncomeZhTw._(_root);
+	@override late final _TranslationsGoalsTypeExpenseZhTw expense = _TranslationsGoalsTypeExpenseZhTw._(_root);
+}
+
+// Path: goals.form
+class _TranslationsGoalsFormZhTw implements TranslationsGoalsFormEn {
+	_TranslationsGoalsFormZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get new_title => 'New Goal';
+	@override String get edit_title => 'Edit Goal';
+	@override String get target_amount => 'Target Amount';
+	@override String get initial_amount => 'Initial Amount';
+	@override String get name => 'Name';
+	@override String get name_hint => 'My Saving Goal';
+	@override String get create_success => 'Goal created successfully';
+	@override String get edit_success => 'Goal edited successfully';
+	@override String get negative_warn => 'The goal amount cannot be negative';
+}
+
+// Path: goals.details
+class _TranslationsGoalsDetailsZhTw implements TranslationsGoalsDetailsEn {
+	_TranslationsGoalsDetailsZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Goal Details';
+	@override String get statistics => 'Statistics';
+	@override String get goal_value => 'Goal Target';
+	@override String get evolution => 'Evolution';
+	@override String get no_transactions => 'It seems that you have not made any transactions related to this goal';
+}
+
+// Path: goals.target_timeline_statuses
+class _TranslationsGoalsTargetTimelineStatusesZhTw implements TranslationsGoalsTargetTimelineStatusesEn {
+	_TranslationsGoalsTargetTimelineStatusesZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => 'Active goal';
+	@override String get past => 'Finished goal';
+	@override String get future => 'Future goal';
+}
+
+// Path: goals.progress
+class _TranslationsGoalsProgressZhTw implements TranslationsGoalsProgressEn {
+	_TranslationsGoalsProgressZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsGoalsProgressLabelsZhTw labels = _TranslationsGoalsProgressLabelsZhTw._(_root);
+	@override late final _TranslationsGoalsProgressDescriptionZhTw description = _TranslationsGoalsProgressDescriptionZhTw._(_root);
 }
 
 // Path: backup.export
@@ -1479,6 +1564,54 @@ class _TranslationsBudgetsProgressDescriptionZhTw implements TranslationsBudgets
 	@override String fail({required Object amount}) => '您超出了預算 ${amount}。下次請更加小心！';
 }
 
+// Path: goals.type.income
+class _TranslationsGoalsTypeIncomeZhTw implements TranslationsGoalsTypeIncomeEn {
+	_TranslationsGoalsTypeIncomeZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '儲蓄目標';
+	@override String get descr => '非常適合儲蓄。當餘額超過目標時，即為成功。';
+}
+
+// Path: goals.type.expense
+class _TranslationsGoalsTypeExpenseZhTw implements TranslationsGoalsTypeExpenseEn {
+	_TranslationsGoalsTypeExpenseZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '支出目標';
+	@override String get descr => '跟踪您的支出並以此達到目標金額。適用於捐款、慈善...';
+}
+
+// Path: goals.progress.labels
+class _TranslationsGoalsProgressLabelsZhTw implements TranslationsGoalsProgressLabelsEn {
+	_TranslationsGoalsProgressLabelsZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get active_on_track => '步入正軌';
+	@override String get active_behind_schedule => '落後於計劃';
+	@override String get success => '目標達成';
+	@override String get fail => '目標失敗';
+}
+
+// Path: goals.progress.description
+class _TranslationsGoalsProgressDescriptionZhTw implements TranslationsGoalsProgressDescriptionEn {
+	_TranslationsGoalsProgressDescriptionZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String active_on_track({required Object remainingDays, required Object dailyAmount}) => '您正在尋找目標的軌道上！您必須在剩餘的 ${remainingDays} 天內每天節省 ${dailyAmount}';
+	@override String active_behind_schedule({required Object dailyAmount, required Object remainingDays}) => '你落後於計劃了。您必須每天節省 ${dailyAmount} 才能在 ${remainingDays} 天后達到您的目標';
+	@override String get success => '恭喜！你達到了你的目標。';
+	@override String fail({required Object amount}) => '您與目標相差了 ${amount}。';
+}
+
 // Path: backup.import.manual_import
 class _TranslationsBackupImportManualImportZhTw implements TranslationsBackupImportManualImportEn {
 	_TranslationsBackupImportManualImportZhTw._(this._root);
@@ -1709,6 +1842,7 @@ extension on TranslationsZhTw {
 		map['general.show_more_fields'] = '顯示更多欄位';
 		map['general.show_less_fields'] = '顯示較少的欄位';
 		map['general.tap_to_search'] = '點擊即可搜尋';
+		map['general.delete_success'] = '項目刪除成功';
 		map['general.leave_without_saving.title'] = '不保存就離開？';
 		map['general.leave_without_saving.message'] = '您有未保存的更改，確定要離開而不保存它們嗎？';
 		map['general.clipboard.success'] = ({required Object x}) => '${x}已複製到剪貼簿';
@@ -2209,14 +2343,10 @@ extension on TranslationsZhTw {
 		map['categories.select.all'] = '所有類別';
 		map['categories.select.all_short'] = '全部';
 		map['budgets.title'] = '預算';
+		map['budgets.status'] = '預算狀況';
 		map['budgets.repeated'] = '週期性';
 		map['budgets.one_time'] = '一次性';
-		map['budgets.annual'] = '年度';
-		map['budgets.week'] = '每週';
-		map['budgets.month'] = '每月';
 		map['budgets.actives'] = '活躍';
-		map['budgets.pending'] = '等待開始';
-		map['budgets.finish'] = '完成的';
 		map['budgets.from_budgeted'] = '從預算';
 		map['budgets.days_left'] = '還剩幾天';
 		map['budgets.days_to_start'] = '開始的日子';
@@ -2238,7 +2368,7 @@ extension on TranslationsZhTw {
 		map['budgets.details.expend_evolution'] = '支出變化';
 		map['budgets.details.no_transactions'] = '看來您還沒有做出與此預算相關的任何收入';
 		map['budgets.target_timeline_statuses.active'] = '目前預算';
-		map['budgets.target_timeline_statuses.past'] = '過去預算';
+		map['budgets.target_timeline_statuses.past'] = '已完成預算';
 		map['budgets.target_timeline_statuses.future'] = '未來預算';
 		map['budgets.progress.labels.active_on_track'] = '正常';
 		map['budgets.progress.labels.active_overspending'] = '超支';
@@ -2249,8 +2379,44 @@ extension on TranslationsZhTw {
 		map['budgets.progress.description.active_exceeded'] = ({required Object amount}) => '您已經超出了預算限額 ${amount}。如果您找不到此預算的任何收入，您應該在其剩餘期間停止支出';
 		map['budgets.progress.description.success'] = '做得好！該預算已成功完成。繼續創建預算以管理您的支出';
 		map['budgets.progress.description.fail'] = ({required Object amount}) => '您超出了預算 ${amount}。下次請更加小心！';
+		map['goals.title'] = '目標';
+		map['goals.status'] = '目標狀態';
+		map['goals.type.display'] = 'Goal Type';
+		map['goals.type.income.title'] = '儲蓄目標';
+		map['goals.type.income.descr'] = '非常適合儲蓄。當餘額超過目標時，即為成功。';
+		map['goals.type.expense.title'] = '支出目標';
+		map['goals.type.expense.descr'] = '跟踪您的支出並以此達到目標金額。適用於捐款、慈善...';
+		map['goals.empty_title'] = '未找到目標';
+		map['goals.empty_description'] = '創建一個新目標以開始追蹤您的儲蓄！';
+		map['goals.delete'] = 'Delete goal';
+		map['goals.delete_warning'] = 'This action is irreversible. Categories and transactions referring to this goal will not be deleted';
+		map['goals.form.new_title'] = 'New Goal';
+		map['goals.form.edit_title'] = 'Edit Goal';
+		map['goals.form.target_amount'] = 'Target Amount';
+		map['goals.form.initial_amount'] = 'Initial Amount';
+		map['goals.form.name'] = 'Name';
+		map['goals.form.name_hint'] = 'My Saving Goal';
+		map['goals.form.create_success'] = 'Goal created successfully';
+		map['goals.form.edit_success'] = 'Goal edited successfully';
+		map['goals.form.negative_warn'] = 'The goal amount cannot be negative';
+		map['goals.details.title'] = 'Goal Details';
+		map['goals.details.statistics'] = 'Statistics';
+		map['goals.details.goal_value'] = 'Goal Target';
+		map['goals.details.evolution'] = 'Evolution';
+		map['goals.details.no_transactions'] = 'It seems that you have not made any transactions related to this goal';
+		map['goals.target_timeline_statuses.active'] = 'Active goal';
+		map['goals.target_timeline_statuses.past'] = 'Finished goal';
+		map['goals.target_timeline_statuses.future'] = 'Future goal';
+		map['goals.progress.labels.active_on_track'] = '步入正軌';
+		map['goals.progress.labels.active_behind_schedule'] = '落後於計劃';
+		map['goals.progress.labels.success'] = '目標達成';
+		map['goals.progress.labels.fail'] = '目標失敗';
+		map['goals.progress.description.active_on_track'] = ({required Object remainingDays, required Object dailyAmount}) => '您正在尋找目標的軌道上！您必須在剩餘的 ${remainingDays} 天內每天節省 ${dailyAmount}';
+		map['goals.progress.description.active_behind_schedule'] = ({required Object dailyAmount, required Object remainingDays}) => '你落後於計劃了。您必須每天節省 ${dailyAmount} 才能在 ${remainingDays} 天后達到您的目標';
+		map['goals.progress.description.success'] = '恭喜！你達到了你的目標。';
+		map['goals.progress.description.fail'] = ({required Object amount}) => '您與目標相差了 ${amount}。';
 		map['target_timeline_statuses.active'] = '進行中';
-		map['target_timeline_statuses.past'] = '已結束';
+		map['target_timeline_statuses.past'] = '已完成';
 		map['target_timeline_statuses.future'] = '未開始';
 		map['backup.no_file_selected'] = '未選擇文件';
 		map['backup.no_directory_selected'] = '未選擇目錄';

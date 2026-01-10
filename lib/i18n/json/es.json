@@ -56,6 +56,7 @@
     "show-more-fields": "Show more fields",
     "show-less-fields": "Show less fields",
     "tap-to-search": "Toca para buscar",
+    "delete_success": "Elemento eliminado con éxito",
     "LEAVE-WITHOUT-SAVING": {
       "title": "¿Salir sin guardar?",
       "message": "Tienes cambios sin guardar, ¿estás seguro de que quieres continuar y salir sin guardarlos?"
@@ -637,14 +638,10 @@
   },
   "BUDGETS": {
     "title": "Presupuestos",
+    "status": "Estado del presupuesto",
     "repeated": "Periódicos",
     "one-time": "Una vez",
-    "annual": "Anuales",
-    "week": "Semanales",
-    "month": "Mensuales",
     "actives": "Activos",
-    "pending": "Pendientes de comenzar",
-    "finish": "Finalizados",
     "from-budgeted": "De un total de ",
     "days-left": "días restantes",
     "days-to-start": "días para empezar",
@@ -653,14 +650,14 @@
     "delete": "Eliminar presupuesto",
     "delete-warning": "Esta acción es irreversible. Categorías y transacciones referentes a este presupuesto no serán eliminados",
     "FORM": {
-      "title": "Añade un presupuesto",
-      "name": "Nombre del presupuesto",
-      "value": "Cantidad límite",
-      "create": "Añade el presupuesto",
-      "create-success": "Presupuesto creado exitosamente",
+      "title": "Nuevo presupuesto",
+      "name": "Nombre",
+      "value": "Límite",
+      "create": "Crear presupuesto",
+      "create-success": "Presupuesto creado correctamente",
       "edit": "Editar presupuesto",
-      "edit-success": "Presupuesto editado exitosamente",
-      "negative-warn": "Los presupuestos no pueden tener un valor límite negativo"
+      "edit-success": "Presupuesto editado correctamente",
+      "negative-warn": "El límite de un presupuesto no puede ser negativo"
     },
     "DETAILS": {
       "title": "Detalles del presupuesto",
@@ -671,7 +668,7 @@
     },
     "TARGET_TIMELINE_STATUSES": {
       "active": "Presupuesto activo",
-      "past": "Presupuesto pasado",
+      "past": "Presupuesto finalizado",
       "future": "Presupuesto futuro"
     },
     "PROGRESS": {
@@ -690,9 +687,65 @@
       }
     }
   },
+  "GOALS": {
+    "title": "Objetivos",
+    "status": "Estado del objetivo",
+    "type": {
+      "display": "Tipo de objetivo",
+      "income": {
+        "title": "Objetivo de ahorro",
+        "descr": "Ideal para ahorrar dinero. Tienes éxito cuando el saldo supera tu objetivo."
+      },
+      "expense": {
+        "title": "Objetivo de gasto",
+        "descr": "Sigue cuánto gastas y apunta a alcanzar una cantidad objetivo. Funciona bien para donaciones, caridad, gastos de ocio..."
+      }
+    },
+    "empty_title": "No se encontraron objetivos",
+    "empty_description": "¡Crea un nuevo objetivo para empezar a seguir tus ahorros!",
+    "delete": "Borrar objetivo",
+    "delete_warning": "Esta acción es irreversible. Categorías y transacciones referentes a este objetivo no serán eliminados",
+    "FORM": {
+      "new_title": "Nuevo objetivo",
+      "edit_title": "Editar objetivo",
+      "target_amount": "Cantidad objetivo",
+      "initial_amount": "Cantidad inicial",
+      "name": "Nombre",
+      "name_hint": "Mi objetivo de ahorro",
+      "create_success": "Objetivo creado correctamente",
+      "edit_success": "Objetivo editado correctamente",
+      "negative_warn": "La cantidad del objetivo no puede ser negativa"
+    },
+    "DETAILS": {
+      "title": "Detalles del objetivo",
+      "statistics": "Estadísticas",
+      "goal_value": "Objetivo",
+      "evolution": "Evolución",
+      "no_transactions": "Parece que no has realizado movimientos relacionados con este objetivo"
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "Objetivo activo",
+      "past": "Objetivo finalizado",
+      "future": "Objetivo futuro"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "En camino",
+        "active-behind-schedule": "Por detrás",
+        "success": "Objetivo alcanzado",
+        "fail": "Objetivo fallido"
+      },
+      "DESCRIPTION": {
+        "active-on-track": "¡Vas por buen camino! Tienes que ahorrar {{ dailyAmount }} al día durante los {{ remainingDays }} días restantes",
+        "active-behind-schedule": "Vas con retraso. Tienes que ahorrar {{ dailyAmount }} al día para alcanzar tu objetivo en {{ remainingDays }} días",
+        "success": "¡Felicidades! Has alcanzado tu objetivo.",
+        "fail": "No has alcanzado tu objetivo por {{ amount }}."
+      }
+    }
+  },
   "TARGET_TIMELINE_STATUSES": {
     "active": "Activo",
-    "past": "Pasado",
+    "past": "Finalizado",
     "future": "Futuro"
   },
   "BACKUP": {

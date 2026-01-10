@@ -54,6 +54,7 @@ class Translations implements BaseTranslations<AppLocale, Translations> {
 	late final TranslationsTagsEn tags = TranslationsTagsEn._(_root);
 	late final TranslationsCategoriesEn categories = TranslationsCategoriesEn._(_root);
 	late final TranslationsBudgetsEn budgets = TranslationsBudgetsEn._(_root);
+	late final TranslationsGoalsEn goals = TranslationsGoalsEn._(_root);
 	late final TranslationsTargetTimelineStatusesEn target_timeline_statuses = TranslationsTargetTimelineStatusesEn._(_root);
 	late final TranslationsBackupEn backup = TranslationsBackupEn._(_root);
 	late final TranslationsSettingsEn settings = TranslationsSettingsEn._(_root);
@@ -238,6 +239,9 @@ class TranslationsGeneralEn {
 
 	/// en: 'Tap to search'
 	String get tap_to_search => 'Tap to search';
+
+	/// en: 'Item deleted successfully'
+	String get delete_success => 'Item deleted successfully';
 
 	late final TranslationsGeneralLeaveWithoutSavingEn leave_without_saving = TranslationsGeneralLeaveWithoutSavingEn._(_root);
 	late final TranslationsGeneralClipboardEn clipboard = TranslationsGeneralClipboardEn._(_root);
@@ -870,29 +874,17 @@ class TranslationsBudgetsEn {
 	/// en: 'Budgets'
 	String get title => 'Budgets';
 
+	/// en: 'Budget status'
+	String get status => 'Budget status';
+
 	/// en: 'Recurring'
 	String get repeated => 'Recurring';
 
 	/// en: 'Once'
 	String get one_time => 'Once';
 
-	/// en: 'Annuals'
-	String get annual => 'Annuals';
-
-	/// en: 'Weekly'
-	String get week => 'Weekly';
-
-	/// en: 'Monthly'
-	String get month => 'Monthly';
-
 	/// en: 'Actives'
 	String get actives => 'Actives';
-
-	/// en: 'Pending start'
-	String get pending => 'Pending start';
-
-	/// en: 'Finished'
-	String get finish => 'Finished';
 
 	/// en: 'left of '
 	String get from_budgeted => 'left of ';
@@ -921,6 +913,40 @@ class TranslationsBudgetsEn {
 	late final TranslationsBudgetsProgressEn progress = TranslationsBudgetsProgressEn._(_root);
 }
 
+// Path: goals
+class TranslationsGoalsEn {
+	TranslationsGoalsEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Goals'
+	String get title => 'Goals';
+
+	/// en: 'Goal status'
+	String get status => 'Goal status';
+
+	late final TranslationsGoalsTypeEn type = TranslationsGoalsTypeEn._(_root);
+
+	/// en: 'No goals found'
+	String get empty_title => 'No goals found';
+
+	/// en: 'Create a new goal to start tracking your savings!'
+	String get empty_description => 'Create a new goal to start tracking your savings!';
+
+	/// en: 'Delete goal'
+	String get delete => 'Delete goal';
+
+	/// en: 'This action is irreversible. Categories and transactions referring to this goal will not be deleted'
+	String get delete_warning => 'This action is irreversible. Categories and transactions referring to this goal will not be deleted';
+
+	late final TranslationsGoalsFormEn form = TranslationsGoalsFormEn._(_root);
+	late final TranslationsGoalsDetailsEn details = TranslationsGoalsDetailsEn._(_root);
+	late final TranslationsGoalsTargetTimelineStatusesEn target_timeline_statuses = TranslationsGoalsTargetTimelineStatusesEn._(_root);
+	late final TranslationsGoalsProgressEn progress = TranslationsGoalsProgressEn._(_root);
+}
+
 // Path: target_timeline_statuses
 class TranslationsTargetTimelineStatusesEn {
 	TranslationsTargetTimelineStatusesEn._(this._root);
@@ -932,8 +958,8 @@ class TranslationsTargetTimelineStatusesEn {
 	/// en: 'Active'
 	String get active => 'Active';
 
-	/// en: 'Past'
-	String get past => 'Past';
+	/// en: 'Finished'
+	String get past => 'Finished';
 
 	/// en: 'Future'
 	String get future => 'Future';
@@ -1954,8 +1980,8 @@ class TranslationsBudgetsTargetTimelineStatusesEn {
 	/// en: 'Active budget'
 	String get active => 'Active budget';
 
-	/// en: 'Past budget'
-	String get past => 'Past budget';
+	/// en: 'Finished budget'
+	String get past => 'Finished budget';
 
 	/// en: 'Future budget'
 	String get future => 'Future budget';
@@ -1970,6 +1996,110 @@ class TranslationsBudgetsProgressEn {
 	// Translations
 	late final TranslationsBudgetsProgressLabelsEn labels = TranslationsBudgetsProgressLabelsEn._(_root);
 	late final TranslationsBudgetsProgressDescriptionEn description = TranslationsBudgetsProgressDescriptionEn._(_root);
+}
+
+// Path: goals.type
+class TranslationsGoalsTypeEn {
+	TranslationsGoalsTypeEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Goal Type'
+	String get display => 'Goal Type';
+
+	late final TranslationsGoalsTypeIncomeEn income = TranslationsGoalsTypeIncomeEn._(_root);
+	late final TranslationsGoalsTypeExpenseEn expense = TranslationsGoalsTypeExpenseEn._(_root);
+}
+
+// Path: goals.form
+class TranslationsGoalsFormEn {
+	TranslationsGoalsFormEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'New Goal'
+	String get new_title => 'New Goal';
+
+	/// en: 'Edit Goal'
+	String get edit_title => 'Edit Goal';
+
+	/// en: 'Target Amount'
+	String get target_amount => 'Target Amount';
+
+	/// en: 'Initial Amount'
+	String get initial_amount => 'Initial Amount';
+
+	/// en: 'Name'
+	String get name => 'Name';
+
+	/// en: 'My Saving Goal'
+	String get name_hint => 'My Saving Goal';
+
+	/// en: 'Goal created successfully'
+	String get create_success => 'Goal created successfully';
+
+	/// en: 'Goal edited successfully'
+	String get edit_success => 'Goal edited successfully';
+
+	/// en: 'The goal amount cannot be negative'
+	String get negative_warn => 'The goal amount cannot be negative';
+}
+
+// Path: goals.details
+class TranslationsGoalsDetailsEn {
+	TranslationsGoalsDetailsEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Goal Details'
+	String get title => 'Goal Details';
+
+	/// en: 'Statistics'
+	String get statistics => 'Statistics';
+
+	/// en: 'Goal Target'
+	String get goal_value => 'Goal Target';
+
+	/// en: 'Evolution'
+	String get evolution => 'Evolution';
+
+	/// en: 'It seems that you have not made any transactions related to this goal'
+	String get no_transactions => 'It seems that you have not made any transactions related to this goal';
+}
+
+// Path: goals.target_timeline_statuses
+class TranslationsGoalsTargetTimelineStatusesEn {
+	TranslationsGoalsTargetTimelineStatusesEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Active goal'
+	String get active => 'Active goal';
+
+	/// en: 'Finished goal'
+	String get past => 'Finished goal';
+
+	/// en: 'Future goal'
+	String get future => 'Future goal';
+}
+
+// Path: goals.progress
+class TranslationsGoalsProgressEn {
+	TranslationsGoalsProgressEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	late final TranslationsGoalsProgressLabelsEn labels = TranslationsGoalsProgressLabelsEn._(_root);
+	late final TranslationsGoalsProgressDescriptionEn description = TranslationsGoalsProgressDescriptionEn._(_root);
 }
 
 // Path: backup.export
@@ -2666,6 +2796,78 @@ class TranslationsBudgetsProgressDescriptionEn {
 	String fail({required Object amount}) => 'You exceeded the budget by ${amount}. Try to be more careful next time!';
 }
 
+// Path: goals.type.income
+class TranslationsGoalsTypeIncomeEn {
+	TranslationsGoalsTypeIncomeEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Savings Goal'
+	String get title => 'Savings Goal';
+
+	/// en: 'Ideal for saving money. You succeed when the balance goes above your target.'
+	String get descr => 'Ideal for saving money. You succeed when the balance goes above your target.';
+}
+
+// Path: goals.type.expense
+class TranslationsGoalsTypeExpenseEn {
+	TranslationsGoalsTypeExpenseEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Spending Goal'
+	String get title => 'Spending Goal';
+
+	/// en: 'Track how much you spend and aim to reach a target amount. Works good for donations, charity, leisure spending...'
+	String get descr => 'Track how much you spend and aim to reach a target amount. Works good for donations, charity, leisure spending...';
+}
+
+// Path: goals.progress.labels
+class TranslationsGoalsProgressLabelsEn {
+	TranslationsGoalsProgressLabelsEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'On track'
+	String get active_on_track => 'On track';
+
+	/// en: 'Behind schedule'
+	String get active_behind_schedule => 'Behind schedule';
+
+	/// en: 'Goal reached'
+	String get success => 'Goal reached';
+
+	/// en: 'Goal failed'
+	String get fail => 'Goal failed';
+}
+
+// Path: goals.progress.description
+class TranslationsGoalsProgressDescriptionEn {
+	TranslationsGoalsProgressDescriptionEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'You are on track to seek your goal! You have to save {{ dailyAmount }} per day for the remaining {{ remainingDays }} days'
+	String active_on_track({required Object dailyAmount, required Object remainingDays}) => 'You are on track to seek your goal! You have to save ${dailyAmount} per day for the remaining ${remainingDays} days';
+
+	/// en: 'You are behind schedule. You have to save {{ dailyAmount }} per day to reach your goal in {{ remainingDays }} days'
+	String active_behind_schedule({required Object dailyAmount, required Object remainingDays}) => 'You are behind schedule. You have to save ${dailyAmount} per day to reach your goal in ${remainingDays} days';
+
+	/// en: 'Congratulations! You reached your goal.'
+	String get success => 'Congratulations! You reached your goal.';
+
+	/// en: 'You missed your goal by {{ amount }}.'
+	String fail({required Object amount}) => 'You missed your goal by ${amount}.';
+}
+
 // Path: backup.import.manual_import
 class TranslationsBackupImportManualImportEn {
 	TranslationsBackupImportManualImportEn._(this._root);
@@ -3009,6 +3211,7 @@ extension on Translations {
 		map['general.show_more_fields'] = 'Show more fields';
 		map['general.show_less_fields'] = 'Show less fields';
 		map['general.tap_to_search'] = 'Tap to search';
+		map['general.delete_success'] = 'Item deleted successfully';
 		map['general.leave_without_saving.title'] = 'Leave without saving?';
 		map['general.leave_without_saving.message'] = 'You have unsaved changes, are you sure you want to leave without saving them?';
 		map['general.clipboard.success'] = ({required Object x}) => '${x} copied to the clipboard';
@@ -3509,14 +3712,10 @@ extension on Translations {
 		map['categories.select.all'] = 'All categories';
 		map['categories.select.all_short'] = 'All';
 		map['budgets.title'] = 'Budgets';
+		map['budgets.status'] = 'Budget status';
 		map['budgets.repeated'] = 'Recurring';
 		map['budgets.one_time'] = 'Once';
-		map['budgets.annual'] = 'Annuals';
-		map['budgets.week'] = 'Weekly';
-		map['budgets.month'] = 'Monthly';
 		map['budgets.actives'] = 'Actives';
-		map['budgets.pending'] = 'Pending start';
-		map['budgets.finish'] = 'Finished';
 		map['budgets.from_budgeted'] = 'left of ';
 		map['budgets.days_left'] = 'days left';
 		map['budgets.days_to_start'] = 'days to start';
@@ -3538,7 +3737,7 @@ extension on Translations {
 		map['budgets.details.expend_evolution'] = 'Expenditure evolution';
 		map['budgets.details.no_transactions'] = 'It seems that you have not made any expenses related to this budget';
 		map['budgets.target_timeline_statuses.active'] = 'Active budget';
-		map['budgets.target_timeline_statuses.past'] = 'Past budget';
+		map['budgets.target_timeline_statuses.past'] = 'Finished budget';
 		map['budgets.target_timeline_statuses.future'] = 'Future budget';
 		map['budgets.progress.labels.active_on_track'] = 'On track';
 		map['budgets.progress.labels.active_overspending'] = 'Overspending';
@@ -3549,8 +3748,44 @@ extension on Translations {
 		map['budgets.progress.description.active_exceeded'] = ({required Object amount}) => 'You have already exceeded your budget limit by ${amount}. If you don\'t find any incomes for this budget, you should stop spending for the rest of its period';
 		map['budgets.progress.description.success'] = 'Great job! This budget has already finish successfully. Keep creating budgets to manage your expenses';
 		map['budgets.progress.description.fail'] = ({required Object amount}) => 'You exceeded the budget by ${amount}. Try to be more careful next time!';
+		map['goals.title'] = 'Goals';
+		map['goals.status'] = 'Goal status';
+		map['goals.type.display'] = 'Goal Type';
+		map['goals.type.income.title'] = 'Savings Goal';
+		map['goals.type.income.descr'] = 'Ideal for saving money. You succeed when the balance goes above your target.';
+		map['goals.type.expense.title'] = 'Spending Goal';
+		map['goals.type.expense.descr'] = 'Track how much you spend and aim to reach a target amount. Works good for donations, charity, leisure spending...';
+		map['goals.empty_title'] = 'No goals found';
+		map['goals.empty_description'] = 'Create a new goal to start tracking your savings!';
+		map['goals.delete'] = 'Delete goal';
+		map['goals.delete_warning'] = 'This action is irreversible. Categories and transactions referring to this goal will not be deleted';
+		map['goals.form.new_title'] = 'New Goal';
+		map['goals.form.edit_title'] = 'Edit Goal';
+		map['goals.form.target_amount'] = 'Target Amount';
+		map['goals.form.initial_amount'] = 'Initial Amount';
+		map['goals.form.name'] = 'Name';
+		map['goals.form.name_hint'] = 'My Saving Goal';
+		map['goals.form.create_success'] = 'Goal created successfully';
+		map['goals.form.edit_success'] = 'Goal edited successfully';
+		map['goals.form.negative_warn'] = 'The goal amount cannot be negative';
+		map['goals.details.title'] = 'Goal Details';
+		map['goals.details.statistics'] = 'Statistics';
+		map['goals.details.goal_value'] = 'Goal Target';
+		map['goals.details.evolution'] = 'Evolution';
+		map['goals.details.no_transactions'] = 'It seems that you have not made any transactions related to this goal';
+		map['goals.target_timeline_statuses.active'] = 'Active goal';
+		map['goals.target_timeline_statuses.past'] = 'Finished goal';
+		map['goals.target_timeline_statuses.future'] = 'Future goal';
+		map['goals.progress.labels.active_on_track'] = 'On track';
+		map['goals.progress.labels.active_behind_schedule'] = 'Behind schedule';
+		map['goals.progress.labels.success'] = 'Goal reached';
+		map['goals.progress.labels.fail'] = 'Goal failed';
+		map['goals.progress.description.active_on_track'] = ({required Object dailyAmount, required Object remainingDays}) => 'You are on track to seek your goal! You have to save ${dailyAmount} per day for the remaining ${remainingDays} days';
+		map['goals.progress.description.active_behind_schedule'] = ({required Object dailyAmount, required Object remainingDays}) => 'You are behind schedule. You have to save ${dailyAmount} per day to reach your goal in ${remainingDays} days';
+		map['goals.progress.description.success'] = 'Congratulations! You reached your goal.';
+		map['goals.progress.description.fail'] = ({required Object amount}) => 'You missed your goal by ${amount}.';
 		map['target_timeline_statuses.active'] = 'Active';
-		map['target_timeline_statuses.past'] = 'Past';
+		map['target_timeline_statuses.past'] = 'Finished';
 		map['target_timeline_statuses.future'] = 'Future';
 		map['backup.no_file_selected'] = 'No file selected';
 		map['backup.no_directory_selected'] = 'No directory selected';

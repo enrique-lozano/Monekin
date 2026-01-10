@@ -56,6 +56,7 @@
     "show-more-fields": "Afficher plus de champs",
     "show-less-fields": "Afficher moins de champs",
     "tap-to-search": "Touchez pour rechercher",
+    "delete_success": "Élément supprimé avec succès",
     "LEAVE-WITHOUT-SAVING": {
       "title": "Partir sans économiser ?",
       "message": "Vous avez des modifications non enregistrées, êtes-vous sûr de vouloir quitter sans les enregistrer ?"
@@ -634,14 +635,10 @@
   },
   "BUDGETS": {
     "title": "Budgets",
+    "status": "Statut budgétaire",
     "repeated": "Récurrents",
     "one-time": "Une fois",
-    "annual": "Annuels",
-    "week": "Hebdomadaires",
-    "month": "Mensuels",
     "actives": "Actifs",
-    "pending": "En attente de démarrage",
-    "finish": "Terminés",
     "from-budgeted": "restant sur ",
     "days-left": "jours restants",
     "days-to-start": "jours avant le début",
@@ -668,7 +665,7 @@
     },
     "TARGET_TIMELINE_STATUSES": {
       "active": "Budget actif",
-      "past": "Budget passé",
+      "past": "Budget terminé",
       "future": "Budget futur"
     },
     "PROGRESS": {
@@ -687,9 +684,65 @@
       }
     }
   },
+  "GOALS": {
+    "title": "Objectifs",
+    "status": "Statut de l'objectif",
+    "type": {
+      "display": "Goal Type",
+      "income": {
+        "title": "Objectif d'épargne",
+        "descr": "Idéal pour économiser de l'argent. Vous réussissez lorsque le solde dépasse votre objectif."
+      },
+      "expense": {
+        "title": "Objectif de dépense",
+        "descr": "Suivez combien vous dépensez et visez à atteindre un montant cible. Fonctionne bien pour les dons..."
+      }
+    },
+    "empty_title": "Aucun objectif trouvé",
+    "empty_description": "Créez un nouvel objectif pour commencer à suivre vos économies !",
+    "delete": "Delete goal",
+    "delete_warning": "This action is irreversible. Categories and transactions referring to this goal will not be deleted",
+    "FORM": {
+      "new_title": "New Goal",
+      "edit_title": "Edit Goal",
+      "target_amount": "Target Amount",
+      "initial_amount": "Initial Amount",
+      "name": "Name",
+      "name_hint": "My Saving Goal",
+      "create_success": "Goal created successfully",
+      "edit_success": "Goal edited successfully",
+      "negative_warn": "The goal amount cannot be negative"
+    },
+    "DETAILS": {
+      "title": "Goal Details",
+      "statistics": "Statistics",
+      "goal_value": "Goal Target",
+      "evolution": "Evolution",
+      "no_transactions": "It seems that you have not made any transactions related to this goal"
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "Active goal",
+      "past": "Finished goal",
+      "future": "Future goal"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "En bonne voie",
+        "active-behind-schedule": "En retard",
+        "success": "Objectif atteint",
+        "fail": "Objectif raté"
+      },
+      "DESCRIPTION": {
+        "active-on-track": "Vous êtes en bonne voie pour atteindre votre objectif ! Vous devez économiser {{ dailyAmount }} par jour pendant les {{ remainingDays }} jours.",
+        "active-behind-schedule": "Vous êtes en retard. Vous devez économiser {{ dailyAmount }} par jour pour atteindre votre objectif dans {{ remainingDays }} jours.",
+        "success": "Félicitations! Vous avez atteint votre objectif.",
+        "fail": "Vous avez raté votre objectif de {{ amount }}."
+      }
+    }
+  },
   "TARGET_TIMELINE_STATUSES": {
     "active": "Actif",
-    "past": "Passé",
+    "past": "Terminé",
     "future": "Futur"
   },
   "BACKUP": {
