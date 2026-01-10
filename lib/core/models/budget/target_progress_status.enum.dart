@@ -6,10 +6,10 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 
 ///  The progress status of a target (budget or goal) based on its current progress.
 enum TargetProgressStatus {
-  /// Target is on track (for expenses: under budget; for income: on track)
+  /// Target is on track and looking good so far (for budgets: under budget; for goals: on track)
   onTrack,
 
-  /// Target is off track (for expenses: over budget; for income: behind schedule)
+  /// Target is off track and showing signs of concern (for budgets: over budget; for goals: behind schedule)
   warning,
 
   /// Target is a limit and has been exceeded (Overspending)
@@ -18,10 +18,10 @@ enum TargetProgressStatus {
   /// Target is a goal and has been reached (Goal Reached)
   goalReached,
 
-  /// Target has finished and was successfully met (for expenses: within budget; for income: met or exceeded)
+  /// Target has finished and was successfully met (for budgets: within budget; for goals: met or exceeded)
   success,
 
-  /// Target has finished and was not met (for expenses: over budget; for income: not met)
+  /// Target has finished and was not met (for budgets: over budget; for goals: not met)
   fail;
 
   static TargetProgressStatus? fromPercentages(
