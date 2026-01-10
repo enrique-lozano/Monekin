@@ -29,7 +29,6 @@ class FinancialTargetCard extends StatelessWidget {
 
     final todayLabelEnabled = target.isActive && target.todayPercent != null;
 
-    // Determine navigation destination
     void onTap() {
       if (target is Budget) {
         RouteUtils.pushRoute(BudgetDetailsPage(budget: target as Budget));
@@ -66,32 +65,12 @@ class FinancialTargetCard extends StatelessWidget {
                         ? 1.0
                         : (percent ?? 0.0);
 
-                    // Helper to check if we should change color to danger/success
-                    // For budgets/expense targets: >100% is bad (red)
-                    // For savings/income: >100% is good (green)
-                    final isCompletedOrExceeded = safePercent >= 1;
-
-                    final Color? progressColor;
-                    if (isCompletedOrExceeded) {
-                      if (target.targetDirection ==
-                          FinancialTargetDirection.toExpense) {
-                        progressColor = AppColors.of(context).danger;
-                      } else {
-                        progressColor = AppColors.of(context).success;
-                      }
-                    } else {
-                      // Inherit default color or define logic
-                      progressColor = null;
-                    }
-
                     return AnimatedProgressBarWithIndicatorLabel(
                       indicatorLabelOptions: IndicatorLabelOptions(
                         label: Text(t.general.today),
                         isLabelBeforeBar: false,
                         labelPercent: (target.todayPercent ?? 100) / 100,
                       ),
-                      // Only show today indicator if there is a valid time range (todayPercent != null)
-                      // and the target is currently active
                       enableLabel: todayLabelEnabled,
                       animatedProgressBar: AnimatedProgressBar(
                         width: 16,
@@ -99,7 +78,11 @@ class FinancialTargetCard extends StatelessWidget {
                         showPercentageText: true,
                         animationDuration: 1500,
                         value: safePercent,
-                        color: progressColor,
+                        color: safePercent >= 1
+                            ? (target.isTargetLimit
+                                  ? AppColors.of(context).danger
+                                  : AppColors.of(context).success)
+                            : null,
                       ),
                     );
                   },

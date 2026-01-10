@@ -105,7 +105,7 @@ class _AnimatedProgressBarState extends State<AnimatedProgressBar> {
                   showDecimals: false,
                   integerStyle: Theme.of(context).textTheme.labelMedium!
                       .copyWith(
-                        color: widget.value > 0.4
+                        color: widget.value > 0.48
                             ? barColor.darkenPastel(
                                 amount: isDarkMode ? 0.6 : -0.9,
                               )
