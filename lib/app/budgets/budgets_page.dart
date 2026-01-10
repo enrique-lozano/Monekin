@@ -3,10 +3,8 @@ import 'package:monekin/app/budgets/budget_form_page.dart';
 import 'package:monekin/app/layout/page_context.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/services/budget/budget_service.dart';
-import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/presentation/widgets/no_results.dart';
-import 'package:monekin/core/presentation/widgets/targets/financial_target_card.dart';
+import 'package:monekin/core/presentation/widgets/targets/target_list_with_empty_indicator.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -64,33 +62,9 @@ class _BudgetsPageState extends State<BudgetsPage>
 
               final budgets = snapshot.data!;
 
-              if (budgets.isEmpty) {
-                return Column(
-                  children: [
-                    Expanded(
-                      child: NoResults(
-                        title: t.general.empty_warn,
-                        description: t.budgets.no_budgets,
-                      ),
-                    ),
-                  ],
-                );
-              }
-
-              return ListView.separated(
-                padding: const EdgeInsets.only(
-                  top: 10,
-                  bottom: 74,
-                ).withSafeBottom(context),
-                itemBuilder: (context, index) {
-                  final budget = budgets[index];
-
-                  return FinancialTargetCard(target: budget);
-                },
-                separatorBuilder: (context, index) {
-                  return const SizedBox.shrink();
-                },
-                itemCount: budgets.length,
+              return TargetListWithEmptyIndicator(
+                targets: budgets,
+                emptyDescription: t.budgets.no_budgets,
               );
             },
           ),
@@ -105,30 +79,9 @@ class _BudgetsPageState extends State<BudgetsPage>
 
               final budgets = snapshot.data!;
 
-              if (budgets.isEmpty) {
-                return Column(
-                  children: [
-                    Expanded(
-                      child: NoResults(
-                        title: t.general.empty_warn,
-                        description: t.budgets.no_budgets,
-                      ),
-                    ),
-                  ],
-                );
-              }
-
-              return ListView.separated(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                itemBuilder: (context, index) {
-                  final budget = budgets[index];
-
-                  return FinancialTargetCard(target: budget);
-                },
-                separatorBuilder: (context, index) {
-                  return const SizedBox.shrink();
-                },
-                itemCount: budgets.length,
+              return TargetListWithEmptyIndicator(
+                targets: budgets,
+                emptyDescription: t.budgets.no_budgets,
               );
             },
           ),

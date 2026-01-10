@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/animations/fade_in.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 
 class AnimatedProgressBar extends StatefulWidget {
@@ -82,6 +83,8 @@ class _AnimatedProgressBarState extends State<AnimatedProgressBar> {
       return mainBar;
     }
 
+    final isDarkMode = isAppInDarkBrightness(context);
+
     return Stack(
       children: [
         mainBar,
@@ -103,8 +106,12 @@ class _AnimatedProgressBarState extends State<AnimatedProgressBar> {
                   integerStyle: Theme.of(context).textTheme.labelMedium!
                       .copyWith(
                         color: widget.value > 0.4
-                            ? barColor.darkenPastel(amount: 0.6)
-                            : barColor.lightenPastel(amount: 0.6),
+                            ? barColor.darkenPastel(
+                                amount: isDarkMode ? 0.6 : -0.9,
+                              )
+                            : barColor.lightenPastel(
+                                amount: isDarkMode ? 0.6 : -0.6,
+                              ),
                         fontSize:
                             widget.width * (widget.width > 20 ? 0.6 : 0.75),
                       ),

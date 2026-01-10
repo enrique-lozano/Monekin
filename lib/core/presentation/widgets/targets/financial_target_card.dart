@@ -41,7 +41,7 @@ class FinancialTargetCard extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(boxShadow: boxShadowGeneral(context)),
       child: Tappable(
-        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+        margin: const EdgeInsets.symmetric(vertical: 6),
         bgColor: Theme.of(context).colorScheme.surfaceContainer,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(radius)),
         onTap: onTap,
@@ -209,7 +209,7 @@ class TargetHeader extends StatelessWidget {
                             .lightenPastel(amount: .25),
                       ),
                       child: Icon(
-                        Icons.golf_course_sharp,
+                        Goal.icon,
                         size: 20,
                         color: Theme.of(context).colorScheme.surface,
                       ),

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/models/date-utils/date_period.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
@@ -11,6 +12,9 @@ import 'package:monekin/core/presentation/widgets/transaction_filter/transaction
 class Goal extends GoalInDB
     with FinancialTargetMixin
     implements FinancialTarget {
+  /// The icon that represent the tag entity
+  static IconData get icon => Icons.flag_rounded;
+
   final TransactionFilterSetInDB _dbTrFilters;
 
   Goal({

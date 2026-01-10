@@ -12,6 +12,7 @@ import 'package:monekin/app/settings/widgets/setting_card_item.dart';
 import 'package:monekin/app/stats/stats_page.dart';
 import 'package:monekin/app/tags/tag_list.page.dart';
 import 'package:monekin/app/transactions/recurrent_transactions_page.dart';
+import 'package:monekin/core/models/goal/goal.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/routes/route_utils.dart';
@@ -89,7 +90,7 @@ class _MoreActionsPageState extends State<MoreActionsPage> {
     final allItems = [
       _ActionItem(
         title: t.goals.title,
-        icon: Icons.flag_rounded,
+        icon: Goal.icon,
         onTap: () => RouteUtils.pushRoute(const GoalsPage()),
         id: null, // Goals is not yet in the main menu enum/list
       ),

@@ -233,7 +233,11 @@ class _GoalFormPageState extends State<GoalFormPage> {
                       borderRadius: BorderRadius.circular(4),
                       color: goalType.color(context).lighten(),
                     ),
-                    child: Icon(Icons.golf_course_rounded, size: 14),
+                    child: Icon(
+                      Goal.icon,
+                      size: 14,
+                      color: Theme.of(context).colorScheme.surface,
+                    ),
                   ),
                 ),
                 readOnly: true,
