@@ -56,6 +56,7 @@
     "show-more-fields": "Mostra più campi",
     "show-less-fields": "Mostra meno campi",
     "tap-to-search": "Tocca per cercare",
+    "delete_success": "Elemento eliminato con successo",
     "LEAVE-WITHOUT-SAVING": {
       "title": "Uscire senza salvare?",
       "message": "Hai modifiche non salvate, sei sicuro di voler uscire senza salvarle?"
@@ -634,14 +635,10 @@
   },
   "BUDGETS": {
     "title": "Budget",
+    "status": "Stato del bilancio",
     "repeated": "Ricorrente",
     "one-time": "Una tantum",
-    "annual": "Annuali",
-    "week": "Settimanali",
-    "month": "Mensili",
     "actives": "Attivi",
-    "pending": "In attesa di inizio",
-    "finish": "Terminati",
     "from-budgeted": "rimanenti di ",
     "days-left": "giorni rimasti",
     "days-to-start": "giorni all'inizio",
@@ -668,28 +665,88 @@
     },
     "TARGET_TIMELINE_STATUSES": {
       "active": "Budget attivo",
-      "past": "Budget passato",
+      "past": "Budget terminato",
       "future": "Budget futuro"
     },
     "PROGRESS": {
       "LABELS": {
         "active-on-track": "In linea",
         "active-overspending": "Spesa eccessiva",
+        "active-indeterminate": "Attivo",
         "success": "Raggiunto",
         "fail": "Budget superato"
       },
       "DESCRIPTION": {
         "active-on-track": "Puoi spendere {{ dailyAmount }} al giorno per i restanti {{ remainingDays }} giorni",
         "active-overspending": "Per tornare in linea, dovresti limitare la tua spesa a {{ dailyAmount }} al giorno per i restanti {{ remainingDays }} giorni",
+        "active-indeterminate": "Ti restano {{ amount }} da spendere.",
         "active-exceeded": "Hai già superato il limite del budget di {{ amount }}. Se non trovi entrate per questo budget, dovresti smettere di spendere per il resto del periodo",
         "success": "Ottimo lavoro! Questo budget è terminato con successo. Continua a creare budget per gestire le tue spese",
         "fail": "Hai superato il budget di {{ amount }}. Cerca di fare più attenzione la prossima volta!"
       }
     }
   },
+  "GOALS": {
+    "title": "Obiettivi",
+    "status": "Stato dell'obiettivo",
+    "type": {
+      "display": "Tipo di obiettivo",
+      "income": {
+        "title": "Obiettivo di Risparmio",
+        "descr": "Ideale per risparmiare denaro. Hai successo quando il saldo supera il tuo obiettivo."
+      },
+      "expense": {
+        "title": "Obiettivo di Spesa",
+        "descr": "Traccia quanto spendi e mira a raggiungere un importo obiettivo. Funziona bene per donazioni..."
+      }
+    },
+    "empty_title": "Nessun obiettivo trovato",
+    "empty_description": "Crea un nuovo obiettivo per iniziare a monitorare i tuoi risparmi!",
+    "delete": "Elimina obiettivo",
+    "delete_warning": "Questa azione è irreversibile. Le categorie e le transazioni riferite a questo obiettivo non verranno eliminate",
+    "FORM": {
+      "new_title": "Nuovo obiettivo",
+      "edit_title": "Modifica obiettivo",
+      "target_amount": "Importo obiettivo",
+      "initial_amount": "Importo iniziale",
+      "name": "Nome",
+      "name_hint": "Il mio obiettivo di risparmio",
+      "create_success": "Obiettivo creato con successo",
+      "edit_success": "Obiettivo modificato con successo",
+      "negative_warn": "L'importo dell'obiettivo non può essere negativo"
+    },
+    "DETAILS": {
+      "title": "Dettagli obiettivo",
+      "statistics": "Statistiche",
+      "goal_value": "Valore obiettivo",
+      "evolution": "Evoluzione",
+      "no_transactions": "Sembra che tu non abbia effettuato alcuna transazione relativa a questo obiettivo"
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "Obiettivo attivo",
+      "past": "Obiettivo terminato",
+      "future": "Obiettivo futuro"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "In pista",
+        "active-behind-schedule": "In ritardo rispetto al programma",
+        "active-indeterminate": "Attivo",
+        "success": "Obiettivo raggiunto",
+        "fail": "Obiettivo fallito"
+      },
+      "DESCRIPTION": {
+        "active-on-track": "Sei sulla buona strada per raggiungere il tuo obiettivo! Devi risparmiare {{ dailyAmount }} al giorno per i restanti {{ remainingDays }} giorni",
+        "active-behind-schedule": "Sei in ritardo sulla tabella di marcia. Devi risparmiare {{ dailyAmount }} al giorno per raggiungere il tuo obiettivo in {{ remainingDays }} giorni",
+        "active-indeterminate": "Ti servono {{ amount }} in più per raggiungere il tuo obiettivo.",
+        "success": "Congratulazioni! Hai raggiunto il tuo obiettivo.",
+        "fail": "Hai mancato il tuo obiettivo di {{ amount }}."
+      }
+    }
+  },
   "TARGET_TIMELINE_STATUSES": {
     "active": "Attivo",
-    "past": "Passato",
+    "past": "Terminato",
     "future": "Futuro"
   },
   "BACKUP": {

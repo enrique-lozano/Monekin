@@ -51,6 +51,7 @@ class TranslationsHu implements Translations {
 	@override late final _TranslationsTagsHu tags = _TranslationsTagsHu._(_root);
 	@override late final _TranslationsCategoriesHu categories = _TranslationsCategoriesHu._(_root);
 	@override late final _TranslationsBudgetsHu budgets = _TranslationsBudgetsHu._(_root);
+	@override late final _TranslationsGoalsHu goals = _TranslationsGoalsHu._(_root);
 	@override late final _TranslationsTargetTimelineStatusesHu target_timeline_statuses = _TranslationsTargetTimelineStatusesHu._(_root);
 	@override late final _TranslationsBackupHu backup = _TranslationsBackupHu._(_root);
 	@override late final _TranslationsSettingsHu settings = _TranslationsSettingsHu._(_root);
@@ -127,6 +128,7 @@ class _TranslationsGeneralHu implements TranslationsGeneralEn {
 	@override String get show_more_fields => 'Több mező mutatása';
 	@override String get show_less_fields => 'Kevesebb mező mutatása';
 	@override String get tap_to_search => 'Koppintson a kereséshez';
+	@override String get delete_success => 'Az elem sikeresen törölve';
 	@override late final _TranslationsGeneralLeaveWithoutSavingHu leave_without_saving = _TranslationsGeneralLeaveWithoutSavingHu._(_root);
 	@override late final _TranslationsGeneralClipboardHu clipboard = _TranslationsGeneralClipboardHu._(_root);
 	@override late final _TranslationsGeneralTimeHu time = _TranslationsGeneralTimeHu._(_root);
@@ -436,14 +438,10 @@ class _TranslationsBudgetsHu implements TranslationsBudgetsEn {
 
 	// Translations
 	@override String get title => 'Költségvetések';
+	@override String get status => 'Költségkeret állapota';
 	@override String get repeated => 'Ismétlődő';
 	@override String get one_time => 'Egyszer';
-	@override String get annual => 'Éves';
-	@override String get week => 'Hetente';
-	@override String get month => 'Havonta';
 	@override String get actives => 'Aktívok';
-	@override String get pending => 'Függőben lévő kezdés';
-	@override String get finish => 'Kész';
 	@override String get from_budgeted => 'maradt ';
 	@override String get days_left => 'nap van hátra';
 	@override String get days_to_start => 'nap van a kezdésig';
@@ -457,6 +455,26 @@ class _TranslationsBudgetsHu implements TranslationsBudgetsEn {
 	@override late final _TranslationsBudgetsProgressHu progress = _TranslationsBudgetsProgressHu._(_root);
 }
 
+// Path: goals
+class _TranslationsGoalsHu implements TranslationsGoalsEn {
+	_TranslationsGoalsHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Célok';
+	@override String get status => 'A cél állapota';
+	@override late final _TranslationsGoalsTypeHu type = _TranslationsGoalsTypeHu._(_root);
+	@override String get empty_title => 'Nincsenek célok';
+	@override String get empty_description => 'Hozzon létre új célt megtakarításai követéséhez!';
+	@override String get delete => 'Cél törlése';
+	@override String get delete_warning => 'Ez a művelet visszafordíthatatlan. A célhoz kapcsolódó kategóriák és tranzakciók nem törlődnek';
+	@override late final _TranslationsGoalsFormHu form = _TranslationsGoalsFormHu._(_root);
+	@override late final _TranslationsGoalsDetailsHu details = _TranslationsGoalsDetailsHu._(_root);
+	@override late final _TranslationsGoalsTargetTimelineStatusesHu target_timeline_statuses = _TranslationsGoalsTargetTimelineStatusesHu._(_root);
+	@override late final _TranslationsGoalsProgressHu progress = _TranslationsGoalsProgressHu._(_root);
+}
+
 // Path: target_timeline_statuses
 class _TranslationsTargetTimelineStatusesHu implements TranslationsTargetTimelineStatusesEn {
 	_TranslationsTargetTimelineStatusesHu._(this._root);
@@ -465,7 +483,7 @@ class _TranslationsTargetTimelineStatusesHu implements TranslationsTargetTimelin
 
 	// Translations
 	@override String get active => 'Aktív';
-	@override String get past => 'Múlt';
+	@override String get past => 'Befejezve';
 	@override String get future => 'Jövő';
 }
 
@@ -1074,7 +1092,7 @@ class _TranslationsBudgetsTargetTimelineStatusesHu implements TranslationsBudget
 
 	// Translations
 	@override String get active => 'Aktív költségvetés';
-	@override String get past => 'Múltbeli költségvetés';
+	@override String get past => 'Befejezett költségvetés';
 	@override String get future => 'Jövőbeli költségvetés';
 }
 
@@ -1087,6 +1105,73 @@ class _TranslationsBudgetsProgressHu implements TranslationsBudgetsProgressEn {
 	// Translations
 	@override late final _TranslationsBudgetsProgressLabelsHu labels = _TranslationsBudgetsProgressLabelsHu._(_root);
 	@override late final _TranslationsBudgetsProgressDescriptionHu description = _TranslationsBudgetsProgressDescriptionHu._(_root);
+}
+
+// Path: goals.type
+class _TranslationsGoalsTypeHu implements TranslationsGoalsTypeEn {
+	_TranslationsGoalsTypeHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Cél típusa';
+	@override late final _TranslationsGoalsTypeIncomeHu income = _TranslationsGoalsTypeIncomeHu._(_root);
+	@override late final _TranslationsGoalsTypeExpenseHu expense = _TranslationsGoalsTypeExpenseHu._(_root);
+}
+
+// Path: goals.form
+class _TranslationsGoalsFormHu implements TranslationsGoalsFormEn {
+	_TranslationsGoalsFormHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get new_title => 'Új cél';
+	@override String get edit_title => 'Cél szerkesztése';
+	@override String get target_amount => 'Célösszeg';
+	@override String get initial_amount => 'Kezdő összeg';
+	@override String get name => 'Név';
+	@override String get name_hint => 'Megtakarítási célom';
+	@override String get create_success => 'Cél sikeresen létrehozva';
+	@override String get edit_success => 'Cél sikeresen szerkesztve';
+	@override String get negative_warn => 'A cél összege nem lehet negatív';
+}
+
+// Path: goals.details
+class _TranslationsGoalsDetailsHu implements TranslationsGoalsDetailsEn {
+	_TranslationsGoalsDetailsHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Cél részletei';
+	@override String get statistics => 'Statisztikák';
+	@override String get goal_value => 'Célérték';
+	@override String get evolution => 'Fejlődés';
+	@override String get no_transactions => 'Úgy tűnik, nem hajtott végre ehhez a célhoz kapcsolódó tranzakciót';
+}
+
+// Path: goals.target_timeline_statuses
+class _TranslationsGoalsTargetTimelineStatusesHu implements TranslationsGoalsTargetTimelineStatusesEn {
+	_TranslationsGoalsTargetTimelineStatusesHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => 'Aktív cél';
+	@override String get past => 'Befejezett cél';
+	@override String get future => 'Jövőbeli cél';
+}
+
+// Path: goals.progress
+class _TranslationsGoalsProgressHu implements TranslationsGoalsProgressEn {
+	_TranslationsGoalsProgressHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsGoalsProgressLabelsHu labels = _TranslationsGoalsProgressLabelsHu._(_root);
+	@override late final _TranslationsGoalsProgressDescriptionHu description = _TranslationsGoalsProgressDescriptionHu._(_root);
 }
 
 // Path: backup.export
@@ -1461,6 +1546,7 @@ class _TranslationsBudgetsProgressLabelsHu implements TranslationsBudgetsProgres
 	// Translations
 	@override String get active_on_track => 'Terv szerint';
 	@override String get active_overspending => 'Túlköltekezés';
+	@override String get active_indeterminate => 'Aktív';
 	@override String get success => 'Teljesítve';
 	@override String get fail => 'Költségvetés túllépve';
 }
@@ -1474,9 +1560,60 @@ class _TranslationsBudgetsProgressDescriptionHu implements TranslationsBudgetsPr
 	// Translations
 	@override String active_on_track({required Object dailyAmount, required Object remainingDays}) => 'Naponta ${dailyAmount} összeget költhet a hátralévő ${remainingDays} napban';
 	@override String active_overspending({required Object dailyAmount, required Object remainingDays}) => 'Hogy visszatérjen a tervhez, korlátoznia kell kiadásait napi ${dailyAmount} összegre a hátralévő ${remainingDays} napban';
+	@override String active_indeterminate({required Object amount}) => 'Még ${amount} elkölthető.';
 	@override String active_exceeded({required Object amount}) => 'Már túllépte a költségvetési keretet ${amount} összeggel. Ha nem talál bevételt ehhez a költségvetéshez, abba kell hagynia a költekezést az időszak hátralévő részében';
 	@override String get success => 'Szép munka! Ez a költségvetés sikeresen lezárult. Hozzon létre további költségvetéseket kiadásai kezeléséhez';
 	@override String fail({required Object amount}) => 'Túllépte a költségvetést ${amount} összeggel. Próbáljon meg óvatosabb lenni legközelebb!';
+}
+
+// Path: goals.type.income
+class _TranslationsGoalsTypeIncomeHu implements TranslationsGoalsTypeIncomeEn {
+	_TranslationsGoalsTypeIncomeHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Megtakarítási cél';
+	@override String get descr => 'Ideális pénzmegtakarításhoz. Akkor sikeres, ha az egyenleg meghaladja a célösszeget.';
+}
+
+// Path: goals.type.expense
+class _TranslationsGoalsTypeExpenseHu implements TranslationsGoalsTypeExpenseEn {
+	_TranslationsGoalsTypeExpenseHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Költési cél';
+	@override String get descr => 'Kövesse nyomon kiadásait, és próbáljon meg elérni egy célösszeget. Jól használható adományokhoz...';
+}
+
+// Path: goals.progress.labels
+class _TranslationsGoalsProgressLabelsHu implements TranslationsGoalsProgressLabelsEn {
+	_TranslationsGoalsProgressLabelsHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get active_on_track => 'Pályán';
+	@override String get active_behind_schedule => 'A menetrend lemaradásával';
+	@override String get active_indeterminate => 'Aktív';
+	@override String get success => 'A cél elérve';
+	@override String get fail => 'A gól nem sikerült';
+}
+
+// Path: goals.progress.description
+class _TranslationsGoalsProgressDescriptionHu implements TranslationsGoalsProgressDescriptionEn {
+	_TranslationsGoalsProgressDescriptionHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String active_on_track({required Object dailyAmount, required Object remainingDays}) => 'Jó úton haladsz a cél felé! Naponta ${dailyAmount} összeget kell megtakarítania a fennmaradó ${remainingDays} napig';
+	@override String active_behind_schedule({required Object dailyAmount, required Object remainingDays}) => 'Lemaradsz a menetrendről. Naponta ${dailyAmount} összeget kell megtakarítania, hogy ${remainingDays} napon belül elérje célját';
+	@override String active_indeterminate({required Object amount}) => 'További ${amount} kell a cél eléréséhez.';
+	@override String get success => 'Gratulálok! Elérted a célodat.';
+	@override String fail({required Object amount}) => '${amount} értékkel eltévesztette a célt.';
 }
 
 // Path: backup.import.manual_import
@@ -1709,6 +1846,7 @@ extension on TranslationsHu {
 		map['general.show_more_fields'] = 'Több mező mutatása';
 		map['general.show_less_fields'] = 'Kevesebb mező mutatása';
 		map['general.tap_to_search'] = 'Koppintson a kereséshez';
+		map['general.delete_success'] = 'Az elem sikeresen törölve';
 		map['general.leave_without_saving.title'] = 'Mentés nélkül távozik?';
 		map['general.leave_without_saving.message'] = 'Vannak nem mentett módosításai. Biztos, hogy mentés nélkül kilép?';
 		map['general.clipboard.success'] = ({required Object x}) => '${x} a vágólapra másolva';
@@ -2209,14 +2347,10 @@ extension on TranslationsHu {
 		map['categories.select.all'] = 'Összes kategória';
 		map['categories.select.all_short'] = 'Mind';
 		map['budgets.title'] = 'Költségvetések';
+		map['budgets.status'] = 'Költségkeret állapota';
 		map['budgets.repeated'] = 'Ismétlődő';
 		map['budgets.one_time'] = 'Egyszer';
-		map['budgets.annual'] = 'Éves';
-		map['budgets.week'] = 'Hetente';
-		map['budgets.month'] = 'Havonta';
 		map['budgets.actives'] = 'Aktívok';
-		map['budgets.pending'] = 'Függőben lévő kezdés';
-		map['budgets.finish'] = 'Kész';
 		map['budgets.from_budgeted'] = 'maradt ';
 		map['budgets.days_left'] = 'nap van hátra';
 		map['budgets.days_to_start'] = 'nap van a kezdésig';
@@ -2238,19 +2372,59 @@ extension on TranslationsHu {
 		map['budgets.details.expend_evolution'] = 'Költségek alakulása';
 		map['budgets.details.no_transactions'] = 'Úgy tűnik, hogy ezzel a költségvetéssel kapcsolatban semmilyen kiadást nem teljesített.';
 		map['budgets.target_timeline_statuses.active'] = 'Aktív költségvetés';
-		map['budgets.target_timeline_statuses.past'] = 'Múltbeli költségvetés';
+		map['budgets.target_timeline_statuses.past'] = 'Befejezett költségvetés';
 		map['budgets.target_timeline_statuses.future'] = 'Jövőbeli költségvetés';
 		map['budgets.progress.labels.active_on_track'] = 'Terv szerint';
 		map['budgets.progress.labels.active_overspending'] = 'Túlköltekezés';
+		map['budgets.progress.labels.active_indeterminate'] = 'Aktív';
 		map['budgets.progress.labels.success'] = 'Teljesítve';
 		map['budgets.progress.labels.fail'] = 'Költségvetés túllépve';
 		map['budgets.progress.description.active_on_track'] = ({required Object dailyAmount, required Object remainingDays}) => 'Naponta ${dailyAmount} összeget költhet a hátralévő ${remainingDays} napban';
 		map['budgets.progress.description.active_overspending'] = ({required Object dailyAmount, required Object remainingDays}) => 'Hogy visszatérjen a tervhez, korlátoznia kell kiadásait napi ${dailyAmount} összegre a hátralévő ${remainingDays} napban';
+		map['budgets.progress.description.active_indeterminate'] = ({required Object amount}) => 'Még ${amount} elkölthető.';
 		map['budgets.progress.description.active_exceeded'] = ({required Object amount}) => 'Már túllépte a költségvetési keretet ${amount} összeggel. Ha nem talál bevételt ehhez a költségvetéshez, abba kell hagynia a költekezést az időszak hátralévő részében';
 		map['budgets.progress.description.success'] = 'Szép munka! Ez a költségvetés sikeresen lezárult. Hozzon létre további költségvetéseket kiadásai kezeléséhez';
 		map['budgets.progress.description.fail'] = ({required Object amount}) => 'Túllépte a költségvetést ${amount} összeggel. Próbáljon meg óvatosabb lenni legközelebb!';
+		map['goals.title'] = 'Célok';
+		map['goals.status'] = 'A cél állapota';
+		map['goals.type.display'] = 'Cél típusa';
+		map['goals.type.income.title'] = 'Megtakarítási cél';
+		map['goals.type.income.descr'] = 'Ideális pénzmegtakarításhoz. Akkor sikeres, ha az egyenleg meghaladja a célösszeget.';
+		map['goals.type.expense.title'] = 'Költési cél';
+		map['goals.type.expense.descr'] = 'Kövesse nyomon kiadásait, és próbáljon meg elérni egy célösszeget. Jól használható adományokhoz...';
+		map['goals.empty_title'] = 'Nincsenek célok';
+		map['goals.empty_description'] = 'Hozzon létre új célt megtakarításai követéséhez!';
+		map['goals.delete'] = 'Cél törlése';
+		map['goals.delete_warning'] = 'Ez a művelet visszafordíthatatlan. A célhoz kapcsolódó kategóriák és tranzakciók nem törlődnek';
+		map['goals.form.new_title'] = 'Új cél';
+		map['goals.form.edit_title'] = 'Cél szerkesztése';
+		map['goals.form.target_amount'] = 'Célösszeg';
+		map['goals.form.initial_amount'] = 'Kezdő összeg';
+		map['goals.form.name'] = 'Név';
+		map['goals.form.name_hint'] = 'Megtakarítási célom';
+		map['goals.form.create_success'] = 'Cél sikeresen létrehozva';
+		map['goals.form.edit_success'] = 'Cél sikeresen szerkesztve';
+		map['goals.form.negative_warn'] = 'A cél összege nem lehet negatív';
+		map['goals.details.title'] = 'Cél részletei';
+		map['goals.details.statistics'] = 'Statisztikák';
+		map['goals.details.goal_value'] = 'Célérték';
+		map['goals.details.evolution'] = 'Fejlődés';
+		map['goals.details.no_transactions'] = 'Úgy tűnik, nem hajtott végre ehhez a célhoz kapcsolódó tranzakciót';
+		map['goals.target_timeline_statuses.active'] = 'Aktív cél';
+		map['goals.target_timeline_statuses.past'] = 'Befejezett cél';
+		map['goals.target_timeline_statuses.future'] = 'Jövőbeli cél';
+		map['goals.progress.labels.active_on_track'] = 'Pályán';
+		map['goals.progress.labels.active_behind_schedule'] = 'A menetrend lemaradásával';
+		map['goals.progress.labels.active_indeterminate'] = 'Aktív';
+		map['goals.progress.labels.success'] = 'A cél elérve';
+		map['goals.progress.labels.fail'] = 'A gól nem sikerült';
+		map['goals.progress.description.active_on_track'] = ({required Object dailyAmount, required Object remainingDays}) => 'Jó úton haladsz a cél felé! Naponta ${dailyAmount} összeget kell megtakarítania a fennmaradó ${remainingDays} napig';
+		map['goals.progress.description.active_behind_schedule'] = ({required Object dailyAmount, required Object remainingDays}) => 'Lemaradsz a menetrendről. Naponta ${dailyAmount} összeget kell megtakarítania, hogy ${remainingDays} napon belül elérje célját';
+		map['goals.progress.description.active_indeterminate'] = ({required Object amount}) => 'További ${amount} kell a cél eléréséhez.';
+		map['goals.progress.description.success'] = 'Gratulálok! Elérted a célodat.';
+		map['goals.progress.description.fail'] = ({required Object amount}) => '${amount} értékkel eltévesztette a célt.';
 		map['target_timeline_statuses.active'] = 'Aktív';
-		map['target_timeline_statuses.past'] = 'Múlt';
+		map['target_timeline_statuses.past'] = 'Befejezve';
 		map['target_timeline_statuses.future'] = 'Jövő';
 		map['backup.no_file_selected'] = 'Nincs kiválasztva fájl';
 		map['backup.no_directory_selected'] = 'Nincs kiválasztott könyvtár';

@@ -8,6 +8,8 @@ abstract class AppUtils {
     return Platform.isMacOS || Platform.isWindows || Platform.isLinux;
   }
 
+  /// Returns true if the current layout is in mobile mode. That means that
+  /// we will display a bottom navigation bar instead of a sidebar
   static bool isMobileLayout(BuildContext context) {
     return BreakPoint.of(context).isSmallerThan(BreakpointID.md);
   }

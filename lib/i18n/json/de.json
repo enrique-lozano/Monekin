@@ -56,6 +56,7 @@
     "show-more-fields": "Weitere Felder anzeigen",
     "show-less-fields": "Weniger Felder anzeigen",
     "tap-to-search": "Zum Suchen tippen",
+    "delete_success": "Element erfolgreich gelöscht",
     "LEAVE-WITHOUT-SAVING": {
       "title": "Ohne zu speichern verlassen?",
       "message": "Sie haben noch nicht gespeicherte Änderungen. Möchten Sie die Seite wirklich verlassen, ohne sie zu speichern?"
@@ -634,14 +635,10 @@
   },
   "BUDGETS": {
     "title": "Budgets",
+    "status": "Budgetstatus",
     "repeated": "Wiederkehrend",
     "one-time": "Einmalig",
-    "annual": "Jährlich",
-    "week": "Wöchentlich",
-    "month": "Monatlich",
     "actives": "Aktive",
-    "pending": "Ausstehender Start",
-    "finish": "Fertig",
     "from-budgeted": "übrig von ",
     "days-left": "Tage übrig",
     "days-to-start": "Tage bis Start",
@@ -668,28 +665,88 @@
     },
     "TARGET_TIMELINE_STATUSES": {
       "active": "Aktives Budget",
-      "past": "Vergangenes Budget",
+      "past": "Abgeschlossenes Budget",
       "future": "Zukünftiges Budget"
     },
     "PROGRESS": {
       "LABELS": {
         "active-on-track": "Auf Kurs",
         "active-overspending": "Mehrausgaben",
+        "active-indeterminate": "Aktiv",
         "success": "Erreicht",
         "fail": "Budget überschritten"
       },
       "DESCRIPTION": {
         "active-on-track": "Sie können {{ dailyAmount }} pro Tag für die verbleibenden {{ remainingDays }} Tage ausgeben",
         "active-overspending": "Um wieder auf Kurs zu kommen, sollten Sie Ihre Ausgaben auf {{ dailyAmount }} pro Tag für die verbleibenden {{ remainingDays }} Tage begrenzen",
+        "active-indeterminate": "Sie haben noch {{ amount }} zum Ausgeben übrig.",
         "active-exceeded": "Sie haben Ihr Budgetlimit bereits um {{ amount }} überschritten. Wenn Sie keine Einnahmen für dieses Budget finden, sollten Sie für den Rest des Zeitraums keine Ausgaben mehr tätigen",
         "success": "Gute Arbeit! Dieses Budget wurde erfolgreich abgeschlossen. Erstellen Sie weiterhin Budgets, um Ihre Ausgaben zu verwalten",
         "fail": "Sie haben das Budget um {{ amount }} überschritten. Versuchen Sie beim nächsten Mal vorsichtiger zu sein!"
       }
     }
   },
+  "GOALS": {
+    "title": "Ziele",
+    "status": "Zielstatus",
+    "type": {
+      "display": "Zieltyp",
+      "income": {
+        "title": "Sparziel",
+        "descr": "Ideal zum Sparen. Du bist erfolgreich, wenn der Saldo dein Ziel übersteigt."
+      },
+      "expense": {
+        "title": "Ausgabenziel",
+        "descr": "Verfolge, wie viel du ausgibst, und versuche, einen Zielbetrag zu erreichen. Gut für Spenden, Wohltätigkeit..."
+      }
+    },
+    "empty_title": "Keine Ziele gefunden",
+    "empty_description": "Erstellen Sie ein neues Ziel, um Ihre Ersparnisse zu verfolgen!",
+    "delete": "Ziel löschen",
+    "delete_warning": "Diese Aktion ist unwiderruflich. Kategorien und Transaktionen, die sich auf dieses Ziel beziehen, werden nicht gelöscht.",
+    "FORM": {
+      "new_title": "Neues Ziel",
+      "edit_title": "Ziel bearbeiten",
+      "target_amount": "Zielbetrag",
+      "initial_amount": "Anfangsbetrag",
+      "name": "Name",
+      "name_hint": "Mein Sparziel",
+      "create_success": "Ziel erfolgreich erstellt",
+      "edit_success": "Ziel erfolgreich bearbeitet",
+      "negative_warn": "Der Zielbetrag kann nicht negativ sein"
+    },
+    "DETAILS": {
+      "title": "Zieldetails",
+      "statistics": "Statistiken",
+      "goal_value": "Zielwert",
+      "evolution": "Entwicklung",
+      "no_transactions": "Es scheint, dass Sie keine Transaktionen im Zusammenhang mit diesem Ziel getätigt haben"
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "Aktives Ziel",
+      "past": "Abgeschlossenes Ziel",
+      "future": "Zukünftiges Ziel"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "Auf dem richtigen Weg",
+        "active-behind-schedule": "Hinter dem Zeitplan",
+        "active-indeterminate": "Aktiv",
+        "success": "Ziel erreicht",
+        "fail": "Ziel gescheitert"
+      },
+      "DESCRIPTION": {
+        "active-on-track": "Sie sind auf dem richtigen Weg, Ihr Ziel zu erreichen! Sie müssen für die verbleibenden {{ remainingDays }} Tage pro Tag {{ dailyAmount }} sparen",
+        "active-behind-schedule": "Sie sind im Rückstand. Sie müssen {{ dailyAmount }} pro Tag sparen, um Ihr Ziel in {{ remainingDays }} Tagen zu erreichen",
+        "active-indeterminate": "Sie benötigen {{ amount }} mehr, um Ihr Ziel zu erreichen.",
+        "success": "Glückwunsch! Du hast dein Ziel erreicht.",
+        "fail": "Sie haben Ihr Ziel um {{ amount }} verfehlt."
+      }
+    }
+  },
   "TARGET_TIMELINE_STATUSES": {
     "active": "Aktiv",
-    "past": "Vergangen",
+    "past": "Abgeschlossen",
     "future": "Zukunft"
   },
   "BACKUP": {

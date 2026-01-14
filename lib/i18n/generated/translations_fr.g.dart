@@ -51,6 +51,7 @@ class TranslationsFr implements Translations {
 	@override late final _TranslationsTagsFr tags = _TranslationsTagsFr._(_root);
 	@override late final _TranslationsCategoriesFr categories = _TranslationsCategoriesFr._(_root);
 	@override late final _TranslationsBudgetsFr budgets = _TranslationsBudgetsFr._(_root);
+	@override late final _TranslationsGoalsFr goals = _TranslationsGoalsFr._(_root);
 	@override late final _TranslationsTargetTimelineStatusesFr target_timeline_statuses = _TranslationsTargetTimelineStatusesFr._(_root);
 	@override late final _TranslationsBackupFr backup = _TranslationsBackupFr._(_root);
 	@override late final _TranslationsSettingsFr settings = _TranslationsSettingsFr._(_root);
@@ -127,6 +128,7 @@ class _TranslationsGeneralFr implements TranslationsGeneralEn {
 	@override String get show_more_fields => 'Afficher plus de champs';
 	@override String get show_less_fields => 'Afficher moins de champs';
 	@override String get tap_to_search => 'Touchez pour rechercher';
+	@override String get delete_success => 'Élément supprimé avec succès';
 	@override late final _TranslationsGeneralLeaveWithoutSavingFr leave_without_saving = _TranslationsGeneralLeaveWithoutSavingFr._(_root);
 	@override late final _TranslationsGeneralClipboardFr clipboard = _TranslationsGeneralClipboardFr._(_root);
 	@override late final _TranslationsGeneralTimeFr time = _TranslationsGeneralTimeFr._(_root);
@@ -436,14 +438,10 @@ class _TranslationsBudgetsFr implements TranslationsBudgetsEn {
 
 	// Translations
 	@override String get title => 'Budgets';
+	@override String get status => 'Statut budgétaire';
 	@override String get repeated => 'Récurrents';
 	@override String get one_time => 'Une fois';
-	@override String get annual => 'Annuels';
-	@override String get week => 'Hebdomadaires';
-	@override String get month => 'Mensuels';
 	@override String get actives => 'Actifs';
-	@override String get pending => 'En attente de démarrage';
-	@override String get finish => 'Terminés';
 	@override String get from_budgeted => 'restant sur ';
 	@override String get days_left => 'jours restants';
 	@override String get days_to_start => 'jours avant le début';
@@ -457,6 +455,26 @@ class _TranslationsBudgetsFr implements TranslationsBudgetsEn {
 	@override late final _TranslationsBudgetsProgressFr progress = _TranslationsBudgetsProgressFr._(_root);
 }
 
+// Path: goals
+class _TranslationsGoalsFr implements TranslationsGoalsEn {
+	_TranslationsGoalsFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Objectifs';
+	@override String get status => 'Statut de l\'objectif';
+	@override late final _TranslationsGoalsTypeFr type = _TranslationsGoalsTypeFr._(_root);
+	@override String get empty_title => 'Aucun objectif trouvé';
+	@override String get empty_description => 'Créez un nouvel objectif pour commencer à suivre vos économies !';
+	@override String get delete => 'Supprimer l\'objectif';
+	@override String get delete_warning => 'Cette action est irréversible. Les catégories et transactions liées à cet objectif ne seront pas supprimées';
+	@override late final _TranslationsGoalsFormFr form = _TranslationsGoalsFormFr._(_root);
+	@override late final _TranslationsGoalsDetailsFr details = _TranslationsGoalsDetailsFr._(_root);
+	@override late final _TranslationsGoalsTargetTimelineStatusesFr target_timeline_statuses = _TranslationsGoalsTargetTimelineStatusesFr._(_root);
+	@override late final _TranslationsGoalsProgressFr progress = _TranslationsGoalsProgressFr._(_root);
+}
+
 // Path: target_timeline_statuses
 class _TranslationsTargetTimelineStatusesFr implements TranslationsTargetTimelineStatusesEn {
 	_TranslationsTargetTimelineStatusesFr._(this._root);
@@ -465,7 +483,7 @@ class _TranslationsTargetTimelineStatusesFr implements TranslationsTargetTimelin
 
 	// Translations
 	@override String get active => 'Actif';
-	@override String get past => 'Passé';
+	@override String get past => 'Terminé';
 	@override String get future => 'Futur';
 }
 
@@ -1074,7 +1092,7 @@ class _TranslationsBudgetsTargetTimelineStatusesFr implements TranslationsBudget
 
 	// Translations
 	@override String get active => 'Budget actif';
-	@override String get past => 'Budget passé';
+	@override String get past => 'Budget terminé';
 	@override String get future => 'Budget futur';
 }
 
@@ -1087,6 +1105,73 @@ class _TranslationsBudgetsProgressFr implements TranslationsBudgetsProgressEn {
 	// Translations
 	@override late final _TranslationsBudgetsProgressLabelsFr labels = _TranslationsBudgetsProgressLabelsFr._(_root);
 	@override late final _TranslationsBudgetsProgressDescriptionFr description = _TranslationsBudgetsProgressDescriptionFr._(_root);
+}
+
+// Path: goals.type
+class _TranslationsGoalsTypeFr implements TranslationsGoalsTypeEn {
+	_TranslationsGoalsTypeFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Type d\'objectif';
+	@override late final _TranslationsGoalsTypeIncomeFr income = _TranslationsGoalsTypeIncomeFr._(_root);
+	@override late final _TranslationsGoalsTypeExpenseFr expense = _TranslationsGoalsTypeExpenseFr._(_root);
+}
+
+// Path: goals.form
+class _TranslationsGoalsFormFr implements TranslationsGoalsFormEn {
+	_TranslationsGoalsFormFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get new_title => 'Nouvel objectif';
+	@override String get edit_title => 'Modifier l\'objectif';
+	@override String get target_amount => 'Montant cible';
+	@override String get initial_amount => 'Montant initial';
+	@override String get name => 'Nom';
+	@override String get name_hint => 'Mon objectif d\'épargne';
+	@override String get create_success => 'Objectif créé avec succès';
+	@override String get edit_success => 'Objectif modifié avec succès';
+	@override String get negative_warn => 'Le montant de l\'objectif ne peut pas être négatif';
+}
+
+// Path: goals.details
+class _TranslationsGoalsDetailsFr implements TranslationsGoalsDetailsEn {
+	_TranslationsGoalsDetailsFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Détails de l\'objectif';
+	@override String get statistics => 'Statistiques';
+	@override String get goal_value => 'Valeur cible';
+	@override String get evolution => 'Évolution';
+	@override String get no_transactions => 'Il semble que vous n\'ayez effectué aucune transaction liée à cet objectif';
+}
+
+// Path: goals.target_timeline_statuses
+class _TranslationsGoalsTargetTimelineStatusesFr implements TranslationsGoalsTargetTimelineStatusesEn {
+	_TranslationsGoalsTargetTimelineStatusesFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => 'Objectif actif';
+	@override String get past => 'Objectif terminé';
+	@override String get future => 'Objectif futur';
+}
+
+// Path: goals.progress
+class _TranslationsGoalsProgressFr implements TranslationsGoalsProgressEn {
+	_TranslationsGoalsProgressFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsGoalsProgressLabelsFr labels = _TranslationsGoalsProgressLabelsFr._(_root);
+	@override late final _TranslationsGoalsProgressDescriptionFr description = _TranslationsGoalsProgressDescriptionFr._(_root);
 }
 
 // Path: backup.export
@@ -1459,6 +1544,7 @@ class _TranslationsBudgetsProgressLabelsFr implements TranslationsBudgetsProgres
 	// Translations
 	@override String get active_on_track => 'En bonne voie';
 	@override String get active_overspending => 'Dépenses excessives';
+	@override String get active_indeterminate => 'Actif';
 	@override String get success => 'Atteint';
 	@override String get fail => 'Budget dépassé';
 }
@@ -1472,9 +1558,60 @@ class _TranslationsBudgetsProgressDescriptionFr implements TranslationsBudgetsPr
 	// Translations
 	@override String active_on_track({required Object dailyAmount, required Object remainingDays}) => 'Vous pouvez dépenser ${dailyAmount} par jour pour les ${remainingDays} jours restants';
 	@override String active_overspending({required Object dailyAmount, required Object remainingDays}) => 'Pour revenir sur la bonne voie, vous devriez limiter vos dépenses à ${dailyAmount} par jour pour les ${remainingDays} jours restants';
+	@override String active_indeterminate({required Object amount}) => 'Il vous reste ${amount} à dépenser.';
 	@override String active_exceeded({required Object amount}) => 'Vous avez déjà dépassé votre limite budgétaire de ${amount}. Si vous ne trouvez aucun revenu pour ce budget, vous devriez arrêter de dépenser pour le reste de sa période';
 	@override String get success => 'Bon travail ! Ce budget est terminé avec succès. Continuez à créer des budgets pour gérer vos dépenses';
 	@override String fail({required Object amount}) => 'Vous avez dépassé le budget de ${amount}. Essayez d\'être plus prudent la prochaine fois !';
+}
+
+// Path: goals.type.income
+class _TranslationsGoalsTypeIncomeFr implements TranslationsGoalsTypeIncomeEn {
+	_TranslationsGoalsTypeIncomeFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Objectif d\'épargne';
+	@override String get descr => 'Idéal pour économiser de l\'argent. Vous réussissez lorsque le solde dépasse votre objectif.';
+}
+
+// Path: goals.type.expense
+class _TranslationsGoalsTypeExpenseFr implements TranslationsGoalsTypeExpenseEn {
+	_TranslationsGoalsTypeExpenseFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Objectif de dépense';
+	@override String get descr => 'Suivez combien vous dépensez et visez à atteindre un montant cible. Fonctionne bien pour les dons...';
+}
+
+// Path: goals.progress.labels
+class _TranslationsGoalsProgressLabelsFr implements TranslationsGoalsProgressLabelsEn {
+	_TranslationsGoalsProgressLabelsFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get active_on_track => 'En bonne voie';
+	@override String get active_behind_schedule => 'En retard';
+	@override String get active_indeterminate => 'Actif';
+	@override String get success => 'Objectif atteint';
+	@override String get fail => 'Objectif raté';
+}
+
+// Path: goals.progress.description
+class _TranslationsGoalsProgressDescriptionFr implements TranslationsGoalsProgressDescriptionEn {
+	_TranslationsGoalsProgressDescriptionFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String active_on_track({required Object dailyAmount, required Object remainingDays}) => 'Vous êtes en bonne voie pour atteindre votre objectif ! Vous devez économiser ${dailyAmount} par jour pendant les ${remainingDays} jours.';
+	@override String active_behind_schedule({required Object dailyAmount, required Object remainingDays}) => 'Vous êtes en retard. Vous devez économiser ${dailyAmount} par jour pour atteindre votre objectif dans ${remainingDays} jours.';
+	@override String active_indeterminate({required Object amount}) => 'Il vous en faut ${amount} supplémentaires pour atteindre votre objectif.';
+	@override String get success => 'Félicitations! Vous avez atteint votre objectif.';
+	@override String fail({required Object amount}) => 'Vous avez raté votre objectif de ${amount}.';
 }
 
 // Path: backup.import.manual_import
@@ -1707,6 +1844,7 @@ extension on TranslationsFr {
 		map['general.show_more_fields'] = 'Afficher plus de champs';
 		map['general.show_less_fields'] = 'Afficher moins de champs';
 		map['general.tap_to_search'] = 'Touchez pour rechercher';
+		map['general.delete_success'] = 'Élément supprimé avec succès';
 		map['general.leave_without_saving.title'] = 'Partir sans économiser ?';
 		map['general.leave_without_saving.message'] = 'Vous avez des modifications non enregistrées, êtes-vous sûr de vouloir quitter sans les enregistrer ?';
 		map['general.clipboard.success'] = ({required Object x}) => '${x} copié dans le presse-papiers';
@@ -2207,14 +2345,10 @@ extension on TranslationsFr {
 		map['categories.select.all'] = 'Toutes les catégories';
 		map['categories.select.all_short'] = 'Toutes';
 		map['budgets.title'] = 'Budgets';
+		map['budgets.status'] = 'Statut budgétaire';
 		map['budgets.repeated'] = 'Récurrents';
 		map['budgets.one_time'] = 'Une fois';
-		map['budgets.annual'] = 'Annuels';
-		map['budgets.week'] = 'Hebdomadaires';
-		map['budgets.month'] = 'Mensuels';
 		map['budgets.actives'] = 'Actifs';
-		map['budgets.pending'] = 'En attente de démarrage';
-		map['budgets.finish'] = 'Terminés';
 		map['budgets.from_budgeted'] = 'restant sur ';
 		map['budgets.days_left'] = 'jours restants';
 		map['budgets.days_to_start'] = 'jours avant le début';
@@ -2236,19 +2370,59 @@ extension on TranslationsFr {
 		map['budgets.details.expend_evolution'] = 'Évolution des dépenses';
 		map['budgets.details.no_transactions'] = 'Il semble que vous n\'ayez pas encore fait de dépenses liées à ce budget';
 		map['budgets.target_timeline_statuses.active'] = 'Budget actif';
-		map['budgets.target_timeline_statuses.past'] = 'Budget passé';
+		map['budgets.target_timeline_statuses.past'] = 'Budget terminé';
 		map['budgets.target_timeline_statuses.future'] = 'Budget futur';
 		map['budgets.progress.labels.active_on_track'] = 'En bonne voie';
 		map['budgets.progress.labels.active_overspending'] = 'Dépenses excessives';
+		map['budgets.progress.labels.active_indeterminate'] = 'Actif';
 		map['budgets.progress.labels.success'] = 'Atteint';
 		map['budgets.progress.labels.fail'] = 'Budget dépassé';
 		map['budgets.progress.description.active_on_track'] = ({required Object dailyAmount, required Object remainingDays}) => 'Vous pouvez dépenser ${dailyAmount} par jour pour les ${remainingDays} jours restants';
 		map['budgets.progress.description.active_overspending'] = ({required Object dailyAmount, required Object remainingDays}) => 'Pour revenir sur la bonne voie, vous devriez limiter vos dépenses à ${dailyAmount} par jour pour les ${remainingDays} jours restants';
+		map['budgets.progress.description.active_indeterminate'] = ({required Object amount}) => 'Il vous reste ${amount} à dépenser.';
 		map['budgets.progress.description.active_exceeded'] = ({required Object amount}) => 'Vous avez déjà dépassé votre limite budgétaire de ${amount}. Si vous ne trouvez aucun revenu pour ce budget, vous devriez arrêter de dépenser pour le reste de sa période';
 		map['budgets.progress.description.success'] = 'Bon travail ! Ce budget est terminé avec succès. Continuez à créer des budgets pour gérer vos dépenses';
 		map['budgets.progress.description.fail'] = ({required Object amount}) => 'Vous avez dépassé le budget de ${amount}. Essayez d\'être plus prudent la prochaine fois !';
+		map['goals.title'] = 'Objectifs';
+		map['goals.status'] = 'Statut de l\'objectif';
+		map['goals.type.display'] = 'Type d\'objectif';
+		map['goals.type.income.title'] = 'Objectif d\'épargne';
+		map['goals.type.income.descr'] = 'Idéal pour économiser de l\'argent. Vous réussissez lorsque le solde dépasse votre objectif.';
+		map['goals.type.expense.title'] = 'Objectif de dépense';
+		map['goals.type.expense.descr'] = 'Suivez combien vous dépensez et visez à atteindre un montant cible. Fonctionne bien pour les dons...';
+		map['goals.empty_title'] = 'Aucun objectif trouvé';
+		map['goals.empty_description'] = 'Créez un nouvel objectif pour commencer à suivre vos économies !';
+		map['goals.delete'] = 'Supprimer l\'objectif';
+		map['goals.delete_warning'] = 'Cette action est irréversible. Les catégories et transactions liées à cet objectif ne seront pas supprimées';
+		map['goals.form.new_title'] = 'Nouvel objectif';
+		map['goals.form.edit_title'] = 'Modifier l\'objectif';
+		map['goals.form.target_amount'] = 'Montant cible';
+		map['goals.form.initial_amount'] = 'Montant initial';
+		map['goals.form.name'] = 'Nom';
+		map['goals.form.name_hint'] = 'Mon objectif d\'épargne';
+		map['goals.form.create_success'] = 'Objectif créé avec succès';
+		map['goals.form.edit_success'] = 'Objectif modifié avec succès';
+		map['goals.form.negative_warn'] = 'Le montant de l\'objectif ne peut pas être négatif';
+		map['goals.details.title'] = 'Détails de l\'objectif';
+		map['goals.details.statistics'] = 'Statistiques';
+		map['goals.details.goal_value'] = 'Valeur cible';
+		map['goals.details.evolution'] = 'Évolution';
+		map['goals.details.no_transactions'] = 'Il semble que vous n\'ayez effectué aucune transaction liée à cet objectif';
+		map['goals.target_timeline_statuses.active'] = 'Objectif actif';
+		map['goals.target_timeline_statuses.past'] = 'Objectif terminé';
+		map['goals.target_timeline_statuses.future'] = 'Objectif futur';
+		map['goals.progress.labels.active_on_track'] = 'En bonne voie';
+		map['goals.progress.labels.active_behind_schedule'] = 'En retard';
+		map['goals.progress.labels.active_indeterminate'] = 'Actif';
+		map['goals.progress.labels.success'] = 'Objectif atteint';
+		map['goals.progress.labels.fail'] = 'Objectif raté';
+		map['goals.progress.description.active_on_track'] = ({required Object dailyAmount, required Object remainingDays}) => 'Vous êtes en bonne voie pour atteindre votre objectif ! Vous devez économiser ${dailyAmount} par jour pendant les ${remainingDays} jours.';
+		map['goals.progress.description.active_behind_schedule'] = ({required Object dailyAmount, required Object remainingDays}) => 'Vous êtes en retard. Vous devez économiser ${dailyAmount} par jour pour atteindre votre objectif dans ${remainingDays} jours.';
+		map['goals.progress.description.active_indeterminate'] = ({required Object amount}) => 'Il vous en faut ${amount} supplémentaires pour atteindre votre objectif.';
+		map['goals.progress.description.success'] = 'Félicitations! Vous avez atteint votre objectif.';
+		map['goals.progress.description.fail'] = ({required Object amount}) => 'Vous avez raté votre objectif de ${amount}.';
 		map['target_timeline_statuses.active'] = 'Actif';
-		map['target_timeline_statuses.past'] = 'Passé';
+		map['target_timeline_statuses.past'] = 'Terminé';
 		map['target_timeline_statuses.future'] = 'Futur';
 		map['backup.no_file_selected'] = 'Aucun fichier sélectionné';
 		map['backup.no_directory_selected'] = 'Aucun dossier sélectionné';

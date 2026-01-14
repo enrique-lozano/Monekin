@@ -1,88 +1,70 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:monekin/app/budgets/budget_form_page.dart';
-import 'package:monekin/app/budgets/budgets_page.dart';
-import 'package:monekin/app/budgets/components/budget_evolution_chart.dart';
+import 'package:monekin/app/goals/goal_form_page.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:monekin/core/database/services/budget/budget_service.dart';
-import 'package:monekin/core/models/budget/budget.dart';
+import 'package:monekin/core/database/services/goal/goal_service.dart';
+import 'package:monekin/core/models/date-utils/date_period.dart';
+import 'package:monekin/core/models/date-utils/date_period_state.dart';
+import 'package:monekin/core/models/goal/goal.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
+import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/targets/financial_target_card.dart';
 import 'package:monekin/core/presentation/widgets/targets/target_status_card.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
-import '../../core/presentation/widgets/no_results.dart';
+class GoalDetailsPage extends StatefulWidget {
+  const GoalDetailsPage({super.key, required this.goal});
 
-class BudgetDetailsPage extends StatefulWidget {
-  const BudgetDetailsPage({super.key, required this.budget});
-
-  final Budget budget;
+  final Goal goal;
 
   @override
-  State<BudgetDetailsPage> createState() => _BudgetDetailsPageState();
+  State<GoalDetailsPage> createState() => _GoalDetailsPageState();
 }
 
-class _BudgetDetailsPageState extends State<BudgetDetailsPage>
+class _GoalDetailsPageState extends State<GoalDetailsPage>
     with SingleTickerProviderStateMixin {
-  double? budgetCurrentValue;
-  double? budgetCurrentPercentage;
-
-  List<StreamSubscription<double>> subscrList = [];
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-
     _tabController = TabController(length: 2, vsync: this);
-
-    subscrList.addAll([
-      widget.budget.currentValue.asBroadcastStream().listen((event) {
-        setState(() {
-          budgetCurrentValue = event;
-        });
-      }),
-      widget.budget.percentageAlreadyUsed.asBroadcastStream().listen((event) {
-        setState(() {
-          budgetCurrentPercentage = event;
-        });
-      }),
-    ]);
-  }
-
-  @override
-  void dispose() {
-    for (final element in subscrList) {
-      element.cancel();
-    }
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
+    // Reuse page framework style
     return StreamBuilder(
-      stream: BudgetServive.instance.getBudgetById(widget.budget.id),
-      initialData: widget.budget,
+      stream: GoalService.instance.getGoalById(widget.goal.id),
+      initialData: widget.goal,
       builder: (context, snapshot) {
         if (!snapshot.hasData) return Container();
 
-        final budget = snapshot.data!;
+        final goal = snapshot.data!;
+
+        // Construct PeriodState for charts using goal dates
+        // If end date is null, we might default to "now" or some logic,
+        // but charts usually need a finite range.
+        final periodState = DatePeriodState(
+          datePeriod: DatePeriod.customRange(
+            goal.startDate,
+            goal.endDate ?? DateTime.now(),
+          ),
+        );
 
         return PageFramework(
-          title: Translations.of(context).budgets.details.title,
+          title: t.goals.details.title,
           tabBar: TabBar(
             controller: _tabController,
             tabAlignment: BreakPoint.of(context).isSmallerThan(BreakpointID.md)
@@ -92,7 +74,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
               context,
             ).isSmallerThan(BreakpointID.md),
             tabs: [
-              Tab(text: t.budgets.details.statistics),
+              Tab(text: t.goals.details.statistics),
               Tab(text: t.transaction.display(n: 10)),
             ],
           ),
@@ -100,15 +82,10 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
             MonekinPopupMenuButton(
               actionItems: [
                 ListTileActionItem(
-                  label: t.budgets.form.edit,
+                  label: t.goals.form.edit_title,
                   icon: Icons.edit,
                   onClick: () {
-                    RouteUtils.pushRoute(
-                      BudgetFormPage(
-                        prevPage: const BudgetsPage(),
-                        budgetToEdit: budget,
-                      ),
-                    );
+                    RouteUtils.pushRoute(GoalFormPage(goalToEdit: goal));
                   },
                 ),
                 ListTileActionItem(
@@ -118,18 +95,17 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
                   onClick: () {
                     confirmDialog(
                       context,
-                      dialogTitle: t.budgets.delete,
-                      contentParagraphs: [Text(t.budgets.delete_warning)],
+                      dialogTitle: t.goals.delete,
+                      contentParagraphs: [Text(t.goals.delete_warning)],
                       confirmationText: t.ui_actions.confirm,
                       icon: Icons.delete,
                     ).then((confirmed) {
                       if (confirmed != true) return;
 
-                      BudgetServive.instance
-                          .deleteBudget(budget.id)
+                      GoalService.instance
+                          .deleteGoal(goal.id)
                           .then((value) {
                             RouteUtils.popRoute();
-
                             MonekinSnackbar.success(
                               SnackbarParams(t.general.delete_success),
                             );
@@ -145,13 +121,13 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
               ],
             ),
           ],
-
           body: Column(
             children: [
+              // Use a header similar to budget card header
               Container(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                 decoration: BoxDecoration(color: Theme.of(context).cardColor),
-                child: TargetHeader(target: budget),
+                child: TargetHeader(target: goal),
               ),
               Expanded(
                 child: TabBarView(
@@ -174,16 +150,14 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
                               mainAxisSize: MainAxisSize.min,
                               spacing: 16,
                               children: [
-                                if (!budget.isActive)
-                                  FinancialTargetTimelineCard(target: budget),
-
-                                FinancialTargetStatusCard(
-                                  target: budget,
-                                  currentValue: budgetCurrentValue,
-                                ),
-                                CardWithHeader(
-                                  title: t.budgets.details.expend_evolution,
-                                  body: BudgetEvolutionChart(budget: budget),
+                                StreamBuilder<double>(
+                                  stream: goal.currentValue,
+                                  builder: (context, currentValueSnapshot) {
+                                    return FinancialTargetStatusCard(
+                                      target: goal,
+                                      currentValue: currentValueSnapshot.data,
+                                    );
+                                  },
                                 ),
                               ],
                             ),
@@ -193,8 +167,8 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
                             child: CardWithHeader(
                               title: t.stats.by_categories,
                               body: PieChartByCategories(
-                                filters: budget.trFilters,
-                                datePeriodState: budget.periodState,
+                                filters: goal.trFilters,
+                                datePeriodState: periodState,
                               ),
                             ),
                           ),
@@ -205,9 +179,9 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
                       isScrollable: true,
                       tileBuilder: (transaction) => TransactionListTile(
                         transaction: transaction,
-                        heroTag: 'budgets-page__tr-icon-${transaction.id}',
+                        heroTag: 'goal-page__tr-icon-${transaction.id}',
                       ),
-                      filters: budget.trFilters,
+                      filters: goal.trFilters,
                       onEmptyList: NoResults(
                         title: t.general.empty_warn,
                         description: t.budgets.details.no_transactions,
