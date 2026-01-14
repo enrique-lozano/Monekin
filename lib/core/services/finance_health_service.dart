@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:async/async.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
@@ -69,8 +70,11 @@ class FinanceHealthData {
       return null;
     }
 
-    return savingPercentageScore.weightedValue! +
+    final score =
+        savingPercentageScore.weightedValue! +
         monthsWithoutIncomeScore.weightedValue!;
+
+    return clampDouble(score, 0, 100);
   }
 
   String healthyScoreString({int decimalPlaces = 0}) {
@@ -113,7 +117,12 @@ class FinanceHealthData {
   static Color getHealthyValueColor(double? healthyValue) =>
       healthyValue == null
       ? Colors.grey
-      : HSLColor.fromAHSL(1, healthyValue, 1, 0.35).toColor();
+      : HSLColor.fromAHSL(
+          1,
+          clampDouble(healthyValue, 0, 100),
+          1,
+          0.35,
+        ).toColor();
 
   Color getHealthyScoreColor() => getHealthyValueColor(healthyScore);
 
@@ -221,7 +230,7 @@ class FinanceHealthService {
         final dateDiff = maxDate.difference(minDate).inDays;
         final monthlyExpense = expense / dateDiff * 30;
 
-        return accountsMoney / monthlyExpense;
+        return max(accountsMoney / monthlyExpense, 0);
       },
     );
   }

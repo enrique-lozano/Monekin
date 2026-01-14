@@ -4,11 +4,12 @@ class LoadingOverlay {
   BuildContext _context;
 
   void hide() {
-    Navigator.of(_context).pop();
+    Navigator.of(_context, rootNavigator: true).pop();
   }
 
   void show() {
     showDialog(
+      useRootNavigator: true,
       context: _context,
       barrierDismissible: false,
       builder: (ctx) => _FullScreenLoader(),
