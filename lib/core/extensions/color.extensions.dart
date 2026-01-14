@@ -65,10 +65,22 @@ extension ColorBrightness on Color {
   }
 
   Color lightenPastel({double amount = 0.1}) {
+    assert(amount >= -1 && amount <= 1);
+
+    if (amount < 0) {
+      return darkenPastel(amount: amount.abs());
+    }
+
     return Color.alphaBlend(Colors.white.withOpacity(amount), this);
   }
 
   Color darkenPastel({double amount = 0.1}) {
+    assert(amount >= -1 && amount <= 1);
+
+    if (amount < 0) {
+      return lightenPastel(amount: amount.abs());
+    }
+
     return Color.alphaBlend(Colors.black.withOpacity(amount), this);
   }
 

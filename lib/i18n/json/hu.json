@@ -56,6 +56,7 @@
     "show-more-fields": "Több mező mutatása",
     "show-less-fields": "Kevesebb mező mutatása",
     "tap-to-search": "Koppintson a kereséshez",
+    "delete_success": "Az elem sikeresen törölve",
     "LEAVE-WITHOUT-SAVING": {
       "title": "Mentés nélkül távozik?",
       "message": "Vannak nem mentett módosításai. Biztos, hogy mentés nélkül kilép?"
@@ -634,14 +635,10 @@
   },
   "BUDGETS": {
     "title": "Költségvetések",
+    "status": "Költségkeret állapota",
     "repeated": "Ismétlődő",
     "one-time": "Egyszer",
-    "annual": "Éves",
-    "week": "Hetente",
-    "month": "Havonta",
     "actives": "Aktívok",
-    "pending": "Függőben lévő kezdés",
-    "finish": "Kész",
     "from-budgeted": "maradt ",
     "days-left": "nap van hátra",
     "days-to-start": "nap van a kezdésig",
@@ -668,28 +665,88 @@
     },
     "TARGET_TIMELINE_STATUSES": {
       "active": "Aktív költségvetés",
-      "past": "Múltbeli költségvetés",
+      "past": "Befejezett költségvetés",
       "future": "Jövőbeli költségvetés"
     },
     "PROGRESS": {
       "LABELS": {
         "active-on-track": "Terv szerint",
         "active-overspending": "Túlköltekezés",
+        "active-indeterminate": "Aktív",
         "success": "Teljesítve",
         "fail": "Költségvetés túllépve"
       },
       "DESCRIPTION": {
         "active-on-track": "Naponta {{ dailyAmount }} összeget költhet a hátralévő {{ remainingDays }} napban",
         "active-overspending": "Hogy visszatérjen a tervhez, korlátoznia kell kiadásait napi {{ dailyAmount }} összegre a hátralévő {{ remainingDays }} napban",
+        "active-indeterminate": "Még {{ amount }} elkölthető.",
         "active-exceeded": "Már túllépte a költségvetési keretet {{ amount }} összeggel. Ha nem talál bevételt ehhez a költségvetéshez, abba kell hagynia a költekezést az időszak hátralévő részében",
         "success": "Szép munka! Ez a költségvetés sikeresen lezárult. Hozzon létre további költségvetéseket kiadásai kezeléséhez",
         "fail": "Túllépte a költségvetést {{ amount }} összeggel. Próbáljon meg óvatosabb lenni legközelebb!"
       }
     }
   },
+  "GOALS": {
+    "title": "Célok",
+    "status": "A cél állapota",
+    "type": {
+      "display": "Cél típusa",
+      "income": {
+        "title": "Megtakarítási cél",
+        "descr": "Ideális pénzmegtakarításhoz. Akkor sikeres, ha az egyenleg meghaladja a célösszeget."
+      },
+      "expense": {
+        "title": "Költési cél",
+        "descr": "Kövesse nyomon kiadásait, és próbáljon meg elérni egy célösszeget. Jól használható adományokhoz..."
+      }
+    },
+    "empty_title": "Nincsenek célok",
+    "empty_description": "Hozzon létre új célt megtakarításai követéséhez!",
+    "delete": "Cél törlése",
+    "delete_warning": "Ez a művelet visszafordíthatatlan. A célhoz kapcsolódó kategóriák és tranzakciók nem törlődnek",
+    "FORM": {
+      "new_title": "Új cél",
+      "edit_title": "Cél szerkesztése",
+      "target_amount": "Célösszeg",
+      "initial_amount": "Kezdő összeg",
+      "name": "Név",
+      "name_hint": "Megtakarítási célom",
+      "create_success": "Cél sikeresen létrehozva",
+      "edit_success": "Cél sikeresen szerkesztve",
+      "negative_warn": "A cél összege nem lehet negatív"
+    },
+    "DETAILS": {
+      "title": "Cél részletei",
+      "statistics": "Statisztikák",
+      "goal_value": "Célérték",
+      "evolution": "Fejlődés",
+      "no_transactions": "Úgy tűnik, nem hajtott végre ehhez a célhoz kapcsolódó tranzakciót"
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "Aktív cél",
+      "past": "Befejezett cél",
+      "future": "Jövőbeli cél"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "Pályán",
+        "active-behind-schedule": "A menetrend lemaradásával",
+        "active-indeterminate": "Aktív",
+        "success": "A cél elérve",
+        "fail": "A gól nem sikerült"
+      },
+      "DESCRIPTION": {
+        "active-on-track": "Jó úton haladsz a cél felé! Naponta {{ dailyAmount }} összeget kell megtakarítania a fennmaradó {{ remainingDays }} napig",
+        "active-behind-schedule": "Lemaradsz a menetrendről. Naponta {{ dailyAmount }} összeget kell megtakarítania, hogy {{ remainingDays }} napon belül elérje célját",
+        "active-indeterminate": "További {{ amount }} kell a cél eléréséhez.",
+        "success": "Gratulálok! Elérted a célodat.",
+        "fail": "{{ amount }} értékkel eltévesztette a célt."
+      }
+    }
+  },
   "TARGET_TIMELINE_STATUSES": {
     "active": "Aktív",
-    "past": "Múlt",
+    "past": "Befejezve",
     "future": "Jövő"
   },
   "BACKUP": {

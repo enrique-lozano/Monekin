@@ -92,8 +92,6 @@ class UINumberFormatter {
       case UINumberFormatterMode.decimal:
         formattedAmount = _getFormattedDecimalAmount();
         break;
-      default:
-        formattedAmount = '';
     }
 
     return formattedAmount;

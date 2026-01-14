@@ -87,3 +87,16 @@ UPDATE transactions SET status_new = 'U' WHERE status = 'unreconciled';
 -- 3. Drop the old column and rename the new column to the original name
 ALTER TABLE transactions DROP COLUMN status;
 ALTER TABLE transactions RENAME COLUMN status_new TO status;
+
+--- ----------- GOALS ------------
+
+CREATE TABLE IF NOT EXISTS goals (
+  id TEXT NOT NULL PRIMARY KEY,
+  name TEXT NOT NULL UNIQUE,
+  amount REAL NOT NULL,
+  initialAmount REAL NOT NULL DEFAULT 0,
+  startDate DATETIME NOT NULL,
+  endDate DATETIME,
+  type INTEGER NOT NULL CHECK(type IN (0, 1)),
+  filterID TEXT NOT NULL REFERENCES transactionFilterSets(id) ON DELETE CASCADE ON UPDATE CASCADE
+);

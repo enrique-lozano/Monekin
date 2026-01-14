@@ -10,6 +10,8 @@ import './../../../models/transaction/transaction_type.enum.dart';
 import './../../../models/date-utils/periodicity.dart';
 import './../../../models/category/category.dart';
 import './../../../models/account/account.dart';
+import './../../../models/goal/goal.dart';
+import './../../../models/goal/goal_type.enum.dart';
 import './../../services/user-setting/user_setting_service.dart';
 import './../../services/app-data/app_data_service.dart';
 import './../../utils/database_enum.dart';
@@ -251,6 +253,29 @@ CREATE TABLE IF NOT EXISTS budgets (
 
   CHECK ((startDate IS NULL AND endDate IS NULL) != (intervalPeriod IS NULL))
 ) AS BudgetInDB;
+
+CREATE TABLE IF NOT EXISTS goals (
+  id TEXT NOT NULL PRIMARY KEY,
+
+  -- Title of the goal and its identificator. For instance, this name is unique (the user can not have another goal with the same name) 
+  name TEXT NOT NULL UNIQUE,
+
+  --  Target amount of the goal. It will always be in the user's preferred currency
+  amount REAL NOT NULL,
+
+  initialAmount REAL NOT NULL DEFAULT 0,
+
+  -- Custom start date
+  startDate DATETIME NOT NULL,
+
+  -- Custom end date
+  endDate DATETIME,
+
+  type INTEGER NOT NULL CHECK(type IN (0, 1)) MAPPED BY `CustomEnumConverter(GoalType.values)`,
+
+  filterID TEXT NOT NULL REFERENCES transactionFilterSets(id) ON DELETE CASCADE ON UPDATE CASCADE
+) AS GoalInDB;
+
 
 CREATE TABLE IF NOT EXISTS userSettings (
   settingKey ENUMNAME(SettingKey) NOT NULL PRIMARY KEY,

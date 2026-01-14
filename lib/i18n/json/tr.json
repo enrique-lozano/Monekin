@@ -56,6 +56,7 @@
     "show-more-fields": "Daha fazla alan göster",
     "show-less-fields": "Daha az alan göster",
     "tap-to-search": "Aramak için dokunun",
+    "delete_success": "Öğe başarıyla silindi",
     "LEAVE-WITHOUT-SAVING": {
       "title": "Kaydetmeden ayrılmak mı istiyorsunuz?",
       "message": "Kaydedilmemiş değişiklikleriniz var, bunları kaydetmeden ayrılmak istediğinizden emin misiniz?"
@@ -634,14 +635,10 @@
   },
   "BUDGETS": {
     "title": "Bütçeler",
+    "status": "Bütçe durumu",
     "repeated": "Tekrarlayan",
     "one-time": "Tek seferlik",
-    "annual": "Yıllık",
-    "week": "Haftalık",
-    "month": "Aylık",
     "actives": "Aktifler",
-    "pending": "Başlangıcı Bekliyor",
-    "finish": "Bitti",
     "from-budgeted": "kalan ",
     "days-left": "gün kaldı",
     "days-to-start": "başlangıca kalan gün",
@@ -668,28 +665,88 @@
     },
     "TARGET_TIMELINE_STATUSES": {
       "active": "Aktif bütçe",
-      "past": "Geçmiş bütçe",
+      "past": "Tamamlanan bütçe",
       "future": "Gelecek bütçe"
     },
     "PROGRESS": {
       "LABELS": {
         "active-on-track": "Yolunda",
         "active-overspending": "Aşırı harcama",
+        "active-indeterminate": "Aktif",
         "success": "Başarılı",
         "fail": "Bütçe aşıldı"
       },
       "DESCRIPTION": {
         "active-on-track": "Kalan {{ remainingDays }} gün için günde {{ dailyAmount }} harcayabilirsiniz",
         "active-overspending": "Tekrar rayına oturmak için, kalan {{ remainingDays }} gün boyunca harcamalarınızı günde {{ dailyAmount }} ile sınırlamalısınız",
+        "active-indeterminate": "Harcayabileceğiniz {{ amount }} kaldı.",
         "active-exceeded": "Bütçe limitinizi {{ amount }} aştınız. Bu bütçe için herhangi bir gelir bulamazsanız, dönemin geri kalanında harcama yapmayı bırakmalısınız",
         "success": "Harika iş! Bu bütçe başarıyla tamamlandı. Harcamalarınızı yönetmek için bütçe oluşturmaya devam edin",
         "fail": "Bütçeyi {{ amount }} aştınız. Bir dahaki sefere daha dikkatli olmaya çalışın!"
       }
     }
   },
+  "GOALS": {
+    "title": "Hedefler",
+    "status": "Hedef durumu",
+    "type": {
+      "display": "Hedef Türü",
+      "income": {
+        "title": "Tasarruf Hedefi",
+        "descr": "Para biriktirmek için ideal. Bakiye hedefinizi aştığında başarılı olursunuz."
+      },
+      "expense": {
+        "title": "Harcama Hedefi",
+        "descr": "Ne kadar harcadığınızı takip edin ve bir hedef tutara ulaşmayı amaçlayın. Bağışlar için ..."
+      }
+    },
+    "empty_title": "Hedef bulunamadı",
+    "empty_description": "Tasarruflarınızı takip etmek için yeni bir hedef oluşturun!",
+    "delete": "Hedefi sil",
+    "delete_warning": "Bu işlem geri alınamaz. Bu hedefi referans alan kategoriler ve işlemler silinmeyecektir",
+    "FORM": {
+      "new_title": "Yeni Hedef",
+      "edit_title": "Hedefi Düzenle",
+      "target_amount": "Hedef Tutar",
+      "initial_amount": "Başlangıç Tutarı",
+      "name": "İsim",
+      "name_hint": "Tasarruf Hedefim",
+      "create_success": "Hedef başarıyla oluşturuldu",
+      "edit_success": "Hedef başarıyla düzenlendi",
+      "negative_warn": "Hedef tutar negatif olamaz"
+    },
+    "DETAILS": {
+      "title": "Hedef Detayları",
+      "statistics": "İstatistikler",
+      "goal_value": "Hedef Değeri",
+      "evolution": "Gelişim",
+      "no_transactions": "Bu hedefle ilgili herhangi bir işlem yapmamışsınız gibi görünüyor"
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "Aktif hedef",
+      "past": "Tamamlanmış hedef",
+      "future": "Gelecek hedef"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "Yolda",
+        "active-behind-schedule": "Programın gerisinde",
+        "active-indeterminate": "Aktif",
+        "success": "Hedefe ulaşıldı",
+        "fail": "Hedef başarısız oldu"
+      },
+      "DESCRIPTION": {
+        "active-on-track": "Hedefinizi arama yolundasınız! Kalan {{ remainingDays }} gün boyunca günde {{ dailyAmount }} tasarruf etmelisiniz",
+        "active-behind-schedule": "Programın gerisindesiniz. Hedefinize {{ remainingDays }} gün içinde ulaşmak için günde {{ dailyAmount }} tasarruf etmeniz gerekiyor",
+        "active-indeterminate": "Hedefinize ulaşmak için {{ amount }} daha fazlasına ihtiyacınız var.",
+        "success": "Tebrikler! Hedefine ulaştın.",
+        "fail": "Hedefinizi {{ amount }} kadar kaçırdınız."
+      }
+    }
+  },
   "TARGET_TIMELINE_STATUSES": {
     "active": "Aktif",
-    "past": "Geçmiş",
+    "past": "Tamamlandı",
     "future": "Gelecek"
   },
   "BACKUP": {

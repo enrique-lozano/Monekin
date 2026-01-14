@@ -51,6 +51,7 @@ class TranslationsUk implements Translations {
 	@override late final _TranslationsTagsUk tags = _TranslationsTagsUk._(_root);
 	@override late final _TranslationsCategoriesUk categories = _TranslationsCategoriesUk._(_root);
 	@override late final _TranslationsBudgetsUk budgets = _TranslationsBudgetsUk._(_root);
+	@override late final _TranslationsGoalsUk goals = _TranslationsGoalsUk._(_root);
 	@override late final _TranslationsTargetTimelineStatusesUk target_timeline_statuses = _TranslationsTargetTimelineStatusesUk._(_root);
 	@override late final _TranslationsBackupUk backup = _TranslationsBackupUk._(_root);
 	@override late final _TranslationsSettingsUk settings = _TranslationsSettingsUk._(_root);
@@ -127,6 +128,7 @@ class _TranslationsGeneralUk implements TranslationsGeneralEn {
 	@override String get show_more_fields => 'Показати більше полів';
 	@override String get show_less_fields => 'Показати менше полів';
 	@override String get tap_to_search => 'Натисніть для пошуку';
+	@override String get delete_success => 'Елемент успішно видалено';
 	@override late final _TranslationsGeneralLeaveWithoutSavingUk leave_without_saving = _TranslationsGeneralLeaveWithoutSavingUk._(_root);
 	@override late final _TranslationsGeneralClipboardUk clipboard = _TranslationsGeneralClipboardUk._(_root);
 	@override late final _TranslationsGeneralTimeUk time = _TranslationsGeneralTimeUk._(_root);
@@ -436,14 +438,10 @@ class _TranslationsBudgetsUk implements TranslationsBudgetsEn {
 
 	// Translations
 	@override String get title => 'Бюджети';
+	@override String get status => 'Стан бюджету';
 	@override String get repeated => 'Повторювані';
 	@override String get one_time => 'Одноразові';
-	@override String get annual => 'Щорічні';
-	@override String get week => 'Щотижневі';
-	@override String get month => 'Щомісячні';
 	@override String get actives => 'Активні';
-	@override String get pending => 'Очікує початку';
-	@override String get finish => 'Завершені';
 	@override String get from_budgeted => 'з ';
 	@override String get days_left => 'днів залишилось';
 	@override String get days_to_start => 'днів до початку';
@@ -457,6 +455,26 @@ class _TranslationsBudgetsUk implements TranslationsBudgetsEn {
 	@override late final _TranslationsBudgetsProgressUk progress = _TranslationsBudgetsProgressUk._(_root);
 }
 
+// Path: goals
+class _TranslationsGoalsUk implements TranslationsGoalsEn {
+	_TranslationsGoalsUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Цілі';
+	@override String get status => 'Статус цілі';
+	@override late final _TranslationsGoalsTypeUk type = _TranslationsGoalsTypeUk._(_root);
+	@override String get empty_title => 'Цілей не знайдено';
+	@override String get empty_description => 'Створіть нову ціль, щоб почати відстежувати свої заощадження!';
+	@override String get delete => 'Видалити ціль';
+	@override String get delete_warning => 'Ця дія є незворотною. Категорії та транзакції, пов\'язані з цією ціллю, не будуть видалені';
+	@override late final _TranslationsGoalsFormUk form = _TranslationsGoalsFormUk._(_root);
+	@override late final _TranslationsGoalsDetailsUk details = _TranslationsGoalsDetailsUk._(_root);
+	@override late final _TranslationsGoalsTargetTimelineStatusesUk target_timeline_statuses = _TranslationsGoalsTargetTimelineStatusesUk._(_root);
+	@override late final _TranslationsGoalsProgressUk progress = _TranslationsGoalsProgressUk._(_root);
+}
+
 // Path: target_timeline_statuses
 class _TranslationsTargetTimelineStatusesUk implements TranslationsTargetTimelineStatusesEn {
 	_TranslationsTargetTimelineStatusesUk._(this._root);
@@ -465,7 +483,7 @@ class _TranslationsTargetTimelineStatusesUk implements TranslationsTargetTimelin
 
 	// Translations
 	@override String get active => 'Активний';
-	@override String get past => 'Минулий';
+	@override String get past => 'Завершений';
 	@override String get future => 'Майбутній';
 }
 
@@ -1074,7 +1092,7 @@ class _TranslationsBudgetsTargetTimelineStatusesUk implements TranslationsBudget
 
 	// Translations
 	@override String get active => 'Активний бюджет';
-	@override String get past => 'Минулий бюджет';
+	@override String get past => 'Завершений бюджет';
 	@override String get future => 'Майбутній бюджет';
 }
 
@@ -1087,6 +1105,73 @@ class _TranslationsBudgetsProgressUk implements TranslationsBudgetsProgressEn {
 	// Translations
 	@override late final _TranslationsBudgetsProgressLabelsUk labels = _TranslationsBudgetsProgressLabelsUk._(_root);
 	@override late final _TranslationsBudgetsProgressDescriptionUk description = _TranslationsBudgetsProgressDescriptionUk._(_root);
+}
+
+// Path: goals.type
+class _TranslationsGoalsTypeUk implements TranslationsGoalsTypeEn {
+	_TranslationsGoalsTypeUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get display => 'Тип цілі';
+	@override late final _TranslationsGoalsTypeIncomeUk income = _TranslationsGoalsTypeIncomeUk._(_root);
+	@override late final _TranslationsGoalsTypeExpenseUk expense = _TranslationsGoalsTypeExpenseUk._(_root);
+}
+
+// Path: goals.form
+class _TranslationsGoalsFormUk implements TranslationsGoalsFormEn {
+	_TranslationsGoalsFormUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get new_title => 'Нова ціль';
+	@override String get edit_title => 'Редагувати ціль';
+	@override String get target_amount => 'Цільова сума';
+	@override String get initial_amount => 'Початкова сума';
+	@override String get name => 'Назва';
+	@override String get name_hint => 'Моя ціль заощаджень';
+	@override String get create_success => 'Ціль успішно створено';
+	@override String get edit_success => 'Ціль успішно відредаговано';
+	@override String get negative_warn => 'Сума цілі не може бути від\'ємною';
+}
+
+// Path: goals.details
+class _TranslationsGoalsDetailsUk implements TranslationsGoalsDetailsEn {
+	_TranslationsGoalsDetailsUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Деталі цілі';
+	@override String get statistics => 'Статистика';
+	@override String get goal_value => 'Значення цілі';
+	@override String get evolution => 'Динаміка';
+	@override String get no_transactions => 'Схоже, ви не здійснили жодних транзакцій, пов\'язаних з цією ціллю';
+}
+
+// Path: goals.target_timeline_statuses
+class _TranslationsGoalsTargetTimelineStatusesUk implements TranslationsGoalsTargetTimelineStatusesEn {
+	_TranslationsGoalsTargetTimelineStatusesUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => 'Активна ціль';
+	@override String get past => 'Завершена ціль';
+	@override String get future => 'Майбутня ціль';
+}
+
+// Path: goals.progress
+class _TranslationsGoalsProgressUk implements TranslationsGoalsProgressEn {
+	_TranslationsGoalsProgressUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsGoalsProgressLabelsUk labels = _TranslationsGoalsProgressLabelsUk._(_root);
+	@override late final _TranslationsGoalsProgressDescriptionUk description = _TranslationsGoalsProgressDescriptionUk._(_root);
 }
 
 // Path: backup.export
@@ -1461,6 +1546,7 @@ class _TranslationsBudgetsProgressLabelsUk implements TranslationsBudgetsProgres
 	// Translations
 	@override String get active_on_track => 'За планом';
 	@override String get active_overspending => 'Перевитрата';
+	@override String get active_indeterminate => 'Активний';
 	@override String get success => 'Досягнуто';
 	@override String get fail => 'Бюджет перевищено';
 }
@@ -1474,9 +1560,60 @@ class _TranslationsBudgetsProgressDescriptionUk implements TranslationsBudgetsPr
 	// Translations
 	@override String active_on_track({required Object dailyAmount, required Object remainingDays}) => 'Ви можете витрачати ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися';
 	@override String active_overspending({required Object dailyAmount, required Object remainingDays}) => 'Щоб повернутися до плану, вам слід обмежити витрати до ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися';
+	@override String active_indeterminate({required Object amount}) => 'У вас залишилося витратити ${amount}.';
 	@override String active_exceeded({required Object amount}) => 'Ви вже перевищили ліміт бюджету на ${amount}. Якщо ви не знайдете жодних доходів для цього бюджету, вам слід припинити витрати до кінця його періоду';
 	@override String get success => 'Чудова робота! Цей бюджет успішно завершено. Продовжуйте створювати бюджети для управління витратами';
 	@override String fail({required Object amount}) => 'Ви перевищили бюджет на ${amount}. Спробуйте бути уважнішими наступного разу!';
+}
+
+// Path: goals.type.income
+class _TranslationsGoalsTypeIncomeUk implements TranslationsGoalsTypeIncomeEn {
+	_TranslationsGoalsTypeIncomeUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Ціль заощадження';
+	@override String get descr => 'Ідеально для заощадження грошей. Ви досягаєте успіху, коли баланс перевищує вашу ціль.';
+}
+
+// Path: goals.type.expense
+class _TranslationsGoalsTypeExpenseUk implements TranslationsGoalsTypeExpenseEn {
+	_TranslationsGoalsTypeExpenseUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Ціль витрат';
+	@override String get descr => 'Відстежуйте, скільки ви витрачаєте, і намагайтеся досягти цільової суми. Добре підходить для пожертвувань...';
+}
+
+// Path: goals.progress.labels
+class _TranslationsGoalsProgressLabelsUk implements TranslationsGoalsProgressLabelsEn {
+	_TranslationsGoalsProgressLabelsUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get active_on_track => 'На шляху';
+	@override String get active_behind_schedule => 'Відставання від графіка';
+	@override String get active_indeterminate => 'Активний';
+	@override String get success => 'Мета досягнута';
+	@override String get fail => 'Мета не вдалася';
+}
+
+// Path: goals.progress.description
+class _TranslationsGoalsProgressDescriptionUk implements TranslationsGoalsProgressDescriptionEn {
+	_TranslationsGoalsProgressDescriptionUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String active_on_track({required Object dailyAmount, required Object remainingDays}) => 'Ви на шляху до своєї мети! Ви повинні відкладати ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися';
+	@override String active_behind_schedule({required Object dailyAmount, required Object remainingDays}) => 'Ви відстаєте від графіка. Ви повинні заощаджувати ${dailyAmount} на день, щоб досягти своєї мети за ${remainingDays} днів';
+	@override String active_indeterminate({required Object amount}) => 'Вам потрібно ще ${amount}, щоб досягти своєї мети.';
+	@override String get success => 'Щиро вітаю! Ви досягли своєї мети.';
+	@override String fail({required Object amount}) => 'Ви не досягли цілі на ${amount}.';
 }
 
 // Path: backup.import.manual_import
@@ -1547,9 +1684,9 @@ class _TranslationsSettingsTransactionsSwipeActionsUk implements TranslationsSet
 	// Translations
 	@override String get title => 'Дії гортання';
 	@override String get choose_description => 'Виберіть, яка дія буде ініційована, коли ви проводите пальцем по елементу транзакції у списку в цьому напрямку';
+	@override String get none => 'Ніяких дій';
 	@override String get swipe_left => 'Проведіть ліворуч';
 	@override String get swipe_right => 'Проведіть праворуч';
-	@override String get none => 'Ніяких дій';
 	@override String get toggle_reconciled => 'Перемикач узгоджено';
 	@override String get toggle_pending => 'Перемкнути в очікуванні';
 	@override String get toggle_voided => 'Перемикач скасовано';
@@ -1709,6 +1846,7 @@ extension on TranslationsUk {
 		map['general.show_more_fields'] = 'Показати більше полів';
 		map['general.show_less_fields'] = 'Показати менше полів';
 		map['general.tap_to_search'] = 'Натисніть для пошуку';
+		map['general.delete_success'] = 'Елемент успішно видалено';
 		map['general.leave_without_saving.title'] = 'Вийти без збереження?';
 		map['general.leave_without_saving.message'] = 'У вас є незбережені зміни. Ви впевнені, що бажаєте вийти, не зберігаючи їх?';
 		map['general.clipboard.success'] = ({required Object x}) => '${x} скопійовано в буфер обміну';
@@ -2209,14 +2347,10 @@ extension on TranslationsUk {
 		map['categories.select.all'] = 'Усі категорії';
 		map['categories.select.all_short'] = 'Усі';
 		map['budgets.title'] = 'Бюджети';
+		map['budgets.status'] = 'Стан бюджету';
 		map['budgets.repeated'] = 'Повторювані';
 		map['budgets.one_time'] = 'Одноразові';
-		map['budgets.annual'] = 'Щорічні';
-		map['budgets.week'] = 'Щотижневі';
-		map['budgets.month'] = 'Щомісячні';
 		map['budgets.actives'] = 'Активні';
-		map['budgets.pending'] = 'Очікує початку';
-		map['budgets.finish'] = 'Завершені';
 		map['budgets.from_budgeted'] = 'з ';
 		map['budgets.days_left'] = 'днів залишилось';
 		map['budgets.days_to_start'] = 'днів до початку';
@@ -2238,19 +2372,59 @@ extension on TranslationsUk {
 		map['budgets.details.expend_evolution'] = 'Еволюція витрат';
 		map['budgets.details.no_transactions'] = 'Здається, ви не здійснили жодних витрат, пов\'язаних з цим бюджетом';
 		map['budgets.target_timeline_statuses.active'] = 'Активний бюджет';
-		map['budgets.target_timeline_statuses.past'] = 'Минулий бюджет';
+		map['budgets.target_timeline_statuses.past'] = 'Завершений бюджет';
 		map['budgets.target_timeline_statuses.future'] = 'Майбутній бюджет';
 		map['budgets.progress.labels.active_on_track'] = 'За планом';
 		map['budgets.progress.labels.active_overspending'] = 'Перевитрата';
+		map['budgets.progress.labels.active_indeterminate'] = 'Активний';
 		map['budgets.progress.labels.success'] = 'Досягнуто';
 		map['budgets.progress.labels.fail'] = 'Бюджет перевищено';
 		map['budgets.progress.description.active_on_track'] = ({required Object dailyAmount, required Object remainingDays}) => 'Ви можете витрачати ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися';
 		map['budgets.progress.description.active_overspending'] = ({required Object dailyAmount, required Object remainingDays}) => 'Щоб повернутися до плану, вам слід обмежити витрати до ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися';
+		map['budgets.progress.description.active_indeterminate'] = ({required Object amount}) => 'У вас залишилося витратити ${amount}.';
 		map['budgets.progress.description.active_exceeded'] = ({required Object amount}) => 'Ви вже перевищили ліміт бюджету на ${amount}. Якщо ви не знайдете жодних доходів для цього бюджету, вам слід припинити витрати до кінця його періоду';
 		map['budgets.progress.description.success'] = 'Чудова робота! Цей бюджет успішно завершено. Продовжуйте створювати бюджети для управління витратами';
 		map['budgets.progress.description.fail'] = ({required Object amount}) => 'Ви перевищили бюджет на ${amount}. Спробуйте бути уважнішими наступного разу!';
+		map['goals.title'] = 'Цілі';
+		map['goals.status'] = 'Статус цілі';
+		map['goals.type.display'] = 'Тип цілі';
+		map['goals.type.income.title'] = 'Ціль заощадження';
+		map['goals.type.income.descr'] = 'Ідеально для заощадження грошей. Ви досягаєте успіху, коли баланс перевищує вашу ціль.';
+		map['goals.type.expense.title'] = 'Ціль витрат';
+		map['goals.type.expense.descr'] = 'Відстежуйте, скільки ви витрачаєте, і намагайтеся досягти цільової суми. Добре підходить для пожертвувань...';
+		map['goals.empty_title'] = 'Цілей не знайдено';
+		map['goals.empty_description'] = 'Створіть нову ціль, щоб почати відстежувати свої заощадження!';
+		map['goals.delete'] = 'Видалити ціль';
+		map['goals.delete_warning'] = 'Ця дія є незворотною. Категорії та транзакції, пов\'язані з цією ціллю, не будуть видалені';
+		map['goals.form.new_title'] = 'Нова ціль';
+		map['goals.form.edit_title'] = 'Редагувати ціль';
+		map['goals.form.target_amount'] = 'Цільова сума';
+		map['goals.form.initial_amount'] = 'Початкова сума';
+		map['goals.form.name'] = 'Назва';
+		map['goals.form.name_hint'] = 'Моя ціль заощаджень';
+		map['goals.form.create_success'] = 'Ціль успішно створено';
+		map['goals.form.edit_success'] = 'Ціль успішно відредаговано';
+		map['goals.form.negative_warn'] = 'Сума цілі не може бути від\'ємною';
+		map['goals.details.title'] = 'Деталі цілі';
+		map['goals.details.statistics'] = 'Статистика';
+		map['goals.details.goal_value'] = 'Значення цілі';
+		map['goals.details.evolution'] = 'Динаміка';
+		map['goals.details.no_transactions'] = 'Схоже, ви не здійснили жодних транзакцій, пов\'язаних з цією ціллю';
+		map['goals.target_timeline_statuses.active'] = 'Активна ціль';
+		map['goals.target_timeline_statuses.past'] = 'Завершена ціль';
+		map['goals.target_timeline_statuses.future'] = 'Майбутня ціль';
+		map['goals.progress.labels.active_on_track'] = 'На шляху';
+		map['goals.progress.labels.active_behind_schedule'] = 'Відставання від графіка';
+		map['goals.progress.labels.active_indeterminate'] = 'Активний';
+		map['goals.progress.labels.success'] = 'Мета досягнута';
+		map['goals.progress.labels.fail'] = 'Мета не вдалася';
+		map['goals.progress.description.active_on_track'] = ({required Object dailyAmount, required Object remainingDays}) => 'Ви на шляху до своєї мети! Ви повинні відкладати ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися';
+		map['goals.progress.description.active_behind_schedule'] = ({required Object dailyAmount, required Object remainingDays}) => 'Ви відстаєте від графіка. Ви повинні заощаджувати ${dailyAmount} на день, щоб досягти своєї мети за ${remainingDays} днів';
+		map['goals.progress.description.active_indeterminate'] = ({required Object amount}) => 'Вам потрібно ще ${amount}, щоб досягти своєї мети.';
+		map['goals.progress.description.success'] = 'Щиро вітаю! Ви досягли своєї мети.';
+		map['goals.progress.description.fail'] = ({required Object amount}) => 'Ви не досягли цілі на ${amount}.';
 		map['target_timeline_statuses.active'] = 'Активний';
-		map['target_timeline_statuses.past'] = 'Минулий';
+		map['target_timeline_statuses.past'] = 'Завершений';
 		map['target_timeline_statuses.future'] = 'Майбутній';
 		map['backup.no_file_selected'] = 'Файл не вибрано';
 		map['backup.no_directory_selected'] = 'Каталог не вибрано';
@@ -2334,9 +2508,9 @@ extension on TranslationsUk {
 		map['settings.transactions.title'] = 'Налаштування транзакцій';
 		map['settings.transactions.swipe_actions.title'] = 'Дії гортання';
 		map['settings.transactions.swipe_actions.choose_description'] = 'Виберіть, яка дія буде ініційована, коли ви проводите пальцем по елементу транзакції у списку в цьому напрямку';
+		map['settings.transactions.swipe_actions.none'] = 'Ніяких дій';
 		map['settings.transactions.swipe_actions.swipe_left'] = 'Проведіть ліворуч';
 		map['settings.transactions.swipe_actions.swipe_right'] = 'Проведіть праворуч';
-		map['settings.transactions.swipe_actions.none'] = 'Ніяких дій';
 		map['settings.transactions.swipe_actions.toggle_reconciled'] = 'Перемикач узгоджено';
 		map['settings.transactions.swipe_actions.toggle_pending'] = 'Перемкнути в очікуванні';
 		map['settings.transactions.swipe_actions.toggle_voided'] = 'Перемикач скасовано';

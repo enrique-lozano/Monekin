@@ -8,6 +8,7 @@ import './../initial/tables.drift';
 import './../../../models/account/account.dart';
 import './../../../models/category/category.dart';
 import './../../../models/budget/budget.dart';
+import './../../../models/goal/goal.dart';
 import './../../../models/exchange-rate/exchange_rate.dart';
 import './../../../models/transaction/transaction.dart';
 import './../../../models/filters/saved_filter.dart';
@@ -167,6 +168,16 @@ getBudgetsWithFullData($predicate = TRUE) WITH Budget:
     FROM budgets b 
         INNER JOIN transactionFilterSets trFilters 
         ON b.filterID = trFilters.id
+    WHERE $predicate 
+    ORDER BY $orderBy
+    LIMIT $limit;
+
+
+getGoalsWithFullData($predicate = TRUE) WITH Goal:
+    SELECT g.*, trFilters.** 
+    FROM goals g 
+        INNER JOIN transactionFilterSets trFilters 
+        ON g.filterID = trFilters.id
     WHERE $predicate 
     ORDER BY $orderBy
     LIMIT $limit;

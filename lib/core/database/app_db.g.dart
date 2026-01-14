@@ -5006,6 +5006,526 @@ class BudgetsCompanion extends UpdateCompanion<BudgetInDB> {
   }
 }
 
+class Goals extends Table with TableInfo<Goals, GoalInDB> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  Goals(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL PRIMARY KEY',
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL UNIQUE',
+  );
+  static const VerificationMeta _amountMeta = const VerificationMeta('amount');
+  late final GeneratedColumn<double> amount = GeneratedColumn<double>(
+    'amount',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _initialAmountMeta = const VerificationMeta(
+    'initialAmount',
+  );
+  late final GeneratedColumn<double> initialAmount = GeneratedColumn<double>(
+    'initialAmount',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 0',
+    defaultValue: const CustomExpression('0'),
+  );
+  static const VerificationMeta _startDateMeta = const VerificationMeta(
+    'startDate',
+  );
+  late final GeneratedColumn<DateTime> startDate = GeneratedColumn<DateTime>(
+    'startDate',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _endDateMeta = const VerificationMeta(
+    'endDate',
+  );
+  late final GeneratedColumn<DateTime> endDate = GeneratedColumn<DateTime>(
+    'endDate',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
+  late final GeneratedColumnWithTypeConverter<GoalType, int> type =
+      GeneratedColumn<int>(
+        'type',
+        aliasedName,
+        false,
+        type: DriftSqlType.int,
+        requiredDuringInsert: true,
+        $customConstraints: 'NOT NULL CHECK (type IN (0, 1))',
+      ).withConverter<GoalType>(Goals.$convertertype);
+  static const VerificationMeta _filterIDMeta = const VerificationMeta(
+    'filterID',
+  );
+  late final GeneratedColumn<String> filterID = GeneratedColumn<String>(
+    'filterID',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL REFERENCES transactionFilterSets(id)ON UPDATE CASCADE ON DELETE CASCADE',
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    name,
+    amount,
+    initialAmount,
+    startDate,
+    endDate,
+    type,
+    filterID,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'goals';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<GoalInDB> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('amount')) {
+      context.handle(
+        _amountMeta,
+        amount.isAcceptableOrUnknown(data['amount']!, _amountMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_amountMeta);
+    }
+    if (data.containsKey('initialAmount')) {
+      context.handle(
+        _initialAmountMeta,
+        initialAmount.isAcceptableOrUnknown(
+          data['initialAmount']!,
+          _initialAmountMeta,
+        ),
+      );
+    }
+    if (data.containsKey('startDate')) {
+      context.handle(
+        _startDateMeta,
+        startDate.isAcceptableOrUnknown(data['startDate']!, _startDateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startDateMeta);
+    }
+    if (data.containsKey('endDate')) {
+      context.handle(
+        _endDateMeta,
+        endDate.isAcceptableOrUnknown(data['endDate']!, _endDateMeta),
+      );
+    }
+    if (data.containsKey('filterID')) {
+      context.handle(
+        _filterIDMeta,
+        filterID.isAcceptableOrUnknown(data['filterID']!, _filterIDMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_filterIDMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  GoalInDB map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return GoalInDB(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      amount: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}amount'],
+      )!,
+      initialAmount: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}initialAmount'],
+      )!,
+      startDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}startDate'],
+      )!,
+      endDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}endDate'],
+      ),
+      type: Goals.$convertertype.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}type'],
+        )!,
+      ),
+      filterID: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}filterID'],
+      )!,
+    );
+  }
+
+  @override
+  Goals createAlias(String alias) {
+    return Goals(attachedDatabase, alias);
+  }
+
+  static TypeConverter<GoalType, int> $convertertype = CustomEnumConverter(
+    GoalType.values,
+  );
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class GoalInDB extends DataClass implements Insertable<GoalInDB> {
+  final String id;
+
+  /// Title of the goal and its identificator. For instance, this name is unique (the user can not have another goal with the same name)
+  final String name;
+
+  ///  Target amount of the goal. It will always be in the user's preferred currency
+  final double amount;
+  final double initialAmount;
+
+  /// Custom start date
+  final DateTime startDate;
+
+  /// Custom end date
+  final DateTime? endDate;
+  final GoalType type;
+  final String filterID;
+  const GoalInDB({
+    required this.id,
+    required this.name,
+    required this.amount,
+    required this.initialAmount,
+    required this.startDate,
+    this.endDate,
+    required this.type,
+    required this.filterID,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['name'] = Variable<String>(name);
+    map['amount'] = Variable<double>(amount);
+    map['initialAmount'] = Variable<double>(initialAmount);
+    map['startDate'] = Variable<DateTime>(startDate);
+    if (!nullToAbsent || endDate != null) {
+      map['endDate'] = Variable<DateTime>(endDate);
+    }
+    {
+      map['type'] = Variable<int>(Goals.$convertertype.toSql(type));
+    }
+    map['filterID'] = Variable<String>(filterID);
+    return map;
+  }
+
+  GoalsCompanion toCompanion(bool nullToAbsent) {
+    return GoalsCompanion(
+      id: Value(id),
+      name: Value(name),
+      amount: Value(amount),
+      initialAmount: Value(initialAmount),
+      startDate: Value(startDate),
+      endDate: endDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(endDate),
+      type: Value(type),
+      filterID: Value(filterID),
+    );
+  }
+
+  factory GoalInDB.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return GoalInDB(
+      id: serializer.fromJson<String>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      amount: serializer.fromJson<double>(json['amount']),
+      initialAmount: serializer.fromJson<double>(json['initialAmount']),
+      startDate: serializer.fromJson<DateTime>(json['startDate']),
+      endDate: serializer.fromJson<DateTime?>(json['endDate']),
+      type: serializer.fromJson<GoalType>(json['type']),
+      filterID: serializer.fromJson<String>(json['filterID']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'name': serializer.toJson<String>(name),
+      'amount': serializer.toJson<double>(amount),
+      'initialAmount': serializer.toJson<double>(initialAmount),
+      'startDate': serializer.toJson<DateTime>(startDate),
+      'endDate': serializer.toJson<DateTime?>(endDate),
+      'type': serializer.toJson<GoalType>(type),
+      'filterID': serializer.toJson<String>(filterID),
+    };
+  }
+
+  GoalInDB copyWith({
+    String? id,
+    String? name,
+    double? amount,
+    double? initialAmount,
+    DateTime? startDate,
+    Value<DateTime?> endDate = const Value.absent(),
+    GoalType? type,
+    String? filterID,
+  }) => GoalInDB(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    amount: amount ?? this.amount,
+    initialAmount: initialAmount ?? this.initialAmount,
+    startDate: startDate ?? this.startDate,
+    endDate: endDate.present ? endDate.value : this.endDate,
+    type: type ?? this.type,
+    filterID: filterID ?? this.filterID,
+  );
+  GoalInDB copyWithCompanion(GoalsCompanion data) {
+    return GoalInDB(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      amount: data.amount.present ? data.amount.value : this.amount,
+      initialAmount: data.initialAmount.present
+          ? data.initialAmount.value
+          : this.initialAmount,
+      startDate: data.startDate.present ? data.startDate.value : this.startDate,
+      endDate: data.endDate.present ? data.endDate.value : this.endDate,
+      type: data.type.present ? data.type.value : this.type,
+      filterID: data.filterID.present ? data.filterID.value : this.filterID,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('GoalInDB(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('amount: $amount, ')
+          ..write('initialAmount: $initialAmount, ')
+          ..write('startDate: $startDate, ')
+          ..write('endDate: $endDate, ')
+          ..write('type: $type, ')
+          ..write('filterID: $filterID')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    name,
+    amount,
+    initialAmount,
+    startDate,
+    endDate,
+    type,
+    filterID,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is GoalInDB &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.amount == this.amount &&
+          other.initialAmount == this.initialAmount &&
+          other.startDate == this.startDate &&
+          other.endDate == this.endDate &&
+          other.type == this.type &&
+          other.filterID == this.filterID);
+}
+
+class GoalsCompanion extends UpdateCompanion<GoalInDB> {
+  final Value<String> id;
+  final Value<String> name;
+  final Value<double> amount;
+  final Value<double> initialAmount;
+  final Value<DateTime> startDate;
+  final Value<DateTime?> endDate;
+  final Value<GoalType> type;
+  final Value<String> filterID;
+  final Value<int> rowid;
+  const GoalsCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.amount = const Value.absent(),
+    this.initialAmount = const Value.absent(),
+    this.startDate = const Value.absent(),
+    this.endDate = const Value.absent(),
+    this.type = const Value.absent(),
+    this.filterID = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  GoalsCompanion.insert({
+    required String id,
+    required String name,
+    required double amount,
+    this.initialAmount = const Value.absent(),
+    required DateTime startDate,
+    this.endDate = const Value.absent(),
+    required GoalType type,
+    required String filterID,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       name = Value(name),
+       amount = Value(amount),
+       startDate = Value(startDate),
+       type = Value(type),
+       filterID = Value(filterID);
+  static Insertable<GoalInDB> custom({
+    Expression<String>? id,
+    Expression<String>? name,
+    Expression<double>? amount,
+    Expression<double>? initialAmount,
+    Expression<DateTime>? startDate,
+    Expression<DateTime>? endDate,
+    Expression<int>? type,
+    Expression<String>? filterID,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (amount != null) 'amount': amount,
+      if (initialAmount != null) 'initialAmount': initialAmount,
+      if (startDate != null) 'startDate': startDate,
+      if (endDate != null) 'endDate': endDate,
+      if (type != null) 'type': type,
+      if (filterID != null) 'filterID': filterID,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  GoalsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? name,
+    Value<double>? amount,
+    Value<double>? initialAmount,
+    Value<DateTime>? startDate,
+    Value<DateTime?>? endDate,
+    Value<GoalType>? type,
+    Value<String>? filterID,
+    Value<int>? rowid,
+  }) {
+    return GoalsCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      amount: amount ?? this.amount,
+      initialAmount: initialAmount ?? this.initialAmount,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      type: type ?? this.type,
+      filterID: filterID ?? this.filterID,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (amount.present) {
+      map['amount'] = Variable<double>(amount.value);
+    }
+    if (initialAmount.present) {
+      map['initialAmount'] = Variable<double>(initialAmount.value);
+    }
+    if (startDate.present) {
+      map['startDate'] = Variable<DateTime>(startDate.value);
+    }
+    if (endDate.present) {
+      map['endDate'] = Variable<DateTime>(endDate.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<int>(Goals.$convertertype.toSql(type.value));
+    }
+    if (filterID.present) {
+      map['filterID'] = Variable<String>(filterID.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('GoalsCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('amount: $amount, ')
+          ..write('initialAmount: $initialAmount, ')
+          ..write('startDate: $startDate, ')
+          ..write('endDate: $endDate, ')
+          ..write('type: $type, ')
+          ..write('filterID: $filterID, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class SavedFilters extends Table with TableInfo<SavedFilters, SavedFilterInDB> {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -5805,6 +6325,7 @@ abstract class _$AppDB extends GeneratedDatabase {
   late final TransactionFilterSets transactionFilterSets =
       TransactionFilterSets(this);
   late final Budgets budgets = Budgets(this);
+  late final Goals goals = Goals(this);
   late final SavedFilters savedFilters = SavedFilters(this);
   late final UserSettings userSettings = UserSettings(this);
   late final AppData appData = AppData(this);
@@ -6225,6 +6746,72 @@ abstract class _$AppDB extends GeneratedDatabase {
     );
   }
 
+  Selectable<Goal> getGoalsWithFullData({
+    GetGoalsWithFullData$predicate? predicate,
+    GetGoalsWithFullData$orderBy? orderBy,
+    required GetGoalsWithFullData$limit limit,
+  }) {
+    var $arrayStartIndex = 1;
+    final generatedpredicate = $write(
+      predicate?.call(
+            alias(this.goals, 'g'),
+            alias(this.transactionFilterSets, 'trFilters'),
+          ) ??
+          const CustomExpression('(TRUE)'),
+      hasMultipleTables: true,
+      startIndex: $arrayStartIndex,
+    );
+    $arrayStartIndex += generatedpredicate.amountOfVariables;
+    final generatedorderBy = $write(
+      orderBy?.call(
+            alias(this.goals, 'g'),
+            alias(this.transactionFilterSets, 'trFilters'),
+          ) ??
+          const OrderBy.nothing(),
+      hasMultipleTables: true,
+      startIndex: $arrayStartIndex,
+    );
+    $arrayStartIndex += generatedorderBy.amountOfVariables;
+    final generatedlimit = $write(
+      limit(
+        alias(this.goals, 'g'),
+        alias(this.transactionFilterSets, 'trFilters'),
+      ),
+      hasMultipleTables: true,
+      startIndex: $arrayStartIndex,
+    );
+    $arrayStartIndex += generatedlimit.amountOfVariables;
+    return customSelect(
+      'SELECT g.*,"trFilters"."id" AS "nested_0.id", "trFilters"."accountsIDs" AS "nested_0.accountsIDs", "trFilters"."categoriesIds" AS "nested_0.categoriesIds", "trFilters"."status" AS "nested_0.status", "trFilters"."minDate" AS "nested_0.minDate", "trFilters"."maxDate" AS "nested_0.maxDate", "trFilters"."searchValue" AS "nested_0.searchValue", "trFilters"."transactionTypes" AS "nested_0.transactionTypes", "trFilters"."minValue" AS "nested_0.minValue", "trFilters"."maxValue" AS "nested_0.maxValue", "trFilters"."tagsIDs" AS "nested_0.tagsIDs" FROM goals AS g INNER JOIN transactionFilterSets AS trFilters ON g.filterID = trFilters.id WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
+      variables: [
+        ...generatedpredicate.introducedVariables,
+        ...generatedorderBy.introducedVariables,
+        ...generatedlimit.introducedVariables,
+      ],
+      readsFrom: {
+        goals,
+        transactionFilterSets,
+        ...generatedpredicate.watchedTables,
+        ...generatedorderBy.watchedTables,
+        ...generatedlimit.watchedTables,
+      },
+    ).asyncMap(
+      (QueryRow row) async => Goal(
+        id: row.read<String>('id'),
+        name: row.read<String>('name'),
+        amount: row.read<double>('amount'),
+        initialAmount: row.read<double>('initialAmount'),
+        startDate: row.read<DateTime>('startDate'),
+        endDate: row.readNullable<DateTime>('endDate'),
+        type: Goals.$convertertype.fromSql(row.read<int>('type')),
+        trFilters: await transactionFilterSets.mapFromRow(
+          row,
+          tablePrefix: 'nested_0',
+        ),
+      ),
+    );
+  }
+
   Selectable<SavedFilter> getSavedFiltersWithFullData({
     GetSavedFiltersWithFullData$predicate? predicate,
     GetSavedFiltersWithFullData$orderBy? orderBy,
@@ -6301,6 +6888,7 @@ abstract class _$AppDB extends GeneratedDatabase {
     transactionTags,
     transactionFilterSets,
     budgets,
+    goals,
     savedFilters,
     userSettings,
     appData,
@@ -6418,6 +7006,20 @@ abstract class _$AppDB extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.update,
       ),
       result: [TableUpdate('budgets', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'transactionFilterSets',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('goals', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'transactionFilterSets',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('goals', kind: UpdateKind.update)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
@@ -9555,6 +10157,28 @@ final class $TransactionFilterSetsReferences
     );
   }
 
+  static MultiTypedResultKey<Goals, List<GoalInDB>> _goalsRefsTable(
+    _$AppDB db,
+  ) => MultiTypedResultKey.fromTable(
+    db.goals,
+    aliasName: $_aliasNameGenerator(
+      db.transactionFilterSets.id,
+      db.goals.filterID,
+    ),
+  );
+
+  $GoalsProcessedTableManager get goalsRefs {
+    final manager = $GoalsTableManager(
+      $_db,
+      $_db.goals,
+    ).filter((f) => f.filterID.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_goalsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
   static MultiTypedResultKey<SavedFilters, List<SavedFilterInDB>>
   _savedFiltersRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
     db.savedFilters,
@@ -9670,6 +10294,31 @@ class $TransactionFilterSetsFilterComposer
           }) => $BudgetsFilterComposer(
             $db: $db,
             $table: $db.budgets,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> goalsRefs(
+    Expression<bool> Function($GoalsFilterComposer f) f,
+  ) {
+    final $GoalsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.goals,
+      getReferencedColumn: (t) => t.filterID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $GoalsFilterComposer(
+            $db: $db,
+            $table: $db.goals,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -9849,6 +10498,31 @@ class $TransactionFilterSetsAnnotationComposer
     return f(composer);
   }
 
+  Expression<T> goalsRefs<T extends Object>(
+    Expression<T> Function($GoalsAnnotationComposer a) f,
+  ) {
+    final $GoalsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.goals,
+      getReferencedColumn: (t) => t.filterID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $GoalsAnnotationComposer(
+            $db: $db,
+            $table: $db.goals,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
   Expression<T> savedFiltersRefs<T extends Object>(
     Expression<T> Function($SavedFiltersAnnotationComposer a) f,
   ) {
@@ -9888,7 +10562,11 @@ class $TransactionFilterSetsTableManager
           $TransactionFilterSetsUpdateCompanionBuilder,
           (TransactionFilterSetInDB, $TransactionFilterSetsReferences),
           TransactionFilterSetInDB,
-          PrefetchHooks Function({bool budgetsRefs, bool savedFiltersRefs})
+          PrefetchHooks Function({
+            bool budgetsRefs,
+            bool goalsRefs,
+            bool savedFiltersRefs,
+          })
         > {
   $TransactionFilterSetsTableManager(_$AppDB db, TransactionFilterSets table)
     : super(
@@ -9968,11 +10646,16 @@ class $TransactionFilterSetsTableManager
               )
               .toList(),
           prefetchHooksCallback:
-              ({budgetsRefs = false, savedFiltersRefs = false}) {
+              ({
+                budgetsRefs = false,
+                goalsRefs = false,
+                savedFiltersRefs = false,
+              }) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
                     if (budgetsRefs) db.budgets,
+                    if (goalsRefs) db.goals,
                     if (savedFiltersRefs) db.savedFilters,
                   ],
                   addJoins: null,
@@ -9993,6 +10676,27 @@ class $TransactionFilterSetsTableManager
                                 table,
                                 p0,
                               ).budgetsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.filterID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (goalsRefs)
+                        await $_getPrefetchedData<
+                          TransactionFilterSetInDB,
+                          TransactionFilterSets,
+                          GoalInDB
+                        >(
+                          currentTable: table,
+                          referencedTable: $TransactionFilterSetsReferences
+                              ._goalsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $TransactionFilterSetsReferences(
+                                db,
+                                table,
+                                p0,
+                              ).goalsRefs,
                           referencedItemsForCurrentItem:
                               (item, referencedItems) => referencedItems.where(
                                 (e) => e.filterID == item.id,
@@ -10040,7 +10744,11 @@ typedef $TransactionFilterSetsProcessedTableManager =
       $TransactionFilterSetsUpdateCompanionBuilder,
       (TransactionFilterSetInDB, $TransactionFilterSetsReferences),
       TransactionFilterSetInDB,
-      PrefetchHooks Function({bool budgetsRefs, bool savedFiltersRefs})
+      PrefetchHooks Function({
+        bool budgetsRefs,
+        bool goalsRefs,
+        bool savedFiltersRefs,
+      })
     >;
 typedef $BudgetsCreateCompanionBuilder =
     BudgetsCompanion Function({
@@ -10397,6 +11105,376 @@ typedef $BudgetsProcessedTableManager =
       $BudgetsUpdateCompanionBuilder,
       (BudgetInDB, $BudgetsReferences),
       BudgetInDB,
+      PrefetchHooks Function({bool filterID})
+    >;
+typedef $GoalsCreateCompanionBuilder =
+    GoalsCompanion Function({
+      required String id,
+      required String name,
+      required double amount,
+      Value<double> initialAmount,
+      required DateTime startDate,
+      Value<DateTime?> endDate,
+      required GoalType type,
+      required String filterID,
+      Value<int> rowid,
+    });
+typedef $GoalsUpdateCompanionBuilder =
+    GoalsCompanion Function({
+      Value<String> id,
+      Value<String> name,
+      Value<double> amount,
+      Value<double> initialAmount,
+      Value<DateTime> startDate,
+      Value<DateTime?> endDate,
+      Value<GoalType> type,
+      Value<String> filterID,
+      Value<int> rowid,
+    });
+
+final class $GoalsReferences extends BaseReferences<_$AppDB, Goals, GoalInDB> {
+  $GoalsReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static TransactionFilterSets _filterIDTable(_$AppDB db) =>
+      db.transactionFilterSets.createAlias(
+        $_aliasNameGenerator(db.goals.filterID, db.transactionFilterSets.id),
+      );
+
+  $TransactionFilterSetsProcessedTableManager get filterID {
+    final $_column = $_itemColumn<String>('filterID')!;
+
+    final manager = $TransactionFilterSetsTableManager(
+      $_db,
+      $_db.transactionFilterSets,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_filterIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $GoalsFilterComposer extends Composer<_$AppDB, Goals> {
+  $GoalsFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get amount => $composableBuilder(
+    column: $table.amount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get initialAmount => $composableBuilder(
+    column: $table.initialAmount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get startDate => $composableBuilder(
+    column: $table.startDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get endDate => $composableBuilder(
+    column: $table.endDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<GoalType, GoalType, int> get type =>
+      $composableBuilder(
+        column: $table.type,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  $TransactionFilterSetsFilterComposer get filterID {
+    final $TransactionFilterSetsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.filterID,
+      referencedTable: $db.transactionFilterSets,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $TransactionFilterSetsFilterComposer(
+            $db: $db,
+            $table: $db.transactionFilterSets,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $GoalsOrderingComposer extends Composer<_$AppDB, Goals> {
+  $GoalsOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get amount => $composableBuilder(
+    column: $table.amount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get initialAmount => $composableBuilder(
+    column: $table.initialAmount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get startDate => $composableBuilder(
+    column: $table.startDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get endDate => $composableBuilder(
+    column: $table.endDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $TransactionFilterSetsOrderingComposer get filterID {
+    final $TransactionFilterSetsOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.filterID,
+      referencedTable: $db.transactionFilterSets,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $TransactionFilterSetsOrderingComposer(
+            $db: $db,
+            $table: $db.transactionFilterSets,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $GoalsAnnotationComposer extends Composer<_$AppDB, Goals> {
+  $GoalsAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<double> get amount =>
+      $composableBuilder(column: $table.amount, builder: (column) => column);
+
+  GeneratedColumn<double> get initialAmount => $composableBuilder(
+    column: $table.initialAmount,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get startDate =>
+      $composableBuilder(column: $table.startDate, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get endDate =>
+      $composableBuilder(column: $table.endDate, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<GoalType, int> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  $TransactionFilterSetsAnnotationComposer get filterID {
+    final $TransactionFilterSetsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.filterID,
+      referencedTable: $db.transactionFilterSets,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $TransactionFilterSetsAnnotationComposer(
+            $db: $db,
+            $table: $db.transactionFilterSets,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $GoalsTableManager
+    extends
+        RootTableManager<
+          _$AppDB,
+          Goals,
+          GoalInDB,
+          $GoalsFilterComposer,
+          $GoalsOrderingComposer,
+          $GoalsAnnotationComposer,
+          $GoalsCreateCompanionBuilder,
+          $GoalsUpdateCompanionBuilder,
+          (GoalInDB, $GoalsReferences),
+          GoalInDB,
+          PrefetchHooks Function({bool filterID})
+        > {
+  $GoalsTableManager(_$AppDB db, Goals table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $GoalsFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $GoalsOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $GoalsAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<double> amount = const Value.absent(),
+                Value<double> initialAmount = const Value.absent(),
+                Value<DateTime> startDate = const Value.absent(),
+                Value<DateTime?> endDate = const Value.absent(),
+                Value<GoalType> type = const Value.absent(),
+                Value<String> filterID = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => GoalsCompanion(
+                id: id,
+                name: name,
+                amount: amount,
+                initialAmount: initialAmount,
+                startDate: startDate,
+                endDate: endDate,
+                type: type,
+                filterID: filterID,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String name,
+                required double amount,
+                Value<double> initialAmount = const Value.absent(),
+                required DateTime startDate,
+                Value<DateTime?> endDate = const Value.absent(),
+                required GoalType type,
+                required String filterID,
+                Value<int> rowid = const Value.absent(),
+              }) => GoalsCompanion.insert(
+                id: id,
+                name: name,
+                amount: amount,
+                initialAmount: initialAmount,
+                startDate: startDate,
+                endDate: endDate,
+                type: type,
+                filterID: filterID,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), $GoalsReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: ({filterID = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (filterID) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.filterID,
+                                referencedTable: $GoalsReferences
+                                    ._filterIDTable(db),
+                                referencedColumn: $GoalsReferences
+                                    ._filterIDTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $GoalsProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDB,
+      Goals,
+      GoalInDB,
+      $GoalsFilterComposer,
+      $GoalsOrderingComposer,
+      $GoalsAnnotationComposer,
+      $GoalsCreateCompanionBuilder,
+      $GoalsUpdateCompanionBuilder,
+      (GoalInDB, $GoalsReferences),
+      GoalInDB,
       PrefetchHooks Function({bool filterID})
     >;
 typedef $SavedFiltersCreateCompanionBuilder =
@@ -10999,6 +12077,7 @@ class $AppDBManager {
   $TransactionFilterSetsTableManager get transactionFilterSets =>
       $TransactionFilterSetsTableManager(_db, _db.transactionFilterSets);
   $BudgetsTableManager get budgets => $BudgetsTableManager(_db, _db.budgets);
+  $GoalsTableManager get goals => $GoalsTableManager(_db, _db.goals);
   $SavedFiltersTableManager get savedFilters =>
       $SavedFiltersTableManager(_db, _db.savedFilters);
   $UserSettingsTableManager get userSettings =>
@@ -11080,6 +12159,12 @@ typedef GetBudgetsWithFullData$orderBy =
     OrderBy Function(Budgets b, TransactionFilterSets trFilters);
 typedef GetBudgetsWithFullData$limit =
     Limit Function(Budgets b, TransactionFilterSets trFilters);
+typedef GetGoalsWithFullData$predicate =
+    Expression<bool> Function(Goals g, TransactionFilterSets trFilters);
+typedef GetGoalsWithFullData$orderBy =
+    OrderBy Function(Goals g, TransactionFilterSets trFilters);
+typedef GetGoalsWithFullData$limit =
+    Limit Function(Goals g, TransactionFilterSets trFilters);
 typedef GetSavedFiltersWithFullData$predicate =
     Expression<bool> Function(SavedFilters sf, TransactionFilterSets filterSet);
 typedef GetSavedFiltersWithFullData$orderBy =
