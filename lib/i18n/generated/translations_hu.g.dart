@@ -1546,6 +1546,7 @@ class _TranslationsBudgetsProgressLabelsHu implements TranslationsBudgetsProgres
 	// Translations
 	@override String get active_on_track => 'Terv szerint';
 	@override String get active_overspending => 'Túlköltekezés';
+	@override String get active_indeterminate => 'Aktív';
 	@override String get success => 'Teljesítve';
 	@override String get fail => 'Költségvetés túllépve';
 }
@@ -1559,6 +1560,7 @@ class _TranslationsBudgetsProgressDescriptionHu implements TranslationsBudgetsPr
 	// Translations
 	@override String active_on_track({required Object dailyAmount, required Object remainingDays}) => 'Naponta ${dailyAmount} összeget költhet a hátralévő ${remainingDays} napban';
 	@override String active_overspending({required Object dailyAmount, required Object remainingDays}) => 'Hogy visszatérjen a tervhez, korlátoznia kell kiadásait napi ${dailyAmount} összegre a hátralévő ${remainingDays} napban';
+	@override String active_indeterminate({required Object amount}) => 'Még ${amount} elkölthető.';
 	@override String active_exceeded({required Object amount}) => 'Már túllépte a költségvetési keretet ${amount} összeggel. Ha nem talál bevételt ehhez a költségvetéshez, abba kell hagynia a költekezést az időszak hátralévő részében';
 	@override String get success => 'Szép munka! Ez a költségvetés sikeresen lezárult. Hozzon létre további költségvetéseket kiadásai kezeléséhez';
 	@override String fail({required Object amount}) => 'Túllépte a költségvetést ${amount} összeggel. Próbáljon meg óvatosabb lenni legközelebb!';
@@ -1595,6 +1597,7 @@ class _TranslationsGoalsProgressLabelsHu implements TranslationsGoalsProgressLab
 	// Translations
 	@override String get active_on_track => 'Pályán';
 	@override String get active_behind_schedule => 'A menetrend lemaradásával';
+	@override String get active_indeterminate => 'Aktív';
 	@override String get success => 'A cél elérve';
 	@override String get fail => 'A gól nem sikerült';
 }
@@ -1608,6 +1611,7 @@ class _TranslationsGoalsProgressDescriptionHu implements TranslationsGoalsProgre
 	// Translations
 	@override String active_on_track({required Object dailyAmount, required Object remainingDays}) => 'Jó úton haladsz a cél felé! Naponta ${dailyAmount} összeget kell megtakarítania a fennmaradó ${remainingDays} napig';
 	@override String active_behind_schedule({required Object dailyAmount, required Object remainingDays}) => 'Lemaradsz a menetrendről. Naponta ${dailyAmount} összeget kell megtakarítania, hogy ${remainingDays} napon belül elérje célját';
+	@override String active_indeterminate({required Object amount}) => 'További ${amount} kell a cél eléréséhez.';
 	@override String get success => 'Gratulálok! Elérted a célodat.';
 	@override String fail({required Object amount}) => '${amount} értékkel eltévesztette a célt.';
 }
@@ -2372,10 +2376,12 @@ extension on TranslationsHu {
 		map['budgets.target_timeline_statuses.future'] = 'Jövőbeli költségvetés';
 		map['budgets.progress.labels.active_on_track'] = 'Terv szerint';
 		map['budgets.progress.labels.active_overspending'] = 'Túlköltekezés';
+		map['budgets.progress.labels.active_indeterminate'] = 'Aktív';
 		map['budgets.progress.labels.success'] = 'Teljesítve';
 		map['budgets.progress.labels.fail'] = 'Költségvetés túllépve';
 		map['budgets.progress.description.active_on_track'] = ({required Object dailyAmount, required Object remainingDays}) => 'Naponta ${dailyAmount} összeget költhet a hátralévő ${remainingDays} napban';
 		map['budgets.progress.description.active_overspending'] = ({required Object dailyAmount, required Object remainingDays}) => 'Hogy visszatérjen a tervhez, korlátoznia kell kiadásait napi ${dailyAmount} összegre a hátralévő ${remainingDays} napban';
+		map['budgets.progress.description.active_indeterminate'] = ({required Object amount}) => 'Még ${amount} elkölthető.';
 		map['budgets.progress.description.active_exceeded'] = ({required Object amount}) => 'Már túllépte a költségvetési keretet ${amount} összeggel. Ha nem talál bevételt ehhez a költségvetéshez, abba kell hagynia a költekezést az időszak hátralévő részében';
 		map['budgets.progress.description.success'] = 'Szép munka! Ez a költségvetés sikeresen lezárult. Hozzon létre további költségvetéseket kiadásai kezeléséhez';
 		map['budgets.progress.description.fail'] = ({required Object amount}) => 'Túllépte a költségvetést ${amount} összeggel. Próbáljon meg óvatosabb lenni legközelebb!';
@@ -2409,10 +2415,12 @@ extension on TranslationsHu {
 		map['goals.target_timeline_statuses.future'] = 'Future goal';
 		map['goals.progress.labels.active_on_track'] = 'Pályán';
 		map['goals.progress.labels.active_behind_schedule'] = 'A menetrend lemaradásával';
+		map['goals.progress.labels.active_indeterminate'] = 'Aktív';
 		map['goals.progress.labels.success'] = 'A cél elérve';
 		map['goals.progress.labels.fail'] = 'A gól nem sikerült';
 		map['goals.progress.description.active_on_track'] = ({required Object dailyAmount, required Object remainingDays}) => 'Jó úton haladsz a cél felé! Naponta ${dailyAmount} összeget kell megtakarítania a fennmaradó ${remainingDays} napig';
 		map['goals.progress.description.active_behind_schedule'] = ({required Object dailyAmount, required Object remainingDays}) => 'Lemaradsz a menetrendről. Naponta ${dailyAmount} összeget kell megtakarítania, hogy ${remainingDays} napon belül elérje célját';
+		map['goals.progress.description.active_indeterminate'] = ({required Object amount}) => 'További ${amount} kell a cél eléréséhez.';
 		map['goals.progress.description.success'] = 'Gratulálok! Elérted a célodat.';
 		map['goals.progress.description.fail'] = ({required Object amount}) => '${amount} értékkel eltévesztette a célt.';
 		map['target_timeline_statuses.active'] = 'Aktív';

@@ -193,6 +193,9 @@ class FinancialTargetStatusCard extends StatelessWidget {
                                               ((target.targetAmount -
                                                   (currentValue ?? 0)) /
                                               (daysToTheEnd ?? 1)),
+                                          amountLeft:
+                                              target.targetAmount -
+                                              (currentValue ?? 0),
                                           currency: snapshot.data?.userCurrency,
                                           daysLeft: daysToTheEnd ?? 9999,
                                           failedByAmount:
@@ -210,15 +213,20 @@ class FinancialTargetStatusCard extends StatelessWidget {
                           shape: BoxShape.circle,
                           color: snapshot.data?.progressStatus == null
                               ? null
-                              : snapshot.data!.progressStatus!.color
+                              : snapshot.data!.progressStatus!
+                                    .color(target.isTargetLimit)
                                     .lighten(0.2)
                                     .withOpacity(0.2),
                         ),
                         child: Icon(
-                          snapshot.data?.progressStatus?.iconData ??
+                          snapshot.data?.progressStatus?.icon(
+                                target.isTargetLimit,
+                              ) ??
                               Icons.question_mark,
                           size: 20,
-                          color: snapshot.data?.progressStatus?.color,
+                          color: snapshot.data?.progressStatus?.color(
+                            target.isTargetLimit,
+                          ),
                         ),
                       ),
                     ],

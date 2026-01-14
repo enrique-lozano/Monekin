@@ -12,11 +12,11 @@ enum TargetProgressStatus {
   /// Target is off track and showing signs of concern (for budgets: over budget; for goals: behind schedule)
   warning,
 
-  /// Target is a limit and has been exceeded (Overspending)
-  limitExceeded,
+  /// Target is a limit and has been exceeded (Overspending) or a goal and has been reached (Goal Reached)
+  reached,
 
-  /// Target is a goal and has been reached (Goal Reached)
-  goalReached,
+  /// Target is active but there is not enough data to determine if it is on track or not (e.g. no end date)
+  indeterminate,
 
   /// Target has finished and was successfully met (for budgets: within budget; for goals: met or exceeded)
   success,
@@ -26,7 +26,7 @@ enum TargetProgressStatus {
 
   static TargetProgressStatus? fromPercentages(
     double percentage,
-    double todayPercent,
+    double? todayPercent,
     TargetTimelineStatus timelineStatus, {
     required bool isTargetLimit,
   }) {
@@ -34,11 +34,11 @@ enum TargetProgressStatus {
       case TargetTimelineStatus.active:
         if (percentage >= 1) {
           // If 100% reached:
-          // Limit (Budget) -> BAD (limitExceeded)
-          // Target (Goal) -> GOOD (goalReached)
-          return isTargetLimit
-              ? TargetProgressStatus.limitExceeded
-              : TargetProgressStatus.goalReached;
+          // Limit (Budget) -> BAD (reached ie: limitExceeded)
+          // Target (Goal) -> GOOD (reached ie: goalReached)
+          return TargetProgressStatus.reached;
+        } else if (todayPercent == null) {
+          return TargetProgressStatus.indeterminate;
         } else if (percentage > todayPercent) {
           // Progress is faster than time:
           // Limit (Budget) -> Spending too fast -> BAD (warning)
@@ -73,31 +73,35 @@ enum TargetProgressStatus {
     }
   }
 
-  IconData get iconData {
+  IconData icon(bool isTargetLimit) {
     switch (this) {
       case TargetProgressStatus.onTrack:
         return Icons.thumb_up_alt_rounded;
+      case TargetProgressStatus.indeterminate:
+        return Icons.query_stats_rounded;
       case TargetProgressStatus.warning:
         return Icons.warning_rounded;
       case TargetProgressStatus.success:
-      case TargetProgressStatus.goalReached:
         return Icons.done_all_rounded;
+      case TargetProgressStatus.reached:
+        return isTargetLimit ? Icons.close_rounded : Icons.done_all_rounded;
       case TargetProgressStatus.fail:
-      case TargetProgressStatus.limitExceeded:
         return Icons.close_rounded;
     }
   }
 
-  Color get color {
+  Color color(bool isTargetLimit) {
     switch (this) {
       case TargetProgressStatus.onTrack:
       case TargetProgressStatus.success:
-      case TargetProgressStatus.goalReached:
         return Colors.green;
+      case TargetProgressStatus.indeterminate:
+        return Colors.blueGrey;
+      case TargetProgressStatus.reached:
+        return isTargetLimit ? Colors.red : Colors.green;
       case TargetProgressStatus.warning:
         return Colors.orange;
       case TargetProgressStatus.fail:
-      case TargetProgressStatus.limitExceeded:
         return Colors.red;
     }
   }
@@ -109,13 +113,12 @@ enum TargetProgressStatus {
       switch (this) {
         case TargetProgressStatus.onTrack:
           return t.budgets.progress.labels.active_on_track;
+        case TargetProgressStatus.indeterminate:
+          return t.budgets.progress.labels.active_indeterminate;
         case TargetProgressStatus.warning:
           return t.budgets.progress.labels.active_overspending;
-        case TargetProgressStatus.limitExceeded:
+        case TargetProgressStatus.reached:
           return t.budgets.progress.labels.fail;
-        case TargetProgressStatus.goalReached:
-          // Should not happen for Limit
-          return t.budgets.progress.labels.success;
         case TargetProgressStatus.success:
           return t.budgets.progress.labels.success;
         case TargetProgressStatus.fail:
@@ -125,12 +128,11 @@ enum TargetProgressStatus {
       switch (this) {
         case TargetProgressStatus.onTrack:
           return t.goals.progress.labels.active_on_track;
+        case TargetProgressStatus.indeterminate:
+          return t.goals.progress.labels.active_indeterminate;
         case TargetProgressStatus.warning:
           return t.goals.progress.labels.active_behind_schedule;
-        case TargetProgressStatus.limitExceeded:
-          // Should not happen for Goal
-          return t.goals.progress.labels.fail;
-        case TargetProgressStatus.goalReached:
+        case TargetProgressStatus.reached:
           return t.goals.progress.labels.success;
         case TargetProgressStatus.success:
           return t.goals.progress.labels.success;
@@ -145,6 +147,7 @@ enum TargetProgressStatus {
     required bool isTargetLimit,
     CurrencyInDB? currency,
     double? dailyAmountLeft,
+    required double? amountLeft,
     int? daysLeft,
     double? failedByAmount,
   }) {
@@ -172,6 +175,16 @@ enum TargetProgressStatus {
             remainingDays: days,
           );
         }
+      case TargetProgressStatus.indeterminate:
+        if (isTargetLimit) {
+          return t.budgets.progress.description.active_indeterminate(
+            amount: amount(amountLeft),
+          );
+        } else {
+          return t.goals.progress.description.active_indeterminate(
+            amount: amount(amountLeft),
+          );
+        }
       case TargetProgressStatus.warning:
         if (isTargetLimit) {
           return t.budgets.progress.description.active_overspending(
@@ -190,8 +203,14 @@ enum TargetProgressStatus {
         } else {
           return t.goals.progress.description.success;
         }
-      case TargetProgressStatus.goalReached:
-        return t.goals.progress.description.success;
+      case TargetProgressStatus.reached:
+        if (isTargetLimit) {
+          return t.budgets.progress.description.fail(
+            amount: amount(failedByAmount),
+          );
+        } else {
+          return t.goals.progress.description.success;
+        }
       case TargetProgressStatus.fail:
         if (isTargetLimit) {
           return t.budgets.progress.description.fail(
@@ -202,10 +221,6 @@ enum TargetProgressStatus {
             amount: amount(failedByAmount),
           );
         }
-      case TargetProgressStatus.limitExceeded:
-        return t.budgets.progress.description.fail(
-          amount: amount(failedByAmount),
-        );
     }
   }
 }

@@ -672,12 +672,14 @@
       "LABELS": {
         "active-on-track": "In linea",
         "active-overspending": "Spesa eccessiva",
+        "active-indeterminate": "Attivo",
         "success": "Raggiunto",
         "fail": "Budget superato"
       },
       "DESCRIPTION": {
         "active-on-track": "Puoi spendere {{ dailyAmount }} al giorno per i restanti {{ remainingDays }} giorni",
         "active-overspending": "Per tornare in linea, dovresti limitare la tua spesa a {{ dailyAmount }} al giorno per i restanti {{ remainingDays }} giorni",
+        "active-indeterminate": "Ti restano {{ amount }} da spendere.",
         "active-exceeded": "Hai già superato il limite del budget di {{ amount }}. Se non trovi entrate per questo budget, dovresti smettere di spendere per il resto del periodo",
         "success": "Ottimo lavoro! Questo budget è terminato con successo. Continua a creare budget per gestire le tue spese",
         "fail": "Hai superato il budget di {{ amount }}. Cerca di fare più attenzione la prossima volta!"
@@ -729,12 +731,14 @@
       "LABELS": {
         "active-on-track": "In pista",
         "active-behind-schedule": "In ritardo rispetto al programma",
+        "active-indeterminate": "Attivo",
         "success": "Obiettivo raggiunto",
         "fail": "Obiettivo fallito"
       },
       "DESCRIPTION": {
         "active-on-track": "Sei sulla buona strada per raggiungere il tuo obiettivo! Devi risparmiare {{ dailyAmount }} al giorno per i restanti {{ remainingDays }} giorni",
         "active-behind-schedule": "Sei in ritardo sulla tabella di marcia. Devi risparmiare {{ dailyAmount }} al giorno per raggiungere il tuo obiettivo in {{ remainingDays }} giorni",
+        "active-indeterminate": "Ti servono {{ amount }} in più per raggiungere il tuo obiettivo.",
         "success": "Congratulazioni! Hai raggiunto il tuo obiettivo.",
         "fail": "Hai mancato il tuo obiettivo di {{ amount }}."
       }

@@ -1546,6 +1546,7 @@ class _TranslationsBudgetsProgressLabelsUk implements TranslationsBudgetsProgres
 	// Translations
 	@override String get active_on_track => 'За планом';
 	@override String get active_overspending => 'Перевитрата';
+	@override String get active_indeterminate => 'Активний';
 	@override String get success => 'Досягнуто';
 	@override String get fail => 'Бюджет перевищено';
 }
@@ -1559,6 +1560,7 @@ class _TranslationsBudgetsProgressDescriptionUk implements TranslationsBudgetsPr
 	// Translations
 	@override String active_on_track({required Object dailyAmount, required Object remainingDays}) => 'Ви можете витрачати ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися';
 	@override String active_overspending({required Object dailyAmount, required Object remainingDays}) => 'Щоб повернутися до плану, вам слід обмежити витрати до ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися';
+	@override String active_indeterminate({required Object amount}) => 'У вас залишилося витратити ${amount}.';
 	@override String active_exceeded({required Object amount}) => 'Ви вже перевищили ліміт бюджету на ${amount}. Якщо ви не знайдете жодних доходів для цього бюджету, вам слід припинити витрати до кінця його періоду';
 	@override String get success => 'Чудова робота! Цей бюджет успішно завершено. Продовжуйте створювати бюджети для управління витратами';
 	@override String fail({required Object amount}) => 'Ви перевищили бюджет на ${amount}. Спробуйте бути уважнішими наступного разу!';
@@ -1595,6 +1597,7 @@ class _TranslationsGoalsProgressLabelsUk implements TranslationsGoalsProgressLab
 	// Translations
 	@override String get active_on_track => 'На шляху';
 	@override String get active_behind_schedule => 'Відставання від графіка';
+	@override String get active_indeterminate => 'Активний';
 	@override String get success => 'Мета досягнута';
 	@override String get fail => 'Мета не вдалася';
 }
@@ -1608,6 +1611,7 @@ class _TranslationsGoalsProgressDescriptionUk implements TranslationsGoalsProgre
 	// Translations
 	@override String active_on_track({required Object dailyAmount, required Object remainingDays}) => 'Ви на шляху до своєї мети! Ви повинні відкладати ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися';
 	@override String active_behind_schedule({required Object dailyAmount, required Object remainingDays}) => 'Ви відстаєте від графіка. Ви повинні заощаджувати ${dailyAmount} на день, щоб досягти своєї мети за ${remainingDays} днів';
+	@override String active_indeterminate({required Object amount}) => 'Вам потрібно ще ${amount}, щоб досягти своєї мети.';
 	@override String get success => 'Щиро вітаю! Ви досягли своєї мети.';
 	@override String fail({required Object amount}) => 'Ви не досягли цілі на ${amount}.';
 }
@@ -2372,10 +2376,12 @@ extension on TranslationsUk {
 		map['budgets.target_timeline_statuses.future'] = 'Майбутній бюджет';
 		map['budgets.progress.labels.active_on_track'] = 'За планом';
 		map['budgets.progress.labels.active_overspending'] = 'Перевитрата';
+		map['budgets.progress.labels.active_indeterminate'] = 'Активний';
 		map['budgets.progress.labels.success'] = 'Досягнуто';
 		map['budgets.progress.labels.fail'] = 'Бюджет перевищено';
 		map['budgets.progress.description.active_on_track'] = ({required Object dailyAmount, required Object remainingDays}) => 'Ви можете витрачати ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися';
 		map['budgets.progress.description.active_overspending'] = ({required Object dailyAmount, required Object remainingDays}) => 'Щоб повернутися до плану, вам слід обмежити витрати до ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися';
+		map['budgets.progress.description.active_indeterminate'] = ({required Object amount}) => 'У вас залишилося витратити ${amount}.';
 		map['budgets.progress.description.active_exceeded'] = ({required Object amount}) => 'Ви вже перевищили ліміт бюджету на ${amount}. Якщо ви не знайдете жодних доходів для цього бюджету, вам слід припинити витрати до кінця його періоду';
 		map['budgets.progress.description.success'] = 'Чудова робота! Цей бюджет успішно завершено. Продовжуйте створювати бюджети для управління витратами';
 		map['budgets.progress.description.fail'] = ({required Object amount}) => 'Ви перевищили бюджет на ${amount}. Спробуйте бути уважнішими наступного разу!';
@@ -2409,10 +2415,12 @@ extension on TranslationsUk {
 		map['goals.target_timeline_statuses.future'] = 'Future goal';
 		map['goals.progress.labels.active_on_track'] = 'На шляху';
 		map['goals.progress.labels.active_behind_schedule'] = 'Відставання від графіка';
+		map['goals.progress.labels.active_indeterminate'] = 'Активний';
 		map['goals.progress.labels.success'] = 'Мета досягнута';
 		map['goals.progress.labels.fail'] = 'Мета не вдалася';
 		map['goals.progress.description.active_on_track'] = ({required Object dailyAmount, required Object remainingDays}) => 'Ви на шляху до своєї мети! Ви повинні відкладати ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися';
 		map['goals.progress.description.active_behind_schedule'] = ({required Object dailyAmount, required Object remainingDays}) => 'Ви відстаєте від графіка. Ви повинні заощаджувати ${dailyAmount} на день, щоб досягти своєї мети за ${remainingDays} днів';
+		map['goals.progress.description.active_indeterminate'] = ({required Object amount}) => 'Вам потрібно ще ${amount}, щоб досягти своєї мети.';
 		map['goals.progress.description.success'] = 'Щиро вітаю! Ви досягли своєї мети.';
 		map['goals.progress.description.fail'] = ({required Object amount}) => 'Ви не досягли цілі на ${amount}.';
 		map['target_timeline_statuses.active'] = 'Активний';

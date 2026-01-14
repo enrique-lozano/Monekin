@@ -1546,6 +1546,7 @@ class _TranslationsBudgetsProgressLabelsTr implements TranslationsBudgetsProgres
 	// Translations
 	@override String get active_on_track => 'Yolunda';
 	@override String get active_overspending => 'Aşırı harcama';
+	@override String get active_indeterminate => 'Aktif';
 	@override String get success => 'Başarılı';
 	@override String get fail => 'Bütçe aşıldı';
 }
@@ -1559,6 +1560,7 @@ class _TranslationsBudgetsProgressDescriptionTr implements TranslationsBudgetsPr
 	// Translations
 	@override String active_on_track({required Object remainingDays, required Object dailyAmount}) => 'Kalan ${remainingDays} gün için günde ${dailyAmount} harcayabilirsiniz';
 	@override String active_overspending({required Object remainingDays, required Object dailyAmount}) => 'Tekrar rayına oturmak için, kalan ${remainingDays} gün boyunca harcamalarınızı günde ${dailyAmount} ile sınırlamalısınız';
+	@override String active_indeterminate({required Object amount}) => 'Harcayabileceğiniz ${amount} kaldı.';
 	@override String active_exceeded({required Object amount}) => 'Bütçe limitinizi ${amount} aştınız. Bu bütçe için herhangi bir gelir bulamazsanız, dönemin geri kalanında harcama yapmayı bırakmalısınız';
 	@override String get success => 'Harika iş! Bu bütçe başarıyla tamamlandı. Harcamalarınızı yönetmek için bütçe oluşturmaya devam edin';
 	@override String fail({required Object amount}) => 'Bütçeyi ${amount} aştınız. Bir dahaki sefere daha dikkatli olmaya çalışın!';
@@ -1595,6 +1597,7 @@ class _TranslationsGoalsProgressLabelsTr implements TranslationsGoalsProgressLab
 	// Translations
 	@override String get active_on_track => 'Yolda';
 	@override String get active_behind_schedule => 'Programın gerisinde';
+	@override String get active_indeterminate => 'Aktif';
 	@override String get success => 'Hedefe ulaşıldı';
 	@override String get fail => 'Hedef başarısız oldu';
 }
@@ -1608,6 +1611,7 @@ class _TranslationsGoalsProgressDescriptionTr implements TranslationsGoalsProgre
 	// Translations
 	@override String active_on_track({required Object remainingDays, required Object dailyAmount}) => 'Hedefinizi arama yolundasınız! Kalan ${remainingDays} gün boyunca günde ${dailyAmount} tasarruf etmelisiniz';
 	@override String active_behind_schedule({required Object remainingDays, required Object dailyAmount}) => 'Programın gerisindesiniz. Hedefinize ${remainingDays} gün içinde ulaşmak için günde ${dailyAmount} tasarruf etmeniz gerekiyor';
+	@override String active_indeterminate({required Object amount}) => 'Hedefinize ulaşmak için ${amount} daha fazlasına ihtiyacınız var.';
 	@override String get success => 'Tebrikler! Hedefine ulaştın.';
 	@override String fail({required Object amount}) => 'Hedefinizi ${amount} kadar kaçırdınız.';
 }
@@ -2372,10 +2376,12 @@ extension on TranslationsTr {
 		map['budgets.target_timeline_statuses.future'] = 'Gelecek bütçe';
 		map['budgets.progress.labels.active_on_track'] = 'Yolunda';
 		map['budgets.progress.labels.active_overspending'] = 'Aşırı harcama';
+		map['budgets.progress.labels.active_indeterminate'] = 'Aktif';
 		map['budgets.progress.labels.success'] = 'Başarılı';
 		map['budgets.progress.labels.fail'] = 'Bütçe aşıldı';
 		map['budgets.progress.description.active_on_track'] = ({required Object remainingDays, required Object dailyAmount}) => 'Kalan ${remainingDays} gün için günde ${dailyAmount} harcayabilirsiniz';
 		map['budgets.progress.description.active_overspending'] = ({required Object remainingDays, required Object dailyAmount}) => 'Tekrar rayına oturmak için, kalan ${remainingDays} gün boyunca harcamalarınızı günde ${dailyAmount} ile sınırlamalısınız';
+		map['budgets.progress.description.active_indeterminate'] = ({required Object amount}) => 'Harcayabileceğiniz ${amount} kaldı.';
 		map['budgets.progress.description.active_exceeded'] = ({required Object amount}) => 'Bütçe limitinizi ${amount} aştınız. Bu bütçe için herhangi bir gelir bulamazsanız, dönemin geri kalanında harcama yapmayı bırakmalısınız';
 		map['budgets.progress.description.success'] = 'Harika iş! Bu bütçe başarıyla tamamlandı. Harcamalarınızı yönetmek için bütçe oluşturmaya devam edin';
 		map['budgets.progress.description.fail'] = ({required Object amount}) => 'Bütçeyi ${amount} aştınız. Bir dahaki sefere daha dikkatli olmaya çalışın!';
@@ -2409,10 +2415,12 @@ extension on TranslationsTr {
 		map['goals.target_timeline_statuses.future'] = 'Future goal';
 		map['goals.progress.labels.active_on_track'] = 'Yolda';
 		map['goals.progress.labels.active_behind_schedule'] = 'Programın gerisinde';
+		map['goals.progress.labels.active_indeterminate'] = 'Aktif';
 		map['goals.progress.labels.success'] = 'Hedefe ulaşıldı';
 		map['goals.progress.labels.fail'] = 'Hedef başarısız oldu';
 		map['goals.progress.description.active_on_track'] = ({required Object remainingDays, required Object dailyAmount}) => 'Hedefinizi arama yolundasınız! Kalan ${remainingDays} gün boyunca günde ${dailyAmount} tasarruf etmelisiniz';
 		map['goals.progress.description.active_behind_schedule'] = ({required Object remainingDays, required Object dailyAmount}) => 'Programın gerisindesiniz. Hedefinize ${remainingDays} gün içinde ulaşmak için günde ${dailyAmount} tasarruf etmeniz gerekiyor';
+		map['goals.progress.description.active_indeterminate'] = ({required Object amount}) => 'Hedefinize ulaşmak için ${amount} daha fazlasına ihtiyacınız var.';
 		map['goals.progress.description.success'] = 'Tebrikler! Hedefine ulaştın.';
 		map['goals.progress.description.fail'] = ({required Object amount}) => 'Hedefinizi ${amount} kadar kaçırdınız.';
 		map['target_timeline_statuses.active'] = 'Aktif';

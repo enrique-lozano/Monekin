@@ -1546,6 +1546,7 @@ class _TranslationsBudgetsProgressLabelsZhCn implements TranslationsBudgetsProgr
 	// Translations
 	@override String get active_on_track => '正常';
 	@override String get active_overspending => '超支';
+	@override String get active_indeterminate => '积极的';
 	@override String get success => '已达成';
 	@override String get fail => '超出预算';
 }
@@ -1559,6 +1560,7 @@ class _TranslationsBudgetsProgressDescriptionZhCn implements TranslationsBudgets
 	// Translations
 	@override String active_on_track({required Object remainingDays, required Object dailyAmount}) => '在剩余的 ${remainingDays} 天里，您每天可以花费 ${dailyAmount}';
 	@override String active_overspending({required Object remainingDays, required Object dailyAmount}) => '为了回到正轨，您应该在剩余的 ${remainingDays} 天里将每天的支出限制在 ${dailyAmount}';
+	@override String active_indeterminate({required Object amount}) => '您还剩 ${amount} 可以消费。';
 	@override String active_exceeded({required Object amount}) => '您已经超出了预算限额 ${amount}。如果您找不到此预算的任何收入，您应该在其剩余期间停止支出';
 	@override String get success => '干得好！该预算已成功完成。继续创建预算以管理您的支出';
 	@override String fail({required Object amount}) => '您超出了预算 ${amount}。下次请更加小心！';
@@ -1595,6 +1597,7 @@ class _TranslationsGoalsProgressLabelsZhCn implements TranslationsGoalsProgressL
 	// Translations
 	@override String get active_on_track => '步入正轨';
 	@override String get active_behind_schedule => '落后于计划';
+	@override String get active_indeterminate => '积极的';
 	@override String get success => '目标达成';
 	@override String get fail => '目标失败';
 }
@@ -1608,6 +1611,7 @@ class _TranslationsGoalsProgressDescriptionZhCn implements TranslationsGoalsProg
 	// Translations
 	@override String active_on_track({required Object remainingDays, required Object dailyAmount}) => '您正在寻找目标的轨道上！您必须在剩余的 ${remainingDays} 天内每天节省 ${dailyAmount}';
 	@override String active_behind_schedule({required Object dailyAmount, required Object remainingDays}) => '你落后于计划了。您必须每天节省 ${dailyAmount} 才能在 ${remainingDays} 天后达到您的目标';
+	@override String active_indeterminate({required Object amount}) => '您还需要 ${amount} 才能实现目标。';
 	@override String get success => '恭喜！你达到了你的目标。';
 	@override String fail({required Object amount}) => '您与目标相差了 ${amount}。';
 }
@@ -2372,10 +2376,12 @@ extension on TranslationsZhCn {
 		map['budgets.target_timeline_statuses.future'] = '未来预算';
 		map['budgets.progress.labels.active_on_track'] = '正常';
 		map['budgets.progress.labels.active_overspending'] = '超支';
+		map['budgets.progress.labels.active_indeterminate'] = '积极的';
 		map['budgets.progress.labels.success'] = '已达成';
 		map['budgets.progress.labels.fail'] = '超出预算';
 		map['budgets.progress.description.active_on_track'] = ({required Object remainingDays, required Object dailyAmount}) => '在剩余的 ${remainingDays} 天里，您每天可以花费 ${dailyAmount}';
 		map['budgets.progress.description.active_overspending'] = ({required Object remainingDays, required Object dailyAmount}) => '为了回到正轨，您应该在剩余的 ${remainingDays} 天里将每天的支出限制在 ${dailyAmount}';
+		map['budgets.progress.description.active_indeterminate'] = ({required Object amount}) => '您还剩 ${amount} 可以消费。';
 		map['budgets.progress.description.active_exceeded'] = ({required Object amount}) => '您已经超出了预算限额 ${amount}。如果您找不到此预算的任何收入，您应该在其剩余期间停止支出';
 		map['budgets.progress.description.success'] = '干得好！该预算已成功完成。继续创建预算以管理您的支出';
 		map['budgets.progress.description.fail'] = ({required Object amount}) => '您超出了预算 ${amount}。下次请更加小心！';
@@ -2409,10 +2415,12 @@ extension on TranslationsZhCn {
 		map['goals.target_timeline_statuses.future'] = 'Future goal';
 		map['goals.progress.labels.active_on_track'] = '步入正轨';
 		map['goals.progress.labels.active_behind_schedule'] = '落后于计划';
+		map['goals.progress.labels.active_indeterminate'] = '积极的';
 		map['goals.progress.labels.success'] = '目标达成';
 		map['goals.progress.labels.fail'] = '目标失败';
 		map['goals.progress.description.active_on_track'] = ({required Object remainingDays, required Object dailyAmount}) => '您正在寻找目标的轨道上！您必须在剩余的 ${remainingDays} 天内每天节省 ${dailyAmount}';
 		map['goals.progress.description.active_behind_schedule'] = ({required Object dailyAmount, required Object remainingDays}) => '你落后于计划了。您必须每天节省 ${dailyAmount} 才能在 ${remainingDays} 天后达到您的目标';
+		map['goals.progress.description.active_indeterminate'] = ({required Object amount}) => '您还需要 ${amount} 才能实现目标。';
 		map['goals.progress.description.success'] = '恭喜！你达到了你的目标。';
 		map['goals.progress.description.fail'] = ({required Object amount}) => '您与目标相差了 ${amount}。';
 		map['target_timeline_statuses.active'] = '进行中';

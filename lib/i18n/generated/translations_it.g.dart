@@ -1546,6 +1546,7 @@ class _TranslationsBudgetsProgressLabelsIt implements TranslationsBudgetsProgres
 	// Translations
 	@override String get active_on_track => 'In linea';
 	@override String get active_overspending => 'Spesa eccessiva';
+	@override String get active_indeterminate => 'Attivo';
 	@override String get success => 'Raggiunto';
 	@override String get fail => 'Budget superato';
 }
@@ -1559,6 +1560,7 @@ class _TranslationsBudgetsProgressDescriptionIt implements TranslationsBudgetsPr
 	// Translations
 	@override String active_on_track({required Object dailyAmount, required Object remainingDays}) => 'Puoi spendere ${dailyAmount} al giorno per i restanti ${remainingDays} giorni';
 	@override String active_overspending({required Object dailyAmount, required Object remainingDays}) => 'Per tornare in linea, dovresti limitare la tua spesa a ${dailyAmount} al giorno per i restanti ${remainingDays} giorni';
+	@override String active_indeterminate({required Object amount}) => 'Ti restano ${amount} da spendere.';
 	@override String active_exceeded({required Object amount}) => 'Hai già superato il limite del budget di ${amount}. Se non trovi entrate per questo budget, dovresti smettere di spendere per il resto del periodo';
 	@override String get success => 'Ottimo lavoro! Questo budget è terminato con successo. Continua a creare budget per gestire le tue spese';
 	@override String fail({required Object amount}) => 'Hai superato il budget di ${amount}. Cerca di fare più attenzione la prossima volta!';
@@ -1595,6 +1597,7 @@ class _TranslationsGoalsProgressLabelsIt implements TranslationsGoalsProgressLab
 	// Translations
 	@override String get active_on_track => 'In pista';
 	@override String get active_behind_schedule => 'In ritardo rispetto al programma';
+	@override String get active_indeterminate => 'Attivo';
 	@override String get success => 'Obiettivo raggiunto';
 	@override String get fail => 'Obiettivo fallito';
 }
@@ -1608,6 +1611,7 @@ class _TranslationsGoalsProgressDescriptionIt implements TranslationsGoalsProgre
 	// Translations
 	@override String active_on_track({required Object dailyAmount, required Object remainingDays}) => 'Sei sulla buona strada per raggiungere il tuo obiettivo! Devi risparmiare ${dailyAmount} al giorno per i restanti ${remainingDays} giorni';
 	@override String active_behind_schedule({required Object dailyAmount, required Object remainingDays}) => 'Sei in ritardo sulla tabella di marcia. Devi risparmiare ${dailyAmount} al giorno per raggiungere il tuo obiettivo in ${remainingDays} giorni';
+	@override String active_indeterminate({required Object amount}) => 'Ti servono ${amount} in più per raggiungere il tuo obiettivo.';
 	@override String get success => 'Congratulazioni! Hai raggiunto il tuo obiettivo.';
 	@override String fail({required Object amount}) => 'Hai mancato il tuo obiettivo di ${amount}.';
 }
@@ -2372,10 +2376,12 @@ extension on TranslationsIt {
 		map['budgets.target_timeline_statuses.future'] = 'Budget futuro';
 		map['budgets.progress.labels.active_on_track'] = 'In linea';
 		map['budgets.progress.labels.active_overspending'] = 'Spesa eccessiva';
+		map['budgets.progress.labels.active_indeterminate'] = 'Attivo';
 		map['budgets.progress.labels.success'] = 'Raggiunto';
 		map['budgets.progress.labels.fail'] = 'Budget superato';
 		map['budgets.progress.description.active_on_track'] = ({required Object dailyAmount, required Object remainingDays}) => 'Puoi spendere ${dailyAmount} al giorno per i restanti ${remainingDays} giorni';
 		map['budgets.progress.description.active_overspending'] = ({required Object dailyAmount, required Object remainingDays}) => 'Per tornare in linea, dovresti limitare la tua spesa a ${dailyAmount} al giorno per i restanti ${remainingDays} giorni';
+		map['budgets.progress.description.active_indeterminate'] = ({required Object amount}) => 'Ti restano ${amount} da spendere.';
 		map['budgets.progress.description.active_exceeded'] = ({required Object amount}) => 'Hai già superato il limite del budget di ${amount}. Se non trovi entrate per questo budget, dovresti smettere di spendere per il resto del periodo';
 		map['budgets.progress.description.success'] = 'Ottimo lavoro! Questo budget è terminato con successo. Continua a creare budget per gestire le tue spese';
 		map['budgets.progress.description.fail'] = ({required Object amount}) => 'Hai superato il budget di ${amount}. Cerca di fare più attenzione la prossima volta!';
@@ -2409,10 +2415,12 @@ extension on TranslationsIt {
 		map['goals.target_timeline_statuses.future'] = 'Future goal';
 		map['goals.progress.labels.active_on_track'] = 'In pista';
 		map['goals.progress.labels.active_behind_schedule'] = 'In ritardo rispetto al programma';
+		map['goals.progress.labels.active_indeterminate'] = 'Attivo';
 		map['goals.progress.labels.success'] = 'Obiettivo raggiunto';
 		map['goals.progress.labels.fail'] = 'Obiettivo fallito';
 		map['goals.progress.description.active_on_track'] = ({required Object dailyAmount, required Object remainingDays}) => 'Sei sulla buona strada per raggiungere il tuo obiettivo! Devi risparmiare ${dailyAmount} al giorno per i restanti ${remainingDays} giorni';
 		map['goals.progress.description.active_behind_schedule'] = ({required Object dailyAmount, required Object remainingDays}) => 'Sei in ritardo sulla tabella di marcia. Devi risparmiare ${dailyAmount} al giorno per raggiungere il tuo obiettivo in ${remainingDays} giorni';
+		map['goals.progress.description.active_indeterminate'] = ({required Object amount}) => 'Ti servono ${amount} in più per raggiungere il tuo obiettivo.';
 		map['goals.progress.description.success'] = 'Congratulazioni! Hai raggiunto il tuo obiettivo.';
 		map['goals.progress.description.fail'] = ({required Object amount}) => 'Hai mancato il tuo obiettivo di ${amount}.';
 		map['target_timeline_statuses.active'] = 'Attivo';

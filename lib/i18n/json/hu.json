@@ -672,12 +672,14 @@
       "LABELS": {
         "active-on-track": "Terv szerint",
         "active-overspending": "Túlköltekezés",
+        "active-indeterminate": "Aktív",
         "success": "Teljesítve",
         "fail": "Költségvetés túllépve"
       },
       "DESCRIPTION": {
         "active-on-track": "Naponta {{ dailyAmount }} összeget költhet a hátralévő {{ remainingDays }} napban",
         "active-overspending": "Hogy visszatérjen a tervhez, korlátoznia kell kiadásait napi {{ dailyAmount }} összegre a hátralévő {{ remainingDays }} napban",
+        "active-indeterminate": "Még {{ amount }} elkölthető.",
         "active-exceeded": "Már túllépte a költségvetési keretet {{ amount }} összeggel. Ha nem talál bevételt ehhez a költségvetéshez, abba kell hagynia a költekezést az időszak hátralévő részében",
         "success": "Szép munka! Ez a költségvetés sikeresen lezárult. Hozzon létre további költségvetéseket kiadásai kezeléséhez",
         "fail": "Túllépte a költségvetést {{ amount }} összeggel. Próbáljon meg óvatosabb lenni legközelebb!"
@@ -729,12 +731,14 @@
       "LABELS": {
         "active-on-track": "Pályán",
         "active-behind-schedule": "A menetrend lemaradásával",
+        "active-indeterminate": "Aktív",
         "success": "A cél elérve",
         "fail": "A gól nem sikerült"
       },
       "DESCRIPTION": {
         "active-on-track": "Jó úton haladsz a cél felé! Naponta {{ dailyAmount }} összeget kell megtakarítania a fennmaradó {{ remainingDays }} napig",
         "active-behind-schedule": "Lemaradsz a menetrendről. Naponta {{ dailyAmount }} összeget kell megtakarítania, hogy {{ remainingDays }} napon belül elérje célját",
+        "active-indeterminate": "További {{ amount }} kell a cél eléréséhez.",
         "success": "Gratulálok! Elérted a célodat.",
         "fail": "{{ amount }} értékkel eltévesztette a célt."
       }

@@ -113,29 +113,7 @@ mixin FinancialTargetMixin implements FinancialTarget {
   @override
   Stream<TargetProgressStatus?> get progressStatus {
     return percentageAlreadyUsed.map((percentage) {
-      double tp;
-      if (todayPercent != null) {
-        tp = todayPercent! / 100;
-      } else {
-        // No time limit
-        if (isTargetLimit) {
-          // Budget with no time limit:
-          // Assume strict progress (always active, check agains 100%??)
-          // Actually if no time limit, todayPercent is null.
-          // Passed to fromPercentage:
-          // If percentage > 1 ? Bad : Good.
-          // What to pass as todayPercent? 1.0 implies time is up?
-          // If I pass 0, then percentage > 0 is "Warning".
-          // If I pass 1, then percentage > 1 is "Failed".
-          tp = 1.0;
-        } else {
-          // Goal with no time limit.
-          // Saving anything is good.
-          // Should be Good unless 0?
-          // Pass 0.0 -> percentage > 0 -> Good/Warning logic?
-          tp = 0.0;
-        }
-      }
+      final tp = todayPercent != null ? todayPercent! / 100 : null;
 
       return TargetProgressStatus.fromPercentages(
         percentage,

@@ -672,12 +672,14 @@
       "LABELS": {
         "active-on-track": "正常",
         "active-overspending": "超支",
+        "active-indeterminate": "积极的",
         "success": "已达成",
         "fail": "超出预算"
       },
       "DESCRIPTION": {
         "active-on-track": "在剩余的 {{ remainingDays }} 天里，您每天可以花费 {{ dailyAmount }}",
         "active-overspending": "为了回到正轨，您应该在剩余的 {{ remainingDays }} 天里将每天的支出限制在 {{ dailyAmount }}",
+        "active-indeterminate": "您还剩 {{ amount }} 可以消费。",
         "active-exceeded": "您已经超出了预算限额 {{ amount }}。如果您找不到此预算的任何收入，您应该在其剩余期间停止支出",
         "success": "干得好！该预算已成功完成。继续创建预算以管理您的支出",
         "fail": "您超出了预算 {{ amount }}。下次请更加小心！"
@@ -729,12 +731,14 @@
       "LABELS": {
         "active-on-track": "步入正轨",
         "active-behind-schedule": "落后于计划",
+        "active-indeterminate": "积极的",
         "success": "目标达成",
         "fail": "目标失败"
       },
       "DESCRIPTION": {
         "active-on-track": "您正在寻找目标的轨道上！您必须在剩余的 {{ remainingDays }} 天内每天节省 {{ dailyAmount }}",
         "active-behind-schedule": "你落后于计划了。您必须每天节省 {{ dailyAmount }} 才能在 {{ remainingDays }} 天后达到您的目标",
+        "active-indeterminate": "您还需要 {{ amount }} 才能实现目标。",
         "success": "恭喜！你达到了你的目标。",
         "fail": "您与目标相差了 {{ amount }}。"
       }

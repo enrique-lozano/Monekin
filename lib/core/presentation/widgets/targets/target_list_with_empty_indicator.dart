@@ -44,14 +44,21 @@ class TargetListWithEmptyIndicator extends StatelessWidget {
         ).withSafeBottom(context),
         child: Wrap(
           spacing: 16,
-          runSpacing: 16,
+          runSpacing: 0,
           children: targets
               .map(
-                (target) => SizedBox(
-                  width: BreakPoint.of(context).isLargerThan(BreakpointID.xl)
-                      ? 400
-                      : 320,
-                  child: FinancialTargetCard(target: target),
+                (target) => LayoutBuilder(
+                  builder: (context, constraints) {
+                    return SizedBox(
+                      width:
+                          BreakPoint.of(context).isLargerThan(BreakpointID.xxl)
+                          ? constraints.maxWidth / 4 - 12
+                          : BreakPoint.of(context).isLargerThan(BreakpointID.lg)
+                          ? constraints.maxWidth / 3 - 12
+                          : constraints.maxWidth / 2 - 12,
+                      child: FinancialTargetCard(target: target),
+                    );
+                  },
                 ),
               )
               .toList(),

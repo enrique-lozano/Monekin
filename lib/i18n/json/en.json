@@ -672,12 +672,14 @@
       "LABELS": {
         "active-on-track": "On track",
         "active-overspending": "Overspending",
+        "active-indeterminate": "Active",
         "success": "Achieved",
         "fail": "Budget exceeded"
       },
       "DESCRIPTION": {
         "active-on-track": "You can spend {{ dailyAmount }} per day for the remaining {{ remainingDays }} days",
         "active-overspending": "To get back on track, you should limit your spending to {{ dailyAmount }} per day for the remaining {{ remainingDays }} days",
+        "active-indeterminate": "You have {{ amount }} left to spend.",
         "active-exceeded": "You have already exceeded your budget limit by {{ amount }}. If you don't find any incomes for this budget, you should stop spending for the rest of its period",
         "success": "Great job! This budget has already finish successfully. Keep creating budgets to manage your expenses",
         "fail": "You exceeded the budget by {{ amount }}. Try to be more careful next time!"
@@ -729,12 +731,14 @@
       "LABELS": {
         "active-on-track": "On track",
         "active-behind-schedule": "Behind schedule",
+        "active-indeterminate": "Active",
         "success": "Goal reached",
         "fail": "Goal failed"
       },
       "DESCRIPTION": {
         "active-on-track": "You are on track to seek your goal! You have to save {{ dailyAmount }} per day for the remaining {{ remainingDays }} days",
         "active-behind-schedule": "You are behind schedule. You have to save {{ dailyAmount }} per day to reach your goal in {{ remainingDays }} days",
+        "active-indeterminate": "You need {{ amount }} more to reach your goal.",
         "success": "Congratulations! You reached your goal.",
         "fail": "You missed your goal by {{ amount }}."
       }

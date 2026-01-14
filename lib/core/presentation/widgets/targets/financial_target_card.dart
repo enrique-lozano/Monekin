@@ -128,14 +128,17 @@ class FinancialTargetCard extends StatelessWidget {
                               padding: const EdgeInsets.all(4),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: progressStatus.color
+                                color: progressStatus
+                                    .color(target.isTargetLimit)
                                     .lighten(0.2)
                                     .withOpacity(0.2),
                               ),
                               child: Icon(
-                                progressStatus.iconData,
+                                progressStatus.icon(target.isTargetLimit),
                                 size: 12,
-                                color: progressStatus.color,
+                                color: progressStatus.color(
+                                  target.isTargetLimit,
+                                ),
                               ),
                             ),
                             Text(
@@ -172,6 +175,7 @@ class TargetHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 8,
       children: [
         Column(
           mainAxisSize: MainAxisSize.min,
@@ -209,45 +213,45 @@ class TargetHeader extends StatelessWidget {
             _buildMoneyValueLine(context),
           ],
         ),
-        Flexible(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            spacing: 4,
-            children: [
-              Builder(
-                builder: (context) {
-                  // If it's a Budget with periodicity, use existing logic
-                  if (target is Budget) {
-                    final b = target as Budget;
-                    final periodText =
-                        b.intervalPeriod?.allThePeriodsText(context) ?? '';
-                    if (periodText.isNotEmpty) return Text(periodText);
-                  }
+        if (target.periodState.toDateTimeRange != null)
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              spacing: 4,
+              children: [
+                Builder(
+                  builder: (context) {
+                    // If it's a Budget with periodicity, use existing logic
+                    if (target is Budget) {
+                      final b = target as Budget;
+                      final periodText =
+                          b.intervalPeriod?.allThePeriodsText(context) ?? '';
+                      if (periodText.isNotEmpty) {
+                        return Text(periodText, textAlign: TextAlign.end);
+                      }
+                    }
 
-                  // Default date range display
-                  final range = target.periodState.toDateTimeRange;
-                  if (range == null) return const Text('∞');
+                    final range = target.periodState.toDateTimeRange!;
+                    final startDate = range.start;
+                    final endDate = range.end;
 
-                  final startDate = range.start;
-                  final endDate = range.end;
+                    final startDateLabel = startDate.year == currentYear
+                        ? DateFormat.MMMd().format(startDate)
+                        : DateFormat.yMMMd().format(startDate);
 
-                  // Check if it's effectively infinite end date (though converting to range usually assumes finite,
-                  // but let's check if end is far future or if logic allows)
+                    final endDateLabel = endDate.year == currentYear
+                        ? DateFormat.MMMd().format(endDate)
+                        : DateFormat.yMMMd().format(endDate);
 
-                  final startDateLabel = startDate.year == currentYear
-                      ? DateFormat.MMMd().format(startDate)
-                      : DateFormat.yMMMd().format(startDate);
-
-                  final endDateLabel = endDate.year == currentYear
-                      ? DateFormat.MMMd().format(endDate)
-                      : DateFormat.yMMMd().format(endDate);
-
-                  return Text('$startDateLabel - $endDateLabel');
-                },
-              ),
-            ],
+                    return Text(
+                      '$startDateLabel - $endDateLabel',
+                      textAlign: TextAlign.end,
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
-        ),
       ],
     );
   }
