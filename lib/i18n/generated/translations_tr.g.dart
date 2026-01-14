@@ -467,8 +467,8 @@ class _TranslationsGoalsTr implements TranslationsGoalsEn {
 	@override late final _TranslationsGoalsTypeTr type = _TranslationsGoalsTypeTr._(_root);
 	@override String get empty_title => 'Hedef bulunamadı';
 	@override String get empty_description => 'Tasarruflarınızı takip etmek için yeni bir hedef oluşturun!';
-	@override String get delete => 'Delete goal';
-	@override String get delete_warning => 'This action is irreversible. Categories and transactions referring to this goal will not be deleted';
+	@override String get delete => 'Hedefi sil';
+	@override String get delete_warning => 'Bu işlem geri alınamaz. Bu hedefi referans alan kategoriler ve işlemler silinmeyecektir';
 	@override late final _TranslationsGoalsFormTr form = _TranslationsGoalsFormTr._(_root);
 	@override late final _TranslationsGoalsDetailsTr details = _TranslationsGoalsDetailsTr._(_root);
 	@override late final _TranslationsGoalsTargetTimelineStatusesTr target_timeline_statuses = _TranslationsGoalsTargetTimelineStatusesTr._(_root);
@@ -1114,7 +1114,7 @@ class _TranslationsGoalsTypeTr implements TranslationsGoalsTypeEn {
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get display => 'Goal Type';
+	@override String get display => 'Hedef Türü';
 	@override late final _TranslationsGoalsTypeIncomeTr income = _TranslationsGoalsTypeIncomeTr._(_root);
 	@override late final _TranslationsGoalsTypeExpenseTr expense = _TranslationsGoalsTypeExpenseTr._(_root);
 }
@@ -1126,15 +1126,15 @@ class _TranslationsGoalsFormTr implements TranslationsGoalsFormEn {
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get new_title => 'New Goal';
-	@override String get edit_title => 'Edit Goal';
-	@override String get target_amount => 'Target Amount';
-	@override String get initial_amount => 'Initial Amount';
-	@override String get name => 'Name';
-	@override String get name_hint => 'My Saving Goal';
-	@override String get create_success => 'Goal created successfully';
-	@override String get edit_success => 'Goal edited successfully';
-	@override String get negative_warn => 'The goal amount cannot be negative';
+	@override String get new_title => 'Yeni Hedef';
+	@override String get edit_title => 'Hedefi Düzenle';
+	@override String get target_amount => 'Hedef Tutar';
+	@override String get initial_amount => 'Başlangıç Tutarı';
+	@override String get name => 'İsim';
+	@override String get name_hint => 'Tasarruf Hedefim';
+	@override String get create_success => 'Hedef başarıyla oluşturuldu';
+	@override String get edit_success => 'Hedef başarıyla düzenlendi';
+	@override String get negative_warn => 'Hedef tutar negatif olamaz';
 }
 
 // Path: goals.details
@@ -1144,11 +1144,11 @@ class _TranslationsGoalsDetailsTr implements TranslationsGoalsDetailsEn {
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Goal Details';
-	@override String get statistics => 'Statistics';
-	@override String get goal_value => 'Goal Target';
-	@override String get evolution => 'Evolution';
-	@override String get no_transactions => 'It seems that you have not made any transactions related to this goal';
+	@override String get title => 'Hedef Detayları';
+	@override String get statistics => 'İstatistikler';
+	@override String get goal_value => 'Hedef Değeri';
+	@override String get evolution => 'Gelişim';
+	@override String get no_transactions => 'Bu hedefle ilgili herhangi bir işlem yapmamışsınız gibi görünüyor';
 }
 
 // Path: goals.target_timeline_statuses
@@ -1158,9 +1158,9 @@ class _TranslationsGoalsTargetTimelineStatusesTr implements TranslationsGoalsTar
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get active => 'Active goal';
-	@override String get past => 'Finished goal';
-	@override String get future => 'Future goal';
+	@override String get active => 'Aktif hedef';
+	@override String get past => 'Tamamlanmış hedef';
+	@override String get future => 'Gelecek hedef';
 }
 
 // Path: goals.progress
@@ -2387,32 +2387,32 @@ extension on TranslationsTr {
 		map['budgets.progress.description.fail'] = ({required Object amount}) => 'Bütçeyi ${amount} aştınız. Bir dahaki sefere daha dikkatli olmaya çalışın!';
 		map['goals.title'] = 'Hedefler';
 		map['goals.status'] = 'Hedef durumu';
-		map['goals.type.display'] = 'Goal Type';
+		map['goals.type.display'] = 'Hedef Türü';
 		map['goals.type.income.title'] = 'Tasarruf Hedefi';
 		map['goals.type.income.descr'] = 'Para biriktirmek için ideal. Bakiye hedefinizi aştığında başarılı olursunuz.';
 		map['goals.type.expense.title'] = 'Harcama Hedefi';
 		map['goals.type.expense.descr'] = 'Ne kadar harcadığınızı takip edin ve bir hedef tutara ulaşmayı amaçlayın. Bağışlar için ...';
 		map['goals.empty_title'] = 'Hedef bulunamadı';
 		map['goals.empty_description'] = 'Tasarruflarınızı takip etmek için yeni bir hedef oluşturun!';
-		map['goals.delete'] = 'Delete goal';
-		map['goals.delete_warning'] = 'This action is irreversible. Categories and transactions referring to this goal will not be deleted';
-		map['goals.form.new_title'] = 'New Goal';
-		map['goals.form.edit_title'] = 'Edit Goal';
-		map['goals.form.target_amount'] = 'Target Amount';
-		map['goals.form.initial_amount'] = 'Initial Amount';
-		map['goals.form.name'] = 'Name';
-		map['goals.form.name_hint'] = 'My Saving Goal';
-		map['goals.form.create_success'] = 'Goal created successfully';
-		map['goals.form.edit_success'] = 'Goal edited successfully';
-		map['goals.form.negative_warn'] = 'The goal amount cannot be negative';
-		map['goals.details.title'] = 'Goal Details';
-		map['goals.details.statistics'] = 'Statistics';
-		map['goals.details.goal_value'] = 'Goal Target';
-		map['goals.details.evolution'] = 'Evolution';
-		map['goals.details.no_transactions'] = 'It seems that you have not made any transactions related to this goal';
-		map['goals.target_timeline_statuses.active'] = 'Active goal';
-		map['goals.target_timeline_statuses.past'] = 'Finished goal';
-		map['goals.target_timeline_statuses.future'] = 'Future goal';
+		map['goals.delete'] = 'Hedefi sil';
+		map['goals.delete_warning'] = 'Bu işlem geri alınamaz. Bu hedefi referans alan kategoriler ve işlemler silinmeyecektir';
+		map['goals.form.new_title'] = 'Yeni Hedef';
+		map['goals.form.edit_title'] = 'Hedefi Düzenle';
+		map['goals.form.target_amount'] = 'Hedef Tutar';
+		map['goals.form.initial_amount'] = 'Başlangıç Tutarı';
+		map['goals.form.name'] = 'İsim';
+		map['goals.form.name_hint'] = 'Tasarruf Hedefim';
+		map['goals.form.create_success'] = 'Hedef başarıyla oluşturuldu';
+		map['goals.form.edit_success'] = 'Hedef başarıyla düzenlendi';
+		map['goals.form.negative_warn'] = 'Hedef tutar negatif olamaz';
+		map['goals.details.title'] = 'Hedef Detayları';
+		map['goals.details.statistics'] = 'İstatistikler';
+		map['goals.details.goal_value'] = 'Hedef Değeri';
+		map['goals.details.evolution'] = 'Gelişim';
+		map['goals.details.no_transactions'] = 'Bu hedefle ilgili herhangi bir işlem yapmamışsınız gibi görünüyor';
+		map['goals.target_timeline_statuses.active'] = 'Aktif hedef';
+		map['goals.target_timeline_statuses.past'] = 'Tamamlanmış hedef';
+		map['goals.target_timeline_statuses.future'] = 'Gelecek hedef';
 		map['goals.progress.labels.active_on_track'] = 'Yolda';
 		map['goals.progress.labels.active_behind_schedule'] = 'Programın gerisinde';
 		map['goals.progress.labels.active_indeterminate'] = 'Aktif';

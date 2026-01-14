@@ -690,7 +690,7 @@
     "title": "Obiettivi",
     "status": "Stato dell'obiettivo",
     "type": {
-      "display": "Goal Type",
+      "display": "Tipo di obiettivo",
       "income": {
         "title": "Obiettivo di Risparmio",
         "descr": "Ideale per risparmiare denaro. Hai successo quando il saldo supera il tuo obiettivo."
@@ -702,30 +702,30 @@
     },
     "empty_title": "Nessun obiettivo trovato",
     "empty_description": "Crea un nuovo obiettivo per iniziare a monitorare i tuoi risparmi!",
-    "delete": "Delete goal",
-    "delete_warning": "This action is irreversible. Categories and transactions referring to this goal will not be deleted",
+    "delete": "Elimina obiettivo",
+    "delete_warning": "Questa azione è irreversibile. Le categorie e le transazioni riferite a questo obiettivo non verranno eliminate",
     "FORM": {
-      "new_title": "New Goal",
-      "edit_title": "Edit Goal",
-      "target_amount": "Target Amount",
-      "initial_amount": "Initial Amount",
-      "name": "Name",
-      "name_hint": "My Saving Goal",
-      "create_success": "Goal created successfully",
-      "edit_success": "Goal edited successfully",
-      "negative_warn": "The goal amount cannot be negative"
+      "new_title": "Nuovo obiettivo",
+      "edit_title": "Modifica obiettivo",
+      "target_amount": "Importo obiettivo",
+      "initial_amount": "Importo iniziale",
+      "name": "Nome",
+      "name_hint": "Il mio obiettivo di risparmio",
+      "create_success": "Obiettivo creato con successo",
+      "edit_success": "Obiettivo modificato con successo",
+      "negative_warn": "L'importo dell'obiettivo non può essere negativo"
     },
     "DETAILS": {
-      "title": "Goal Details",
-      "statistics": "Statistics",
-      "goal_value": "Goal Target",
-      "evolution": "Evolution",
-      "no_transactions": "It seems that you have not made any transactions related to this goal"
+      "title": "Dettagli obiettivo",
+      "statistics": "Statistiche",
+      "goal_value": "Valore obiettivo",
+      "evolution": "Evoluzione",
+      "no_transactions": "Sembra che tu non abbia effettuato alcuna transazione relativa a questo obiettivo"
     },
     "TARGET_TIMELINE_STATUSES": {
-      "active": "Active goal",
-      "past": "Finished goal",
-      "future": "Future goal"
+      "active": "Obiettivo attivo",
+      "past": "Obiettivo terminato",
+      "future": "Obiettivo futuro"
     },
     "PROGRESS": {
       "LABELS": {

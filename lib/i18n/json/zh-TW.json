@@ -690,7 +690,7 @@
     "title": "目標",
     "status": "目標狀態",
     "type": {
-      "display": "Goal Type",
+      "display": "目標類型",
       "income": {
         "title": "儲蓄目標",
         "descr": "非常適合儲蓄。當餘額超過目標時，即為成功。"
@@ -702,30 +702,30 @@
     },
     "empty_title": "未找到目標",
     "empty_description": "創建一個新目標以開始追蹤您的儲蓄！",
-    "delete": "Delete goal",
-    "delete_warning": "This action is irreversible. Categories and transactions referring to this goal will not be deleted",
+    "delete": "刪除目標",
+    "delete_warning": "此操作不可逆。涉及此目標的類別和交易將不會被刪除",
     "FORM": {
-      "new_title": "New Goal",
-      "edit_title": "Edit Goal",
-      "target_amount": "Target Amount",
-      "initial_amount": "Initial Amount",
-      "name": "Name",
-      "name_hint": "My Saving Goal",
-      "create_success": "Goal created successfully",
-      "edit_success": "Goal edited successfully",
-      "negative_warn": "The goal amount cannot be negative"
+      "new_title": "新目標",
+      "edit_title": "編輯目標",
+      "target_amount": "目標金額",
+      "initial_amount": "初始金額",
+      "name": "名稱",
+      "name_hint": "我的儲蓄目標",
+      "create_success": "目標建立成功",
+      "edit_success": "目標編輯成功",
+      "negative_warn": "目標金額不能為負數"
     },
     "DETAILS": {
-      "title": "Goal Details",
-      "statistics": "Statistics",
-      "goal_value": "Goal Target",
-      "evolution": "Evolution",
-      "no_transactions": "It seems that you have not made any transactions related to this goal"
+      "title": "目標詳情",
+      "statistics": "統計",
+      "goal_value": "目標值",
+      "evolution": "趨勢",
+      "no_transactions": "看來您還沒有進行任何與此目標相關的交易"
     },
     "TARGET_TIMELINE_STATUSES": {
-      "active": "Active goal",
-      "past": "Finished goal",
-      "future": "Future goal"
+      "active": "進行中的目標",
+      "past": "已結束的目標",
+      "future": "未來的目標"
     },
     "PROGRESS": {
       "LABELS": {

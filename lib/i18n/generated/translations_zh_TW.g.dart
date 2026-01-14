@@ -467,8 +467,8 @@ class _TranslationsGoalsZhTw implements TranslationsGoalsEn {
 	@override late final _TranslationsGoalsTypeZhTw type = _TranslationsGoalsTypeZhTw._(_root);
 	@override String get empty_title => '未找到目標';
 	@override String get empty_description => '創建一個新目標以開始追蹤您的儲蓄！';
-	@override String get delete => 'Delete goal';
-	@override String get delete_warning => 'This action is irreversible. Categories and transactions referring to this goal will not be deleted';
+	@override String get delete => '刪除目標';
+	@override String get delete_warning => '此操作不可逆。涉及此目標的類別和交易將不會被刪除';
 	@override late final _TranslationsGoalsFormZhTw form = _TranslationsGoalsFormZhTw._(_root);
 	@override late final _TranslationsGoalsDetailsZhTw details = _TranslationsGoalsDetailsZhTw._(_root);
 	@override late final _TranslationsGoalsTargetTimelineStatusesZhTw target_timeline_statuses = _TranslationsGoalsTargetTimelineStatusesZhTw._(_root);
@@ -1114,7 +1114,7 @@ class _TranslationsGoalsTypeZhTw implements TranslationsGoalsTypeEn {
 	final TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get display => 'Goal Type';
+	@override String get display => '目標類型';
 	@override late final _TranslationsGoalsTypeIncomeZhTw income = _TranslationsGoalsTypeIncomeZhTw._(_root);
 	@override late final _TranslationsGoalsTypeExpenseZhTw expense = _TranslationsGoalsTypeExpenseZhTw._(_root);
 }
@@ -1126,15 +1126,15 @@ class _TranslationsGoalsFormZhTw implements TranslationsGoalsFormEn {
 	final TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get new_title => 'New Goal';
-	@override String get edit_title => 'Edit Goal';
-	@override String get target_amount => 'Target Amount';
-	@override String get initial_amount => 'Initial Amount';
-	@override String get name => 'Name';
-	@override String get name_hint => 'My Saving Goal';
-	@override String get create_success => 'Goal created successfully';
-	@override String get edit_success => 'Goal edited successfully';
-	@override String get negative_warn => 'The goal amount cannot be negative';
+	@override String get new_title => '新目標';
+	@override String get edit_title => '編輯目標';
+	@override String get target_amount => '目標金額';
+	@override String get initial_amount => '初始金額';
+	@override String get name => '名稱';
+	@override String get name_hint => '我的儲蓄目標';
+	@override String get create_success => '目標建立成功';
+	@override String get edit_success => '目標編輯成功';
+	@override String get negative_warn => '目標金額不能為負數';
 }
 
 // Path: goals.details
@@ -1144,11 +1144,11 @@ class _TranslationsGoalsDetailsZhTw implements TranslationsGoalsDetailsEn {
 	final TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Goal Details';
-	@override String get statistics => 'Statistics';
-	@override String get goal_value => 'Goal Target';
-	@override String get evolution => 'Evolution';
-	@override String get no_transactions => 'It seems that you have not made any transactions related to this goal';
+	@override String get title => '目標詳情';
+	@override String get statistics => '統計';
+	@override String get goal_value => '目標值';
+	@override String get evolution => '趨勢';
+	@override String get no_transactions => '看來您還沒有進行任何與此目標相關的交易';
 }
 
 // Path: goals.target_timeline_statuses
@@ -1158,9 +1158,9 @@ class _TranslationsGoalsTargetTimelineStatusesZhTw implements TranslationsGoalsT
 	final TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get active => 'Active goal';
-	@override String get past => 'Finished goal';
-	@override String get future => 'Future goal';
+	@override String get active => '進行中的目標';
+	@override String get past => '已結束的目標';
+	@override String get future => '未來的目標';
 }
 
 // Path: goals.progress
@@ -2387,32 +2387,32 @@ extension on TranslationsZhTw {
 		map['budgets.progress.description.fail'] = ({required Object amount}) => '您超出了預算 ${amount}。下次請更加小心！';
 		map['goals.title'] = '目標';
 		map['goals.status'] = '目標狀態';
-		map['goals.type.display'] = 'Goal Type';
+		map['goals.type.display'] = '目標類型';
 		map['goals.type.income.title'] = '儲蓄目標';
 		map['goals.type.income.descr'] = '非常適合儲蓄。當餘額超過目標時，即為成功。';
 		map['goals.type.expense.title'] = '支出目標';
 		map['goals.type.expense.descr'] = '跟踪您的支出並以此達到目標金額。適用於捐款、慈善...';
 		map['goals.empty_title'] = '未找到目標';
 		map['goals.empty_description'] = '創建一個新目標以開始追蹤您的儲蓄！';
-		map['goals.delete'] = 'Delete goal';
-		map['goals.delete_warning'] = 'This action is irreversible. Categories and transactions referring to this goal will not be deleted';
-		map['goals.form.new_title'] = 'New Goal';
-		map['goals.form.edit_title'] = 'Edit Goal';
-		map['goals.form.target_amount'] = 'Target Amount';
-		map['goals.form.initial_amount'] = 'Initial Amount';
-		map['goals.form.name'] = 'Name';
-		map['goals.form.name_hint'] = 'My Saving Goal';
-		map['goals.form.create_success'] = 'Goal created successfully';
-		map['goals.form.edit_success'] = 'Goal edited successfully';
-		map['goals.form.negative_warn'] = 'The goal amount cannot be negative';
-		map['goals.details.title'] = 'Goal Details';
-		map['goals.details.statistics'] = 'Statistics';
-		map['goals.details.goal_value'] = 'Goal Target';
-		map['goals.details.evolution'] = 'Evolution';
-		map['goals.details.no_transactions'] = 'It seems that you have not made any transactions related to this goal';
-		map['goals.target_timeline_statuses.active'] = 'Active goal';
-		map['goals.target_timeline_statuses.past'] = 'Finished goal';
-		map['goals.target_timeline_statuses.future'] = 'Future goal';
+		map['goals.delete'] = '刪除目標';
+		map['goals.delete_warning'] = '此操作不可逆。涉及此目標的類別和交易將不會被刪除';
+		map['goals.form.new_title'] = '新目標';
+		map['goals.form.edit_title'] = '編輯目標';
+		map['goals.form.target_amount'] = '目標金額';
+		map['goals.form.initial_amount'] = '初始金額';
+		map['goals.form.name'] = '名稱';
+		map['goals.form.name_hint'] = '我的儲蓄目標';
+		map['goals.form.create_success'] = '目標建立成功';
+		map['goals.form.edit_success'] = '目標編輯成功';
+		map['goals.form.negative_warn'] = '目標金額不能為負數';
+		map['goals.details.title'] = '目標詳情';
+		map['goals.details.statistics'] = '統計';
+		map['goals.details.goal_value'] = '目標值';
+		map['goals.details.evolution'] = '趨勢';
+		map['goals.details.no_transactions'] = '看來您還沒有進行任何與此目標相關的交易';
+		map['goals.target_timeline_statuses.active'] = '進行中的目標';
+		map['goals.target_timeline_statuses.past'] = '已結束的目標';
+		map['goals.target_timeline_statuses.future'] = '未來的目標';
 		map['goals.progress.labels.active_on_track'] = '步入正軌';
 		map['goals.progress.labels.active_behind_schedule'] = '落後於計劃';
 		map['goals.progress.labels.active_indeterminate'] = '積極的';

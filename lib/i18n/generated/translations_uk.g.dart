@@ -467,8 +467,8 @@ class _TranslationsGoalsUk implements TranslationsGoalsEn {
 	@override late final _TranslationsGoalsTypeUk type = _TranslationsGoalsTypeUk._(_root);
 	@override String get empty_title => 'Цілей не знайдено';
 	@override String get empty_description => 'Створіть нову ціль, щоб почати відстежувати свої заощадження!';
-	@override String get delete => 'Delete goal';
-	@override String get delete_warning => 'This action is irreversible. Categories and transactions referring to this goal will not be deleted';
+	@override String get delete => 'Видалити ціль';
+	@override String get delete_warning => 'Ця дія є незворотною. Категорії та транзакції, пов\'язані з цією ціллю, не будуть видалені';
 	@override late final _TranslationsGoalsFormUk form = _TranslationsGoalsFormUk._(_root);
 	@override late final _TranslationsGoalsDetailsUk details = _TranslationsGoalsDetailsUk._(_root);
 	@override late final _TranslationsGoalsTargetTimelineStatusesUk target_timeline_statuses = _TranslationsGoalsTargetTimelineStatusesUk._(_root);
@@ -1114,7 +1114,7 @@ class _TranslationsGoalsTypeUk implements TranslationsGoalsTypeEn {
 	final TranslationsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get display => 'Goal Type';
+	@override String get display => 'Тип цілі';
 	@override late final _TranslationsGoalsTypeIncomeUk income = _TranslationsGoalsTypeIncomeUk._(_root);
 	@override late final _TranslationsGoalsTypeExpenseUk expense = _TranslationsGoalsTypeExpenseUk._(_root);
 }
@@ -1126,15 +1126,15 @@ class _TranslationsGoalsFormUk implements TranslationsGoalsFormEn {
 	final TranslationsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get new_title => 'New Goal';
-	@override String get edit_title => 'Edit Goal';
-	@override String get target_amount => 'Target Amount';
-	@override String get initial_amount => 'Initial Amount';
-	@override String get name => 'Name';
-	@override String get name_hint => 'My Saving Goal';
-	@override String get create_success => 'Goal created successfully';
-	@override String get edit_success => 'Goal edited successfully';
-	@override String get negative_warn => 'The goal amount cannot be negative';
+	@override String get new_title => 'Нова ціль';
+	@override String get edit_title => 'Редагувати ціль';
+	@override String get target_amount => 'Цільова сума';
+	@override String get initial_amount => 'Початкова сума';
+	@override String get name => 'Назва';
+	@override String get name_hint => 'Моя ціль заощаджень';
+	@override String get create_success => 'Ціль успішно створено';
+	@override String get edit_success => 'Ціль успішно відредаговано';
+	@override String get negative_warn => 'Сума цілі не може бути від\'ємною';
 }
 
 // Path: goals.details
@@ -1144,11 +1144,11 @@ class _TranslationsGoalsDetailsUk implements TranslationsGoalsDetailsEn {
 	final TranslationsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Goal Details';
-	@override String get statistics => 'Statistics';
-	@override String get goal_value => 'Goal Target';
-	@override String get evolution => 'Evolution';
-	@override String get no_transactions => 'It seems that you have not made any transactions related to this goal';
+	@override String get title => 'Деталі цілі';
+	@override String get statistics => 'Статистика';
+	@override String get goal_value => 'Значення цілі';
+	@override String get evolution => 'Динаміка';
+	@override String get no_transactions => 'Схоже, ви не здійснили жодних транзакцій, пов\'язаних з цією ціллю';
 }
 
 // Path: goals.target_timeline_statuses
@@ -1158,9 +1158,9 @@ class _TranslationsGoalsTargetTimelineStatusesUk implements TranslationsGoalsTar
 	final TranslationsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get active => 'Active goal';
-	@override String get past => 'Finished goal';
-	@override String get future => 'Future goal';
+	@override String get active => 'Активна ціль';
+	@override String get past => 'Завершена ціль';
+	@override String get future => 'Майбутня ціль';
 }
 
 // Path: goals.progress
@@ -2387,32 +2387,32 @@ extension on TranslationsUk {
 		map['budgets.progress.description.fail'] = ({required Object amount}) => 'Ви перевищили бюджет на ${amount}. Спробуйте бути уважнішими наступного разу!';
 		map['goals.title'] = 'Цілі';
 		map['goals.status'] = 'Статус цілі';
-		map['goals.type.display'] = 'Goal Type';
+		map['goals.type.display'] = 'Тип цілі';
 		map['goals.type.income.title'] = 'Ціль заощадження';
 		map['goals.type.income.descr'] = 'Ідеально для заощадження грошей. Ви досягаєте успіху, коли баланс перевищує вашу ціль.';
 		map['goals.type.expense.title'] = 'Ціль витрат';
 		map['goals.type.expense.descr'] = 'Відстежуйте, скільки ви витрачаєте, і намагайтеся досягти цільової суми. Добре підходить для пожертвувань...';
 		map['goals.empty_title'] = 'Цілей не знайдено';
 		map['goals.empty_description'] = 'Створіть нову ціль, щоб почати відстежувати свої заощадження!';
-		map['goals.delete'] = 'Delete goal';
-		map['goals.delete_warning'] = 'This action is irreversible. Categories and transactions referring to this goal will not be deleted';
-		map['goals.form.new_title'] = 'New Goal';
-		map['goals.form.edit_title'] = 'Edit Goal';
-		map['goals.form.target_amount'] = 'Target Amount';
-		map['goals.form.initial_amount'] = 'Initial Amount';
-		map['goals.form.name'] = 'Name';
-		map['goals.form.name_hint'] = 'My Saving Goal';
-		map['goals.form.create_success'] = 'Goal created successfully';
-		map['goals.form.edit_success'] = 'Goal edited successfully';
-		map['goals.form.negative_warn'] = 'The goal amount cannot be negative';
-		map['goals.details.title'] = 'Goal Details';
-		map['goals.details.statistics'] = 'Statistics';
-		map['goals.details.goal_value'] = 'Goal Target';
-		map['goals.details.evolution'] = 'Evolution';
-		map['goals.details.no_transactions'] = 'It seems that you have not made any transactions related to this goal';
-		map['goals.target_timeline_statuses.active'] = 'Active goal';
-		map['goals.target_timeline_statuses.past'] = 'Finished goal';
-		map['goals.target_timeline_statuses.future'] = 'Future goal';
+		map['goals.delete'] = 'Видалити ціль';
+		map['goals.delete_warning'] = 'Ця дія є незворотною. Категорії та транзакції, пов\'язані з цією ціллю, не будуть видалені';
+		map['goals.form.new_title'] = 'Нова ціль';
+		map['goals.form.edit_title'] = 'Редагувати ціль';
+		map['goals.form.target_amount'] = 'Цільова сума';
+		map['goals.form.initial_amount'] = 'Початкова сума';
+		map['goals.form.name'] = 'Назва';
+		map['goals.form.name_hint'] = 'Моя ціль заощаджень';
+		map['goals.form.create_success'] = 'Ціль успішно створено';
+		map['goals.form.edit_success'] = 'Ціль успішно відредаговано';
+		map['goals.form.negative_warn'] = 'Сума цілі не може бути від\'ємною';
+		map['goals.details.title'] = 'Деталі цілі';
+		map['goals.details.statistics'] = 'Статистика';
+		map['goals.details.goal_value'] = 'Значення цілі';
+		map['goals.details.evolution'] = 'Динаміка';
+		map['goals.details.no_transactions'] = 'Схоже, ви не здійснили жодних транзакцій, пов\'язаних з цією ціллю';
+		map['goals.target_timeline_statuses.active'] = 'Активна ціль';
+		map['goals.target_timeline_statuses.past'] = 'Завершена ціль';
+		map['goals.target_timeline_statuses.future'] = 'Майбутня ціль';
 		map['goals.progress.labels.active_on_track'] = 'На шляху';
 		map['goals.progress.labels.active_behind_schedule'] = 'Відставання від графіка';
 		map['goals.progress.labels.active_indeterminate'] = 'Активний';

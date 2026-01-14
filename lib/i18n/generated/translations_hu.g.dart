@@ -467,8 +467,8 @@ class _TranslationsGoalsHu implements TranslationsGoalsEn {
 	@override late final _TranslationsGoalsTypeHu type = _TranslationsGoalsTypeHu._(_root);
 	@override String get empty_title => 'Nincsenek célok';
 	@override String get empty_description => 'Hozzon létre új célt megtakarításai követéséhez!';
-	@override String get delete => 'Delete goal';
-	@override String get delete_warning => 'This action is irreversible. Categories and transactions referring to this goal will not be deleted';
+	@override String get delete => 'Cél törlése';
+	@override String get delete_warning => 'Ez a művelet visszafordíthatatlan. A célhoz kapcsolódó kategóriák és tranzakciók nem törlődnek';
 	@override late final _TranslationsGoalsFormHu form = _TranslationsGoalsFormHu._(_root);
 	@override late final _TranslationsGoalsDetailsHu details = _TranslationsGoalsDetailsHu._(_root);
 	@override late final _TranslationsGoalsTargetTimelineStatusesHu target_timeline_statuses = _TranslationsGoalsTargetTimelineStatusesHu._(_root);
@@ -1114,7 +1114,7 @@ class _TranslationsGoalsTypeHu implements TranslationsGoalsTypeEn {
 	final TranslationsHu _root; // ignore: unused_field
 
 	// Translations
-	@override String get display => 'Goal Type';
+	@override String get display => 'Cél típusa';
 	@override late final _TranslationsGoalsTypeIncomeHu income = _TranslationsGoalsTypeIncomeHu._(_root);
 	@override late final _TranslationsGoalsTypeExpenseHu expense = _TranslationsGoalsTypeExpenseHu._(_root);
 }
@@ -1126,15 +1126,15 @@ class _TranslationsGoalsFormHu implements TranslationsGoalsFormEn {
 	final TranslationsHu _root; // ignore: unused_field
 
 	// Translations
-	@override String get new_title => 'New Goal';
-	@override String get edit_title => 'Edit Goal';
-	@override String get target_amount => 'Target Amount';
-	@override String get initial_amount => 'Initial Amount';
-	@override String get name => 'Name';
-	@override String get name_hint => 'My Saving Goal';
-	@override String get create_success => 'Goal created successfully';
-	@override String get edit_success => 'Goal edited successfully';
-	@override String get negative_warn => 'The goal amount cannot be negative';
+	@override String get new_title => 'Új cél';
+	@override String get edit_title => 'Cél szerkesztése';
+	@override String get target_amount => 'Célösszeg';
+	@override String get initial_amount => 'Kezdő összeg';
+	@override String get name => 'Név';
+	@override String get name_hint => 'Megtakarítási célom';
+	@override String get create_success => 'Cél sikeresen létrehozva';
+	@override String get edit_success => 'Cél sikeresen szerkesztve';
+	@override String get negative_warn => 'A cél összege nem lehet negatív';
 }
 
 // Path: goals.details
@@ -1144,11 +1144,11 @@ class _TranslationsGoalsDetailsHu implements TranslationsGoalsDetailsEn {
 	final TranslationsHu _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Goal Details';
-	@override String get statistics => 'Statistics';
-	@override String get goal_value => 'Goal Target';
-	@override String get evolution => 'Evolution';
-	@override String get no_transactions => 'It seems that you have not made any transactions related to this goal';
+	@override String get title => 'Cél részletei';
+	@override String get statistics => 'Statisztikák';
+	@override String get goal_value => 'Célérték';
+	@override String get evolution => 'Fejlődés';
+	@override String get no_transactions => 'Úgy tűnik, nem hajtott végre ehhez a célhoz kapcsolódó tranzakciót';
 }
 
 // Path: goals.target_timeline_statuses
@@ -1158,9 +1158,9 @@ class _TranslationsGoalsTargetTimelineStatusesHu implements TranslationsGoalsTar
 	final TranslationsHu _root; // ignore: unused_field
 
 	// Translations
-	@override String get active => 'Active goal';
-	@override String get past => 'Finished goal';
-	@override String get future => 'Future goal';
+	@override String get active => 'Aktív cél';
+	@override String get past => 'Befejezett cél';
+	@override String get future => 'Jövőbeli cél';
 }
 
 // Path: goals.progress
@@ -2387,32 +2387,32 @@ extension on TranslationsHu {
 		map['budgets.progress.description.fail'] = ({required Object amount}) => 'Túllépte a költségvetést ${amount} összeggel. Próbáljon meg óvatosabb lenni legközelebb!';
 		map['goals.title'] = 'Célok';
 		map['goals.status'] = 'A cél állapota';
-		map['goals.type.display'] = 'Goal Type';
+		map['goals.type.display'] = 'Cél típusa';
 		map['goals.type.income.title'] = 'Megtakarítási cél';
 		map['goals.type.income.descr'] = 'Ideális pénzmegtakarításhoz. Akkor sikeres, ha az egyenleg meghaladja a célösszeget.';
 		map['goals.type.expense.title'] = 'Költési cél';
 		map['goals.type.expense.descr'] = 'Kövesse nyomon kiadásait, és próbáljon meg elérni egy célösszeget. Jól használható adományokhoz...';
 		map['goals.empty_title'] = 'Nincsenek célok';
 		map['goals.empty_description'] = 'Hozzon létre új célt megtakarításai követéséhez!';
-		map['goals.delete'] = 'Delete goal';
-		map['goals.delete_warning'] = 'This action is irreversible. Categories and transactions referring to this goal will not be deleted';
-		map['goals.form.new_title'] = 'New Goal';
-		map['goals.form.edit_title'] = 'Edit Goal';
-		map['goals.form.target_amount'] = 'Target Amount';
-		map['goals.form.initial_amount'] = 'Initial Amount';
-		map['goals.form.name'] = 'Name';
-		map['goals.form.name_hint'] = 'My Saving Goal';
-		map['goals.form.create_success'] = 'Goal created successfully';
-		map['goals.form.edit_success'] = 'Goal edited successfully';
-		map['goals.form.negative_warn'] = 'The goal amount cannot be negative';
-		map['goals.details.title'] = 'Goal Details';
-		map['goals.details.statistics'] = 'Statistics';
-		map['goals.details.goal_value'] = 'Goal Target';
-		map['goals.details.evolution'] = 'Evolution';
-		map['goals.details.no_transactions'] = 'It seems that you have not made any transactions related to this goal';
-		map['goals.target_timeline_statuses.active'] = 'Active goal';
-		map['goals.target_timeline_statuses.past'] = 'Finished goal';
-		map['goals.target_timeline_statuses.future'] = 'Future goal';
+		map['goals.delete'] = 'Cél törlése';
+		map['goals.delete_warning'] = 'Ez a művelet visszafordíthatatlan. A célhoz kapcsolódó kategóriák és tranzakciók nem törlődnek';
+		map['goals.form.new_title'] = 'Új cél';
+		map['goals.form.edit_title'] = 'Cél szerkesztése';
+		map['goals.form.target_amount'] = 'Célösszeg';
+		map['goals.form.initial_amount'] = 'Kezdő összeg';
+		map['goals.form.name'] = 'Név';
+		map['goals.form.name_hint'] = 'Megtakarítási célom';
+		map['goals.form.create_success'] = 'Cél sikeresen létrehozva';
+		map['goals.form.edit_success'] = 'Cél sikeresen szerkesztve';
+		map['goals.form.negative_warn'] = 'A cél összege nem lehet negatív';
+		map['goals.details.title'] = 'Cél részletei';
+		map['goals.details.statistics'] = 'Statisztikák';
+		map['goals.details.goal_value'] = 'Célérték';
+		map['goals.details.evolution'] = 'Fejlődés';
+		map['goals.details.no_transactions'] = 'Úgy tűnik, nem hajtott végre ehhez a célhoz kapcsolódó tranzakciót';
+		map['goals.target_timeline_statuses.active'] = 'Aktív cél';
+		map['goals.target_timeline_statuses.past'] = 'Befejezett cél';
+		map['goals.target_timeline_statuses.future'] = 'Jövőbeli cél';
 		map['goals.progress.labels.active_on_track'] = 'Pályán';
 		map['goals.progress.labels.active_behind_schedule'] = 'A menetrend lemaradásával';
 		map['goals.progress.labels.active_indeterminate'] = 'Aktív';

@@ -467,8 +467,8 @@ class _TranslationsGoalsFr implements TranslationsGoalsEn {
 	@override late final _TranslationsGoalsTypeFr type = _TranslationsGoalsTypeFr._(_root);
 	@override String get empty_title => 'Aucun objectif trouvé';
 	@override String get empty_description => 'Créez un nouvel objectif pour commencer à suivre vos économies !';
-	@override String get delete => 'Delete goal';
-	@override String get delete_warning => 'This action is irreversible. Categories and transactions referring to this goal will not be deleted';
+	@override String get delete => 'Supprimer l\'objectif';
+	@override String get delete_warning => 'Cette action est irréversible. Les catégories et transactions liées à cet objectif ne seront pas supprimées';
 	@override late final _TranslationsGoalsFormFr form = _TranslationsGoalsFormFr._(_root);
 	@override late final _TranslationsGoalsDetailsFr details = _TranslationsGoalsDetailsFr._(_root);
 	@override late final _TranslationsGoalsTargetTimelineStatusesFr target_timeline_statuses = _TranslationsGoalsTargetTimelineStatusesFr._(_root);
@@ -1114,7 +1114,7 @@ class _TranslationsGoalsTypeFr implements TranslationsGoalsTypeEn {
 	final TranslationsFr _root; // ignore: unused_field
 
 	// Translations
-	@override String get display => 'Goal Type';
+	@override String get display => 'Type d\'objectif';
 	@override late final _TranslationsGoalsTypeIncomeFr income = _TranslationsGoalsTypeIncomeFr._(_root);
 	@override late final _TranslationsGoalsTypeExpenseFr expense = _TranslationsGoalsTypeExpenseFr._(_root);
 }
@@ -1126,15 +1126,15 @@ class _TranslationsGoalsFormFr implements TranslationsGoalsFormEn {
 	final TranslationsFr _root; // ignore: unused_field
 
 	// Translations
-	@override String get new_title => 'New Goal';
-	@override String get edit_title => 'Edit Goal';
-	@override String get target_amount => 'Target Amount';
-	@override String get initial_amount => 'Initial Amount';
-	@override String get name => 'Name';
-	@override String get name_hint => 'My Saving Goal';
-	@override String get create_success => 'Goal created successfully';
-	@override String get edit_success => 'Goal edited successfully';
-	@override String get negative_warn => 'The goal amount cannot be negative';
+	@override String get new_title => 'Nouvel objectif';
+	@override String get edit_title => 'Modifier l\'objectif';
+	@override String get target_amount => 'Montant cible';
+	@override String get initial_amount => 'Montant initial';
+	@override String get name => 'Nom';
+	@override String get name_hint => 'Mon objectif d\'épargne';
+	@override String get create_success => 'Objectif créé avec succès';
+	@override String get edit_success => 'Objectif modifié avec succès';
+	@override String get negative_warn => 'Le montant de l\'objectif ne peut pas être négatif';
 }
 
 // Path: goals.details
@@ -1144,11 +1144,11 @@ class _TranslationsGoalsDetailsFr implements TranslationsGoalsDetailsEn {
 	final TranslationsFr _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Goal Details';
-	@override String get statistics => 'Statistics';
-	@override String get goal_value => 'Goal Target';
-	@override String get evolution => 'Evolution';
-	@override String get no_transactions => 'It seems that you have not made any transactions related to this goal';
+	@override String get title => 'Détails de l\'objectif';
+	@override String get statistics => 'Statistiques';
+	@override String get goal_value => 'Valeur cible';
+	@override String get evolution => 'Évolution';
+	@override String get no_transactions => 'Il semble que vous n\'ayez effectué aucune transaction liée à cet objectif';
 }
 
 // Path: goals.target_timeline_statuses
@@ -1158,9 +1158,9 @@ class _TranslationsGoalsTargetTimelineStatusesFr implements TranslationsGoalsTar
 	final TranslationsFr _root; // ignore: unused_field
 
 	// Translations
-	@override String get active => 'Active goal';
-	@override String get past => 'Finished goal';
-	@override String get future => 'Future goal';
+	@override String get active => 'Objectif actif';
+	@override String get past => 'Objectif terminé';
+	@override String get future => 'Objectif futur';
 }
 
 // Path: goals.progress
@@ -2385,32 +2385,32 @@ extension on TranslationsFr {
 		map['budgets.progress.description.fail'] = ({required Object amount}) => 'Vous avez dépassé le budget de ${amount}. Essayez d\'être plus prudent la prochaine fois !';
 		map['goals.title'] = 'Objectifs';
 		map['goals.status'] = 'Statut de l\'objectif';
-		map['goals.type.display'] = 'Goal Type';
+		map['goals.type.display'] = 'Type d\'objectif';
 		map['goals.type.income.title'] = 'Objectif d\'épargne';
 		map['goals.type.income.descr'] = 'Idéal pour économiser de l\'argent. Vous réussissez lorsque le solde dépasse votre objectif.';
 		map['goals.type.expense.title'] = 'Objectif de dépense';
 		map['goals.type.expense.descr'] = 'Suivez combien vous dépensez et visez à atteindre un montant cible. Fonctionne bien pour les dons...';
 		map['goals.empty_title'] = 'Aucun objectif trouvé';
 		map['goals.empty_description'] = 'Créez un nouvel objectif pour commencer à suivre vos économies !';
-		map['goals.delete'] = 'Delete goal';
-		map['goals.delete_warning'] = 'This action is irreversible. Categories and transactions referring to this goal will not be deleted';
-		map['goals.form.new_title'] = 'New Goal';
-		map['goals.form.edit_title'] = 'Edit Goal';
-		map['goals.form.target_amount'] = 'Target Amount';
-		map['goals.form.initial_amount'] = 'Initial Amount';
-		map['goals.form.name'] = 'Name';
-		map['goals.form.name_hint'] = 'My Saving Goal';
-		map['goals.form.create_success'] = 'Goal created successfully';
-		map['goals.form.edit_success'] = 'Goal edited successfully';
-		map['goals.form.negative_warn'] = 'The goal amount cannot be negative';
-		map['goals.details.title'] = 'Goal Details';
-		map['goals.details.statistics'] = 'Statistics';
-		map['goals.details.goal_value'] = 'Goal Target';
-		map['goals.details.evolution'] = 'Evolution';
-		map['goals.details.no_transactions'] = 'It seems that you have not made any transactions related to this goal';
-		map['goals.target_timeline_statuses.active'] = 'Active goal';
-		map['goals.target_timeline_statuses.past'] = 'Finished goal';
-		map['goals.target_timeline_statuses.future'] = 'Future goal';
+		map['goals.delete'] = 'Supprimer l\'objectif';
+		map['goals.delete_warning'] = 'Cette action est irréversible. Les catégories et transactions liées à cet objectif ne seront pas supprimées';
+		map['goals.form.new_title'] = 'Nouvel objectif';
+		map['goals.form.edit_title'] = 'Modifier l\'objectif';
+		map['goals.form.target_amount'] = 'Montant cible';
+		map['goals.form.initial_amount'] = 'Montant initial';
+		map['goals.form.name'] = 'Nom';
+		map['goals.form.name_hint'] = 'Mon objectif d\'épargne';
+		map['goals.form.create_success'] = 'Objectif créé avec succès';
+		map['goals.form.edit_success'] = 'Objectif modifié avec succès';
+		map['goals.form.negative_warn'] = 'Le montant de l\'objectif ne peut pas être négatif';
+		map['goals.details.title'] = 'Détails de l\'objectif';
+		map['goals.details.statistics'] = 'Statistiques';
+		map['goals.details.goal_value'] = 'Valeur cible';
+		map['goals.details.evolution'] = 'Évolution';
+		map['goals.details.no_transactions'] = 'Il semble que vous n\'ayez effectué aucune transaction liée à cet objectif';
+		map['goals.target_timeline_statuses.active'] = 'Objectif actif';
+		map['goals.target_timeline_statuses.past'] = 'Objectif terminé';
+		map['goals.target_timeline_statuses.future'] = 'Objectif futur';
 		map['goals.progress.labels.active_on_track'] = 'En bonne voie';
 		map['goals.progress.labels.active_behind_schedule'] = 'En retard';
 		map['goals.progress.labels.active_indeterminate'] = 'Actif';

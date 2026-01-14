@@ -690,7 +690,7 @@
     "title": "Célok",
     "status": "A cél állapota",
     "type": {
-      "display": "Goal Type",
+      "display": "Cél típusa",
       "income": {
         "title": "Megtakarítási cél",
         "descr": "Ideális pénzmegtakarításhoz. Akkor sikeres, ha az egyenleg meghaladja a célösszeget."
@@ -702,30 +702,30 @@
     },
     "empty_title": "Nincsenek célok",
     "empty_description": "Hozzon létre új célt megtakarításai követéséhez!",
-    "delete": "Delete goal",
-    "delete_warning": "This action is irreversible. Categories and transactions referring to this goal will not be deleted",
+    "delete": "Cél törlése",
+    "delete_warning": "Ez a művelet visszafordíthatatlan. A célhoz kapcsolódó kategóriák és tranzakciók nem törlődnek",
     "FORM": {
-      "new_title": "New Goal",
-      "edit_title": "Edit Goal",
-      "target_amount": "Target Amount",
-      "initial_amount": "Initial Amount",
-      "name": "Name",
-      "name_hint": "My Saving Goal",
-      "create_success": "Goal created successfully",
-      "edit_success": "Goal edited successfully",
-      "negative_warn": "The goal amount cannot be negative"
+      "new_title": "Új cél",
+      "edit_title": "Cél szerkesztése",
+      "target_amount": "Célösszeg",
+      "initial_amount": "Kezdő összeg",
+      "name": "Név",
+      "name_hint": "Megtakarítási célom",
+      "create_success": "Cél sikeresen létrehozva",
+      "edit_success": "Cél sikeresen szerkesztve",
+      "negative_warn": "A cél összege nem lehet negatív"
     },
     "DETAILS": {
-      "title": "Goal Details",
-      "statistics": "Statistics",
-      "goal_value": "Goal Target",
-      "evolution": "Evolution",
-      "no_transactions": "It seems that you have not made any transactions related to this goal"
+      "title": "Cél részletei",
+      "statistics": "Statisztikák",
+      "goal_value": "Célérték",
+      "evolution": "Fejlődés",
+      "no_transactions": "Úgy tűnik, nem hajtott végre ehhez a célhoz kapcsolódó tranzakciót"
     },
     "TARGET_TIMELINE_STATUSES": {
-      "active": "Active goal",
-      "past": "Finished goal",
-      "future": "Future goal"
+      "active": "Aktív cél",
+      "past": "Befejezett cél",
+      "future": "Jövőbeli cél"
     },
     "PROGRESS": {
       "LABELS": {
