@@ -16,9 +16,12 @@ Future<DateTime?> openDateTimePicker(
   firstDate ??= kDefaultFirstSelectableDate;
   lastDate ??= kDefaultLastSelectableDate;
 
-  final today = DateTime.now();
-  if (today.isAfter(firstDate) && today.isBefore(lastDate)) {
-    initialDate = today;
+  if (initialDate != null) {
+    if (initialDate.isBefore(firstDate)) {
+      initialDate = firstDate;
+    } else if (initialDate.isAfter(lastDate)) {
+      initialDate = lastDate;
+    }
   }
 
   showTimePickerDef() {
