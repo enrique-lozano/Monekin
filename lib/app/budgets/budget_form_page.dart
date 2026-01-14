@@ -184,6 +184,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 12,
             children: [
               TextFormField(
                 controller: nameController,
@@ -193,7 +194,6 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                   labelText: '${t.budgets.form.name} *',
                 ),
               ),
-              const SizedBox(height: 8),
               TextFormField(
                 controller: valueController,
                 decoration: InputDecoration(
@@ -231,7 +231,6 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                   setState(() {});
                 },
               ),
-              const SizedBox(height: 16),
               DropdownButtonFormField(
                 value: intervalPeriod,
                 decoration: InputDecoration(
@@ -258,8 +257,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                   });
                 },
               ),
-              if (intervalPeriod == null) ...[
-                const SizedBox(height: 16),
+              if (intervalPeriod == null)
                 Row(
                   children: [
                     Expanded(
@@ -303,8 +301,14 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                     ),
                   ],
                 ),
-              ],
-              const SizedBox(height: 16),
+
+              const Divider(thickness: 2, height: 16),
+
+              Text(
+                t.general.filters,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+
               StreamBuilder(
                 stream: AccountService.instance.getAccounts(),
                 builder: (context, snapshot) {
@@ -347,7 +351,6 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
                   );
                 },
               ),
-              const SizedBox(height: 16),
               StreamBuilder(
                 stream: CategoryService.instance.getCategories(),
                 builder: (context, snapshot) {

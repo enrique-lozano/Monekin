@@ -300,7 +300,7 @@ class _GoalFormPageState extends State<GoalFormPage> {
               ),
 
               const SizedBox(height: 16),
-              const Divider(height: 8),
+              const Divider(height: 8, thickness: 2),
               const SizedBox(height: 16),
 
               Text(

@@ -21,6 +21,7 @@ class TransactionTitleField extends StatelessWidget {
         decoration: InputDecoration(
           isDense: false,
           filled: false,
+          contentPadding: const EdgeInsets.symmetric(vertical: 8),
           counterText: '',
           border: InputBorder.none,
           hintText: t.transaction.form.title,
@@ -50,6 +51,7 @@ class TransactionDescriptionField extends StatelessWidget {
           isDense: false,
           filled: false,
           border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(vertical: 8),
           hintText: t.transaction.form.description_info,
         ),
       ),

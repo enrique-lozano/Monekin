@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
 
 class ListTileField extends StatelessWidget {
@@ -22,10 +23,14 @@ class ListTileField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Tappable(
       bgColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(inputBorderRadius),
+      ),
       onTap: onTap,
       child: ListTile(
         mouseCursor: SystemMouseCursors.click,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+        minVerticalPadding: 8,
         title: Text(title),
         subtitle: Text(
           subtitle,

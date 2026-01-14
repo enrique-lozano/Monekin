@@ -119,10 +119,13 @@ class _IntervalSelectorPageState extends State<IntervalSelectorPage> {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(18, 2, 0, 12),
-              child: Text(t.general.time.ranges.it_repeat),
+              child: Text(
+                t.general.time.ranges.it_repeat,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
               child: Form(
                 key: _formKey,
                 child: Row(
@@ -192,10 +195,13 @@ class _IntervalSelectorPageState extends State<IntervalSelectorPage> {
                 ),
               ),
             ),
-            const Divider(height: 24),
+            const Divider(height: 24, thickness: 3),
             Padding(
               padding: const EdgeInsets.fromLTRB(18, 12, 0, 12),
-              child: Text(t.general.time.ranges.it_ends),
+              child: Text(
+                t.general.time.ranges.it_ends,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
             ),
             buildRadioButton(
               RuleUntilMode.infinity,

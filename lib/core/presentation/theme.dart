@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/user-setting/enum/app-fonts.enum.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/presentation/styles/borders.dart';
 
 import 'app_colors.dart';
 
@@ -148,14 +149,19 @@ ThemeData getThemeData(
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: theme.colorScheme.surfaceContainerHighest,
-      isDense: true,
+      isDense: false,
+      contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      floatingLabelBehavior: FloatingLabelBehavior.auto,
       hintStyle: TextStyle(color: customAppColors.textHint),
-      floatingLabelStyle: TextStyle(
-        backgroundColor: theme.colorScheme.surface.withOpacity(0.5),
-      ),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10.0),
-        borderSide: const BorderSide(width: 0, style: BorderStyle.none),
+      border: UnderlineInputBorder(
+        borderSide: BorderSide.none,
+        borderRadius: BorderRadius.only(
+          topLeft: inputBorderRadius,
+          topRight: inputBorderRadius,
+          bottomLeft: inputBorderRadius,
+          bottomRight: inputBorderRadius,
+        ),
+        //    borderSide: BorderSide(color: theme.colorScheme.outline),
       ),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
