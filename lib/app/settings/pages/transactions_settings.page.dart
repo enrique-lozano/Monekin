@@ -138,7 +138,6 @@ class TransactionsSettingsPage extends StatelessWidget {
                                 },
                               ),
                               MonekinTileSwitch(
-                                //TODO: i18n
                                 title: t.settings.transactions.style.show_time,
                                 initialValue:
                                     appStateSettings[SettingKey
