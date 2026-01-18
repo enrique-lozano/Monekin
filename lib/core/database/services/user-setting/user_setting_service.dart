@@ -49,7 +49,7 @@ enum SettingKey {
   /// Whether to show the tags of the transaction in the transaction list tiles
   transactionTileShowTags,
 
-  /// Wheter to show the time of the transaction in the transaction list tiles
+  /// Whether to show the time of the transaction in the transaction list tiles
   transactionTileShowTime,
 }
 
