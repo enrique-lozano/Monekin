@@ -24,5 +24,8 @@ String settingsInitialSeedSQL =
   ('${SettingKey.themeMode.name}', 'system'),
   ('${SettingKey.defaultTransactionType.name}', 'E'),
   ('${SettingKey.transactionSwipeLeftAction.name}', null), 
-  ('${SettingKey.transactionSwipeRightAction.name}', null);
+  ('${SettingKey.transactionSwipeRightAction.name}', null),
+  ('${SettingKey.showAllDecimals.name}', '1'),
+  ('${SettingKey.transactionTileShowTags.name}', '1'),
+  ('${SettingKey.transactionTileShowTime.name}', '1')
 """;

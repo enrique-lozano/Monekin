@@ -826,6 +826,8 @@
     "GENERAL": {
       "menu_title": "Genel Ayarlar",
       "menu_descr": "Dil, gizlilik ve daha fazlası",
+      "show_all_decimals": "Tüm ondalık basamakları göster",
+      "show_all_decimals_descr": "Sondaki sıfırlar olsa bile tüm ondalık basamakları göster",
       "LANGUAGE": {
         "section": "Dil ve metinler",
         "title": "Uygulama dili",
@@ -853,6 +855,12 @@
       "menu_title": "İşlemler",
       "menu_descr": "İşlemlerinizin davranışını yapılandırın",
       "title": "İşlem Ayarları",
+      "STYLE": {
+        "title": "İşlem stili",
+        "subtitle": "İşlemlerin listelerde nasıl görüneceğini yapılandırın",
+        "show_tags": "Etiketleri Göster",
+        "show_time": "Saati Göster"
+      },
       "SWIPE_ACTIONS": {
         "title": "Kaydırma eylemleri",
         "choose_description": "Bu kaydırma yönünü kullanarak listedeki bir işlem öğesini kaydırdığınızda hangi eylemin tetikleneceğini seçin",

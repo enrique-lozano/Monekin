@@ -829,6 +829,8 @@
     "GENERAL": {
       "menu_title": "Ajustes generales",
       "menu_descr": "Idioma, privacidad y más",
+      "show_all_decimals": "Mostrar todos los decimales",
+      "show_all_decimals_descr": "Mostrar todos los decimales incluso si hay ceros finales",
       "LANGUAGE": {
         "section": "Idioma y textos",
         "title": "Idioma de la aplicación",
@@ -856,6 +858,12 @@
       "menu_title": "Transacciones",
       "menu_descr": "Configura el comportamiento de tus transacciones",
       "title": "Ajustes de transacciones",
+      "STYLE": {
+        "title": "Estilo de transacción",
+        "subtitle": "Configura cómo se ven las transacciones en las listas",
+        "show_tags": "Ver Etiquetas",
+        "show_time": "Ver Hora"
+      },
       "SWIPE_ACTIONS": {
         "title": "Acciones al deslizar el dedo",
         "choose_description": "Elije qué acción se activará cuando deslices una transacción del listado de transacciones usando esta dirección de deslizamiento",

@@ -1245,6 +1245,8 @@ class _TranslationsSettingsGeneralTr implements TranslationsSettingsGeneralEn {
 	// Translations
 	@override String get menu_title => 'Genel Ayarlar';
 	@override String get menu_descr => 'Dil, gizlilik ve daha fazlası';
+	@override String get show_all_decimals => 'Tüm ondalık basamakları göster';
+	@override String get show_all_decimals_descr => 'Sondaki sıfırlar olsa bile tüm ondalık basamakları göster';
 	@override late final _TranslationsSettingsGeneralLanguageTr language = _TranslationsSettingsGeneralLanguageTr._(_root);
 	@override late final _TranslationsSettingsGeneralLocaleTr locale = _TranslationsSettingsGeneralLocaleTr._(_root);
 }
@@ -1275,6 +1277,7 @@ class _TranslationsSettingsTransactionsTr implements TranslationsSettingsTransac
 	@override String get menu_title => 'İşlemler';
 	@override String get menu_descr => 'İşlemlerinizin davranışını yapılandırın';
 	@override String get title => 'İşlem Ayarları';
+	@override late final _TranslationsSettingsTransactionsStyleTr style = _TranslationsSettingsTransactionsStyleTr._(_root);
 	@override late final _TranslationsSettingsTransactionsSwipeActionsTr swipe_actions = _TranslationsSettingsTransactionsSwipeActionsTr._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultValuesTr default_values = _TranslationsSettingsTransactionsDefaultValuesTr._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultTypeTr default_type = _TranslationsSettingsTransactionsDefaultTypeTr._(_root);
@@ -1673,6 +1676,19 @@ class _TranslationsSettingsGeneralLocaleTr implements TranslationsSettingsGenera
 	@override String get descr => 'Tarihler, sayılar için kullanılacak biçimi ayarlayın...';
 	@override String get warn => 'Bölge değiştirildiğinde uygulama güncellenecektir';
 	@override String get first_day_of_week => 'Haftanın ilk günü';
+}
+
+// Path: settings.transactions.style
+class _TranslationsSettingsTransactionsStyleTr implements TranslationsSettingsTransactionsStyleEn {
+	_TranslationsSettingsTransactionsStyleTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'İşlem stili';
+	@override String get subtitle => 'İşlemlerin listelerde nasıl görüneceğini yapılandırın';
+	@override String get show_tags => 'Etiketleri Göster';
+	@override String get show_time => 'Saati Göster';
 }
 
 // Path: settings.transactions.swipe_actions
@@ -2487,6 +2503,8 @@ extension on TranslationsTr {
 		map['settings.edit_profile'] = 'Profili düzenle';
 		map['settings.general.menu_title'] = 'Genel Ayarlar';
 		map['settings.general.menu_descr'] = 'Dil, gizlilik ve daha fazlası';
+		map['settings.general.show_all_decimals'] = 'Tüm ondalık basamakları göster';
+		map['settings.general.show_all_decimals_descr'] = 'Sondaki sıfırlar olsa bile tüm ondalık basamakları göster';
 		map['settings.general.language.section'] = 'Dil ve metinler';
 		map['settings.general.language.title'] = 'Uygulama dili';
 		map['settings.general.language.descr'] = 'Metinlerin uygulamada görüntüleneceği dil';
@@ -2506,6 +2524,10 @@ extension on TranslationsTr {
 		map['settings.transactions.menu_title'] = 'İşlemler';
 		map['settings.transactions.menu_descr'] = 'İşlemlerinizin davranışını yapılandırın';
 		map['settings.transactions.title'] = 'İşlem Ayarları';
+		map['settings.transactions.style.title'] = 'İşlem stili';
+		map['settings.transactions.style.subtitle'] = 'İşlemlerin listelerde nasıl görüneceğini yapılandırın';
+		map['settings.transactions.style.show_tags'] = 'Etiketleri Göster';
+		map['settings.transactions.style.show_time'] = 'Saati Göster';
 		map['settings.transactions.swipe_actions.title'] = 'Kaydırma eylemleri';
 		map['settings.transactions.swipe_actions.choose_description'] = 'Bu kaydırma yönünü kullanarak listedeki bir işlem öğesini kaydırdığınızda hangi eylemin tetikleneceğini seçin';
 		map['settings.transactions.swipe_actions.swipe_left'] = 'Sola kaydırın';

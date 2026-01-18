@@ -1245,6 +1245,8 @@ class _TranslationsSettingsGeneralDe implements TranslationsSettingsGeneralEn {
 	// Translations
 	@override String get menu_title => 'Allgemeine Einstellungen';
 	@override String get menu_descr => 'Sprache, Datenschutz und mehr';
+	@override String get show_all_decimals => 'Alle Nachkommastellen anzeigen';
+	@override String get show_all_decimals_descr => 'Alle Dezimalstellen anzeigen, auch bei nachgestellten Nullen';
 	@override late final _TranslationsSettingsGeneralLanguageDe language = _TranslationsSettingsGeneralLanguageDe._(_root);
 	@override late final _TranslationsSettingsGeneralLocaleDe locale = _TranslationsSettingsGeneralLocaleDe._(_root);
 }
@@ -1275,6 +1277,7 @@ class _TranslationsSettingsTransactionsDe implements TranslationsSettingsTransac
 	@override String get menu_title => 'Transaktionen';
 	@override String get menu_descr => 'Konfigurieren Sie das Verhalten Ihrer Transaktionen';
 	@override String get title => 'Transaktionseinstellungen';
+	@override late final _TranslationsSettingsTransactionsStyleDe style = _TranslationsSettingsTransactionsStyleDe._(_root);
 	@override late final _TranslationsSettingsTransactionsSwipeActionsDe swipe_actions = _TranslationsSettingsTransactionsSwipeActionsDe._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultValuesDe default_values = _TranslationsSettingsTransactionsDefaultValuesDe._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultTypeDe default_type = _TranslationsSettingsTransactionsDefaultTypeDe._(_root);
@@ -1673,6 +1676,19 @@ class _TranslationsSettingsGeneralLocaleDe implements TranslationsSettingsGenera
 	@override String get descr => 'Lege das für Datumsangaben, Zahlen usw. zu verwendende Format fest.';
 	@override String get warn => 'Wenn Du die Region änderst, wird die App aktualisiert';
 	@override String get first_day_of_week => 'Erster Tag der Woche';
+}
+
+// Path: settings.transactions.style
+class _TranslationsSettingsTransactionsStyleDe implements TranslationsSettingsTransactionsStyleEn {
+	_TranslationsSettingsTransactionsStyleDe._(this._root);
+
+	final TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Transaktionsstil';
+	@override String get subtitle => 'Konfigurieren Sie das Aussehen von Transaktionen in Listen';
+	@override String get show_tags => 'Tags anzeigen';
+	@override String get show_time => 'Zeit anzeigen';
 }
 
 // Path: settings.transactions.swipe_actions
@@ -2487,6 +2503,8 @@ extension on TranslationsDe {
 		map['settings.edit_profile'] = 'Profil bearbeiten';
 		map['settings.general.menu_title'] = 'Allgemeine Einstellungen';
 		map['settings.general.menu_descr'] = 'Sprache, Datenschutz und mehr';
+		map['settings.general.show_all_decimals'] = 'Alle Nachkommastellen anzeigen';
+		map['settings.general.show_all_decimals_descr'] = 'Alle Dezimalstellen anzeigen, auch bei nachgestellten Nullen';
 		map['settings.general.language.section'] = 'Sprache und Texte';
 		map['settings.general.language.title'] = 'App-Sprache';
 		map['settings.general.language.descr'] = 'Sprache, in der die Texte in der App angezeigt werden';
@@ -2506,6 +2524,10 @@ extension on TranslationsDe {
 		map['settings.transactions.menu_title'] = 'Transaktionen';
 		map['settings.transactions.menu_descr'] = 'Konfigurieren Sie das Verhalten Ihrer Transaktionen';
 		map['settings.transactions.title'] = 'Transaktionseinstellungen';
+		map['settings.transactions.style.title'] = 'Transaktionsstil';
+		map['settings.transactions.style.subtitle'] = 'Konfigurieren Sie das Aussehen von Transaktionen in Listen';
+		map['settings.transactions.style.show_tags'] = 'Tags anzeigen';
+		map['settings.transactions.style.show_time'] = 'Zeit anzeigen';
 		map['settings.transactions.swipe_actions.title'] = 'Wischaktionen';
 		map['settings.transactions.swipe_actions.choose_description'] = 'Wählen Sie aus, welche Aktion ausgelöst wird, wenn Sie mit dieser Wischrichtung über ein Transaktionselement in der Liste wischen';
 		map['settings.transactions.swipe_actions.swipe_left'] = 'Wischen Sie nach links';

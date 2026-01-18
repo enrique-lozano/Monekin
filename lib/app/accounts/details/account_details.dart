@@ -196,6 +196,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                         body: TransactionListComponent(
                           tileBuilder: (transaction) => TransactionListTile(
                             transaction: transaction,
+                            showAccount: false,
                             heroTag:
                                 'account-details-page__tr-icon-${transaction.id}',
                           ),
@@ -208,6 +209,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                           ),
                           limit: 5,
                           showGroupDivider: false,
+
                           onEmptyList: Padding(
                             padding: const EdgeInsets.all(24),
                             child: Text(

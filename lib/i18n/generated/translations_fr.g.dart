@@ -1243,6 +1243,8 @@ class _TranslationsSettingsGeneralFr implements TranslationsSettingsGeneralEn {
 	// Translations
 	@override String get menu_title => 'Paramètres généraux';
 	@override String get menu_descr => 'Langue, confidentialité et plus';
+	@override String get show_all_decimals => 'Afficher toutes les décimales';
+	@override String get show_all_decimals_descr => 'Afficher toutes les décimales même s\'il y a des zéros à la fin';
 	@override late final _TranslationsSettingsGeneralLanguageFr language = _TranslationsSettingsGeneralLanguageFr._(_root);
 	@override late final _TranslationsSettingsGeneralLocaleFr locale = _TranslationsSettingsGeneralLocaleFr._(_root);
 }
@@ -1273,6 +1275,7 @@ class _TranslationsSettingsTransactionsFr implements TranslationsSettingsTransac
 	@override String get menu_title => 'Transactions';
 	@override String get menu_descr => 'Configurer le comportement de vos transactions';
 	@override String get title => 'Paramètres des transactions';
+	@override late final _TranslationsSettingsTransactionsStyleFr style = _TranslationsSettingsTransactionsStyleFr._(_root);
 	@override late final _TranslationsSettingsTransactionsSwipeActionsFr swipe_actions = _TranslationsSettingsTransactionsSwipeActionsFr._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultValuesFr default_values = _TranslationsSettingsTransactionsDefaultValuesFr._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultTypeFr default_type = _TranslationsSettingsTransactionsDefaultTypeFr._(_root);
@@ -1671,6 +1674,19 @@ class _TranslationsSettingsGeneralLocaleFr implements TranslationsSettingsGenera
 	@override String get descr => 'Définissez le format à utiliser pour les dates, les nombres...';
 	@override String get warn => 'Lors du changement de région, l\'application va se mettre à jour';
 	@override String get first_day_of_week => 'Premier jour de la semaine';
+}
+
+// Path: settings.transactions.style
+class _TranslationsSettingsTransactionsStyleFr implements TranslationsSettingsTransactionsStyleEn {
+	_TranslationsSettingsTransactionsStyleFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Style de transaction';
+	@override String get subtitle => 'Configurer l\'apparence des transactions dans les listes';
+	@override String get show_tags => 'Afficher Étiquettes';
+	@override String get show_time => 'Afficher Heure';
 }
 
 // Path: settings.transactions.swipe_actions
@@ -2483,6 +2499,8 @@ extension on TranslationsFr {
 		map['settings.edit_profile'] = 'Modifier le profil';
 		map['settings.general.menu_title'] = 'Paramètres généraux';
 		map['settings.general.menu_descr'] = 'Langue, confidentialité et plus';
+		map['settings.general.show_all_decimals'] = 'Afficher toutes les décimales';
+		map['settings.general.show_all_decimals_descr'] = 'Afficher toutes les décimales même s\'il y a des zéros à la fin';
 		map['settings.general.language.section'] = 'Langue et textes';
 		map['settings.general.language.title'] = 'Langue de l\'application';
 		map['settings.general.language.descr'] = 'Langue dans laquelle les textes seront affichés dans l\'application';
@@ -2502,6 +2520,10 @@ extension on TranslationsFr {
 		map['settings.transactions.menu_title'] = 'Transactions';
 		map['settings.transactions.menu_descr'] = 'Configurer le comportement de vos transactions';
 		map['settings.transactions.title'] = 'Paramètres des transactions';
+		map['settings.transactions.style.title'] = 'Style de transaction';
+		map['settings.transactions.style.subtitle'] = 'Configurer l\'apparence des transactions dans les listes';
+		map['settings.transactions.style.show_tags'] = 'Afficher Étiquettes';
+		map['settings.transactions.style.show_time'] = 'Afficher Heure';
 		map['settings.transactions.swipe_actions.title'] = 'Actions de balayage';
 		map['settings.transactions.swipe_actions.choose_description'] = 'Choisissez l\'action qui sera déclenchée lorsque vous balayez un élément de transaction dans la liste dans cette direction';
 		map['settings.transactions.swipe_actions.swipe_left'] = 'Balayage vers la gauche';

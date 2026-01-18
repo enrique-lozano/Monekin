@@ -2235,6 +2235,12 @@ class TranslationsSettingsGeneralEn {
 	/// en: 'Language, privacy, and more'
 	String get menu_descr => 'Language, privacy, and more';
 
+	/// en: 'Show all decimal places'
+	String get show_all_decimals => 'Show all decimal places';
+
+	/// en: 'Whether to show all decimals places even if there are trailing zeros'
+	String get show_all_decimals_descr => 'Whether to show all decimals places even if there are trailing zeros';
+
 	late final TranslationsSettingsGeneralLanguageEn language = TranslationsSettingsGeneralLanguageEn._(_root);
 	late final TranslationsSettingsGeneralLocaleEn locale = TranslationsSettingsGeneralLocaleEn._(_root);
 }
@@ -2286,6 +2292,7 @@ class TranslationsSettingsTransactionsEn {
 	/// en: 'Transactions Settings'
 	String get title => 'Transactions Settings';
 
+	late final TranslationsSettingsTransactionsStyleEn style = TranslationsSettingsTransactionsStyleEn._(_root);
 	late final TranslationsSettingsTransactionsSwipeActionsEn swipe_actions = TranslationsSettingsTransactionsSwipeActionsEn._(_root);
 	late final TranslationsSettingsTransactionsDefaultValuesEn default_values = TranslationsSettingsTransactionsDefaultValuesEn._(_root);
 	late final TranslationsSettingsTransactionsDefaultTypeEn default_type = TranslationsSettingsTransactionsDefaultTypeEn._(_root);
@@ -2970,6 +2977,27 @@ class TranslationsSettingsGeneralLocaleEn {
 
 	/// en: 'First day of week'
 	String get first_day_of_week => 'First day of week';
+}
+
+// Path: settings.transactions.style
+class TranslationsSettingsTransactionsStyleEn {
+	TranslationsSettingsTransactionsStyleEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Transaction style'
+	String get title => 'Transaction style';
+
+	/// en: 'Configure how transactions look in the different lists of the app'
+	String get subtitle => 'Configure how transactions look in the different lists of the app';
+
+	/// en: 'Show Tags'
+	String get show_tags => 'Show Tags';
+
+	/// en: 'Show Time'
+	String get show_time => 'Show Time';
 }
 
 // Path: settings.transactions.swipe_actions
@@ -3862,6 +3890,8 @@ extension on Translations {
 		map['settings.edit_profile'] = 'Edit profile';
 		map['settings.general.menu_title'] = 'General Settings';
 		map['settings.general.menu_descr'] = 'Language, privacy, and more';
+		map['settings.general.show_all_decimals'] = 'Show all decimal places';
+		map['settings.general.show_all_decimals_descr'] = 'Whether to show all decimals places even if there are trailing zeros';
 		map['settings.general.language.section'] = 'Language and texts';
 		map['settings.general.language.title'] = 'App language';
 		map['settings.general.language.descr'] = 'Language in which the texts will be displayed in the app';
@@ -3881,6 +3911,10 @@ extension on Translations {
 		map['settings.transactions.menu_title'] = 'Transactions';
 		map['settings.transactions.menu_descr'] = 'Configure the behavior of your transactions';
 		map['settings.transactions.title'] = 'Transactions Settings';
+		map['settings.transactions.style.title'] = 'Transaction style';
+		map['settings.transactions.style.subtitle'] = 'Configure how transactions look in the different lists of the app';
+		map['settings.transactions.style.show_tags'] = 'Show Tags';
+		map['settings.transactions.style.show_time'] = 'Show Time';
 		map['settings.transactions.swipe_actions.title'] = 'Swipe actions';
 		map['settings.transactions.swipe_actions.choose_description'] = 'Choose what action will be triggered when you swipe a transaction item in the list using this swipe direction';
 		map['settings.transactions.swipe_actions.swipe_left'] = 'Swipe left';

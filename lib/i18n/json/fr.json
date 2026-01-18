@@ -824,6 +824,8 @@
     "GENERAL": {
       "menu_title": "Paramètres généraux",
       "menu_descr": "Langue, confidentialité et plus",
+      "show_all_decimals": "Afficher toutes les décimales",
+      "show_all_decimals_descr": "Afficher toutes les décimales même s'il y a des zéros à la fin",
       "LANGUAGE": {
         "section": "Langue et textes",
         "title": "Langue de l'application",
@@ -851,6 +853,12 @@
       "menu_title": "Transactions",
       "menu_descr": "Configurer le comportement de vos transactions",
       "title": "Paramètres des transactions",
+      "STYLE": {
+        "title": "Style de transaction",
+        "subtitle": "Configurer l'apparence des transactions dans les listes",
+        "show_tags": "Afficher Étiquettes",
+        "show_time": "Afficher Heure"
+      },
       "SWIPE_ACTIONS": {
         "title": "Actions de balayage",
         "choose_description": "Choisissez l'action qui sera déclenchée lorsque vous balayez un élément de transaction dans la liste dans cette direction",

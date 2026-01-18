@@ -42,6 +42,15 @@ enum SettingKey {
   /// List of fields that should use the last used value when creating a new transaction.
   /// Stored as a JSON list of strings (names of [TransactionFormField] enum).
   fieldsToUseLastUsedValue,
+
+  /// Whether to show all decimals places even if there are trailing zeros
+  showAllDecimals,
+
+  /// Whether to show the tags of the transaction in the transaction list tiles
+  transactionTileShowTags,
+
+  /// Whether to show the time of the transaction in the transaction list tiles
+  transactionTileShowTime,
 }
 
 final Map<SettingKey, String?> appStateSettings = {};

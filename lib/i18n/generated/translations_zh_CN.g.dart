@@ -1245,6 +1245,8 @@ class _TranslationsSettingsGeneralZhCn implements TranslationsSettingsGeneralEn 
 	// Translations
 	@override String get menu_title => '常规设置';
 	@override String get menu_descr => '语言、隐私等';
+	@override String get show_all_decimals => '显示所有小数位';
+	@override String get show_all_decimals_descr => '即便是末尾为零，也显示所有小数位';
 	@override late final _TranslationsSettingsGeneralLanguageZhCn language = _TranslationsSettingsGeneralLanguageZhCn._(_root);
 	@override late final _TranslationsSettingsGeneralLocaleZhCn locale = _TranslationsSettingsGeneralLocaleZhCn._(_root);
 }
@@ -1275,6 +1277,7 @@ class _TranslationsSettingsTransactionsZhCn implements TranslationsSettingsTrans
 	@override String get menu_title => '交易';
 	@override String get menu_descr => '配置交易的行为';
 	@override String get title => '交易设置';
+	@override late final _TranslationsSettingsTransactionsStyleZhCn style = _TranslationsSettingsTransactionsStyleZhCn._(_root);
 	@override late final _TranslationsSettingsTransactionsSwipeActionsZhCn swipe_actions = _TranslationsSettingsTransactionsSwipeActionsZhCn._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultValuesZhCn default_values = _TranslationsSettingsTransactionsDefaultValuesZhCn._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultTypeZhCn default_type = _TranslationsSettingsTransactionsDefaultTypeZhCn._(_root);
@@ -1673,6 +1676,19 @@ class _TranslationsSettingsGeneralLocaleZhCn implements TranslationsSettingsGene
 	@override String get descr => '设置用于日期、数字的格式……';
 	@override String get warn => '更改区域时应用将更新';
 	@override String get first_day_of_week => '一周的第一天';
+}
+
+// Path: settings.transactions.style
+class _TranslationsSettingsTransactionsStyleZhCn implements TranslationsSettingsTransactionsStyleEn {
+	_TranslationsSettingsTransactionsStyleZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '交易样式';
+	@override String get subtitle => '配置交易在应用列表中的显示方式';
+	@override String get show_tags => '显示标签';
+	@override String get show_time => '显示时间';
 }
 
 // Path: settings.transactions.swipe_actions
@@ -2487,6 +2503,8 @@ extension on TranslationsZhCn {
 		map['settings.edit_profile'] = '编辑个人资料';
 		map['settings.general.menu_title'] = '常规设置';
 		map['settings.general.menu_descr'] = '语言、隐私等';
+		map['settings.general.show_all_decimals'] = '显示所有小数位';
+		map['settings.general.show_all_decimals_descr'] = '即便是末尾为零，也显示所有小数位';
 		map['settings.general.language.section'] = '语言和文字';
 		map['settings.general.language.title'] = '语言/Language';
 		map['settings.general.language.descr'] = '应用中显示文字的语言';
@@ -2506,6 +2524,10 @@ extension on TranslationsZhCn {
 		map['settings.transactions.menu_title'] = '交易';
 		map['settings.transactions.menu_descr'] = '配置交易的行为';
 		map['settings.transactions.title'] = '交易设置';
+		map['settings.transactions.style.title'] = '交易样式';
+		map['settings.transactions.style.subtitle'] = '配置交易在应用列表中的显示方式';
+		map['settings.transactions.style.show_tags'] = '显示标签';
+		map['settings.transactions.style.show_time'] = '显示时间';
 		map['settings.transactions.swipe_actions.title'] = '滑动操作';
 		map['settings.transactions.swipe_actions.choose_description'] = '选择当您使用此滑动方向滑动列表中的交易项目时将触发什么操作';
 		map['settings.transactions.swipe_actions.swipe_left'] = '向左滑动';
