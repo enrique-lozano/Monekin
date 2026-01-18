@@ -456,31 +456,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                   (index) {
                                     final tag = transaction.tags[index];
 
-                                    return Chip(
-                                      backgroundColor: tag.colorData.lighten(
-                                        0.8,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(6),
-                                        side: const BorderSide(
-                                          width: 0,
-                                          color: Colors.transparent,
-                                          style: BorderStyle.none,
-                                        ),
-                                      ),
-                                      elevation: 0,
-                                      label: Text(
-                                        tag.name,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelMedium!
-                                            .copyWith(color: tag.colorData),
-                                      ),
-                                      avatar: Icon(
-                                        Tag.icon,
-                                        color: tag.colorData,
-                                      ),
-                                    );
+                                    return TransactionTagChip(tag: tag);
                                   },
                                 ),
                               ),
@@ -662,6 +638,65 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
         const SizedBox(width: 8),
         Text(data, style: TextStyle(color: color)),
       ],
+    );
+  }
+}
+
+class TransactionTagChip extends StatelessWidget {
+  const TransactionTagChip({
+    super.key,
+    required this.tag,
+    this.visualDensity = VisualDensity.standard,
+  });
+
+  final Tag tag;
+  final VisualDensity visualDensity;
+
+  @override
+  Widget build(BuildContext context) {
+    if (visualDensity == VisualDensity.compact) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+        decoration: BoxDecoration(
+          color: tag.colorData.lighten(0.8),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Row(
+          spacing: 2,
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Tag.icon, color: tag.colorData, size: 14),
+            Text(
+              tag.name,
+              style: Theme.of(
+                context,
+              ).textTheme.labelMedium!.copyWith(color: tag.colorData),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Chip(
+      backgroundColor: tag.colorData.lighten(0.8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(6),
+        side: const BorderSide(
+          width: 0,
+          color: Colors.transparent,
+          style: BorderStyle.none,
+        ),
+      ),
+      elevation: 0,
+      label: Text(
+        tag.name,
+        style: Theme.of(
+          context,
+        ).textTheme.labelMedium!.copyWith(color: tag.colorData),
+      ),
+      visualDensity: visualDensity,
+      avatar: Icon(Tag.icon, color: tag.colorData),
     );
   }
 }

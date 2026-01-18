@@ -81,6 +81,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                   }
                 },
               ),
+              ShowAllDecimalPlacesSwitch(),
               createListSeparator(context, t.settings.security.title),
               MonekinTileSwitch(
                 title: t.settings.security.private_mode_at_launch,
@@ -123,6 +124,39 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ShowAllDecimalPlacesSwitch extends StatelessWidget {
+  const ShowAllDecimalPlacesSwitch({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MonekinTileSwitch(
+      //TODO: i18n
+      title: "Show all decimal places",
+      subtitle:
+          "Whether to show all decimals places even if there are trailing zeros",
+      icon: DecoratedBox(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
+        child: Icon(
+          Icons.exposure_zero,
+          color: Theme.of(context).colorScheme.surface,
+        ),
+      ),
+      initialValue: appStateSettings[SettingKey.showAllDecimals] == '1',
+      onSwitchDebounceMs: 200,
+      onSwitch: (bool value) async {
+        await UserSettingService.instance.setItem(
+          SettingKey.showAllDecimals,
+          value ? '1' : '0',
+          updateGlobalState: true,
+        );
+      },
     );
   }
 }

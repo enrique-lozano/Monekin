@@ -73,6 +73,9 @@ DROP TABLE budgetAccount;
 
 --- ----------- NEW USER SETTINGS ------------
 INSERT INTO userSettings VALUES ('defaultTransactionType', 'E');
+INSERT INTO userSettings VALUES ('transactionTileShowTags', '1');
+INSERT INTO userSettings VALUES ('transactionTileShowTime', '1');
+INSERT INTO userSettings VALUES ('showAllDecimals', '1');
 
 --- ----------- TRANSACTION STATUS MIGRATION ------------
 -- 1. Add new temporary column with the new check constraint

@@ -61,7 +61,6 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
                 heroTag:
                     'recurrent-transactions-page__tr-icon-${transaction.id}',
                 periodicityInfo: periodicity,
-                showTime: false,
               ),
               onEmptyList: Center(
                 child: NoResults(

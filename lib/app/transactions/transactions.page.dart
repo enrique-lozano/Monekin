@@ -243,7 +243,7 @@ class TransactionsPageState extends State<TransactionsPage> {
                   isSelected: selectedTransactions.any(
                     (element) => element.id == tr.id,
                   ),
-                  showDate: false,
+                  showDateTime: false,
                   applySwipeActions: true,
                 ),
                 filters: filters.copyWith(searchValue: searchController.text),

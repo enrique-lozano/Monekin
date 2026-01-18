@@ -54,8 +54,6 @@ class TransactionListComponentState extends State<TransactionListComponent> {
   void initState() {
     super.initState();
 
-    print("HAS FILTERS: ${widget.filters.hasFilter}");
-
     listScrollController = widget.scrollController ?? ScrollController();
 
     listScrollController.addListener(() {
@@ -84,8 +82,7 @@ class TransactionListComponentState extends State<TransactionListComponent> {
 
     return TransactionListTile(
       transaction: transaction,
-      showDate: !widget.showGroupDivider,
-      showTime: widget.showGroupDivider,
+      showDateTime: !widget.showGroupDivider,
       heroTag: null,
       applySwipeActions: true,
     );

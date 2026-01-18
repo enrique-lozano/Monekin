@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/decimal_separator.dart';
 
 enum UINumberFormatterMode { currency, percentage, decimal }
@@ -108,8 +109,14 @@ class UINumberFormatter {
 
       return formatter.format(amountToConvert);
     } else {
+      final forceHideAllDecimals =
+          appStateSettings[SettingKey.showAllDecimals] != '1' &&
+          amountToConvert % 1 == 0;
+
       return NumberFormat.currency(
-        decimalDigits: showDecimals ? currency?.decimalPlaces : 0,
+        decimalDigits: showDecimals && !forceHideAllDecimals
+            ? currency?.decimalPlaces
+            : 0,
         symbol: _currencySymbolWithoutDecimalSep,
       ).format(amountToConvert);
     }
