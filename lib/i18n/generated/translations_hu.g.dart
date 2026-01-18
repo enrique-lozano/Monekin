@@ -1245,6 +1245,8 @@ class _TranslationsSettingsGeneralHu implements TranslationsSettingsGeneralEn {
 	// Translations
 	@override String get menu_title => 'Általános beállítások';
 	@override String get menu_descr => 'Nyelv, adatvédelem és egyebek';
+	@override String get show_all_decimals => 'Összes tizedesjegy mutatása';
+	@override String get show_all_decimals_descr => 'Minden tizedesjegy megjelenítése, még akkor is, ha nullára végződik';
 	@override late final _TranslationsSettingsGeneralLanguageHu language = _TranslationsSettingsGeneralLanguageHu._(_root);
 	@override late final _TranslationsSettingsGeneralLocaleHu locale = _TranslationsSettingsGeneralLocaleHu._(_root);
 }
@@ -1275,6 +1277,7 @@ class _TranslationsSettingsTransactionsHu implements TranslationsSettingsTransac
 	@override String get menu_title => 'Tranzakciók';
 	@override String get menu_descr => 'Konfigurálja tranzakciói viselkedését';
 	@override String get title => 'Tranzakciós beállítások';
+	@override late final _TranslationsSettingsTransactionsStyleHu style = _TranslationsSettingsTransactionsStyleHu._(_root);
 	@override late final _TranslationsSettingsTransactionsSwipeActionsHu swipe_actions = _TranslationsSettingsTransactionsSwipeActionsHu._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultValuesHu default_values = _TranslationsSettingsTransactionsDefaultValuesHu._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultTypeHu default_type = _TranslationsSettingsTransactionsDefaultTypeHu._(_root);
@@ -1673,6 +1676,19 @@ class _TranslationsSettingsGeneralLocaleHu implements TranslationsSettingsGenera
 	@override String get descr => 'Dátumok, számformátumok beállítása...';
 	@override String get warn => 'Régióváltáskor az alkalmazás frissülni fog';
 	@override String get first_day_of_week => 'A hét első napja';
+}
+
+// Path: settings.transactions.style
+class _TranslationsSettingsTransactionsStyleHu implements TranslationsSettingsTransactionsStyleEn {
+	_TranslationsSettingsTransactionsStyleHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Tranzakció stílusa';
+	@override String get subtitle => 'Állítsa be, hogyan jelenjenek meg a tranzakciók a listákban';
+	@override String get show_tags => 'Címkék mutatása';
+	@override String get show_time => 'Idő mutatása';
 }
 
 // Path: settings.transactions.swipe_actions
@@ -2487,6 +2503,8 @@ extension on TranslationsHu {
 		map['settings.edit_profile'] = 'Profil szerkesztése';
 		map['settings.general.menu_title'] = 'Általános beállítások';
 		map['settings.general.menu_descr'] = 'Nyelv, adatvédelem és egyebek';
+		map['settings.general.show_all_decimals'] = 'Összes tizedesjegy mutatása';
+		map['settings.general.show_all_decimals_descr'] = 'Minden tizedesjegy megjelenítése, még akkor is, ha nullára végződik';
 		map['settings.general.language.section'] = 'Nyelv és szövegek';
 		map['settings.general.language.title'] = 'Alkalmazás nyelve';
 		map['settings.general.language.descr'] = 'Nyelv, amelyen a szövegek megjelennek az alkalmazásban';
@@ -2506,6 +2524,10 @@ extension on TranslationsHu {
 		map['settings.transactions.menu_title'] = 'Tranzakciók';
 		map['settings.transactions.menu_descr'] = 'Konfigurálja tranzakciói viselkedését';
 		map['settings.transactions.title'] = 'Tranzakciós beállítások';
+		map['settings.transactions.style.title'] = 'Tranzakció stílusa';
+		map['settings.transactions.style.subtitle'] = 'Állítsa be, hogyan jelenjenek meg a tranzakciók a listákban';
+		map['settings.transactions.style.show_tags'] = 'Címkék mutatása';
+		map['settings.transactions.style.show_time'] = 'Idő mutatása';
 		map['settings.transactions.swipe_actions.title'] = 'Csúsztatási műveletek';
 		map['settings.transactions.swipe_actions.choose_description'] = 'Válassza ki, hogy milyen művelet induljon el, ha a listában lévő tranzakciós tételt ezzel a csúsztatási irány segítségével csúsztatja';
 		map['settings.transactions.swipe_actions.swipe_left'] = 'Csúsztasson balra';

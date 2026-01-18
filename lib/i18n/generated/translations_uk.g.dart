@@ -1245,6 +1245,8 @@ class _TranslationsSettingsGeneralUk implements TranslationsSettingsGeneralEn {
 	// Translations
 	@override String get menu_title => 'Загальні налаштування';
 	@override String get menu_descr => 'Мова, конфіденційність та інше';
+	@override String get show_all_decimals => 'Усі десяткові розряди';
+	@override String get show_all_decimals_descr => 'Показувати всі десяткові знаки, навіть якщо це нулі';
 	@override late final _TranslationsSettingsGeneralLanguageUk language = _TranslationsSettingsGeneralLanguageUk._(_root);
 	@override late final _TranslationsSettingsGeneralLocaleUk locale = _TranslationsSettingsGeneralLocaleUk._(_root);
 }
@@ -1275,6 +1277,7 @@ class _TranslationsSettingsTransactionsUk implements TranslationsSettingsTransac
 	@override String get menu_title => 'Транзакції';
 	@override String get menu_descr => 'Налаштуйте поведінку ваших транзакцій';
 	@override String get title => 'Налаштування транзакцій';
+	@override late final _TranslationsSettingsTransactionsStyleUk style = _TranslationsSettingsTransactionsStyleUk._(_root);
 	@override late final _TranslationsSettingsTransactionsSwipeActionsUk swipe_actions = _TranslationsSettingsTransactionsSwipeActionsUk._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultValuesUk default_values = _TranslationsSettingsTransactionsDefaultValuesUk._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultTypeUk default_type = _TranslationsSettingsTransactionsDefaultTypeUk._(_root);
@@ -1673,6 +1676,19 @@ class _TranslationsSettingsGeneralLocaleUk implements TranslationsSettingsGenera
 	@override String get descr => 'Встановіть формат, який буде використовуватися для дат, чисел...';
 	@override String get warn => 'Після зміни регіону додаток оновиться';
 	@override String get first_day_of_week => 'Перший день тижня';
+}
+
+// Path: settings.transactions.style
+class _TranslationsSettingsTransactionsStyleUk implements TranslationsSettingsTransactionsStyleEn {
+	_TranslationsSettingsTransactionsStyleUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Стиль транзакції';
+	@override String get subtitle => 'Налаштуйте вигляд транзакцій у списках додатку';
+	@override String get show_tags => 'Показати Теги';
+	@override String get show_time => 'Показати Час';
 }
 
 // Path: settings.transactions.swipe_actions
@@ -2487,6 +2503,8 @@ extension on TranslationsUk {
 		map['settings.edit_profile'] = 'Редагувати профіль';
 		map['settings.general.menu_title'] = 'Загальні налаштування';
 		map['settings.general.menu_descr'] = 'Мова, конфіденційність та інше';
+		map['settings.general.show_all_decimals'] = 'Усі десяткові розряди';
+		map['settings.general.show_all_decimals_descr'] = 'Показувати всі десяткові знаки, навіть якщо це нулі';
 		map['settings.general.language.section'] = 'Мова та тексти';
 		map['settings.general.language.title'] = 'Мова додатку';
 		map['settings.general.language.descr'] = 'Мова, в якій будуть відображатися тексти в додатку';
@@ -2506,6 +2524,10 @@ extension on TranslationsUk {
 		map['settings.transactions.menu_title'] = 'Транзакції';
 		map['settings.transactions.menu_descr'] = 'Налаштуйте поведінку ваших транзакцій';
 		map['settings.transactions.title'] = 'Налаштування транзакцій';
+		map['settings.transactions.style.title'] = 'Стиль транзакції';
+		map['settings.transactions.style.subtitle'] = 'Налаштуйте вигляд транзакцій у списках додатку';
+		map['settings.transactions.style.show_tags'] = 'Показати Теги';
+		map['settings.transactions.style.show_time'] = 'Показати Час';
 		map['settings.transactions.swipe_actions.title'] = 'Дії гортання';
 		map['settings.transactions.swipe_actions.choose_description'] = 'Виберіть, яка дія буде ініційована, коли ви проводите пальцем по елементу транзакції у списку в цьому напрямку';
 		map['settings.transactions.swipe_actions.none'] = 'Ніяких дій';

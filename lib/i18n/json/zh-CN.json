@@ -826,6 +826,8 @@
     "GENERAL": {
       "menu_title": "常规设置",
       "menu_descr": "语言、隐私等",
+      "show_all_decimals": "显示所有小数位",
+      "show_all_decimals_descr": "即便是末尾为零，也显示所有小数位",
       "LANGUAGE": {
         "section": "语言和文字",
         "title": "语言/Language",
@@ -853,6 +855,12 @@
       "menu_title": "交易",
       "menu_descr": "配置交易的行为",
       "title": "交易设置",
+      "STYLE": {
+        "title": "交易样式",
+        "subtitle": "配置交易在应用列表中的显示方式",
+        "show_tags": "显示标签",
+        "show_time": "显示时间"
+      },
       "SWIPE_ACTIONS": {
         "title": "滑动操作",
         "choose_description": "选择当您使用此滑动方向滑动列表中的交易项目时将触发什么操作",

@@ -38,11 +38,8 @@ class TransactionsSettingsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
-                //TODO: i18n
-                title: Text("Estilo de la transacción"),
-                subtitle: Text(
-                  "Configura como se ven las transacciones en los diferentes listados de la app",
-                ),
+                title: Text(t.settings.transactions.style.title),
+                subtitle: Text(t.settings.transactions.style.subtitle),
 
                 onTap: () {
                   showModalBottomSheet(
@@ -51,9 +48,8 @@ class TransactionsSettingsPage extends StatelessWidget {
                     showDragHandle: true,
                     builder: (context) {
                       return ModalContainer(
-                        title: "Estilo de la transacción",
-                        subtitle:
-                            "Configura como se ven las transacciones en los diferentes listados de la app",
+                        title: t.settings.transactions.style.title,
+                        subtitle: t.settings.transactions.style.subtitle,
                         body: SingleChildScrollView(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -126,8 +122,7 @@ class TransactionsSettingsPage extends StatelessWidget {
 
                               const SizedBox(height: 16),
                               MonekinTileSwitch(
-                                //TODO: i18n
-                                title: "Mostrar Tags",
+                                title: t.settings.transactions.style.show_tags,
                                 initialValue:
                                     appStateSettings[SettingKey
                                         .transactionTileShowTags] ==
@@ -144,7 +139,7 @@ class TransactionsSettingsPage extends StatelessWidget {
                               ),
                               MonekinTileSwitch(
                                 //TODO: i18n
-                                title: "Mostrar Hora",
+                                title: t.settings.transactions.style.show_time,
                                 initialValue:
                                     appStateSettings[SettingKey
                                         .transactionTileShowTime] ==

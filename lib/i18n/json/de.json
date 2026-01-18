@@ -826,6 +826,8 @@
     "GENERAL": {
       "menu_title": "Allgemeine Einstellungen",
       "menu_descr": "Sprache, Datenschutz und mehr",
+      "show_all_decimals": "Alle Nachkommastellen anzeigen",
+      "show_all_decimals_descr": "Alle Dezimalstellen anzeigen, auch bei nachgestellten Nullen",
       "LANGUAGE": {
         "section": "Sprache und Texte",
         "title": "App-Sprache",
@@ -853,6 +855,12 @@
       "menu_title": "Transaktionen",
       "menu_descr": "Konfigurieren Sie das Verhalten Ihrer Transaktionen",
       "title": "Transaktionseinstellungen",
+      "STYLE": {
+        "title": "Transaktionsstil",
+        "subtitle": "Konfigurieren Sie das Aussehen von Transaktionen in Listen",
+        "show_tags": "Tags anzeigen",
+        "show_time": "Zeit anzeigen"
+      },
       "SWIPE_ACTIONS": {
         "title": "Wischaktionen",
         "choose_description": "Wählen Sie aus, welche Aktion ausgelöst wird, wenn Sie mit dieser Wischrichtung über ein Transaktionselement in der Liste wischen",

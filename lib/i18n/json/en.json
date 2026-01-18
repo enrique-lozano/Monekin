@@ -824,6 +824,8 @@
     "GENERAL": {
       "menu_title": "General Settings",
       "menu_descr": "Language, privacy, and more",
+      "show_all_decimals": "Show all decimal places",
+      "show_all_decimals_descr": "Whether to show all decimals places even if there are trailing zeros",
       "LANGUAGE": {
         "section": "Language and texts",
         "title": "App language",
@@ -851,6 +853,12 @@
       "menu_title": "Transactions",
       "menu_descr": "Configure the behavior of your transactions",
       "title": "Transactions Settings",
+      "STYLE": {
+        "title": "Transaction style",
+        "subtitle": "Configure how transactions look in the different lists of the app",
+        "show_tags": "Show Tags",
+        "show_time": "Show Time"
+      },
       "SWIPE_ACTIONS": {
         "title": "Swipe actions",
         "choose_description": "Choose what action will be triggered when you swipe a transaction item in the list using this swipe direction",

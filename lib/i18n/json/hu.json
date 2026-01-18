@@ -826,6 +826,8 @@
     "GENERAL": {
       "menu_title": "Általános beállítások",
       "menu_descr": "Nyelv, adatvédelem és egyebek",
+      "show_all_decimals": "Összes tizedesjegy mutatása",
+      "show_all_decimals_descr": "Minden tizedesjegy megjelenítése, még akkor is, ha nullára végződik",
       "LANGUAGE": {
         "section": "Nyelv és szövegek",
         "title": "Alkalmazás nyelve",
@@ -853,6 +855,12 @@
       "menu_title": "Tranzakciók",
       "menu_descr": "Konfigurálja tranzakciói viselkedését",
       "title": "Tranzakciós beállítások",
+      "STYLE": {
+        "title": "Tranzakció stílusa",
+        "subtitle": "Állítsa be, hogyan jelenjenek meg a tranzakciók a listákban",
+        "show_tags": "Címkék mutatása",
+        "show_time": "Idő mutatása"
+      },
       "SWIPE_ACTIONS": {
         "title": "Csúsztatási műveletek",
         "choose_description": "Válassza ki, hogy milyen művelet induljon el, ha a listában lévő tranzakciós tételt ezzel a csúsztatási irány segítségével csúsztatja",

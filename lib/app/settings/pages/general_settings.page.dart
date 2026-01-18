@@ -133,11 +133,10 @@ class ShowAllDecimalPlacesSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
     return MonekinTileSwitch(
-      //TODO: i18n
-      title: "Show all decimal places",
-      subtitle:
-          "Whether to show all decimals places even if there are trailing zeros",
+      title: t.settings.general.show_all_decimals,
+      subtitle: t.settings.general.show_all_decimals_descr,
       icon: DecoratedBox(
         decoration: BoxDecoration(
           shape: BoxShape.circle,

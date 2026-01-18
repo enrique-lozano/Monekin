@@ -826,6 +826,8 @@
     "GENERAL": {
       "menu_title": "Impostazioni generali",
       "menu_descr": "Lingua, privacy e altro",
+      "show_all_decimals": "Mostra tutti i decimali",
+      "show_all_decimals_descr": "Mostra tutti i decimali anche se sono zeri finali",
       "LANGUAGE": {
         "section": "Lingua e testi",
         "title": "Lingua dell'app",
@@ -853,6 +855,12 @@
       "menu_title": "Transazioni",
       "menu_descr": "Configura il comportamento delle tue transazioni",
       "title": "Impostazioni transazioni",
+      "STYLE": {
+        "title": "Stile transazione",
+        "subtitle": "Configura l'aspetto delle transazioni nelle liste dell'app",
+        "show_tags": "Mostra Tag",
+        "show_time": "Mostra Ora"
+      },
       "SWIPE_ACTIONS": {
         "title": "Azioni di scorrimento",
         "choose_description": "Scegli quale azione verrà attivata quando fai scorrere un elemento di transazione nell'elenco utilizzando questa direzione di scorrimento",

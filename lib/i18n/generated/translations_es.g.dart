@@ -1245,6 +1245,8 @@ class _TranslationsSettingsGeneralEs implements TranslationsSettingsGeneralEn {
 	// Translations
 	@override String get menu_title => 'Ajustes generales';
 	@override String get menu_descr => 'Idioma, privacidad y más';
+	@override String get show_all_decimals => 'Mostrar todos los decimales';
+	@override String get show_all_decimals_descr => 'Mostrar todos los decimales incluso si hay ceros finales';
 	@override late final _TranslationsSettingsGeneralLanguageEs language = _TranslationsSettingsGeneralLanguageEs._(_root);
 	@override late final _TranslationsSettingsGeneralLocaleEs locale = _TranslationsSettingsGeneralLocaleEs._(_root);
 }
@@ -1275,6 +1277,7 @@ class _TranslationsSettingsTransactionsEs implements TranslationsSettingsTransac
 	@override String get menu_title => 'Transacciones';
 	@override String get menu_descr => 'Configura el comportamiento de tus transacciones';
 	@override String get title => 'Ajustes de transacciones';
+	@override late final _TranslationsSettingsTransactionsStyleEs style = _TranslationsSettingsTransactionsStyleEs._(_root);
 	@override late final _TranslationsSettingsTransactionsSwipeActionsEs swipe_actions = _TranslationsSettingsTransactionsSwipeActionsEs._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultValuesEs default_values = _TranslationsSettingsTransactionsDefaultValuesEs._(_root);
 	@override late final _TranslationsSettingsTransactionsDefaultTypeEs default_type = _TranslationsSettingsTransactionsDefaultTypeEs._(_root);
@@ -1674,6 +1677,19 @@ class _TranslationsSettingsGeneralLocaleEs implements TranslationsSettingsGenera
 	@override String get descr => 'Establecer el formato a utilizar para fechas, números...';
 	@override String get warn => 'Al cambiar la región, la aplicación se actualizará';
 	@override String get first_day_of_week => 'Primer día de la semana';
+}
+
+// Path: settings.transactions.style
+class _TranslationsSettingsTransactionsStyleEs implements TranslationsSettingsTransactionsStyleEn {
+	_TranslationsSettingsTransactionsStyleEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Estilo de transacción';
+	@override String get subtitle => 'Configura cómo se ven las transacciones en las listas';
+	@override String get show_tags => 'Ver Etiquetas';
+	@override String get show_time => 'Ver Hora';
 }
 
 // Path: settings.transactions.swipe_actions
@@ -2489,6 +2505,8 @@ extension on TranslationsEs {
 		map['settings.edit_profile'] = 'Editar perfil';
 		map['settings.general.menu_title'] = 'Ajustes generales';
 		map['settings.general.menu_descr'] = 'Idioma, privacidad y más';
+		map['settings.general.show_all_decimals'] = 'Mostrar todos los decimales';
+		map['settings.general.show_all_decimals_descr'] = 'Mostrar todos los decimales incluso si hay ceros finales';
 		map['settings.general.language.section'] = 'Idioma y textos';
 		map['settings.general.language.title'] = 'Idioma de la aplicación';
 		map['settings.general.language.descr'] = 'Idioma en el que se mostrarán los textos en la aplicación';
@@ -2508,6 +2526,10 @@ extension on TranslationsEs {
 		map['settings.transactions.menu_title'] = 'Transacciones';
 		map['settings.transactions.menu_descr'] = 'Configura el comportamiento de tus transacciones';
 		map['settings.transactions.title'] = 'Ajustes de transacciones';
+		map['settings.transactions.style.title'] = 'Estilo de transacción';
+		map['settings.transactions.style.subtitle'] = 'Configura cómo se ven las transacciones en las listas';
+		map['settings.transactions.style.show_tags'] = 'Ver Etiquetas';
+		map['settings.transactions.style.show_time'] = 'Ver Hora';
 		map['settings.transactions.swipe_actions.title'] = 'Acciones al deslizar el dedo';
 		map['settings.transactions.swipe_actions.choose_description'] = 'Elije qué acción se activará cuando deslices una transacción del listado de transacciones usando esta dirección de deslizamiento';
 		map['settings.transactions.swipe_actions.swipe_left'] = 'Desliza hacia la izquierda';
