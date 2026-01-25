@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/layout/page_switcher.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
@@ -21,10 +20,12 @@ import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/loading_overlay.dart';
+import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
 import 'package:monekin/core/utils/logger.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
+import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -67,11 +68,17 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
       final csvString = await csvFile.readAsString();
       final parsedCSV = await BackupDatabaseService().processCsv(csvString);
 
-      final firstRowLength = parsedCSV.first.length;
+      int firstRowLength = parsedCSV.first.length;
 
-      if (parsedCSV.length >= 2 && firstRowLength == parsedCSV[1].length + 1) {
+      final lastHeaderColumnName = parsedCSV.first.last;
+
+      if (parsedCSV.length >= 2 &&
+          firstRowLength == parsedCSV[1].length + 1 &&
+          lastHeaderColumnName is String &&
+          lastHeaderColumnName.trim().isEmpty) {
         // Remove trailing column in header row if it has one more than the second row
         parsedCSV[0].removeLast();
+        firstRowLength = parsedCSV.first.length;
       }
 
       if (parsedCSV.length > 2 &&
@@ -175,7 +182,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
   Future<void> addTransactions() async {
     onSuccess() {
       RouteUtils.popAllRoutesExceptFirst();
-      RouteUtils.pushRoute(const PageSwitcher());
+      tabsPageKey.currentState!.changePage(AppMenuDestinationsID.dashboard);
 
       MonekinSnackbar.success(
         SnackbarParams(
