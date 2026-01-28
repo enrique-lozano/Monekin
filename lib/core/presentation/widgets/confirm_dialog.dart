@@ -68,10 +68,7 @@ Future<bool?> confirmDialog(
           TextButton(
             child: Text(confirmationText ?? t.general.understood),
             onPressed: () {
-              Navigator.of(
-                context,
-                rootNavigator: useRootNavigator,
-              ).maybePop(true);
+              Navigator.of(context, rootNavigator: useRootNavigator).pop(true);
             },
           ),
         ],
