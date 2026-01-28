@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/transactions/label_value_info_table.dart';
-import 'package:monekin/app/transactions/utils/transaction_details.utils.dart';
+import 'package:monekin/app/transactions/utils/show_pay_modal.dart';
 import 'package:monekin/app/transactions/widgets/translucent_transaction_status_card.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
@@ -167,61 +167,6 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
           ],
         ),
       ),
-    );
-  }
-
-  void showPayModal(BuildContext context, MoneyTransaction transaction) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ...(getPayActions(context, transaction).map(
-                (e) => ListTile(
-                  leading: Icon(e.icon),
-                  title: Text(e.label),
-                  enabled: e.onClick != null,
-                  onTap: e.onClick == null
-                      ? null
-                      : () {
-                          RouteUtils.popRoute();
-                          e.onClick!();
-                        },
-                ),
-              )),
-              if (transaction.recurrentInfo.isRecurrent &&
-                  transaction.isOnLastPayment)
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.info_outline_rounded,
-                        size: 14,
-                        weight: 200,
-                      ),
-                      const SizedBox(width: 8),
-                      Flexible(
-                        child: Text(
-                          t.recurrent_transactions.details.last_payment_info,
-                          style: Theme.of(context).textTheme.labelSmall!
-                              .copyWith(fontWeight: FontWeight.w300),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-            ],
-          ),
-        );
-      },
     );
   }
 
