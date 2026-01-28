@@ -23,7 +23,7 @@ Future<bool?> confirmDialog(
     barrierDismissible: canPop,
     barrierColor: Colors.black.withOpacity(0.4),
     barrierLabel: '',
-    transitionBuilder: (_, anim, __, child) {
+    transitionBuilder: (_, anim, _, child) {
       Tween<double> tween;
       if (anim.status == AnimationStatus.reverse) {
         tween = Tween(begin: 0.9, end: 1);
@@ -39,7 +39,7 @@ Future<bool?> confirmDialog(
     },
     transitionDuration: Duration(milliseconds: 200),
     useRootNavigator: useRootNavigator,
-    pageBuilder: (_, __, ___) => PopScope(
+    pageBuilder: (_, _, _) => PopScope(
       canPop: canPop,
       child: AlertDialog.adaptive(
         title: Text(dialogTitle),
