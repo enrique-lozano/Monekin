@@ -5,11 +5,11 @@ import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
-void showPayModal(BuildContext context, MoneyTransaction transaction) {
-  final t = Translations.of(context);
+void showPayModal(BuildContext pageContext, MoneyTransaction transaction) {
+  final t = Translations.of(pageContext);
 
   showModalBottomSheet(
-    context: context,
+    context: pageContext,
     isScrollControlled: true,
     showDragHandle: true,
     builder: (context) {
@@ -18,7 +18,7 @@ void showPayModal(BuildContext context, MoneyTransaction transaction) {
         body: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ...(getPayActions(context, transaction).map(
+            ...(getPayActions(pageContext, transaction).map(
               (e) => ListTile(
                 leading: Icon(e.icon),
                 title: Text(e.label),
