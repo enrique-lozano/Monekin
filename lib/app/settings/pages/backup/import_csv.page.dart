@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:drift/drift.dart' as drift;
+import 'package:file_picker/file_picker.dart' show FileType;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
@@ -41,9 +42,8 @@ const _rowsToPreview = 5;
 class _ImportCSVPageState extends State<ImportCSVPage> {
   int currentStep = 0;
 
-  List<List<dynamic>>? csvData;
-  Iterable<String>? get csvHeaders =>
-      csvData?[0].map((item) => item.toString());
+  List<List<String>>? csvData;
+  List<String>? get csvHeaders => csvData?.firstOrNull;
 
   int? amountColumn;
   int? accountColumn;
@@ -62,44 +62,35 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
 
   Future<void> readFile() async {
     try {
-      final csvFile = await BackupDatabaseService().readFile();
-      if (csvFile == null) return;
-
-      final csvString = await csvFile.readAsString();
-      final parsedCSV = await BackupDatabaseService().processCsv(csvString);
-
-      int firstRowLength = parsedCSV.first.length;
-
-      final lastHeaderColumnName = parsedCSV.first.last;
-
-      if (parsedCSV.length >= 2 &&
-          firstRowLength == parsedCSV[1].length + 1 &&
-          lastHeaderColumnName is String &&
-          lastHeaderColumnName.trim().isEmpty) {
-        // Remove trailing column in header row if it has one more than the second row
-        parsedCSV[0].removeLast();
-        firstRowLength = parsedCSV.first.length;
-      }
-
-      if (parsedCSV.length > 2 &&
-          parsedCSV.last.every((cell) => cell.trim().isEmpty)) {
-        // Remove last row if it's effectively empty
-        parsedCSV.removeLast();
-      }
-
-      final allRowsSameLength = parsedCSV.every(
-        (row) => row.length == firstRowLength,
+      final csvFile = await BackupDatabaseService().pickAndReadSingleFile(
+        allowedExtensions: ['csv'],
+        type: FileType.custom,
       );
 
-      if (!allRowsSameLength) {
-        MonekinSnackbar.error(
-          SnackbarParams(
-            'All rows in the CSV must have the same number of columns.',
-          ),
-        );
-
+      if (csvFile == null) {
+        MonekinSnackbar.info(SnackbarParams(t.backup.no_file_selected));
         return;
       }
+
+      final csvString = await csvFile.readAsString();
+      List<List<String>> parsedCSV = await BackupDatabaseService().processCsv(
+        csvString,
+      );
+
+      int maxColumns = parsedCSV.fold(
+        0,
+        (prev, element) => element.length > prev ? element.length : prev,
+      );
+
+      // Add missing values to rows with fewer columns
+      parsedCSV = parsedCSV
+          .map((row) => row + List.filled(maxColumns - row.length, ''))
+          .toList();
+
+      // Remove blank rows
+      parsedCSV = parsedCSV
+          .where((list) => list.any((element) => element.trim().isNotEmpty))
+          .toList();
 
       setState(() {
         csvData = parsedCSV;
@@ -275,7 +266,9 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
           categoryID = category?.id ?? defaultCategory!.id;
         }
 
-        final trValue = double.parse(row[amountColumn!].toString());
+        final trValue = double.parse(
+          row[amountColumn!].toString().replaceFirst(',', '.'),
+        );
 
         transactionsToInsert.add(
           TransactionInDB(
@@ -621,12 +614,21 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
-        headingRowColor: WidgetStateProperty.resolveWith<Color?>(
-          (states) => Theme.of(context).colorScheme.primary.withOpacity(0.18),
-        ),
         clipBehavior: Clip.hardEdge,
+
+        headingRowColor: WidgetStateProperty.resolveWith<Color?>(
+          (states) => Theme.of(context).colorScheme.primary.withOpacity(0.25),
+        ),
+        headingRowHeight: 36,
         headingTextStyle: Theme.of(context).textTheme.labelLarge,
+
+        dataRowMaxHeight: 32,
+        dataRowMinHeight: 32,
         dataTextStyle: Theme.of(context).textTheme.bodySmall,
+        dataRowColor: WidgetStateProperty.resolveWith<Color?>(
+          (states) => Theme.of(context).colorScheme.surfaceContainerHigh,
+        ),
+
         columns: csvHeaders!
             .map((item) => DataColumn(label: Text(item)))
             .toList(),
@@ -639,7 +641,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
               .map(
                 (csvrow) => DataRow(
                   cells: csvrow
-                      .map((csvItem) => DataCell(Text(csvItem.toString())))
+                      .map((csvItem) => DataCell(Text(csvItem)))
                       .toList(),
                 ),
               ),
