@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:csv/csv.dart';
+import 'package:csv/csv_settings_autodetection.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/app_db.dart';
@@ -120,71 +121,79 @@ class BackupDatabaseService {
     return file.writeAsString(csvData, mode: FileMode.writeOnly);
   }
 
+  /// Imports a database file selected by the user. Returns true if the import was successful,
+  /// false if no file was selected.
   Future<bool> importDatabase() async {
-    FilePickerResult? result;
+    final selectedFile = await pickAndReadSingleFile(
+      type: Platform.isWindows ? FileType.custom : FileType.any,
+      allowedExtensions: Platform.isWindows ? ['db'] : null,
+    );
+
+    if (selectedFile == null) {
+      return false;
+    }
+
+    // Delete the previous database
+    String dbPath = await db.databasePath;
+
+    final currentDBContent = await File(dbPath).readAsBytes();
+
+    // Load the new database
+    await File(
+      dbPath,
+    ).writeAsBytes(await selectedFile.readAsBytes(), mode: FileMode.write);
 
     try {
-      result = await FilePicker.platform.pickFiles(
-        type: Platform.isWindows ? FileType.custom : FileType.any,
-        allowedExtensions: Platform.isWindows ? ['db'] : null,
-        allowMultiple: false,
+      final dbVersion = int.parse(
+        (await AppDataService.instance
+            .getAppDataItem(AppDataKey.dbVersion)
+            .first)!,
       );
-    } catch (e) {
-      throw Exception(e.toString());
-    }
 
-    if (result != null) {
-      File selectedFile = File(result.files.single.path!);
-
-      // Delete the previous database
-      String dbPath = await db.databasePath;
-
-      final currentDBContent = await File(dbPath).readAsBytes();
-
-      // Load the new database
-      await File(
-        dbPath,
-      ).writeAsBytes(await selectedFile.readAsBytes(), mode: FileMode.write);
-
-      try {
-        final dbVersion = int.parse(
-          (await AppDataService.instance
-              .getAppDataItem(AppDataKey.dbVersion)
-              .first)!,
-        );
-
-        if (dbVersion < db.schemaVersion) {
-          await db.migrateDB(dbVersion, db.schemaVersion);
-        }
-
-        db.markTablesUpdated(db.allTables);
-      } catch (e) {
-        // Reset the DB as it was
-        await File(dbPath).writeAsBytes(currentDBContent, mode: FileMode.write);
-        db.markTablesUpdated(db.allTables);
-
-        Logger.printDebug('Error\n: $e');
-
-        throw Exception('The database is invalid or could not be readed');
+      if (dbVersion < db.schemaVersion) {
+        await db.migrateDB(dbVersion, db.schemaVersion);
       }
 
-      return true;
+      db.markTablesUpdated(db.allTables);
+    } catch (e) {
+      // Reset the DB as it was
+      await File(dbPath).writeAsBytes(currentDBContent, mode: FileMode.write);
+      db.markTablesUpdated(db.allTables);
+
+      Logger.printDebug('Error\n: $e');
+
+      throw Exception('The database is invalid or could not be readed');
     }
 
-    return false;
+    return true;
   }
 
-  Future<File?> readFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+  Future<File?> pickAndReadSingleFile({
+    FileType type = FileType.any,
+    List<String>? allowedExtensions,
+  }) async {
+    final result = await FilePicker.platform.pickFiles(
+      type: type,
+      allowedExtensions: allowedExtensions,
+      allowMultiple: false,
+    );
 
-    if (result != null) {
-      return File(result.files.single.path!);
+    if (result == null) {
+      return null;
     }
 
-    return null;
+    return File(result.files.single.path!);
   }
 
-  Future<List<List<dynamic>>> processCsv(String csvData) async {
-    return const CsvToListConverter().convert(csvData, eol: '\n');
+  Future<List<List<String>>> processCsv(String csvData) async {
+    return const CsvToListConverter().convert(
+      csvData,
+      eol: '\n',
+      csvSettingsDetector: const FirstOccurrenceSettingsDetector(
+        fieldDelimiters: [',', ';', '\t', '|'],
+        textDelimiters: ['"', "'"],
+      ),
+      shouldParseNumbers: false,
+    );
   }
 }
