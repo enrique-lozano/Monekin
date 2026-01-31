@@ -17,6 +17,7 @@ import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
+import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
@@ -661,15 +662,16 @@ class _TransactionDetailHeader extends SliverPersistentHeaderDelegate {
 
     return Container(
       color: Theme.of(context).colorScheme.surface,
-      padding: const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 16),
+      padding: EdgeInsets.only(left: 24, right: 24, bottom: 12, top: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        spacing: 24,
         children: [
           Flexible(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 AnimatedDefaultTextStyle(
                   duration: const Duration(milliseconds: 100),
@@ -697,38 +699,24 @@ class _TransactionDetailHeader extends SliverPersistentHeaderDelegate {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 if (transaction.recurrentInfo.isNoRecurrent)
-                  AnimatedSwitcher(
+                  AnimatedExpanded(
                     duration: const Duration(milliseconds: 200),
-                    transitionBuilder:
-                        (Widget child, Animation<double> animation) {
-                          return SizeTransition(
-                            sizeFactor: animation,
-                            child: ScaleTransition(
-                              scale: animation,
-                              alignment: Alignment.centerLeft,
-                              child: child,
-                            ),
-                          );
-                        },
-                    child: shrinkPercent > 0.3
-                        ? const SizedBox.shrink()
-                        : Text(
-                            transaction.date.year == currentYear
-                                ? DateFormat.MMMMEEEEd().format(
-                                    transaction.date,
-                                  )
-                                : DateFormat.yMMMEd().format(transaction.date),
-                          ),
+                    expand: shrinkPercent < 0.3,
+                    child: Text(
+                      transaction.date.year == currentYear
+                          ? DateFormat.MMMMEEEEd().format(transaction.date)
+                          : DateFormat.yMMMEd().format(transaction.date),
+                    ),
                   )
                 else
                   Row(
+                    spacing: 4,
                     children: [
                       Icon(
                         Icons.repeat_rounded,
                         size: 14,
                         color: Theme.of(context).colorScheme.primary,
                       ),
-                      const SizedBox(width: 4),
                       Text(
                         transaction.recurrentInfo.formText(context),
                         style: TextStyle(
@@ -741,12 +729,11 @@ class _TransactionDetailHeader extends SliverPersistentHeaderDelegate {
               ],
             ),
           ),
-          const SizedBox(width: 24),
           Hero(
             tag: heroTag ?? UniqueKey(),
             child: transaction.getDisplayIcon(
               context,
-              size: 42 - (1 - pow(1 - shrinkPercent, 4)) * 16,
+              size: 44 - (1 - pow(1 - shrinkPercent, 4)) * 16,
             ),
           ),
         ],
@@ -758,7 +745,7 @@ class _TransactionDetailHeader extends SliverPersistentHeaderDelegate {
   double get maxExtent => 120;
 
   @override
-  double get minExtent => 80;
+  double get minExtent => transaction.recurrentInfo.isNoRecurrent ? 72 : 100;
 
   @override
   bool shouldRebuild(covariant _TransactionDetailHeader oldDelegate) =>
