@@ -106,7 +106,7 @@ class AccountService {
       date: date,
       trFilters: trFilters,
       convertToPreferredCurrency: convertToPreferredCurrency,
-    );
+    ).map((result) => result.roundWithDecimals(account.currency.decimalPlaces));
   }
 
   /// Get the amount of money that some accounts have in a certain period of time,
