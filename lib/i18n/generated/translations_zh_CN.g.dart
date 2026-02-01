@@ -1642,7 +1642,7 @@ class _TranslationsBackupImportManualImportZhCn implements TranslationsBackupImp
 	];
 	@override List<String> get steps_descr => [
 		'从您的设备中选择一个 .csv 文件。确保它的第一行描述了每列的名称。',
-		'选择每笔交易数额的列。负值表示支出，正值表示收入。.表示小数点分隔符。',
+		'选择每笔交易数额的列。负值表示支出，正值表示收入。',
 		'选择每笔交易所属账户的列。您也可以选择默认账户，以防我们找不到您想要的账户。如果未指定默认账户，我们将建立一个同名账户。',
 		'选择交易类别名称所在的列。您必须指定一个默认类别，以便我们在找不到此类别时，将默认类别分配给交易。',
 		'选择每笔交易日期的列。如果未指定，所有交易将使用当前日期。',
@@ -2483,7 +2483,7 @@ extension on TranslationsZhCn {
 		map['backup.import.manual_import.steps.4'] = '日期列';
 		map['backup.import.manual_import.steps.5'] = '其它列';
 		map['backup.import.manual_import.steps_descr.0'] = '从您的设备中选择一个 .csv 文件。确保它的第一行描述了每列的名称。';
-		map['backup.import.manual_import.steps_descr.1'] = '选择每笔交易数额的列。负值表示支出，正值表示收入。.表示小数点分隔符。';
+		map['backup.import.manual_import.steps_descr.1'] = '选择每笔交易数额的列。负值表示支出，正值表示收入。';
 		map['backup.import.manual_import.steps_descr.2'] = '选择每笔交易所属账户的列。您也可以选择默认账户，以防我们找不到您想要的账户。如果未指定默认账户，我们将建立一个同名账户。';
 		map['backup.import.manual_import.steps_descr.3'] = '选择交易类别名称所在的列。您必须指定一个默认类别，以便我们在找不到此类别时，将默认类别分配给交易。';
 		map['backup.import.manual_import.steps_descr.4'] = '选择每笔交易日期的列。如果未指定，所有交易将使用当前日期。';
