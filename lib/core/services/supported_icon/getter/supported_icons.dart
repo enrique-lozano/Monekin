@@ -46,6 +46,7 @@ List<Map<String, dynamic>> supportedIcons = [
   {'id': 'hsbc', 'scope': 'logos/financial_institutions'},
   {'id': 'jpmorgan', 'scope': 'logos/financial_institutions'},
   {'id': 'revolut', 'scope': 'logos/financial_institutions'},
+  {'id': 'trade_republic', 'scope': 'logos/financial_institutions'},
   {'id': 'santander', 'scope': 'logos/financial_institutions'},
   {'id': 'caixabank', 'scope': 'logos/financial_institutions'},
   {'id': 'sabadell', 'scope': 'logos/financial_institutions'},

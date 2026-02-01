@@ -2923,7 +2923,7 @@ class TranslationsBackupImportManualImportEn {
 	];
 	List<String> get steps_descr => [
 		'Select a .csv file from your device. Make sure it has a first row that describes the name of each column',
-		'Select the column where the value of each transaction is specified. Use negative values for expenses and positive values for income. Use a point as a decimal separator',
+		'Select the column where the value of each transaction is specified. Use negative values for expenses and positive values for income.',
 		'Select the column where the account to which each transaction belongs is specified. You can also select a default account in case we cannot find the account you want. If a default account is not specified, we will create one with the same name ',
 		'Specify the column where the transaction category name is located. You must specify a default category so that we assign this category to transactions, in case the category cannot be found',
 		'Select the column where the date of each transaction is specified. If not specified, transactions will be created with the current date',
@@ -3871,7 +3871,7 @@ extension on Translations {
 		map['backup.import.manual_import.steps.4'] = 'Column for date';
 		map['backup.import.manual_import.steps.5'] = 'other columns';
 		map['backup.import.manual_import.steps_descr.0'] = 'Select a .csv file from your device. Make sure it has a first row that describes the name of each column';
-		map['backup.import.manual_import.steps_descr.1'] = 'Select the column where the value of each transaction is specified. Use negative values for expenses and positive values for income. Use a point as a decimal separator';
+		map['backup.import.manual_import.steps_descr.1'] = 'Select the column where the value of each transaction is specified. Use negative values for expenses and positive values for income.';
 		map['backup.import.manual_import.steps_descr.2'] = 'Select the column where the account to which each transaction belongs is specified. You can also select a default account in case we cannot find the account you want. If a default account is not specified, we will create one with the same name ';
 		map['backup.import.manual_import.steps_descr.3'] = 'Specify the column where the transaction category name is located. You must specify a default category so that we assign this category to transactions, in case the category cannot be found';
 		map['backup.import.manual_import.steps_descr.4'] = 'Select the column where the date of each transaction is specified. If not specified, transactions will be created with the current date';

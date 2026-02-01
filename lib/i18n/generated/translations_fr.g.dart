@@ -1640,7 +1640,7 @@ class _TranslationsBackupImportManualImportFr implements TranslationsBackupImpor
 	];
 	@override List<String> get steps_descr => [
 		'Sélectionnez un fichier .csv depuis votre appareil. Assurez-vous qu\'il possède une première ligne décrivant le nom de chaque colonne',
-		'Sélectionnez la colonne où la valeur de chaque transaction est spécifiée. Utilisez des valeurs négatives pour les dépenses et positives pour les recettes. Utilisez un point comme séparateur décimal',
+		'Sélectionnez la colonne où la valeur de chaque transaction est spécifiée. Utilisez des valeurs négatives pour les dépenses et positives pour les recettes.',
 		'Sélectionnez la colonne où est spécifié le compte auquel appartient chaque transaction. Vous pouvez également sélectionner un compte par défaut au cas où nous ne pourrions pas trouver le compte souhaité. Si aucun compte par défaut n\'est spécifié, nous en créerons un avec le même nom',
 		'Indiquez la colonne où se trouve le nom de la catégorie de la transaction. Vous devez spécifier une catégorie par défaut pour que nous l\'assignions aux transactions si la catégorie ne peut pas être trouvée',
 		'Sélectionnez la colonne où la date de chaque transaction est spécifiée. Si elle n\'est pas indiquée, les transactions seront créées avec la date actuelle',
@@ -2480,7 +2480,7 @@ extension on TranslationsFr {
 		map['backup.import.manual_import.steps.4'] = 'Colonne pour la date';
 		map['backup.import.manual_import.steps.5'] = 'autres colonnes';
 		map['backup.import.manual_import.steps_descr.0'] = 'Sélectionnez un fichier .csv depuis votre appareil. Assurez-vous qu\'il possède une première ligne décrivant le nom de chaque colonne';
-		map['backup.import.manual_import.steps_descr.1'] = 'Sélectionnez la colonne où la valeur de chaque transaction est spécifiée. Utilisez des valeurs négatives pour les dépenses et positives pour les recettes. Utilisez un point comme séparateur décimal';
+		map['backup.import.manual_import.steps_descr.1'] = 'Sélectionnez la colonne où la valeur de chaque transaction est spécifiée. Utilisez des valeurs négatives pour les dépenses et positives pour les recettes.';
 		map['backup.import.manual_import.steps_descr.2'] = 'Sélectionnez la colonne où est spécifié le compte auquel appartient chaque transaction. Vous pouvez également sélectionner un compte par défaut au cas où nous ne pourrions pas trouver le compte souhaité. Si aucun compte par défaut n\'est spécifié, nous en créerons un avec le même nom';
 		map['backup.import.manual_import.steps_descr.3'] = 'Indiquez la colonne où se trouve le nom de la catégorie de la transaction. Vous devez spécifier une catégorie par défaut pour que nous l\'assignions aux transactions si la catégorie ne peut pas être trouvée';
 		map['backup.import.manual_import.steps_descr.4'] = 'Sélectionnez la colonne où la date de chaque transaction est spécifiée. Si elle n\'est pas indiquée, les transactions seront créées avec la date actuelle';
