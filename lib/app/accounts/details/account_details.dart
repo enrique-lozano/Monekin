@@ -112,6 +112,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                         title: 'Info',
                         footer: CardFooterWithSingleButton(
                           text: t.ui_actions.edit,
+                          icon: Icon(Icons.edit_rounded),
                           onButtonClick: () => RouteUtils.pushRoute(
                             AccountFormPage(account: account),
                           ),

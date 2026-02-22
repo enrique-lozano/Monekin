@@ -24,7 +24,6 @@ class LabelValueInfoList extends StatelessWidget {
       itemCount: items.length,
       separatorBuilder: (context, index) {
         return const Divider(
-          //  color: Colors.grey, // Customize the color of the separator
           thickness: 1, // Customize the thickness of the separator
           indent: 16,
           endIndent: 16,
@@ -33,7 +32,6 @@ class LabelValueInfoList extends StatelessWidget {
       itemBuilder: (context, index) {
         final element = items[index];
         return ListTile(
-          minVerticalPadding: 0,
           contentPadding: const EdgeInsets.symmetric(horizontal: 16),
           title: Text(element.label),
           subtitle: element.value,

@@ -84,34 +84,56 @@ class CardWithHeader extends StatelessWidget {
   }
 }
 
+/// A card footer with a single button, used in the `CardWithHeader` widget.
+/// By default, the button has a "see more" text and icon, but both can be customized.
 class CardFooterWithSingleButton extends StatelessWidget {
-  const CardFooterWithSingleButton({super.key, this.text, this.onButtonClick});
+  const CardFooterWithSingleButton({
+    super.key,
+    this.text,
+    this.onButtonClick,
+    this.icon,
+  });
 
   final String? text;
+  final Widget? icon;
   final VoidCallback? onButtonClick;
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
+    const double indent = 16;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Divider(
-          thickness: 2,
-          indent: 16,
-          endIndent: 16,
-          color: Theme.of(context).dividerColor.withOpacity(0.2),
-        ),
-        Container(
-          alignment: Alignment.centerRight,
-          padding: const EdgeInsets.fromLTRB(2, 4, 2, 4),
-          child: TextButton.icon(
-            onPressed: onButtonClick,
-            iconAlignment: IconAlignment.end,
-            icon: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
-            label: Text(text ?? t.ui_actions.see_more),
+        Transform.translate(
+          offset: const Offset(0, 1),
+          child: Divider(
+            thickness: 2,
+            indent: indent,
+            endIndent: indent,
+            color: Theme.of(context).dividerColor.withOpacity(0.2),
           ),
+        ),
+        TextButton.icon(
+          style: TextButton.styleFrom(
+            minimumSize: const Size.fromHeight(48),
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.symmetric(
+              horizontal: indent,
+              vertical: 8,
+            ),
+            shape: RoundedRectangleBorder(),
+          ),
+          onPressed: onButtonClick,
+          icon:
+              icon ??
+              Transform.rotate(
+                angle: -180 * 3.14 / 180,
+                child: const Icon(Icons.menu_open),
+              ),
+          label: Text(text ?? t.ui_actions.see_more),
         ),
       ],
     );
