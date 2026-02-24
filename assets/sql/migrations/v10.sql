@@ -1,0 +1,13 @@
+-- ----------- DEBTS ------------
+CREATE TABLE IF NOT EXISTS debts (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT UNIQUE NOT NULL,
+    type INTEGER NOT NULL CHECK(type IN (0, 1)),
+    iconId TEXT NOT NULL,
+    currencyId TEXT NOT NULL REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
+    initialAmount REAL NOT NULL DEFAULT 0,
+    startDate DATETIME NOT NULL,
+    endDate DATETIME
+);
+
+ALTER TABLE transactions ADD COLUMN debtId TEXT REFERENCES debts(id) ON DELETE SET NULL ON UPDATE CASCADE;

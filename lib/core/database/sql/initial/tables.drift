@@ -306,7 +306,7 @@ CREATE TABLE IF NOT EXISTS debts (
     startDate DATETIME NOT NULL,
 
     -- The closing date of the debt. After this date, no transactions can exists on it.
-    endDate DATETIME,
+    endDate DATETIME
 ) AS DebtInDB;
 
 
