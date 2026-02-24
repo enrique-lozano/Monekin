@@ -6,7 +6,7 @@
 /// Locales: 10
 /// Strings: 7177 (717 per locale)
 ///
-/// Built on 2026-02-24 at 20:38 UTC
+/// Built on 2026-02-24 at 21:52 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint, unused_import
@@ -16,7 +16,6 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:slang/generated.dart';
 import 'package:slang_flutter/slang_flutter.dart';
-export 'package:slang_flutter/slang_flutter.dart';
 
 import 'translations_de.g.dart' deferred as l_de;
 import 'translations_es.g.dart' deferred as l_es;
@@ -27,6 +26,9 @@ import 'translations_tr.g.dart' deferred as l_tr;
 import 'translations_uk.g.dart' deferred as l_uk;
 import 'translations_zh_CN.g.dart' deferred as l_zh_CN;
 import 'translations_zh_TW.g.dart' deferred as l_zh_TW;
+
+export 'package:slang_flutter/slang_flutter.dart';
+
 part 'translations_en.g.dart';
 
 /// Supported locales.
