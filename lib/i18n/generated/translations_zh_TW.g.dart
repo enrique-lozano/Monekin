@@ -3,6 +3,7 @@
 ///
 // coverage:ignore-file
 // ignore_for_file: type=lint, unused_import
+// dart format off
 
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +11,7 @@ import 'package:slang/generated.dart';
 import 'translations.g.dart';
 
 // Path: <root>
-class TranslationsZhTw implements Translations {
+class TranslationsZhTw with BaseTranslations<AppLocale, Translations> implements Translations {
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
 	TranslationsZhTw({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
@@ -1796,813 +1797,708 @@ class _TranslationsGeneralTimeRangesTypesZhTw implements TranslationsGeneralTime
 
 /// The flat map containing all translations for locale <zh-TW>.
 /// Only for edge cases! For simple maps, use the map function of this library.
-/// Note: We use a HashMap because Dart seems to be unable to compile large switch statements.
-Map<String, dynamic>? _map;
-
+///
+/// The Dart AOT compiler has issues with very large switch statements,
+/// so the map is split into smaller functions (512 entries each).
 extension on TranslationsZhTw {
 	dynamic _flatMapFunction(String path) {
-		final map = _map ?? _initFlatMap();
-		return map[path];
-	}
-
-	/// Initializes the flat map and returns it.
-	Map<String, dynamic> _initFlatMap() {
-		final map = <String, dynamic>{};
-		map['ui_actions.cancel'] = '取消';
-		map['ui_actions.confirm'] = '確認';
-		map['ui_actions.continue_text'] = '繼續';
-		map['ui_actions.save'] = '保存';
-		map['ui_actions.save_changes'] = '儲存變更';
-		map['ui_actions.close_and_save'] = '儲存並關閉';
-		map['ui_actions.add'] = '添加';
-		map['ui_actions.edit'] = '編輯';
-		map['ui_actions.delete'] = '刪除';
-		map['ui_actions.see_more'] = '查看更多';
-		map['ui_actions.select_all'] = '全選';
-		map['ui_actions.deselect_all'] = '取消全選';
-		map['ui_actions.select'] = '選擇';
-		map['ui_actions.search'] = '搜尋';
-		map['ui_actions.filter'] = '過濾';
-		map['ui_actions.reset'] = '重設';
-		map['ui_actions.submit'] = '提交';
-		map['ui_actions.next'] = '下一步';
-		map['ui_actions.previous'] = '上一步';
-		map['ui_actions.back'] = '返回';
-		map['ui_actions.reload'] = '重新載入';
-		map['ui_actions.view'] = '檢視';
-		map['ui_actions.download'] = '下載';
-		map['ui_actions.upload'] = '上傳';
-		map['ui_actions.retry'] = '重試';
-		map['ui_actions.copy'] = '複製';
-		map['ui_actions.paste'] = '貼上';
-		map['ui_actions.undo'] = '還原';
-		map['ui_actions.redo'] = '重做';
-		map['ui_actions.open'] = '開啟';
-		map['ui_actions.close'] = '關閉';
-		map['ui_actions.apply'] = '套用';
-		map['ui_actions.discard'] = '捨棄';
-		map['ui_actions.refresh'] = '重新整理';
-		map['ui_actions.share'] = '分享';
-		map['general.or'] = '或';
-		map['general.understood'] = '明白了';
-		map['general.unspecified'] = '未指定';
-		map['general.quick_actions'] = '快速行動';
-		map['general.details'] = '細節';
-		map['general.balance'] = '平衡';
-		map['general.account'] = '帳戶';
-		map['general.accounts'] = '帳戶';
-		map['general.categories'] = '類別';
-		map['general.category'] = '類別';
-		map['general.today'] = '今天';
-		map['general.yesterday'] = '昨天';
-		map['general.filters'] = '過濾';
-		map['general.empty_warn'] = '哦！這裡非常空';
-		map['general.search_no_results'] = '沒有符合您搜索條件的商品';
-		map['general.insufficient_data'] = '數據不足';
-		map['general.show_more_fields'] = '顯示更多欄位';
-		map['general.show_less_fields'] = '顯示較少的欄位';
-		map['general.tap_to_search'] = '點擊即可搜尋';
-		map['general.delete_success'] = '項目刪除成功';
-		map['general.leave_without_saving.title'] = '不保存就離開？';
-		map['general.leave_without_saving.message'] = '您有未保存的更改，確定要離開而不保存它們嗎？';
-		map['general.clipboard.success'] = ({required Object x}) => '${x}已複製到剪貼簿';
-		map['general.clipboard.error'] = '複製錯誤';
-		map['general.time.start_date'] = '開始日期';
-		map['general.time.end_date'] = '結束日期';
-		map['general.time.from_date'] = '從日期';
-		map['general.time.until_date'] = '截止日期';
-		map['general.time.date'] = '日期';
-		map['general.time.datetime'] = '約會時間';
-		map['general.time.time'] = '時間';
-		map['general.time.each'] = '每個';
-		map['general.time.after'] = '後';
-		map['general.time.ranges.display'] = '時間範圍';
-		map['general.time.ranges.it_repeat'] = '重複';
-		map['general.time.ranges.it_ends'] = '結束';
-		map['general.time.ranges.forever'] = '永遠';
-		map['general.time.ranges.types.cycle'] = '循環';
-		map['general.time.ranges.types.last_days'] = '最後一天';
-		map['general.time.ranges.types.last_days_form'] = ({required Object x}) => '前${x}天';
-		map['general.time.ranges.types.all'] = '總是';
-		map['general.time.ranges.types.date_range'] = '自訂範圍';
-		map['general.time.ranges.each_range'] = ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '每個${range}',
-				other: '每${n}${range}',
-			);
-		map['general.time.ranges.each_range_until_date'] = ({required num n, required Object range, required Object day}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '每${range}直到${day}',
-				other: '每 ${n}${range}直到${day}',
-			);
-		map['general.time.ranges.each_range_until_times'] = ({required num n, required Object range, required Object limit}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '每${range}${limit}次',
-				other: '每${n}${range}${limit}次',
-			);
-		map['general.time.ranges.each_range_until_once'] = ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '每${range}一次',
-				other: '每${n}${range}一次',
-			);
-		map['general.time.ranges.month'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '月',
-				other: '月',
-			);
-		map['general.time.ranges.year'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '年',
-				other: '年',
-			);
-		map['general.time.ranges.day'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '天',
-				other: '天',
-			);
-		map['general.time.ranges.week'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '星期',
-				other: '幾週',
-			);
-		map['general.time.periodicity.display'] = '週期性';
-		map['general.time.periodicity.no_repeat'] = '不再重複';
-		map['general.time.periodicity.repeat'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '重複',
-				other: '重複',
-			);
-		map['general.time.periodicity.diary'] = '日常的';
-		map['general.time.periodicity.monthly'] = '每月';
-		map['general.time.periodicity.annually'] = '每年';
-		map['general.time.periodicity.quaterly'] = '每季';
-		map['general.time.periodicity.weekly'] = '每週';
-		map['general.time.periodicity.custom'] = '自訂範圍';
-		map['general.time.periodicity.infinite'] = '總是';
-		map['general.time.current.monthly'] = '這個月';
-		map['general.time.current.annually'] = '今年';
-		map['general.time.current.quaterly'] = '本季';
-		map['general.time.current.weekly'] = '本星期';
-		map['general.time.current.infinite'] = '總是';
-		map['general.time.current.custom'] = '自訂範圍';
-		map['general.time.all.diary'] = '每天';
-		map['general.time.all.monthly'] = '每月';
-		map['general.time.all.annually'] = '每年';
-		map['general.time.all.quaterly'] = '每季';
-		map['general.time.all.weekly'] = '每週';
-		map['general.transaction_order.display'] = '訂單交易';
-		map['general.transaction_order.category'] = '按類別';
-		map['general.transaction_order.quantity'] = '按數量';
-		map['general.transaction_order.date'] = '按日期';
-		map['general.validations.form_error'] = '修正表單中指示的欄位以繼續';
-		map['general.validations.required'] = '必填項目';
-		map['general.validations.positive'] = '應該是積極的';
-		map['general.validations.min_number'] = ({required Object x}) => '應該大於${x}';
-		map['general.validations.max_number'] = ({required Object x}) => '應小於${x}';
-		map['intro.start'] = '開始';
-		map['intro.skip'] = '跳過';
-		map['intro.next'] = '下一個';
-		map['intro.select_your_currency'] = '選擇您的貨幣';
-		map['intro.welcome_subtitle'] = '您的個人財務管家';
-		map['intro.welcome_subtitle2'] = '100% 開放，100% 免費';
-		map['intro.welcome_footer'] = '登入即表示您同意<a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>隱私權政策</a>和<a href= \'https: //github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>應用程式的使用條款</a>';
-		map['intro.offline_descr_title'] = '離線帳戶：';
-		map['intro.offline_descr'] = '您的資料只會儲存在您的裝置上，只要您不卸載應用程式或更換手機，資料就安全。為防止資料遺失，建議定期從應用程式設定中進行備份。';
-		map['intro.offline_start'] = '離線啟動會話';
-		map['intro.sl1_title'] = '選擇您的貨幣';
-		map['intro.sl1_descr'] = '您的預設貨幣將用於報告和一般圖表。您以後可以隨時在應用程式設定中更改貨幣和應用程式語言';
-		map['intro.sl2_title'] = '安全、隱私、可靠';
-		map['intro.sl2_descr'] = '您的資料只屬於您。我們將資訊直接儲存在您的設備上，無需通過外部伺服器。這使得即使沒有互聯網也可以使用該應用程式';
-		map['intro.sl2_descr2'] = '此外，該應用程式的源代碼是公開的，任何人都可以對其進行協作並查看它是如何工作的';
-		map['intro.last_slide_title'] = '一切準備就緒';
-		map['intro.last_slide_descr'] = '有了 Monekin，您終於可以實現您想要的財務獨立。您將擁有圖表、預算、提示、統計數據以及更多有關您的資金的信息。';
-		map['intro.last_slide_descr2'] = '我們希望您享受這次體驗！如有疑問、建議，請隨時與我們聯繫......';
-		map['home.title'] = '儀表板';
-		map['home.filter_transactions'] = '過濾交易';
-		map['home.hello_day'] = '早安，';
-		map['home.hello_night'] = '晚安，';
-		map['home.total_balance'] = '總餘額';
-		map['home.my_accounts'] = '我的帳戶';
-		map['home.active_accounts'] = '活躍帳戶';
-		map['home.no_accounts'] = '尚未建立帳戶';
-		map['home.no_accounts_descr'] = '開始使用 Monekin 的所有魔力。至少建立一個帳戶以開始添加交易';
-		map['home.last_transactions'] = '最後的交易';
-		map['home.should_create_account_header'] = '哎呀！';
-		map['home.should_create_account_message'] = '您必須至少擁有一個非存檔帳戶才能開始建立交易';
-		map['financial_health.display'] = '財務健康';
-		map['financial_health.review.very_good'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return '很好！';
-					case GenderContext.female:
-						return '很好！';
-				}
-			};
-		map['financial_health.review.good'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return '好';
-					case GenderContext.female:
-						return '好';
-				}
-			};
-		map['financial_health.review.normal'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return '平均';
-					case GenderContext.female:
-						return '平均';
-				}
-			};
-		map['financial_health.review.bad'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return '一般';
-					case GenderContext.female:
-						return '一般';
-				}
-			};
-		map['financial_health.review.very_bad'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return '非常糟糕';
-					case GenderContext.female:
-						return '非常糟糕';
-				}
-			};
-		map['financial_health.review.insufficient_data'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return '數據不足';
-					case GenderContext.female:
-						return '數據不足';
-				}
-			};
-		map['financial_health.review.descr.insufficient_data'] = '看起來我們沒有足夠的收入來計算您的財務健康狀況。添加這段時間的一些收入/收入，以便我們能夠幫助您！';
-		map['financial_health.review.descr.very_good'] = '恭喜！您的財務狀況非常好。我們希望您繼續保持良好的勢頭，並繼續與 Monekin 一起學習';
-		map['financial_health.review.descr.good'] = '太棒了！您的財務狀況良好。請訪問分析選項卡，了解如何節省更多！';
-		map['financial_health.review.descr.normal'] = '您的財務健康狀況或多或少處於這一時期其他人口的平均水平';
-		map['financial_health.review.descr.bad'] = '看來您的財務狀況還不是最好的。探索其餘圖表以了解更多有關您財務狀況的信息';
-		map['financial_health.review.descr.very_bad'] = '嗯，您的財務健康狀況遠低於應有的水平。探索其餘圖表以了解有關您財務狀況的更多信息';
-		map['financial_health.months_without_income.title'] = '存活率';
-		map['financial_health.months_without_income.subtitle'] = '考慮到您的餘額，您可以在沒有收入的情況下度過多長時間';
-		map['financial_health.months_without_income.text_zero'] = '按照這樣的開支，沒有收入你一個月都活不下去！';
-		map['financial_health.months_without_income.text_one'] = '按照這樣的收入，如果沒有收入，你幾乎無法生存大約一個月！';
-		map['financial_health.months_without_income.text_other'] = ({required Object n}) => '以這樣的支出速度，如果沒有收入，您大約可以生存 <b>${n}個月</b>。';
-		map['financial_health.months_without_income.text_infinite'] = '以這樣的支出速度，如果沒有收入，您大約可以<b>一生</b>生存。';
-		map['financial_health.months_without_income.suggestion'] = '請記住，建議始終將此比率保持在至少 5 個月以上。如果您發現自己沒有足夠的儲蓄緩衝，請減少不必要的開支。';
-		map['financial_health.months_without_income.insufficient_data'] = '看來我們沒有足夠的開支來計算您在沒有收入的情況下可以生存多少個月。輸入幾筆交易，然後回到這裡檢查您的財務狀況';
-		map['financial_health.savings_percentage.title'] = '儲蓄百分比';
-		map['financial_health.savings_percentage.subtitle'] = '你的收入中有哪一部分沒有在這段時間花掉';
-		map['financial_health.savings_percentage.text.good'] = ({required Object value}) => '恭喜您！您在這段時間裡成功節省了收入的<b>${value}%</b>。看來您已經是專家了，繼續努力吧！';
-		map['financial_health.savings_percentage.text.normal'] = ({required Object value}) => '恭喜您，在此期間您已成功節省收入的 <b>${value}%</b>。';
-		map['financial_health.savings_percentage.text.bad'] = ({required Object value}) => '在此期間，您已成功節省了收入的 <b>${value}%</b>。但是，我們認為您還可以做得更多！';
-		map['financial_health.savings_percentage.text.very_bad'] = '哇哦，這段時間你什麼都沒保存下來。';
-		map['financial_health.savings_percentage.suggestion'] = '請記住，建議將收入的至少 15-20% 存起來。';
-		map['stats.title'] = '統計數據';
-		map['stats.balance'] = '平衡';
-		map['stats.final_balance'] = '最終餘額';
-		map['stats.balance_by_account'] = '帳戶餘額';
-		map['stats.balance_by_account_subtitle'] = '我的大部分錢都在哪裡？';
-		map['stats.balance_by_currency'] = '按貨幣餘额';
-		map['stats.balance_by_currency_subtitle'] = '我有多少錢的外幣？';
-		map['stats.balance_evolution'] = '平衡趨勢';
-		map['stats.balance_evolution_subtitle'] = '我的錢比以前多了嗎？';
-		map['stats.compared_to_previous_period'] = '與上一时期相比';
-		map['stats.cash_flow'] = '現金流';
-		map['stats.cash_flow_subtitle'] = '我的支出是否少于我的收入？';
-		map['stats.by_periods'] = '按時期';
-		map['stats.by_categories'] = '按類別';
-		map['stats.by_tags'] = '按標籤';
-		map['stats.distribution'] = '分配';
-		map['stats.finance_health_resume'] = '恢復';
-		map['stats.finance_health_breakdown'] = '分解';
-		map['icon_selector.name'] = '姓名：';
-		map['icon_selector.icon'] = '圖示';
-		map['icon_selector.color'] = '顏色';
-		map['icon_selector.select_icon'] = '選擇一個圖示';
-		map['icon_selector.select_color'] = '選擇一種顏色';
-		map['icon_selector.custom_color'] = '自訂顏色';
-		map['icon_selector.current_color_selection'] = '目前選擇';
-		map['icon_selector.select_account_icon'] = '識別您的帳戶';
-		map['icon_selector.select_category_icon'] = '確定您的類別';
-		map['icon_selector.scopes.transport'] = '運輸';
-		map['icon_selector.scopes.money'] = '錢';
-		map['icon_selector.scopes.food'] = '食物';
-		map['icon_selector.scopes.medical'] = '健康';
-		map['icon_selector.scopes.entertainment'] = '閒暇';
-		map['icon_selector.scopes.technology'] = '技術';
-		map['icon_selector.scopes.other'] = '其他的';
-		map['icon_selector.scopes.logos_financial_institutions'] = '金融機構';
-		map['transaction.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '交易',
-				other: '交易',
-			);
-		map['transaction.create'] = '新交易';
-		map['transaction.new_income'] = '新收入';
-		map['transaction.new_expense'] = '新開支';
-		map['transaction.new_success'] = '交易建立成功';
-		map['transaction.edit'] = '編輯交易';
-		map['transaction.edit_success'] = '交易編輯成功';
-		map['transaction.edit_multiple'] = '編輯交易';
-		map['transaction.edit_multiple_success'] = ({required Object x}) => '${x}筆交易已成功編輯';
-		map['transaction.duplicate'] = '複製交易';
-		map['transaction.duplicate_short'] = '複製';
-		map['transaction.duplicate_warning_message'] = '將在同一日期建立與此相同的交易，您想繼續嗎？';
-		map['transaction.duplicate_success'] = '交易複製成功';
-		map['transaction.delete'] = '刪除交易';
-		map['transaction.delete_warning_message'] = '此操作不可逆轉。您的帳戶當前餘額和所有統計資料都將重新計算';
-		map['transaction.delete_success'] = '交易已正確刪除';
-		map['transaction.delete_multiple'] = '刪除交易';
-		map['transaction.delete_multiple_warning_message'] = ({required Object x}) => '此操作不可逆轉，將刪除${x}筆交易。您帳戶的當前餘額和所有統計資料都將重新計算';
-		map['transaction.delete_multiple_success'] = ({required Object x}) => '正確刪除了${x}筆交易';
-		map['transaction.details'] = '動作詳情';
-		map['transaction.next_payments.accept'] = '接受';
-		map['transaction.next_payments.skip'] = '跳過';
-		map['transaction.next_payments.skip_success'] = '成功跳過交易';
-		map['transaction.next_payments.skip_dialog_title'] = '跳過交易';
-		map['transaction.next_payments.skip_dialog_msg'] = ({required Object date}) => '此操作不可逆轉。我們會將下次移動的日期移至${date}';
-		map['transaction.next_payments.accept_today'] = '今天接受';
-		map['transaction.next_payments.accept_in_required_date'] = ({required Object date}) => '在要求的日期 (${date}) 接受';
-		map['transaction.next_payments.accept_dialog_title'] = '接受交易';
-		map['transaction.next_payments.accept_dialog_msg_single'] = '該交易的新狀態將為空。您可以隨時重新編輯該交易的狀態';
-		map['transaction.next_payments.accept_dialog_msg'] = ({required Object date}) => '此操作將建立日期為${date}的新交易。您將能夠在交易頁面上查看此交易的詳細資訊';
-		map['transaction.next_payments.recurrent_rule_finished'] = '循環規則已完成，無需再支付！';
-		map['transaction.list.all'] = '所有交易';
-		map['transaction.list.empty'] = '未發現此處顯示的交易。在應用程式中添加一些交易，也許您下次會有更好的運氣';
-		map['transaction.list.searcher_placeholder'] = '按類別、描述搜尋...';
-		map['transaction.list.searcher_no_results'] = '未找到符合搜尋條件的交易';
-		map['transaction.list.loading'] = '正在加載更多交易...';
-		map['transaction.list.selected_short'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '${n} 已選取',
-				other: '${n} 已選取',
-			);
-		map['transaction.list.selected_long'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '已選擇 ${n} 筆交易',
-				other: '選擇 ${n} 筆交易',
-			);
-		map['transaction.list.bulk_edit.dates'] = '編輯日期';
-		map['transaction.list.bulk_edit.categories'] = '編輯類別';
-		map['transaction.list.bulk_edit.status'] = '編輯狀態';
-		map['transaction.filters.title'] = '交易過濾器';
-		map['transaction.filters.from_value'] = '從金額';
-		map['transaction.filters.to_value'] = '最多金額';
-		map['transaction.filters.from_value_def'] = ({required Object x}) => '來自 ${x}';
-		map['transaction.filters.to_value_def'] = ({required Object x}) => '最多 ${x}';
-		map['transaction.filters.from_date_def'] = ({required Object date}) => '從${date}開始';
-		map['transaction.filters.to_date_def'] = ({required Object date}) => '截至 ${date}';
-		map['transaction.filters.reset'] = '重置過濾器';
-		map['transaction.filters.saved.title'] = '已儲存的過濾器';
-		map['transaction.filters.saved.new_title'] = '新增過濾器';
-		map['transaction.filters.saved.edit_title'] = '編輯過濾器';
-		map['transaction.filters.saved.name_label'] = '過濾器名稱';
-		map['transaction.filters.saved.name_hint'] = '我的自訂過濾器';
-		map['transaction.filters.saved.save_dialog_title'] = '儲存過濾器';
-		map['transaction.filters.saved.save_tooltip'] = '儲存目前的過濾器';
-		map['transaction.filters.saved.load_tooltip'] = '載入已儲存的過濾器';
-		map['transaction.filters.saved.empty_title'] = '未找到已儲存的過濾器';
-		map['transaction.filters.saved.empty_description'] = '在此儲存過濾器以便稍後快速存取。';
-		map['transaction.filters.saved.save_success'] = '篩選器儲存成功';
-		map['transaction.filters.saved.delete_success'] = '篩選器刪除成功';
-		map['transaction.form.validators.zero'] = '一筆交易的價值不能等於零';
-		map['transaction.form.validators.date_max'] = '所選日期晚於當前日期。交易將新增為待處理';
-		map['transaction.form.validators.date_after_account_creation'] = '您無法建立日期早於所屬帳戶建立日期的交易';
-		map['transaction.form.validators.negative_transfer'] = '轉帳的貨幣價值不能為負數';
-		map['transaction.form.validators.transfer_between_same_accounts'] = '來源帳號與目標帳號不能符合';
-		map['transaction.form.title'] = '交易標題';
-		map['transaction.form.title_short'] = '資質';
-		map['transaction.form.value'] = '交易價值';
-		map['transaction.form.tap_to_see_more'] = '點擊查看更多詳細資訊';
-		map['transaction.form.no_tags'] = '-- 無標籤 --';
-		map['transaction.form.description'] = '描述';
-		map['transaction.form.description_info'] = '點擊此處輸入有關此交易的更詳細描述';
-		map['transaction.form.exchange_to_preferred_title'] = ({required Object currency}) => '匯率為${currency}';
-		map['transaction.form.exchange_to_preferred_in_date'] = '交易日';
-		map['transaction.reversed.title'] = '逆向交易';
-		map['transaction.reversed.title_short'] = '逆向交易';
-		map['transaction.reversed.description_for_expenses'] = '儘管是收入交易，但它的金額為正數。這些類型的交易可用於表示先前記錄的收入的返還，例如退款或償還債務。';
-		map['transaction.reversed.description_for_incomes'] = '儘管是一項收入交易，但其金額為負數。這些類型的交易可用於作廢或更正錯誤記錄的收入，反映資金的返還或退款或記錄債務的支付。';
-		map['transaction.status.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '地位',
-				other: '狀態',
-			);
-		map['transaction.status.display_long'] = '交易狀態';
-		map['transaction.status.tr_status'] = ({required Object status}) => '${status}交易';
-		map['transaction.status.none'] = '無狀態';
-		map['transaction.status.none_descr'] = '沒有特定狀態的交易';
-		map['transaction.status.reconciled'] = '已驗證';
-		map['transaction.status.reconciled_descr'] = '此交易已經過驗證，並且與您銀行的真實交易相對應';
-		map['transaction.status.unreconciled'] = '未驗證';
-		map['transaction.status.unreconciled_descr'] = '此交易尚未經過驗證，因此尚未出現在您的真實銀行帳戶中。但是，它將計算 Monekin 中的餘額和統計數據';
-		map['transaction.status.pending'] = '待辦';
-		map['transaction.status.pending_descr'] = '此交易正在等待處理，因此在計算餘額和統計數據時不會考慮它';
-		map['transaction.status.voided'] = '作廢';
-		map['transaction.status.voided_descr'] = '由於付款錯誤或任何其他原因導致的交易無效/取消。在計算餘額和統計時不會考慮該交易';
-		map['transaction.types.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '交易類型',
-				other: '交易類型',
-			);
-		map['transaction.types.income'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '收入',
-				other: '收入',
-			);
-		map['transaction.types.expense'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '支出',
-				other: '支出',
-			);
-		map['transaction.types.transfer'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '轉移',
-				other: '轉移',
-			);
-		map['transfer.display'] = '轉移';
-		map['transfer.transfers'] = '轉移';
-		map['transfer.transfer_to'] = ({required Object account}) => '轉移至${account}';
-		map['transfer.create'] = '轉移';
-		map['transfer.need_two_accounts_warning_header'] = 'Ops!';
-		map['transfer.need_two_accounts_warning_message'] = '至少需要兩個帳戶才能執行此操作。如果您需要調整或編輯該帳戶的當前餘額，請點擊編輯按鈕';
-		map['transfer.form.from'] = '原始帳戶';
-		map['transfer.form.to'] = '目的地帳戶';
-		map['transfer.form.value_in_destiny.title'] = '目的地轉帳金额';
-		map['transfer.form.value_in_destiny.amount_short'] = ({required Object amount}) => '${amount}至目標帳户';
-		map['recurrent_transactions.title'] = '經常交易';
-		map['recurrent_transactions.title_short'] = '經常交易';
-		map['recurrent_transactions.empty'] = '您似乎沒有任何經常交易。建立每月、每年或每週的經常交易，它將顯示在此處';
-		map['recurrent_transactions.total_expense_title'] = '每個期間的總收入';
-		map['recurrent_transactions.total_expense_descr'] = '*不考慮每次重複的開始和結束日期';
-		map['recurrent_transactions.details.title'] = '經常交易';
-		map['recurrent_transactions.details.descr'] = '此交易的下一步動作如下所示。您可以接受第一步動作或跳過此動作';
-		map['recurrent_transactions.details.last_payment_info'] = '此動作是循環規則的最後一個，因此當確認此動作時，該規則將自動刪除';
-		map['recurrent_transactions.details.delete_header'] = '刪除重複交易';
-		map['recurrent_transactions.details.delete_message'] = '此操作不可逆轉，不會影響您已確認/付款的交易';
-		map['recurrent_transactions.status.delayed_by'] = ({required Object x}) => '延遲了 ${x}d';
-		map['recurrent_transactions.status.coming_in'] = ({required Object x}) => '${x} 天後';
-		map['account.details'] = '帳戶詳細資料';
-		map['account.date'] = '開業日期';
-		map['account.close_date'] = '截止日期';
-		map['account.reopen'] = '重新開立帳戶';
-		map['account.reopen_short'] = '重新開放';
-		map['account.reopen_descr'] = '您確定要重新開啟此帳戶嗎？';
-		map['account.balance'] = '帳戶餘額';
-		map['account.n_transactions'] = '交易數量';
-		map['account.add_money'] = '增加金額';
-		map['account.withdraw_money'] = '取出金額';
-		map['account.no_accounts'] = '未發現此處顯示的交易。請點選底部的 \'+\' 按鈕新增交易';
-		map['account.types.title'] = '帳戶類型';
-		map['account.types.warning'] = '帳戶類型一旦選擇，以後將無法更改';
-		map['account.types.normal'] = '普通帳戶';
-		map['account.types.normal_descr'] = '對於記錄您的日常財務很有用。這是最常見的帳戶，它可以讓您添加支出、收入......';
-		map['account.types.saving'] = '儲蓄帳戶';
-		map['account.types.saving_descr'] = '您只能從其他帳戶中添加和提取資金。非常適合開始存錢';
-		map['account.form.name'] = '帳戶名稱';
-		map['account.form.name_placeholder'] = '例如：儲蓄帳戶';
-		map['account.form.notes'] = '筆記';
-		map['account.form.notes_placeholder'] = '輸入有關此帳戶的一些註釋/描述';
-		map['account.form.initial_balance'] = '初始餘額';
-		map['account.form.current_balance'] = '當前餘額';
-		map['account.form.create'] = '建立帳戶';
-		map['account.form.edit'] = '編輯帳戶';
-		map['account.form.currency_not_found_warn'] = '您沒有該貨幣的匯率資訊。1.0 將用作預設匯率。您可以在設定中修改';
-		map['account.form.already_exists'] = '已經有另一個同名，請再寫一個';
-		map['account.form.tr_before_opening_date'] = '該帳戶中有日期早於開戶日期的交易';
-		map['account.form.iban'] = 'iban';
-		map['account.form.swift'] = 'swift';
-		map['account.delete.warning_header'] = '刪除帳戶？';
-		map['account.delete.warning_text'] = '此操作將刪除該帳戶及其所有交易';
-		map['account.delete.success'] = '帳號刪除成功';
-		map['account.close.title'] = '關閉帳戶';
-		map['account.close.title_short'] = '關閉';
-		map['account.close.warn'] = '此帳戶將不再出現在某些清單中，您將無法在其中建立日期晚於下面指定的日期的交易。此操作不會影響任何交易或餘額，您也可以隨時重新開啟此帳戶時間。 ';
-		map['account.close.should_have_zero_balance'] = '此帳戶中的當前餘額必須為 0 才能關閉它。請在繼續之前編輯帳戶';
-		map['account.close.should_have_no_transactions'] = '此帳戶在指定的關閉日期之後有交易。請刪除它們或編輯帳戶關閉日期，然後再繼續';
-		map['account.close.success'] = '帳戶關閉成功';
-		map['account.close.unarchive_succes'] = '帳戶已成功重新開設';
-		map['account.select.one'] = '選擇一個帳戶';
-		map['account.select.all'] = '所有帳戶';
-		map['account.select.multiple'] = '選擇帳戶';
-		map['currencies.currency_converter'] = '貨幣換算';
-		map['currencies.currency'] = '貨幣';
-		map['currencies.currency_settings'] = '貨幣設置';
-		map['currencies.currency_manager'] = '貨幣管理';
-		map['currencies.currency_manager_descr'] = '配置您的貨幣及其與其他貨幣的匯率';
-		map['currencies.preferred_currency'] = '首選/基礎貨幣';
-		map['currencies.tap_to_change_preferred_currency'] = '點擊即可更改';
-		map['currencies.change_preferred_currency_title'] = '更改首選貨幣';
-		map['currencies.change_preferred_currency_msg'] = '從現在開始，所有統計數據和預算都將以該貨幣顯示。帳戶和交易將保留其所擁有的貨幣。如果您執行此操作，所有保存的匯率都將被刪除。您想繼續嗎？';
-		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = '幣種不能等於用戶幣種';
-		map['currencies.exchange_rate_form.override_existing_warn'] = '該貨幣在該日期的匯率已存在。如果繼續，前一個將會被覆蓋';
-		map['currencies.exchange_rate_form.specify_a_currency'] = '請指定貨幣';
-		map['currencies.exchange_rate_form.add'] = '添加匯率';
-		map['currencies.exchange_rate_form.add_success'] = '匯率新增成功';
-		map['currencies.exchange_rate_form.edit'] = '編輯匯率';
-		map['currencies.exchange_rate_form.edit_success'] = '匯率編輯成功';
-		map['currencies.exchange_rate_form.remove_all'] = '刪除所有匯率';
-		map['currencies.exchange_rate_form.remove_all_warning'] = '此操作不可逆轉，並將刪除該貨幣的所有匯率';
-		map['currencies.types.display'] = '貨幣類型';
-		map['currencies.types.fiat'] = '菲亞特';
-		map['currencies.types.crypto'] = '加密貨幣';
-		map['currencies.types.other'] = '其他';
-		map['currencies.currency_form.name'] = '顯示名稱';
-		map['currencies.currency_form.code'] = '貨幣代碼';
-		map['currencies.currency_form.symbol'] = '象徵';
-		map['currencies.currency_form.decimal_digits'] = '小數位';
-		map['currencies.currency_form.create'] = '創建貨幣';
-		map['currencies.currency_form.create_success'] = '貨幣創建成功';
-		map['currencies.currency_form.edit'] = '編輯貨幣';
-		map['currencies.currency_form.edit_success'] = '貨幣編輯成功';
-		map['currencies.currency_form.delete'] = '刪除貨幣';
-		map['currencies.currency_form.delete_success'] = '幣種刪除成功';
-		map['currencies.currency_form.already_exists'] = '具有此代碼的貨幣已存在。您可能想要編輯它';
-		map['currencies.delete_all_success'] = '刪除匯率成功';
-		map['currencies.historical'] = '歷史利率';
-		map['currencies.historical_empty'] = '沒有找到該貨幣的歷史匯率';
-		map['currencies.exchange_rate'] = '匯率';
-		map['currencies.exchange_rates'] = '匯率';
-		map['currencies.min_exchange_rate'] = '最低匯率';
-		map['currencies.max_exchange_rate'] = '最高匯率';
-		map['currencies.empty'] = '在此處添加匯率，以便如果您的帳戶使用基礎貨幣以外的貨幣，我們的圖表會更加準確';
-		map['currencies.select_a_currency'] = '選擇貨幣';
-		map['currencies.search'] = '按名稱或貨幣代碼搜尋';
-		map['tags.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '標籤',
-				other: '標籤',
-			);
-		map['tags.form.name'] = '標籤名';
-		map['tags.form.description'] = '描述';
-		map['tags.select.title'] = '選擇標籤';
-		map['tags.select.all'] = '所有標籤';
-		map['tags.empty_list'] = '您還沒有建立任何標籤。標籤和類別是對您的動作進行分類的好方法';
-		map['tags.without_tags'] = '沒有標籤';
-		map['tags.add'] = '添加標籤';
-		map['tags.create'] = '建立標籤';
-		map['tags.create_success'] = '標籤建立成功';
-		map['tags.already_exists'] = '此標籤名稱已存在。您可能需要編輯它';
-		map['tags.edit'] = '編輯標籤';
-		map['tags.edit_success'] = '標籤編輯成功';
-		map['tags.delete_success'] = '類別刪除成功';
-		map['tags.delete_warning_header'] = '刪除標籤？';
-		map['tags.delete_warning_message'] = '此操作不會刪除具有此標籤的交易。';
-		map['categories.unknown'] = '未知類別';
-		map['categories.create'] = '建立類別';
-		map['categories.create_success'] = '類別建立成功';
-		map['categories.new_category'] = '新類別';
-		map['categories.already_exists'] = '該類別的名稱已存在。也許您可以編輯';
-		map['categories.edit'] = '編輯類別';
-		map['categories.edit_success'] = '類別編輯成功';
-		map['categories.name'] = '分類名稱';
-		map['categories.type'] = '類別類型';
-		map['categories.both_types'] = '兩種類型';
-		map['categories.subcategories'] = '子類別';
-		map['categories.subcategories_add'] = '新增子類別';
-		map['categories.make_parent'] = '按類別製作';
-		map['categories.make_child'] = '建立一個子類別';
-		map['categories.make_child_warning1'] = ({required Object destiny}) => '此類別及其子類別將成為<b>${destiny}</b>的子類別。';
-		map['categories.make_child_warning2'] = ({required Object x, required Object destiny}) => '他們的交易<b>(${x})</b>將被移至<b>${destiny}</b>類別中建立的新子類別。';
-		map['categories.make_child_success'] = '子類別建立成功';
-		map['categories.merge'] = '與另一個類別合併';
-		map['categories.merge_warning1'] = ({required Object from, required Object x, required Object destiny}) => '與類別<b>${from}</b>相關的所有交易 (${x}) 將移至類別<b>${destiny}</b>';
-		map['categories.merge_warning2'] = ({required Object from}) => '類別<b>${from}</b>將被不可逆轉地刪除。 ';
-		map['categories.merge_success'] = '類別合併成功';
-		map['categories.delete_success'] = '類別已成功刪除';
-		map['categories.delete_warning_header'] = '刪除類別？';
-		map['categories.delete_warning_message'] = ({required Object x}) => '此操作將不可逆轉地刪除與此類別相關的所有交易<b>(${x})</b>。';
-		map['categories.select.title'] = '選擇類別';
-		map['categories.select.select_one'] = '選擇一個類別';
-		map['categories.select.select_subcategory'] = '選擇一個子類別';
-		map['categories.select.without_subcategory'] = '沒有子類別';
-		map['categories.select.all'] = '所有類別';
-		map['categories.select.all_short'] = '全部';
-		map['budgets.title'] = '預算';
-		map['budgets.status'] = '預算狀況';
-		map['budgets.repeated'] = '週期性';
-		map['budgets.one_time'] = '一次性';
-		map['budgets.actives'] = '活躍';
-		map['budgets.from_budgeted'] = '從預算';
-		map['budgets.days_left'] = '還剩幾天';
-		map['budgets.days_to_start'] = '開始的日子';
-		map['budgets.since_expiration'] = '自到期日起的天數';
-		map['budgets.no_budgets'] = '此部分中似乎沒有可顯示的預算。首先單擊下面的按鈕以建立預算';
-		map['budgets.delete'] = '刪除預算';
-		map['budgets.delete_warning'] = '此操作不可逆轉。引用此報價的類別和交易不會被刪除';
-		map['budgets.form.title'] = '添加預算';
-		map['budgets.form.name'] = '預算名稱';
-		map['budgets.form.value'] = '數量限制';
-		map['budgets.form.create'] = '添加預算';
-		map['budgets.form.create_success'] = '預算創建成功';
-		map['budgets.form.edit'] = '編輯預算';
-		map['budgets.form.edit_success'] = '預算編輯成功';
-		map['budgets.form.negative_warn'] = '預算不能有負數';
-		map['budgets.details.title'] = '預算詳情';
-		map['budgets.details.statistics'] = '統計數據';
-		map['budgets.details.budget_value'] = '預算';
-		map['budgets.details.expend_evolution'] = '支出變化';
-		map['budgets.details.no_transactions'] = '看來您還沒有做出與此預算相關的任何收入';
-		map['budgets.target_timeline_statuses.active'] = '目前預算';
-		map['budgets.target_timeline_statuses.past'] = '已完成預算';
-		map['budgets.target_timeline_statuses.future'] = '未來預算';
-		map['budgets.progress.labels.active_on_track'] = '正常';
-		map['budgets.progress.labels.active_overspending'] = '超支';
-		map['budgets.progress.labels.active_indeterminate'] = '積極的';
-		map['budgets.progress.labels.success'] = '已達成';
-		map['budgets.progress.labels.fail'] = '超出預算';
-		map['budgets.progress.description.active_on_track'] = ({required Object remainingDays, required Object dailyAmount}) => '在剩餘的 ${remainingDays} 天裡，您每天可以花費 ${dailyAmount}';
-		map['budgets.progress.description.active_overspending'] = ({required Object remainingDays, required Object dailyAmount}) => '為了回到正軌，您應該在剩餘的 ${remainingDays} 天裡將每天的支出限制在 ${dailyAmount}';
-		map['budgets.progress.description.active_indeterminate'] = ({required Object amount}) => '您還剩 ${amount} 可以消費。';
-		map['budgets.progress.description.active_exceeded'] = ({required Object amount}) => '您已經超出了預算限額 ${amount}。如果您找不到此預算的任何收入，您應該在其剩餘期間停止支出';
-		map['budgets.progress.description.success'] = '做得好！該預算已成功完成。繼續創建預算以管理您的支出';
-		map['budgets.progress.description.fail'] = ({required Object amount}) => '您超出了預算 ${amount}。下次請更加小心！';
-		map['goals.title'] = '目標';
-		map['goals.status'] = '目標狀態';
-		map['goals.type.display'] = '目標類型';
-		map['goals.type.income.title'] = '儲蓄目標';
-		map['goals.type.income.descr'] = '非常適合儲蓄。當餘額超過目標時，即為成功。';
-		map['goals.type.expense.title'] = '支出目標';
-		map['goals.type.expense.descr'] = '跟踪您的支出並以此達到目標金額。適用於捐款、慈善...';
-		map['goals.empty_title'] = '未找到目標';
-		map['goals.empty_description'] = '創建一個新目標以開始追蹤您的儲蓄！';
-		map['goals.delete'] = '刪除目標';
-		map['goals.delete_warning'] = '此操作不可逆。涉及此目標的類別和交易將不會被刪除';
-		map['goals.form.new_title'] = '新目標';
-		map['goals.form.edit_title'] = '編輯目標';
-		map['goals.form.target_amount'] = '目標金額';
-		map['goals.form.initial_amount'] = '初始金額';
-		map['goals.form.name'] = '名稱';
-		map['goals.form.name_hint'] = '我的儲蓄目標';
-		map['goals.form.create_success'] = '目標建立成功';
-		map['goals.form.edit_success'] = '目標編輯成功';
-		map['goals.form.negative_warn'] = '目標金額不能為負數';
-		map['goals.details.title'] = '目標詳情';
-		map['goals.details.statistics'] = '統計';
-		map['goals.details.goal_value'] = '目標值';
-		map['goals.details.evolution'] = '趨勢';
-		map['goals.details.no_transactions'] = '看來您還沒有進行任何與此目標相關的交易';
-		map['goals.target_timeline_statuses.active'] = '進行中的目標';
-		map['goals.target_timeline_statuses.past'] = '已結束的目標';
-		map['goals.target_timeline_statuses.future'] = '未來的目標';
-		map['goals.progress.labels.active_on_track'] = '步入正軌';
-		map['goals.progress.labels.active_behind_schedule'] = '落後於計劃';
-		map['goals.progress.labels.active_indeterminate'] = '積極的';
-		map['goals.progress.labels.success'] = '目標達成';
-		map['goals.progress.labels.fail'] = '目標失敗';
-		map['goals.progress.description.active_on_track'] = ({required Object remainingDays, required Object dailyAmount}) => '您正在尋找目標的軌道上！您必須在剩餘的 ${remainingDays} 天內每天節省 ${dailyAmount}';
-		map['goals.progress.description.active_behind_schedule'] = ({required Object dailyAmount, required Object remainingDays}) => '你落後於計劃了。您必須每天節省 ${dailyAmount} 才能在 ${remainingDays} 天后達到您的目標';
-		map['goals.progress.description.active_indeterminate'] = ({required Object amount}) => '您還需要 ${amount} 才能實現目標。';
-		map['goals.progress.description.success'] = '恭喜！你達到了你的目標。';
-		map['goals.progress.description.fail'] = ({required Object amount}) => '您與目標相差了 ${amount}。';
-		map['target_timeline_statuses.active'] = '進行中';
-		map['target_timeline_statuses.past'] = '已完成';
-		map['target_timeline_statuses.future'] = '未開始';
-		map['backup.no_file_selected'] = '未選擇文件';
-		map['backup.no_directory_selected'] = '未選擇目錄';
-		map['backup.export.title'] = '匯出您的資料';
-		map['backup.export.title_short'] = '匯出';
-		map['backup.export.type_of_export'] = '出口類型';
-		map['backup.export.other_options'] = '選項';
-		map['backup.export.all'] = '完整備份';
-		map['backup.export.all_descr'] = '匯出您的所有資料（帳戶、交易、預算、設定...）。隨時重新匯入它們，這樣您就不會丟失任何內容。';
-		map['backup.export.transactions'] = '交易備份';
-		map['backup.export.transactions_descr'] = '以 CSV 格式匯出您的交易，以便您可以在其他程式或應用程式中更輕鬆地分析它們。';
-		map['backup.export.transactions_to_export'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
-				one: '1 筆交易要導出',
-				other: '要導出的 ${n} 筆交易',
-			);
-		map['backup.export.description'] = '以不同格式下載資料';
-		map['backup.export.send_file'] = '發送文件';
-		map['backup.export.see_folder'] = '查看文件夾';
-		map['backup.export.success'] = ({required Object x}) => '檔案已在${x}中成功儲存/下載';
-		map['backup.export.error'] = '下載檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員';
-		map['backup.export.dialog_title'] = '儲存/傳送文件';
-		map['backup.import.title'] = '匯入您的資料';
-		map['backup.import.title_short'] = '匯入';
-		map['backup.import.restore_backup'] = '恢復備份';
-		map['backup.import.restore_backup_descr'] = '從 Monekin 匯入先前儲存的資料庫。此操作將用新資料取代任何當前應用程式資料';
-		map['backup.import.restore_backup_warn_description'] = '導入新資料庫時，您將丟失應用程式中當前保存的所有資料。建議在繼續之前進行備份。請勿在此處上傳任何來源不明的文件，僅上傳您之前從其下載的文件 Monekin';
-		map['backup.import.restore_backup_warn_title'] = '覆蓋所有數據';
-		map['backup.import.select_other_file'] = '選擇其他文件';
-		map['backup.import.tap_to_select_file'] = '點選選擇檔案';
-		map['backup.import.manual_import.title'] = '手動導入';
-		map['backup.import.manual_import.descr'] = '手動從 .csv 檔案匯入交易';
-		map['backup.import.manual_import.default_account'] = '預設帳戶';
-		map['backup.import.manual_import.remove_default_account'] = '刪除預設帳戶';
-		map['backup.import.manual_import.default_category'] = '預設類別';
-		map['backup.import.manual_import.select_a_column'] = '從 .csv 中選擇一列';
-		map['backup.import.manual_import.steps.0'] = '選擇您的文件';
-		map['backup.import.manual_import.steps.1'] = '數量欄位';
-		map['backup.import.manual_import.steps.2'] = '帳戶欄位';
-		map['backup.import.manual_import.steps.3'] = '類別欄位';
-		map['backup.import.manual_import.steps.4'] = '日期欄位';
-		map['backup.import.manual_import.steps.5'] = '其他欄位';
-		map['backup.import.manual_import.steps_descr.0'] = '從您的裝置中選擇一個 .csv 檔案。確保它的第一行描述了每列的名稱。';
-		map['backup.import.manual_import.steps_descr.1'] = '選擇每筆交易價值的欄位。使用負值表示支出，使用正值表示收入。';
-		map['backup.import.manual_import.steps_descr.2'] = '選擇每筆交易所屬帳戶的列。您也可以選擇預設帳戶，以防我們找不到您想要的帳戶。如果未指定預設帳戶，我們將建立一個同名帳戶。';
-		map['backup.import.manual_import.steps_descr.3'] = '選擇交易類別名稱所在的欄位。您必須指定一個預設類別，以便我們將此類別指派給交易，以防找不到該類別。';
-		map['backup.import.manual_import.steps_descr.4'] = '選擇每筆交易日期的欄位。如果未指定，交易將使用當前日期建立。';
-		map['backup.import.manual_import.steps_descr.5'] = '選擇其他交易屬性的資料列';
-		map['backup.import.manual_import.success'] = ({required Object x}) => '已成功導入${x}筆交易';
-		map['backup.import.success'] = '導入成功';
-		map['backup.import.error'] = '匯入檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員。';
-		map['backup.import.cancelled'] = '導入已被用戶取消';
-		map['backup.about.title'] = '有關您的資料庫的資訊';
-		map['backup.about.create_date'] = '建立日期';
-		map['backup.about.modify_date'] = '上一次更改';
-		map['backup.about.last_backup'] = '上次備份';
-		map['backup.about.size'] = '檔案大小';
-		map['settings.title_long'] = '設定與自訂';
-		map['settings.title_short'] = '設定';
-		map['settings.description'] = '主題、語言、數據等';
-		map['settings.edit_profile'] = '編輯個人資料';
-		map['settings.general.menu_title'] = '常規設定';
-		map['settings.general.menu_descr'] = '語言、隱私等';
-		map['settings.general.show_all_decimals'] = '顯示所有小數位';
-		map['settings.general.show_all_decimals_descr'] = '即使是末尾為零，也顯示所有小數位';
-		map['settings.general.language.section'] = '語言和文本';
-		map['settings.general.language.title'] = '應用程式語言';
-		map['settings.general.language.descr'] = '應用程式中顯示文字的語言';
-		map['settings.general.language.help'] = '如果您想與此應用程式的翻譯合作，您可以參考<a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>我們的指南</a>';
-		map['settings.general.locale.title'] = '地區';
-		map['settings.general.locale.auto'] = '系統';
-		map['settings.general.locale.descr'] = '設定用於日期、數字的格式...';
-		map['settings.general.locale.warn'] = '更改區域時應用程式將更新';
-		map['settings.general.locale.first_day_of_week'] = '一週的第一天';
-		map['settings.security.title'] = '安全';
-		map['settings.security.private_mode_at_launch'] = '啟動時啟用的隱私模式';
-		map['settings.security.private_mode_at_launch_descr'] = '默認以隱私模式啟動應用程序';
-		map['settings.security.private_mode'] = '隱私模式';
-		map['settings.security.private_mode_descr'] = '隱藏所有貨幣值';
-		map['settings.security.private_mode_activated'] = '隱私模式已啟用';
-		map['settings.security.private_mode_deactivated'] = '隱私模式已禁用';
-		map['settings.transactions.menu_title'] = '交易';
-		map['settings.transactions.menu_descr'] = '配置交易行為';
-		map['settings.transactions.title'] = '交易設定';
-		map['settings.transactions.style.title'] = '交易樣式';
-		map['settings.transactions.style.subtitle'] = '設定交易在應用程式列表中的顯示方式';
-		map['settings.transactions.style.show_tags'] = '顯示標籤';
-		map['settings.transactions.style.show_time'] = '顯示時間';
-		map['settings.transactions.swipe_actions.title'] = '滑動操作';
-		map['settings.transactions.swipe_actions.choose_description'] = '選擇當您使用此滑動方向滑動列表中的交易項目時將觸發什麼操作';
-		map['settings.transactions.swipe_actions.swipe_left'] = '向左滑動';
-		map['settings.transactions.swipe_actions.swipe_right'] = '向右滑動';
-		map['settings.transactions.swipe_actions.none'] = '無動作';
-		map['settings.transactions.swipe_actions.toggle_reconciled'] = '切換已調節';
-		map['settings.transactions.swipe_actions.toggle_pending'] = '切換待處理';
-		map['settings.transactions.swipe_actions.toggle_voided'] = '切換作廢';
-		map['settings.transactions.swipe_actions.toggle_unreconciled'] = '切換不可調和';
-		map['settings.transactions.swipe_actions.remove_status'] = '刪除狀態';
-		map['settings.transactions.default_values.title'] = 'Default Form Values';
-		map['settings.transactions.default_values.page_title'] = 'New Transaction: Default Form Values';
-		map['settings.transactions.default_values.reuse_last_transaction'] = 'Reuse Last Transaction Values';
-		map['settings.transactions.default_values.reuse_last_transaction_descr'] = 'Automatically fill the form with some values from the last created transaction';
-		map['settings.transactions.default_values.fields_to_reuse'] = 'Fields to reuse';
-		map['settings.transactions.default_values.reuse_last_values_modal_descr'] = 'Select the fields that should be pre-filled with the values from the last created transaction.';
-		map['settings.transactions.default_values.default_values_separator'] = 'Default Values';
-		map['settings.transactions.default_values.default_category'] = 'Default Category';
-		map['settings.transactions.default_values.default_status'] = 'Default Status';
-		map['settings.transactions.default_values.default_tags'] = 'Default Tags';
-		map['settings.transactions.default_values.no_tags_selected'] = 'No tags selected';
-		map['settings.transactions.default_type.title'] = 'Default Type';
-		map['settings.transactions.default_type.modal_title'] = 'Select Default Type';
-		map['settings.appearance.menu_title'] = '主題與風格';
-		map['settings.appearance.menu_descr'] = '主題選擇、顏色以及與應用程式外觀相關的其他內容';
-		map['settings.appearance.theme_and_colors'] = '主題和顏色';
-		map['settings.appearance.theme.title'] = '主題';
-		map['settings.appearance.theme.auto'] = '系統';
-		map['settings.appearance.theme.light'] = '明亮主題';
-		map['settings.appearance.theme.dark'] = '黑暗主題';
-		map['settings.appearance.amoled_mode'] = 'amoled mode';
-		map['settings.appearance.amoled_mode_descr'] = '盡可能使用純黑色壁紙。這對 AMOLED 螢幕設備的電池略有幫助';
-		map['settings.appearance.dynamic_colors'] = '動態色彩';
-		map['settings.appearance.dynamic_colors_descr'] = '盡可能使用系統強調色';
-		map['settings.appearance.accent_color'] = '強調色';
-		map['settings.appearance.accent_color_descr'] = '選擇應用程式用來強調介面某些部分的顏色';
-		map['settings.appearance.text'] = '文本';
-		map['settings.appearance.font'] = '字體';
-		map['settings.appearance.font_platform'] = '平台';
-		map['more.title'] = '更多';
-		map['more.title_long'] = '更多';
-		map['more.data.display'] = '數據';
-		map['more.data.display_descr'] = '匯出和匯入您的數據，這樣您就不會丟失任何東西';
-		map['more.data.delete_all'] = '刪除我的資料';
-		map['more.data.delete_all_header1'] = 'Stop right there padawan ⚠️⚠️';
-		map['more.data.delete_all_message1'] = '您確定要繼續嗎？您的所有資料將永久刪除且無法恢復';
-		map['more.data.delete_all_header2'] = '最後一步⚠️⚠️';
-		map['more.data.delete_all_message2'] = '刪除帳戶後，您將刪除所有儲存的個人資料。您的帳戶、交易、預算和類別將被刪除且無法恢復。您同意嗎？';
-		map['more.about_us.display'] = '應用程式資訊';
-		map['more.about_us.description'] = '查找 Monekin 的條款、重要資訊，並透過回報錯誤或分享想法與我們聯繫';
-		map['more.about_us.legal.display'] = '法律資訊';
-		map['more.about_us.legal.privacy'] = '隱私權政策';
-		map['more.about_us.legal.terms'] = '使用條款';
-		map['more.about_us.legal.licenses'] = '許可證';
-		map['more.about_us.project.display'] = '專案';
-		map['more.about_us.project.contributors'] = '合作者';
-		map['more.about_us.project.contributors_descr'] = '所有讓 Monekin 成長的開發者';
-		map['more.about_us.project.contact'] = '聯絡我們';
-		map['more.help_us.display'] = '幫助我們';
-		map['more.help_us.description'] = '了解如何幫助 Monekin 變得越來越好';
-		map['more.help_us.rate_us'] = '評價我們';
-		map['more.help_us.rate_us_descr'] = '歡迎任何價格！';
-		map['more.help_us.share'] = '分享 Monekin';
-		map['more.help_us.share_descr'] = '與朋友和家人分享我們的應用程式';
-		map['more.help_us.share_text'] = 'Monekin！最好的個人理財應用程式。在這裡下載';
-		map['more.help_us.thanks'] = '謝謝你！';
-		map['more.help_us.thanks_long'] = '您對 Monekin 和其他大大小小的開源專案的貢獻使得這樣偉大的專案成為可能。感謝您花時間做出貢獻。';
-		map['more.help_us.donate'] = '做捐贈';
-		map['more.help_us.donate_descr'] = '透過您的捐款，您將幫助該應用程式繼續改進。還有什麼比邀請我喝咖啡來感謝所做的工作更好的方式呢？';
-		map['more.help_us.donate_success'] = '捐款已完成。非常感謝您的貢獻！❤️';
-		map['more.help_us.donate_err'] = '糟糕！接收您的付款時出現錯誤';
-		map['more.help_us.report'] = '報告錯誤、留下建議…';
-
-		_map = map;
-		return map;
+		return switch (path) {
+			'ui_actions.cancel' => '取消',
+			'ui_actions.confirm' => '確認',
+			'ui_actions.continue_text' => '繼續',
+			'ui_actions.save' => '保存',
+			'ui_actions.save_changes' => '儲存變更',
+			'ui_actions.close_and_save' => '儲存並關閉',
+			'ui_actions.add' => '添加',
+			'ui_actions.edit' => '編輯',
+			'ui_actions.delete' => '刪除',
+			'ui_actions.see_more' => '查看更多',
+			'ui_actions.select_all' => '全選',
+			'ui_actions.deselect_all' => '取消全選',
+			'ui_actions.select' => '選擇',
+			'ui_actions.search' => '搜尋',
+			'ui_actions.filter' => '過濾',
+			'ui_actions.reset' => '重設',
+			'ui_actions.submit' => '提交',
+			'ui_actions.next' => '下一步',
+			'ui_actions.previous' => '上一步',
+			'ui_actions.back' => '返回',
+			'ui_actions.reload' => '重新載入',
+			'ui_actions.view' => '檢視',
+			'ui_actions.download' => '下載',
+			'ui_actions.upload' => '上傳',
+			'ui_actions.retry' => '重試',
+			'ui_actions.copy' => '複製',
+			'ui_actions.paste' => '貼上',
+			'ui_actions.undo' => '還原',
+			'ui_actions.redo' => '重做',
+			'ui_actions.open' => '開啟',
+			'ui_actions.close' => '關閉',
+			'ui_actions.apply' => '套用',
+			'ui_actions.discard' => '捨棄',
+			'ui_actions.refresh' => '重新整理',
+			'ui_actions.share' => '分享',
+			'general.or' => '或',
+			'general.understood' => '明白了',
+			'general.unspecified' => '未指定',
+			'general.quick_actions' => '快速行動',
+			'general.details' => '細節',
+			'general.balance' => '平衡',
+			'general.account' => '帳戶',
+			'general.accounts' => '帳戶',
+			'general.categories' => '類別',
+			'general.category' => '類別',
+			'general.today' => '今天',
+			'general.yesterday' => '昨天',
+			'general.filters' => '過濾',
+			'general.empty_warn' => '哦！這裡非常空',
+			'general.search_no_results' => '沒有符合您搜索條件的商品',
+			'general.insufficient_data' => '數據不足',
+			'general.show_more_fields' => '顯示更多欄位',
+			'general.show_less_fields' => '顯示較少的欄位',
+			'general.tap_to_search' => '點擊即可搜尋',
+			'general.delete_success' => '項目刪除成功',
+			'general.leave_without_saving.title' => '不保存就離開？',
+			'general.leave_without_saving.message' => '您有未保存的更改，確定要離開而不保存它們嗎？',
+			'general.clipboard.success' => ({required Object x}) => '${x}已複製到剪貼簿',
+			'general.clipboard.error' => '複製錯誤',
+			'general.time.start_date' => '開始日期',
+			'general.time.end_date' => '結束日期',
+			'general.time.from_date' => '從日期',
+			'general.time.until_date' => '截止日期',
+			'general.time.date' => '日期',
+			'general.time.datetime' => '約會時間',
+			'general.time.time' => '時間',
+			'general.time.each' => '每個',
+			'general.time.after' => '後',
+			'general.time.ranges.display' => '時間範圍',
+			'general.time.ranges.it_repeat' => '重複',
+			'general.time.ranges.it_ends' => '結束',
+			'general.time.ranges.forever' => '永遠',
+			'general.time.ranges.types.cycle' => '循環',
+			'general.time.ranges.types.last_days' => '最後一天',
+			'general.time.ranges.types.last_days_form' => ({required Object x}) => '前${x}天',
+			'general.time.ranges.types.all' => '總是',
+			'general.time.ranges.types.date_range' => '自訂範圍',
+			'general.time.ranges.each_range' => ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '每個${range}', other: '每${n}${range}', ), 
+			'general.time.ranges.each_range_until_date' => ({required num n, required Object range, required Object day}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '每${range}直到${day}', other: '每 ${n}${range}直到${day}', ), 
+			'general.time.ranges.each_range_until_times' => ({required num n, required Object range, required Object limit}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '每${range}${limit}次', other: '每${n}${range}${limit}次', ), 
+			'general.time.ranges.each_range_until_once' => ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '每${range}一次', other: '每${n}${range}一次', ), 
+			'general.time.ranges.month' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '月', other: '月', ), 
+			'general.time.ranges.year' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '年', other: '年', ), 
+			'general.time.ranges.day' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '天', other: '天', ), 
+			'general.time.ranges.week' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '星期', other: '幾週', ), 
+			'general.time.periodicity.display' => '週期性',
+			'general.time.periodicity.no_repeat' => '不再重複',
+			'general.time.periodicity.repeat' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '重複', other: '重複', ), 
+			'general.time.periodicity.diary' => '日常的',
+			'general.time.periodicity.monthly' => '每月',
+			'general.time.periodicity.annually' => '每年',
+			'general.time.periodicity.quaterly' => '每季',
+			'general.time.periodicity.weekly' => '每週',
+			'general.time.periodicity.custom' => '自訂範圍',
+			'general.time.periodicity.infinite' => '總是',
+			'general.time.current.monthly' => '這個月',
+			'general.time.current.annually' => '今年',
+			'general.time.current.quaterly' => '本季',
+			'general.time.current.weekly' => '本星期',
+			'general.time.current.infinite' => '總是',
+			'general.time.current.custom' => '自訂範圍',
+			'general.time.all.diary' => '每天',
+			'general.time.all.monthly' => '每月',
+			'general.time.all.annually' => '每年',
+			'general.time.all.quaterly' => '每季',
+			'general.time.all.weekly' => '每週',
+			'general.transaction_order.display' => '訂單交易',
+			'general.transaction_order.category' => '按類別',
+			'general.transaction_order.quantity' => '按數量',
+			'general.transaction_order.date' => '按日期',
+			'general.validations.form_error' => '修正表單中指示的欄位以繼續',
+			'general.validations.required' => '必填項目',
+			'general.validations.positive' => '應該是積極的',
+			'general.validations.min_number' => ({required Object x}) => '應該大於${x}',
+			'general.validations.max_number' => ({required Object x}) => '應小於${x}',
+			'intro.start' => '開始',
+			'intro.skip' => '跳過',
+			'intro.next' => '下一個',
+			'intro.select_your_currency' => '選擇您的貨幣',
+			'intro.welcome_subtitle' => '您的個人財務管家',
+			'intro.welcome_subtitle2' => '100% 開放，100% 免費',
+			'intro.welcome_footer' => '登入即表示您同意<a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>隱私權政策</a>和<a href= \'https: //github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>應用程式的使用條款</a>',
+			'intro.offline_descr_title' => '離線帳戶：',
+			'intro.offline_descr' => '您的資料只會儲存在您的裝置上，只要您不卸載應用程式或更換手機，資料就安全。為防止資料遺失，建議定期從應用程式設定中進行備份。',
+			'intro.offline_start' => '離線啟動會話',
+			'intro.sl1_title' => '選擇您的貨幣',
+			'intro.sl1_descr' => '您的預設貨幣將用於報告和一般圖表。您以後可以隨時在應用程式設定中更改貨幣和應用程式語言',
+			'intro.sl2_title' => '安全、隱私、可靠',
+			'intro.sl2_descr' => '您的資料只屬於您。我們將資訊直接儲存在您的設備上，無需通過外部伺服器。這使得即使沒有互聯網也可以使用該應用程式',
+			'intro.sl2_descr2' => '此外，該應用程式的源代碼是公開的，任何人都可以對其進行協作並查看它是如何工作的',
+			'intro.last_slide_title' => '一切準備就緒',
+			'intro.last_slide_descr' => '有了 Monekin，您終於可以實現您想要的財務獨立。您將擁有圖表、預算、提示、統計數據以及更多有關您的資金的信息。',
+			'intro.last_slide_descr2' => '我們希望您享受這次體驗！如有疑問、建議，請隨時與我們聯繫......',
+			'home.title' => '儀表板',
+			'home.filter_transactions' => '過濾交易',
+			'home.hello_day' => '早安，',
+			'home.hello_night' => '晚安，',
+			'home.total_balance' => '總餘額',
+			'home.my_accounts' => '我的帳戶',
+			'home.active_accounts' => '活躍帳戶',
+			'home.no_accounts' => '尚未建立帳戶',
+			'home.no_accounts_descr' => '開始使用 Monekin 的所有魔力。至少建立一個帳戶以開始添加交易',
+			'home.last_transactions' => '最後的交易',
+			'home.should_create_account_header' => '哎呀！',
+			'home.should_create_account_message' => '您必須至少擁有一個非存檔帳戶才能開始建立交易',
+			'financial_health.display' => '財務健康',
+			'financial_health.review.very_good' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return '很好！'; case GenderContext.female: return '很好！'; } }, 
+			'financial_health.review.good' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return '好'; case GenderContext.female: return '好'; } }, 
+			'financial_health.review.normal' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return '平均'; case GenderContext.female: return '平均'; } }, 
+			'financial_health.review.bad' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return '一般'; case GenderContext.female: return '一般'; } }, 
+			'financial_health.review.very_bad' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return '非常糟糕'; case GenderContext.female: return '非常糟糕'; } }, 
+			'financial_health.review.insufficient_data' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return '數據不足'; case GenderContext.female: return '數據不足'; } }, 
+			'financial_health.review.descr.insufficient_data' => '看起來我們沒有足夠的收入來計算您的財務健康狀況。添加這段時間的一些收入/收入，以便我們能夠幫助您！',
+			'financial_health.review.descr.very_good' => '恭喜！您的財務狀況非常好。我們希望您繼續保持良好的勢頭，並繼續與 Monekin 一起學習',
+			'financial_health.review.descr.good' => '太棒了！您的財務狀況良好。請訪問分析選項卡，了解如何節省更多！',
+			'financial_health.review.descr.normal' => '您的財務健康狀況或多或少處於這一時期其他人口的平均水平',
+			'financial_health.review.descr.bad' => '看來您的財務狀況還不是最好的。探索其餘圖表以了解更多有關您財務狀況的信息',
+			'financial_health.review.descr.very_bad' => '嗯，您的財務健康狀況遠低於應有的水平。探索其餘圖表以了解有關您財務狀況的更多信息',
+			'financial_health.months_without_income.title' => '存活率',
+			'financial_health.months_without_income.subtitle' => '考慮到您的餘額，您可以在沒有收入的情況下度過多長時間',
+			'financial_health.months_without_income.text_zero' => '按照這樣的開支，沒有收入你一個月都活不下去！',
+			'financial_health.months_without_income.text_one' => '按照這樣的收入，如果沒有收入，你幾乎無法生存大約一個月！',
+			'financial_health.months_without_income.text_other' => ({required Object n}) => '以這樣的支出速度，如果沒有收入，您大約可以生存 <b>${n}個月</b>。',
+			'financial_health.months_without_income.text_infinite' => '以這樣的支出速度，如果沒有收入，您大約可以<b>一生</b>生存。',
+			'financial_health.months_without_income.suggestion' => '請記住，建議始終將此比率保持在至少 5 個月以上。如果您發現自己沒有足夠的儲蓄緩衝，請減少不必要的開支。',
+			'financial_health.months_without_income.insufficient_data' => '看來我們沒有足夠的開支來計算您在沒有收入的情況下可以生存多少個月。輸入幾筆交易，然後回到這裡檢查您的財務狀況',
+			'financial_health.savings_percentage.title' => '儲蓄百分比',
+			'financial_health.savings_percentage.subtitle' => '你的收入中有哪一部分沒有在這段時間花掉',
+			'financial_health.savings_percentage.text.good' => ({required Object value}) => '恭喜您！您在這段時間裡成功節省了收入的<b>${value}%</b>。看來您已經是專家了，繼續努力吧！',
+			'financial_health.savings_percentage.text.normal' => ({required Object value}) => '恭喜您，在此期間您已成功節省收入的 <b>${value}%</b>。',
+			'financial_health.savings_percentage.text.bad' => ({required Object value}) => '在此期間，您已成功節省了收入的 <b>${value}%</b>。但是，我們認為您還可以做得更多！',
+			'financial_health.savings_percentage.text.very_bad' => '哇哦，這段時間你什麼都沒保存下來。',
+			'financial_health.savings_percentage.suggestion' => '請記住，建議將收入的至少 15-20% 存起來。',
+			'stats.title' => '統計數據',
+			'stats.balance' => '平衡',
+			'stats.final_balance' => '最終餘額',
+			'stats.balance_by_account' => '帳戶餘額',
+			'stats.balance_by_account_subtitle' => '我的大部分錢都在哪裡？',
+			'stats.balance_by_currency' => '按貨幣餘额',
+			'stats.balance_by_currency_subtitle' => '我有多少錢的外幣？',
+			'stats.balance_evolution' => '平衡趨勢',
+			'stats.balance_evolution_subtitle' => '我的錢比以前多了嗎？',
+			'stats.compared_to_previous_period' => '與上一时期相比',
+			'stats.cash_flow' => '現金流',
+			'stats.cash_flow_subtitle' => '我的支出是否少于我的收入？',
+			'stats.by_periods' => '按時期',
+			'stats.by_categories' => '按類別',
+			'stats.by_tags' => '按標籤',
+			'stats.distribution' => '分配',
+			'stats.finance_health_resume' => '恢復',
+			'stats.finance_health_breakdown' => '分解',
+			'icon_selector.name' => '姓名：',
+			'icon_selector.icon' => '圖示',
+			'icon_selector.color' => '顏色',
+			'icon_selector.select_icon' => '選擇一個圖示',
+			'icon_selector.select_color' => '選擇一種顏色',
+			'icon_selector.custom_color' => '自訂顏色',
+			'icon_selector.current_color_selection' => '目前選擇',
+			'icon_selector.select_account_icon' => '識別您的帳戶',
+			'icon_selector.select_category_icon' => '確定您的類別',
+			'icon_selector.scopes.transport' => '運輸',
+			'icon_selector.scopes.money' => '錢',
+			'icon_selector.scopes.food' => '食物',
+			'icon_selector.scopes.medical' => '健康',
+			'icon_selector.scopes.entertainment' => '閒暇',
+			'icon_selector.scopes.technology' => '技術',
+			'icon_selector.scopes.other' => '其他的',
+			'icon_selector.scopes.logos_financial_institutions' => '金融機構',
+			'transaction.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '交易', other: '交易', ), 
+			'transaction.create' => '新交易',
+			'transaction.new_income' => '新收入',
+			'transaction.new_expense' => '新開支',
+			'transaction.new_success' => '交易建立成功',
+			'transaction.edit' => '編輯交易',
+			'transaction.edit_success' => '交易編輯成功',
+			'transaction.edit_multiple' => '編輯交易',
+			'transaction.edit_multiple_success' => ({required Object x}) => '${x}筆交易已成功編輯',
+			'transaction.duplicate' => '複製交易',
+			'transaction.duplicate_short' => '複製',
+			'transaction.duplicate_warning_message' => '將在同一日期建立與此相同的交易，您想繼續嗎？',
+			'transaction.duplicate_success' => '交易複製成功',
+			'transaction.delete' => '刪除交易',
+			'transaction.delete_warning_message' => '此操作不可逆轉。您的帳戶當前餘額和所有統計資料都將重新計算',
+			'transaction.delete_success' => '交易已正確刪除',
+			'transaction.delete_multiple' => '刪除交易',
+			'transaction.delete_multiple_warning_message' => ({required Object x}) => '此操作不可逆轉，將刪除${x}筆交易。您帳戶的當前餘額和所有統計資料都將重新計算',
+			'transaction.delete_multiple_success' => ({required Object x}) => '正確刪除了${x}筆交易',
+			'transaction.details' => '動作詳情',
+			'transaction.next_payments.accept' => '接受',
+			'transaction.next_payments.skip' => '跳過',
+			'transaction.next_payments.skip_success' => '成功跳過交易',
+			'transaction.next_payments.skip_dialog_title' => '跳過交易',
+			'transaction.next_payments.skip_dialog_msg' => ({required Object date}) => '此操作不可逆轉。我們會將下次移動的日期移至${date}',
+			'transaction.next_payments.accept_today' => '今天接受',
+			'transaction.next_payments.accept_in_required_date' => ({required Object date}) => '在要求的日期 (${date}) 接受',
+			'transaction.next_payments.accept_dialog_title' => '接受交易',
+			'transaction.next_payments.accept_dialog_msg_single' => '該交易的新狀態將為空。您可以隨時重新編輯該交易的狀態',
+			'transaction.next_payments.accept_dialog_msg' => ({required Object date}) => '此操作將建立日期為${date}的新交易。您將能夠在交易頁面上查看此交易的詳細資訊',
+			'transaction.next_payments.recurrent_rule_finished' => '循環規則已完成，無需再支付！',
+			'transaction.list.all' => '所有交易',
+			'transaction.list.empty' => '未發現此處顯示的交易。在應用程式中添加一些交易，也許您下次會有更好的運氣',
+			'transaction.list.searcher_placeholder' => '按類別、描述搜尋...',
+			'transaction.list.searcher_no_results' => '未找到符合搜尋條件的交易',
+			'transaction.list.loading' => '正在加載更多交易...',
+			'transaction.list.selected_short' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '${n} 已選取', other: '${n} 已選取', ), 
+			'transaction.list.selected_long' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '已選擇 ${n} 筆交易', other: '選擇 ${n} 筆交易', ), 
+			'transaction.list.bulk_edit.dates' => '編輯日期',
+			'transaction.list.bulk_edit.categories' => '編輯類別',
+			'transaction.list.bulk_edit.status' => '編輯狀態',
+			'transaction.filters.title' => '交易過濾器',
+			'transaction.filters.from_value' => '從金額',
+			'transaction.filters.to_value' => '最多金額',
+			'transaction.filters.from_value_def' => ({required Object x}) => '來自 ${x}',
+			'transaction.filters.to_value_def' => ({required Object x}) => '最多 ${x}',
+			'transaction.filters.from_date_def' => ({required Object date}) => '從${date}開始',
+			'transaction.filters.to_date_def' => ({required Object date}) => '截至 ${date}',
+			'transaction.filters.reset' => '重置過濾器',
+			'transaction.filters.saved.title' => '已儲存的過濾器',
+			'transaction.filters.saved.new_title' => '新增過濾器',
+			'transaction.filters.saved.edit_title' => '編輯過濾器',
+			'transaction.filters.saved.name_label' => '過濾器名稱',
+			'transaction.filters.saved.name_hint' => '我的自訂過濾器',
+			'transaction.filters.saved.save_dialog_title' => '儲存過濾器',
+			'transaction.filters.saved.save_tooltip' => '儲存目前的過濾器',
+			'transaction.filters.saved.load_tooltip' => '載入已儲存的過濾器',
+			'transaction.filters.saved.empty_title' => '未找到已儲存的過濾器',
+			'transaction.filters.saved.empty_description' => '在此儲存過濾器以便稍後快速存取。',
+			'transaction.filters.saved.save_success' => '篩選器儲存成功',
+			'transaction.filters.saved.delete_success' => '篩選器刪除成功',
+			'transaction.form.validators.zero' => '一筆交易的價值不能等於零',
+			'transaction.form.validators.date_max' => '所選日期晚於當前日期。交易將新增為待處理',
+			'transaction.form.validators.date_after_account_creation' => '您無法建立日期早於所屬帳戶建立日期的交易',
+			'transaction.form.validators.negative_transfer' => '轉帳的貨幣價值不能為負數',
+			'transaction.form.validators.transfer_between_same_accounts' => '來源帳號與目標帳號不能符合',
+			'transaction.form.title' => '交易標題',
+			'transaction.form.title_short' => '資質',
+			'transaction.form.value' => '交易價值',
+			'transaction.form.tap_to_see_more' => '點擊查看更多詳細資訊',
+			'transaction.form.no_tags' => '-- 無標籤 --',
+			'transaction.form.description' => '描述',
+			'transaction.form.description_info' => '點擊此處輸入有關此交易的更詳細描述',
+			'transaction.form.exchange_to_preferred_title' => ({required Object currency}) => '匯率為${currency}',
+			'transaction.form.exchange_to_preferred_in_date' => '交易日',
+			'transaction.reversed.title' => '逆向交易',
+			'transaction.reversed.title_short' => '逆向交易',
+			'transaction.reversed.description_for_expenses' => '儘管是收入交易，但它的金額為正數。這些類型的交易可用於表示先前記錄的收入的返還，例如退款或償還債務。',
+			'transaction.reversed.description_for_incomes' => '儘管是一項收入交易，但其金額為負數。這些類型的交易可用於作廢或更正錯誤記錄的收入，反映資金的返還或退款或記錄債務的支付。',
+			'transaction.status.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '地位', other: '狀態', ), 
+			'transaction.status.display_long' => '交易狀態',
+			'transaction.status.tr_status' => ({required Object status}) => '${status}交易',
+			'transaction.status.none' => '無狀態',
+			'transaction.status.none_descr' => '沒有特定狀態的交易',
+			'transaction.status.reconciled' => '已驗證',
+			'transaction.status.reconciled_descr' => '此交易已經過驗證，並且與您銀行的真實交易相對應',
+			'transaction.status.unreconciled' => '未驗證',
+			'transaction.status.unreconciled_descr' => '此交易尚未經過驗證，因此尚未出現在您的真實銀行帳戶中。但是，它將計算 Monekin 中的餘額和統計數據',
+			'transaction.status.pending' => '待辦',
+			'transaction.status.pending_descr' => '此交易正在等待處理，因此在計算餘額和統計數據時不會考慮它',
+			'transaction.status.voided' => '作廢',
+			'transaction.status.voided_descr' => '由於付款錯誤或任何其他原因導致的交易無效/取消。在計算餘額和統計時不會考慮該交易',
+			'transaction.types.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '交易類型', other: '交易類型', ), 
+			'transaction.types.income' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '收入', other: '收入', ), 
+			'transaction.types.expense' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '支出', other: '支出', ), 
+			'transaction.types.transfer' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '轉移', other: '轉移', ), 
+			'transfer.display' => '轉移',
+			'transfer.transfers' => '轉移',
+			'transfer.transfer_to' => ({required Object account}) => '轉移至${account}',
+			'transfer.create' => '轉移',
+			'transfer.need_two_accounts_warning_header' => 'Ops!',
+			'transfer.need_two_accounts_warning_message' => '至少需要兩個帳戶才能執行此操作。如果您需要調整或編輯該帳戶的當前餘額，請點擊編輯按鈕',
+			'transfer.form.from' => '原始帳戶',
+			'transfer.form.to' => '目的地帳戶',
+			'transfer.form.value_in_destiny.title' => '目的地轉帳金额',
+			'transfer.form.value_in_destiny.amount_short' => ({required Object amount}) => '${amount}至目標帳户',
+			'recurrent_transactions.title' => '經常交易',
+			'recurrent_transactions.title_short' => '經常交易',
+			'recurrent_transactions.empty' => '您似乎沒有任何經常交易。建立每月、每年或每週的經常交易，它將顯示在此處',
+			'recurrent_transactions.total_expense_title' => '每個期間的總收入',
+			'recurrent_transactions.total_expense_descr' => '*不考慮每次重複的開始和結束日期',
+			'recurrent_transactions.details.title' => '經常交易',
+			'recurrent_transactions.details.descr' => '此交易的下一步動作如下所示。您可以接受第一步動作或跳過此動作',
+			'recurrent_transactions.details.last_payment_info' => '此動作是循環規則的最後一個，因此當確認此動作時，該規則將自動刪除',
+			'recurrent_transactions.details.delete_header' => '刪除重複交易',
+			'recurrent_transactions.details.delete_message' => '此操作不可逆轉，不會影響您已確認/付款的交易',
+			'recurrent_transactions.status.delayed_by' => ({required Object x}) => '延遲了 ${x}d',
+			'recurrent_transactions.status.coming_in' => ({required Object x}) => '${x} 天後',
+			'account.details' => '帳戶詳細資料',
+			'account.date' => '開業日期',
+			'account.close_date' => '截止日期',
+			'account.reopen' => '重新開立帳戶',
+			'account.reopen_short' => '重新開放',
+			'account.reopen_descr' => '您確定要重新開啟此帳戶嗎？',
+			'account.balance' => '帳戶餘額',
+			'account.n_transactions' => '交易數量',
+			'account.add_money' => '增加金額',
+			'account.withdraw_money' => '取出金額',
+			'account.no_accounts' => '未發現此處顯示的交易。請點選底部的 \'+\' 按鈕新增交易',
+			'account.types.title' => '帳戶類型',
+			'account.types.warning' => '帳戶類型一旦選擇，以後將無法更改',
+			'account.types.normal' => '普通帳戶',
+			'account.types.normal_descr' => '對於記錄您的日常財務很有用。這是最常見的帳戶，它可以讓您添加支出、收入......',
+			'account.types.saving' => '儲蓄帳戶',
+			'account.types.saving_descr' => '您只能從其他帳戶中添加和提取資金。非常適合開始存錢',
+			'account.form.name' => '帳戶名稱',
+			'account.form.name_placeholder' => '例如：儲蓄帳戶',
+			'account.form.notes' => '筆記',
+			'account.form.notes_placeholder' => '輸入有關此帳戶的一些註釋/描述',
+			'account.form.initial_balance' => '初始餘額',
+			'account.form.current_balance' => '當前餘額',
+			'account.form.create' => '建立帳戶',
+			'account.form.edit' => '編輯帳戶',
+			'account.form.currency_not_found_warn' => '您沒有該貨幣的匯率資訊。1.0 將用作預設匯率。您可以在設定中修改',
+			'account.form.already_exists' => '已經有另一個同名，請再寫一個',
+			'account.form.tr_before_opening_date' => '該帳戶中有日期早於開戶日期的交易',
+			'account.form.iban' => 'iban',
+			'account.form.swift' => 'swift',
+			'account.delete.warning_header' => '刪除帳戶？',
+			'account.delete.warning_text' => '此操作將刪除該帳戶及其所有交易',
+			'account.delete.success' => '帳號刪除成功',
+			'account.close.title' => '關閉帳戶',
+			'account.close.title_short' => '關閉',
+			'account.close.warn' => '此帳戶將不再出現在某些清單中，您將無法在其中建立日期晚於下面指定的日期的交易。此操作不會影響任何交易或餘額，您也可以隨時重新開啟此帳戶時間。 ',
+			'account.close.should_have_zero_balance' => '此帳戶中的當前餘額必須為 0 才能關閉它。請在繼續之前編輯帳戶',
+			'account.close.should_have_no_transactions' => '此帳戶在指定的關閉日期之後有交易。請刪除它們或編輯帳戶關閉日期，然後再繼續',
+			'account.close.success' => '帳戶關閉成功',
+			'account.close.unarchive_succes' => '帳戶已成功重新開設',
+			'account.select.one' => '選擇一個帳戶',
+			'account.select.all' => '所有帳戶',
+			'account.select.multiple' => '選擇帳戶',
+			'currencies.currency_converter' => '貨幣換算',
+			'currencies.currency' => '貨幣',
+			'currencies.currency_settings' => '貨幣設置',
+			'currencies.currency_manager' => '貨幣管理',
+			'currencies.currency_manager_descr' => '配置您的貨幣及其與其他貨幣的匯率',
+			'currencies.preferred_currency' => '首選/基礎貨幣',
+			'currencies.tap_to_change_preferred_currency' => '點擊即可更改',
+			'currencies.change_preferred_currency_title' => '更改首選貨幣',
+			'currencies.change_preferred_currency_msg' => '從現在開始，所有統計數據和預算都將以該貨幣顯示。帳戶和交易將保留其所擁有的貨幣。如果您執行此操作，所有保存的匯率都將被刪除。您想繼續嗎？',
+			'currencies.exchange_rate_form.equal_to_preferred_warn' => '幣種不能等於用戶幣種',
+			'currencies.exchange_rate_form.override_existing_warn' => '該貨幣在該日期的匯率已存在。如果繼續，前一個將會被覆蓋',
+			'currencies.exchange_rate_form.specify_a_currency' => '請指定貨幣',
+			'currencies.exchange_rate_form.add' => '添加匯率',
+			'currencies.exchange_rate_form.add_success' => '匯率新增成功',
+			'currencies.exchange_rate_form.edit' => '編輯匯率',
+			'currencies.exchange_rate_form.edit_success' => '匯率編輯成功',
+			'currencies.exchange_rate_form.remove_all' => '刪除所有匯率',
+			'currencies.exchange_rate_form.remove_all_warning' => '此操作不可逆轉，並將刪除該貨幣的所有匯率',
+			'currencies.types.display' => '貨幣類型',
+			'currencies.types.fiat' => '菲亞特',
+			'currencies.types.crypto' => '加密貨幣',
+			'currencies.types.other' => '其他',
+			'currencies.currency_form.name' => '顯示名稱',
+			'currencies.currency_form.code' => '貨幣代碼',
+			'currencies.currency_form.symbol' => '象徵',
+			'currencies.currency_form.decimal_digits' => '小數位',
+			'currencies.currency_form.create' => '創建貨幣',
+			'currencies.currency_form.create_success' => '貨幣創建成功',
+			'currencies.currency_form.edit' => '編輯貨幣',
+			'currencies.currency_form.edit_success' => '貨幣編輯成功',
+			'currencies.currency_form.delete' => '刪除貨幣',
+			'currencies.currency_form.delete_success' => '幣種刪除成功',
+			'currencies.currency_form.already_exists' => '具有此代碼的貨幣已存在。您可能想要編輯它',
+			'currencies.delete_all_success' => '刪除匯率成功',
+			'currencies.historical' => '歷史利率',
+			'currencies.historical_empty' => '沒有找到該貨幣的歷史匯率',
+			'currencies.exchange_rate' => '匯率',
+			'currencies.exchange_rates' => '匯率',
+			'currencies.min_exchange_rate' => '最低匯率',
+			'currencies.max_exchange_rate' => '最高匯率',
+			'currencies.empty' => '在此處添加匯率，以便如果您的帳戶使用基礎貨幣以外的貨幣，我們的圖表會更加準確',
+			'currencies.select_a_currency' => '選擇貨幣',
+			'currencies.search' => '按名稱或貨幣代碼搜尋',
+			'tags.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '標籤', other: '標籤', ), 
+			'tags.form.name' => '標籤名',
+			'tags.form.description' => '描述',
+			'tags.select.title' => '選擇標籤',
+			'tags.select.all' => '所有標籤',
+			'tags.empty_list' => '您還沒有建立任何標籤。標籤和類別是對您的動作進行分類的好方法',
+			'tags.without_tags' => '沒有標籤',
+			'tags.add' => '添加標籤',
+			'tags.create' => '建立標籤',
+			'tags.create_success' => '標籤建立成功',
+			'tags.already_exists' => '此標籤名稱已存在。您可能需要編輯它',
+			'tags.edit' => '編輯標籤',
+			'tags.edit_success' => '標籤編輯成功',
+			'tags.delete_success' => '類別刪除成功',
+			'tags.delete_warning_header' => '刪除標籤？',
+			'tags.delete_warning_message' => '此操作不會刪除具有此標籤的交易。',
+			'categories.unknown' => '未知類別',
+			'categories.create' => '建立類別',
+			'categories.create_success' => '類別建立成功',
+			'categories.new_category' => '新類別',
+			'categories.already_exists' => '該類別的名稱已存在。也許您可以編輯',
+			'categories.edit' => '編輯類別',
+			'categories.edit_success' => '類別編輯成功',
+			'categories.name' => '分類名稱',
+			'categories.type' => '類別類型',
+			'categories.both_types' => '兩種類型',
+			'categories.subcategories' => '子類別',
+			'categories.subcategories_add' => '新增子類別',
+			'categories.make_parent' => '按類別製作',
+			'categories.make_child' => '建立一個子類別',
+			'categories.make_child_warning1' => ({required Object destiny}) => '此類別及其子類別將成為<b>${destiny}</b>的子類別。',
+			'categories.make_child_warning2' => ({required Object x, required Object destiny}) => '他們的交易<b>(${x})</b>將被移至<b>${destiny}</b>類別中建立的新子類別。',
+			'categories.make_child_success' => '子類別建立成功',
+			'categories.merge' => '與另一個類別合併',
+			'categories.merge_warning1' => ({required Object from, required Object x, required Object destiny}) => '與類別<b>${from}</b>相關的所有交易 (${x}) 將移至類別<b>${destiny}</b>',
+			'categories.merge_warning2' => ({required Object from}) => '類別<b>${from}</b>將被不可逆轉地刪除。 ',
+			'categories.merge_success' => '類別合併成功',
+			'categories.delete_success' => '類別已成功刪除',
+			'categories.delete_warning_header' => '刪除類別？',
+			'categories.delete_warning_message' => ({required Object x}) => '此操作將不可逆轉地刪除與此類別相關的所有交易<b>(${x})</b>。',
+			'categories.select.title' => '選擇類別',
+			'categories.select.select_one' => '選擇一個類別',
+			'categories.select.select_subcategory' => '選擇一個子類別',
+			'categories.select.without_subcategory' => '沒有子類別',
+			'categories.select.all' => '所有類別',
+			'categories.select.all_short' => '全部',
+			'budgets.title' => '預算',
+			'budgets.status' => '預算狀況',
+			'budgets.repeated' => '週期性',
+			'budgets.one_time' => '一次性',
+			'budgets.actives' => '活躍',
+			'budgets.from_budgeted' => '從預算',
+			'budgets.days_left' => '還剩幾天',
+			'budgets.days_to_start' => '開始的日子',
+			'budgets.since_expiration' => '自到期日起的天數',
+			'budgets.no_budgets' => '此部分中似乎沒有可顯示的預算。首先單擊下面的按鈕以建立預算',
+			'budgets.delete' => '刪除預算',
+			'budgets.delete_warning' => '此操作不可逆轉。引用此報價的類別和交易不會被刪除',
+			'budgets.form.title' => '添加預算',
+			'budgets.form.name' => '預算名稱',
+			'budgets.form.value' => '數量限制',
+			'budgets.form.create' => '添加預算',
+			'budgets.form.create_success' => '預算創建成功',
+			'budgets.form.edit' => '編輯預算',
+			'budgets.form.edit_success' => '預算編輯成功',
+			'budgets.form.negative_warn' => '預算不能有負數',
+			'budgets.details.title' => '預算詳情',
+			'budgets.details.statistics' => '統計數據',
+			'budgets.details.budget_value' => '預算',
+			'budgets.details.expend_evolution' => '支出變化',
+			'budgets.details.no_transactions' => '看來您還沒有做出與此預算相關的任何收入',
+			'budgets.target_timeline_statuses.active' => '目前預算',
+			'budgets.target_timeline_statuses.past' => '已完成預算',
+			'budgets.target_timeline_statuses.future' => '未來預算',
+			'budgets.progress.labels.active_on_track' => '正常',
+			'budgets.progress.labels.active_overspending' => '超支',
+			'budgets.progress.labels.active_indeterminate' => '積極的',
+			'budgets.progress.labels.success' => '已達成',
+			'budgets.progress.labels.fail' => '超出預算',
+			'budgets.progress.description.active_on_track' => ({required Object remainingDays, required Object dailyAmount}) => '在剩餘的 ${remainingDays} 天裡，您每天可以花費 ${dailyAmount}',
+			'budgets.progress.description.active_overspending' => ({required Object remainingDays, required Object dailyAmount}) => '為了回到正軌，您應該在剩餘的 ${remainingDays} 天裡將每天的支出限制在 ${dailyAmount}',
+			'budgets.progress.description.active_indeterminate' => ({required Object amount}) => '您還剩 ${amount} 可以消費。',
+			'budgets.progress.description.active_exceeded' => ({required Object amount}) => '您已經超出了預算限額 ${amount}。如果您找不到此預算的任何收入，您應該在其剩餘期間停止支出',
+			'budgets.progress.description.success' => '做得好！該預算已成功完成。繼續創建預算以管理您的支出',
+			'budgets.progress.description.fail' => ({required Object amount}) => '您超出了預算 ${amount}。下次請更加小心！',
+			'goals.title' => '目標',
+			'goals.status' => '目標狀態',
+			'goals.type.display' => '目標類型',
+			'goals.type.income.title' => '儲蓄目標',
+			'goals.type.income.descr' => '非常適合儲蓄。當餘額超過目標時，即為成功。',
+			'goals.type.expense.title' => '支出目標',
+			'goals.type.expense.descr' => '跟踪您的支出並以此達到目標金額。適用於捐款、慈善...',
+			'goals.empty_title' => '未找到目標',
+			'goals.empty_description' => '創建一個新目標以開始追蹤您的儲蓄！',
+			'goals.delete' => '刪除目標',
+			'goals.delete_warning' => '此操作不可逆。涉及此目標的類別和交易將不會被刪除',
+			'goals.form.new_title' => '新目標',
+			'goals.form.edit_title' => '編輯目標',
+			'goals.form.target_amount' => '目標金額',
+			'goals.form.initial_amount' => '初始金額',
+			_ => null,
+		} ?? switch (path) {
+			'goals.form.name' => '名稱',
+			'goals.form.name_hint' => '我的儲蓄目標',
+			'goals.form.create_success' => '目標建立成功',
+			'goals.form.edit_success' => '目標編輯成功',
+			'goals.form.negative_warn' => '目標金額不能為負數',
+			'goals.details.title' => '目標詳情',
+			'goals.details.statistics' => '統計',
+			'goals.details.goal_value' => '目標值',
+			'goals.details.evolution' => '趨勢',
+			'goals.details.no_transactions' => '看來您還沒有進行任何與此目標相關的交易',
+			'goals.target_timeline_statuses.active' => '進行中的目標',
+			'goals.target_timeline_statuses.past' => '已結束的目標',
+			'goals.target_timeline_statuses.future' => '未來的目標',
+			'goals.progress.labels.active_on_track' => '步入正軌',
+			'goals.progress.labels.active_behind_schedule' => '落後於計劃',
+			'goals.progress.labels.active_indeterminate' => '積極的',
+			'goals.progress.labels.success' => '目標達成',
+			'goals.progress.labels.fail' => '目標失敗',
+			'goals.progress.description.active_on_track' => ({required Object remainingDays, required Object dailyAmount}) => '您正在尋找目標的軌道上！您必須在剩餘的 ${remainingDays} 天內每天節省 ${dailyAmount}',
+			'goals.progress.description.active_behind_schedule' => ({required Object dailyAmount, required Object remainingDays}) => '你落後於計劃了。您必須每天節省 ${dailyAmount} 才能在 ${remainingDays} 天后達到您的目標',
+			'goals.progress.description.active_indeterminate' => ({required Object amount}) => '您還需要 ${amount} 才能實現目標。',
+			'goals.progress.description.success' => '恭喜！你達到了你的目標。',
+			'goals.progress.description.fail' => ({required Object amount}) => '您與目標相差了 ${amount}。',
+			'target_timeline_statuses.active' => '進行中',
+			'target_timeline_statuses.past' => '已完成',
+			'target_timeline_statuses.future' => '未開始',
+			'backup.no_file_selected' => '未選擇文件',
+			'backup.no_directory_selected' => '未選擇目錄',
+			'backup.export.title' => '匯出您的資料',
+			'backup.export.title_short' => '匯出',
+			'backup.export.type_of_export' => '出口類型',
+			'backup.export.other_options' => '選項',
+			'backup.export.all' => '完整備份',
+			'backup.export.all_descr' => '匯出您的所有資料（帳戶、交易、預算、設定...）。隨時重新匯入它們，這樣您就不會丟失任何內容。',
+			'backup.export.transactions' => '交易備份',
+			'backup.export.transactions_descr' => '以 CSV 格式匯出您的交易，以便您可以在其他程式或應用程式中更輕鬆地分析它們。',
+			'backup.export.transactions_to_export' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '1 筆交易要導出', other: '要導出的 ${n} 筆交易', ), 
+			'backup.export.description' => '以不同格式下載資料',
+			'backup.export.send_file' => '發送文件',
+			'backup.export.see_folder' => '查看文件夾',
+			'backup.export.success' => ({required Object x}) => '檔案已在${x}中成功儲存/下載',
+			'backup.export.error' => '下載檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員',
+			'backup.export.dialog_title' => '儲存/傳送文件',
+			'backup.import.title' => '匯入您的資料',
+			'backup.import.title_short' => '匯入',
+			'backup.import.restore_backup' => '恢復備份',
+			'backup.import.restore_backup_descr' => '從 Monekin 匯入先前儲存的資料庫。此操作將用新資料取代任何當前應用程式資料',
+			'backup.import.restore_backup_warn_description' => '導入新資料庫時，您將丟失應用程式中當前保存的所有資料。建議在繼續之前進行備份。請勿在此處上傳任何來源不明的文件，僅上傳您之前從其下載的文件 Monekin',
+			'backup.import.restore_backup_warn_title' => '覆蓋所有數據',
+			'backup.import.select_other_file' => '選擇其他文件',
+			'backup.import.tap_to_select_file' => '點選選擇檔案',
+			'backup.import.manual_import.title' => '手動導入',
+			'backup.import.manual_import.descr' => '手動從 .csv 檔案匯入交易',
+			'backup.import.manual_import.default_account' => '預設帳戶',
+			'backup.import.manual_import.remove_default_account' => '刪除預設帳戶',
+			'backup.import.manual_import.default_category' => '預設類別',
+			'backup.import.manual_import.select_a_column' => '從 .csv 中選擇一列',
+			'backup.import.manual_import.steps.0' => '選擇您的文件',
+			'backup.import.manual_import.steps.1' => '數量欄位',
+			'backup.import.manual_import.steps.2' => '帳戶欄位',
+			'backup.import.manual_import.steps.3' => '類別欄位',
+			'backup.import.manual_import.steps.4' => '日期欄位',
+			'backup.import.manual_import.steps.5' => '其他欄位',
+			'backup.import.manual_import.steps_descr.0' => '從您的裝置中選擇一個 .csv 檔案。確保它的第一行描述了每列的名稱。',
+			'backup.import.manual_import.steps_descr.1' => '選擇每筆交易價值的欄位。使用負值表示支出，使用正值表示收入。',
+			'backup.import.manual_import.steps_descr.2' => '選擇每筆交易所屬帳戶的列。您也可以選擇預設帳戶，以防我們找不到您想要的帳戶。如果未指定預設帳戶，我們將建立一個同名帳戶。',
+			'backup.import.manual_import.steps_descr.3' => '選擇交易類別名稱所在的欄位。您必須指定一個預設類別，以便我們將此類別指派給交易，以防找不到該類別。',
+			'backup.import.manual_import.steps_descr.4' => '選擇每筆交易日期的欄位。如果未指定，交易將使用當前日期建立。',
+			'backup.import.manual_import.steps_descr.5' => '選擇其他交易屬性的資料列',
+			'backup.import.manual_import.success' => ({required Object x}) => '已成功導入${x}筆交易',
+			'backup.import.success' => '導入成功',
+			'backup.import.error' => '匯入檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員。',
+			'backup.import.cancelled' => '導入已被用戶取消',
+			'backup.about.title' => '有關您的資料庫的資訊',
+			'backup.about.create_date' => '建立日期',
+			'backup.about.modify_date' => '上一次更改',
+			'backup.about.last_backup' => '上次備份',
+			'backup.about.size' => '檔案大小',
+			'settings.title_long' => '設定與自訂',
+			'settings.title_short' => '設定',
+			'settings.description' => '主題、語言、數據等',
+			'settings.edit_profile' => '編輯個人資料',
+			'settings.general.menu_title' => '常規設定',
+			'settings.general.menu_descr' => '語言、隱私等',
+			'settings.general.show_all_decimals' => '顯示所有小數位',
+			'settings.general.show_all_decimals_descr' => '即使是末尾為零，也顯示所有小數位',
+			'settings.general.language.section' => '語言和文本',
+			'settings.general.language.title' => '應用程式語言',
+			'settings.general.language.descr' => '應用程式中顯示文字的語言',
+			'settings.general.language.help' => '如果您想與此應用程式的翻譯合作，您可以參考<a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>我們的指南</a>',
+			'settings.general.locale.title' => '地區',
+			'settings.general.locale.auto' => '系統',
+			'settings.general.locale.descr' => '設定用於日期、數字的格式...',
+			'settings.general.locale.warn' => '更改區域時應用程式將更新',
+			'settings.general.locale.first_day_of_week' => '一週的第一天',
+			'settings.security.title' => '安全',
+			'settings.security.private_mode_at_launch' => '啟動時啟用的隱私模式',
+			'settings.security.private_mode_at_launch_descr' => '默認以隱私模式啟動應用程序',
+			'settings.security.private_mode' => '隱私模式',
+			'settings.security.private_mode_descr' => '隱藏所有貨幣值',
+			'settings.security.private_mode_activated' => '隱私模式已啟用',
+			'settings.security.private_mode_deactivated' => '隱私模式已禁用',
+			'settings.transactions.menu_title' => '交易',
+			'settings.transactions.menu_descr' => '配置交易行為',
+			'settings.transactions.title' => '交易設定',
+			'settings.transactions.style.title' => '交易樣式',
+			'settings.transactions.style.subtitle' => '設定交易在應用程式列表中的顯示方式',
+			'settings.transactions.style.show_tags' => '顯示標籤',
+			'settings.transactions.style.show_time' => '顯示時間',
+			'settings.transactions.swipe_actions.title' => '滑動操作',
+			'settings.transactions.swipe_actions.choose_description' => '選擇當您使用此滑動方向滑動列表中的交易項目時將觸發什麼操作',
+			'settings.transactions.swipe_actions.swipe_left' => '向左滑動',
+			'settings.transactions.swipe_actions.swipe_right' => '向右滑動',
+			'settings.transactions.swipe_actions.none' => '無動作',
+			'settings.transactions.swipe_actions.toggle_reconciled' => '切換已調節',
+			'settings.transactions.swipe_actions.toggle_pending' => '切換待處理',
+			'settings.transactions.swipe_actions.toggle_voided' => '切換作廢',
+			'settings.transactions.swipe_actions.toggle_unreconciled' => '切換不可調和',
+			'settings.transactions.swipe_actions.remove_status' => '刪除狀態',
+			'settings.transactions.default_values.title' => 'Default Form Values',
+			'settings.transactions.default_values.page_title' => 'New Transaction: Default Form Values',
+			'settings.transactions.default_values.reuse_last_transaction' => 'Reuse Last Transaction Values',
+			'settings.transactions.default_values.reuse_last_transaction_descr' => 'Automatically fill the form with some values from the last created transaction',
+			'settings.transactions.default_values.fields_to_reuse' => 'Fields to reuse',
+			'settings.transactions.default_values.reuse_last_values_modal_descr' => 'Select the fields that should be pre-filled with the values from the last created transaction.',
+			'settings.transactions.default_values.default_values_separator' => 'Default Values',
+			'settings.transactions.default_values.default_category' => 'Default Category',
+			'settings.transactions.default_values.default_status' => 'Default Status',
+			'settings.transactions.default_values.default_tags' => 'Default Tags',
+			'settings.transactions.default_values.no_tags_selected' => 'No tags selected',
+			'settings.transactions.default_type.title' => 'Default Type',
+			'settings.transactions.default_type.modal_title' => 'Select Default Type',
+			'settings.appearance.menu_title' => '主題與風格',
+			'settings.appearance.menu_descr' => '主題選擇、顏色以及與應用程式外觀相關的其他內容',
+			'settings.appearance.theme_and_colors' => '主題和顏色',
+			'settings.appearance.theme.title' => '主題',
+			'settings.appearance.theme.auto' => '系統',
+			'settings.appearance.theme.light' => '明亮主題',
+			'settings.appearance.theme.dark' => '黑暗主題',
+			'settings.appearance.amoled_mode' => 'amoled mode',
+			'settings.appearance.amoled_mode_descr' => '盡可能使用純黑色壁紙。這對 AMOLED 螢幕設備的電池略有幫助',
+			'settings.appearance.dynamic_colors' => '動態色彩',
+			'settings.appearance.dynamic_colors_descr' => '盡可能使用系統強調色',
+			'settings.appearance.accent_color' => '強調色',
+			'settings.appearance.accent_color_descr' => '選擇應用程式用來強調介面某些部分的顏色',
+			'settings.appearance.text' => '文本',
+			'settings.appearance.font' => '字體',
+			'settings.appearance.font_platform' => '平台',
+			'more.title' => '更多',
+			'more.title_long' => '更多',
+			'more.data.display' => '數據',
+			'more.data.display_descr' => '匯出和匯入您的數據，這樣您就不會丟失任何東西',
+			'more.data.delete_all' => '刪除我的資料',
+			'more.data.delete_all_header1' => 'Stop right there padawan ⚠️⚠️',
+			'more.data.delete_all_message1' => '您確定要繼續嗎？您的所有資料將永久刪除且無法恢復',
+			'more.data.delete_all_header2' => '最後一步⚠️⚠️',
+			'more.data.delete_all_message2' => '刪除帳戶後，您將刪除所有儲存的個人資料。您的帳戶、交易、預算和類別將被刪除且無法恢復。您同意嗎？',
+			'more.about_us.display' => '應用程式資訊',
+			'more.about_us.description' => '查找 Monekin 的條款、重要資訊，並透過回報錯誤或分享想法與我們聯繫',
+			'more.about_us.legal.display' => '法律資訊',
+			'more.about_us.legal.privacy' => '隱私權政策',
+			'more.about_us.legal.terms' => '使用條款',
+			'more.about_us.legal.licenses' => '許可證',
+			'more.about_us.project.display' => '專案',
+			'more.about_us.project.contributors' => '合作者',
+			'more.about_us.project.contributors_descr' => '所有讓 Monekin 成長的開發者',
+			'more.about_us.project.contact' => '聯絡我們',
+			'more.help_us.display' => '幫助我們',
+			'more.help_us.description' => '了解如何幫助 Monekin 變得越來越好',
+			'more.help_us.rate_us' => '評價我們',
+			'more.help_us.rate_us_descr' => '歡迎任何價格！',
+			'more.help_us.share' => '分享 Monekin',
+			'more.help_us.share_descr' => '與朋友和家人分享我們的應用程式',
+			'more.help_us.share_text' => 'Monekin！最好的個人理財應用程式。在這裡下載',
+			'more.help_us.thanks' => '謝謝你！',
+			'more.help_us.thanks_long' => '您對 Monekin 和其他大大小小的開源專案的貢獻使得這樣偉大的專案成為可能。感謝您花時間做出貢獻。',
+			'more.help_us.donate' => '做捐贈',
+			'more.help_us.donate_descr' => '透過您的捐款，您將幫助該應用程式繼續改進。還有什麼比邀請我喝咖啡來感謝所做的工作更好的方式呢？',
+			'more.help_us.donate_success' => '捐款已完成。非常感謝您的貢獻！❤️',
+			'more.help_us.donate_err' => '糟糕！接收您的付款時出現錯誤',
+			'more.help_us.report' => '報告錯誤、留下建議…',
+			_ => null,
+		};
 	}
 }
-
