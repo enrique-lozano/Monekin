@@ -3,6 +3,7 @@
 ///
 // coverage:ignore-file
 // ignore_for_file: type=lint, unused_import
+// dart format off
 
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +11,7 @@ import 'package:slang/generated.dart';
 import 'translations.g.dart';
 
 // Path: <root>
-class TranslationsTr implements Translations {
+class TranslationsTr with BaseTranslations<AppLocale, Translations> implements Translations {
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
 	TranslationsTr({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
@@ -1796,813 +1797,708 @@ class _TranslationsGeneralTimeRangesTypesTr implements TranslationsGeneralTimeRa
 
 /// The flat map containing all translations for locale <tr>.
 /// Only for edge cases! For simple maps, use the map function of this library.
-/// Note: We use a HashMap because Dart seems to be unable to compile large switch statements.
-Map<String, dynamic>? _map;
-
+///
+/// The Dart AOT compiler has issues with very large switch statements,
+/// so the map is split into smaller functions (512 entries each).
 extension on TranslationsTr {
 	dynamic _flatMapFunction(String path) {
-		final map = _map ?? _initFlatMap();
-		return map[path];
-	}
-
-	/// Initializes the flat map and returns it.
-	Map<String, dynamic> _initFlatMap() {
-		final map = <String, dynamic>{};
-		map['ui_actions.cancel'] = 'İptal';
-		map['ui_actions.confirm'] = 'Onayla';
-		map['ui_actions.continue_text'] = 'Devam Et';
-		map['ui_actions.save'] = 'Kaydet';
-		map['ui_actions.save_changes'] = 'Değişiklikleri Kaydet';
-		map['ui_actions.close_and_save'] = 'Kaydet ve Kapat';
-		map['ui_actions.add'] = 'Ekle';
-		map['ui_actions.edit'] = 'Düzenle';
-		map['ui_actions.delete'] = 'Sil';
-		map['ui_actions.see_more'] = 'Daha Fazla Gör';
-		map['ui_actions.select_all'] = 'Tümünü Seç';
-		map['ui_actions.deselect_all'] = 'Tüm Seçimi Kaldır';
-		map['ui_actions.select'] = 'Seç';
-		map['ui_actions.search'] = 'Ara';
-		map['ui_actions.filter'] = 'Filtrele';
-		map['ui_actions.reset'] = 'Sıfırla';
-		map['ui_actions.submit'] = 'Gönder';
-		map['ui_actions.next'] = 'Sonraki';
-		map['ui_actions.previous'] = 'Önceki';
-		map['ui_actions.back'] = 'Geri';
-		map['ui_actions.reload'] = 'Yenile';
-		map['ui_actions.view'] = 'Görüntüle';
-		map['ui_actions.download'] = 'İndir';
-		map['ui_actions.upload'] = 'Yükle';
-		map['ui_actions.retry'] = 'Tekrar Dene';
-		map['ui_actions.copy'] = 'Kopyala';
-		map['ui_actions.paste'] = 'Yapıştır';
-		map['ui_actions.undo'] = 'Geri Al';
-		map['ui_actions.redo'] = 'İleri Al';
-		map['ui_actions.open'] = 'Aç';
-		map['ui_actions.close'] = 'Kapat';
-		map['ui_actions.apply'] = 'Uygula';
-		map['ui_actions.discard'] = 'Vazgeç';
-		map['ui_actions.refresh'] = 'Yenile';
-		map['ui_actions.share'] = 'Paylaş';
-		map['general.or'] = 'veya';
-		map['general.understood'] = 'Anlaşıldı';
-		map['general.unspecified'] = 'Belirtilmemiş';
-		map['general.quick_actions'] = 'Hızlı İşlemler';
-		map['general.details'] = 'Detaylar';
-		map['general.balance'] = 'Bakiye';
-		map['general.account'] = 'Hesap';
-		map['general.accounts'] = 'Hesaplar';
-		map['general.categories'] = 'Kategoriler';
-		map['general.category'] = 'Kategori';
-		map['general.today'] = 'Bugün';
-		map['general.yesterday'] = 'Dün';
-		map['general.filters'] = 'Filtreler';
-		map['general.empty_warn'] = 'Ups! Burası çok boş';
-		map['general.search_no_results'] = 'Arama kriterlerinizle eşleşen öğe yok';
-		map['general.insufficient_data'] = 'Yetersiz veri';
-		map['general.show_more_fields'] = 'Daha fazla alan göster';
-		map['general.show_less_fields'] = 'Daha az alan göster';
-		map['general.tap_to_search'] = 'Aramak için dokunun';
-		map['general.delete_success'] = 'Öğe başarıyla silindi';
-		map['general.leave_without_saving.title'] = 'Kaydetmeden ayrılmak mı istiyorsunuz?';
-		map['general.leave_without_saving.message'] = 'Kaydedilmemiş değişiklikleriniz var, bunları kaydetmeden ayrılmak istediğinizden emin misiniz?';
-		map['general.clipboard.success'] = ({required Object x}) => '${x} panoya kopyalandı';
-		map['general.clipboard.error'] = 'Kopyalama hatası';
-		map['general.time.start_date'] = 'Başlangıç tarihi';
-		map['general.time.end_date'] = 'Bitiş tarihi';
-		map['general.time.from_date'] = 'Başlangıç tarihi';
-		map['general.time.until_date'] = 'Bitiş tarihi';
-		map['general.time.date'] = 'Tarih';
-		map['general.time.datetime'] = 'Tarih ve saat';
-		map['general.time.time'] = 'Saat';
-		map['general.time.each'] = 'Her';
-		map['general.time.after'] = 'Sonra';
-		map['general.time.ranges.display'] = 'Zaman aralığı';
-		map['general.time.ranges.it_repeat'] = 'Tekrarlar';
-		map['general.time.ranges.it_ends'] = 'Biter';
-		map['general.time.ranges.forever'] = 'Sonsuza kadar';
-		map['general.time.ranges.types.cycle'] = 'Döngüler';
-		map['general.time.ranges.types.last_days'] = 'Son günler';
-		map['general.time.ranges.types.last_days_form'] = ({required Object x}) => 'Önceki ${x} gün';
-		map['general.time.ranges.types.all'] = 'Her Zaman';
-		map['general.time.ranges.types.date_range'] = 'Özel aralık';
-		map['general.time.ranges.each_range'] = ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
-				one: 'Her ${range}',
-				other: 'Her ${n} ${range}',
-			);
-		map['general.time.ranges.each_range_until_date'] = ({required num n, required Object day, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
-				one: '${day} tarihine kadar her ${range}',
-				other: '${day} tarihine kadar her ${n} ${range}',
-			);
-		map['general.time.ranges.each_range_until_times'] = ({required num n, required Object range, required Object limit}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
-				one: 'Her ${range} ${limit} kez',
-				other: 'Her ${n} ${range} ${limit} kez',
-			);
-		map['general.time.ranges.each_range_until_once'] = ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
-				one: 'Her ${range} bir kez',
-				other: 'Her ${n} ${range} bir kez',
-			);
-		map['general.time.ranges.month'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
-				one: 'Ay',
-				other: 'Aylar',
-			);
-		map['general.time.ranges.year'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
-				one: 'Yıl',
-				other: 'Yıllar',
-			);
-		map['general.time.ranges.day'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
-				one: 'Gün',
-				other: 'Günler',
-			);
-		map['general.time.ranges.week'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
-				one: 'Hafta',
-				other: 'Haftalar',
-			);
-		map['general.time.periodicity.display'] = 'Tekrarlama';
-		map['general.time.periodicity.no_repeat'] = 'Tekrarlama yok';
-		map['general.time.periodicity.repeat'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
-				one: 'Tekrar',
-				other: 'Tekrarlar',
-			);
-		map['general.time.periodicity.diary'] = 'Günlük';
-		map['general.time.periodicity.monthly'] = 'Aylık';
-		map['general.time.periodicity.annually'] = 'Yıllık';
-		map['general.time.periodicity.quaterly'] = 'Üç Aylık';
-		map['general.time.periodicity.weekly'] = 'Haftalık';
-		map['general.time.periodicity.custom'] = 'Özel';
-		map['general.time.periodicity.infinite'] = 'Her Zaman';
-		map['general.time.current.monthly'] = 'Bu ay';
-		map['general.time.current.annually'] = 'Bu yıl';
-		map['general.time.current.quaterly'] = 'Bu çeyrek';
-		map['general.time.current.weekly'] = 'Bu hafta';
-		map['general.time.current.infinite'] = 'Sonsuza dek';
-		map['general.time.current.custom'] = 'Özel Aralık';
-		map['general.time.all.diary'] = 'Her gün';
-		map['general.time.all.monthly'] = 'Her ay';
-		map['general.time.all.annually'] = 'Her yıl';
-		map['general.time.all.quaterly'] = 'Her çeyrek';
-		map['general.time.all.weekly'] = 'Her hafta';
-		map['general.transaction_order.display'] = 'İşlemleri sırala';
-		map['general.transaction_order.category'] = 'Kategoriye göre';
-		map['general.transaction_order.quantity'] = 'Miktara göre';
-		map['general.transaction_order.date'] = 'Tarihe göre';
-		map['general.validations.form_error'] = 'Devam etmek için belirtilen alanları düzeltin';
-		map['general.validations.required'] = 'Gerekli alan';
-		map['general.validations.positive'] = 'Pozitif olmalı';
-		map['general.validations.min_number'] = ({required Object x}) => '${x} değerinden büyük olmalı';
-		map['general.validations.max_number'] = ({required Object x}) => '${x} değerinden küçük olmalı';
-		map['intro.start'] = 'Başla';
-		map['intro.skip'] = 'Atla';
-		map['intro.next'] = 'İleri';
-		map['intro.select_your_currency'] = 'Para birimini seçin';
-		map['intro.welcome_subtitle'] = 'Kişisel finans yöneticiniz';
-		map['intro.welcome_subtitle2'] = '%100 açık, %100 ücretsiz';
-		map['intro.welcome_footer'] = 'Giriş yaparak, uygulamanın <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Gizlilik Politikası</a> ve <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Kullanım Şartları</a>\'nı kabul etmiş olursunuz';
-		map['intro.offline_descr_title'] = 'ÇEVRİMDIŞI HESAP:';
-		map['intro.offline_descr'] = 'Verileriniz yalnızca cihazınızda saklanacak ve uygulamayı kaldırmadığınız veya telefon değiştirmediniz sürece güvende olacaktır. Veri kaybını önlemek için, uygulama ayarlarından düzenli olarak yedekleme yapılması önerilir.';
-		map['intro.offline_start'] = 'Çevrimdışı oturum başlat';
-		map['intro.sl1_title'] = 'Para birimini seçin';
-		map['intro.sl1_descr'] = 'Varsayılan para biriminiz raporlarda ve genel grafiklerde kullanılacaktır. Uygulama ayarlarından daha sonra istediğiniz zaman para birimini ve uygulama dilini değiştirebileceksiniz';
-		map['intro.sl2_title'] = 'Güvenli, gizli ve güvenilir';
-		map['intro.sl2_descr'] = 'Verileriniz yalnızca size aittir. Bilgileri harici sunuculara gitmeden doğrudan cihazınızda saklarız. Bu, uygulamayı internet olmadan bile kullanmayı mümkün kılar';
-		map['intro.sl2_descr2'] = 'Ayrıca, uygulamanın kaynak kodu herkese açıktır, herkes üzerinde işbirliği yapabilir ve nasıl çalıştığını görebilir';
-		map['intro.last_slide_title'] = 'Her şey hazır';
-		map['intro.last_slide_descr'] = 'Monekin ile sonunda çok istediğiniz finansal bağımsızlığa ulaşabilirsiniz. Paranız hakkında grafiklere, bütçelere, ipuçlarına, istatistiklere ve çok daha fazlasına sahip olacaksınız.';
-		map['intro.last_slide_descr2'] = 'Umarız deneyiminizden keyif alırsınız! Şüpheleriniz, önerileriniz durumunda bizimle iletişime geçmekten çekinmeyin...';
-		map['home.title'] = 'Gösterge Paneli';
-		map['home.filter_transactions'] = 'İşlemleri filtrele';
-		map['home.hello_day'] = 'Günaydın,';
-		map['home.hello_night'] = 'İyi geceler,';
-		map['home.total_balance'] = 'Toplam bakiye';
-		map['home.my_accounts'] = 'Hesaplarım';
-		map['home.active_accounts'] = 'Aktif hesaplar';
-		map['home.no_accounts'] = 'Henüz hesap oluşturulmadı';
-		map['home.no_accounts_descr'] = 'Monekin\'in tüm sihrini kullanmaya başlayın. İşlem eklemeye başlamak için en az bir hesap oluşturun';
-		map['home.last_transactions'] = 'Son işlemler';
-		map['home.should_create_account_header'] = 'Ups!';
-		map['home.should_create_account_message'] = 'İşlem oluşturmaya başlamadan önce en az bir arşivlenmemiş hesabınız olmalıdır';
-		map['financial_health.display'] = 'Finansal sağlık';
-		map['financial_health.review.very_good'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return 'Çok iyi!';
-					case GenderContext.female:
-						return 'Çok iyi!';
-				}
-			};
-		map['financial_health.review.good'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return 'İyi';
-					case GenderContext.female:
-						return 'İyi';
-				}
-			};
-		map['financial_health.review.normal'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return 'Ortalama';
-					case GenderContext.female:
-						return 'Ortalama';
-				}
-			};
-		map['financial_health.review.bad'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return 'Fena';
-					case GenderContext.female:
-						return 'Fena';
-				}
-			};
-		map['financial_health.review.very_bad'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return 'Çok Kötü';
-					case GenderContext.female:
-						return 'Çok Kötü';
-				}
-			};
-		map['financial_health.review.insufficient_data'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return 'Yetersiz veri';
-					case GenderContext.female:
-						return 'Yetersiz veri';
-				}
-			};
-		map['financial_health.review.descr.insufficient_data'] = 'Finansal sağlığınızı hesaplamak için yeterli giderimiz yok gibi görünüyor. Size yardımcı olmamıza izin vermek için bu dönemde bazı giderler/gelirler ekleyin!';
-		map['financial_health.review.descr.very_good'] = 'Tebrikler! Finansal sağlığınız muazzam. İyi gidişatınızı sürdürmenizi ve Monekin ile öğrenmeye devam etmenizi umuyoruz';
-		map['financial_health.review.descr.good'] = 'Harika! Finansal sağlığınız iyi. Daha da fazla nasıl tasarruf edebileceğinizi görmek için analiz sekmesini ziyaret edin!';
-		map['financial_health.review.descr.normal'] = 'Finansal sağlığınız bu dönem için nüfusun geri kalanının ortalamasına az çok eşit';
-		map['financial_health.review.descr.bad'] = 'Görünüşe göre mali durumunuz henüz en iyi seviyede değil. Finanslarınız hakkında daha fazla bilgi edinmek için grafiklerin geri kalanını inceleyin';
-		map['financial_health.review.descr.very_bad'] = 'Hmm, finansal sağlığınız olması gerekenden çok düşük. Finanslarınız hakkında daha fazla bilgi edinmek için grafiklerin geri kalanını inceleyin';
-		map['financial_health.months_without_income.title'] = 'Hayatta kalma oranı';
-		map['financial_health.months_without_income.subtitle'] = 'Bakiyeniz göz önüne alındığında, gelirsiz kalabileceğiniz süre';
-		map['financial_health.months_without_income.text_zero'] = 'Bu gider oranında gelirsiz bir ay bile dayanamazsınız!';
-		map['financial_health.months_without_income.text_one'] = 'Bu gider oranında yaklaşık bir ay gelirsiz yaşayabilirsiniz!';
-		map['financial_health.months_without_income.text_other'] = ({required Object n}) => 'Bu harcama oranında yaklaşık <b>${n} ay</b> gelir olmadan yaşayabilirsiniz.';
-		map['financial_health.months_without_income.text_infinite'] = 'Bu harcama oranında yaklaşık <b>tüm hayatınız boyunca</b> gelir olmadan yaşayabilirsiniz.';
-		map['financial_health.months_without_income.suggestion'] = 'Bu oranın her zaman en az 5 ayın üzerinde tutulması gerektiğini unutmayın. Yeterli birikiminiz olmadığını görürseniz, gereksiz harcamaları azaltın.';
-		map['financial_health.months_without_income.insufficient_data'] = 'Gelirsiz kaç ay hayatta kalabileceğinizi hesaplamak için yeterli giderimiz yok gibi görünüyor. Birkaç işlem girin ve finansal sağlığınızı kontrol etmek için buraya geri gelin';
-		map['financial_health.savings_percentage.title'] = 'Tasarruf yüzdesi';
-		map['financial_health.savings_percentage.subtitle'] = 'Gelirinizin ne kadarı bu dönemde harcanmıyor';
-		map['financial_health.savings_percentage.text.good'] = ({required Object value}) => 'Tebrikler! Bu dönemde gelirinizin <b>${value}%</b>\'sini tasarruf etmeyi başardınız. Görünüşe göre zaten bir uzmansınız, iyi iş çıkarmaya devam edin!';
-		map['financial_health.savings_percentage.text.normal'] = ({required Object value}) => 'Tebrikler, bu dönemde gelirinizin <b>${value}%</b>\'sini tasarruf etmeyi başardınız.';
-		map['financial_health.savings_percentage.text.bad'] = ({required Object value}) => 'Bu dönemde gelirinizin <b>${value}%</b>\'sini tasarruf etmeyi başardınız. Ancak, hala çok daha fazlasını yapabileceğinizi düşünüyoruz!';
-		map['financial_health.savings_percentage.text.very_bad'] = 'Vay canına, bu dönemde hiçbir şey biriktirmeyi başaramadınız.';
-		map['financial_health.savings_percentage.suggestion'] = 'Kazandığınızın en az %15-20\'sini biriktirmenin tavsiye edildiğini unutmayın.';
-		map['stats.title'] = 'İstatistikler';
-		map['stats.balance'] = 'Bakiye';
-		map['stats.final_balance'] = 'Son bakiye';
-		map['stats.balance_by_account'] = 'Hesaplara göre bakiye';
-		map['stats.balance_by_account_subtitle'] = 'Paramın çoğunu nerede tutuyorum?';
-		map['stats.balance_by_currency'] = 'Para birimine göre bakiye';
-		map['stats.balance_by_currency_subtitle'] = 'Yabancı para biriminde ne kadar param var?';
-		map['stats.balance_evolution'] = 'Bakiye trendi';
-		map['stats.balance_evolution_subtitle'] = 'Eskisinden daha çok param var mı?';
-		map['stats.compared_to_previous_period'] = 'Önceki döneme göre';
-		map['stats.cash_flow'] = 'Nakit akışı';
-		map['stats.cash_flow_subtitle'] = 'Kazandığımdan daha az mı harcıyorum?';
-		map['stats.by_periods'] = 'Dönemlere göre';
-		map['stats.by_categories'] = 'Kategorilere göre';
-		map['stats.by_tags'] = 'Etiketlere göre';
-		map['stats.distribution'] = 'Dağıtım';
-		map['stats.finance_health_resume'] = 'Özet';
-		map['stats.finance_health_breakdown'] = 'Detaylı Analiz';
-		map['icon_selector.name'] = 'İsim:';
-		map['icon_selector.icon'] = 'İkon';
-		map['icon_selector.color'] = 'Renk';
-		map['icon_selector.select_icon'] = 'Bir ikon seçin';
-		map['icon_selector.select_color'] = 'Bir renk seçin';
-		map['icon_selector.custom_color'] = 'Özel renk';
-		map['icon_selector.current_color_selection'] = 'Mevcut seçim';
-		map['icon_selector.select_account_icon'] = 'Hesabınızı tanımlayın';
-		map['icon_selector.select_category_icon'] = 'Kategorinizi tanımlayın';
-		map['icon_selector.scopes.transport'] = 'Ulaşım';
-		map['icon_selector.scopes.money'] = 'Para';
-		map['icon_selector.scopes.food'] = 'Gıda';
-		map['icon_selector.scopes.medical'] = 'Sağlık';
-		map['icon_selector.scopes.entertainment'] = 'Eğlence';
-		map['icon_selector.scopes.technology'] = 'Teknoloji';
-		map['icon_selector.scopes.other'] = 'Diğerleri';
-		map['icon_selector.scopes.logos_financial_institutions'] = 'Finans kuruluşları';
-		map['transaction.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
-				one: 'İşlem',
-				other: 'İşlemler',
-			);
-		map['transaction.create'] = 'Yeni işlem';
-		map['transaction.new_income'] = 'Yeni gelir';
-		map['transaction.new_expense'] = 'Yeni gider';
-		map['transaction.new_success'] = 'İşlem başarıyla oluşturuldu';
-		map['transaction.edit'] = 'İşlemi düzenle';
-		map['transaction.edit_success'] = 'İşlem başarıyla düzenlendi';
-		map['transaction.edit_multiple'] = 'İşlemleri düzenle';
-		map['transaction.edit_multiple_success'] = ({required Object x}) => '${x} işlem başarıyla düzenlendi';
-		map['transaction.duplicate'] = 'İşlemi kopyala';
-		map['transaction.duplicate_short'] = 'Kopyala';
-		map['transaction.duplicate_warning_message'] = 'Aynısı olan bir işlem bu tarih ile oluşturulacaktır, devam etmek istiyor musunuz?';
-		map['transaction.duplicate_success'] = 'İşlem başarıyla kopyalandı';
-		map['transaction.delete'] = 'İşlemi sil';
-		map['transaction.delete_warning_message'] = 'Bu eylem geri alınamaz. Hesaplarınızın mevcut bakiyesi ve tüm istatistikleriniz yeniden hesaplanacaktır';
-		map['transaction.delete_success'] = 'İşlem başarıyla silindi';
-		map['transaction.delete_multiple'] = 'İşlemleri sil';
-		map['transaction.delete_multiple_warning_message'] = ({required Object x}) => 'Bu eylem geri alınamaz ve ${x} işlem silinecektir. Hesaplarınızın mevcut bakiyesi ve tüm istatistikleriniz yeniden hesaplanacaktır';
-		map['transaction.delete_multiple_success'] = ({required Object x}) => '${x} işlem başarıyla silindi';
-		map['transaction.details'] = 'Hareket detayları';
-		map['transaction.next_payments.accept'] = 'Kabul et';
-		map['transaction.next_payments.skip'] = 'Atla';
-		map['transaction.next_payments.skip_success'] = 'İşlem başarıyla atlandı';
-		map['transaction.next_payments.skip_dialog_title'] = 'İşlemi atla';
-		map['transaction.next_payments.skip_dialog_msg'] = ({required Object date}) => 'Bu eylem geri alınamaz. Bir sonraki hareketin tarihini ${date} olarak değiştireceğiz';
-		map['transaction.next_payments.accept_today'] = 'Bugün kabul et';
-		map['transaction.next_payments.accept_in_required_date'] = ({required Object date}) => 'Gerekli tarihte kabul et (${date})';
-		map['transaction.next_payments.accept_dialog_title'] = 'İşlemi kabul et';
-		map['transaction.next_payments.accept_dialog_msg_single'] = 'İşlemin yeni durumu boş olacaktır. İstediğiniz zaman bu işlemin durumunu yeniden düzenleyebilirsiniz';
-		map['transaction.next_payments.accept_dialog_msg'] = ({required Object date}) => 'Bu eylem ${date} tarihli yeni bir işlem oluşturacaktır. İşlem sayfasında bu işlemin detaylarını kontrol edebileceksiniz';
-		map['transaction.next_payments.recurrent_rule_finished'] = 'Tekrarlama kuralı tamamlandı, yapılacak başka ödeme yok!';
-		map['transaction.list.all'] = 'Tüm İşlemler';
-		map['transaction.list.empty'] = 'Burada görüntülenecek işlem bulunamadı. Uygulamaya birkaç işlem ekleyin, belki bir dahaki sefere daha şanslı olursunuz.';
-		map['transaction.list.searcher_placeholder'] = 'Kategoriye, açıklamaya göre ara...';
-		map['transaction.list.searcher_no_results'] = 'Arama kriterlerine uyan işlem bulunamadı';
-		map['transaction.list.loading'] = 'Daha fazla işlem yükleniyor...';
-		map['transaction.list.selected_short'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
-				one: '${n} seçildi',
-				other: '${n} seçildi',
-			);
-		map['transaction.list.selected_long'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
-				one: '${n} işlem seçildi',
-				other: '${n} işlem seçildi',
-			);
-		map['transaction.list.bulk_edit.dates'] = 'Tarihleri düzenle';
-		map['transaction.list.bulk_edit.categories'] = 'Kategorileri düzenle';
-		map['transaction.list.bulk_edit.status'] = 'Durumları düzenle';
-		map['transaction.filters.title'] = 'İşlem filtreleri';
-		map['transaction.filters.from_value'] = 'Miktardan';
-		map['transaction.filters.to_value'] = 'Miktara kadar';
-		map['transaction.filters.from_value_def'] = ({required Object x}) => '${x} dan';
-		map['transaction.filters.to_value_def'] = ({required Object x}) => '${x} a kadar';
-		map['transaction.filters.from_date_def'] = ({required Object date}) => '${date} tarihinden';
-		map['transaction.filters.to_date_def'] = ({required Object date}) => '${date} tarihine kadar';
-		map['transaction.filters.reset'] = 'Filtreleri sıfırla';
-		map['transaction.filters.saved.title'] = 'Kaydedilen filtreler';
-		map['transaction.filters.saved.new_title'] = 'Yeni Filtre';
-		map['transaction.filters.saved.edit_title'] = 'Filtreyi Düzenle';
-		map['transaction.filters.saved.name_label'] = 'Filtre Adı';
-		map['transaction.filters.saved.name_hint'] = 'Özel filtrem';
-		map['transaction.filters.saved.save_dialog_title'] = 'Filtreyi Kaydet';
-		map['transaction.filters.saved.save_tooltip'] = 'Mevcut filtreyi kaydet';
-		map['transaction.filters.saved.load_tooltip'] = 'Kaydedilen filtreyi yükle';
-		map['transaction.filters.saved.empty_title'] = 'Kaydedilen filtre bulunamadı';
-		map['transaction.filters.saved.empty_description'] = 'Filtreleri daha sonra hızlıca erişmek için buraya kaydedin.';
-		map['transaction.filters.saved.save_success'] = 'Filtre başarıyla kaydedildi';
-		map['transaction.filters.saved.delete_success'] = 'Filtre başarıyla silindi';
-		map['transaction.form.validators.zero'] = 'Bir işlemin değeri sıfıra eşit olamaz';
-		map['transaction.form.validators.date_max'] = 'Seçilen tarih, güncel tarihten sonra. İşlem askıda olarak eklenecektir';
-		map['transaction.form.validators.date_after_account_creation'] = 'Bir işlemin tarihi, ait olduğu hesabın oluşturulma tarihinden önce olamaz';
-		map['transaction.form.validators.negative_transfer'] = 'Bir transferin parasal değeri negatif olamaz';
-		map['transaction.form.validators.transfer_between_same_accounts'] = 'Kaynak ve hedef hesap aynı olamaz';
-		map['transaction.form.title'] = 'İşlem başlığı';
-		map['transaction.form.title_short'] = 'Başlık';
-		map['transaction.form.value'] = 'İşlem değeri';
-		map['transaction.form.tap_to_see_more'] = 'Daha fazla detay görmek için dokunun';
-		map['transaction.form.no_tags'] = '-- Etiket yok --';
-		map['transaction.form.description'] = 'Açıklama';
-		map['transaction.form.description_info'] = 'Bu işlem hakkında daha detaylı bir açıklama girmek için buraya dokunun';
-		map['transaction.form.exchange_to_preferred_title'] = ({required Object currency}) => '${currency} için kur';
-		map['transaction.form.exchange_to_preferred_in_date'] = 'İşlem tarihinde';
-		map['transaction.reversed.title'] = 'Ters işlem';
-		map['transaction.reversed.title_short'] = 'Ters. iş.';
-		map['transaction.reversed.description_for_expenses'] = 'Bir gider işlemi olmasına rağmen, pozitif bir tutara sahiptir. Bu tür işlemler, bir geri ödeme veya bir borcun ödenmesi gibi daha önce kaydedilmiş bir giderin iadesini temsil etmek için kullanılabilir.';
-		map['transaction.reversed.description_for_incomes'] = 'Bir gelir işlemi olmasına rağmen, negatif bir tutara sahiptir. Bu tür işlemler, hatalı kaydedilmiş bir geliri geçersiz kılmak veya düzeltmek, para iadesini veya geri ödemesini yansıtmak veya borç ödemesini kaydetmek için kullanılabilir.';
-		map['transaction.status.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
-				one: 'Durum',
-				other: 'Durumlar',
-			);
-		map['transaction.status.display_long'] = 'İşlem durumu';
-		map['transaction.status.tr_status'] = ({required Object status}) => '${status} işlemi';
-		map['transaction.status.none'] = 'Durumsuz';
-		map['transaction.status.none_descr'] = 'Belirli bir durumu olmayan işlem';
-		map['transaction.status.reconciled'] = 'Mutabık';
-		map['transaction.status.reconciled_descr'] = 'Bu işlem zaten onaylandı ve bankanızdaki gerçek bir işleme karşılık geliyor';
-		map['transaction.status.unreconciled'] = 'Mutabık değil';
-		map['transaction.status.unreconciled_descr'] = 'Bu işlem henüz doğrulanmadı ve bu nedenle henüz gerçek banka hesaplarınızda görünmüyor. Ancak, Monekin\'deki bakiyelerin ve istatistiklerin hesaplanması için sayılır';
-		map['transaction.status.pending'] = 'Beklemede';
-		map['transaction.status.pending_descr'] = 'Bu işlem bekliyor ve bu nedenle bakiyeler ve istatistikler hesaplanırken dikkate alınmayacaktır';
-		map['transaction.status.voided'] = 'İptal Edildi';
-		map['transaction.status.voided_descr'] = 'Ödeme hatası veya başka herhangi bir nedenden dolayı geçersiz kılınan/iptal edilen işlem. Bakiyeler ve istatistikler hesaplanırken dikkate alınmayacaktır';
-		map['transaction.types.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
-				one: 'İşlem türü',
-				other: 'İşlem türleri',
-			);
-		map['transaction.types.income'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
-				one: 'Gelir',
-				other: 'Gelirler',
-			);
-		map['transaction.types.expense'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
-				one: 'Gider',
-				other: 'Giderler',
-			);
-		map['transaction.types.transfer'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
-				one: 'Transfer',
-				other: 'Transferler',
-			);
-		map['transfer.display'] = 'Transfer';
-		map['transfer.transfers'] = 'Transferler';
-		map['transfer.transfer_to'] = ({required Object account}) => '${account} hesabına transfer';
-		map['transfer.create'] = 'Yeni Transfer';
-		map['transfer.need_two_accounts_warning_header'] = 'Ups!';
-		map['transfer.need_two_accounts_warning_message'] = 'Bu eylemi gerçekleştirmek için en az iki hesaba ihtiyaç vardır. Bu hesabın mevcut bakiyesini ayarlamanız veya düzenlemeniz gerekiyorsa, düzenle düğmesine tıklayın';
-		map['transfer.form.from'] = 'Kaynak hesap';
-		map['transfer.form.to'] = 'Hedef hesap';
-		map['transfer.form.value_in_destiny.title'] = 'Hedefte aktarılan miktar';
-		map['transfer.form.value_in_destiny.amount_short'] = ({required Object amount}) => 'Hedef hesaba ${amount}';
-		map['recurrent_transactions.title'] = 'Tekrarlayan işlemler';
-		map['recurrent_transactions.title_short'] = 'Tekr. işl.';
-		map['recurrent_transactions.empty'] = 'Görünüşe göre tekrarlayan herhangi bir işleminiz yok. Aylık, yıllık veya haftalık tekrarlayan bir işlem oluşturun, burada görünecektir';
-		map['recurrent_transactions.total_expense_title'] = 'Dönem başına toplam gider';
-		map['recurrent_transactions.total_expense_descr'] = '* Her tekrarın başlangıç ​​ve bitiş tarihi dikkate alınmadan';
-		map['recurrent_transactions.details.title'] = 'Tekrarlayan işlem';
-		map['recurrent_transactions.details.descr'] = 'Bu işlem için sonraki hareketler aşağıda gösterilmektedir. İlk hareketi kabul edebilir veya bu hareketi atlayabilirsiniz';
-		map['recurrent_transactions.details.last_payment_info'] = 'Bu hareket, tekrar kuralının sonuncusudur, bu nedenle bu eylemi onaylarken bu kural otomatik olarak silinecektir';
-		map['recurrent_transactions.details.delete_header'] = 'Tekrarlayan işlemi sil';
-		map['recurrent_transactions.details.delete_message'] = 'Bu eylem geri alınamaz ve zaten onayladığınız/ödediğiniz işlemleri etkilemez';
-		map['recurrent_transactions.status.delayed_by'] = ({required Object x}) => '${x}g gecikti';
-		map['recurrent_transactions.status.coming_in'] = ({required Object x}) => '${x} gün içinde';
-		map['account.details'] = 'Hesap detayları';
-		map['account.date'] = 'Açılış tarihi';
-		map['account.close_date'] = 'Kapanış tarihi';
-		map['account.reopen'] = 'Hesabı yeniden aç';
-		map['account.reopen_short'] = 'Yeniden aç';
-		map['account.reopen_descr'] = 'Bu hesabı yeniden açmak istediğinizden emin misiniz?';
-		map['account.balance'] = 'Hesap bakiyesi';
-		map['account.n_transactions'] = 'İşlem sayısı';
-		map['account.add_money'] = 'Para ekle';
-		map['account.withdraw_money'] = 'Para çek';
-		map['account.no_accounts'] = 'Burada görüntülenecek işlem bulunamadı. Alttaki \'+\' düğmesine tıklayarak bir işlem ekleyin';
-		map['account.types.title'] = 'Hesap türü';
-		map['account.types.warning'] = 'Hesap türü seçildikten sonra gelecekte değiştirilemez';
-		map['account.types.normal'] = 'Normal hesap';
-		map['account.types.normal_descr'] = 'Günlük mali durumunuzu kaydetmek için kullanışlıdır. En yaygın hesaptır, giderler, gelirler eklemenize olanak tanır...';
-		map['account.types.saving'] = 'Tasarruf hesabı';
-		map['account.types.saving_descr'] = 'Yalnızca diğer hesaplardan para ekleyebilecek ve çekebileceksiniz. Para biriktirmeye başlamak için mükemmel';
-		map['account.form.name'] = 'Hesap adı';
-		map['account.form.name_placeholder'] = 'Örn: Tasarruf hesabı';
-		map['account.form.notes'] = 'Notlar';
-		map['account.form.notes_placeholder'] = 'Bu hesap hakkında bazı notlar/açıklama yazın';
-		map['account.form.initial_balance'] = 'Başlangıç ​​bakiyesi';
-		map['account.form.current_balance'] = 'Mevcut bakiye';
-		map['account.form.create'] = 'Hesap oluştur';
-		map['account.form.edit'] = 'Hesabı düzenle';
-		map['account.form.currency_not_found_warn'] = 'Bu para birimi için döviz kurları hakkında bilginiz yok. Varsayılan döviz kuru olarak 1.0 kullanılacaktır. Bunu ayarlardan değiştirebilirsiniz';
-		map['account.form.already_exists'] = 'Aynı ada sahip başka bir hesap zaten var, lütfen başka bir tane yazın';
-		map['account.form.tr_before_opening_date'] = 'Bu hesapta açılış tarihinden önce bir tarihe sahip işlemler var';
-		map['account.form.iban'] = 'IBAN';
-		map['account.form.swift'] = 'SWIFT';
-		map['account.delete.warning_header'] = 'Hesap silinsin mi?';
-		map['account.delete.warning_text'] = 'Bu eylem bu hesabı ve tüm işlemlerini silecektir';
-		map['account.delete.success'] = 'Hesap başarıyla silindi';
-		map['account.close.title'] = 'Hesabı kapat';
-		map['account.close.title_short'] = 'Kapat';
-		map['account.close.warn'] = 'Bu hesap artık belirli listelerde görünmeyecek ve aşağıda belirtilen tarihten sonra bu hesapta işlem oluşturamayacaksınız. Bu eylem herhangi bir işlemi veya bakiyeyi etkilemez ve ayrıca bu hesabı istediğiniz zaman yeniden açabilirsiniz.';
-		map['account.close.should_have_zero_balance'] = 'Kapatmak için bu hesabın mevcut bakiyesi 0 olmalıdır. Lütfen devam etmeden önce hesabı düzenleyin';
-		map['account.close.should_have_no_transactions'] = 'Bu hesap, belirtilen kapanış tarihinden sonra işlemlere sahip. Devam etmeden önce bunları silin veya hesabın kapanış tarihini düzenleyin';
-		map['account.close.success'] = 'Hesap başarıyla kapatıldı';
-		map['account.close.unarchive_succes'] = 'Hesap başarıyla yeniden açıldı';
-		map['account.select.one'] = 'Bir hesap seçin';
-		map['account.select.all'] = 'Tüm hesaplar';
-		map['account.select.multiple'] = 'Hesapları seçin';
-		map['currencies.currency_converter'] = 'Para birimi dönüştürücü';
-		map['currencies.currency'] = 'Para birimi';
-		map['currencies.currency_settings'] = 'Para birimi ayarları';
-		map['currencies.currency_manager'] = 'Para birimi yöneticisi';
-		map['currencies.currency_manager_descr'] = 'Para biriminizi ve diğerleriyle döviz kurlarını yapılandırın';
-		map['currencies.preferred_currency'] = 'Tercih edilen/temel para birimi';
-		map['currencies.tap_to_change_preferred_currency'] = 'Değiştirmek için dokunun';
-		map['currencies.change_preferred_currency_title'] = 'Tercih edilen para birimini değiştir';
-		map['currencies.change_preferred_currency_msg'] = 'Tüm istatistikler ve bütçeler bundan sonra bu para biriminde görüntülenecektir. Hesaplar ve işlemler sahip oldukları para birimini koruyacaktır. Bu eylemi gerçekleştirirseniz, kaydedilen tüm döviz kurları silinecektir. Devam etmek istiyor musunuz?';
-		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = 'Para birimi, kullanıcı para birimine eşit olamaz';
-		map['currencies.exchange_rate_form.override_existing_warn'] = 'Bu tarihte bu para birimi için bir döviz kuru zaten mevcut. Devam ederseniz öncekinin üzerine yazılacak';
-		map['currencies.exchange_rate_form.specify_a_currency'] = 'Lütfen bir para birimi belirtin';
-		map['currencies.exchange_rate_form.add'] = 'Döviz kuru ekle';
-		map['currencies.exchange_rate_form.add_success'] = 'Döviz kuru başarıyla eklendi';
-		map['currencies.exchange_rate_form.edit'] = 'Döviz kurunu düzenle';
-		map['currencies.exchange_rate_form.edit_success'] = 'Döviz kuru başarıyla düzenlendi';
-		map['currencies.exchange_rate_form.remove_all'] = 'Tüm döviz kurlarını sil';
-		map['currencies.exchange_rate_form.remove_all_warning'] = 'Bu işlem geri alınamaz ve bu para biriminin tüm döviz kurlarını silecektir';
-		map['currencies.types.display'] = 'Para birimi türü';
-		map['currencies.types.fiat'] = 'FIAT';
-		map['currencies.types.crypto'] = 'Kripto para birimi';
-		map['currencies.types.other'] = 'Diğer';
-		map['currencies.currency_form.name'] = 'Ekran adı';
-		map['currencies.currency_form.code'] = 'Para Birimi Kodu';
-		map['currencies.currency_form.symbol'] = 'Sembol';
-		map['currencies.currency_form.decimal_digits'] = 'Ondalık Basamaklar';
-		map['currencies.currency_form.create'] = 'Para birimi oluştur';
-		map['currencies.currency_form.create_success'] = 'Para birimi başarıyla oluşturuldu';
-		map['currencies.currency_form.edit'] = 'Para birimini düzenle';
-		map['currencies.currency_form.edit_success'] = 'Para birimi başarıyla düzenlendi';
-		map['currencies.currency_form.delete'] = 'Para birimini sil';
-		map['currencies.currency_form.delete_success'] = 'Para birimi başarıyla silindi';
-		map['currencies.currency_form.already_exists'] = 'Bu koda sahip bir para birimi zaten mevcut. Düzenlemek isteyebilirsiniz';
-		map['currencies.delete_all_success'] = 'Döviz kurları başarıyla silindi';
-		map['currencies.historical'] = 'Geçmiş oranlar';
-		map['currencies.historical_empty'] = 'Bu para birimi için geçmiş döviz kuru bulunamadı';
-		map['currencies.exchange_rate'] = 'Döviz kuru';
-		map['currencies.exchange_rates'] = 'Döviz kurları';
-		map['currencies.min_exchange_rate'] = 'Asgari döviz kuru';
-		map['currencies.max_exchange_rate'] = 'Maksimum döviz kuru';
-		map['currencies.empty'] = 'Buraya döviz kurları ekleyin, böylece temel para biriminizden farklı para birimlerinde hesaplarınız varsa grafiklerimiz daha doğru olur';
-		map['currencies.select_a_currency'] = 'Bir para birimi seçin';
-		map['currencies.search'] = 'Adına veya para birimi koduna göre arayın';
-		map['tags.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
-				one: 'Etiket',
-				other: 'Etiketler',
-			);
-		map['tags.form.name'] = 'Etiket adı';
-		map['tags.form.description'] = 'Açıklama';
-		map['tags.select.title'] = 'Etiketleri seçin';
-		map['tags.select.all'] = 'Tüm etiketler';
-		map['tags.empty_list'] = 'Henüz etiket oluşturmadınız. Etiketler ve kategoriler, hareketlerinizi kategorize etmek için harika bir yoldur';
-		map['tags.without_tags'] = 'Etiketsiz';
-		map['tags.add'] = 'Etiket ekle';
-		map['tags.create'] = 'Etiket oluştur';
-		map['tags.create_success'] = 'Etiket başarıyla oluşturuldu';
-		map['tags.already_exists'] = 'Bu etiket adı zaten var. Düzenlemek isteyebilirsiniz';
-		map['tags.edit'] = 'Etiketi düzenle';
-		map['tags.edit_success'] = 'Etiket başarıyla düzenlendi';
-		map['tags.delete_success'] = 'Kategori başarıyla silindi';
-		map['tags.delete_warning_header'] = 'Etiket silinsin mi?';
-		map['tags.delete_warning_message'] = 'Bu eylem bu etikete sahip işlemleri silmez.';
-		map['categories.unknown'] = 'Bilinmeyen kategori';
-		map['categories.create'] = 'Kategori oluştur';
-		map['categories.create_success'] = 'Kategori başarıyla oluşturuldu';
-		map['categories.new_category'] = 'Yeni kategori';
-		map['categories.already_exists'] = 'Bu kategorinin adı zaten var. Belki düzenlemek istersiniz';
-		map['categories.edit'] = 'Kategoriyi düzenle';
-		map['categories.edit_success'] = 'Kategori başarıyla düzenlendi';
-		map['categories.name'] = 'Kategori adı';
-		map['categories.type'] = 'Kategori türü';
-		map['categories.both_types'] = 'Her iki tür';
-		map['categories.subcategories'] = 'Alt kategoriler';
-		map['categories.subcategories_add'] = 'Alt kategori ekle';
-		map['categories.make_parent'] = 'Kategoriye yap';
-		map['categories.make_child'] = 'Alt kategori yap';
-		map['categories.make_child_warning1'] = ({required Object destiny}) => 'Bu kategori ve alt kategorileri <b>${destiny}</b>\'nin alt kategorileri olacaktır.';
-		map['categories.make_child_warning2'] = ({required Object x, required Object destiny}) => 'İşlemleri <b>(${x})</b>, <b>${destiny}</b> kategorisi içinde oluşturulan yeni alt kategorilere taşınacaktır.';
-		map['categories.make_child_success'] = 'Alt kategoriler başarıyla oluşturuldu';
-		map['categories.merge'] = 'Başka bir kategoriyle birleştir';
-		map['categories.merge_warning1'] = ({required Object from, required Object x, required Object destiny}) => '<b>${from}</b> kategorisiyle ilişkili tüm işlemler (${x}), <b>${destiny}</b> kategorisine taşınacaktır.';
-		map['categories.merge_warning2'] = ({required Object from}) => '<b>${from}</b> kategorisi geri dönüşü olmayacak şekilde silinecektir.';
-		map['categories.merge_success'] = 'Kategori başarıyla birleştirildi';
-		map['categories.delete_success'] = 'Kategori başarıyla silindi';
-		map['categories.delete_warning_header'] = 'Kategori silinsin mi?';
-		map['categories.delete_warning_message'] = ({required Object x}) => 'Bu eylem, bu kategoriyle ilgili tüm işlemleri <b>(${x})</b> geri dönüşü olmayacak şekilde silecektir.';
-		map['categories.select.title'] = 'Kategori seçin';
-		map['categories.select.select_one'] = 'Bir kategori seçin';
-		map['categories.select.select_subcategory'] = 'Bir alt kategori seçin';
-		map['categories.select.without_subcategory'] = 'Alt kategori olmadan';
-		map['categories.select.all'] = 'Tüm kategoriler';
-		map['categories.select.all_short'] = 'Tümü';
-		map['budgets.title'] = 'Bütçeler';
-		map['budgets.status'] = 'Bütçe durumu';
-		map['budgets.repeated'] = 'Tekrarlayan';
-		map['budgets.one_time'] = 'Tek seferlik';
-		map['budgets.actives'] = 'Aktifler';
-		map['budgets.from_budgeted'] = 'kalan ';
-		map['budgets.days_left'] = 'gün kaldı';
-		map['budgets.days_to_start'] = 'başlangıca kalan gün';
-		map['budgets.since_expiration'] = 'son kullanma tarihinden itibaren';
-		map['budgets.no_budgets'] = 'Bu bölümde görüntülenecek bütçe yok gibi görünüyor. Aşağıdaki düğmeyi tıklayarak bir bütçe oluşturmaya başlayın';
-		map['budgets.delete'] = 'Bütçeyi sil';
-		map['budgets.delete_warning'] = 'Bu eylem geri alınamaz. Bu bütçeye atıfta bulunan kategoriler ve işlemler silinmez';
-		map['budgets.form.title'] = 'Bütçe ekle';
-		map['budgets.form.name'] = 'Bütçe adı';
-		map['budgets.form.value'] = 'Limit miktarı';
-		map['budgets.form.create'] = 'Bütçe ekle';
-		map['budgets.form.create_success'] = 'Bütçe başarıyla oluşturuldu';
-		map['budgets.form.edit'] = 'Bütçeyi düzenle';
-		map['budgets.form.edit_success'] = 'Bütçe başarıyla düzenlendi';
-		map['budgets.form.negative_warn'] = 'Bütçeler negatif miktara sahip olamaz';
-		map['budgets.details.title'] = 'Bütçe Detayları';
-		map['budgets.details.statistics'] = 'İstatistikler';
-		map['budgets.details.budget_value'] = 'Bütçelenen';
-		map['budgets.details.expend_evolution'] = 'Harcama gelişimi';
-		map['budgets.details.no_transactions'] = 'Bu bütçeyle ilgili herhangi bir harcama yapmamışsınız gibi görünüyor';
-		map['budgets.target_timeline_statuses.active'] = 'Aktif bütçe';
-		map['budgets.target_timeline_statuses.past'] = 'Tamamlanan bütçe';
-		map['budgets.target_timeline_statuses.future'] = 'Gelecek bütçe';
-		map['budgets.progress.labels.active_on_track'] = 'Yolunda';
-		map['budgets.progress.labels.active_overspending'] = 'Aşırı harcama';
-		map['budgets.progress.labels.active_indeterminate'] = 'Aktif';
-		map['budgets.progress.labels.success'] = 'Başarılı';
-		map['budgets.progress.labels.fail'] = 'Bütçe aşıldı';
-		map['budgets.progress.description.active_on_track'] = ({required Object remainingDays, required Object dailyAmount}) => 'Kalan ${remainingDays} gün için günde ${dailyAmount} harcayabilirsiniz';
-		map['budgets.progress.description.active_overspending'] = ({required Object remainingDays, required Object dailyAmount}) => 'Tekrar rayına oturmak için, kalan ${remainingDays} gün boyunca harcamalarınızı günde ${dailyAmount} ile sınırlamalısınız';
-		map['budgets.progress.description.active_indeterminate'] = ({required Object amount}) => 'Harcayabileceğiniz ${amount} kaldı.';
-		map['budgets.progress.description.active_exceeded'] = ({required Object amount}) => 'Bütçe limitinizi ${amount} aştınız. Bu bütçe için herhangi bir gelir bulamazsanız, dönemin geri kalanında harcama yapmayı bırakmalısınız';
-		map['budgets.progress.description.success'] = 'Harika iş! Bu bütçe başarıyla tamamlandı. Harcamalarınızı yönetmek için bütçe oluşturmaya devam edin';
-		map['budgets.progress.description.fail'] = ({required Object amount}) => 'Bütçeyi ${amount} aştınız. Bir dahaki sefere daha dikkatli olmaya çalışın!';
-		map['goals.title'] = 'Hedefler';
-		map['goals.status'] = 'Hedef durumu';
-		map['goals.type.display'] = 'Hedef Türü';
-		map['goals.type.income.title'] = 'Tasarruf Hedefi';
-		map['goals.type.income.descr'] = 'Para biriktirmek için ideal. Bakiye hedefinizi aştığında başarılı olursunuz.';
-		map['goals.type.expense.title'] = 'Harcama Hedefi';
-		map['goals.type.expense.descr'] = 'Ne kadar harcadığınızı takip edin ve bir hedef tutara ulaşmayı amaçlayın. Bağışlar için ...';
-		map['goals.empty_title'] = 'Hedef bulunamadı';
-		map['goals.empty_description'] = 'Tasarruflarınızı takip etmek için yeni bir hedef oluşturun!';
-		map['goals.delete'] = 'Hedefi sil';
-		map['goals.delete_warning'] = 'Bu işlem geri alınamaz. Bu hedefi referans alan kategoriler ve işlemler silinmeyecektir';
-		map['goals.form.new_title'] = 'Yeni Hedef';
-		map['goals.form.edit_title'] = 'Hedefi Düzenle';
-		map['goals.form.target_amount'] = 'Hedef Tutar';
-		map['goals.form.initial_amount'] = 'Başlangıç Tutarı';
-		map['goals.form.name'] = 'İsim';
-		map['goals.form.name_hint'] = 'Tasarruf Hedefim';
-		map['goals.form.create_success'] = 'Hedef başarıyla oluşturuldu';
-		map['goals.form.edit_success'] = 'Hedef başarıyla düzenlendi';
-		map['goals.form.negative_warn'] = 'Hedef tutar negatif olamaz';
-		map['goals.details.title'] = 'Hedef Detayları';
-		map['goals.details.statistics'] = 'İstatistikler';
-		map['goals.details.goal_value'] = 'Hedef Değeri';
-		map['goals.details.evolution'] = 'Gelişim';
-		map['goals.details.no_transactions'] = 'Bu hedefle ilgili herhangi bir işlem yapmamışsınız gibi görünüyor';
-		map['goals.target_timeline_statuses.active'] = 'Aktif hedef';
-		map['goals.target_timeline_statuses.past'] = 'Tamamlanmış hedef';
-		map['goals.target_timeline_statuses.future'] = 'Gelecek hedef';
-		map['goals.progress.labels.active_on_track'] = 'Yolda';
-		map['goals.progress.labels.active_behind_schedule'] = 'Programın gerisinde';
-		map['goals.progress.labels.active_indeterminate'] = 'Aktif';
-		map['goals.progress.labels.success'] = 'Hedefe ulaşıldı';
-		map['goals.progress.labels.fail'] = 'Hedef başarısız oldu';
-		map['goals.progress.description.active_on_track'] = ({required Object remainingDays, required Object dailyAmount}) => 'Hedefinizi arama yolundasınız! Kalan ${remainingDays} gün boyunca günde ${dailyAmount} tasarruf etmelisiniz';
-		map['goals.progress.description.active_behind_schedule'] = ({required Object remainingDays, required Object dailyAmount}) => 'Programın gerisindesiniz. Hedefinize ${remainingDays} gün içinde ulaşmak için günde ${dailyAmount} tasarruf etmeniz gerekiyor';
-		map['goals.progress.description.active_indeterminate'] = ({required Object amount}) => 'Hedefinize ulaşmak için ${amount} daha fazlasına ihtiyacınız var.';
-		map['goals.progress.description.success'] = 'Tebrikler! Hedefine ulaştın.';
-		map['goals.progress.description.fail'] = ({required Object amount}) => 'Hedefinizi ${amount} kadar kaçırdınız.';
-		map['target_timeline_statuses.active'] = 'Aktif';
-		map['target_timeline_statuses.past'] = 'Tamamlandı';
-		map['target_timeline_statuses.future'] = 'Gelecek';
-		map['backup.no_file_selected'] = 'Hiçbir dosya seçilmedi';
-		map['backup.no_directory_selected'] = 'Hiçbir dizin seçilmedi';
-		map['backup.export.title'] = 'Verilerinizi dışa aktarın';
-		map['backup.export.title_short'] = 'Dışa Aktar';
-		map['backup.export.type_of_export'] = 'İhracat türü';
-		map['backup.export.other_options'] = 'Seçenekler';
-		map['backup.export.all'] = 'Tam yedekleme';
-		map['backup.export.all_descr'] = 'Tüm verilerinizi (hesaplar, işlemler, bütçeler, ayarlar...) dışa aktarın. Herhangi bir şeyi kaybetmemek için bunları istediğiniz zaman tekrar içe aktarın.';
-		map['backup.export.transactions'] = 'İşlemlerin yedeği';
-		map['backup.export.transactions_descr'] = 'İşlemlerinizi CSV olarak dışa aktarın, böylece diğer programlarda veya uygulamalarda daha kolay analiz edebilirsiniz.';
-		map['backup.export.transactions_to_export'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
-				one: 'Dışa aktarılacak 1 işlem',
-				other: 'Dışa aktarılacak ${n} işlem',
-			);
-		map['backup.export.description'] = 'Verilerinizi farklı formatlarda indirin';
-		map['backup.export.send_file'] = 'Dosyayı gönder';
-		map['backup.export.see_folder'] = 'Klasöre bakın';
-		map['backup.export.success'] = ({required Object x}) => 'Dosya ${x} olarak başarıyla kaydedildi/indirildi';
-		map['backup.export.error'] = 'Dosya indirilirken hata oluştu. Lütfen lozin.technologies@gmail.com adresinden geliştirici ile iletişime geçin';
-		map['backup.export.dialog_title'] = 'Dosyayı Kaydet/Gönder';
-		map['backup.import.title'] = 'Verilerinizi içe aktarın';
-		map['backup.import.title_short'] = 'İçe Aktar';
-		map['backup.import.restore_backup'] = 'Yedeklemeyi Geri Yükle';
-		map['backup.import.restore_backup_descr'] = 'Monekin\'den daha önce kaydedilmiş bir veritabanını içe aktarın. Bu eylem, mevcut uygulama verilerinin herhangi birini yeni verilerle değiştirecektir';
-		map['backup.import.restore_backup_warn_description'] = 'Yeni bir veritabanı içe aktarırken, uygulamada şu anda kayıtlı olan tüm verileri kaybedeceksiniz. Devam etmeden önce bir yedekleme yapmanız önerilir. Buraya, kaynağını bilmediğiniz herhangi bir dosyayı yüklemeyin, yalnızca daha önce Monekin\'den indirdiğiniz dosyaları yükleyin';
-		map['backup.import.restore_backup_warn_title'] = 'Tüm verilerin üzerine yaz';
-		map['backup.import.select_other_file'] = 'Başka dosya seç';
-		map['backup.import.tap_to_select_file'] = 'Bir dosya seçmek için dokunun';
-		map['backup.import.manual_import.title'] = 'Manuel içe aktarma';
-		map['backup.import.manual_import.descr'] = 'İşlemleri manuel olarak .csv dosyasından içe aktarın';
-		map['backup.import.manual_import.default_account'] = 'Varsayılan hesap';
-		map['backup.import.manual_import.remove_default_account'] = 'Varsayılan hesabı kaldır';
-		map['backup.import.manual_import.default_category'] = 'Varsayılan Kategori';
-		map['backup.import.manual_import.select_a_column'] = '.csv\'den bir sütun seçin';
-		map['backup.import.manual_import.steps.0'] = 'Dosyanızı seçin';
-		map['backup.import.manual_import.steps.1'] = 'Miktar için sütun';
-		map['backup.import.manual_import.steps.2'] = 'Hesap için sütun';
-		map['backup.import.manual_import.steps.3'] = 'Kategori için sütun';
-		map['backup.import.manual_import.steps.4'] = 'Tarih için sütun';
-		map['backup.import.manual_import.steps.5'] = 'diğer sütunlar';
-		map['backup.import.manual_import.steps_descr.0'] = 'Cihazınızdan bir .csv dosyası seçin. Her sütunun adını açıklayan bir ilk satıra sahip olduğundan emin olun';
-		map['backup.import.manual_import.steps_descr.1'] = 'Her işlemin değerinin belirtildiği sütunu seçin. Giderler için negatif değerler ve gelirler için pozitif değerler kullanın.';
-		map['backup.import.manual_import.steps_descr.2'] = 'Her işlemin ait olduğu hesabın belirtildiği sütunu seçin. İstediğiniz hesabı bulamamamız durumunda varsayılan bir hesap da seçebilirsiniz. Varsayılan bir hesap belirtilmezse, aynı adla bir tane oluşturacağız';
-		map['backup.import.manual_import.steps_descr.3'] = 'İşlem kategorisi adının bulunduğu sütunu belirtin. Kategoriyi bulamamamız durumunda işlemlere bu kategoriyi atayabilmemiz için varsayılan bir kategori belirtmeniz gerekir';
-		map['backup.import.manual_import.steps_descr.4'] = 'Her işlemin tarihinin belirtildiği sütunu seçin. Belirtilmezse, işlemler mevcut tarihle oluşturulacaktır';
-		map['backup.import.manual_import.steps_descr.5'] = 'Diğer isteğe bağlı işlem öznitelikleri için sütunları belirtir';
-		map['backup.import.manual_import.success'] = ({required Object x}) => '${x} işlem başarıyla içe aktarıldı';
-		map['backup.import.success'] = 'İçe aktarma başarıyla gerçekleştirildi';
-		map['backup.import.error'] = 'Dosya içe aktarılırken hata oluştu. Lütfen lozin.technologies@gmail.com adresinden geliştirici ile iletişime geçin';
-		map['backup.import.cancelled'] = 'İçe aktarma kullanıcı tarafından iptal edildi';
-		map['backup.about.title'] = 'Veritabanınız hakkında bilgiler';
-		map['backup.about.create_date'] = 'Oluşturulma tarihi';
-		map['backup.about.modify_date'] = 'Son değiştirilme';
-		map['backup.about.last_backup'] = 'Son yedekleme';
-		map['backup.about.size'] = 'Boyut';
-		map['settings.title_long'] = 'Ayarlar ve Özelleştirme';
-		map['settings.title_short'] = 'Ayarlar';
-		map['settings.description'] = 'Tema, Dil, Veriler ve daha fazlası';
-		map['settings.edit_profile'] = 'Profili düzenle';
-		map['settings.general.menu_title'] = 'Genel Ayarlar';
-		map['settings.general.menu_descr'] = 'Dil, gizlilik ve daha fazlası';
-		map['settings.general.show_all_decimals'] = 'Tüm ondalık basamakları göster';
-		map['settings.general.show_all_decimals_descr'] = 'Sondaki sıfırlar olsa bile tüm ondalık basamakları göster';
-		map['settings.general.language.section'] = 'Dil ve metinler';
-		map['settings.general.language.title'] = 'Uygulama dili';
-		map['settings.general.language.descr'] = 'Metinlerin uygulamada görüntüleneceği dil';
-		map['settings.general.language.help'] = 'Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>kılavuzumuza</a> başvurabilirsiniz';
-		map['settings.general.locale.title'] = 'Bölge';
-		map['settings.general.locale.auto'] = 'Sistem';
-		map['settings.general.locale.descr'] = 'Tarihler, sayılar için kullanılacak biçimi ayarlayın...';
-		map['settings.general.locale.warn'] = 'Bölge değiştirildiğinde uygulama güncellenecektir';
-		map['settings.general.locale.first_day_of_week'] = 'Haftanın ilk günü';
-		map['settings.security.title'] = 'Güvenlik';
-		map['settings.security.private_mode_at_launch'] = 'Başlangıçta özel mod';
-		map['settings.security.private_mode_at_launch_descr'] = 'Uygulamayı varsayılan olarak özel modda başlatın';
-		map['settings.security.private_mode'] = 'Özel mod';
-		map['settings.security.private_mode_descr'] = 'Tüm parasal değerleri gizle';
-		map['settings.security.private_mode_activated'] = 'Özel mod etkinleştirildi';
-		map['settings.security.private_mode_deactivated'] = 'Özel mod devre dışı bırakıldı';
-		map['settings.transactions.menu_title'] = 'İşlemler';
-		map['settings.transactions.menu_descr'] = 'İşlemlerinizin davranışını yapılandırın';
-		map['settings.transactions.title'] = 'İşlem Ayarları';
-		map['settings.transactions.style.title'] = 'İşlem stili';
-		map['settings.transactions.style.subtitle'] = 'İşlemlerin listelerde nasıl görüneceğini yapılandırın';
-		map['settings.transactions.style.show_tags'] = 'Etiketleri Göster';
-		map['settings.transactions.style.show_time'] = 'Saati Göster';
-		map['settings.transactions.swipe_actions.title'] = 'Kaydırma eylemleri';
-		map['settings.transactions.swipe_actions.choose_description'] = 'Bu kaydırma yönünü kullanarak listedeki bir işlem öğesini kaydırdığınızda hangi eylemin tetikleneceğini seçin';
-		map['settings.transactions.swipe_actions.swipe_left'] = 'Sola kaydırın';
-		map['settings.transactions.swipe_actions.swipe_right'] = 'Sağa kaydırın';
-		map['settings.transactions.swipe_actions.none'] = 'Eylem yok';
-		map['settings.transactions.swipe_actions.toggle_reconciled'] = 'Mutabık kılınmayı aç/kapat';
-		map['settings.transactions.swipe_actions.toggle_pending'] = 'Beklemede\'yi aç/kapat';
-		map['settings.transactions.swipe_actions.toggle_voided'] = 'Geçiş iptal edildi';
-		map['settings.transactions.swipe_actions.toggle_unreconciled'] = 'Mutabık kılınmayanları aç/kapat';
-		map['settings.transactions.swipe_actions.remove_status'] = 'Durumu kaldır';
-		map['settings.transactions.default_values.title'] = 'Default Form Values';
-		map['settings.transactions.default_values.page_title'] = 'New Transaction: Default Form Values';
-		map['settings.transactions.default_values.reuse_last_transaction'] = 'Reuse Last Transaction Values';
-		map['settings.transactions.default_values.reuse_last_transaction_descr'] = 'Automatically fill the form with some values from the last created transaction';
-		map['settings.transactions.default_values.fields_to_reuse'] = 'Fields to reuse';
-		map['settings.transactions.default_values.reuse_last_values_modal_descr'] = 'Select the fields that should be pre-filled with the values from the last created transaction.';
-		map['settings.transactions.default_values.default_values_separator'] = 'Default Values';
-		map['settings.transactions.default_values.default_category'] = 'Default Category';
-		map['settings.transactions.default_values.default_status'] = 'Default Status';
-		map['settings.transactions.default_values.default_tags'] = 'Default Tags';
-		map['settings.transactions.default_values.no_tags_selected'] = 'No tags selected';
-		map['settings.transactions.default_type.title'] = 'Default Type';
-		map['settings.transactions.default_type.modal_title'] = 'Select Default Type';
-		map['settings.appearance.menu_title'] = 'Tema ve Stil';
-		map['settings.appearance.menu_descr'] = 'Tema seçimi, renkler ve uygulama görünümüyle ilgili diğer şeyler';
-		map['settings.appearance.theme_and_colors'] = 'Tema ve renkler';
-		map['settings.appearance.theme.title'] = 'Tema';
-		map['settings.appearance.theme.auto'] = 'Sistem';
-		map['settings.appearance.theme.light'] = 'Açık';
-		map['settings.appearance.theme.dark'] = 'Koyu';
-		map['settings.appearance.amoled_mode'] = 'AMOLED modu';
-		map['settings.appearance.amoled_mode_descr'] = 'Mümkün olduğunda saf siyah bir duvar kağıdı kullanın. Bu, AMOLED ekranlara sahip cihazların pili için biraz yardımcı olacaktır';
-		map['settings.appearance.dynamic_colors'] = 'Dinamik renkler';
-		map['settings.appearance.dynamic_colors_descr'] = 'Mümkün olduğunda sistem vurgu renginizi kullanın';
-		map['settings.appearance.accent_color'] = 'Vurgu rengi';
-		map['settings.appearance.accent_color_descr'] = 'Uygulamanın arayüzün belirli kısımlarını vurgulamak için kullanacağı rengi seçin';
-		map['settings.appearance.text'] = 'Metin';
-		map['settings.appearance.font'] = 'Yazı tipi';
-		map['settings.appearance.font_platform'] = 'platformu';
-		map['more.title'] = 'Daha Fazla';
-		map['more.title_long'] = 'Daha fazla eylem';
-		map['more.data.display'] = 'Veri';
-		map['more.data.display_descr'] = 'Hiçbir şeyi kaybetmemek için verilerinizi dışa ve içe aktarın';
-		map['more.data.delete_all'] = 'Verilerimi sil';
-		map['more.data.delete_all_header1'] = 'Orada dur padawan ⚠️⚠️';
-		map['more.data.delete_all_message1'] = 'Devam etmek istediğinizden emin misiniz? Tüm verileriniz kalıcı olarak silinecek ve kurtarılamayacaktır';
-		map['more.data.delete_all_header2'] = 'Son bir adım ⚠️⚠️';
-		map['more.data.delete_all_message2'] = 'Bir hesabı sildiğinizde, kayıtlı tüm kişisel verilerinizi silmiş olursunuz. Hesaplarınız, işlemleriniz, bütçeleriniz ve kategorileriniz silinecek ve kurtarılamayacaktır. Kabul ediyor musunuz?';
-		map['more.about_us.display'] = 'Uygulama bilgileri';
-		map['more.about_us.description'] = 'Monekin\'in şartlarını, önemli bilgilerini bulun ve hata bildirerek veya fikir paylaşımları ile iletişime geçin';
-		map['more.about_us.legal.display'] = 'Yasal bilgiler';
-		map['more.about_us.legal.privacy'] = 'Gizlilik politikası';
-		map['more.about_us.legal.terms'] = 'Kullanım koşulları';
-		map['more.about_us.legal.licenses'] = 'Lisanslar';
-		map['more.about_us.project.display'] = 'Proje';
-		map['more.about_us.project.contributors'] = 'Katkıda bulunanlar';
-		map['more.about_us.project.contributors_descr'] = 'Monekin\'in büyümesini sağlayan tüm geliştiriciler';
-		map['more.about_us.project.contact'] = 'Bize ulaşın';
-		map['more.help_us.display'] = 'Bize yardım edin';
-		map['more.help_us.description'] = 'Monekin\'in nasıl daha iyi olabileceğini öğrenin';
-		map['more.help_us.rate_us'] = 'Bize oy verin';
-		map['more.help_us.rate_us_descr'] = 'Herhangi bir puan memnuniyetle karşılanır!';
-		map['more.help_us.share'] = 'Monekin\'i paylaşın';
-		map['more.help_us.share_descr'] = 'Uygulamamızı arkadaşlarınıza ve ailenize paylaşın';
-		map['more.help_us.share_text'] = 'Monekin! En iyi kişisel finans uygulaması. Buradan indirin';
-		map['more.help_us.thanks'] = 'Teşekkürler!';
-		map['more.help_us.thanks_long'] = 'Monekin\'e ve diğer açık kaynaklı projelere yaptığınız katkılar, büyük ve küçük, bunun gibi harika projeleri mümkün kılıyor. Katkıda bulunmak için zaman ayırdığınız için teşekkür ederiz.';
-		map['more.help_us.donate'] = 'Bağış yap';
-		map['more.help_us.donate_descr'] = 'Bağışınızla uygulamanın iyileştirmeler almaya devam etmesine yardımcı olacaksınız. Yapılan çalışmaya kahve ısmarlayarak teşekkür etmekten daha iyi bir yol mu var?';
-		map['more.help_us.donate_success'] = 'Bağış yapıldı. Katkılarınız için çok teşekkür ederim! ❤️';
-		map['more.help_us.donate_err'] = 'Ups! Ödemenizi alırken bir hata oluştu gibi görünüyor';
-		map['more.help_us.report'] = 'Hataları bildirin, önerilerde bulunun...';
-
-		_map = map;
-		return map;
+		return switch (path) {
+			'ui_actions.cancel' => 'İptal',
+			'ui_actions.confirm' => 'Onayla',
+			'ui_actions.continue_text' => 'Devam Et',
+			'ui_actions.save' => 'Kaydet',
+			'ui_actions.save_changes' => 'Değişiklikleri Kaydet',
+			'ui_actions.close_and_save' => 'Kaydet ve Kapat',
+			'ui_actions.add' => 'Ekle',
+			'ui_actions.edit' => 'Düzenle',
+			'ui_actions.delete' => 'Sil',
+			'ui_actions.see_more' => 'Daha Fazla Gör',
+			'ui_actions.select_all' => 'Tümünü Seç',
+			'ui_actions.deselect_all' => 'Tüm Seçimi Kaldır',
+			'ui_actions.select' => 'Seç',
+			'ui_actions.search' => 'Ara',
+			'ui_actions.filter' => 'Filtrele',
+			'ui_actions.reset' => 'Sıfırla',
+			'ui_actions.submit' => 'Gönder',
+			'ui_actions.next' => 'Sonraki',
+			'ui_actions.previous' => 'Önceki',
+			'ui_actions.back' => 'Geri',
+			'ui_actions.reload' => 'Yenile',
+			'ui_actions.view' => 'Görüntüle',
+			'ui_actions.download' => 'İndir',
+			'ui_actions.upload' => 'Yükle',
+			'ui_actions.retry' => 'Tekrar Dene',
+			'ui_actions.copy' => 'Kopyala',
+			'ui_actions.paste' => 'Yapıştır',
+			'ui_actions.undo' => 'Geri Al',
+			'ui_actions.redo' => 'İleri Al',
+			'ui_actions.open' => 'Aç',
+			'ui_actions.close' => 'Kapat',
+			'ui_actions.apply' => 'Uygula',
+			'ui_actions.discard' => 'Vazgeç',
+			'ui_actions.refresh' => 'Yenile',
+			'ui_actions.share' => 'Paylaş',
+			'general.or' => 'veya',
+			'general.understood' => 'Anlaşıldı',
+			'general.unspecified' => 'Belirtilmemiş',
+			'general.quick_actions' => 'Hızlı İşlemler',
+			'general.details' => 'Detaylar',
+			'general.balance' => 'Bakiye',
+			'general.account' => 'Hesap',
+			'general.accounts' => 'Hesaplar',
+			'general.categories' => 'Kategoriler',
+			'general.category' => 'Kategori',
+			'general.today' => 'Bugün',
+			'general.yesterday' => 'Dün',
+			'general.filters' => 'Filtreler',
+			'general.empty_warn' => 'Ups! Burası çok boş',
+			'general.search_no_results' => 'Arama kriterlerinizle eşleşen öğe yok',
+			'general.insufficient_data' => 'Yetersiz veri',
+			'general.show_more_fields' => 'Daha fazla alan göster',
+			'general.show_less_fields' => 'Daha az alan göster',
+			'general.tap_to_search' => 'Aramak için dokunun',
+			'general.delete_success' => 'Öğe başarıyla silindi',
+			'general.leave_without_saving.title' => 'Kaydetmeden ayrılmak mı istiyorsunuz?',
+			'general.leave_without_saving.message' => 'Kaydedilmemiş değişiklikleriniz var, bunları kaydetmeden ayrılmak istediğinizden emin misiniz?',
+			'general.clipboard.success' => ({required Object x}) => '${x} panoya kopyalandı',
+			'general.clipboard.error' => 'Kopyalama hatası',
+			'general.time.start_date' => 'Başlangıç tarihi',
+			'general.time.end_date' => 'Bitiş tarihi',
+			'general.time.from_date' => 'Başlangıç tarihi',
+			'general.time.until_date' => 'Bitiş tarihi',
+			'general.time.date' => 'Tarih',
+			'general.time.datetime' => 'Tarih ve saat',
+			'general.time.time' => 'Saat',
+			'general.time.each' => 'Her',
+			'general.time.after' => 'Sonra',
+			'general.time.ranges.display' => 'Zaman aralığı',
+			'general.time.ranges.it_repeat' => 'Tekrarlar',
+			'general.time.ranges.it_ends' => 'Biter',
+			'general.time.ranges.forever' => 'Sonsuza kadar',
+			'general.time.ranges.types.cycle' => 'Döngüler',
+			'general.time.ranges.types.last_days' => 'Son günler',
+			'general.time.ranges.types.last_days_form' => ({required Object x}) => 'Önceki ${x} gün',
+			'general.time.ranges.types.all' => 'Her Zaman',
+			'general.time.ranges.types.date_range' => 'Özel aralık',
+			'general.time.ranges.each_range' => ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: 'Her ${range}', other: 'Her ${n} ${range}', ), 
+			'general.time.ranges.each_range_until_date' => ({required num n, required Object day, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: '${day} tarihine kadar her ${range}', other: '${day} tarihine kadar her ${n} ${range}', ), 
+			'general.time.ranges.each_range_until_times' => ({required num n, required Object range, required Object limit}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: 'Her ${range} ${limit} kez', other: 'Her ${n} ${range} ${limit} kez', ), 
+			'general.time.ranges.each_range_until_once' => ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: 'Her ${range} bir kez', other: 'Her ${n} ${range} bir kez', ), 
+			'general.time.ranges.month' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: 'Ay', other: 'Aylar', ), 
+			'general.time.ranges.year' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: 'Yıl', other: 'Yıllar', ), 
+			'general.time.ranges.day' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: 'Gün', other: 'Günler', ), 
+			'general.time.ranges.week' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: 'Hafta', other: 'Haftalar', ), 
+			'general.time.periodicity.display' => 'Tekrarlama',
+			'general.time.periodicity.no_repeat' => 'Tekrarlama yok',
+			'general.time.periodicity.repeat' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: 'Tekrar', other: 'Tekrarlar', ), 
+			'general.time.periodicity.diary' => 'Günlük',
+			'general.time.periodicity.monthly' => 'Aylık',
+			'general.time.periodicity.annually' => 'Yıllık',
+			'general.time.periodicity.quaterly' => 'Üç Aylık',
+			'general.time.periodicity.weekly' => 'Haftalık',
+			'general.time.periodicity.custom' => 'Özel',
+			'general.time.periodicity.infinite' => 'Her Zaman',
+			'general.time.current.monthly' => 'Bu ay',
+			'general.time.current.annually' => 'Bu yıl',
+			'general.time.current.quaterly' => 'Bu çeyrek',
+			'general.time.current.weekly' => 'Bu hafta',
+			'general.time.current.infinite' => 'Sonsuza dek',
+			'general.time.current.custom' => 'Özel Aralık',
+			'general.time.all.diary' => 'Her gün',
+			'general.time.all.monthly' => 'Her ay',
+			'general.time.all.annually' => 'Her yıl',
+			'general.time.all.quaterly' => 'Her çeyrek',
+			'general.time.all.weekly' => 'Her hafta',
+			'general.transaction_order.display' => 'İşlemleri sırala',
+			'general.transaction_order.category' => 'Kategoriye göre',
+			'general.transaction_order.quantity' => 'Miktara göre',
+			'general.transaction_order.date' => 'Tarihe göre',
+			'general.validations.form_error' => 'Devam etmek için belirtilen alanları düzeltin',
+			'general.validations.required' => 'Gerekli alan',
+			'general.validations.positive' => 'Pozitif olmalı',
+			'general.validations.min_number' => ({required Object x}) => '${x} değerinden büyük olmalı',
+			'general.validations.max_number' => ({required Object x}) => '${x} değerinden küçük olmalı',
+			'intro.start' => 'Başla',
+			'intro.skip' => 'Atla',
+			'intro.next' => 'İleri',
+			'intro.select_your_currency' => 'Para birimini seçin',
+			'intro.welcome_subtitle' => 'Kişisel finans yöneticiniz',
+			'intro.welcome_subtitle2' => '%100 açık, %100 ücretsiz',
+			'intro.welcome_footer' => 'Giriş yaparak, uygulamanın <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Gizlilik Politikası</a> ve <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Kullanım Şartları</a>\'nı kabul etmiş olursunuz',
+			'intro.offline_descr_title' => 'ÇEVRİMDIŞI HESAP:',
+			'intro.offline_descr' => 'Verileriniz yalnızca cihazınızda saklanacak ve uygulamayı kaldırmadığınız veya telefon değiştirmediniz sürece güvende olacaktır. Veri kaybını önlemek için, uygulama ayarlarından düzenli olarak yedekleme yapılması önerilir.',
+			'intro.offline_start' => 'Çevrimdışı oturum başlat',
+			'intro.sl1_title' => 'Para birimini seçin',
+			'intro.sl1_descr' => 'Varsayılan para biriminiz raporlarda ve genel grafiklerde kullanılacaktır. Uygulama ayarlarından daha sonra istediğiniz zaman para birimini ve uygulama dilini değiştirebileceksiniz',
+			'intro.sl2_title' => 'Güvenli, gizli ve güvenilir',
+			'intro.sl2_descr' => 'Verileriniz yalnızca size aittir. Bilgileri harici sunuculara gitmeden doğrudan cihazınızda saklarız. Bu, uygulamayı internet olmadan bile kullanmayı mümkün kılar',
+			'intro.sl2_descr2' => 'Ayrıca, uygulamanın kaynak kodu herkese açıktır, herkes üzerinde işbirliği yapabilir ve nasıl çalıştığını görebilir',
+			'intro.last_slide_title' => 'Her şey hazır',
+			'intro.last_slide_descr' => 'Monekin ile sonunda çok istediğiniz finansal bağımsızlığa ulaşabilirsiniz. Paranız hakkında grafiklere, bütçelere, ipuçlarına, istatistiklere ve çok daha fazlasına sahip olacaksınız.',
+			'intro.last_slide_descr2' => 'Umarız deneyiminizden keyif alırsınız! Şüpheleriniz, önerileriniz durumunda bizimle iletişime geçmekten çekinmeyin...',
+			'home.title' => 'Gösterge Paneli',
+			'home.filter_transactions' => 'İşlemleri filtrele',
+			'home.hello_day' => 'Günaydın,',
+			'home.hello_night' => 'İyi geceler,',
+			'home.total_balance' => 'Toplam bakiye',
+			'home.my_accounts' => 'Hesaplarım',
+			'home.active_accounts' => 'Aktif hesaplar',
+			'home.no_accounts' => 'Henüz hesap oluşturulmadı',
+			'home.no_accounts_descr' => 'Monekin\'in tüm sihrini kullanmaya başlayın. İşlem eklemeye başlamak için en az bir hesap oluşturun',
+			'home.last_transactions' => 'Son işlemler',
+			'home.should_create_account_header' => 'Ups!',
+			'home.should_create_account_message' => 'İşlem oluşturmaya başlamadan önce en az bir arşivlenmemiş hesabınız olmalıdır',
+			'financial_health.display' => 'Finansal sağlık',
+			'financial_health.review.very_good' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Çok iyi!'; case GenderContext.female: return 'Çok iyi!'; } }, 
+			'financial_health.review.good' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'İyi'; case GenderContext.female: return 'İyi'; } }, 
+			'financial_health.review.normal' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Ortalama'; case GenderContext.female: return 'Ortalama'; } }, 
+			'financial_health.review.bad' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Fena'; case GenderContext.female: return 'Fena'; } }, 
+			'financial_health.review.very_bad' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Çok Kötü'; case GenderContext.female: return 'Çok Kötü'; } }, 
+			'financial_health.review.insufficient_data' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Yetersiz veri'; case GenderContext.female: return 'Yetersiz veri'; } }, 
+			'financial_health.review.descr.insufficient_data' => 'Finansal sağlığınızı hesaplamak için yeterli giderimiz yok gibi görünüyor. Size yardımcı olmamıza izin vermek için bu dönemde bazı giderler/gelirler ekleyin!',
+			'financial_health.review.descr.very_good' => 'Tebrikler! Finansal sağlığınız muazzam. İyi gidişatınızı sürdürmenizi ve Monekin ile öğrenmeye devam etmenizi umuyoruz',
+			'financial_health.review.descr.good' => 'Harika! Finansal sağlığınız iyi. Daha da fazla nasıl tasarruf edebileceğinizi görmek için analiz sekmesini ziyaret edin!',
+			'financial_health.review.descr.normal' => 'Finansal sağlığınız bu dönem için nüfusun geri kalanının ortalamasına az çok eşit',
+			'financial_health.review.descr.bad' => 'Görünüşe göre mali durumunuz henüz en iyi seviyede değil. Finanslarınız hakkında daha fazla bilgi edinmek için grafiklerin geri kalanını inceleyin',
+			'financial_health.review.descr.very_bad' => 'Hmm, finansal sağlığınız olması gerekenden çok düşük. Finanslarınız hakkında daha fazla bilgi edinmek için grafiklerin geri kalanını inceleyin',
+			'financial_health.months_without_income.title' => 'Hayatta kalma oranı',
+			'financial_health.months_without_income.subtitle' => 'Bakiyeniz göz önüne alındığında, gelirsiz kalabileceğiniz süre',
+			'financial_health.months_without_income.text_zero' => 'Bu gider oranında gelirsiz bir ay bile dayanamazsınız!',
+			'financial_health.months_without_income.text_one' => 'Bu gider oranında yaklaşık bir ay gelirsiz yaşayabilirsiniz!',
+			'financial_health.months_without_income.text_other' => ({required Object n}) => 'Bu harcama oranında yaklaşık <b>${n} ay</b> gelir olmadan yaşayabilirsiniz.',
+			'financial_health.months_without_income.text_infinite' => 'Bu harcama oranında yaklaşık <b>tüm hayatınız boyunca</b> gelir olmadan yaşayabilirsiniz.',
+			'financial_health.months_without_income.suggestion' => 'Bu oranın her zaman en az 5 ayın üzerinde tutulması gerektiğini unutmayın. Yeterli birikiminiz olmadığını görürseniz, gereksiz harcamaları azaltın.',
+			'financial_health.months_without_income.insufficient_data' => 'Gelirsiz kaç ay hayatta kalabileceğinizi hesaplamak için yeterli giderimiz yok gibi görünüyor. Birkaç işlem girin ve finansal sağlığınızı kontrol etmek için buraya geri gelin',
+			'financial_health.savings_percentage.title' => 'Tasarruf yüzdesi',
+			'financial_health.savings_percentage.subtitle' => 'Gelirinizin ne kadarı bu dönemde harcanmıyor',
+			'financial_health.savings_percentage.text.good' => ({required Object value}) => 'Tebrikler! Bu dönemde gelirinizin <b>${value}%</b>\'sini tasarruf etmeyi başardınız. Görünüşe göre zaten bir uzmansınız, iyi iş çıkarmaya devam edin!',
+			'financial_health.savings_percentage.text.normal' => ({required Object value}) => 'Tebrikler, bu dönemde gelirinizin <b>${value}%</b>\'sini tasarruf etmeyi başardınız.',
+			'financial_health.savings_percentage.text.bad' => ({required Object value}) => 'Bu dönemde gelirinizin <b>${value}%</b>\'sini tasarruf etmeyi başardınız. Ancak, hala çok daha fazlasını yapabileceğinizi düşünüyoruz!',
+			'financial_health.savings_percentage.text.very_bad' => 'Vay canına, bu dönemde hiçbir şey biriktirmeyi başaramadınız.',
+			'financial_health.savings_percentage.suggestion' => 'Kazandığınızın en az %15-20\'sini biriktirmenin tavsiye edildiğini unutmayın.',
+			'stats.title' => 'İstatistikler',
+			'stats.balance' => 'Bakiye',
+			'stats.final_balance' => 'Son bakiye',
+			'stats.balance_by_account' => 'Hesaplara göre bakiye',
+			'stats.balance_by_account_subtitle' => 'Paramın çoğunu nerede tutuyorum?',
+			'stats.balance_by_currency' => 'Para birimine göre bakiye',
+			'stats.balance_by_currency_subtitle' => 'Yabancı para biriminde ne kadar param var?',
+			'stats.balance_evolution' => 'Bakiye trendi',
+			'stats.balance_evolution_subtitle' => 'Eskisinden daha çok param var mı?',
+			'stats.compared_to_previous_period' => 'Önceki döneme göre',
+			'stats.cash_flow' => 'Nakit akışı',
+			'stats.cash_flow_subtitle' => 'Kazandığımdan daha az mı harcıyorum?',
+			'stats.by_periods' => 'Dönemlere göre',
+			'stats.by_categories' => 'Kategorilere göre',
+			'stats.by_tags' => 'Etiketlere göre',
+			'stats.distribution' => 'Dağıtım',
+			'stats.finance_health_resume' => 'Özet',
+			'stats.finance_health_breakdown' => 'Detaylı Analiz',
+			'icon_selector.name' => 'İsim:',
+			'icon_selector.icon' => 'İkon',
+			'icon_selector.color' => 'Renk',
+			'icon_selector.select_icon' => 'Bir ikon seçin',
+			'icon_selector.select_color' => 'Bir renk seçin',
+			'icon_selector.custom_color' => 'Özel renk',
+			'icon_selector.current_color_selection' => 'Mevcut seçim',
+			'icon_selector.select_account_icon' => 'Hesabınızı tanımlayın',
+			'icon_selector.select_category_icon' => 'Kategorinizi tanımlayın',
+			'icon_selector.scopes.transport' => 'Ulaşım',
+			'icon_selector.scopes.money' => 'Para',
+			'icon_selector.scopes.food' => 'Gıda',
+			'icon_selector.scopes.medical' => 'Sağlık',
+			'icon_selector.scopes.entertainment' => 'Eğlence',
+			'icon_selector.scopes.technology' => 'Teknoloji',
+			'icon_selector.scopes.other' => 'Diğerleri',
+			'icon_selector.scopes.logos_financial_institutions' => 'Finans kuruluşları',
+			'transaction.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: 'İşlem', other: 'İşlemler', ), 
+			'transaction.create' => 'Yeni işlem',
+			'transaction.new_income' => 'Yeni gelir',
+			'transaction.new_expense' => 'Yeni gider',
+			'transaction.new_success' => 'İşlem başarıyla oluşturuldu',
+			'transaction.edit' => 'İşlemi düzenle',
+			'transaction.edit_success' => 'İşlem başarıyla düzenlendi',
+			'transaction.edit_multiple' => 'İşlemleri düzenle',
+			'transaction.edit_multiple_success' => ({required Object x}) => '${x} işlem başarıyla düzenlendi',
+			'transaction.duplicate' => 'İşlemi kopyala',
+			'transaction.duplicate_short' => 'Kopyala',
+			'transaction.duplicate_warning_message' => 'Aynısı olan bir işlem bu tarih ile oluşturulacaktır, devam etmek istiyor musunuz?',
+			'transaction.duplicate_success' => 'İşlem başarıyla kopyalandı',
+			'transaction.delete' => 'İşlemi sil',
+			'transaction.delete_warning_message' => 'Bu eylem geri alınamaz. Hesaplarınızın mevcut bakiyesi ve tüm istatistikleriniz yeniden hesaplanacaktır',
+			'transaction.delete_success' => 'İşlem başarıyla silindi',
+			'transaction.delete_multiple' => 'İşlemleri sil',
+			'transaction.delete_multiple_warning_message' => ({required Object x}) => 'Bu eylem geri alınamaz ve ${x} işlem silinecektir. Hesaplarınızın mevcut bakiyesi ve tüm istatistikleriniz yeniden hesaplanacaktır',
+			'transaction.delete_multiple_success' => ({required Object x}) => '${x} işlem başarıyla silindi',
+			'transaction.details' => 'Hareket detayları',
+			'transaction.next_payments.accept' => 'Kabul et',
+			'transaction.next_payments.skip' => 'Atla',
+			'transaction.next_payments.skip_success' => 'İşlem başarıyla atlandı',
+			'transaction.next_payments.skip_dialog_title' => 'İşlemi atla',
+			'transaction.next_payments.skip_dialog_msg' => ({required Object date}) => 'Bu eylem geri alınamaz. Bir sonraki hareketin tarihini ${date} olarak değiştireceğiz',
+			'transaction.next_payments.accept_today' => 'Bugün kabul et',
+			'transaction.next_payments.accept_in_required_date' => ({required Object date}) => 'Gerekli tarihte kabul et (${date})',
+			'transaction.next_payments.accept_dialog_title' => 'İşlemi kabul et',
+			'transaction.next_payments.accept_dialog_msg_single' => 'İşlemin yeni durumu boş olacaktır. İstediğiniz zaman bu işlemin durumunu yeniden düzenleyebilirsiniz',
+			'transaction.next_payments.accept_dialog_msg' => ({required Object date}) => 'Bu eylem ${date} tarihli yeni bir işlem oluşturacaktır. İşlem sayfasında bu işlemin detaylarını kontrol edebileceksiniz',
+			'transaction.next_payments.recurrent_rule_finished' => 'Tekrarlama kuralı tamamlandı, yapılacak başka ödeme yok!',
+			'transaction.list.all' => 'Tüm İşlemler',
+			'transaction.list.empty' => 'Burada görüntülenecek işlem bulunamadı. Uygulamaya birkaç işlem ekleyin, belki bir dahaki sefere daha şanslı olursunuz.',
+			'transaction.list.searcher_placeholder' => 'Kategoriye, açıklamaya göre ara...',
+			'transaction.list.searcher_no_results' => 'Arama kriterlerine uyan işlem bulunamadı',
+			'transaction.list.loading' => 'Daha fazla işlem yükleniyor...',
+			'transaction.list.selected_short' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: '${n} seçildi', other: '${n} seçildi', ), 
+			'transaction.list.selected_long' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: '${n} işlem seçildi', other: '${n} işlem seçildi', ), 
+			'transaction.list.bulk_edit.dates' => 'Tarihleri düzenle',
+			'transaction.list.bulk_edit.categories' => 'Kategorileri düzenle',
+			'transaction.list.bulk_edit.status' => 'Durumları düzenle',
+			'transaction.filters.title' => 'İşlem filtreleri',
+			'transaction.filters.from_value' => 'Miktardan',
+			'transaction.filters.to_value' => 'Miktara kadar',
+			'transaction.filters.from_value_def' => ({required Object x}) => '${x} dan',
+			'transaction.filters.to_value_def' => ({required Object x}) => '${x} a kadar',
+			'transaction.filters.from_date_def' => ({required Object date}) => '${date} tarihinden',
+			'transaction.filters.to_date_def' => ({required Object date}) => '${date} tarihine kadar',
+			'transaction.filters.reset' => 'Filtreleri sıfırla',
+			'transaction.filters.saved.title' => 'Kaydedilen filtreler',
+			'transaction.filters.saved.new_title' => 'Yeni Filtre',
+			'transaction.filters.saved.edit_title' => 'Filtreyi Düzenle',
+			'transaction.filters.saved.name_label' => 'Filtre Adı',
+			'transaction.filters.saved.name_hint' => 'Özel filtrem',
+			'transaction.filters.saved.save_dialog_title' => 'Filtreyi Kaydet',
+			'transaction.filters.saved.save_tooltip' => 'Mevcut filtreyi kaydet',
+			'transaction.filters.saved.load_tooltip' => 'Kaydedilen filtreyi yükle',
+			'transaction.filters.saved.empty_title' => 'Kaydedilen filtre bulunamadı',
+			'transaction.filters.saved.empty_description' => 'Filtreleri daha sonra hızlıca erişmek için buraya kaydedin.',
+			'transaction.filters.saved.save_success' => 'Filtre başarıyla kaydedildi',
+			'transaction.filters.saved.delete_success' => 'Filtre başarıyla silindi',
+			'transaction.form.validators.zero' => 'Bir işlemin değeri sıfıra eşit olamaz',
+			'transaction.form.validators.date_max' => 'Seçilen tarih, güncel tarihten sonra. İşlem askıda olarak eklenecektir',
+			'transaction.form.validators.date_after_account_creation' => 'Bir işlemin tarihi, ait olduğu hesabın oluşturulma tarihinden önce olamaz',
+			'transaction.form.validators.negative_transfer' => 'Bir transferin parasal değeri negatif olamaz',
+			'transaction.form.validators.transfer_between_same_accounts' => 'Kaynak ve hedef hesap aynı olamaz',
+			'transaction.form.title' => 'İşlem başlığı',
+			'transaction.form.title_short' => 'Başlık',
+			'transaction.form.value' => 'İşlem değeri',
+			'transaction.form.tap_to_see_more' => 'Daha fazla detay görmek için dokunun',
+			'transaction.form.no_tags' => '-- Etiket yok --',
+			'transaction.form.description' => 'Açıklama',
+			'transaction.form.description_info' => 'Bu işlem hakkında daha detaylı bir açıklama girmek için buraya dokunun',
+			'transaction.form.exchange_to_preferred_title' => ({required Object currency}) => '${currency} için kur',
+			'transaction.form.exchange_to_preferred_in_date' => 'İşlem tarihinde',
+			'transaction.reversed.title' => 'Ters işlem',
+			'transaction.reversed.title_short' => 'Ters. iş.',
+			'transaction.reversed.description_for_expenses' => 'Bir gider işlemi olmasına rağmen, pozitif bir tutara sahiptir. Bu tür işlemler, bir geri ödeme veya bir borcun ödenmesi gibi daha önce kaydedilmiş bir giderin iadesini temsil etmek için kullanılabilir.',
+			'transaction.reversed.description_for_incomes' => 'Bir gelir işlemi olmasına rağmen, negatif bir tutara sahiptir. Bu tür işlemler, hatalı kaydedilmiş bir geliri geçersiz kılmak veya düzeltmek, para iadesini veya geri ödemesini yansıtmak veya borç ödemesini kaydetmek için kullanılabilir.',
+			'transaction.status.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: 'Durum', other: 'Durumlar', ), 
+			'transaction.status.display_long' => 'İşlem durumu',
+			'transaction.status.tr_status' => ({required Object status}) => '${status} işlemi',
+			'transaction.status.none' => 'Durumsuz',
+			'transaction.status.none_descr' => 'Belirli bir durumu olmayan işlem',
+			'transaction.status.reconciled' => 'Mutabık',
+			'transaction.status.reconciled_descr' => 'Bu işlem zaten onaylandı ve bankanızdaki gerçek bir işleme karşılık geliyor',
+			'transaction.status.unreconciled' => 'Mutabık değil',
+			'transaction.status.unreconciled_descr' => 'Bu işlem henüz doğrulanmadı ve bu nedenle henüz gerçek banka hesaplarınızda görünmüyor. Ancak, Monekin\'deki bakiyelerin ve istatistiklerin hesaplanması için sayılır',
+			'transaction.status.pending' => 'Beklemede',
+			'transaction.status.pending_descr' => 'Bu işlem bekliyor ve bu nedenle bakiyeler ve istatistikler hesaplanırken dikkate alınmayacaktır',
+			'transaction.status.voided' => 'İptal Edildi',
+			'transaction.status.voided_descr' => 'Ödeme hatası veya başka herhangi bir nedenden dolayı geçersiz kılınan/iptal edilen işlem. Bakiyeler ve istatistikler hesaplanırken dikkate alınmayacaktır',
+			'transaction.types.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: 'İşlem türü', other: 'İşlem türleri', ), 
+			'transaction.types.income' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: 'Gelir', other: 'Gelirler', ), 
+			'transaction.types.expense' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: 'Gider', other: 'Giderler', ), 
+			'transaction.types.transfer' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: 'Transfer', other: 'Transferler', ), 
+			'transfer.display' => 'Transfer',
+			'transfer.transfers' => 'Transferler',
+			'transfer.transfer_to' => ({required Object account}) => '${account} hesabına transfer',
+			'transfer.create' => 'Yeni Transfer',
+			'transfer.need_two_accounts_warning_header' => 'Ups!',
+			'transfer.need_two_accounts_warning_message' => 'Bu eylemi gerçekleştirmek için en az iki hesaba ihtiyaç vardır. Bu hesabın mevcut bakiyesini ayarlamanız veya düzenlemeniz gerekiyorsa, düzenle düğmesine tıklayın',
+			'transfer.form.from' => 'Kaynak hesap',
+			'transfer.form.to' => 'Hedef hesap',
+			'transfer.form.value_in_destiny.title' => 'Hedefte aktarılan miktar',
+			'transfer.form.value_in_destiny.amount_short' => ({required Object amount}) => 'Hedef hesaba ${amount}',
+			'recurrent_transactions.title' => 'Tekrarlayan işlemler',
+			'recurrent_transactions.title_short' => 'Tekr. işl.',
+			'recurrent_transactions.empty' => 'Görünüşe göre tekrarlayan herhangi bir işleminiz yok. Aylık, yıllık veya haftalık tekrarlayan bir işlem oluşturun, burada görünecektir',
+			'recurrent_transactions.total_expense_title' => 'Dönem başına toplam gider',
+			'recurrent_transactions.total_expense_descr' => '* Her tekrarın başlangıç ​​ve bitiş tarihi dikkate alınmadan',
+			'recurrent_transactions.details.title' => 'Tekrarlayan işlem',
+			'recurrent_transactions.details.descr' => 'Bu işlem için sonraki hareketler aşağıda gösterilmektedir. İlk hareketi kabul edebilir veya bu hareketi atlayabilirsiniz',
+			'recurrent_transactions.details.last_payment_info' => 'Bu hareket, tekrar kuralının sonuncusudur, bu nedenle bu eylemi onaylarken bu kural otomatik olarak silinecektir',
+			'recurrent_transactions.details.delete_header' => 'Tekrarlayan işlemi sil',
+			'recurrent_transactions.details.delete_message' => 'Bu eylem geri alınamaz ve zaten onayladığınız/ödediğiniz işlemleri etkilemez',
+			'recurrent_transactions.status.delayed_by' => ({required Object x}) => '${x}g gecikti',
+			'recurrent_transactions.status.coming_in' => ({required Object x}) => '${x} gün içinde',
+			'account.details' => 'Hesap detayları',
+			'account.date' => 'Açılış tarihi',
+			'account.close_date' => 'Kapanış tarihi',
+			'account.reopen' => 'Hesabı yeniden aç',
+			'account.reopen_short' => 'Yeniden aç',
+			'account.reopen_descr' => 'Bu hesabı yeniden açmak istediğinizden emin misiniz?',
+			'account.balance' => 'Hesap bakiyesi',
+			'account.n_transactions' => 'İşlem sayısı',
+			'account.add_money' => 'Para ekle',
+			'account.withdraw_money' => 'Para çek',
+			'account.no_accounts' => 'Burada görüntülenecek işlem bulunamadı. Alttaki \'+\' düğmesine tıklayarak bir işlem ekleyin',
+			'account.types.title' => 'Hesap türü',
+			'account.types.warning' => 'Hesap türü seçildikten sonra gelecekte değiştirilemez',
+			'account.types.normal' => 'Normal hesap',
+			'account.types.normal_descr' => 'Günlük mali durumunuzu kaydetmek için kullanışlıdır. En yaygın hesaptır, giderler, gelirler eklemenize olanak tanır...',
+			'account.types.saving' => 'Tasarruf hesabı',
+			'account.types.saving_descr' => 'Yalnızca diğer hesaplardan para ekleyebilecek ve çekebileceksiniz. Para biriktirmeye başlamak için mükemmel',
+			'account.form.name' => 'Hesap adı',
+			'account.form.name_placeholder' => 'Örn: Tasarruf hesabı',
+			'account.form.notes' => 'Notlar',
+			'account.form.notes_placeholder' => 'Bu hesap hakkında bazı notlar/açıklama yazın',
+			'account.form.initial_balance' => 'Başlangıç ​​bakiyesi',
+			'account.form.current_balance' => 'Mevcut bakiye',
+			'account.form.create' => 'Hesap oluştur',
+			'account.form.edit' => 'Hesabı düzenle',
+			'account.form.currency_not_found_warn' => 'Bu para birimi için döviz kurları hakkında bilginiz yok. Varsayılan döviz kuru olarak 1.0 kullanılacaktır. Bunu ayarlardan değiştirebilirsiniz',
+			'account.form.already_exists' => 'Aynı ada sahip başka bir hesap zaten var, lütfen başka bir tane yazın',
+			'account.form.tr_before_opening_date' => 'Bu hesapta açılış tarihinden önce bir tarihe sahip işlemler var',
+			'account.form.iban' => 'IBAN',
+			'account.form.swift' => 'SWIFT',
+			'account.delete.warning_header' => 'Hesap silinsin mi?',
+			'account.delete.warning_text' => 'Bu eylem bu hesabı ve tüm işlemlerini silecektir',
+			'account.delete.success' => 'Hesap başarıyla silindi',
+			'account.close.title' => 'Hesabı kapat',
+			'account.close.title_short' => 'Kapat',
+			'account.close.warn' => 'Bu hesap artık belirli listelerde görünmeyecek ve aşağıda belirtilen tarihten sonra bu hesapta işlem oluşturamayacaksınız. Bu eylem herhangi bir işlemi veya bakiyeyi etkilemez ve ayrıca bu hesabı istediğiniz zaman yeniden açabilirsiniz.',
+			'account.close.should_have_zero_balance' => 'Kapatmak için bu hesabın mevcut bakiyesi 0 olmalıdır. Lütfen devam etmeden önce hesabı düzenleyin',
+			'account.close.should_have_no_transactions' => 'Bu hesap, belirtilen kapanış tarihinden sonra işlemlere sahip. Devam etmeden önce bunları silin veya hesabın kapanış tarihini düzenleyin',
+			'account.close.success' => 'Hesap başarıyla kapatıldı',
+			'account.close.unarchive_succes' => 'Hesap başarıyla yeniden açıldı',
+			'account.select.one' => 'Bir hesap seçin',
+			'account.select.all' => 'Tüm hesaplar',
+			'account.select.multiple' => 'Hesapları seçin',
+			'currencies.currency_converter' => 'Para birimi dönüştürücü',
+			'currencies.currency' => 'Para birimi',
+			'currencies.currency_settings' => 'Para birimi ayarları',
+			'currencies.currency_manager' => 'Para birimi yöneticisi',
+			'currencies.currency_manager_descr' => 'Para biriminizi ve diğerleriyle döviz kurlarını yapılandırın',
+			'currencies.preferred_currency' => 'Tercih edilen/temel para birimi',
+			'currencies.tap_to_change_preferred_currency' => 'Değiştirmek için dokunun',
+			'currencies.change_preferred_currency_title' => 'Tercih edilen para birimini değiştir',
+			'currencies.change_preferred_currency_msg' => 'Tüm istatistikler ve bütçeler bundan sonra bu para biriminde görüntülenecektir. Hesaplar ve işlemler sahip oldukları para birimini koruyacaktır. Bu eylemi gerçekleştirirseniz, kaydedilen tüm döviz kurları silinecektir. Devam etmek istiyor musunuz?',
+			'currencies.exchange_rate_form.equal_to_preferred_warn' => 'Para birimi, kullanıcı para birimine eşit olamaz',
+			'currencies.exchange_rate_form.override_existing_warn' => 'Bu tarihte bu para birimi için bir döviz kuru zaten mevcut. Devam ederseniz öncekinin üzerine yazılacak',
+			'currencies.exchange_rate_form.specify_a_currency' => 'Lütfen bir para birimi belirtin',
+			'currencies.exchange_rate_form.add' => 'Döviz kuru ekle',
+			'currencies.exchange_rate_form.add_success' => 'Döviz kuru başarıyla eklendi',
+			'currencies.exchange_rate_form.edit' => 'Döviz kurunu düzenle',
+			'currencies.exchange_rate_form.edit_success' => 'Döviz kuru başarıyla düzenlendi',
+			'currencies.exchange_rate_form.remove_all' => 'Tüm döviz kurlarını sil',
+			'currencies.exchange_rate_form.remove_all_warning' => 'Bu işlem geri alınamaz ve bu para biriminin tüm döviz kurlarını silecektir',
+			'currencies.types.display' => 'Para birimi türü',
+			'currencies.types.fiat' => 'FIAT',
+			'currencies.types.crypto' => 'Kripto para birimi',
+			'currencies.types.other' => 'Diğer',
+			'currencies.currency_form.name' => 'Ekran adı',
+			'currencies.currency_form.code' => 'Para Birimi Kodu',
+			'currencies.currency_form.symbol' => 'Sembol',
+			'currencies.currency_form.decimal_digits' => 'Ondalık Basamaklar',
+			'currencies.currency_form.create' => 'Para birimi oluştur',
+			'currencies.currency_form.create_success' => 'Para birimi başarıyla oluşturuldu',
+			'currencies.currency_form.edit' => 'Para birimini düzenle',
+			'currencies.currency_form.edit_success' => 'Para birimi başarıyla düzenlendi',
+			'currencies.currency_form.delete' => 'Para birimini sil',
+			'currencies.currency_form.delete_success' => 'Para birimi başarıyla silindi',
+			'currencies.currency_form.already_exists' => 'Bu koda sahip bir para birimi zaten mevcut. Düzenlemek isteyebilirsiniz',
+			'currencies.delete_all_success' => 'Döviz kurları başarıyla silindi',
+			'currencies.historical' => 'Geçmiş oranlar',
+			'currencies.historical_empty' => 'Bu para birimi için geçmiş döviz kuru bulunamadı',
+			'currencies.exchange_rate' => 'Döviz kuru',
+			'currencies.exchange_rates' => 'Döviz kurları',
+			'currencies.min_exchange_rate' => 'Asgari döviz kuru',
+			'currencies.max_exchange_rate' => 'Maksimum döviz kuru',
+			'currencies.empty' => 'Buraya döviz kurları ekleyin, böylece temel para biriminizden farklı para birimlerinde hesaplarınız varsa grafiklerimiz daha doğru olur',
+			'currencies.select_a_currency' => 'Bir para birimi seçin',
+			'currencies.search' => 'Adına veya para birimi koduna göre arayın',
+			'tags.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: 'Etiket', other: 'Etiketler', ), 
+			'tags.form.name' => 'Etiket adı',
+			'tags.form.description' => 'Açıklama',
+			'tags.select.title' => 'Etiketleri seçin',
+			'tags.select.all' => 'Tüm etiketler',
+			'tags.empty_list' => 'Henüz etiket oluşturmadınız. Etiketler ve kategoriler, hareketlerinizi kategorize etmek için harika bir yoldur',
+			'tags.without_tags' => 'Etiketsiz',
+			'tags.add' => 'Etiket ekle',
+			'tags.create' => 'Etiket oluştur',
+			'tags.create_success' => 'Etiket başarıyla oluşturuldu',
+			'tags.already_exists' => 'Bu etiket adı zaten var. Düzenlemek isteyebilirsiniz',
+			'tags.edit' => 'Etiketi düzenle',
+			'tags.edit_success' => 'Etiket başarıyla düzenlendi',
+			'tags.delete_success' => 'Kategori başarıyla silindi',
+			'tags.delete_warning_header' => 'Etiket silinsin mi?',
+			'tags.delete_warning_message' => 'Bu eylem bu etikete sahip işlemleri silmez.',
+			'categories.unknown' => 'Bilinmeyen kategori',
+			'categories.create' => 'Kategori oluştur',
+			'categories.create_success' => 'Kategori başarıyla oluşturuldu',
+			'categories.new_category' => 'Yeni kategori',
+			'categories.already_exists' => 'Bu kategorinin adı zaten var. Belki düzenlemek istersiniz',
+			'categories.edit' => 'Kategoriyi düzenle',
+			'categories.edit_success' => 'Kategori başarıyla düzenlendi',
+			'categories.name' => 'Kategori adı',
+			'categories.type' => 'Kategori türü',
+			'categories.both_types' => 'Her iki tür',
+			'categories.subcategories' => 'Alt kategoriler',
+			'categories.subcategories_add' => 'Alt kategori ekle',
+			'categories.make_parent' => 'Kategoriye yap',
+			'categories.make_child' => 'Alt kategori yap',
+			'categories.make_child_warning1' => ({required Object destiny}) => 'Bu kategori ve alt kategorileri <b>${destiny}</b>\'nin alt kategorileri olacaktır.',
+			'categories.make_child_warning2' => ({required Object x, required Object destiny}) => 'İşlemleri <b>(${x})</b>, <b>${destiny}</b> kategorisi içinde oluşturulan yeni alt kategorilere taşınacaktır.',
+			'categories.make_child_success' => 'Alt kategoriler başarıyla oluşturuldu',
+			'categories.merge' => 'Başka bir kategoriyle birleştir',
+			'categories.merge_warning1' => ({required Object from, required Object x, required Object destiny}) => '<b>${from}</b> kategorisiyle ilişkili tüm işlemler (${x}), <b>${destiny}</b> kategorisine taşınacaktır.',
+			'categories.merge_warning2' => ({required Object from}) => '<b>${from}</b> kategorisi geri dönüşü olmayacak şekilde silinecektir.',
+			'categories.merge_success' => 'Kategori başarıyla birleştirildi',
+			'categories.delete_success' => 'Kategori başarıyla silindi',
+			'categories.delete_warning_header' => 'Kategori silinsin mi?',
+			'categories.delete_warning_message' => ({required Object x}) => 'Bu eylem, bu kategoriyle ilgili tüm işlemleri <b>(${x})</b> geri dönüşü olmayacak şekilde silecektir.',
+			'categories.select.title' => 'Kategori seçin',
+			'categories.select.select_one' => 'Bir kategori seçin',
+			'categories.select.select_subcategory' => 'Bir alt kategori seçin',
+			'categories.select.without_subcategory' => 'Alt kategori olmadan',
+			'categories.select.all' => 'Tüm kategoriler',
+			'categories.select.all_short' => 'Tümü',
+			'budgets.title' => 'Bütçeler',
+			'budgets.status' => 'Bütçe durumu',
+			'budgets.repeated' => 'Tekrarlayan',
+			'budgets.one_time' => 'Tek seferlik',
+			'budgets.actives' => 'Aktifler',
+			'budgets.from_budgeted' => 'kalan ',
+			'budgets.days_left' => 'gün kaldı',
+			'budgets.days_to_start' => 'başlangıca kalan gün',
+			'budgets.since_expiration' => 'son kullanma tarihinden itibaren',
+			'budgets.no_budgets' => 'Bu bölümde görüntülenecek bütçe yok gibi görünüyor. Aşağıdaki düğmeyi tıklayarak bir bütçe oluşturmaya başlayın',
+			'budgets.delete' => 'Bütçeyi sil',
+			'budgets.delete_warning' => 'Bu eylem geri alınamaz. Bu bütçeye atıfta bulunan kategoriler ve işlemler silinmez',
+			'budgets.form.title' => 'Bütçe ekle',
+			'budgets.form.name' => 'Bütçe adı',
+			'budgets.form.value' => 'Limit miktarı',
+			'budgets.form.create' => 'Bütçe ekle',
+			'budgets.form.create_success' => 'Bütçe başarıyla oluşturuldu',
+			'budgets.form.edit' => 'Bütçeyi düzenle',
+			'budgets.form.edit_success' => 'Bütçe başarıyla düzenlendi',
+			'budgets.form.negative_warn' => 'Bütçeler negatif miktara sahip olamaz',
+			'budgets.details.title' => 'Bütçe Detayları',
+			'budgets.details.statistics' => 'İstatistikler',
+			'budgets.details.budget_value' => 'Bütçelenen',
+			'budgets.details.expend_evolution' => 'Harcama gelişimi',
+			'budgets.details.no_transactions' => 'Bu bütçeyle ilgili herhangi bir harcama yapmamışsınız gibi görünüyor',
+			'budgets.target_timeline_statuses.active' => 'Aktif bütçe',
+			'budgets.target_timeline_statuses.past' => 'Tamamlanan bütçe',
+			'budgets.target_timeline_statuses.future' => 'Gelecek bütçe',
+			'budgets.progress.labels.active_on_track' => 'Yolunda',
+			'budgets.progress.labels.active_overspending' => 'Aşırı harcama',
+			'budgets.progress.labels.active_indeterminate' => 'Aktif',
+			'budgets.progress.labels.success' => 'Başarılı',
+			'budgets.progress.labels.fail' => 'Bütçe aşıldı',
+			'budgets.progress.description.active_on_track' => ({required Object remainingDays, required Object dailyAmount}) => 'Kalan ${remainingDays} gün için günde ${dailyAmount} harcayabilirsiniz',
+			'budgets.progress.description.active_overspending' => ({required Object remainingDays, required Object dailyAmount}) => 'Tekrar rayına oturmak için, kalan ${remainingDays} gün boyunca harcamalarınızı günde ${dailyAmount} ile sınırlamalısınız',
+			'budgets.progress.description.active_indeterminate' => ({required Object amount}) => 'Harcayabileceğiniz ${amount} kaldı.',
+			'budgets.progress.description.active_exceeded' => ({required Object amount}) => 'Bütçe limitinizi ${amount} aştınız. Bu bütçe için herhangi bir gelir bulamazsanız, dönemin geri kalanında harcama yapmayı bırakmalısınız',
+			'budgets.progress.description.success' => 'Harika iş! Bu bütçe başarıyla tamamlandı. Harcamalarınızı yönetmek için bütçe oluşturmaya devam edin',
+			'budgets.progress.description.fail' => ({required Object amount}) => 'Bütçeyi ${amount} aştınız. Bir dahaki sefere daha dikkatli olmaya çalışın!',
+			'goals.title' => 'Hedefler',
+			'goals.status' => 'Hedef durumu',
+			'goals.type.display' => 'Hedef Türü',
+			'goals.type.income.title' => 'Tasarruf Hedefi',
+			'goals.type.income.descr' => 'Para biriktirmek için ideal. Bakiye hedefinizi aştığında başarılı olursunuz.',
+			'goals.type.expense.title' => 'Harcama Hedefi',
+			'goals.type.expense.descr' => 'Ne kadar harcadığınızı takip edin ve bir hedef tutara ulaşmayı amaçlayın. Bağışlar için ...',
+			'goals.empty_title' => 'Hedef bulunamadı',
+			'goals.empty_description' => 'Tasarruflarınızı takip etmek için yeni bir hedef oluşturun!',
+			'goals.delete' => 'Hedefi sil',
+			'goals.delete_warning' => 'Bu işlem geri alınamaz. Bu hedefi referans alan kategoriler ve işlemler silinmeyecektir',
+			'goals.form.new_title' => 'Yeni Hedef',
+			'goals.form.edit_title' => 'Hedefi Düzenle',
+			'goals.form.target_amount' => 'Hedef Tutar',
+			'goals.form.initial_amount' => 'Başlangıç Tutarı',
+			_ => null,
+		} ?? switch (path) {
+			'goals.form.name' => 'İsim',
+			'goals.form.name_hint' => 'Tasarruf Hedefim',
+			'goals.form.create_success' => 'Hedef başarıyla oluşturuldu',
+			'goals.form.edit_success' => 'Hedef başarıyla düzenlendi',
+			'goals.form.negative_warn' => 'Hedef tutar negatif olamaz',
+			'goals.details.title' => 'Hedef Detayları',
+			'goals.details.statistics' => 'İstatistikler',
+			'goals.details.goal_value' => 'Hedef Değeri',
+			'goals.details.evolution' => 'Gelişim',
+			'goals.details.no_transactions' => 'Bu hedefle ilgili herhangi bir işlem yapmamışsınız gibi görünüyor',
+			'goals.target_timeline_statuses.active' => 'Aktif hedef',
+			'goals.target_timeline_statuses.past' => 'Tamamlanmış hedef',
+			'goals.target_timeline_statuses.future' => 'Gelecek hedef',
+			'goals.progress.labels.active_on_track' => 'Yolda',
+			'goals.progress.labels.active_behind_schedule' => 'Programın gerisinde',
+			'goals.progress.labels.active_indeterminate' => 'Aktif',
+			'goals.progress.labels.success' => 'Hedefe ulaşıldı',
+			'goals.progress.labels.fail' => 'Hedef başarısız oldu',
+			'goals.progress.description.active_on_track' => ({required Object remainingDays, required Object dailyAmount}) => 'Hedefinizi arama yolundasınız! Kalan ${remainingDays} gün boyunca günde ${dailyAmount} tasarruf etmelisiniz',
+			'goals.progress.description.active_behind_schedule' => ({required Object remainingDays, required Object dailyAmount}) => 'Programın gerisindesiniz. Hedefinize ${remainingDays} gün içinde ulaşmak için günde ${dailyAmount} tasarruf etmeniz gerekiyor',
+			'goals.progress.description.active_indeterminate' => ({required Object amount}) => 'Hedefinize ulaşmak için ${amount} daha fazlasına ihtiyacınız var.',
+			'goals.progress.description.success' => 'Tebrikler! Hedefine ulaştın.',
+			'goals.progress.description.fail' => ({required Object amount}) => 'Hedefinizi ${amount} kadar kaçırdınız.',
+			'target_timeline_statuses.active' => 'Aktif',
+			'target_timeline_statuses.past' => 'Tamamlandı',
+			'target_timeline_statuses.future' => 'Gelecek',
+			'backup.no_file_selected' => 'Hiçbir dosya seçilmedi',
+			'backup.no_directory_selected' => 'Hiçbir dizin seçilmedi',
+			'backup.export.title' => 'Verilerinizi dışa aktarın',
+			'backup.export.title_short' => 'Dışa Aktar',
+			'backup.export.type_of_export' => 'İhracat türü',
+			'backup.export.other_options' => 'Seçenekler',
+			'backup.export.all' => 'Tam yedekleme',
+			'backup.export.all_descr' => 'Tüm verilerinizi (hesaplar, işlemler, bütçeler, ayarlar...) dışa aktarın. Herhangi bir şeyi kaybetmemek için bunları istediğiniz zaman tekrar içe aktarın.',
+			'backup.export.transactions' => 'İşlemlerin yedeği',
+			'backup.export.transactions_descr' => 'İşlemlerinizi CSV olarak dışa aktarın, böylece diğer programlarda veya uygulamalarda daha kolay analiz edebilirsiniz.',
+			'backup.export.transactions_to_export' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: 'Dışa aktarılacak 1 işlem', other: 'Dışa aktarılacak ${n} işlem', ), 
+			'backup.export.description' => 'Verilerinizi farklı formatlarda indirin',
+			'backup.export.send_file' => 'Dosyayı gönder',
+			'backup.export.see_folder' => 'Klasöre bakın',
+			'backup.export.success' => ({required Object x}) => 'Dosya ${x} olarak başarıyla kaydedildi/indirildi',
+			'backup.export.error' => 'Dosya indirilirken hata oluştu. Lütfen lozin.technologies@gmail.com adresinden geliştirici ile iletişime geçin',
+			'backup.export.dialog_title' => 'Dosyayı Kaydet/Gönder',
+			'backup.import.title' => 'Verilerinizi içe aktarın',
+			'backup.import.title_short' => 'İçe Aktar',
+			'backup.import.restore_backup' => 'Yedeklemeyi Geri Yükle',
+			'backup.import.restore_backup_descr' => 'Monekin\'den daha önce kaydedilmiş bir veritabanını içe aktarın. Bu eylem, mevcut uygulama verilerinin herhangi birini yeni verilerle değiştirecektir',
+			'backup.import.restore_backup_warn_description' => 'Yeni bir veritabanı içe aktarırken, uygulamada şu anda kayıtlı olan tüm verileri kaybedeceksiniz. Devam etmeden önce bir yedekleme yapmanız önerilir. Buraya, kaynağını bilmediğiniz herhangi bir dosyayı yüklemeyin, yalnızca daha önce Monekin\'den indirdiğiniz dosyaları yükleyin',
+			'backup.import.restore_backup_warn_title' => 'Tüm verilerin üzerine yaz',
+			'backup.import.select_other_file' => 'Başka dosya seç',
+			'backup.import.tap_to_select_file' => 'Bir dosya seçmek için dokunun',
+			'backup.import.manual_import.title' => 'Manuel içe aktarma',
+			'backup.import.manual_import.descr' => 'İşlemleri manuel olarak .csv dosyasından içe aktarın',
+			'backup.import.manual_import.default_account' => 'Varsayılan hesap',
+			'backup.import.manual_import.remove_default_account' => 'Varsayılan hesabı kaldır',
+			'backup.import.manual_import.default_category' => 'Varsayılan Kategori',
+			'backup.import.manual_import.select_a_column' => '.csv\'den bir sütun seçin',
+			'backup.import.manual_import.steps.0' => 'Dosyanızı seçin',
+			'backup.import.manual_import.steps.1' => 'Miktar için sütun',
+			'backup.import.manual_import.steps.2' => 'Hesap için sütun',
+			'backup.import.manual_import.steps.3' => 'Kategori için sütun',
+			'backup.import.manual_import.steps.4' => 'Tarih için sütun',
+			'backup.import.manual_import.steps.5' => 'diğer sütunlar',
+			'backup.import.manual_import.steps_descr.0' => 'Cihazınızdan bir .csv dosyası seçin. Her sütunun adını açıklayan bir ilk satıra sahip olduğundan emin olun',
+			'backup.import.manual_import.steps_descr.1' => 'Her işlemin değerinin belirtildiği sütunu seçin. Giderler için negatif değerler ve gelirler için pozitif değerler kullanın.',
+			'backup.import.manual_import.steps_descr.2' => 'Her işlemin ait olduğu hesabın belirtildiği sütunu seçin. İstediğiniz hesabı bulamamamız durumunda varsayılan bir hesap da seçebilirsiniz. Varsayılan bir hesap belirtilmezse, aynı adla bir tane oluşturacağız',
+			'backup.import.manual_import.steps_descr.3' => 'İşlem kategorisi adının bulunduğu sütunu belirtin. Kategoriyi bulamamamız durumunda işlemlere bu kategoriyi atayabilmemiz için varsayılan bir kategori belirtmeniz gerekir',
+			'backup.import.manual_import.steps_descr.4' => 'Her işlemin tarihinin belirtildiği sütunu seçin. Belirtilmezse, işlemler mevcut tarihle oluşturulacaktır',
+			'backup.import.manual_import.steps_descr.5' => 'Diğer isteğe bağlı işlem öznitelikleri için sütunları belirtir',
+			'backup.import.manual_import.success' => ({required Object x}) => '${x} işlem başarıyla içe aktarıldı',
+			'backup.import.success' => 'İçe aktarma başarıyla gerçekleştirildi',
+			'backup.import.error' => 'Dosya içe aktarılırken hata oluştu. Lütfen lozin.technologies@gmail.com adresinden geliştirici ile iletişime geçin',
+			'backup.import.cancelled' => 'İçe aktarma kullanıcı tarafından iptal edildi',
+			'backup.about.title' => 'Veritabanınız hakkında bilgiler',
+			'backup.about.create_date' => 'Oluşturulma tarihi',
+			'backup.about.modify_date' => 'Son değiştirilme',
+			'backup.about.last_backup' => 'Son yedekleme',
+			'backup.about.size' => 'Boyut',
+			'settings.title_long' => 'Ayarlar ve Özelleştirme',
+			'settings.title_short' => 'Ayarlar',
+			'settings.description' => 'Tema, Dil, Veriler ve daha fazlası',
+			'settings.edit_profile' => 'Profili düzenle',
+			'settings.general.menu_title' => 'Genel Ayarlar',
+			'settings.general.menu_descr' => 'Dil, gizlilik ve daha fazlası',
+			'settings.general.show_all_decimals' => 'Tüm ondalık basamakları göster',
+			'settings.general.show_all_decimals_descr' => 'Sondaki sıfırlar olsa bile tüm ondalık basamakları göster',
+			'settings.general.language.section' => 'Dil ve metinler',
+			'settings.general.language.title' => 'Uygulama dili',
+			'settings.general.language.descr' => 'Metinlerin uygulamada görüntüleneceği dil',
+			'settings.general.language.help' => 'Bu uygulamanın çevirilerine katkıda bulunmak isterseniz, <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>kılavuzumuza</a> başvurabilirsiniz',
+			'settings.general.locale.title' => 'Bölge',
+			'settings.general.locale.auto' => 'Sistem',
+			'settings.general.locale.descr' => 'Tarihler, sayılar için kullanılacak biçimi ayarlayın...',
+			'settings.general.locale.warn' => 'Bölge değiştirildiğinde uygulama güncellenecektir',
+			'settings.general.locale.first_day_of_week' => 'Haftanın ilk günü',
+			'settings.security.title' => 'Güvenlik',
+			'settings.security.private_mode_at_launch' => 'Başlangıçta özel mod',
+			'settings.security.private_mode_at_launch_descr' => 'Uygulamayı varsayılan olarak özel modda başlatın',
+			'settings.security.private_mode' => 'Özel mod',
+			'settings.security.private_mode_descr' => 'Tüm parasal değerleri gizle',
+			'settings.security.private_mode_activated' => 'Özel mod etkinleştirildi',
+			'settings.security.private_mode_deactivated' => 'Özel mod devre dışı bırakıldı',
+			'settings.transactions.menu_title' => 'İşlemler',
+			'settings.transactions.menu_descr' => 'İşlemlerinizin davranışını yapılandırın',
+			'settings.transactions.title' => 'İşlem Ayarları',
+			'settings.transactions.style.title' => 'İşlem stili',
+			'settings.transactions.style.subtitle' => 'İşlemlerin listelerde nasıl görüneceğini yapılandırın',
+			'settings.transactions.style.show_tags' => 'Etiketleri Göster',
+			'settings.transactions.style.show_time' => 'Saati Göster',
+			'settings.transactions.swipe_actions.title' => 'Kaydırma eylemleri',
+			'settings.transactions.swipe_actions.choose_description' => 'Bu kaydırma yönünü kullanarak listedeki bir işlem öğesini kaydırdığınızda hangi eylemin tetikleneceğini seçin',
+			'settings.transactions.swipe_actions.swipe_left' => 'Sola kaydırın',
+			'settings.transactions.swipe_actions.swipe_right' => 'Sağa kaydırın',
+			'settings.transactions.swipe_actions.none' => 'Eylem yok',
+			'settings.transactions.swipe_actions.toggle_reconciled' => 'Mutabık kılınmayı aç/kapat',
+			'settings.transactions.swipe_actions.toggle_pending' => 'Beklemede\'yi aç/kapat',
+			'settings.transactions.swipe_actions.toggle_voided' => 'Geçiş iptal edildi',
+			'settings.transactions.swipe_actions.toggle_unreconciled' => 'Mutabık kılınmayanları aç/kapat',
+			'settings.transactions.swipe_actions.remove_status' => 'Durumu kaldır',
+			'settings.transactions.default_values.title' => 'Default Form Values',
+			'settings.transactions.default_values.page_title' => 'New Transaction: Default Form Values',
+			'settings.transactions.default_values.reuse_last_transaction' => 'Reuse Last Transaction Values',
+			'settings.transactions.default_values.reuse_last_transaction_descr' => 'Automatically fill the form with some values from the last created transaction',
+			'settings.transactions.default_values.fields_to_reuse' => 'Fields to reuse',
+			'settings.transactions.default_values.reuse_last_values_modal_descr' => 'Select the fields that should be pre-filled with the values from the last created transaction.',
+			'settings.transactions.default_values.default_values_separator' => 'Default Values',
+			'settings.transactions.default_values.default_category' => 'Default Category',
+			'settings.transactions.default_values.default_status' => 'Default Status',
+			'settings.transactions.default_values.default_tags' => 'Default Tags',
+			'settings.transactions.default_values.no_tags_selected' => 'No tags selected',
+			'settings.transactions.default_type.title' => 'Default Type',
+			'settings.transactions.default_type.modal_title' => 'Select Default Type',
+			'settings.appearance.menu_title' => 'Tema ve Stil',
+			'settings.appearance.menu_descr' => 'Tema seçimi, renkler ve uygulama görünümüyle ilgili diğer şeyler',
+			'settings.appearance.theme_and_colors' => 'Tema ve renkler',
+			'settings.appearance.theme.title' => 'Tema',
+			'settings.appearance.theme.auto' => 'Sistem',
+			'settings.appearance.theme.light' => 'Açık',
+			'settings.appearance.theme.dark' => 'Koyu',
+			'settings.appearance.amoled_mode' => 'AMOLED modu',
+			'settings.appearance.amoled_mode_descr' => 'Mümkün olduğunda saf siyah bir duvar kağıdı kullanın. Bu, AMOLED ekranlara sahip cihazların pili için biraz yardımcı olacaktır',
+			'settings.appearance.dynamic_colors' => 'Dinamik renkler',
+			'settings.appearance.dynamic_colors_descr' => 'Mümkün olduğunda sistem vurgu renginizi kullanın',
+			'settings.appearance.accent_color' => 'Vurgu rengi',
+			'settings.appearance.accent_color_descr' => 'Uygulamanın arayüzün belirli kısımlarını vurgulamak için kullanacağı rengi seçin',
+			'settings.appearance.text' => 'Metin',
+			'settings.appearance.font' => 'Yazı tipi',
+			'settings.appearance.font_platform' => 'platformu',
+			'more.title' => 'Daha Fazla',
+			'more.title_long' => 'Daha fazla eylem',
+			'more.data.display' => 'Veri',
+			'more.data.display_descr' => 'Hiçbir şeyi kaybetmemek için verilerinizi dışa ve içe aktarın',
+			'more.data.delete_all' => 'Verilerimi sil',
+			'more.data.delete_all_header1' => 'Orada dur padawan ⚠️⚠️',
+			'more.data.delete_all_message1' => 'Devam etmek istediğinizden emin misiniz? Tüm verileriniz kalıcı olarak silinecek ve kurtarılamayacaktır',
+			'more.data.delete_all_header2' => 'Son bir adım ⚠️⚠️',
+			'more.data.delete_all_message2' => 'Bir hesabı sildiğinizde, kayıtlı tüm kişisel verilerinizi silmiş olursunuz. Hesaplarınız, işlemleriniz, bütçeleriniz ve kategorileriniz silinecek ve kurtarılamayacaktır. Kabul ediyor musunuz?',
+			'more.about_us.display' => 'Uygulama bilgileri',
+			'more.about_us.description' => 'Monekin\'in şartlarını, önemli bilgilerini bulun ve hata bildirerek veya fikir paylaşımları ile iletişime geçin',
+			'more.about_us.legal.display' => 'Yasal bilgiler',
+			'more.about_us.legal.privacy' => 'Gizlilik politikası',
+			'more.about_us.legal.terms' => 'Kullanım koşulları',
+			'more.about_us.legal.licenses' => 'Lisanslar',
+			'more.about_us.project.display' => 'Proje',
+			'more.about_us.project.contributors' => 'Katkıda bulunanlar',
+			'more.about_us.project.contributors_descr' => 'Monekin\'in büyümesini sağlayan tüm geliştiriciler',
+			'more.about_us.project.contact' => 'Bize ulaşın',
+			'more.help_us.display' => 'Bize yardım edin',
+			'more.help_us.description' => 'Monekin\'in nasıl daha iyi olabileceğini öğrenin',
+			'more.help_us.rate_us' => 'Bize oy verin',
+			'more.help_us.rate_us_descr' => 'Herhangi bir puan memnuniyetle karşılanır!',
+			'more.help_us.share' => 'Monekin\'i paylaşın',
+			'more.help_us.share_descr' => 'Uygulamamızı arkadaşlarınıza ve ailenize paylaşın',
+			'more.help_us.share_text' => 'Monekin! En iyi kişisel finans uygulaması. Buradan indirin',
+			'more.help_us.thanks' => 'Teşekkürler!',
+			'more.help_us.thanks_long' => 'Monekin\'e ve diğer açık kaynaklı projelere yaptığınız katkılar, büyük ve küçük, bunun gibi harika projeleri mümkün kılıyor. Katkıda bulunmak için zaman ayırdığınız için teşekkür ederiz.',
+			'more.help_us.donate' => 'Bağış yap',
+			'more.help_us.donate_descr' => 'Bağışınızla uygulamanın iyileştirmeler almaya devam etmesine yardımcı olacaksınız. Yapılan çalışmaya kahve ısmarlayarak teşekkür etmekten daha iyi bir yol mu var?',
+			'more.help_us.donate_success' => 'Bağış yapıldı. Katkılarınız için çok teşekkür ederim! ❤️',
+			'more.help_us.donate_err' => 'Ups! Ödemenizi alırken bir hata oluştu gibi görünüyor',
+			'more.help_us.report' => 'Hataları bildirin, önerilerde bulunun...',
+			_ => null,
+		};
 	}
 }
-

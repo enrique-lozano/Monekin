@@ -14,6 +14,8 @@ import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
+import 'package:monekin/core/models/debt/debt.dart';
+import 'package:monekin/core/models/debt/debt_direction.enum.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
 import 'package:monekin/core/models/filters/saved_filter.dart';
 import 'package:monekin/core/models/goal/goal.dart';

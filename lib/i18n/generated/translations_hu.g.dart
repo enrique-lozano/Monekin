@@ -3,6 +3,7 @@
 ///
 // coverage:ignore-file
 // ignore_for_file: type=lint, unused_import
+// dart format off
 
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +11,7 @@ import 'package:slang/generated.dart';
 import 'translations.g.dart';
 
 // Path: <root>
-class TranslationsHu implements Translations {
+class TranslationsHu with BaseTranslations<AppLocale, Translations> implements Translations {
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
 	TranslationsHu({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
@@ -1796,813 +1797,708 @@ class _TranslationsGeneralTimeRangesTypesHu implements TranslationsGeneralTimeRa
 
 /// The flat map containing all translations for locale <hu>.
 /// Only for edge cases! For simple maps, use the map function of this library.
-/// Note: We use a HashMap because Dart seems to be unable to compile large switch statements.
-Map<String, dynamic>? _map;
-
+///
+/// The Dart AOT compiler has issues with very large switch statements,
+/// so the map is split into smaller functions (512 entries each).
 extension on TranslationsHu {
 	dynamic _flatMapFunction(String path) {
-		final map = _map ?? _initFlatMap();
-		return map[path];
-	}
-
-	/// Initializes the flat map and returns it.
-	Map<String, dynamic> _initFlatMap() {
-		final map = <String, dynamic>{};
-		map['ui_actions.cancel'] = 'Mégse';
-		map['ui_actions.confirm'] = 'Megerősítés';
-		map['ui_actions.continue_text'] = 'Folytatás';
-		map['ui_actions.save'] = 'Mentés';
-		map['ui_actions.save_changes'] = 'Módosítások mentése';
-		map['ui_actions.close_and_save'] = 'Mentés és bezárás';
-		map['ui_actions.add'] = 'Hozzáad';
-		map['ui_actions.edit'] = 'Szerkesztés';
-		map['ui_actions.delete'] = 'Törlés';
-		map['ui_actions.see_more'] = 'Továbbiak megtekintése';
-		map['ui_actions.select_all'] = 'Összes kijelölése';
-		map['ui_actions.deselect_all'] = 'Összes kijelölésének megszüntetése';
-		map['ui_actions.select'] = 'Kiválasztás';
-		map['ui_actions.search'] = 'Keresés';
-		map['ui_actions.filter'] = 'Szűrés';
-		map['ui_actions.reset'] = 'Alaphelyzetbe állítás';
-		map['ui_actions.submit'] = 'Beküldés';
-		map['ui_actions.next'] = 'Következő';
-		map['ui_actions.previous'] = 'Előző';
-		map['ui_actions.back'] = 'Vissza';
-		map['ui_actions.reload'] = 'Újratöltés';
-		map['ui_actions.view'] = 'Megtekintés';
-		map['ui_actions.download'] = 'Letöltés';
-		map['ui_actions.upload'] = 'Feltöltés';
-		map['ui_actions.retry'] = 'Újrapróbálkozás';
-		map['ui_actions.copy'] = 'Másolás';
-		map['ui_actions.paste'] = 'Beillesztés';
-		map['ui_actions.undo'] = 'Visszavonás';
-		map['ui_actions.redo'] = 'Újra';
-		map['ui_actions.open'] = 'Megnyitás';
-		map['ui_actions.close'] = 'Bezárás';
-		map['ui_actions.apply'] = 'Alkalmaz';
-		map['ui_actions.discard'] = 'Elvetés';
-		map['ui_actions.refresh'] = 'Frissítés';
-		map['ui_actions.share'] = 'Megosztás';
-		map['general.or'] = 'vagy';
-		map['general.understood'] = 'Megértve';
-		map['general.unspecified'] = 'Meghatározatlan';
-		map['general.quick_actions'] = 'Gyorsműveletek';
-		map['general.details'] = 'Részletek';
-		map['general.balance'] = 'Egyenleg';
-		map['general.account'] = 'Számla';
-		map['general.accounts'] = 'Számlák';
-		map['general.categories'] = 'Kategóriák';
-		map['general.category'] = 'Kategória';
-		map['general.today'] = 'Ma';
-		map['general.yesterday'] = 'Tegnap';
-		map['general.filters'] = 'Szűrők';
-		map['general.empty_warn'] = 'Hoppá! Ez nagyon üres.';
-		map['general.search_no_results'] = 'Egyetlen elem sem felel meg a keresési feltételeknek';
-		map['general.insufficient_data'] = 'Hiányos adatok';
-		map['general.show_more_fields'] = 'Több mező mutatása';
-		map['general.show_less_fields'] = 'Kevesebb mező mutatása';
-		map['general.tap_to_search'] = 'Koppintson a kereséshez';
-		map['general.delete_success'] = 'Az elem sikeresen törölve';
-		map['general.leave_without_saving.title'] = 'Mentés nélkül távozik?';
-		map['general.leave_without_saving.message'] = 'Vannak nem mentett módosításai. Biztos, hogy mentés nélkül kilép?';
-		map['general.clipboard.success'] = ({required Object x}) => '${x} a vágólapra másolva';
-		map['general.clipboard.error'] = 'Másolási hiba';
-		map['general.time.start_date'] = 'Kezdő dátum';
-		map['general.time.end_date'] = 'Befejezés dátuma';
-		map['general.time.from_date'] = 'Ettől kezdve';
-		map['general.time.until_date'] = 'Dátumig';
-		map['general.time.date'] = 'Dátum';
-		map['general.time.datetime'] = 'Időpont';
-		map['general.time.time'] = 'Idő';
-		map['general.time.each'] = 'Minden';
-		map['general.time.after'] = 'Után';
-		map['general.time.ranges.display'] = 'Időtartomány';
-		map['general.time.ranges.it_repeat'] = 'Ismétlések';
-		map['general.time.ranges.it_ends'] = 'Vége';
-		map['general.time.ranges.forever'] = 'Mindig';
-		map['general.time.ranges.types.cycle'] = 'Ciklusok';
-		map['general.time.ranges.types.last_days'] = 'Utolsó nap';
-		map['general.time.ranges.types.last_days_form'] = ({required Object x}) => '${x} előző nap';
-		map['general.time.ranges.types.all'] = 'Mindig';
-		map['general.time.ranges.types.date_range'] = 'Egyéni tartomány';
-		map['general.time.ranges.each_range'] = ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
-				one: 'Minden ${range}',
-				other: 'Minden ${n} ${range}',
-			);
-		map['general.time.ranges.each_range_until_date'] = ({required num n, required Object range, required Object day}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
-				one: 'Minden ${range} ${day} -ig',
-				other: 'Minden ${n} ${range} ${day} -ig',
-			);
-		map['general.time.ranges.each_range_until_times'] = ({required num n, required Object range, required Object limit}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
-				one: 'Minden ${range} ${limit} alkalommal',
-				other: 'Minden ${n} ${range} ${limit} alkalommal',
-			);
-		map['general.time.ranges.each_range_until_once'] = ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
-				one: 'Minden ${range} egyszer',
-				other: 'Minden ${n} ${range} egyszer',
-			);
-		map['general.time.ranges.month'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
-				one: 'Hónap',
-				other: 'Hónap',
-			);
-		map['general.time.ranges.year'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
-				one: 'Év',
-				other: 'Év',
-			);
-		map['general.time.ranges.day'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
-				one: 'Nap',
-				other: 'Nap',
-			);
-		map['general.time.ranges.week'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
-				one: 'Hét',
-				other: 'Hét',
-			);
-		map['general.time.periodicity.display'] = 'Ismétlődés';
-		map['general.time.periodicity.no_repeat'] = 'Nem ismétlődik';
-		map['general.time.periodicity.repeat'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
-				one: 'Ismétlés',
-				other: 'Ismétlések',
-			);
-		map['general.time.periodicity.diary'] = 'Naponta';
-		map['general.time.periodicity.monthly'] = 'Havonta';
-		map['general.time.periodicity.annually'] = 'Évente';
-		map['general.time.periodicity.quaterly'] = 'Negyedévente';
-		map['general.time.periodicity.weekly'] = 'Hetente';
-		map['general.time.periodicity.custom'] = 'Egyéni';
-		map['general.time.periodicity.infinite'] = 'Mindig';
-		map['general.time.current.monthly'] = 'Ebben a hónapban';
-		map['general.time.current.annually'] = 'Ebben az évben';
-		map['general.time.current.quaterly'] = 'Ebben a negyedévben';
-		map['general.time.current.weekly'] = 'Ezen a héten';
-		map['general.time.current.infinite'] = 'Mindig';
-		map['general.time.current.custom'] = 'Egyéni tartomány';
-		map['general.time.all.diary'] = 'Minden nap';
-		map['general.time.all.monthly'] = 'Minden hónapban';
-		map['general.time.all.annually'] = 'Minden évben';
-		map['general.time.all.quaterly'] = 'Minden negyedévben';
-		map['general.time.all.weekly'] = 'Minden héten';
-		map['general.transaction_order.display'] = 'Tranzakciók rendezése';
-		map['general.transaction_order.category'] = 'Kategóriánként';
-		map['general.transaction_order.quantity'] = 'Mennyiség szerint';
-		map['general.transaction_order.date'] = 'Dátum szerint';
-		map['general.validations.form_error'] = 'A folytatáshoz javítsa ki a megadott mezőket';
-		map['general.validations.required'] = 'Kötelező mező';
-		map['general.validations.positive'] = 'Pozitívnak kell lennie';
-		map['general.validations.min_number'] = ({required Object x}) => 'Nagyobbnak kell lennie, mint ${x}';
-		map['general.validations.max_number'] = ({required Object x}) => 'Kevesebbnek kell lennie, mint ${x}';
-		map['intro.start'] = 'Kezdés';
-		map['intro.skip'] = 'Kihagyás';
-		map['intro.next'] = 'Tovább';
-		map['intro.select_your_currency'] = 'Válassza ki a pénznemet';
-		map['intro.welcome_subtitle'] = 'Az Ön személyes pénzügyi menedzsere';
-		map['intro.welcome_subtitle2'] = '100% -ban nyitott, és 100% -ban ingyenes';
-		map['intro.welcome_footer'] = 'A bejelentkezéssel elfogadja az <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Adatvédelmi irányelveket</a> és az alkalmazás <a href=\' https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Felhasználási feltételeit</a>';
-		map['intro.offline_descr_title'] = 'OFFLINE SZÁMLA:';
-		map['intro.offline_descr'] = 'Az Ön adatai csak az Ön készülékén tárolódnak, és biztonságban lesznek, amíg nem távolítja el az alkalmazást, vagy nem cseréli le a telefont. Az adatvesztés megelőzése érdekében ajánlott rendszeresen biztonsági mentést készíteni az alkalmazás beállításaiból.';
-		map['intro.offline_start'] = 'Offline munkamenet indítása';
-		map['intro.sl1_title'] = 'Válassza ki a pénznemet';
-		map['intro.sl1_descr'] = 'Az alapértelmezett pénznemet a jelentésekben és az általános diagramokban használjuk. A pénznemet és az alkalmazás nyelvét később bármikor megváltoztathatja az alkalmazás beállításaiban.';
-		map['intro.sl2_title'] = 'Biztonságos, privát és megbízható';
-		map['intro.sl2_descr'] = 'Az Ön adatai csak az Önéi. Az adatokat közvetlenül az Ön eszközén tároljuk, anélkül, hogy azok külső szervereken keresztül mennének át. Ez lehetővé teszi az alkalmazás használatát internet nélkül is.';
-		map['intro.sl2_descr2'] = 'Az alkalmazás forráskódja is nyilvános, így bárki közreműködhet benne, és megnézheti, hogyan is működik.';
-		map['intro.last_slide_title'] = 'Minden kész';
-		map['intro.last_slide_descr'] = 'A Monekin segítségével végre elérheti azt az anyagi függetlenséget, amelyre annyira vágyik. Grafikonok, költségvetések, tippek, statisztikák és még sok minden más lesz megtalálható a pénzével kapcsolatban.';
-		map['intro.last_slide_descr2'] = 'Reméljük, hogy élvezni fogja az élményt! Ne habozzon kapcsolatba lépni velünk, ha kétségei, javaslatai vannak...';
-		map['home.title'] = 'Kezdőlap';
-		map['home.filter_transactions'] = 'Tranzakciók szűrése';
-		map['home.hello_day'] = 'Jó reggelt,';
-		map['home.hello_night'] = 'Jó éjszakát,';
-		map['home.total_balance'] = 'Teljes egyenleg';
-		map['home.my_accounts'] = 'Saját számláim';
-		map['home.active_accounts'] = 'Aktív számlák';
-		map['home.no_accounts'] = 'Még nincsenek számlák létrehozva';
-		map['home.no_accounts_descr'] = 'Kezdje el élvezni a Monekin összes varázsát. A tranzakciók hozzáadásához legalább egy számlát hozzon létre.';
-		map['home.last_transactions'] = 'Legutóbbi tranzakciók';
-		map['home.should_create_account_header'] = 'Hoppá!';
-		map['home.should_create_account_message'] = 'A tranzakciók létrehozásához legalább egy nem archivált számlával kell rendelkeznie';
-		map['financial_health.display'] = 'Pénzügyi állapot';
-		map['financial_health.review.very_good'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return 'Nagyon jó!';
-					case GenderContext.female:
-						return 'Nagyon jó!';
-				}
-			};
-		map['financial_health.review.good'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return 'Jó';
-					case GenderContext.female:
-						return 'Jó';
-				}
-			};
-		map['financial_health.review.normal'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return 'Átlagos';
-					case GenderContext.female:
-						return 'Átlagos';
-				}
-			};
-		map['financial_health.review.bad'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return 'Korrekt';
-					case GenderContext.female:
-						return 'Korrekt';
-				}
-			};
-		map['financial_health.review.very_bad'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return 'Nagyon rossz';
-					case GenderContext.female:
-						return 'Nagyon rossz';
-				}
-			};
-		map['financial_health.review.insufficient_data'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return 'Hiányos adatok';
-					case GenderContext.female:
-						return 'Hiányos adatok';
-				}
-			};
-		map['financial_health.review.descr.insufficient_data'] = 'Úgy tűnik, nincs elég rögzített kiadásunk ahhoz, hogy kiszámítsuk a pénzügyi állapotát. Adjon hozzá néhány kiadást/bevételt ebben az időszakban, hogy tudjunk segíteni Önnek!';
-		map['financial_health.review.descr.very_good'] = 'Gratulálunk! Az Ön pénzügyi helyzete nagyon rendben van. Reméljük, hogy folytatódik a jó szériája, és továbbra is tanulni fog a Monekin-nel.';
-		map['financial_health.review.descr.good'] = 'Nagyszerű! Az Ön pénzügyi helyzete rendben van. Látogasson el az elemzés fülre, hogy megtudja, hogyan takaríthat meg még többet!';
-		map['financial_health.review.descr.normal'] = 'Az Ön pénzügyi állapota nagyjából a lakosság többi részének átlagában van ebben az időszakban.';
-		map['financial_health.review.descr.bad'] = 'Úgy tűnik, hogy az Ön pénzügyi helyzete még nem a legjobb. Tekintse át a többi diagramot, hogy többet tudjon meg a pénzügyeiről.';
-		map['financial_health.review.descr.very_bad'] = 'Hmm, a pénzügyi helyzete messze elmarad attól, aminek lennie kellene. Nézze át a többi diagramot, hogy többet tudjon meg a pénzügyeiről.';
-		map['financial_health.months_without_income.title'] = 'Túlélési arány';
-		map['financial_health.months_without_income.subtitle'] = 'Egyenlegét tekintve, mennyi ideig maradhat bevétel nélkül';
-		map['financial_health.months_without_income.text_zero'] = 'Ilyen kiadás mellett egy hónapot sem bírna ki bevétel nélkül!';
-		map['financial_health.months_without_income.text_one'] = 'Ilyen mértékű kiadások mellett aligha tudna akár egy hónapot is túlélni bevétel nélkül!';
-		map['financial_health.months_without_income.text_other'] = ({required Object n}) => 'Ezzel a költési aránnyal körülbelül <b>${n} hónapot</b> tudna túlélni jövedelem nélkül.';
-		map['financial_health.months_without_income.text_infinite'] = 'Ezzel a költési aránnyal nagyjából <b>az egész életében</b> meg tudna élni jövedelem nélkül.';
-		map['financial_health.months_without_income.suggestion'] = 'Ne feledje, hogy célszerű ezt az arányt mindig legalább 5 hónap felett tartani. Ha úgy látja, hogy nem rendelkezik elegendő megtakarítási tartalékkal, csökkentse a felesleges kiadásokat.';
-		map['financial_health.months_without_income.insufficient_data'] = 'Úgy tűnik, nincs elég rögzített kiadásunk ahhoz, hogy kiszámolhassuk, hány hónapig tudna bevétel nélkül megélni. Adjon meg néhány tranzakciót, és térjen vissza ide, hogy ellenőrizze a pénzügyi helyzetét.';
-		map['financial_health.savings_percentage.title'] = 'Megtakarítási százalék';
-		map['financial_health.savings_percentage.subtitle'] = 'A jövedelmének mekkora részét nem költi el ebben az időszakban';
-		map['financial_health.savings_percentage.text.good'] = ({required Object value}) => 'Gratulálunk! Ebben az időszakban a bevételének <b>${value}%</b>-át sikerült megtakarítania. Úgy tűnik, már rendelkezik hozzáértéssel, csak így tovább!';
-		map['financial_health.savings_percentage.text.normal'] = ({required Object value}) => 'Gratulálunk, a bevételének <b>${value}%</b>-át sikerült megtakarítania ebben az időszakban.';
-		map['financial_health.savings_percentage.text.bad'] = ({required Object value}) => 'Ebben az időszakban sikerült megtakarítania a jövedelmének <b>${value}%-át</b>. Úgy gondoljuk azonban, hogy ennél még sokkal többet is tehet!';
-		map['financial_health.savings_percentage.text.very_bad'] = 'Hűha, sajnos ebben az időszakban semmit sem sikerült megtakarítania.';
-		map['financial_health.savings_percentage.suggestion'] = 'Ne feledje, hogy a jövedelmének legalább 15-20%-át célszerű megtakarítani.';
-		map['stats.title'] = 'Statisztika';
-		map['stats.balance'] = 'Egyenleg';
-		map['stats.final_balance'] = 'Végső egyenleg';
-		map['stats.balance_by_account'] = 'Számlák szerinti egyenleg';
-		map['stats.balance_by_account_subtitle'] = 'Hol van a legtöbb pénzem?';
-		map['stats.balance_by_currency'] = 'Egyenleg pénznemenként';
-		map['stats.balance_by_currency_subtitle'] = 'Mennyi pénzem van devizában?';
-		map['stats.balance_evolution'] = 'Egyenleg alakulása';
-		map['stats.balance_evolution_subtitle'] = 'Több pénzem van, mint korábban?';
-		map['stats.compared_to_previous_period'] = 'Az előző időszakhoz képest';
-		map['stats.cash_flow'] = 'Pénzforgalom';
-		map['stats.cash_flow_subtitle'] = 'Kevesebbet költök, mint amennyit megkeresek?';
-		map['stats.by_periods'] = 'Időszakonként';
-		map['stats.by_categories'] = 'Kategóriánként';
-		map['stats.by_tags'] = 'Címkék szerint';
-		map['stats.distribution'] = 'Megoszlás';
-		map['stats.finance_health_resume'] = 'Folytatás';
-		map['stats.finance_health_breakdown'] = 'Csőd';
-		map['icon_selector.name'] = 'Név:';
-		map['icon_selector.icon'] = 'Ikon';
-		map['icon_selector.color'] = 'Szín';
-		map['icon_selector.select_icon'] = 'Ikon kiválasztása';
-		map['icon_selector.select_color'] = 'Szín kiválasztása';
-		map['icon_selector.custom_color'] = 'Egyedi szín';
-		map['icon_selector.current_color_selection'] = 'Jelenlegi kiválasztás';
-		map['icon_selector.select_account_icon'] = 'Számla azonosítása';
-		map['icon_selector.select_category_icon'] = 'Kategória azonosítása';
-		map['icon_selector.scopes.transport'] = 'Közlekedés';
-		map['icon_selector.scopes.money'] = 'Pénz';
-		map['icon_selector.scopes.food'] = 'Élelmiszer';
-		map['icon_selector.scopes.medical'] = 'Egészség';
-		map['icon_selector.scopes.entertainment'] = 'Szabadidő';
-		map['icon_selector.scopes.technology'] = 'Technológia';
-		map['icon_selector.scopes.other'] = 'Egyebek';
-		map['icon_selector.scopes.logos_financial_institutions'] = 'Pénzintézetek';
-		map['transaction.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
-				one: 'Tranzakció',
-				other: 'Tranzakciók',
-			);
-		map['transaction.create'] = 'Új tranzakció';
-		map['transaction.new_income'] = 'Új bevétel';
-		map['transaction.new_expense'] = 'Új kiadás';
-		map['transaction.new_success'] = 'A tranzakció sikeresen létrehozva';
-		map['transaction.edit'] = 'Tranzakció szerkesztése';
-		map['transaction.edit_success'] = 'A tranzakció sikeresen szerkesztve';
-		map['transaction.edit_multiple'] = 'Tranzakciók szerkesztése';
-		map['transaction.edit_multiple_success'] = ({required Object x}) => '${x} tranzakció sikeresen szerkesztve';
-		map['transaction.duplicate'] = 'Tranzakció klónozása';
-		map['transaction.duplicate_short'] = 'Klónozás';
-		map['transaction.duplicate_warning_message'] = 'Egy ezzel megegyező tranzakció jön létre ugyanazzal a dátummal, folytatni szeretné?';
-		map['transaction.duplicate_success'] = 'A tranzakció sikeresen klónozva';
-		map['transaction.delete'] = 'Tranzakció törlése';
-		map['transaction.delete_warning_message'] = 'Ez a művelet visszafordíthatatlan. A számlák aktuális egyenlege és az összes statisztikája újraszámításra kerül.';
-		map['transaction.delete_success'] = 'A tranzakció sikeresen törölve';
-		map['transaction.delete_multiple'] = 'Tranzakciók törlése';
-		map['transaction.delete_multiple_warning_message'] = ({required Object x}) => 'Ez a művelet visszafordíthatatlan, és eltávolít ${x} tranzakciót. A számlái aktuális egyenlege és minden statisztikája újraszámításra kerül.';
-		map['transaction.delete_multiple_success'] = ({required Object x}) => '${x} tranzakció megfelelően törölve';
-		map['transaction.details'] = 'A mozgás részletei';
-		map['transaction.next_payments.accept'] = 'Elfogadás';
-		map['transaction.next_payments.skip'] = 'Kihagyás';
-		map['transaction.next_payments.skip_success'] = 'A tranzakció sikeresen kihagyásra került';
-		map['transaction.next_payments.skip_dialog_title'] = 'Tranzakció kihagyása';
-		map['transaction.next_payments.skip_dialog_msg'] = ({required Object date}) => 'Ez a művelet visszafordíthatatlan. A következő átvitel dátumát módosítjuk erre: ${date}';
-		map['transaction.next_payments.accept_today'] = 'Elfogadom ma';
-		map['transaction.next_payments.accept_in_required_date'] = ({required Object date}) => 'Elfogadás a szükséges időpontban: (${date})';
-		map['transaction.next_payments.accept_dialog_title'] = 'Tranzakció elfogadása';
-		map['transaction.next_payments.accept_dialog_msg_single'] = 'A tranzakció új állapota nulla lesz. A tranzakció státuszát bármikor újra módosíthatja, amikor csak akarja.';
-		map['transaction.next_payments.accept_dialog_msg'] = ({required Object date}) => 'Ez a művelet egy új tranzakciót hoz létre ${date} dátummal. A tranzakció részleteit a tranzakciós oldalon ellenőrizheti.';
-		map['transaction.next_payments.recurrent_rule_finished'] = 'Az ismétlődő szabály teljesült, nincs több kifizetés!';
-		map['transaction.list.all'] = 'Minden tranzakció';
-		map['transaction.list.empty'] = 'Nem található itt megjeleníthető tranzakció. Adjon hozzá néhány tranzakciót az alkalmazásban, és talán legközelebb több szerencséje lesz.';
-		map['transaction.list.searcher_placeholder'] = 'Keresés kategória, leírás alapján...';
-		map['transaction.list.searcher_no_results'] = 'Nincs a keresési feltételeknek megfelelő tranzakció';
-		map['transaction.list.loading'] = 'További tranzakciók betöltése...';
-		map['transaction.list.selected_short'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
-				one: '${n} kiválasztva',
-				other: '${n} kiválasztva',
-			);
-		map['transaction.list.selected_long'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
-				one: '${n} tranzakció kiválasztva',
-				other: '${n} tranzakció kiválasztva',
-			);
-		map['transaction.list.bulk_edit.dates'] = 'Dátumok szerkesztése';
-		map['transaction.list.bulk_edit.categories'] = 'Kategóriák szerkesztése';
-		map['transaction.list.bulk_edit.status'] = 'Állapotok szerkesztése';
-		map['transaction.filters.title'] = 'Tranzakciós szűrők';
-		map['transaction.filters.from_value'] = 'Ebből az összegből';
-		map['transaction.filters.to_value'] = 'Eddig az összegig';
-		map['transaction.filters.from_value_def'] = ({required Object x}) => 'Innen: ${x}';
-		map['transaction.filters.to_value_def'] = ({required Object x}) => 'Ide: ${x}';
-		map['transaction.filters.from_date_def'] = ({required Object date}) => 'Ettől: ${date}';
-		map['transaction.filters.to_date_def'] = ({required Object date}) => 'Eddig: ${date}';
-		map['transaction.filters.reset'] = 'Szűrők visszaállítása';
-		map['transaction.filters.saved.title'] = 'Mentett szűrők';
-		map['transaction.filters.saved.new_title'] = 'Új szűrő';
-		map['transaction.filters.saved.edit_title'] = 'Szűrő szerkesztése';
-		map['transaction.filters.saved.name_label'] = 'Szűrő neve';
-		map['transaction.filters.saved.name_hint'] = 'Saját szűrőm';
-		map['transaction.filters.saved.save_dialog_title'] = 'Szűrő mentése';
-		map['transaction.filters.saved.save_tooltip'] = 'Jelenlegi szűrő mentése';
-		map['transaction.filters.saved.load_tooltip'] = 'Mentett szűrő betöltése';
-		map['transaction.filters.saved.empty_title'] = 'Nincsenek mentett szűrők';
-		map['transaction.filters.saved.empty_description'] = 'Mentse el a szűrőket itt, hogy később gyorsan elérhesse őket.';
-		map['transaction.filters.saved.save_success'] = 'Szűrő sikeresen mentve';
-		map['transaction.filters.saved.delete_success'] = 'Szűrő sikeresen törölve';
-		map['transaction.form.validators.zero'] = 'A tranzakció értéke nem lehet nulla.';
-		map['transaction.form.validators.date_max'] = 'A kiválasztott dátum az aktuális dátum után van. A tranzakció függő tranzakcióként kerül hozzáadásra.';
-		map['transaction.form.validators.date_after_account_creation'] = 'Nem hozhat létre olyan tranzakciót, amelynek a dátuma megelőzi a hozzá tartozó számla létrehozásának a dátumát.';
-		map['transaction.form.validators.negative_transfer'] = 'Az átutalás pénzbeli értéke nem lehet negatív.';
-		map['transaction.form.validators.transfer_between_same_accounts'] = 'A kiindulási és a célszámla nem lehet ugyanaz.';
-		map['transaction.form.title'] = 'Tranzakció megnevezése';
-		map['transaction.form.title_short'] = 'Cím';
-		map['transaction.form.value'] = 'A tranzakció értéke';
-		map['transaction.form.tap_to_see_more'] = 'Koppintson a további részletek megtekintéséhez';
-		map['transaction.form.no_tags'] = '-- Nincsenek címkék --';
-		map['transaction.form.description'] = 'Leírás';
-		map['transaction.form.description_info'] = 'Koppintson ide a tranzakció részletesebb leírásának megadásához.';
-		map['transaction.form.exchange_to_preferred_title'] = ({required Object currency}) => '${currency} átváltási árfolyam';
-		map['transaction.form.exchange_to_preferred_in_date'] = 'A tranzakció napján';
-		map['transaction.reversed.title'] = 'Megfordított tranzakció';
-		map['transaction.reversed.title_short'] = 'Megfordított';
-		map['transaction.reversed.description_for_expenses'] = 'Annak ellenére, hogy költségtranzakció, pozitív összegű. Az ilyen típusú tranzakciókat egy korábban elszámolt kiadás visszatérülésének, például visszatérítésnek vagy egy tartozás kifizetésének megjelenítésére lehet használni.';
-		map['transaction.reversed.description_for_incomes'] = 'Annak ellenére, hogy bevételi tranzakció, negatív összegű. Az ilyen típusú tranzakciók felhasználhatók a helytelenül elszámolt bevétel érvénytelenítésére vagy helyesbítésére, pénzvisszatérítés vagy pénzvisszatérítés tükrözésére, illetve tartozások kifizetésének rögzítésére.';
-		map['transaction.status.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
-				one: 'Állapot',
-				other: 'Állapotok',
-			);
-		map['transaction.status.display_long'] = 'Tranzakció állapota';
-		map['transaction.status.tr_status'] = ({required Object status}) => '${status} tranzakció';
-		map['transaction.status.none'] = 'Állapot nélküli';
-		map['transaction.status.none_descr'] = 'Konkrét állapot nélküli tranzakció';
-		map['transaction.status.reconciled'] = 'Egyeztetett';
-		map['transaction.status.reconciled_descr'] = 'Ezt a tranzakciót már érvényesítették, és megfelel a bankja valós tranzakciójának.';
-		map['transaction.status.unreconciled'] = 'Nem egyeztetett';
-		map['transaction.status.unreconciled_descr'] = 'Ezt a tranzakciót még nem ellenőrizték, ezért még nem jelenik meg a valódi bankszámláin. Ez azonban szükséges a Monekin egyenlegeinek és statisztikáinak kiszámításához.';
-		map['transaction.status.pending'] = 'Függőben';
-		map['transaction.status.pending_descr'] = 'Ez a tranzakció függőben van, ezért az egyenlegek és statisztikák kiszámításakor nem kerül figyelembevételbe.';
-		map['transaction.status.voided'] = 'Érvénytelenítve';
-		map['transaction.status.voided_descr'] = 'Fizetési hiba vagy bármilyen más ok miatt érvénytelenített/törölt tranzakció. Ezt nem vesszük figyelembe az egyenlegek és statisztikák kiszámításakor.';
-		map['transaction.types.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
-				one: 'Tranzakció típusa',
-				other: 'Tranzakciótípusok',
-			);
-		map['transaction.types.income'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
-				one: 'Bevétel',
-				other: 'Bevételek',
-			);
-		map['transaction.types.expense'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
-				one: 'Kiadás',
-				other: 'Kiadások',
-			);
-		map['transaction.types.transfer'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
-				one: 'Áthelyezés',
-				other: 'Áthelyezések',
-			);
-		map['transfer.display'] = 'Áthelyezés';
-		map['transfer.transfers'] = 'Áthelyezések';
-		map['transfer.transfer_to'] = ({required Object account}) => 'Áthelyezés ide: ${account}';
-		map['transfer.create'] = 'Új átvitel';
-		map['transfer.need_two_accounts_warning_header'] = 'Hoppá!';
-		map['transfer.need_two_accounts_warning_message'] = 'A művelet végrehajtásához legalább kettő számlára van szükség. Ha módosítani vagy szerkeszteni szeretné a számla aktuális egyenlegét, kattintson a szerkesztés gombra.';
-		map['transfer.form.from'] = 'Eredeti számla';
-		map['transfer.form.to'] = 'Célszámla';
-		map['transfer.form.value_in_destiny.title'] = 'A rendeltetési helyre átutalt összeg';
-		map['transfer.form.value_in_destiny.amount_short'] = ({required Object amount}) => '${amount} a célszámlához';
-		map['recurrent_transactions.title'] = 'Ismétlődő tranzakciók';
-		map['recurrent_transactions.title_short'] = 'Ism. tranzakciók';
-		map['recurrent_transactions.empty'] = 'Úgy tűnik, hogy nincsenek ismétlődő tranzakciói. Hozzon létre havi, éves vagy heti ismétlődő tranzakciót, és az itt fog megjelenni.';
-		map['recurrent_transactions.total_expense_title'] = 'Összes kiadás periódusonként';
-		map['recurrent_transactions.total_expense_descr'] = '* Az egyes ismétlődések kezdő és befejező időpontjának figyelembevétele nélkül';
-		map['recurrent_transactions.details.title'] = 'Ismétlődő tranzakció';
-		map['recurrent_transactions.details.descr'] = 'A tranzakció következő lépései az alábbiakban láthatók. Elfogadhatja az első lépést, vagy kihagyhatja ezt a lépést.';
-		map['recurrent_transactions.details.last_payment_info'] = 'Ez a mozgatás az utolsó az ismétlődő szabályban, így ez a szabály automatikusan törlődik a művelet megerősítésekor.';
-		map['recurrent_transactions.details.delete_header'] = 'Ismétlődő tranzakció törlése';
-		map['recurrent_transactions.details.delete_message'] = 'Ez a művelet visszafordíthatatlan, és nem érinti a már visszaigazolt/befizetett tranzakciókat.';
-		map['recurrent_transactions.status.delayed_by'] = ({required Object x}) => 'Késés: ${x}d';
-		map['recurrent_transactions.status.coming_in'] = ({required Object x}) => '${x} napon belül';
-		map['account.details'] = 'Számlaadatok';
-		map['account.date'] = 'Megnyitás dátuma';
-		map['account.close_date'] = 'Lezárás dátuma';
-		map['account.reopen'] = 'Számla újranyitása';
-		map['account.reopen_short'] = 'Újranyitás';
-		map['account.reopen_descr'] = 'Biztos, hogy újra meg akarja nyitni ezt a számlát?';
-		map['account.balance'] = 'Számlaegyenleg';
-		map['account.n_transactions'] = 'Tranzakciók száma';
-		map['account.add_money'] = 'Hozzáadás';
-		map['account.withdraw_money'] = 'Pénzfelvétel';
-		map['account.no_accounts'] = 'Nem található itt megjeleníthető tranzakció. Adjon hozzá egy tranzakciót az alul található „+” gombra kattintva.';
-		map['account.types.title'] = 'Számlatípus';
-		map['account.types.warning'] = 'A számlatípus kiválasztása után az a jövőben nem változtatható meg.';
-		map['account.types.normal'] = 'Normál számla';
-		map['account.types.normal_descr'] = 'Hasznos a napi pénzügyek rögzítéséhez. Ez a leggyakoribb számla, amely lehetővé teszi kiadások, bevételek hozzáadását...';
-		map['account.types.saving'] = 'Megtakarítási számla';
-		map['account.types.saving_descr'] = 'Csak más számlákról tud pénzt hozzáadni és kivenni belőle. Tökéletes a megtakarítás megkezdéséhez.';
-		map['account.form.name'] = 'Számla neve';
-		map['account.form.name_placeholder'] = 'Pl.: Megtakarítási számla';
-		map['account.form.notes'] = 'Megjegyzések';
-		map['account.form.notes_placeholder'] = 'Írjon néhány megjegyzést/leírást erről a számláról.';
-		map['account.form.initial_balance'] = 'Kezdőegyenleg';
-		map['account.form.current_balance'] = 'Aktuális egyenleg';
-		map['account.form.create'] = 'Számla létrehozása';
-		map['account.form.edit'] = 'Számla szerkesztése';
-		map['account.form.currency_not_found_warn'] = 'Nincs információja ennek a pénznemnek az árfolyamairól. 1,0 lesz az alapértelmezett átváltási árfolyam. Ezt a beállításokban tudja majd módosítani.';
-		map['account.form.already_exists'] = 'Ugyanezzel a névvel már van egy másik is. Kérjük, adjon meg egy másikat.';
-		map['account.form.tr_before_opening_date'] = 'A számlán a nyitási dátumot megelőző dátumú tranzakciók vannak.';
-		map['account.form.iban'] = 'IBAN';
-		map['account.form.swift'] = 'SWIFT';
-		map['account.delete.warning_header'] = 'Törli a számlát?';
-		map['account.delete.warning_text'] = 'Ez a művelet törli ezt a számlát és annak az összes tranzakcióját.';
-		map['account.delete.success'] = 'A számla sikeresen törlésre került';
-		map['account.close.title'] = 'Számla lezárása';
-		map['account.close.title_short'] = 'Lezárás';
-		map['account.close.warn'] = 'Ez a számla többé nem jelenik meg bizonyos listákban, és nem tud benne tranzakciókat létrehozni az alább megadott dátumnál későbbi dátummal. Ez a művelet semmilyen tranzakciót vagy egyenleget nem érint, és ezt a számlát bármikor újra megnyithatja. ';
-		map['account.close.should_have_zero_balance'] = 'A számla lezárásához 0-nak kell lennie az aktuális egyenlegnek. Kérjük, a folytatás előtt szerkessze át a számlát.';
-		map['account.close.should_have_no_transactions'] = 'Ez a számla a megadott zárási dátumot követő tranzakciókat tartalmaz. Törölje őket, vagy szerkessze a számla zárási dátumát, mielőtt folytatná.';
-		map['account.close.success'] = 'A számla sikeresen lezárva';
-		map['account.close.unarchive_succes'] = 'A számla sikeresen újranyitásra került';
-		map['account.select.one'] = 'Egy számla kiválasztása';
-		map['account.select.all'] = 'Összes számla';
-		map['account.select.multiple'] = 'Számlák kiválasztása';
-		map['currencies.currency_converter'] = 'Valutaváltó';
-		map['currencies.currency'] = 'Pénznem';
-		map['currencies.currency_settings'] = 'Pénznem beállítások';
-		map['currencies.currency_manager'] = 'Valutakezelő';
-		map['currencies.currency_manager_descr'] = 'Konfigurálja a pénznemet és annak árfolyamait másokkal együtt';
-		map['currencies.preferred_currency'] = 'Kedvelt/alap pénznem';
-		map['currencies.tap_to_change_preferred_currency'] = 'Érintse meg a módosításhoz';
-		map['currencies.change_preferred_currency_title'] = 'Kedvelt pénznem módosítása';
-		map['currencies.change_preferred_currency_msg'] = 'Mostantól minden statisztika és költségvetés ebben a pénznemben jelenik meg. A számlák és tranzakciók megtartják a korábbi pénznemet. Minden elmentett árfolyam törlődik, ha ezt a műveletet végrehajtja. Szeretné folytatni?';
-		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = 'A pénznem nem lehet azonos a felhasználói pénznemmel';
-		map['currencies.exchange_rate_form.override_existing_warn'] = 'Ebben a dátumban már létezik árfolyam ehhez a pénznemhez. Ha folytatja, az előző felülírásra kerül';
-		map['currencies.exchange_rate_form.specify_a_currency'] = 'Kérjük, adjon meg egy pénznemet';
-		map['currencies.exchange_rate_form.add'] = 'Árfolyam hozzáadása';
-		map['currencies.exchange_rate_form.add_success'] = 'Az árfolyam sikeresen hozzáadva';
-		map['currencies.exchange_rate_form.edit'] = 'Árfolyam szerkesztése';
-		map['currencies.exchange_rate_form.edit_success'] = 'Az árfolyam szerkesztése sikerült';
-		map['currencies.exchange_rate_form.remove_all'] = 'Törölje az összes árfolyamot';
-		map['currencies.exchange_rate_form.remove_all_warning'] = 'Ez a művelet visszafordíthatatlan, és törli az összes átváltási árfolyamot ehhez a pénznemhez';
-		map['currencies.types.display'] = 'Pénznem típusa';
-		map['currencies.types.fiat'] = 'FIAT';
-		map['currencies.types.crypto'] = 'Kriptovaluta';
-		map['currencies.types.other'] = 'Más';
-		map['currencies.currency_form.name'] = 'Megjelenítési név';
-		map['currencies.currency_form.code'] = 'Pénznem kódja';
-		map['currencies.currency_form.symbol'] = 'Szimbólum';
-		map['currencies.currency_form.decimal_digits'] = 'Tizedesjegyek';
-		map['currencies.currency_form.create'] = 'Pénznem létrehozása';
-		map['currencies.currency_form.create_success'] = 'A pénznem sikeresen létrehozva';
-		map['currencies.currency_form.edit'] = 'Pénznem szerkesztése';
-		map['currencies.currency_form.edit_success'] = 'A pénznem sikeresen szerkesztve';
-		map['currencies.currency_form.delete'] = 'Pénznem törlése';
-		map['currencies.currency_form.delete_success'] = 'A pénznem sikeresen törölve';
-		map['currencies.currency_form.already_exists'] = 'Már létezik ilyen kóddal rendelkező pénznem. Érdemes lehet szerkeszteni';
-		map['currencies.delete_all_success'] = 'Az árfolyamok sikeresen törlésre kerültek';
-		map['currencies.historical'] = 'Árfolyamtörténetek';
-		map['currencies.historical_empty'] = 'Ehhez a pénznemhez nem található történelmi átváltási árfolyam';
-		map['currencies.exchange_rate'] = 'Árfolyam';
-		map['currencies.exchange_rates'] = 'Árfolyamok';
-		map['currencies.min_exchange_rate'] = 'Minimális árfolyam';
-		map['currencies.max_exchange_rate'] = 'Maximális árfolyam';
-		map['currencies.empty'] = 'Adja hozzá az árfolyamokat, hogy ha az alapvalutától eltérő valutában vezetett számlái vannak, és így a grafikonok pontosabbak legyenek.';
-		map['currencies.select_a_currency'] = 'Válasszon ki egy pénznemet';
-		map['currencies.search'] = 'Keresés név vagy pénznemkód alapján';
-		map['tags.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
-				one: 'Felirat',
-				other: 'Címkék',
-			);
-		map['tags.form.name'] = 'Címke neve';
-		map['tags.form.description'] = 'Leírás';
-		map['tags.select.title'] = 'Címke kiválasztása';
-		map['tags.select.all'] = 'Minden címke';
-		map['tags.empty_list'] = 'Még nem hozott létre címkéket. A címkék és kategóriák nagyszerű lehetőséget kínálnak a pénzmozgások kategorizálására.';
-		map['tags.without_tags'] = 'Címkék nélkül';
-		map['tags.add'] = 'Hozzáadás';
-		map['tags.create'] = 'Felirat készítése';
-		map['tags.create_success'] = 'A felirat sikeresen létrehozva';
-		map['tags.already_exists'] = 'Ez a címkenév már létezik. Érdemes lehet átszerkeszteni';
-		map['tags.edit'] = 'Címke szerkesztése';
-		map['tags.edit_success'] = 'A címke sikeresen szerkesztésre került';
-		map['tags.delete_success'] = 'A kategória sikeresen törölve';
-		map['tags.delete_warning_header'] = 'Törli a címkét?';
-		map['tags.delete_warning_message'] = 'Ez a művelet nem törli az ezzel a címkével rendelkező tranzakciókat.';
-		map['categories.unknown'] = 'Ismeretlen kategória';
-		map['categories.create'] = 'Kategória létrehozása';
-		map['categories.create_success'] = 'A kategória sikeresen létrehozva';
-		map['categories.new_category'] = 'Új kategória';
-		map['categories.already_exists'] = 'Ez a kategórianév már létezik. Talán szeretné szerkeszteni?';
-		map['categories.edit'] = 'Kategória szerkesztése';
-		map['categories.edit_success'] = 'A kategória sikeresen szerkesztve lett';
-		map['categories.name'] = 'Kategória neve';
-		map['categories.type'] = 'Kategória típusa';
-		map['categories.both_types'] = 'Mindkét típus';
-		map['categories.subcategories'] = 'Alkategóriák';
-		map['categories.subcategories_add'] = 'Hozzáadás';
-		map['categories.make_parent'] = 'Kategória létrehozása';
-		map['categories.make_child'] = 'Alkategória létrehozása';
-		map['categories.make_child_warning1'] = ({required Object destiny}) => 'Ez a kategória és alkategóriái a(z) <b>${destiny}</b> alkategóriái lesznek.';
-		map['categories.make_child_warning2'] = ({required Object x, required Object destiny}) => 'A tranzakcióik <b>(${x})</b> átkerülnek a(z) <b>${destiny}</b> kategóriában létrehozott új alkategóriákba.';
-		map['categories.make_child_success'] = 'Az alkategóriák sikeresen létrehozva';
-		map['categories.merge'] = 'Összevonás másik kategóriával';
-		map['categories.merge_warning1'] = ({required Object from, required Object x, required Object destiny}) => 'A(z) <b>${from}</b> kategóriához tartozó összes tranzakció (${x}) átkerül a(z) <b>${destiny}</b> kategóriába.';
-		map['categories.merge_warning2'] = ({required Object from}) => 'A(z) <b>${from}</b> kategória visszafordíthatatlanul törlésre kerül.';
-		map['categories.merge_success'] = 'A kategória sikeresen egyesítve';
-		map['categories.delete_success'] = 'A kategória sikeresen törölve';
-		map['categories.delete_warning_header'] = 'Törli a kategóriát?';
-		map['categories.delete_warning_message'] = ({required Object x}) => 'Ez a művelet visszafordíthatatlanul törli az összes <b>(${x})</b> tranzakciót, amely ehhez a kategóriához kapcsolódik.';
-		map['categories.select.title'] = 'Kategóriák kiválasztása';
-		map['categories.select.select_one'] = 'Kategória kiválasztása';
-		map['categories.select.select_subcategory'] = 'Alkategória kiválasztása';
-		map['categories.select.without_subcategory'] = 'Alkategória nélkül';
-		map['categories.select.all'] = 'Összes kategória';
-		map['categories.select.all_short'] = 'Mind';
-		map['budgets.title'] = 'Költségvetések';
-		map['budgets.status'] = 'Költségkeret állapota';
-		map['budgets.repeated'] = 'Ismétlődő';
-		map['budgets.one_time'] = 'Egyszer';
-		map['budgets.actives'] = 'Aktívok';
-		map['budgets.from_budgeted'] = 'maradt ';
-		map['budgets.days_left'] = 'nap van hátra';
-		map['budgets.days_to_start'] = 'nap van a kezdésig';
-		map['budgets.since_expiration'] = 'napja lejárt';
-		map['budgets.no_budgets'] = 'Úgy tűnik, hogy ebben a szakaszban nincs megjelenítendő költségvetés. Kezdje a költségvetés létrehozásával az alábbi gombra kattintva.';
-		map['budgets.delete'] = 'Költségvetés törlése';
-		map['budgets.delete_warning'] = 'Ez a művelet visszafordíthatatlan. Az erre az ajánlatra hivatkozó kategóriák és tranzakciók nem törlődnek.';
-		map['budgets.form.title'] = 'Hozzáadás';
-		map['budgets.form.name'] = 'Költségvetés neve';
-		map['budgets.form.value'] = 'Mennyiségkorlátozás';
-		map['budgets.form.create'] = 'Hozzáadás';
-		map['budgets.form.create_success'] = 'A költségkeret sikeresen létrehozva';
-		map['budgets.form.edit'] = 'Szerkesztés';
-		map['budgets.form.edit_success'] = 'A költségvetés szerkesztése sikeresen megtörtént';
-		map['budgets.form.negative_warn'] = 'A költségvetések nem lehetnek negatív összegűek.';
-		map['budgets.details.title'] = 'Költségvetés részletei';
-		map['budgets.details.statistics'] = 'Statisztika';
-		map['budgets.details.budget_value'] = 'Költségvetésben';
-		map['budgets.details.expend_evolution'] = 'Költségek alakulása';
-		map['budgets.details.no_transactions'] = 'Úgy tűnik, hogy ezzel a költségvetéssel kapcsolatban semmilyen kiadást nem teljesített.';
-		map['budgets.target_timeline_statuses.active'] = 'Aktív költségvetés';
-		map['budgets.target_timeline_statuses.past'] = 'Befejezett költségvetés';
-		map['budgets.target_timeline_statuses.future'] = 'Jövőbeli költségvetés';
-		map['budgets.progress.labels.active_on_track'] = 'Terv szerint';
-		map['budgets.progress.labels.active_overspending'] = 'Túlköltekezés';
-		map['budgets.progress.labels.active_indeterminate'] = 'Aktív';
-		map['budgets.progress.labels.success'] = 'Teljesítve';
-		map['budgets.progress.labels.fail'] = 'Költségvetés túllépve';
-		map['budgets.progress.description.active_on_track'] = ({required Object dailyAmount, required Object remainingDays}) => 'Naponta ${dailyAmount} összeget költhet a hátralévő ${remainingDays} napban';
-		map['budgets.progress.description.active_overspending'] = ({required Object dailyAmount, required Object remainingDays}) => 'Hogy visszatérjen a tervhez, korlátoznia kell kiadásait napi ${dailyAmount} összegre a hátralévő ${remainingDays} napban';
-		map['budgets.progress.description.active_indeterminate'] = ({required Object amount}) => 'Még ${amount} elkölthető.';
-		map['budgets.progress.description.active_exceeded'] = ({required Object amount}) => 'Már túllépte a költségvetési keretet ${amount} összeggel. Ha nem talál bevételt ehhez a költségvetéshez, abba kell hagynia a költekezést az időszak hátralévő részében';
-		map['budgets.progress.description.success'] = 'Szép munka! Ez a költségvetés sikeresen lezárult. Hozzon létre további költségvetéseket kiadásai kezeléséhez';
-		map['budgets.progress.description.fail'] = ({required Object amount}) => 'Túllépte a költségvetést ${amount} összeggel. Próbáljon meg óvatosabb lenni legközelebb!';
-		map['goals.title'] = 'Célok';
-		map['goals.status'] = 'A cél állapota';
-		map['goals.type.display'] = 'Cél típusa';
-		map['goals.type.income.title'] = 'Megtakarítási cél';
-		map['goals.type.income.descr'] = 'Ideális pénzmegtakarításhoz. Akkor sikeres, ha az egyenleg meghaladja a célösszeget.';
-		map['goals.type.expense.title'] = 'Költési cél';
-		map['goals.type.expense.descr'] = 'Kövesse nyomon kiadásait, és próbáljon meg elérni egy célösszeget. Jól használható adományokhoz...';
-		map['goals.empty_title'] = 'Nincsenek célok';
-		map['goals.empty_description'] = 'Hozzon létre új célt megtakarításai követéséhez!';
-		map['goals.delete'] = 'Cél törlése';
-		map['goals.delete_warning'] = 'Ez a művelet visszafordíthatatlan. A célhoz kapcsolódó kategóriák és tranzakciók nem törlődnek';
-		map['goals.form.new_title'] = 'Új cél';
-		map['goals.form.edit_title'] = 'Cél szerkesztése';
-		map['goals.form.target_amount'] = 'Célösszeg';
-		map['goals.form.initial_amount'] = 'Kezdő összeg';
-		map['goals.form.name'] = 'Név';
-		map['goals.form.name_hint'] = 'Megtakarítási célom';
-		map['goals.form.create_success'] = 'Cél sikeresen létrehozva';
-		map['goals.form.edit_success'] = 'Cél sikeresen szerkesztve';
-		map['goals.form.negative_warn'] = 'A cél összege nem lehet negatív';
-		map['goals.details.title'] = 'Cél részletei';
-		map['goals.details.statistics'] = 'Statisztikák';
-		map['goals.details.goal_value'] = 'Célérték';
-		map['goals.details.evolution'] = 'Fejlődés';
-		map['goals.details.no_transactions'] = 'Úgy tűnik, nem hajtott végre ehhez a célhoz kapcsolódó tranzakciót';
-		map['goals.target_timeline_statuses.active'] = 'Aktív cél';
-		map['goals.target_timeline_statuses.past'] = 'Befejezett cél';
-		map['goals.target_timeline_statuses.future'] = 'Jövőbeli cél';
-		map['goals.progress.labels.active_on_track'] = 'Pályán';
-		map['goals.progress.labels.active_behind_schedule'] = 'A menetrend lemaradásával';
-		map['goals.progress.labels.active_indeterminate'] = 'Aktív';
-		map['goals.progress.labels.success'] = 'A cél elérve';
-		map['goals.progress.labels.fail'] = 'A gól nem sikerült';
-		map['goals.progress.description.active_on_track'] = ({required Object dailyAmount, required Object remainingDays}) => 'Jó úton haladsz a cél felé! Naponta ${dailyAmount} összeget kell megtakarítania a fennmaradó ${remainingDays} napig';
-		map['goals.progress.description.active_behind_schedule'] = ({required Object dailyAmount, required Object remainingDays}) => 'Lemaradsz a menetrendről. Naponta ${dailyAmount} összeget kell megtakarítania, hogy ${remainingDays} napon belül elérje célját';
-		map['goals.progress.description.active_indeterminate'] = ({required Object amount}) => 'További ${amount} kell a cél eléréséhez.';
-		map['goals.progress.description.success'] = 'Gratulálok! Elérted a célodat.';
-		map['goals.progress.description.fail'] = ({required Object amount}) => '${amount} értékkel eltévesztette a célt.';
-		map['target_timeline_statuses.active'] = 'Aktív';
-		map['target_timeline_statuses.past'] = 'Befejezve';
-		map['target_timeline_statuses.future'] = 'Jövő';
-		map['backup.no_file_selected'] = 'Nincs kiválasztva fájl';
-		map['backup.no_directory_selected'] = 'Nincs kiválasztott könyvtár';
-		map['backup.export.title'] = 'Adatok exportálása';
-		map['backup.export.title_short'] = 'Exportálás';
-		map['backup.export.type_of_export'] = 'Az export típusa';
-		map['backup.export.other_options'] = 'Opciók';
-		map['backup.export.all'] = 'Teljes mentés';
-		map['backup.export.all_descr'] = 'Exportálja az összes adatát (számlák, tranzakciók, költségvetések, beállítások...). Bármikor újra importálhatja őket, így semmit sem veszíthet el.';
-		map['backup.export.transactions'] = 'Tranzakciók mentése';
-		map['backup.export.transactions_descr'] = 'Exportálja tranzakcióit CSV formátumban, így könnyebben elemezheti azokat más programokban vagy alkalmazásokban.';
-		map['backup.export.transactions_to_export'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
-				one: '1 exportálandó tranzakció',
-				other: '${n} exportálandó tranzakció',
-			);
-		map['backup.export.description'] = 'Adatok letöltése különböző formátumokban';
-		map['backup.export.send_file'] = 'Fájl küldése';
-		map['backup.export.see_folder'] = 'Lásd a mappát';
-		map['backup.export.success'] = ({required Object x}) => 'A fájl sikeresen mentve/letöltve ide: ${x}';
-		map['backup.export.error'] = 'Hiba a fájl letöltésében. Kérjük, lépjen kapcsolatba a fejlesztővel a lozin.technologies@gmail.com címen keresztül.';
-		map['backup.export.dialog_title'] = 'Fájl mentése/küldése';
-		map['backup.import.title'] = 'Adatok importálása';
-		map['backup.import.title_short'] = 'Importálás';
-		map['backup.import.restore_backup'] = 'Mentés visszaállítása';
-		map['backup.import.restore_backup_descr'] = 'Importáljon egy korábban mentett adatbázist a Monekinből. Ez a művelet minden jelenlegi alkalmazásadatot lecseréli az új adatokra.';
-		map['backup.import.restore_backup_warn_description'] = 'Új adatbázis importálásakor az alkalmazásban jelenleg mentett összes adat elveszik. A folytatás előtt ajánlatos biztonsági másolatot készíteni. Ne töltsön fel ide olyan fájlt, amelynek eredetét nem ismeri, csak azokat a fájlokat töltse fel, amelyeket korábban letöltött a Monekin oldaláról.';
-		map['backup.import.restore_backup_warn_title'] = 'Az összes adat felülírása';
-		map['backup.import.select_other_file'] = 'Másik fájl kiválasztása';
-		map['backup.import.tap_to_select_file'] = 'Koppintson a fájl kiválasztásához';
-		map['backup.import.manual_import.title'] = 'Kézi importálás';
-		map['backup.import.manual_import.descr'] = 'Tranzakciók kézi importálása egy .csv fájlból';
-		map['backup.import.manual_import.default_account'] = 'Alapértelm. számla';
-		map['backup.import.manual_import.remove_default_account'] = 'Alapértelmezett számla törlése';
-		map['backup.import.manual_import.default_category'] = 'Alapértelm. kategória';
-		map['backup.import.manual_import.select_a_column'] = 'Válasszon ki egy oszlopot a .csv fájlból';
-		map['backup.import.manual_import.steps.0'] = 'Fájl kiválasztása';
-		map['backup.import.manual_import.steps.1'] = 'Mennyiség oszlop';
-		map['backup.import.manual_import.steps.2'] = 'Számlaoszlop';
-		map['backup.import.manual_import.steps.3'] = 'Kategória oszlop';
-		map['backup.import.manual_import.steps.4'] = 'Dátum oszlop';
-		map['backup.import.manual_import.steps.5'] = 'egyéb oszlopok';
-		map['backup.import.manual_import.steps_descr.0'] = 'Válasszon ki egy .csv fájlt az eszközről. Győződjön meg arról, hogy van egy első sora, amely leírja az egyes oszlopok nevét.';
-		map['backup.import.manual_import.steps_descr.1'] = 'Válassza ki azt az oszlopot, amelyben az egyes tranzakciók dátuma meg van adva. Ha nincs megadva, a tranzakciók az aktuális dátummal jönnek létre. Válassza ki azt az oszlopot, ahol az egyes tranzakciók értéke meg van adva. Használjon negatív értékeket a kiadásokhoz és pozitív értékeket a bevételekhez.';
-		map['backup.import.manual_import.steps_descr.2'] = 'Válassza ki azt az oszlopot, amelyben meg van adva az a számla, amelyhez az egyes tranzakciók tartoznak. Kiválaszthat egy alapértelmezett fiókot is arra az esetre, ha nem találnánk a kívánt fiókot. Ha nincs megadva alapértelmezett fiók, akkor létrehozunk egyet ugyanazzal a névvel. ';
-		map['backup.import.manual_import.steps_descr.3'] = 'Adja meg azt az oszlopot, ahol a tranzakciókategória neve található. Meg kell adnia egy alapértelmezett kategóriát, hogy ezt a kategóriát rendeljük hozzá a tranzakciókhoz, ha a kategória nem található.';
-		map['backup.import.manual_import.steps_descr.4'] = 'Válassza ki azt az oszlopot, amelyben az egyes tranzakciók dátuma meg van adva. Ha nincs megadva, a tranzakciók az aktuális dátummal jönnek létre.';
-		map['backup.import.manual_import.steps_descr.5'] = 'Az egyéb opcionális tranzakciós attribútumok oszlopainak meghatározása';
-		map['backup.import.manual_import.success'] = ({required Object x}) => '${x} tranzakció sikeresen importálva';
-		map['backup.import.success'] = 'Az importálás sikeresen végrehajtva';
-		map['backup.import.error'] = 'Hiba történt importálásakor. Kérjük, lépjen kapcsolatba a fejlesztővel a lozin.technologies@gmail.com címen keresztül.';
-		map['backup.import.cancelled'] = 'Az importálást a felhasználó megszakította';
-		map['backup.about.title'] = 'Információk az adatbázisról';
-		map['backup.about.create_date'] = 'Létrehozás dátuma';
-		map['backup.about.modify_date'] = 'Utolsó módosítása';
-		map['backup.about.last_backup'] = 'Utolsó mentés';
-		map['backup.about.size'] = 'Méret';
-		map['settings.title_long'] = 'Beállítások és Testreszabás';
-		map['settings.title_short'] = 'Beállítások';
-		map['settings.description'] = 'Téma, Nyelv, Adatok és egyebek';
-		map['settings.edit_profile'] = 'Profil szerkesztése';
-		map['settings.general.menu_title'] = 'Általános beállítások';
-		map['settings.general.menu_descr'] = 'Nyelv, adatvédelem és egyebek';
-		map['settings.general.show_all_decimals'] = 'Összes tizedesjegy mutatása';
-		map['settings.general.show_all_decimals_descr'] = 'Minden tizedesjegy megjelenítése, még akkor is, ha nullára végződik';
-		map['settings.general.language.section'] = 'Nyelv és szövegek';
-		map['settings.general.language.title'] = 'Alkalmazás nyelve';
-		map['settings.general.language.descr'] = 'Nyelv, amelyen a szövegek megjelennek az alkalmazásban';
-		map['settings.general.language.help'] = 'Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'> útmutatónk</a>';
-		map['settings.general.locale.title'] = 'Régió';
-		map['settings.general.locale.auto'] = 'Rendszer';
-		map['settings.general.locale.descr'] = 'Dátumok, számformátumok beállítása...';
-		map['settings.general.locale.warn'] = 'Régióváltáskor az alkalmazás frissülni fog';
-		map['settings.general.locale.first_day_of_week'] = 'A hét első napja';
-		map['settings.security.title'] = 'Biztonság';
-		map['settings.security.private_mode_at_launch'] = 'Privát mód indításkor';
-		map['settings.security.private_mode_at_launch_descr'] = 'Az alkalmazás alapértelmezés szerinti indítása privát módban';
-		map['settings.security.private_mode'] = 'Privát mód';
-		map['settings.security.private_mode_descr'] = 'Minden pénzösszeg elrejtése';
-		map['settings.security.private_mode_activated'] = 'Privát mód aktiválva';
-		map['settings.security.private_mode_deactivated'] = 'Privát mód letiltva';
-		map['settings.transactions.menu_title'] = 'Tranzakciók';
-		map['settings.transactions.menu_descr'] = 'Konfigurálja tranzakciói viselkedését';
-		map['settings.transactions.title'] = 'Tranzakciós beállítások';
-		map['settings.transactions.style.title'] = 'Tranzakció stílusa';
-		map['settings.transactions.style.subtitle'] = 'Állítsa be, hogyan jelenjenek meg a tranzakciók a listákban';
-		map['settings.transactions.style.show_tags'] = 'Címkék mutatása';
-		map['settings.transactions.style.show_time'] = 'Idő mutatása';
-		map['settings.transactions.swipe_actions.title'] = 'Csúsztatási műveletek';
-		map['settings.transactions.swipe_actions.choose_description'] = 'Válassza ki, hogy milyen művelet induljon el, ha a listában lévő tranzakciós tételt ezzel a csúsztatási irány segítségével csúsztatja';
-		map['settings.transactions.swipe_actions.swipe_left'] = 'Csúsztasson balra';
-		map['settings.transactions.swipe_actions.swipe_right'] = 'Csúsztasson jobbra';
-		map['settings.transactions.swipe_actions.none'] = 'Nincs akció';
-		map['settings.transactions.swipe_actions.toggle_reconciled'] = 'Váltás egyeztetve';
-		map['settings.transactions.swipe_actions.toggle_pending'] = 'Váltás függőben';
-		map['settings.transactions.swipe_actions.toggle_voided'] = 'Váltó érvénytelenítve';
-		map['settings.transactions.swipe_actions.toggle_unreconciled'] = 'Váltás nem egyeztetve';
-		map['settings.transactions.swipe_actions.remove_status'] = 'Állapot eltávolítása';
-		map['settings.transactions.default_values.title'] = 'Default Form Values';
-		map['settings.transactions.default_values.page_title'] = 'New Transaction: Default Form Values';
-		map['settings.transactions.default_values.reuse_last_transaction'] = 'Reuse Last Transaction Values';
-		map['settings.transactions.default_values.reuse_last_transaction_descr'] = 'Automatically fill the form with some values from the last created transaction';
-		map['settings.transactions.default_values.fields_to_reuse'] = 'Fields to reuse';
-		map['settings.transactions.default_values.reuse_last_values_modal_descr'] = 'Select the fields that should be pre-filled with the values from the last created transaction.';
-		map['settings.transactions.default_values.default_values_separator'] = 'Default Values';
-		map['settings.transactions.default_values.default_category'] = 'Default Category';
-		map['settings.transactions.default_values.default_status'] = 'Default Status';
-		map['settings.transactions.default_values.default_tags'] = 'Default Tags';
-		map['settings.transactions.default_values.no_tags_selected'] = 'No tags selected';
-		map['settings.transactions.default_type.title'] = 'Default Type';
-		map['settings.transactions.default_type.modal_title'] = 'Select Default Type';
-		map['settings.appearance.menu_title'] = 'Téma és stílus';
-		map['settings.appearance.menu_descr'] = 'Témaválasztás, színek és egyéb, az alkalmazás megjelenésével kapcsolatos dolgok';
-		map['settings.appearance.theme_and_colors'] = 'Témák és színek';
-		map['settings.appearance.theme.title'] = 'Téma';
-		map['settings.appearance.theme.auto'] = 'Rendszer';
-		map['settings.appearance.theme.light'] = 'Világos';
-		map['settings.appearance.theme.dark'] = 'Sötét';
-		map['settings.appearance.amoled_mode'] = 'AMOLED mód';
-		map['settings.appearance.amoled_mode_descr'] = 'Ha lehetséges, használjon tiszta fekete háttérképet. Ez némileg segíti az AMOLED képernyővel rendelkező készülékek akkumulátorát.';
-		map['settings.appearance.dynamic_colors'] = 'Dinamikus színek';
-		map['settings.appearance.dynamic_colors_descr'] = 'Amikor csak lehetséges, használja a rendszer kiemelő színét';
-		map['settings.appearance.accent_color'] = 'Kiemelő szín';
-		map['settings.appearance.accent_color_descr'] = 'Válassza ki, hogy az alkalmazás milyen színnel emelje ki a felület bizonyos részeit';
-		map['settings.appearance.text'] = 'Szöveg';
-		map['settings.appearance.font'] = 'Betűtípus';
-		map['settings.appearance.font_platform'] = 'Platform';
-		map['more.title'] = 'Továbbiak';
-		map['more.title_long'] = 'További műveletek';
-		map['more.data.display'] = 'Adatok';
-		map['more.data.display_descr'] = 'Exportálja és importálja az adatait, hogy ne veszítsen el semmit se';
-		map['more.data.delete_all'] = 'Adataim törlése';
-		map['more.data.delete_all_header1'] = 'Álljon meg ⚠️⚠️';
-		map['more.data.delete_all_message1'] = 'Biztosan benne, hogy folytatja? Minden adata véglegesen törlődik, és nem állítható vissza';
-		map['more.data.delete_all_header2'] = 'Még egy utolsó lépés ⚠️⚠️';
-		map['more.data.delete_all_message2'] = 'A fiók törlésével törli az összes tárolt személyes adatát. A számlái, tranzakciói, költségvetései és kategóriái törlődnek, és nem állíthatók helyre. Egyetért ezzel?';
-		map['more.about_us.display'] = 'Alkalmazásinformációk';
-		map['more.about_us.description'] = 'Találja meg a Monekin feltételeit, fontos információkat, és lépjen kapcsolatba hibák bejelentésével vagy ötletek megosztásával';
-		map['more.about_us.legal.display'] = 'Jogi információk';
-		map['more.about_us.legal.privacy'] = 'Adatvédelem';
-		map['more.about_us.legal.terms'] = 'Használati feltételek';
-		map['more.about_us.legal.licenses'] = 'Licencek';
-		map['more.about_us.project.display'] = 'Projekt';
-		map['more.about_us.project.contributors'] = 'Közreműködők';
-		map['more.about_us.project.contributors_descr'] = 'Az összes fejlesztő, akik hozzájárultak a Monekin létrehozásához';
-		map['more.about_us.project.contact'] = 'Kapcsolatfelvétel';
-		map['more.help_us.display'] = 'Segítsen nekünk';
-		map['more.help_us.description'] = 'Tudja meg, hogyan segíthet a Monekinnek abban, hogy egyre jobb és jobb legyen';
-		map['more.help_us.rate_us'] = 'Értékeljen minket';
-		map['more.help_us.rate_us_descr'] = 'Bármilyen értékelést szívesen fogadunk!';
-		map['more.help_us.share'] = 'Monekin megosztása';
-		map['more.help_us.share_descr'] = 'Ossza meg alkalmazásunkat a barátaival és a családtagjaival';
-		map['more.help_us.share_text'] = 'Monekin! A legjobb személyes pénzügyi alkalmazás. Töltse le innen';
-		map['more.help_us.thanks'] = 'Köszönjük!';
-		map['more.help_us.thanks_long'] = 'Az Ön hozzájárulása a Monekinhez és más nyílt forráskódú projektekhez, legyen az kicsi vagy nagy, lehetővé teszi az ehhez hasonló nagyszerű projekteket. Köszönjük, hogy időt szán a közreműködésre.';
-		map['more.help_us.donate'] = 'Adományozás';
-		map['more.help_us.donate_descr'] = 'Az adományával segít az alkalmazás további fejlesztésében. Mi lehetne jobb módja, mint megköszönni az elvégzett munkát egy kávéra való meghívással?';
-		map['more.help_us.donate_success'] = 'Az adományozás megtörtént. Köszönöm szépen a közreműködését! ❤️';
-		map['more.help_us.donate_err'] = 'Hoppá! Úgy tűnik, hiba történt a fizetés fogadásakor';
-		map['more.help_us.report'] = 'Hibák jelentése, javaslatok...';
-
-		_map = map;
-		return map;
+		return switch (path) {
+			'ui_actions.cancel' => 'Mégse',
+			'ui_actions.confirm' => 'Megerősítés',
+			'ui_actions.continue_text' => 'Folytatás',
+			'ui_actions.save' => 'Mentés',
+			'ui_actions.save_changes' => 'Módosítások mentése',
+			'ui_actions.close_and_save' => 'Mentés és bezárás',
+			'ui_actions.add' => 'Hozzáad',
+			'ui_actions.edit' => 'Szerkesztés',
+			'ui_actions.delete' => 'Törlés',
+			'ui_actions.see_more' => 'Továbbiak megtekintése',
+			'ui_actions.select_all' => 'Összes kijelölése',
+			'ui_actions.deselect_all' => 'Összes kijelölésének megszüntetése',
+			'ui_actions.select' => 'Kiválasztás',
+			'ui_actions.search' => 'Keresés',
+			'ui_actions.filter' => 'Szűrés',
+			'ui_actions.reset' => 'Alaphelyzetbe állítás',
+			'ui_actions.submit' => 'Beküldés',
+			'ui_actions.next' => 'Következő',
+			'ui_actions.previous' => 'Előző',
+			'ui_actions.back' => 'Vissza',
+			'ui_actions.reload' => 'Újratöltés',
+			'ui_actions.view' => 'Megtekintés',
+			'ui_actions.download' => 'Letöltés',
+			'ui_actions.upload' => 'Feltöltés',
+			'ui_actions.retry' => 'Újrapróbálkozás',
+			'ui_actions.copy' => 'Másolás',
+			'ui_actions.paste' => 'Beillesztés',
+			'ui_actions.undo' => 'Visszavonás',
+			'ui_actions.redo' => 'Újra',
+			'ui_actions.open' => 'Megnyitás',
+			'ui_actions.close' => 'Bezárás',
+			'ui_actions.apply' => 'Alkalmaz',
+			'ui_actions.discard' => 'Elvetés',
+			'ui_actions.refresh' => 'Frissítés',
+			'ui_actions.share' => 'Megosztás',
+			'general.or' => 'vagy',
+			'general.understood' => 'Megértve',
+			'general.unspecified' => 'Meghatározatlan',
+			'general.quick_actions' => 'Gyorsműveletek',
+			'general.details' => 'Részletek',
+			'general.balance' => 'Egyenleg',
+			'general.account' => 'Számla',
+			'general.accounts' => 'Számlák',
+			'general.categories' => 'Kategóriák',
+			'general.category' => 'Kategória',
+			'general.today' => 'Ma',
+			'general.yesterday' => 'Tegnap',
+			'general.filters' => 'Szűrők',
+			'general.empty_warn' => 'Hoppá! Ez nagyon üres.',
+			'general.search_no_results' => 'Egyetlen elem sem felel meg a keresési feltételeknek',
+			'general.insufficient_data' => 'Hiányos adatok',
+			'general.show_more_fields' => 'Több mező mutatása',
+			'general.show_less_fields' => 'Kevesebb mező mutatása',
+			'general.tap_to_search' => 'Koppintson a kereséshez',
+			'general.delete_success' => 'Az elem sikeresen törölve',
+			'general.leave_without_saving.title' => 'Mentés nélkül távozik?',
+			'general.leave_without_saving.message' => 'Vannak nem mentett módosításai. Biztos, hogy mentés nélkül kilép?',
+			'general.clipboard.success' => ({required Object x}) => '${x} a vágólapra másolva',
+			'general.clipboard.error' => 'Másolási hiba',
+			'general.time.start_date' => 'Kezdő dátum',
+			'general.time.end_date' => 'Befejezés dátuma',
+			'general.time.from_date' => 'Ettől kezdve',
+			'general.time.until_date' => 'Dátumig',
+			'general.time.date' => 'Dátum',
+			'general.time.datetime' => 'Időpont',
+			'general.time.time' => 'Idő',
+			'general.time.each' => 'Minden',
+			'general.time.after' => 'Után',
+			'general.time.ranges.display' => 'Időtartomány',
+			'general.time.ranges.it_repeat' => 'Ismétlések',
+			'general.time.ranges.it_ends' => 'Vége',
+			'general.time.ranges.forever' => 'Mindig',
+			'general.time.ranges.types.cycle' => 'Ciklusok',
+			'general.time.ranges.types.last_days' => 'Utolsó nap',
+			'general.time.ranges.types.last_days_form' => ({required Object x}) => '${x} előző nap',
+			'general.time.ranges.types.all' => 'Mindig',
+			'general.time.ranges.types.date_range' => 'Egyéni tartomány',
+			'general.time.ranges.each_range' => ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: 'Minden ${range}', other: 'Minden ${n} ${range}', ), 
+			'general.time.ranges.each_range_until_date' => ({required num n, required Object range, required Object day}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: 'Minden ${range} ${day} -ig', other: 'Minden ${n} ${range} ${day} -ig', ), 
+			'general.time.ranges.each_range_until_times' => ({required num n, required Object range, required Object limit}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: 'Minden ${range} ${limit} alkalommal', other: 'Minden ${n} ${range} ${limit} alkalommal', ), 
+			'general.time.ranges.each_range_until_once' => ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: 'Minden ${range} egyszer', other: 'Minden ${n} ${range} egyszer', ), 
+			'general.time.ranges.month' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: 'Hónap', other: 'Hónap', ), 
+			'general.time.ranges.year' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: 'Év', other: 'Év', ), 
+			'general.time.ranges.day' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: 'Nap', other: 'Nap', ), 
+			'general.time.ranges.week' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: 'Hét', other: 'Hét', ), 
+			'general.time.periodicity.display' => 'Ismétlődés',
+			'general.time.periodicity.no_repeat' => 'Nem ismétlődik',
+			'general.time.periodicity.repeat' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: 'Ismétlés', other: 'Ismétlések', ), 
+			'general.time.periodicity.diary' => 'Naponta',
+			'general.time.periodicity.monthly' => 'Havonta',
+			'general.time.periodicity.annually' => 'Évente',
+			'general.time.periodicity.quaterly' => 'Negyedévente',
+			'general.time.periodicity.weekly' => 'Hetente',
+			'general.time.periodicity.custom' => 'Egyéni',
+			'general.time.periodicity.infinite' => 'Mindig',
+			'general.time.current.monthly' => 'Ebben a hónapban',
+			'general.time.current.annually' => 'Ebben az évben',
+			'general.time.current.quaterly' => 'Ebben a negyedévben',
+			'general.time.current.weekly' => 'Ezen a héten',
+			'general.time.current.infinite' => 'Mindig',
+			'general.time.current.custom' => 'Egyéni tartomány',
+			'general.time.all.diary' => 'Minden nap',
+			'general.time.all.monthly' => 'Minden hónapban',
+			'general.time.all.annually' => 'Minden évben',
+			'general.time.all.quaterly' => 'Minden negyedévben',
+			'general.time.all.weekly' => 'Minden héten',
+			'general.transaction_order.display' => 'Tranzakciók rendezése',
+			'general.transaction_order.category' => 'Kategóriánként',
+			'general.transaction_order.quantity' => 'Mennyiség szerint',
+			'general.transaction_order.date' => 'Dátum szerint',
+			'general.validations.form_error' => 'A folytatáshoz javítsa ki a megadott mezőket',
+			'general.validations.required' => 'Kötelező mező',
+			'general.validations.positive' => 'Pozitívnak kell lennie',
+			'general.validations.min_number' => ({required Object x}) => 'Nagyobbnak kell lennie, mint ${x}',
+			'general.validations.max_number' => ({required Object x}) => 'Kevesebbnek kell lennie, mint ${x}',
+			'intro.start' => 'Kezdés',
+			'intro.skip' => 'Kihagyás',
+			'intro.next' => 'Tovább',
+			'intro.select_your_currency' => 'Válassza ki a pénznemet',
+			'intro.welcome_subtitle' => 'Az Ön személyes pénzügyi menedzsere',
+			'intro.welcome_subtitle2' => '100% -ban nyitott, és 100% -ban ingyenes',
+			'intro.welcome_footer' => 'A bejelentkezéssel elfogadja az <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Adatvédelmi irányelveket</a> és az alkalmazás <a href=\' https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Felhasználási feltételeit</a>',
+			'intro.offline_descr_title' => 'OFFLINE SZÁMLA:',
+			'intro.offline_descr' => 'Az Ön adatai csak az Ön készülékén tárolódnak, és biztonságban lesznek, amíg nem távolítja el az alkalmazást, vagy nem cseréli le a telefont. Az adatvesztés megelőzése érdekében ajánlott rendszeresen biztonsági mentést készíteni az alkalmazás beállításaiból.',
+			'intro.offline_start' => 'Offline munkamenet indítása',
+			'intro.sl1_title' => 'Válassza ki a pénznemet',
+			'intro.sl1_descr' => 'Az alapértelmezett pénznemet a jelentésekben és az általános diagramokban használjuk. A pénznemet és az alkalmazás nyelvét később bármikor megváltoztathatja az alkalmazás beállításaiban.',
+			'intro.sl2_title' => 'Biztonságos, privát és megbízható',
+			'intro.sl2_descr' => 'Az Ön adatai csak az Önéi. Az adatokat közvetlenül az Ön eszközén tároljuk, anélkül, hogy azok külső szervereken keresztül mennének át. Ez lehetővé teszi az alkalmazás használatát internet nélkül is.',
+			'intro.sl2_descr2' => 'Az alkalmazás forráskódja is nyilvános, így bárki közreműködhet benne, és megnézheti, hogyan is működik.',
+			'intro.last_slide_title' => 'Minden kész',
+			'intro.last_slide_descr' => 'A Monekin segítségével végre elérheti azt az anyagi függetlenséget, amelyre annyira vágyik. Grafikonok, költségvetések, tippek, statisztikák és még sok minden más lesz megtalálható a pénzével kapcsolatban.',
+			'intro.last_slide_descr2' => 'Reméljük, hogy élvezni fogja az élményt! Ne habozzon kapcsolatba lépni velünk, ha kétségei, javaslatai vannak...',
+			'home.title' => 'Kezdőlap',
+			'home.filter_transactions' => 'Tranzakciók szűrése',
+			'home.hello_day' => 'Jó reggelt,',
+			'home.hello_night' => 'Jó éjszakát,',
+			'home.total_balance' => 'Teljes egyenleg',
+			'home.my_accounts' => 'Saját számláim',
+			'home.active_accounts' => 'Aktív számlák',
+			'home.no_accounts' => 'Még nincsenek számlák létrehozva',
+			'home.no_accounts_descr' => 'Kezdje el élvezni a Monekin összes varázsát. A tranzakciók hozzáadásához legalább egy számlát hozzon létre.',
+			'home.last_transactions' => 'Legutóbbi tranzakciók',
+			'home.should_create_account_header' => 'Hoppá!',
+			'home.should_create_account_message' => 'A tranzakciók létrehozásához legalább egy nem archivált számlával kell rendelkeznie',
+			'financial_health.display' => 'Pénzügyi állapot',
+			'financial_health.review.very_good' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Nagyon jó!'; case GenderContext.female: return 'Nagyon jó!'; } }, 
+			'financial_health.review.good' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Jó'; case GenderContext.female: return 'Jó'; } }, 
+			'financial_health.review.normal' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Átlagos'; case GenderContext.female: return 'Átlagos'; } }, 
+			'financial_health.review.bad' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Korrekt'; case GenderContext.female: return 'Korrekt'; } }, 
+			'financial_health.review.very_bad' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Nagyon rossz'; case GenderContext.female: return 'Nagyon rossz'; } }, 
+			'financial_health.review.insufficient_data' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Hiányos adatok'; case GenderContext.female: return 'Hiányos adatok'; } }, 
+			'financial_health.review.descr.insufficient_data' => 'Úgy tűnik, nincs elég rögzített kiadásunk ahhoz, hogy kiszámítsuk a pénzügyi állapotát. Adjon hozzá néhány kiadást/bevételt ebben az időszakban, hogy tudjunk segíteni Önnek!',
+			'financial_health.review.descr.very_good' => 'Gratulálunk! Az Ön pénzügyi helyzete nagyon rendben van. Reméljük, hogy folytatódik a jó szériája, és továbbra is tanulni fog a Monekin-nel.',
+			'financial_health.review.descr.good' => 'Nagyszerű! Az Ön pénzügyi helyzete rendben van. Látogasson el az elemzés fülre, hogy megtudja, hogyan takaríthat meg még többet!',
+			'financial_health.review.descr.normal' => 'Az Ön pénzügyi állapota nagyjából a lakosság többi részének átlagában van ebben az időszakban.',
+			'financial_health.review.descr.bad' => 'Úgy tűnik, hogy az Ön pénzügyi helyzete még nem a legjobb. Tekintse át a többi diagramot, hogy többet tudjon meg a pénzügyeiről.',
+			'financial_health.review.descr.very_bad' => 'Hmm, a pénzügyi helyzete messze elmarad attól, aminek lennie kellene. Nézze át a többi diagramot, hogy többet tudjon meg a pénzügyeiről.',
+			'financial_health.months_without_income.title' => 'Túlélési arány',
+			'financial_health.months_without_income.subtitle' => 'Egyenlegét tekintve, mennyi ideig maradhat bevétel nélkül',
+			'financial_health.months_without_income.text_zero' => 'Ilyen kiadás mellett egy hónapot sem bírna ki bevétel nélkül!',
+			'financial_health.months_without_income.text_one' => 'Ilyen mértékű kiadások mellett aligha tudna akár egy hónapot is túlélni bevétel nélkül!',
+			'financial_health.months_without_income.text_other' => ({required Object n}) => 'Ezzel a költési aránnyal körülbelül <b>${n} hónapot</b> tudna túlélni jövedelem nélkül.',
+			'financial_health.months_without_income.text_infinite' => 'Ezzel a költési aránnyal nagyjából <b>az egész életében</b> meg tudna élni jövedelem nélkül.',
+			'financial_health.months_without_income.suggestion' => 'Ne feledje, hogy célszerű ezt az arányt mindig legalább 5 hónap felett tartani. Ha úgy látja, hogy nem rendelkezik elegendő megtakarítási tartalékkal, csökkentse a felesleges kiadásokat.',
+			'financial_health.months_without_income.insufficient_data' => 'Úgy tűnik, nincs elég rögzített kiadásunk ahhoz, hogy kiszámolhassuk, hány hónapig tudna bevétel nélkül megélni. Adjon meg néhány tranzakciót, és térjen vissza ide, hogy ellenőrizze a pénzügyi helyzetét.',
+			'financial_health.savings_percentage.title' => 'Megtakarítási százalék',
+			'financial_health.savings_percentage.subtitle' => 'A jövedelmének mekkora részét nem költi el ebben az időszakban',
+			'financial_health.savings_percentage.text.good' => ({required Object value}) => 'Gratulálunk! Ebben az időszakban a bevételének <b>${value}%</b>-át sikerült megtakarítania. Úgy tűnik, már rendelkezik hozzáértéssel, csak így tovább!',
+			'financial_health.savings_percentage.text.normal' => ({required Object value}) => 'Gratulálunk, a bevételének <b>${value}%</b>-át sikerült megtakarítania ebben az időszakban.',
+			'financial_health.savings_percentage.text.bad' => ({required Object value}) => 'Ebben az időszakban sikerült megtakarítania a jövedelmének <b>${value}%-át</b>. Úgy gondoljuk azonban, hogy ennél még sokkal többet is tehet!',
+			'financial_health.savings_percentage.text.very_bad' => 'Hűha, sajnos ebben az időszakban semmit sem sikerült megtakarítania.',
+			'financial_health.savings_percentage.suggestion' => 'Ne feledje, hogy a jövedelmének legalább 15-20%-át célszerű megtakarítani.',
+			'stats.title' => 'Statisztika',
+			'stats.balance' => 'Egyenleg',
+			'stats.final_balance' => 'Végső egyenleg',
+			'stats.balance_by_account' => 'Számlák szerinti egyenleg',
+			'stats.balance_by_account_subtitle' => 'Hol van a legtöbb pénzem?',
+			'stats.balance_by_currency' => 'Egyenleg pénznemenként',
+			'stats.balance_by_currency_subtitle' => 'Mennyi pénzem van devizában?',
+			'stats.balance_evolution' => 'Egyenleg alakulása',
+			'stats.balance_evolution_subtitle' => 'Több pénzem van, mint korábban?',
+			'stats.compared_to_previous_period' => 'Az előző időszakhoz képest',
+			'stats.cash_flow' => 'Pénzforgalom',
+			'stats.cash_flow_subtitle' => 'Kevesebbet költök, mint amennyit megkeresek?',
+			'stats.by_periods' => 'Időszakonként',
+			'stats.by_categories' => 'Kategóriánként',
+			'stats.by_tags' => 'Címkék szerint',
+			'stats.distribution' => 'Megoszlás',
+			'stats.finance_health_resume' => 'Folytatás',
+			'stats.finance_health_breakdown' => 'Csőd',
+			'icon_selector.name' => 'Név:',
+			'icon_selector.icon' => 'Ikon',
+			'icon_selector.color' => 'Szín',
+			'icon_selector.select_icon' => 'Ikon kiválasztása',
+			'icon_selector.select_color' => 'Szín kiválasztása',
+			'icon_selector.custom_color' => 'Egyedi szín',
+			'icon_selector.current_color_selection' => 'Jelenlegi kiválasztás',
+			'icon_selector.select_account_icon' => 'Számla azonosítása',
+			'icon_selector.select_category_icon' => 'Kategória azonosítása',
+			'icon_selector.scopes.transport' => 'Közlekedés',
+			'icon_selector.scopes.money' => 'Pénz',
+			'icon_selector.scopes.food' => 'Élelmiszer',
+			'icon_selector.scopes.medical' => 'Egészség',
+			'icon_selector.scopes.entertainment' => 'Szabadidő',
+			'icon_selector.scopes.technology' => 'Technológia',
+			'icon_selector.scopes.other' => 'Egyebek',
+			'icon_selector.scopes.logos_financial_institutions' => 'Pénzintézetek',
+			'transaction.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: 'Tranzakció', other: 'Tranzakciók', ), 
+			'transaction.create' => 'Új tranzakció',
+			'transaction.new_income' => 'Új bevétel',
+			'transaction.new_expense' => 'Új kiadás',
+			'transaction.new_success' => 'A tranzakció sikeresen létrehozva',
+			'transaction.edit' => 'Tranzakció szerkesztése',
+			'transaction.edit_success' => 'A tranzakció sikeresen szerkesztve',
+			'transaction.edit_multiple' => 'Tranzakciók szerkesztése',
+			'transaction.edit_multiple_success' => ({required Object x}) => '${x} tranzakció sikeresen szerkesztve',
+			'transaction.duplicate' => 'Tranzakció klónozása',
+			'transaction.duplicate_short' => 'Klónozás',
+			'transaction.duplicate_warning_message' => 'Egy ezzel megegyező tranzakció jön létre ugyanazzal a dátummal, folytatni szeretné?',
+			'transaction.duplicate_success' => 'A tranzakció sikeresen klónozva',
+			'transaction.delete' => 'Tranzakció törlése',
+			'transaction.delete_warning_message' => 'Ez a művelet visszafordíthatatlan. A számlák aktuális egyenlege és az összes statisztikája újraszámításra kerül.',
+			'transaction.delete_success' => 'A tranzakció sikeresen törölve',
+			'transaction.delete_multiple' => 'Tranzakciók törlése',
+			'transaction.delete_multiple_warning_message' => ({required Object x}) => 'Ez a művelet visszafordíthatatlan, és eltávolít ${x} tranzakciót. A számlái aktuális egyenlege és minden statisztikája újraszámításra kerül.',
+			'transaction.delete_multiple_success' => ({required Object x}) => '${x} tranzakció megfelelően törölve',
+			'transaction.details' => 'A mozgás részletei',
+			'transaction.next_payments.accept' => 'Elfogadás',
+			'transaction.next_payments.skip' => 'Kihagyás',
+			'transaction.next_payments.skip_success' => 'A tranzakció sikeresen kihagyásra került',
+			'transaction.next_payments.skip_dialog_title' => 'Tranzakció kihagyása',
+			'transaction.next_payments.skip_dialog_msg' => ({required Object date}) => 'Ez a művelet visszafordíthatatlan. A következő átvitel dátumát módosítjuk erre: ${date}',
+			'transaction.next_payments.accept_today' => 'Elfogadom ma',
+			'transaction.next_payments.accept_in_required_date' => ({required Object date}) => 'Elfogadás a szükséges időpontban: (${date})',
+			'transaction.next_payments.accept_dialog_title' => 'Tranzakció elfogadása',
+			'transaction.next_payments.accept_dialog_msg_single' => 'A tranzakció új állapota nulla lesz. A tranzakció státuszát bármikor újra módosíthatja, amikor csak akarja.',
+			'transaction.next_payments.accept_dialog_msg' => ({required Object date}) => 'Ez a művelet egy új tranzakciót hoz létre ${date} dátummal. A tranzakció részleteit a tranzakciós oldalon ellenőrizheti.',
+			'transaction.next_payments.recurrent_rule_finished' => 'Az ismétlődő szabály teljesült, nincs több kifizetés!',
+			'transaction.list.all' => 'Minden tranzakció',
+			'transaction.list.empty' => 'Nem található itt megjeleníthető tranzakció. Adjon hozzá néhány tranzakciót az alkalmazásban, és talán legközelebb több szerencséje lesz.',
+			'transaction.list.searcher_placeholder' => 'Keresés kategória, leírás alapján...',
+			'transaction.list.searcher_no_results' => 'Nincs a keresési feltételeknek megfelelő tranzakció',
+			'transaction.list.loading' => 'További tranzakciók betöltése...',
+			'transaction.list.selected_short' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: '${n} kiválasztva', other: '${n} kiválasztva', ), 
+			'transaction.list.selected_long' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: '${n} tranzakció kiválasztva', other: '${n} tranzakció kiválasztva', ), 
+			'transaction.list.bulk_edit.dates' => 'Dátumok szerkesztése',
+			'transaction.list.bulk_edit.categories' => 'Kategóriák szerkesztése',
+			'transaction.list.bulk_edit.status' => 'Állapotok szerkesztése',
+			'transaction.filters.title' => 'Tranzakciós szűrők',
+			'transaction.filters.from_value' => 'Ebből az összegből',
+			'transaction.filters.to_value' => 'Eddig az összegig',
+			'transaction.filters.from_value_def' => ({required Object x}) => 'Innen: ${x}',
+			'transaction.filters.to_value_def' => ({required Object x}) => 'Ide: ${x}',
+			'transaction.filters.from_date_def' => ({required Object date}) => 'Ettől: ${date}',
+			'transaction.filters.to_date_def' => ({required Object date}) => 'Eddig: ${date}',
+			'transaction.filters.reset' => 'Szűrők visszaállítása',
+			'transaction.filters.saved.title' => 'Mentett szűrők',
+			'transaction.filters.saved.new_title' => 'Új szűrő',
+			'transaction.filters.saved.edit_title' => 'Szűrő szerkesztése',
+			'transaction.filters.saved.name_label' => 'Szűrő neve',
+			'transaction.filters.saved.name_hint' => 'Saját szűrőm',
+			'transaction.filters.saved.save_dialog_title' => 'Szűrő mentése',
+			'transaction.filters.saved.save_tooltip' => 'Jelenlegi szűrő mentése',
+			'transaction.filters.saved.load_tooltip' => 'Mentett szűrő betöltése',
+			'transaction.filters.saved.empty_title' => 'Nincsenek mentett szűrők',
+			'transaction.filters.saved.empty_description' => 'Mentse el a szűrőket itt, hogy később gyorsan elérhesse őket.',
+			'transaction.filters.saved.save_success' => 'Szűrő sikeresen mentve',
+			'transaction.filters.saved.delete_success' => 'Szűrő sikeresen törölve',
+			'transaction.form.validators.zero' => 'A tranzakció értéke nem lehet nulla.',
+			'transaction.form.validators.date_max' => 'A kiválasztott dátum az aktuális dátum után van. A tranzakció függő tranzakcióként kerül hozzáadásra.',
+			'transaction.form.validators.date_after_account_creation' => 'Nem hozhat létre olyan tranzakciót, amelynek a dátuma megelőzi a hozzá tartozó számla létrehozásának a dátumát.',
+			'transaction.form.validators.negative_transfer' => 'Az átutalás pénzbeli értéke nem lehet negatív.',
+			'transaction.form.validators.transfer_between_same_accounts' => 'A kiindulási és a célszámla nem lehet ugyanaz.',
+			'transaction.form.title' => 'Tranzakció megnevezése',
+			'transaction.form.title_short' => 'Cím',
+			'transaction.form.value' => 'A tranzakció értéke',
+			'transaction.form.tap_to_see_more' => 'Koppintson a további részletek megtekintéséhez',
+			'transaction.form.no_tags' => '-- Nincsenek címkék --',
+			'transaction.form.description' => 'Leírás',
+			'transaction.form.description_info' => 'Koppintson ide a tranzakció részletesebb leírásának megadásához.',
+			'transaction.form.exchange_to_preferred_title' => ({required Object currency}) => '${currency} átváltási árfolyam',
+			'transaction.form.exchange_to_preferred_in_date' => 'A tranzakció napján',
+			'transaction.reversed.title' => 'Megfordított tranzakció',
+			'transaction.reversed.title_short' => 'Megfordított',
+			'transaction.reversed.description_for_expenses' => 'Annak ellenére, hogy költségtranzakció, pozitív összegű. Az ilyen típusú tranzakciókat egy korábban elszámolt kiadás visszatérülésének, például visszatérítésnek vagy egy tartozás kifizetésének megjelenítésére lehet használni.',
+			'transaction.reversed.description_for_incomes' => 'Annak ellenére, hogy bevételi tranzakció, negatív összegű. Az ilyen típusú tranzakciók felhasználhatók a helytelenül elszámolt bevétel érvénytelenítésére vagy helyesbítésére, pénzvisszatérítés vagy pénzvisszatérítés tükrözésére, illetve tartozások kifizetésének rögzítésére.',
+			'transaction.status.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: 'Állapot', other: 'Állapotok', ), 
+			'transaction.status.display_long' => 'Tranzakció állapota',
+			'transaction.status.tr_status' => ({required Object status}) => '${status} tranzakció',
+			'transaction.status.none' => 'Állapot nélküli',
+			'transaction.status.none_descr' => 'Konkrét állapot nélküli tranzakció',
+			'transaction.status.reconciled' => 'Egyeztetett',
+			'transaction.status.reconciled_descr' => 'Ezt a tranzakciót már érvényesítették, és megfelel a bankja valós tranzakciójának.',
+			'transaction.status.unreconciled' => 'Nem egyeztetett',
+			'transaction.status.unreconciled_descr' => 'Ezt a tranzakciót még nem ellenőrizték, ezért még nem jelenik meg a valódi bankszámláin. Ez azonban szükséges a Monekin egyenlegeinek és statisztikáinak kiszámításához.',
+			'transaction.status.pending' => 'Függőben',
+			'transaction.status.pending_descr' => 'Ez a tranzakció függőben van, ezért az egyenlegek és statisztikák kiszámításakor nem kerül figyelembevételbe.',
+			'transaction.status.voided' => 'Érvénytelenítve',
+			'transaction.status.voided_descr' => 'Fizetési hiba vagy bármilyen más ok miatt érvénytelenített/törölt tranzakció. Ezt nem vesszük figyelembe az egyenlegek és statisztikák kiszámításakor.',
+			'transaction.types.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: 'Tranzakció típusa', other: 'Tranzakciótípusok', ), 
+			'transaction.types.income' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: 'Bevétel', other: 'Bevételek', ), 
+			'transaction.types.expense' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: 'Kiadás', other: 'Kiadások', ), 
+			'transaction.types.transfer' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: 'Áthelyezés', other: 'Áthelyezések', ), 
+			'transfer.display' => 'Áthelyezés',
+			'transfer.transfers' => 'Áthelyezések',
+			'transfer.transfer_to' => ({required Object account}) => 'Áthelyezés ide: ${account}',
+			'transfer.create' => 'Új átvitel',
+			'transfer.need_two_accounts_warning_header' => 'Hoppá!',
+			'transfer.need_two_accounts_warning_message' => 'A művelet végrehajtásához legalább kettő számlára van szükség. Ha módosítani vagy szerkeszteni szeretné a számla aktuális egyenlegét, kattintson a szerkesztés gombra.',
+			'transfer.form.from' => 'Eredeti számla',
+			'transfer.form.to' => 'Célszámla',
+			'transfer.form.value_in_destiny.title' => 'A rendeltetési helyre átutalt összeg',
+			'transfer.form.value_in_destiny.amount_short' => ({required Object amount}) => '${amount} a célszámlához',
+			'recurrent_transactions.title' => 'Ismétlődő tranzakciók',
+			'recurrent_transactions.title_short' => 'Ism. tranzakciók',
+			'recurrent_transactions.empty' => 'Úgy tűnik, hogy nincsenek ismétlődő tranzakciói. Hozzon létre havi, éves vagy heti ismétlődő tranzakciót, és az itt fog megjelenni.',
+			'recurrent_transactions.total_expense_title' => 'Összes kiadás periódusonként',
+			'recurrent_transactions.total_expense_descr' => '* Az egyes ismétlődések kezdő és befejező időpontjának figyelembevétele nélkül',
+			'recurrent_transactions.details.title' => 'Ismétlődő tranzakció',
+			'recurrent_transactions.details.descr' => 'A tranzakció következő lépései az alábbiakban láthatók. Elfogadhatja az első lépést, vagy kihagyhatja ezt a lépést.',
+			'recurrent_transactions.details.last_payment_info' => 'Ez a mozgatás az utolsó az ismétlődő szabályban, így ez a szabály automatikusan törlődik a művelet megerősítésekor.',
+			'recurrent_transactions.details.delete_header' => 'Ismétlődő tranzakció törlése',
+			'recurrent_transactions.details.delete_message' => 'Ez a művelet visszafordíthatatlan, és nem érinti a már visszaigazolt/befizetett tranzakciókat.',
+			'recurrent_transactions.status.delayed_by' => ({required Object x}) => 'Késés: ${x}d',
+			'recurrent_transactions.status.coming_in' => ({required Object x}) => '${x} napon belül',
+			'account.details' => 'Számlaadatok',
+			'account.date' => 'Megnyitás dátuma',
+			'account.close_date' => 'Lezárás dátuma',
+			'account.reopen' => 'Számla újranyitása',
+			'account.reopen_short' => 'Újranyitás',
+			'account.reopen_descr' => 'Biztos, hogy újra meg akarja nyitni ezt a számlát?',
+			'account.balance' => 'Számlaegyenleg',
+			'account.n_transactions' => 'Tranzakciók száma',
+			'account.add_money' => 'Hozzáadás',
+			'account.withdraw_money' => 'Pénzfelvétel',
+			'account.no_accounts' => 'Nem található itt megjeleníthető tranzakció. Adjon hozzá egy tranzakciót az alul található „+” gombra kattintva.',
+			'account.types.title' => 'Számlatípus',
+			'account.types.warning' => 'A számlatípus kiválasztása után az a jövőben nem változtatható meg.',
+			'account.types.normal' => 'Normál számla',
+			'account.types.normal_descr' => 'Hasznos a napi pénzügyek rögzítéséhez. Ez a leggyakoribb számla, amely lehetővé teszi kiadások, bevételek hozzáadását...',
+			'account.types.saving' => 'Megtakarítási számla',
+			'account.types.saving_descr' => 'Csak más számlákról tud pénzt hozzáadni és kivenni belőle. Tökéletes a megtakarítás megkezdéséhez.',
+			'account.form.name' => 'Számla neve',
+			'account.form.name_placeholder' => 'Pl.: Megtakarítási számla',
+			'account.form.notes' => 'Megjegyzések',
+			'account.form.notes_placeholder' => 'Írjon néhány megjegyzést/leírást erről a számláról.',
+			'account.form.initial_balance' => 'Kezdőegyenleg',
+			'account.form.current_balance' => 'Aktuális egyenleg',
+			'account.form.create' => 'Számla létrehozása',
+			'account.form.edit' => 'Számla szerkesztése',
+			'account.form.currency_not_found_warn' => 'Nincs információja ennek a pénznemnek az árfolyamairól. 1,0 lesz az alapértelmezett átváltási árfolyam. Ezt a beállításokban tudja majd módosítani.',
+			'account.form.already_exists' => 'Ugyanezzel a névvel már van egy másik is. Kérjük, adjon meg egy másikat.',
+			'account.form.tr_before_opening_date' => 'A számlán a nyitási dátumot megelőző dátumú tranzakciók vannak.',
+			'account.form.iban' => 'IBAN',
+			'account.form.swift' => 'SWIFT',
+			'account.delete.warning_header' => 'Törli a számlát?',
+			'account.delete.warning_text' => 'Ez a művelet törli ezt a számlát és annak az összes tranzakcióját.',
+			'account.delete.success' => 'A számla sikeresen törlésre került',
+			'account.close.title' => 'Számla lezárása',
+			'account.close.title_short' => 'Lezárás',
+			'account.close.warn' => 'Ez a számla többé nem jelenik meg bizonyos listákban, és nem tud benne tranzakciókat létrehozni az alább megadott dátumnál későbbi dátummal. Ez a művelet semmilyen tranzakciót vagy egyenleget nem érint, és ezt a számlát bármikor újra megnyithatja. ',
+			'account.close.should_have_zero_balance' => 'A számla lezárásához 0-nak kell lennie az aktuális egyenlegnek. Kérjük, a folytatás előtt szerkessze át a számlát.',
+			'account.close.should_have_no_transactions' => 'Ez a számla a megadott zárási dátumot követő tranzakciókat tartalmaz. Törölje őket, vagy szerkessze a számla zárási dátumát, mielőtt folytatná.',
+			'account.close.success' => 'A számla sikeresen lezárva',
+			'account.close.unarchive_succes' => 'A számla sikeresen újranyitásra került',
+			'account.select.one' => 'Egy számla kiválasztása',
+			'account.select.all' => 'Összes számla',
+			'account.select.multiple' => 'Számlák kiválasztása',
+			'currencies.currency_converter' => 'Valutaváltó',
+			'currencies.currency' => 'Pénznem',
+			'currencies.currency_settings' => 'Pénznem beállítások',
+			'currencies.currency_manager' => 'Valutakezelő',
+			'currencies.currency_manager_descr' => 'Konfigurálja a pénznemet és annak árfolyamait másokkal együtt',
+			'currencies.preferred_currency' => 'Kedvelt/alap pénznem',
+			'currencies.tap_to_change_preferred_currency' => 'Érintse meg a módosításhoz',
+			'currencies.change_preferred_currency_title' => 'Kedvelt pénznem módosítása',
+			'currencies.change_preferred_currency_msg' => 'Mostantól minden statisztika és költségvetés ebben a pénznemben jelenik meg. A számlák és tranzakciók megtartják a korábbi pénznemet. Minden elmentett árfolyam törlődik, ha ezt a műveletet végrehajtja. Szeretné folytatni?',
+			'currencies.exchange_rate_form.equal_to_preferred_warn' => 'A pénznem nem lehet azonos a felhasználói pénznemmel',
+			'currencies.exchange_rate_form.override_existing_warn' => 'Ebben a dátumban már létezik árfolyam ehhez a pénznemhez. Ha folytatja, az előző felülírásra kerül',
+			'currencies.exchange_rate_form.specify_a_currency' => 'Kérjük, adjon meg egy pénznemet',
+			'currencies.exchange_rate_form.add' => 'Árfolyam hozzáadása',
+			'currencies.exchange_rate_form.add_success' => 'Az árfolyam sikeresen hozzáadva',
+			'currencies.exchange_rate_form.edit' => 'Árfolyam szerkesztése',
+			'currencies.exchange_rate_form.edit_success' => 'Az árfolyam szerkesztése sikerült',
+			'currencies.exchange_rate_form.remove_all' => 'Törölje az összes árfolyamot',
+			'currencies.exchange_rate_form.remove_all_warning' => 'Ez a művelet visszafordíthatatlan, és törli az összes átváltási árfolyamot ehhez a pénznemhez',
+			'currencies.types.display' => 'Pénznem típusa',
+			'currencies.types.fiat' => 'FIAT',
+			'currencies.types.crypto' => 'Kriptovaluta',
+			'currencies.types.other' => 'Más',
+			'currencies.currency_form.name' => 'Megjelenítési név',
+			'currencies.currency_form.code' => 'Pénznem kódja',
+			'currencies.currency_form.symbol' => 'Szimbólum',
+			'currencies.currency_form.decimal_digits' => 'Tizedesjegyek',
+			'currencies.currency_form.create' => 'Pénznem létrehozása',
+			'currencies.currency_form.create_success' => 'A pénznem sikeresen létrehozva',
+			'currencies.currency_form.edit' => 'Pénznem szerkesztése',
+			'currencies.currency_form.edit_success' => 'A pénznem sikeresen szerkesztve',
+			'currencies.currency_form.delete' => 'Pénznem törlése',
+			'currencies.currency_form.delete_success' => 'A pénznem sikeresen törölve',
+			'currencies.currency_form.already_exists' => 'Már létezik ilyen kóddal rendelkező pénznem. Érdemes lehet szerkeszteni',
+			'currencies.delete_all_success' => 'Az árfolyamok sikeresen törlésre kerültek',
+			'currencies.historical' => 'Árfolyamtörténetek',
+			'currencies.historical_empty' => 'Ehhez a pénznemhez nem található történelmi átváltási árfolyam',
+			'currencies.exchange_rate' => 'Árfolyam',
+			'currencies.exchange_rates' => 'Árfolyamok',
+			'currencies.min_exchange_rate' => 'Minimális árfolyam',
+			'currencies.max_exchange_rate' => 'Maximális árfolyam',
+			'currencies.empty' => 'Adja hozzá az árfolyamokat, hogy ha az alapvalutától eltérő valutában vezetett számlái vannak, és így a grafikonok pontosabbak legyenek.',
+			'currencies.select_a_currency' => 'Válasszon ki egy pénznemet',
+			'currencies.search' => 'Keresés név vagy pénznemkód alapján',
+			'tags.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: 'Felirat', other: 'Címkék', ), 
+			'tags.form.name' => 'Címke neve',
+			'tags.form.description' => 'Leírás',
+			'tags.select.title' => 'Címke kiválasztása',
+			'tags.select.all' => 'Minden címke',
+			'tags.empty_list' => 'Még nem hozott létre címkéket. A címkék és kategóriák nagyszerű lehetőséget kínálnak a pénzmozgások kategorizálására.',
+			'tags.without_tags' => 'Címkék nélkül',
+			'tags.add' => 'Hozzáadás',
+			'tags.create' => 'Felirat készítése',
+			'tags.create_success' => 'A felirat sikeresen létrehozva',
+			'tags.already_exists' => 'Ez a címkenév már létezik. Érdemes lehet átszerkeszteni',
+			'tags.edit' => 'Címke szerkesztése',
+			'tags.edit_success' => 'A címke sikeresen szerkesztésre került',
+			'tags.delete_success' => 'A kategória sikeresen törölve',
+			'tags.delete_warning_header' => 'Törli a címkét?',
+			'tags.delete_warning_message' => 'Ez a művelet nem törli az ezzel a címkével rendelkező tranzakciókat.',
+			'categories.unknown' => 'Ismeretlen kategória',
+			'categories.create' => 'Kategória létrehozása',
+			'categories.create_success' => 'A kategória sikeresen létrehozva',
+			'categories.new_category' => 'Új kategória',
+			'categories.already_exists' => 'Ez a kategórianév már létezik. Talán szeretné szerkeszteni?',
+			'categories.edit' => 'Kategória szerkesztése',
+			'categories.edit_success' => 'A kategória sikeresen szerkesztve lett',
+			'categories.name' => 'Kategória neve',
+			'categories.type' => 'Kategória típusa',
+			'categories.both_types' => 'Mindkét típus',
+			'categories.subcategories' => 'Alkategóriák',
+			'categories.subcategories_add' => 'Hozzáadás',
+			'categories.make_parent' => 'Kategória létrehozása',
+			'categories.make_child' => 'Alkategória létrehozása',
+			'categories.make_child_warning1' => ({required Object destiny}) => 'Ez a kategória és alkategóriái a(z) <b>${destiny}</b> alkategóriái lesznek.',
+			'categories.make_child_warning2' => ({required Object x, required Object destiny}) => 'A tranzakcióik <b>(${x})</b> átkerülnek a(z) <b>${destiny}</b> kategóriában létrehozott új alkategóriákba.',
+			'categories.make_child_success' => 'Az alkategóriák sikeresen létrehozva',
+			'categories.merge' => 'Összevonás másik kategóriával',
+			'categories.merge_warning1' => ({required Object from, required Object x, required Object destiny}) => 'A(z) <b>${from}</b> kategóriához tartozó összes tranzakció (${x}) átkerül a(z) <b>${destiny}</b> kategóriába.',
+			'categories.merge_warning2' => ({required Object from}) => 'A(z) <b>${from}</b> kategória visszafordíthatatlanul törlésre kerül.',
+			'categories.merge_success' => 'A kategória sikeresen egyesítve',
+			'categories.delete_success' => 'A kategória sikeresen törölve',
+			'categories.delete_warning_header' => 'Törli a kategóriát?',
+			'categories.delete_warning_message' => ({required Object x}) => 'Ez a művelet visszafordíthatatlanul törli az összes <b>(${x})</b> tranzakciót, amely ehhez a kategóriához kapcsolódik.',
+			'categories.select.title' => 'Kategóriák kiválasztása',
+			'categories.select.select_one' => 'Kategória kiválasztása',
+			'categories.select.select_subcategory' => 'Alkategória kiválasztása',
+			'categories.select.without_subcategory' => 'Alkategória nélkül',
+			'categories.select.all' => 'Összes kategória',
+			'categories.select.all_short' => 'Mind',
+			'budgets.title' => 'Költségvetések',
+			'budgets.status' => 'Költségkeret állapota',
+			'budgets.repeated' => 'Ismétlődő',
+			'budgets.one_time' => 'Egyszer',
+			'budgets.actives' => 'Aktívok',
+			'budgets.from_budgeted' => 'maradt ',
+			'budgets.days_left' => 'nap van hátra',
+			'budgets.days_to_start' => 'nap van a kezdésig',
+			'budgets.since_expiration' => 'napja lejárt',
+			'budgets.no_budgets' => 'Úgy tűnik, hogy ebben a szakaszban nincs megjelenítendő költségvetés. Kezdje a költségvetés létrehozásával az alábbi gombra kattintva.',
+			'budgets.delete' => 'Költségvetés törlése',
+			'budgets.delete_warning' => 'Ez a művelet visszafordíthatatlan. Az erre az ajánlatra hivatkozó kategóriák és tranzakciók nem törlődnek.',
+			'budgets.form.title' => 'Hozzáadás',
+			'budgets.form.name' => 'Költségvetés neve',
+			'budgets.form.value' => 'Mennyiségkorlátozás',
+			'budgets.form.create' => 'Hozzáadás',
+			'budgets.form.create_success' => 'A költségkeret sikeresen létrehozva',
+			'budgets.form.edit' => 'Szerkesztés',
+			'budgets.form.edit_success' => 'A költségvetés szerkesztése sikeresen megtörtént',
+			'budgets.form.negative_warn' => 'A költségvetések nem lehetnek negatív összegűek.',
+			'budgets.details.title' => 'Költségvetés részletei',
+			'budgets.details.statistics' => 'Statisztika',
+			'budgets.details.budget_value' => 'Költségvetésben',
+			'budgets.details.expend_evolution' => 'Költségek alakulása',
+			'budgets.details.no_transactions' => 'Úgy tűnik, hogy ezzel a költségvetéssel kapcsolatban semmilyen kiadást nem teljesített.',
+			'budgets.target_timeline_statuses.active' => 'Aktív költségvetés',
+			'budgets.target_timeline_statuses.past' => 'Befejezett költségvetés',
+			'budgets.target_timeline_statuses.future' => 'Jövőbeli költségvetés',
+			'budgets.progress.labels.active_on_track' => 'Terv szerint',
+			'budgets.progress.labels.active_overspending' => 'Túlköltekezés',
+			'budgets.progress.labels.active_indeterminate' => 'Aktív',
+			'budgets.progress.labels.success' => 'Teljesítve',
+			'budgets.progress.labels.fail' => 'Költségvetés túllépve',
+			'budgets.progress.description.active_on_track' => ({required Object dailyAmount, required Object remainingDays}) => 'Naponta ${dailyAmount} összeget költhet a hátralévő ${remainingDays} napban',
+			'budgets.progress.description.active_overspending' => ({required Object dailyAmount, required Object remainingDays}) => 'Hogy visszatérjen a tervhez, korlátoznia kell kiadásait napi ${dailyAmount} összegre a hátralévő ${remainingDays} napban',
+			'budgets.progress.description.active_indeterminate' => ({required Object amount}) => 'Még ${amount} elkölthető.',
+			'budgets.progress.description.active_exceeded' => ({required Object amount}) => 'Már túllépte a költségvetési keretet ${amount} összeggel. Ha nem talál bevételt ehhez a költségvetéshez, abba kell hagynia a költekezést az időszak hátralévő részében',
+			'budgets.progress.description.success' => 'Szép munka! Ez a költségvetés sikeresen lezárult. Hozzon létre további költségvetéseket kiadásai kezeléséhez',
+			'budgets.progress.description.fail' => ({required Object amount}) => 'Túllépte a költségvetést ${amount} összeggel. Próbáljon meg óvatosabb lenni legközelebb!',
+			'goals.title' => 'Célok',
+			'goals.status' => 'A cél állapota',
+			'goals.type.display' => 'Cél típusa',
+			'goals.type.income.title' => 'Megtakarítási cél',
+			'goals.type.income.descr' => 'Ideális pénzmegtakarításhoz. Akkor sikeres, ha az egyenleg meghaladja a célösszeget.',
+			'goals.type.expense.title' => 'Költési cél',
+			'goals.type.expense.descr' => 'Kövesse nyomon kiadásait, és próbáljon meg elérni egy célösszeget. Jól használható adományokhoz...',
+			'goals.empty_title' => 'Nincsenek célok',
+			'goals.empty_description' => 'Hozzon létre új célt megtakarításai követéséhez!',
+			'goals.delete' => 'Cél törlése',
+			'goals.delete_warning' => 'Ez a művelet visszafordíthatatlan. A célhoz kapcsolódó kategóriák és tranzakciók nem törlődnek',
+			'goals.form.new_title' => 'Új cél',
+			'goals.form.edit_title' => 'Cél szerkesztése',
+			'goals.form.target_amount' => 'Célösszeg',
+			'goals.form.initial_amount' => 'Kezdő összeg',
+			_ => null,
+		} ?? switch (path) {
+			'goals.form.name' => 'Név',
+			'goals.form.name_hint' => 'Megtakarítási célom',
+			'goals.form.create_success' => 'Cél sikeresen létrehozva',
+			'goals.form.edit_success' => 'Cél sikeresen szerkesztve',
+			'goals.form.negative_warn' => 'A cél összege nem lehet negatív',
+			'goals.details.title' => 'Cél részletei',
+			'goals.details.statistics' => 'Statisztikák',
+			'goals.details.goal_value' => 'Célérték',
+			'goals.details.evolution' => 'Fejlődés',
+			'goals.details.no_transactions' => 'Úgy tűnik, nem hajtott végre ehhez a célhoz kapcsolódó tranzakciót',
+			'goals.target_timeline_statuses.active' => 'Aktív cél',
+			'goals.target_timeline_statuses.past' => 'Befejezett cél',
+			'goals.target_timeline_statuses.future' => 'Jövőbeli cél',
+			'goals.progress.labels.active_on_track' => 'Pályán',
+			'goals.progress.labels.active_behind_schedule' => 'A menetrend lemaradásával',
+			'goals.progress.labels.active_indeterminate' => 'Aktív',
+			'goals.progress.labels.success' => 'A cél elérve',
+			'goals.progress.labels.fail' => 'A gól nem sikerült',
+			'goals.progress.description.active_on_track' => ({required Object dailyAmount, required Object remainingDays}) => 'Jó úton haladsz a cél felé! Naponta ${dailyAmount} összeget kell megtakarítania a fennmaradó ${remainingDays} napig',
+			'goals.progress.description.active_behind_schedule' => ({required Object dailyAmount, required Object remainingDays}) => 'Lemaradsz a menetrendről. Naponta ${dailyAmount} összeget kell megtakarítania, hogy ${remainingDays} napon belül elérje célját',
+			'goals.progress.description.active_indeterminate' => ({required Object amount}) => 'További ${amount} kell a cél eléréséhez.',
+			'goals.progress.description.success' => 'Gratulálok! Elérted a célodat.',
+			'goals.progress.description.fail' => ({required Object amount}) => '${amount} értékkel eltévesztette a célt.',
+			'target_timeline_statuses.active' => 'Aktív',
+			'target_timeline_statuses.past' => 'Befejezve',
+			'target_timeline_statuses.future' => 'Jövő',
+			'backup.no_file_selected' => 'Nincs kiválasztva fájl',
+			'backup.no_directory_selected' => 'Nincs kiválasztott könyvtár',
+			'backup.export.title' => 'Adatok exportálása',
+			'backup.export.title_short' => 'Exportálás',
+			'backup.export.type_of_export' => 'Az export típusa',
+			'backup.export.other_options' => 'Opciók',
+			'backup.export.all' => 'Teljes mentés',
+			'backup.export.all_descr' => 'Exportálja az összes adatát (számlák, tranzakciók, költségvetések, beállítások...). Bármikor újra importálhatja őket, így semmit sem veszíthet el.',
+			'backup.export.transactions' => 'Tranzakciók mentése',
+			'backup.export.transactions_descr' => 'Exportálja tranzakcióit CSV formátumban, így könnyebben elemezheti azokat más programokban vagy alkalmazásokban.',
+			'backup.export.transactions_to_export' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: '1 exportálandó tranzakció', other: '${n} exportálandó tranzakció', ), 
+			'backup.export.description' => 'Adatok letöltése különböző formátumokban',
+			'backup.export.send_file' => 'Fájl küldése',
+			'backup.export.see_folder' => 'Lásd a mappát',
+			'backup.export.success' => ({required Object x}) => 'A fájl sikeresen mentve/letöltve ide: ${x}',
+			'backup.export.error' => 'Hiba a fájl letöltésében. Kérjük, lépjen kapcsolatba a fejlesztővel a lozin.technologies@gmail.com címen keresztül.',
+			'backup.export.dialog_title' => 'Fájl mentése/küldése',
+			'backup.import.title' => 'Adatok importálása',
+			'backup.import.title_short' => 'Importálás',
+			'backup.import.restore_backup' => 'Mentés visszaállítása',
+			'backup.import.restore_backup_descr' => 'Importáljon egy korábban mentett adatbázist a Monekinből. Ez a művelet minden jelenlegi alkalmazásadatot lecseréli az új adatokra.',
+			'backup.import.restore_backup_warn_description' => 'Új adatbázis importálásakor az alkalmazásban jelenleg mentett összes adat elveszik. A folytatás előtt ajánlatos biztonsági másolatot készíteni. Ne töltsön fel ide olyan fájlt, amelynek eredetét nem ismeri, csak azokat a fájlokat töltse fel, amelyeket korábban letöltött a Monekin oldaláról.',
+			'backup.import.restore_backup_warn_title' => 'Az összes adat felülírása',
+			'backup.import.select_other_file' => 'Másik fájl kiválasztása',
+			'backup.import.tap_to_select_file' => 'Koppintson a fájl kiválasztásához',
+			'backup.import.manual_import.title' => 'Kézi importálás',
+			'backup.import.manual_import.descr' => 'Tranzakciók kézi importálása egy .csv fájlból',
+			'backup.import.manual_import.default_account' => 'Alapértelm. számla',
+			'backup.import.manual_import.remove_default_account' => 'Alapértelmezett számla törlése',
+			'backup.import.manual_import.default_category' => 'Alapértelm. kategória',
+			'backup.import.manual_import.select_a_column' => 'Válasszon ki egy oszlopot a .csv fájlból',
+			'backup.import.manual_import.steps.0' => 'Fájl kiválasztása',
+			'backup.import.manual_import.steps.1' => 'Mennyiség oszlop',
+			'backup.import.manual_import.steps.2' => 'Számlaoszlop',
+			'backup.import.manual_import.steps.3' => 'Kategória oszlop',
+			'backup.import.manual_import.steps.4' => 'Dátum oszlop',
+			'backup.import.manual_import.steps.5' => 'egyéb oszlopok',
+			'backup.import.manual_import.steps_descr.0' => 'Válasszon ki egy .csv fájlt az eszközről. Győződjön meg arról, hogy van egy első sora, amely leírja az egyes oszlopok nevét.',
+			'backup.import.manual_import.steps_descr.1' => 'Válassza ki azt az oszlopot, amelyben az egyes tranzakciók dátuma meg van adva. Ha nincs megadva, a tranzakciók az aktuális dátummal jönnek létre. Válassza ki azt az oszlopot, ahol az egyes tranzakciók értéke meg van adva. Használjon negatív értékeket a kiadásokhoz és pozitív értékeket a bevételekhez.',
+			'backup.import.manual_import.steps_descr.2' => 'Válassza ki azt az oszlopot, amelyben meg van adva az a számla, amelyhez az egyes tranzakciók tartoznak. Kiválaszthat egy alapértelmezett fiókot is arra az esetre, ha nem találnánk a kívánt fiókot. Ha nincs megadva alapértelmezett fiók, akkor létrehozunk egyet ugyanazzal a névvel. ',
+			'backup.import.manual_import.steps_descr.3' => 'Adja meg azt az oszlopot, ahol a tranzakciókategória neve található. Meg kell adnia egy alapértelmezett kategóriát, hogy ezt a kategóriát rendeljük hozzá a tranzakciókhoz, ha a kategória nem található.',
+			'backup.import.manual_import.steps_descr.4' => 'Válassza ki azt az oszlopot, amelyben az egyes tranzakciók dátuma meg van adva. Ha nincs megadva, a tranzakciók az aktuális dátummal jönnek létre.',
+			'backup.import.manual_import.steps_descr.5' => 'Az egyéb opcionális tranzakciós attribútumok oszlopainak meghatározása',
+			'backup.import.manual_import.success' => ({required Object x}) => '${x} tranzakció sikeresen importálva',
+			'backup.import.success' => 'Az importálás sikeresen végrehajtva',
+			'backup.import.error' => 'Hiba történt importálásakor. Kérjük, lépjen kapcsolatba a fejlesztővel a lozin.technologies@gmail.com címen keresztül.',
+			'backup.import.cancelled' => 'Az importálást a felhasználó megszakította',
+			'backup.about.title' => 'Információk az adatbázisról',
+			'backup.about.create_date' => 'Létrehozás dátuma',
+			'backup.about.modify_date' => 'Utolsó módosítása',
+			'backup.about.last_backup' => 'Utolsó mentés',
+			'backup.about.size' => 'Méret',
+			'settings.title_long' => 'Beállítások és Testreszabás',
+			'settings.title_short' => 'Beállítások',
+			'settings.description' => 'Téma, Nyelv, Adatok és egyebek',
+			'settings.edit_profile' => 'Profil szerkesztése',
+			'settings.general.menu_title' => 'Általános beállítások',
+			'settings.general.menu_descr' => 'Nyelv, adatvédelem és egyebek',
+			'settings.general.show_all_decimals' => 'Összes tizedesjegy mutatása',
+			'settings.general.show_all_decimals_descr' => 'Minden tizedesjegy megjelenítése, még akkor is, ha nullára végződik',
+			'settings.general.language.section' => 'Nyelv és szövegek',
+			'settings.general.language.title' => 'Alkalmazás nyelve',
+			'settings.general.language.descr' => 'Nyelv, amelyen a szövegek megjelennek az alkalmazásban',
+			'settings.general.language.help' => 'Ha együttműködni szeretne ennek az alkalmazásnak a fordításával, tekintse meg a <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'> útmutatónk</a>',
+			'settings.general.locale.title' => 'Régió',
+			'settings.general.locale.auto' => 'Rendszer',
+			'settings.general.locale.descr' => 'Dátumok, számformátumok beállítása...',
+			'settings.general.locale.warn' => 'Régióváltáskor az alkalmazás frissülni fog',
+			'settings.general.locale.first_day_of_week' => 'A hét első napja',
+			'settings.security.title' => 'Biztonság',
+			'settings.security.private_mode_at_launch' => 'Privát mód indításkor',
+			'settings.security.private_mode_at_launch_descr' => 'Az alkalmazás alapértelmezés szerinti indítása privát módban',
+			'settings.security.private_mode' => 'Privát mód',
+			'settings.security.private_mode_descr' => 'Minden pénzösszeg elrejtése',
+			'settings.security.private_mode_activated' => 'Privát mód aktiválva',
+			'settings.security.private_mode_deactivated' => 'Privát mód letiltva',
+			'settings.transactions.menu_title' => 'Tranzakciók',
+			'settings.transactions.menu_descr' => 'Konfigurálja tranzakciói viselkedését',
+			'settings.transactions.title' => 'Tranzakciós beállítások',
+			'settings.transactions.style.title' => 'Tranzakció stílusa',
+			'settings.transactions.style.subtitle' => 'Állítsa be, hogyan jelenjenek meg a tranzakciók a listákban',
+			'settings.transactions.style.show_tags' => 'Címkék mutatása',
+			'settings.transactions.style.show_time' => 'Idő mutatása',
+			'settings.transactions.swipe_actions.title' => 'Csúsztatási műveletek',
+			'settings.transactions.swipe_actions.choose_description' => 'Válassza ki, hogy milyen művelet induljon el, ha a listában lévő tranzakciós tételt ezzel a csúsztatási irány segítségével csúsztatja',
+			'settings.transactions.swipe_actions.swipe_left' => 'Csúsztasson balra',
+			'settings.transactions.swipe_actions.swipe_right' => 'Csúsztasson jobbra',
+			'settings.transactions.swipe_actions.none' => 'Nincs akció',
+			'settings.transactions.swipe_actions.toggle_reconciled' => 'Váltás egyeztetve',
+			'settings.transactions.swipe_actions.toggle_pending' => 'Váltás függőben',
+			'settings.transactions.swipe_actions.toggle_voided' => 'Váltó érvénytelenítve',
+			'settings.transactions.swipe_actions.toggle_unreconciled' => 'Váltás nem egyeztetve',
+			'settings.transactions.swipe_actions.remove_status' => 'Állapot eltávolítása',
+			'settings.transactions.default_values.title' => 'Default Form Values',
+			'settings.transactions.default_values.page_title' => 'New Transaction: Default Form Values',
+			'settings.transactions.default_values.reuse_last_transaction' => 'Reuse Last Transaction Values',
+			'settings.transactions.default_values.reuse_last_transaction_descr' => 'Automatically fill the form with some values from the last created transaction',
+			'settings.transactions.default_values.fields_to_reuse' => 'Fields to reuse',
+			'settings.transactions.default_values.reuse_last_values_modal_descr' => 'Select the fields that should be pre-filled with the values from the last created transaction.',
+			'settings.transactions.default_values.default_values_separator' => 'Default Values',
+			'settings.transactions.default_values.default_category' => 'Default Category',
+			'settings.transactions.default_values.default_status' => 'Default Status',
+			'settings.transactions.default_values.default_tags' => 'Default Tags',
+			'settings.transactions.default_values.no_tags_selected' => 'No tags selected',
+			'settings.transactions.default_type.title' => 'Default Type',
+			'settings.transactions.default_type.modal_title' => 'Select Default Type',
+			'settings.appearance.menu_title' => 'Téma és stílus',
+			'settings.appearance.menu_descr' => 'Témaválasztás, színek és egyéb, az alkalmazás megjelenésével kapcsolatos dolgok',
+			'settings.appearance.theme_and_colors' => 'Témák és színek',
+			'settings.appearance.theme.title' => 'Téma',
+			'settings.appearance.theme.auto' => 'Rendszer',
+			'settings.appearance.theme.light' => 'Világos',
+			'settings.appearance.theme.dark' => 'Sötét',
+			'settings.appearance.amoled_mode' => 'AMOLED mód',
+			'settings.appearance.amoled_mode_descr' => 'Ha lehetséges, használjon tiszta fekete háttérképet. Ez némileg segíti az AMOLED képernyővel rendelkező készülékek akkumulátorát.',
+			'settings.appearance.dynamic_colors' => 'Dinamikus színek',
+			'settings.appearance.dynamic_colors_descr' => 'Amikor csak lehetséges, használja a rendszer kiemelő színét',
+			'settings.appearance.accent_color' => 'Kiemelő szín',
+			'settings.appearance.accent_color_descr' => 'Válassza ki, hogy az alkalmazás milyen színnel emelje ki a felület bizonyos részeit',
+			'settings.appearance.text' => 'Szöveg',
+			'settings.appearance.font' => 'Betűtípus',
+			'settings.appearance.font_platform' => 'Platform',
+			'more.title' => 'Továbbiak',
+			'more.title_long' => 'További műveletek',
+			'more.data.display' => 'Adatok',
+			'more.data.display_descr' => 'Exportálja és importálja az adatait, hogy ne veszítsen el semmit se',
+			'more.data.delete_all' => 'Adataim törlése',
+			'more.data.delete_all_header1' => 'Álljon meg ⚠️⚠️',
+			'more.data.delete_all_message1' => 'Biztosan benne, hogy folytatja? Minden adata véglegesen törlődik, és nem állítható vissza',
+			'more.data.delete_all_header2' => 'Még egy utolsó lépés ⚠️⚠️',
+			'more.data.delete_all_message2' => 'A fiók törlésével törli az összes tárolt személyes adatát. A számlái, tranzakciói, költségvetései és kategóriái törlődnek, és nem állíthatók helyre. Egyetért ezzel?',
+			'more.about_us.display' => 'Alkalmazásinformációk',
+			'more.about_us.description' => 'Találja meg a Monekin feltételeit, fontos információkat, és lépjen kapcsolatba hibák bejelentésével vagy ötletek megosztásával',
+			'more.about_us.legal.display' => 'Jogi információk',
+			'more.about_us.legal.privacy' => 'Adatvédelem',
+			'more.about_us.legal.terms' => 'Használati feltételek',
+			'more.about_us.legal.licenses' => 'Licencek',
+			'more.about_us.project.display' => 'Projekt',
+			'more.about_us.project.contributors' => 'Közreműködők',
+			'more.about_us.project.contributors_descr' => 'Az összes fejlesztő, akik hozzájárultak a Monekin létrehozásához',
+			'more.about_us.project.contact' => 'Kapcsolatfelvétel',
+			'more.help_us.display' => 'Segítsen nekünk',
+			'more.help_us.description' => 'Tudja meg, hogyan segíthet a Monekinnek abban, hogy egyre jobb és jobb legyen',
+			'more.help_us.rate_us' => 'Értékeljen minket',
+			'more.help_us.rate_us_descr' => 'Bármilyen értékelést szívesen fogadunk!',
+			'more.help_us.share' => 'Monekin megosztása',
+			'more.help_us.share_descr' => 'Ossza meg alkalmazásunkat a barátaival és a családtagjaival',
+			'more.help_us.share_text' => 'Monekin! A legjobb személyes pénzügyi alkalmazás. Töltse le innen',
+			'more.help_us.thanks' => 'Köszönjük!',
+			'more.help_us.thanks_long' => 'Az Ön hozzájárulása a Monekinhez és más nyílt forráskódú projektekhez, legyen az kicsi vagy nagy, lehetővé teszi az ehhez hasonló nagyszerű projekteket. Köszönjük, hogy időt szán a közreműködésre.',
+			'more.help_us.donate' => 'Adományozás',
+			'more.help_us.donate_descr' => 'Az adományával segít az alkalmazás további fejlesztésében. Mi lehetne jobb módja, mint megköszönni az elvégzett munkát egy kávéra való meghívással?',
+			'more.help_us.donate_success' => 'Az adományozás megtörtént. Köszönöm szépen a közreműködését! ❤️',
+			'more.help_us.donate_err' => 'Hoppá! Úgy tűnik, hiba történt a fizetés fogadásakor',
+			'more.help_us.report' => 'Hibák jelentése, javaslatok...',
+			_ => null,
+		};
 	}
 }
-

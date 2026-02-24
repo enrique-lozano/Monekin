@@ -3,6 +3,7 @@
 ///
 // coverage:ignore-file
 // ignore_for_file: type=lint, unused_import
+// dart format off
 
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +11,7 @@ import 'package:slang/generated.dart';
 import 'translations.g.dart';
 
 // Path: <root>
-class TranslationsUk implements Translations {
+class TranslationsUk with BaseTranslations<AppLocale, Translations> implements Translations {
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
 	TranslationsUk({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
@@ -1796,813 +1797,708 @@ class _TranslationsGeneralTimeRangesTypesUk implements TranslationsGeneralTimeRa
 
 /// The flat map containing all translations for locale <uk>.
 /// Only for edge cases! For simple maps, use the map function of this library.
-/// Note: We use a HashMap because Dart seems to be unable to compile large switch statements.
-Map<String, dynamic>? _map;
-
+///
+/// The Dart AOT compiler has issues with very large switch statements,
+/// so the map is split into smaller functions (512 entries each).
 extension on TranslationsUk {
 	dynamic _flatMapFunction(String path) {
-		final map = _map ?? _initFlatMap();
-		return map[path];
-	}
-
-	/// Initializes the flat map and returns it.
-	Map<String, dynamic> _initFlatMap() {
-		final map = <String, dynamic>{};
-		map['ui_actions.cancel'] = 'Скасувати';
-		map['ui_actions.confirm'] = 'Підтвердити';
-		map['ui_actions.continue_text'] = 'Продовжити';
-		map['ui_actions.save'] = 'Зберегти';
-		map['ui_actions.save_changes'] = 'Зберегти зміни';
-		map['ui_actions.close_and_save'] = 'Закрити та зберегти';
-		map['ui_actions.add'] = 'Додати';
-		map['ui_actions.edit'] = 'Редагувати';
-		map['ui_actions.delete'] = 'Видалити';
-		map['ui_actions.see_more'] = 'Детальніше';
-		map['ui_actions.select_all'] = 'Вибрати все';
-		map['ui_actions.deselect_all'] = 'Скасувати вибір всього';
-		map['ui_actions.select'] = 'Вибрати';
-		map['ui_actions.search'] = 'Пошук';
-		map['ui_actions.filter'] = 'Фільтр';
-		map['ui_actions.reset'] = 'Скинути';
-		map['ui_actions.submit'] = 'Надіслати';
-		map['ui_actions.next'] = 'Далі';
-		map['ui_actions.previous'] = 'Назад';
-		map['ui_actions.back'] = 'Повернутися';
-		map['ui_actions.reload'] = 'Перезавантажити';
-		map['ui_actions.view'] = 'Переглянути';
-		map['ui_actions.download'] = 'Завантажити';
-		map['ui_actions.upload'] = 'Завантажити файл';
-		map['ui_actions.retry'] = 'Спробувати знову';
-		map['ui_actions.copy'] = 'Копіювати';
-		map['ui_actions.paste'] = 'Вставити';
-		map['ui_actions.undo'] = 'Скасувати дію';
-		map['ui_actions.redo'] = 'Повторити дію';
-		map['ui_actions.open'] = 'Відкрити';
-		map['ui_actions.close'] = 'Закрити';
-		map['ui_actions.apply'] = 'Застосувати';
-		map['ui_actions.discard'] = 'Скасувати зміни';
-		map['ui_actions.refresh'] = 'Оновити';
-		map['ui_actions.share'] = 'Поділитися';
-		map['general.or'] = 'або';
-		map['general.understood'] = 'Зрозуміло';
-		map['general.unspecified'] = 'Не вказано';
-		map['general.quick_actions'] = 'Швидкі дії';
-		map['general.details'] = 'Подробиці';
-		map['general.balance'] = 'Баланс';
-		map['general.account'] = 'Рахунок';
-		map['general.accounts'] = 'Рахунки';
-		map['general.categories'] = 'Категорії';
-		map['general.category'] = 'Категорія';
-		map['general.today'] = 'Сьогодні';
-		map['general.yesterday'] = 'Вчора';
-		map['general.filters'] = 'Фільтри';
-		map['general.empty_warn'] = 'Ой! Тут порожньо';
-		map['general.search_no_results'] = 'Немає елементів, які відповідають вашим критеріям пошуку';
-		map['general.insufficient_data'] = 'Недостатньо даних';
-		map['general.show_more_fields'] = 'Показати більше полів';
-		map['general.show_less_fields'] = 'Показати менше полів';
-		map['general.tap_to_search'] = 'Натисніть для пошуку';
-		map['general.delete_success'] = 'Елемент успішно видалено';
-		map['general.leave_without_saving.title'] = 'Вийти без збереження?';
-		map['general.leave_without_saving.message'] = 'У вас є незбережені зміни. Ви впевнені, що бажаєте вийти, не зберігаючи їх?';
-		map['general.clipboard.success'] = ({required Object x}) => '${x} скопійовано в буфер обміну';
-		map['general.clipboard.error'] = 'Помилка копіювання';
-		map['general.time.start_date'] = 'Початкова дата';
-		map['general.time.end_date'] = 'Кінцева дата';
-		map['general.time.from_date'] = 'З дати';
-		map['general.time.until_date'] = 'До дати';
-		map['general.time.date'] = 'Дата';
-		map['general.time.datetime'] = 'Дата та час';
-		map['general.time.time'] = 'Час';
-		map['general.time.each'] = 'Кожний';
-		map['general.time.after'] = 'Після';
-		map['general.time.ranges.display'] = 'Часовий діапазон';
-		map['general.time.ranges.it_repeat'] = 'Повторюється';
-		map['general.time.ranges.it_ends'] = 'Закінчується';
-		map['general.time.ranges.forever'] = 'Назавжди';
-		map['general.time.ranges.types.cycle'] = 'Цикли';
-		map['general.time.ranges.types.last_days'] = 'Останні дні';
-		map['general.time.ranges.types.last_days_form'] = ({required Object x}) => '${x} попередніх днів';
-		map['general.time.ranges.types.all'] = 'Завжди';
-		map['general.time.ranges.types.date_range'] = 'Власний діапазон';
-		map['general.time.ranges.each_range'] = ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
-				one: 'Кожного ${range}',
-				other: 'Кожних ${n} ${range}',
-			);
-		map['general.time.ranges.each_range_until_date'] = ({required num n, required Object range, required Object day}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
-				one: 'Кожного ${range} до ${day}',
-				other: 'Кожних ${n} ${range} до ${day}',
-			);
-		map['general.time.ranges.each_range_until_times'] = ({required num n, required Object range, required Object limit}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
-				one: 'Кожного ${range} ${limit} раз',
-				other: 'Кожних ${n} ${range} ${limit} раз',
-			);
-		map['general.time.ranges.each_range_until_once'] = ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
-				one: 'Кожного ${range} один раз',
-				other: 'Кожних ${n} ${range} один раз',
-			);
-		map['general.time.ranges.month'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
-				one: 'Місяць',
-				other: 'Місяці',
-			);
-		map['general.time.ranges.year'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
-				one: 'Рік',
-				other: 'Роки',
-			);
-		map['general.time.ranges.day'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
-				one: 'День',
-				other: 'Дні',
-			);
-		map['general.time.ranges.week'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
-				one: 'Тиждень',
-				other: 'Тижні',
-			);
-		map['general.time.periodicity.display'] = 'Повторення';
-		map['general.time.periodicity.no_repeat'] = 'Без повторень';
-		map['general.time.periodicity.repeat'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
-				one: 'Повторення',
-				other: 'Повторень',
-			);
-		map['general.time.periodicity.diary'] = 'Щоденно';
-		map['general.time.periodicity.monthly'] = 'Щомісяця';
-		map['general.time.periodicity.annually'] = 'Щороку';
-		map['general.time.periodicity.quaterly'] = 'Щокварталу';
-		map['general.time.periodicity.weekly'] = 'Щотижня';
-		map['general.time.periodicity.custom'] = 'Власний';
-		map['general.time.periodicity.infinite'] = 'Завжди';
-		map['general.time.current.monthly'] = 'Цього місяця';
-		map['general.time.current.annually'] = 'Цього року';
-		map['general.time.current.quaterly'] = 'Цього кварталу';
-		map['general.time.current.weekly'] = 'На цьому тижні';
-		map['general.time.current.infinite'] = 'Назавжди';
-		map['general.time.current.custom'] = 'Власний діапазон';
-		map['general.time.all.diary'] = 'Щоденно';
-		map['general.time.all.monthly'] = 'Щомісяця';
-		map['general.time.all.annually'] = 'Щороку';
-		map['general.time.all.quaterly'] = 'Щокварталу';
-		map['general.time.all.weekly'] = 'Щотижня';
-		map['general.transaction_order.display'] = 'Сортувати транзакції';
-		map['general.transaction_order.category'] = 'За категорією';
-		map['general.transaction_order.quantity'] = 'За кількістю';
-		map['general.transaction_order.date'] = 'За датою';
-		map['general.validations.form_error'] = 'Виправте поля, зазначені у формі, щоб продовжити';
-		map['general.validations.required'] = 'Обов\'язкове поле';
-		map['general.validations.positive'] = 'Повинно бути позитивним';
-		map['general.validations.min_number'] = ({required Object x}) => 'Повинно бути більшим, ніж ${x}';
-		map['general.validations.max_number'] = ({required Object x}) => 'Повинно бути меншим, ніж ${x}';
-		map['intro.start'] = 'Початок';
-		map['intro.skip'] = 'Пропустити';
-		map['intro.next'] = 'Далі';
-		map['intro.select_your_currency'] = 'Виберіть вашу валюту';
-		map['intro.welcome_subtitle'] = 'Ваш особистий фінансовий менеджер';
-		map['intro.welcome_subtitle2'] = '100% відкритий, 100% безкоштовний';
-		map['intro.welcome_footer'] = 'Увійшовши в систему, ви погоджуєтеся з <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Політикою конфіденційності</a> та <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Умовами використання</a> додатка';
-		map['intro.offline_descr_title'] = 'ОФЛАЙН-РЕЖИМ:';
-		map['intro.offline_descr'] = 'Ваші дані будуть збережені тільки на вашому пристрої, поки ви не видалите програму або не зміните телефон. Щоб запобігти втраті даних, рекомендується регулярно робити резервні копії з налаштувань програми.';
-		map['intro.offline_start'] = 'Почати сеанс офлайн';
-		map['intro.sl1_title'] = 'Виберіть вашу валюту';
-		map['intro.sl1_descr'] = 'Ваша основна валюта буде використовуватися в звітах та загальних діаграмах. Ви зможете змінити валюту та мову програми пізніше в будь-який час у налаштуваннях додатка';
-		map['intro.sl2_title'] = 'Безпечно, приватно і надійно';
-		map['intro.sl2_descr'] = 'Ваші дані належать тільки вам. Інформація зберігається безпосередньо на вашому пристрої, без пропуску через зовнішні сервери. Це дозволяє використовувати додаток навіть без Інтернету';
-		map['intro.sl2_descr2'] = 'Крім того, вихідний код програми є відкритим, будь-хто може вносити свої правки та переглядати, як він працює';
-		map['intro.last_slide_title'] = 'Все готово';
-		map['intro.last_slide_descr'] = 'З Monekin ви нарешті можете досягти фінансової незалежності, яку так багато хочете. У вас будуть графіки, бюджети, поради, статистика та багато іншого про ваші фінанси.';
-		map['intro.last_slide_descr2'] = 'Сподіваємося, вам сподобається користуватись додатком! Не соромтеся зв\'язатися з нами у разі сумнівів або пропозицій...';
-		map['home.title'] = 'Панель керування';
-		map['home.filter_transactions'] = 'Фільтрувати транзакції';
-		map['home.hello_day'] = 'Доброго ранку,';
-		map['home.hello_night'] = 'Доброї ночі,';
-		map['home.total_balance'] = 'Загальний баланс';
-		map['home.my_accounts'] = 'Мої рахунки';
-		map['home.active_accounts'] = 'Активні рахунки';
-		map['home.no_accounts'] = 'Рахунки ще не створені';
-		map['home.no_accounts_descr'] = 'Почніть використовувати всю магію Monekin. Створіть принаймні один рахунок, щоб почати додавати транзакції';
-		map['home.last_transactions'] = 'Останні транзакції';
-		map['home.should_create_account_header'] = 'Ой!';
-		map['home.should_create_account_message'] = 'Перш ніж почати створювати транзакції, вам потрібно мати принаймні один неархівований рахунок';
-		map['financial_health.display'] = 'Фінансове здоров\'я';
-		map['financial_health.review.very_good'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return 'Дуже добре!';
-					case GenderContext.female:
-						return 'Дуже добре!';
-				}
-			};
-		map['financial_health.review.good'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return 'Добре';
-					case GenderContext.female:
-						return 'Добре';
-				}
-			};
-		map['financial_health.review.normal'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return 'Середнє';
-					case GenderContext.female:
-						return 'Середнє';
-				}
-			};
-		map['financial_health.review.bad'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return 'Прийнятно';
-					case GenderContext.female:
-						return 'Прийнятно';
-				}
-			};
-		map['financial_health.review.very_bad'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return 'Дуже погано';
-					case GenderContext.female:
-						return 'Дуже погано';
-				}
-			};
-		map['financial_health.review.insufficient_data'] = ({required GenderContext context}) {
-				switch (context) {
-					case GenderContext.male:
-						return 'Недостатньо даних';
-					case GenderContext.female:
-						return 'Недостатньо даних';
-				}
-			};
-		map['financial_health.review.descr.insufficient_data'] = 'Схоже, у нас недостатньо витрат, щоб розрахувати ваше фінансове здоров\'я. Додайте деякі витрати/доходи за цей період, щоб дозволити нам допомогти вам!';
-		map['financial_health.review.descr.very_good'] = 'Вітаємо! Ваше фінансове здоров\'я прекрасне. Сподіваємося, ви продовжите свою успішну хвилю і будете навчатися разом з Monekin';
-		map['financial_health.review.descr.good'] = 'Чудово! Ваше фінансове здоров\'я гарне. Відвідайте вкладку аналізу, щоб побачити, як зберегти ще більше!';
-		map['financial_health.review.descr.normal'] = 'Ваше фінансове здоров\'я більш-менш в середньому залишку населення за цей період';
-		map['financial_health.review.descr.bad'] = 'Схоже, що ваша фінансова ситуація ще не найкраща. Вивчіть решту графіків, щоб дізнатися більше про свої фінанси';
-		map['financial_health.review.descr.very_bad'] = 'Хмм, ваше фінансове здоров\'я далеко не відповідає тому, що воно повинно бути. Вивчіть решту графіків, щоб дізнатися більше про свої фінанси';
-		map['financial_health.months_without_income.title'] = 'Шанси на виживання';
-		map['financial_health.months_without_income.subtitle'] = 'З урахуванням вашого балансу, час, на який ви можете обійтися без доходу';
-		map['financial_health.months_without_income.text_zero'] = 'Ви не могли б прожити місяць без доходу з такою швидкістю витрат!';
-		map['financial_health.months_without_income.text_one'] = 'Ви ледве могли б прожити близько місяця без доходу з такою швидкістю витрат!';
-		map['financial_health.months_without_income.text_other'] = ({required Object n}) => 'Ви могли б прожити приблизно <b>${n} місяців</b> без доходу з такою швидкістю витрат.';
-		map['financial_health.months_without_income.text_infinite'] = 'Ви могли б прожити приблизно <b>майже все своє життя</b> без доходу з такою швидкістю витрат.';
-		map['financial_health.months_without_income.suggestion'] = 'Пам\'ятайте, що рекомендується завжди тримати цей відсоток не менше 5 місяців. Якщо ви бачите, що у вас недостатньо збережень, зменште непотрібні витрати.';
-		map['financial_health.months_without_income.insufficient_data'] = 'Схоже, у нас недостатньо витрат, щоб розрахувати, на скільки місяців ви можете вижити без доходу. Введіть кілька транзакцій і повертайтесь сюди, щоб перевірити ваше фінансове здоров\'я';
-		map['financial_health.savings_percentage.title'] = 'Відсоток заощаджень';
-		map['financial_health.savings_percentage.subtitle'] = 'Яка частина вашого доходу не витрачена за цей період';
-		map['financial_health.savings_percentage.text.good'] = ({required Object value}) => 'Вітаємо! Ви змогли заощадити <b>${value}%</b> вашого доходу протягом цього періоду. Схоже, ви вже професіонал, продовжуйте в тому ж дусі!';
-		map['financial_health.savings_percentage.text.normal'] = ({required Object value}) => 'Вітаємо, ви змогли заощадити <b>${value}%</b> вашого доходу протягом цього періоду.';
-		map['financial_health.savings_percentage.text.bad'] = ({required Object value}) => 'Ви змогли заощадити <b>${value}%</b> вашого доходу протягом цього періоду. Проте ми вважаємо, що ви все ще можете зробити набагато більше!';
-		map['financial_health.savings_percentage.text.very_bad'] = 'Вау, ви не змогли заощадити нічого протягом цього періоду.';
-		map['financial_health.savings_percentage.suggestion'] = 'Пам\'ятайте, що рекомендується заощаджувати принаймні 15-20% від вашого доходу.';
-		map['stats.title'] = 'Статистика';
-		map['stats.balance'] = 'Баланс';
-		map['stats.final_balance'] = 'Кінцевий баланс';
-		map['stats.balance_by_account'] = 'Баланс за рахунками';
-		map['stats.balance_by_account_subtitle'] = 'Де я маю більшість грошей?';
-		map['stats.balance_by_currency'] = 'Баланс за валютою';
-		map['stats.balance_by_currency_subtitle'] = 'Скільки я маю грошей в іноземній валюті?';
-		map['stats.balance_evolution'] = 'Тенденція балансу';
-		map['stats.balance_evolution_subtitle'] = 'У мене більше грошей, ніж раніше?';
-		map['stats.compared_to_previous_period'] = 'Порівняно з попереднім періодом';
-		map['stats.cash_flow'] = 'Грошовий потік';
-		map['stats.cash_flow_subtitle'] = 'Я витрачаю менше, ніж заробляю?';
-		map['stats.by_periods'] = 'За періодами';
-		map['stats.by_categories'] = 'За категоріями';
-		map['stats.by_tags'] = 'За тегами';
-		map['stats.distribution'] = 'Розподіл';
-		map['stats.finance_health_resume'] = 'Підсумок фінансового здоров\'я';
-		map['stats.finance_health_breakdown'] = 'Детальний аналіз фінансового здоров\'я';
-		map['icon_selector.name'] = 'Назва:';
-		map['icon_selector.icon'] = 'Іконка';
-		map['icon_selector.color'] = 'Колір';
-		map['icon_selector.select_icon'] = 'Виберіть іконку';
-		map['icon_selector.select_color'] = 'Виберіть колір';
-		map['icon_selector.custom_color'] = 'Користувацький колір';
-		map['icon_selector.current_color_selection'] = 'Поточний вибір';
-		map['icon_selector.select_account_icon'] = 'Ідентифікуйте ваш рахунок';
-		map['icon_selector.select_category_icon'] = 'Ідентифікуйте вашу категорію';
-		map['icon_selector.scopes.transport'] = 'Транспорт';
-		map['icon_selector.scopes.money'] = 'Гроші';
-		map['icon_selector.scopes.food'] = 'Їжа';
-		map['icon_selector.scopes.medical'] = 'Медицина';
-		map['icon_selector.scopes.entertainment'] = 'Розваги';
-		map['icon_selector.scopes.technology'] = 'Технології';
-		map['icon_selector.scopes.other'] = 'Інше';
-		map['icon_selector.scopes.logos_financial_institutions'] = 'Фінансові установи';
-		map['transaction.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
-				one: 'Транзакція',
-				other: 'Транзакції',
-			);
-		map['transaction.create'] = 'Нова транзакція';
-		map['transaction.new_income'] = 'Новий дохід';
-		map['transaction.new_expense'] = 'Новий витрати';
-		map['transaction.new_success'] = 'Транзакція успішно створена';
-		map['transaction.edit'] = 'Редагувати транзакцію';
-		map['transaction.edit_success'] = 'Транзакція успішно відредагована';
-		map['transaction.edit_multiple'] = 'редагувати транзакції';
-		map['transaction.edit_multiple_success'] = ({required Object x}) => '${x} належним чином відредаговані транзакції';
-		map['transaction.duplicate'] = 'Клонувати транзакцію';
-		map['transaction.duplicate_short'] = 'Клон';
-		map['transaction.duplicate_warning_message'] = 'Транзакція, ідентична цій, буде створена з такою ж датою. Бажаєте продовжити?';
-		map['transaction.duplicate_success'] = 'Транзакція успішно склонована';
-		map['transaction.delete'] = 'Видалити транзакцію';
-		map['transaction.delete_warning_message'] = 'Ця дія незворотня. Поточний баланс ваших рахунків і всі ваші статистичні дані будуть перераховані';
-		map['transaction.delete_success'] = 'Транзакцію успішно видалено';
-		map['transaction.delete_multiple'] = 'Усунути транзакції';
-		map['transaction.delete_multiple_warning_message'] = ({required Object x}) => 'Ця дія незворотна і безумовно стерть ${x} транзакції. Поточний баланс ваших рахунків та вся ваша статистика будуть перенесені';
-		map['transaction.delete_multiple_success'] = ({required Object x}) => '${x} належним чином усунути транзакції';
-		map['transaction.details'] = 'Деталі руху коштів';
-		map['transaction.next_payments.accept'] = 'Прийняти';
-		map['transaction.next_payments.skip'] = 'Пропустити';
-		map['transaction.next_payments.skip_success'] = 'Транзакцію успішно пропущено';
-		map['transaction.next_payments.skip_dialog_title'] = 'Пропустити транзакцію';
-		map['transaction.next_payments.skip_dialog_msg'] = ({required Object date}) => 'Ця дія незворотня. Ми перемістимо дату наступного переходу до ${date}';
-		map['transaction.next_payments.accept_today'] = 'Прийняти сьогодні';
-		map['transaction.next_payments.accept_in_required_date'] = ({required Object date}) => 'Прийняти в потрібну дату (${date})';
-		map['transaction.next_payments.accept_dialog_title'] = 'Прийняти транзакцію';
-		map['transaction.next_payments.accept_dialog_msg_single'] = 'Новий статус транзакції буде нульовим. Ви можете знову редагувати статус цієї транзакції в будь-який момент';
-		map['transaction.next_payments.accept_dialog_msg'] = ({required Object date}) => 'Ця дія створить нову транзакцію з датою ${date}. Ви зможете переглянути деталі цієї транзакції на сторінці транзакцій';
-		map['transaction.next_payments.recurrent_rule_finished'] = 'Правило періодичності було завершено, більше немає платежів!';
-		map['transaction.list.all'] = 'Всі транзакції';
-		map['transaction.list.empty'] = 'Тут не знайдено жодних транзакцій для відображення. Додайте кілька транзакцій у додаток, і, можливо, наступного разу вам пощастить більше';
-		map['transaction.list.searcher_placeholder'] = 'Шукати за категорією, описом...';
-		map['transaction.list.searcher_no_results'] = 'Не знайдено транзакцій, що відповідають критеріям пошуку';
-		map['transaction.list.loading'] = 'Завантаження додаткових транзакцій...';
-		map['transaction.list.selected_short'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
-				one: '${n} вибрано',
-				other: 'вибрано ${n}',
-			);
-		map['transaction.list.selected_long'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
-				one: '${n} вибрана транзакція',
-				other: '${n} вибраних транзакцій',
-			);
-		map['transaction.list.bulk_edit.dates'] = 'Редагувати дати';
-		map['transaction.list.bulk_edit.categories'] = 'Редагувати категорії';
-		map['transaction.list.bulk_edit.status'] = 'Редагувати статуси';
-		map['transaction.filters.title'] = 'Фільтри транзакцій';
-		map['transaction.filters.from_value'] = 'Від суми';
-		map['transaction.filters.to_value'] = 'До суми';
-		map['transaction.filters.from_value_def'] = ({required Object x}) => 'Від ${x}';
-		map['transaction.filters.to_value_def'] = ({required Object x}) => 'До ${x}';
-		map['transaction.filters.from_date_def'] = ({required Object date}) => 'З ${date}';
-		map['transaction.filters.to_date_def'] = ({required Object date}) => 'До ${date}';
-		map['transaction.filters.reset'] = 'Скинути фільтри';
-		map['transaction.filters.saved.title'] = 'Збережені фільтри';
-		map['transaction.filters.saved.new_title'] = 'Новий фільтр';
-		map['transaction.filters.saved.edit_title'] = 'Редагувати фільтр';
-		map['transaction.filters.saved.name_label'] = 'Назва фільтру';
-		map['transaction.filters.saved.name_hint'] = 'Мій власний фільтр';
-		map['transaction.filters.saved.save_dialog_title'] = 'Зберегти фільтр';
-		map['transaction.filters.saved.save_tooltip'] = 'Зберегти поточний фільтр';
-		map['transaction.filters.saved.load_tooltip'] = 'Завантажити збережений фільтр';
-		map['transaction.filters.saved.empty_title'] = 'Збережених фільтрів не знайдено';
-		map['transaction.filters.saved.empty_description'] = 'Зберігайте фільтри тут, щоб швидко отримати до них доступ пізніше.';
-		map['transaction.filters.saved.save_success'] = 'Фільтр успішно збережено';
-		map['transaction.filters.saved.delete_success'] = 'Фільтр успішно видалено';
-		map['transaction.form.validators.zero'] = 'Значення транзакції не може бути рівним нулю';
-		map['transaction.form.validators.date_max'] = 'Обрана дата після поточної. Транзакція буде додана як очікувана';
-		map['transaction.form.validators.date_after_account_creation'] = 'Ви не можете створити транзакцію з датою до створення рахунку, до якого вона належить';
-		map['transaction.form.validators.negative_transfer'] = 'Монетарна вартість переказу не може бути від\'ємною';
-		map['transaction.form.validators.transfer_between_same_accounts'] = 'Облікові записи джерела та призначення не збігаються';
-		map['transaction.form.title'] = 'Назва транзакції';
-		map['transaction.form.title_short'] = 'Назва';
-		map['transaction.form.value'] = 'Сума транзакції';
-		map['transaction.form.tap_to_see_more'] = 'Натисніть, щоб побачити більше деталей';
-		map['transaction.form.no_tags'] = '-- Немає тегів --';
-		map['transaction.form.description'] = 'Опис';
-		map['transaction.form.description_info'] = 'Натисніть тут, щоб ввести детальніший опис цієї транзакції';
-		map['transaction.form.exchange_to_preferred_title'] = ({required Object currency}) => 'Обмінний курс на ${currency}';
-		map['transaction.form.exchange_to_preferred_in_date'] = 'На дату транзакції';
-		map['transaction.reversed.title'] = 'Скасована транзакція';
-		map['transaction.reversed.title_short'] = 'Перевернутий тр.';
-		map['transaction.reversed.description_for_expenses'] = 'Незважаючи на те, що транзакція типу витрат, ця транзакція має додатну суму. Ці типи транзакцій можна використовувати для представлення повернення раніше зареєстрованих витрат, таких як відшкодування або оплата борг.';
-		map['transaction.reversed.description_for_incomes'] = 'Незважаючи на те, що транзакція є дохідною, ця транзакція має від’ємну суму. Ці типи транзакцій можна використовувати ля анулювання або виправлення неправильно зареєстрованого доходу, для відображення повернення або відшкодування грошей або для обліку сплати боргів».';
-		map['transaction.status.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
-				one: 'Статус',
-				other: 'Статуси',
-			);
-		map['transaction.status.display_long'] = 'Статус транзакції';
-		map['transaction.status.tr_status'] = ({required Object status}) => '${status} транзакція';
-		map['transaction.status.none'] = 'Без статусу';
-		map['transaction.status.none_descr'] = 'Транзакція без певного стану';
-		map['transaction.status.reconciled'] = 'Узгоджений';
-		map['transaction.status.reconciled_descr'] = 'Ця транзакція вже підтверджена і відповідає реальній транзакції з вашого банку';
-		map['transaction.status.unreconciled'] = 'Не узгоджений';
-		map['transaction.status.unreconciled_descr'] = 'Ця транзакція ще не підтверджена і тому ще не відображається у ваших реальних банківських рахунках. Однак вона враховується при розрахунку балансів і статистики в Monekin';
-		map['transaction.status.pending'] = 'Очікується';
-		map['transaction.status.pending_descr'] = 'Ця транзакція очікується і тому не буде враховуватися при розрахунку балансів і статистики';
-		map['transaction.status.voided'] = 'Скасований';
-		map['transaction.status.voided_descr'] = 'Скасована транзакція через помилку в платежі або будь-яку іншу причину. Вона не буде враховуватися при розрахунку балансів і статистики';
-		map['transaction.types.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
-				one: 'Тип транзакції',
-				other: 'Типи транзакцій',
-			);
-		map['transaction.types.income'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
-				one: 'Дохід',
-				other: 'Доходи',
-			);
-		map['transaction.types.expense'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
-				one: 'Витрата',
-				other: 'Витрати',
-			);
-		map['transaction.types.transfer'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
-				one: 'Переказ',
-				other: 'Перекази',
-			);
-		map['transfer.display'] = 'Переказ';
-		map['transfer.transfers'] = 'Перекази';
-		map['transfer.transfer_to'] = ({required Object account}) => 'Переказ на ${account}';
-		map['transfer.create'] = 'Новий переказ';
-		map['transfer.need_two_accounts_warning_header'] = 'Увага!';
-		map['transfer.need_two_accounts_warning_message'] = 'Для виконання цієї дії потрібно щонайменше два рахунки. Якщо вам потрібно відредагувати поточний баланс цього рахунку, натисніть кнопку редагування';
-		map['transfer.form.from'] = 'Початковий рахунок';
-		map['transfer.form.to'] = 'Цільовий рахунок';
-		map['transfer.form.value_in_destiny.title'] = 'Сума переказу в пункті призначення';
-		map['transfer.form.value_in_destiny.amount_short'] = ({required Object amount}) => '${amount} на цільовий рахунок';
-		map['recurrent_transactions.title'] = 'Повторювані транзакції';
-		map['recurrent_transactions.title_short'] = 'Повт. транзакції';
-		map['recurrent_transactions.empty'] = 'Схоже, у вас немає жодних повторюваних транзакцій. Створіть щомісячну, щорічну або щотижневу повторювану транзакцію, і вона з\'явиться тут';
-		map['recurrent_transactions.total_expense_title'] = 'Загальні витрати за період';
-		map['recurrent_transactions.total_expense_descr'] = '* Без урахування початкової та кінцевої дати кожної повторюваної транзакції';
-		map['recurrent_transactions.details.title'] = 'Повторювана транзакція';
-		map['recurrent_transactions.details.descr'] = 'Наступні переміщення для цієї транзакції показані нижче. Ви можете прийняти перший рух або пропустити цей рух';
-		map['recurrent_transactions.details.last_payment_info'] = 'Цей рух є останнім за повторюваною правилою, тому це правило буде автоматично видалено при підтвердженні цієї дії';
-		map['recurrent_transactions.details.delete_header'] = 'Видалити повторювану транзакцію';
-		map['recurrent_transactions.details.delete_message'] = 'Ця дія є незворотньою і не вплине на транзакції, які ви вже підтвердили/оплатили';
-		map['recurrent_transactions.status.delayed_by'] = ({required Object x}) => 'Затримано на ${x}d';
-		map['recurrent_transactions.status.coming_in'] = ({required Object x}) => 'Через ${x} днів';
-		map['account.details'] = 'Деталі рахунку';
-		map['account.date'] = 'Дата відкриття';
-		map['account.close_date'] = 'Дата закриття';
-		map['account.reopen'] = 'Повторно відкрити рахунок';
-		map['account.reopen_short'] = 'Повторно відкрити';
-		map['account.reopen_descr'] = 'Ви впевнені, що хочете повторно відкрити цей рахунок?';
-		map['account.balance'] = 'Баланс рахунку';
-		map['account.n_transactions'] = 'Кількість транзакцій';
-		map['account.add_money'] = 'Додати кошти';
-		map['account.withdraw_money'] = 'Зняти кошти';
-		map['account.no_accounts'] = 'Тут не знайдено жодних транзакцій для відображення. Додайте транзакцію, натиснувши кнопку \'+\' внизу';
-		map['account.types.title'] = 'Тип рахунку';
-		map['account.types.warning'] = 'Після вибору типу рахунку його не можна буде змінити в майбутньому';
-		map['account.types.normal'] = 'Звичайний рахунок';
-		map['account.types.normal_descr'] = 'Використовується для фіксації вашої повсякденної фінансової діяльності. Це найбільш поширений рахунок, який дозволяє додавати витрати, доходи...';
-		map['account.types.saving'] = 'Зберігаючий рахунок';
-		map['account.types.saving_descr'] = 'З нього можна тільки додавати та знімати гроші з інших рахунків. Ідеально підходить для початку збереження грошей';
-		map['account.form.name'] = 'Назва рахунку';
-		map['account.form.name_placeholder'] = 'Наприклад: Зберігаючий рахунок';
-		map['account.form.notes'] = 'Примітки';
-		map['account.form.notes_placeholder'] = 'Введіть примітки/опис про цей рахунок';
-		map['account.form.initial_balance'] = 'Початковий баланс';
-		map['account.form.current_balance'] = 'Поточний баланс';
-		map['account.form.create'] = 'Створити рахунок';
-		map['account.form.edit'] = 'Редагувати рахунок';
-		map['account.form.currency_not_found_warn'] = 'У вас немає інформації про обмінні курси для цієї валюти. За замовчуванням буде використано 1.0 як курс обміну. Ви можете змінити це в налаштуваннях';
-		map['account.form.already_exists'] = 'Вже існує інший з такою самою назвою, будь ласка, введіть іншу';
-		map['account.form.tr_before_opening_date'] = 'В цьому рахунку є транзакції з датою перед датою відкриття';
-		map['account.form.iban'] = 'IBAN';
-		map['account.form.swift'] = 'SWIFT';
-		map['account.delete.warning_header'] = 'Видалити рахунок?';
-		map['account.delete.warning_text'] = 'Ця дія видалить цей рахунок і всі його транзакції';
-		map['account.delete.success'] = 'Рахунок успішно видалено';
-		map['account.close.title'] = 'Закрити рахунок';
-		map['account.close.title_short'] = 'Закрити';
-		map['account.close.warn'] = 'Цей рахунок більше не буде відображатися у певних списках, і ви не зможете створювати транзакції в ньому з датою пізніше, ніж вказана нижче. Ця дія не впливає на жодні транзакції або баланс, і ви також можете повторно відкрити цей рахунок у будь-який час. ';
-		map['account.close.should_have_zero_balance'] = 'Баланс цього рахунку повинен бути 0, щоб його закрити. Будь ласка, відредагуйте рахунок перед продовженням';
-		map['account.close.should_have_no_transactions'] = 'У цього рахунку є транзакції після вказаної дати закриття. Видаліть їх або відредагуйте дату закриття рахунку перед продовженням';
-		map['account.close.success'] = 'Рахунок успішно закрито';
-		map['account.close.unarchive_succes'] = 'Рахунок успішно повторно відкрито';
-		map['account.select.one'] = 'Виберіть рахунок';
-		map['account.select.all'] = 'Всі рахунки';
-		map['account.select.multiple'] = 'Вибрати рахунки';
-		map['currencies.currency_converter'] = 'Конвертер валют';
-		map['currencies.currency'] = 'Валюта';
-		map['currencies.currency_settings'] = 'Параметри валюти';
-		map['currencies.currency_manager'] = 'Менеджер валют';
-		map['currencies.currency_manager_descr'] = 'Налаштуйте вашу валюту та її обмінні курси з іншими';
-		map['currencies.preferred_currency'] = 'Перевагова/базова валюта';
-		map['currencies.tap_to_change_preferred_currency'] = 'Торкніться, щоб змінити';
-		map['currencies.change_preferred_currency_title'] = 'Змінити перевагову валюту';
-		map['currencies.change_preferred_currency_msg'] = 'Усі статистичні дані та бюджети будуть відображатися в цій валюті відтепер. Рахунки та транзакції залишаться у тій валюті, яку вони мали. Усі збережені обмінні курси будуть видалені, якщо ви виконаєте цю дію. Ви хочете продовжити?';
-		map['currencies.exchange_rate_form.equal_to_preferred_warn'] = 'Валюта не може бути однаковою з валютою користувача';
-		map['currencies.exchange_rate_form.override_existing_warn'] = 'Курс обміну для цієї валюти на цю дату вже існує. Якщо ви продовжите, попередній буде перезаписано';
-		map['currencies.exchange_rate_form.specify_a_currency'] = 'Будь ласка, вкажіть валюту';
-		map['currencies.exchange_rate_form.add'] = 'Додати обмінний курс';
-		map['currencies.exchange_rate_form.add_success'] = 'Обмінний курс успішно додано';
-		map['currencies.exchange_rate_form.edit'] = 'Редагувати обмінний курс';
-		map['currencies.exchange_rate_form.edit_success'] = 'Обмінний курс успішно відредаговано';
-		map['currencies.exchange_rate_form.remove_all'] = 'Видалити всі курси валют';
-		map['currencies.exchange_rate_form.remove_all_warning'] = 'Цю дію не можна відмінити, і всі курси обміну для цієї валюти буде видалено';
-		map['currencies.types.display'] = 'Тип валюти';
-		map['currencies.types.fiat'] = 'FIAT';
-		map['currencies.types.crypto'] = 'Криптовалюта';
-		map['currencies.types.other'] = 'інше';
-		map['currencies.currency_form.name'] = 'Відображуване ім\'я';
-		map['currencies.currency_form.code'] = 'Код валюти';
-		map['currencies.currency_form.symbol'] = 'символ';
-		map['currencies.currency_form.decimal_digits'] = 'Десяткові цифри';
-		map['currencies.currency_form.create'] = 'Створіть валюту';
-		map['currencies.currency_form.create_success'] = 'Валюту створено успішно';
-		map['currencies.currency_form.edit'] = 'Редагувати валюту';
-		map['currencies.currency_form.edit_success'] = 'Валюту успішно відредаговано';
-		map['currencies.currency_form.delete'] = 'Видалити валюту';
-		map['currencies.currency_form.delete_success'] = 'Валюту успішно видалено';
-		map['currencies.currency_form.already_exists'] = 'Валюта з таким кодом уже існує. Ви можете відредагувати його';
-		map['currencies.delete_all_success'] = 'Обмінні курси успішно видалено';
-		map['currencies.historical'] = 'Історичні курси';
-		map['currencies.historical_empty'] = 'Історичних курсів обміну для цієї валюти не знайдено';
-		map['currencies.exchange_rate'] = 'Обмінний курс';
-		map['currencies.exchange_rates'] = 'Обмінні курси';
-		map['currencies.min_exchange_rate'] = 'Мінімальний курс обміну';
-		map['currencies.max_exchange_rate'] = 'Максимальний курс обміну';
-		map['currencies.empty'] = 'Додайте тут обмінні курси, щоб, якщо у вас є рахунки в інших валютах, наші графіки були б точнішими';
-		map['currencies.select_a_currency'] = 'Виберіть валюту';
-		map['currencies.search'] = 'Пошук за назвою або кодом валюти';
-		map['tags.display'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
-				one: 'Мітка',
-				other: 'Теги',
-			);
-		map['tags.form.name'] = 'Назва тегу';
-		map['tags.form.description'] = 'Опис';
-		map['tags.select.title'] = 'Вибрати теги';
-		map['tags.select.all'] = 'Усі теги';
-		map['tags.empty_list'] = 'Ви ще не створили жодних тегів. Теги та категорії - це відмінний спосіб категоризувати ваші рухи';
-		map['tags.without_tags'] = 'Без тегів';
-		map['tags.add'] = 'Додати тег';
-		map['tags.create'] = 'Створити мітку';
-		map['tags.create_success'] = 'Мітка успішно створена';
-		map['tags.already_exists'] = 'Ця назва тегу вже існує. Ви можете відредагувати її';
-		map['tags.edit'] = 'Редагувати тег';
-		map['tags.edit_success'] = 'Тег успішно відредаговано';
-		map['tags.delete_success'] = 'Тег успішно видалено';
-		map['tags.delete_warning_header'] = 'Видалити тег?';
-		map['tags.delete_warning_message'] = 'Ця дія не призведе до видалення транзакцій, які мають цей тег.';
-		map['categories.unknown'] = 'Невідома категорія';
-		map['categories.create'] = 'Створити категорію';
-		map['categories.create_success'] = 'Категорія успішно створена';
-		map['categories.new_category'] = 'Нова категорія';
-		map['categories.already_exists'] = 'Така назва категорії вже існує. Можливо, ви хочете відредагувати її';
-		map['categories.edit'] = 'Редагувати категорію';
-		map['categories.edit_success'] = 'Категорію успішно відредаговано';
-		map['categories.name'] = 'Назва категорії';
-		map['categories.type'] = 'Тип категорії';
-		map['categories.both_types'] = 'Обидва типи';
-		map['categories.subcategories'] = 'Підкатегорії';
-		map['categories.subcategories_add'] = 'Додати підкатегорію';
-		map['categories.make_parent'] = 'Зробити батьківською категорією';
-		map['categories.make_child'] = 'Зробити підкатегорією';
-		map['categories.make_child_warning1'] = ({required Object destiny}) => 'Ця категорія та її підкатегорії стануть підкатегоріями <b>${destiny}</b>.';
-		map['categories.make_child_warning2'] = ({required Object x, required Object destiny}) => 'Їх транзакції <b>(${x})</b> будуть перенесені до нових підкатегорій, створених всередині категорії <b>${destiny}</b>.';
-		map['categories.make_child_success'] = 'Підкатегорії успішно створено';
-		map['categories.merge'] = 'Об\'єднати з іншою категорією';
-		map['categories.merge_warning1'] = ({required Object x, required Object from, required Object destiny}) => 'Всі транзакції (${x}), пов\'язані з категорією <b>${from}</b>, будуть перенесені до категорії <b>${destiny}</b>';
-		map['categories.merge_warning2'] = ({required Object from}) => 'Категорія <b>${from}</b> буде безповоротно видалена.';
-		map['categories.merge_success'] = 'Категорії успішно об\'єднані';
-		map['categories.delete_success'] = 'Категорію видалено коректно';
-		map['categories.delete_warning_header'] = 'Видалити категорію?';
-		map['categories.delete_warning_message'] = ({required Object x}) => 'Ця дія незворотно видалить всі транзакції <b>(${x})</b>, пов\'язані з цією категорією.';
-		map['categories.select.title'] = 'Вибрати категорії';
-		map['categories.select.select_one'] = 'Виберіть категорію';
-		map['categories.select.select_subcategory'] = 'Оберіть підкатегорію';
-		map['categories.select.without_subcategory'] = 'Без підкатегорії';
-		map['categories.select.all'] = 'Усі категорії';
-		map['categories.select.all_short'] = 'Усі';
-		map['budgets.title'] = 'Бюджети';
-		map['budgets.status'] = 'Стан бюджету';
-		map['budgets.repeated'] = 'Повторювані';
-		map['budgets.one_time'] = 'Одноразові';
-		map['budgets.actives'] = 'Активні';
-		map['budgets.from_budgeted'] = 'з ';
-		map['budgets.days_left'] = 'днів залишилось';
-		map['budgets.days_to_start'] = 'днів до початку';
-		map['budgets.since_expiration'] = 'днів після закінчення терміну';
-		map['budgets.no_budgets'] = 'Здається, що в цьому розділі немає жодних бюджетів для відображення. Розпочніть з створення бюджету, натиснувши кнопку нижче';
-		map['budgets.delete'] = 'Видалити бюджет';
-		map['budgets.delete_warning'] = 'Ця дія незворотня. Категорії та транзакції, що стосуються цитати, не будуть видалені';
-		map['budgets.form.title'] = 'Додати бюджет';
-		map['budgets.form.name'] = 'Назва бюджету';
-		map['budgets.form.value'] = 'Обмежена кількість';
-		map['budgets.form.create'] = 'Додати бюджет';
-		map['budgets.form.create_success'] = 'Бюджет створено успішно';
-		map['budgets.form.edit'] = 'Редагувати бюджет';
-		map['budgets.form.edit_success'] = 'Бюджет успішно відредаговано';
-		map['budgets.form.negative_warn'] = 'Бюджети не можуть мати від\'ємну суму';
-		map['budgets.details.title'] = 'Деталі бюджету';
-		map['budgets.details.statistics'] = 'Статистика';
-		map['budgets.details.budget_value'] = 'Заплановано';
-		map['budgets.details.expend_evolution'] = 'Еволюція витрат';
-		map['budgets.details.no_transactions'] = 'Здається, ви не здійснили жодних витрат, пов\'язаних з цим бюджетом';
-		map['budgets.target_timeline_statuses.active'] = 'Активний бюджет';
-		map['budgets.target_timeline_statuses.past'] = 'Завершений бюджет';
-		map['budgets.target_timeline_statuses.future'] = 'Майбутній бюджет';
-		map['budgets.progress.labels.active_on_track'] = 'За планом';
-		map['budgets.progress.labels.active_overspending'] = 'Перевитрата';
-		map['budgets.progress.labels.active_indeterminate'] = 'Активний';
-		map['budgets.progress.labels.success'] = 'Досягнуто';
-		map['budgets.progress.labels.fail'] = 'Бюджет перевищено';
-		map['budgets.progress.description.active_on_track'] = ({required Object dailyAmount, required Object remainingDays}) => 'Ви можете витрачати ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися';
-		map['budgets.progress.description.active_overspending'] = ({required Object dailyAmount, required Object remainingDays}) => 'Щоб повернутися до плану, вам слід обмежити витрати до ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися';
-		map['budgets.progress.description.active_indeterminate'] = ({required Object amount}) => 'У вас залишилося витратити ${amount}.';
-		map['budgets.progress.description.active_exceeded'] = ({required Object amount}) => 'Ви вже перевищили ліміт бюджету на ${amount}. Якщо ви не знайдете жодних доходів для цього бюджету, вам слід припинити витрати до кінця його періоду';
-		map['budgets.progress.description.success'] = 'Чудова робота! Цей бюджет успішно завершено. Продовжуйте створювати бюджети для управління витратами';
-		map['budgets.progress.description.fail'] = ({required Object amount}) => 'Ви перевищили бюджет на ${amount}. Спробуйте бути уважнішими наступного разу!';
-		map['goals.title'] = 'Цілі';
-		map['goals.status'] = 'Статус цілі';
-		map['goals.type.display'] = 'Тип цілі';
-		map['goals.type.income.title'] = 'Ціль заощадження';
-		map['goals.type.income.descr'] = 'Ідеально для заощадження грошей. Ви досягаєте успіху, коли баланс перевищує вашу ціль.';
-		map['goals.type.expense.title'] = 'Ціль витрат';
-		map['goals.type.expense.descr'] = 'Відстежуйте, скільки ви витрачаєте, і намагайтеся досягти цільової суми. Добре підходить для пожертвувань...';
-		map['goals.empty_title'] = 'Цілей не знайдено';
-		map['goals.empty_description'] = 'Створіть нову ціль, щоб почати відстежувати свої заощадження!';
-		map['goals.delete'] = 'Видалити ціль';
-		map['goals.delete_warning'] = 'Ця дія є незворотною. Категорії та транзакції, пов\'язані з цією ціллю, не будуть видалені';
-		map['goals.form.new_title'] = 'Нова ціль';
-		map['goals.form.edit_title'] = 'Редагувати ціль';
-		map['goals.form.target_amount'] = 'Цільова сума';
-		map['goals.form.initial_amount'] = 'Початкова сума';
-		map['goals.form.name'] = 'Назва';
-		map['goals.form.name_hint'] = 'Моя ціль заощаджень';
-		map['goals.form.create_success'] = 'Ціль успішно створено';
-		map['goals.form.edit_success'] = 'Ціль успішно відредаговано';
-		map['goals.form.negative_warn'] = 'Сума цілі не може бути від\'ємною';
-		map['goals.details.title'] = 'Деталі цілі';
-		map['goals.details.statistics'] = 'Статистика';
-		map['goals.details.goal_value'] = 'Значення цілі';
-		map['goals.details.evolution'] = 'Динаміка';
-		map['goals.details.no_transactions'] = 'Схоже, ви не здійснили жодних транзакцій, пов\'язаних з цією ціллю';
-		map['goals.target_timeline_statuses.active'] = 'Активна ціль';
-		map['goals.target_timeline_statuses.past'] = 'Завершена ціль';
-		map['goals.target_timeline_statuses.future'] = 'Майбутня ціль';
-		map['goals.progress.labels.active_on_track'] = 'На шляху';
-		map['goals.progress.labels.active_behind_schedule'] = 'Відставання від графіка';
-		map['goals.progress.labels.active_indeterminate'] = 'Активний';
-		map['goals.progress.labels.success'] = 'Мета досягнута';
-		map['goals.progress.labels.fail'] = 'Мета не вдалася';
-		map['goals.progress.description.active_on_track'] = ({required Object dailyAmount, required Object remainingDays}) => 'Ви на шляху до своєї мети! Ви повинні відкладати ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися';
-		map['goals.progress.description.active_behind_schedule'] = ({required Object dailyAmount, required Object remainingDays}) => 'Ви відстаєте від графіка. Ви повинні заощаджувати ${dailyAmount} на день, щоб досягти своєї мети за ${remainingDays} днів';
-		map['goals.progress.description.active_indeterminate'] = ({required Object amount}) => 'Вам потрібно ще ${amount}, щоб досягти своєї мети.';
-		map['goals.progress.description.success'] = 'Щиро вітаю! Ви досягли своєї мети.';
-		map['goals.progress.description.fail'] = ({required Object amount}) => 'Ви не досягли цілі на ${amount}.';
-		map['target_timeline_statuses.active'] = 'Активний';
-		map['target_timeline_statuses.past'] = 'Завершений';
-		map['target_timeline_statuses.future'] = 'Майбутній';
-		map['backup.no_file_selected'] = 'Файл не вибрано';
-		map['backup.no_directory_selected'] = 'Каталог не вибрано';
-		map['backup.export.title'] = 'Експорт ваших даних';
-		map['backup.export.title_short'] = 'Експорт';
-		map['backup.export.type_of_export'] = 'Тип експорту';
-		map['backup.export.other_options'] = 'Опції';
-		map['backup.export.all'] = 'Повне резервне копіювання';
-		map['backup.export.all_descr'] = 'Експортувати всі ваші дані (рахунки, транзакції, бюджети, налаштування...). Імпортуйте їх знову у будь-який момент, щоб нічого не втратити.';
-		map['backup.export.transactions'] = 'Резервне копіювання транзакцій';
-		map['backup.export.transactions_descr'] = 'Експортуйте ваші транзакції у форматі CSV, щоб ви могли зручніше їх аналізувати в інших програмах або застосунках.';
-		map['backup.export.transactions_to_export'] = ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
-				one: '1 транзакція для експорту',
-				other: '${n} транзакцій для експорту',
-			);
-		map['backup.export.description'] = 'Завантажте ваші дані у різних форматах';
-		map['backup.export.send_file'] = 'Надіслати файл';
-		map['backup.export.see_folder'] = 'Дивіться папку';
-		map['backup.export.success'] = ({required Object x}) => 'Файл успішно збережено/завантажено у ${x}';
-		map['backup.export.error'] = 'Помилка при завантаженні файлу. Будь ласка, зв\'яжіться з розробником за адресою lozin.technologies@gmail.com';
-		map['backup.export.dialog_title'] = 'Зберегти/Відправити файл';
-		map['backup.import.title'] = 'Імпорт ваших даних';
-		map['backup.import.title_short'] = 'Імпорт';
-		map['backup.import.restore_backup'] = 'Відновити резервну копію';
-		map['backup.import.restore_backup_descr'] = 'Імпортуйте раніше збережену базу даних з Monekin. Ця дія замінить будь-які поточні дані програми новими даними';
-		map['backup.import.restore_backup_warn_description'] = 'При імпорті нової бази даних ви втратите всі дані, які вже збережено в програмі. Рекомендується зробити резервну копію перед продовженням. Не завантажуйте сюди будь-який файл, походження якого ви не знаєте, завантажуйте лише файли, які ви раніше завантажили з Monekin';
-		map['backup.import.restore_backup_warn_title'] = 'Перезаписати всі дані';
-		map['backup.import.select_other_file'] = 'Вибрати інший файл';
-		map['backup.import.tap_to_select_file'] = 'Торкніться, щоб вибрати файл';
-		map['backup.import.manual_import.title'] = 'Ручний імпорт';
-		map['backup.import.manual_import.descr'] = 'Імпортуйте транзакції з файлу .csv вручну';
-		map['backup.import.manual_import.default_account'] = 'Типовий рахунок';
-		map['backup.import.manual_import.remove_default_account'] = 'Видалити типовий рахунок';
-		map['backup.import.manual_import.default_category'] = 'Типова категорія';
-		map['backup.import.manual_import.select_a_column'] = 'Виберіть стовпець з файлу .csv';
-		map['backup.import.manual_import.steps.0'] = 'Виберіть ваш файл';
-		map['backup.import.manual_import.steps.1'] = 'Стовпець для суми';
-		map['backup.import.manual_import.steps.2'] = 'Стовпець для рахунку';
-		map['backup.import.manual_import.steps.3'] = 'Стовпець для категорії';
-		map['backup.import.manual_import.steps.4'] = 'Стовпець для дати';
-		map['backup.import.manual_import.steps.5'] = 'інші стовпці';
-		map['backup.import.manual_import.steps_descr.0'] = 'Виберіть файл .csv з вашого пристрою. Переконайтеся, що в ньому є перший рядок, який описує назву кожного стовпця';
-		map['backup.import.manual_import.steps_descr.1'] = 'Виберіть стовпець, де вказано значення кожної транзакції. Використовуйте від\'ємні значення для витрат та позитивні значення для доходів.';
-		map['backup.import.manual_import.steps_descr.2'] = 'Виберіть стовпець, де вказано рахунок, до якого належить кожна транзакція. Ви також можете вибрати типовий рахунок у випадку, якщо ми не зможемо знайти рахунок, який вам потрібен. Якщо типовий рахунок не вказано, ми створимо його з такою самою назвою';
-		map['backup.import.manual_import.steps_descr.3'] = 'Вкажіть стовпець, де знаходиться назва категорії транзакції. Ви повинні вказати типову категорію, щоб ми призначили цю категорію транзакціям, у випадку, якщо категорія не може бути знайдена';
-		map['backup.import.manual_import.steps_descr.4'] = 'Виберіть стовпець, де вказано дату кожної транзакції. Якщо не вказано, транзакції будуть створені з поточною датою';
-		map['backup.import.manual_import.steps_descr.5'] = 'Вкажіть стовпці для інших необов\'язкових атрибутів транзакцій';
-		map['backup.import.manual_import.success'] = ({required Object x}) => 'Успішно імпортовано ${x} транзакцій';
-		map['backup.import.success'] = 'Імпорт виконано успішно';
-		map['backup.import.error'] = 'Помилка імпорту файлу. Будь ласка, зв\'яжіться з розробником за адресою lozin.technologies@gmail.com';
-		map['backup.import.cancelled'] = 'Імпорт скасовано користувачем';
-		map['backup.about.title'] = 'Інформація про вашу базу даних';
-		map['backup.about.create_date'] = 'Дата створення';
-		map['backup.about.modify_date'] = 'Останнє змінено';
-		map['backup.about.last_backup'] = 'Остання резервна копія';
-		map['backup.about.size'] = 'Розмір';
-		map['settings.title_long'] = 'Налаштування та Персоналізація';
-		map['settings.title_short'] = 'Налаштування';
-		map['settings.description'] = 'Тема, Мова, Дані та інше';
-		map['settings.edit_profile'] = 'Редагувати профіль';
-		map['settings.general.menu_title'] = 'Загальні налаштування';
-		map['settings.general.menu_descr'] = 'Мова, конфіденційність та інше';
-		map['settings.general.show_all_decimals'] = 'Усі десяткові розряди';
-		map['settings.general.show_all_decimals_descr'] = 'Показувати всі десяткові знаки, навіть якщо це нулі';
-		map['settings.general.language.section'] = 'Мова та тексти';
-		map['settings.general.language.title'] = 'Мова додатку';
-		map['settings.general.language.descr'] = 'Мова, в якій будуть відображатися тексти в додатку';
-		map['settings.general.language.help'] = 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>нашого посібник</ a>';
-		map['settings.general.locale.title'] = 'Регіон';
-		map['settings.general.locale.auto'] = 'Система';
-		map['settings.general.locale.descr'] = 'Встановіть формат, який буде використовуватися для дат, чисел...';
-		map['settings.general.locale.warn'] = 'Після зміни регіону додаток оновиться';
-		map['settings.general.locale.first_day_of_week'] = 'Перший день тижня';
-		map['settings.security.title'] = 'Безпека';
-		map['settings.security.private_mode_at_launch'] = 'Приватний режим під час запуску';
-		map['settings.security.private_mode_at_launch_descr'] = 'За замовчуванням запускати програму в приватному режимі';
-		map['settings.security.private_mode'] = 'Приватний режим';
-		map['settings.security.private_mode_descr'] = 'Приховати всі грошові значення';
-		map['settings.security.private_mode_activated'] = 'Приватний режим активовано';
-		map['settings.security.private_mode_deactivated'] = 'Приватний режим вимкнено';
-		map['settings.transactions.menu_title'] = 'Транзакції';
-		map['settings.transactions.menu_descr'] = 'Налаштуйте поведінку ваших транзакцій';
-		map['settings.transactions.title'] = 'Налаштування транзакцій';
-		map['settings.transactions.style.title'] = 'Стиль транзакції';
-		map['settings.transactions.style.subtitle'] = 'Налаштуйте вигляд транзакцій у списках додатку';
-		map['settings.transactions.style.show_tags'] = 'Показати Теги';
-		map['settings.transactions.style.show_time'] = 'Показати Час';
-		map['settings.transactions.swipe_actions.title'] = 'Дії гортання';
-		map['settings.transactions.swipe_actions.choose_description'] = 'Виберіть, яка дія буде ініційована, коли ви проводите пальцем по елементу транзакції у списку в цьому напрямку';
-		map['settings.transactions.swipe_actions.none'] = 'Ніяких дій';
-		map['settings.transactions.swipe_actions.swipe_left'] = 'Проведіть ліворуч';
-		map['settings.transactions.swipe_actions.swipe_right'] = 'Проведіть праворуч';
-		map['settings.transactions.swipe_actions.toggle_reconciled'] = 'Перемикач узгоджено';
-		map['settings.transactions.swipe_actions.toggle_pending'] = 'Перемкнути в очікуванні';
-		map['settings.transactions.swipe_actions.toggle_voided'] = 'Перемикач скасовано';
-		map['settings.transactions.swipe_actions.toggle_unreconciled'] = 'Перемикач неузгоджений';
-		map['settings.transactions.swipe_actions.remove_status'] = 'Видалити статус';
-		map['settings.transactions.default_values.title'] = 'Default Form Values';
-		map['settings.transactions.default_values.page_title'] = 'New Transaction: Default Form Values';
-		map['settings.transactions.default_values.reuse_last_transaction'] = 'Reuse Last Transaction Values';
-		map['settings.transactions.default_values.reuse_last_transaction_descr'] = 'Automatically fill the form with some values from the last created transaction';
-		map['settings.transactions.default_values.fields_to_reuse'] = 'Fields to reuse';
-		map['settings.transactions.default_values.reuse_last_values_modal_descr'] = 'Select the fields that should be pre-filled with the values from the last created transaction.';
-		map['settings.transactions.default_values.default_values_separator'] = 'Default Values';
-		map['settings.transactions.default_values.default_category'] = 'Default Category';
-		map['settings.transactions.default_values.default_status'] = 'Default Status';
-		map['settings.transactions.default_values.default_tags'] = 'Default Tags';
-		map['settings.transactions.default_values.no_tags_selected'] = 'No tags selected';
-		map['settings.transactions.default_type.title'] = 'Default Type';
-		map['settings.transactions.default_type.modal_title'] = 'Select Default Type';
-		map['settings.appearance.menu_title'] = 'Тема та стиль';
-		map['settings.appearance.menu_descr'] = 'Вибір теми, кольори та інші речі, пов\'язані з виглядом програми';
-		map['settings.appearance.theme_and_colors'] = 'Тема та кольори';
-		map['settings.appearance.theme.title'] = 'Тема';
-		map['settings.appearance.theme.auto'] = 'система';
-		map['settings.appearance.theme.light'] = 'Світла';
-		map['settings.appearance.theme.dark'] = 'Темна';
-		map['settings.appearance.amoled_mode'] = 'Режим AMOLED';
-		map['settings.appearance.amoled_mode_descr'] = 'Використовуйте чисто чорний шпалери, якщо це можливо. Це трохи допоможе акумулятору пристроїв з екранами AMOLED';
-		map['settings.appearance.dynamic_colors'] = 'Динамічні кольори';
-		map['settings.appearance.dynamic_colors_descr'] = 'Використовуйте колір акценту вашої системи, коли це можливо';
-		map['settings.appearance.accent_color'] = 'Колір акценту';
-		map['settings.appearance.accent_color_descr'] = 'Виберіть колір, який додаток буде використовувати для виділення певних частин інтерфейсу';
-		map['settings.appearance.text'] = 'Текст';
-		map['settings.appearance.font'] = 'Шрифт';
-		map['settings.appearance.font_platform'] = 'Платформа';
-		map['more.title'] = 'Більше';
-		map['more.title_long'] = 'Більше дій';
-		map['more.data.display'] = 'Дані';
-		map['more.data.display_descr'] = 'Експортуйте та імпортуйте свої дані, щоб нічого не втратити';
-		map['more.data.delete_all'] = 'Видалити мої дані';
-		map['more.data.delete_all_header1'] = 'Зупиніться, молодий падаване ⚠️⚠️';
-		map['more.data.delete_all_message1'] = 'Ви впевнені, що хочете продовжити? Всі ваші дані буде остаточно видалено і не може бути відновлено';
-		map['more.data.delete_all_header2'] = 'Останній крок ⚠️⚠️';
-		map['more.data.delete_all_message2'] = 'Видаляючи обліковий запис, ви видалите всі ваші збережені особисті дані. Ваші облікові записи, транзакції, бюджети та категорії будуть видалені і не можуть бути відновлені. Ви згодні?';
-		map['more.about_us.display'] = 'Інформація про додаток';
-		map['more.about_us.description'] = 'Знаходьте умови Monekin, важливу інформацію та зв\'язуйтеся, повідомляючи про помилки або ділячись ідеями';
-		map['more.about_us.legal.display'] = 'Юридична інформація';
-		map['more.about_us.legal.privacy'] = 'Політика конфіденційності';
-		map['more.about_us.legal.terms'] = 'Умови використання';
-		map['more.about_us.legal.licenses'] = 'Ліцензії';
-		map['more.about_us.project.display'] = 'Проект';
-		map['more.about_us.project.contributors'] = 'Співробітники';
-		map['more.about_us.project.contributors_descr'] = 'Усі розробники, які зробили Monekin краще';
-		map['more.about_us.project.contact'] = 'Зв\'яжіться з нами';
-		map['more.help_us.display'] = 'Допоможіть нам';
-		map['more.help_us.description'] = 'Дізнайтеся, як ви можете допомогти Monekin ставати кращим і кращим';
-		map['more.help_us.rate_us'] = 'Оцініть нас';
-		map['more.help_us.rate_us_descr'] = 'Будь-яка оцінка вітається!';
-		map['more.help_us.share'] = 'Поділіться Monekin';
-		map['more.help_us.share_descr'] = 'Поділіться нашим додатком з друзями та родиною';
-		map['more.help_us.share_text'] = 'Monekin! Найкращий додаток для особистих фінансів. Завантажте його тут';
-		map['more.help_us.thanks'] = 'Дякуємо!';
-		map['more.help_us.thanks_long'] = 'Ваші внески в Monekin та інші відкриті проекти, великі та малі, роблять великі проекти, подібні до цього, можливими. Дякуємо вам за час, витрачений на внесок.';
-		map['more.help_us.donate'] = 'Зробіть пожертву';
-		map['more.help_us.donate_descr'] = 'З вашою пожертвою ви допоможете додатку продовжувати отримувати вдосконалення. Що може бути краще, ніж подякувати за виконану роботу, запрошуючи мене на каву?';
-		map['more.help_us.donate_success'] = 'Пожертва зроблена. Дуже вдячний за ваш внесок! ❤️';
-		map['more.help_us.donate_err'] = 'Ой! Здається, виникла помилка при отриманні вашого платежу';
-		map['more.help_us.report'] = 'Повідомити про помилки, залишити пропозиції...';
-
-		_map = map;
-		return map;
+		return switch (path) {
+			'ui_actions.cancel' => 'Скасувати',
+			'ui_actions.confirm' => 'Підтвердити',
+			'ui_actions.continue_text' => 'Продовжити',
+			'ui_actions.save' => 'Зберегти',
+			'ui_actions.save_changes' => 'Зберегти зміни',
+			'ui_actions.close_and_save' => 'Закрити та зберегти',
+			'ui_actions.add' => 'Додати',
+			'ui_actions.edit' => 'Редагувати',
+			'ui_actions.delete' => 'Видалити',
+			'ui_actions.see_more' => 'Детальніше',
+			'ui_actions.select_all' => 'Вибрати все',
+			'ui_actions.deselect_all' => 'Скасувати вибір всього',
+			'ui_actions.select' => 'Вибрати',
+			'ui_actions.search' => 'Пошук',
+			'ui_actions.filter' => 'Фільтр',
+			'ui_actions.reset' => 'Скинути',
+			'ui_actions.submit' => 'Надіслати',
+			'ui_actions.next' => 'Далі',
+			'ui_actions.previous' => 'Назад',
+			'ui_actions.back' => 'Повернутися',
+			'ui_actions.reload' => 'Перезавантажити',
+			'ui_actions.view' => 'Переглянути',
+			'ui_actions.download' => 'Завантажити',
+			'ui_actions.upload' => 'Завантажити файл',
+			'ui_actions.retry' => 'Спробувати знову',
+			'ui_actions.copy' => 'Копіювати',
+			'ui_actions.paste' => 'Вставити',
+			'ui_actions.undo' => 'Скасувати дію',
+			'ui_actions.redo' => 'Повторити дію',
+			'ui_actions.open' => 'Відкрити',
+			'ui_actions.close' => 'Закрити',
+			'ui_actions.apply' => 'Застосувати',
+			'ui_actions.discard' => 'Скасувати зміни',
+			'ui_actions.refresh' => 'Оновити',
+			'ui_actions.share' => 'Поділитися',
+			'general.or' => 'або',
+			'general.understood' => 'Зрозуміло',
+			'general.unspecified' => 'Не вказано',
+			'general.quick_actions' => 'Швидкі дії',
+			'general.details' => 'Подробиці',
+			'general.balance' => 'Баланс',
+			'general.account' => 'Рахунок',
+			'general.accounts' => 'Рахунки',
+			'general.categories' => 'Категорії',
+			'general.category' => 'Категорія',
+			'general.today' => 'Сьогодні',
+			'general.yesterday' => 'Вчора',
+			'general.filters' => 'Фільтри',
+			'general.empty_warn' => 'Ой! Тут порожньо',
+			'general.search_no_results' => 'Немає елементів, які відповідають вашим критеріям пошуку',
+			'general.insufficient_data' => 'Недостатньо даних',
+			'general.show_more_fields' => 'Показати більше полів',
+			'general.show_less_fields' => 'Показати менше полів',
+			'general.tap_to_search' => 'Натисніть для пошуку',
+			'general.delete_success' => 'Елемент успішно видалено',
+			'general.leave_without_saving.title' => 'Вийти без збереження?',
+			'general.leave_without_saving.message' => 'У вас є незбережені зміни. Ви впевнені, що бажаєте вийти, не зберігаючи їх?',
+			'general.clipboard.success' => ({required Object x}) => '${x} скопійовано в буфер обміну',
+			'general.clipboard.error' => 'Помилка копіювання',
+			'general.time.start_date' => 'Початкова дата',
+			'general.time.end_date' => 'Кінцева дата',
+			'general.time.from_date' => 'З дати',
+			'general.time.until_date' => 'До дати',
+			'general.time.date' => 'Дата',
+			'general.time.datetime' => 'Дата та час',
+			'general.time.time' => 'Час',
+			'general.time.each' => 'Кожний',
+			'general.time.after' => 'Після',
+			'general.time.ranges.display' => 'Часовий діапазон',
+			'general.time.ranges.it_repeat' => 'Повторюється',
+			'general.time.ranges.it_ends' => 'Закінчується',
+			'general.time.ranges.forever' => 'Назавжди',
+			'general.time.ranges.types.cycle' => 'Цикли',
+			'general.time.ranges.types.last_days' => 'Останні дні',
+			'general.time.ranges.types.last_days_form' => ({required Object x}) => '${x} попередніх днів',
+			'general.time.ranges.types.all' => 'Завжди',
+			'general.time.ranges.types.date_range' => 'Власний діапазон',
+			'general.time.ranges.each_range' => ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: 'Кожного ${range}', other: 'Кожних ${n} ${range}', ), 
+			'general.time.ranges.each_range_until_date' => ({required num n, required Object range, required Object day}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: 'Кожного ${range} до ${day}', other: 'Кожних ${n} ${range} до ${day}', ), 
+			'general.time.ranges.each_range_until_times' => ({required num n, required Object range, required Object limit}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: 'Кожного ${range} ${limit} раз', other: 'Кожних ${n} ${range} ${limit} раз', ), 
+			'general.time.ranges.each_range_until_once' => ({required num n, required Object range}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: 'Кожного ${range} один раз', other: 'Кожних ${n} ${range} один раз', ), 
+			'general.time.ranges.month' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: 'Місяць', other: 'Місяці', ), 
+			'general.time.ranges.year' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: 'Рік', other: 'Роки', ), 
+			'general.time.ranges.day' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: 'День', other: 'Дні', ), 
+			'general.time.ranges.week' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: 'Тиждень', other: 'Тижні', ), 
+			'general.time.periodicity.display' => 'Повторення',
+			'general.time.periodicity.no_repeat' => 'Без повторень',
+			'general.time.periodicity.repeat' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: 'Повторення', other: 'Повторень', ), 
+			'general.time.periodicity.diary' => 'Щоденно',
+			'general.time.periodicity.monthly' => 'Щомісяця',
+			'general.time.periodicity.annually' => 'Щороку',
+			'general.time.periodicity.quaterly' => 'Щокварталу',
+			'general.time.periodicity.weekly' => 'Щотижня',
+			'general.time.periodicity.custom' => 'Власний',
+			'general.time.periodicity.infinite' => 'Завжди',
+			'general.time.current.monthly' => 'Цього місяця',
+			'general.time.current.annually' => 'Цього року',
+			'general.time.current.quaterly' => 'Цього кварталу',
+			'general.time.current.weekly' => 'На цьому тижні',
+			'general.time.current.infinite' => 'Назавжди',
+			'general.time.current.custom' => 'Власний діапазон',
+			'general.time.all.diary' => 'Щоденно',
+			'general.time.all.monthly' => 'Щомісяця',
+			'general.time.all.annually' => 'Щороку',
+			'general.time.all.quaterly' => 'Щокварталу',
+			'general.time.all.weekly' => 'Щотижня',
+			'general.transaction_order.display' => 'Сортувати транзакції',
+			'general.transaction_order.category' => 'За категорією',
+			'general.transaction_order.quantity' => 'За кількістю',
+			'general.transaction_order.date' => 'За датою',
+			'general.validations.form_error' => 'Виправте поля, зазначені у формі, щоб продовжити',
+			'general.validations.required' => 'Обов\'язкове поле',
+			'general.validations.positive' => 'Повинно бути позитивним',
+			'general.validations.min_number' => ({required Object x}) => 'Повинно бути більшим, ніж ${x}',
+			'general.validations.max_number' => ({required Object x}) => 'Повинно бути меншим, ніж ${x}',
+			'intro.start' => 'Початок',
+			'intro.skip' => 'Пропустити',
+			'intro.next' => 'Далі',
+			'intro.select_your_currency' => 'Виберіть вашу валюту',
+			'intro.welcome_subtitle' => 'Ваш особистий фінансовий менеджер',
+			'intro.welcome_subtitle2' => '100% відкритий, 100% безкоштовний',
+			'intro.welcome_footer' => 'Увійшовши в систему, ви погоджуєтеся з <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md\'>Політикою конфіденційності</a> та <a href=\'https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md\'>Умовами використання</a> додатка',
+			'intro.offline_descr_title' => 'ОФЛАЙН-РЕЖИМ:',
+			'intro.offline_descr' => 'Ваші дані будуть збережені тільки на вашому пристрої, поки ви не видалите програму або не зміните телефон. Щоб запобігти втраті даних, рекомендується регулярно робити резервні копії з налаштувань програми.',
+			'intro.offline_start' => 'Почати сеанс офлайн',
+			'intro.sl1_title' => 'Виберіть вашу валюту',
+			'intro.sl1_descr' => 'Ваша основна валюта буде використовуватися в звітах та загальних діаграмах. Ви зможете змінити валюту та мову програми пізніше в будь-який час у налаштуваннях додатка',
+			'intro.sl2_title' => 'Безпечно, приватно і надійно',
+			'intro.sl2_descr' => 'Ваші дані належать тільки вам. Інформація зберігається безпосередньо на вашому пристрої, без пропуску через зовнішні сервери. Це дозволяє використовувати додаток навіть без Інтернету',
+			'intro.sl2_descr2' => 'Крім того, вихідний код програми є відкритим, будь-хто може вносити свої правки та переглядати, як він працює',
+			'intro.last_slide_title' => 'Все готово',
+			'intro.last_slide_descr' => 'З Monekin ви нарешті можете досягти фінансової незалежності, яку так багато хочете. У вас будуть графіки, бюджети, поради, статистика та багато іншого про ваші фінанси.',
+			'intro.last_slide_descr2' => 'Сподіваємося, вам сподобається користуватись додатком! Не соромтеся зв\'язатися з нами у разі сумнівів або пропозицій...',
+			'home.title' => 'Панель керування',
+			'home.filter_transactions' => 'Фільтрувати транзакції',
+			'home.hello_day' => 'Доброго ранку,',
+			'home.hello_night' => 'Доброї ночі,',
+			'home.total_balance' => 'Загальний баланс',
+			'home.my_accounts' => 'Мої рахунки',
+			'home.active_accounts' => 'Активні рахунки',
+			'home.no_accounts' => 'Рахунки ще не створені',
+			'home.no_accounts_descr' => 'Почніть використовувати всю магію Monekin. Створіть принаймні один рахунок, щоб почати додавати транзакції',
+			'home.last_transactions' => 'Останні транзакції',
+			'home.should_create_account_header' => 'Ой!',
+			'home.should_create_account_message' => 'Перш ніж почати створювати транзакції, вам потрібно мати принаймні один неархівований рахунок',
+			'financial_health.display' => 'Фінансове здоров\'я',
+			'financial_health.review.very_good' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Дуже добре!'; case GenderContext.female: return 'Дуже добре!'; } }, 
+			'financial_health.review.good' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Добре'; case GenderContext.female: return 'Добре'; } }, 
+			'financial_health.review.normal' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Середнє'; case GenderContext.female: return 'Середнє'; } }, 
+			'financial_health.review.bad' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Прийнятно'; case GenderContext.female: return 'Прийнятно'; } }, 
+			'financial_health.review.very_bad' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Дуже погано'; case GenderContext.female: return 'Дуже погано'; } }, 
+			'financial_health.review.insufficient_data' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Недостатньо даних'; case GenderContext.female: return 'Недостатньо даних'; } }, 
+			'financial_health.review.descr.insufficient_data' => 'Схоже, у нас недостатньо витрат, щоб розрахувати ваше фінансове здоров\'я. Додайте деякі витрати/доходи за цей період, щоб дозволити нам допомогти вам!',
+			'financial_health.review.descr.very_good' => 'Вітаємо! Ваше фінансове здоров\'я прекрасне. Сподіваємося, ви продовжите свою успішну хвилю і будете навчатися разом з Monekin',
+			'financial_health.review.descr.good' => 'Чудово! Ваше фінансове здоров\'я гарне. Відвідайте вкладку аналізу, щоб побачити, як зберегти ще більше!',
+			'financial_health.review.descr.normal' => 'Ваше фінансове здоров\'я більш-менш в середньому залишку населення за цей період',
+			'financial_health.review.descr.bad' => 'Схоже, що ваша фінансова ситуація ще не найкраща. Вивчіть решту графіків, щоб дізнатися більше про свої фінанси',
+			'financial_health.review.descr.very_bad' => 'Хмм, ваше фінансове здоров\'я далеко не відповідає тому, що воно повинно бути. Вивчіть решту графіків, щоб дізнатися більше про свої фінанси',
+			'financial_health.months_without_income.title' => 'Шанси на виживання',
+			'financial_health.months_without_income.subtitle' => 'З урахуванням вашого балансу, час, на який ви можете обійтися без доходу',
+			'financial_health.months_without_income.text_zero' => 'Ви не могли б прожити місяць без доходу з такою швидкістю витрат!',
+			'financial_health.months_without_income.text_one' => 'Ви ледве могли б прожити близько місяця без доходу з такою швидкістю витрат!',
+			'financial_health.months_without_income.text_other' => ({required Object n}) => 'Ви могли б прожити приблизно <b>${n} місяців</b> без доходу з такою швидкістю витрат.',
+			'financial_health.months_without_income.text_infinite' => 'Ви могли б прожити приблизно <b>майже все своє життя</b> без доходу з такою швидкістю витрат.',
+			'financial_health.months_without_income.suggestion' => 'Пам\'ятайте, що рекомендується завжди тримати цей відсоток не менше 5 місяців. Якщо ви бачите, що у вас недостатньо збережень, зменште непотрібні витрати.',
+			'financial_health.months_without_income.insufficient_data' => 'Схоже, у нас недостатньо витрат, щоб розрахувати, на скільки місяців ви можете вижити без доходу. Введіть кілька транзакцій і повертайтесь сюди, щоб перевірити ваше фінансове здоров\'я',
+			'financial_health.savings_percentage.title' => 'Відсоток заощаджень',
+			'financial_health.savings_percentage.subtitle' => 'Яка частина вашого доходу не витрачена за цей період',
+			'financial_health.savings_percentage.text.good' => ({required Object value}) => 'Вітаємо! Ви змогли заощадити <b>${value}%</b> вашого доходу протягом цього періоду. Схоже, ви вже професіонал, продовжуйте в тому ж дусі!',
+			'financial_health.savings_percentage.text.normal' => ({required Object value}) => 'Вітаємо, ви змогли заощадити <b>${value}%</b> вашого доходу протягом цього періоду.',
+			'financial_health.savings_percentage.text.bad' => ({required Object value}) => 'Ви змогли заощадити <b>${value}%</b> вашого доходу протягом цього періоду. Проте ми вважаємо, що ви все ще можете зробити набагато більше!',
+			'financial_health.savings_percentage.text.very_bad' => 'Вау, ви не змогли заощадити нічого протягом цього періоду.',
+			'financial_health.savings_percentage.suggestion' => 'Пам\'ятайте, що рекомендується заощаджувати принаймні 15-20% від вашого доходу.',
+			'stats.title' => 'Статистика',
+			'stats.balance' => 'Баланс',
+			'stats.final_balance' => 'Кінцевий баланс',
+			'stats.balance_by_account' => 'Баланс за рахунками',
+			'stats.balance_by_account_subtitle' => 'Де я маю більшість грошей?',
+			'stats.balance_by_currency' => 'Баланс за валютою',
+			'stats.balance_by_currency_subtitle' => 'Скільки я маю грошей в іноземній валюті?',
+			'stats.balance_evolution' => 'Тенденція балансу',
+			'stats.balance_evolution_subtitle' => 'У мене більше грошей, ніж раніше?',
+			'stats.compared_to_previous_period' => 'Порівняно з попереднім періодом',
+			'stats.cash_flow' => 'Грошовий потік',
+			'stats.cash_flow_subtitle' => 'Я витрачаю менше, ніж заробляю?',
+			'stats.by_periods' => 'За періодами',
+			'stats.by_categories' => 'За категоріями',
+			'stats.by_tags' => 'За тегами',
+			'stats.distribution' => 'Розподіл',
+			'stats.finance_health_resume' => 'Підсумок фінансового здоров\'я',
+			'stats.finance_health_breakdown' => 'Детальний аналіз фінансового здоров\'я',
+			'icon_selector.name' => 'Назва:',
+			'icon_selector.icon' => 'Іконка',
+			'icon_selector.color' => 'Колір',
+			'icon_selector.select_icon' => 'Виберіть іконку',
+			'icon_selector.select_color' => 'Виберіть колір',
+			'icon_selector.custom_color' => 'Користувацький колір',
+			'icon_selector.current_color_selection' => 'Поточний вибір',
+			'icon_selector.select_account_icon' => 'Ідентифікуйте ваш рахунок',
+			'icon_selector.select_category_icon' => 'Ідентифікуйте вашу категорію',
+			'icon_selector.scopes.transport' => 'Транспорт',
+			'icon_selector.scopes.money' => 'Гроші',
+			'icon_selector.scopes.food' => 'Їжа',
+			'icon_selector.scopes.medical' => 'Медицина',
+			'icon_selector.scopes.entertainment' => 'Розваги',
+			'icon_selector.scopes.technology' => 'Технології',
+			'icon_selector.scopes.other' => 'Інше',
+			'icon_selector.scopes.logos_financial_institutions' => 'Фінансові установи',
+			'transaction.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: 'Транзакція', other: 'Транзакції', ), 
+			'transaction.create' => 'Нова транзакція',
+			'transaction.new_income' => 'Новий дохід',
+			'transaction.new_expense' => 'Новий витрати',
+			'transaction.new_success' => 'Транзакція успішно створена',
+			'transaction.edit' => 'Редагувати транзакцію',
+			'transaction.edit_success' => 'Транзакція успішно відредагована',
+			'transaction.edit_multiple' => 'редагувати транзакції',
+			'transaction.edit_multiple_success' => ({required Object x}) => '${x} належним чином відредаговані транзакції',
+			'transaction.duplicate' => 'Клонувати транзакцію',
+			'transaction.duplicate_short' => 'Клон',
+			'transaction.duplicate_warning_message' => 'Транзакція, ідентична цій, буде створена з такою ж датою. Бажаєте продовжити?',
+			'transaction.duplicate_success' => 'Транзакція успішно склонована',
+			'transaction.delete' => 'Видалити транзакцію',
+			'transaction.delete_warning_message' => 'Ця дія незворотня. Поточний баланс ваших рахунків і всі ваші статистичні дані будуть перераховані',
+			'transaction.delete_success' => 'Транзакцію успішно видалено',
+			'transaction.delete_multiple' => 'Усунути транзакції',
+			'transaction.delete_multiple_warning_message' => ({required Object x}) => 'Ця дія незворотна і безумовно стерть ${x} транзакції. Поточний баланс ваших рахунків та вся ваша статистика будуть перенесені',
+			'transaction.delete_multiple_success' => ({required Object x}) => '${x} належним чином усунути транзакції',
+			'transaction.details' => 'Деталі руху коштів',
+			'transaction.next_payments.accept' => 'Прийняти',
+			'transaction.next_payments.skip' => 'Пропустити',
+			'transaction.next_payments.skip_success' => 'Транзакцію успішно пропущено',
+			'transaction.next_payments.skip_dialog_title' => 'Пропустити транзакцію',
+			'transaction.next_payments.skip_dialog_msg' => ({required Object date}) => 'Ця дія незворотня. Ми перемістимо дату наступного переходу до ${date}',
+			'transaction.next_payments.accept_today' => 'Прийняти сьогодні',
+			'transaction.next_payments.accept_in_required_date' => ({required Object date}) => 'Прийняти в потрібну дату (${date})',
+			'transaction.next_payments.accept_dialog_title' => 'Прийняти транзакцію',
+			'transaction.next_payments.accept_dialog_msg_single' => 'Новий статус транзакції буде нульовим. Ви можете знову редагувати статус цієї транзакції в будь-який момент',
+			'transaction.next_payments.accept_dialog_msg' => ({required Object date}) => 'Ця дія створить нову транзакцію з датою ${date}. Ви зможете переглянути деталі цієї транзакції на сторінці транзакцій',
+			'transaction.next_payments.recurrent_rule_finished' => 'Правило періодичності було завершено, більше немає платежів!',
+			'transaction.list.all' => 'Всі транзакції',
+			'transaction.list.empty' => 'Тут не знайдено жодних транзакцій для відображення. Додайте кілька транзакцій у додаток, і, можливо, наступного разу вам пощастить більше',
+			'transaction.list.searcher_placeholder' => 'Шукати за категорією, описом...',
+			'transaction.list.searcher_no_results' => 'Не знайдено транзакцій, що відповідають критеріям пошуку',
+			'transaction.list.loading' => 'Завантаження додаткових транзакцій...',
+			'transaction.list.selected_short' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: '${n} вибрано', other: 'вибрано ${n}', ), 
+			'transaction.list.selected_long' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: '${n} вибрана транзакція', other: '${n} вибраних транзакцій', ), 
+			'transaction.list.bulk_edit.dates' => 'Редагувати дати',
+			'transaction.list.bulk_edit.categories' => 'Редагувати категорії',
+			'transaction.list.bulk_edit.status' => 'Редагувати статуси',
+			'transaction.filters.title' => 'Фільтри транзакцій',
+			'transaction.filters.from_value' => 'Від суми',
+			'transaction.filters.to_value' => 'До суми',
+			'transaction.filters.from_value_def' => ({required Object x}) => 'Від ${x}',
+			'transaction.filters.to_value_def' => ({required Object x}) => 'До ${x}',
+			'transaction.filters.from_date_def' => ({required Object date}) => 'З ${date}',
+			'transaction.filters.to_date_def' => ({required Object date}) => 'До ${date}',
+			'transaction.filters.reset' => 'Скинути фільтри',
+			'transaction.filters.saved.title' => 'Збережені фільтри',
+			'transaction.filters.saved.new_title' => 'Новий фільтр',
+			'transaction.filters.saved.edit_title' => 'Редагувати фільтр',
+			'transaction.filters.saved.name_label' => 'Назва фільтру',
+			'transaction.filters.saved.name_hint' => 'Мій власний фільтр',
+			'transaction.filters.saved.save_dialog_title' => 'Зберегти фільтр',
+			'transaction.filters.saved.save_tooltip' => 'Зберегти поточний фільтр',
+			'transaction.filters.saved.load_tooltip' => 'Завантажити збережений фільтр',
+			'transaction.filters.saved.empty_title' => 'Збережених фільтрів не знайдено',
+			'transaction.filters.saved.empty_description' => 'Зберігайте фільтри тут, щоб швидко отримати до них доступ пізніше.',
+			'transaction.filters.saved.save_success' => 'Фільтр успішно збережено',
+			'transaction.filters.saved.delete_success' => 'Фільтр успішно видалено',
+			'transaction.form.validators.zero' => 'Значення транзакції не може бути рівним нулю',
+			'transaction.form.validators.date_max' => 'Обрана дата після поточної. Транзакція буде додана як очікувана',
+			'transaction.form.validators.date_after_account_creation' => 'Ви не можете створити транзакцію з датою до створення рахунку, до якого вона належить',
+			'transaction.form.validators.negative_transfer' => 'Монетарна вартість переказу не може бути від\'ємною',
+			'transaction.form.validators.transfer_between_same_accounts' => 'Облікові записи джерела та призначення не збігаються',
+			'transaction.form.title' => 'Назва транзакції',
+			'transaction.form.title_short' => 'Назва',
+			'transaction.form.value' => 'Сума транзакції',
+			'transaction.form.tap_to_see_more' => 'Натисніть, щоб побачити більше деталей',
+			'transaction.form.no_tags' => '-- Немає тегів --',
+			'transaction.form.description' => 'Опис',
+			'transaction.form.description_info' => 'Натисніть тут, щоб ввести детальніший опис цієї транзакції',
+			'transaction.form.exchange_to_preferred_title' => ({required Object currency}) => 'Обмінний курс на ${currency}',
+			'transaction.form.exchange_to_preferred_in_date' => 'На дату транзакції',
+			'transaction.reversed.title' => 'Скасована транзакція',
+			'transaction.reversed.title_short' => 'Перевернутий тр.',
+			'transaction.reversed.description_for_expenses' => 'Незважаючи на те, що транзакція типу витрат, ця транзакція має додатну суму. Ці типи транзакцій можна використовувати для представлення повернення раніше зареєстрованих витрат, таких як відшкодування або оплата борг.',
+			'transaction.reversed.description_for_incomes' => 'Незважаючи на те, що транзакція є дохідною, ця транзакція має від’ємну суму. Ці типи транзакцій можна використовувати ля анулювання або виправлення неправильно зареєстрованого доходу, для відображення повернення або відшкодування грошей або для обліку сплати боргів».',
+			'transaction.status.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: 'Статус', other: 'Статуси', ), 
+			'transaction.status.display_long' => 'Статус транзакції',
+			'transaction.status.tr_status' => ({required Object status}) => '${status} транзакція',
+			'transaction.status.none' => 'Без статусу',
+			'transaction.status.none_descr' => 'Транзакція без певного стану',
+			'transaction.status.reconciled' => 'Узгоджений',
+			'transaction.status.reconciled_descr' => 'Ця транзакція вже підтверджена і відповідає реальній транзакції з вашого банку',
+			'transaction.status.unreconciled' => 'Не узгоджений',
+			'transaction.status.unreconciled_descr' => 'Ця транзакція ще не підтверджена і тому ще не відображається у ваших реальних банківських рахунках. Однак вона враховується при розрахунку балансів і статистики в Monekin',
+			'transaction.status.pending' => 'Очікується',
+			'transaction.status.pending_descr' => 'Ця транзакція очікується і тому не буде враховуватися при розрахунку балансів і статистики',
+			'transaction.status.voided' => 'Скасований',
+			'transaction.status.voided_descr' => 'Скасована транзакція через помилку в платежі або будь-яку іншу причину. Вона не буде враховуватися при розрахунку балансів і статистики',
+			'transaction.types.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: 'Тип транзакції', other: 'Типи транзакцій', ), 
+			'transaction.types.income' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: 'Дохід', other: 'Доходи', ), 
+			'transaction.types.expense' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: 'Витрата', other: 'Витрати', ), 
+			'transaction.types.transfer' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: 'Переказ', other: 'Перекази', ), 
+			'transfer.display' => 'Переказ',
+			'transfer.transfers' => 'Перекази',
+			'transfer.transfer_to' => ({required Object account}) => 'Переказ на ${account}',
+			'transfer.create' => 'Новий переказ',
+			'transfer.need_two_accounts_warning_header' => 'Увага!',
+			'transfer.need_two_accounts_warning_message' => 'Для виконання цієї дії потрібно щонайменше два рахунки. Якщо вам потрібно відредагувати поточний баланс цього рахунку, натисніть кнопку редагування',
+			'transfer.form.from' => 'Початковий рахунок',
+			'transfer.form.to' => 'Цільовий рахунок',
+			'transfer.form.value_in_destiny.title' => 'Сума переказу в пункті призначення',
+			'transfer.form.value_in_destiny.amount_short' => ({required Object amount}) => '${amount} на цільовий рахунок',
+			'recurrent_transactions.title' => 'Повторювані транзакції',
+			'recurrent_transactions.title_short' => 'Повт. транзакції',
+			'recurrent_transactions.empty' => 'Схоже, у вас немає жодних повторюваних транзакцій. Створіть щомісячну, щорічну або щотижневу повторювану транзакцію, і вона з\'явиться тут',
+			'recurrent_transactions.total_expense_title' => 'Загальні витрати за період',
+			'recurrent_transactions.total_expense_descr' => '* Без урахування початкової та кінцевої дати кожної повторюваної транзакції',
+			'recurrent_transactions.details.title' => 'Повторювана транзакція',
+			'recurrent_transactions.details.descr' => 'Наступні переміщення для цієї транзакції показані нижче. Ви можете прийняти перший рух або пропустити цей рух',
+			'recurrent_transactions.details.last_payment_info' => 'Цей рух є останнім за повторюваною правилою, тому це правило буде автоматично видалено при підтвердженні цієї дії',
+			'recurrent_transactions.details.delete_header' => 'Видалити повторювану транзакцію',
+			'recurrent_transactions.details.delete_message' => 'Ця дія є незворотньою і не вплине на транзакції, які ви вже підтвердили/оплатили',
+			'recurrent_transactions.status.delayed_by' => ({required Object x}) => 'Затримано на ${x}d',
+			'recurrent_transactions.status.coming_in' => ({required Object x}) => 'Через ${x} днів',
+			'account.details' => 'Деталі рахунку',
+			'account.date' => 'Дата відкриття',
+			'account.close_date' => 'Дата закриття',
+			'account.reopen' => 'Повторно відкрити рахунок',
+			'account.reopen_short' => 'Повторно відкрити',
+			'account.reopen_descr' => 'Ви впевнені, що хочете повторно відкрити цей рахунок?',
+			'account.balance' => 'Баланс рахунку',
+			'account.n_transactions' => 'Кількість транзакцій',
+			'account.add_money' => 'Додати кошти',
+			'account.withdraw_money' => 'Зняти кошти',
+			'account.no_accounts' => 'Тут не знайдено жодних транзакцій для відображення. Додайте транзакцію, натиснувши кнопку \'+\' внизу',
+			'account.types.title' => 'Тип рахунку',
+			'account.types.warning' => 'Після вибору типу рахунку його не можна буде змінити в майбутньому',
+			'account.types.normal' => 'Звичайний рахунок',
+			'account.types.normal_descr' => 'Використовується для фіксації вашої повсякденної фінансової діяльності. Це найбільш поширений рахунок, який дозволяє додавати витрати, доходи...',
+			'account.types.saving' => 'Зберігаючий рахунок',
+			'account.types.saving_descr' => 'З нього можна тільки додавати та знімати гроші з інших рахунків. Ідеально підходить для початку збереження грошей',
+			'account.form.name' => 'Назва рахунку',
+			'account.form.name_placeholder' => 'Наприклад: Зберігаючий рахунок',
+			'account.form.notes' => 'Примітки',
+			'account.form.notes_placeholder' => 'Введіть примітки/опис про цей рахунок',
+			'account.form.initial_balance' => 'Початковий баланс',
+			'account.form.current_balance' => 'Поточний баланс',
+			'account.form.create' => 'Створити рахунок',
+			'account.form.edit' => 'Редагувати рахунок',
+			'account.form.currency_not_found_warn' => 'У вас немає інформації про обмінні курси для цієї валюти. За замовчуванням буде використано 1.0 як курс обміну. Ви можете змінити це в налаштуваннях',
+			'account.form.already_exists' => 'Вже існує інший з такою самою назвою, будь ласка, введіть іншу',
+			'account.form.tr_before_opening_date' => 'В цьому рахунку є транзакції з датою перед датою відкриття',
+			'account.form.iban' => 'IBAN',
+			'account.form.swift' => 'SWIFT',
+			'account.delete.warning_header' => 'Видалити рахунок?',
+			'account.delete.warning_text' => 'Ця дія видалить цей рахунок і всі його транзакції',
+			'account.delete.success' => 'Рахунок успішно видалено',
+			'account.close.title' => 'Закрити рахунок',
+			'account.close.title_short' => 'Закрити',
+			'account.close.warn' => 'Цей рахунок більше не буде відображатися у певних списках, і ви не зможете створювати транзакції в ньому з датою пізніше, ніж вказана нижче. Ця дія не впливає на жодні транзакції або баланс, і ви також можете повторно відкрити цей рахунок у будь-який час. ',
+			'account.close.should_have_zero_balance' => 'Баланс цього рахунку повинен бути 0, щоб його закрити. Будь ласка, відредагуйте рахунок перед продовженням',
+			'account.close.should_have_no_transactions' => 'У цього рахунку є транзакції після вказаної дати закриття. Видаліть їх або відредагуйте дату закриття рахунку перед продовженням',
+			'account.close.success' => 'Рахунок успішно закрито',
+			'account.close.unarchive_succes' => 'Рахунок успішно повторно відкрито',
+			'account.select.one' => 'Виберіть рахунок',
+			'account.select.all' => 'Всі рахунки',
+			'account.select.multiple' => 'Вибрати рахунки',
+			'currencies.currency_converter' => 'Конвертер валют',
+			'currencies.currency' => 'Валюта',
+			'currencies.currency_settings' => 'Параметри валюти',
+			'currencies.currency_manager' => 'Менеджер валют',
+			'currencies.currency_manager_descr' => 'Налаштуйте вашу валюту та її обмінні курси з іншими',
+			'currencies.preferred_currency' => 'Перевагова/базова валюта',
+			'currencies.tap_to_change_preferred_currency' => 'Торкніться, щоб змінити',
+			'currencies.change_preferred_currency_title' => 'Змінити перевагову валюту',
+			'currencies.change_preferred_currency_msg' => 'Усі статистичні дані та бюджети будуть відображатися в цій валюті відтепер. Рахунки та транзакції залишаться у тій валюті, яку вони мали. Усі збережені обмінні курси будуть видалені, якщо ви виконаєте цю дію. Ви хочете продовжити?',
+			'currencies.exchange_rate_form.equal_to_preferred_warn' => 'Валюта не може бути однаковою з валютою користувача',
+			'currencies.exchange_rate_form.override_existing_warn' => 'Курс обміну для цієї валюти на цю дату вже існує. Якщо ви продовжите, попередній буде перезаписано',
+			'currencies.exchange_rate_form.specify_a_currency' => 'Будь ласка, вкажіть валюту',
+			'currencies.exchange_rate_form.add' => 'Додати обмінний курс',
+			'currencies.exchange_rate_form.add_success' => 'Обмінний курс успішно додано',
+			'currencies.exchange_rate_form.edit' => 'Редагувати обмінний курс',
+			'currencies.exchange_rate_form.edit_success' => 'Обмінний курс успішно відредаговано',
+			'currencies.exchange_rate_form.remove_all' => 'Видалити всі курси валют',
+			'currencies.exchange_rate_form.remove_all_warning' => 'Цю дію не можна відмінити, і всі курси обміну для цієї валюти буде видалено',
+			'currencies.types.display' => 'Тип валюти',
+			'currencies.types.fiat' => 'FIAT',
+			'currencies.types.crypto' => 'Криптовалюта',
+			'currencies.types.other' => 'інше',
+			'currencies.currency_form.name' => 'Відображуване ім\'я',
+			'currencies.currency_form.code' => 'Код валюти',
+			'currencies.currency_form.symbol' => 'символ',
+			'currencies.currency_form.decimal_digits' => 'Десяткові цифри',
+			'currencies.currency_form.create' => 'Створіть валюту',
+			'currencies.currency_form.create_success' => 'Валюту створено успішно',
+			'currencies.currency_form.edit' => 'Редагувати валюту',
+			'currencies.currency_form.edit_success' => 'Валюту успішно відредаговано',
+			'currencies.currency_form.delete' => 'Видалити валюту',
+			'currencies.currency_form.delete_success' => 'Валюту успішно видалено',
+			'currencies.currency_form.already_exists' => 'Валюта з таким кодом уже існує. Ви можете відредагувати його',
+			'currencies.delete_all_success' => 'Обмінні курси успішно видалено',
+			'currencies.historical' => 'Історичні курси',
+			'currencies.historical_empty' => 'Історичних курсів обміну для цієї валюти не знайдено',
+			'currencies.exchange_rate' => 'Обмінний курс',
+			'currencies.exchange_rates' => 'Обмінні курси',
+			'currencies.min_exchange_rate' => 'Мінімальний курс обміну',
+			'currencies.max_exchange_rate' => 'Максимальний курс обміну',
+			'currencies.empty' => 'Додайте тут обмінні курси, щоб, якщо у вас є рахунки в інших валютах, наші графіки були б точнішими',
+			'currencies.select_a_currency' => 'Виберіть валюту',
+			'currencies.search' => 'Пошук за назвою або кодом валюти',
+			'tags.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: 'Мітка', other: 'Теги', ), 
+			'tags.form.name' => 'Назва тегу',
+			'tags.form.description' => 'Опис',
+			'tags.select.title' => 'Вибрати теги',
+			'tags.select.all' => 'Усі теги',
+			'tags.empty_list' => 'Ви ще не створили жодних тегів. Теги та категорії - це відмінний спосіб категоризувати ваші рухи',
+			'tags.without_tags' => 'Без тегів',
+			'tags.add' => 'Додати тег',
+			'tags.create' => 'Створити мітку',
+			'tags.create_success' => 'Мітка успішно створена',
+			'tags.already_exists' => 'Ця назва тегу вже існує. Ви можете відредагувати її',
+			'tags.edit' => 'Редагувати тег',
+			'tags.edit_success' => 'Тег успішно відредаговано',
+			'tags.delete_success' => 'Тег успішно видалено',
+			'tags.delete_warning_header' => 'Видалити тег?',
+			'tags.delete_warning_message' => 'Ця дія не призведе до видалення транзакцій, які мають цей тег.',
+			'categories.unknown' => 'Невідома категорія',
+			'categories.create' => 'Створити категорію',
+			'categories.create_success' => 'Категорія успішно створена',
+			'categories.new_category' => 'Нова категорія',
+			'categories.already_exists' => 'Така назва категорії вже існує. Можливо, ви хочете відредагувати її',
+			'categories.edit' => 'Редагувати категорію',
+			'categories.edit_success' => 'Категорію успішно відредаговано',
+			'categories.name' => 'Назва категорії',
+			'categories.type' => 'Тип категорії',
+			'categories.both_types' => 'Обидва типи',
+			'categories.subcategories' => 'Підкатегорії',
+			'categories.subcategories_add' => 'Додати підкатегорію',
+			'categories.make_parent' => 'Зробити батьківською категорією',
+			'categories.make_child' => 'Зробити підкатегорією',
+			'categories.make_child_warning1' => ({required Object destiny}) => 'Ця категорія та її підкатегорії стануть підкатегоріями <b>${destiny}</b>.',
+			'categories.make_child_warning2' => ({required Object x, required Object destiny}) => 'Їх транзакції <b>(${x})</b> будуть перенесені до нових підкатегорій, створених всередині категорії <b>${destiny}</b>.',
+			'categories.make_child_success' => 'Підкатегорії успішно створено',
+			'categories.merge' => 'Об\'єднати з іншою категорією',
+			'categories.merge_warning1' => ({required Object x, required Object from, required Object destiny}) => 'Всі транзакції (${x}), пов\'язані з категорією <b>${from}</b>, будуть перенесені до категорії <b>${destiny}</b>',
+			'categories.merge_warning2' => ({required Object from}) => 'Категорія <b>${from}</b> буде безповоротно видалена.',
+			'categories.merge_success' => 'Категорії успішно об\'єднані',
+			'categories.delete_success' => 'Категорію видалено коректно',
+			'categories.delete_warning_header' => 'Видалити категорію?',
+			'categories.delete_warning_message' => ({required Object x}) => 'Ця дія незворотно видалить всі транзакції <b>(${x})</b>, пов\'язані з цією категорією.',
+			'categories.select.title' => 'Вибрати категорії',
+			'categories.select.select_one' => 'Виберіть категорію',
+			'categories.select.select_subcategory' => 'Оберіть підкатегорію',
+			'categories.select.without_subcategory' => 'Без підкатегорії',
+			'categories.select.all' => 'Усі категорії',
+			'categories.select.all_short' => 'Усі',
+			'budgets.title' => 'Бюджети',
+			'budgets.status' => 'Стан бюджету',
+			'budgets.repeated' => 'Повторювані',
+			'budgets.one_time' => 'Одноразові',
+			'budgets.actives' => 'Активні',
+			'budgets.from_budgeted' => 'з ',
+			'budgets.days_left' => 'днів залишилось',
+			'budgets.days_to_start' => 'днів до початку',
+			'budgets.since_expiration' => 'днів після закінчення терміну',
+			'budgets.no_budgets' => 'Здається, що в цьому розділі немає жодних бюджетів для відображення. Розпочніть з створення бюджету, натиснувши кнопку нижче',
+			'budgets.delete' => 'Видалити бюджет',
+			'budgets.delete_warning' => 'Ця дія незворотня. Категорії та транзакції, що стосуються цитати, не будуть видалені',
+			'budgets.form.title' => 'Додати бюджет',
+			'budgets.form.name' => 'Назва бюджету',
+			'budgets.form.value' => 'Обмежена кількість',
+			'budgets.form.create' => 'Додати бюджет',
+			'budgets.form.create_success' => 'Бюджет створено успішно',
+			'budgets.form.edit' => 'Редагувати бюджет',
+			'budgets.form.edit_success' => 'Бюджет успішно відредаговано',
+			'budgets.form.negative_warn' => 'Бюджети не можуть мати від\'ємну суму',
+			'budgets.details.title' => 'Деталі бюджету',
+			'budgets.details.statistics' => 'Статистика',
+			'budgets.details.budget_value' => 'Заплановано',
+			'budgets.details.expend_evolution' => 'Еволюція витрат',
+			'budgets.details.no_transactions' => 'Здається, ви не здійснили жодних витрат, пов\'язаних з цим бюджетом',
+			'budgets.target_timeline_statuses.active' => 'Активний бюджет',
+			'budgets.target_timeline_statuses.past' => 'Завершений бюджет',
+			'budgets.target_timeline_statuses.future' => 'Майбутній бюджет',
+			'budgets.progress.labels.active_on_track' => 'За планом',
+			'budgets.progress.labels.active_overspending' => 'Перевитрата',
+			'budgets.progress.labels.active_indeterminate' => 'Активний',
+			'budgets.progress.labels.success' => 'Досягнуто',
+			'budgets.progress.labels.fail' => 'Бюджет перевищено',
+			'budgets.progress.description.active_on_track' => ({required Object dailyAmount, required Object remainingDays}) => 'Ви можете витрачати ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися',
+			'budgets.progress.description.active_overspending' => ({required Object dailyAmount, required Object remainingDays}) => 'Щоб повернутися до плану, вам слід обмежити витрати до ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися',
+			'budgets.progress.description.active_indeterminate' => ({required Object amount}) => 'У вас залишилося витратити ${amount}.',
+			'budgets.progress.description.active_exceeded' => ({required Object amount}) => 'Ви вже перевищили ліміт бюджету на ${amount}. Якщо ви не знайдете жодних доходів для цього бюджету, вам слід припинити витрати до кінця його періоду',
+			'budgets.progress.description.success' => 'Чудова робота! Цей бюджет успішно завершено. Продовжуйте створювати бюджети для управління витратами',
+			'budgets.progress.description.fail' => ({required Object amount}) => 'Ви перевищили бюджет на ${amount}. Спробуйте бути уважнішими наступного разу!',
+			'goals.title' => 'Цілі',
+			'goals.status' => 'Статус цілі',
+			'goals.type.display' => 'Тип цілі',
+			'goals.type.income.title' => 'Ціль заощадження',
+			'goals.type.income.descr' => 'Ідеально для заощадження грошей. Ви досягаєте успіху, коли баланс перевищує вашу ціль.',
+			'goals.type.expense.title' => 'Ціль витрат',
+			'goals.type.expense.descr' => 'Відстежуйте, скільки ви витрачаєте, і намагайтеся досягти цільової суми. Добре підходить для пожертвувань...',
+			'goals.empty_title' => 'Цілей не знайдено',
+			'goals.empty_description' => 'Створіть нову ціль, щоб почати відстежувати свої заощадження!',
+			'goals.delete' => 'Видалити ціль',
+			'goals.delete_warning' => 'Ця дія є незворотною. Категорії та транзакції, пов\'язані з цією ціллю, не будуть видалені',
+			'goals.form.new_title' => 'Нова ціль',
+			'goals.form.edit_title' => 'Редагувати ціль',
+			'goals.form.target_amount' => 'Цільова сума',
+			'goals.form.initial_amount' => 'Початкова сума',
+			_ => null,
+		} ?? switch (path) {
+			'goals.form.name' => 'Назва',
+			'goals.form.name_hint' => 'Моя ціль заощаджень',
+			'goals.form.create_success' => 'Ціль успішно створено',
+			'goals.form.edit_success' => 'Ціль успішно відредаговано',
+			'goals.form.negative_warn' => 'Сума цілі не може бути від\'ємною',
+			'goals.details.title' => 'Деталі цілі',
+			'goals.details.statistics' => 'Статистика',
+			'goals.details.goal_value' => 'Значення цілі',
+			'goals.details.evolution' => 'Динаміка',
+			'goals.details.no_transactions' => 'Схоже, ви не здійснили жодних транзакцій, пов\'язаних з цією ціллю',
+			'goals.target_timeline_statuses.active' => 'Активна ціль',
+			'goals.target_timeline_statuses.past' => 'Завершена ціль',
+			'goals.target_timeline_statuses.future' => 'Майбутня ціль',
+			'goals.progress.labels.active_on_track' => 'На шляху',
+			'goals.progress.labels.active_behind_schedule' => 'Відставання від графіка',
+			'goals.progress.labels.active_indeterminate' => 'Активний',
+			'goals.progress.labels.success' => 'Мета досягнута',
+			'goals.progress.labels.fail' => 'Мета не вдалася',
+			'goals.progress.description.active_on_track' => ({required Object dailyAmount, required Object remainingDays}) => 'Ви на шляху до своєї мети! Ви повинні відкладати ${dailyAmount} на день протягом ${remainingDays} днів, що залишилися',
+			'goals.progress.description.active_behind_schedule' => ({required Object dailyAmount, required Object remainingDays}) => 'Ви відстаєте від графіка. Ви повинні заощаджувати ${dailyAmount} на день, щоб досягти своєї мети за ${remainingDays} днів',
+			'goals.progress.description.active_indeterminate' => ({required Object amount}) => 'Вам потрібно ще ${amount}, щоб досягти своєї мети.',
+			'goals.progress.description.success' => 'Щиро вітаю! Ви досягли своєї мети.',
+			'goals.progress.description.fail' => ({required Object amount}) => 'Ви не досягли цілі на ${amount}.',
+			'target_timeline_statuses.active' => 'Активний',
+			'target_timeline_statuses.past' => 'Завершений',
+			'target_timeline_statuses.future' => 'Майбутній',
+			'backup.no_file_selected' => 'Файл не вибрано',
+			'backup.no_directory_selected' => 'Каталог не вибрано',
+			'backup.export.title' => 'Експорт ваших даних',
+			'backup.export.title_short' => 'Експорт',
+			'backup.export.type_of_export' => 'Тип експорту',
+			'backup.export.other_options' => 'Опції',
+			'backup.export.all' => 'Повне резервне копіювання',
+			'backup.export.all_descr' => 'Експортувати всі ваші дані (рахунки, транзакції, бюджети, налаштування...). Імпортуйте їх знову у будь-який момент, щоб нічого не втратити.',
+			'backup.export.transactions' => 'Резервне копіювання транзакцій',
+			'backup.export.transactions_descr' => 'Експортуйте ваші транзакції у форматі CSV, щоб ви могли зручніше їх аналізувати в інших програмах або застосунках.',
+			'backup.export.transactions_to_export' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: '1 транзакція для експорту', other: '${n} транзакцій для експорту', ), 
+			'backup.export.description' => 'Завантажте ваші дані у різних форматах',
+			'backup.export.send_file' => 'Надіслати файл',
+			'backup.export.see_folder' => 'Дивіться папку',
+			'backup.export.success' => ({required Object x}) => 'Файл успішно збережено/завантажено у ${x}',
+			'backup.export.error' => 'Помилка при завантаженні файлу. Будь ласка, зв\'яжіться з розробником за адресою lozin.technologies@gmail.com',
+			'backup.export.dialog_title' => 'Зберегти/Відправити файл',
+			'backup.import.title' => 'Імпорт ваших даних',
+			'backup.import.title_short' => 'Імпорт',
+			'backup.import.restore_backup' => 'Відновити резервну копію',
+			'backup.import.restore_backup_descr' => 'Імпортуйте раніше збережену базу даних з Monekin. Ця дія замінить будь-які поточні дані програми новими даними',
+			'backup.import.restore_backup_warn_description' => 'При імпорті нової бази даних ви втратите всі дані, які вже збережено в програмі. Рекомендується зробити резервну копію перед продовженням. Не завантажуйте сюди будь-який файл, походження якого ви не знаєте, завантажуйте лише файли, які ви раніше завантажили з Monekin',
+			'backup.import.restore_backup_warn_title' => 'Перезаписати всі дані',
+			'backup.import.select_other_file' => 'Вибрати інший файл',
+			'backup.import.tap_to_select_file' => 'Торкніться, щоб вибрати файл',
+			'backup.import.manual_import.title' => 'Ручний імпорт',
+			'backup.import.manual_import.descr' => 'Імпортуйте транзакції з файлу .csv вручну',
+			'backup.import.manual_import.default_account' => 'Типовий рахунок',
+			'backup.import.manual_import.remove_default_account' => 'Видалити типовий рахунок',
+			'backup.import.manual_import.default_category' => 'Типова категорія',
+			'backup.import.manual_import.select_a_column' => 'Виберіть стовпець з файлу .csv',
+			'backup.import.manual_import.steps.0' => 'Виберіть ваш файл',
+			'backup.import.manual_import.steps.1' => 'Стовпець для суми',
+			'backup.import.manual_import.steps.2' => 'Стовпець для рахунку',
+			'backup.import.manual_import.steps.3' => 'Стовпець для категорії',
+			'backup.import.manual_import.steps.4' => 'Стовпець для дати',
+			'backup.import.manual_import.steps.5' => 'інші стовпці',
+			'backup.import.manual_import.steps_descr.0' => 'Виберіть файл .csv з вашого пристрою. Переконайтеся, що в ньому є перший рядок, який описує назву кожного стовпця',
+			'backup.import.manual_import.steps_descr.1' => 'Виберіть стовпець, де вказано значення кожної транзакції. Використовуйте від\'ємні значення для витрат та позитивні значення для доходів.',
+			'backup.import.manual_import.steps_descr.2' => 'Виберіть стовпець, де вказано рахунок, до якого належить кожна транзакція. Ви також можете вибрати типовий рахунок у випадку, якщо ми не зможемо знайти рахунок, який вам потрібен. Якщо типовий рахунок не вказано, ми створимо його з такою самою назвою',
+			'backup.import.manual_import.steps_descr.3' => 'Вкажіть стовпець, де знаходиться назва категорії транзакції. Ви повинні вказати типову категорію, щоб ми призначили цю категорію транзакціям, у випадку, якщо категорія не може бути знайдена',
+			'backup.import.manual_import.steps_descr.4' => 'Виберіть стовпець, де вказано дату кожної транзакції. Якщо не вказано, транзакції будуть створені з поточною датою',
+			'backup.import.manual_import.steps_descr.5' => 'Вкажіть стовпці для інших необов\'язкових атрибутів транзакцій',
+			'backup.import.manual_import.success' => ({required Object x}) => 'Успішно імпортовано ${x} транзакцій',
+			'backup.import.success' => 'Імпорт виконано успішно',
+			'backup.import.error' => 'Помилка імпорту файлу. Будь ласка, зв\'яжіться з розробником за адресою lozin.technologies@gmail.com',
+			'backup.import.cancelled' => 'Імпорт скасовано користувачем',
+			'backup.about.title' => 'Інформація про вашу базу даних',
+			'backup.about.create_date' => 'Дата створення',
+			'backup.about.modify_date' => 'Останнє змінено',
+			'backup.about.last_backup' => 'Остання резервна копія',
+			'backup.about.size' => 'Розмір',
+			'settings.title_long' => 'Налаштування та Персоналізація',
+			'settings.title_short' => 'Налаштування',
+			'settings.description' => 'Тема, Мова, Дані та інше',
+			'settings.edit_profile' => 'Редагувати профіль',
+			'settings.general.menu_title' => 'Загальні налаштування',
+			'settings.general.menu_descr' => 'Мова, конфіденційність та інше',
+			'settings.general.show_all_decimals' => 'Усі десяткові розряди',
+			'settings.general.show_all_decimals_descr' => 'Показувати всі десяткові знаки, навіть якщо це нулі',
+			'settings.general.language.section' => 'Мова та тексти',
+			'settings.general.language.title' => 'Мова додатку',
+			'settings.general.language.descr' => 'Мова, в якій будуть відображатися тексти в додатку',
+			'settings.general.language.help' => 'Якщо ви хочете співпрацювати з перекладами цієї програми, ви можете звернутися до <a href=\'https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n\'>нашого посібник</ a>',
+			'settings.general.locale.title' => 'Регіон',
+			'settings.general.locale.auto' => 'Система',
+			'settings.general.locale.descr' => 'Встановіть формат, який буде використовуватися для дат, чисел...',
+			'settings.general.locale.warn' => 'Після зміни регіону додаток оновиться',
+			'settings.general.locale.first_day_of_week' => 'Перший день тижня',
+			'settings.security.title' => 'Безпека',
+			'settings.security.private_mode_at_launch' => 'Приватний режим під час запуску',
+			'settings.security.private_mode_at_launch_descr' => 'За замовчуванням запускати програму в приватному режимі',
+			'settings.security.private_mode' => 'Приватний режим',
+			'settings.security.private_mode_descr' => 'Приховати всі грошові значення',
+			'settings.security.private_mode_activated' => 'Приватний режим активовано',
+			'settings.security.private_mode_deactivated' => 'Приватний режим вимкнено',
+			'settings.transactions.menu_title' => 'Транзакції',
+			'settings.transactions.menu_descr' => 'Налаштуйте поведінку ваших транзакцій',
+			'settings.transactions.title' => 'Налаштування транзакцій',
+			'settings.transactions.style.title' => 'Стиль транзакції',
+			'settings.transactions.style.subtitle' => 'Налаштуйте вигляд транзакцій у списках додатку',
+			'settings.transactions.style.show_tags' => 'Показати Теги',
+			'settings.transactions.style.show_time' => 'Показати Час',
+			'settings.transactions.swipe_actions.title' => 'Дії гортання',
+			'settings.transactions.swipe_actions.choose_description' => 'Виберіть, яка дія буде ініційована, коли ви проводите пальцем по елементу транзакції у списку в цьому напрямку',
+			'settings.transactions.swipe_actions.none' => 'Ніяких дій',
+			'settings.transactions.swipe_actions.swipe_left' => 'Проведіть ліворуч',
+			'settings.transactions.swipe_actions.swipe_right' => 'Проведіть праворуч',
+			'settings.transactions.swipe_actions.toggle_reconciled' => 'Перемикач узгоджено',
+			'settings.transactions.swipe_actions.toggle_pending' => 'Перемкнути в очікуванні',
+			'settings.transactions.swipe_actions.toggle_voided' => 'Перемикач скасовано',
+			'settings.transactions.swipe_actions.toggle_unreconciled' => 'Перемикач неузгоджений',
+			'settings.transactions.swipe_actions.remove_status' => 'Видалити статус',
+			'settings.transactions.default_values.title' => 'Default Form Values',
+			'settings.transactions.default_values.page_title' => 'New Transaction: Default Form Values',
+			'settings.transactions.default_values.reuse_last_transaction' => 'Reuse Last Transaction Values',
+			'settings.transactions.default_values.reuse_last_transaction_descr' => 'Automatically fill the form with some values from the last created transaction',
+			'settings.transactions.default_values.fields_to_reuse' => 'Fields to reuse',
+			'settings.transactions.default_values.reuse_last_values_modal_descr' => 'Select the fields that should be pre-filled with the values from the last created transaction.',
+			'settings.transactions.default_values.default_values_separator' => 'Default Values',
+			'settings.transactions.default_values.default_category' => 'Default Category',
+			'settings.transactions.default_values.default_status' => 'Default Status',
+			'settings.transactions.default_values.default_tags' => 'Default Tags',
+			'settings.transactions.default_values.no_tags_selected' => 'No tags selected',
+			'settings.transactions.default_type.title' => 'Default Type',
+			'settings.transactions.default_type.modal_title' => 'Select Default Type',
+			'settings.appearance.menu_title' => 'Тема та стиль',
+			'settings.appearance.menu_descr' => 'Вибір теми, кольори та інші речі, пов\'язані з виглядом програми',
+			'settings.appearance.theme_and_colors' => 'Тема та кольори',
+			'settings.appearance.theme.title' => 'Тема',
+			'settings.appearance.theme.auto' => 'система',
+			'settings.appearance.theme.light' => 'Світла',
+			'settings.appearance.theme.dark' => 'Темна',
+			'settings.appearance.amoled_mode' => 'Режим AMOLED',
+			'settings.appearance.amoled_mode_descr' => 'Використовуйте чисто чорний шпалери, якщо це можливо. Це трохи допоможе акумулятору пристроїв з екранами AMOLED',
+			'settings.appearance.dynamic_colors' => 'Динамічні кольори',
+			'settings.appearance.dynamic_colors_descr' => 'Використовуйте колір акценту вашої системи, коли це можливо',
+			'settings.appearance.accent_color' => 'Колір акценту',
+			'settings.appearance.accent_color_descr' => 'Виберіть колір, який додаток буде використовувати для виділення певних частин інтерфейсу',
+			'settings.appearance.text' => 'Текст',
+			'settings.appearance.font' => 'Шрифт',
+			'settings.appearance.font_platform' => 'Платформа',
+			'more.title' => 'Більше',
+			'more.title_long' => 'Більше дій',
+			'more.data.display' => 'Дані',
+			'more.data.display_descr' => 'Експортуйте та імпортуйте свої дані, щоб нічого не втратити',
+			'more.data.delete_all' => 'Видалити мої дані',
+			'more.data.delete_all_header1' => 'Зупиніться, молодий падаване ⚠️⚠️',
+			'more.data.delete_all_message1' => 'Ви впевнені, що хочете продовжити? Всі ваші дані буде остаточно видалено і не може бути відновлено',
+			'more.data.delete_all_header2' => 'Останній крок ⚠️⚠️',
+			'more.data.delete_all_message2' => 'Видаляючи обліковий запис, ви видалите всі ваші збережені особисті дані. Ваші облікові записи, транзакції, бюджети та категорії будуть видалені і не можуть бути відновлені. Ви згодні?',
+			'more.about_us.display' => 'Інформація про додаток',
+			'more.about_us.description' => 'Знаходьте умови Monekin, важливу інформацію та зв\'язуйтеся, повідомляючи про помилки або ділячись ідеями',
+			'more.about_us.legal.display' => 'Юридична інформація',
+			'more.about_us.legal.privacy' => 'Політика конфіденційності',
+			'more.about_us.legal.terms' => 'Умови використання',
+			'more.about_us.legal.licenses' => 'Ліцензії',
+			'more.about_us.project.display' => 'Проект',
+			'more.about_us.project.contributors' => 'Співробітники',
+			'more.about_us.project.contributors_descr' => 'Усі розробники, які зробили Monekin краще',
+			'more.about_us.project.contact' => 'Зв\'яжіться з нами',
+			'more.help_us.display' => 'Допоможіть нам',
+			'more.help_us.description' => 'Дізнайтеся, як ви можете допомогти Monekin ставати кращим і кращим',
+			'more.help_us.rate_us' => 'Оцініть нас',
+			'more.help_us.rate_us_descr' => 'Будь-яка оцінка вітається!',
+			'more.help_us.share' => 'Поділіться Monekin',
+			'more.help_us.share_descr' => 'Поділіться нашим додатком з друзями та родиною',
+			'more.help_us.share_text' => 'Monekin! Найкращий додаток для особистих фінансів. Завантажте його тут',
+			'more.help_us.thanks' => 'Дякуємо!',
+			'more.help_us.thanks_long' => 'Ваші внески в Monekin та інші відкриті проекти, великі та малі, роблять великі проекти, подібні до цього, можливими. Дякуємо вам за час, витрачений на внесок.',
+			'more.help_us.donate' => 'Зробіть пожертву',
+			'more.help_us.donate_descr' => 'З вашою пожертвою ви допоможете додатку продовжувати отримувати вдосконалення. Що може бути краще, ніж подякувати за виконану роботу, запрошуючи мене на каву?',
+			'more.help_us.donate_success' => 'Пожертва зроблена. Дуже вдячний за ваш внесок! ❤️',
+			'more.help_us.donate_err' => 'Ой! Здається, виникла помилка при отриманні вашого платежу',
+			'more.help_us.report' => 'Повідомити про помилки, залишити пропозиції...',
+			_ => null,
+		};
 	}
 }
-
