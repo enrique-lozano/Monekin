@@ -3,16 +3,20 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/app/debts/debt_details_page.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/transactions/label_value_info_table.dart';
 import 'package:monekin/app/transactions/utils/show_pay_modal.dart';
 import 'package:monekin/app/transactions/widgets/translucent_transaction_status_card.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
+import 'package:monekin/core/database/services/debts/debt_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
+import 'package:monekin/core/models/debt/debt.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
@@ -25,6 +29,7 @@ import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
 import 'package:monekin/core/services/view-actions/transaction_view_actions_service.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -320,6 +325,11 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                               ),
                               icon: MoneyTransaction.reversedIcon,
                               title: t.transaction.reversed.title,
+                            ),
+                          if (transaction.debtId != null)
+                            _LinkedDebtCard(
+                              transactionId: transaction.id,
+                              debtId: transaction.debtId!,
                             ),
                           CardWithHeader(
                             title: 'Info',
@@ -750,4 +760,118 @@ class _TransactionDetailHeader extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant _TransactionDetailHeader oldDelegate) =>
       oldDelegate.transaction != transaction || oldDelegate.heroTag != heroTag;
+}
+
+class _LinkedDebtCard extends StatelessWidget {
+  const _LinkedDebtCard({required this.transactionId, required this.debtId});
+
+  final String transactionId;
+  final String debtId;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<Debt?>(
+      stream: DebtServive.instance.getDebtById(debtId),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return const SizedBox.shrink();
+        final debt = snapshot.data!;
+        final debtColor = debt.type.color(context);
+
+        return TranslucentTransactionStatusCard(
+          color: debtColor,
+          icon: Debt.icon,
+          title: 'Linked Debt',
+          body: Column(
+            children: [
+              ListTile(
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 0,
+                ),
+                leading: IconDisplayer(
+                  supportedIcon: SupportedIconService.instance.getIconByID(
+                    debt.iconId,
+                  ),
+                  mainColor: debtColor,
+                ),
+                title: Text(debt.name),
+                subtitle: Row(
+                  spacing: 4,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(debt.type.icon(), size: 12, color: debtColor),
+                    Text(
+                      debt.type.title(context),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodySmall?.copyWith(color: debtColor),
+                    ),
+                  ],
+                ),
+              ),
+              Divider(height: 1, color: debtColor.withOpacity(0.35)),
+              IntrinsicHeight(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextButton.icon(
+                        style: TextButton.styleFrom(
+                          foregroundColor: debtColor,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: const RoundedRectangleBorder(),
+                        ),
+                        icon: const Icon(Icons.open_in_new_rounded, size: 16),
+                        label: const Text('View debt'),
+                        onPressed: () => RouteUtils.pushRoute(
+                          DebtDetailsPage(debtInitialData: debt),
+                        ),
+                      ),
+                    ),
+                    VerticalDivider(
+                      width: 1,
+                      color: debtColor.withOpacity(0.35),
+                    ),
+                    Expanded(
+                      child: TextButton.icon(
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.of(context).danger,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: const RoundedRectangleBorder(),
+                        ),
+                        icon: const Icon(Icons.link_off_rounded, size: 16),
+                        label: const Text('Unlink'),
+                        onPressed: () async {
+                          final confirmed = await confirmDialog(
+                            context,
+                            dialogTitle: 'Unlink from debt?',
+                            contentParagraphs: [
+                              const Text(
+                                'This transaction will no longer be associated with this debt.',
+                              ),
+                            ],
+                            showCancelButton: true,
+                            icon: Icons.link_off_rounded,
+                          );
+                          if (confirmed != true) return;
+                          try {
+                            await DebtServive.instance
+                                .unlinkTransactionFromDebt(transactionId);
+                            MonekinSnackbar.success(
+                              SnackbarParams('Transaction unlinked from debt'),
+                            );
+                          } catch (e) {
+                            MonekinSnackbar.error(SnackbarParams.fromError(e));
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }

@@ -29,6 +29,13 @@ class DebtServive {
     return (db.delete(db.debts)..where((tbl) => tbl.id.equals(debtId))).go();
   }
 
+  Stream<Debt?> getDebtById(String id) {
+    return getDebts(
+      predicate: (p0, trFilter) => p0.id.equals(id),
+      limit: 1,
+    ).map((res) => res.firstOrNull);
+  }
+
   /// Gets the total amount of the debt to be fully paid back
   Stream<double> getDebtTotalAmount(
     Debt debt, {
@@ -144,10 +151,10 @@ class DebtServive {
         .write(TransactionsCompanion(debtId: Value(debtId)));
   }
 
-  Stream<Debt?> getDebtById(String id) {
-    return getDebts(
-      predicate: (p0, trFilter) => p0.id.equals(id),
-      limit: 1,
-    ).map((res) => res.firstOrNull);
+  /// Removes the debt link from a transaction by setting its [debtId] to null.
+  Future<int> unlinkTransactionFromDebt(String transactionId) {
+    return (db.update(db.transactions)
+          ..where((tbl) => tbl.id.equals(transactionId)))
+        .write(TransactionsCompanion(debtId: Value<String?>(null)));
   }
 }
