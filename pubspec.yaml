@@ -29,7 +29,7 @@ dependencies:
   # General
   cupertino_icons: ^1.0.0
   collection: ^1.18.0
-  equatable: ^2.0.5
+  equatable: ^2.0.8
   path: ^1.8.2
   async: ^2.10.0
   rxdart: ^0.28.0

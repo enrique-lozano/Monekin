@@ -117,7 +117,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
     });
   }
 
-  Widget cardPay({
+  Widget _cardPay({
     required MoneyTransaction transaction,
     required DateTime date,
     bool isNext = false,
@@ -128,13 +128,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
         enabled: isNext,
         contentPadding: const EdgeInsets.only(left: 16, right: 6),
         tileColor: transaction.nextPayStatus!.color(context).withOpacity(0.1),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(6),
-          side: BorderSide(
-            width: 1,
-            color: transaction.nextPayStatus!.color(context),
-          ),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
         leading: Icon(
           isNext ? transaction.nextPayStatus!.icon : Icons.access_time,
           color: transaction.nextPayStatus!.color(context),
@@ -181,53 +175,71 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
       throw Exception('Error');
     }
 
-    final bool showRecurrencyStatus = (transaction.recurrentInfo.isRecurrent);
-    final bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    if (transaction.recurrentInfo.isRecurrent) {
+      return _recurrencyStatusCard(transaction);
+    }
 
-    final color = showRecurrencyStatus
-        ? isDarkTheme
-              ? Theme.of(context).colorScheme.primary
-              : Theme.of(context).colorScheme.primary.lighten(0.2)
-        : transaction.status!.color;
+    return _transactionStatusCard(transaction);
+  }
+
+  Widget _recurrencyStatusCard(MoneyTransaction transaction) {
+    final bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final color = isDarkTheme
+        ? Theme.of(context).colorScheme.primary
+        : Theme.of(context).colorScheme.primary.lighten(0.2);
 
     return TranslucentTransactionStatusCard(
       color: color,
+      initiallyExpanded: true,
+      icon: Icons.repeat_rounded,
+      title: t.recurrent_transactions.details.title,
       body: Padding(
-        padding: EdgeInsets.all(showRecurrencyStatus ? 0 : 12),
+        padding: const EdgeInsets.symmetric(vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 8,
           children: [
             Padding(
-              padding: EdgeInsets.all(showRecurrencyStatus ? 12 : 0),
-              child: Text(
-                showRecurrencyStatus
-                    ? t.recurrent_transactions.details.descr
-                    : transaction.status!.description(context),
-              ),
+              padding: EdgeInsetsGeometry.symmetric(horizontal: 12),
+              child: Text(t.recurrent_transactions.details.descr),
             ),
-            if (showRecurrencyStatus) ...[
-              //const SizedBox(height: 12),
-              Column(
-                children: transaction
+            Column(
+              children: [
+                ...transaction
                     .getNextDatesOfRecurrency(limit: 3)
                     .mapIndexed(
-                      (index, e) => Column(
-                        children: [
-                          cardPay(
-                            date: e,
-                            transaction: transaction,
-                            isNext: index == 0,
-                          ),
-                          if (index == 2) const SizedBox(height: 8),
-                        ],
+                      (index, e) => _cardPay(
+                        date: e,
+                        transaction: transaction,
+                        isNext: index == 0,
                       ),
-                    )
-                    .toList(),
-              ),
-            ],
-            if (transaction.status == TransactionStatus.pending &&
-                !showRecurrencyStatus) ...[
-              const SizedBox(height: 12),
+                    ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _transactionStatusCard(MoneyTransaction transaction) {
+    final color = transaction.status!.color;
+
+    return TranslucentTransactionStatusCard(
+      color: color,
+      initiallyExpanded: transaction.status == TransactionStatus.pending,
+      icon: transaction.status?.icon,
+      title: t.transaction.status
+          .tr_status(status: transaction.status!.displayName(context))
+          .capitalize(),
+      body: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 12,
+          children: [
+            Text(transaction.status!.description(context)),
+            if (transaction.status == TransactionStatus.pending)
               SizedBox(
                 width: double.infinity,
                 child: FilledButton(
@@ -239,18 +251,9 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                   child: Text(t.transaction.next_payments.accept_dialog_title),
                 ),
               ),
-            ],
           ],
         ),
       ),
-      icon: showRecurrencyStatus
-          ? Icons.repeat_rounded
-          : transaction.status?.icon,
-      title: showRecurrencyStatus
-          ? t.recurrent_transactions.details.title
-          : t.transaction.status
-                .tr_status(status: transaction.status!.displayName(context))
-                .capitalize(),
     );
   }
 

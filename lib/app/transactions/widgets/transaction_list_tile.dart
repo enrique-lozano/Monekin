@@ -52,6 +52,9 @@ class TransactionListTile extends StatelessWidget {
 
   final Object? heroTag;
 
+  /// Whether to apply the swipe actions defined in the user settings. If `false`,
+  /// the tile will not be dismissible and won't show the swipe action background.
+  /// Defaults to `false`
   final bool applySwipeActions;
 
   /// Action to trigger when the tile is long pressed. If `null`,
