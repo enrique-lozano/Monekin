@@ -1026,7 +1026,7 @@ class _TranslationsTagsFormTr implements TranslationsTagsFormEn {
 	// Translations
 	@override String get name => 'Etiket adı';
 	@override String get name_hint => 'Örn.: Yemek';
-	@override String get forbidden_char_error => 'Etiket adı \';\' içeremez';
+	@override String get forbidden_char_error => 'İsim \';\' karakterini içeremez';
 	@override String get description => 'Açıklama';
 }
 
@@ -2227,7 +2227,7 @@ extension on TranslationsTr {
 			'tags.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: 'Etiket', other: 'Etiketler', ), 
 			'tags.form.name' => 'Etiket adı',
 			'tags.form.name_hint' => 'Örn.: Yemek',
-			'tags.form.forbidden_char_error' => 'Etiket adı \';\' içeremez',
+			'tags.form.forbidden_char_error' => 'İsim \';\' karakterini içeremez',
 			'tags.form.description' => 'Açıklama',
 			'tags.select.title' => 'Etiketleri seçin',
 			'tags.select.all' => 'Tüm etiketler',

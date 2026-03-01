@@ -1026,7 +1026,7 @@ class _TranslationsTagsFormHu implements TranslationsTagsFormEn {
 	// Translations
 	@override String get name => 'Címke neve';
 	@override String get name_hint => 'Pl.: Étel';
-	@override String get forbidden_char_error => 'A címke neve nem tartalmazhat \';\' karaktert';
+	@override String get forbidden_char_error => 'A név nem tartalmazhat \';\' karaktert';
 	@override String get description => 'Leírás';
 }
 
@@ -2227,7 +2227,7 @@ extension on TranslationsHu {
 			'tags.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: 'Felirat', other: 'Címkék', ), 
 			'tags.form.name' => 'Címke neve',
 			'tags.form.name_hint' => 'Pl.: Étel',
-			'tags.form.forbidden_char_error' => 'A címke neve nem tartalmazhat \';\' karaktert',
+			'tags.form.forbidden_char_error' => 'A név nem tartalmazhat \';\' karaktert',
 			'tags.form.description' => 'Leírás',
 			'tags.select.title' => 'Címke kiválasztása',
 			'tags.select.all' => 'Minden címke',

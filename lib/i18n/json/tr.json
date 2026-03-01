@@ -582,7 +582,7 @@
     "FORM": {
       "name": "Etiket adı",
       "name-hint": "Örn.: Yemek",
-      "forbidden-char-error": "Etiket adı ';' içeremez",
+      "forbidden-char-error": "İsim ';' karakterini içeremez",
       "description": "Açıklama"
     },
     "SELECT": {

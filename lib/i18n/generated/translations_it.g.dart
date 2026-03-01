@@ -1026,7 +1026,7 @@ class _TranslationsTagsFormIt implements TranslationsTagsFormEn {
 	// Translations
 	@override String get name => 'Nome etichetta';
 	@override String get name_hint => 'Es.: Cibo';
-	@override String get forbidden_char_error => 'Il nome dell\'etichetta non può contenere \';\'';
+	@override String get forbidden_char_error => 'Il nome non può contenere \';\'';
 	@override String get description => 'Descrizione';
 }
 
@@ -2227,7 +2227,7 @@ extension on TranslationsIt {
 			'tags.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n, one: 'Etichetta', other: 'Etichette', ), 
 			'tags.form.name' => 'Nome etichetta',
 			'tags.form.name_hint' => 'Es.: Cibo',
-			'tags.form.forbidden_char_error' => 'Il nome dell\'etichetta non può contenere \';\'',
+			'tags.form.forbidden_char_error' => 'Il nome non può contenere \';\'',
 			'tags.form.description' => 'Descrizione',
 			'tags.select.title' => 'Seleziona etichette',
 			'tags.select.all' => 'Tutte le etichette',

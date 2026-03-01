@@ -582,7 +582,7 @@
     "FORM": {
       "name": "Nom du tag",
       "name-hint": "Ex.: Nourriture",
-      "forbidden-char-error": "Le nom de l'étiquette ne peut pas contenir de ';'",
+      "forbidden-char-error": "Le nom ne peut pas contenir de ';'",
       "description": "Description"
     },
     "SELECT": {

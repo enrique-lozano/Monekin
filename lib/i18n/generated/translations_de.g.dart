@@ -1026,7 +1026,7 @@ class _TranslationsTagsFormDe implements TranslationsTagsFormEn {
 	// Translations
 	@override String get name => 'Schlagworte-Name';
 	@override String get name_hint => 'Z.B.: Essen';
-	@override String get forbidden_char_error => 'Tag-Name darf kein \';\' enthalten';
+	@override String get forbidden_char_error => 'Der Name darf kein \';\' enthalten';
 	@override String get description => 'Beschreibung';
 }
 
@@ -2227,7 +2227,7 @@ extension on TranslationsDe {
 			'tags.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n, one: 'Label', other: 'Schlagworte', ), 
 			'tags.form.name' => 'Schlagworte-Name',
 			'tags.form.name_hint' => 'Z.B.: Essen',
-			'tags.form.forbidden_char_error' => 'Tag-Name darf kein \';\' enthalten',
+			'tags.form.forbidden_char_error' => 'Der Name darf kein \';\' enthalten',
 			'tags.form.description' => 'Beschreibung',
 			'tags.select.title' => 'Schlagworte auswählen',
 			'tags.select.all' => 'Alle Schlagworte',

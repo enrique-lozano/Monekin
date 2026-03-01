@@ -582,7 +582,7 @@
     "FORM": {
       "name": "Назва тегу",
       "name-hint": "Наприклад: Їжа",
-      "forbidden-char-error": "Назва мітки не може містити ';'",
+      "forbidden-char-error": "Ім'я не може містити ';'",
       "description": "Опис"
     },
     "SELECT": {

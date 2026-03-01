@@ -582,7 +582,7 @@
     "FORM": {
       "name": "標籤名",
       "name-hint": "例如：食物",
-      "forbidden-char-error": "標籤名稱不能包含';'",
+      "forbidden-char-error": "名稱不能包含 ';'",
       "description": "描述"
     },
     "SELECT": {

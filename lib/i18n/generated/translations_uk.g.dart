@@ -1026,7 +1026,7 @@ class _TranslationsTagsFormUk implements TranslationsTagsFormEn {
 	// Translations
 	@override String get name => 'Назва тегу';
 	@override String get name_hint => 'Наприклад: Їжа';
-	@override String get forbidden_char_error => 'Назва мітки не може містити \';\'';
+	@override String get forbidden_char_error => 'Ім\'я не може містити \';\'';
 	@override String get description => 'Опис';
 }
 
@@ -2227,7 +2227,7 @@ extension on TranslationsUk {
 			'tags.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: 'Мітка', other: 'Теги', ), 
 			'tags.form.name' => 'Назва тегу',
 			'tags.form.name_hint' => 'Наприклад: Їжа',
-			'tags.form.forbidden_char_error' => 'Назва мітки не може містити \';\'',
+			'tags.form.forbidden_char_error' => 'Ім\'я не може містити \';\'',
 			'tags.form.description' => 'Опис',
 			'tags.select.title' => 'Вибрати теги',
 			'tags.select.all' => 'Усі теги',

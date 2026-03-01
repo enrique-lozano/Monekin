@@ -582,7 +582,7 @@
     "FORM": {
       "name": "Nome etichetta",
       "name-hint": "Es.: Cibo",
-      "forbidden-char-error": "Il nome dell'etichetta non può contenere ';'",
+      "forbidden-char-error": "Il nome non può contenere ';'",
       "description": "Descrizione"
     },
     "SELECT": {

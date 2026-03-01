@@ -582,7 +582,7 @@
     "FORM": {
       "name": "标签名",
       "name-hint": "例如：食物",
-      "forbidden-char-error": "礼仪名称不能包含';'",
+      "forbidden-char-error": "名称不能包含 ';'",
       "description": "描述"
     },
     "SELECT": {

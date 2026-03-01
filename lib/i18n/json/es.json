@@ -585,7 +585,7 @@
     "FORM": {
       "name": "Nombre de la etiqueta",
       "name-hint": "Ej.: Comida",
-      "forbidden-char-error": "El nombre de la etiqueta no puede contener ';'",
+      "forbidden-char-error": "El nombre no puede contener ';'",
       "description": "Descripción"
     },
     "SELECT": {

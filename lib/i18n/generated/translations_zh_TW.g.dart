@@ -1026,7 +1026,7 @@ class _TranslationsTagsFormZhTw implements TranslationsTagsFormEn {
 	// Translations
 	@override String get name => '標籤名';
 	@override String get name_hint => '例如：食物';
-	@override String get forbidden_char_error => '標籤名稱不能包含\';\'';
+	@override String get forbidden_char_error => '名稱不能包含 \';\'';
 	@override String get description => '描述';
 }
 
@@ -2227,7 +2227,7 @@ extension on TranslationsZhTw {
 			'tags.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '標籤', other: '標籤', ), 
 			'tags.form.name' => '標籤名',
 			'tags.form.name_hint' => '例如：食物',
-			'tags.form.forbidden_char_error' => '標籤名稱不能包含\';\'',
+			'tags.form.forbidden_char_error' => '名稱不能包含 \';\'',
 			'tags.form.description' => '描述',
 			'tags.select.title' => '選擇標籤',
 			'tags.select.all' => '所有標籤',

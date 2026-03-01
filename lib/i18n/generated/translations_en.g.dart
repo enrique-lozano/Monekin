@@ -355,8 +355,8 @@ class TranslationsHomeEn {
 	/// en: 'Oops!'
 	String get should_create_account_header => 'Oops!';
 
-	/// en: 'You must have at least one no-archived account before you can start creating transactions'
-	String get should_create_account_message => 'You must have at least one no-archived account before you can start creating transactions';
+	/// en: 'You must have at least one non-archived account before you can start creating transactions'
+	String get should_create_account_message => 'You must have at least one non-archived account before you can start creating transactions';
 }
 
 // Path: financial_health
@@ -1870,8 +1870,8 @@ class TranslationsTagsFormEn {
 	/// en: 'E.g.: Food'
 	String get name_hint => 'E.g.: Food';
 
-	/// en: 'Tag name cannot contain ';''
-	String get forbidden_char_error => 'Tag name cannot contain \';\'';
+	/// en: 'The name cannot contain ';''
+	String get forbidden_char_error => 'The name cannot contain \';\'';
 
 	/// en: 'Description'
 	String get description => 'Description';
@@ -3359,7 +3359,7 @@ extension on Translations {
 			'home.no_accounts_descr' => 'Start using all the magic of Monekin. Create at least one account to start adding transactions',
 			'home.last_transactions' => 'Last transactions',
 			'home.should_create_account_header' => 'Oops!',
-			'home.should_create_account_message' => 'You must have at least one no-archived account before you can start creating transactions',
+			'home.should_create_account_message' => 'You must have at least one non-archived account before you can start creating transactions',
 			'financial_health.display' => 'Financial health',
 			'financial_health.review.very_good' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Very good!'; case GenderContext.female: return 'Very good!'; } }, 
 			'financial_health.review.good' => ({required GenderContext context}) { switch (context) { case GenderContext.male: return 'Good'; case GenderContext.female: return 'Good'; } }, 
@@ -3630,7 +3630,7 @@ extension on Translations {
 			'tags.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n, one: 'Label', other: 'Tags', ), 
 			'tags.form.name' => 'Tag name',
 			'tags.form.name_hint' => 'E.g.: Food',
-			'tags.form.forbidden_char_error' => 'Tag name cannot contain \';\'',
+			'tags.form.forbidden_char_error' => 'The name cannot contain \';\'',
 			'tags.form.description' => 'Description',
 			'tags.select.title' => 'Select tags',
 			'tags.select.all' => 'All the tags',

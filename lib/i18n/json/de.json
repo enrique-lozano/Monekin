@@ -582,7 +582,7 @@
     "FORM": {
       "name": "Schlagworte-Name",
       "name-hint": "Z.B.: Essen",
-      "forbidden-char-error": "Tag-Name darf kein ';' enthalten",
+      "forbidden-char-error": "Der Name darf kein ';' enthalten",
       "description": "Beschreibung"
     },
     "SELECT": {

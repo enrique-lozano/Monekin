@@ -582,7 +582,7 @@
     "FORM": {
       "name": "Tag name",
       "name-hint": "E.g.: Food",
-      "forbidden-char-error": "Tag name cannot contain ';'",
+      "forbidden-char-error": "The name cannot contain ';'",
       "description": "Description"
     },
     "SELECT": {

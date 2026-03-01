@@ -582,7 +582,7 @@
     "FORM": {
       "name": "Címke neve",
       "name-hint": "Pl.: Étel",
-      "forbidden-char-error": "A címke neve nem tartalmazhat ';' karaktert",
+      "forbidden-char-error": "A név nem tartalmazhat ';' karaktert",
       "description": "Leírás"
     },
     "SELECT": {
