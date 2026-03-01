@@ -39,6 +39,8 @@ abstract class _$TransactionFilterSetCWProxy {
 
   TransactionFilterSet tagsIDs(Iterable<String?>? tagsIDs);
 
+  TransactionFilterSet debtId(String? debtId);
+
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `TransactionFilterSet(...).copyWith.fieldName(value)`.
   ///
@@ -60,6 +62,7 @@ abstract class _$TransactionFilterSetCWProxy {
     Iterable<String>? categoriesIds,
     List<TransactionStatus?>? status,
     Iterable<String?>? tagsIDs,
+    String? debtId,
   });
 }
 
@@ -126,6 +129,9 @@ class _$TransactionFilterSetCWProxyImpl
       call(tagsIDs: tagsIDs);
 
   @override
+  TransactionFilterSet debtId(String? debtId) => call(debtId: debtId);
+
+  @override
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `TransactionFilterSet(...).copyWith.fieldName(value)`.
   ///
@@ -148,6 +154,7 @@ class _$TransactionFilterSetCWProxyImpl
     Object? categoriesIds = const $CopyWithPlaceholder(),
     Object? status = const $CopyWithPlaceholder(),
     Object? tagsIDs = const $CopyWithPlaceholder(),
+    Object? debtId = const $CopyWithPlaceholder(),
   }) {
     return TransactionFilterSet(
       minDate: minDate == const $CopyWithPlaceholder()
@@ -207,6 +214,10 @@ class _$TransactionFilterSetCWProxyImpl
           ? _value.tagsIDs
           // ignore: cast_nullable_to_non_nullable
           : tagsIDs as Iterable<String?>?,
+      debtId: debtId == const $CopyWithPlaceholder()
+          ? _value.debtId
+          // ignore: cast_nullable_to_non_nullable
+          : debtId as String?,
     );
   }
 }
@@ -237,6 +248,7 @@ extension $TransactionFilterSetCopyWith on TransactionFilterSet {
     bool categoriesIds = false,
     bool status = false,
     bool tagsIDs = false,
+    bool debtId = false,
   }) {
     return TransactionFilterSet(
       minDate: minDate == true ? null : this.minDate,
@@ -253,6 +265,7 @@ extension $TransactionFilterSetCopyWith on TransactionFilterSet {
       categoriesIds: categoriesIds == true ? null : this.categoriesIds,
       status: status == true ? null : this.status,
       tagsIDs: tagsIDs == true ? null : this.tagsIDs,
+      debtId: debtId == true ? null : this.debtId,
     );
   }
 }

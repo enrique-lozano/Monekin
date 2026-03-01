@@ -21,6 +21,7 @@ import 'package:monekin/core/database/utils/drift_utils.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/debt/debt.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
@@ -43,6 +44,7 @@ class TransactionFormPage extends StatefulWidget {
     this.mode,
     this.fromAccount,
     this.transactionToEdit,
+    this.linkedDebt,
   });
 
   final TransactionType? mode;
@@ -50,6 +52,10 @@ class TransactionFormPage extends StatefulWidget {
   final MoneyTransaction? transactionToEdit;
 
   final Account? fromAccount;
+
+  /// When non-null, the created transaction will be automatically linked to
+  /// this debt. A banner indicator is shown inside the form.
+  final Debt? linkedDebt;
 
   @override
   State<TransactionFormPage> createState() => _TransactionFormPageState();
@@ -308,6 +314,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       categoryID: transactionType.isIncomeOrExpense
           ? selectedCategory?.id
           : null,
+      debtId: widget.linkedDebt?.id,
       receivingAccountID: transactionType.isTransfer
           ? transferAccount?.id
           : null,
@@ -506,6 +513,10 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     final t = Translations.of(context);
 
     final formFieldWithDividers = [
+      if (widget.linkedDebt != null) ...[
+        _DebtLinkBanner(debt: widget.linkedDebt!),
+        const Divider(),
+      ],
       TransactionTitleField(controller: titleController),
       const Divider(),
       TransactionDateSelector(
@@ -654,6 +665,51 @@ class _TransactionFormPageState extends State<TransactionFormPage>
             RouteUtils.popRoute();
           });
         },
+      ),
+    );
+  }
+}
+
+/// A compact banner shown in [TransactionFormPage] when the transaction being
+/// created is pre-linked to a [Debt]. Visible only during creation (not edit).
+class _DebtLinkBanner extends StatelessWidget {
+  const _DebtLinkBanner({required this.debt});
+
+  final Debt debt;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = debt.type.color(context);
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.08),
+        border: Border.all(color: color.withOpacity(0.35), width: 1.5),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        spacing: 10,
+        children: [
+          Icon(Icons.link_rounded, size: 18, color: color),
+          Expanded(
+            child: Text.rich(
+              TextSpan(
+                text: 'Linked to debt: ',
+                style: Theme.of(context).textTheme.bodySmall,
+                children: [
+                  TextSpan(
+                    text: debt.name,
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: color,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

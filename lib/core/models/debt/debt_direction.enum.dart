@@ -23,27 +23,27 @@ enum DebtDirection implements DatabaseEnum<int> {
 
     switch (this) {
       case DebtDirection.lent:
-        return "t.debts.direction.lent.title";
+        return "Presté";
       case DebtDirection.borrowed:
-        return "t.debts.direction.borrowed.title";
+        return "Me prestaron";
     }
   }
 
   Color color(BuildContext context) {
     switch (this) {
       case DebtDirection.lent:
-        return AppColors.of(context).success; // Green
+        return AppColors.of(context).danger;
       case DebtDirection.borrowed:
-        return AppColors.of(context).danger; // Red
+        return AppColors.of(context).success;
     }
   }
 
   IconData icon() {
     switch (this) {
       case DebtDirection.lent:
-        return Icons.arrow_upward_rounded;
+        return Icons.north_east_rounded;
       case DebtDirection.borrowed:
-        return Icons.arrow_downward_rounded;
+        return Icons.south_west_rounded;
     }
   }
 }

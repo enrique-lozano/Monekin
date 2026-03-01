@@ -42,6 +42,7 @@ class TransactionFilterSet {
   final double? maxValue;
 
   final Iterable<String?>? tagsIDs;
+  final String? debtId;
 
   const TransactionFilterSet({
     this.minDate,
@@ -57,6 +58,7 @@ class TransactionFilterSet {
     this.categoriesIds,
     this.status,
     this.tagsIDs,
+    this.debtId,
   });
 
   /// Factory constructor to create a [TransactionFilterSet] from a [TransactionFilterSetInDB]
@@ -72,6 +74,7 @@ class TransactionFilterSet {
       categoriesIds: dbModel.categoriesIds,
       status: dbModel.status,
       tagsIDs: dbModel.tagsIDs,
+      // debtId is not stored in DB filter sets for now
     );
   }
 
@@ -103,6 +106,7 @@ class TransactionFilterSet {
     categoriesIds,
     status,
     tagsIDs,
+    debtId,
   ].any((element) => element != null);
 
   Stream<List<Account>> accounts() => accountsIDs != null
@@ -165,6 +169,7 @@ class TransactionFilterSet {
       if (isRecurrent == true) transaction.intervalPeriod.isNotNull(),
 
       // Other filters:
+      if (debtId != null) transaction.debtId.equals(debtId!),
       if (searchValue != null && searchValue!.isNotEmpty)
         (transaction.notes.contains(searchValue!) |
             transaction.title.contains(searchValue!) |

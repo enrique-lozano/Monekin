@@ -1,15 +1,14 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-import 'package:monekin/app/debts/debt_form_page.dart';
-import 'package:monekin/app/debts/debt_list.dart';
+import 'package:monekin/app/debts/components/debt_fab_button.dart';
+import 'package:monekin/app/debts/components/debt_list.dart';
 import 'package:monekin/app/layout/page_context.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/services/debts/debt_service.dart';
 import 'package:monekin/core/models/debt/debt.dart';
 import 'package:monekin/core/models/debt/debt_direction.enum.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 class DebtsPage extends StatefulWidget {
@@ -107,27 +106,19 @@ class DebtsView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (lentDebts.isNotEmpty) ...[
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
-                  child: Text(
-                    "Money Lent",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ),
+                _SectionHeader(direction: DebtDirection.lent),
                 DebtList(
                   debts: lentDebts,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                 ),
               ],
+              if (lentDebts.isNotEmpty && borrowedDebts.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Divider(height: 8, indent: 12, endIndent: 12),
+              ],
               if (borrowedDebts.isNotEmpty) ...[
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
-                  child: Text(
-                    "Money Borrowed",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ),
+                _SectionHeader(direction: DebtDirection.borrowed),
                 DebtList(
                   debts: borrowedDebts,
                   shrinkWrap: true,
@@ -142,46 +133,36 @@ class DebtsView extends StatelessWidget {
   }
 }
 
-class DebtFabButton extends StatelessWidget {
-  const DebtFabButton({super.key});
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({required this.direction});
+
+  final DebtDirection direction;
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
+    final color = direction.color(context);
 
-    return ExpandableFab(
-      overlayStyle: ExpandableFabOverlayStyle(color: Colors.transparent),
-      type: ExpandableFabType.up,
-      pos: ExpandableFabPos.right,
-      duration: const Duration(milliseconds: 250),
-      distance: 56,
-      openButtonBuilder: RotateFloatingActionButtonBuilder(
-        child: const Icon(Icons.add_rounded),
-        fabSize: ExpandableFabSize.regular,
-      ),
-      closeButtonBuilder: RotateFloatingActionButtonBuilder(
-        child: const Icon(Icons.close),
-        backgroundColor: Colors.red.shade100,
-        foregroundColor: Colors.red.shade400,
-        fabSize: ExpandableFabSize.small,
-      ),
-      children: [
-        buildFabOption(DebtDirection.lent),
-        buildFabOption(DebtDirection.borrowed),
-      ],
-    );
-  }
-
-  Widget buildFabOption(DebtDirection direction) {
-    return SizedBox(
-      height: 48,
-      child: FloatingActionButton.extended(
-        heroTag: null,
-        icon: Icon(direction.icon()),
-        label: Text("Me prestaron"),
-        onPressed: () {
-          RouteUtils.pushRoute(DebtFormPage(type: direction));
-        },
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+      child: Row(
+        spacing: 8,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(direction.icon(), size: 14, color: color),
+          ),
+          Text(
+            direction.title(context),
+            style: Theme.of(context).textTheme.titleSmall!.copyWith(
+              color: color,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     );
   }
