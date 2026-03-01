@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_single_quotes
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/debts/components/add_register_to_debt_modal.dart';
@@ -7,6 +9,7 @@ import 'package:monekin/app/transactions/transaction_details.page.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/services/debts/debt_service.dart';
+import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/models/debt/debt.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
@@ -15,6 +18,7 @@ import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
@@ -43,6 +47,7 @@ class DebtDetailsPage extends StatelessWidget {
 
         return PageFramework(
           title: debt.name,
+
           appBarBackgroundColor: Theme.of(context).cardColor,
           appBarActions: [
             IconButton(
@@ -53,11 +58,9 @@ class DebtDetailsPage extends StatelessWidget {
               onPressed: () async {
                 final confirmed = await confirmDialog(
                   context,
-                  dialogTitle: 'Delete this debt?',
+                  dialogTitle: t.debts.actions.delete.warning_header,
                   contentParagraphs: [
-                    const Text(
-                      'This action cannot be undone. Linked transactions will not be deleted but will no longer be associated with this debt.',
-                    ),
+                    Text(t.debts.actions.delete.warning_text),
                   ],
                   showCancelButton: true,
                   icon: Icons.delete_forever_rounded,
@@ -66,7 +69,7 @@ class DebtDetailsPage extends StatelessWidget {
                 try {
                   await DebtServive.instance.deleteDebt(debt.id);
                   MonekinSnackbar.success(
-                    SnackbarParams('Debt deleted successfully'),
+                    SnackbarParams(t.general.delete_success),
                   );
                   if (context.mounted) Navigator.of(context).pop();
                 } catch (e) {
@@ -85,7 +88,7 @@ class DebtDetailsPage extends StatelessWidget {
               FloatingActionButtonLocation.centerFloat,
           floatingActionButton: FloatingActionButton.extended(
             icon: const Icon(Icons.add_link_rounded),
-            label: const Text('Add register'),
+            label: Text(t.debts.actions.add_register.fab_label),
             onPressed: () => showModalBottomSheet(
               context: context,
               isScrollControlled: true,
@@ -107,9 +110,13 @@ class DebtDetailsPage extends StatelessWidget {
               Expanded(
                 child: TransactionListComponent(
                   filters: TransactionFilterSet(debtId: debt.id),
+                  listPadding: EdgeInsets.only(
+                    bottom: 64,
+                  ).withSafeBottom(context),
                   onEmptyList: Center(
-                    child: Text('No transactions found for this debt'),
+                    child: Text(t.debts.details.no_transactions),
                   ),
+                  isScrollable: true,
                   showGroupDivider: false,
                   tileBuilder: (transaction) {
                     final heroTag =
@@ -138,6 +145,7 @@ class DebtDetailsPage extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context, {required Debt debt}) {
+    final t = Translations.of(context);
     return StreamBuilder(
       stream: Rx.combineLatest2(
         DebtServive.instance.getDebtRemainingAmount(debt),
@@ -181,7 +189,7 @@ class DebtDetailsPage extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Collected Amount',
+                            t.debts.details.collected_amount,
                             style: Theme.of(context).textTheme.labelSmall!
                                 .copyWith(color: _labelColorInHeader(context)),
                           ),
@@ -242,107 +250,114 @@ class DebtDetailsPage extends StatelessWidget {
                   ],
                 ),
               ),
-              const Divider(),
-              IntrinsicHeight(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: _DebtInfoItem(
-                        icon: Icons.calendar_today_rounded,
-                        label: t.general.time.start_date,
-                        child: Text(
-                          DateFormat.yMMMd().format(debt.startDate),
-                          style: Theme.of(context).textTheme.bodySmall!
-                              .copyWith(fontWeight: FontWeight.w600),
+              if (MediaQuery.of(context).size.height > 500) const Divider(),
+              if (MediaQuery.of(context).size.height > 500)
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: _DebtInfoItem(
+                          icon: Icons.calendar_today_rounded,
+                          label: t.general.time.start_date,
+                          child: Text(
+                            DateFormat.yMMMd().format(debt.startDate),
+                          ),
                         ),
                       ),
-                    ),
-                    const VerticalDivider(
-                      width: 1,
-                      thickness: 0.5,
-                      indent: 10,
-                      endIndent: 10,
-                    ),
-                    Expanded(
-                      child: _DebtInfoItem(
-                        icon: debt.endDate != null
-                            ? Icons.event_available_rounded
-                            : Icons.event_busy_rounded,
-                        label: t.general.time.end_date,
-                        child: debt.endDate != null
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    DateFormat.yMMMd().format(debt.endDate!),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall!
-                                        .copyWith(fontWeight: FontWeight.w600),
-                                  ),
-                                  const SizedBox(height: 2),
-                                  if (daysLeft != null)
+                      const VerticalDivider(
+                        width: 0,
+                        thickness: 0.5,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      Expanded(
+                        child: _DebtInfoItem(
+                          icon: debt.endDate != null
+                              ? Icons.event_available_rounded
+                              : Icons.event_busy_rounded,
+                          label: t.general.time.end_date,
+                          child: debt.endDate != null
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
                                     Text(
-                                      daysLeft > 0
-                                          ? 'In $daysLeft days'
-                                          : daysLeft == 0
-                                          ? 'Due today'
-                                          : '${daysLeft.abs()} days ago',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall!
-                                          .copyWith(
-                                            color: daysLeft > 0
-                                                ? color
-                                                : Theme.of(
-                                                    context,
-                                                  ).colorScheme.error,
-                                            fontWeight: FontWeight.w500,
-                                          ),
+                                      DateFormat.yMMMd().format(debt.endDate!),
                                     ),
-                                ],
-                              )
-                            : Text(
-                                'No deadline',
-                                style: Theme.of(context).textTheme.bodySmall!
-                                    .copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onSurface.withOpacity(0.45),
-                                      fontStyle: FontStyle.italic,
-                                    ),
-                              ),
-                      ),
-                    ),
-                    const VerticalDivider(
-                      width: 1,
-                      thickness: 0.5,
-                      indent: 10,
-                      endIndent: 10,
-                    ),
-                    Expanded(
-                      child: _DebtInfoItem(
-                        icon: Icons.account_balance_wallet_outlined,
-                        label: 'Remaining',
-                        child: CurrencyDisplayer(
-                          amountToConvert: remainingAmount,
-                          currency: debt.currency,
-                          integerStyle: Theme.of(context).textTheme.bodySmall!
-                              .copyWith(
-                                fontWeight: FontWeight.w600,
-                                color: remainingAmount > 0
-                                    ? Theme.of(context).colorScheme.error
-                                    : Theme.of(context).colorScheme.primary,
-                              ),
+                                    if (daysLeft != null)
+                                      Text(
+                                        daysLeft > 0
+                                            ? t.debts.details.in_days(
+                                                x: daysLeft,
+                                              )
+                                            : daysLeft == 0
+                                            ? t.debts.details.due_today
+                                            : t.debts.details.days_ago(
+                                                x: daysLeft.abs(),
+                                              ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelSmall!
+                                            .copyWith(
+                                              color: daysLeft > 0
+                                                  ? color
+                                                  : Theme.of(
+                                                      context,
+                                                    ).colorScheme.error,
+                                            ),
+                                      ),
+                                  ],
+                                )
+                              : Text(
+                                  t.debts.details.no_deadline,
+                                  style: TextStyle(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface.withOpacity(0.45),
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
                         ),
                       ),
-                    ),
-                  ],
+                      const VerticalDivider(
+                        width: 0,
+                        thickness: 0.5,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      Expanded(
+                        child: _DebtInfoItem(
+                          icon: Icons.account_balance_wallet_outlined,
+                          label: t.debts.details.remaining,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CurrencyDisplayer(
+                                amountToConvert: remainingAmount,
+                                currency: debt.currency,
+                                integerStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: remainingAmount > 0
+                                      ? Theme.of(context).colorScheme.error
+                                      : Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+
+                              if (daysLeft != null &&
+                                  daysLeft > 0 &&
+                                  remainingAmount > 0)
+                                Text(
+                                  "${UINumberFormatter.currency(currency: debt.currency, amountToConvert: remainingAmount / daysLeft).getFormattedAmount()} ${t.debts.details.per_day}",
+                                  style: Theme.of(context).textTheme.labelSmall,
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
             ],
           ),
         );
@@ -374,7 +389,7 @@ class _DebtInfoItem extends StatelessWidget {
           Row(
             spacing: 4,
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Icon(icon, size: 11, color: _labelColorInHeader(context)),
               Flexible(
@@ -384,14 +399,15 @@ class _DebtInfoItem extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.labelSmall!.copyWith(
                     color: _labelColorInHeader(context),
-                    fontSize: 9,
-                    letterSpacing: 0.5,
                   ),
                 ),
               ),
             ],
           ),
-          child,
+          DefaultTextStyle(
+            style: Theme.of(context).textTheme.labelLarge!,
+            child: child,
+          ),
         ],
       ),
     );

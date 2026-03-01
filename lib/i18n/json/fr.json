@@ -1,4 +1,4 @@
-{
+﻿{
   "UI-ACTIONS": {
     "cancel": "Annuler",
     "confirm": "Confirmer",
@@ -741,6 +741,81 @@
         "active-indeterminate": "Il vous en faut {{ amount }} supplémentaires pour atteindre votre objectif.",
         "success": "Félicitations! Vous avez atteint votre objectif.",
         "fail": "Vous avez raté votre objectif de {{ amount }}."
+      }
+    }
+  },
+  "DEBTS": {
+    "display": {
+      "one": "Dette",
+      "other": "Dettes"
+    },
+    "FORM": {
+      "name": "Nom de la dette",
+      "initial_amount": "Montant initial",
+      "step_initial_value": "Valeur initiale",
+      "step_details": "Détails",
+      "from_transaction": {
+        "title": "D'une transaction",
+        "select": "Sélectionnez une transaction",
+        "tap_to_select": "Appuyez pour sélectionner une transaction"
+      },
+      "from_amount": {
+        "title": "A partir d'un montant initial",
+        "description": "Ce montant ne sera pas pris en compte pour les statistiques en tant que dépense/revenu. Il sera utilisé pour calculer les soldes et la valeur nette"
+      }
+    },
+    "DIRECTION": {
+      "lent": "Prêté",
+      "borrowed": "Emprunté"
+    },
+    "STATUS": {
+      "active": "Actif",
+      "close": "Fermé"
+    },
+    "DETAILS": {
+      "collected_amount": "Montant collecté",
+      "remaining": "Restant",
+      "no_deadline": "Pas de date limite",
+      "in_days": "Dans {{x}} jours",
+      "due_today": "À rendre aujourd'hui",
+      "days_ago": "il y a {{x}} jours",
+      "overdue_by": "En retard de {{x}} jours",
+      "per_day": "/ jour",
+      "no_transactions": "Aucune transaction trouvée pour cette dette"
+    },
+    "EMPTY": {
+      "no_debts_active": "Aucune dette active trouvée. Commencez par créer une nouvelle dette en cliquant sur le bouton ci-dessous",
+      "no_debts_closed": "Aucune dettes clôturées trouvée. Une dette est clôturée lorsque vous en avez encaissé tout l’argent ou que vous avez payé tout l’argent que vous deviez."
+    },
+    "ACTIONS": {
+      "edit": {
+        "title": "Modifier la dette",
+        "success": "Dette modifiée avec succès"
+      },
+      "delete": {
+        "warning_header": "Supprimer cette dette ?",
+        "warning_text": "Cette action ne peut pas être annulée. Les transactions liées ne seront pas supprimées mais ne seront plus associées à cette dette."
+      },
+      "add_register": {
+        "title": "Ajouter du mouvement",
+        "success": "Mouvement ajouté avec succès",
+        "fab_label": "Ajouter un registre",
+        "modal_title": "Ajouter un registre à cette dette",
+        "modal_subtitle": "Choisissez l'une des options suivantes pour lier une transaction à cette dette"
+      },
+      "link_transaction": {
+        "title": "Lier une transaction existante",
+        "description": "Choisir un enregistrement existant pour le lier à cette dette",
+        "success": "Opération liée à la dette",
+        "creating": "Vous créez une transaction liée à la dette <b>{{ name }}</b>"
+      },
+      "new_transaction": {
+        "title": "Ajouter une nouvelle transaction",
+        "description": "Ajouter ou réduire manuellement la dette en créant une nouvelle transaction liée à cette dette"
+      },
+      "create": {
+        "title": "Créer de la dette",
+        "success": "Dette créée avec succès"
       }
     }
   },

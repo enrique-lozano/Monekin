@@ -103,7 +103,7 @@ class _MoreActionsPageState extends State<MoreActionsPage> {
         id: AppMenuDestinationsID.budgets,
       ),
       _ActionItem(
-        title: "DEBTS",
+        title: t.debts.display(n: 10),
         icon: Debt.icon,
         onTap: () => RouteUtils.pushRoute(const DebtsPage()),
         id: null,

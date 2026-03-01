@@ -9,6 +9,7 @@ import 'package:monekin/core/database/services/debts/debt_service.dart';
 import 'package:monekin/core/models/debt/debt.dart';
 import 'package:monekin/core/models/debt/debt_direction.enum.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -40,13 +41,13 @@ class _DebtsPageState extends State<DebtsPage>
           : TabAlignment.start,
       isScrollable: !BreakPoint.of(context).isSmallerThan(BreakpointID.md),
       tabs: [
-        Tab(text: "Active"),
-        Tab(text: "Closed"),
+        Tab(text: t.debts.status.active),
+        Tab(text: t.debts.status.close),
       ],
     );
 
     return PageFramework(
-      title: t.budgets.title,
+      title: t.debts.display(n: 2),
       tabBar: tabBar,
       floatingActionButton: ifIsInTabs(context) ? null : const DebtFabButton(),
       floatingActionButtonLocation: ExpandableFab.location,
@@ -95,6 +96,7 @@ class DebtsView extends StatelessWidget {
             );
           }),
       builder: (context, snapshot) {
+        final t = Translations.of(context);
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         }
@@ -106,7 +108,11 @@ class DebtsView extends StatelessWidget {
         final debts = snapshot.data!;
 
         if (debts.isEmpty) {
-          return const Center(child: Text('No debts found'));
+          return NoResults(
+            description: isActive
+                ? t.debts.empty.no_debts_active
+                : t.debts.empty.no_debts_closed,
+          );
         }
 
         final lentDebts = debts

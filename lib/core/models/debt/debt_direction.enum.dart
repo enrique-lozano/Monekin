@@ -23,9 +23,9 @@ enum DebtDirection implements DatabaseEnum<int> {
 
     switch (this) {
       case DebtDirection.lent:
-        return "Presté";
+        return t.debts.direction.lent;
       case DebtDirection.borrowed:
-        return "Me prestaron";
+        return t.debts.direction.borrowed;
     }
   }
 

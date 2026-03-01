@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/app/accounts/widgets/balance_currency_form_field.dart';
 import 'package:monekin/app/debts/components/transaction_selector.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
@@ -18,10 +18,9 @@ import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
+import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
-import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_field.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
@@ -107,7 +106,9 @@ class _DebtFormPageState extends State<DebtFormPage> {
     final t = Translations.of(context);
 
     return PageFramework(
-      title: widget.isEditing ? widget.debt!.name : 'Preste',
+      title: widget.isEditing
+          ? widget.debt!.name
+          : t.debts.actions.create.title,
       persistentFooterButtons: [
         PersistentFooterButton(
           child: FilledButton.icon(
@@ -202,18 +203,18 @@ class _DebtFormPageState extends State<DebtFormPage> {
       },
       steps: [
         Step(
-          title: const Text('Valor inicial'),
+          title: Text(t.debts.form.step_initial_value),
           content: _buildInitialValueStep(context, t),
         ),
         Step(
-          title: const Text('Datos'),
+          title: Text(t.debts.form.step_details),
           content: Form(
             key: _formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 _buildIconAndNameField(context),
-                const SizedBox(height: 8),
+                const SizedBox(height: 16),
                 ..._buildDateFields(context, t),
               ],
             ),
@@ -237,7 +238,7 @@ class _DebtFormPageState extends State<DebtFormPage> {
         children: [
           RadioListTile.adaptive(
             value: 0,
-            title: const Text('Desde una transacción'),
+            title: Text(t.debts.form.from_transaction.title),
           ),
           AnimatedExpanded(
             expand: _radioValue == 0,
@@ -245,13 +246,13 @@ class _DebtFormPageState extends State<DebtFormPage> {
               builder: (context) {
                 if (_transaction == null) {
                   return ListTile(
-                    title: const Text('Select a transaction'),
+                    title: Text(t.debts.form.from_transaction.select),
                     trailing: const Icon(
                       Icons.arrow_forward_ios_rounded,
                       size: 14,
                     ),
                     contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-                    subtitle: const Text('Tap to select a transaction'),
+                    subtitle: Text(t.debts.form.from_transaction.tap_to_select),
                     onTap: () => _showTransactionSelector(context),
                   );
                 }
@@ -266,7 +267,7 @@ class _DebtFormPageState extends State<DebtFormPage> {
           ),
           RadioListTile.adaptive(
             value: 1,
-            title: const Text('A partir de un monto inicial'),
+            title: Text(t.debts.form.from_amount.title),
           ),
           AnimatedExpanded(
             expand: _radioValue == 1,
@@ -274,7 +275,7 @@ class _DebtFormPageState extends State<DebtFormPage> {
               children: [
                 const SizedBox(height: 6),
                 Text(
-                  'Esta cantidad no será tenido en cuenta para las estadísticas como un gasto/ingreso. Si que se usará para calcular saldos y patrimonio',
+                  t.debts.form.from_amount.description,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 const SizedBox(height: 12),
@@ -318,10 +319,7 @@ class _DebtFormPageState extends State<DebtFormPage> {
             controller: _nameController,
             maxLength: maxLabelLenghtForDisplayNames,
             onChanged: (_) => setState(() {}),
-            decoration: InputDecoration(
-              labelText: '${t.categories.name} *',
-              hintText: 'Ex.: My account',
-            ),
+            decoration: InputDecoration(labelText: '${t.debts.form.name} *'),
             validator: (value) => fieldValidator(value, isRequired: true),
             autovalidateMode: AutovalidateMode.onUserInteraction,
             textInputAction: TextInputAction.next,
@@ -332,61 +330,38 @@ class _DebtFormPageState extends State<DebtFormPage> {
   }
 
   List<Widget> _buildAmountAndCurrencyFields(BuildContext context) {
+    final t = Translations.of(context);
+
     return [
-      TextFormField(
-        controller: _amountController,
-        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        validator: (value) => fieldValidator(
-          value,
-          isRequired: false,
-          validator: ValidatorType.double,
-        ),
-        decoration: const InputDecoration(labelText: 'Monto inicial'),
-      ),
-      ReadOnlyTextFormField(
-        displayValue: _currency != null
-            ? _currency!.name
-            : t.general.unspecified,
-        onTap: () {
-          if (_currency == null) return;
-          showCurrencySelectorModal(
-            context,
-            CurrencySelectorModal(
-              preselectedCurrency: _currency!,
-              onCurrencySelected: (newCurrency) {
-                setState(() => _currency = newCurrency);
-              },
-            ),
-          );
+      AmountAndCurrencyFormField(
+        amountController: _amountController,
+        currency: _currency,
+        amountLabel: t.debts.form.initial_amount,
+        isRequired: false,
+        onCurrencySelected: (newCurrency) {
+          setState(() {
+            _currency = newCurrency;
+          });
         },
-        decoration: InputDecoration(
-          labelText: t.currencies.currency,
-          suffixIcon: const Icon(Icons.arrow_drop_down),
-          prefixIcon: _currency != null
-              ? Container(
-                  margin: const EdgeInsets.all(10),
-                  clipBehavior: Clip.hardEdge,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: SvgPicture.asset(
-                    _currency!.currencyIconPath,
-                    height: 25,
-                    width: 25,
-                  ),
-                )
-              : null,
-        ),
       ),
     ];
   }
 
   List<Widget> _buildDateFields(BuildContext context, Translations t) {
+    final t = Translations.of(context);
+
     return [
       DateTimeFormField(
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           prefixIcon: Icon(Icons.event),
-          labelText: 'START DATE *',
+          labelText: '${t.general.time.start_date} *',
+          border: UnderlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.only(
+              topLeft: inputBorderRadius,
+              topRight: inputBorderRadius,
+            ),
+          ),
         ),
         initialDate: _openingDate,
         dateFormat: DateFormat.yMMMMd(),
@@ -397,10 +372,17 @@ class _DebtFormPageState extends State<DebtFormPage> {
           setState(() => _openingDate = value);
         },
       ),
+      const Divider(),
       DateTimeFormField(
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           prefixIcon: Icon(Icons.event),
-          labelText: 'END DATE',
+          labelText: t.general.time.end_date,
+          border: appInputBorder.copyWith(
+            borderRadius: BorderRadius.only(
+              bottomLeft: inputBorderRadius,
+              bottomRight: inputBorderRadius,
+            ),
+          ),
         ),
         initialDate: _closeDate,
         dateFormat: DateFormat.yMMMMd(),
@@ -445,7 +427,14 @@ class _DebtFormPageState extends State<DebtFormPage> {
         }
       }
 
-      MonekinSnackbar.success(SnackbarParams('SUCCESS'));
+      final t = Translations.of(context);
+      MonekinSnackbar.success(
+        SnackbarParams(
+          widget.isEditing
+              ? t.debts.actions.edit.success
+              : t.debts.actions.create.success,
+        ),
+      );
       if (mounted) Navigator.of(context).pop();
     } catch (e) {
       MonekinSnackbar.error(SnackbarParams.fromError(e));
@@ -456,7 +445,10 @@ class _DebtFormPageState extends State<DebtFormPage> {
     return showTransactionSelectorModal(
       context,
       initialFilters: TransactionFilterSet(
-        transactionTypes: [TransactionType.income, TransactionType.expense],
+        transactionTypes: [
+          if (widget.type == DebtDirection.lent) TransactionType.expense,
+          if (widget.type == DebtDirection.borrowed) TransactionType.income,
+        ],
       ),
       onTransactionSelected: (selectedTransaction) {
         setState(() {

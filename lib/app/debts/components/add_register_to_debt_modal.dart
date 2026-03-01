@@ -9,6 +9,7 @@ import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/outlined_button_stacked.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 class AddMoneyTransactionToDebtModal extends StatelessWidget {
   const AddMoneyTransactionToDebtModal({required this.debt});
@@ -17,19 +18,17 @@ class AddMoneyTransactionToDebtModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
     return ModalContainer(
-      title: 'Add register to this debt',
-      subtitle:
-          "Elige una de las siguientes opciones para vincular una transacción a esta deuda",
+      title: t.debts.actions.add_register.modal_title,
+      subtitle: t.debts.actions.add_register.modal_subtitle,
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
         child: Column(
           children: [
             OutlinedButtonStacked(
-              text: 'Link existing transaction',
-              afterWidget: Text(
-                "Elige un registro ya existente para vincularlo a esta deuda",
-              ),
+              text: t.debts.actions.link_transaction.title,
+              afterWidget: Text(t.debts.actions.link_transaction.description),
               iconData: Icons.link_rounded,
               alignLeft: true,
               alignBeside: true,
@@ -55,7 +54,7 @@ class AddMoneyTransactionToDebtModal extends StatelessWidget {
                       );
                       MonekinSnackbar.success(
                         SnackbarParams(
-                          'Transaction linked to debt',
+                          t.debts.actions.link_transaction.success,
                           showAtTop: true,
                         ),
                       );
@@ -70,10 +69,8 @@ class AddMoneyTransactionToDebtModal extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             OutlinedButtonStacked(
-              text: 'Add new transaction',
-              afterWidget: Text(
-                "Añade o reduce la deuda manualmente creando una nueva transacción vinculada a esta deuda.",
-              ),
+              text: t.debts.actions.new_transaction.title,
+              afterWidget: Text(t.debts.actions.new_transaction.description),
               iconData: Icons.add_card_rounded,
               alignLeft: true,
               alignBeside: true,

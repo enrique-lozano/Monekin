@@ -831,28 +831,11 @@ class _LinkedDebtCard extends StatelessWidget {
                     icon: const Icon(Icons.link_off_rounded, size: 18),
                     label: const Text('Unlink from debt'),
                     onPressed: () async {
-                      final confirmed = await confirmDialog(
-                        context,
-                        dialogTitle: 'Unlink from debt?',
-                        contentParagraphs: [
-                          const Text(
-                            'This transaction will no longer be associated with this debt.',
-                          ),
-                        ],
-                        showCancelButton: true,
-                        icon: Icons.link_off_rounded,
-                      );
-                      if (confirmed != true) return;
-                      try {
-                        await DebtServive.instance.unlinkTransactionFromDebt(
-                          transactionId,
-                        );
-                        MonekinSnackbar.success(
-                          SnackbarParams('Transaction unlinked from debt'),
-                        );
-                      } catch (e) {
-                        MonekinSnackbar.error(SnackbarParams.fromError(e));
-                      }
+                      await TransactionViewActionService()
+                          .unlinkTransactionFromDebtWithAlertAndSnackbar(
+                            context,
+                            transactionId: transactionId,
+                          );
                     },
                   ),
                 ),

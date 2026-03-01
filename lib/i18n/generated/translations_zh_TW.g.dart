@@ -53,6 +53,7 @@ class TranslationsZhTw with BaseTranslations<AppLocale, Translations> implements
 	@override late final _TranslationsCategoriesZhTw categories = _TranslationsCategoriesZhTw._(_root);
 	@override late final _TranslationsBudgetsZhTw budgets = _TranslationsBudgetsZhTw._(_root);
 	@override late final _TranslationsGoalsZhTw goals = _TranslationsGoalsZhTw._(_root);
+	@override late final _TranslationsDebtsZhTw debts = _TranslationsDebtsZhTw._(_root);
 	@override late final _TranslationsTargetTimelineStatusesZhTw target_timeline_statuses = _TranslationsTargetTimelineStatusesZhTw._(_root);
 	@override late final _TranslationsBackupZhTw backup = _TranslationsBackupZhTw._(_root);
 	@override late final _TranslationsSettingsZhTw settings = _TranslationsSettingsZhTw._(_root);
@@ -474,6 +475,25 @@ class _TranslationsGoalsZhTw implements TranslationsGoalsEn {
 	@override late final _TranslationsGoalsDetailsZhTw details = _TranslationsGoalsDetailsZhTw._(_root);
 	@override late final _TranslationsGoalsTargetTimelineStatusesZhTw target_timeline_statuses = _TranslationsGoalsTargetTimelineStatusesZhTw._(_root);
 	@override late final _TranslationsGoalsProgressZhTw progress = _TranslationsGoalsProgressZhTw._(_root);
+}
+
+// Path: debts
+class _TranslationsDebtsZhTw implements TranslationsDebtsEn {
+	_TranslationsDebtsZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
+		one: '債務',
+		other: '債務',
+	);
+	@override late final _TranslationsDebtsFormZhTw form = _TranslationsDebtsFormZhTw._(_root);
+	@override late final _TranslationsDebtsDirectionZhTw direction = _TranslationsDebtsDirectionZhTw._(_root);
+	@override late final _TranslationsDebtsStatusZhTw status = _TranslationsDebtsStatusZhTw._(_root);
+	@override late final _TranslationsDebtsDetailsZhTw details = _TranslationsDebtsDetailsZhTw._(_root);
+	@override late final _TranslationsDebtsEmptyZhTw empty = _TranslationsDebtsEmptyZhTw._(_root);
+	@override late final _TranslationsDebtsActionsZhTw actions = _TranslationsDebtsActionsZhTw._(_root);
 }
 
 // Path: target_timeline_statuses
@@ -1175,6 +1195,87 @@ class _TranslationsGoalsProgressZhTw implements TranslationsGoalsProgressEn {
 	@override late final _TranslationsGoalsProgressDescriptionZhTw description = _TranslationsGoalsProgressDescriptionZhTw._(_root);
 }
 
+// Path: debts.form
+class _TranslationsDebtsFormZhTw implements TranslationsDebtsFormEn {
+	_TranslationsDebtsFormZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => '債務名稱';
+	@override String get initial_amount => '初始金額';
+	@override String get step_initial_value => '初始值';
+	@override String get step_details => '細節';
+	@override late final _TranslationsDebtsFormFromTransactionZhTw from_transaction = _TranslationsDebtsFormFromTransactionZhTw._(_root);
+	@override late final _TranslationsDebtsFormFromAmountZhTw from_amount = _TranslationsDebtsFormFromAmountZhTw._(_root);
+}
+
+// Path: debts.direction
+class _TranslationsDebtsDirectionZhTw implements TranslationsDebtsDirectionEn {
+	_TranslationsDebtsDirectionZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get lent => '借出';
+	@override String get borrowed => '借來的';
+}
+
+// Path: debts.status
+class _TranslationsDebtsStatusZhTw implements TranslationsDebtsStatusEn {
+	_TranslationsDebtsStatusZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => '積極的';
+	@override String get close => '關閉';
+}
+
+// Path: debts.details
+class _TranslationsDebtsDetailsZhTw implements TranslationsDebtsDetailsEn {
+	_TranslationsDebtsDetailsZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get collected_amount => '收取金額';
+	@override String get remaining => '其餘的';
+	@override String get no_deadline => '無截止日期';
+	@override String in_days({required Object x}) => '${x} 天后';
+	@override String get due_today => '今天到期';
+	@override String days_ago({required Object x}) => '${x} days ago';
+	@override String overdue_by({required Object x}) => 'Overdue by ${x} days';
+	@override String get per_day => '/ 天';
+	@override String get no_transactions => '未找到該債務的交易';
+}
+
+// Path: debts.empty
+class _TranslationsDebtsEmptyZhTw implements TranslationsDebtsEmptyEn {
+	_TranslationsDebtsEmptyZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get no_debts_active => '未發現活躍債務。首先點擊下面的按鈕建立新債務';
+	@override String get no_debts_closed => '未發現已結清的債務。当您收回所有债务或支付所有所欠债务时，债务就结束了。';
+}
+
+// Path: debts.actions
+class _TranslationsDebtsActionsZhTw implements TranslationsDebtsActionsEn {
+	_TranslationsDebtsActionsZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsDebtsActionsEditZhTw edit = _TranslationsDebtsActionsEditZhTw._(_root);
+	@override late final _TranslationsDebtsActionsDeleteZhTw delete = _TranslationsDebtsActionsDeleteZhTw._(_root);
+	@override late final _TranslationsDebtsActionsAddRegisterZhTw add_register = _TranslationsDebtsActionsAddRegisterZhTw._(_root);
+	@override late final _TranslationsDebtsActionsLinkTransactionZhTw link_transaction = _TranslationsDebtsActionsLinkTransactionZhTw._(_root);
+	@override late final _TranslationsDebtsActionsNewTransactionZhTw new_transaction = _TranslationsDebtsActionsNewTransactionZhTw._(_root);
+	@override late final _TranslationsDebtsActionsCreateZhTw create = _TranslationsDebtsActionsCreateZhTw._(_root);
+}
+
 // Path: backup.export
 class _TranslationsBackupExportZhTw implements TranslationsBackupExportEn {
 	_TranslationsBackupExportZhTw._(this._root);
@@ -1618,6 +1719,100 @@ class _TranslationsGoalsProgressDescriptionZhTw implements TranslationsGoalsProg
 	@override String active_indeterminate({required Object amount}) => '您還需要 ${amount} 才能實現目標。';
 	@override String get success => '恭喜！你達到了你的目標。';
 	@override String fail({required Object amount}) => '您與目標相差了 ${amount}。';
+}
+
+// Path: debts.form.from_transaction
+class _TranslationsDebtsFormFromTransactionZhTw implements TranslationsDebtsFormFromTransactionEn {
+	_TranslationsDebtsFormFromTransactionZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '來自一筆交易';
+	@override String get select => '選擇交易';
+	@override String get tap_to_select => '點選選擇交易';
+}
+
+// Path: debts.form.from_amount
+class _TranslationsDebtsFormFromAmountZhTw implements TranslationsDebtsFormFromAmountEn {
+	_TranslationsDebtsFormFromAmountZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '從初始金額開始';
+	@override String get description => '該金額不會作為支出/收入納入統計。它將用於計算餘額和淨值';
+}
+
+// Path: debts.actions.edit
+class _TranslationsDebtsActionsEditZhTw implements TranslationsDebtsActionsEditEn {
+	_TranslationsDebtsActionsEditZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '編輯債務';
+	@override String get success => '債務編輯成功';
+}
+
+// Path: debts.actions.delete
+class _TranslationsDebtsActionsDeleteZhTw implements TranslationsDebtsActionsDeleteEn {
+	_TranslationsDebtsActionsDeleteZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get warning_header => '刪除這筆債務嗎？';
+	@override String get warning_text => '此操作無法撤銷。關聯交易不會被刪除，但將不再與該債務關聯。';
+}
+
+// Path: debts.actions.add_register
+class _TranslationsDebtsActionsAddRegisterZhTw implements TranslationsDebtsActionsAddRegisterEn {
+	_TranslationsDebtsActionsAddRegisterZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '添加動作';
+	@override String get success => '運動添加成功';
+	@override String get fab_label => '新增寄存器';
+	@override String get modal_title => '新增登記到該債務';
+	@override String get modal_subtitle => '選擇以下選項之一將交易與該債務關聯起來';
+}
+
+// Path: debts.actions.link_transaction
+class _TranslationsDebtsActionsLinkTransactionZhTw implements TranslationsDebtsActionsLinkTransactionEn {
+	_TranslationsDebtsActionsLinkTransactionZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '連結現有交易';
+	@override String get description => '選擇現有記錄將其連結到該債務';
+	@override String get success => '與債務掛鉤的交易';
+	@override String creating({required Object name}) => '您正在建立與債務 <b>${name}</b> 關聯的交易';
+}
+
+// Path: debts.actions.new_transaction
+class _TranslationsDebtsActionsNewTransactionZhTw implements TranslationsDebtsActionsNewTransactionEn {
+	_TranslationsDebtsActionsNewTransactionZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '新增交易';
+	@override String get description => '透過建立與該債務相關的新交易來手動新增或減少債務';
+}
+
+// Path: debts.actions.create
+class _TranslationsDebtsActionsCreateZhTw implements TranslationsDebtsActionsCreateEn {
+	_TranslationsDebtsActionsCreateZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '創造債務';
+	@override String get success => '債務創建成功';
 }
 
 // Path: backup.import.manual_import
@@ -2340,6 +2535,48 @@ extension on TranslationsZhTw {
 			'goals.progress.description.active_indeterminate' => ({required Object amount}) => '您還需要 ${amount} 才能實現目標。',
 			'goals.progress.description.success' => '恭喜！你達到了你的目標。',
 			'goals.progress.description.fail' => ({required Object amount}) => '您與目標相差了 ${amount}。',
+			'debts.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '債務', other: '債務', ), 
+			'debts.form.name' => '債務名稱',
+			'debts.form.initial_amount' => '初始金額',
+			'debts.form.step_initial_value' => '初始值',
+			'debts.form.step_details' => '細節',
+			'debts.form.from_transaction.title' => '來自一筆交易',
+			'debts.form.from_transaction.select' => '選擇交易',
+			'debts.form.from_transaction.tap_to_select' => '點選選擇交易',
+			'debts.form.from_amount.title' => '從初始金額開始',
+			'debts.form.from_amount.description' => '該金額不會作為支出/收入納入統計。它將用於計算餘額和淨值',
+			'debts.direction.lent' => '借出',
+			'debts.direction.borrowed' => '借來的',
+			'debts.status.active' => '積極的',
+			'debts.status.close' => '關閉',
+			'debts.details.collected_amount' => '收取金額',
+			'debts.details.remaining' => '其餘的',
+			'debts.details.no_deadline' => '無截止日期',
+			'debts.details.in_days' => ({required Object x}) => '${x} 天后',
+			'debts.details.due_today' => '今天到期',
+			'debts.details.days_ago' => ({required Object x}) => '${x} days ago',
+			'debts.details.overdue_by' => ({required Object x}) => 'Overdue by ${x} days',
+			'debts.details.per_day' => '/ 天',
+			'debts.details.no_transactions' => '未找到該債務的交易',
+			'debts.empty.no_debts_active' => '未發現活躍債務。首先點擊下面的按鈕建立新債務',
+			'debts.empty.no_debts_closed' => '未發現已結清的債務。当您收回所有债务或支付所有所欠债务时，债务就结束了。',
+			'debts.actions.edit.title' => '編輯債務',
+			'debts.actions.edit.success' => '債務編輯成功',
+			'debts.actions.delete.warning_header' => '刪除這筆債務嗎？',
+			'debts.actions.delete.warning_text' => '此操作無法撤銷。關聯交易不會被刪除，但將不再與該債務關聯。',
+			'debts.actions.add_register.title' => '添加動作',
+			'debts.actions.add_register.success' => '運動添加成功',
+			'debts.actions.add_register.fab_label' => '新增寄存器',
+			'debts.actions.add_register.modal_title' => '新增登記到該債務',
+			'debts.actions.add_register.modal_subtitle' => '選擇以下選項之一將交易與該債務關聯起來',
+			'debts.actions.link_transaction.title' => '連結現有交易',
+			'debts.actions.link_transaction.description' => '選擇現有記錄將其連結到該債務',
+			'debts.actions.link_transaction.success' => '與債務掛鉤的交易',
+			'debts.actions.link_transaction.creating' => ({required Object name}) => '您正在建立與債務 <b>${name}</b> 關聯的交易',
+			'debts.actions.new_transaction.title' => '新增交易',
+			'debts.actions.new_transaction.description' => '透過建立與該債務相關的新交易來手動新增或減少債務',
+			'debts.actions.create.title' => '創造債務',
+			'debts.actions.create.success' => '債務創建成功',
 			'target_timeline_statuses.active' => '進行中',
 			'target_timeline_statuses.past' => '已完成',
 			'target_timeline_statuses.future' => '未開始',

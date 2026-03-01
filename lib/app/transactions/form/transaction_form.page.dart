@@ -5,6 +5,7 @@ import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/transactions/form/dialogs/amount_selector.dart';
+import 'package:monekin/app/transactions/form/widgets/debt_link_banner.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_account_selector_row.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_amount_display.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_date_selector.dart';
@@ -504,6 +505,14 @@ class _TransactionFormPageState extends State<TransactionFormPage>
           },
           onCategoryTap: () => selectCategory(),
         ),
+        if (widget.linkedDebt != null &&
+            BreakPoint.of(context).isLargerThan(BreakpointID.sm)) ...[
+          const SizedBox(height: 24),
+          DebtLinkBanner(
+            debt: widget.linkedDebt!,
+            padding: EdgeInsetsGeometry.zero,
+          ),
+        ],
       ],
     );
   }
@@ -513,11 +522,12 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     final t = Translations.of(context);
 
     final formFieldWithDividers = [
-      if (widget.linkedDebt != null) ...[
-        _DebtLinkBanner(debt: widget.linkedDebt!),
+      TransactionTitleField(controller: titleController),
+      if (widget.linkedDebt != null &&
+          BreakPoint.of(context).isSmallerOrEqualTo(BreakpointID.sm)) ...[
+        DebtLinkBanner(debt: widget.linkedDebt!),
         const Divider(),
       ],
-      TransactionTitleField(controller: titleController),
       const Divider(),
       TransactionDateSelector(
         date: date,
@@ -665,51 +675,6 @@ class _TransactionFormPageState extends State<TransactionFormPage>
             RouteUtils.popRoute();
           });
         },
-      ),
-    );
-  }
-}
-
-/// A compact banner shown in [TransactionFormPage] when the transaction being
-/// created is pre-linked to a [Debt]. Visible only during creation (not edit).
-class _DebtLinkBanner extends StatelessWidget {
-  const _DebtLinkBanner({required this.debt});
-
-  final Debt debt;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = debt.type.color(context);
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.08),
-        border: Border.all(color: color.withOpacity(0.35), width: 1.5),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        spacing: 10,
-        children: [
-          Icon(Icons.link_rounded, size: 18, color: color),
-          Expanded(
-            child: Text.rich(
-              TextSpan(
-                text: 'Linked to debt: ',
-                style: Theme.of(context).textTheme.bodySmall,
-                children: [
-                  TextSpan(
-                    text: debt.name,
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: color,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

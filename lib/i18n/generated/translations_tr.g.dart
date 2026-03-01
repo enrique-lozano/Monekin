@@ -53,6 +53,7 @@ class TranslationsTr with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsCategoriesTr categories = _TranslationsCategoriesTr._(_root);
 	@override late final _TranslationsBudgetsTr budgets = _TranslationsBudgetsTr._(_root);
 	@override late final _TranslationsGoalsTr goals = _TranslationsGoalsTr._(_root);
+	@override late final _TranslationsDebtsTr debts = _TranslationsDebtsTr._(_root);
 	@override late final _TranslationsTargetTimelineStatusesTr target_timeline_statuses = _TranslationsTargetTimelineStatusesTr._(_root);
 	@override late final _TranslationsBackupTr backup = _TranslationsBackupTr._(_root);
 	@override late final _TranslationsSettingsTr settings = _TranslationsSettingsTr._(_root);
@@ -474,6 +475,25 @@ class _TranslationsGoalsTr implements TranslationsGoalsEn {
 	@override late final _TranslationsGoalsDetailsTr details = _TranslationsGoalsDetailsTr._(_root);
 	@override late final _TranslationsGoalsTargetTimelineStatusesTr target_timeline_statuses = _TranslationsGoalsTargetTimelineStatusesTr._(_root);
 	@override late final _TranslationsGoalsProgressTr progress = _TranslationsGoalsProgressTr._(_root);
+}
+
+// Path: debts
+class _TranslationsDebtsTr implements TranslationsDebtsEn {
+	_TranslationsDebtsTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n,
+		one: 'Borç',
+		other: 'Borçlar',
+	);
+	@override late final _TranslationsDebtsFormTr form = _TranslationsDebtsFormTr._(_root);
+	@override late final _TranslationsDebtsDirectionTr direction = _TranslationsDebtsDirectionTr._(_root);
+	@override late final _TranslationsDebtsStatusTr status = _TranslationsDebtsStatusTr._(_root);
+	@override late final _TranslationsDebtsDetailsTr details = _TranslationsDebtsDetailsTr._(_root);
+	@override late final _TranslationsDebtsEmptyTr empty = _TranslationsDebtsEmptyTr._(_root);
+	@override late final _TranslationsDebtsActionsTr actions = _TranslationsDebtsActionsTr._(_root);
 }
 
 // Path: target_timeline_statuses
@@ -1175,6 +1195,87 @@ class _TranslationsGoalsProgressTr implements TranslationsGoalsProgressEn {
 	@override late final _TranslationsGoalsProgressDescriptionTr description = _TranslationsGoalsProgressDescriptionTr._(_root);
 }
 
+// Path: debts.form
+class _TranslationsDebtsFormTr implements TranslationsDebtsFormEn {
+	_TranslationsDebtsFormTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Borç adı';
+	@override String get initial_amount => 'Başlangıç ​​tutarı';
+	@override String get step_initial_value => 'Başlangıç ​​değeri';
+	@override String get step_details => 'Detaylar';
+	@override late final _TranslationsDebtsFormFromTransactionTr from_transaction = _TranslationsDebtsFormFromTransactionTr._(_root);
+	@override late final _TranslationsDebtsFormFromAmountTr from_amount = _TranslationsDebtsFormFromAmountTr._(_root);
+}
+
+// Path: debts.direction
+class _TranslationsDebtsDirectionTr implements TranslationsDebtsDirectionEn {
+	_TranslationsDebtsDirectionTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get lent => 'Ödünç verilmiş';
+	@override String get borrowed => 'Ödünç alındı';
+}
+
+// Path: debts.status
+class _TranslationsDebtsStatusTr implements TranslationsDebtsStatusEn {
+	_TranslationsDebtsStatusTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => 'Aktif';
+	@override String get close => 'Kapalı';
+}
+
+// Path: debts.details
+class _TranslationsDebtsDetailsTr implements TranslationsDebtsDetailsEn {
+	_TranslationsDebtsDetailsTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get collected_amount => 'Toplanan miktar';
+	@override String get remaining => 'Geriye kalan';
+	@override String get no_deadline => 'Son tarih yok';
+	@override String in_days({required Object x}) => '${x} gün içinde';
+	@override String get due_today => 'Bugün vadesi doluyor';
+	@override String days_ago({required Object x}) => '${x} gün önce';
+	@override String overdue_by({required Object x}) => '${x} gün gecikti';
+	@override String get per_day => '/ gün';
+	@override String get no_transactions => 'Bu borç için işlem bulunamadı';
+}
+
+// Path: debts.empty
+class _TranslationsDebtsEmptyTr implements TranslationsDebtsEmptyEn {
+	_TranslationsDebtsEmptyTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get no_debts_active => 'Aktif borç bulunamadı. Aşağıdaki butona tıklayarak yeni bir borç oluşturarak başlayın';
+	@override String get no_debts_closed => 'Kapatılan borç bulunamadı. Borç, borcunuzun tamamını topladığınızda veya borcunuzun tamamını ödediğinizde kapatılır.';
+}
+
+// Path: debts.actions
+class _TranslationsDebtsActionsTr implements TranslationsDebtsActionsEn {
+	_TranslationsDebtsActionsTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsDebtsActionsEditTr edit = _TranslationsDebtsActionsEditTr._(_root);
+	@override late final _TranslationsDebtsActionsDeleteTr delete = _TranslationsDebtsActionsDeleteTr._(_root);
+	@override late final _TranslationsDebtsActionsAddRegisterTr add_register = _TranslationsDebtsActionsAddRegisterTr._(_root);
+	@override late final _TranslationsDebtsActionsLinkTransactionTr link_transaction = _TranslationsDebtsActionsLinkTransactionTr._(_root);
+	@override late final _TranslationsDebtsActionsNewTransactionTr new_transaction = _TranslationsDebtsActionsNewTransactionTr._(_root);
+	@override late final _TranslationsDebtsActionsCreateTr create = _TranslationsDebtsActionsCreateTr._(_root);
+}
+
 // Path: backup.export
 class _TranslationsBackupExportTr implements TranslationsBackupExportEn {
 	_TranslationsBackupExportTr._(this._root);
@@ -1618,6 +1719,100 @@ class _TranslationsGoalsProgressDescriptionTr implements TranslationsGoalsProgre
 	@override String active_indeterminate({required Object amount}) => 'Hedefinize ulaşmak için ${amount} daha fazlasına ihtiyacınız var.';
 	@override String get success => 'Tebrikler! Hedefine ulaştın.';
 	@override String fail({required Object amount}) => 'Hedefinizi ${amount} kadar kaçırdınız.';
+}
+
+// Path: debts.form.from_transaction
+class _TranslationsDebtsFormFromTransactionTr implements TranslationsDebtsFormFromTransactionEn {
+	_TranslationsDebtsFormFromTransactionTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Bir işlemden';
+	@override String get select => 'Bir işlem seçin';
+	@override String get tap_to_select => 'Bir işlemi seçmek için dokunun';
+}
+
+// Path: debts.form.from_amount
+class _TranslationsDebtsFormFromAmountTr implements TranslationsDebtsFormFromAmountEn {
+	_TranslationsDebtsFormFromAmountTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Başlangıç ​​tutarından';
+	@override String get description => 'Bu tutar istatistiklerde gider/gelir olarak dikkate alınmayacaktır. Bakiyeleri ve net değeri hesaplamak için kullanılacak';
+}
+
+// Path: debts.actions.edit
+class _TranslationsDebtsActionsEditTr implements TranslationsDebtsActionsEditEn {
+	_TranslationsDebtsActionsEditTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Borcu düzenle';
+	@override String get success => 'Borç başarıyla düzenlendi';
+}
+
+// Path: debts.actions.delete
+class _TranslationsDebtsActionsDeleteTr implements TranslationsDebtsActionsDeleteEn {
+	_TranslationsDebtsActionsDeleteTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get warning_header => 'Bu borç silinsin mi?';
+	@override String get warning_text => 'Bu eylem geri alınamaz. Bağlantılı işlemler silinmeyecek ancak artık bu borçla ilişkilendirilmeyecektir.';
+}
+
+// Path: debts.actions.add_register
+class _TranslationsDebtsActionsAddRegisterTr implements TranslationsDebtsActionsAddRegisterEn {
+	_TranslationsDebtsActionsAddRegisterTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Hareket ekle';
+	@override String get success => 'Hareket başarıyla eklendi';
+	@override String get fab_label => 'Kayıt ekle';
+	@override String get modal_title => 'Bu borca ​​kayıt ekle';
+	@override String get modal_subtitle => 'Bir işlemi bu borca ​​bağlamak için aşağıdaki seçeneklerden birini seçin';
+}
+
+// Path: debts.actions.link_transaction
+class _TranslationsDebtsActionsLinkTransactionTr implements TranslationsDebtsActionsLinkTransactionEn {
+	_TranslationsDebtsActionsLinkTransactionTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Mevcut işlemi bağla';
+	@override String get description => 'Bu borca ​​bağlamak için mevcut bir kaydı seçin';
+	@override String get success => 'Borca bağlı işlem';
+	@override String creating({required Object name}) => '<b>${name}</b> borcuna bağlı bir işlem oluşturuyorsunuz';
+}
+
+// Path: debts.actions.new_transaction
+class _TranslationsDebtsActionsNewTransactionTr implements TranslationsDebtsActionsNewTransactionEn {
+	_TranslationsDebtsActionsNewTransactionTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Yeni işlem ekle';
+	@override String get description => 'Bu borca ​​bağlı yeni bir işlem oluşturarak borcu manuel olarak ekleyin veya azaltın';
+}
+
+// Path: debts.actions.create
+class _TranslationsDebtsActionsCreateTr implements TranslationsDebtsActionsCreateEn {
+	_TranslationsDebtsActionsCreateTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Borç oluştur';
+	@override String get success => 'Borç başarıyla oluşturuldu';
 }
 
 // Path: backup.import.manual_import
@@ -2340,6 +2535,48 @@ extension on TranslationsTr {
 			'goals.progress.description.active_indeterminate' => ({required Object amount}) => 'Hedefinize ulaşmak için ${amount} daha fazlasına ihtiyacınız var.',
 			'goals.progress.description.success' => 'Tebrikler! Hedefine ulaştın.',
 			'goals.progress.description.fail' => ({required Object amount}) => 'Hedefinizi ${amount} kadar kaçırdınız.',
+			'debts.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: 'Borç', other: 'Borçlar', ), 
+			'debts.form.name' => 'Borç adı',
+			'debts.form.initial_amount' => 'Başlangıç ​​tutarı',
+			'debts.form.step_initial_value' => 'Başlangıç ​​değeri',
+			'debts.form.step_details' => 'Detaylar',
+			'debts.form.from_transaction.title' => 'Bir işlemden',
+			'debts.form.from_transaction.select' => 'Bir işlem seçin',
+			'debts.form.from_transaction.tap_to_select' => 'Bir işlemi seçmek için dokunun',
+			'debts.form.from_amount.title' => 'Başlangıç ​​tutarından',
+			'debts.form.from_amount.description' => 'Bu tutar istatistiklerde gider/gelir olarak dikkate alınmayacaktır. Bakiyeleri ve net değeri hesaplamak için kullanılacak',
+			'debts.direction.lent' => 'Ödünç verilmiş',
+			'debts.direction.borrowed' => 'Ödünç alındı',
+			'debts.status.active' => 'Aktif',
+			'debts.status.close' => 'Kapalı',
+			'debts.details.collected_amount' => 'Toplanan miktar',
+			'debts.details.remaining' => 'Geriye kalan',
+			'debts.details.no_deadline' => 'Son tarih yok',
+			'debts.details.in_days' => ({required Object x}) => '${x} gün içinde',
+			'debts.details.due_today' => 'Bugün vadesi doluyor',
+			'debts.details.days_ago' => ({required Object x}) => '${x} gün önce',
+			'debts.details.overdue_by' => ({required Object x}) => '${x} gün gecikti',
+			'debts.details.per_day' => '/ gün',
+			'debts.details.no_transactions' => 'Bu borç için işlem bulunamadı',
+			'debts.empty.no_debts_active' => 'Aktif borç bulunamadı. Aşağıdaki butona tıklayarak yeni bir borç oluşturarak başlayın',
+			'debts.empty.no_debts_closed' => 'Kapatılan borç bulunamadı. Borç, borcunuzun tamamını topladığınızda veya borcunuzun tamamını ödediğinizde kapatılır.',
+			'debts.actions.edit.title' => 'Borcu düzenle',
+			'debts.actions.edit.success' => 'Borç başarıyla düzenlendi',
+			'debts.actions.delete.warning_header' => 'Bu borç silinsin mi?',
+			'debts.actions.delete.warning_text' => 'Bu eylem geri alınamaz. Bağlantılı işlemler silinmeyecek ancak artık bu borçla ilişkilendirilmeyecektir.',
+			'debts.actions.add_register.title' => 'Hareket ekle',
+			'debts.actions.add_register.success' => 'Hareket başarıyla eklendi',
+			'debts.actions.add_register.fab_label' => 'Kayıt ekle',
+			'debts.actions.add_register.modal_title' => 'Bu borca ​​kayıt ekle',
+			'debts.actions.add_register.modal_subtitle' => 'Bir işlemi bu borca ​​bağlamak için aşağıdaki seçeneklerden birini seçin',
+			'debts.actions.link_transaction.title' => 'Mevcut işlemi bağla',
+			'debts.actions.link_transaction.description' => 'Bu borca ​​bağlamak için mevcut bir kaydı seçin',
+			'debts.actions.link_transaction.success' => 'Borca bağlı işlem',
+			'debts.actions.link_transaction.creating' => ({required Object name}) => '<b>${name}</b> borcuna bağlı bir işlem oluşturuyorsunuz',
+			'debts.actions.new_transaction.title' => 'Yeni işlem ekle',
+			'debts.actions.new_transaction.description' => 'Bu borca ​​bağlı yeni bir işlem oluşturarak borcu manuel olarak ekleyin veya azaltın',
+			'debts.actions.create.title' => 'Borç oluştur',
+			'debts.actions.create.success' => 'Borç başarıyla oluşturuldu',
 			'target_timeline_statuses.active' => 'Aktif',
 			'target_timeline_statuses.past' => 'Tamamlandı',
 			'target_timeline_statuses.future' => 'Gelecek',

@@ -747,6 +747,82 @@
       }
     }
   },
+  "DEBTS": {
+    "display": {
+      "one": "Deuda",
+      "other": "Deudas"
+    },
+    "FORM": {
+      "name": "Nombre de la deuda",
+      "initial_amount": "Monto inicial",
+      "step_initial_value": "Valor inicial",
+      "step_details": "Detalles",
+      "from_transaction": {
+        "title": "De una transacción",
+        "select": "Seleccione una transacción",
+        "tap_to_select": "Toque para seleccionar una transacción"
+      },
+      "from_amount": {
+        "title": "A partir de un importe inicial",
+        "description": "Este importe no se tendrá en cuenta a efectos estadísticos como gasto/ingreso. Se utilizará para calcular saldos y patrimonio neto."
+      }
+    },
+    "DIRECTION": {
+      "lent": "Presté",
+      "borrowed": "Me prestaron"
+    },
+    "STATUS": {
+      "active": "Activas",
+      "close": "Cerradas"
+    },
+    "DETAILS": {
+      "collected_amount": "Monto cobrado",
+      "remaining": "Restante",
+      "no_deadline": "Sin fecha límite",
+      "in_days": "En {{x}} días",
+      "due_today": "Vencimiento hoy",
+      "days_ago": "Hace {{x}} días",
+      "overdue_by": "Vencido por {{x}} días",
+
+      "per_day": "/ día",
+      "no_transactions": "No se encontraron transacciones para esta deuda"
+    },
+    "EMPTY": {
+      "no_debts_active": "No se encontraron deudas activas. Comience creando una nueva deuda haciendo clic en el botón de abajo",
+      "no_debts_closed": "No se encontraron deudas cerradas. Una deuda se cierra cuando has cobrado todo el dinero de ella o has pagado todo el dinero que debías."
+    },
+    "ACTIONS": {
+      "edit": {
+        "title": "Editar deuda",
+        "success": "Deuda editada exitosamente"
+      },
+      "delete": {
+        "warning_header": "¿Eliminar esta deuda?",
+        "warning_text": "Esta acción no se puede deshacer. Las transacciones vinculadas no se eliminarán pero ya no estarán asociadas con esta deuda."
+      },
+      "add_register": {
+        "title": "Agregar movimiento",
+        "success": "Movimiento agregado exitosamente",
+        "fab_label": "Añadir registro",
+        "modal_title": "Añadir registro a esta deuda",
+        "modal_subtitle": "Elija una de las siguientes opciones para vincular una transacción a esta deuda"
+      },
+      "link_transaction": {
+        "title": "Vincular transacción existente",
+        "description": "Elija un registro existente para vincularlo a esta deuda",
+        "success": "Transacción vinculada a deuda",
+        "creating": "Estás creando una transacción vinculada a la deuda <b>{{ name }}</b>"
+      },
+      "new_transaction": {
+        "title": "Agregar nueva transacción",
+        "description": "Agregue o reduzca manualmente la deuda creando una nueva transacción vinculada a esta deuda"
+      },
+      "create": {
+        "title": "Crear deuda",
+        "success": "Deuda creada exitosamente"
+      }
+    }
+  },
   "TARGET_TIMELINE_STATUSES": {
     "active": "Activo",
     "past": "Finalizado",

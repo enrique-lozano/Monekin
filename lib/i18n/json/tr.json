@@ -744,6 +744,82 @@
       }
     }
   },
+  "DEBTS": {
+    "display": {
+      "one": "Borç",
+      "other": "Borçlar"
+    },
+    "FORM": {
+      "name": "Borç adı",
+      "initial_amount": "Başlangıç ​​tutarı",
+      "step_initial_value": "Başlangıç ​​değeri",
+      "step_details": "Detaylar",
+      "from_transaction": {
+        "title": "Bir işlemden",
+        "select": "Bir işlem seçin",
+        "tap_to_select": "Bir işlemi seçmek için dokunun"
+      },
+      "from_amount": {
+        "title": "Başlangıç ​​tutarından",
+        "description": "Bu tutar istatistiklerde gider/gelir olarak dikkate alınmayacaktır. Bakiyeleri ve net değeri hesaplamak için kullanılacak"
+      }
+    },
+    "DIRECTION": {
+      "lent": "Ödünç verilmiş",
+      "borrowed": "Ödünç alındı"
+    },
+    "STATUS": {
+      "active": "Aktif",
+      "close": "Kapalı"
+    },
+    "DETAILS": {
+      "collected_amount": "Toplanan miktar",
+      "remaining": "Geriye kalan",
+      "no_deadline": "Son tarih yok",
+      "in_days": "{{x}} gün içinde",
+      "due_today": "Bugün vadesi doluyor",
+      "days_ago": "{{x}} gün önce",
+      "overdue_by": "{{x}} gün gecikti",
+
+      "per_day": "/ gün",
+      "no_transactions": "Bu borç için işlem bulunamadı"
+    },
+    "EMPTY": {
+      "no_debts_active": "Aktif borç bulunamadı. Aşağıdaki butona tıklayarak yeni bir borç oluşturarak başlayın",
+      "no_debts_closed": "Kapatılan borç bulunamadı. Borç, borcunuzun tamamını topladığınızda veya borcunuzun tamamını ödediğinizde kapatılır."
+    },
+    "ACTIONS": {
+      "edit": {
+        "title": "Borcu düzenle",
+        "success": "Borç başarıyla düzenlendi"
+      },
+      "delete": {
+        "warning_header": "Bu borç silinsin mi?",
+        "warning_text": "Bu eylem geri alınamaz. Bağlantılı işlemler silinmeyecek ancak artık bu borçla ilişkilendirilmeyecektir."
+      },
+      "add_register": {
+        "title": "Hareket ekle",
+        "success": "Hareket başarıyla eklendi",
+        "fab_label": "Kayıt ekle",
+        "modal_title": "Bu borca ​​kayıt ekle",
+        "modal_subtitle": "Bir işlemi bu borca ​​bağlamak için aşağıdaki seçeneklerden birini seçin"
+      },
+      "link_transaction": {
+        "title": "Mevcut işlemi bağla",
+        "description": "Bu borca ​​bağlamak için mevcut bir kaydı seçin",
+        "success": "Borca bağlı işlem",
+        "creating": "<b>{{ name }}</b> borcuna bağlı bir işlem oluşturuyorsunuz"
+      },
+      "new_transaction": {
+        "title": "Yeni işlem ekle",
+        "description": "Bu borca ​​bağlı yeni bir işlem oluşturarak borcu manuel olarak ekleyin veya azaltın"
+      },
+      "create": {
+        "title": "Borç oluştur",
+        "success": "Borç başarıyla oluşturuldu"
+      }
+    }
+  },
   "TARGET_TIMELINE_STATUSES": {
     "active": "Aktif",
     "past": "Tamamlandı",
