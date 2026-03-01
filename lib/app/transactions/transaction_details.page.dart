@@ -785,19 +785,19 @@ class _LinkedDebtCard extends StatelessWidget {
           icon: Debt.icon,
           title: 'Linked Debt',
           body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               ListTile(
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 0,
-                ),
                 leading: IconDisplayer(
                   supportedIcon: SupportedIconService.instance.getIconByID(
                     debt.iconId,
                   ),
                   mainColor: debtColor,
                 ),
-                title: Text(debt.name),
+                title: Text(
+                  debt.name,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
                 subtitle: Row(
                   spacing: 4,
                   mainAxisSize: MainAxisSize.min,
@@ -805,70 +805,56 @@ class _LinkedDebtCard extends StatelessWidget {
                     Icon(debt.type.icon(), size: 12, color: debtColor),
                     Text(
                       debt.type.title(context),
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodySmall?.copyWith(color: debtColor),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: debtColor,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),
+                trailing: Icon(Icons.open_in_new_rounded, color: debtColor),
+                onTap: () => RouteUtils.pushRoute(
+                  DebtDetailsPage(debtInitialData: debt),
+                ),
               ),
-              Divider(height: 1, color: debtColor.withOpacity(0.35)),
-              IntrinsicHeight(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextButton.icon(
-                        style: TextButton.styleFrom(
-                          foregroundColor: debtColor,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: const RoundedRectangleBorder(),
-                        ),
-                        icon: const Icon(Icons.open_in_new_rounded, size: 16),
-                        label: const Text('View debt'),
-                        onPressed: () => RouteUtils.pushRoute(
-                          DebtDetailsPage(debtInitialData: debt),
-                        ),
-                      ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: FilledButton.icon(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: AppColors.of(
+                        context,
+                      ).danger.withOpacity(0.15),
+                      foregroundColor: AppColors.of(context).danger,
                     ),
-                    VerticalDivider(
-                      width: 1,
-                      color: debtColor.withOpacity(0.35),
-                    ),
-                    Expanded(
-                      child: TextButton.icon(
-                        style: TextButton.styleFrom(
-                          foregroundColor: AppColors.of(context).danger,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: const RoundedRectangleBorder(),
-                        ),
-                        icon: const Icon(Icons.link_off_rounded, size: 16),
-                        label: const Text('Unlink'),
-                        onPressed: () async {
-                          final confirmed = await confirmDialog(
-                            context,
-                            dialogTitle: 'Unlink from debt?',
-                            contentParagraphs: [
-                              const Text(
-                                'This transaction will no longer be associated with this debt.',
-                              ),
-                            ],
-                            showCancelButton: true,
-                            icon: Icons.link_off_rounded,
-                          );
-                          if (confirmed != true) return;
-                          try {
-                            await DebtServive.instance
-                                .unlinkTransactionFromDebt(transactionId);
-                            MonekinSnackbar.success(
-                              SnackbarParams('Transaction unlinked from debt'),
-                            );
-                          } catch (e) {
-                            MonekinSnackbar.error(SnackbarParams.fromError(e));
-                          }
-                        },
-                      ),
-                    ),
-                  ],
+                    icon: const Icon(Icons.link_off_rounded, size: 18),
+                    label: const Text('Unlink from debt'),
+                    onPressed: () async {
+                      final confirmed = await confirmDialog(
+                        context,
+                        dialogTitle: 'Unlink from debt?',
+                        contentParagraphs: [
+                          const Text(
+                            'This transaction will no longer be associated with this debt.',
+                          ),
+                        ],
+                        showCancelButton: true,
+                        icon: Icons.link_off_rounded,
+                      );
+                      if (confirmed != true) return;
+                      try {
+                        await DebtServive.instance.unlinkTransactionFromDebt(
+                          transactionId,
+                        );
+                        MonekinSnackbar.success(
+                          SnackbarParams('Transaction unlinked from debt'),
+                        );
+                      } catch (e) {
+                        MonekinSnackbar.error(SnackbarParams.fromError(e));
+                      }
+                    },
+                  ),
                 ),
               ),
             ],
