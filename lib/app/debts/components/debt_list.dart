@@ -12,11 +12,15 @@ class DebtList extends StatelessWidget {
     required this.debts,
     this.shrinkWrap = false,
     this.physics,
+    this.showOverdueWarning = true,
   });
 
   final List<Debt> debts;
   final bool shrinkWrap;
   final ScrollPhysics? physics;
+
+  /// Whether to show a warning subtitle when the debt's end date has passed.
+  final bool showOverdueWarning;
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +32,40 @@ class DebtList extends StatelessWidget {
       itemBuilder: (context, index) {
         final debt = debts[index];
 
+        Widget? subtitleWidget;
+        if (debt.endDate != null) {
+          final now = DateTime.now();
+          if (showOverdueWarning && debt.endDate!.isBefore(now)) {
+            final daysOverdue = now.difference(debt.endDate!).inDays;
+            subtitleWidget = Row(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 4,
+              children: [
+                Icon(
+                  Icons.warning_amber_rounded,
+                  size: 12,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+                Text(
+                  daysOverdue == 0
+                      ? 'Due today'
+                      : 'Overdue by $daysOverdue days',
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                ),
+              ],
+            );
+          } else {
+            subtitleWidget = Text(
+              'Ends: ${debt.endDate.toString().split(' ')[0]}',
+            );
+          }
+        }
+
         return ListTile(
-          onTap: () => RouteUtils.pushRoute(DebtDetailsPage(debt: debt)),
+          onTap: () =>
+              RouteUtils.pushRoute(DebtDetailsPage(debtInitialData: debt)),
           leading: IconDisplayer(
             supportedIcon: SupportedIconService.instance.getIconByID(
               debt.iconId,
@@ -38,9 +74,7 @@ class DebtList extends StatelessWidget {
             borderRadius: 8,
           ),
           title: Text(debt.name),
-          subtitle: debt.endDate != null
-              ? Text("Ends: ${debt.endDate.toString().split(' ')[0]}")
-              : null,
+          subtitle: subtitleWidget,
           trailing: StreamBuilder(
             stream: DebtServive.instance.getDebtRemainingAmount(debt),
             // We use the initial amount as a placeholder while loading the real updated amount

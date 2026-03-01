@@ -29,7 +29,8 @@ class DebtList extends StatelessWidget {
         final debt = debts[index];
 
         return ListTile(
-          onTap: () => RouteUtils.pushRoute(DebtDetailsPage(debt: debt)),
+          onTap: () =>
+              RouteUtils.pushRoute(DebtDetailsPage(debtInitialData: debt)),
           leading: IconDisplayer(
             supportedIcon: SupportedIconService.instance.getIconByID(
               debt.iconId,

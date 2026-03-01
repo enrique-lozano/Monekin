@@ -13,6 +13,7 @@ import 'package:monekin/app/settings/widgets/setting_card_item.dart';
 import 'package:monekin/app/stats/stats_page.dart';
 import 'package:monekin/app/tags/tag_list.page.dart';
 import 'package:monekin/app/transactions/recurrent_transactions_page.dart';
+import 'package:monekin/core/models/debt/debt.dart';
 import 'package:monekin/core/models/goal/goal.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/routes/destinations.dart';
@@ -103,7 +104,7 @@ class _MoreActionsPageState extends State<MoreActionsPage> {
       ),
       _ActionItem(
         title: "DEBTS",
-        icon: Icons.pie_chart_rounded,
+        icon: Debt.icon,
         onTap: () => RouteUtils.pushRoute(const DebtsPage()),
         id: null,
       ),

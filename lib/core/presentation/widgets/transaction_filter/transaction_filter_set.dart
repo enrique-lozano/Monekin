@@ -44,6 +44,10 @@ class TransactionFilterSet {
   final Iterable<String?>? tagsIDs;
   final String? debtId;
 
+  /// When set, excludes transactions already linked to this debt ID from results.
+  /// Useful in transaction selectors to avoid showing already-assigned transactions.
+  final String? excludeDebtId;
+
   const TransactionFilterSet({
     this.minDate,
     this.maxDate,
@@ -59,6 +63,7 @@ class TransactionFilterSet {
     this.status,
     this.tagsIDs,
     this.debtId,
+    this.excludeDebtId,
   });
 
   /// Factory constructor to create a [TransactionFilterSet] from a [TransactionFilterSetInDB]
@@ -170,6 +175,9 @@ class TransactionFilterSet {
 
       // Other filters:
       if (debtId != null) transaction.debtId.equals(debtId!),
+      if (excludeDebtId != null)
+        transaction.debtId.isNull() |
+            transaction.debtId.equals(excludeDebtId!).not(),
       if (searchValue != null && searchValue!.isNotEmpty)
         (transaction.notes.contains(searchValue!) |
             transaction.title.contains(searchValue!) |

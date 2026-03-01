@@ -44,6 +44,7 @@ class AddMoneyTransactionToDebtModal extends StatelessWidget {
                       TransactionType.income,
                       TransactionType.expense,
                     ],
+                    excludeDebtId: debt.id,
                   ),
                   onTransactionSelected: (transaction) async {
                     RouteUtils.popRoute(); // pop _AddRegisterToDebtModal

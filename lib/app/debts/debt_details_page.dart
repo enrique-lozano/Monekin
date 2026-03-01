@@ -3,12 +3,15 @@ import 'package:intl/intl.dart';
 import 'package:monekin/app/debts/components/add_register_to_debt_modal.dart';
 import 'package:monekin/app/debts/debt_form_page.dart';
 import 'package:monekin/app/layout/page_framework.dart';
+import 'package:monekin/app/transactions/transaction_details.page.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
+import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/services/debts/debt_service.dart';
 import 'package:monekin/core/models/debt/debt.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -18,93 +21,123 @@ import 'package:monekin/core/services/supported_icon/supported_icon_service.dart
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 
-class DebtDetailsPage extends StatelessWidget {
-  const DebtDetailsPage({super.key, required this.debt});
+Color _labelColorInHeader(BuildContext context) => Theme.of(context)
+    .colorScheme
+    .onSurface
+    .withOpacity(isAppInDarkBrightness(context) ? 0.6 : 0.85);
 
-  final Debt debt;
+class DebtDetailsPage extends StatelessWidget {
+  const DebtDetailsPage({super.key, required this.debtInitialData});
+
+  final Debt debtInitialData;
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return PageFramework(
-      title: debt.name,
-      appBarBackgroundColor: Theme.of(context).cardColor,
-      appBarActions: [
-        IconButton(
-          icon: Icon(
-            Icons.delete_outline_rounded,
-            color: Theme.of(context).colorScheme.error,
-          ),
-          onPressed: () async {
-            final confirmed = await confirmDialog(
-              context,
-              dialogTitle: 'Delete this debt?',
-              contentParagraphs: [
-                const Text(
-                  'This action cannot be undone. Linked transactions will not be deleted but will no longer be associated with this debt.',
-                ),
-              ],
-              showCancelButton: true,
-              icon: Icons.delete_forever_rounded,
-            );
-            if (confirmed != true) return;
-            try {
-              await DebtServive.instance.deleteDebt(debt.id);
-              MonekinSnackbar.success(
-                SnackbarParams('Debt deleted successfully'),
-              );
-              if (context.mounted) Navigator.of(context).pop();
-            } catch (e) {
-              MonekinSnackbar.error(SnackbarParams.fromError(e));
-            }
-          },
-        ),
-        IconButton(
-          icon: const Icon(Icons.edit),
-          onPressed: () {
-            RouteUtils.pushRoute(DebtFormPage(debt: debt));
-          },
-        ),
-      ],
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
-        icon: const Icon(Icons.add_link_rounded),
-        label: const Text('Add register'),
-        onPressed: () => showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          showDragHandle: true,
-          builder: (_) => AddMoneyTransactionToDebtModal(debt: debt),
-        ),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildHeader(context),
+    return StreamBuilder(
+      stream: DebtServive.instance.getDebtById(debtInitialData.id),
+      initialData: debtInitialData,
+      builder: (context, asyncSnapshot) {
+        final debt = asyncSnapshot.data ?? debtInitialData;
 
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-            child: Text(
-              t.transaction.display(n: 20),
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-          ),
-          Expanded(
-            child: TransactionListComponent(
-              filters: TransactionFilterSet(debtId: debt.id),
-              onEmptyList: Center(
-                child: Text('No transactions found for this debt'),
+        return PageFramework(
+          title: debt.name,
+          appBarBackgroundColor: Theme.of(context).cardColor,
+          appBarActions: [
+            IconButton(
+              icon: Icon(
+                Icons.delete_outline_rounded,
+                color: Theme.of(context).colorScheme.error,
               ),
-              showGroupDivider: false,
+              onPressed: () async {
+                final confirmed = await confirmDialog(
+                  context,
+                  dialogTitle: 'Delete this debt?',
+                  contentParagraphs: [
+                    const Text(
+                      'This action cannot be undone. Linked transactions will not be deleted but will no longer be associated with this debt.',
+                    ),
+                  ],
+                  showCancelButton: true,
+                  icon: Icons.delete_forever_rounded,
+                );
+                if (confirmed != true) return;
+                try {
+                  await DebtServive.instance.deleteDebt(debt.id);
+                  MonekinSnackbar.success(
+                    SnackbarParams('Debt deleted successfully'),
+                  );
+                  if (context.mounted) Navigator.of(context).pop();
+                } catch (e) {
+                  MonekinSnackbar.error(SnackbarParams.fromError(e));
+                }
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () {
+                RouteUtils.pushRoute(DebtFormPage(debt: debt));
+              },
+            ),
+          ],
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: FloatingActionButton.extended(
+            icon: const Icon(Icons.add_link_rounded),
+            label: const Text('Add register'),
+            onPressed: () => showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              showDragHandle: true,
+              builder: (_) => AddMoneyTransactionToDebtModal(debt: debt),
             ),
           ),
-        ],
-      ),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHeader(context, debt: debt),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                child: Text(
+                  t.transaction.display(n: 20),
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+              Expanded(
+                child: TransactionListComponent(
+                  filters: TransactionFilterSet(debtId: debt.id),
+                  onEmptyList: Center(
+                    child: Text('No transactions found for this debt'),
+                  ),
+                  showGroupDivider: false,
+                  tileBuilder: (transaction) {
+                    final heroTag =
+                        'debt-${debt.id}-transaction-${transaction.id}';
+
+                    return TransactionListTile(
+                      transaction: transaction,
+                      heroTag: heroTag,
+                      onTap: () {
+                        RouteUtils.pushRoute(
+                          TransactionDetailsPage(
+                            transaction: transaction,
+                            heroTag: heroTag,
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, {required Debt debt}) {
     return StreamBuilder(
       stream: Rx.combineLatest2(
         DebtServive.instance.getDebtRemainingAmount(debt),
@@ -150,11 +183,7 @@ class DebtDetailsPage extends StatelessWidget {
                           Text(
                             'Collected Amount',
                             style: Theme.of(context).textTheme.labelSmall!
-                                .copyWith(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface.withOpacity(0.6),
-                                ),
+                                .copyWith(color: _labelColorInHeader(context)),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -178,7 +207,7 @@ class DebtDetailsPage extends StatelessWidget {
                                         ),
                                   ),
                                   Text(
-                                    "/",
+                                    '/',
                                     style: Theme.of(
                                       context,
                                     ).textTheme.titleMedium,
@@ -195,7 +224,7 @@ class DebtDetailsPage extends StatelessWidget {
 
                               if (BreakPoint.of(
                                 context,
-                              ).isLargerThan(BreakpointID.md))
+                              ).isLargerThan(BreakpointID.sm))
                                 Flexible(
                                   child: _DebtDirectionBadge(debt: debt),
                                 ),
@@ -216,6 +245,7 @@ class DebtDetailsPage extends StatelessWidget {
               const Divider(),
               IntrinsicHeight(
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       child: _DebtInfoItem(
@@ -266,8 +296,6 @@ class DebtDetailsPage extends StatelessWidget {
                                           .copyWith(
                                             color: daysLeft > 0
                                                 ? color
-                                                : daysLeft == 0
-                                                ? Colors.orange
                                                 : Theme.of(
                                                     context,
                                                   ).colorScheme.error,
@@ -348,20 +376,14 @@ class _DebtInfoItem extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(
-                icon,
-                size: 11,
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-              ),
+              Icon(icon, size: 11, color: _labelColorInHeader(context)),
               Flexible(
                 child: Text(
                   label.toUpperCase(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.onSurface.withOpacity(0.6),
+                    color: _labelColorInHeader(context),
                     fontSize: 9,
                     letterSpacing: 0.5,
                   ),

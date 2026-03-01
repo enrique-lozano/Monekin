@@ -10,6 +10,7 @@ import 'package:monekin/core/models/debt/debt.dart';
 import 'package:monekin/core/models/debt/debt_direction.enum.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:rxdart/rxdart.dart';
 
 class DebtsPage extends StatefulWidget {
   const DebtsPage({super.key});
@@ -69,16 +70,30 @@ class DebtsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Debt>>(
-      stream: DebtServive.instance.getDebts(
-        predicate: (debts, _) =>
-            isActive ? debts.endDate.isNull() : debts.endDate.isNotNull(),
-        orderBy: (debts, _) => drift.OrderBy([
-          drift.OrderingTerm(
-            expression: debts.startDate,
-            mode: drift.OrderingMode.desc,
-          ),
-        ]),
-      ),
+      stream: DebtServive.instance
+          .getDebts(
+            orderBy: (debts, _) => drift.OrderBy([
+              drift.OrderingTerm(
+                expression: debts.startDate,
+                mode: drift.OrderingMode.desc,
+              ),
+            ]),
+          )
+          .switchMap((debts) {
+            if (debts.isEmpty) return Stream.value(<Debt>[]);
+            return Rx.combineLatestList(
+              debts.map(
+                (debt) => DebtServive.instance
+                    .getDebtRemainingAmount(debt)
+                    .map((remaining) => (debt: debt, remaining: remaining)),
+              ),
+            ).map(
+              (entries) => entries
+                  .where((e) => isActive ? e.remaining > 0 : e.remaining == 0)
+                  .map((e) => e.debt)
+                  .toList(),
+            );
+          }),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
@@ -111,6 +126,7 @@ class DebtsView extends StatelessWidget {
                   debts: lentDebts,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
+                  showOverdueWarning: isActive,
                 ),
               ],
               if (lentDebts.isNotEmpty && borrowedDebts.isNotEmpty) ...[
@@ -123,6 +139,7 @@ class DebtsView extends StatelessWidget {
                   debts: borrowedDebts,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
+                  showOverdueWarning: isActive,
                 ),
               ],
             ],

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart' show IconData, Icons;
 import 'package:monekin/core/database/app_db.dart';
 
 class Debt extends DebtInDB {
@@ -13,4 +14,7 @@ class Debt extends DebtInDB {
     required super.type,
     super.endDate,
   }) : super(currencyId: currency.code);
+
+  /// The icon that represents this entity
+  static IconData get icon => Icons.payments_rounded;
 }
