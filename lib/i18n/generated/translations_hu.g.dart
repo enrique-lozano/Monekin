@@ -1025,6 +1025,8 @@ class _TranslationsTagsFormHu implements TranslationsTagsFormEn {
 
 	// Translations
 	@override String get name => 'Címke neve';
+	@override String get name_hint => 'Pl.: Étel';
+	@override String get forbidden_char_error => 'A címke neve nem tartalmazhat \';\' karaktert';
 	@override String get description => 'Leírás';
 }
 
@@ -1632,20 +1634,27 @@ class _TranslationsBackupImportManualImportHu implements TranslationsBackupImpor
 	@override String get default_account => 'Alapértelm. számla';
 	@override String get remove_default_account => 'Alapértelmezett számla törlése';
 	@override String get default_category => 'Alapértelm. kategória';
+	@override String get default_tags => 'Alapértelmezett címkék';
 	@override String get select_a_column => 'Válasszon ki egy oszlopot a .csv fájlból';
+	@override String get date_format => 'Dátumformátum';
+	@override String get note_column => 'Megjegyzés oszlop';
+	@override String get title_column => 'Cím oszlop';
+	@override String get tag_separator => 'Címkeelválasztó a .csv fájlban';
 	@override List<String> get steps => [
 		'Fájl kiválasztása',
 		'Mennyiség oszlop',
 		'Számlaoszlop',
 		'Kategória oszlop',
+		'Címkék oszlopa',
 		'Dátum oszlop',
-		'egyéb oszlopok',
+		'Egyéb oszlopok',
 	];
 	@override List<String> get steps_descr => [
 		'Válasszon ki egy .csv fájlt az eszközről. Győződjön meg arról, hogy van egy első sora, amely leírja az egyes oszlopok nevét.',
 		'Válassza ki azt az oszlopot, amelyben az egyes tranzakciók dátuma meg van adva. Ha nincs megadva, a tranzakciók az aktuális dátummal jönnek létre. Válassza ki azt az oszlopot, ahol az egyes tranzakciók értéke meg van adva. Használjon negatív értékeket a kiadásokhoz és pozitív értékeket a bevételekhez.',
 		'Válassza ki azt az oszlopot, amelyben meg van adva az a számla, amelyhez az egyes tranzakciók tartoznak. Kiválaszthat egy alapértelmezett fiókot is arra az esetre, ha nem találnánk a kívánt fiókot. Ha nincs megadva alapértelmezett fiók, akkor létrehozunk egyet ugyanazzal a névvel. ',
 		'Adja meg azt az oszlopot, ahol a tranzakciókategória neve található. Meg kell adnia egy alapértelmezett kategóriát, hogy ezt a kategóriát rendeljük hozzá a tranzakciókhoz, ha a kategória nem található.',
+		'Adja meg azt az oszlopot, ahol a tranzakciós címkék találhatók. Ha nincs megadva, a tranzakciók az alapértelmezett címkékkel jönnek létre.',
 		'Válassza ki azt az oszlopot, amelyben az egyes tranzakciók dátuma meg van adva. Ha nincs megadva, a tranzakciók az aktuális dátummal jönnek létre.',
 		'Az egyéb opcionális tranzakciós attribútumok oszlopainak meghatározása',
 	];
@@ -2217,6 +2226,8 @@ extension on TranslationsHu {
 			'currencies.search' => 'Keresés név vagy pénznemkód alapján',
 			'tags.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: 'Felirat', other: 'Címkék', ), 
 			'tags.form.name' => 'Címke neve',
+			'tags.form.name_hint' => 'Pl.: Étel',
+			'tags.form.forbidden_char_error' => 'A címke neve nem tartalmazhat \';\' karaktert',
 			'tags.form.description' => 'Leírás',
 			'tags.select.title' => 'Címke kiválasztása',
 			'tags.select.all' => 'Minden címke',
@@ -2313,10 +2324,10 @@ extension on TranslationsHu {
 			'goals.delete_warning' => 'Ez a művelet visszafordíthatatlan. A célhoz kapcsolódó kategóriák és tranzakciók nem törlődnek',
 			'goals.form.new_title' => 'Új cél',
 			'goals.form.edit_title' => 'Cél szerkesztése',
-			'goals.form.target_amount' => 'Célösszeg',
-			'goals.form.initial_amount' => 'Kezdő összeg',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.target_amount' => 'Célösszeg',
+			'goals.form.initial_amount' => 'Kezdő összeg',
 			'goals.form.name' => 'Név',
 			'goals.form.name_hint' => 'Megtakarítási célom',
 			'goals.form.create_success' => 'Cél sikeresen létrehozva',
@@ -2373,19 +2384,26 @@ extension on TranslationsHu {
 			'backup.import.manual_import.default_account' => 'Alapértelm. számla',
 			'backup.import.manual_import.remove_default_account' => 'Alapértelmezett számla törlése',
 			'backup.import.manual_import.default_category' => 'Alapértelm. kategória',
+			'backup.import.manual_import.default_tags' => 'Alapértelmezett címkék',
 			'backup.import.manual_import.select_a_column' => 'Válasszon ki egy oszlopot a .csv fájlból',
+			'backup.import.manual_import.date_format' => 'Dátumformátum',
+			'backup.import.manual_import.note_column' => 'Megjegyzés oszlop',
+			'backup.import.manual_import.title_column' => 'Cím oszlop',
+			'backup.import.manual_import.tag_separator' => 'Címkeelválasztó a .csv fájlban',
 			'backup.import.manual_import.steps.0' => 'Fájl kiválasztása',
 			'backup.import.manual_import.steps.1' => 'Mennyiség oszlop',
 			'backup.import.manual_import.steps.2' => 'Számlaoszlop',
 			'backup.import.manual_import.steps.3' => 'Kategória oszlop',
-			'backup.import.manual_import.steps.4' => 'Dátum oszlop',
-			'backup.import.manual_import.steps.5' => 'egyéb oszlopok',
+			'backup.import.manual_import.steps.4' => 'Címkék oszlopa',
+			'backup.import.manual_import.steps.5' => 'Dátum oszlop',
+			'backup.import.manual_import.steps.6' => 'Egyéb oszlopok',
 			'backup.import.manual_import.steps_descr.0' => 'Válasszon ki egy .csv fájlt az eszközről. Győződjön meg arról, hogy van egy első sora, amely leírja az egyes oszlopok nevét.',
 			'backup.import.manual_import.steps_descr.1' => 'Válassza ki azt az oszlopot, amelyben az egyes tranzakciók dátuma meg van adva. Ha nincs megadva, a tranzakciók az aktuális dátummal jönnek létre. Válassza ki azt az oszlopot, ahol az egyes tranzakciók értéke meg van adva. Használjon negatív értékeket a kiadásokhoz és pozitív értékeket a bevételekhez.',
 			'backup.import.manual_import.steps_descr.2' => 'Válassza ki azt az oszlopot, amelyben meg van adva az a számla, amelyhez az egyes tranzakciók tartoznak. Kiválaszthat egy alapértelmezett fiókot is arra az esetre, ha nem találnánk a kívánt fiókot. Ha nincs megadva alapértelmezett fiók, akkor létrehozunk egyet ugyanazzal a névvel. ',
 			'backup.import.manual_import.steps_descr.3' => 'Adja meg azt az oszlopot, ahol a tranzakciókategória neve található. Meg kell adnia egy alapértelmezett kategóriát, hogy ezt a kategóriát rendeljük hozzá a tranzakciókhoz, ha a kategória nem található.',
-			'backup.import.manual_import.steps_descr.4' => 'Válassza ki azt az oszlopot, amelyben az egyes tranzakciók dátuma meg van adva. Ha nincs megadva, a tranzakciók az aktuális dátummal jönnek létre.',
-			'backup.import.manual_import.steps_descr.5' => 'Az egyéb opcionális tranzakciós attribútumok oszlopainak meghatározása',
+			'backup.import.manual_import.steps_descr.4' => 'Adja meg azt az oszlopot, ahol a tranzakciós címkék találhatók. Ha nincs megadva, a tranzakciók az alapértelmezett címkékkel jönnek létre.',
+			'backup.import.manual_import.steps_descr.5' => 'Válassza ki azt az oszlopot, amelyben az egyes tranzakciók dátuma meg van adva. Ha nincs megadva, a tranzakciók az aktuális dátummal jönnek létre.',
+			'backup.import.manual_import.steps_descr.6' => 'Az egyéb opcionális tranzakciós attribútumok oszlopainak meghatározása',
 			'backup.import.manual_import.success' => ({required Object x}) => '${x} tranzakció sikeresen importálva',
 			'backup.import.success' => 'Az importálás sikeresen végrehajtva',
 			'backup.import.error' => 'Hiba történt importálásakor. Kérjük, lépjen kapcsolatba a fejlesztővel a lozin.technologies@gmail.com címen keresztül.',

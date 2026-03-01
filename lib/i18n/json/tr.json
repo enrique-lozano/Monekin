@@ -581,6 +581,8 @@
     },
     "FORM": {
       "name": "Etiket adı",
+      "name-hint": "Örn.: Yemek",
+      "forbidden-char-error": "Etiket adı ';' içeremez",
       "description": "Açıklama"
     },
     "SELECT": {
@@ -787,20 +789,27 @@
         "defaultAccount": "Varsayılan hesap",
         "removeDefaultAccount": "Varsayılan hesabı kaldır",
         "defaultCategory": "Varsayılan Kategori",
+        "defaultTags": "Varsayılan Etiketler",
         "select-a-column": ".csv'den bir sütun seçin",
+        "date-format": "Tarih formatı",
+        "note-column": "Not sütunu",
+        "title-column": "Başlık sütunu",
+        "tag-separator": ".csv dosyasındaki etiket ayırıcı",
         "steps": [
           "Dosyanızı seçin",
           "Miktar için sütun",
           "Hesap için sütun",
           "Kategori için sütun",
+          "Etiket sütunu",
           "Tarih için sütun",
-          "diğer sütunlar"
+          "Diğer sütunlar"
         ],
         "steps-descr": [
           "Cihazınızdan bir .csv dosyası seçin. Her sütunun adını açıklayan bir ilk satıra sahip olduğundan emin olun",
           "Her işlemin değerinin belirtildiği sütunu seçin. Giderler için negatif değerler ve gelirler için pozitif değerler kullanın.",
           "Her işlemin ait olduğu hesabın belirtildiği sütunu seçin. İstediğiniz hesabı bulamamamız durumunda varsayılan bir hesap da seçebilirsiniz. Varsayılan bir hesap belirtilmezse, aynı adla bir tane oluşturacağız",
           "İşlem kategorisi adının bulunduğu sütunu belirtin. Kategoriyi bulamamamız durumunda işlemlere bu kategoriyi atayabilmemiz için varsayılan bir kategori belirtmeniz gerekir",
+          "İşlem etiketlerinin bulunduğu sütunu belirtin. Belirtilmediği takdirde, işlemler varsayılan etiketlerle oluşturulacaktır.",
           "Her işlemin tarihinin belirtildiği sütunu seçin. Belirtilmezse, işlemler mevcut tarihle oluşturulacaktır",
           "Diğer isteğe bağlı işlem öznitelikleri için sütunları belirtir"
         ],

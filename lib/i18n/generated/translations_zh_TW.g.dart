@@ -1025,6 +1025,8 @@ class _TranslationsTagsFormZhTw implements TranslationsTagsFormEn {
 
 	// Translations
 	@override String get name => '標籤名';
+	@override String get name_hint => '例如：食物';
+	@override String get forbidden_char_error => '標籤名稱不能包含\';\'';
 	@override String get description => '描述';
 }
 
@@ -1632,12 +1634,18 @@ class _TranslationsBackupImportManualImportZhTw implements TranslationsBackupImp
 	@override String get default_account => '預設帳戶';
 	@override String get remove_default_account => '刪除預設帳戶';
 	@override String get default_category => '預設類別';
+	@override String get default_tags => '預設標籤';
 	@override String get select_a_column => '從 .csv 中選擇一列';
+	@override String get date_format => '日期格式';
+	@override String get note_column => '筆記欄';
+	@override String get title_column => '標題欄';
+	@override String get tag_separator => '.csv 中的標籤分隔符';
 	@override List<String> get steps => [
 		'選擇您的文件',
 		'數量欄位',
 		'帳戶欄位',
 		'類別欄位',
+		'標籤欄位',
 		'日期欄位',
 		'其他欄位',
 	];
@@ -1646,6 +1654,7 @@ class _TranslationsBackupImportManualImportZhTw implements TranslationsBackupImp
 		'選擇每筆交易價值的欄位。使用負值表示支出，使用正值表示收入。',
 		'選擇每筆交易所屬帳戶的列。您也可以選擇預設帳戶，以防我們找不到您想要的帳戶。如果未指定預設帳戶，我們將建立一個同名帳戶。',
 		'選擇交易類別名稱所在的欄位。您必須指定一個預設類別，以便我們將此類別指派給交易，以防找不到該類別。',
+		'請指定交易標籤所在的欄位。如果未指定，交易將以預設標籤建立。',
 		'選擇每筆交易日期的欄位。如果未指定，交易將使用當前日期建立。',
 		'選擇其他交易屬性的資料列',
 	];
@@ -2217,6 +2226,8 @@ extension on TranslationsZhTw {
 			'currencies.search' => '按名稱或貨幣代碼搜尋',
 			'tags.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '標籤', other: '標籤', ), 
 			'tags.form.name' => '標籤名',
+			'tags.form.name_hint' => '例如：食物',
+			'tags.form.forbidden_char_error' => '標籤名稱不能包含\';\'',
 			'tags.form.description' => '描述',
 			'tags.select.title' => '選擇標籤',
 			'tags.select.all' => '所有標籤',
@@ -2313,10 +2324,10 @@ extension on TranslationsZhTw {
 			'goals.delete_warning' => '此操作不可逆。涉及此目標的類別和交易將不會被刪除',
 			'goals.form.new_title' => '新目標',
 			'goals.form.edit_title' => '編輯目標',
-			'goals.form.target_amount' => '目標金額',
-			'goals.form.initial_amount' => '初始金額',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.target_amount' => '目標金額',
+			'goals.form.initial_amount' => '初始金額',
 			'goals.form.name' => '名稱',
 			'goals.form.name_hint' => '我的儲蓄目標',
 			'goals.form.create_success' => '目標建立成功',
@@ -2373,19 +2384,26 @@ extension on TranslationsZhTw {
 			'backup.import.manual_import.default_account' => '預設帳戶',
 			'backup.import.manual_import.remove_default_account' => '刪除預設帳戶',
 			'backup.import.manual_import.default_category' => '預設類別',
+			'backup.import.manual_import.default_tags' => '預設標籤',
 			'backup.import.manual_import.select_a_column' => '從 .csv 中選擇一列',
+			'backup.import.manual_import.date_format' => '日期格式',
+			'backup.import.manual_import.note_column' => '筆記欄',
+			'backup.import.manual_import.title_column' => '標題欄',
+			'backup.import.manual_import.tag_separator' => '.csv 中的標籤分隔符',
 			'backup.import.manual_import.steps.0' => '選擇您的文件',
 			'backup.import.manual_import.steps.1' => '數量欄位',
 			'backup.import.manual_import.steps.2' => '帳戶欄位',
 			'backup.import.manual_import.steps.3' => '類別欄位',
-			'backup.import.manual_import.steps.4' => '日期欄位',
-			'backup.import.manual_import.steps.5' => '其他欄位',
+			'backup.import.manual_import.steps.4' => '標籤欄位',
+			'backup.import.manual_import.steps.5' => '日期欄位',
+			'backup.import.manual_import.steps.6' => '其他欄位',
 			'backup.import.manual_import.steps_descr.0' => '從您的裝置中選擇一個 .csv 檔案。確保它的第一行描述了每列的名稱。',
 			'backup.import.manual_import.steps_descr.1' => '選擇每筆交易價值的欄位。使用負值表示支出，使用正值表示收入。',
 			'backup.import.manual_import.steps_descr.2' => '選擇每筆交易所屬帳戶的列。您也可以選擇預設帳戶，以防我們找不到您想要的帳戶。如果未指定預設帳戶，我們將建立一個同名帳戶。',
 			'backup.import.manual_import.steps_descr.3' => '選擇交易類別名稱所在的欄位。您必須指定一個預設類別，以便我們將此類別指派給交易，以防找不到該類別。',
-			'backup.import.manual_import.steps_descr.4' => '選擇每筆交易日期的欄位。如果未指定，交易將使用當前日期建立。',
-			'backup.import.manual_import.steps_descr.5' => '選擇其他交易屬性的資料列',
+			'backup.import.manual_import.steps_descr.4' => '請指定交易標籤所在的欄位。如果未指定，交易將以預設標籤建立。',
+			'backup.import.manual_import.steps_descr.5' => '選擇每筆交易日期的欄位。如果未指定，交易將使用當前日期建立。',
+			'backup.import.manual_import.steps_descr.6' => '選擇其他交易屬性的資料列',
 			'backup.import.manual_import.success' => ({required Object x}) => '已成功導入${x}筆交易',
 			'backup.import.success' => '導入成功',
 			'backup.import.error' => '匯入檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員。',

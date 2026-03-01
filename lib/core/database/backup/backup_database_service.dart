@@ -90,6 +90,8 @@ class BackupDatabaseService {
         (transaction.category?.parentCategory != null
             ? transaction.category?.name
             : ''),
+        // Tags
+        transaction.tags.map((e) => e.name).join(listSeparator),
       ];
 
       csvData += toAdd.join(separator);
@@ -188,10 +190,10 @@ class BackupDatabaseService {
   Future<List<List<String>>> processCsv(String csvData) async {
     return const CsvToListConverter().convert(
       csvData,
-      eol: '\n',
       csvSettingsDetector: const FirstOccurrenceSettingsDetector(
         fieldDelimiters: [',', ';', '\t', '|'],
         textDelimiters: ['"', "'"],
+        eols: ['\r\n', '\n'],
       ),
       shouldParseNumbers: false,
     );

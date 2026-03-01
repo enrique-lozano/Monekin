@@ -1867,6 +1867,12 @@ class TranslationsTagsFormEn {
 	/// en: 'Tag name'
 	String get name => 'Tag name';
 
+	/// en: 'E.g.: Food'
+	String get name_hint => 'E.g.: Food';
+
+	/// en: 'Tag name cannot contain ';''
+	String get forbidden_char_error => 'Tag name cannot contain \';\'';
+
 	/// en: 'Description'
 	String get description => 'Description';
 }
@@ -2911,24 +2917,41 @@ class TranslationsBackupImportManualImportEn {
 	/// en: 'Default Category'
 	String get default_category => 'Default Category';
 
+	/// en: 'Default Tags'
+	String get default_tags => 'Default Tags';
+
 	/// en: 'Select a column from the .csv'
 	String get select_a_column => 'Select a column from the .csv';
 
+	/// en: 'Date format'
+	String get date_format => 'Date format';
+
+	/// en: 'Note column'
+	String get note_column => 'Note column';
+
+	/// en: 'Title column'
+	String get title_column => 'Title column';
+
+	/// en: 'Tag separator in the .csv'
+	String get tag_separator => 'Tag separator in the .csv';
+
 	List<String> get steps => [
 		'Select your file',
-		'Column for quantity',
+		'Column for amount',
 		'Column for account',
 		'Column for category',
+		'Column for tags',
 		'Column for date',
-		'other columns',
+		'Other columns',
 	];
 	List<String> get steps_descr => [
-		'Select a .csv file from your device. Make sure it has a first row that describes the name of each column',
+		'Select a .csv file from your device. Make sure it has a first row that describes the name of each column.',
 		'Select the column where the value of each transaction is specified. Use negative values for expenses and positive values for income.',
-		'Select the column where the account to which each transaction belongs is specified. You can also select a default account in case we cannot find the account you want. If a default account is not specified, we will create one with the same name ',
-		'Specify the column where the transaction category name is located. You must specify a default category so that we assign this category to transactions, in case the category cannot be found',
-		'Select the column where the date of each transaction is specified. If not specified, transactions will be created with the current date',
-		'Specifies the columns for other optional transaction attributes',
+		'Select the column where the account to which each transaction belongs is specified. You can also select a default account in case we cannot find the account you want. If a default account is not specified, we will create one with the same name.',
+		'Specify the column where the transaction category name is located. You must specify a default category so that we assign this category to transactions, in case the category cannot be found.',
+		'Specify the column where the transaction tags are located. If not specified, transactions will be created with default tags.',
+		'Select the column where the date of each transaction is specified. If not specified, transactions will be created with the current date.',
+		'Specifies the columns for other optional transaction attributes.',
 	];
 
 	/// en: 'Successfully imported {{x}} transactions'
@@ -3606,6 +3629,8 @@ extension on Translations {
 			'currencies.search' => 'Search by name or by currency code',
 			'tags.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n, one: 'Label', other: 'Tags', ), 
 			'tags.form.name' => 'Tag name',
+			'tags.form.name_hint' => 'E.g.: Food',
+			'tags.form.forbidden_char_error' => 'Tag name cannot contain \';\'',
 			'tags.form.description' => 'Description',
 			'tags.select.title' => 'Select tags',
 			'tags.select.all' => 'All the tags',
@@ -3702,10 +3727,10 @@ extension on Translations {
 			'goals.delete_warning' => 'This action is irreversible. Categories and transactions referring to this goal will not be deleted',
 			'goals.form.new_title' => 'New Goal',
 			'goals.form.edit_title' => 'Edit Goal',
-			'goals.form.target_amount' => 'Target Amount',
-			'goals.form.initial_amount' => 'Initial Amount',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.target_amount' => 'Target Amount',
+			'goals.form.initial_amount' => 'Initial Amount',
 			'goals.form.name' => 'Name',
 			'goals.form.name_hint' => 'My Saving Goal',
 			'goals.form.create_success' => 'Goal created successfully',
@@ -3761,19 +3786,26 @@ extension on Translations {
 			'backup.import.manual_import.default_account' => 'Default account',
 			'backup.import.manual_import.remove_default_account' => 'Remove default account',
 			'backup.import.manual_import.default_category' => 'Default Category',
+			'backup.import.manual_import.default_tags' => 'Default Tags',
 			'backup.import.manual_import.select_a_column' => 'Select a column from the .csv',
+			'backup.import.manual_import.date_format' => 'Date format',
+			'backup.import.manual_import.note_column' => 'Note column',
+			'backup.import.manual_import.title_column' => 'Title column',
+			'backup.import.manual_import.tag_separator' => 'Tag separator in the .csv',
 			'backup.import.manual_import.steps.0' => 'Select your file',
-			'backup.import.manual_import.steps.1' => 'Column for quantity',
+			'backup.import.manual_import.steps.1' => 'Column for amount',
 			'backup.import.manual_import.steps.2' => 'Column for account',
 			'backup.import.manual_import.steps.3' => 'Column for category',
-			'backup.import.manual_import.steps.4' => 'Column for date',
-			'backup.import.manual_import.steps.5' => 'other columns',
-			'backup.import.manual_import.steps_descr.0' => 'Select a .csv file from your device. Make sure it has a first row that describes the name of each column',
+			'backup.import.manual_import.steps.4' => 'Column for tags',
+			'backup.import.manual_import.steps.5' => 'Column for date',
+			'backup.import.manual_import.steps.6' => 'Other columns',
+			'backup.import.manual_import.steps_descr.0' => 'Select a .csv file from your device. Make sure it has a first row that describes the name of each column.',
 			'backup.import.manual_import.steps_descr.1' => 'Select the column where the value of each transaction is specified. Use negative values for expenses and positive values for income.',
-			'backup.import.manual_import.steps_descr.2' => 'Select the column where the account to which each transaction belongs is specified. You can also select a default account in case we cannot find the account you want. If a default account is not specified, we will create one with the same name ',
-			'backup.import.manual_import.steps_descr.3' => 'Specify the column where the transaction category name is located. You must specify a default category so that we assign this category to transactions, in case the category cannot be found',
-			'backup.import.manual_import.steps_descr.4' => 'Select the column where the date of each transaction is specified. If not specified, transactions will be created with the current date',
-			'backup.import.manual_import.steps_descr.5' => 'Specifies the columns for other optional transaction attributes',
+			'backup.import.manual_import.steps_descr.2' => 'Select the column where the account to which each transaction belongs is specified. You can also select a default account in case we cannot find the account you want. If a default account is not specified, we will create one with the same name.',
+			'backup.import.manual_import.steps_descr.3' => 'Specify the column where the transaction category name is located. You must specify a default category so that we assign this category to transactions, in case the category cannot be found.',
+			'backup.import.manual_import.steps_descr.4' => 'Specify the column where the transaction tags are located. If not specified, transactions will be created with default tags.',
+			'backup.import.manual_import.steps_descr.5' => 'Select the column where the date of each transaction is specified. If not specified, transactions will be created with the current date.',
+			'backup.import.manual_import.steps_descr.6' => 'Specifies the columns for other optional transaction attributes.',
 			'backup.import.manual_import.success' => ({required Object x}) => 'Successfully imported ${x} transactions',
 			'backup.import.success' => 'Import performed successfully',
 			'backup.import.error' => 'Error importing file. Please contact developer via lozin.technologies@gmail.com',

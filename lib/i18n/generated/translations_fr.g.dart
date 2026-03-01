@@ -1025,6 +1025,8 @@ class _TranslationsTagsFormFr implements TranslationsTagsFormEn {
 
 	// Translations
 	@override String get name => 'Nom du tag';
+	@override String get name_hint => 'Ex.: Nourriture';
+	@override String get forbidden_char_error => 'Le nom de l\'étiquette ne peut pas contenir de \';\'';
 	@override String get description => 'Description';
 }
 
@@ -1630,22 +1632,29 @@ class _TranslationsBackupImportManualImportFr implements TranslationsBackupImpor
 	@override String get default_account => 'Compte par défaut';
 	@override String get remove_default_account => 'Supprimer le compte par défaut';
 	@override String get default_category => 'Catégorie par défaut';
+	@override String get default_tags => 'Étiquettes par défaut';
 	@override String get select_a_column => 'Sélectionnez une colonne du .csv';
+	@override String get date_format => 'Format de la date';
+	@override String get note_column => 'Colonne des notes';
+	@override String get title_column => 'Colonne des titres';
+	@override String get tag_separator => 'Séparateur d\'étiquettes dans le .csv';
 	@override List<String> get steps => [
 		'Sélectionnez votre fichier',
 		'Colonne pour le montant',
 		'Colonne pour le compte',
 		'Colonne pour la catégorie',
+		'Colonne pour les étiquettes',
 		'Colonne pour la date',
-		'autres colonnes',
+		'Autres colonnes',
 	];
 	@override List<String> get steps_descr => [
-		'Sélectionnez un fichier .csv depuis votre appareil. Assurez-vous qu\'il possède une première ligne décrivant le nom de chaque colonne',
+		'Sélectionnez un fichier .csv depuis votre appareil. Assurez-vous qu\'il possède une première ligne décrivant le nom de chaque colonne.',
 		'Sélectionnez la colonne où la valeur de chaque transaction est spécifiée. Utilisez des valeurs négatives pour les dépenses et positives pour les recettes.',
-		'Sélectionnez la colonne où est spécifié le compte auquel appartient chaque transaction. Vous pouvez également sélectionner un compte par défaut au cas où nous ne pourrions pas trouver le compte souhaité. Si aucun compte par défaut n\'est spécifié, nous en créerons un avec le même nom',
-		'Indiquez la colonne où se trouve le nom de la catégorie de la transaction. Vous devez spécifier une catégorie par défaut pour que nous l\'assignions aux transactions si la catégorie ne peut pas être trouvée',
-		'Sélectionnez la colonne où la date de chaque transaction est spécifiée. Si elle n\'est pas indiquée, les transactions seront créées avec la date actuelle',
-		'Indiquez les colonnes pour les autres attributs optionnels de la transaction',
+		'Sélectionnez la colonne où est spécifié le compte auquel appartient chaque transaction. Vous pouvez également sélectionner un compte par défaut au cas où nous ne pourrions pas trouver le compte souhaité. Si aucun compte par défaut n\'est spécifié, nous en créerons un avec le même nom.',
+		'Indiquez la colonne où se trouve le nom de la catégorie de la transaction. Vous devez spécifier une catégorie par défaut pour que nous l\'assignions aux transactions si la catégorie ne peut pas être trouvée.',
+		'Specifica la colonna in cui si trovano i tag delle transazioni. Se non specificata, le transazioni verranno create con i tag predefiniti.',
+		'Sélectionnez la colonne où la date de chaque transaction est spécifiée. Si elle n\'est pas indiquée, les transactions seront créées avec la date actuelle.',
+		'Indiquez les colonnes pour les autres attributs optionnels de la transaction.',
 	];
 	@override String success({required Object x}) => '${x} transactions importées avec succès';
 }
@@ -2215,6 +2224,8 @@ extension on TranslationsFr {
 			'currencies.search' => 'Rechercher par nom ou par code de devise',
 			'tags.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(n, one: 'Tag', other: 'Tags', ), 
 			'tags.form.name' => 'Nom du tag',
+			'tags.form.name_hint' => 'Ex.: Nourriture',
+			'tags.form.forbidden_char_error' => 'Le nom de l\'étiquette ne peut pas contenir de \';\'',
 			'tags.form.description' => 'Description',
 			'tags.select.title' => 'Sélectionnez des tags',
 			'tags.select.all' => 'Tous les tags',
@@ -2311,10 +2322,10 @@ extension on TranslationsFr {
 			'goals.delete_warning' => 'Cette action est irréversible. Les catégories et transactions liées à cet objectif ne seront pas supprimées',
 			'goals.form.new_title' => 'Nouvel objectif',
 			'goals.form.edit_title' => 'Modifier l\'objectif',
-			'goals.form.target_amount' => 'Montant cible',
-			'goals.form.initial_amount' => 'Montant initial',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.target_amount' => 'Montant cible',
+			'goals.form.initial_amount' => 'Montant initial',
 			'goals.form.name' => 'Nom',
 			'goals.form.name_hint' => 'Mon objectif d\'épargne',
 			'goals.form.create_success' => 'Objectif créé avec succès',
@@ -2370,19 +2381,26 @@ extension on TranslationsFr {
 			'backup.import.manual_import.default_account' => 'Compte par défaut',
 			'backup.import.manual_import.remove_default_account' => 'Supprimer le compte par défaut',
 			'backup.import.manual_import.default_category' => 'Catégorie par défaut',
+			'backup.import.manual_import.default_tags' => 'Étiquettes par défaut',
 			'backup.import.manual_import.select_a_column' => 'Sélectionnez une colonne du .csv',
+			'backup.import.manual_import.date_format' => 'Format de la date',
+			'backup.import.manual_import.note_column' => 'Colonne des notes',
+			'backup.import.manual_import.title_column' => 'Colonne des titres',
+			'backup.import.manual_import.tag_separator' => 'Séparateur d\'étiquettes dans le .csv',
 			'backup.import.manual_import.steps.0' => 'Sélectionnez votre fichier',
 			'backup.import.manual_import.steps.1' => 'Colonne pour le montant',
 			'backup.import.manual_import.steps.2' => 'Colonne pour le compte',
 			'backup.import.manual_import.steps.3' => 'Colonne pour la catégorie',
-			'backup.import.manual_import.steps.4' => 'Colonne pour la date',
-			'backup.import.manual_import.steps.5' => 'autres colonnes',
-			'backup.import.manual_import.steps_descr.0' => 'Sélectionnez un fichier .csv depuis votre appareil. Assurez-vous qu\'il possède une première ligne décrivant le nom de chaque colonne',
+			'backup.import.manual_import.steps.4' => 'Colonne pour les étiquettes',
+			'backup.import.manual_import.steps.5' => 'Colonne pour la date',
+			'backup.import.manual_import.steps.6' => 'Autres colonnes',
+			'backup.import.manual_import.steps_descr.0' => 'Sélectionnez un fichier .csv depuis votre appareil. Assurez-vous qu\'il possède une première ligne décrivant le nom de chaque colonne.',
 			'backup.import.manual_import.steps_descr.1' => 'Sélectionnez la colonne où la valeur de chaque transaction est spécifiée. Utilisez des valeurs négatives pour les dépenses et positives pour les recettes.',
-			'backup.import.manual_import.steps_descr.2' => 'Sélectionnez la colonne où est spécifié le compte auquel appartient chaque transaction. Vous pouvez également sélectionner un compte par défaut au cas où nous ne pourrions pas trouver le compte souhaité. Si aucun compte par défaut n\'est spécifié, nous en créerons un avec le même nom',
-			'backup.import.manual_import.steps_descr.3' => 'Indiquez la colonne où se trouve le nom de la catégorie de la transaction. Vous devez spécifier une catégorie par défaut pour que nous l\'assignions aux transactions si la catégorie ne peut pas être trouvée',
-			'backup.import.manual_import.steps_descr.4' => 'Sélectionnez la colonne où la date de chaque transaction est spécifiée. Si elle n\'est pas indiquée, les transactions seront créées avec la date actuelle',
-			'backup.import.manual_import.steps_descr.5' => 'Indiquez les colonnes pour les autres attributs optionnels de la transaction',
+			'backup.import.manual_import.steps_descr.2' => 'Sélectionnez la colonne où est spécifié le compte auquel appartient chaque transaction. Vous pouvez également sélectionner un compte par défaut au cas où nous ne pourrions pas trouver le compte souhaité. Si aucun compte par défaut n\'est spécifié, nous en créerons un avec le même nom.',
+			'backup.import.manual_import.steps_descr.3' => 'Indiquez la colonne où se trouve le nom de la catégorie de la transaction. Vous devez spécifier une catégorie par défaut pour que nous l\'assignions aux transactions si la catégorie ne peut pas être trouvée.',
+			'backup.import.manual_import.steps_descr.4' => 'Specifica la colonna in cui si trovano i tag delle transazioni. Se non specificata, le transazioni verranno create con i tag predefiniti.',
+			'backup.import.manual_import.steps_descr.5' => 'Sélectionnez la colonne où la date de chaque transaction est spécifiée. Si elle n\'est pas indiquée, les transactions seront créées avec la date actuelle.',
+			'backup.import.manual_import.steps_descr.6' => 'Indiquez les colonnes pour les autres attributs optionnels de la transaction.',
 			'backup.import.manual_import.success' => ({required Object x}) => '${x} transactions importées avec succès',
 			'backup.import.success' => 'Import réalisé avec succès',
 			'backup.import.error' => 'Erreur lors de l\'import du fichier. Veuillez contacter le développeur via lozin.technologies@gmail.com',

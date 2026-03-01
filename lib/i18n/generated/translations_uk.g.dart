@@ -1025,6 +1025,8 @@ class _TranslationsTagsFormUk implements TranslationsTagsFormEn {
 
 	// Translations
 	@override String get name => 'Назва тегу';
+	@override String get name_hint => 'Наприклад: Їжа';
+	@override String get forbidden_char_error => 'Назва мітки не може містити \';\'';
 	@override String get description => 'Опис';
 }
 
@@ -1632,12 +1634,18 @@ class _TranslationsBackupImportManualImportUk implements TranslationsBackupImpor
 	@override String get default_account => 'Типовий рахунок';
 	@override String get remove_default_account => 'Видалити типовий рахунок';
 	@override String get default_category => 'Типова категорія';
+	@override String get default_tags => 'Теги за замовчуванням';
 	@override String get select_a_column => 'Виберіть стовпець з файлу .csv';
+	@override String get date_format => 'Формат дати';
+	@override String get note_column => 'Колонка нотаток';
+	@override String get title_column => 'Колонка заголовків';
+	@override String get tag_separator => 'Розділювач тегів у .csv';
 	@override List<String> get steps => [
 		'Виберіть ваш файл',
 		'Стовпець для суми',
 		'Стовпець для рахунку',
 		'Стовпець для категорії',
+		'Стовпець для тегів',
 		'Стовпець для дати',
 		'інші стовпці',
 	];
@@ -1646,6 +1654,7 @@ class _TranslationsBackupImportManualImportUk implements TranslationsBackupImpor
 		'Виберіть стовпець, де вказано значення кожної транзакції. Використовуйте від\'ємні значення для витрат та позитивні значення для доходів.',
 		'Виберіть стовпець, де вказано рахунок, до якого належить кожна транзакція. Ви також можете вибрати типовий рахунок у випадку, якщо ми не зможемо знайти рахунок, який вам потрібен. Якщо типовий рахунок не вказано, ми створимо його з такою самою назвою',
 		'Вкажіть стовпець, де знаходиться назва категорії транзакції. Ви повинні вказати типову категорію, щоб ми призначили цю категорію транзакціям, у випадку, якщо категорія не може бути знайдена',
+		'Вкажіть стовпець, у якому розташовані теги транзакцій. Якщо його не вказати, транзакції будуть створені з тегами за замовчуванням.',
 		'Виберіть стовпець, де вказано дату кожної транзакції. Якщо не вказано, транзакції будуть створені з поточною датою',
 		'Вкажіть стовпці для інших необов\'язкових атрибутів транзакцій',
 	];
@@ -2217,6 +2226,8 @@ extension on TranslationsUk {
 			'currencies.search' => 'Пошук за назвою або кодом валюти',
 			'tags.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: 'Мітка', other: 'Теги', ), 
 			'tags.form.name' => 'Назва тегу',
+			'tags.form.name_hint' => 'Наприклад: Їжа',
+			'tags.form.forbidden_char_error' => 'Назва мітки не може містити \';\'',
 			'tags.form.description' => 'Опис',
 			'tags.select.title' => 'Вибрати теги',
 			'tags.select.all' => 'Усі теги',
@@ -2313,10 +2324,10 @@ extension on TranslationsUk {
 			'goals.delete_warning' => 'Ця дія є незворотною. Категорії та транзакції, пов\'язані з цією ціллю, не будуть видалені',
 			'goals.form.new_title' => 'Нова ціль',
 			'goals.form.edit_title' => 'Редагувати ціль',
-			'goals.form.target_amount' => 'Цільова сума',
-			'goals.form.initial_amount' => 'Початкова сума',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.target_amount' => 'Цільова сума',
+			'goals.form.initial_amount' => 'Початкова сума',
 			'goals.form.name' => 'Назва',
 			'goals.form.name_hint' => 'Моя ціль заощаджень',
 			'goals.form.create_success' => 'Ціль успішно створено',
@@ -2373,19 +2384,26 @@ extension on TranslationsUk {
 			'backup.import.manual_import.default_account' => 'Типовий рахунок',
 			'backup.import.manual_import.remove_default_account' => 'Видалити типовий рахунок',
 			'backup.import.manual_import.default_category' => 'Типова категорія',
+			'backup.import.manual_import.default_tags' => 'Теги за замовчуванням',
 			'backup.import.manual_import.select_a_column' => 'Виберіть стовпець з файлу .csv',
+			'backup.import.manual_import.date_format' => 'Формат дати',
+			'backup.import.manual_import.note_column' => 'Колонка нотаток',
+			'backup.import.manual_import.title_column' => 'Колонка заголовків',
+			'backup.import.manual_import.tag_separator' => 'Розділювач тегів у .csv',
 			'backup.import.manual_import.steps.0' => 'Виберіть ваш файл',
 			'backup.import.manual_import.steps.1' => 'Стовпець для суми',
 			'backup.import.manual_import.steps.2' => 'Стовпець для рахунку',
 			'backup.import.manual_import.steps.3' => 'Стовпець для категорії',
-			'backup.import.manual_import.steps.4' => 'Стовпець для дати',
-			'backup.import.manual_import.steps.5' => 'інші стовпці',
+			'backup.import.manual_import.steps.4' => 'Стовпець для тегів',
+			'backup.import.manual_import.steps.5' => 'Стовпець для дати',
+			'backup.import.manual_import.steps.6' => 'інші стовпці',
 			'backup.import.manual_import.steps_descr.0' => 'Виберіть файл .csv з вашого пристрою. Переконайтеся, що в ньому є перший рядок, який описує назву кожного стовпця',
 			'backup.import.manual_import.steps_descr.1' => 'Виберіть стовпець, де вказано значення кожної транзакції. Використовуйте від\'ємні значення для витрат та позитивні значення для доходів.',
 			'backup.import.manual_import.steps_descr.2' => 'Виберіть стовпець, де вказано рахунок, до якого належить кожна транзакція. Ви також можете вибрати типовий рахунок у випадку, якщо ми не зможемо знайти рахунок, який вам потрібен. Якщо типовий рахунок не вказано, ми створимо його з такою самою назвою',
 			'backup.import.manual_import.steps_descr.3' => 'Вкажіть стовпець, де знаходиться назва категорії транзакції. Ви повинні вказати типову категорію, щоб ми призначили цю категорію транзакціям, у випадку, якщо категорія не може бути знайдена',
-			'backup.import.manual_import.steps_descr.4' => 'Виберіть стовпець, де вказано дату кожної транзакції. Якщо не вказано, транзакції будуть створені з поточною датою',
-			'backup.import.manual_import.steps_descr.5' => 'Вкажіть стовпці для інших необов\'язкових атрибутів транзакцій',
+			'backup.import.manual_import.steps_descr.4' => 'Вкажіть стовпець, у якому розташовані теги транзакцій. Якщо його не вказати, транзакції будуть створені з тегами за замовчуванням.',
+			'backup.import.manual_import.steps_descr.5' => 'Виберіть стовпець, де вказано дату кожної транзакції. Якщо не вказано, транзакції будуть створені з поточною датою',
+			'backup.import.manual_import.steps_descr.6' => 'Вкажіть стовпці для інших необов\'язкових атрибутів транзакцій',
 			'backup.import.manual_import.success' => ({required Object x}) => 'Успішно імпортовано ${x} транзакцій',
 			'backup.import.success' => 'Імпорт виконано успішно',
 			'backup.import.error' => 'Помилка імпорту файлу. Будь ласка, зв\'яжіться з розробником за адресою lozin.technologies@gmail.com',

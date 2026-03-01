@@ -1025,6 +1025,8 @@ class _TranslationsTagsFormZhCn implements TranslationsTagsFormEn {
 
 	// Translations
 	@override String get name => '标签名';
+	@override String get name_hint => '例如：食物';
+	@override String get forbidden_char_error => '礼仪名称不能包含\';\'';
 	@override String get description => '描述';
 }
 
@@ -1632,12 +1634,18 @@ class _TranslationsBackupImportManualImportZhCn implements TranslationsBackupImp
 	@override String get default_account => '默认账户';
 	@override String get remove_default_account => '删除默认账户';
 	@override String get default_category => '默认类别';
+	@override String get default_tags => '默认标签';
 	@override String get select_a_column => '从 .csv 中选择一列';
+	@override String get date_format => '日期格式';
+	@override String get note_column => '备注列';
+	@override String get title_column => '标题列';
+	@override String get tag_separator => '.csv 中的標籤分隔符';
 	@override List<String> get steps => [
 		'选择您的文件',
 		'数额列',
 		'账户列',
 		'类别列',
+		'标签列',
 		'日期列',
 		'其它列',
 	];
@@ -1646,6 +1654,7 @@ class _TranslationsBackupImportManualImportZhCn implements TranslationsBackupImp
 		'选择每笔交易数额的列。负值表示支出，正值表示收入。',
 		'选择每笔交易所属账户的列。您也可以选择默认账户，以防我们找不到您想要的账户。如果未指定默认账户，我们将建立一个同名账户。',
 		'选择交易类别名称所在的列。您必须指定一个默认类别，以便我们在找不到此类别时，将默认类别分配给交易。',
+		'指定交易标签所在的列。如果未指定，将使用默认标签创建交易。',
 		'选择每笔交易日期的列。如果未指定，所有交易将使用当前日期。',
 		'选择其它交易属性的数据列',
 	];
@@ -2217,6 +2226,8 @@ extension on TranslationsZhCn {
 			'currencies.search' => '按名称或货币代码搜索',
 			'tags.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '标签', other: '标签', ), 
 			'tags.form.name' => '标签名',
+			'tags.form.name_hint' => '例如：食物',
+			'tags.form.forbidden_char_error' => '礼仪名称不能包含\';\'',
 			'tags.form.description' => '描述',
 			'tags.select.title' => '选择标签',
 			'tags.select.all' => '所有标签',
@@ -2313,10 +2324,10 @@ extension on TranslationsZhCn {
 			'goals.delete_warning' => '此操作不可逆。涉及此目标的类别和交易将不会被删除',
 			'goals.form.new_title' => '新目标',
 			'goals.form.edit_title' => '编辑目标',
-			'goals.form.target_amount' => '目标金额',
-			'goals.form.initial_amount' => '初始金额',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.target_amount' => '目标金额',
+			'goals.form.initial_amount' => '初始金额',
 			'goals.form.name' => '名称',
 			'goals.form.name_hint' => '我的储蓄目标',
 			'goals.form.create_success' => '目标创建成功',
@@ -2373,19 +2384,26 @@ extension on TranslationsZhCn {
 			'backup.import.manual_import.default_account' => '默认账户',
 			'backup.import.manual_import.remove_default_account' => '删除默认账户',
 			'backup.import.manual_import.default_category' => '默认类别',
+			'backup.import.manual_import.default_tags' => '默认标签',
 			'backup.import.manual_import.select_a_column' => '从 .csv 中选择一列',
+			'backup.import.manual_import.date_format' => '日期格式',
+			'backup.import.manual_import.note_column' => '备注列',
+			'backup.import.manual_import.title_column' => '标题列',
+			'backup.import.manual_import.tag_separator' => '.csv 中的標籤分隔符',
 			'backup.import.manual_import.steps.0' => '选择您的文件',
 			'backup.import.manual_import.steps.1' => '数额列',
 			'backup.import.manual_import.steps.2' => '账户列',
 			'backup.import.manual_import.steps.3' => '类别列',
-			'backup.import.manual_import.steps.4' => '日期列',
-			'backup.import.manual_import.steps.5' => '其它列',
+			'backup.import.manual_import.steps.4' => '标签列',
+			'backup.import.manual_import.steps.5' => '日期列',
+			'backup.import.manual_import.steps.6' => '其它列',
 			'backup.import.manual_import.steps_descr.0' => '从您的设备中选择一个 .csv 文件。确保它的第一行描述了每列的名称。',
 			'backup.import.manual_import.steps_descr.1' => '选择每笔交易数额的列。负值表示支出，正值表示收入。',
 			'backup.import.manual_import.steps_descr.2' => '选择每笔交易所属账户的列。您也可以选择默认账户，以防我们找不到您想要的账户。如果未指定默认账户，我们将建立一个同名账户。',
 			'backup.import.manual_import.steps_descr.3' => '选择交易类别名称所在的列。您必须指定一个默认类别，以便我们在找不到此类别时，将默认类别分配给交易。',
-			'backup.import.manual_import.steps_descr.4' => '选择每笔交易日期的列。如果未指定，所有交易将使用当前日期。',
-			'backup.import.manual_import.steps_descr.5' => '选择其它交易属性的数据列',
+			'backup.import.manual_import.steps_descr.4' => '指定交易标签所在的列。如果未指定，将使用默认标签创建交易。',
+			'backup.import.manual_import.steps_descr.5' => '选择每笔交易日期的列。如果未指定，所有交易将使用当前日期。',
+			'backup.import.manual_import.steps_descr.6' => '选择其它交易属性的数据列',
 			'backup.import.manual_import.success' => ({required Object x}) => '成功导入 ${x} 笔交易',
 			'backup.import.success' => '导入成功',
 			'backup.import.error' => '导入文件时发生错误。请通过 lozin.technologies@gmail.com 联系开发人员。',

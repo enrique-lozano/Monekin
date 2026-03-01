@@ -1025,6 +1025,8 @@ class _TranslationsTagsFormTr implements TranslationsTagsFormEn {
 
 	// Translations
 	@override String get name => 'Etiket adı';
+	@override String get name_hint => 'Örn.: Yemek';
+	@override String get forbidden_char_error => 'Etiket adı \';\' içeremez';
 	@override String get description => 'Açıklama';
 }
 
@@ -1632,20 +1634,27 @@ class _TranslationsBackupImportManualImportTr implements TranslationsBackupImpor
 	@override String get default_account => 'Varsayılan hesap';
 	@override String get remove_default_account => 'Varsayılan hesabı kaldır';
 	@override String get default_category => 'Varsayılan Kategori';
+	@override String get default_tags => 'Varsayılan Etiketler';
 	@override String get select_a_column => '.csv\'den bir sütun seçin';
+	@override String get date_format => 'Tarih formatı';
+	@override String get note_column => 'Not sütunu';
+	@override String get title_column => 'Başlık sütunu';
+	@override String get tag_separator => '.csv dosyasındaki etiket ayırıcı';
 	@override List<String> get steps => [
 		'Dosyanızı seçin',
 		'Miktar için sütun',
 		'Hesap için sütun',
 		'Kategori için sütun',
+		'Etiket sütunu',
 		'Tarih için sütun',
-		'diğer sütunlar',
+		'Diğer sütunlar',
 	];
 	@override List<String> get steps_descr => [
 		'Cihazınızdan bir .csv dosyası seçin. Her sütunun adını açıklayan bir ilk satıra sahip olduğundan emin olun',
 		'Her işlemin değerinin belirtildiği sütunu seçin. Giderler için negatif değerler ve gelirler için pozitif değerler kullanın.',
 		'Her işlemin ait olduğu hesabın belirtildiği sütunu seçin. İstediğiniz hesabı bulamamamız durumunda varsayılan bir hesap da seçebilirsiniz. Varsayılan bir hesap belirtilmezse, aynı adla bir tane oluşturacağız',
 		'İşlem kategorisi adının bulunduğu sütunu belirtin. Kategoriyi bulamamamız durumunda işlemlere bu kategoriyi atayabilmemiz için varsayılan bir kategori belirtmeniz gerekir',
+		'İşlem etiketlerinin bulunduğu sütunu belirtin. Belirtilmediği takdirde, işlemler varsayılan etiketlerle oluşturulacaktır.',
 		'Her işlemin tarihinin belirtildiği sütunu seçin. Belirtilmezse, işlemler mevcut tarihle oluşturulacaktır',
 		'Diğer isteğe bağlı işlem öznitelikleri için sütunları belirtir',
 	];
@@ -2217,6 +2226,8 @@ extension on TranslationsTr {
 			'currencies.search' => 'Adına veya para birimi koduna göre arayın',
 			'tags.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: 'Etiket', other: 'Etiketler', ), 
 			'tags.form.name' => 'Etiket adı',
+			'tags.form.name_hint' => 'Örn.: Yemek',
+			'tags.form.forbidden_char_error' => 'Etiket adı \';\' içeremez',
 			'tags.form.description' => 'Açıklama',
 			'tags.select.title' => 'Etiketleri seçin',
 			'tags.select.all' => 'Tüm etiketler',
@@ -2313,10 +2324,10 @@ extension on TranslationsTr {
 			'goals.delete_warning' => 'Bu işlem geri alınamaz. Bu hedefi referans alan kategoriler ve işlemler silinmeyecektir',
 			'goals.form.new_title' => 'Yeni Hedef',
 			'goals.form.edit_title' => 'Hedefi Düzenle',
-			'goals.form.target_amount' => 'Hedef Tutar',
-			'goals.form.initial_amount' => 'Başlangıç Tutarı',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.target_amount' => 'Hedef Tutar',
+			'goals.form.initial_amount' => 'Başlangıç Tutarı',
 			'goals.form.name' => 'İsim',
 			'goals.form.name_hint' => 'Tasarruf Hedefim',
 			'goals.form.create_success' => 'Hedef başarıyla oluşturuldu',
@@ -2373,19 +2384,26 @@ extension on TranslationsTr {
 			'backup.import.manual_import.default_account' => 'Varsayılan hesap',
 			'backup.import.manual_import.remove_default_account' => 'Varsayılan hesabı kaldır',
 			'backup.import.manual_import.default_category' => 'Varsayılan Kategori',
+			'backup.import.manual_import.default_tags' => 'Varsayılan Etiketler',
 			'backup.import.manual_import.select_a_column' => '.csv\'den bir sütun seçin',
+			'backup.import.manual_import.date_format' => 'Tarih formatı',
+			'backup.import.manual_import.note_column' => 'Not sütunu',
+			'backup.import.manual_import.title_column' => 'Başlık sütunu',
+			'backup.import.manual_import.tag_separator' => '.csv dosyasındaki etiket ayırıcı',
 			'backup.import.manual_import.steps.0' => 'Dosyanızı seçin',
 			'backup.import.manual_import.steps.1' => 'Miktar için sütun',
 			'backup.import.manual_import.steps.2' => 'Hesap için sütun',
 			'backup.import.manual_import.steps.3' => 'Kategori için sütun',
-			'backup.import.manual_import.steps.4' => 'Tarih için sütun',
-			'backup.import.manual_import.steps.5' => 'diğer sütunlar',
+			'backup.import.manual_import.steps.4' => 'Etiket sütunu',
+			'backup.import.manual_import.steps.5' => 'Tarih için sütun',
+			'backup.import.manual_import.steps.6' => 'Diğer sütunlar',
 			'backup.import.manual_import.steps_descr.0' => 'Cihazınızdan bir .csv dosyası seçin. Her sütunun adını açıklayan bir ilk satıra sahip olduğundan emin olun',
 			'backup.import.manual_import.steps_descr.1' => 'Her işlemin değerinin belirtildiği sütunu seçin. Giderler için negatif değerler ve gelirler için pozitif değerler kullanın.',
 			'backup.import.manual_import.steps_descr.2' => 'Her işlemin ait olduğu hesabın belirtildiği sütunu seçin. İstediğiniz hesabı bulamamamız durumunda varsayılan bir hesap da seçebilirsiniz. Varsayılan bir hesap belirtilmezse, aynı adla bir tane oluşturacağız',
 			'backup.import.manual_import.steps_descr.3' => 'İşlem kategorisi adının bulunduğu sütunu belirtin. Kategoriyi bulamamamız durumunda işlemlere bu kategoriyi atayabilmemiz için varsayılan bir kategori belirtmeniz gerekir',
-			'backup.import.manual_import.steps_descr.4' => 'Her işlemin tarihinin belirtildiği sütunu seçin. Belirtilmezse, işlemler mevcut tarihle oluşturulacaktır',
-			'backup.import.manual_import.steps_descr.5' => 'Diğer isteğe bağlı işlem öznitelikleri için sütunları belirtir',
+			'backup.import.manual_import.steps_descr.4' => 'İşlem etiketlerinin bulunduğu sütunu belirtin. Belirtilmediği takdirde, işlemler varsayılan etiketlerle oluşturulacaktır.',
+			'backup.import.manual_import.steps_descr.5' => 'Her işlemin tarihinin belirtildiği sütunu seçin. Belirtilmezse, işlemler mevcut tarihle oluşturulacaktır',
+			'backup.import.manual_import.steps_descr.6' => 'Diğer isteğe bağlı işlem öznitelikleri için sütunları belirtir',
 			'backup.import.manual_import.success' => ({required Object x}) => '${x} işlem başarıyla içe aktarıldı',
 			'backup.import.success' => 'İçe aktarma başarıyla gerçekleştirildi',
 			'backup.import.error' => 'Dosya içe aktarılırken hata oluştu. Lütfen lozin.technologies@gmail.com adresinden geliştirici ile iletişime geçin',

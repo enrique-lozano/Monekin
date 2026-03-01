@@ -1025,6 +1025,8 @@ class _TranslationsTagsFormIt implements TranslationsTagsFormEn {
 
 	// Translations
 	@override String get name => 'Nome etichetta';
+	@override String get name_hint => 'Es.: Cibo';
+	@override String get forbidden_char_error => 'Il nome dell\'etichetta non può contenere \';\'';
 	@override String get description => 'Descrizione';
 }
 
@@ -1632,20 +1634,27 @@ class _TranslationsBackupImportManualImportIt implements TranslationsBackupImpor
 	@override String get default_account => 'Conto predefinito';
 	@override String get remove_default_account => 'Rimuovi conto predefinito';
 	@override String get default_category => 'Categoria predefinita';
+	@override String get default_tags => 'Tag predefiniti';
 	@override String get select_a_column => 'Seleziona una colonna dal .csv';
+	@override String get date_format => 'Formato data';
+	@override String get note_column => 'Colonna note';
+	@override String get title_column => 'Colonna titolo';
+	@override String get tag_separator => 'Separatore di tag nel file .csv';
 	@override List<String> get steps => [
 		'Seleziona il tuo file',
 		'Colonna per la quantità',
 		'Colonna per il conto',
 		'Colonna per la categoria',
+		'Colonna per i tag',
 		'Colonna per la data',
-		'altre colonne',
+		'Altre colonne',
 	];
 	@override List<String> get steps_descr => [
 		'Seleziona un file .csv dal tuo dispositivo. Assicurati che abbia una prima riga che descriva il nome di ciascuna colonna',
 		'Seleziona la colonna in cui è specificato il valore di ogni transazione. Usa valori negativi per le spese e valori positivi per le entrate.',
 		'Seleziona la colonna in cui è specificato il conto a cui appartiene ogni transazione. Puoi anche selezionare un conto predefinito nel caso in cui non riusciamo a trovare il conto che desideri. Se non viene specificato un conto predefinito, ne creeremo uno con lo stesso nome',
 		'Specifica la colonna in cui si trova il nome della categoria della transazione. Devi specificare una categoria predefinita in modo da assegnare questa categoria alle transazioni, nel caso in cui la categoria non possa essere trovata',
+		'Specifica la colonna in cui si trovano i tag delle transazioni. Se non specificata, le transazioni verranno create con i tag predefiniti.',
 		'Seleziona la colonna in cui è specificata la data di ogni transazione. Se non specificato, le transazioni verranno create con la data attuale',
 		'Specifica le colonne per altri attributi opzionali della transazione',
 	];
@@ -2217,6 +2226,8 @@ extension on TranslationsIt {
 			'currencies.search' => 'Cerca per nome o per codice valuta',
 			'tags.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n, one: 'Etichetta', other: 'Etichette', ), 
 			'tags.form.name' => 'Nome etichetta',
+			'tags.form.name_hint' => 'Es.: Cibo',
+			'tags.form.forbidden_char_error' => 'Il nome dell\'etichetta non può contenere \';\'',
 			'tags.form.description' => 'Descrizione',
 			'tags.select.title' => 'Seleziona etichette',
 			'tags.select.all' => 'Tutte le etichette',
@@ -2313,10 +2324,10 @@ extension on TranslationsIt {
 			'goals.delete_warning' => 'Questa azione è irreversibile. Le categorie e le transazioni riferite a questo obiettivo non verranno eliminate',
 			'goals.form.new_title' => 'Nuovo obiettivo',
 			'goals.form.edit_title' => 'Modifica obiettivo',
-			'goals.form.target_amount' => 'Importo obiettivo',
-			'goals.form.initial_amount' => 'Importo iniziale',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.target_amount' => 'Importo obiettivo',
+			'goals.form.initial_amount' => 'Importo iniziale',
 			'goals.form.name' => 'Nome',
 			'goals.form.name_hint' => 'Il mio obiettivo di risparmio',
 			'goals.form.create_success' => 'Obiettivo creato con successo',
@@ -2373,19 +2384,26 @@ extension on TranslationsIt {
 			'backup.import.manual_import.default_account' => 'Conto predefinito',
 			'backup.import.manual_import.remove_default_account' => 'Rimuovi conto predefinito',
 			'backup.import.manual_import.default_category' => 'Categoria predefinita',
+			'backup.import.manual_import.default_tags' => 'Tag predefiniti',
 			'backup.import.manual_import.select_a_column' => 'Seleziona una colonna dal .csv',
+			'backup.import.manual_import.date_format' => 'Formato data',
+			'backup.import.manual_import.note_column' => 'Colonna note',
+			'backup.import.manual_import.title_column' => 'Colonna titolo',
+			'backup.import.manual_import.tag_separator' => 'Separatore di tag nel file .csv',
 			'backup.import.manual_import.steps.0' => 'Seleziona il tuo file',
 			'backup.import.manual_import.steps.1' => 'Colonna per la quantità',
 			'backup.import.manual_import.steps.2' => 'Colonna per il conto',
 			'backup.import.manual_import.steps.3' => 'Colonna per la categoria',
-			'backup.import.manual_import.steps.4' => 'Colonna per la data',
-			'backup.import.manual_import.steps.5' => 'altre colonne',
+			'backup.import.manual_import.steps.4' => 'Colonna per i tag',
+			'backup.import.manual_import.steps.5' => 'Colonna per la data',
+			'backup.import.manual_import.steps.6' => 'Altre colonne',
 			'backup.import.manual_import.steps_descr.0' => 'Seleziona un file .csv dal tuo dispositivo. Assicurati che abbia una prima riga che descriva il nome di ciascuna colonna',
 			'backup.import.manual_import.steps_descr.1' => 'Seleziona la colonna in cui è specificato il valore di ogni transazione. Usa valori negativi per le spese e valori positivi per le entrate.',
 			'backup.import.manual_import.steps_descr.2' => 'Seleziona la colonna in cui è specificato il conto a cui appartiene ogni transazione. Puoi anche selezionare un conto predefinito nel caso in cui non riusciamo a trovare il conto che desideri. Se non viene specificato un conto predefinito, ne creeremo uno con lo stesso nome',
 			'backup.import.manual_import.steps_descr.3' => 'Specifica la colonna in cui si trova il nome della categoria della transazione. Devi specificare una categoria predefinita in modo da assegnare questa categoria alle transazioni, nel caso in cui la categoria non possa essere trovata',
-			'backup.import.manual_import.steps_descr.4' => 'Seleziona la colonna in cui è specificata la data di ogni transazione. Se non specificato, le transazioni verranno create con la data attuale',
-			'backup.import.manual_import.steps_descr.5' => 'Specifica le colonne per altri attributi opzionali della transazione',
+			'backup.import.manual_import.steps_descr.4' => 'Specifica la colonna in cui si trovano i tag delle transazioni. Se non specificata, le transazioni verranno create con i tag predefiniti.',
+			'backup.import.manual_import.steps_descr.5' => 'Seleziona la colonna in cui è specificata la data di ogni transazione. Se non specificato, le transazioni verranno create con la data attuale',
+			'backup.import.manual_import.steps_descr.6' => 'Specifica le colonne per altri attributi opzionali della transazione',
 			'backup.import.manual_import.success' => ({required Object x}) => '${x} transazioni importate con successo',
 			'backup.import.success' => 'Importazione eseguita con successo',
 			'backup.import.error' => 'Errore durante l\'importazione del file. Contatta lo sviluppatore tramite lozin.technologies@gmail.com',

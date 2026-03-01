@@ -581,6 +581,8 @@
     },
     "FORM": {
       "name": "Címke neve",
+      "name-hint": "Pl.: Étel",
+      "forbidden-char-error": "A címke neve nem tartalmazhat ';' karaktert",
       "description": "Leírás"
     },
     "SELECT": {
@@ -787,20 +789,27 @@
         "defaultAccount": "Alapértelm. számla",
         "removeDefaultAccount": "Alapértelmezett számla törlése",
         "defaultCategory": "Alapértelm. kategória",
+        "defaultTags": "Alapértelmezett címkék",
         "select-a-column": "Válasszon ki egy oszlopot a .csv fájlból",
+        "date-format": "Dátumformátum",
+        "note-column": "Megjegyzés oszlop",
+        "title-column": "Cím oszlop",
+        "tag-separator": "Címkeelválasztó a .csv fájlban",
         "steps": [
           "Fájl kiválasztása",
           "Mennyiség oszlop",
           "Számlaoszlop",
           "Kategória oszlop",
+          "Címkék oszlopa",
           "Dátum oszlop",
-          "egyéb oszlopok"
+          "Egyéb oszlopok"
         ],
         "steps-descr": [
           "Válasszon ki egy .csv fájlt az eszközről. Győződjön meg arról, hogy van egy első sora, amely leírja az egyes oszlopok nevét.",
           "Válassza ki azt az oszlopot, amelyben az egyes tranzakciók dátuma meg van adva. Ha nincs megadva, a tranzakciók az aktuális dátummal jönnek létre. Válassza ki azt az oszlopot, ahol az egyes tranzakciók értéke meg van adva. Használjon negatív értékeket a kiadásokhoz és pozitív értékeket a bevételekhez.",
           "Válassza ki azt az oszlopot, amelyben meg van adva az a számla, amelyhez az egyes tranzakciók tartoznak. Kiválaszthat egy alapértelmezett fiókot is arra az esetre, ha nem találnánk a kívánt fiókot. Ha nincs megadva alapértelmezett fiók, akkor létrehozunk egyet ugyanazzal a névvel. ",
           "Adja meg azt az oszlopot, ahol a tranzakciókategória neve található. Meg kell adnia egy alapértelmezett kategóriát, hogy ezt a kategóriát rendeljük hozzá a tranzakciókhoz, ha a kategória nem található.",
+          "Adja meg azt az oszlopot, ahol a tranzakciós címkék találhatók. Ha nincs megadva, a tranzakciók az alapértelmezett címkékkel jönnek létre.",
           "Válassza ki azt az oszlopot, amelyben az egyes tranzakciók dátuma meg van adva. Ha nincs megadva, a tranzakciók az aktuális dátummal jönnek létre.",
           "Az egyéb opcionális tranzakciós attribútumok oszlopainak meghatározása"
         ],

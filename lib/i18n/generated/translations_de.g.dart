@@ -1025,6 +1025,8 @@ class _TranslationsTagsFormDe implements TranslationsTagsFormEn {
 
 	// Translations
 	@override String get name => 'Schlagworte-Name';
+	@override String get name_hint => 'Z.B.: Essen';
+	@override String get forbidden_char_error => 'Tag-Name darf kein \';\' enthalten';
 	@override String get description => 'Beschreibung';
 }
 
@@ -1632,22 +1634,29 @@ class _TranslationsBackupImportManualImportDe implements TranslationsBackupImpor
 	@override String get default_account => 'Standardkonto';
 	@override String get remove_default_account => 'Standardkonto entfernen';
 	@override String get default_category => 'Standardkategorie';
+	@override String get default_tags => 'Standardtags';
 	@override String get select_a_column => 'Wählen eine Spalte aus der CSV-Datei aus';
+	@override String get date_format => 'Datumsformat';
+	@override String get note_column => 'Notizspalte';
+	@override String get title_column => 'Titelsspalte';
+	@override String get tag_separator => 'Tag-Trennzeichen in der CSV-Datei';
 	@override List<String> get steps => [
 		'Wähle Deine Datei aus',
 		'Spalte für Menge',
 		'Spalte für Konto',
 		'Spalte für Kategorie',
+		'Spalte für Tags',
 		'Spalte für Datum',
-		'andere Spalten',
+		'Andere Spalten',
 	];
 	@override List<String> get steps_descr => [
-		'Wähle eine CSV-Datei von Deinem Gerät aus. Stelle sicher, dass die erste Zeile den Namen der einzelnen Spalten enthält',
-		'Wählen die Spalte aus, in der der Wert jeder Transaktion angegeben ist. Verwende negative Werte für Ausgaben und positive Werte für Einnahmen.',
-		'Wähle die Spalte aus, in der das Konto angegeben ist, zu dem jede Transaktion gehört. Du kannst auch ein Standardkonto auswählen, falls wir das von Dir gewünschte Konto nicht finden können. Wenn Du kein Standardkonto angibst, wird eines mit demselben Namen erstellt ',
-		'Gebe die Spalte an, in der sich der Name der Transaktionskategorie befindet. Du musst eine Standardkategorie angeben, damit wir diese Kategorie den Transaktionen zuordnen können, falls die Kategorie nicht gefunden werden kann.',
-		'Wähle die Spalte aus, in der das Datum jeder Transaktion angegeben ist. Wird nichts angegeben, werden die Transaktionen mit dem aktuellen Datum erstellt.',
-		'Gibt die Spalten für andere optionale Transaktionsattribute an',
+		'Wähl eine CSV-Datei von Deinem Gerät aus. Stelle sicher, dass die erste Zeile den Namen der einzelnen Spalten enthält.',
+		'Wähl die Spalte aus, in der der Wert jeder Transaktion angegeben ist. Verwend negative Werte für Ausgaben und positive Werte für Einnahmen.',
+		'Wähl die Spalte aus, in der das Konto angegeben ist, zu dem jede Transaktion gehört. Du kannst auch ein Standardkonto auswählen, falls wir das von Dir gewünschte Konto nicht finden können. Wenn Du kein Standardkonto angibst, wird eines mit demselben Namen erstellt.',
+		'Gib die Spalte an, in der sich der Name der Transaktionskategorie befindet. Du musst eine Standardkategorie angeben, damit wir diese Kategorie den Transaktionen zuordnen können, falls die Kategorie nicht gefunden werden kann.',
+		'Gib die Spalte an, wo die Transaktions-Tags stehen. Wird nichts angegeben, werden Transaktionen mit Standard-Tags erstellt.',
+		'Wähl die Spalte aus, in der das Datum jeder Transaktion angegeben ist. Wird nichts angegeben, werden die Transaktionen mit dem aktuellen Datum erstellt.',
+		'Gib die Spalten für andere optionale Transaktionsattribute an.',
 	];
 	@override String success({required Object x}) => 'Erfolgreich ${x} Transaktionen importiert';
 }
@@ -2217,6 +2226,8 @@ extension on TranslationsDe {
 			'currencies.search' => 'Suche nach Name oder Währungscode',
 			'tags.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('de'))(n, one: 'Label', other: 'Schlagworte', ), 
 			'tags.form.name' => 'Schlagworte-Name',
+			'tags.form.name_hint' => 'Z.B.: Essen',
+			'tags.form.forbidden_char_error' => 'Tag-Name darf kein \';\' enthalten',
 			'tags.form.description' => 'Beschreibung',
 			'tags.select.title' => 'Schlagworte auswählen',
 			'tags.select.all' => 'Alle Schlagworte',
@@ -2313,10 +2324,10 @@ extension on TranslationsDe {
 			'goals.delete_warning' => 'Diese Aktion ist unwiderruflich. Kategorien und Transaktionen, die sich auf dieses Ziel beziehen, werden nicht gelöscht.',
 			'goals.form.new_title' => 'Neues Ziel',
 			'goals.form.edit_title' => 'Ziel bearbeiten',
-			'goals.form.target_amount' => 'Zielbetrag',
-			'goals.form.initial_amount' => 'Anfangsbetrag',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.target_amount' => 'Zielbetrag',
+			'goals.form.initial_amount' => 'Anfangsbetrag',
 			'goals.form.name' => 'Name',
 			'goals.form.name_hint' => 'Mein Sparziel',
 			'goals.form.create_success' => 'Ziel erfolgreich erstellt',
@@ -2373,19 +2384,26 @@ extension on TranslationsDe {
 			'backup.import.manual_import.default_account' => 'Standardkonto',
 			'backup.import.manual_import.remove_default_account' => 'Standardkonto entfernen',
 			'backup.import.manual_import.default_category' => 'Standardkategorie',
+			'backup.import.manual_import.default_tags' => 'Standardtags',
 			'backup.import.manual_import.select_a_column' => 'Wählen eine Spalte aus der CSV-Datei aus',
+			'backup.import.manual_import.date_format' => 'Datumsformat',
+			'backup.import.manual_import.note_column' => 'Notizspalte',
+			'backup.import.manual_import.title_column' => 'Titelsspalte',
+			'backup.import.manual_import.tag_separator' => 'Tag-Trennzeichen in der CSV-Datei',
 			'backup.import.manual_import.steps.0' => 'Wähle Deine Datei aus',
 			'backup.import.manual_import.steps.1' => 'Spalte für Menge',
 			'backup.import.manual_import.steps.2' => 'Spalte für Konto',
 			'backup.import.manual_import.steps.3' => 'Spalte für Kategorie',
-			'backup.import.manual_import.steps.4' => 'Spalte für Datum',
-			'backup.import.manual_import.steps.5' => 'andere Spalten',
-			'backup.import.manual_import.steps_descr.0' => 'Wähle eine CSV-Datei von Deinem Gerät aus. Stelle sicher, dass die erste Zeile den Namen der einzelnen Spalten enthält',
-			'backup.import.manual_import.steps_descr.1' => 'Wählen die Spalte aus, in der der Wert jeder Transaktion angegeben ist. Verwende negative Werte für Ausgaben und positive Werte für Einnahmen.',
-			'backup.import.manual_import.steps_descr.2' => 'Wähle die Spalte aus, in der das Konto angegeben ist, zu dem jede Transaktion gehört. Du kannst auch ein Standardkonto auswählen, falls wir das von Dir gewünschte Konto nicht finden können. Wenn Du kein Standardkonto angibst, wird eines mit demselben Namen erstellt ',
-			'backup.import.manual_import.steps_descr.3' => 'Gebe die Spalte an, in der sich der Name der Transaktionskategorie befindet. Du musst eine Standardkategorie angeben, damit wir diese Kategorie den Transaktionen zuordnen können, falls die Kategorie nicht gefunden werden kann.',
-			'backup.import.manual_import.steps_descr.4' => 'Wähle die Spalte aus, in der das Datum jeder Transaktion angegeben ist. Wird nichts angegeben, werden die Transaktionen mit dem aktuellen Datum erstellt.',
-			'backup.import.manual_import.steps_descr.5' => 'Gibt die Spalten für andere optionale Transaktionsattribute an',
+			'backup.import.manual_import.steps.4' => 'Spalte für Tags',
+			'backup.import.manual_import.steps.5' => 'Spalte für Datum',
+			'backup.import.manual_import.steps.6' => 'Andere Spalten',
+			'backup.import.manual_import.steps_descr.0' => 'Wähl eine CSV-Datei von Deinem Gerät aus. Stelle sicher, dass die erste Zeile den Namen der einzelnen Spalten enthält.',
+			'backup.import.manual_import.steps_descr.1' => 'Wähl die Spalte aus, in der der Wert jeder Transaktion angegeben ist. Verwend negative Werte für Ausgaben und positive Werte für Einnahmen.',
+			'backup.import.manual_import.steps_descr.2' => 'Wähl die Spalte aus, in der das Konto angegeben ist, zu dem jede Transaktion gehört. Du kannst auch ein Standardkonto auswählen, falls wir das von Dir gewünschte Konto nicht finden können. Wenn Du kein Standardkonto angibst, wird eines mit demselben Namen erstellt.',
+			'backup.import.manual_import.steps_descr.3' => 'Gib die Spalte an, in der sich der Name der Transaktionskategorie befindet. Du musst eine Standardkategorie angeben, damit wir diese Kategorie den Transaktionen zuordnen können, falls die Kategorie nicht gefunden werden kann.',
+			'backup.import.manual_import.steps_descr.4' => 'Gib die Spalte an, wo die Transaktions-Tags stehen. Wird nichts angegeben, werden Transaktionen mit Standard-Tags erstellt.',
+			'backup.import.manual_import.steps_descr.5' => 'Wähl die Spalte aus, in der das Datum jeder Transaktion angegeben ist. Wird nichts angegeben, werden die Transaktionen mit dem aktuellen Datum erstellt.',
+			'backup.import.manual_import.steps_descr.6' => 'Gib die Spalten für andere optionale Transaktionsattribute an.',
 			'backup.import.manual_import.success' => ({required Object x}) => 'Erfolgreich ${x} Transaktionen importiert',
 			'backup.import.success' => 'Der Import wurde erfolgreich durchgeführt',
 			'backup.import.error' => 'Fehler beim Importieren der Datei. Bitte kontaktiere den Entwickler lozin.technologies@gmail.com',
