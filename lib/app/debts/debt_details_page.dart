@@ -159,7 +159,8 @@ class DebtDetailsPage extends StatelessWidget {
         final remainingAmount = data.remaining;
         final totalAmount = data.total;
         final collectedAmount = totalAmount - remainingAmount;
-        final progress = collectedAmount / totalAmount;
+        final progress =
+            totalAmount <= 0 ? 0.0 : collectedAmount / totalAmount;
 
         final color = debt.type.color(context);
         final int? daysLeft = debt.endDate?.difference(DateTime.now()).inDays;
