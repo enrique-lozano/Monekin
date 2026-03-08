@@ -316,6 +316,7 @@
     "delete.multiple.warning-message": "Diese Aktion ist irreversibel und wird entfernt {{ x }} Transaktionen. ",
     "delete.multiple.success": "{{x}} Transaktionen korrekt gelöscht",
     "details": "Bewegungsdetails",
+    "select": "Wählen Sie eine Transaktion aus",
     "NEXT-PAYMENTS": {
       "accept": "Akzeptieren",
       "skip": "Überspringen",
@@ -757,7 +758,6 @@
       "step_details": "Einzelheiten",
       "from_transaction": {
         "title": "Aus einer Transaktion",
-        "select": "Wählen Sie eine Transaktion aus",
         "tap_to_select": "Tippen Sie, um eine Transaktion auszuwählen"
       },
       "from_amount": {
@@ -812,7 +812,7 @@
         "creating": "Sie erstellen eine Transaktion, die mit der Schuld <b>{{ name }}</b> verknüpft ist"
       },
       "unlink_transaction": {
-        "title": "Von Schulden trennen?",
+        "title": "Von Schulden trennen",
         "warning_text": "Diese Transaktion wird nicht mehr mit dieser Schuld verknüpft sein.",
         "success": "Transaktion von Schulden getrennt"
       },

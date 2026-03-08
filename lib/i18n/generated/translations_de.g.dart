@@ -275,6 +275,7 @@ class _TranslationsTransactionDe implements TranslationsTransactionEn {
 	@override String delete_multiple_warning_message({required Object x}) => 'Diese Aktion ist irreversibel und wird entfernt ${x} Transaktionen. ';
 	@override String delete_multiple_success({required Object x}) => '${x} Transaktionen korrekt gelöscht';
 	@override String get details => 'Bewegungsdetails';
+	@override String get select => 'Wählen Sie eine Transaktion aus';
 	@override late final _TranslationsTransactionNextPaymentsDe next_payments = _TranslationsTransactionNextPaymentsDe._(_root);
 	@override late final _TranslationsTransactionListDe list = _TranslationsTransactionListDe._(_root);
 	@override late final _TranslationsTransactionFiltersDe filters = _TranslationsTransactionFiltersDe._(_root);
@@ -1731,7 +1732,6 @@ class _TranslationsDebtsFormFromTransactionDe implements TranslationsDebtsFormFr
 
 	// Translations
 	@override String get title => 'Aus einer Transaktion';
-	@override String get select => 'Wählen Sie eine Transaktion aus';
 	@override String get tap_to_select => 'Tippen Sie, um eine Transaktion auszuwählen';
 }
 
@@ -1802,7 +1802,7 @@ class _TranslationsDebtsActionsUnlinkTransactionDe implements TranslationsDebtsA
 	final TranslationsDe _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Von Schulden trennen?';
+	@override String get title => 'Von Schulden trennen';
 	@override String get warning_text => 'Diese Transaktion wird nicht mehr mit dieser Schuld verknüpft sein.';
 	@override String get success => 'Transaktion von Schulden getrennt';
 }
@@ -2240,6 +2240,7 @@ extension on TranslationsDe {
 			'transaction.delete_multiple_warning_message' => ({required Object x}) => 'Diese Aktion ist irreversibel und wird entfernt ${x} Transaktionen. ',
 			'transaction.delete_multiple_success' => ({required Object x}) => '${x} Transaktionen korrekt gelöscht',
 			'transaction.details' => 'Bewegungsdetails',
+			'transaction.select' => 'Wählen Sie eine Transaktion aus',
 			'transaction.next_payments.accept' => 'Akzeptieren',
 			'transaction.next_payments.skip' => 'Überspringen',
 			'transaction.next_payments.skip_success' => 'Transaktion erfolgreich übersprungen',
@@ -2523,9 +2524,9 @@ extension on TranslationsDe {
 			'goals.form.new_title' => 'Neues Ziel',
 			'goals.form.edit_title' => 'Ziel bearbeiten',
 			'goals.form.target_amount' => 'Zielbetrag',
-			'goals.form.initial_amount' => 'Anfangsbetrag',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.initial_amount' => 'Anfangsbetrag',
 			'goals.form.name' => 'Name',
 			'goals.form.name_hint' => 'Mein Sparziel',
 			'goals.form.create_success' => 'Ziel erfolgreich erstellt',
@@ -2556,7 +2557,6 @@ extension on TranslationsDe {
 			'debts.form.step_initial_value' => 'Anfangswert',
 			'debts.form.step_details' => 'Einzelheiten',
 			'debts.form.from_transaction.title' => 'Aus einer Transaktion',
-			'debts.form.from_transaction.select' => 'Wählen Sie eine Transaktion aus',
 			'debts.form.from_transaction.tap_to_select' => 'Tippen Sie, um eine Transaktion auszuwählen',
 			'debts.form.from_amount.title' => 'Ab einem Anfangsbetrag',
 			'debts.form.from_amount.description' => 'Dieser Betrag wird in der Statistik nicht als Aufwand/Ertrag berücksichtigt. Es wird zur Berechnung der Salden und des Nettovermögens verwendet',
@@ -2588,7 +2588,7 @@ extension on TranslationsDe {
 			'debts.actions.link_transaction.description' => 'Wählen Sie einen vorhandenen Datensatz aus, um ihn mit dieser Schuld zu verknüpfen',
 			'debts.actions.link_transaction.success' => 'Mit Schulden verbundene Transaktion',
 			'debts.actions.link_transaction.creating' => ({required Object name}) => 'Sie erstellen eine Transaktion, die mit der Schuld <b>${name}</b> verknüpft ist',
-			'debts.actions.unlink_transaction.title' => 'Von Schulden trennen?',
+			'debts.actions.unlink_transaction.title' => 'Von Schulden trennen',
 			'debts.actions.unlink_transaction.warning_text' => 'Diese Transaktion wird nicht mehr mit dieser Schuld verknüpft sein.',
 			'debts.actions.unlink_transaction.success' => 'Transaktion von Schulden getrennt',
 			'debts.actions.new_transaction.title' => 'Neue Transaktion hinzufügen',

@@ -548,6 +548,9 @@ class TranslationsTransactionEn {
 	/// en: 'Movement details'
 	String get details => 'Movement details';
 
+	/// en: 'Select a transaction'
+	String get select => 'Select a transaction';
+
 	late final TranslationsTransactionNextPaymentsEn next_payments = TranslationsTransactionNextPaymentsEn._(_root);
 	late final TranslationsTransactionListEn list = TranslationsTransactionListEn._(_root);
 	late final TranslationsTransactionFiltersEn filters = TranslationsTransactionFiltersEn._(_root);
@@ -3046,9 +3049,6 @@ class TranslationsDebtsFormFromTransactionEn {
 	/// en: 'From a transaction'
 	String get title => 'From a transaction';
 
-	/// en: 'Select a transaction'
-	String get select => 'Select a transaction';
-
 	/// en: 'Tap to select a transaction'
 	String get tap_to_select => 'Tap to select a transaction';
 }
@@ -3151,8 +3151,8 @@ class TranslationsDebtsActionsUnlinkTransactionEn {
 
 	// Translations
 
-	/// en: 'Unlink from debt?'
-	String get title => 'Unlink from debt?';
+	/// en: 'Unlink from debt'
+	String get title => 'Unlink from debt';
 
 	/// en: 'This transaction will no longer be associated with this debt.'
 	String get warning_text => 'This transaction will no longer be associated with this debt.';
@@ -3723,6 +3723,7 @@ extension on Translations {
 			'transaction.delete_multiple_warning_message' => ({required Object x}) => 'This action is irreversible and will remove ${x} transactions. The current balance of your accounts and all your statistics will be recalculated',
 			'transaction.delete_multiple_success' => ({required Object x}) => '${x} transactions deleted correctly',
 			'transaction.details' => 'Movement details',
+			'transaction.select' => 'Select a transaction',
 			'transaction.next_payments.accept' => 'Accept',
 			'transaction.next_payments.skip' => 'Skip',
 			'transaction.next_payments.skip_success' => 'Successfully skipped transaction',
@@ -4006,9 +4007,9 @@ extension on Translations {
 			'goals.form.new_title' => 'New Goal',
 			'goals.form.edit_title' => 'Edit Goal',
 			'goals.form.target_amount' => 'Target Amount',
-			'goals.form.initial_amount' => 'Initial Amount',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.initial_amount' => 'Initial Amount',
 			'goals.form.name' => 'Name',
 			'goals.form.name_hint' => 'My Saving Goal',
 			'goals.form.create_success' => 'Goal created successfully',
@@ -4039,7 +4040,6 @@ extension on Translations {
 			'debts.form.step_initial_value' => 'Initial value',
 			'debts.form.step_details' => 'Details',
 			'debts.form.from_transaction.title' => 'From a transaction',
-			'debts.form.from_transaction.select' => 'Select a transaction',
 			'debts.form.from_transaction.tap_to_select' => 'Tap to select a transaction',
 			'debts.form.from_amount.title' => 'From an initial amount',
 			'debts.form.from_amount.description' => 'This amount will not be taken into account for statistics as an expense/income. It will be used to calculate balances and net worth',
@@ -4071,7 +4071,7 @@ extension on Translations {
 			'debts.actions.link_transaction.description' => 'Choose an existing record to link it to this debt',
 			'debts.actions.link_transaction.success' => 'Transaction linked to debt',
 			'debts.actions.link_transaction.creating' => ({required Object name}) => 'You are creating a transaction linked to the debt <b>${name}</b>',
-			'debts.actions.unlink_transaction.title' => 'Unlink from debt?',
+			'debts.actions.unlink_transaction.title' => 'Unlink from debt',
 			'debts.actions.unlink_transaction.warning_text' => 'This transaction will no longer be associated with this debt.',
 			'debts.actions.unlink_transaction.success' => 'Transaction unlinked from debt',
 			'debts.actions.new_transaction.title' => 'Add new transaction',

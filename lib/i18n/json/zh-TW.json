@@ -316,6 +316,7 @@
     "delete.multiple.warning-message": "此操作不可逆轉，將刪除{{x}}筆交易。您帳戶的當前餘額和所有統計資料都將重新計算",
     "delete.multiple.success": "正確刪除了{{x}}筆交易",
     "details": "動作詳情",
+    "select": "選擇交易",
     "NEXT-PAYMENTS": {
       "accept": "接受",
       "skip": "跳過",
@@ -757,7 +758,6 @@
       "step_details": "細節",
       "from_transaction": {
         "title": "來自一筆交易",
-        "select": "選擇交易",
         "tap_to_select": "點選選擇交易"
       },
       "from_amount": {
@@ -812,7 +812,7 @@
         "creating": "您正在建立與債務 <b>{{ name }}</b> 關聯的交易"
       },
       "unlink_transaction": {
-        "title": "取消與債務的關聯？",
+        "title": "取消與債務的關聯",
         "warning_text": "此交易將不再與此債務相關聯。",
         "success": "交易已取消與債務的關聯"
       },

@@ -275,6 +275,7 @@ class _TranslationsTransactionFr implements TranslationsTransactionEn {
 	@override String delete_multiple_warning_message({required Object x}) => 'Cette action est irréversible et supprimera ${x} transactions. Le solde actuel de vos comptes et toutes vos statistiques seront recalculés';
 	@override String delete_multiple_success({required Object x}) => '${x} transactions supprimées avec succès';
 	@override String get details => 'Détails du mouvement';
+	@override String get select => 'Sélectionnez une transaction';
 	@override late final _TranslationsTransactionNextPaymentsFr next_payments = _TranslationsTransactionNextPaymentsFr._(_root);
 	@override late final _TranslationsTransactionListFr list = _TranslationsTransactionListFr._(_root);
 	@override late final _TranslationsTransactionFiltersFr filters = _TranslationsTransactionFiltersFr._(_root);
@@ -1729,7 +1730,6 @@ class _TranslationsDebtsFormFromTransactionFr implements TranslationsDebtsFormFr
 
 	// Translations
 	@override String get title => 'D\'une transaction';
-	@override String get select => 'Sélectionnez une transaction';
 	@override String get tap_to_select => 'Appuyez pour sélectionner une transaction';
 }
 
@@ -1800,7 +1800,7 @@ class _TranslationsDebtsActionsUnlinkTransactionFr implements TranslationsDebtsA
 	final TranslationsFr _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Dissocier de la dette ?';
+	@override String get title => 'Dissocier de la dette';
 	@override String get warning_text => 'Cette transaction ne sera plus associée à cette dette.';
 	@override String get success => 'Transaction dissociée de la dette';
 }
@@ -2238,6 +2238,7 @@ extension on TranslationsFr {
 			'transaction.delete_multiple_warning_message' => ({required Object x}) => 'Cette action est irréversible et supprimera ${x} transactions. Le solde actuel de vos comptes et toutes vos statistiques seront recalculés',
 			'transaction.delete_multiple_success' => ({required Object x}) => '${x} transactions supprimées avec succès',
 			'transaction.details' => 'Détails du mouvement',
+			'transaction.select' => 'Sélectionnez une transaction',
 			'transaction.next_payments.accept' => 'Accepter',
 			'transaction.next_payments.skip' => 'Ignorer',
 			'transaction.next_payments.skip_success' => 'Transaction ignorée avec succès',
@@ -2521,9 +2522,9 @@ extension on TranslationsFr {
 			'goals.form.new_title' => 'Nouvel objectif',
 			'goals.form.edit_title' => 'Modifier l\'objectif',
 			'goals.form.target_amount' => 'Montant cible',
-			'goals.form.initial_amount' => 'Montant initial',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.initial_amount' => 'Montant initial',
 			'goals.form.name' => 'Nom',
 			'goals.form.name_hint' => 'Mon objectif d\'épargne',
 			'goals.form.create_success' => 'Objectif créé avec succès',
@@ -2554,7 +2555,6 @@ extension on TranslationsFr {
 			'debts.form.step_initial_value' => 'Valeur initiale',
 			'debts.form.step_details' => 'Détails',
 			'debts.form.from_transaction.title' => 'D\'une transaction',
-			'debts.form.from_transaction.select' => 'Sélectionnez une transaction',
 			'debts.form.from_transaction.tap_to_select' => 'Appuyez pour sélectionner une transaction',
 			'debts.form.from_amount.title' => 'A partir d\'un montant initial',
 			'debts.form.from_amount.description' => 'Ce montant ne sera pas pris en compte pour les statistiques en tant que dépense/revenu. Il sera utilisé pour calculer les soldes et la valeur nette',
@@ -2586,7 +2586,7 @@ extension on TranslationsFr {
 			'debts.actions.link_transaction.description' => 'Choisir un enregistrement existant pour le lier à cette dette',
 			'debts.actions.link_transaction.success' => 'Opération liée à la dette',
 			'debts.actions.link_transaction.creating' => ({required Object name}) => 'Vous créez une transaction liée à la dette <b>${name}</b>',
-			'debts.actions.unlink_transaction.title' => 'Dissocier de la dette ?',
+			'debts.actions.unlink_transaction.title' => 'Dissocier de la dette',
 			'debts.actions.unlink_transaction.warning_text' => 'Cette transaction ne sera plus associée à cette dette.',
 			'debts.actions.unlink_transaction.success' => 'Transaction dissociée de la dette',
 			'debts.actions.new_transaction.title' => 'Ajouter une nouvelle transaction',

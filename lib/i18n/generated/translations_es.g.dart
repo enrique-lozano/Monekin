@@ -275,6 +275,7 @@ class _TranslationsTransactionEs implements TranslationsTransactionEn {
 	@override String delete_multiple_warning_message({required Object x}) => 'Esta acción es irreversible y borrará definitivamente ${x} transacciones. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas';
 	@override String delete_multiple_success({required Object x}) => '${x} transacciones eliminadas correctamente';
 	@override String get details => 'Detalles del movimiento';
+	@override String get select => 'Seleccione una transacción';
 	@override late final _TranslationsTransactionNextPaymentsEs next_payments = _TranslationsTransactionNextPaymentsEs._(_root);
 	@override late final _TranslationsTransactionListEs list = _TranslationsTransactionListEs._(_root);
 	@override late final _TranslationsTransactionFiltersEs filters = _TranslationsTransactionFiltersEs._(_root);
@@ -1732,7 +1733,6 @@ class _TranslationsDebtsFormFromTransactionEs implements TranslationsDebtsFormFr
 
 	// Translations
 	@override String get title => 'De una transacción';
-	@override String get select => 'Seleccione una transacción';
 	@override String get tap_to_select => 'Toque para seleccionar una transacción';
 }
 
@@ -1803,7 +1803,7 @@ class _TranslationsDebtsActionsUnlinkTransactionEs implements TranslationsDebtsA
 	final TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '¿Desvincular de la deuda?';
+	@override String get title => 'Desvincular de la deuda';
 	@override String get warning_text => 'Esta transacción ya no estará asociada a esta deuda.';
 	@override String get success => 'Transacción desvinculada de la deuda';
 }
@@ -2242,6 +2242,7 @@ extension on TranslationsEs {
 			'transaction.delete_multiple_warning_message' => ({required Object x}) => 'Esta acción es irreversible y borrará definitivamente ${x} transacciones. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas',
 			'transaction.delete_multiple_success' => ({required Object x}) => '${x} transacciones eliminadas correctamente',
 			'transaction.details' => 'Detalles del movimiento',
+			'transaction.select' => 'Seleccione una transacción',
 			'transaction.next_payments.accept' => 'Aceptar',
 			'transaction.next_payments.skip' => 'Saltar',
 			'transaction.next_payments.skip_success' => 'Transacción saltada con exito',
@@ -2524,9 +2525,9 @@ extension on TranslationsEs {
 			'goals.delete_warning' => 'Esta acción es irreversible. Categorías y transacciones referentes a este objetivo no serán eliminados',
 			'goals.form.new_title' => 'Nuevo objetivo',
 			'goals.form.edit_title' => 'Editar objetivo',
-			'goals.form.target_amount' => 'Cantidad objetivo',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.target_amount' => 'Cantidad objetivo',
 			'goals.form.initial_amount' => 'Cantidad inicial',
 			'goals.form.name' => 'Nombre',
 			'goals.form.name_hint' => 'Mi objetivo de ahorro',
@@ -2558,7 +2559,6 @@ extension on TranslationsEs {
 			'debts.form.step_initial_value' => 'Valor inicial',
 			'debts.form.step_details' => 'Detalles',
 			'debts.form.from_transaction.title' => 'De una transacción',
-			'debts.form.from_transaction.select' => 'Seleccione una transacción',
 			'debts.form.from_transaction.tap_to_select' => 'Toque para seleccionar una transacción',
 			'debts.form.from_amount.title' => 'A partir de un importe inicial',
 			'debts.form.from_amount.description' => 'Este importe no se tendrá en cuenta a efectos estadísticos como gasto/ingreso. Se utilizará para calcular saldos y patrimonio neto.',
@@ -2590,7 +2590,7 @@ extension on TranslationsEs {
 			'debts.actions.link_transaction.description' => 'Elija un registro existente para vincularlo a esta deuda',
 			'debts.actions.link_transaction.success' => 'Transacción vinculada a deuda',
 			'debts.actions.link_transaction.creating' => ({required Object name}) => 'Estás creando una transacción vinculada a la deuda <b>${name}</b>',
-			'debts.actions.unlink_transaction.title' => '¿Desvincular de la deuda?',
+			'debts.actions.unlink_transaction.title' => 'Desvincular de la deuda',
 			'debts.actions.unlink_transaction.warning_text' => 'Esta transacción ya no estará asociada a esta deuda.',
 			'debts.actions.unlink_transaction.success' => 'Transacción desvinculada de la deuda',
 			'debts.actions.new_transaction.title' => 'Agregar nueva transacción',

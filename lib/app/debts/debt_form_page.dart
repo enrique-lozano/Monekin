@@ -246,7 +246,7 @@ class _DebtFormPageState extends State<DebtFormPage> {
               builder: (context) {
                 if (_transaction == null) {
                   return ListTile(
-                    title: Text(t.debts.form.from_transaction.select),
+                    title: Text(t.transaction.select),
                     trailing: const Icon(
                       Icons.arrow_forward_ios_rounded,
                       size: 14,

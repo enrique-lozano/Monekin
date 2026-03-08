@@ -275,6 +275,7 @@ class _TranslationsTransactionUk implements TranslationsTransactionEn {
 	@override String delete_multiple_warning_message({required Object x}) => 'Ця дія незворотна і безумовно стерть ${x} транзакції. Поточний баланс ваших рахунків та вся ваша статистика будуть перенесені';
 	@override String delete_multiple_success({required Object x}) => '${x} належним чином усунути транзакції';
 	@override String get details => 'Деталі руху коштів';
+	@override String get select => 'Виберіть транзакцію';
 	@override late final _TranslationsTransactionNextPaymentsUk next_payments = _TranslationsTransactionNextPaymentsUk._(_root);
 	@override late final _TranslationsTransactionListUk list = _TranslationsTransactionListUk._(_root);
 	@override late final _TranslationsTransactionFiltersUk filters = _TranslationsTransactionFiltersUk._(_root);
@@ -1731,7 +1732,6 @@ class _TranslationsDebtsFormFromTransactionUk implements TranslationsDebtsFormFr
 
 	// Translations
 	@override String get title => 'З транзакції';
-	@override String get select => 'Виберіть транзакцію';
 	@override String get tap_to_select => 'Торкніться, щоб вибрати транзакцію';
 }
 
@@ -1802,7 +1802,7 @@ class _TranslationsDebtsActionsUnlinkTransactionUk implements TranslationsDebtsA
 	final TranslationsUk _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Від\'єднати від боргу?';
+	@override String get title => 'Від\'єднати від боргу';
 	@override String get warning_text => 'Ця транзакція більше не буде пов\'язана з цим боргом.';
 	@override String get success => 'Транзакцію від\'єднано від боргу';
 }
@@ -2240,6 +2240,7 @@ extension on TranslationsUk {
 			'transaction.delete_multiple_warning_message' => ({required Object x}) => 'Ця дія незворотна і безумовно стерть ${x} транзакції. Поточний баланс ваших рахунків та вся ваша статистика будуть перенесені',
 			'transaction.delete_multiple_success' => ({required Object x}) => '${x} належним чином усунути транзакції',
 			'transaction.details' => 'Деталі руху коштів',
+			'transaction.select' => 'Виберіть транзакцію',
 			'transaction.next_payments.accept' => 'Прийняти',
 			'transaction.next_payments.skip' => 'Пропустити',
 			'transaction.next_payments.skip_success' => 'Транзакцію успішно пропущено',
@@ -2523,9 +2524,9 @@ extension on TranslationsUk {
 			'goals.form.new_title' => 'Нова ціль',
 			'goals.form.edit_title' => 'Редагувати ціль',
 			'goals.form.target_amount' => 'Цільова сума',
-			'goals.form.initial_amount' => 'Початкова сума',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.initial_amount' => 'Початкова сума',
 			'goals.form.name' => 'Назва',
 			'goals.form.name_hint' => 'Моя ціль заощаджень',
 			'goals.form.create_success' => 'Ціль успішно створено',
@@ -2556,7 +2557,6 @@ extension on TranslationsUk {
 			'debts.form.step_initial_value' => 'Початкове значення',
 			'debts.form.step_details' => 'Подробиці',
 			'debts.form.from_transaction.title' => 'З транзакції',
-			'debts.form.from_transaction.select' => 'Виберіть транзакцію',
 			'debts.form.from_transaction.tap_to_select' => 'Торкніться, щоб вибрати транзакцію',
 			'debts.form.from_amount.title' => 'Від початкової суми',
 			'debts.form.from_amount.description' => 'Ця сума не буде врахована для статистики як витрати/доходи. Він використовуватиметься для розрахунку балансів і чистої вартості',
@@ -2588,7 +2588,7 @@ extension on TranslationsUk {
 			'debts.actions.link_transaction.description' => 'Виберіть існуючий запис, щоб пов’язати його з цим боргом',
 			'debts.actions.link_transaction.success' => 'Операція, пов\'язана з боргом',
 			'debts.actions.link_transaction.creating' => ({required Object name}) => 'Ви створюєте транзакцію, пов\'язану з боргом <b>${name}</b>',
-			'debts.actions.unlink_transaction.title' => 'Від\'єднати від боргу?',
+			'debts.actions.unlink_transaction.title' => 'Від\'єднати від боргу',
 			'debts.actions.unlink_transaction.warning_text' => 'Ця транзакція більше не буде пов\'язана з цим боргом.',
 			'debts.actions.unlink_transaction.success' => 'Транзакцію від\'єднано від боргу',
 			'debts.actions.new_transaction.title' => 'Додати нову транзакцію',

@@ -316,6 +316,7 @@
     "delete.multiple.warning-message": "Cette action est irréversible et supprimera {{ x }} transactions. Le solde actuel de vos comptes et toutes vos statistiques seront recalculés",
     "delete.multiple.success": "{{x}} transactions supprimées avec succès",
     "details": "Détails du mouvement",
+    "select": "Sélectionnez une transaction",
     "NEXT-PAYMENTS": {
       "accept": "Accepter",
       "skip": "Ignorer",
@@ -757,7 +758,6 @@
       "step_details": "Détails",
       "from_transaction": {
         "title": "D'une transaction",
-        "select": "Sélectionnez une transaction",
         "tap_to_select": "Appuyez pour sélectionner une transaction"
       },
       "from_amount": {
@@ -811,7 +811,7 @@
         "creating": "Vous créez une transaction liée à la dette <b>{{ name }}</b>"
       },
       "unlink_transaction": {
-        "title": "Dissocier de la dette ?",
+        "title": "Dissocier de la dette",
         "warning_text": "Cette transaction ne sera plus associée à cette dette.",
         "success": "Transaction dissociée de la dette"
       },

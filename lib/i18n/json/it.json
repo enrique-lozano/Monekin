@@ -316,6 +316,7 @@
     "delete.multiple.warning-message": "Questa azione è irreversibile ed eliminerà {{ x }} transazioni. Il saldo attuale dei tuoi conti e tutte le tue statistiche saranno ricalcolate",
     "delete.multiple.success": "{{x}} transazioni eliminate correttamente",
     "details": "Dettagli movimento",
+    "select": "Seleziona una transazione",
     "NEXT-PAYMENTS": {
       "accept": "Accetta",
       "skip": "Salta",
@@ -757,7 +758,6 @@
       "step_details": "Dettagli",
       "from_transaction": {
         "title": "Da una transazione",
-        "select": "Seleziona una transazione",
         "tap_to_select": "Tocca per selezionare una transazione"
       },
       "from_amount": {
@@ -812,7 +812,7 @@
         "creating": "Stai creando una transazione collegata al debito <b>{{ name }}</b>"
       },
       "unlink_transaction": {
-        "title": "Scollegare dal debito?",
+        "title": "Scollegare dal debito",
         "warning_text": "Questa transazione non sarà più associata a questo debito.",
         "success": "Transazione scollegata dal debito"
       },

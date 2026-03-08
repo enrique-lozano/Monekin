@@ -316,6 +316,7 @@
     "delete.multiple.warning-message": "This action is irreversible and will remove {{ x }} transactions. The current balance of your accounts and all your statistics will be recalculated",
     "delete.multiple.success": "{{x}} transactions deleted correctly",
     "details": "Movement details",
+    "select": "Select a transaction",
     "NEXT-PAYMENTS": {
       "accept": "Accept",
       "skip": "Skip",
@@ -757,7 +758,6 @@
       "step_details": "Details",
       "from_transaction": {
         "title": "From a transaction",
-        "select": "Select a transaction",
         "tap_to_select": "Tap to select a transaction"
       },
       "from_amount": {
@@ -811,7 +811,7 @@
         "creating": "You are creating a transaction linked to the debt <b>{{ name }}</b>"
       },
       "unlink_transaction": {
-        "title": "Unlink from debt?",
+        "title": "Unlink from debt",
         "warning_text": "This transaction will no longer be associated with this debt.",
         "success": "Transaction unlinked from debt"
       },

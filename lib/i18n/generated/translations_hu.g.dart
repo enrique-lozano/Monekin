@@ -275,6 +275,7 @@ class _TranslationsTransactionHu implements TranslationsTransactionEn {
 	@override String delete_multiple_warning_message({required Object x}) => 'Ez a művelet visszafordíthatatlan, és eltávolít ${x} tranzakciót. A számlái aktuális egyenlege és minden statisztikája újraszámításra kerül.';
 	@override String delete_multiple_success({required Object x}) => '${x} tranzakció megfelelően törölve';
 	@override String get details => 'A mozgás részletei';
+	@override String get select => 'Válasszon ki egy tranzakciót';
 	@override late final _TranslationsTransactionNextPaymentsHu next_payments = _TranslationsTransactionNextPaymentsHu._(_root);
 	@override late final _TranslationsTransactionListHu list = _TranslationsTransactionListHu._(_root);
 	@override late final _TranslationsTransactionFiltersHu filters = _TranslationsTransactionFiltersHu._(_root);
@@ -1731,7 +1732,6 @@ class _TranslationsDebtsFormFromTransactionHu implements TranslationsDebtsFormFr
 
 	// Translations
 	@override String get title => 'Egy tranzakcióból';
-	@override String get select => 'Válasszon ki egy tranzakciót';
 	@override String get tap_to_select => 'Koppintson egy tranzakció kiválasztásához';
 }
 
@@ -1802,7 +1802,7 @@ class _TranslationsDebtsActionsUnlinkTransactionHu implements TranslationsDebtsA
 	final TranslationsHu _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Leválasztás az adósságról?';
+	@override String get title => 'Leválasztás az adósságról';
 	@override String get warning_text => 'Ez a tranzakció a továbbiakban nem lesz ehhez a tartozáshoz társítva.';
 	@override String get success => 'Tranzakció leválasztva az adósságról';
 }
@@ -2240,6 +2240,7 @@ extension on TranslationsHu {
 			'transaction.delete_multiple_warning_message' => ({required Object x}) => 'Ez a művelet visszafordíthatatlan, és eltávolít ${x} tranzakciót. A számlái aktuális egyenlege és minden statisztikája újraszámításra kerül.',
 			'transaction.delete_multiple_success' => ({required Object x}) => '${x} tranzakció megfelelően törölve',
 			'transaction.details' => 'A mozgás részletei',
+			'transaction.select' => 'Válasszon ki egy tranzakciót',
 			'transaction.next_payments.accept' => 'Elfogadás',
 			'transaction.next_payments.skip' => 'Kihagyás',
 			'transaction.next_payments.skip_success' => 'A tranzakció sikeresen kihagyásra került',
@@ -2523,9 +2524,9 @@ extension on TranslationsHu {
 			'goals.form.new_title' => 'Új cél',
 			'goals.form.edit_title' => 'Cél szerkesztése',
 			'goals.form.target_amount' => 'Célösszeg',
-			'goals.form.initial_amount' => 'Kezdő összeg',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.initial_amount' => 'Kezdő összeg',
 			'goals.form.name' => 'Név',
 			'goals.form.name_hint' => 'Megtakarítási célom',
 			'goals.form.create_success' => 'Cél sikeresen létrehozva',
@@ -2556,7 +2557,6 @@ extension on TranslationsHu {
 			'debts.form.step_initial_value' => 'Kezdeti érték',
 			'debts.form.step_details' => 'Részletek',
 			'debts.form.from_transaction.title' => 'Egy tranzakcióból',
-			'debts.form.from_transaction.select' => 'Válasszon ki egy tranzakciót',
 			'debts.form.from_transaction.tap_to_select' => 'Koppintson egy tranzakció kiválasztásához',
 			'debts.form.from_amount.title' => 'Kezdő összegből',
 			'debts.form.from_amount.description' => 'Ezt az összeget a statisztikában nem veszik figyelembe kiadásként/bevételként. Ezt az egyenlegek és a nettó vagyon kiszámításához fogják használni',
@@ -2588,7 +2588,7 @@ extension on TranslationsHu {
 			'debts.actions.link_transaction.description' => 'Válasszon egy meglévő rekordot, hogy összekapcsolja ezzel a tartozással',
 			'debts.actions.link_transaction.success' => 'Adóssághoz kapcsolódó ügylet',
 			'debts.actions.link_transaction.creating' => ({required Object name}) => 'Egy <b>${name}</b> adóssághoz kapcsolódó tranzakciót hoz létre',
-			'debts.actions.unlink_transaction.title' => 'Leválasztás az adósságról?',
+			'debts.actions.unlink_transaction.title' => 'Leválasztás az adósságról',
 			'debts.actions.unlink_transaction.warning_text' => 'Ez a tranzakció a továbbiakban nem lesz ehhez a tartozáshoz társítva.',
 			'debts.actions.unlink_transaction.success' => 'Tranzakció leválasztva az adósságról',
 			'debts.actions.new_transaction.title' => 'Új tranzakció hozzáadása',

@@ -275,6 +275,7 @@ class _TranslationsTransactionIt implements TranslationsTransactionEn {
 	@override String delete_multiple_warning_message({required Object x}) => 'Questa azione è irreversibile ed eliminerà ${x} transazioni. Il saldo attuale dei tuoi conti e tutte le tue statistiche saranno ricalcolate';
 	@override String delete_multiple_success({required Object x}) => '${x} transazioni eliminate correttamente';
 	@override String get details => 'Dettagli movimento';
+	@override String get select => 'Seleziona una transazione';
 	@override late final _TranslationsTransactionNextPaymentsIt next_payments = _TranslationsTransactionNextPaymentsIt._(_root);
 	@override late final _TranslationsTransactionListIt list = _TranslationsTransactionListIt._(_root);
 	@override late final _TranslationsTransactionFiltersIt filters = _TranslationsTransactionFiltersIt._(_root);
@@ -1731,7 +1732,6 @@ class _TranslationsDebtsFormFromTransactionIt implements TranslationsDebtsFormFr
 
 	// Translations
 	@override String get title => 'Da una transazione';
-	@override String get select => 'Seleziona una transazione';
 	@override String get tap_to_select => 'Tocca per selezionare una transazione';
 }
 
@@ -1802,7 +1802,7 @@ class _TranslationsDebtsActionsUnlinkTransactionIt implements TranslationsDebtsA
 	final TranslationsIt _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Scollegare dal debito?';
+	@override String get title => 'Scollegare dal debito';
 	@override String get warning_text => 'Questa transazione non sarà più associata a questo debito.';
 	@override String get success => 'Transazione scollegata dal debito';
 }
@@ -2240,6 +2240,7 @@ extension on TranslationsIt {
 			'transaction.delete_multiple_warning_message' => ({required Object x}) => 'Questa azione è irreversibile ed eliminerà ${x} transazioni. Il saldo attuale dei tuoi conti e tutte le tue statistiche saranno ricalcolate',
 			'transaction.delete_multiple_success' => ({required Object x}) => '${x} transazioni eliminate correttamente',
 			'transaction.details' => 'Dettagli movimento',
+			'transaction.select' => 'Seleziona una transazione',
 			'transaction.next_payments.accept' => 'Accetta',
 			'transaction.next_payments.skip' => 'Salta',
 			'transaction.next_payments.skip_success' => 'Transazione saltata con successo',
@@ -2523,9 +2524,9 @@ extension on TranslationsIt {
 			'goals.form.new_title' => 'Nuovo obiettivo',
 			'goals.form.edit_title' => 'Modifica obiettivo',
 			'goals.form.target_amount' => 'Importo obiettivo',
-			'goals.form.initial_amount' => 'Importo iniziale',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.initial_amount' => 'Importo iniziale',
 			'goals.form.name' => 'Nome',
 			'goals.form.name_hint' => 'Il mio obiettivo di risparmio',
 			'goals.form.create_success' => 'Obiettivo creato con successo',
@@ -2556,7 +2557,6 @@ extension on TranslationsIt {
 			'debts.form.step_initial_value' => 'Valore iniziale',
 			'debts.form.step_details' => 'Dettagli',
 			'debts.form.from_transaction.title' => 'Da una transazione',
-			'debts.form.from_transaction.select' => 'Seleziona una transazione',
 			'debts.form.from_transaction.tap_to_select' => 'Tocca per selezionare una transazione',
 			'debts.form.from_amount.title' => 'Da un importo iniziale',
 			'debts.form.from_amount.description' => 'Questo importo non verrà preso in considerazione per le statistiche come spesa/entrata. Verrà utilizzato per calcolare i saldi e il patrimonio netto',
@@ -2588,7 +2588,7 @@ extension on TranslationsIt {
 			'debts.actions.link_transaction.description' => 'Scegli un record esistente per collegarlo a questo debito',
 			'debts.actions.link_transaction.success' => 'Operazione legata al debito',
 			'debts.actions.link_transaction.creating' => ({required Object name}) => 'Stai creando una transazione collegata al debito <b>${name}</b>',
-			'debts.actions.unlink_transaction.title' => 'Scollegare dal debito?',
+			'debts.actions.unlink_transaction.title' => 'Scollegare dal debito',
 			'debts.actions.unlink_transaction.warning_text' => 'Questa transazione non sarà più associata a questo debito.',
 			'debts.actions.unlink_transaction.success' => 'Transazione scollegata dal debito',
 			'debts.actions.new_transaction.title' => 'Aggiungi nuova transazione',

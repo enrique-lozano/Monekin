@@ -5,6 +5,7 @@ import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
 void showTransactionSelectorModal(
   BuildContext context, {
@@ -56,15 +57,14 @@ class _TransactionSelectorModalState extends State<TransactionSelectorModal> {
       initialChildSize: 0.85,
       builder: (context, scrollController) {
         return ModalContainer(
-          title: 'Select a transaction',
+          title: t.transaction.select,
           body: Column(
             children: [
               TextField(
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   filled: false,
                   isDense: false,
-                  hintText: 'Search for a transaction...',
-                  labelText: 'Tap to search',
+                  labelText: t.general.tap_to_search,
                   floatingLabelStyle: TextStyle(height: -0.0005),
                   prefixIcon: Icon(Icons.search),
                   border: UnderlineInputBorder(),

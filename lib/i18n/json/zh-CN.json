@@ -316,6 +316,7 @@
     "delete.multiple.warning-message": "此操作无法撤回，并且将删除{{x}}笔交易。将重新计算您账户的当前余额及其它所有统计数据",
     "delete.multiple.success": "{{x}}笔交易删除成功",
     "details": "操作详情",
+    "select": "选择交易",
     "NEXT-PAYMENTS": {
       "accept": "接受",
       "skip": "跳过",
@@ -757,7 +758,6 @@
       "step_details": "细节",
       "from_transaction": {
         "title": "来自一笔交易",
-        "select": "选择交易",
         "tap_to_select": "点击选择交易"
       },
       "from_amount": {
@@ -812,7 +812,7 @@
         "creating": "您正在创建与债务 <b>{{ name }}</b> 关联的交易"
       },
       "unlink_transaction": {
-        "title": "取消与债务的关联？",
+        "title": "取消与债务的关联",
         "warning_text": "此交易将不再与此债务相关联。",
         "success": "交易已取消与债务的关联"
       },

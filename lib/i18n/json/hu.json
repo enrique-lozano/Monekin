@@ -316,6 +316,7 @@
     "delete.multiple.warning-message": "Ez a művelet visszafordíthatatlan, és eltávolít {{ x }} tranzakciót. A számlái aktuális egyenlege és minden statisztikája újraszámításra kerül.",
     "delete.multiple.success": "{{x}} tranzakció megfelelően törölve",
     "details": "A mozgás részletei",
+    "select": "Válasszon ki egy tranzakciót",
     "NEXT-PAYMENTS": {
       "accept": "Elfogadás",
       "skip": "Kihagyás",
@@ -757,7 +758,6 @@
       "step_details": "Részletek",
       "from_transaction": {
         "title": "Egy tranzakcióból",
-        "select": "Válasszon ki egy tranzakciót",
         "tap_to_select": "Koppintson egy tranzakció kiválasztásához"
       },
       "from_amount": {
@@ -812,7 +812,7 @@
         "creating": "Egy <b>{{ name }}</b> adóssághoz kapcsolódó tranzakciót hoz létre"
       },
       "unlink_transaction": {
-        "title": "Leválasztás az adósságról?",
+        "title": "Leválasztás az adósságról",
         "warning_text": "Ez a tranzakció a továbbiakban nem lesz ehhez a tartozáshoz társítva.",
         "success": "Tranzakció leválasztva az adósságról"
       },

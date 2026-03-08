@@ -829,7 +829,7 @@ class _LinkedDebtCard extends StatelessWidget {
                       foregroundColor: AppColors.of(context).danger,
                     ),
                     icon: const Icon(Icons.link_off_rounded, size: 18),
-                    label: const Text('Unlink from debt'),
+                    label: Text(t.debts.actions.unlink_transaction.title),
                     onPressed: () async {
                       await TransactionViewActionService()
                           .unlinkTransactionFromDebtWithAlertAndSnackbar(

@@ -275,6 +275,7 @@ class _TranslationsTransactionTr implements TranslationsTransactionEn {
 	@override String delete_multiple_warning_message({required Object x}) => 'Bu eylem geri alınamaz ve ${x} işlem silinecektir. Hesaplarınızın mevcut bakiyesi ve tüm istatistikleriniz yeniden hesaplanacaktır';
 	@override String delete_multiple_success({required Object x}) => '${x} işlem başarıyla silindi';
 	@override String get details => 'Hareket detayları';
+	@override String get select => 'Bir işlem seçin';
 	@override late final _TranslationsTransactionNextPaymentsTr next_payments = _TranslationsTransactionNextPaymentsTr._(_root);
 	@override late final _TranslationsTransactionListTr list = _TranslationsTransactionListTr._(_root);
 	@override late final _TranslationsTransactionFiltersTr filters = _TranslationsTransactionFiltersTr._(_root);
@@ -1731,7 +1732,6 @@ class _TranslationsDebtsFormFromTransactionTr implements TranslationsDebtsFormFr
 
 	// Translations
 	@override String get title => 'Bir işlemden';
-	@override String get select => 'Bir işlem seçin';
 	@override String get tap_to_select => 'Bir işlemi seçmek için dokunun';
 }
 
@@ -1802,7 +1802,7 @@ class _TranslationsDebtsActionsUnlinkTransactionTr implements TranslationsDebtsA
 	final TranslationsTr _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Borçtan bağlantıyı kaldır?';
+	@override String get title => 'Borçtan bağlantıyı kaldır';
 	@override String get warning_text => 'Bu işlem artık bu borçla ilişkilendirilmeyecek.';
 	@override String get success => 'İşlemin borca bağlantısı kaldırıldı';
 }
@@ -2240,6 +2240,7 @@ extension on TranslationsTr {
 			'transaction.delete_multiple_warning_message' => ({required Object x}) => 'Bu eylem geri alınamaz ve ${x} işlem silinecektir. Hesaplarınızın mevcut bakiyesi ve tüm istatistikleriniz yeniden hesaplanacaktır',
 			'transaction.delete_multiple_success' => ({required Object x}) => '${x} işlem başarıyla silindi',
 			'transaction.details' => 'Hareket detayları',
+			'transaction.select' => 'Bir işlem seçin',
 			'transaction.next_payments.accept' => 'Kabul et',
 			'transaction.next_payments.skip' => 'Atla',
 			'transaction.next_payments.skip_success' => 'İşlem başarıyla atlandı',
@@ -2523,9 +2524,9 @@ extension on TranslationsTr {
 			'goals.form.new_title' => 'Yeni Hedef',
 			'goals.form.edit_title' => 'Hedefi Düzenle',
 			'goals.form.target_amount' => 'Hedef Tutar',
-			'goals.form.initial_amount' => 'Başlangıç Tutarı',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.initial_amount' => 'Başlangıç Tutarı',
 			'goals.form.name' => 'İsim',
 			'goals.form.name_hint' => 'Tasarruf Hedefim',
 			'goals.form.create_success' => 'Hedef başarıyla oluşturuldu',
@@ -2556,7 +2557,6 @@ extension on TranslationsTr {
 			'debts.form.step_initial_value' => 'Başlangıç ​​değeri',
 			'debts.form.step_details' => 'Detaylar',
 			'debts.form.from_transaction.title' => 'Bir işlemden',
-			'debts.form.from_transaction.select' => 'Bir işlem seçin',
 			'debts.form.from_transaction.tap_to_select' => 'Bir işlemi seçmek için dokunun',
 			'debts.form.from_amount.title' => 'Başlangıç ​​tutarından',
 			'debts.form.from_amount.description' => 'Bu tutar istatistiklerde gider/gelir olarak dikkate alınmayacaktır. Bakiyeleri ve net değeri hesaplamak için kullanılacak',
@@ -2588,7 +2588,7 @@ extension on TranslationsTr {
 			'debts.actions.link_transaction.description' => 'Bu borca ​​bağlamak için mevcut bir kaydı seçin',
 			'debts.actions.link_transaction.success' => 'Borca bağlı işlem',
 			'debts.actions.link_transaction.creating' => ({required Object name}) => '<b>${name}</b> borcuna bağlı bir işlem oluşturuyorsunuz',
-			'debts.actions.unlink_transaction.title' => 'Borçtan bağlantıyı kaldır?',
+			'debts.actions.unlink_transaction.title' => 'Borçtan bağlantıyı kaldır',
 			'debts.actions.unlink_transaction.warning_text' => 'Bu işlem artık bu borçla ilişkilendirilmeyecek.',
 			'debts.actions.unlink_transaction.success' => 'İşlemin borca bağlantısı kaldırıldı',
 			'debts.actions.new_transaction.title' => 'Yeni işlem ekle',

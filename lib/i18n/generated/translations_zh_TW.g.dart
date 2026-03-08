@@ -275,6 +275,7 @@ class _TranslationsTransactionZhTw implements TranslationsTransactionEn {
 	@override String delete_multiple_warning_message({required Object x}) => '此操作不可逆轉，將刪除${x}筆交易。您帳戶的當前餘額和所有統計資料都將重新計算';
 	@override String delete_multiple_success({required Object x}) => '正確刪除了${x}筆交易';
 	@override String get details => '動作詳情';
+	@override String get select => '選擇交易';
 	@override late final _TranslationsTransactionNextPaymentsZhTw next_payments = _TranslationsTransactionNextPaymentsZhTw._(_root);
 	@override late final _TranslationsTransactionListZhTw list = _TranslationsTransactionListZhTw._(_root);
 	@override late final _TranslationsTransactionFiltersZhTw filters = _TranslationsTransactionFiltersZhTw._(_root);
@@ -1731,7 +1732,6 @@ class _TranslationsDebtsFormFromTransactionZhTw implements TranslationsDebtsForm
 
 	// Translations
 	@override String get title => '來自一筆交易';
-	@override String get select => '選擇交易';
 	@override String get tap_to_select => '點選選擇交易';
 }
 
@@ -1802,7 +1802,7 @@ class _TranslationsDebtsActionsUnlinkTransactionZhTw implements TranslationsDebt
 	final TranslationsZhTw _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '取消與債務的關聯？';
+	@override String get title => '取消與債務的關聯';
 	@override String get warning_text => '此交易將不再與此債務相關聯。';
 	@override String get success => '交易已取消與債務的關聯';
 }
@@ -2240,6 +2240,7 @@ extension on TranslationsZhTw {
 			'transaction.delete_multiple_warning_message' => ({required Object x}) => '此操作不可逆轉，將刪除${x}筆交易。您帳戶的當前餘額和所有統計資料都將重新計算',
 			'transaction.delete_multiple_success' => ({required Object x}) => '正確刪除了${x}筆交易',
 			'transaction.details' => '動作詳情',
+			'transaction.select' => '選擇交易',
 			'transaction.next_payments.accept' => '接受',
 			'transaction.next_payments.skip' => '跳過',
 			'transaction.next_payments.skip_success' => '成功跳過交易',
@@ -2523,9 +2524,9 @@ extension on TranslationsZhTw {
 			'goals.form.new_title' => '新目標',
 			'goals.form.edit_title' => '編輯目標',
 			'goals.form.target_amount' => '目標金額',
-			'goals.form.initial_amount' => '初始金額',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.initial_amount' => '初始金額',
 			'goals.form.name' => '名稱',
 			'goals.form.name_hint' => '我的儲蓄目標',
 			'goals.form.create_success' => '目標建立成功',
@@ -2556,7 +2557,6 @@ extension on TranslationsZhTw {
 			'debts.form.step_initial_value' => '初始值',
 			'debts.form.step_details' => '細節',
 			'debts.form.from_transaction.title' => '來自一筆交易',
-			'debts.form.from_transaction.select' => '選擇交易',
 			'debts.form.from_transaction.tap_to_select' => '點選選擇交易',
 			'debts.form.from_amount.title' => '從初始金額開始',
 			'debts.form.from_amount.description' => '該金額不會作為支出/收入納入統計。它將用於計算餘額和淨值',
@@ -2588,7 +2588,7 @@ extension on TranslationsZhTw {
 			'debts.actions.link_transaction.description' => '選擇現有記錄將其連結到該債務',
 			'debts.actions.link_transaction.success' => '與債務掛鉤的交易',
 			'debts.actions.link_transaction.creating' => ({required Object name}) => '您正在建立與債務 <b>${name}</b> 關聯的交易',
-			'debts.actions.unlink_transaction.title' => '取消與債務的關聯？',
+			'debts.actions.unlink_transaction.title' => '取消與債務的關聯',
 			'debts.actions.unlink_transaction.warning_text' => '此交易將不再與此債務相關聯。',
 			'debts.actions.unlink_transaction.success' => '交易已取消與債務的關聯',
 			'debts.actions.new_transaction.title' => '新增交易',

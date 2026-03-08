@@ -275,6 +275,7 @@ class _TranslationsTransactionZhCn implements TranslationsTransactionEn {
 	@override String delete_multiple_warning_message({required Object x}) => '此操作无法撤回，并且将删除${x}笔交易。将重新计算您账户的当前余额及其它所有统计数据';
 	@override String delete_multiple_success({required Object x}) => '${x}笔交易删除成功';
 	@override String get details => '操作详情';
+	@override String get select => '选择交易';
 	@override late final _TranslationsTransactionNextPaymentsZhCn next_payments = _TranslationsTransactionNextPaymentsZhCn._(_root);
 	@override late final _TranslationsTransactionListZhCn list = _TranslationsTransactionListZhCn._(_root);
 	@override late final _TranslationsTransactionFiltersZhCn filters = _TranslationsTransactionFiltersZhCn._(_root);
@@ -1731,7 +1732,6 @@ class _TranslationsDebtsFormFromTransactionZhCn implements TranslationsDebtsForm
 
 	// Translations
 	@override String get title => '来自一笔交易';
-	@override String get select => '选择交易';
 	@override String get tap_to_select => '点击选择交易';
 }
 
@@ -1802,7 +1802,7 @@ class _TranslationsDebtsActionsUnlinkTransactionZhCn implements TranslationsDebt
 	final TranslationsZhCn _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '取消与债务的关联？';
+	@override String get title => '取消与债务的关联';
 	@override String get warning_text => '此交易将不再与此债务相关联。';
 	@override String get success => '交易已取消与债务的关联';
 }
@@ -2240,6 +2240,7 @@ extension on TranslationsZhCn {
 			'transaction.delete_multiple_warning_message' => ({required Object x}) => '此操作无法撤回，并且将删除${x}笔交易。将重新计算您账户的当前余额及其它所有统计数据',
 			'transaction.delete_multiple_success' => ({required Object x}) => '${x}笔交易删除成功',
 			'transaction.details' => '操作详情',
+			'transaction.select' => '选择交易',
 			'transaction.next_payments.accept' => '接受',
 			'transaction.next_payments.skip' => '跳过',
 			'transaction.next_payments.skip_success' => '已成果跳过交易',
@@ -2523,9 +2524,9 @@ extension on TranslationsZhCn {
 			'goals.form.new_title' => '新目标',
 			'goals.form.edit_title' => '编辑目标',
 			'goals.form.target_amount' => '目标金额',
-			'goals.form.initial_amount' => '初始金额',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.initial_amount' => '初始金额',
 			'goals.form.name' => '名称',
 			'goals.form.name_hint' => '我的储蓄目标',
 			'goals.form.create_success' => '目标创建成功',
@@ -2556,7 +2557,6 @@ extension on TranslationsZhCn {
 			'debts.form.step_initial_value' => '初始值',
 			'debts.form.step_details' => '细节',
 			'debts.form.from_transaction.title' => '来自一笔交易',
-			'debts.form.from_transaction.select' => '选择交易',
 			'debts.form.from_transaction.tap_to_select' => '点击选择交易',
 			'debts.form.from_amount.title' => '从初始金额开始',
 			'debts.form.from_amount.description' => '该金额不会作为支出/收入纳入统计。它将用于计算余额和净值',
@@ -2588,7 +2588,7 @@ extension on TranslationsZhCn {
 			'debts.actions.link_transaction.description' => '选择现有记录将其链接到该债务',
 			'debts.actions.link_transaction.success' => '与债务挂钩的交易',
 			'debts.actions.link_transaction.creating' => ({required Object name}) => '您正在创建与债务 <b>${name}</b> 关联的交易',
-			'debts.actions.unlink_transaction.title' => '取消与债务的关联？',
+			'debts.actions.unlink_transaction.title' => '取消与债务的关联',
 			'debts.actions.unlink_transaction.warning_text' => '此交易将不再与此债务相关联。',
 			'debts.actions.unlink_transaction.success' => '交易已取消与债务的关联',
 			'debts.actions.new_transaction.title' => '添加新交易',

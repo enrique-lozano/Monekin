@@ -316,6 +316,7 @@
     "delete.multiple.warning-message": "Bu eylem geri alınamaz ve {{ x }} işlem silinecektir. Hesaplarınızın mevcut bakiyesi ve tüm istatistikleriniz yeniden hesaplanacaktır",
     "delete.multiple.success": "{{x}} işlem başarıyla silindi",
     "details": "Hareket detayları",
+    "select": "Bir işlem seçin",
     "NEXT-PAYMENTS": {
       "accept": "Kabul et",
       "skip": "Atla",
@@ -757,7 +758,6 @@
       "step_details": "Detaylar",
       "from_transaction": {
         "title": "Bir işlemden",
-        "select": "Bir işlem seçin",
         "tap_to_select": "Bir işlemi seçmek için dokunun"
       },
       "from_amount": {
@@ -812,7 +812,7 @@
         "creating": "<b>{{ name }}</b> borcuna bağlı bir işlem oluşturuyorsunuz"
       },
       "unlink_transaction": {
-        "title": "Borçtan bağlantıyı kaldır?",
+        "title": "Borçtan bağlantıyı kaldır",
         "warning_text": "Bu işlem artık bu borçla ilişkilendirilmeyecek.",
         "success": "İşlemin borca bağlantısı kaldırıldı"
       },
