@@ -2,7 +2,6 @@
 
 Monekin is fully open-source, allowing you to run it locally on your device. Whether you’re curious about how the app works, planning to contribute, or simply exploring, this guide provides all the steps to get started.
 
-
 ## Prerequisites 🛠️
 
 Before running Monekin, ensure you have the following tools installed:
@@ -34,7 +33,11 @@ You can choose one of two ways to obtain the project:
 Once you’ve downloaded or cloned the project, navigate to the project directory and install the required dependencies using Flutter:
 
 ```bash
+# Install dependencies:
 flutter pub get
+
+# Retrieve translations
+dart run slang
 ```
 
 ## Running the App ▶️
