@@ -811,6 +811,11 @@
         "success": "Borca bağlı işlem",
         "creating": "<b>{{ name }}</b> borcuna bağlı bir işlem oluşturuyorsunuz"
       },
+      "unlink_transaction": {
+        "title": "Borçtan bağlantıyı kaldır?",
+        "warning_text": "Bu işlem artık bu borçla ilişkilendirilmeyecek.",
+        "success": "İşlemin borca bağlantısı kaldırıldı"
+      },
       "new_transaction": {
         "title": "Yeni işlem ekle",
         "description": "Bu borca ​​bağlı yeni bir işlem oluşturarak borcu manuel olarak ekleyin veya azaltın"

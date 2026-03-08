@@ -1273,6 +1273,7 @@ class _TranslationsDebtsActionsZhTw implements TranslationsDebtsActionsEn {
 	@override late final _TranslationsDebtsActionsDeleteZhTw delete = _TranslationsDebtsActionsDeleteZhTw._(_root);
 	@override late final _TranslationsDebtsActionsAddRegisterZhTw add_register = _TranslationsDebtsActionsAddRegisterZhTw._(_root);
 	@override late final _TranslationsDebtsActionsLinkTransactionZhTw link_transaction = _TranslationsDebtsActionsLinkTransactionZhTw._(_root);
+	@override late final _TranslationsDebtsActionsUnlinkTransactionZhTw unlink_transaction = _TranslationsDebtsActionsUnlinkTransactionZhTw._(_root);
 	@override late final _TranslationsDebtsActionsNewTransactionZhTw new_transaction = _TranslationsDebtsActionsNewTransactionZhTw._(_root);
 	@override late final _TranslationsDebtsActionsCreateZhTw create = _TranslationsDebtsActionsCreateZhTw._(_root);
 }
@@ -1792,6 +1793,18 @@ class _TranslationsDebtsActionsLinkTransactionZhTw implements TranslationsDebtsA
 	@override String get description => '選擇現有記錄將其連結到該債務';
 	@override String get success => '與債務掛鉤的交易';
 	@override String creating({required Object name}) => '您正在建立與債務 <b>${name}</b> 關聯的交易';
+}
+
+// Path: debts.actions.unlink_transaction
+class _TranslationsDebtsActionsUnlinkTransactionZhTw implements TranslationsDebtsActionsUnlinkTransactionEn {
+	_TranslationsDebtsActionsUnlinkTransactionZhTw._(this._root);
+
+	final TranslationsZhTw _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '取消與債務的關聯？';
+	@override String get warning_text => '此交易將不再與此債務相關聯。';
+	@override String get success => '交易已取消與債務的關聯';
 }
 
 // Path: debts.actions.new_transaction
@@ -2575,6 +2588,9 @@ extension on TranslationsZhTw {
 			'debts.actions.link_transaction.description' => '選擇現有記錄將其連結到該債務',
 			'debts.actions.link_transaction.success' => '與債務掛鉤的交易',
 			'debts.actions.link_transaction.creating' => ({required Object name}) => '您正在建立與債務 <b>${name}</b> 關聯的交易',
+			'debts.actions.unlink_transaction.title' => '取消與債務的關聯？',
+			'debts.actions.unlink_transaction.warning_text' => '此交易將不再與此債務相關聯。',
+			'debts.actions.unlink_transaction.success' => '交易已取消與債務的關聯',
 			'debts.actions.new_transaction.title' => '新增交易',
 			'debts.actions.new_transaction.description' => '透過建立與該債務相關的新交易來手動新增或減少債務',
 			'debts.actions.create.title' => '創造債務',

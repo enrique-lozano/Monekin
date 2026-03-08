@@ -1273,6 +1273,7 @@ class _TranslationsDebtsActionsDe implements TranslationsDebtsActionsEn {
 	@override late final _TranslationsDebtsActionsDeleteDe delete = _TranslationsDebtsActionsDeleteDe._(_root);
 	@override late final _TranslationsDebtsActionsAddRegisterDe add_register = _TranslationsDebtsActionsAddRegisterDe._(_root);
 	@override late final _TranslationsDebtsActionsLinkTransactionDe link_transaction = _TranslationsDebtsActionsLinkTransactionDe._(_root);
+	@override late final _TranslationsDebtsActionsUnlinkTransactionDe unlink_transaction = _TranslationsDebtsActionsUnlinkTransactionDe._(_root);
 	@override late final _TranslationsDebtsActionsNewTransactionDe new_transaction = _TranslationsDebtsActionsNewTransactionDe._(_root);
 	@override late final _TranslationsDebtsActionsCreateDe create = _TranslationsDebtsActionsCreateDe._(_root);
 }
@@ -1792,6 +1793,18 @@ class _TranslationsDebtsActionsLinkTransactionDe implements TranslationsDebtsAct
 	@override String get description => 'Wählen Sie einen vorhandenen Datensatz aus, um ihn mit dieser Schuld zu verknüpfen';
 	@override String get success => 'Mit Schulden verbundene Transaktion';
 	@override String creating({required Object name}) => 'Sie erstellen eine Transaktion, die mit der Schuld <b>${name}</b> verknüpft ist';
+}
+
+// Path: debts.actions.unlink_transaction
+class _TranslationsDebtsActionsUnlinkTransactionDe implements TranslationsDebtsActionsUnlinkTransactionEn {
+	_TranslationsDebtsActionsUnlinkTransactionDe._(this._root);
+
+	final TranslationsDe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Von Schulden trennen?';
+	@override String get warning_text => 'Diese Transaktion wird nicht mehr mit dieser Schuld verknüpft sein.';
+	@override String get success => 'Transaktion von Schulden getrennt';
 }
 
 // Path: debts.actions.new_transaction
@@ -2575,6 +2588,9 @@ extension on TranslationsDe {
 			'debts.actions.link_transaction.description' => 'Wählen Sie einen vorhandenen Datensatz aus, um ihn mit dieser Schuld zu verknüpfen',
 			'debts.actions.link_transaction.success' => 'Mit Schulden verbundene Transaktion',
 			'debts.actions.link_transaction.creating' => ({required Object name}) => 'Sie erstellen eine Transaktion, die mit der Schuld <b>${name}</b> verknüpft ist',
+			'debts.actions.unlink_transaction.title' => 'Von Schulden trennen?',
+			'debts.actions.unlink_transaction.warning_text' => 'Diese Transaktion wird nicht mehr mit dieser Schuld verknüpft sein.',
+			'debts.actions.unlink_transaction.success' => 'Transaktion von Schulden getrennt',
 			'debts.actions.new_transaction.title' => 'Neue Transaktion hinzufügen',
 			'debts.actions.new_transaction.description' => 'Fügen Sie die Schulden manuell hinzu oder reduzieren Sie sie, indem Sie eine neue Transaktion erstellen, die mit dieser Schuld verknüpft ist',
 			'debts.actions.create.title' => 'Schulden machen',

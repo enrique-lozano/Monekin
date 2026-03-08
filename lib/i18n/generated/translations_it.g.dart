@@ -1273,6 +1273,7 @@ class _TranslationsDebtsActionsIt implements TranslationsDebtsActionsEn {
 	@override late final _TranslationsDebtsActionsDeleteIt delete = _TranslationsDebtsActionsDeleteIt._(_root);
 	@override late final _TranslationsDebtsActionsAddRegisterIt add_register = _TranslationsDebtsActionsAddRegisterIt._(_root);
 	@override late final _TranslationsDebtsActionsLinkTransactionIt link_transaction = _TranslationsDebtsActionsLinkTransactionIt._(_root);
+	@override late final _TranslationsDebtsActionsUnlinkTransactionIt unlink_transaction = _TranslationsDebtsActionsUnlinkTransactionIt._(_root);
 	@override late final _TranslationsDebtsActionsNewTransactionIt new_transaction = _TranslationsDebtsActionsNewTransactionIt._(_root);
 	@override late final _TranslationsDebtsActionsCreateIt create = _TranslationsDebtsActionsCreateIt._(_root);
 }
@@ -1792,6 +1793,18 @@ class _TranslationsDebtsActionsLinkTransactionIt implements TranslationsDebtsAct
 	@override String get description => 'Scegli un record esistente per collegarlo a questo debito';
 	@override String get success => 'Operazione legata al debito';
 	@override String creating({required Object name}) => 'Stai creando una transazione collegata al debito <b>${name}</b>';
+}
+
+// Path: debts.actions.unlink_transaction
+class _TranslationsDebtsActionsUnlinkTransactionIt implements TranslationsDebtsActionsUnlinkTransactionEn {
+	_TranslationsDebtsActionsUnlinkTransactionIt._(this._root);
+
+	final TranslationsIt _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Scollegare dal debito?';
+	@override String get warning_text => 'Questa transazione non sarà più associata a questo debito.';
+	@override String get success => 'Transazione scollegata dal debito';
 }
 
 // Path: debts.actions.new_transaction
@@ -2575,6 +2588,9 @@ extension on TranslationsIt {
 			'debts.actions.link_transaction.description' => 'Scegli un record esistente per collegarlo a questo debito',
 			'debts.actions.link_transaction.success' => 'Operazione legata al debito',
 			'debts.actions.link_transaction.creating' => ({required Object name}) => 'Stai creando una transazione collegata al debito <b>${name}</b>',
+			'debts.actions.unlink_transaction.title' => 'Scollegare dal debito?',
+			'debts.actions.unlink_transaction.warning_text' => 'Questa transazione non sarà più associata a questo debito.',
+			'debts.actions.unlink_transaction.success' => 'Transazione scollegata dal debito',
 			'debts.actions.new_transaction.title' => 'Aggiungi nuova transazione',
 			'debts.actions.new_transaction.description' => 'Aggiungi o riduci manualmente il debito creando una nuova transazione collegata a questo debito',
 			'debts.actions.create.title' => 'Creare debito',

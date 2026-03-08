@@ -811,6 +811,11 @@
         "success": "与债务挂钩的交易",
         "creating": "您正在创建与债务 <b>{{ name }}</b> 关联的交易"
       },
+      "unlink_transaction": {
+        "title": "取消与债务的关联？",
+        "warning_text": "此交易将不再与此债务相关联。",
+        "success": "交易已取消与债务的关联"
+      },
       "new_transaction": {
         "title": "添加新交易",
         "description": "通过创建与该债务相关的新交易来手动添加或减少债务"

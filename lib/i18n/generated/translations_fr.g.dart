@@ -1273,6 +1273,7 @@ class _TranslationsDebtsActionsFr implements TranslationsDebtsActionsEn {
 	@override late final _TranslationsDebtsActionsDeleteFr delete = _TranslationsDebtsActionsDeleteFr._(_root);
 	@override late final _TranslationsDebtsActionsAddRegisterFr add_register = _TranslationsDebtsActionsAddRegisterFr._(_root);
 	@override late final _TranslationsDebtsActionsLinkTransactionFr link_transaction = _TranslationsDebtsActionsLinkTransactionFr._(_root);
+	@override late final _TranslationsDebtsActionsUnlinkTransactionFr unlink_transaction = _TranslationsDebtsActionsUnlinkTransactionFr._(_root);
 	@override late final _TranslationsDebtsActionsNewTransactionFr new_transaction = _TranslationsDebtsActionsNewTransactionFr._(_root);
 	@override late final _TranslationsDebtsActionsCreateFr create = _TranslationsDebtsActionsCreateFr._(_root);
 }
@@ -1790,6 +1791,18 @@ class _TranslationsDebtsActionsLinkTransactionFr implements TranslationsDebtsAct
 	@override String get description => 'Choisir un enregistrement existant pour le lier à cette dette';
 	@override String get success => 'Opération liée à la dette';
 	@override String creating({required Object name}) => 'Vous créez une transaction liée à la dette <b>${name}</b>';
+}
+
+// Path: debts.actions.unlink_transaction
+class _TranslationsDebtsActionsUnlinkTransactionFr implements TranslationsDebtsActionsUnlinkTransactionEn {
+	_TranslationsDebtsActionsUnlinkTransactionFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Dissocier de la dette ?';
+	@override String get warning_text => 'Cette transaction ne sera plus associée à cette dette.';
+	@override String get success => 'Transaction dissociée de la dette';
 }
 
 // Path: debts.actions.new_transaction
@@ -2573,6 +2586,9 @@ extension on TranslationsFr {
 			'debts.actions.link_transaction.description' => 'Choisir un enregistrement existant pour le lier à cette dette',
 			'debts.actions.link_transaction.success' => 'Opération liée à la dette',
 			'debts.actions.link_transaction.creating' => ({required Object name}) => 'Vous créez une transaction liée à la dette <b>${name}</b>',
+			'debts.actions.unlink_transaction.title' => 'Dissocier de la dette ?',
+			'debts.actions.unlink_transaction.warning_text' => 'Cette transaction ne sera plus associée à cette dette.',
+			'debts.actions.unlink_transaction.success' => 'Transaction dissociée de la dette',
 			'debts.actions.new_transaction.title' => 'Ajouter une nouvelle transaction',
 			'debts.actions.new_transaction.description' => 'Ajouter ou réduire manuellement la dette en créant une nouvelle transaction liée à cette dette',
 			'debts.actions.create.title' => 'Créer de la dette',

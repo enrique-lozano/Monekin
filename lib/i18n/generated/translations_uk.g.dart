@@ -1273,6 +1273,7 @@ class _TranslationsDebtsActionsUk implements TranslationsDebtsActionsEn {
 	@override late final _TranslationsDebtsActionsDeleteUk delete = _TranslationsDebtsActionsDeleteUk._(_root);
 	@override late final _TranslationsDebtsActionsAddRegisterUk add_register = _TranslationsDebtsActionsAddRegisterUk._(_root);
 	@override late final _TranslationsDebtsActionsLinkTransactionUk link_transaction = _TranslationsDebtsActionsLinkTransactionUk._(_root);
+	@override late final _TranslationsDebtsActionsUnlinkTransactionUk unlink_transaction = _TranslationsDebtsActionsUnlinkTransactionUk._(_root);
 	@override late final _TranslationsDebtsActionsNewTransactionUk new_transaction = _TranslationsDebtsActionsNewTransactionUk._(_root);
 	@override late final _TranslationsDebtsActionsCreateUk create = _TranslationsDebtsActionsCreateUk._(_root);
 }
@@ -1792,6 +1793,18 @@ class _TranslationsDebtsActionsLinkTransactionUk implements TranslationsDebtsAct
 	@override String get description => 'Виберіть існуючий запис, щоб пов’язати його з цим боргом';
 	@override String get success => 'Операція, пов\'язана з боргом';
 	@override String creating({required Object name}) => 'Ви створюєте транзакцію, пов\'язану з боргом <b>${name}</b>';
+}
+
+// Path: debts.actions.unlink_transaction
+class _TranslationsDebtsActionsUnlinkTransactionUk implements TranslationsDebtsActionsUnlinkTransactionEn {
+	_TranslationsDebtsActionsUnlinkTransactionUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Від\'єднати від боргу?';
+	@override String get warning_text => 'Ця транзакція більше не буде пов\'язана з цим боргом.';
+	@override String get success => 'Транзакцію від\'єднано від боргу';
 }
 
 // Path: debts.actions.new_transaction
@@ -2575,6 +2588,9 @@ extension on TranslationsUk {
 			'debts.actions.link_transaction.description' => 'Виберіть існуючий запис, щоб пов’язати його з цим боргом',
 			'debts.actions.link_transaction.success' => 'Операція, пов\'язана з боргом',
 			'debts.actions.link_transaction.creating' => ({required Object name}) => 'Ви створюєте транзакцію, пов\'язану з боргом <b>${name}</b>',
+			'debts.actions.unlink_transaction.title' => 'Від\'єднати від боргу?',
+			'debts.actions.unlink_transaction.warning_text' => 'Ця транзакція більше не буде пов\'язана з цим боргом.',
+			'debts.actions.unlink_transaction.success' => 'Транзакцію від\'єднано від боргу',
 			'debts.actions.new_transaction.title' => 'Додати нову транзакцію',
 			'debts.actions.new_transaction.description' => 'Вручну додайте або зменшіть борг, створивши нову транзакцію, пов’язану з цим боргом',
 			'debts.actions.create.title' => 'Створити борг',

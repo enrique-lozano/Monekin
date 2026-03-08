@@ -1273,6 +1273,7 @@ class _TranslationsDebtsActionsTr implements TranslationsDebtsActionsEn {
 	@override late final _TranslationsDebtsActionsDeleteTr delete = _TranslationsDebtsActionsDeleteTr._(_root);
 	@override late final _TranslationsDebtsActionsAddRegisterTr add_register = _TranslationsDebtsActionsAddRegisterTr._(_root);
 	@override late final _TranslationsDebtsActionsLinkTransactionTr link_transaction = _TranslationsDebtsActionsLinkTransactionTr._(_root);
+	@override late final _TranslationsDebtsActionsUnlinkTransactionTr unlink_transaction = _TranslationsDebtsActionsUnlinkTransactionTr._(_root);
 	@override late final _TranslationsDebtsActionsNewTransactionTr new_transaction = _TranslationsDebtsActionsNewTransactionTr._(_root);
 	@override late final _TranslationsDebtsActionsCreateTr create = _TranslationsDebtsActionsCreateTr._(_root);
 }
@@ -1792,6 +1793,18 @@ class _TranslationsDebtsActionsLinkTransactionTr implements TranslationsDebtsAct
 	@override String get description => 'Bu borca ​​bağlamak için mevcut bir kaydı seçin';
 	@override String get success => 'Borca bağlı işlem';
 	@override String creating({required Object name}) => '<b>${name}</b> borcuna bağlı bir işlem oluşturuyorsunuz';
+}
+
+// Path: debts.actions.unlink_transaction
+class _TranslationsDebtsActionsUnlinkTransactionTr implements TranslationsDebtsActionsUnlinkTransactionEn {
+	_TranslationsDebtsActionsUnlinkTransactionTr._(this._root);
+
+	final TranslationsTr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Borçtan bağlantıyı kaldır?';
+	@override String get warning_text => 'Bu işlem artık bu borçla ilişkilendirilmeyecek.';
+	@override String get success => 'İşlemin borca bağlantısı kaldırıldı';
 }
 
 // Path: debts.actions.new_transaction
@@ -2575,6 +2588,9 @@ extension on TranslationsTr {
 			'debts.actions.link_transaction.description' => 'Bu borca ​​bağlamak için mevcut bir kaydı seçin',
 			'debts.actions.link_transaction.success' => 'Borca bağlı işlem',
 			'debts.actions.link_transaction.creating' => ({required Object name}) => '<b>${name}</b> borcuna bağlı bir işlem oluşturuyorsunuz',
+			'debts.actions.unlink_transaction.title' => 'Borçtan bağlantıyı kaldır?',
+			'debts.actions.unlink_transaction.warning_text' => 'Bu işlem artık bu borçla ilişkilendirilmeyecek.',
+			'debts.actions.unlink_transaction.success' => 'İşlemin borca bağlantısı kaldırıldı',
 			'debts.actions.new_transaction.title' => 'Yeni işlem ekle',
 			'debts.actions.new_transaction.description' => 'Bu borca ​​bağlı yeni bir işlem oluşturarak borcu manuel olarak ekleyin veya azaltın',
 			'debts.actions.create.title' => 'Borç oluştur',

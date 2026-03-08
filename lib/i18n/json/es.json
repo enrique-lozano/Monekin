@@ -814,6 +814,11 @@
         "success": "Transacción vinculada a deuda",
         "creating": "Estás creando una transacción vinculada a la deuda <b>{{ name }}</b>"
       },
+      "unlink_transaction": {
+        "title": "¿Desvincular de la deuda?",
+        "warning_text": "Esta transacción ya no estará asociada a esta deuda.",
+        "success": "Transacción desvinculada de la deuda"
+      },
       "new_transaction": {
         "title": "Agregar nueva transacción",
         "description": "Agregue o reduzca manualmente la deuda creando una nueva transacción vinculada a esta deuda"

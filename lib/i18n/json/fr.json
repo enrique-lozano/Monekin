@@ -810,6 +810,11 @@
         "success": "Opération liée à la dette",
         "creating": "Vous créez une transaction liée à la dette <b>{{ name }}</b>"
       },
+      "unlink_transaction": {
+        "title": "Dissocier de la dette ?",
+        "warning_text": "Cette transaction ne sera plus associée à cette dette.",
+        "success": "Transaction dissociée de la dette"
+      },
       "new_transaction": {
         "title": "Ajouter une nouvelle transaction",
         "description": "Ajouter ou réduire manuellement la dette en créant une nouvelle transaction liée à cette dette"

@@ -811,6 +811,11 @@
         "success": "Operazione legata al debito",
         "creating": "Stai creando una transazione collegata al debito <b>{{ name }}</b>"
       },
+      "unlink_transaction": {
+        "title": "Scollegare dal debito?",
+        "warning_text": "Questa transazione non sarà più associata a questo debito.",
+        "success": "Transazione scollegata dal debito"
+      },
       "new_transaction": {
         "title": "Aggiungi nuova transazione",
         "description": "Aggiungi o riduci manualmente il debito creando una nuova transazione collegata a questo debito"

@@ -1273,6 +1273,7 @@ class _TranslationsDebtsActionsHu implements TranslationsDebtsActionsEn {
 	@override late final _TranslationsDebtsActionsDeleteHu delete = _TranslationsDebtsActionsDeleteHu._(_root);
 	@override late final _TranslationsDebtsActionsAddRegisterHu add_register = _TranslationsDebtsActionsAddRegisterHu._(_root);
 	@override late final _TranslationsDebtsActionsLinkTransactionHu link_transaction = _TranslationsDebtsActionsLinkTransactionHu._(_root);
+	@override late final _TranslationsDebtsActionsUnlinkTransactionHu unlink_transaction = _TranslationsDebtsActionsUnlinkTransactionHu._(_root);
 	@override late final _TranslationsDebtsActionsNewTransactionHu new_transaction = _TranslationsDebtsActionsNewTransactionHu._(_root);
 	@override late final _TranslationsDebtsActionsCreateHu create = _TranslationsDebtsActionsCreateHu._(_root);
 }
@@ -1792,6 +1793,18 @@ class _TranslationsDebtsActionsLinkTransactionHu implements TranslationsDebtsAct
 	@override String get description => 'Válasszon egy meglévő rekordot, hogy összekapcsolja ezzel a tartozással';
 	@override String get success => 'Adóssághoz kapcsolódó ügylet';
 	@override String creating({required Object name}) => 'Egy <b>${name}</b> adóssághoz kapcsolódó tranzakciót hoz létre';
+}
+
+// Path: debts.actions.unlink_transaction
+class _TranslationsDebtsActionsUnlinkTransactionHu implements TranslationsDebtsActionsUnlinkTransactionEn {
+	_TranslationsDebtsActionsUnlinkTransactionHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Leválasztás az adósságról?';
+	@override String get warning_text => 'Ez a tranzakció a továbbiakban nem lesz ehhez a tartozáshoz társítva.';
+	@override String get success => 'Tranzakció leválasztva az adósságról';
 }
 
 // Path: debts.actions.new_transaction
@@ -2575,6 +2588,9 @@ extension on TranslationsHu {
 			'debts.actions.link_transaction.description' => 'Válasszon egy meglévő rekordot, hogy összekapcsolja ezzel a tartozással',
 			'debts.actions.link_transaction.success' => 'Adóssághoz kapcsolódó ügylet',
 			'debts.actions.link_transaction.creating' => ({required Object name}) => 'Egy <b>${name}</b> adóssághoz kapcsolódó tranzakciót hoz létre',
+			'debts.actions.unlink_transaction.title' => 'Leválasztás az adósságról?',
+			'debts.actions.unlink_transaction.warning_text' => 'Ez a tranzakció a továbbiakban nem lesz ehhez a tartozáshoz társítva.',
+			'debts.actions.unlink_transaction.success' => 'Tranzakció leválasztva az adósságról',
 			'debts.actions.new_transaction.title' => 'Új tranzakció hozzáadása',
 			'debts.actions.new_transaction.description' => 'Manuálisan adja hozzá vagy csökkentse az adósságot úgy, hogy új tranzakciót hoz létre ehhez az adóssághoz kapcsolva',
 			'debts.actions.create.title' => 'Adósság létrehozása',

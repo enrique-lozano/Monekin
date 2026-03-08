@@ -2245,6 +2245,7 @@ class TranslationsDebtsActionsEn {
 	late final TranslationsDebtsActionsDeleteEn delete = TranslationsDebtsActionsDeleteEn._(_root);
 	late final TranslationsDebtsActionsAddRegisterEn add_register = TranslationsDebtsActionsAddRegisterEn._(_root);
 	late final TranslationsDebtsActionsLinkTransactionEn link_transaction = TranslationsDebtsActionsLinkTransactionEn._(_root);
+	late final TranslationsDebtsActionsUnlinkTransactionEn unlink_transaction = TranslationsDebtsActionsUnlinkTransactionEn._(_root);
 	late final TranslationsDebtsActionsNewTransactionEn new_transaction = TranslationsDebtsActionsNewTransactionEn._(_root);
 	late final TranslationsDebtsActionsCreateEn create = TranslationsDebtsActionsCreateEn._(_root);
 }
@@ -3140,6 +3141,24 @@ class TranslationsDebtsActionsLinkTransactionEn {
 
 	/// en: 'You are creating a transaction linked to the debt <b>{{ name }}</b>'
 	String creating({required Object name}) => 'You are creating a transaction linked to the debt <b>${name}</b>';
+}
+
+// Path: debts.actions.unlink_transaction
+class TranslationsDebtsActionsUnlinkTransactionEn {
+	TranslationsDebtsActionsUnlinkTransactionEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Unlink from debt?'
+	String get title => 'Unlink from debt?';
+
+	/// en: 'This transaction will no longer be associated with this debt.'
+	String get warning_text => 'This transaction will no longer be associated with this debt.';
+
+	/// en: 'Transaction unlinked from debt'
+	String get success => 'Transaction unlinked from debt';
 }
 
 // Path: debts.actions.new_transaction
@@ -4052,6 +4071,9 @@ extension on Translations {
 			'debts.actions.link_transaction.description' => 'Choose an existing record to link it to this debt',
 			'debts.actions.link_transaction.success' => 'Transaction linked to debt',
 			'debts.actions.link_transaction.creating' => ({required Object name}) => 'You are creating a transaction linked to the debt <b>${name}</b>',
+			'debts.actions.unlink_transaction.title' => 'Unlink from debt?',
+			'debts.actions.unlink_transaction.warning_text' => 'This transaction will no longer be associated with this debt.',
+			'debts.actions.unlink_transaction.success' => 'Transaction unlinked from debt',
 			'debts.actions.new_transaction.title' => 'Add new transaction',
 			'debts.actions.new_transaction.description' => 'Manually add or reduce the debt by creating a new transaction linked to this debt',
 			'debts.actions.create.title' => 'Create debt',

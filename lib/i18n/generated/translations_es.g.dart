@@ -1273,6 +1273,7 @@ class _TranslationsDebtsActionsEs implements TranslationsDebtsActionsEn {
 	@override late final _TranslationsDebtsActionsDeleteEs delete = _TranslationsDebtsActionsDeleteEs._(_root);
 	@override late final _TranslationsDebtsActionsAddRegisterEs add_register = _TranslationsDebtsActionsAddRegisterEs._(_root);
 	@override late final _TranslationsDebtsActionsLinkTransactionEs link_transaction = _TranslationsDebtsActionsLinkTransactionEs._(_root);
+	@override late final _TranslationsDebtsActionsUnlinkTransactionEs unlink_transaction = _TranslationsDebtsActionsUnlinkTransactionEs._(_root);
 	@override late final _TranslationsDebtsActionsNewTransactionEs new_transaction = _TranslationsDebtsActionsNewTransactionEs._(_root);
 	@override late final _TranslationsDebtsActionsCreateEs create = _TranslationsDebtsActionsCreateEs._(_root);
 }
@@ -1793,6 +1794,18 @@ class _TranslationsDebtsActionsLinkTransactionEs implements TranslationsDebtsAct
 	@override String get description => 'Elija un registro existente para vincularlo a esta deuda';
 	@override String get success => 'Transacción vinculada a deuda';
 	@override String creating({required Object name}) => 'Estás creando una transacción vinculada a la deuda <b>${name}</b>';
+}
+
+// Path: debts.actions.unlink_transaction
+class _TranslationsDebtsActionsUnlinkTransactionEs implements TranslationsDebtsActionsUnlinkTransactionEn {
+	_TranslationsDebtsActionsUnlinkTransactionEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '¿Desvincular de la deuda?';
+	@override String get warning_text => 'Esta transacción ya no estará asociada a esta deuda.';
+	@override String get success => 'Transacción desvinculada de la deuda';
 }
 
 // Path: debts.actions.new_transaction
@@ -2577,6 +2590,9 @@ extension on TranslationsEs {
 			'debts.actions.link_transaction.description' => 'Elija un registro existente para vincularlo a esta deuda',
 			'debts.actions.link_transaction.success' => 'Transacción vinculada a deuda',
 			'debts.actions.link_transaction.creating' => ({required Object name}) => 'Estás creando una transacción vinculada a la deuda <b>${name}</b>',
+			'debts.actions.unlink_transaction.title' => '¿Desvincular de la deuda?',
+			'debts.actions.unlink_transaction.warning_text' => 'Esta transacción ya no estará asociada a esta deuda.',
+			'debts.actions.unlink_transaction.success' => 'Transacción desvinculada de la deuda',
 			'debts.actions.new_transaction.title' => 'Agregar nueva transacción',
 			'debts.actions.new_transaction.description' => 'Agregue o reduzca manualmente la deuda creando una nueva transacción vinculada a esta deuda',
 			'debts.actions.create.title' => 'Crear deuda',

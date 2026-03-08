@@ -811,6 +811,11 @@
         "success": "Mit Schulden verbundene Transaktion",
         "creating": "Sie erstellen eine Transaktion, die mit der Schuld <b>{{ name }}</b> verknüpft ist"
       },
+      "unlink_transaction": {
+        "title": "Von Schulden trennen?",
+        "warning_text": "Diese Transaktion wird nicht mehr mit dieser Schuld verknüpft sein.",
+        "success": "Transaktion von Schulden getrennt"
+      },
       "new_transaction": {
         "title": "Neue Transaktion hinzufügen",
         "description": "Fügen Sie die Schulden manuell hinzu oder reduzieren Sie sie, indem Sie eine neue Transaktion erstellen, die mit dieser Schuld verknüpft ist"

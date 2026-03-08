@@ -67,13 +67,13 @@ class TransactionViewActionService {
     BuildContext context, {
     required String transactionId,
   }) async {
+    final t = Translations.of(context);
+
     final confirmed = await confirmDialog(
       context,
-      dialogTitle: 'Unlink from debt?',
+      dialogTitle: t.debts.actions.unlink_transaction.title,
       contentParagraphs: [
-        const Text(
-          'This transaction will no longer be associated with this debt.',
-        ),
+        Text(t.debts.actions.unlink_transaction.warning_text),
       ],
       showCancelButton: true,
       icon: Icons.link_off_rounded,
@@ -81,7 +81,9 @@ class TransactionViewActionService {
     if (confirmed != true) return;
     try {
       await DebtService.instance.unlinkTransactionFromDebt(transactionId);
-      MonekinSnackbar.success(SnackbarParams('Transaction unlinked from debt'));
+      MonekinSnackbar.success(
+        SnackbarParams(t.debts.actions.unlink_transaction.success),
+      );
     } catch (e) {
       MonekinSnackbar.error(SnackbarParams.fromError(e));
     }

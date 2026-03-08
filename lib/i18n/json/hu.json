@@ -811,6 +811,11 @@
         "success": "Adóssághoz kapcsolódó ügylet",
         "creating": "Egy <b>{{ name }}</b> adóssághoz kapcsolódó tranzakciót hoz létre"
       },
+      "unlink_transaction": {
+        "title": "Leválasztás az adósságról?",
+        "warning_text": "Ez a tranzakció a továbbiakban nem lesz ehhez a tartozáshoz társítva.",
+        "success": "Tranzakció leválasztva az adósságról"
+      },
       "new_transaction": {
         "title": "Új tranzakció hozzáadása",
         "description": "Manuálisan adja hozzá vagy csökkentse az adósságot úgy, hogy új tranzakciót hoz létre ehhez az adóssághoz kapcsolva"

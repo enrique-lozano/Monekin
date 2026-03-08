@@ -810,6 +810,11 @@
         "success": "Transaction linked to debt",
         "creating": "You are creating a transaction linked to the debt <b>{{ name }}</b>"
       },
+      "unlink_transaction": {
+        "title": "Unlink from debt?",
+        "warning_text": "This transaction will no longer be associated with this debt.",
+        "success": "Transaction unlinked from debt"
+      },
       "new_transaction": {
         "title": "Add new transaction",
         "description": "Manually add or reduce the debt by creating a new transaction linked to this debt"
