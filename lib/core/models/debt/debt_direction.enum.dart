@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart' show Icons;
+import 'package:flutter/material.dart' show Colors, Icons;
 import 'package:flutter/widgets.dart';
 import 'package:monekin/core/database/utils/database_enum.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 enum DebtDirection implements DatabaseEnum<int> {
@@ -32,9 +31,9 @@ enum DebtDirection implements DatabaseEnum<int> {
   Color color(BuildContext context) {
     switch (this) {
       case DebtDirection.lent:
-        return AppColors.of(context).danger;
+        return Colors.lightBlue;
       case DebtDirection.borrowed:
-        return AppColors.of(context).success;
+        return Colors.purpleAccent;
     }
   }
 
