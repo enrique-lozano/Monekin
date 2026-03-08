@@ -99,7 +99,7 @@ class DebtList extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Text(
-                  "${snapshot.data!.toStringAsFixed(2)} ${debt.currency.symbol}",
+                  "${snapshot.data!.toStringAsFixed(debt.currency.decimalPlaces)} ${debt.currency.symbol}",
                   style: Theme.of(context).textTheme.bodyLarge,
                 );
               }
