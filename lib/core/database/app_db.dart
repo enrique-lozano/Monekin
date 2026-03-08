@@ -11,6 +11,7 @@ import 'package:monekin/core/database/sql/initial/seed.dart';
 import 'package:monekin/core/database/utils/database_enum.dart';
 import 'package:monekin/core/database/utils/list_converters.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
@@ -83,7 +84,7 @@ class AppDB extends _$AppDB {
   }
 
   @override
-  int get schemaVersion => 10;
+  int get schemaVersion => 11;
 
   @override
   MigrationStrategy get migration {

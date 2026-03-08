@@ -487,7 +487,9 @@
       "normal": "普通帳戶",
       "normal.descr": "對於記錄您的日常財務很有用。這是最常見的帳戶，它可以讓您添加支出、收入......",
       "saving": "儲蓄帳戶",
-      "saving.descr": "您只能從其他帳戶中添加和提取資金。非常適合開始存錢"
+      "saving.descr": "您只能從其他帳戶中添加和提取資金。非常適合開始存錢",
+      "investment": "Investment account",
+      "investment.descr": "A broker, crypto exchange or portfolio account. Track your invested capital and update its value manually via valuations"
     },
     "FORM": {
       "name": "帳戶名稱",

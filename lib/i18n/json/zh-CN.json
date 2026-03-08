@@ -487,7 +487,9 @@
       "normal": "普通账户",
       "normal.descr": "用于记录日常财务。这是最普通的账户，您可以添加支出、收入……",
       "saving": "储蓄账户",
-      "saving.descr": "您只能从此账户中向其它账户中转入/转出（而无法用于消费开支）。非常适合用于存钱"
+      "saving.descr": "您只能从此账户中向其它账户中转入/转出（而无法用于消费开支）。非常适合用于存钱",
+      "investment": "Investment account",
+      "investment.descr": "A broker, crypto exchange or portfolio account. Track your invested capital and update its value manually via valuations"
     },
     "FORM": {
       "name": "账户名称",

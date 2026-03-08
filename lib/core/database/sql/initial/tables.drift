@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS accounts (
     date DATETIME NOT NULL,
 
     description TEXT,
-    type ENUMNAME(AccountType) NOT NULL CHECK(type IN ('normal', 'saving')),
+    type ENUMNAME(AccountType) NOT NULL CHECK(type IN ('normal', 'saving', 'investment')),
     
     iconId TEXT NOT NULL,
 
@@ -78,7 +78,10 @@ CREATE TABLE IF NOT EXISTS accounts (
     currencyId TEXT NOT NULL REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
     
     iban TEXT,
-    swift TEXT
+    swift TEXT,
+
+    -- Whether to include this account when computing the user's net worth
+    includeInNetWorth BOOLEAN NOT NULL DEFAULT 1
 ) AS AccountInDB;
 
 CREATE TABLE IF NOT EXISTS categories (
@@ -309,6 +312,47 @@ CREATE TABLE IF NOT EXISTS debts (
     endDate DATETIME
 ) AS DebtInDB;
 
+
+CREATE TABLE IF NOT EXISTS assets (
+    id TEXT NOT NULL PRIMARY KEY,
+
+    -- Asset name (unique among user assets)
+    name TEXT UNIQUE NOT NULL,
+
+    -- Optional description
+    description TEXT,
+
+    -- ID of the reference currency for this asset
+    currencyId TEXT NOT NULL REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    -- Initial/purchase value of the asset
+    initialValue REAL NOT NULL DEFAULT 0,
+
+    -- Date this asset was acquired or created
+    creationDate DATETIME NOT NULL,
+
+    -- Whether to include this asset when computing the user's net worth
+    includeInNetWorth BOOLEAN NOT NULL DEFAULT 1
+) AS AssetInDB;
+
+CREATE TABLE IF NOT EXISTS valuations (
+    id TEXT NOT NULL PRIMARY KEY,
+
+    -- FK to the account this valuation belongs to (mutually exclusive with assetId)
+    accountId TEXT REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    -- FK to the asset this valuation belongs to (mutually exclusive with accountId)
+    assetId TEXT REFERENCES assets(id) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    -- Date of this valuation snapshot
+    date DATETIME NOT NULL,
+
+    -- Value at the time of this snapshot, in the currency of the account or asset
+    value REAL NOT NULL,
+
+    -- Exactly one of accountId or assetId must be set
+    CHECK ((accountId IS NULL) != (assetId IS NULL))
+) AS ValuationInDB;
 
 CREATE TABLE IF NOT EXISTS userSettings (
   settingKey ENUMNAME(SettingKey) NOT NULL PRIMARY KEY,

@@ -234,6 +234,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
             type: AccountType.normal,
             iconId: SupportedIconService.instance.defaultSupportedIcon.id,
             currencyId: preferredCurrency.code,
+            includeInNetWorth: true,
           );
           await AccountService.instance.insertAccount(account);
           existingAccounts[lowerAccountName] = account;

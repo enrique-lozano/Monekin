@@ -487,7 +487,9 @@
       "normal": "Normál számla",
       "normal.descr": "Hasznos a napi pénzügyek rögzítéséhez. Ez a leggyakoribb számla, amely lehetővé teszi kiadások, bevételek hozzáadását...",
       "saving": "Megtakarítási számla",
-      "saving.descr": "Csak más számlákról tud pénzt hozzáadni és kivenni belőle. Tökéletes a megtakarítás megkezdéséhez."
+      "saving.descr": "Csak más számlákról tud pénzt hozzáadni és kivenni belőle. Tökéletes a megtakarítás megkezdéséhez.",
+      "investment": "Investment account",
+      "investment.descr": "A broker, crypto exchange or portfolio account. Track your invested capital and update its value manually via valuations"
     },
     "FORM": {
       "name": "Számla neve",

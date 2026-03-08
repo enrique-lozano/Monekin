@@ -1,4 +1,4 @@
-﻿{
+{
   "UI-ACTIONS": {
     "cancel": "Annuler",
     "confirm": "Confirmer",
@@ -487,7 +487,9 @@
       "normal": "Compte normal",
       "normal.descr": "Utile pour enregistrer vos finances du quotidien. C'est le type de compte le plus courant, il vous permet d'ajouter des dépenses, des recettes...",
       "saving": "Compte d'épargne",
-      "saving.descr": "Vous ne pourrez y ajouter et y retirer de l'argent qu'à partir d'autres comptes. Parfait pour commencer à économiser"
+      "saving.descr": "Vous ne pourrez y ajouter et y retirer de l'argent qu'à partir d'autres comptes. Parfait pour commencer à économiser",
+      "investment": "Investment account",
+      "investment.descr": "A broker, crypto exchange or portfolio account. Track your invested capital and update its value manually via valuations"
     },
     "FORM": {
       "name": "Nom du compte",

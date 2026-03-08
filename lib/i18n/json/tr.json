@@ -487,7 +487,9 @@
       "normal": "Normal hesap",
       "normal.descr": "Günlük mali durumunuzu kaydetmek için kullanışlıdır. En yaygın hesaptır, giderler, gelirler eklemenize olanak tanır...",
       "saving": "Tasarruf hesabı",
-      "saving.descr": "Yalnızca diğer hesaplardan para ekleyebilecek ve çekebileceksiniz. Para biriktirmeye başlamak için mükemmel"
+      "saving.descr": "Yalnızca diğer hesaplardan para ekleyebilecek ve çekebileceksiniz. Para biriktirmeye başlamak için mükemmel",
+      "investment": "Investment account",
+      "investment.descr": "A broker, crypto exchange or portfolio account. Track your invested capital and update its value manually via valuations"
     },
     "FORM": {
       "name": "Hesap adı",

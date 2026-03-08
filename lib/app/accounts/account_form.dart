@@ -112,6 +112,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
       iban: _ibanController.text.isEmpty ? null : _ibanController.text,
       description: _textController.text.isEmpty ? null : _textController.text,
       swift: _swiftController.text.isEmpty ? null : _swiftController.text,
+      includeInNetWorth: _accountToEdit?.includeInNetWorth ?? true,
     );
 
     // Check for accounts with same names before continue:

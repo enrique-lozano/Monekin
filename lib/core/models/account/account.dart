@@ -12,13 +12,19 @@ enum AccountType {
   normal,
 
   /// This type of accounts can not have transactions. You only can add and withdraw money from it from other accounts
-  saving;
+  saving,
+
+  /// An investment account (broker, crypto exchange, ETF portfolio, etc.).
+  /// Its current value is tracked via manual valuations rather than individual transactions.
+  investment;
 
   IconData get icon {
     if (this == normal) {
       return Icons.wallet;
     } else if (this == saving) {
       return Icons.savings;
+    } else if (this == investment) {
+      return Icons.trending_up_rounded;
     }
 
     return Icons.question_mark;
@@ -31,6 +37,8 @@ enum AccountType {
       return t.account.types.normal;
     } else if (this == saving) {
       return t.account.types.saving;
+    } else if (this == investment) {
+      return t.account.types.investment;
     }
 
     return '';
@@ -43,6 +51,8 @@ enum AccountType {
       return t.account.types.normal_descr;
     } else if (this == saving) {
       return t.account.types.saving_descr;
+    } else if (this == investment) {
+      return t.account.types.investment_descr;
     }
 
     return '';
@@ -59,6 +69,7 @@ class Account extends AccountInDB {
     required super.displayOrder,
     required super.iconId,
     required this.currency,
+    required super.includeInNetWorth,
     super.closingDate,
     super.description,
     super.iban,
@@ -124,5 +135,6 @@ class Account extends AccountInDB {
     closingDate: account.closingDate,
     type: account.type,
     color: account.color,
+    includeInNetWorth: account.includeInNetWorth,
   );
 }

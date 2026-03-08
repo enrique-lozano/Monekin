@@ -27,6 +27,7 @@ final List<AccountInDB> _accountsToCreate = [
     iniValue: 1000,
     date: DateTime(2023),
     iconId: 'wallet',
+    includeInNetWorth: true,
   ),
   AccountInDB(
     id: _bankAccountID,
@@ -37,6 +38,7 @@ final List<AccountInDB> _accountsToCreate = [
     iniValue: 5000,
     date: DateTime(2023),
     iconId: 'bank',
+    includeInNetWorth: true,
   ),
 ];
 

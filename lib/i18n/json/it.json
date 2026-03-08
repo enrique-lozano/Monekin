@@ -487,7 +487,9 @@
       "normal": "Conto normale",
       "normal.descr": "Utile per registrare le tue finanze quotidiane. È il conto più comune, ti permette di aggiungere spese, entrate...",
       "saving": "Conto risparmio",
-      "saving.descr": "Potrai solo aggiungere e prelevare denaro da esso da altri conti. Perfetto per iniziare a risparmiare denaro"
+      "saving.descr": "Potrai solo aggiungere e prelevare denaro da esso da altri conti. Perfetto per iniziare a risparmiare denaro",
+      "investment": "Investment account",
+      "investment.descr": "A broker, crypto exchange or portfolio account. Track your invested capital and update its value manually via valuations"
     },
     "FORM": {
       "name": "Nome conto",

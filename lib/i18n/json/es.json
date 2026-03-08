@@ -490,7 +490,9 @@
       "normal": "Cuenta corriente",
       "normal.descr": "Útil para registrar tus finanzas del día a día. Es la cuenta mas común, permite añadir gastos, ingresos...",
       "saving": "Cuenta de ahorros",
-      "saving.descr": "Solo podrás añadir y retirar dinero de ella desde otras cuentas. Perfecta para empezar a ahorrar"
+      "saving.descr": "Solo podrás añadir y retirar dinero de ella desde otras cuentas. Perfecta para empezar a ahorrar",
+      "investment": "Investment account",
+      "investment.descr": "A broker, crypto exchange or portfolio account. Track your invested capital and update its value manually via valuations"
     },
     "FORM": {
       "name": "Nombre de la cuenta",

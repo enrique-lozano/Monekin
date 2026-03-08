@@ -487,7 +487,9 @@
       "normal": "Normal account",
       "normal.descr": "Useful to record your day-to-day finances. It is the most common account, it allows you to add expenses, income...",
       "saving": "Savings account",
-      "saving.descr": "You will only be able to add and withdraw money from it from other accounts. Perfect to start saving money"
+      "saving.descr": "You will only be able to add and withdraw money from it from other accounts. Perfect to start saving money",
+      "investment": "Investment account",
+      "investment.descr": "A broker, crypto exchange or portfolio account. Track your invested capital and update its value manually via valuations"
     },
     "FORM": {
       "name": "Account name",
