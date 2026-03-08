@@ -79,7 +79,7 @@ dev_dependencies:
 
   # Generators:
   build_runner: 2.10.1
-  json_serializable: ^6.2.0
+  json_serializable: ^6.11.2
   flutter_launcher_icons: ^0.14.2 # Package to regenerate icons (config later in this file). To run, type `dart run flutter_launcher_icons`
   drift_dev: ^2.30.0
   slang_build_runner: ^4.4.0 # To regenerate the translations run 'dart run slang'
