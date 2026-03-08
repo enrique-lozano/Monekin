@@ -153,16 +153,7 @@ ThemeData getThemeData(
       contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       floatingLabelBehavior: FloatingLabelBehavior.auto,
       hintStyle: TextStyle(color: customAppColors.textHint),
-      border: UnderlineInputBorder(
-        borderSide: BorderSide.none,
-        borderRadius: BorderRadius.only(
-          topLeft: inputBorderRadius,
-          topRight: inputBorderRadius,
-          bottomLeft: inputBorderRadius,
-          bottomRight: inputBorderRadius,
-        ),
-        //    borderSide: BorderSide(color: theme.colorScheme.outline),
-      ),
+      border: appInputBorder,
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: theme.colorScheme.primary,

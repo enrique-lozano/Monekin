@@ -316,6 +316,7 @@
     "delete.multiple.warning-message": "This action is irreversible and will remove {{ x }} transactions. The current balance of your accounts and all your statistics will be recalculated",
     "delete.multiple.success": "{{x}} transactions deleted correctly",
     "details": "Movement details",
+    "select": "Select a transaction",
     "NEXT-PAYMENTS": {
       "accept": "Accept",
       "skip": "Skip",
@@ -741,6 +742,86 @@
         "active-indeterminate": "You need {{ amount }} more to reach your goal.",
         "success": "Congratulations! You reached your goal.",
         "fail": "You missed your goal by {{ amount }}."
+      }
+    }
+  },
+  "DEBTS": {
+    "display": {
+      "one": "Debt",
+      "other": "Debts"
+    },
+    "FORM": {
+      "name": "Debt name",
+      "initial_amount": "Initial amount",
+      "total_amount": "Total amount",
+      "step_initial_value": "Initial value",
+      "step_details": "Details",
+      "from_transaction": {
+        "title": "From a transaction",
+        "tap_to_select": "Tap to select a transaction"
+      },
+      "from_amount": {
+        "title": "From an initial amount",
+        "description": "This amount will not be taken into account for statistics as an expense/income. It will be used to calculate balances and net worth"
+      }
+    },
+    "DIRECTION": {
+      "lent": "Lent",
+      "borrowed": "Borrowed"
+    },
+    "STATUS": {
+      "active": "Active",
+      "close": "Closed"
+    },
+    "DETAILS": {
+      "collected_amount": "Collected amount",
+      "remaining": "Remaining",
+      "no_deadline": "No deadline",
+      "in_days": "In {{x}} days",
+      "due_today": "Due today",
+      "days_ago": "{{x}} days ago",
+      "overdue_by": "Overdue by {{x}} days",
+      "per_day": "/ day",
+      "no_transactions": "No transactions found for this debt"
+    },
+    "EMPTY": {
+      "no_debts_active": "No active debts found. Start by creating a new debt by clicking the button below",
+      "no_debts_closed": "No closed debts found. A debt is closed when you have collected all the money from it or you have paid all the money you owed."
+    },
+    "ACTIONS": {
+      "edit": {
+        "title": "Edit debt",
+        "success": "Debt edited successfully"
+      },
+      "delete": {
+        "warning_header": "Delete this debt?",
+        "warning_text": "This action cannot be undone. Linked transactions will not be deleted but will no longer be associated with this debt."
+      },
+      "add_register": {
+        "title": "Add movement",
+        "success": "Movement added successfully",
+        "fab_label": "Add register",
+        "modal_title": "Add register to this debt",
+        "modal_subtitle": "Choose one of the following options to link a transaction to this debt"
+      },
+      "link_transaction": {
+        "title": "Link existing transaction",
+        "description": "Choose an existing record to link it to this debt",
+        "success": "Transaction linked to debt",
+        "creating": "You are creating a transaction linked to the debt <b>{{ name }}</b>"
+      },
+      "unlink_transaction": {
+        "title": "Unlink from debt",
+        "warning_text": "This transaction will no longer be associated with this debt.",
+        "success": "Transaction unlinked from debt"
+      },
+      "new_transaction": {
+        "title": "Add new transaction",
+        "description": "Manually add or reduce the debt by creating a new transaction linked to this debt"
+      },
+      "create": {
+        "title": "Create debt",
+        "success": "Debt created successfully"
       }
     }
   },

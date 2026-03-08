@@ -79,7 +79,7 @@ class IconAndColorSelector extends StatelessWidget {
                     ),
                   ),
                 ),
-                Divider(color: Theme.of(context).dividerColor, height: 0),
+                Divider(height: 0),
                 Tappable(
                   onTap: () => showColorPickerModal(
                     context,

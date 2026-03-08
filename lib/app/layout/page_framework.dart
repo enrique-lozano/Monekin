@@ -17,6 +17,7 @@ class PageFramework extends StatelessWidget {
     this.floatingActionButton,
     required this.body,
     this.bottomNavigationBar,
+    this.floatingActionButtonLocation,
   });
 
   final String? title;
@@ -35,6 +36,7 @@ class PageFramework extends StatelessWidget {
   final Widget? floatingActionButton;
   final Widget body;
   final Widget? bottomNavigationBar;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
 
   PreferredSizeWidget? _buildAppBar() {
     if (enableAppBar) {
@@ -72,6 +74,7 @@ class PageFramework extends StatelessWidget {
         appBar: _buildAppBar(),
         persistentFooterButtons: persistentFooterButtons,
         floatingActionButton: AnimateFABDelayed(fab: floatingActionButton),
+        floatingActionButtonLocation: floatingActionButtonLocation,
         bottomNavigationBar: bottomNavigationBar,
         body: body,
       ),

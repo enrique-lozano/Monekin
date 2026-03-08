@@ -2,8 +2,79 @@ import 'package:flutter/material.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
 import 'package:monekin/core/presentation/theme.dart';
+import 'package:monekin/core/presentation/widgets/html_text.dart';
 
-enum InlineInfoCardMode { warn, info }
+abstract class InlineInfoCardMode {
+  const InlineInfoCardMode();
+
+  Color resolveBgColor(BuildContext context);
+  Color resolveIconColor(BuildContext context);
+  IconData get icon;
+
+  static const InlineInfoCardMode warn = _WarnInlineInfoCardMode();
+  static const InlineInfoCardMode info = _InfoInlineInfoCardMode();
+
+  /// Creates a fully custom mode with explicit colors and icon.
+  factory InlineInfoCardMode.custom({
+    required Color bgColor,
+    required Color iconColor,
+    IconData icon,
+  }) = _CustomInlineInfoCardMode;
+}
+
+class _WarnInlineInfoCardMode extends InlineInfoCardMode {
+  const _WarnInlineInfoCardMode();
+
+  @override
+  Color resolveBgColor(BuildContext context) {
+    final isDark = isAppInDarkBrightness(context);
+    return Colors.amber.darken(isDark ? 0.6 : -0.7);
+  }
+
+  @override
+  Color resolveIconColor(BuildContext context) {
+    final isDark = isAppInDarkBrightness(context);
+    return Colors.amber.lighten(isDark ? 0.5 : -0.4);
+  }
+
+  @override
+  IconData get icon => Icons.warning_rounded;
+}
+
+class _InfoInlineInfoCardMode extends InlineInfoCardMode {
+  const _InfoInlineInfoCardMode();
+
+  @override
+  Color resolveBgColor(BuildContext context) =>
+      Theme.of(context).colorScheme.primaryContainer;
+
+  @override
+  Color resolveIconColor(BuildContext context) =>
+      Theme.of(context).colorScheme.onPrimaryContainer;
+
+  @override
+  IconData get icon => Icons.info_rounded;
+}
+
+class _CustomInlineInfoCardMode extends InlineInfoCardMode {
+  const _CustomInlineInfoCardMode({
+    required this.bgColor,
+    required this.iconColor,
+    this.icon = Icons.info_rounded,
+  });
+
+  final Color bgColor;
+  final Color iconColor;
+
+  @override
+  Color resolveBgColor(BuildContext context) => bgColor;
+
+  @override
+  Color resolveIconColor(BuildContext context) => iconColor;
+
+  @override
+  final IconData icon;
+}
 
 class InlineInfoCard extends StatelessWidget {
   const InlineInfoCard({
@@ -23,16 +94,8 @@ class InlineInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkBrightness = isAppInDarkBrightness(context);
-
-    final Color bgColor = mode == InlineInfoCardMode.warn
-        ? Colors.amber.darken(isDarkBrightness ? 0.6 : -0.7)
-        : Theme.of(context).colorScheme.primaryContainer;
-    final Color iconColor = mode == InlineInfoCardMode.warn
-        ? Colors.amber.lighten(isDarkBrightness ? 0.5 : -0.4)
-        : Theme.of(context).colorScheme.onPrimaryContainer;
-
-    //   final iconColor = baseColor.lighten(isDarkBrightness ? 0.5 : -0.4);
+    final bgColor = mode.resolveBgColor(context);
+    final iconColor = mode.resolveIconColor(context);
 
     return Card(
       color: bgColor,
@@ -44,26 +107,21 @@ class InlineInfoCard extends StatelessWidget {
       ),
       child: ResponsiveRowColumn.withSymetricSpacing(
         spacing: 10,
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         direction: direction,
         children: [
           ResponsiveRowColumnItem(
-            child: Icon(
-              mode == InlineInfoCardMode.info
-                  ? Icons.info_rounded
-                  : Icons.warning_rounded,
-              color: iconColor,
-              size: 28,
-            ),
+            child: Icon(mode.icon, color: iconColor, size: 28),
           ),
           ResponsiveRowColumnItem(
             rowFlex: 1,
-            child: Text(
-              text,
+            child: HTMLText(
+              htmlString: text,
               textAlign: direction == Axis.vertical
                   ? TextAlign.center
                   : TextAlign.left,
-              style: TextStyle(fontSize: 12.25),
+              tags: {"b": TextStyle(fontWeight: FontWeight.bold)},
+              defaultTextStyle: Theme.of(context).textTheme.bodySmall,
             ),
           ),
         ],

@@ -316,6 +316,7 @@
     "delete.multiple.warning-message": "Diese Aktion ist irreversibel und wird entfernt {{ x }} Transaktionen. ",
     "delete.multiple.success": "{{x}} Transaktionen korrekt gelöscht",
     "details": "Bewegungsdetails",
+    "select": "Wählen Sie eine Transaktion aus",
     "NEXT-PAYMENTS": {
       "accept": "Akzeptieren",
       "skip": "Überspringen",
@@ -741,6 +742,87 @@
         "active-indeterminate": "Sie benötigen {{ amount }} mehr, um Ihr Ziel zu erreichen.",
         "success": "Glückwunsch! Du hast dein Ziel erreicht.",
         "fail": "Sie haben Ihr Ziel um {{ amount }} verfehlt."
+      }
+    }
+  },
+  "DEBTS": {
+    "display": {
+      "one": "Schulden",
+      "other": "Schulden"
+    },
+    "FORM": {
+      "name": "Schuldenname",
+      "initial_amount": "Anfangsbetrag",
+      "total_amount": "Gesamtbetrag",
+      "step_initial_value": "Anfangswert",
+      "step_details": "Einzelheiten",
+      "from_transaction": {
+        "title": "Aus einer Transaktion",
+        "tap_to_select": "Tippen Sie, um eine Transaktion auszuwählen"
+      },
+      "from_amount": {
+        "title": "Ab einem Anfangsbetrag",
+        "description": "Dieser Betrag wird in der Statistik nicht als Aufwand/Ertrag berücksichtigt. Es wird zur Berechnung der Salden und des Nettovermögens verwendet"
+      }
+    },
+    "DIRECTION": {
+      "lent": "Verliehen",
+      "borrowed": "Entlehnt"
+    },
+    "STATUS": {
+      "active": "Aktiv",
+      "close": "Geschlossen"
+    },
+    "DETAILS": {
+      "collected_amount": "Gesammelter Betrag",
+      "remaining": "Übrig",
+      "no_deadline": "Keine Frist",
+      "in_days": "In {{x}} Tagen",
+      "due_today": "Heute fällig",
+      "days_ago": "Vor {{x}} Tagen",
+      "overdue_by": "Um {{x}} Tage überfällig",
+
+      "per_day": "/ Tag",
+      "no_transactions": "Für diese Schuld wurden keine Transaktionen gefunden"
+    },
+    "EMPTY": {
+      "no_debts_active": "Keine aktiven Schulden gefunden. Erstellen Sie zunächst eine neue Schuld, indem Sie auf die Schaltfläche unten klicken",
+      "no_debts_closed": "Keine geschlossenen Schulden gefunden. Eine Schuld gilt als beglichen, wenn Sie das gesamte Geld eingezogen oder den gesamten geschuldeten Betrag beglichen haben."
+    },
+    "ACTIONS": {
+      "edit": {
+        "title": "Schulden bearbeiten",
+        "success": "Schulden erfolgreich bearbeitet"
+      },
+      "delete": {
+        "warning_header": "Diese Schulden löschen?",
+        "warning_text": "Diese Aktion kann nicht rückgängig gemacht werden. Verknüpfte Transaktionen werden nicht gelöscht, sind aber nicht mehr mit dieser Schuld verknüpft."
+      },
+      "add_register": {
+        "title": "Fügen Sie Bewegung hinzu",
+        "success": "Bewegung erfolgreich hinzugefügt",
+        "fab_label": "Register hinzufügen",
+        "modal_title": "Register zu dieser Schuld hinzufügen",
+        "modal_subtitle": "Wählen Sie eine der folgenden Optionen, um eine Transaktion mit dieser Schuld zu verknüpfen"
+      },
+      "link_transaction": {
+        "title": "Bestehende Transaktion verknüpfen",
+        "description": "Wählen Sie einen vorhandenen Datensatz aus, um ihn mit dieser Schuld zu verknüpfen",
+        "success": "Mit Schulden verbundene Transaktion",
+        "creating": "Sie erstellen eine Transaktion, die mit der Schuld <b>{{ name }}</b> verknüpft ist"
+      },
+      "unlink_transaction": {
+        "title": "Von Schulden trennen",
+        "warning_text": "Diese Transaktion wird nicht mehr mit dieser Schuld verknüpft sein.",
+        "success": "Transaktion von Schulden getrennt"
+      },
+      "new_transaction": {
+        "title": "Neue Transaktion hinzufügen",
+        "description": "Fügen Sie die Schulden manuell hinzu oder reduzieren Sie sie, indem Sie eine neue Transaktion erstellen, die mit dieser Schuld verknüpft ist"
+      },
+      "create": {
+        "title": "Schulden machen",
+        "success": "Schulden erfolgreich erstellt"
       }
     }
   },

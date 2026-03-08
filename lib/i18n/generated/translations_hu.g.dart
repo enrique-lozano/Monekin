@@ -53,6 +53,7 @@ class TranslationsHu with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsCategoriesHu categories = _TranslationsCategoriesHu._(_root);
 	@override late final _TranslationsBudgetsHu budgets = _TranslationsBudgetsHu._(_root);
 	@override late final _TranslationsGoalsHu goals = _TranslationsGoalsHu._(_root);
+	@override late final _TranslationsDebtsHu debts = _TranslationsDebtsHu._(_root);
 	@override late final _TranslationsTargetTimelineStatusesHu target_timeline_statuses = _TranslationsTargetTimelineStatusesHu._(_root);
 	@override late final _TranslationsBackupHu backup = _TranslationsBackupHu._(_root);
 	@override late final _TranslationsSettingsHu settings = _TranslationsSettingsHu._(_root);
@@ -274,6 +275,7 @@ class _TranslationsTransactionHu implements TranslationsTransactionEn {
 	@override String delete_multiple_warning_message({required Object x}) => 'Ez a művelet visszafordíthatatlan, és eltávolít ${x} tranzakciót. A számlái aktuális egyenlege és minden statisztikája újraszámításra kerül.';
 	@override String delete_multiple_success({required Object x}) => '${x} tranzakció megfelelően törölve';
 	@override String get details => 'A mozgás részletei';
+	@override String get select => 'Válasszon ki egy tranzakciót';
 	@override late final _TranslationsTransactionNextPaymentsHu next_payments = _TranslationsTransactionNextPaymentsHu._(_root);
 	@override late final _TranslationsTransactionListHu list = _TranslationsTransactionListHu._(_root);
 	@override late final _TranslationsTransactionFiltersHu filters = _TranslationsTransactionFiltersHu._(_root);
@@ -474,6 +476,25 @@ class _TranslationsGoalsHu implements TranslationsGoalsEn {
 	@override late final _TranslationsGoalsDetailsHu details = _TranslationsGoalsDetailsHu._(_root);
 	@override late final _TranslationsGoalsTargetTimelineStatusesHu target_timeline_statuses = _TranslationsGoalsTargetTimelineStatusesHu._(_root);
 	@override late final _TranslationsGoalsProgressHu progress = _TranslationsGoalsProgressHu._(_root);
+}
+
+// Path: debts
+class _TranslationsDebtsHu implements TranslationsDebtsEn {
+	_TranslationsDebtsHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n,
+		one: 'Adósság',
+		other: 'Adósságok',
+	);
+	@override late final _TranslationsDebtsFormHu form = _TranslationsDebtsFormHu._(_root);
+	@override late final _TranslationsDebtsDirectionHu direction = _TranslationsDebtsDirectionHu._(_root);
+	@override late final _TranslationsDebtsStatusHu status = _TranslationsDebtsStatusHu._(_root);
+	@override late final _TranslationsDebtsDetailsHu details = _TranslationsDebtsDetailsHu._(_root);
+	@override late final _TranslationsDebtsEmptyHu empty = _TranslationsDebtsEmptyHu._(_root);
+	@override late final _TranslationsDebtsActionsHu actions = _TranslationsDebtsActionsHu._(_root);
 }
 
 // Path: target_timeline_statuses
@@ -1175,6 +1196,89 @@ class _TranslationsGoalsProgressHu implements TranslationsGoalsProgressEn {
 	@override late final _TranslationsGoalsProgressDescriptionHu description = _TranslationsGoalsProgressDescriptionHu._(_root);
 }
 
+// Path: debts.form
+class _TranslationsDebtsFormHu implements TranslationsDebtsFormEn {
+	_TranslationsDebtsFormHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Adósság neve';
+	@override String get initial_amount => 'Kezdeti összeg';
+	@override String get total_amount => 'Teljes összeg';
+	@override String get step_initial_value => 'Kezdeti érték';
+	@override String get step_details => 'Részletek';
+	@override late final _TranslationsDebtsFormFromTransactionHu from_transaction = _TranslationsDebtsFormFromTransactionHu._(_root);
+	@override late final _TranslationsDebtsFormFromAmountHu from_amount = _TranslationsDebtsFormFromAmountHu._(_root);
+}
+
+// Path: debts.direction
+class _TranslationsDebtsDirectionHu implements TranslationsDebtsDirectionEn {
+	_TranslationsDebtsDirectionHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get lent => 'Kölcsönadva';
+	@override String get borrowed => 'Kölcsönözve';
+}
+
+// Path: debts.status
+class _TranslationsDebtsStatusHu implements TranslationsDebtsStatusEn {
+	_TranslationsDebtsStatusHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => 'Aktív';
+	@override String get close => 'Zárt';
+}
+
+// Path: debts.details
+class _TranslationsDebtsDetailsHu implements TranslationsDebtsDetailsEn {
+	_TranslationsDebtsDetailsHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get collected_amount => 'Összegyűjtött összeg';
+	@override String get remaining => 'Többi';
+	@override String get no_deadline => 'Nincs határidő';
+	@override String in_days({required Object x}) => '${x} napon belül';
+	@override String get due_today => 'Ma esedékes';
+	@override String days_ago({required Object x}) => '${x} napja';
+	@override String overdue_by({required Object x}) => '${x} napot késik';
+	@override String get per_day => '/ nap';
+	@override String get no_transactions => 'Nem található tranzakció ehhez az adóssághoz';
+}
+
+// Path: debts.empty
+class _TranslationsDebtsEmptyHu implements TranslationsDebtsEmptyEn {
+	_TranslationsDebtsEmptyHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get no_debts_active => 'Nem található aktív adósság. Kezdje új adósság létrehozásával az alábbi gombra kattintva';
+	@override String get no_debts_closed => 'Nem található lezárt adósság. A tartozás akkor zárul le, ha az összes pénzt beszedte, vagy kifizette az összes tartozását.';
+}
+
+// Path: debts.actions
+class _TranslationsDebtsActionsHu implements TranslationsDebtsActionsEn {
+	_TranslationsDebtsActionsHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsDebtsActionsEditHu edit = _TranslationsDebtsActionsEditHu._(_root);
+	@override late final _TranslationsDebtsActionsDeleteHu delete = _TranslationsDebtsActionsDeleteHu._(_root);
+	@override late final _TranslationsDebtsActionsAddRegisterHu add_register = _TranslationsDebtsActionsAddRegisterHu._(_root);
+	@override late final _TranslationsDebtsActionsLinkTransactionHu link_transaction = _TranslationsDebtsActionsLinkTransactionHu._(_root);
+	@override late final _TranslationsDebtsActionsUnlinkTransactionHu unlink_transaction = _TranslationsDebtsActionsUnlinkTransactionHu._(_root);
+	@override late final _TranslationsDebtsActionsNewTransactionHu new_transaction = _TranslationsDebtsActionsNewTransactionHu._(_root);
+	@override late final _TranslationsDebtsActionsCreateHu create = _TranslationsDebtsActionsCreateHu._(_root);
+}
+
 // Path: backup.export
 class _TranslationsBackupExportHu implements TranslationsBackupExportEn {
 	_TranslationsBackupExportHu._(this._root);
@@ -1620,6 +1724,111 @@ class _TranslationsGoalsProgressDescriptionHu implements TranslationsGoalsProgre
 	@override String fail({required Object amount}) => '${amount} értékkel eltévesztette a célt.';
 }
 
+// Path: debts.form.from_transaction
+class _TranslationsDebtsFormFromTransactionHu implements TranslationsDebtsFormFromTransactionEn {
+	_TranslationsDebtsFormFromTransactionHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Egy tranzakcióból';
+	@override String get tap_to_select => 'Koppintson egy tranzakció kiválasztásához';
+}
+
+// Path: debts.form.from_amount
+class _TranslationsDebtsFormFromAmountHu implements TranslationsDebtsFormFromAmountEn {
+	_TranslationsDebtsFormFromAmountHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Kezdő összegből';
+	@override String get description => 'Ezt az összeget a statisztikában nem veszik figyelembe kiadásként/bevételként. Ezt az egyenlegek és a nettó vagyon kiszámításához fogják használni';
+}
+
+// Path: debts.actions.edit
+class _TranslationsDebtsActionsEditHu implements TranslationsDebtsActionsEditEn {
+	_TranslationsDebtsActionsEditHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Adósság szerkesztése';
+	@override String get success => 'A tartozás sikeresen szerkesztve';
+}
+
+// Path: debts.actions.delete
+class _TranslationsDebtsActionsDeleteHu implements TranslationsDebtsActionsDeleteEn {
+	_TranslationsDebtsActionsDeleteHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get warning_header => 'Törli ezt az adósságot?';
+	@override String get warning_text => 'Ez a művelet nem vonható vissza. A kapcsolt tranzakciók nem törlődnek, de a továbbiakban nem lesznek társítva ehhez az adóssághoz.';
+}
+
+// Path: debts.actions.add_register
+class _TranslationsDebtsActionsAddRegisterHu implements TranslationsDebtsActionsAddRegisterEn {
+	_TranslationsDebtsActionsAddRegisterHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Mozgás hozzáadása';
+	@override String get success => 'A mozgás sikeresen hozzáadva';
+	@override String get fab_label => 'Regisztráció hozzáadása';
+	@override String get modal_title => 'Regiszter hozzáadása ehhez az adóssághoz';
+	@override String get modal_subtitle => 'Válasszon egyet az alábbi lehetőségek közül, ha egy tranzakciót ehhez az adóssághoz szeretne kapcsolni';
+}
+
+// Path: debts.actions.link_transaction
+class _TranslationsDebtsActionsLinkTransactionHu implements TranslationsDebtsActionsLinkTransactionEn {
+	_TranslationsDebtsActionsLinkTransactionHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Kapcsolja össze a meglévő tranzakciót';
+	@override String get description => 'Válasszon egy meglévő rekordot, hogy összekapcsolja ezzel a tartozással';
+	@override String get success => 'Adóssághoz kapcsolódó ügylet';
+	@override String creating({required Object name}) => 'Egy <b>${name}</b> adóssághoz kapcsolódó tranzakciót hoz létre';
+}
+
+// Path: debts.actions.unlink_transaction
+class _TranslationsDebtsActionsUnlinkTransactionHu implements TranslationsDebtsActionsUnlinkTransactionEn {
+	_TranslationsDebtsActionsUnlinkTransactionHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Leválasztás az adósságról';
+	@override String get warning_text => 'Ez a tranzakció a továbbiakban nem lesz ehhez a tartozáshoz társítva.';
+	@override String get success => 'Tranzakció leválasztva az adósságról';
+}
+
+// Path: debts.actions.new_transaction
+class _TranslationsDebtsActionsNewTransactionHu implements TranslationsDebtsActionsNewTransactionEn {
+	_TranslationsDebtsActionsNewTransactionHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Új tranzakció hozzáadása';
+	@override String get description => 'Manuálisan adja hozzá vagy csökkentse az adósságot úgy, hogy új tranzakciót hoz létre ehhez az adóssághoz kapcsolva';
+}
+
+// Path: debts.actions.create
+class _TranslationsDebtsActionsCreateHu implements TranslationsDebtsActionsCreateEn {
+	_TranslationsDebtsActionsCreateHu._(this._root);
+
+	final TranslationsHu _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Adósság létrehozása';
+	@override String get success => 'Az adósság sikeresen létrehozva';
+}
+
 // Path: backup.import.manual_import
 class _TranslationsBackupImportManualImportHu implements TranslationsBackupImportManualImportEn {
 	_TranslationsBackupImportManualImportHu._(this._root);
@@ -2031,6 +2240,7 @@ extension on TranslationsHu {
 			'transaction.delete_multiple_warning_message' => ({required Object x}) => 'Ez a művelet visszafordíthatatlan, és eltávolít ${x} tranzakciót. A számlái aktuális egyenlege és minden statisztikája újraszámításra kerül.',
 			'transaction.delete_multiple_success' => ({required Object x}) => '${x} tranzakció megfelelően törölve',
 			'transaction.details' => 'A mozgás részletei',
+			'transaction.select' => 'Válasszon ki egy tranzakciót',
 			'transaction.next_payments.accept' => 'Elfogadás',
 			'transaction.next_payments.skip' => 'Kihagyás',
 			'transaction.next_payments.skip_success' => 'A tranzakció sikeresen kihagyásra került',
@@ -2314,9 +2524,9 @@ extension on TranslationsHu {
 			'goals.form.new_title' => 'Új cél',
 			'goals.form.edit_title' => 'Cél szerkesztése',
 			'goals.form.target_amount' => 'Célösszeg',
-			'goals.form.initial_amount' => 'Kezdő összeg',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.initial_amount' => 'Kezdő összeg',
 			'goals.form.name' => 'Név',
 			'goals.form.name_hint' => 'Megtakarítási célom',
 			'goals.form.create_success' => 'Cél sikeresen létrehozva',
@@ -2340,6 +2550,51 @@ extension on TranslationsHu {
 			'goals.progress.description.active_indeterminate' => ({required Object amount}) => 'További ${amount} kell a cél eléréséhez.',
 			'goals.progress.description.success' => 'Gratulálok! Elérted a célodat.',
 			'goals.progress.description.fail' => ({required Object amount}) => '${amount} értékkel eltévesztette a célt.',
+			'debts.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: 'Adósság', other: 'Adósságok', ), 
+			'debts.form.name' => 'Adósság neve',
+			'debts.form.initial_amount' => 'Kezdeti összeg',
+			'debts.form.total_amount' => 'Teljes összeg',
+			'debts.form.step_initial_value' => 'Kezdeti érték',
+			'debts.form.step_details' => 'Részletek',
+			'debts.form.from_transaction.title' => 'Egy tranzakcióból',
+			'debts.form.from_transaction.tap_to_select' => 'Koppintson egy tranzakció kiválasztásához',
+			'debts.form.from_amount.title' => 'Kezdő összegből',
+			'debts.form.from_amount.description' => 'Ezt az összeget a statisztikában nem veszik figyelembe kiadásként/bevételként. Ezt az egyenlegek és a nettó vagyon kiszámításához fogják használni',
+			'debts.direction.lent' => 'Kölcsönadva',
+			'debts.direction.borrowed' => 'Kölcsönözve',
+			'debts.status.active' => 'Aktív',
+			'debts.status.close' => 'Zárt',
+			'debts.details.collected_amount' => 'Összegyűjtött összeg',
+			'debts.details.remaining' => 'Többi',
+			'debts.details.no_deadline' => 'Nincs határidő',
+			'debts.details.in_days' => ({required Object x}) => '${x} napon belül',
+			'debts.details.due_today' => 'Ma esedékes',
+			'debts.details.days_ago' => ({required Object x}) => '${x} napja',
+			'debts.details.overdue_by' => ({required Object x}) => '${x} napot késik',
+			'debts.details.per_day' => '/ nap',
+			'debts.details.no_transactions' => 'Nem található tranzakció ehhez az adóssághoz',
+			'debts.empty.no_debts_active' => 'Nem található aktív adósság. Kezdje új adósság létrehozásával az alábbi gombra kattintva',
+			'debts.empty.no_debts_closed' => 'Nem található lezárt adósság. A tartozás akkor zárul le, ha az összes pénzt beszedte, vagy kifizette az összes tartozását.',
+			'debts.actions.edit.title' => 'Adósság szerkesztése',
+			'debts.actions.edit.success' => 'A tartozás sikeresen szerkesztve',
+			'debts.actions.delete.warning_header' => 'Törli ezt az adósságot?',
+			'debts.actions.delete.warning_text' => 'Ez a művelet nem vonható vissza. A kapcsolt tranzakciók nem törlődnek, de a továbbiakban nem lesznek társítva ehhez az adóssághoz.',
+			'debts.actions.add_register.title' => 'Mozgás hozzáadása',
+			'debts.actions.add_register.success' => 'A mozgás sikeresen hozzáadva',
+			'debts.actions.add_register.fab_label' => 'Regisztráció hozzáadása',
+			'debts.actions.add_register.modal_title' => 'Regiszter hozzáadása ehhez az adóssághoz',
+			'debts.actions.add_register.modal_subtitle' => 'Válasszon egyet az alábbi lehetőségek közül, ha egy tranzakciót ehhez az adóssághoz szeretne kapcsolni',
+			'debts.actions.link_transaction.title' => 'Kapcsolja össze a meglévő tranzakciót',
+			'debts.actions.link_transaction.description' => 'Válasszon egy meglévő rekordot, hogy összekapcsolja ezzel a tartozással',
+			'debts.actions.link_transaction.success' => 'Adóssághoz kapcsolódó ügylet',
+			'debts.actions.link_transaction.creating' => ({required Object name}) => 'Egy <b>${name}</b> adóssághoz kapcsolódó tranzakciót hoz létre',
+			'debts.actions.unlink_transaction.title' => 'Leválasztás az adósságról',
+			'debts.actions.unlink_transaction.warning_text' => 'Ez a tranzakció a továbbiakban nem lesz ehhez a tartozáshoz társítva.',
+			'debts.actions.unlink_transaction.success' => 'Tranzakció leválasztva az adósságról',
+			'debts.actions.new_transaction.title' => 'Új tranzakció hozzáadása',
+			'debts.actions.new_transaction.description' => 'Manuálisan adja hozzá vagy csökkentse az adósságot úgy, hogy új tranzakciót hoz létre ehhez az adóssághoz kapcsolva',
+			'debts.actions.create.title' => 'Adósság létrehozása',
+			'debts.actions.create.success' => 'Az adósság sikeresen létrehozva',
 			'target_timeline_statuses.active' => 'Aktív',
 			'target_timeline_statuses.past' => 'Befejezve',
 			'target_timeline_statuses.future' => 'Jövő',

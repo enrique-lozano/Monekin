@@ -1,8 +1,10 @@
+// ignore_for_file: unnecessary_string_interpolations
+
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_type_selector.dart';
+import 'package:monekin/app/accounts/widgets/balance_currency_form_field.dart';
 import 'package:monekin/app/categories/form/icon_and_color_selector.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/app_db.dart';
@@ -17,11 +19,10 @@ import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
+import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
-import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
-import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_field.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
@@ -52,7 +53,9 @@ class _AccountFormPageState extends State<AccountFormPage> {
   final TextEditingController _ibanController = TextEditingController();
   final TextEditingController _swiftController = TextEditingController();
   final TextEditingController _textController = TextEditingController();
-  final TextEditingController _balanceController = TextEditingController();
+  final TextEditingController _balanceController = TextEditingController(
+    text: '0',
+  );
 
   AccountType _type = AccountType.normal;
   SupportedIcon _icon = SupportedIconService.instance.defaultSupportedIcon;
@@ -179,8 +182,9 @@ class _AccountFormPageState extends State<AccountFormPage> {
     _type = _accountToEdit.type;
 
     accountService.getAccountMoney(account: _accountToEdit).first.then((value) {
-      _balanceController.text = value.toString();
-
+      _balanceController.text = value.toStringAsFixed(
+        _accountToEdit.currency.decimalPlaces,
+      );
       _color = _accountToEdit.getComputedColor(context);
     });
 
@@ -247,6 +251,18 @@ class _AccountFormPageState extends State<AccountFormPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      labelText: '${t.account.form.name} *',
+                      hintText: 'Ex.: My account',
+                    ),
+                    validator: (value) =>
+                        fieldValidator(value, isRequired: true),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    textInputAction: TextInputAction.next,
+                  ),
+                  const SizedBox(height: 16),
                   IconAndColorSelector(
                     iconSelectorModalSubtitle:
                         t.icon_selector.select_account_icon,
@@ -286,77 +302,19 @@ class _AccountFormPageState extends State<AccountFormPage> {
                     data: (color: _color, icon: _icon),
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                      labelText: '${t.account.form.name} *',
-                      hintText: 'Ex.: My account',
-                    ),
-                    validator: (value) =>
-                        fieldValidator(value, isRequired: true),
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    textInputAction: TextInputAction.next,
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _balanceController,
-                    decoration: InputDecoration(
-                      labelText: widget.account != null
-                          ? '${t.account.form.current_balance} *'
-                          : '${t.account.form.initial_balance} *',
-                      hintText: 'Ex.: 200',
-                      suffixText: _currency?.symbol,
-                    ),
-                    keyboardType: TextInputType.number,
+                  AmountAndCurrencyFormField(
+                    amountController: _balanceController,
+                    currency: _currency,
+                    amountLabel: widget.account != null
+                        ? t.account.form.current_balance
+                        : t.account.form.initial_balance,
                     enabled:
                         !(widget.account != null && widget.account!.isClosed),
-                    inputFormatters: twoDecimalDigitFormatter,
-                    validator: (value) => fieldValidator(
-                      value,
-                      validator: ValidatorType.double,
-                      isRequired: true,
-                    ),
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    textInputAction: TextInputAction.next,
-                  ),
-                  const SizedBox(height: 16),
-                  ReadOnlyTextFormField(
-                    displayValue: _currency != null
-                        ? _currency!.name
-                        : t.general.unspecified,
-                    onTap: () {
-                      if (_currency == null) return;
-
-                      showCurrencySelectorModal(
-                        context,
-                        CurrencySelectorModal(
-                          preselectedCurrency: _currency!,
-                          onCurrencySelected: (newCurrency) {
-                            setState(() {
-                              _currency = newCurrency;
-                            });
-                          },
-                        ),
-                      );
+                    onCurrencySelected: (newCurrency) {
+                      setState(() {
+                        _currency = newCurrency;
+                      });
                     },
-                    decoration: InputDecoration(
-                      labelText: t.currencies.currency,
-                      suffixIcon: const Icon(Icons.arrow_drop_down),
-                      prefixIcon: _currency != null
-                          ? Container(
-                              margin: const EdgeInsets.all(10),
-                              clipBehavior: Clip.hardEdge,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                              child: SvgPicture.asset(
-                                _currency!.currencyIconPath,
-                                height: 25,
-                                width: 25,
-                              ),
-                            )
-                          : null,
-                    ),
                   ),
                   const SizedBox(height: 12),
                   if (_currency != null)
@@ -454,14 +412,26 @@ class _AccountFormPageState extends State<AccountFormPage> {
                           controller: _ibanController,
                           decoration: InputDecoration(
                             labelText: t.account.form.iban,
+                            border: appInputBorder.copyWith(
+                              borderRadius: BorderRadius.only(
+                                topLeft: inputBorderRadius,
+                                topRight: inputBorderRadius,
+                              ),
+                            ),
                           ),
                           textInputAction: TextInputAction.next,
                         ),
-                        const SizedBox(height: 22),
+                        const Divider(),
                         TextFormField(
                           controller: _swiftController,
                           decoration: InputDecoration(
                             labelText: t.account.form.swift,
+                            border: appInputBorder.copyWith(
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: inputBorderRadius,
+                                bottomRight: inputBorderRadius,
+                              ),
+                            ),
                           ),
                           textInputAction: TextInputAction.next,
                         ),

@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/database/services/debts/debt_service.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
@@ -60,6 +61,32 @@ class TransactionViewActionService {
             ),
       ),
     ];
+  }
+
+  Future<void> unlinkTransactionFromDebtWithAlertAndSnackbar(
+    BuildContext context, {
+    required String transactionId,
+  }) async {
+    final t = Translations.of(context);
+
+    final confirmed = await confirmDialog(
+      context,
+      dialogTitle: t.debts.actions.unlink_transaction.title,
+      contentParagraphs: [
+        Text(t.debts.actions.unlink_transaction.warning_text),
+      ],
+      showCancelButton: true,
+      icon: Icons.link_off_rounded,
+    );
+    if (confirmed != true) return;
+    try {
+      await DebtService.instance.unlinkTransactionFromDebt(transactionId);
+      MonekinSnackbar.success(
+        SnackbarParams(t.debts.actions.unlink_transaction.success),
+      );
+    } catch (e) {
+      MonekinSnackbar.error(SnackbarParams.fromError(e));
+    }
   }
 
   void deleteTransactionWithAlertAndSnackBar(

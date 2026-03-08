@@ -53,6 +53,7 @@ class TranslationsEs with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsCategoriesEs categories = _TranslationsCategoriesEs._(_root);
 	@override late final _TranslationsBudgetsEs budgets = _TranslationsBudgetsEs._(_root);
 	@override late final _TranslationsGoalsEs goals = _TranslationsGoalsEs._(_root);
+	@override late final _TranslationsDebtsEs debts = _TranslationsDebtsEs._(_root);
 	@override late final _TranslationsTargetTimelineStatusesEs target_timeline_statuses = _TranslationsTargetTimelineStatusesEs._(_root);
 	@override late final _TranslationsBackupEs backup = _TranslationsBackupEs._(_root);
 	@override late final _TranslationsSettingsEs settings = _TranslationsSettingsEs._(_root);
@@ -274,6 +275,7 @@ class _TranslationsTransactionEs implements TranslationsTransactionEn {
 	@override String delete_multiple_warning_message({required Object x}) => 'Esta acción es irreversible y borrará definitivamente ${x} transacciones. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas';
 	@override String delete_multiple_success({required Object x}) => '${x} transacciones eliminadas correctamente';
 	@override String get details => 'Detalles del movimiento';
+	@override String get select => 'Seleccione una transacción';
 	@override late final _TranslationsTransactionNextPaymentsEs next_payments = _TranslationsTransactionNextPaymentsEs._(_root);
 	@override late final _TranslationsTransactionListEs list = _TranslationsTransactionListEs._(_root);
 	@override late final _TranslationsTransactionFiltersEs filters = _TranslationsTransactionFiltersEs._(_root);
@@ -474,6 +476,25 @@ class _TranslationsGoalsEs implements TranslationsGoalsEn {
 	@override late final _TranslationsGoalsDetailsEs details = _TranslationsGoalsDetailsEs._(_root);
 	@override late final _TranslationsGoalsTargetTimelineStatusesEs target_timeline_statuses = _TranslationsGoalsTargetTimelineStatusesEs._(_root);
 	@override late final _TranslationsGoalsProgressEs progress = _TranslationsGoalsProgressEs._(_root);
+}
+
+// Path: debts
+class _TranslationsDebtsEs implements TranslationsDebtsEn {
+	_TranslationsDebtsEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n,
+		one: 'Deuda',
+		other: 'Deudas',
+	);
+	@override late final _TranslationsDebtsFormEs form = _TranslationsDebtsFormEs._(_root);
+	@override late final _TranslationsDebtsDirectionEs direction = _TranslationsDebtsDirectionEs._(_root);
+	@override late final _TranslationsDebtsStatusEs status = _TranslationsDebtsStatusEs._(_root);
+	@override late final _TranslationsDebtsDetailsEs details = _TranslationsDebtsDetailsEs._(_root);
+	@override late final _TranslationsDebtsEmptyEs empty = _TranslationsDebtsEmptyEs._(_root);
+	@override late final _TranslationsDebtsActionsEs actions = _TranslationsDebtsActionsEs._(_root);
 }
 
 // Path: target_timeline_statuses
@@ -1175,6 +1196,89 @@ class _TranslationsGoalsProgressEs implements TranslationsGoalsProgressEn {
 	@override late final _TranslationsGoalsProgressDescriptionEs description = _TranslationsGoalsProgressDescriptionEs._(_root);
 }
 
+// Path: debts.form
+class _TranslationsDebtsFormEs implements TranslationsDebtsFormEn {
+	_TranslationsDebtsFormEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Nombre de la deuda';
+	@override String get initial_amount => 'Monto inicial';
+	@override String get total_amount => 'Monto total';
+	@override String get step_initial_value => 'Valor inicial';
+	@override String get step_details => 'Detalles';
+	@override late final _TranslationsDebtsFormFromTransactionEs from_transaction = _TranslationsDebtsFormFromTransactionEs._(_root);
+	@override late final _TranslationsDebtsFormFromAmountEs from_amount = _TranslationsDebtsFormFromAmountEs._(_root);
+}
+
+// Path: debts.direction
+class _TranslationsDebtsDirectionEs implements TranslationsDebtsDirectionEn {
+	_TranslationsDebtsDirectionEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get lent => 'Presté';
+	@override String get borrowed => 'Me prestaron';
+}
+
+// Path: debts.status
+class _TranslationsDebtsStatusEs implements TranslationsDebtsStatusEn {
+	_TranslationsDebtsStatusEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => 'Activas';
+	@override String get close => 'Cerradas';
+}
+
+// Path: debts.details
+class _TranslationsDebtsDetailsEs implements TranslationsDebtsDetailsEn {
+	_TranslationsDebtsDetailsEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get collected_amount => 'Monto cobrado';
+	@override String get remaining => 'Restante';
+	@override String get no_deadline => 'Sin fecha límite';
+	@override String in_days({required Object x}) => 'En ${x} días';
+	@override String get due_today => 'Vencimiento hoy';
+	@override String days_ago({required Object x}) => 'Hace ${x} días';
+	@override String overdue_by({required Object x}) => 'Vencido por ${x} días';
+	@override String get per_day => '/ día';
+	@override String get no_transactions => 'No se encontraron transacciones para esta deuda';
+}
+
+// Path: debts.empty
+class _TranslationsDebtsEmptyEs implements TranslationsDebtsEmptyEn {
+	_TranslationsDebtsEmptyEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get no_debts_active => 'No se encontraron deudas activas. Comience creando una nueva deuda haciendo clic en el botón de abajo';
+	@override String get no_debts_closed => 'No se encontraron deudas cerradas. Una deuda se cierra cuando has cobrado todo el dinero de ella o has pagado todo el dinero que debías.';
+}
+
+// Path: debts.actions
+class _TranslationsDebtsActionsEs implements TranslationsDebtsActionsEn {
+	_TranslationsDebtsActionsEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsDebtsActionsEditEs edit = _TranslationsDebtsActionsEditEs._(_root);
+	@override late final _TranslationsDebtsActionsDeleteEs delete = _TranslationsDebtsActionsDeleteEs._(_root);
+	@override late final _TranslationsDebtsActionsAddRegisterEs add_register = _TranslationsDebtsActionsAddRegisterEs._(_root);
+	@override late final _TranslationsDebtsActionsLinkTransactionEs link_transaction = _TranslationsDebtsActionsLinkTransactionEs._(_root);
+	@override late final _TranslationsDebtsActionsUnlinkTransactionEs unlink_transaction = _TranslationsDebtsActionsUnlinkTransactionEs._(_root);
+	@override late final _TranslationsDebtsActionsNewTransactionEs new_transaction = _TranslationsDebtsActionsNewTransactionEs._(_root);
+	@override late final _TranslationsDebtsActionsCreateEs create = _TranslationsDebtsActionsCreateEs._(_root);
+}
+
 // Path: backup.export
 class _TranslationsBackupExportEs implements TranslationsBackupExportEn {
 	_TranslationsBackupExportEs._(this._root);
@@ -1621,6 +1725,111 @@ class _TranslationsGoalsProgressDescriptionEs implements TranslationsGoalsProgre
 	@override String fail({required Object amount}) => 'No has alcanzado tu objetivo por ${amount}.';
 }
 
+// Path: debts.form.from_transaction
+class _TranslationsDebtsFormFromTransactionEs implements TranslationsDebtsFormFromTransactionEn {
+	_TranslationsDebtsFormFromTransactionEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'De una transacción';
+	@override String get tap_to_select => 'Toque para seleccionar una transacción';
+}
+
+// Path: debts.form.from_amount
+class _TranslationsDebtsFormFromAmountEs implements TranslationsDebtsFormFromAmountEn {
+	_TranslationsDebtsFormFromAmountEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'A partir de un importe inicial';
+	@override String get description => 'Este importe no se tendrá en cuenta a efectos estadísticos como gasto/ingreso. Se utilizará para calcular saldos y patrimonio neto.';
+}
+
+// Path: debts.actions.edit
+class _TranslationsDebtsActionsEditEs implements TranslationsDebtsActionsEditEn {
+	_TranslationsDebtsActionsEditEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Editar deuda';
+	@override String get success => 'Deuda editada exitosamente';
+}
+
+// Path: debts.actions.delete
+class _TranslationsDebtsActionsDeleteEs implements TranslationsDebtsActionsDeleteEn {
+	_TranslationsDebtsActionsDeleteEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get warning_header => '¿Eliminar esta deuda?';
+	@override String get warning_text => 'Esta acción no se puede deshacer. Las transacciones vinculadas no se eliminarán pero ya no estarán asociadas con esta deuda.';
+}
+
+// Path: debts.actions.add_register
+class _TranslationsDebtsActionsAddRegisterEs implements TranslationsDebtsActionsAddRegisterEn {
+	_TranslationsDebtsActionsAddRegisterEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Agregar movimiento';
+	@override String get success => 'Movimiento agregado exitosamente';
+	@override String get fab_label => 'Añadir registro';
+	@override String get modal_title => 'Añadir registro a esta deuda';
+	@override String get modal_subtitle => 'Elija una de las siguientes opciones para vincular una transacción a esta deuda';
+}
+
+// Path: debts.actions.link_transaction
+class _TranslationsDebtsActionsLinkTransactionEs implements TranslationsDebtsActionsLinkTransactionEn {
+	_TranslationsDebtsActionsLinkTransactionEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Vincular transacción existente';
+	@override String get description => 'Elija un registro existente para vincularlo a esta deuda';
+	@override String get success => 'Transacción vinculada a deuda';
+	@override String creating({required Object name}) => 'Estás creando una transacción vinculada a la deuda <b>${name}</b>';
+}
+
+// Path: debts.actions.unlink_transaction
+class _TranslationsDebtsActionsUnlinkTransactionEs implements TranslationsDebtsActionsUnlinkTransactionEn {
+	_TranslationsDebtsActionsUnlinkTransactionEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Desvincular de la deuda';
+	@override String get warning_text => 'Esta transacción ya no estará asociada a esta deuda.';
+	@override String get success => 'Transacción desvinculada de la deuda';
+}
+
+// Path: debts.actions.new_transaction
+class _TranslationsDebtsActionsNewTransactionEs implements TranslationsDebtsActionsNewTransactionEn {
+	_TranslationsDebtsActionsNewTransactionEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Agregar nueva transacción';
+	@override String get description => 'Agregue o reduzca manualmente la deuda creando una nueva transacción vinculada a esta deuda';
+}
+
+// Path: debts.actions.create
+class _TranslationsDebtsActionsCreateEs implements TranslationsDebtsActionsCreateEn {
+	_TranslationsDebtsActionsCreateEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Crear deuda';
+	@override String get success => 'Deuda creada exitosamente';
+}
+
 // Path: backup.import.manual_import
 class _TranslationsBackupImportManualImportEs implements TranslationsBackupImportManualImportEn {
 	_TranslationsBackupImportManualImportEs._(this._root);
@@ -2033,6 +2242,7 @@ extension on TranslationsEs {
 			'transaction.delete_multiple_warning_message' => ({required Object x}) => 'Esta acción es irreversible y borrará definitivamente ${x} transacciones. El balance actual de tus cuentas y todas tus estadisticas serán recalculadas',
 			'transaction.delete_multiple_success' => ({required Object x}) => '${x} transacciones eliminadas correctamente',
 			'transaction.details' => 'Detalles del movimiento',
+			'transaction.select' => 'Seleccione una transacción',
 			'transaction.next_payments.accept' => 'Aceptar',
 			'transaction.next_payments.skip' => 'Saltar',
 			'transaction.next_payments.skip_success' => 'Transacción saltada con exito',
@@ -2315,9 +2525,9 @@ extension on TranslationsEs {
 			'goals.delete_warning' => 'Esta acción es irreversible. Categorías y transacciones referentes a este objetivo no serán eliminados',
 			'goals.form.new_title' => 'Nuevo objetivo',
 			'goals.form.edit_title' => 'Editar objetivo',
-			'goals.form.target_amount' => 'Cantidad objetivo',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.target_amount' => 'Cantidad objetivo',
 			'goals.form.initial_amount' => 'Cantidad inicial',
 			'goals.form.name' => 'Nombre',
 			'goals.form.name_hint' => 'Mi objetivo de ahorro',
@@ -2342,6 +2552,51 @@ extension on TranslationsEs {
 			'goals.progress.description.active_indeterminate' => ({required Object amount}) => 'Necesitas ${amount} más para alcanzar tu objetivo.',
 			'goals.progress.description.success' => '¡Felicidades! Has alcanzado tu objetivo.',
 			'goals.progress.description.fail' => ({required Object amount}) => 'No has alcanzado tu objetivo por ${amount}.',
+			'debts.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('es'))(n, one: 'Deuda', other: 'Deudas', ), 
+			'debts.form.name' => 'Nombre de la deuda',
+			'debts.form.initial_amount' => 'Monto inicial',
+			'debts.form.total_amount' => 'Monto total',
+			'debts.form.step_initial_value' => 'Valor inicial',
+			'debts.form.step_details' => 'Detalles',
+			'debts.form.from_transaction.title' => 'De una transacción',
+			'debts.form.from_transaction.tap_to_select' => 'Toque para seleccionar una transacción',
+			'debts.form.from_amount.title' => 'A partir de un importe inicial',
+			'debts.form.from_amount.description' => 'Este importe no se tendrá en cuenta a efectos estadísticos como gasto/ingreso. Se utilizará para calcular saldos y patrimonio neto.',
+			'debts.direction.lent' => 'Presté',
+			'debts.direction.borrowed' => 'Me prestaron',
+			'debts.status.active' => 'Activas',
+			'debts.status.close' => 'Cerradas',
+			'debts.details.collected_amount' => 'Monto cobrado',
+			'debts.details.remaining' => 'Restante',
+			'debts.details.no_deadline' => 'Sin fecha límite',
+			'debts.details.in_days' => ({required Object x}) => 'En ${x} días',
+			'debts.details.due_today' => 'Vencimiento hoy',
+			'debts.details.days_ago' => ({required Object x}) => 'Hace ${x} días',
+			'debts.details.overdue_by' => ({required Object x}) => 'Vencido por ${x} días',
+			'debts.details.per_day' => '/ día',
+			'debts.details.no_transactions' => 'No se encontraron transacciones para esta deuda',
+			'debts.empty.no_debts_active' => 'No se encontraron deudas activas. Comience creando una nueva deuda haciendo clic en el botón de abajo',
+			'debts.empty.no_debts_closed' => 'No se encontraron deudas cerradas. Una deuda se cierra cuando has cobrado todo el dinero de ella o has pagado todo el dinero que debías.',
+			'debts.actions.edit.title' => 'Editar deuda',
+			'debts.actions.edit.success' => 'Deuda editada exitosamente',
+			'debts.actions.delete.warning_header' => '¿Eliminar esta deuda?',
+			'debts.actions.delete.warning_text' => 'Esta acción no se puede deshacer. Las transacciones vinculadas no se eliminarán pero ya no estarán asociadas con esta deuda.',
+			'debts.actions.add_register.title' => 'Agregar movimiento',
+			'debts.actions.add_register.success' => 'Movimiento agregado exitosamente',
+			'debts.actions.add_register.fab_label' => 'Añadir registro',
+			'debts.actions.add_register.modal_title' => 'Añadir registro a esta deuda',
+			'debts.actions.add_register.modal_subtitle' => 'Elija una de las siguientes opciones para vincular una transacción a esta deuda',
+			'debts.actions.link_transaction.title' => 'Vincular transacción existente',
+			'debts.actions.link_transaction.description' => 'Elija un registro existente para vincularlo a esta deuda',
+			'debts.actions.link_transaction.success' => 'Transacción vinculada a deuda',
+			'debts.actions.link_transaction.creating' => ({required Object name}) => 'Estás creando una transacción vinculada a la deuda <b>${name}</b>',
+			'debts.actions.unlink_transaction.title' => 'Desvincular de la deuda',
+			'debts.actions.unlink_transaction.warning_text' => 'Esta transacción ya no estará asociada a esta deuda.',
+			'debts.actions.unlink_transaction.success' => 'Transacción desvinculada de la deuda',
+			'debts.actions.new_transaction.title' => 'Agregar nueva transacción',
+			'debts.actions.new_transaction.description' => 'Agregue o reduzca manualmente la deuda creando una nueva transacción vinculada a esta deuda',
+			'debts.actions.create.title' => 'Crear deuda',
+			'debts.actions.create.success' => 'Deuda creada exitosamente',
 			'target_timeline_statuses.active' => 'Activo',
 			'target_timeline_statuses.past' => 'Finalizado',
 			'target_timeline_statuses.future' => 'Futuro',

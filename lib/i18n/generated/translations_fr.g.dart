@@ -53,6 +53,7 @@ class TranslationsFr with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsCategoriesFr categories = _TranslationsCategoriesFr._(_root);
 	@override late final _TranslationsBudgetsFr budgets = _TranslationsBudgetsFr._(_root);
 	@override late final _TranslationsGoalsFr goals = _TranslationsGoalsFr._(_root);
+	@override late final _TranslationsDebtsFr debts = _TranslationsDebtsFr._(_root);
 	@override late final _TranslationsTargetTimelineStatusesFr target_timeline_statuses = _TranslationsTargetTimelineStatusesFr._(_root);
 	@override late final _TranslationsBackupFr backup = _TranslationsBackupFr._(_root);
 	@override late final _TranslationsSettingsFr settings = _TranslationsSettingsFr._(_root);
@@ -274,6 +275,7 @@ class _TranslationsTransactionFr implements TranslationsTransactionEn {
 	@override String delete_multiple_warning_message({required Object x}) => 'Cette action est irréversible et supprimera ${x} transactions. Le solde actuel de vos comptes et toutes vos statistiques seront recalculés';
 	@override String delete_multiple_success({required Object x}) => '${x} transactions supprimées avec succès';
 	@override String get details => 'Détails du mouvement';
+	@override String get select => 'Sélectionnez une transaction';
 	@override late final _TranslationsTransactionNextPaymentsFr next_payments = _TranslationsTransactionNextPaymentsFr._(_root);
 	@override late final _TranslationsTransactionListFr list = _TranslationsTransactionListFr._(_root);
 	@override late final _TranslationsTransactionFiltersFr filters = _TranslationsTransactionFiltersFr._(_root);
@@ -474,6 +476,25 @@ class _TranslationsGoalsFr implements TranslationsGoalsEn {
 	@override late final _TranslationsGoalsDetailsFr details = _TranslationsGoalsDetailsFr._(_root);
 	@override late final _TranslationsGoalsTargetTimelineStatusesFr target_timeline_statuses = _TranslationsGoalsTargetTimelineStatusesFr._(_root);
 	@override late final _TranslationsGoalsProgressFr progress = _TranslationsGoalsProgressFr._(_root);
+}
+
+// Path: debts
+class _TranslationsDebtsFr implements TranslationsDebtsEn {
+	_TranslationsDebtsFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(n,
+		one: 'Dette',
+		other: 'Dettes',
+	);
+	@override late final _TranslationsDebtsFormFr form = _TranslationsDebtsFormFr._(_root);
+	@override late final _TranslationsDebtsDirectionFr direction = _TranslationsDebtsDirectionFr._(_root);
+	@override late final _TranslationsDebtsStatusFr status = _TranslationsDebtsStatusFr._(_root);
+	@override late final _TranslationsDebtsDetailsFr details = _TranslationsDebtsDetailsFr._(_root);
+	@override late final _TranslationsDebtsEmptyFr empty = _TranslationsDebtsEmptyFr._(_root);
+	@override late final _TranslationsDebtsActionsFr actions = _TranslationsDebtsActionsFr._(_root);
 }
 
 // Path: target_timeline_statuses
@@ -1175,6 +1196,89 @@ class _TranslationsGoalsProgressFr implements TranslationsGoalsProgressEn {
 	@override late final _TranslationsGoalsProgressDescriptionFr description = _TranslationsGoalsProgressDescriptionFr._(_root);
 }
 
+// Path: debts.form
+class _TranslationsDebtsFormFr implements TranslationsDebtsFormEn {
+	_TranslationsDebtsFormFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Nom de la dette';
+	@override String get initial_amount => 'Montant initial';
+	@override String get total_amount => 'Montant total';
+	@override String get step_initial_value => 'Valeur initiale';
+	@override String get step_details => 'Détails';
+	@override late final _TranslationsDebtsFormFromTransactionFr from_transaction = _TranslationsDebtsFormFromTransactionFr._(_root);
+	@override late final _TranslationsDebtsFormFromAmountFr from_amount = _TranslationsDebtsFormFromAmountFr._(_root);
+}
+
+// Path: debts.direction
+class _TranslationsDebtsDirectionFr implements TranslationsDebtsDirectionEn {
+	_TranslationsDebtsDirectionFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get lent => 'Prêté';
+	@override String get borrowed => 'Emprunté';
+}
+
+// Path: debts.status
+class _TranslationsDebtsStatusFr implements TranslationsDebtsStatusEn {
+	_TranslationsDebtsStatusFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => 'Actif';
+	@override String get close => 'Fermé';
+}
+
+// Path: debts.details
+class _TranslationsDebtsDetailsFr implements TranslationsDebtsDetailsEn {
+	_TranslationsDebtsDetailsFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get collected_amount => 'Montant collecté';
+	@override String get remaining => 'Restant';
+	@override String get no_deadline => 'Pas de date limite';
+	@override String in_days({required Object x}) => 'Dans ${x} jours';
+	@override String get due_today => 'À rendre aujourd\'hui';
+	@override String days_ago({required Object x}) => 'il y a ${x} jours';
+	@override String overdue_by({required Object x}) => 'En retard de ${x} jours';
+	@override String get per_day => '/ jour';
+	@override String get no_transactions => 'Aucune transaction trouvée pour cette dette';
+}
+
+// Path: debts.empty
+class _TranslationsDebtsEmptyFr implements TranslationsDebtsEmptyEn {
+	_TranslationsDebtsEmptyFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get no_debts_active => 'Aucune dette active trouvée. Commencez par créer une nouvelle dette en cliquant sur le bouton ci-dessous';
+	@override String get no_debts_closed => 'Aucune dettes clôturées trouvée. Une dette est clôturée lorsque vous en avez encaissé tout l’argent ou que vous avez payé tout l’argent que vous deviez.';
+}
+
+// Path: debts.actions
+class _TranslationsDebtsActionsFr implements TranslationsDebtsActionsEn {
+	_TranslationsDebtsActionsFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsDebtsActionsEditFr edit = _TranslationsDebtsActionsEditFr._(_root);
+	@override late final _TranslationsDebtsActionsDeleteFr delete = _TranslationsDebtsActionsDeleteFr._(_root);
+	@override late final _TranslationsDebtsActionsAddRegisterFr add_register = _TranslationsDebtsActionsAddRegisterFr._(_root);
+	@override late final _TranslationsDebtsActionsLinkTransactionFr link_transaction = _TranslationsDebtsActionsLinkTransactionFr._(_root);
+	@override late final _TranslationsDebtsActionsUnlinkTransactionFr unlink_transaction = _TranslationsDebtsActionsUnlinkTransactionFr._(_root);
+	@override late final _TranslationsDebtsActionsNewTransactionFr new_transaction = _TranslationsDebtsActionsNewTransactionFr._(_root);
+	@override late final _TranslationsDebtsActionsCreateFr create = _TranslationsDebtsActionsCreateFr._(_root);
+}
+
 // Path: backup.export
 class _TranslationsBackupExportFr implements TranslationsBackupExportEn {
 	_TranslationsBackupExportFr._(this._root);
@@ -1618,6 +1722,111 @@ class _TranslationsGoalsProgressDescriptionFr implements TranslationsGoalsProgre
 	@override String fail({required Object amount}) => 'Vous avez raté votre objectif de ${amount}.';
 }
 
+// Path: debts.form.from_transaction
+class _TranslationsDebtsFormFromTransactionFr implements TranslationsDebtsFormFromTransactionEn {
+	_TranslationsDebtsFormFromTransactionFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'D\'une transaction';
+	@override String get tap_to_select => 'Appuyez pour sélectionner une transaction';
+}
+
+// Path: debts.form.from_amount
+class _TranslationsDebtsFormFromAmountFr implements TranslationsDebtsFormFromAmountEn {
+	_TranslationsDebtsFormFromAmountFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'A partir d\'un montant initial';
+	@override String get description => 'Ce montant ne sera pas pris en compte pour les statistiques en tant que dépense/revenu. Il sera utilisé pour calculer les soldes et la valeur nette';
+}
+
+// Path: debts.actions.edit
+class _TranslationsDebtsActionsEditFr implements TranslationsDebtsActionsEditEn {
+	_TranslationsDebtsActionsEditFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Modifier la dette';
+	@override String get success => 'Dette modifiée avec succès';
+}
+
+// Path: debts.actions.delete
+class _TranslationsDebtsActionsDeleteFr implements TranslationsDebtsActionsDeleteEn {
+	_TranslationsDebtsActionsDeleteFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get warning_header => 'Supprimer cette dette ?';
+	@override String get warning_text => 'Cette action ne peut pas être annulée. Les transactions liées ne seront pas supprimées mais ne seront plus associées à cette dette.';
+}
+
+// Path: debts.actions.add_register
+class _TranslationsDebtsActionsAddRegisterFr implements TranslationsDebtsActionsAddRegisterEn {
+	_TranslationsDebtsActionsAddRegisterFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Ajouter du mouvement';
+	@override String get success => 'Mouvement ajouté avec succès';
+	@override String get fab_label => 'Ajouter un registre';
+	@override String get modal_title => 'Ajouter un registre à cette dette';
+	@override String get modal_subtitle => 'Choisissez l\'une des options suivantes pour lier une transaction à cette dette';
+}
+
+// Path: debts.actions.link_transaction
+class _TranslationsDebtsActionsLinkTransactionFr implements TranslationsDebtsActionsLinkTransactionEn {
+	_TranslationsDebtsActionsLinkTransactionFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Lier une transaction existante';
+	@override String get description => 'Choisir un enregistrement existant pour le lier à cette dette';
+	@override String get success => 'Opération liée à la dette';
+	@override String creating({required Object name}) => 'Vous créez une transaction liée à la dette <b>${name}</b>';
+}
+
+// Path: debts.actions.unlink_transaction
+class _TranslationsDebtsActionsUnlinkTransactionFr implements TranslationsDebtsActionsUnlinkTransactionEn {
+	_TranslationsDebtsActionsUnlinkTransactionFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Dissocier de la dette';
+	@override String get warning_text => 'Cette transaction ne sera plus associée à cette dette.';
+	@override String get success => 'Transaction dissociée de la dette';
+}
+
+// Path: debts.actions.new_transaction
+class _TranslationsDebtsActionsNewTransactionFr implements TranslationsDebtsActionsNewTransactionEn {
+	_TranslationsDebtsActionsNewTransactionFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Ajouter une nouvelle transaction';
+	@override String get description => 'Ajouter ou réduire manuellement la dette en créant une nouvelle transaction liée à cette dette';
+}
+
+// Path: debts.actions.create
+class _TranslationsDebtsActionsCreateFr implements TranslationsDebtsActionsCreateEn {
+	_TranslationsDebtsActionsCreateFr._(this._root);
+
+	final TranslationsFr _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Créer de la dette';
+	@override String get success => 'Dette créée avec succès';
+}
+
 // Path: backup.import.manual_import
 class _TranslationsBackupImportManualImportFr implements TranslationsBackupImportManualImportEn {
 	_TranslationsBackupImportManualImportFr._(this._root);
@@ -2029,6 +2238,7 @@ extension on TranslationsFr {
 			'transaction.delete_multiple_warning_message' => ({required Object x}) => 'Cette action est irréversible et supprimera ${x} transactions. Le solde actuel de vos comptes et toutes vos statistiques seront recalculés',
 			'transaction.delete_multiple_success' => ({required Object x}) => '${x} transactions supprimées avec succès',
 			'transaction.details' => 'Détails du mouvement',
+			'transaction.select' => 'Sélectionnez une transaction',
 			'transaction.next_payments.accept' => 'Accepter',
 			'transaction.next_payments.skip' => 'Ignorer',
 			'transaction.next_payments.skip_success' => 'Transaction ignorée avec succès',
@@ -2312,9 +2522,9 @@ extension on TranslationsFr {
 			'goals.form.new_title' => 'Nouvel objectif',
 			'goals.form.edit_title' => 'Modifier l\'objectif',
 			'goals.form.target_amount' => 'Montant cible',
-			'goals.form.initial_amount' => 'Montant initial',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.initial_amount' => 'Montant initial',
 			'goals.form.name' => 'Nom',
 			'goals.form.name_hint' => 'Mon objectif d\'épargne',
 			'goals.form.create_success' => 'Objectif créé avec succès',
@@ -2338,6 +2548,51 @@ extension on TranslationsFr {
 			'goals.progress.description.active_indeterminate' => ({required Object amount}) => 'Il vous en faut ${amount} supplémentaires pour atteindre votre objectif.',
 			'goals.progress.description.success' => 'Félicitations! Vous avez atteint votre objectif.',
 			'goals.progress.description.fail' => ({required Object amount}) => 'Vous avez raté votre objectif de ${amount}.',
+			'debts.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('fr'))(n, one: 'Dette', other: 'Dettes', ), 
+			'debts.form.name' => 'Nom de la dette',
+			'debts.form.initial_amount' => 'Montant initial',
+			'debts.form.total_amount' => 'Montant total',
+			'debts.form.step_initial_value' => 'Valeur initiale',
+			'debts.form.step_details' => 'Détails',
+			'debts.form.from_transaction.title' => 'D\'une transaction',
+			'debts.form.from_transaction.tap_to_select' => 'Appuyez pour sélectionner une transaction',
+			'debts.form.from_amount.title' => 'A partir d\'un montant initial',
+			'debts.form.from_amount.description' => 'Ce montant ne sera pas pris en compte pour les statistiques en tant que dépense/revenu. Il sera utilisé pour calculer les soldes et la valeur nette',
+			'debts.direction.lent' => 'Prêté',
+			'debts.direction.borrowed' => 'Emprunté',
+			'debts.status.active' => 'Actif',
+			'debts.status.close' => 'Fermé',
+			'debts.details.collected_amount' => 'Montant collecté',
+			'debts.details.remaining' => 'Restant',
+			'debts.details.no_deadline' => 'Pas de date limite',
+			'debts.details.in_days' => ({required Object x}) => 'Dans ${x} jours',
+			'debts.details.due_today' => 'À rendre aujourd\'hui',
+			'debts.details.days_ago' => ({required Object x}) => 'il y a ${x} jours',
+			'debts.details.overdue_by' => ({required Object x}) => 'En retard de ${x} jours',
+			'debts.details.per_day' => '/ jour',
+			'debts.details.no_transactions' => 'Aucune transaction trouvée pour cette dette',
+			'debts.empty.no_debts_active' => 'Aucune dette active trouvée. Commencez par créer une nouvelle dette en cliquant sur le bouton ci-dessous',
+			'debts.empty.no_debts_closed' => 'Aucune dettes clôturées trouvée. Une dette est clôturée lorsque vous en avez encaissé tout l’argent ou que vous avez payé tout l’argent que vous deviez.',
+			'debts.actions.edit.title' => 'Modifier la dette',
+			'debts.actions.edit.success' => 'Dette modifiée avec succès',
+			'debts.actions.delete.warning_header' => 'Supprimer cette dette ?',
+			'debts.actions.delete.warning_text' => 'Cette action ne peut pas être annulée. Les transactions liées ne seront pas supprimées mais ne seront plus associées à cette dette.',
+			'debts.actions.add_register.title' => 'Ajouter du mouvement',
+			'debts.actions.add_register.success' => 'Mouvement ajouté avec succès',
+			'debts.actions.add_register.fab_label' => 'Ajouter un registre',
+			'debts.actions.add_register.modal_title' => 'Ajouter un registre à cette dette',
+			'debts.actions.add_register.modal_subtitle' => 'Choisissez l\'une des options suivantes pour lier une transaction à cette dette',
+			'debts.actions.link_transaction.title' => 'Lier une transaction existante',
+			'debts.actions.link_transaction.description' => 'Choisir un enregistrement existant pour le lier à cette dette',
+			'debts.actions.link_transaction.success' => 'Opération liée à la dette',
+			'debts.actions.link_transaction.creating' => ({required Object name}) => 'Vous créez une transaction liée à la dette <b>${name}</b>',
+			'debts.actions.unlink_transaction.title' => 'Dissocier de la dette',
+			'debts.actions.unlink_transaction.warning_text' => 'Cette transaction ne sera plus associée à cette dette.',
+			'debts.actions.unlink_transaction.success' => 'Transaction dissociée de la dette',
+			'debts.actions.new_transaction.title' => 'Ajouter une nouvelle transaction',
+			'debts.actions.new_transaction.description' => 'Ajouter ou réduire manuellement la dette en créant une nouvelle transaction liée à cette dette',
+			'debts.actions.create.title' => 'Créer de la dette',
+			'debts.actions.create.success' => 'Dette créée avec succès',
 			'target_timeline_statuses.active' => 'Actif',
 			'target_timeline_statuses.past' => 'Terminé',
 			'target_timeline_statuses.future' => 'Futur',

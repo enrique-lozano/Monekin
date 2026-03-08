@@ -53,6 +53,7 @@ class TranslationsZhCn with BaseTranslations<AppLocale, Translations> implements
 	@override late final _TranslationsCategoriesZhCn categories = _TranslationsCategoriesZhCn._(_root);
 	@override late final _TranslationsBudgetsZhCn budgets = _TranslationsBudgetsZhCn._(_root);
 	@override late final _TranslationsGoalsZhCn goals = _TranslationsGoalsZhCn._(_root);
+	@override late final _TranslationsDebtsZhCn debts = _TranslationsDebtsZhCn._(_root);
 	@override late final _TranslationsTargetTimelineStatusesZhCn target_timeline_statuses = _TranslationsTargetTimelineStatusesZhCn._(_root);
 	@override late final _TranslationsBackupZhCn backup = _TranslationsBackupZhCn._(_root);
 	@override late final _TranslationsSettingsZhCn settings = _TranslationsSettingsZhCn._(_root);
@@ -274,6 +275,7 @@ class _TranslationsTransactionZhCn implements TranslationsTransactionEn {
 	@override String delete_multiple_warning_message({required Object x}) => '此操作无法撤回，并且将删除${x}笔交易。将重新计算您账户的当前余额及其它所有统计数据';
 	@override String delete_multiple_success({required Object x}) => '${x}笔交易删除成功';
 	@override String get details => '操作详情';
+	@override String get select => '选择交易';
 	@override late final _TranslationsTransactionNextPaymentsZhCn next_payments = _TranslationsTransactionNextPaymentsZhCn._(_root);
 	@override late final _TranslationsTransactionListZhCn list = _TranslationsTransactionListZhCn._(_root);
 	@override late final _TranslationsTransactionFiltersZhCn filters = _TranslationsTransactionFiltersZhCn._(_root);
@@ -474,6 +476,25 @@ class _TranslationsGoalsZhCn implements TranslationsGoalsEn {
 	@override late final _TranslationsGoalsDetailsZhCn details = _TranslationsGoalsDetailsZhCn._(_root);
 	@override late final _TranslationsGoalsTargetTimelineStatusesZhCn target_timeline_statuses = _TranslationsGoalsTargetTimelineStatusesZhCn._(_root);
 	@override late final _TranslationsGoalsProgressZhCn progress = _TranslationsGoalsProgressZhCn._(_root);
+}
+
+// Path: debts
+class _TranslationsDebtsZhCn implements TranslationsDebtsEn {
+	_TranslationsDebtsZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n,
+		one: '债务',
+		other: '债务',
+	);
+	@override late final _TranslationsDebtsFormZhCn form = _TranslationsDebtsFormZhCn._(_root);
+	@override late final _TranslationsDebtsDirectionZhCn direction = _TranslationsDebtsDirectionZhCn._(_root);
+	@override late final _TranslationsDebtsStatusZhCn status = _TranslationsDebtsStatusZhCn._(_root);
+	@override late final _TranslationsDebtsDetailsZhCn details = _TranslationsDebtsDetailsZhCn._(_root);
+	@override late final _TranslationsDebtsEmptyZhCn empty = _TranslationsDebtsEmptyZhCn._(_root);
+	@override late final _TranslationsDebtsActionsZhCn actions = _TranslationsDebtsActionsZhCn._(_root);
 }
 
 // Path: target_timeline_statuses
@@ -1175,6 +1196,89 @@ class _TranslationsGoalsProgressZhCn implements TranslationsGoalsProgressEn {
 	@override late final _TranslationsGoalsProgressDescriptionZhCn description = _TranslationsGoalsProgressDescriptionZhCn._(_root);
 }
 
+// Path: debts.form
+class _TranslationsDebtsFormZhCn implements TranslationsDebtsFormEn {
+	_TranslationsDebtsFormZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => '债务名称';
+	@override String get initial_amount => '初始金额';
+	@override String get total_amount => '总金额';
+	@override String get step_initial_value => '初始值';
+	@override String get step_details => '细节';
+	@override late final _TranslationsDebtsFormFromTransactionZhCn from_transaction = _TranslationsDebtsFormFromTransactionZhCn._(_root);
+	@override late final _TranslationsDebtsFormFromAmountZhCn from_amount = _TranslationsDebtsFormFromAmountZhCn._(_root);
+}
+
+// Path: debts.direction
+class _TranslationsDebtsDirectionZhCn implements TranslationsDebtsDirectionEn {
+	_TranslationsDebtsDirectionZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get lent => '借出';
+	@override String get borrowed => '借来的';
+}
+
+// Path: debts.status
+class _TranslationsDebtsStatusZhCn implements TranslationsDebtsStatusEn {
+	_TranslationsDebtsStatusZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => '积极的';
+	@override String get close => '关闭';
+}
+
+// Path: debts.details
+class _TranslationsDebtsDetailsZhCn implements TranslationsDebtsDetailsEn {
+	_TranslationsDebtsDetailsZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get collected_amount => '收取金额';
+	@override String get remaining => '其余的';
+	@override String get no_deadline => '无截止日期';
+	@override String in_days({required Object x}) => '${x} 天后';
+	@override String get due_today => '今天到期';
+	@override String days_ago({required Object x}) => '${x}天前';
+	@override String overdue_by({required Object x}) => '逾期 ${x} 天';
+	@override String get per_day => '/ 天';
+	@override String get no_transactions => '未找到该债务的交易';
+}
+
+// Path: debts.empty
+class _TranslationsDebtsEmptyZhCn implements TranslationsDebtsEmptyEn {
+	_TranslationsDebtsEmptyZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get no_debts_active => '未发现活跃债务。首先点击下面的按钮创建新债务';
+	@override String get no_debts_closed => '未发现已结清的债务。当您收回所有债务或支付所有所欠债务时，债务就结束了。';
+}
+
+// Path: debts.actions
+class _TranslationsDebtsActionsZhCn implements TranslationsDebtsActionsEn {
+	_TranslationsDebtsActionsZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsDebtsActionsEditZhCn edit = _TranslationsDebtsActionsEditZhCn._(_root);
+	@override late final _TranslationsDebtsActionsDeleteZhCn delete = _TranslationsDebtsActionsDeleteZhCn._(_root);
+	@override late final _TranslationsDebtsActionsAddRegisterZhCn add_register = _TranslationsDebtsActionsAddRegisterZhCn._(_root);
+	@override late final _TranslationsDebtsActionsLinkTransactionZhCn link_transaction = _TranslationsDebtsActionsLinkTransactionZhCn._(_root);
+	@override late final _TranslationsDebtsActionsUnlinkTransactionZhCn unlink_transaction = _TranslationsDebtsActionsUnlinkTransactionZhCn._(_root);
+	@override late final _TranslationsDebtsActionsNewTransactionZhCn new_transaction = _TranslationsDebtsActionsNewTransactionZhCn._(_root);
+	@override late final _TranslationsDebtsActionsCreateZhCn create = _TranslationsDebtsActionsCreateZhCn._(_root);
+}
+
 // Path: backup.export
 class _TranslationsBackupExportZhCn implements TranslationsBackupExportEn {
 	_TranslationsBackupExportZhCn._(this._root);
@@ -1620,6 +1724,111 @@ class _TranslationsGoalsProgressDescriptionZhCn implements TranslationsGoalsProg
 	@override String fail({required Object amount}) => '您与目标相差了 ${amount}。';
 }
 
+// Path: debts.form.from_transaction
+class _TranslationsDebtsFormFromTransactionZhCn implements TranslationsDebtsFormFromTransactionEn {
+	_TranslationsDebtsFormFromTransactionZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '来自一笔交易';
+	@override String get tap_to_select => '点击选择交易';
+}
+
+// Path: debts.form.from_amount
+class _TranslationsDebtsFormFromAmountZhCn implements TranslationsDebtsFormFromAmountEn {
+	_TranslationsDebtsFormFromAmountZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '从初始金额开始';
+	@override String get description => '该金额不会作为支出/收入纳入统计。它将用于计算余额和净值';
+}
+
+// Path: debts.actions.edit
+class _TranslationsDebtsActionsEditZhCn implements TranslationsDebtsActionsEditEn {
+	_TranslationsDebtsActionsEditZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '编辑债务';
+	@override String get success => '债务编辑成功';
+}
+
+// Path: debts.actions.delete
+class _TranslationsDebtsActionsDeleteZhCn implements TranslationsDebtsActionsDeleteEn {
+	_TranslationsDebtsActionsDeleteZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get warning_header => '删除这笔债务吗？';
+	@override String get warning_text => '此操作无法撤消。关联交易不会被删除，但将不再与该债务关联。';
+}
+
+// Path: debts.actions.add_register
+class _TranslationsDebtsActionsAddRegisterZhCn implements TranslationsDebtsActionsAddRegisterEn {
+	_TranslationsDebtsActionsAddRegisterZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '添加动作';
+	@override String get success => '运动添加成功';
+	@override String get fab_label => '添加寄存器';
+	@override String get modal_title => '添加登记到该债务';
+	@override String get modal_subtitle => '选择以下选项之一将交易与该债务关联起来';
+}
+
+// Path: debts.actions.link_transaction
+class _TranslationsDebtsActionsLinkTransactionZhCn implements TranslationsDebtsActionsLinkTransactionEn {
+	_TranslationsDebtsActionsLinkTransactionZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '链接现有交易';
+	@override String get description => '选择现有记录将其链接到该债务';
+	@override String get success => '与债务挂钩的交易';
+	@override String creating({required Object name}) => '您正在创建与债务 <b>${name}</b> 关联的交易';
+}
+
+// Path: debts.actions.unlink_transaction
+class _TranslationsDebtsActionsUnlinkTransactionZhCn implements TranslationsDebtsActionsUnlinkTransactionEn {
+	_TranslationsDebtsActionsUnlinkTransactionZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '取消与债务的关联';
+	@override String get warning_text => '此交易将不再与此债务相关联。';
+	@override String get success => '交易已取消与债务的关联';
+}
+
+// Path: debts.actions.new_transaction
+class _TranslationsDebtsActionsNewTransactionZhCn implements TranslationsDebtsActionsNewTransactionEn {
+	_TranslationsDebtsActionsNewTransactionZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '添加新交易';
+	@override String get description => '通过创建与该债务相关的新交易来手动添加或减少债务';
+}
+
+// Path: debts.actions.create
+class _TranslationsDebtsActionsCreateZhCn implements TranslationsDebtsActionsCreateEn {
+	_TranslationsDebtsActionsCreateZhCn._(this._root);
+
+	final TranslationsZhCn _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '创造债务';
+	@override String get success => '债务创建成功';
+}
+
 // Path: backup.import.manual_import
 class _TranslationsBackupImportManualImportZhCn implements TranslationsBackupImportManualImportEn {
 	_TranslationsBackupImportManualImportZhCn._(this._root);
@@ -2031,6 +2240,7 @@ extension on TranslationsZhCn {
 			'transaction.delete_multiple_warning_message' => ({required Object x}) => '此操作无法撤回，并且将删除${x}笔交易。将重新计算您账户的当前余额及其它所有统计数据',
 			'transaction.delete_multiple_success' => ({required Object x}) => '${x}笔交易删除成功',
 			'transaction.details' => '操作详情',
+			'transaction.select' => '选择交易',
 			'transaction.next_payments.accept' => '接受',
 			'transaction.next_payments.skip' => '跳过',
 			'transaction.next_payments.skip_success' => '已成果跳过交易',
@@ -2314,9 +2524,9 @@ extension on TranslationsZhCn {
 			'goals.form.new_title' => '新目标',
 			'goals.form.edit_title' => '编辑目标',
 			'goals.form.target_amount' => '目标金额',
-			'goals.form.initial_amount' => '初始金额',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.initial_amount' => '初始金额',
 			'goals.form.name' => '名称',
 			'goals.form.name_hint' => '我的储蓄目标',
 			'goals.form.create_success' => '目标创建成功',
@@ -2340,6 +2550,51 @@ extension on TranslationsZhCn {
 			'goals.progress.description.active_indeterminate' => ({required Object amount}) => '您还需要 ${amount} 才能实现目标。',
 			'goals.progress.description.success' => '恭喜！你达到了你的目标。',
 			'goals.progress.description.fail' => ({required Object amount}) => '您与目标相差了 ${amount}。',
+			'debts.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '债务', other: '债务', ), 
+			'debts.form.name' => '债务名称',
+			'debts.form.initial_amount' => '初始金额',
+			'debts.form.total_amount' => '总金额',
+			'debts.form.step_initial_value' => '初始值',
+			'debts.form.step_details' => '细节',
+			'debts.form.from_transaction.title' => '来自一笔交易',
+			'debts.form.from_transaction.tap_to_select' => '点击选择交易',
+			'debts.form.from_amount.title' => '从初始金额开始',
+			'debts.form.from_amount.description' => '该金额不会作为支出/收入纳入统计。它将用于计算余额和净值',
+			'debts.direction.lent' => '借出',
+			'debts.direction.borrowed' => '借来的',
+			'debts.status.active' => '积极的',
+			'debts.status.close' => '关闭',
+			'debts.details.collected_amount' => '收取金额',
+			'debts.details.remaining' => '其余的',
+			'debts.details.no_deadline' => '无截止日期',
+			'debts.details.in_days' => ({required Object x}) => '${x} 天后',
+			'debts.details.due_today' => '今天到期',
+			'debts.details.days_ago' => ({required Object x}) => '${x}天前',
+			'debts.details.overdue_by' => ({required Object x}) => '逾期 ${x} 天',
+			'debts.details.per_day' => '/ 天',
+			'debts.details.no_transactions' => '未找到该债务的交易',
+			'debts.empty.no_debts_active' => '未发现活跃债务。首先点击下面的按钮创建新债务',
+			'debts.empty.no_debts_closed' => '未发现已结清的债务。当您收回所有债务或支付所有所欠债务时，债务就结束了。',
+			'debts.actions.edit.title' => '编辑债务',
+			'debts.actions.edit.success' => '债务编辑成功',
+			'debts.actions.delete.warning_header' => '删除这笔债务吗？',
+			'debts.actions.delete.warning_text' => '此操作无法撤消。关联交易不会被删除，但将不再与该债务关联。',
+			'debts.actions.add_register.title' => '添加动作',
+			'debts.actions.add_register.success' => '运动添加成功',
+			'debts.actions.add_register.fab_label' => '添加寄存器',
+			'debts.actions.add_register.modal_title' => '添加登记到该债务',
+			'debts.actions.add_register.modal_subtitle' => '选择以下选项之一将交易与该债务关联起来',
+			'debts.actions.link_transaction.title' => '链接现有交易',
+			'debts.actions.link_transaction.description' => '选择现有记录将其链接到该债务',
+			'debts.actions.link_transaction.success' => '与债务挂钩的交易',
+			'debts.actions.link_transaction.creating' => ({required Object name}) => '您正在创建与债务 <b>${name}</b> 关联的交易',
+			'debts.actions.unlink_transaction.title' => '取消与债务的关联',
+			'debts.actions.unlink_transaction.warning_text' => '此交易将不再与此债务相关联。',
+			'debts.actions.unlink_transaction.success' => '交易已取消与债务的关联',
+			'debts.actions.new_transaction.title' => '添加新交易',
+			'debts.actions.new_transaction.description' => '通过创建与该债务相关的新交易来手动添加或减少债务',
+			'debts.actions.create.title' => '创造债务',
+			'debts.actions.create.success' => '债务创建成功',
 			'target_timeline_statuses.active' => '进行中',
 			'target_timeline_statuses.past' => '已完成',
 			'target_timeline_statuses.future' => '未开始',

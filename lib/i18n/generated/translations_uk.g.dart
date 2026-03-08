@@ -53,6 +53,7 @@ class TranslationsUk with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsCategoriesUk categories = _TranslationsCategoriesUk._(_root);
 	@override late final _TranslationsBudgetsUk budgets = _TranslationsBudgetsUk._(_root);
 	@override late final _TranslationsGoalsUk goals = _TranslationsGoalsUk._(_root);
+	@override late final _TranslationsDebtsUk debts = _TranslationsDebtsUk._(_root);
 	@override late final _TranslationsTargetTimelineStatusesUk target_timeline_statuses = _TranslationsTargetTimelineStatusesUk._(_root);
 	@override late final _TranslationsBackupUk backup = _TranslationsBackupUk._(_root);
 	@override late final _TranslationsSettingsUk settings = _TranslationsSettingsUk._(_root);
@@ -274,6 +275,7 @@ class _TranslationsTransactionUk implements TranslationsTransactionEn {
 	@override String delete_multiple_warning_message({required Object x}) => 'Ця дія незворотна і безумовно стерть ${x} транзакції. Поточний баланс ваших рахунків та вся ваша статистика будуть перенесені';
 	@override String delete_multiple_success({required Object x}) => '${x} належним чином усунути транзакції';
 	@override String get details => 'Деталі руху коштів';
+	@override String get select => 'Виберіть транзакцію';
 	@override late final _TranslationsTransactionNextPaymentsUk next_payments = _TranslationsTransactionNextPaymentsUk._(_root);
 	@override late final _TranslationsTransactionListUk list = _TranslationsTransactionListUk._(_root);
 	@override late final _TranslationsTransactionFiltersUk filters = _TranslationsTransactionFiltersUk._(_root);
@@ -474,6 +476,25 @@ class _TranslationsGoalsUk implements TranslationsGoalsEn {
 	@override late final _TranslationsGoalsDetailsUk details = _TranslationsGoalsDetailsUk._(_root);
 	@override late final _TranslationsGoalsTargetTimelineStatusesUk target_timeline_statuses = _TranslationsGoalsTargetTimelineStatusesUk._(_root);
 	@override late final _TranslationsGoalsProgressUk progress = _TranslationsGoalsProgressUk._(_root);
+}
+
+// Path: debts
+class _TranslationsDebtsUk implements TranslationsDebtsEn {
+	_TranslationsDebtsUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String display({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n,
+		one: 'борг',
+		other: 'борги',
+	);
+	@override late final _TranslationsDebtsFormUk form = _TranslationsDebtsFormUk._(_root);
+	@override late final _TranslationsDebtsDirectionUk direction = _TranslationsDebtsDirectionUk._(_root);
+	@override late final _TranslationsDebtsStatusUk status = _TranslationsDebtsStatusUk._(_root);
+	@override late final _TranslationsDebtsDetailsUk details = _TranslationsDebtsDetailsUk._(_root);
+	@override late final _TranslationsDebtsEmptyUk empty = _TranslationsDebtsEmptyUk._(_root);
+	@override late final _TranslationsDebtsActionsUk actions = _TranslationsDebtsActionsUk._(_root);
 }
 
 // Path: target_timeline_statuses
@@ -1175,6 +1196,89 @@ class _TranslationsGoalsProgressUk implements TranslationsGoalsProgressEn {
 	@override late final _TranslationsGoalsProgressDescriptionUk description = _TranslationsGoalsProgressDescriptionUk._(_root);
 }
 
+// Path: debts.form
+class _TranslationsDebtsFormUk implements TranslationsDebtsFormEn {
+	_TranslationsDebtsFormUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Назва боргу';
+	@override String get initial_amount => 'Початкова сума';
+	@override String get total_amount => 'Загальна сума';
+	@override String get step_initial_value => 'Початкове значення';
+	@override String get step_details => 'Подробиці';
+	@override late final _TranslationsDebtsFormFromTransactionUk from_transaction = _TranslationsDebtsFormFromTransactionUk._(_root);
+	@override late final _TranslationsDebtsFormFromAmountUk from_amount = _TranslationsDebtsFormFromAmountUk._(_root);
+}
+
+// Path: debts.direction
+class _TranslationsDebtsDirectionUk implements TranslationsDebtsDirectionEn {
+	_TranslationsDebtsDirectionUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get lent => 'Позичив';
+	@override String get borrowed => 'Позичений';
+}
+
+// Path: debts.status
+class _TranslationsDebtsStatusUk implements TranslationsDebtsStatusEn {
+	_TranslationsDebtsStatusUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => 'Активний';
+	@override String get close => 'ЗАЧИНЕНО';
+}
+
+// Path: debts.details
+class _TranslationsDebtsDetailsUk implements TranslationsDebtsDetailsEn {
+	_TranslationsDebtsDetailsUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get collected_amount => 'Зібрана сума';
+	@override String get remaining => 'Залишилося';
+	@override String get no_deadline => 'Без крайнього терміну';
+	@override String in_days({required Object x}) => 'Через ${x} днів';
+	@override String get due_today => 'Термін виконання сьогодні';
+	@override String days_ago({required Object x}) => '${x} днів тому';
+	@override String overdue_by({required Object x}) => 'Прострочено на ${x} днів';
+	@override String get per_day => '/ день';
+	@override String get no_transactions => 'Для цього боргу не знайдено транзакцій';
+}
+
+// Path: debts.empty
+class _TranslationsDebtsEmptyUk implements TranslationsDebtsEmptyEn {
+	_TranslationsDebtsEmptyUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get no_debts_active => 'Активних боргів не знайдено. Почніть зі створення нового боргу, натиснувши кнопку нижче';
+	@override String get no_debts_closed => 'Закритих боргів не виявлено. Борг вважається закритим, коли ви зібрали всі гроші з нього або сплатили всі гроші, які вам були винні.';
+}
+
+// Path: debts.actions
+class _TranslationsDebtsActionsUk implements TranslationsDebtsActionsEn {
+	_TranslationsDebtsActionsUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override late final _TranslationsDebtsActionsEditUk edit = _TranslationsDebtsActionsEditUk._(_root);
+	@override late final _TranslationsDebtsActionsDeleteUk delete = _TranslationsDebtsActionsDeleteUk._(_root);
+	@override late final _TranslationsDebtsActionsAddRegisterUk add_register = _TranslationsDebtsActionsAddRegisterUk._(_root);
+	@override late final _TranslationsDebtsActionsLinkTransactionUk link_transaction = _TranslationsDebtsActionsLinkTransactionUk._(_root);
+	@override late final _TranslationsDebtsActionsUnlinkTransactionUk unlink_transaction = _TranslationsDebtsActionsUnlinkTransactionUk._(_root);
+	@override late final _TranslationsDebtsActionsNewTransactionUk new_transaction = _TranslationsDebtsActionsNewTransactionUk._(_root);
+	@override late final _TranslationsDebtsActionsCreateUk create = _TranslationsDebtsActionsCreateUk._(_root);
+}
+
 // Path: backup.export
 class _TranslationsBackupExportUk implements TranslationsBackupExportEn {
 	_TranslationsBackupExportUk._(this._root);
@@ -1620,6 +1724,111 @@ class _TranslationsGoalsProgressDescriptionUk implements TranslationsGoalsProgre
 	@override String fail({required Object amount}) => 'Ви не досягли цілі на ${amount}.';
 }
 
+// Path: debts.form.from_transaction
+class _TranslationsDebtsFormFromTransactionUk implements TranslationsDebtsFormFromTransactionEn {
+	_TranslationsDebtsFormFromTransactionUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'З транзакції';
+	@override String get tap_to_select => 'Торкніться, щоб вибрати транзакцію';
+}
+
+// Path: debts.form.from_amount
+class _TranslationsDebtsFormFromAmountUk implements TranslationsDebtsFormFromAmountEn {
+	_TranslationsDebtsFormFromAmountUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Від початкової суми';
+	@override String get description => 'Ця сума не буде врахована для статистики як витрати/доходи. Він використовуватиметься для розрахунку балансів і чистої вартості';
+}
+
+// Path: debts.actions.edit
+class _TranslationsDebtsActionsEditUk implements TranslationsDebtsActionsEditEn {
+	_TranslationsDebtsActionsEditUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Редагувати борг';
+	@override String get success => 'Заборгованість успішно відредагована';
+}
+
+// Path: debts.actions.delete
+class _TranslationsDebtsActionsDeleteUk implements TranslationsDebtsActionsDeleteEn {
+	_TranslationsDebtsActionsDeleteUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get warning_header => 'Видалити цей борг?';
+	@override String get warning_text => 'Цю дію не можна скасувати. Пов’язані транзакції не будуть видалені, але більше не будуть пов’язані з цим боргом.';
+}
+
+// Path: debts.actions.add_register
+class _TranslationsDebtsActionsAddRegisterUk implements TranslationsDebtsActionsAddRegisterEn {
+	_TranslationsDebtsActionsAddRegisterUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Додайте руху';
+	@override String get success => 'Рух успішно додано';
+	@override String get fab_label => 'Додати реєстр';
+	@override String get modal_title => 'Додайте реєстр до цього боргу';
+	@override String get modal_subtitle => 'Виберіть один із наведених нижче варіантів, щоб прив’язати транзакцію до цього боргу';
+}
+
+// Path: debts.actions.link_transaction
+class _TranslationsDebtsActionsLinkTransactionUk implements TranslationsDebtsActionsLinkTransactionEn {
+	_TranslationsDebtsActionsLinkTransactionUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Пов’язати існуючу транзакцію';
+	@override String get description => 'Виберіть існуючий запис, щоб пов’язати його з цим боргом';
+	@override String get success => 'Операція, пов\'язана з боргом';
+	@override String creating({required Object name}) => 'Ви створюєте транзакцію, пов\'язану з боргом <b>${name}</b>';
+}
+
+// Path: debts.actions.unlink_transaction
+class _TranslationsDebtsActionsUnlinkTransactionUk implements TranslationsDebtsActionsUnlinkTransactionEn {
+	_TranslationsDebtsActionsUnlinkTransactionUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Від\'єднати від боргу';
+	@override String get warning_text => 'Ця транзакція більше не буде пов\'язана з цим боргом.';
+	@override String get success => 'Транзакцію від\'єднано від боргу';
+}
+
+// Path: debts.actions.new_transaction
+class _TranslationsDebtsActionsNewTransactionUk implements TranslationsDebtsActionsNewTransactionEn {
+	_TranslationsDebtsActionsNewTransactionUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Додати нову транзакцію';
+	@override String get description => 'Вручну додайте або зменшіть борг, створивши нову транзакцію, пов’язану з цим боргом';
+}
+
+// Path: debts.actions.create
+class _TranslationsDebtsActionsCreateUk implements TranslationsDebtsActionsCreateEn {
+	_TranslationsDebtsActionsCreateUk._(this._root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Створити борг';
+	@override String get success => 'Борг створено успішно';
+}
+
 // Path: backup.import.manual_import
 class _TranslationsBackupImportManualImportUk implements TranslationsBackupImportManualImportEn {
 	_TranslationsBackupImportManualImportUk._(this._root);
@@ -2031,6 +2240,7 @@ extension on TranslationsUk {
 			'transaction.delete_multiple_warning_message' => ({required Object x}) => 'Ця дія незворотна і безумовно стерть ${x} транзакції. Поточний баланс ваших рахунків та вся ваша статистика будуть перенесені',
 			'transaction.delete_multiple_success' => ({required Object x}) => '${x} належним чином усунути транзакції',
 			'transaction.details' => 'Деталі руху коштів',
+			'transaction.select' => 'Виберіть транзакцію',
 			'transaction.next_payments.accept' => 'Прийняти',
 			'transaction.next_payments.skip' => 'Пропустити',
 			'transaction.next_payments.skip_success' => 'Транзакцію успішно пропущено',
@@ -2314,9 +2524,9 @@ extension on TranslationsUk {
 			'goals.form.new_title' => 'Нова ціль',
 			'goals.form.edit_title' => 'Редагувати ціль',
 			'goals.form.target_amount' => 'Цільова сума',
-			'goals.form.initial_amount' => 'Початкова сума',
 			_ => null,
 		} ?? switch (path) {
+			'goals.form.initial_amount' => 'Початкова сума',
 			'goals.form.name' => 'Назва',
 			'goals.form.name_hint' => 'Моя ціль заощаджень',
 			'goals.form.create_success' => 'Ціль успішно створено',
@@ -2340,6 +2550,51 @@ extension on TranslationsUk {
 			'goals.progress.description.active_indeterminate' => ({required Object amount}) => 'Вам потрібно ще ${amount}, щоб досягти своєї мети.',
 			'goals.progress.description.success' => 'Щиро вітаю! Ви досягли своєї мети.',
 			'goals.progress.description.fail' => ({required Object amount}) => 'Ви не досягли цілі на ${amount}.',
+			'debts.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: 'борг', other: 'борги', ), 
+			'debts.form.name' => 'Назва боргу',
+			'debts.form.initial_amount' => 'Початкова сума',
+			'debts.form.total_amount' => 'Загальна сума',
+			'debts.form.step_initial_value' => 'Початкове значення',
+			'debts.form.step_details' => 'Подробиці',
+			'debts.form.from_transaction.title' => 'З транзакції',
+			'debts.form.from_transaction.tap_to_select' => 'Торкніться, щоб вибрати транзакцію',
+			'debts.form.from_amount.title' => 'Від початкової суми',
+			'debts.form.from_amount.description' => 'Ця сума не буде врахована для статистики як витрати/доходи. Він використовуватиметься для розрахунку балансів і чистої вартості',
+			'debts.direction.lent' => 'Позичив',
+			'debts.direction.borrowed' => 'Позичений',
+			'debts.status.active' => 'Активний',
+			'debts.status.close' => 'ЗАЧИНЕНО',
+			'debts.details.collected_amount' => 'Зібрана сума',
+			'debts.details.remaining' => 'Залишилося',
+			'debts.details.no_deadline' => 'Без крайнього терміну',
+			'debts.details.in_days' => ({required Object x}) => 'Через ${x} днів',
+			'debts.details.due_today' => 'Термін виконання сьогодні',
+			'debts.details.days_ago' => ({required Object x}) => '${x} днів тому',
+			'debts.details.overdue_by' => ({required Object x}) => 'Прострочено на ${x} днів',
+			'debts.details.per_day' => '/ день',
+			'debts.details.no_transactions' => 'Для цього боргу не знайдено транзакцій',
+			'debts.empty.no_debts_active' => 'Активних боргів не знайдено. Почніть зі створення нового боргу, натиснувши кнопку нижче',
+			'debts.empty.no_debts_closed' => 'Закритих боргів не виявлено. Борг вважається закритим, коли ви зібрали всі гроші з нього або сплатили всі гроші, які вам були винні.',
+			'debts.actions.edit.title' => 'Редагувати борг',
+			'debts.actions.edit.success' => 'Заборгованість успішно відредагована',
+			'debts.actions.delete.warning_header' => 'Видалити цей борг?',
+			'debts.actions.delete.warning_text' => 'Цю дію не можна скасувати. Пов’язані транзакції не будуть видалені, але більше не будуть пов’язані з цим боргом.',
+			'debts.actions.add_register.title' => 'Додайте руху',
+			'debts.actions.add_register.success' => 'Рух успішно додано',
+			'debts.actions.add_register.fab_label' => 'Додати реєстр',
+			'debts.actions.add_register.modal_title' => 'Додайте реєстр до цього боргу',
+			'debts.actions.add_register.modal_subtitle' => 'Виберіть один із наведених нижче варіантів, щоб прив’язати транзакцію до цього боргу',
+			'debts.actions.link_transaction.title' => 'Пов’язати існуючу транзакцію',
+			'debts.actions.link_transaction.description' => 'Виберіть існуючий запис, щоб пов’язати його з цим боргом',
+			'debts.actions.link_transaction.success' => 'Операція, пов\'язана з боргом',
+			'debts.actions.link_transaction.creating' => ({required Object name}) => 'Ви створюєте транзакцію, пов\'язану з боргом <b>${name}</b>',
+			'debts.actions.unlink_transaction.title' => 'Від\'єднати від боргу',
+			'debts.actions.unlink_transaction.warning_text' => 'Ця транзакція більше не буде пов\'язана з цим боргом.',
+			'debts.actions.unlink_transaction.success' => 'Транзакцію від\'єднано від боргу',
+			'debts.actions.new_transaction.title' => 'Додати нову транзакцію',
+			'debts.actions.new_transaction.description' => 'Вручну додайте або зменшіть борг, створивши нову транзакцію, пов’язану з цим боргом',
+			'debts.actions.create.title' => 'Створити борг',
+			'debts.actions.create.success' => 'Борг створено успішно',
 			'target_timeline_statuses.active' => 'Активний',
 			'target_timeline_statuses.past' => 'Завершений',
 			'target_timeline_statuses.future' => 'Майбутній',

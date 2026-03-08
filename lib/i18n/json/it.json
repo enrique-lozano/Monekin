@@ -316,6 +316,7 @@
     "delete.multiple.warning-message": "Questa azione è irreversibile ed eliminerà {{ x }} transazioni. Il saldo attuale dei tuoi conti e tutte le tue statistiche saranno ricalcolate",
     "delete.multiple.success": "{{x}} transazioni eliminate correttamente",
     "details": "Dettagli movimento",
+    "select": "Seleziona una transazione",
     "NEXT-PAYMENTS": {
       "accept": "Accetta",
       "skip": "Salta",
@@ -741,6 +742,87 @@
         "active-indeterminate": "Ti servono {{ amount }} in più per raggiungere il tuo obiettivo.",
         "success": "Congratulazioni! Hai raggiunto il tuo obiettivo.",
         "fail": "Hai mancato il tuo obiettivo di {{ amount }}."
+      }
+    }
+  },
+  "DEBTS": {
+    "display": {
+      "one": "Debito",
+      "other": "Debiti"
+    },
+    "FORM": {
+      "name": "Nome del debito",
+      "initial_amount": "Importo iniziale",
+      "total_amount": "Importo totale",
+      "step_initial_value": "Valore iniziale",
+      "step_details": "Dettagli",
+      "from_transaction": {
+        "title": "Da una transazione",
+        "tap_to_select": "Tocca per selezionare una transazione"
+      },
+      "from_amount": {
+        "title": "Da un importo iniziale",
+        "description": "Questo importo non verrà preso in considerazione per le statistiche come spesa/entrata. Verrà utilizzato per calcolare i saldi e il patrimonio netto"
+      }
+    },
+    "DIRECTION": {
+      "lent": "Prestato",
+      "borrowed": "Preso in prestito"
+    },
+    "STATUS": {
+      "active": "Attivo",
+      "close": "Chiuso"
+    },
+    "DETAILS": {
+      "collected_amount": "Importo riscosso",
+      "remaining": "Rimanente",
+      "no_deadline": "Nessuna scadenza",
+      "in_days": "Tra {{x}} giorni",
+      "due_today": "Due today",
+      "days_ago": "{{x}} giorni fa",
+      "overdue_by": "In ritardo di {{x}} giorni",
+
+      "per_day": "/ giorno",
+      "no_transactions": "Nessuna transazione trovata per questo debito"
+    },
+    "EMPTY": {
+      "no_debts_active": "Nessun debito attivo trovato. Inizia creando un nuovo debito facendo clic sul pulsante in basso",
+      "no_debts_closed": "Nessun debito chiuso trovato. Un debito viene chiuso quando hai incassato tutto il denaro o hai pagato tutto il denaro dovuto."
+    },
+    "ACTIONS": {
+      "edit": {
+        "title": "Modifica debito",
+        "success": "Debito modificato correttamente"
+      },
+      "delete": {
+        "warning_header": "Cancellare questo debito?",
+        "warning_text": "Questa azione non può essere annullata. Le transazioni collegate non verranno eliminate ma non saranno più associate a questo debito."
+      },
+      "add_register": {
+        "title": "Aggiungi movimento",
+        "success": "Movimento aggiunto con successo",
+        "fab_label": "Aggiungi registro",
+        "modal_title": "Aggiungi registro a questo debito",
+        "modal_subtitle": "Scegli una delle seguenti opzioni per collegare una transazione a questo debito"
+      },
+      "link_transaction": {
+        "title": "Collega la transazione esistente",
+        "description": "Scegli un record esistente per collegarlo a questo debito",
+        "success": "Operazione legata al debito",
+        "creating": "Stai creando una transazione collegata al debito <b>{{ name }}</b>"
+      },
+      "unlink_transaction": {
+        "title": "Scollegare dal debito",
+        "warning_text": "Questa transazione non sarà più associata a questo debito.",
+        "success": "Transazione scollegata dal debito"
+      },
+      "new_transaction": {
+        "title": "Aggiungi nuova transazione",
+        "description": "Aggiungi o riduci manualmente il debito creando una nuova transazione collegata a questo debito"
+      },
+      "create": {
+        "title": "Creare debito",
+        "success": "Debito creato con successo"
       }
     }
   },

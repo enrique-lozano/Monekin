@@ -13,3 +13,14 @@ List<BoxShadow> boxShadowGeneral(BuildContext context) {
     ),
   ];
 }
+
+UnderlineInputBorder get appInputBorder => UnderlineInputBorder(
+  borderSide: BorderSide.none,
+  borderRadius: BorderRadius.only(
+    topLeft: inputBorderRadius,
+    topRight: inputBorderRadius,
+    bottomLeft: inputBorderRadius,
+    bottomRight: inputBorderRadius,
+  ),
+  //    borderSide: BorderSide(color: theme.colorScheme.outline),
+);

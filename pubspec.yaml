@@ -36,7 +36,7 @@ dependencies:
 
   # i18n
   intl: ^0.20.2
-  slang: ^4.12.1
+  slang: ^4.4.0
   slang_flutter: ^4.4.0
 
   # Drift
@@ -68,6 +68,7 @@ dependencies:
   pausable_timer: ^3.1.0+3
   bitsdojo_window: ^0.1.6
   skeletonizer: ^2.1.2
+  flutter_expandable_fab: ^2.5.2
 
 dev_dependencies:
   flutter_test:

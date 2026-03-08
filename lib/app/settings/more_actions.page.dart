@@ -3,6 +3,7 @@ import 'package:monekin/app/accounts/all_accounts_page.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/categories/categories_list_page.dart';
 import 'package:monekin/app/currencies/currency_manager.dart';
+import 'package:monekin/app/debts/debts_page.dart';
 import 'package:monekin/app/goals/goals_page.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/about.page.dart';
@@ -12,6 +13,7 @@ import 'package:monekin/app/settings/widgets/setting_card_item.dart';
 import 'package:monekin/app/stats/stats_page.dart';
 import 'package:monekin/app/tags/tag_list.page.dart';
 import 'package:monekin/app/transactions/recurrent_transactions_page.dart';
+import 'package:monekin/core/models/debt/debt.dart';
 import 'package:monekin/core/models/goal/goal.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/routes/destinations.dart';
@@ -99,6 +101,12 @@ class _MoreActionsPageState extends State<MoreActionsPage> {
         icon: Icons.pie_chart_rounded,
         onTap: () => RouteUtils.pushRoute(const BudgetsPage()),
         id: AppMenuDestinationsID.budgets,
+      ),
+      _ActionItem(
+        title: t.debts.display(n: 10),
+        icon: Debt.icon,
+        onTap: () => RouteUtils.pushRoute(const DebtsPage()),
+        id: null,
       ),
       _ActionItem(
         title: t.stats.title,
