@@ -504,7 +504,20 @@
       "already-exists": "此账户名已存在，请起一个新的账户名",
       "tr-before-opening-date": "此账户中有早于开户日期的交易",
       "iban": "国际银行账户号码（IBAN）",
-      "swift": "银行识别码（SWIFT）"
+      "swift": "银行识别码（SWIFT）",
+      "include-in-net-worth": "Include in net worth",
+      "include-in-net-worth.descr": "Add this account to the total net worth calculation"
+    },
+    "INVESTMENT": {
+      "details-header": "Investment",
+      "invested-capital": "Invested capital",
+      "portfolio-value": "Portfolio value",
+      "profit": "Profit",
+      "last-valuation": "Last valuation",
+      "no-valuations": "No valuations recorded yet",
+      "update-value": "Update value",
+      "update-value.descr": "Record the current portfolio value",
+      "update-value.success": "Valuation recorded successfully"
     },
     "DELETE": {
       "warning-header": "删除账户？",

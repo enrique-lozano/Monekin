@@ -507,7 +507,20 @@
       "already-exists": "Ya existe otra cuenta con el mismo nombre. Por favor, escriba otro",
       "tr-before-opening-date": "Existen transacciones en esta cuenta con fecha anterior a la fecha de apertura",
       "iban": "IBAN",
-      "swift": "SWIFT"
+      "swift": "SWIFT",
+      "include-in-net-worth": "Include in net worth",
+      "include-in-net-worth.descr": "Add this account to the total net worth calculation"
+    },
+    "INVESTMENT": {
+      "details-header": "Investment",
+      "invested-capital": "Invested capital",
+      "portfolio-value": "Portfolio value",
+      "profit": "Profit",
+      "last-valuation": "Last valuation",
+      "no-valuations": "No valuations recorded yet",
+      "update-value": "Update value",
+      "update-value.descr": "Record the current portfolio value",
+      "update-value.success": "Valuation recorded successfully"
     },
     "DELETE": {
       "warning-header": "¿Eliminar cuenta?",

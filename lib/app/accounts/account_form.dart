@@ -23,6 +23,7 @@ import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/list_tile_field.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
@@ -62,6 +63,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
   Color _color = ColorHex.get(defaultColorPickerOptions.randomItem());
   Currency? _currency;
   Currency? _userPrCurrency;
+  bool _includeInNetWorth = true;
 
   late final Account? _accountToEdit;
 
@@ -112,7 +114,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
       iban: _ibanController.text.isEmpty ? null : _ibanController.text,
       description: _textController.text.isEmpty ? null : _textController.text,
       swift: _swiftController.text.isEmpty ? null : _swiftController.text,
-      includeInNetWorth: _accountToEdit?.includeInNetWorth ?? true,
+      includeInNetWorth: _includeInNetWorth,
     );
 
     // Check for accounts with same names before continue:
@@ -181,6 +183,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
     _closeDate = _accountToEdit.closingDate;
 
     _type = _accountToEdit.type;
+    _includeInNetWorth = _accountToEdit.includeInNetWorth;
 
     accountService.getAccountMoney(account: _accountToEdit).first.then((value) {
       _balanceController.text = value.toStringAsFixed(
@@ -349,25 +352,46 @@ class _AccountFormPageState extends State<AccountFormPage> {
                               )
                               .map((count) => count == 0),
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData || snapshot.data! == false) {
-                        return Container();
+                      // Hide the selector when:
+                      // - Still loading or account has income/expense transactions
+                      // - Editing an investment account (can't convert away from it)
+                      // - Editing a non-investment account (can't convert to investment)
+                      final hasTransactions =
+                          !snapshot.hasData || snapshot.data! == false;
+                      final isInvestmentEdit =
+                          _accountToEdit?.type == AccountType.investment;
+
+                      if (hasTransactions || isInvestmentEdit) {
+                        return SizedBox.shrink();
                       }
 
                       return Column(
                         children: [
-                          const SizedBox(height: 12),
-                          AccountTypeSelector(
-                            selectedType: _type,
-                            onSelected: (newType) {
-                              setState(() {
-                                _type = newType;
-                              });
+                          const SizedBox(height: 6),
+                          ListTileField(
+                            leading: Icon(
+                              _type.icon,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            title: t.account.types.title,
+                            subtitle: _type.title(context),
+                            trailing: const Icon(Icons.chevron_right),
+                            onTap: () async {
+                              final selected = await showAccountTypeSelector(
+                                context,
+                                selectedType: _type,
+                              );
+                              if (selected != null) {
+                                setState(() => _type = selected);
+                              }
                             },
                           ),
+                          const SizedBox(height: 6),
                         ],
                       );
                     },
                   ),
+
                   const SizedBox(height: 16),
                   ShowMoreContentButton(
                     child: Column(
@@ -447,6 +471,20 @@ class _AccountFormPageState extends State<AccountFormPage> {
                             alignLabelWithHint: true,
                           ),
                           textInputAction: TextInputAction.next,
+                        ),
+                        const SizedBox(height: 12),
+                        SwitchListTile(
+                          value: _includeInNetWorth,
+                          onChanged: (value) {
+                            setState(() {
+                              _includeInNetWorth = value;
+                            });
+                          },
+                          title: Text(t.account.form.include_in_net_worth),
+                          subtitle: Text(
+                            t.account.form.include_in_net_worth_descr,
+                          ),
+                          contentPadding: EdgeInsets.zero,
                         ),
                         const SizedBox(height: 22),
                       ],

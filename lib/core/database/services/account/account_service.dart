@@ -1,6 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:monekin/core/database/services/investment/investment_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
@@ -101,6 +103,28 @@ class AccountService {
     TransactionFilterSet trFilters = const TransactionFilterSet(),
     bool convertToPreferredCurrency = false,
   }) {
+    // Investment accounts use portfolio value (latest valuation or invested capital)
+    if (account.type == AccountType.investment &&
+        trFilters == const TransactionFilterSet() &&
+        date == null) {
+      final stream = InvestmentService.instance
+          .getPortfolioValue(account)
+          .map((v) => v.roundWithDecimals(account.currency.decimalPlaces));
+      if (!convertToPreferredCurrency) return stream;
+      // Convert to preferred currency via exchange rate
+      return stream.switchMap(
+        (value) => ExchangeRateService.instance
+            .calculateExchangeRateToPreferredCurrency(
+              amount: value,
+              fromCurrency: account.currency.code,
+            )
+            .map(
+              (converted) =>
+                  converted.roundWithDecimals(account.currency.decimalPlaces),
+            ),
+      );
+    }
+
     return getAccountsMoney(
       accountIds: [account.id],
       date: date,

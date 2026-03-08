@@ -1,8 +1,11 @@
 import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/asset.dart';
+import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:rxdart/rxdart.dart';
 
 /// Service for investment accounts, assets, valuations and net worth.
@@ -95,44 +98,20 @@ class InvestmentService {
   /// Returns the total capital invested into the given investment account.
   ///
   /// This is calculated as:
-  ///   iniValue of the account
-  ///   + SUM(valueInDestiny) for transfers IN (receivingAccountID = accountId)
-  ///   - SUM(value) for transfers OUT (accountID = accountId, type = 'T')
+  ///   iniValue + net transfers (transfersIn - transfersOut) in account currency.
   ///
-  /// All amounts are in the account's own currency.
-  /// Pending (status = 'P') and voided (status = 'V') transactions are excluded.
+  /// Delegates to [TransactionService.getTransactionsValueBalance] filtered to
+  /// transfers only, which already handles valueInDestiny vs value correctly.
   Stream<double> getInvestedCapital(Account account) {
-    return db
-        .customSelect(
-          '''
-          SELECT
-            ? + 
-            COALESCE(
-              (SELECT SUM(COALESCE(t.valueInDestiny, t.value))
-               FROM transactions t
-               WHERE t.receivingAccountID = ?
-                 AND t.type = 'T'
-                 AND (t.status IS NULL OR t.status NOT IN ('P', 'V'))),
-              0
-            ) -
-            COALESCE(
-              (SELECT SUM(t.value)
-               FROM transactions t
-               WHERE t.accountID = ?
-                 AND t.type = 'T'
-                 AND (t.status IS NULL OR t.status NOT IN ('P', 'V'))),
-              0
-            ) AS investedCapital
-          ''',
-          readsFrom: {db.transactions, db.accounts},
-          variables: [
-            Variable.withReal(account.iniValue),
-            Variable.withString(account.id),
-            Variable.withString(account.id),
-          ],
+    return TransactionService.instance
+        .getTransactionsValueBalance(
+          filters: TransactionFilterSet(
+            accountsIDs: [account.id],
+            transactionTypes: [TransactionType.transfer],
+          ),
+          convertToPreferredCurrency: false,
         )
-        .watchSingle()
-        .map((row) => (row.data['investedCapital'] as num).toDouble());
+        .map((netTransfers) => account.iniValue + netTransfers);
   }
 
   /// Returns the current portfolio value for an investment account.
@@ -144,6 +123,7 @@ class InvestmentService {
       if (valuation != null) {
         return Stream.value(valuation.value);
       }
+
       return getInvestedCapital(account);
     });
   }
