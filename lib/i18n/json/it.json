@@ -480,6 +480,7 @@
     "n_transactions": "Numero di transazioni",
     "add_money": "Aggiungi denaro",
     "withdraw_money": "Preleva denaro",
+    "correct_balance": "Correggi saldo",
     "no-accounts": "Nessuna transazione trovata da mostrare qui. Aggiungi una transazione cliccando sul pulsante '+' in basso",
     "TYPES": {
       "title": "Tipo di conto",

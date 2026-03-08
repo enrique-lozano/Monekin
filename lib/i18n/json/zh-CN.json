@@ -480,6 +480,7 @@
     "n_transactions": "交易数量",
     "add_money": "增加金额",
     "withdraw_money": "减少金额",
+    "correct_balance": "修正余额",
     "no-accounts": "未发现应当显示的交易。请点击底部的 '+' 按钮新增一个交易",
     "TYPES": {
       "title": "账户类型",

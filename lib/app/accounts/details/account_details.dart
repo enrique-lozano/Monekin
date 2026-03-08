@@ -1,10 +1,7 @@
-import 'dart:math';
-
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/details/account_details_actions.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/transactions/label_value_info_list.dart';
@@ -21,12 +18,14 @@ import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
+import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
-import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
+import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/routes/route_utils.dart';
@@ -166,50 +165,143 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return PageFramework(
-      title: t.account.details,
-      body: StreamBuilder(
-        stream: AccountService.instance.getAccountById(widget.account.id),
-        initialData: widget.account,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const LinearProgressIndicator();
-          }
+    return StreamBuilder(
+      stream: AccountService.instance.getAccountById(widget.account.id),
+      initialData: widget.account,
+      builder: (context, snapshot) {
+        final account = snapshot.data ?? widget.account;
 
-          final account = snapshot.data!;
+        final accountDetailsActions =
+            AccountDetailsActions.getAccountDetailsActions(
+              context,
+              account: account,
+              navigateBackOnDelete: true,
+            );
 
-          final accountDetailsActions =
-              AccountDetailsActions.getAccountDetailsActions(
-                context,
-                account: account,
-                navigateBackOnDelete: true,
-              );
+        final primaryActions = accountDetailsActions.primary;
+        final menuActions = accountDetailsActions.menu;
 
-          return CustomScrollView(
-            slivers: [
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: _AccountDetailHeader(
-                  account: account,
-                  accountIconHeroTag: widget.accountIconHeroTag,
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 24,
-                  ).withSafeBottom(context),
-                  child: Column(
+        return PageFramework(
+          title: t.account.details,
+          appBarActions: [
+            if (menuActions.isNotEmpty)
+              MonekinPopupMenuButton(actionItems: menuActions),
+          ],
+          body: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1200),
+              child: ListView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ).withSafeBottom(context),
+                children: [
+                  Column(
                     children: [
-                      CardWithHeader(
-                        title: 'Info',
-                        footer: CardFooterWithSingleButton(
-                          text: t.ui_actions.edit,
-                          onButtonClick: () => RouteUtils.pushRoute(
-                            AccountFormPage(account: account),
+                      Hero(
+                        tag: widget.accountIconHeroTag ?? UniqueKey(),
+                        child: account.displayIcon(context, size: 48),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        account.name,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 4),
+                      StreamBuilder(
+                        initialData: 0.0,
+                        stream: AccountService.instance.getAccountMoney(
+                          account: account,
+                        ),
+                        builder: (context, balanceSnapshot) {
+                          return Column(
+                            children: [
+                              DefaultTextStyle.merge(
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.headlineMedium!,
+                                child: CurrencyDisplayer(
+                                  amountToConvert: balanceSnapshot.data!,
+                                  currency: account.currency,
+                                ),
+                              ),
+                              StreamBuilder(
+                                stream: ExchangeRateService.instance
+                                    .calculateExchangeRateToPreferredCurrency(
+                                      amount: balanceSnapshot.data!,
+                                      fromCurrency: account.currency.code,
+                                    ),
+                                builder: (context, currencySnapshot) {
+                                  if (currencySnapshot.connectionState ==
+                                          ConnectionState.waiting ||
+                                      currencySnapshot.data != 0 &&
+                                          currencySnapshot.data! ==
+                                              balanceSnapshot.data ||
+                                      balanceSnapshot.data! == 0) {
+                                    return const SizedBox.shrink();
+                                  }
+
+                                  return Padding(
+                                    padding: const EdgeInsets.only(top: 2),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(
+                                          Icons.currency_exchange_rounded,
+                                          size: 14,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        CurrencyDisplayer(
+                                          amountToConvert:
+                                              currencySnapshot.data!,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minWidth: constraints.maxWidth,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: 8,
+                            children: primaryActions
+                                .map(
+                                  (action) => ActionChip(
+                                    avatar: Icon(action.icon, size: 18),
+                                    label: Text(action.label),
+                                    onPressed: action.onClick,
+                                  ),
+                                )
+                                .toList(),
                           ),
                         ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 24),
+
+                  Builder(
+                    builder: (context) {
+                      final isWideScreen = BreakPoint.of(
+                        context,
+                      ).isLargerOrEqualTo(BreakpointID.sm);
+
+                      final infoCard = CardWithHeader(
+                        title: 'Info',
                         body: LabelValueInfoList(
                           items: [
                             LabelValueInfoListItem(
@@ -254,13 +346,9 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                             ],
                           ],
                         ),
-                      ),
-                      if (account.type == AccountType.investment) ...[
-                        const SizedBox(height: 16),
-                        _buildInvestmentCard(context, account),
-                      ],
-                      const SizedBox(height: 16),
-                      CardWithHeader(
+                      );
+
+                      final transactionsCard = CardWithHeader(
                         title: t.home.last_transactions,
                         bodyPadding: const EdgeInsets.symmetric(vertical: 6),
                         footer: StreamBuilder(
@@ -307,7 +395,6 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                           ),
                           limit: 5,
                           showGroupDivider: false,
-
                           onEmptyList: Padding(
                             padding: const EdgeInsets.all(24),
                             child: Text(
@@ -316,143 +403,43 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      CardWithHeader(
-                        title: t.general.quick_actions,
-                        body: MonekinQuickActionsButton(
-                          actions: accountDetailsActions,
-                        ),
-                      ),
-                    ],
+                      );
+
+                      return ResponsiveRowColumn.withSymetricSpacing(
+                        spacing: 16,
+                        rowCrossAxisAlignment: CrossAxisAlignment.start,
+                        direction: isWideScreen
+                            ? Axis.horizontal
+                            : Axis.vertical,
+                        children: [
+                          ResponsiveRowColumnItem(
+                            rowFit: FlexFit.tight,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              spacing: 16,
+                              children: [
+                                infoCard,
+                                if (account.type == AccountType.investment)
+                                  _buildInvestmentCard(context, account),
+                              ],
+                            ),
+                          ),
+                          ResponsiveRowColumnItem(
+                            rowFit: FlexFit.tight,
+                            child: transactionsCard,
+                          ),
+                        ],
+                      );
+                    },
                   ),
-                ),
+                ],
               ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _AccountDetailHeader extends SliverPersistentHeaderDelegate {
-  const _AccountDetailHeader({
-    required this.account,
-    required this.accountIconHeroTag,
-  });
-
-  final Account account;
-  final Object? accountIconHeroTag;
-
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlap) {
-    final shrinkPercent = shrinkOffset / maxExtent;
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        border: Border(
-          bottom: BorderSide(width: 2, color: Theme.of(context).dividerColor),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: shrinkPercent > 0.5
-            ? CrossAxisAlignment.center
-            : CrossAxisAlignment.end,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: shrinkPercent > 0.5
-                ? MainAxisAlignment.center
-                : MainAxisAlignment.end,
-            children: [
-              Text(account.name),
-              StreamBuilder(
-                initialData: 0.0,
-                stream: AccountService.instance.getAccountMoney(
-                  account: account,
-                ),
-                builder: (context, snapshot) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AnimatedDefaultTextStyle(
-                        duration: const Duration(milliseconds: 100),
-                        style: Theme.of(context).textTheme.headlineMedium!
-                            .copyWith(
-                              fontSize:
-                                  32 - (1 - pow(1 - shrinkPercent, 4)) * 15,
-                            ),
-                        child: CurrencyDisplayer(
-                          amountToConvert: snapshot.data!,
-                          currency: account.currency,
-                        ),
-                      ),
-                      StreamBuilder(
-                        stream: ExchangeRateService.instance
-                            .calculateExchangeRateToPreferredCurrency(
-                              amount: snapshot.data!,
-                              fromCurrency: account.currency.code,
-                            ),
-                        builder: (context, currencySnapshot) {
-                          if (currencySnapshot.connectionState ==
-                                  ConnectionState.waiting ||
-                              currencySnapshot.data != 0 &&
-                                  currencySnapshot.data! == snapshot.data ||
-                              snapshot.data! == 0) {
-                            return Container();
-                          }
-
-                          return Row(
-                            children: [
-                              Text(
-                                String.fromCharCode(
-                                  Icons.currency_exchange_rounded.codePoint,
-                                ),
-                                style: TextStyle(
-                                  fontFamily: Icons
-                                      .currency_exchange_rounded
-                                      .fontFamily,
-                                ),
-                              ),
-                              const SizedBox(width: 4),
-                              CurrencyDisplayer(
-                                amountToConvert: currencySnapshot.data!,
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ],
-          ),
-          Hero(
-            tag: accountIconHeroTag ?? UniqueKey(),
-            child: account.displayIcon(
-              context,
-              size: 48 - (1 - pow(1 - shrinkPercent, 4)) * 20,
             ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
-
-  @override
-  double get maxExtent => 120;
-
-  @override
-  double get minExtent => 80;
-
-  @override
-  bool shouldRebuild(covariant _AccountDetailHeader oldDelegate) =>
-      oldDelegate.account != account;
 }
 
 class _UpdateValuationDialog extends StatefulWidget {

@@ -14,56 +14,115 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 import '../../../core/models/transaction/transaction_type.enum.dart';
 
 abstract class AccountDetailsActions {
-  static List<ListTileActionItem> getAccountDetailsActions(
+  static Future<void> _navigateToTransferOrWarn(
+    BuildContext context, {
+    Account? fromAccount,
+    Account? toAccount,
+  }) async {
+    final t = Translations.of(context);
+
+    final numberOfAccounts =
+        (await AccountService.instance
+                .getAccounts(predicate: (acc, curr) => acc.closingDate.isNull())
+                .first)
+            .length;
+
+    if (numberOfAccounts <= 1) {
+      await confirmDialog(
+        context,
+        dialogTitle: t.transfer.need_two_accounts_warning_header,
+        contentParagraphs: [Text(t.transfer.need_two_accounts_warning_message)],
+      );
+    } else {
+      RouteUtils.pushRoute(
+        TransactionFormPage(
+          fromAccount: fromAccount,
+          toAccount: toAccount,
+          mode: TransactionType.transfer,
+        ),
+      );
+    }
+  }
+
+  static ({List<ListTileActionItem> primary, List<ListTileActionItem> menu})
+  getAccountDetailsActions(
     BuildContext context, {
     required Account account,
     bool navigateBackOnDelete = false,
   }) {
     final t = Translations.of(context);
+    final isInvestment = account.type == AccountType.investment;
 
-    return [
+    final List<ListTileActionItem> primary = [];
+    final List<ListTileActionItem> menu = [];
+
+    // --- Primary actions (shown as chips) ---
+
+    if (!isInvestment) {
+      primary.add(
+        ListTileActionItem(
+          label: t.account.correct_balance,
+          icon: Icons.balance_rounded,
+          onClick: account.isClosed
+              ? null
+              : () => RouteUtils.pushRoute(AccountFormPage(account: account)),
+        ),
+      );
+
+      primary.add(
+        ListTileActionItem(
+          label: t.transfer.create,
+          icon: TransactionType.transfer.icon,
+          onClick: account.isClosed
+              ? null
+              : () => _navigateToTransferOrWarn(context, fromAccount: account),
+        ),
+      );
+    } else {
+      primary.add(
+        ListTileActionItem(
+          label: t.account.add_money,
+          icon: Icons.add_rounded,
+          onClick: account.isClosed
+              ? null
+              : () => _navigateToTransferOrWarn(context, toAccount: account),
+        ),
+      );
+
+      primary.add(
+        ListTileActionItem(
+          label: t.account.withdraw_money,
+          icon: Icons.remove_rounded,
+          onClick: account.isClosed
+              ? null
+              : () => _navigateToTransferOrWarn(context, fromAccount: account),
+        ),
+      );
+    }
+
+    // --- Menu actions (shown in three-dot popup) ---
+
+    menu.add(
       ListTileActionItem(
         label: t.ui_actions.edit,
         icon: Icons.edit,
         onClick: () => RouteUtils.pushRoute(AccountFormPage(account: account)),
       ),
-      ListTileActionItem(
-        label: t.transfer.create,
-        icon: TransactionType.transfer.icon,
-        onClick: account.isClosed
-            ? null
-            : () async {
-                showAccountsWarn() async => await confirmDialog(
-                  context,
-                  dialogTitle: t.transfer.need_two_accounts_warning_header,
-                  contentParagraphs: [
-                    Text(t.transfer.need_two_accounts_warning_message),
-                  ],
-                );
+    );
 
-                navigateToTransferForm() => RouteUtils.pushRoute(
-                  TransactionFormPage(
-                    fromAccount: account,
-                    mode: TransactionType.transfer,
-                  ),
-                );
+    if (isInvestment) {
+      menu.add(
+        ListTileActionItem(
+          label: t.account.correct_balance,
+          icon: Icons.balance_rounded,
+          onClick: account.isClosed
+              ? null
+              : () => RouteUtils.pushRoute(AccountFormPage(account: account)),
+        ),
+      );
+    }
 
-                final numberOfAccounts =
-                    (await AccountService.instance
-                            .getAccounts(
-                              predicate: (acc, curr) =>
-                                  acc.closingDate.isNull(),
-                            )
-                            .first)
-                        .length;
-
-                if (numberOfAccounts <= 1) {
-                  await showAccountsWarn();
-                } else {
-                  await navigateToTransferForm();
-                }
-              },
-      ),
+    menu.add(
       ListTileActionItem(
         label: account.isClosed
             ? t.account.reopen_short
@@ -89,6 +148,9 @@ abstract class AccountDetailsActions {
           );
         },
       ),
+    );
+
+    menu.add(
       ListTileActionItem(
         label: t.ui_actions.delete,
         icon: Icons.delete,
@@ -101,7 +163,9 @@ abstract class AccountDetailsActions {
           );
         },
       ),
-    ];
+    );
+
+    return (primary: primary, menu: menu);
   }
 
   static void showReopenAccountDialog(BuildContext context, Account account) {

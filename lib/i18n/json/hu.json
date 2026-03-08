@@ -480,6 +480,7 @@
     "n_transactions": "Tranzakciók száma",
     "add_money": "Hozzáadás",
     "withdraw_money": "Pénzfelvétel",
+    "correct_balance": "Egyenleg javítás",
     "no-accounts": "Nem található itt megjeleníthető tranzakció. Adjon hozzá egy tranzakciót az alul található „+” gombra kattintva.",
     "TYPES": {
       "title": "Számlatípus",

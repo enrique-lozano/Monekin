@@ -480,6 +480,7 @@
     "n_transactions": "Number of transactions",
     "add_money": "Add money",
     "withdraw_money": "Withdraw money",
+    "correct_balance": "Correct balance",
     "no-accounts": "No accounts found to display here. Add an account by clicking the '+' button at the bottom",
     "TYPES": {
       "title": "Account type",

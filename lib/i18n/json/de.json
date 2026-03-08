@@ -480,6 +480,7 @@
     "n_transactions": "Anzahl der Transaktionen",
     "add_money": "Geld hinzufügen",
     "withdraw_money": "Geld abheben",
+    "correct_balance": "Kontostand korrigieren",
     "no-accounts": "Es wurden keine Transaktionen gefunden, die hier angezeigt werden könnten. Füge eine Transaktion hinzu, indem Du auf die Schaltfläche „+“ am unteren Rand klickst.",
     "TYPES": {
       "title": "Kontotyp",

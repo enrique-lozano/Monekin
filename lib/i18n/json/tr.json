@@ -480,6 +480,7 @@
     "n_transactions": "İşlem sayısı",
     "add_money": "Para ekle",
     "withdraw_money": "Para çek",
+    "correct_balance": "Bakiye düzelt",
     "no-accounts": "Burada görüntülenecek işlem bulunamadı. Alttaki '+' düğmesine tıklayarak bir işlem ekleyin",
     "TYPES": {
       "title": "Hesap türü",

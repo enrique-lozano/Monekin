@@ -480,6 +480,7 @@
     "n_transactions": "交易數量",
     "add_money": "增加金額",
     "withdraw_money": "取出金額",
+    "correct_balance": "修正餘額",
     "no-accounts": "未發現此處顯示的交易。請點選底部的 '+' 按鈕新增交易",
     "TYPES": {
       "title": "帳戶類型",
