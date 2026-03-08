@@ -794,7 +794,7 @@
         "date-format": "日期格式",
         "note-column": "备注列",
         "title-column": "标题列",
-        "tag-separator": ".csv 中的標籤分隔符",
+        "tag-separator": ".csv 中的标签分隔符",
         "steps": [
           "选择您的文件",
           "数额列",
