@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:monekin/app/debts/debt_details_page.dart';
 import 'package:monekin/core/database/services/debts/debt_service.dart';
 import 'package:monekin/core/models/debt/debt.dart';
@@ -72,7 +73,7 @@ class DebtList extends StatelessWidget {
                   ).colorScheme.onSurface.withOpacity(0.6),
                 ),
                 Text(
-                  debt.endDate.toString().split(' ')[0],
+                  DateFormat.yMMMd().format(debt.endDate!),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
