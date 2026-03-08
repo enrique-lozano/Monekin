@@ -48,7 +48,7 @@ class AddMoneyTransactionToDebtModal extends StatelessWidget {
                   onTransactionSelected: (transaction) async {
                     RouteUtils.popRoute(); // pop _AddRegisterToDebtModal
                     try {
-                      await DebtServive.instance.linkTransactionToDebt(
+                      await DebtService.instance.linkTransactionToDebt(
                         transactionId: transaction.id,
                         debtId: debt.id,
                       );

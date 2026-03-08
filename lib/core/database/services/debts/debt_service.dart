@@ -11,11 +11,11 @@ import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:rxdart/rxdart.dart';
 
-class DebtServive {
+class DebtService {
   final AppDB db;
 
-  DebtServive._(this.db);
-  static final DebtServive instance = DebtServive._(AppDB.instance);
+  DebtService._(this.db);
+  static final DebtService instance = DebtService._(AppDB.instance);
 
   Future<int> insertDebt(DebtInDB debt) {
     return db.into(db.debts).insert(debt);

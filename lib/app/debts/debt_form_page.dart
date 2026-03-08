@@ -151,7 +151,7 @@ class _DebtFormPageState extends State<DebtFormPage> {
             ..._buildAmountAndCurrencyFields(context),
             const SizedBox(height: 8),
             StreamBuilder(
-              stream: DebtServive.instance.getDebtTotalAmount(
+              stream: DebtService.instance.getDebtTotalAmount(
                 widget.debt!,
                 countInitialAmount: false,
               ),
@@ -416,9 +416,9 @@ class _DebtFormPageState extends State<DebtFormPage> {
 
     try {
       if (widget.isEditing) {
-        await DebtServive.instance.updateDebt(debtToUpload);
+        await DebtService.instance.updateDebt(debtToUpload);
       } else {
-        await DebtServive.instance.insertDebt(debtToUpload);
+        await DebtService.instance.insertDebt(debtToUpload);
 
         if (_transaction != null && _radioValue == 0) {
           await TransactionService.instance.updateTransaction(

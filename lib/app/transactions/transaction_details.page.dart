@@ -774,7 +774,7 @@ class _LinkedDebtCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<Debt?>(
-      stream: DebtServive.instance.getDebtById(debtId),
+      stream: DebtService.instance.getDebtById(debtId),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const SizedBox.shrink();
         final debt = snapshot.data!;

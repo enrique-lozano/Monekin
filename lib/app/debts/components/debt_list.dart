@@ -94,7 +94,7 @@ class DebtList extends StatelessWidget {
           title: Text(debt.name),
           subtitle: subtitleWidget,
           trailing: StreamBuilder(
-            stream: DebtServive.instance.getDebtRemainingAmount(debt),
+            stream: DebtService.instance.getDebtRemainingAmount(debt),
             initialData: debt.initialAmount,
             builder: (context, snapshot) {
               if (snapshot.hasData) {

@@ -80,7 +80,7 @@ class TransactionViewActionService {
     );
     if (confirmed != true) return;
     try {
-      await DebtServive.instance.unlinkTransactionFromDebt(transactionId);
+      await DebtService.instance.unlinkTransactionFromDebt(transactionId);
       MonekinSnackbar.success(SnackbarParams('Transaction unlinked from debt'));
     } catch (e) {
       MonekinSnackbar.error(SnackbarParams.fromError(e));

@@ -71,7 +71,7 @@ class DebtsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Debt>>(
-      stream: DebtServive.instance
+      stream: DebtService.instance
           .getDebts(
             orderBy: (debts, _) => drift.OrderBy([
               drift.OrderingTerm(
@@ -84,7 +84,7 @@ class DebtsView extends StatelessWidget {
             if (debts.isEmpty) return Stream.value(<Debt>[]);
             return Rx.combineLatestList(
               debts.map(
-                (debt) => DebtServive.instance
+                (debt) => DebtService.instance
                     .getDebtRemainingAmount(debt)
                     .map((remaining) => (debt: debt, remaining: remaining)),
               ),

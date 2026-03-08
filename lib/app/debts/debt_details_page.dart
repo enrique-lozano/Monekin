@@ -40,7 +40,7 @@ class DebtDetailsPage extends StatelessWidget {
     final t = Translations.of(context);
 
     return StreamBuilder(
-      stream: DebtServive.instance.getDebtById(debtInitialData.id),
+      stream: DebtService.instance.getDebtById(debtInitialData.id),
       initialData: debtInitialData,
       builder: (context, asyncSnapshot) {
         final debt = asyncSnapshot.data ?? debtInitialData;
@@ -67,7 +67,7 @@ class DebtDetailsPage extends StatelessWidget {
                 );
                 if (confirmed != true) return;
                 try {
-                  await DebtServive.instance.deleteDebt(debt.id);
+                  await DebtService.instance.deleteDebt(debt.id);
                   MonekinSnackbar.success(
                     SnackbarParams(t.general.delete_success),
                   );
@@ -148,8 +148,8 @@ class DebtDetailsPage extends StatelessWidget {
     final t = Translations.of(context);
     return StreamBuilder(
       stream: Rx.combineLatest2(
-        DebtServive.instance.getDebtRemainingAmount(debt),
-        DebtServive.instance.getDebtTotalAmount(debt),
+        DebtService.instance.getDebtRemainingAmount(debt),
+        DebtService.instance.getDebtTotalAmount(debt),
         (remaining, total) => (remaining: remaining, total: total),
       ),
       initialData: (remaining: 0.0, total: debt.initialAmount),
