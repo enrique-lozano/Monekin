@@ -25,7 +25,7 @@ CREATE TABLE accounts_new (
     includeInNetWorth INTEGER NOT NULL DEFAULT 1
 );
 
--- Step 3: Copy existing accounts; all get includeInNetWorth = 1 by default
+-- Step 3: Copy existing accounts
 INSERT INTO accounts_new
     SELECT id, name, iniValue, date, description, type, iconId, displayOrder,
            color, closingDate, currencyId, iban, swift, 1
