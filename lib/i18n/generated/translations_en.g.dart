@@ -2140,6 +2140,9 @@ class TranslationsDebtsFormEn {
 	/// en: 'Initial amount'
 	String get initial_amount => 'Initial amount';
 
+	/// en: 'Total amount'
+	String get total_amount => 'Total amount';
+
 	/// en: 'Initial value'
 	String get step_initial_value => 'Initial value';
 
@@ -4013,6 +4016,7 @@ extension on Translations {
 			'debts.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('en'))(n, one: 'Debt', other: 'Debts', ), 
 			'debts.form.name' => 'Debt name',
 			'debts.form.initial_amount' => 'Initial amount',
+			'debts.form.total_amount' => 'Total amount',
 			'debts.form.step_initial_value' => 'Initial value',
 			'debts.form.step_details' => 'Details',
 			'debts.form.from_transaction.title' => 'From a transaction',

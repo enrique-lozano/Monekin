@@ -752,6 +752,7 @@
     "FORM": {
       "name": "Nom de la dette",
       "initial_amount": "Montant initial",
+      "total_amount": "Montant total",
       "step_initial_value": "Valeur initiale",
       "step_details": "Détails",
       "from_transaction": {

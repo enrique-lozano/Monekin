@@ -1204,6 +1204,7 @@ class _TranslationsDebtsFormUk implements TranslationsDebtsFormEn {
 	// Translations
 	@override String get name => 'Назва боргу';
 	@override String get initial_amount => 'Початкова сума';
+	@override String get total_amount => 'Загальна сума';
 	@override String get step_initial_value => 'Початкове значення';
 	@override String get step_details => 'Подробиці';
 	@override late final _TranslationsDebtsFormFromTransactionUk from_transaction = _TranslationsDebtsFormFromTransactionUk._(_root);
@@ -2538,6 +2539,7 @@ extension on TranslationsUk {
 			'debts.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('uk'))(n, one: 'борг', other: 'борги', ), 
 			'debts.form.name' => 'Назва боргу',
 			'debts.form.initial_amount' => 'Початкова сума',
+			'debts.form.total_amount' => 'Загальна сума',
 			'debts.form.step_initial_value' => 'Початкове значення',
 			'debts.form.step_details' => 'Подробиці',
 			'debts.form.from_transaction.title' => 'З транзакції',

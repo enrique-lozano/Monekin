@@ -1204,6 +1204,7 @@ class _TranslationsDebtsFormIt implements TranslationsDebtsFormEn {
 	// Translations
 	@override String get name => 'Nome del debito';
 	@override String get initial_amount => 'Importo iniziale';
+	@override String get total_amount => 'Importo totale';
 	@override String get step_initial_value => 'Valore iniziale';
 	@override String get step_details => 'Dettagli';
 	@override late final _TranslationsDebtsFormFromTransactionIt from_transaction = _TranslationsDebtsFormFromTransactionIt._(_root);
@@ -2538,6 +2539,7 @@ extension on TranslationsIt {
 			'debts.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('it'))(n, one: 'Debito', other: 'Debiti', ), 
 			'debts.form.name' => 'Nome del debito',
 			'debts.form.initial_amount' => 'Importo iniziale',
+			'debts.form.total_amount' => 'Importo totale',
 			'debts.form.step_initial_value' => 'Valore iniziale',
 			'debts.form.step_details' => 'Dettagli',
 			'debts.form.from_transaction.title' => 'Da una transazione',

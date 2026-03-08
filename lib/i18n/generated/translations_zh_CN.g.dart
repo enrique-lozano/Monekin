@@ -1204,6 +1204,7 @@ class _TranslationsDebtsFormZhCn implements TranslationsDebtsFormEn {
 	// Translations
 	@override String get name => '债务名称';
 	@override String get initial_amount => '初始金额';
+	@override String get total_amount => '总金额';
 	@override String get step_initial_value => '初始值';
 	@override String get step_details => '细节';
 	@override late final _TranslationsDebtsFormFromTransactionZhCn from_transaction = _TranslationsDebtsFormFromTransactionZhCn._(_root);
@@ -2538,6 +2539,7 @@ extension on TranslationsZhCn {
 			'debts.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('zh'))(n, one: '债务', other: '债务', ), 
 			'debts.form.name' => '债务名称',
 			'debts.form.initial_amount' => '初始金额',
+			'debts.form.total_amount' => '总金额',
 			'debts.form.step_initial_value' => '初始值',
 			'debts.form.step_details' => '细节',
 			'debts.form.from_transaction.title' => '来自一笔交易',

@@ -755,6 +755,7 @@
     "FORM": {
       "name": "Nombre de la deuda",
       "initial_amount": "Monto inicial",
+      "total_amount": "Monto total",
       "step_initial_value": "Valor inicial",
       "step_details": "Detalles",
       "from_transaction": {

@@ -752,6 +752,7 @@
     "FORM": {
       "name": "債務名稱",
       "initial_amount": "初始金額",
+      "total_amount": "總金額",
       "step_initial_value": "初始值",
       "step_details": "細節",
       "from_transaction": {

@@ -301,7 +301,7 @@ class DebtDetailsPage extends StatelessWidget {
                                             .labelSmall!
                                             .copyWith(
                                               color: daysLeft > 0
-                                                  ? color
+                                                  ? null
                                                   : Theme.of(
                                                       context,
                                                     ).colorScheme.error,

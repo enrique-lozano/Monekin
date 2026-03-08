@@ -1204,6 +1204,7 @@ class _TranslationsDebtsFormTr implements TranslationsDebtsFormEn {
 	// Translations
 	@override String get name => 'Borç adı';
 	@override String get initial_amount => 'Başlangıç ​​tutarı';
+	@override String get total_amount => 'Toplam tutar';
 	@override String get step_initial_value => 'Başlangıç ​​değeri';
 	@override String get step_details => 'Detaylar';
 	@override late final _TranslationsDebtsFormFromTransactionTr from_transaction = _TranslationsDebtsFormFromTransactionTr._(_root);
@@ -2538,6 +2539,7 @@ extension on TranslationsTr {
 			'debts.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('tr'))(n, one: 'Borç', other: 'Borçlar', ), 
 			'debts.form.name' => 'Borç adı',
 			'debts.form.initial_amount' => 'Başlangıç ​​tutarı',
+			'debts.form.total_amount' => 'Toplam tutar',
 			'debts.form.step_initial_value' => 'Başlangıç ​​değeri',
 			'debts.form.step_details' => 'Detaylar',
 			'debts.form.from_transaction.title' => 'Bir işlemden',

@@ -752,6 +752,7 @@
     "FORM": {
       "name": "Nome del debito",
       "initial_amount": "Importo iniziale",
+      "total_amount": "Importo totale",
       "step_initial_value": "Valore iniziale",
       "step_details": "Dettagli",
       "from_transaction": {

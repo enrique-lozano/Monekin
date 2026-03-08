@@ -752,6 +752,7 @@
     "FORM": {
       "name": "Borç adı",
       "initial_amount": "Başlangıç ​​tutarı",
+      "total_amount": "Toplam tutar",
       "step_initial_value": "Başlangıç ​​değeri",
       "step_details": "Detaylar",
       "from_transaction": {

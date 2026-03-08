@@ -752,6 +752,7 @@
     "FORM": {
       "name": "Debt name",
       "initial_amount": "Initial amount",
+      "total_amount": "Total amount",
       "step_initial_value": "Initial value",
       "step_details": "Details",
       "from_transaction": {

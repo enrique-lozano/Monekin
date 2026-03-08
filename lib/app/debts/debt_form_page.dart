@@ -163,7 +163,7 @@ class _DebtFormPageState extends State<DebtFormPage> {
                     .roundWithDecimals(currency.decimalPlaces);
 
                 return Text(
-                  'Monto total: ${UINumberFormatter.currency(amountToConvert: initialAmount, currency: currency).getFormattedAmount()} + ${UINumberFormatter.currency(amountToConvert: trAmount, currency: currency).getFormattedAmount()}'
+                  '${t.debts.form.total_amount}: ${UINumberFormatter.currency(amountToConvert: initialAmount, currency: currency).getFormattedAmount()} + ${UINumberFormatter.currency(amountToConvert: trAmount, currency: currency).getFormattedAmount()}'
                   ' = ${UINumberFormatter.currency(amountToConvert: totalAmount, currency: currency).getFormattedAmount()}',
 
                   style: Theme.of(context).textTheme.bodySmall,

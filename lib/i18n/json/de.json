@@ -752,6 +752,7 @@
     "FORM": {
       "name": "Schuldenname",
       "initial_amount": "Anfangsbetrag",
+      "total_amount": "Gesamtbetrag",
       "step_initial_value": "Anfangswert",
       "step_details": "Einzelheiten",
       "from_transaction": {

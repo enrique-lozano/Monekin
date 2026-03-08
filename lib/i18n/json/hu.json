@@ -752,6 +752,7 @@
     "FORM": {
       "name": "Adósság neve",
       "initial_amount": "Kezdeti összeg",
+      "total_amount": "Teljes összeg",
       "step_initial_value": "Kezdeti érték",
       "step_details": "Részletek",
       "from_transaction": {

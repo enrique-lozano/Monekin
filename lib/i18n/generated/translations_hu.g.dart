@@ -1204,6 +1204,7 @@ class _TranslationsDebtsFormHu implements TranslationsDebtsFormEn {
 	// Translations
 	@override String get name => 'Adósság neve';
 	@override String get initial_amount => 'Kezdeti összeg';
+	@override String get total_amount => 'Teljes összeg';
 	@override String get step_initial_value => 'Kezdeti érték';
 	@override String get step_details => 'Részletek';
 	@override late final _TranslationsDebtsFormFromTransactionHu from_transaction = _TranslationsDebtsFormFromTransactionHu._(_root);
@@ -2538,6 +2539,7 @@ extension on TranslationsHu {
 			'debts.display' => ({required num n}) => (_root.$meta.cardinalResolver ?? PluralResolvers.cardinal('hu'))(n, one: 'Adósság', other: 'Adósságok', ), 
 			'debts.form.name' => 'Adósság neve',
 			'debts.form.initial_amount' => 'Kezdeti összeg',
+			'debts.form.total_amount' => 'Teljes összeg',
 			'debts.form.step_initial_value' => 'Kezdeti érték',
 			'debts.form.step_details' => 'Részletek',
 			'debts.form.from_transaction.title' => 'Egy tranzakcióból',

@@ -752,6 +752,7 @@
     "FORM": {
       "name": "债务名称",
       "initial_amount": "初始金额",
+      "total_amount": "总金额",
       "step_initial_value": "初始值",
       "step_details": "细节",
       "from_transaction": {

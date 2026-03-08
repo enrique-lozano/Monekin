@@ -752,6 +752,7 @@
     "FORM": {
       "name": "Назва боргу",
       "initial_amount": "Початкова сума",
+      "total_amount": "Загальна сума",
       "step_initial_value": "Початкове значення",
       "step_details": "Подробиці",
       "from_transaction": {
