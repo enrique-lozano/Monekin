@@ -5,6 +5,7 @@ import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/transactions/form/dialogs/amount_selector.dart';
+import 'package:monekin/app/transactions/form/widgets/debt_link_banner.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_account_selector_row.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_amount_display.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_date_selector.dart';
@@ -21,6 +22,7 @@ import 'package:monekin/core/database/utils/drift_utils.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/debt/debt.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
@@ -43,6 +45,7 @@ class TransactionFormPage extends StatefulWidget {
     this.mode,
     this.fromAccount,
     this.transactionToEdit,
+    this.linkedDebt,
   });
 
   final TransactionType? mode;
@@ -50,6 +53,10 @@ class TransactionFormPage extends StatefulWidget {
   final MoneyTransaction? transactionToEdit;
 
   final Account? fromAccount;
+
+  /// When non-null, the created transaction will be automatically linked to
+  /// this debt. A banner indicator is shown inside the form.
+  final Debt? linkedDebt;
 
   @override
   State<TransactionFormPage> createState() => _TransactionFormPageState();
@@ -308,6 +315,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       categoryID: transactionType.isIncomeOrExpense
           ? selectedCategory?.id
           : null,
+      debtId: widget.linkedDebt?.id,
       receivingAccountID: transactionType.isTransfer
           ? transferAccount?.id
           : null,
@@ -497,6 +505,14 @@ class _TransactionFormPageState extends State<TransactionFormPage>
           },
           onCategoryTap: () => selectCategory(),
         ),
+        if (widget.linkedDebt != null &&
+            BreakPoint.of(context).isLargerThan(BreakpointID.sm)) ...[
+          const SizedBox(height: 24),
+          DebtLinkBanner(
+            debt: widget.linkedDebt!,
+            padding: EdgeInsetsGeometry.zero,
+          ),
+        ],
       ],
     );
   }
@@ -507,6 +523,11 @@ class _TransactionFormPageState extends State<TransactionFormPage>
 
     final formFieldWithDividers = [
       TransactionTitleField(controller: titleController),
+      if (widget.linkedDebt != null &&
+          BreakPoint.of(context).isSmallerOrEqualTo(BreakpointID.sm)) ...[
+        DebtLinkBanner(debt: widget.linkedDebt!),
+        const Divider(),
+      ],
       const Divider(),
       TransactionDateSelector(
         date: date,

@@ -3,16 +3,20 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/app/debts/debt_details_page.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/transactions/label_value_info_table.dart';
 import 'package:monekin/app/transactions/utils/show_pay_modal.dart';
 import 'package:monekin/app/transactions/widgets/translucent_transaction_status_card.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
+import 'package:monekin/core/database/services/debts/debt_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
+import 'package:monekin/core/models/debt/debt.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
@@ -25,6 +29,7 @@ import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/monekin_quick_actions_buttons.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
 import 'package:monekin/core/services/view-actions/transaction_view_actions_service.dart';
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -112,7 +117,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
     });
   }
 
-  Widget cardPay({
+  Widget _cardPay({
     required MoneyTransaction transaction,
     required DateTime date,
     bool isNext = false,
@@ -123,13 +128,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
         enabled: isNext,
         contentPadding: const EdgeInsets.only(left: 16, right: 6),
         tileColor: transaction.nextPayStatus!.color(context).withOpacity(0.1),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(6),
-          side: BorderSide(
-            width: 1,
-            color: transaction.nextPayStatus!.color(context),
-          ),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
         leading: Icon(
           isNext ? transaction.nextPayStatus!.icon : Icons.access_time,
           color: transaction.nextPayStatus!.color(context),
@@ -176,53 +175,71 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
       throw Exception('Error');
     }
 
-    final bool showRecurrencyStatus = (transaction.recurrentInfo.isRecurrent);
-    final bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    if (transaction.recurrentInfo.isRecurrent) {
+      return _recurrencyStatusCard(transaction);
+    }
 
-    final color = showRecurrencyStatus
-        ? isDarkTheme
-              ? Theme.of(context).colorScheme.primary
-              : Theme.of(context).colorScheme.primary.lighten(0.2)
-        : transaction.status!.color;
+    return _transactionStatusCard(transaction);
+  }
+
+  Widget _recurrencyStatusCard(MoneyTransaction transaction) {
+    final bool isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final color = isDarkTheme
+        ? Theme.of(context).colorScheme.primary
+        : Theme.of(context).colorScheme.primary.lighten(0.2);
 
     return TranslucentTransactionStatusCard(
       color: color,
+      initiallyExpanded: true,
+      icon: Icons.repeat_rounded,
+      title: t.recurrent_transactions.details.title,
       body: Padding(
-        padding: EdgeInsets.all(showRecurrencyStatus ? 0 : 12),
+        padding: const EdgeInsets.symmetric(vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 8,
           children: [
             Padding(
-              padding: EdgeInsets.all(showRecurrencyStatus ? 12 : 0),
-              child: Text(
-                showRecurrencyStatus
-                    ? t.recurrent_transactions.details.descr
-                    : transaction.status!.description(context),
-              ),
+              padding: EdgeInsetsGeometry.symmetric(horizontal: 12),
+              child: Text(t.recurrent_transactions.details.descr),
             ),
-            if (showRecurrencyStatus) ...[
-              //const SizedBox(height: 12),
-              Column(
-                children: transaction
+            Column(
+              children: [
+                ...transaction
                     .getNextDatesOfRecurrency(limit: 3)
                     .mapIndexed(
-                      (index, e) => Column(
-                        children: [
-                          cardPay(
-                            date: e,
-                            transaction: transaction,
-                            isNext: index == 0,
-                          ),
-                          if (index == 2) const SizedBox(height: 8),
-                        ],
+                      (index, e) => _cardPay(
+                        date: e,
+                        transaction: transaction,
+                        isNext: index == 0,
                       ),
-                    )
-                    .toList(),
-              ),
-            ],
-            if (transaction.status == TransactionStatus.pending &&
-                !showRecurrencyStatus) ...[
-              const SizedBox(height: 12),
+                    ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _transactionStatusCard(MoneyTransaction transaction) {
+    final color = transaction.status!.color;
+
+    return TranslucentTransactionStatusCard(
+      color: color,
+      initiallyExpanded: transaction.status == TransactionStatus.pending,
+      icon: transaction.status?.icon,
+      title: t.transaction.status
+          .tr_status(status: transaction.status!.displayName(context))
+          .capitalize(),
+      body: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 12,
+          children: [
+            Text(transaction.status!.description(context)),
+            if (transaction.status == TransactionStatus.pending)
               SizedBox(
                 width: double.infinity,
                 child: FilledButton(
@@ -234,18 +251,9 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                   child: Text(t.transaction.next_payments.accept_dialog_title),
                 ),
               ),
-            ],
           ],
         ),
       ),
-      icon: showRecurrencyStatus
-          ? Icons.repeat_rounded
-          : transaction.status?.icon,
-      title: showRecurrencyStatus
-          ? t.recurrent_transactions.details.title
-          : t.transaction.status
-                .tr_status(status: transaction.status!.displayName(context))
-                .capitalize(),
     );
   }
 
@@ -320,6 +328,11 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                               ),
                               icon: MoneyTransaction.reversedIcon,
                               title: t.transaction.reversed.title,
+                            ),
+                          if (transaction.debtId != null)
+                            _LinkedDebtCard(
+                              transactionId: transaction.id,
+                              debtId: transaction.debtId!,
                             ),
                           CardWithHeader(
                             title: 'Info',
@@ -750,4 +763,87 @@ class _TransactionDetailHeader extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant _TransactionDetailHeader oldDelegate) =>
       oldDelegate.transaction != transaction || oldDelegate.heroTag != heroTag;
+}
+
+class _LinkedDebtCard extends StatelessWidget {
+  const _LinkedDebtCard({required this.transactionId, required this.debtId});
+
+  final String transactionId;
+  final String debtId;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<Debt?>(
+      stream: DebtService.instance.getDebtById(debtId),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return const SizedBox.shrink();
+        final debt = snapshot.data!;
+        final debtColor = debt.type.color(context);
+
+        return TranslucentTransactionStatusCard(
+          color: debtColor,
+          icon: Debt.icon,
+          title: 'Linked Debt',
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ListTile(
+                leading: IconDisplayer(
+                  supportedIcon: SupportedIconService.instance.getIconByID(
+                    debt.iconId,
+                  ),
+                  mainColor: debtColor,
+                ),
+                title: Text(
+                  debt.name,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+                subtitle: Row(
+                  spacing: 4,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(debt.type.icon(), size: 12, color: debtColor),
+                    Text(
+                      debt.type.title(context),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: debtColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                trailing: Icon(Icons.open_in_new_rounded, color: debtColor),
+                onTap: () => RouteUtils.pushRoute(
+                  DebtDetailsPage(debtInitialData: debt),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: FilledButton.icon(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: AppColors.of(
+                        context,
+                      ).danger.withOpacity(0.15),
+                      foregroundColor: AppColors.of(context).danger,
+                    ),
+                    icon: const Icon(Icons.link_off_rounded, size: 18),
+                    label: Text(t.debts.actions.unlink_transaction.title),
+                    onPressed: () async {
+                      await TransactionViewActionService()
+                          .unlinkTransactionFromDebtWithAlertAndSnackbar(
+                            context,
+                            transactionId: transactionId,
+                          );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }

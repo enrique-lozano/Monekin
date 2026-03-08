@@ -12,6 +12,7 @@ import './../../../models/category/category.dart';
 import './../../../models/account/account.dart';
 import './../../../models/goal/goal.dart';
 import './../../../models/goal/goal_type.enum.dart';
+import './../../../models/debt/debt_direction.enum.dart';
 import './../../services/user-setting/user_setting_service.dart';
 import './../../services/app-data/app_data_service.dart';
 import './../../utils/database_enum.dart';
@@ -128,8 +129,16 @@ CREATE TABLE IF NOT EXISTS transactions (
   
   status TEXT CHECK(status IN ('V', 'P', 'R', 'U')) MAPPED BY `CustomEnumConverter(TransactionStatus.values)`,
   categoryID TEXT REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  valueInDestiny REAL,
+
+  -- If this transaction is related to a debt, the ID of the debt. This field is independent of the account and category fields, so it can be used in transactions of different accounts and categories as long as they are related to the same debt. It will be null for transactions that are not related to any debt.
+  debtId TEXT REFERENCES debts(id) ON DELETE SET NULL ON UPDATE CASCADE,
+
+  -- In case this transaction is a transfer, the account that receives the transfer. Only one of categoryID or receivingAccountID can be defined, never both or none
   receivingAccountID TEXT REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE,
+
+  -- In case this transaction is a transfer, the value that will be added to the receiving account. This value can be different from the `value` field if the transfer involves a currency exchange. It will always be in the currency of the receiving account.
+  valueInDestiny REAL,
+
   isHidden BOOLEAN NOT NULL DEFAULT 0,
 
   ----------- Location data --------------
@@ -275,6 +284,30 @@ CREATE TABLE IF NOT EXISTS goals (
 
   filterID TEXT NOT NULL REFERENCES transactionFilterSets(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) AS GoalInDB;
+
+
+CREATE TABLE IF NOT EXISTS debts (
+    id TEXT NOT NULL PRIMARY KEY,
+    
+    -- Debt name (unique among user debts)
+    name TEXT UNIQUE NOT NULL,
+
+    type INTEGER NOT NULL CHECK(type IN (0, 1)) MAPPED BY `CustomEnumConverter(DebtDirection.values)`,
+
+    iconId TEXT NOT NULL,
+
+    -- ID of the currency used by this debt. The transactions related to this debt can be in different accounts and therefore in different currencies, but they will all be converted to this currency when calculating the total amount of the debt
+    currencyId TEXT NOT NULL REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
+    
+    -- Initial amount of the debt, in the currency of the debt. This amount will not be used to calculate user balances
+    initialAmount REAL NOT NULL DEFAULT 0,
+
+    -- Date on which the debt was created or the money was lent/borrowed. Before this date, no transactions can exists on it.
+    startDate DATETIME NOT NULL,
+
+    -- The closing date of the debt. After this date, no transactions can exists on it.
+    endDate DATETIME
+) AS DebtInDB;
 
 
 CREATE TABLE IF NOT EXISTS userSettings (

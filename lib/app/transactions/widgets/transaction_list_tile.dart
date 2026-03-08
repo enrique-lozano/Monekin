@@ -41,7 +41,10 @@ class TransactionListTile extends StatelessWidget {
 
   final Periodicity? periodicityInfo;
 
-  /// Whether to show the date and time in the subtitle. Defaults to `true`
+  /// Whether to show the date of the transaction in the subtitle. If the user
+  /// has enabled the `transactionTileShowTime` setting, it will also show the time.
+  ///
+  /// Defaults to `true`
   final bool showDateTime;
 
   /// Whether to show the account name in the subtitle. Defaults to `true`
@@ -49,6 +52,9 @@ class TransactionListTile extends StatelessWidget {
 
   final Object? heroTag;
 
+  /// Whether to apply the swipe actions defined in the user settings. If `false`,
+  /// the tile will not be dismissible and won't show the swipe action background.
+  /// Defaults to `false`
   final bool applySwipeActions;
 
   /// Action to trigger when the tile is long pressed. If `null`,

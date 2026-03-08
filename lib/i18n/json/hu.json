@@ -316,6 +316,7 @@
     "delete.multiple.warning-message": "Ez a művelet visszafordíthatatlan, és eltávolít {{ x }} tranzakciót. A számlái aktuális egyenlege és minden statisztikája újraszámításra kerül.",
     "delete.multiple.success": "{{x}} tranzakció megfelelően törölve",
     "details": "A mozgás részletei",
+    "select": "Válasszon ki egy tranzakciót",
     "NEXT-PAYMENTS": {
       "accept": "Elfogadás",
       "skip": "Kihagyás",
@@ -743,6 +744,87 @@
         "active-indeterminate": "További {{ amount }} kell a cél eléréséhez.",
         "success": "Gratulálok! Elérted a célodat.",
         "fail": "{{ amount }} értékkel eltévesztette a célt."
+      }
+    }
+  },
+  "DEBTS": {
+    "display": {
+      "one": "Adósság",
+      "other": "Adósságok"
+    },
+    "FORM": {
+      "name": "Adósság neve",
+      "initial_amount": "Kezdeti összeg",
+      "total_amount": "Teljes összeg",
+      "step_initial_value": "Kezdeti érték",
+      "step_details": "Részletek",
+      "from_transaction": {
+        "title": "Egy tranzakcióból",
+        "tap_to_select": "Koppintson egy tranzakció kiválasztásához"
+      },
+      "from_amount": {
+        "title": "Kezdő összegből",
+        "description": "Ezt az összeget a statisztikában nem veszik figyelembe kiadásként/bevételként. Ezt az egyenlegek és a nettó vagyon kiszámításához fogják használni"
+      }
+    },
+    "DIRECTION": {
+      "lent": "Kölcsönadva",
+      "borrowed": "Kölcsönözve"
+    },
+    "STATUS": {
+      "active": "Aktív",
+      "close": "Zárt"
+    },
+    "DETAILS": {
+      "collected_amount": "Összegyűjtött összeg",
+      "remaining": "Többi",
+      "no_deadline": "Nincs határidő",
+      "in_days": "{{x}} napon belül",
+      "due_today": "Ma esedékes",
+      "days_ago": "{{x}} napja",
+      "overdue_by": "{{x}} napot késik",
+
+      "per_day": "/ nap",
+      "no_transactions": "Nem található tranzakció ehhez az adóssághoz"
+    },
+    "EMPTY": {
+      "no_debts_active": "Nem található aktív adósság. Kezdje új adósság létrehozásával az alábbi gombra kattintva",
+      "no_debts_closed": "Nem található lezárt adósság. A tartozás akkor zárul le, ha az összes pénzt beszedte, vagy kifizette az összes tartozását."
+    },
+    "ACTIONS": {
+      "edit": {
+        "title": "Adósság szerkesztése",
+        "success": "A tartozás sikeresen szerkesztve"
+      },
+      "delete": {
+        "warning_header": "Törli ezt az adósságot?",
+        "warning_text": "Ez a művelet nem vonható vissza. A kapcsolt tranzakciók nem törlődnek, de a továbbiakban nem lesznek társítva ehhez az adóssághoz."
+      },
+      "add_register": {
+        "title": "Mozgás hozzáadása",
+        "success": "A mozgás sikeresen hozzáadva",
+        "fab_label": "Regisztráció hozzáadása",
+        "modal_title": "Regiszter hozzáadása ehhez az adóssághoz",
+        "modal_subtitle": "Válasszon egyet az alábbi lehetőségek közül, ha egy tranzakciót ehhez az adóssághoz szeretne kapcsolni"
+      },
+      "link_transaction": {
+        "title": "Kapcsolja össze a meglévő tranzakciót",
+        "description": "Válasszon egy meglévő rekordot, hogy összekapcsolja ezzel a tartozással",
+        "success": "Adóssághoz kapcsolódó ügylet",
+        "creating": "Egy <b>{{ name }}</b> adóssághoz kapcsolódó tranzakciót hoz létre"
+      },
+      "unlink_transaction": {
+        "title": "Leválasztás az adósságról",
+        "warning_text": "Ez a tranzakció a továbbiakban nem lesz ehhez a tartozáshoz társítva.",
+        "success": "Tranzakció leválasztva az adósságról"
+      },
+      "new_transaction": {
+        "title": "Új tranzakció hozzáadása",
+        "description": "Manuálisan adja hozzá vagy csökkentse az adósságot úgy, hogy új tranzakciót hoz létre ehhez az adóssághoz kapcsolva"
+      },
+      "create": {
+        "title": "Adósság létrehozása",
+        "success": "Az adósság sikeresen létrehozva"
       }
     }
   },

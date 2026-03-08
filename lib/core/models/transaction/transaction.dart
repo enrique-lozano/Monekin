@@ -51,6 +51,7 @@ class MoneyTransaction extends TransactionInDB {
     super.intervalEach,
     super.intervalPeriod,
     super.remainingTransactions,
+    super.debtId,
   }) : category = category != null
            ? Category.fromDB(category, parentCategory)
            : null,

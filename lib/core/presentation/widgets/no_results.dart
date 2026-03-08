@@ -36,11 +36,15 @@ class NoResults extends StatelessWidget {
             padding:
                 padding ??
                 EdgeInsets.only(
-                  top: MediaQuery.sizeOf(context).height * 0.4 > 400 ? 100 : 45,
+                  bottom: MediaQuery.sizeOf(context).height * 0.4 > 400
+                      ? 80
+                      : 40,
                   right: 40,
                   left: 40,
                 ),
             child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (showIllustration)
                   Container(
