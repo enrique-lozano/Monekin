@@ -44,7 +44,11 @@ abstract class AccountDetailsActions {
     }
   }
 
-  static ({List<ListTileActionItem> primary, List<ListTileActionItem> menu})
+  static ({
+    List<ListTileActionItem> primary,
+    List<ListTileActionItem> desktopChips,
+    List<ListTileActionItem> menu,
+  })
   getAccountDetailsActions(
     BuildContext context, {
     required Account account,
@@ -54,20 +58,21 @@ abstract class AccountDetailsActions {
     final isInvestment = account.type == AccountType.investment;
 
     final List<ListTileActionItem> primary = [];
+    final List<ListTileActionItem> desktopChips = [];
     final List<ListTileActionItem> menu = [];
+
+    final correctBalanceAction = ListTileActionItem(
+      label: t.account.correct_balance,
+      icon: Icons.balance_rounded,
+      onClick: account.isClosed
+          ? null
+          : () => RouteUtils.pushRoute(AccountFormPage(account: account)),
+    );
 
     // --- Primary actions (shown as chips) ---
 
     if (!isInvestment) {
-      primary.add(
-        ListTileActionItem(
-          label: t.account.correct_balance,
-          icon: Icons.balance_rounded,
-          onClick: account.isClosed
-              ? null
-              : () => RouteUtils.pushRoute(AccountFormPage(account: account)),
-        ),
-      );
+      primary.add(correctBalanceAction);
 
       primary.add(
         ListTileActionItem(
@@ -100,27 +105,13 @@ abstract class AccountDetailsActions {
       );
     }
 
-    // --- Menu actions (shown in three-dot popup) ---
-
-    menu.add(
-      ListTileActionItem(
-        label: t.ui_actions.edit,
-        icon: Icons.edit,
-        onClick: () => RouteUtils.pushRoute(AccountFormPage(account: account)),
-      ),
-    );
+    // --- Desktop-only chips (shown next to primary chips on wider screens) ---
 
     if (isInvestment) {
-      menu.add(
-        ListTileActionItem(
-          label: t.account.correct_balance,
-          icon: Icons.balance_rounded,
-          onClick: account.isClosed
-              ? null
-              : () => RouteUtils.pushRoute(AccountFormPage(account: account)),
-        ),
-      );
+      desktopChips.add(correctBalanceAction);
     }
+
+    // --- Menu actions (shown in three-dot popup) ---
 
     menu.add(
       ListTileActionItem(
@@ -165,7 +156,7 @@ abstract class AccountDetailsActions {
       ),
     );
 
-    return (primary: primary, menu: menu);
+    return (primary: primary, desktopChips: desktopChips, menu: menu);
   }
 
   static void showReopenAccountDialog(BuildContext context, Account account) {

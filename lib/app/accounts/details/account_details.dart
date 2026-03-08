@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/details/account_details_actions.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/transactions/label_value_info_list.dart';
@@ -179,13 +180,26 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
             );
 
         final primaryActions = accountDetailsActions.primary;
+        final desktopChips = accountDetailsActions.desktopChips;
         final menuActions = accountDetailsActions.menu;
 
         return PageFramework(
           title: t.account.details,
           appBarActions: [
+            IconButton(
+              icon: Icon(Icons.edit_rounded),
+              tooltip: t.ui_actions.edit,
+              onPressed: () =>
+                  RouteUtils.pushRoute(AccountFormPage(account: account)),
+            ),
             if (menuActions.isNotEmpty)
-              MonekinPopupMenuButton(actionItems: menuActions),
+              MonekinPopupMenuButton(
+                actionItems: [
+                  if (BreakPoint.of(context).isSmallerThan(BreakpointID.md))
+                    ...desktopChips,
+                  ...menuActions,
+                ],
+              ),
           ],
           body: Center(
             child: ConstrainedBox(
@@ -278,15 +292,26 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             spacing: 8,
-                            children: primaryActions
-                                .map(
+                            children: [
+                              ...primaryActions.map(
+                                (action) => ActionChip(
+                                  avatar: Icon(action.icon, size: 18),
+                                  label: Text(action.label),
+                                  onPressed: action.onClick,
+                                ),
+                              ),
+                              if (desktopChips.isNotEmpty &&
+                                  BreakPoint.of(
+                                    context,
+                                  ).isLargerOrEqualTo(BreakpointID.sm))
+                                ...desktopChips.map(
                                   (action) => ActionChip(
                                     avatar: Icon(action.icon, size: 18),
                                     label: Text(action.label),
                                     onPressed: action.onClick,
                                   ),
-                                )
-                                .toList(),
+                                ),
+                            ],
                           ),
                         ),
                       );
@@ -298,7 +323,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                     builder: (context) {
                       final isWideScreen = BreakPoint.of(
                         context,
-                      ).isLargerOrEqualTo(BreakpointID.sm);
+                      ).isLargerThan(BreakpointID.md);
 
                       final infoCard = CardWithHeader(
                         title: 'Info',
