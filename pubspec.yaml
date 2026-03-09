@@ -59,7 +59,7 @@ dependencies:
   dotted_border: ^3.1.0
   package_info_plus: ^9.0.0
   dynamic_color: ^1.7.0
-  copy_with_extension: ^10.0.1
+  copy_with_extension: ^11.0.0
   freezed_annotation: ^3.1.0
   in_app_purchase: ^3.1.11
   flutter_colorpicker: ^1.1.0
@@ -79,12 +79,12 @@ dev_dependencies:
 
   # Generators:
   build_runner: 2.12.1
-  json_serializable: ^6.11.2
+  json_serializable: ^6.11.4
   flutter_launcher_icons: ^0.14.2 # Package to regenerate icons (config later in this file). To run, type `dart run flutter_launcher_icons`
   drift_dev: ^2.30.0
   slang_build_runner: ^4.4.0 # To regenerate the translations run 'dart run slang'
-  copy_with_extension_gen: ^10.0.1
-  freezed: ^3.0.6
+  copy_with_extension_gen: ^11.0.0
+  freezed: ^3.2.5
 
 flutter_launcher_icons:
   image_path: 'assets/resources/appIcon.png'
