@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/currencies/exchange_rate_form.dart';
 import 'package:monekin/app/currencies/widgets/currency_edit_fields.dart';
-import 'package:monekin/app/currencies/widgets/exchange_rate_evolution_chart.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
@@ -16,10 +15,12 @@ import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
+import 'package:monekin/core/presentation/widgets/editable_time_series_list.dart';
 import 'package:monekin/core/presentation/widgets/exit_without_save_warn_dialog.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:monekin/core/presentation/widgets/time_series_evolution_chart.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -372,8 +373,10 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
         if (_currentRates != null && MediaQuery.of(context).size.height > 550)
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 24, 0, 8),
-            child: ExchangeRateEvolutionChart(
-              exchangeRates: _currentRates!,
+            child: TimeSeriesEvolutionChart<ExchangeRate>(
+              data: _currentRates!,
+              dateExtractor: (r) => r.date,
+              valueExtractor: (r) => r.exchangeRate,
               onHover: (rate) {
                 setState(() {
                   _selectedRate = rate;
@@ -478,67 +481,19 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
     });
   }
 
-  ListView buildExchangeRateList() {
-    final t = Translations.of(context);
-    final isLargeScreen = BreakPoint.of(context).isLargerThan(BreakpointID.md);
-
-    return ListView.separated(
-      shrinkWrap: true,
-      controller: scrollController,
-      itemCount: _currentRates!.length,
-      itemBuilder: (context, index) {
-        final item = _currentRates![index];
-
-        return ListTile(
-          title: Text(DateFormat.yMMMMd().format(item.date)),
-          subtitle: Text(
-            NumberFormat.currency(
-              symbol: '',
-              decimalDigits: 4,
-            ).format(item.exchangeRate),
-          ),
-          contentPadding: EdgeInsetsDirectional.only(
-            start: 16,
-            end: isLargeScreen ? 0 : 8,
-          ),
-          trailing: isLargeScreen
-              ? Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      iconSize: 18,
-                      icon: const Icon(Icons.edit_rounded),
-                      onPressed: () => _editRate(item),
-                      tooltip: t.ui_actions.edit,
-                    ),
-                    IconButton(
-                      iconSize: 18,
-                      icon: const Icon(Icons.delete),
-                      onPressed: () => _deleteRate(item),
-                      tooltip: t.ui_actions.delete,
-                    ),
-                  ],
-                )
-              : MonekinPopupMenuButton(
-                  actionItems: [
-                    ListTileActionItem(
-                      label: t.ui_actions.edit,
-                      icon: Icons.edit_rounded,
-                      onClick: () => _editRate(item),
-                    ),
-                    ListTileActionItem(
-                      label: t.ui_actions.delete,
-                      icon: Icons.delete,
-                      role: ListTileActionRole.delete,
-                      onClick: () => _deleteRate(item),
-                    ),
-                  ],
-                ),
-        );
-      },
-      separatorBuilder: (context, index) {
-        return const Divider();
-      },
+  Widget buildExchangeRateList() {
+    return EditableTimeSeriesList<ExchangeRate>(
+      items: _currentRates!,
+      dateExtractor: (r) => r.date,
+      subtitleBuilder: (context, item) => Text(
+        NumberFormat.currency(
+          symbol: '',
+          decimalDigits: 4,
+        ).format(item.exchangeRate),
+      ),
+      onEdit: _editRate,
+      onDelete: _deleteRate,
+      scrollController: scrollController,
     );
   }
 

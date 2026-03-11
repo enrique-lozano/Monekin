@@ -518,7 +518,15 @@
       "no-valuations": "No valuations recorded yet",
       "update-value": "Update value",
       "update-value.descr": "Record the current portfolio value",
-      "update-value.success": "Valuation recorded successfully"
+      "update-value.success": "Değerleme başarıyla kaydedildi",
+      "history": "Değerleme geçmişi",
+      "history-empty": "Bu hesap için henüz değerleme kaydedilmedi",
+      "add-valuation": "Değerleme ekle",
+      "edit-valuation": "Değerlemeyi düzenle",
+      "edit-valuation.success": "Değerleme başarıyla düzenlendi",
+      "delete-valuation.success": "Değerleme başarıyla silindi",
+      "delete-all-valuations": "Tüm değerlemeleri sil",
+      "delete-all-valuations.success": "Tüm değerlemeler başarıyla silindi"
     },
     "DELETE": {
       "warning-header": "Hesap silinsin mi?",

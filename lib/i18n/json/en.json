@@ -518,7 +518,15 @@
       "no-valuations": "No valuations recorded yet",
       "update-value": "Update value",
       "update-value.descr": "Record the current portfolio value",
-      "update-value.success": "Valuation recorded successfully"
+      "update-value.success": "Valuation recorded successfully",
+      "history": "Valuation history",
+      "history-empty": "No valuations recorded yet for this account",
+      "add-valuation": "Add valuation",
+      "edit-valuation": "Edit valuation",
+      "edit-valuation.success": "Valuation edited successfully",
+      "delete-valuation.success": "Valuation deleted successfully",
+      "delete-all-valuations": "Delete all valuations",
+      "delete-all-valuations.success": "All valuations deleted successfully"
     },
     "DELETE": {
       "warning-header": "Delete account?",

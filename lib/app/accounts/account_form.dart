@@ -254,6 +254,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 12,
                 children: [
                   TextFormField(
                     controller: _nameController,
@@ -266,7 +267,6 @@ class _AccountFormPageState extends State<AccountFormPage> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     textInputAction: TextInputAction.next,
                   ),
-                  const SizedBox(height: 16),
                   IconAndColorSelector(
                     iconSelectorModalSubtitle:
                         t.icon_selector.select_account_icon,
@@ -305,7 +305,6 @@ class _AccountFormPageState extends State<AccountFormPage> {
                     }),
                     data: (color: _color, icon: _icon),
                   ),
-                  const SizedBox(height: 16),
                   AmountAndCurrencyFormField(
                     amountController: _balanceController,
                     currency: _currency,
@@ -320,7 +319,6 @@ class _AccountFormPageState extends State<AccountFormPage> {
                       });
                     },
                   ),
-                  const SizedBox(height: 12),
                   if (_currency != null)
                     StreamBuilder(
                       stream: ExchangeRateService.instance
@@ -328,7 +326,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                       builder: (context, snapshot) {
                         if (snapshot.hasData ||
                             _currency?.code == _userPrCurrency?.code) {
-                          return Container();
+                          return SizedBox.shrink();
                         } else {
                           return InlineInfoCard(
                             text: t.account.form.currency_not_found_warn,
@@ -392,11 +390,11 @@ class _AccountFormPageState extends State<AccountFormPage> {
                     },
                   ),
 
-                  const SizedBox(height: 16),
                   ShowMoreContentButton(
                     child: Column(
+                      spacing: 12,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        const SizedBox(height: 12),
                         DateTimeFormField(
                           decoration: InputDecoration(
                             suffixIcon: const Icon(Icons.event),
@@ -413,9 +411,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                             });
                           },
                         ),
-                        const SizedBox(height: 22),
-                        if (_accountToEdit != null &&
-                            _accountToEdit.isClosed) ...[
+                        if (_accountToEdit != null && _accountToEdit.isClosed)
                           DateTimeFormField(
                             decoration: InputDecoration(
                               suffixIcon: const Icon(Icons.event),
@@ -431,36 +427,39 @@ class _AccountFormPageState extends State<AccountFormPage> {
                               });
                             },
                           ),
-                          const SizedBox(height: 22),
-                        ],
-                        TextFormField(
-                          controller: _ibanController,
-                          decoration: InputDecoration(
-                            labelText: t.account.form.iban,
-                            border: appInputBorder.copyWith(
-                              borderRadius: BorderRadius.only(
-                                topLeft: inputBorderRadius,
-                                topRight: inputBorderRadius,
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextFormField(
+                              controller: _ibanController,
+                              decoration: InputDecoration(
+                                labelText: t.account.form.iban,
+                                border: appInputBorder.copyWith(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: inputBorderRadius,
+                                    topRight: inputBorderRadius,
+                                  ),
+                                ),
                               ),
+                              textInputAction: TextInputAction.next,
                             ),
-                          ),
-                          textInputAction: TextInputAction.next,
-                        ),
-                        const Divider(),
-                        TextFormField(
-                          controller: _swiftController,
-                          decoration: InputDecoration(
-                            labelText: t.account.form.swift,
-                            border: appInputBorder.copyWith(
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: inputBorderRadius,
-                                bottomRight: inputBorderRadius,
+                            const Divider(),
+                            TextFormField(
+                              controller: _swiftController,
+                              decoration: InputDecoration(
+                                labelText: t.account.form.swift,
+                                border: appInputBorder.copyWith(
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: inputBorderRadius,
+                                    bottomRight: inputBorderRadius,
+                                  ),
+                                ),
                               ),
+                              textInputAction: TextInputAction.next,
                             ),
-                          ),
-                          textInputAction: TextInputAction.next,
+                          ],
                         ),
-                        const SizedBox(height: 22),
+
                         TextFormField(
                           minLines: 2,
                           maxLines: 10,
@@ -472,7 +471,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                           ),
                           textInputAction: TextInputAction.next,
                         ),
-                        const SizedBox(height: 12),
+
                         SwitchListTile(
                           value: _includeInNetWorth,
                           onChanged: (value) {
@@ -484,7 +483,14 @@ class _AccountFormPageState extends State<AccountFormPage> {
                           subtitle: Text(
                             t.account.form.include_in_net_worth_descr,
                           ),
-                          contentPadding: EdgeInsets.zero,
+                          contentPadding: const EdgeInsets.only(
+                            left: 16,
+                            right: 4,
+                          ),
+                          shape: appInputBorder,
+                          tileColor: Theme.of(
+                            context,
+                          ).colorScheme.surfaceContainerHighest,
                         ),
                         const SizedBox(height: 22),
                       ],

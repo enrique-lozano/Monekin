@@ -4,12 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/details/account_details_actions.dart';
+import 'package:monekin/app/accounts/details/investment_history_page.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/transactions/label_value_info_list.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list.dart';
 import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
-import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/investment/investment_service.dart';
@@ -30,8 +30,6 @@ import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/text_field_utils.dart';
-import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 class AccountDetailsPage extends StatefulWidget {
@@ -90,14 +88,9 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
             return CardWithHeader(
               title: t.account.investment.details_header,
               footer: CardFooterWithSingleButton(
-                text: t.account.investment.update_value,
-                onButtonClick: () async {
-                  await showModalBottomSheet<void>(
-                    context: context,
-                    isScrollControlled: true,
-                    showDragHandle: true,
-                    builder: (_) => _UpdateValuationDialog(account: account),
-                  );
+                text: t.account.investment.history,
+                onButtonClick: () {
+                  RouteUtils.pushRoute(InvestmentHistoryPage(account: account));
                 },
               ),
               body: LabelValueInfoList(
@@ -373,6 +366,8 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                         ),
                       );
 
+                      const transactionsToShow = 4;
+
                       final transactionsCard = CardWithHeader(
                         title: t.home.last_transactions,
                         bodyPadding: const EdgeInsets.symmetric(vertical: 6),
@@ -387,7 +382,8 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                             ),
                           ),
                           builder: (context, snapshot) {
-                            if (!snapshot.hasData || snapshot.data! < 5) {
+                            if (!snapshot.hasData ||
+                                snapshot.data! < transactionsToShow) {
                               return const SizedBox.shrink();
                             }
 
@@ -418,7 +414,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                             }),
                             accountsIDs: [widget.account.id],
                           ),
-                          limit: 5,
+                          limit: transactionsToShow,
                           showGroupDivider: false,
                           onEmptyList: Padding(
                             padding: const EdgeInsets.all(24),
@@ -443,9 +439,9 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                               mainAxisSize: MainAxisSize.min,
                               spacing: 16,
                               children: [
-                                infoCard,
                                 if (account.type == AccountType.investment)
                                   _buildInvestmentCard(context, account),
+                                infoCard,
                               ],
                             ),
                           ),
@@ -463,110 +459,6 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
           ),
         );
       },
-    );
-  }
-}
-
-class _UpdateValuationDialog extends StatefulWidget {
-  const _UpdateValuationDialog({required this.account});
-
-  final Account account;
-
-  @override
-  State<_UpdateValuationDialog> createState() => _UpdateValuationDialogState();
-}
-
-class _UpdateValuationDialogState extends State<_UpdateValuationDialog> {
-  final _formKey = GlobalKey<FormState>();
-  final _valueController = TextEditingController();
-  DateTime _date = DateTime.now();
-
-  @override
-  void dispose() {
-    _valueController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final t = Translations.of(context);
-
-    return ModalContainer(
-      title: t.account.investment.update_value,
-      subtitle: t.account.investment.update_value_descr,
-      footer: BottomSheetFooter(
-        submitText: t.ui_actions.save,
-        onSaved: () async {
-          if (!_formKey.currentState!.validate()) return;
-
-          final value = double.tryParse(_valueController.text);
-          if (value == null) return;
-
-          await InvestmentService.instance
-              .insertValuation(
-                ValuationInDB(
-                  id: generateUUID(),
-                  accountId: widget.account.id,
-                  date: _date,
-                  value: value,
-                ),
-              )
-              .then((_) {
-                RouteUtils.popRoute();
-                MonekinSnackbar.success(
-                  SnackbarParams(t.account.investment.update_value_success),
-                );
-              })
-              .catchError((err) {
-                MonekinSnackbar.error(SnackbarParams.fromError(err));
-              });
-        },
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                controller: _valueController,
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
-                decoration: InputDecoration(
-                  labelText: '${t.account.investment.portfolio_value} *',
-                  suffixText: widget.account.currency.symbol,
-                ),
-                validator: (value) => fieldValidator(
-                  value,
-                  isRequired: true,
-                  validator: ValidatorType.double,
-                ),
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-              ),
-              const SizedBox(height: 16),
-              DateTimeFormField(
-                decoration: InputDecoration(
-                  suffixIcon: const Icon(Icons.event),
-                  labelText: '${t.general.time.date} *',
-                ),
-                initialDate: _date,
-                lastDate: DateTime.now(),
-                dateFormat: DateFormat.yMMMd().add_jm(),
-                validator: (e) =>
-                    e == null ? t.general.validations.required : null,
-                onDateSelected: (DateTime value) {
-                  setState(() {
-                    _date = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

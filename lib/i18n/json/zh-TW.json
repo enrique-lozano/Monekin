@@ -518,7 +518,15 @@
       "no-valuations": "No valuations recorded yet",
       "update-value": "Update value",
       "update-value.descr": "Record the current portfolio value",
-      "update-value.success": "Valuation recorded successfully"
+      "update-value.success": "估值記錄成功",
+      "history": "估值歷史",
+      "history-empty": "此帳戶尚無估值記錄",
+      "add-valuation": "新增估值",
+      "edit-valuation": "編輯估值",
+      "edit-valuation.success": "估值編輯成功",
+      "delete-valuation.success": "估值刪除成功",
+      "delete-all-valuations": "刪除所有估值",
+      "delete-all-valuations.success": "所有估值已成功刪除"
     },
     "DELETE": {
       "warning-header": "刪除帳戶？",

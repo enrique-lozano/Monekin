@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flutter/material.dart' show DateUtils;
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
@@ -61,6 +62,25 @@ class InvestmentService {
 
   Future<bool> updateValuation(ValuationInDB valuation) {
     return db.update(db.valuations).replace(valuation);
+  }
+
+  /// Inserts a valuation, or replaces an existing one if there is already
+  /// a valuation for the same account/asset on the same day.
+  Future<int> insertOrUpdateValuation(ValuationInDB valuation) async {
+    final existing = await getValuationsForAccount(valuation.accountId!).first;
+
+    final sameDay = existing.where(
+      (v) =>
+          v.id != valuation.id && DateUtils.isSameDay(v.date, valuation.date),
+    );
+
+    if (sameDay.isNotEmpty) {
+      valuation = valuation.copyWith(id: sameDay.first.id);
+    }
+
+    return db
+        .into(db.valuations)
+        .insert(valuation, mode: InsertMode.insertOrReplace);
   }
 
   Future<int> deleteValuation(String valuationId) {

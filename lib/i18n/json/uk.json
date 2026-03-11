@@ -518,7 +518,15 @@
       "no-valuations": "No valuations recorded yet",
       "update-value": "Update value",
       "update-value.descr": "Record the current portfolio value",
-      "update-value.success": "Valuation recorded successfully"
+      "update-value.success": "Оцінку успішно збережено",
+      "history": "Історія оцінок",
+      "history-empty": "Для цього рахунку ще немає оцінок",
+      "add-valuation": "Додати оцінку",
+      "edit-valuation": "Редагувати оцінку",
+      "edit-valuation.success": "Оцінку успішно відредаговано",
+      "delete-valuation.success": "Оцінку успішно видалено",
+      "delete-all-valuations": "Видалити всі оцінки",
+      "delete-all-valuations.success": "Усі оцінки успішно видалено"
     },
     "DELETE": {
       "warning-header": "Видалити рахунок?",

@@ -518,7 +518,15 @@
       "no-valuations": "No valuations recorded yet",
       "update-value": "Update value",
       "update-value.descr": "Record the current portfolio value",
-      "update-value.success": "Valuation recorded successfully"
+      "update-value.success": "Értékelés sikeresen rögzítve",
+      "history": "Értékelési előzmények",
+      "history-empty": "Még nincs értékelés ehhez a számlához",
+      "add-valuation": "Értékelés hozzáadása",
+      "edit-valuation": "Értékelés szerkesztése",
+      "edit-valuation.success": "Értékelés sikeresen szerkesztve",
+      "delete-valuation.success": "Értékelés sikeresen törölve",
+      "delete-all-valuations": "Összes értékelés törlése",
+      "delete-all-valuations.success": "Összes értékelés sikeresen törölve"
     },
     "DELETE": {
       "warning-header": "Törli a számlát?",
