@@ -7,11 +7,14 @@ import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
+/// An enum representing the type of an account.
 enum AccountType {
-  /// A normal type of account The default type
+  // * Do not modify the names of the elements of this enums. These are used in the DB //
+
+  /// A normal type of account. The default type
   normal,
 
-  /// This type of accounts can not have transactions. You only can add and withdraw money from it from other accounts
+  /// Similar to a normal account but with some differences in the UI
   saving,
 
   /// An investment account (broker, crypto exchange, ETF portfolio, etc.).

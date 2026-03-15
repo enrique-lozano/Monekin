@@ -82,7 +82,8 @@ class TimeSeriesEvolutionChart<T> extends StatelessWidget {
                         spot.x.toInt(),
                       );
 
-                      final text = '${DateFormat.yMMMd().format(date)}\n';
+                      final text =
+                          '${DateFormat.yMMMd().format(date)}\n${spot.y.toStringAsFixed(2)}';
 
                       return LineTooltipItem(
                         text,

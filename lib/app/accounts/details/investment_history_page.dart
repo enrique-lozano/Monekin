@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/details/widgets/valuation_form_dialog.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/investment/investment_service.dart';
+import 'package:monekin/core/database/services/account/investment_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/presentation/app_colors.dart';

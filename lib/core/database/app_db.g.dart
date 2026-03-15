@@ -8035,6 +8035,17 @@ abstract class _$AppDB extends GeneratedDatabase {
     ).asyncMap(valuations.mapFromRow);
   }
 
+  Selectable<ValuationInDB> getLatestValuationForAccountAtDate({
+    required String accountId,
+    required DateTime date,
+  }) {
+    return customSelect(
+      'SELECT * FROM valuations WHERE accountId = ?1 AND date <= ?2 ORDER BY date DESC LIMIT 1',
+      variables: [Variable<String>(accountId), Variable<DateTime>(date)],
+      readsFrom: {valuations},
+    ).asyncMap(valuations.mapFromRow);
+  }
+
   Selectable<ValuationInDB> getValuationsForAsset({required String assetId}) {
     return customSelect(
       'SELECT * FROM valuations WHERE assetId = ?1 ORDER BY date DESC',

@@ -90,4 +90,8 @@ netWorth = Σ balance(normal/saving accounts where includeInNetWorth = 1 and not
          + Σ value(assets where includeInNetWorth = 1)
 ```
 
-See `InvestmentService.getNetWorth()` for the full SQL implementation.
+Net worth is derived from:
+
+- non-investment account balances (`iniValue + transactions`)
+- investment account portfolio values (latest valuation at/before date, fallback to invested capital)
+- assets (latest valuation, fallback to initial value)

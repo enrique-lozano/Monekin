@@ -61,6 +61,8 @@ CREATE TABLE IF NOT EXISTS accounts (
     date DATETIME NOT NULL,
 
     description TEXT,
+
+    -- The type of the account. It can be 'normal', 'investment'...
     type ENUMNAME(AccountType) NOT NULL CHECK(type IN ('normal', 'saving', 'investment')),
     
     iconId TEXT NOT NULL,
