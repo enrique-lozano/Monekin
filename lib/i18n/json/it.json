@@ -489,8 +489,8 @@
       "normal.descr": "Utile per registrare le tue finanze quotidiane. È il conto più comune, ti permette di aggiungere spese, entrate...",
       "saving": "Conto risparmio",
       "saving.descr": "Potrai solo aggiungere e prelevare denaro da esso da altri conti. Perfetto per iniziare a risparmiare denaro",
-      "investment": "Investment account",
-      "investment.descr": "A broker, crypto exchange or portfolio account. Track your invested capital and update its value manually via valuations"
+      "investment": "Conto investimento",
+      "investment.descr": "Un conto broker, exchange di criptovalute o portafoglio. Tieni traccia del tuo capitale investito e aggiorna il suo valore manualmente tramite valutazioni"
     },
     "FORM": {
       "name": "Nome conto",
@@ -506,18 +506,18 @@
       "tr-before-opening-date": "Ci sono transazioni in questo conto con una data precedente alla data di apertura",
       "iban": "IBAN",
       "swift": "SWIFT",
-      "include-in-net-worth": "Include in net worth",
-      "include-in-net-worth.descr": "Add this account to the total net worth calculation"
+      "include-in-net-worth": "Includi nel patrimonio netto",
+      "include-in-net-worth.descr": "Aggiungi questo conto al calcolo del patrimonio netto totale"
     },
     "INVESTMENT": {
-      "details-header": "Investment",
-      "invested-capital": "Invested capital",
-      "portfolio-value": "Portfolio value",
-      "profit": "Profit",
-      "last-valuation": "Last valuation",
-      "no-valuations": "No valuations recorded yet",
-      "update-value": "Update value",
-      "update-value.descr": "Record the current portfolio value",
+      "details-header": "Investimento",
+      "invested-capital": "Capitale investito",
+      "portfolio-value": "Valore del portafoglio",
+      "profit": "Profitto",
+      "last-valuation": "Ultima valutazione",
+      "no-valuations": "Nessuna valutazione registrata",
+      "update-value": "Aggiorna valore",
+      "update-value.descr": "Registra il valore attuale del portafoglio",
       "update-value.success": "Valutazione registrata con successo",
       "history": "Storico valutazioni",
       "history-empty": "Nessuna valutazione registrata per questo conto",

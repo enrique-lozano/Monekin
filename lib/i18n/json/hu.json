@@ -489,8 +489,8 @@
       "normal.descr": "Hasznos a napi pénzügyek rögzítéséhez. Ez a leggyakoribb számla, amely lehetővé teszi kiadások, bevételek hozzáadását...",
       "saving": "Megtakarítási számla",
       "saving.descr": "Csak más számlákról tud pénzt hozzáadni és kivenni belőle. Tökéletes a megtakarítás megkezdéséhez.",
-      "investment": "Investment account",
-      "investment.descr": "A broker, crypto exchange or portfolio account. Track your invested capital and update its value manually via valuations"
+      "investment": "Befektetési számla",
+      "investment.descr": "Bróker-, kriptotőzsde- vagy portfóliószámla. Kövesse nyomon befektetett tőkéjét és frissítse az értékét manuálisan értékeléseken keresztül"
     },
     "FORM": {
       "name": "Számla neve",
@@ -506,18 +506,18 @@
       "tr-before-opening-date": "A számlán a nyitási dátumot megelőző dátumú tranzakciók vannak.",
       "iban": "IBAN",
       "swift": "SWIFT",
-      "include-in-net-worth": "Include in net worth",
-      "include-in-net-worth.descr": "Add this account to the total net worth calculation"
+      "include-in-net-worth": "Beleszámítás a nettó vagyonba",
+      "include-in-net-worth.descr": "Számla hozzáadása a teljes nettó vagyon számításához"
     },
     "INVESTMENT": {
-      "details-header": "Investment",
-      "invested-capital": "Invested capital",
-      "portfolio-value": "Portfolio value",
-      "profit": "Profit",
-      "last-valuation": "Last valuation",
-      "no-valuations": "No valuations recorded yet",
-      "update-value": "Update value",
-      "update-value.descr": "Record the current portfolio value",
+      "details-header": "Befektetés",
+      "invested-capital": "Befektetett tőke",
+      "portfolio-value": "Portfólió értéke",
+      "profit": "Nyereség",
+      "last-valuation": "Utolsó értékelés",
+      "no-valuations": "Még nincs értékelés rögzítve",
+      "update-value": "Érték frissítése",
+      "update-value.descr": "A portfólió aktuális értékének rögzítése",
       "update-value.success": "Értékelés sikeresen rögzítve",
       "history": "Értékelési előzmények",
       "history-empty": "Még nincs értékelés ehhez a számlához",

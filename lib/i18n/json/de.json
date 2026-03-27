@@ -489,8 +489,8 @@
       "normal.descr": "Nützlich, um Deine täglichen Finanzen aufzuzeichnen. Es ist das gebräuchlichste Konto, das es Dir ermöglicht, Ausgaben, Einnahmen hinzuzufügen",
       "saving": "Sparkonto",
       "saving.descr": "Du kannst nur Geld von anderen Konten einzahlen und abheben. Perfekt geignet, um Geld zu sparen",
-      "investment": "Investment account",
-      "investment.descr": "A broker, crypto exchange or portfolio account. Track your invested capital and update its value manually via valuations"
+      "investment": "Investmentkonto",
+      "investment.descr": "Ein Broker-, Krypto-Börsen- oder Portfoliokonto. Erfasse Dein investiertes Kapital und aktualisiere den Wert manuell über Bewertungen"
     },
     "FORM": {
       "name": "Kontoname",
@@ -506,18 +506,18 @@
       "tr-before-opening-date": "Auf diesem Konto liegen Transaktionen vor, deren Datum vor dem Eröffnungsdatum liegt",
       "iban": "IBAN",
       "swift": "SWIFT",
-      "include-in-net-worth": "Include in net worth",
-      "include-in-net-worth.descr": "Add this account to the total net worth calculation"
+      "include-in-net-worth": "Im Nettovermögen einbeziehen",
+      "include-in-net-worth.descr": "Dieses Konto in die Berechnung des Gesamtnettovermögens einbeziehen"
     },
     "INVESTMENT": {
       "details-header": "Investment",
-      "invested-capital": "Invested capital",
-      "portfolio-value": "Portfolio value",
-      "profit": "Profit",
-      "last-valuation": "Last valuation",
-      "no-valuations": "No valuations recorded yet",
-      "update-value": "Update value",
-      "update-value.descr": "Record the current portfolio value",
+      "invested-capital": "Investiertes Kapital",
+      "portfolio-value": "Portfoliowert",
+      "profit": "Gewinn",
+      "last-valuation": "Letzte Bewertung",
+      "no-valuations": "Noch keine Bewertungen vorhanden",
+      "update-value": "Wert aktualisieren",
+      "update-value.descr": "Den aktuellen Portfoliowert erfassen",
       "update-value.success": "Bewertung erfolgreich gespeichert",
       "history": "Bewertungsverlauf",
       "history-empty": "Noch keine Bewertungen für dieses Konto",

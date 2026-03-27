@@ -492,8 +492,8 @@
       "normal.descr": "Útil para registrar tus finanzas del día a día. Es la cuenta mas común, permite añadir gastos, ingresos...",
       "saving": "Cuenta de ahorros",
       "saving.descr": "Solo podrás añadir y retirar dinero de ella desde otras cuentas. Perfecta para empezar a ahorrar",
-      "investment": "Investment account",
-      "investment.descr": "A broker, crypto exchange or portfolio account. Track your invested capital and update its value manually via valuations"
+      "investment": "Cuenta de inversión",
+      "investment.descr": "Una cuenta de broker, exchange de criptomonedas o cartera de inversión. Registra tu capital invertido y actualiza su valor manualmente mediante valoraciones"
     },
     "FORM": {
       "name": "Nombre de la cuenta",
@@ -509,18 +509,18 @@
       "tr-before-opening-date": "Existen transacciones en esta cuenta con fecha anterior a la fecha de apertura",
       "iban": "IBAN",
       "swift": "SWIFT",
-      "include-in-net-worth": "Include in net worth",
-      "include-in-net-worth.descr": "Add this account to the total net worth calculation"
+      "include-in-net-worth": "Incluir en el patrimonio neto",
+      "include-in-net-worth.descr": "Añadir esta cuenta al cálculo del patrimonio neto total"
     },
     "INVESTMENT": {
-      "details-header": "Investment",
-      "invested-capital": "Invested capital",
-      "portfolio-value": "Portfolio value",
-      "profit": "Profit",
-      "last-valuation": "Last valuation",
-      "no-valuations": "No valuations recorded yet",
-      "update-value": "Update value",
-      "update-value.descr": "Record the current portfolio value",
+      "details-header": "Inversión",
+      "invested-capital": "Capital invertido",
+      "portfolio-value": "Valor de la cartera",
+      "profit": "Beneficio",
+      "last-valuation": "Última valoración",
+      "no-valuations": "Aún no hay valoraciones registradas",
+      "update-value": "Actualizar valor",
+      "update-value.descr": "Registrar el valor actual de la cartera",
       "update-value.success": "Valoración registrada correctamente",
       "history": "Historial de valoraciones",
       "history-empty": "No hay valoraciones registradas para esta cuenta",

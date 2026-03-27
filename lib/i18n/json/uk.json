@@ -489,8 +489,8 @@
       "normal.descr": "Використовується для фіксації вашої повсякденної фінансової діяльності. Це найбільш поширений рахунок, який дозволяє додавати витрати, доходи...",
       "saving": "Зберігаючий рахунок",
       "saving.descr": "З нього можна тільки додавати та знімати гроші з інших рахунків. Ідеально підходить для початку збереження грошей",
-      "investment": "Investment account",
-      "investment.descr": "A broker, crypto exchange or portfolio account. Track your invested capital and update its value manually via valuations"
+      "investment": "Інвестиційний рахунок",
+      "investment.descr": "Рахунок брокера, криптобіржі або портфеля. Відстежуйте свій інвестований капітал та оновлюйте його вартість вручну через оцінки"
     },
     "FORM": {
       "name": "Назва рахунку",
@@ -506,18 +506,18 @@
       "tr-before-opening-date": "В цьому рахунку є транзакції з датою перед датою відкриття",
       "iban": "IBAN",
       "swift": "SWIFT",
-      "include-in-net-worth": "Include in net worth",
-      "include-in-net-worth.descr": "Add this account to the total net worth calculation"
+      "include-in-net-worth": "Включити до чистих активів",
+      "include-in-net-worth.descr": "Додати цей рахунок до розрахунку загальних чистих активів"
     },
     "INVESTMENT": {
-      "details-header": "Investment",
-      "invested-capital": "Invested capital",
-      "portfolio-value": "Portfolio value",
-      "profit": "Profit",
-      "last-valuation": "Last valuation",
-      "no-valuations": "No valuations recorded yet",
-      "update-value": "Update value",
-      "update-value.descr": "Record the current portfolio value",
+      "details-header": "Інвестиція",
+      "invested-capital": "Інвестований капітал",
+      "portfolio-value": "Вартість портфеля",
+      "profit": "Прибуток",
+      "last-valuation": "Остання оцінка",
+      "no-valuations": "Оцінок ще не записано",
+      "update-value": "Оновити вартість",
+      "update-value.descr": "Записати поточну вартість портфеля",
       "update-value.success": "Оцінку успішно збережено",
       "history": "Історія оцінок",
       "history-empty": "Для цього рахунку ще немає оцінок",

@@ -489,8 +489,8 @@
       "normal.descr": "Utile pour enregistrer vos finances du quotidien. C'est le type de compte le plus courant, il vous permet d'ajouter des dépenses, des recettes...",
       "saving": "Compte d'épargne",
       "saving.descr": "Vous ne pourrez y ajouter et y retirer de l'argent qu'à partir d'autres comptes. Parfait pour commencer à économiser",
-      "investment": "Investment account",
-      "investment.descr": "A broker, crypto exchange or portfolio account. Track your invested capital and update its value manually via valuations"
+      "investment": "Compte d'investissement",
+      "investment.descr": "Un compte de courtier, d'échange de cryptomonnaies ou un portefeuille. Suivez votre capital investi et mettez à jour sa valeur manuellement via des évaluations"
     },
     "FORM": {
       "name": "Nom du compte",
@@ -506,18 +506,18 @@
       "tr-before-opening-date": "Il existe des transactions sur ce compte avec une date antérieure à la date d'ouverture",
       "iban": "IBAN",
       "swift": "SWIFT",
-      "include-in-net-worth": "Include in net worth",
-      "include-in-net-worth.descr": "Add this account to the total net worth calculation"
+      "include-in-net-worth": "Inclure dans le patrimoine net",
+      "include-in-net-worth.descr": "Ajouter ce compte au calcul du patrimoine net total"
     },
     "INVESTMENT": {
-      "details-header": "Investment",
-      "invested-capital": "Invested capital",
-      "portfolio-value": "Portfolio value",
+      "details-header": "Investissement",
+      "invested-capital": "Capital investi",
+      "portfolio-value": "Valeur du portefeuille",
       "profit": "Profit",
-      "last-valuation": "Last valuation",
-      "no-valuations": "No valuations recorded yet",
-      "update-value": "Update value",
-      "update-value.descr": "Record the current portfolio value",
+      "last-valuation": "Dernière évaluation",
+      "no-valuations": "Aucune évaluation enregistrée",
+      "update-value": "Mettre à jour la valeur",
+      "update-value.descr": "Enregistrer la valeur actuelle du portefeuille",
       "update-value.success": "Évaluation enregistrée avec succès",
       "history": "Historique des évaluations",
       "history-empty": "Aucune évaluation enregistrée pour ce compte",

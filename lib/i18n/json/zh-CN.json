@@ -489,8 +489,8 @@
       "normal.descr": "用于记录日常财务。这是最普通的账户，您可以添加支出、收入……",
       "saving": "储蓄账户",
       "saving.descr": "您只能从此账户中向其它账户中转入/转出（而无法用于消费开支）。非常适合用于存钱",
-      "investment": "Investment account",
-      "investment.descr": "A broker, crypto exchange or portfolio account. Track your invested capital and update its value manually via valuations"
+      "investment": "投资账户",
+      "investment.descr": "券商、加密货币交易所或投资组合账户。跟踪您的投资资本，并通过估值手动更新其价值"
     },
     "FORM": {
       "name": "账户名称",
@@ -506,18 +506,18 @@
       "tr-before-opening-date": "此账户中有早于开户日期的交易",
       "iban": "国际银行账户号码（IBAN）",
       "swift": "银行识别码（SWIFT）",
-      "include-in-net-worth": "Include in net worth",
-      "include-in-net-worth.descr": "Add this account to the total net worth calculation"
+      "include-in-net-worth": "计入净资产",
+      "include-in-net-worth.descr": "将此账户纳入总净资产计算"
     },
     "INVESTMENT": {
-      "details-header": "Investment",
-      "invested-capital": "Invested capital",
-      "portfolio-value": "Portfolio value",
-      "profit": "Profit",
-      "last-valuation": "Last valuation",
-      "no-valuations": "No valuations recorded yet",
-      "update-value": "Update value",
-      "update-value.descr": "Record the current portfolio value",
+      "details-header": "投资",
+      "invested-capital": "已投资本金",
+      "portfolio-value": "投资组合价值",
+      "profit": "收益",
+      "last-valuation": "最近估值",
+      "no-valuations": "暂无估值记录",
+      "update-value": "更新价值",
+      "update-value.descr": "记录当前投资组合价值",
       "update-value.success": "估值记录成功",
       "history": "估值历史",
       "history-empty": "此账户暂无估值记录",
